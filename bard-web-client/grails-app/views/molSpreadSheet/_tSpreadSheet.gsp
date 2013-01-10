@@ -27,12 +27,15 @@
         <g:if test="${molSpreadSheetData?.getColumnCount() > 0}">
             <g:set var="columnHeaders" value="${molSpreadSheetData?.getColumns()}"/>
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
-            <label class="checkbox" class="pull-left">
-                <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
+            <span>
+                <input type="checkbox" class="pull-left" defaultChecked="checked" checked
+                       name="showPromiscuityScores"
                        id="showPromiscuityScores">
-                Hide Promiscuity Scores
-            </label>
-            <a href="../molSpreadSheet/index?norefresh=true" class="pull-right tranposeSymbol" title="Transpose array elements">T</a>
+
+                <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
+            </span>
+            <a href="../molSpreadSheet/index?norefresh=true" class="pull-right tranposeSymbol"
+               title="Transpose array elements">T</a>
             <table cellpadding="0" cellspacing="0" border="1" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <tr>
@@ -46,46 +49,48 @@
                     </g:each>
                 </tr>
                 <tr>
-                    <th class="molSpreadSheetImg"  colspan=2>CID</th>
+                    <th class="molSpreadSheetImg" colspan=2>CID</th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
-                            <g:cidCell  cid="${cid}"/>
+                            <g:cidCell cid="${cid}"/>
                         </td>
                     </g:each>
                 </tr>
 
                 <tr>
-                    <th class="molSpreadSheetImg"  colspan=2><%="${((columnHeaders?.size() > 2)?(columnHeaders[2]):'promiscuity')}"%></th>
+                    <th class="molSpreadSheetImg"
+                        colspan=2><%="${((columnHeaders?.size() > 2) ? (columnHeaders[2]) : 'promiscuity')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet">
                             <g:promiscuityCell cid="${cid}"/>
-                       </td>
+                        </td>
                     </g:each>
                 </tr>
 
                 <tr>
-                    <th class="molSpreadSheetImg"  colspan=2><%="${((columnHeaders?.size() > 3)?(columnHeaders[3]):'inactive/active')}"%></th>
+                    <th class="molSpreadSheetImg"
+                        colspan=2><%="${((columnHeaders?.size() > 3) ? (columnHeaders[3]) : 'inactive/active')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
                             <g:activeVrsTestedCell activeVrsTested="${activeVrsTested}"/>
-                       </td>
+                        </td>
                     </g:each>
                 </tr>
 
                 <% int rowsToSkipBeforeNextAssayid = 0 %>
-                <% int currentRowCounter =0 %>
-                <g:set var="assayHeaders" value="${molSpreadSheetData.determineResponseTypesPerAssay()}" />
-                <g:if test="${(assayHeaders.size()>0)}">
-                    <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}" />
+                <% int currentRowCounter = 0 %>
+                <g:set var="assayHeaders" value="${molSpreadSheetData.determineResponseTypesPerAssay()}"/>
+                <g:if test="${(assayHeaders.size() > 0)}">
+                    <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}"/>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${currentRowCounter > 3}">
                             <tr>
-                                <g:if test="${(rowsToSkipBeforeNextAssayid==0)}">
-                                    <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}" />
-                                    <%rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes"%>
+                                <g:if test="${(rowsToSkipBeforeNextAssayid == 0)}">
+                                    <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}"/>
+                                    <% rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes" %>
                                     <th class="molSpreadSheetHeadData" rel="tooltip"
                                         rowspan="<%=rowsToSkipBeforeNextAssayid%>"
                                         title="<%=currentAssayIdHeader."fullAssayName"%>"><a
@@ -93,12 +98,13 @@
                                         ADID=<%=currentAssayIdHeader."assayName"%></a>
                                     </th>
                                 </g:if>
-                                <%rowsToSkipBeforeNextAssayid--%>
+                                <% rowsToSkipBeforeNextAssayid-- %>
                                 <th class="molSpreadSheetHeadData">${colHeader}
                                 </th>
 
-                               <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
-                                    <g:exptDataCell colCnt="${currentRowCounter}" spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, currentRowCounter)}"/>
+                                <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
+                                    <g:exptDataCell colCnt="${currentRowCounter}"
+                                                    spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, currentRowCounter)}"/>
                                 </g:each>
 
                             </tr>
@@ -106,7 +112,7 @@
                         <% currentRowCounter++ %>
                     </g:each>
                 </g:if>
-             </table>
+            </table>
         </g:if>
         <g:else>
             <g:render template="../molSpreadSheet/noSpreadSheet"/>
