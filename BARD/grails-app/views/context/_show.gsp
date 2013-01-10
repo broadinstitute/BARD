@@ -13,7 +13,7 @@
                 <g:each in="${contexts}" var="entry">
                     <div id="${entry.key}"  class="roundedBorder card-group ${entry.key.replaceAll(/( |> )/, '-')}">
                         <div class="row-fluid">
-                            <h5 class="span12">${entry.key}</h5>
+                            <strong class="span12">${entry.key}</strong>
                         </div>
                         <div class="row-fluid">
                             <g:each in="${contextOwner.splitForColumnLayout(entry.value)}" var="contextColumnList">

@@ -112,7 +112,10 @@ grails {
         springsecurity {
             providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
             controllerAnnotations.staticRules = [
-                    '/console/**': ['isFullyAuthenticated()']
+                '/console/**': ['ROLE_CONSOLE_USER']
+            ]
+            ipRestrictions = [
+                '/console/**': '127.0.0.1'
             ]
         }
     }
@@ -122,7 +125,7 @@ CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_NO_ROLE']
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE']
 }
 
 
