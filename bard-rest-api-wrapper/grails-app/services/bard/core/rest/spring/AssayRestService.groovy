@@ -17,10 +17,11 @@ import org.springframework.util.MultiValueMap
 
 class AssayRestService extends AbstractRestService {
 
-    public List<AssayAnnotation> findAnnotations(final Long adid) {
+    public AssayAnnotation findAnnotations(final Long adid) {
         final String resource = getResource(adid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
-        final List<AssayAnnotation> annotations = getForObject(url.toURI(), AssayAnnotation[].class) as List<AssayAnnotation>
+        println(resource)
+        final AssayAnnotation annotations = (AssayAnnotation)getForObject(url.toURI(), AssayAnnotation.class)
         return annotations;
     }
     /**

@@ -357,6 +357,7 @@ abstract class AbstractRestService {
 
     public Object getForObject(URI uri, Class clazz) {
         try {
+            println(uri.toString())
             StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.getForObject(uri, clazz)
             this.loggerService.stopStopWatch(sw, "method=getForObject(URI uri, Class clazz); uri='${uri}'; class=${clazz}")
@@ -370,6 +371,7 @@ abstract class AbstractRestService {
 
     public Object getForObject(final String uri, final Class clazz, Map map = [:]) {
         try {
+            println(uri)
             StopWatch sw = this.loggerService.startStopWatch()
             def result = this.restTemplate.getForObject(uri, clazz, map)
             this.loggerService.stopStopWatch(sw, "method=getForObject(final String uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")

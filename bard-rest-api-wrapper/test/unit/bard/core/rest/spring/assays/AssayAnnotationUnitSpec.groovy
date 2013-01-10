@@ -11,28 +11,88 @@ class AssayAnnotationUnitSpec extends Specification {
     ObjectMapper objectMapper = new ObjectMapper()
 
     public static final String ASSAY_ANNOTATION = '''
-    {
-       "source": "cap",
-       "id": "31690",
-       "display": "http://www.uniprot.org/uniprot/Q9Y253",
-       "contextRef": "context",
-       "key": "UniProt",
-       "value": "value",
-       "extValueId": "Q9Y253"
-    }
+{
+   "contexts":[
+      {
+         "id":16715,
+         "name":"species name",
+         "comps":[
+            {
+               "entityId":null,
+               "entity":"assay",
+               "source":"cap-context",
+               "id":16715,
+               "display":"Homo sapiens",
+               "contextRef":"species name",
+               "key":"species name",
+               "value":null,
+               "extValueId":"9606",
+               "url":"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606",
+               "displayOrder":0,
+               "related":null
+            }
+         ]
+      }
+   ],
+   "measures":[
+      {
+         "id":2761,
+         "name":null,
+         "comps":[
+            {
+               "entityId":null,
+               "entity":"assay",
+               "source":"cap-measure",
+               "id":2761,
+               "display":"Hill coefficient",
+               "contextRef":null,
+               "key":null,
+               "value":"Hill coefficient",
+               "extValueId":null,
+               "url":null,
+               "displayOrder":0,
+               "related":""
+            }
+         ]
+      }
+   ],
+   "docs":[
+      {
+         "id":28391,
+         "name":"External URL",
+         "comps":[
+            {
+               "entityId":null,
+               "entity":"assay",
+               "source":"cap-doc",
+               "id":28391,
+               "display":"Assay Link",
+               "contextRef":"External URL",
+               "key":"doc",
+               "value":"http://ncgc.nih.gov/db/?aid=614",
+               "extValueId":"http://ncgc.nih.gov/db/?aid=614",
+               "url":null,
+               "displayOrder":0,
+               "related":null
+            }
+         ]
+      }
+   ]
+}
     '''
 
     void "test serialization to AssayAnnotation"() {
         when:
         final AssayAnnotation assayAnnotation = objectMapper.readValue(ASSAY_ANNOTATION, AssayAnnotation.class)
         then:
-        assert assayAnnotation.contextRef=="context"
-        assert  assayAnnotation.display=="http://www.uniprot.org/uniprot/Q9Y253"
-        assert  assayAnnotation.extValueId=="Q9Y253"
-        assert assayAnnotation.id =="31690"
-        assert assayAnnotation.key=="UniProt"
-        assert assayAnnotation.source =="cap"
-        assert assayAnnotation.value=="value"
+        assert assayAnnotation.measures
+        assert assayAnnotation.measures.size() == 1
+        assert assayAnnotation.docs
+        assert assayAnnotation.docs.size() == 1
+        assert assayAnnotation.contexts
+        assert assayAnnotation.contexts.size()==1
+
+
     }
 
 

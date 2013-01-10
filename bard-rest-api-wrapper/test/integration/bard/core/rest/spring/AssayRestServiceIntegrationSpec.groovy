@@ -11,7 +11,6 @@ import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
-import spock.lang.IgnoreRest
 
 /**
  * Tests for RESTAssayService in JDO
@@ -27,34 +26,28 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final AssayResult assayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
         final long adid = assayResult.assays.get(0).id
         when:
-        final List<AssayAnnotation> annotations = assayRestService.findAnnotations(adid)
+        final AssayAnnotation annotation = assayRestService.findAnnotations(adid)
         then:
         assert assayResult.metaData
         assert assayResult.link
         assert assayResult.etag
         assert assayResult.facetsToValues
-        assert annotations
-        for (AssayAnnotation assayAnnotation : annotations) {
-            // assert assayAnnotation?.display
-            assert assayAnnotation.source
-            assert assayAnnotation.id
-            assert assayAnnotation.key
-        }
+        assert annotation
+        assert annotation.contexts
+        assert annotation.docs
+        assert annotation.measures
     }
 
     void "getAssayAnnotationFromId"() {
         given:
         final ExpandedAssay assay = assayRestService.getAssayById(2868);
         when:
-        final List<AssayAnnotation> annotations = assayRestService.findAnnotations(assay.id)
+        final AssayAnnotation annotation = assayRestService.findAnnotations(assay.id)
         then:
-        assert annotations
-        for (AssayAnnotation assayAnnotation : annotations) {
-            assert assayAnnotation.display
-            assert assayAnnotation.source
-            assert assayAnnotation.id
-            assert assayAnnotation.key
-        }
+        assert annotation
+        assert annotation.contexts
+        assert annotation.docs
+        assert annotation.measures
 
     }
 
@@ -65,16 +58,13 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final List<ExpandedAssay> assays = assayResult.assays
         final ExpandedAssay assay = assays.get(0)
         when:
-        List<AssayAnnotation> annotations = assayRestService.findAnnotations(assay.getId())
+         AssayAnnotation annotation = assayRestService.findAnnotations(assay.getId())
         then:
-        assert annotations
+        assert annotation
+        assert annotation.contexts
+        assert annotation.docs
+        assert annotation.measures
 
-        for (AssayAnnotation assayAnnotation : annotations) {
-            assert assayAnnotation.display
-            assert assayAnnotation.source
-            assert assayAnnotation.id
-            assert assayAnnotation.key
-        }
     }
 
     /**
@@ -341,7 +331,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void "test Get Assays with facets, #label"() {
         given: "An ETAG"
         final String etag = assayRestService.newETag("My assay collection", adids);
-        when: "We call the getFactest matehod"
+        when: "We call the getFacets method"
         final List<Facet> facets = this.assayRestService.getFacetsByETag(etag)
         and: "A list of assays"
         final ExpandedAssayResult assayResult = this.assayRestService.searchAssaysByIds(adids)

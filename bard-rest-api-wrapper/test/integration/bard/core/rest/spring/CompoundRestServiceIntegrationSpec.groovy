@@ -2,6 +2,7 @@ package bard.core.rest.spring
 
 import bard.core.SearchParams
 import bard.core.SuggestParams
+import bard.core.exceptions.RestApiException
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.util.Counts
@@ -9,10 +10,9 @@ import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
-import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
-import bard.core.exceptions.RestApiException
+import spock.lang.IgnoreRest
 
 /**
  * Tests for CompoundRestService in JDO
@@ -21,7 +21,7 @@ import bard.core.exceptions.RestApiException
 @Unroll
 class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     CompoundRestService compoundRestService
-
+    @IgnoreRest
     void "test getSummaryForCompound"() {
         given:
         Long cid = 16760208
@@ -35,6 +35,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundSummary.ntest
         assert compoundSummary.testedAssays
         assert compoundSummary.testedExptdata
+        assert compoundSummary.testedExptdata.resultData
     }
 
     void "test retrieving assays from a compound #label"() {
@@ -142,7 +143,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
 
         for (Compound compound : compounds) {
-            assert compound.getName(), "Compound  must have a name"
+            assert compound.getIupacName(), "Compound  must have a name"
         }
 
         final List<Facet> facets = compoundResult.getFacets();

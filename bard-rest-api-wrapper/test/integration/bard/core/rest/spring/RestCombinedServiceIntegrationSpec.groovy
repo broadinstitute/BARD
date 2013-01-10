@@ -12,6 +12,7 @@ import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
+import bard.core.rest.spring.project.ProjectExpanded
 
 /**
  * Tests for RESTAssayService in JDO
@@ -213,7 +214,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     void "test projects with experiments #label"() {
 
         when: "The get method is called with the given PID: #pid"
-        Project project = this.projectRestService.getProjectById(pid)
+        ProjectExpanded project = this.projectRestService.getProjectById(pid)
         then: "A ProjectSearchResult is returned with the expected information"
         assert project
         assert pid == project.id
@@ -233,7 +234,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     void "test projects with assays #label"() {
 
         when: "The get method is called with the given PID: #pid"
-        Project project = this.projectRestService.getProjectById(pid)
+        ProjectExpanded project = this.projectRestService.getProjectById(pid)
         then: "A ProjectSearchResult is returned with the expected information"
         assert project
         assert pid == project.id
@@ -249,7 +250,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "testExperimentsFromSingleProject"() {
         given:
-        Project project = this.projectRestService.getProjectById(1);
+        ProjectExpanded project = this.projectRestService.getProjectById(1);
         assert project
 
         when:

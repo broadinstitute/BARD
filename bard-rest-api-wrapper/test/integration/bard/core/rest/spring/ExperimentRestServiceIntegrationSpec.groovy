@@ -9,6 +9,8 @@ import bard.core.rest.spring.experiment.ExperimentShow
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Timeout
 import spock.lang.Unroll
+import spock.lang.IgnoreRest
+import bard.core.rest.spring.experiment.ResultData
 
 /**
  * Tests for ProjectRestService
@@ -97,6 +99,20 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         "For an existing experiment with activities" | new Long(346)
     }
 
+    void "tests new json #label"() {
+        when: "We call the restExperimentService.activities method with the experiment"
+        final ExperimentData experimentData = experimentRestService.activities(experimentId);
+
+        then: "We expect activities for each of the experiments to be found"
+        assert experimentData
+        final List<Activity> activities = experimentData.activities
+        Activity activity = activities.get(0)
+        final ResultData resultData = activity.getResultData()
+        assert resultData
+        where:
+        label                                        | experimentId
+        "For an existing experiment with activities" | new Long(346)
+    }
     void "testExperimentActivity"() {
         given:
         final Long experimentId = 197

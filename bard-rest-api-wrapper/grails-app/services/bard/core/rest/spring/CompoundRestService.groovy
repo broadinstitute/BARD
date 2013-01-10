@@ -216,6 +216,7 @@ class CompoundRestService extends AbstractRestService {
      */
     public CompoundResult findCompoundsByFreeTextSearch(SearchParams searchParams) {
         final String urlString = buildSearchURL(searchParams)
+        println(urlString)
         //We are passing the URI because we have already encoded the string
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html

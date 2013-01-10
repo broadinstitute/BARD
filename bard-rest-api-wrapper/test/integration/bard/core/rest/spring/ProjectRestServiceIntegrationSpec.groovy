@@ -10,6 +10,7 @@ import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.exceptions.RestApiException
+import bard.core.rest.spring.project.ProjectExpanded
 
 /**
  * Tests for ProjectRestService
@@ -56,7 +57,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test project with probe #label"() {
         when: "The get method is called with the given PID: #pid"
-        final Project project = projectRestService.getProjectById(pid)
+        final ProjectExpanded project = projectRestService.getProjectById(pid)
         then: "A Project is returned with the expected information"
         assert project
         assert pid == project.projectId
@@ -65,7 +66,12 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert compound.cid == 9795907
         assert compound.probeId == "ML103"
         assert compound.url == "https://mli.nih.gov/mli/?dl_id=976"
-        assertProject(project, false)
+        assert project.id != null
+        assert project.name
+        assert project.description
+        assert project.eids
+        assert project.aids
+        assert project.experimentCount
         where:
         label                                               | pid
         "Find an existing ProjectSearchResult with a Probe" | new Integer(17)
@@ -92,11 +98,16 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     void "test Get a Single Project #label"() {
 
         when: "The get method is called with the given PID: #pid"
-        final Project project = projectRestService.getProjectById(pid)
+        final ProjectExpanded project = projectRestService.getProjectById(pid)
         then: "An ProjectSearchResult is returned with the expected information"
         assert project
         assert pid == project.projectId
-        assertProject(project, false)
+        assert project.id != null
+        assert project.name
+        assert project.description
+        assert project.eids
+        assert project.aids
+        assert project.experimentCount
         where:
         label                                  | pid
         "Find an existing ProjectSearchResult" | new Integer(129)
@@ -152,7 +163,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         final Project projectAfterFreeTextSearch = projects.iterator().next()
 
         and: "call the restProjectService.get() on it "
-        Project projectAfterGet = projectRestService.getProjectById(projectAfterFreeTextSearch.getId())
+        ProjectExpanded projectAfterGet = projectRestService.getProjectById(projectAfterFreeTextSearch.getId())
         then: "We expected to get the same project back and we expect that it is not null"
 
         assert projectAfterFreeTextSearch != null

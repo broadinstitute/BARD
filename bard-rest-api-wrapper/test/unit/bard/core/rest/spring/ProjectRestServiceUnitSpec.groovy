@@ -1,14 +1,14 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
+import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
-import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.helper.LoggerService
 
 @Unroll
 @TestFor(ProjectRestService)
@@ -31,15 +31,15 @@ class ProjectRestServiceUnitSpec extends Specification {
 
     void "getProjectById #label"() {
         when:
-        final Project resultProject = service.getProjectById(pid)
+        final ProjectExpanded resultProject = service.getProjectById(pid)
 
         then:
         restTemplate.getForObject(_, _, _) >> {project}
         assert (resultProject != null) == noErrors
         where:
-        label                  | pid | project       | noErrors
-        "Existing Project"     | 179 | new Project() | true
-        "Non_Existing Project" | -1  | null          | false
+        label                  | pid | project               | noErrors
+        "Existing Project"     | 179 | new ProjectExpanded() | true
+        "Non_Existing Project" | -1  | null                  | false
     }
 
     void "getResourceContext"() {

@@ -1,95 +1,51 @@
 package bard.core.rest.spring.assays;
 
 
-import bard.core.rest.spring.util.JsonUtil
+
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import bard.core.rest.spring.util.JsonUtil
 
+/**
+ * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AssayAnnotation extends JsonUtil {
+public class AssayAnnotation  extends JsonUtil {
 
-    @JsonProperty("source")
-    private String source;
-    @JsonProperty("id")
-    private String id;
-    @JsonProperty("display")
-    private String display;
-    @JsonProperty("contextRef")
-    private String contextRef;
-    @JsonProperty("key")
-    private String key;
-    @JsonProperty("value")
-    private String value;
-    @JsonProperty("extValueId")
-    private String extValueId;
+    @JsonProperty("contexts")
+    private List<Context> contexts = new ArrayList<Context>();
+    @JsonProperty("measures")
+    private List<Measure> measures = new ArrayList<Measure>();
+    @JsonProperty("docs")
+    private List<Doc> docs = new ArrayList<Doc>();
 
-    @JsonProperty("source")
-    public String getSource() {
-        return source;
+    @JsonProperty("contexts")
+    public List<Context> getContexts() {
+        return contexts;
     }
 
-    @JsonProperty("source")
-    public void setSource(String source) {
-        this.source = source;
+    @JsonProperty("contexts")
+    public void setContexts(List<Context> contexts) {
+        this.contexts = contexts;
     }
 
-    @JsonProperty("id")
-    public String getId() {
-        return id;
+    @JsonProperty("measures")
+    public List<Measure> getMeasures() {
+        return measures;
     }
 
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
+    @JsonProperty("measures")
+    public void setMeasures(List<Measure> measures) {
+        this.measures = measures;
     }
 
-    @JsonProperty("display")
-    public String getDisplay() {
-        return display;
+    @JsonProperty("docs")
+    public List<Doc> getDocs() {
+        return docs;
     }
 
-    @JsonProperty("display")
-    public void setDisplay(String display) {
-        this.display = display;
-    }
-
-    @JsonProperty("contextRef")
-    public String getContextRef() {
-        return contextRef;
-    }
-
-    @JsonProperty("contextRef")
-    public void setContextRef(String contextRef) {
-        this.contextRef = contextRef;
-    }
-
-    @JsonProperty("key")
-    public String getKey() {
-        return key;
-    }
-
-    @JsonProperty("key")
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    @JsonProperty("value")
-    public String getValue() {
-        return value;
-    }
-
-    @JsonProperty("value")
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    @JsonProperty("extValueId")
-    public String getExtValueId() {
-        return extValueId;
-    }
-
-    @JsonProperty("extValueId")
-    public void setExtValueId(String extValueId) {
-        this.extValueId = extValueId;
+    @JsonProperty("docs")
+    public void setDocs(List<Doc> docs) {
+        this.docs = docs;
     }
 }
