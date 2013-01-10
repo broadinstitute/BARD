@@ -2,17 +2,19 @@
 <g:hiddenField name="totalAssays" id="totalAssays" value="${nhits}"/>
 <div class="row-fluid">
 <g:if test="${facets}">
-    <g:render template="facets" model="['facets': facets, 'formName' : FacetFormType.AssayFacetForm]"/>
+    <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
     <div class="span9">
 </g:if>
 <g:else>
     <div class="span12">
 </g:else>
 <g:if test="${nhits > 0}">
-        <ul class="unstyled results">
+    <ul class="unstyled results">
         <g:each var="assayAdapter" in="${assayAdapters}">
             <li>
-                <h3><g:link action="showAssay" id="${assayAdapter.id}" params='[searchString:"${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link></h3>
+                <h3><g:link action="showAssay" id="${assayAdapter.id}"
+                            params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link>
+                </h3>
                 <g:saveToCartButton id="${assayAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>
@@ -24,13 +26,15 @@
                 </g:if>
             </li>
         </g:each>
-        </ul>
+    </ul>
+    <g:if test="${params.max || params.offset}">
         <div class="pagination">
-            <g:paginate total="${nhits?nhits:0}" params='[searchString:"${searchString}"]'/>
+            <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
         </div>
+    </g:if>
 </g:if>
 <g:else>
-        <div class="tab-message">No search results found</div>
+    <div class="tab-message">No search results found</div>
 </g:else>
-    </div>
+</div>
 </div>
