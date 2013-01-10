@@ -39,56 +39,47 @@
 		    </div>
 	    </div>
     </g:if>
-    
+
     <div class="row-fluid">
 	    <div class="span12">
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
-	        	<g:form action="findByName" class="form-inline">	
+	        	<g:form action="findByName" class="form-inline">
 	        		<label class="control-label" for="assayName">Enter Assay Name:</label>
-	        		<input type="text" size="50" id="name" name='assayName' value="${params.assayName}">														
+	        		<input type="text" size="50" id="name" name='assayName' value="${params.assayName}">
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
 				</g:form>
 	        </div>
 	    </div>
 	</div>
-	
+
 	<g:if test="${assays}">
 	<div class="row-fluid">
 	    <div class="span12" id="results_accordion">
-	    		<h3><a href="#">Assays (${assays.size()})</a></a></h3>
+	    		<h3>Assays (${assays.size()})</h3>
 				<div>
 					<g:if test="${assays.size() > 0}">
-						<div>		
+						<div>
 							<table class="gridtable">
 								<thead>
 									<tr>
-										<g:sortableColumn property="id" title="${message(code: 'assay.id.label', default: 'ID')}" />	
-										<g:sortableColumn property="assayName" title="${message(code: 'assay.assayName.label', default: 'Assay Name')}" />							
-										<g:sortableColumn property="designedBy" title="${message(code: 'assay.designedBy.label', default: 'Designed By')}" />						
+										<g:sortableColumn property="id" title="${message(code: 'assay.id.label', default: 'ID')}" />
+										<g:sortableColumn property="assayName" title="${message(code: 'assay.assayName.label', default: 'Assay Name')}" />
+										<g:sortableColumn property="designedBy" title="${message(code: 'assay.designedBy.label', default: 'Designed By')}" />
 									</tr>
 								</thead>
 								<tbody>
 								<g:each in="${assays}" status="i" var="assayInstance">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 										<td>${fieldValue(bean: assayInstance, field: "id")}</td>
-										<td><g:link action="show" id="${assayInstance.id}">${fieldValue(bean: assayInstance, field: "assayName")}</g:link></td>															
+										<td><g:link action="show" id="${assayInstance.id}">${fieldValue(bean: assayInstance, field: "assayName")}</g:link></td>
 										<td>${fieldValue(bean: assayInstance, field: "designedBy")}</td>
 									</tr>
 								</g:each>
 								</tbody>
 							</table>
 						</div>
-					</g:if>	
+					</g:if>
 				</div>
-				
-				<h3><a href="#">Compounds</a></h3>
-				<div>No data</div>
-				
-				<h3><a href="#">Experiments</a></h3>
-				<div>No data</div>
-				
-				<h3><a href="#">Projects</a></h3>
-				<div>No data</div>
 	    </div>
 	</div>
 	</g:if>
