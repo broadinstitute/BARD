@@ -18,6 +18,7 @@
             var canvas = $(canvas).get(0)
             var ctx = canvas.getContext("2d");
             var particleSystem
+            var isClicked = false
             var that = {
                 init:function(system){
                     //
@@ -40,6 +41,8 @@
                 },
 
                 redraw:function(){
+                    if (isClicked)
+                        particleSystem.stop()
                     //
                     // redraw will be called repeatedly during the run whenever the node positions
                     // change. the new positions for the nodes can be accessed by looking at the
@@ -118,7 +121,7 @@
                     // for moves and mouseups while dragging
                     var handler = {
                         clicked:function(e){
-                            particleSystem.stop()
+                            isClicked = true
                             var pos = $(canvas).offset();
                             _mouseP = arbor.Point(e.pageX-pos.left, e.pageY-pos.top)
                             nearest = dragged = particleSystem.nearest(_mouseP);
@@ -202,10 +205,6 @@
                             {name: "", length:.75});
                             //{name: graphInJSON.edges[i].label})
             }
-//            if (connectedNodes + isolatedNodes <= 1) {
-//                //a hack to prevent single node bouncing around
-//                 sys.parameters({ friction: '1.0' });
-//            }
         })
     })(this.jQuery)
     </r:script>
