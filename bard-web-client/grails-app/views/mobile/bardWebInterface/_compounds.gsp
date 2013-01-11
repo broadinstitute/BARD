@@ -56,9 +56,11 @@
             </g:each>
         </table>
 
-        <div id="paginateBar" class="pagination">
-            <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
-        </div>
+        <g:if test="${params.max || params.offset}">
+            <div id="paginateBar" class="pagination">
+                <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
+            </div>
+        </g:if>
     </g:if>
     <g:else>
         <div class="tab-message">No search results found</div>

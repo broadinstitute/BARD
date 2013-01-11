@@ -311,14 +311,8 @@ class CompoundRestService extends AbstractRestService {
      * @param eTagName
      * @return
      */
-    public CompoundResult findCompoundsByETag(String eTagName) {
-        List<ETag> etags = findAllETagsForResource()
-        ETag matchedETag = etags.find {ETag eTag -> eTag.name == eTagName};
-        if (!matchedETag) {
-            return new CompoundResult()
-        }
-
-        String urlToCompounds = getResource() + RestApiConstants.ETAG + RestApiConstants.FORWARD_SLASH + matchedETag.etag_id
+    public CompoundResult findCompoundsByETag(String eTagId) {
+        String urlToCompounds = getResource() + RestApiConstants.ETAG + RestApiConstants.FORWARD_SLASH + eTagId
 
         //We are passing the URI because we have already encoded the string
         //just passing in the string would cause the URI to be encoded twice
