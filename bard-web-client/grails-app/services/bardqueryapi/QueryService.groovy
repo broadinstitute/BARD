@@ -23,6 +23,7 @@ import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
 
 import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.assays.AssayAnnotation
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -306,7 +307,8 @@ class QueryService implements IQueryService {
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
-            final AssayAdapter assayAdapter = new AssayAdapter(assay)
+            final List<AssayAnnotation> annotations = assayRestService.findAnnotations(assayId)
+            final AssayAdapter assayAdapter = new AssayAdapter(assay, 0, null, annotations)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
         }
         return [:]

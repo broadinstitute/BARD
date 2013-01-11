@@ -183,6 +183,7 @@ class QueryServiceUnitSpec extends Specification {
         Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
         numberOfExceptedCalls * assayRestService.getAssayById(_) >> {expandedAssay}
+        numberOfExceptedCalls * assayRestService.findAnnotations(_)
         assert foundAssayMap
         assert foundAssayMap.assayAdapter
 
