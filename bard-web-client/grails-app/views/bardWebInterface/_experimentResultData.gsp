@@ -26,7 +26,8 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-            <th>${experimentDataMap?.activities.get(0)?.resultData?.priorityElements.get(0)?.displayName ?: ""}</th>
+            %{--We should probably do this server side--}%
+            <th>${experimentDataMap?.activities.get(0)?.resultData?.priorityElements?.get(0)?.displayName ?: ""}</th>
             <th>Experiment Descriptors</th>
             <th>Child Elements</th>
             <g:if test="${!experimentDataMap?.activities?.isEmpty()}">
