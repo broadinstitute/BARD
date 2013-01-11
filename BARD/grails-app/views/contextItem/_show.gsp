@@ -15,8 +15,8 @@
                 <p>${context.preferredName}</p>
                 <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
                     <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
-                        <g:each in="${context.assayContextMeasures}" var="assayContextMeasure">
-                            <a href="#measures-header">${assayContextMeasure.measure.resultType.label}</a>
+                        <g:each in="${context.assayContextMeasures}" status="i" var="assayContextMeasure">
+                            <a href="#measures-header">${assayContextMeasure.measure.resultType.label}<g:if test="${i < context.assayContextMeasures.size() - 1}">,  </g:if></a>
                         </g:each>
                     </p>
                 </g:if>
