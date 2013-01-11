@@ -30,7 +30,7 @@
             <th>Experiment Descriptors</th>
             <th>Child Elements</th>
             <g:if test="${!experimentDataMap?.activities?.isEmpty()}">
-                <g:if test="${experimentDataMap?.activities?.get(0)?.resultData?.hasConcentrationResponseSeries()}">
+                <g:if test="${experimentDataMap?.activities?.get(0)?.resultData?.responseClassEnum==bard.core.rest.spring.experiment.ResponseClassEnum.CR_SER}">
                     <th>Concentration Response Series</th>
                     <th>Concentration Response Plot</th>
                 </g:if>
