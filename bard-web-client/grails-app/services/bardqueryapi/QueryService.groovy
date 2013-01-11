@@ -21,11 +21,11 @@ import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
-import org.apache.commons.lang.time.StopWatch
+
 import bard.core.rest.spring.compounds.CompoundSummary
 
 class QueryService implements IQueryService {
-    final static String PROBE_ETAG_NAME = 'MLP Probes'
+    final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
 
     /**
      * {@link QueryHelperService}
@@ -128,7 +128,7 @@ class QueryService implements IQueryService {
     }
 
     Map showProbeList() {
-        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_NAME)
+        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
         final List<CompoundAdapter> compoundAdapters = queryHelperService.compoundsToAdapters(compoundResult)
         return [
                 compoundAdapters: compoundAdapters,

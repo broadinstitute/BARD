@@ -1,6 +1,8 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
+import bard.core.exceptions.RestApiException
+import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
@@ -19,9 +21,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.FutureTask
 
 import bard.core.rest.spring.compounds.*
-import spock.lang.IgnoreRest
-import bard.core.exceptions.RestApiException
-import bard.core.helper.LoggerService
 
 @Unroll
 @TestFor(CompoundRestService)
@@ -374,20 +373,16 @@ class CompoundRestServiceUnitSpec extends Specification {
 
     void "test findCompoundsByETag #label"() {
         when:
-        CompoundResult returnedCompoundResult = service.findCompoundsByETag(eTagName)
+        CompoundResult returnedCompoundResult = service.findCompoundsByETag(eTagId)
 
         then:
-        //Expecting two calls:
-        // 1st: for findCompoundsByETag -> findAllETagsForResource
-        // 2nd: for findCompoundsByETag -> List<Compound>
-        (0..2) * this.restTemplate.getForObject(_, _) >>> [new ETagCollection(etags: etags), compounds]
-        assert returnedCompoundResult.compounds == expextedCompounds
+        1 * this.restTemplate.getForObject(_, _) >> { compounds }
+        assert returnedCompoundResult.compounds*.name == expextedCompoundNames
 
         where:
-        label                 | eTagName   | etags                        | compounds                         | expextedCompounds
-        'etag name found'     | 'etagName' | [new ETag(name: 'etagName')] | [new Compound(name: 'compound1')] | [new Compound(name: 'compound1')]
-        'etag name not found' | 'noName'   | [new ETag(name: 'etagName')] | [new Compound(name: 'compound1')] | []
-        'no compounds found'  | 'etagName' | [new ETag(name: 'etagName')] | []                                | []
+        label                | eTagId | compounds                         | expextedCompoundNames
+        'compounds found'    | '1a'   | [new Compound(name: 'compound1')] | ['compound1']
+        'no compounds found' | '1a'   | []                                | []
     }
 
     void "test findCompoundById #label"() {
