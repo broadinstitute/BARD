@@ -254,25 +254,32 @@ class QueryService implements IQueryService {
 
         }
         String priorityDisplay = ""
+        boolean hasChildElements = false
         for (Activity activity : activities) {
             final ResultData resultData = activity.resultData
             if (resultData) {
-                if (!priorityDisplay) {
 
-                    if (resultData?.hasPriorityElements()) {
-                        priorityDisplay = activity.resultData?.priorityElements.get(0).displayName
+
+                if (resultData?.hasPriorityElements()) {
+                    final PriorityElement priorityElement = resultData?.priorityElements.get(0)
+                    if (!priorityDisplay) {
+                        priorityDisplay = priorityElement.displayName
+
+                    }
+                    if(!hasChildElements){
+                        hasChildElements = priorityElement.hasChildElements()
                     }
                 }
-                if (!hasPlot && resultData.responseClassEnum==ResponseClassEnum.CR_SER) {
+                if (!hasPlot && resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
                     hasPlot = true
 
                 }
             }
-            if(hasPlot && priorityDisplay){
+            if (hasPlot && priorityDisplay && hasChildElements) {
                 break
             }
         }
-        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot, priorityDisplay:priorityDisplay]
+        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot, priorityDisplay: priorityDisplay, hasChildElements: hasChildElements]
     }
 
     /**

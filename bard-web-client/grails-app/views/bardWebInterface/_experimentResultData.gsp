@@ -29,7 +29,9 @@
             %{--We should probably do this server side--}%
             <th>${experimentDataMap?.priorityDisplay ?: ""}</th>
             <th>Experiment Descriptors</th>
-            <th>Child Elements</th>
+            <g:if test="${experimentDataMap?.hasChildElements}">
+                <th>Child Elements</th>
+            </g:if>
             <g:if test="${experimentDataMap?.hasPlot}">
                 <th>Concentration Response Series</th>
                 <th>Concentration Response Plot</th>
@@ -41,10 +43,10 @@
             <%
                 PriorityElement priorityElement = null
                 ResultData resultData = activity?.resultData
-                if(resultData?.hasPriorityElements()){
+                if (resultData?.hasPriorityElements()) {
                     priorityElement = resultData?.priorityElements.get(0)
                 }
-             %>
+            %>
             <tr>
                 <td>
                     <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${activity.sid}">
@@ -77,14 +79,15 @@
                         <g:if test="${rootElement.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
                     </g:each>
                 </td>
+                <g:if test="${experimentDataMap?.hasChildElements}">
+                    <td>
+                        <g:each in="${priorityElement?.childElements}" var="childElement">
 
-                <td>
-                    <g:each in="${priorityElement?.childElements}" var="childElement">
+                            <g:if test="${childElement.toDisplay()}">${childElement.toDisplay()}<br/></g:if>
 
-                        <g:if test="${childElement.toDisplay()}">${childElement.toDisplay()}<br/></g:if>
-
-                    </g:each>
-                </td>
+                        </g:each>
+                    </td>
+                </g:if>
                 <g:each in="${priorityElement?.concentrationResponseSeries}" var="concRespSeries">
                     <% List<ConcentrationResponsePoint> concentrationResponsePoints = concRespSeries.concentrationResponsePoints
                     Map m = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)

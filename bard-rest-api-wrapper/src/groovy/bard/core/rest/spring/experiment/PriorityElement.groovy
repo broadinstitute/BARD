@@ -32,4 +32,10 @@ public class PriorityElement extends ActivityConcentration {
         }
         return null
     }
+    public boolean hasChildElements(){
+        if(this.childElements){
+            return true
+        }
+        return false
+    }
 }
