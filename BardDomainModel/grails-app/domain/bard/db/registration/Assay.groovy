@@ -95,4 +95,8 @@ class Assay extends AbstractContextOwner{
         this.assayContexts
     }
 
+
+    def getRootMeasures() {
+        return measures.findAll {it.parentMeasure == null}
+    }
 }
