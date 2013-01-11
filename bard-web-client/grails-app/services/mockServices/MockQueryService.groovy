@@ -15,6 +15,7 @@ import bard.core.interfaces.*
 import bard.core.rest.spring.compounds.CompoundSummary
 import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
+import bard.core.rest.spring.assays.AssayAnnotation
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -784,14 +785,13 @@ class MockAssayAdapter implements AssayAdapterInterface {
         super()
     }
 
-    public Collection<Value> getAnnotations() {
-        final Collection<Value> annos = new ArrayList<Value>();
-        final Map<String, String> terms = [name: "value"]
-        for (String key : terms.keySet()) {
-            Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
-            annos.add(value)
-        }
-        return annos//To change body of implemented methods use File | Settings | File Templates.
+    public List<AssayAnnotation> getAnnotations() {
+        final List<AssayAnnotation> annos = new ArrayList<AssayAnnotation>();
+        AssayAnnotation annotation = new AssayAnnotation()
+        annotation.key = "target"
+        annotation.value = "WEE1"
+        annos.add(annotation)
+        return annos
     }
 
     @Override
