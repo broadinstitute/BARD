@@ -17,3 +17,5 @@ atlassian-ide-plugin.xml
 .idea/vcs.xml
 logs/
 *.log
+*~
+.DS_Store
