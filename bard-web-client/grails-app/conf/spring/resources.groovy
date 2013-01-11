@@ -58,6 +58,7 @@ beans = {
                 projectRestService = ref('projectRestService')
                 assayRestService = ref('assayRestService')
                 substanceRestService=ref('substanceRestService')
+                experimentRestService=ref('experimentRestService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here

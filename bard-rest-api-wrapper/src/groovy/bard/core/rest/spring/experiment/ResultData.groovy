@@ -84,12 +84,7 @@ public class ResultData extends JsonUtil {
        return ResponseClassEnum.toEnum(this.responseClass)
     }
     public boolean hasConcentrationResponseSeries(){
-        for(PriorityElement priorityElement : this.priorityElements){
-            if(priorityElement.concentrationResponseSeries){
-                return true;
-            }
-        }
-        return false
+        return getResponseClassEnum() == ResponseClassEnum.CR_SER
     }
 }
 enum ResponseClassEnum {

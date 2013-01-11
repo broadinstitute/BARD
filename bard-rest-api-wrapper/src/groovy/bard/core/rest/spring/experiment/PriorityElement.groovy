@@ -21,12 +21,14 @@ public class PriorityElement extends ActivityConcentration {
         this.primaryElements = primaryElements
     }
     public boolean hasPlot(){
-        if(this.concentrationResponseSeries){
-            return true
-        }
-        if(primaryElements){
+        if(this.concentrationResponseSeries|| this.primaryElements){
             return true
         }
         return false
+    }
+    public Double getSlope(){
+        if(hasPlot()){
+         return new Double(this.value)
+        }
     }
 }

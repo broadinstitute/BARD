@@ -47,7 +47,7 @@ class ConcentrationResponsePointUnitSpec extends Specification {
         when:
         ConcentrationResponsePoint concentrationResponsePoint = objectMapper.readValue(JSON_DATA, ConcentrationResponsePoint.class)
         then:
-        assert concentrationResponsePoint.testConc
+        assert concentrationResponsePoint.testConcentration
         assert concentrationResponsePoint.value
 
         final List<ActivityData> childElements = concentrationResponsePoint.childElements

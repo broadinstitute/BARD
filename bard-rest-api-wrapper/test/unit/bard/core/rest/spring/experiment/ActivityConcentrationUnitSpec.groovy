@@ -177,13 +177,13 @@ class ActivityConcentrationUnitSpec extends Specification {
         assert activityConcentration.value
         final ConcentrationResponseSeries concResponseSeries = activityConcentration.concentrationResponseSeries
         assert concResponseSeries
-        assert concResponseSeries.testConcUnit
+        assert concResponseSeries.testConcentrationUnit
         assert concResponseSeries.dictElemId
-        assert concResponseSeries.concRespParams
+        assert concResponseSeries.curveFitParameters
         final List<ConcentrationResponsePoint> concRespPoints = concResponseSeries.concentrationResponsePoints
         assert concRespPoints
         for(ConcentrationResponsePoint concRespPoint in concRespPoints){
-            assert concRespPoint.testConc
+            assert concRespPoint.testConcentration
             assert concRespPoint.value
         }
         assert concResponseSeries.miscData

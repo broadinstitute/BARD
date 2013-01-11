@@ -22,6 +22,21 @@ public class ActivityData extends JsonUtil {
     @JsonProperty("qualifierValue")
     private String qualifier;
 
+
+    public String toDisplay() {
+        StringBuilder stringBuilder = new StringBuilder()
+        if ("Score" != displayName && "Activity_Score" != displayName) {
+            stringBuilder.append(displayName ? displayName + " : " : '')
+
+            stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");
+            if (testConcentration) {
+                stringBuilder.append("  Test Concentration:").append(testConcentration).append(testConcentrationUnit)
+            }
+        }
+        return stringBuilder.toString()
+
+    }
+
     @JsonProperty("displayName")
     public String getDisplayName() {
         return displayName;

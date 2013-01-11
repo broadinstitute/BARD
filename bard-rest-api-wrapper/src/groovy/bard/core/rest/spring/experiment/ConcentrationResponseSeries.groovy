@@ -6,16 +6,18 @@ import bard.core.rest.spring.util.JsonUtil
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ConcentrationResponseSeries extends JsonUtil{
+public class ConcentrationResponseSeries extends JsonUtil {
+
+
 
     @JsonProperty("responseUnit")
     private String responseUnit;
     @JsonProperty("testConcUnit")
-    private String testConcUnit;
+    private String testConcentrationUnit;
     @JsonProperty("crSeriesDictId")
     private long dictElemId;
     @JsonProperty("concRespParams")
-    private CurveFitParameters concRespParams;
+    private CurveFitParameters curveFitParameters;
     @JsonProperty("concRespPoints")
     private List<ConcentrationResponsePoint> concentrationResponsePoints = new ArrayList<ConcentrationResponsePoint>();
     @JsonProperty("miscData")
@@ -32,13 +34,13 @@ public class ConcentrationResponseSeries extends JsonUtil{
     }
 
     @JsonProperty("testConcUnit")
-    public String getTestConcUnit() {
-        return testConcUnit;
+    public String getTestConcentrationUnit() {
+        return testConcentrationUnit;
     }
 
     @JsonProperty("testConcUnit")
-    public void setTestConcUnit(String testConcUnit) {
-        this.testConcUnit = testConcUnit;
+    public void setTestConcentrationUnit(String testConcUnit) {
+        this.testConcentrationUnit = testConcUnit;
     }
 
     @JsonProperty("crSeriesDictId")
@@ -52,13 +54,13 @@ public class ConcentrationResponseSeries extends JsonUtil{
     }
 
     @JsonProperty("concRespParams")
-    public CurveFitParameters getConcRespParams() {
-        return concRespParams;
+    public CurveFitParameters getCurveFitParameters() {
+        return curveFitParameters;
     }
 
     @JsonProperty("concRespParams")
-    public void setConcRespParams(CurveFitParameters concRespParams) {
-        this.concRespParams = concRespParams;
+    public void setCurveFitParameters(CurveFitParameters curveFitParameters) {
+        this.curveFitParameters = curveFitParameters;
     }
 
     @JsonProperty("concRespPoints")
@@ -79,5 +81,17 @@ public class ConcentrationResponseSeries extends JsonUtil{
     @JsonProperty("miscData")
     public void setMiscData(List<ActivityData> miscData) {
         this.miscData = miscData;
+    }
+
+    public static Map toDoseResponsePoints(List<ConcentrationResponsePoint> concentrationResponsePoints) {
+        List<Double> concentrations = []
+        List<Double> activities = []
+
+        for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
+            concentrations.add(concentrationResponsePoint.testConcentration)
+            activities.add(new Double(concentrationResponsePoint.value))
+        }
+        return [activities: activities, concentrations:concentrations]
+
     }
 }

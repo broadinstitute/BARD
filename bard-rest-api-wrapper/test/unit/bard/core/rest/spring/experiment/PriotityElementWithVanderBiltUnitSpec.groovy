@@ -914,10 +914,10 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
         assert concentrationResponsePoints
         assert concentrationResponsePoints.size() > 1
         for (ConcentrationResponsePoint concentrationResponsePoint in concentrationResponsePoints) {
-            assert concentrationResponsePoint.testConc
+            assert concentrationResponsePoint.testConcentration
             assert concentrationResponsePoint.value
         }
-        final CurveFitParameters curveFitParameters = concentrationResponseSeries.concRespParams
+        final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
         assert curveFitParameters
         assert !curveFitParameters.s0
         assert !curveFitParameters.hillCoef

@@ -13,7 +13,7 @@ public class Activity extends JsonUtil {
   ObjectMapper objectMapper = new ObjectMapper()
 
 
-
+    @JsonIgnore
     private ResultData resultData
     @JsonProperty("resultJson")
     private String resultJson
@@ -192,6 +192,5 @@ public class Activity extends JsonUtil {
     public boolean hasConcentrationSeries(){
         return getResultData()?.hasConcentrationResponseSeries()
     }
-
 
 }

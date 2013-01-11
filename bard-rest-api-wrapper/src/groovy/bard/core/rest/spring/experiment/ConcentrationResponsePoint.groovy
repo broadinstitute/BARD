@@ -17,19 +17,19 @@ public class ConcentrationResponsePoint extends JsonUtil {
     private List<ActivityData> childElements = new ArrayList<ActivityData>();
 
     @JsonProperty("testConc")
-    private double testConc;
+    private double testConcentration;
     @JsonProperty("value")
     private String value;
 
 
     @JsonProperty("testConc")
-    public double getTestConc() {
-        return testConc;
+    public double getTestConcentration() {
+        return testConcentration;
     }
 
     @JsonProperty("testConc")
-    public void setTestConc(double testConc) {
-        this.testConc = testConc;
+    public void setTestConcentration(double testConcentration) {
+        this.testConcentration = testConcentration;
     }
 
     @JsonProperty("value")

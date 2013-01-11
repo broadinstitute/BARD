@@ -21,8 +21,12 @@ import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
-import org.apache.commons.lang.time.StopWatch
 import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.experiment.ExperimentShow
+import bard.core.rest.spring.experiment.ExperimentData
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.project.ProjectExpanded
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_NAME = 'MLP Probes'
@@ -35,6 +39,7 @@ class QueryService implements IQueryService {
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
+    ExperimentRestService experimentRestService
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search
@@ -190,9 +195,9 @@ class QueryService implements IQueryService {
         return this.compoundRestService.getSummaryForCompound(cid)
     }
 
-        /*
-       * Returns an unexpanded list of sids
-        */
+    /*
+   * Returns an unexpanded list of sids
+    */
 
     List<Long> findSubstancesByCid(Long cid) {
         if (cid) {
@@ -227,6 +232,31 @@ class QueryService implements IQueryService {
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
+    /**
+     * Used for Show Experiment Page. Perhaps we should move this to the Query Service
+     * @param experimentId
+     * @param top
+     * @param skip
+     * @return Map of data to use to display an experiment
+     */
+    Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) {
+        List<Activity> activities = []
+        boolean hasPlot = false
+        final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+        long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
+        if (experimentShow) {
+            final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
+            activities = experimentData.activities
+
+        }
+        for (Activity activity : activities) {
+            if (activity.hasConcentrationSeries()) {
+                hasPlot = true
+                break
+            }
+        }
+        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot]
     }
 
     /**
@@ -318,7 +348,7 @@ class QueryService implements IQueryService {
      */
     Map showProject(final Long projectId) {
         if (projectId) {
-            final Project project = projectRestService.getProjectById(projectId)
+            final ProjectExpanded project = projectRestService.getProjectById(projectId)
 
             //TODO: Here we make 2 other calls to the server to get the experiments and assays associated with this project
             //TODO: Since we only display the names of the experiments and assays we should ask NCGC to change the payload to supply the names and ids

@@ -495,10 +495,10 @@ class MolecularSpreadSheetService {
      * @param activityValues
      * @return list
      */
-    protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Activity> activityValues) {
+    protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Activity> activities) {
         List<SpreadSheetActivity> spreadSheetActivities = []
-        for (Activity experimentValue : activityValues) {
-            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
+        for (Activity activity : activities) {
+            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(activity)
             spreadSheetActivities.add(spreadSheetActivity)
         }
         return spreadSheetActivities

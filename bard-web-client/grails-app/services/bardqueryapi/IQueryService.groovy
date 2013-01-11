@@ -89,8 +89,16 @@ public interface IQueryService {
      * @return map
      */
     Map findAssaysByADIDs(final List<Long> assayIds, List<SearchFilter> filters);
-
     /**
+     * Used for Show Experiment Page. Perhaps we should move this to the Query Service
+     * @param experimentId
+     * @param top
+     * @param skip
+     * @return Map of data to use to display an experiment
+     */
+    Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) ;
+
+        /**
      *
      * Given a list of Project Ids return all the projects that were found
      * @param projectIds

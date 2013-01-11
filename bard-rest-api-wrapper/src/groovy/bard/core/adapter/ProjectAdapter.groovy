@@ -6,19 +6,19 @@ import bard.core.Probe
 import bard.core.Value
 import bard.core.interfaces.EntityNamedSources
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.project.Project
 import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.project.ProjectExpanded
 
 
 public class ProjectAdapter implements ProjectAdapterInterface {
-    final Project project
+    final ProjectExpanded project
     final Double score
     final NameDescription matchingField
 
-    public ProjectAdapter(Project project, Double score=0, NameDescription nameDescription=null) {
+    public ProjectAdapter(ProjectExpanded project, Double score=0, NameDescription nameDescription=null) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription
@@ -78,7 +78,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return project.experimentCount.intValue()
     }
     public List<Document> getDocuments(){
-        return project.getPublications()
+        return [project.getPublications()]
     }
     public List<Target> getTargets(){
        return project.getTargets()

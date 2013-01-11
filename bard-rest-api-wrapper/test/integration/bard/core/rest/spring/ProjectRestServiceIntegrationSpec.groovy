@@ -118,7 +118,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     void "test Fail project Id does not exist #label"() {
 
         when: "The get method is called with the given PID: #pid"
-        final Project project = projectRestService.getProjectById(pid)
+        projectRestService.getProjectById(pid)
         then: "No Project is returned"
         thrown(RestApiException)
         where:
