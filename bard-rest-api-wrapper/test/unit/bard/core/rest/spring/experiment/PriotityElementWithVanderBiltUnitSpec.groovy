@@ -908,7 +908,7 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
 '''
 
     void assertActivityConcentration(final ActivityConcentration activityConcentration) {
-        final ConcentrationResponseSeries concentrationResponseSeries = activityConcentration.concResponseSeries
+        final ConcentrationResponseSeries concentrationResponseSeries = activityConcentration.concentrationResponseSeries
         assert concentrationResponseSeries
         final List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
         assert concentrationResponsePoints
@@ -968,7 +968,7 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
         assert childElements
         assert childElements.size() == 2
         assertChildElements(childElements)
-        assert !priorityElement.concResponseSeries
+        assert !priorityElement.concentrationResponseSeries
     }
 }
 

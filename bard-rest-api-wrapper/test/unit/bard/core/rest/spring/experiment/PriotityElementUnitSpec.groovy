@@ -158,7 +158,7 @@ class PriotityElementUnitSpec extends Specification {
 
         assert priorityElement.value
         if (hasConcentration) {
-            final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concResponseSeries
+            final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
             assert concentrationResponseSeries
             final List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
             assert concentrationResponsePoints
@@ -183,7 +183,7 @@ class PriotityElementUnitSpec extends Specification {
 
 
         } else {
-            assert !priorityElement.concResponseSeries
+            assert !priorityElement.concentrationResponseSeries
         }
         if (hasChildElement) {
             final List<ActivityData> childElements = priorityElement.childElements

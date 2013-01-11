@@ -20,4 +20,13 @@ public class PriorityElement extends ActivityConcentration {
     public void setPrimaryElements(List<ActivityConcentration> primaryElements) {
         this.primaryElements = primaryElements
     }
+    public boolean hasPlot(){
+        if(this.concentrationResponseSeries){
+            return true
+        }
+        if(primaryElements){
+            return true
+        }
+        return false
+    }
 }

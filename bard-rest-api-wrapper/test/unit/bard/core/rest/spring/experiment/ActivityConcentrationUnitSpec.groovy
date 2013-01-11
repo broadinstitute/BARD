@@ -175,7 +175,7 @@ class ActivityConcentrationUnitSpec extends Specification {
         assert activityConcentration.displayName
         assert activityConcentration.dictElemId
         assert activityConcentration.value
-        final ConcentrationResponseSeries concResponseSeries = activityConcentration.concResponseSeries
+        final ConcentrationResponseSeries concResponseSeries = activityConcentration.concentrationResponseSeries
         assert concResponseSeries
         assert concResponseSeries.testConcUnit
         assert concResponseSeries.dictElemId

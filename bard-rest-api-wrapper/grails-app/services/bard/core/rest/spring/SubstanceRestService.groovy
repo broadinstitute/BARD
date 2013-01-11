@@ -28,7 +28,7 @@ class SubstanceRestService extends AbstractRestService {
         if (sids && bardExperimentIds) {
             final String urlString = buildExperimentQuery()
             final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-            map.add("ids", sids.join(","));
+            map.add("sids", sids.join(","));
             map.add("eids", bardExperimentIds.join(","));
             final URL url = new URL(urlString)
             final List<Activity> activitiesFound = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;

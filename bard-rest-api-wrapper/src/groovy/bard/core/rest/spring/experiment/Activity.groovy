@@ -189,5 +189,9 @@ public class Activity extends JsonUtil {
         //convert the string to data object
         return resultData
     }
+    public boolean hasConcentrationSeries(){
+        return getResultData()?.hasConcentrationResponseSeries()
+    }
+
 
 }

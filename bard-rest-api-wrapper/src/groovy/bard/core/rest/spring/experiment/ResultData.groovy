@@ -79,13 +79,36 @@ public class ResultData extends JsonUtil {
     public void setRootElements(List<RootElement> rootElements) {
         this.rootElements = rootElements;
     }
-    public ResponseClassEnum getResponseClassEnum(){
-        //TODO: add logic based on response class
-      return ResponseClassEnum.CR_NO_SER
+
+    public ResponseClassEnum getResponseClassEnum() {
+       return ResponseClassEnum.toEnum(this.responseClass)
+    }
+    public boolean hasConcentrationResponseSeries(){
+        for(PriorityElement priorityElement : this.priorityElements){
+            if(priorityElement.concentrationResponseSeries){
+                return true;
+            }
+        }
+        return false
     }
 }
-enum ResponseClassEnum{
-   CR_NO_SER
+enum ResponseClassEnum {
+    SP("Single Point"),
+    CR_SER("Concentration Response"),
+    CR_NO_SER("Probable Concentration Response but no Series"),
+    UNCLASS("Unclassified"),
+    MULTCONC("Multiple Test Concentrations")
+
+    final String description
+
+    ResponseClassEnum(String description) {
+        this.description = description
+    }
+
+    static ResponseClassEnum toEnum(String representation){
+       return ResponseClassEnum.valueOf(representation)
+    }
+
 
 }
 

@@ -3,8 +3,8 @@ package bard.core.rest.spring.experiment
 import com.fasterxml.jackson.annotation.JsonProperty
 
 public class ActivityConcentration extends ActivityData {
-
-    private ConcentrationResponseSeries concResponseSeries
+    @JsonProperty("concResponseSeries")
+    private ConcentrationResponseSeries concentrationResponseSeries
 
     @JsonProperty("childElements")
     private List<ActivityData> childElements
@@ -18,11 +18,12 @@ public class ActivityConcentration extends ActivityData {
     public void setChildElements(List<ActivityData> childElements) {
         this.childElements = childElements
     }
-    public ConcentrationResponseSeries getConcResponseSeries() {
-        return concResponseSeries
+    @JsonProperty("concResponseSeries")
+    public ConcentrationResponseSeries getConcentrationResponseSeries() {
+        return concentrationResponseSeries
     }
-
-    public void setConcResponseSeries(ConcentrationResponseSeries concResponseSeries) {
-        this.concResponseSeries = concResponseSeries
+    @JsonProperty("concResponseSeries")
+    public void setConcentrationResponseSeries(ConcentrationResponseSeries concentrationResponseSeries) {
+        this.concentrationResponseSeries = concentrationResponseSeries
     }
 }
