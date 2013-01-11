@@ -82,17 +82,17 @@
 
                     </g:each>
                 </td>
-                <g:each in="${priorityElement.concentrationResponseSeries}"
-                        var="concRespSeries">
+                <g:each in="${priorityElement.concentrationResponseSeries}" var="concRespSeries">
                     <% List<ConcentrationResponsePoint> concentrationResponsePoints = concRespSeries.concentrationResponsePoints
                     Map m = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                     List<Double> concentrations = m.concentrations
                     List<Double> activities = m.activities
+                    CurveFitParameters curveFitParameters = concRespSeries.curveFitParameters
+                    List<ActivityData> miscDataList = concRespSeries.miscData
+                    String yAxisLabel = concRespSeries.getYAxisLabel()
                     %>
-                    <% CurveFitParameters curveFitParameters = concRespSeries.curveFitParameters %>
-                    <% List<ActivityData> miscDataList = concRespSeries.miscData %>
                     <td>
-                        <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
+                         <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
                             <%
                                 String responseValue = concentrationResponsePoint.value
                                 Double concentrationValue = concentrationResponsePoint.testConcentration
@@ -118,7 +118,6 @@
                     </td>
                     <g:if test="${!concentrationResponsePoints.isEmpty()}">
                         <td>
-
                             <img alt="Plot for CID ${activity.cid}" title="Plot for CID ${activity.cid}"
                                  src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
                                          params: [sinf: curveFitParameters.sInf,
@@ -127,7 +126,7 @@
                                                  hillSlope: curveFitParameters.hillCoef,
                                                  concentrations: concentrations,
                                                  activities: activities,
-                                                 yAxisLabel: "Place Holder",
+                                                 yAxisLabel: "${yAxisLabel}",
                                                  xAxisLabel: "Concentration ${priorityElement.testConcentrationUnit}"
                                          ])}"/>
                             <br/>
