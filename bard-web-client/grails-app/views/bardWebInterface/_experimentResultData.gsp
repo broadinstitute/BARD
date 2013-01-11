@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
@@ -27,22 +27,24 @@
             <th>Structure</th>
             <th>Outcome</th>
             %{--We should probably do this server side--}%
-            <th>${experimentDataMap?.activities.get(0)?.resultData?.priorityElements?.get(0)?.displayName ?: ""}</th>
+            <th>${experimentDataMap?.priorityDisplay ?: ""}</th>
             <th>Experiment Descriptors</th>
             <th>Child Elements</th>
-            <g:if test="${!experimentDataMap?.activities?.isEmpty()}">
-                <g:if test="${experimentDataMap?.activities?.get(0)?.resultData?.responseClassEnum==bard.core.rest.spring.experiment.ResponseClassEnum.CR_SER}">
-                    <th>Concentration Response Series</th>
-                    <th>Concentration Response Plot</th>
-                </g:if>
-            </g:if>
-            <g:if test="${experimentDataMap?.activities?.get(0)?.resultData?.hasConcentrationResponseSeries()}">
+            <g:if test="${experimentDataMap?.hasPlot}">
+                <th>Concentration Response Series</th>
+                <th>Concentration Response Plot</th>
                 <th>Misc Data</th>
             </g:if>
         </tr>
         </thead>
         <g:each in="${experimentDataMap?.activities}" var="activity">
-            <% PriorityElement priorityElement = activity?.resultData?.priorityElements.get(0) %>
+            <%
+                PriorityElement priorityElement = null
+                ResultData resultData = activity?.resultData
+                if(resultData?.hasPriorityElements()){
+                    priorityElement = resultData?.priorityElements.get(0)
+                }
+             %>
             <tr>
                 <td>
                     <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${activity.sid}">
@@ -65,25 +67,25 @@
                     </g:if>
                 </td>
                 <td>
-                    <g:if test="${priorityElement.value != null}">
-                        ${priorityElement.value}
+                    <g:if test="${priorityElement?.value != null}">
+                        ${priorityElement.qualifier ?: ''} ${priorityElement.value}
                     </g:if>
                 </td>
                 <td>
-                    <g:each in="${activity?.resultData?.rootElements}" var="rootElement">
+                    <g:each in="${resultData?.rootElements}" var="rootElement">
 
                         <g:if test="${rootElement.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
                     </g:each>
                 </td>
 
                 <td>
-                    <g:each in="${priorityElement.childElements}" var="childElement">
+                    <g:each in="${priorityElement?.childElements}" var="childElement">
 
                         <g:if test="${childElement.toDisplay()}">${childElement.toDisplay()}<br/></g:if>
 
                     </g:each>
                 </td>
-                <g:each in="${priorityElement.concentrationResponseSeries}" var="concRespSeries">
+                <g:each in="${priorityElement?.concentrationResponseSeries}" var="concRespSeries">
                     <% List<ConcentrationResponsePoint> concentrationResponsePoints = concRespSeries.concentrationResponsePoints
                     Map m = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                     List<Double> concentrations = m.concentrations

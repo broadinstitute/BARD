@@ -27,6 +27,9 @@ import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResultData
+import bard.core.rest.spring.experiment.ResponseClassEnum
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_NAME = 'MLP Probes'
@@ -250,13 +253,26 @@ class QueryService implements IQueryService {
             activities = experimentData.activities
 
         }
+        String priorityDisplay = ""
         for (Activity activity : activities) {
-            if (activity.hasConcentrationSeries()) {
-                hasPlot = true
+            final ResultData resultData = activity.resultData
+            if (resultData) {
+                if (!priorityDisplay) {
+
+                    if (resultData?.hasPriorityElements()) {
+                        priorityDisplay = activity.resultData?.priorityElements.get(0).displayName
+                    }
+                }
+                if (!hasPlot && resultData.responseClassEnum==ResponseClassEnum.CR_SER) {
+                    hasPlot = true
+
+                }
+            }
+            if(hasPlot && priorityDisplay){
                 break
             }
         }
-        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot]
+        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot, priorityDisplay:priorityDisplay]
     }
 
     /**

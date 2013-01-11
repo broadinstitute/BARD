@@ -86,6 +86,12 @@ public class ResultData extends JsonUtil {
     public boolean hasConcentrationResponseSeries(){
         return getResponseClassEnum() == ResponseClassEnum.CR_SER
     }
+    public boolean hasPriorityElements(){
+        if(this.priorityElements){
+            return true
+        }
+        return false
+    }
 }
 enum ResponseClassEnum {
     SP("Single Point"),

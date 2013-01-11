@@ -28,7 +28,7 @@ public class PriorityElement extends ActivityConcentration {
     }
     public Double getSlope(){
         if(hasPlot()&&this.value){
-         return new Double(this.value?:0)
+         return new Double(this.value)
         }
         return null
     }
