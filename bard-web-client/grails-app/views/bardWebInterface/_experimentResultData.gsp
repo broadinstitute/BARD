@@ -26,7 +26,7 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-            <th>Potency</th>
+            <th>${experimentDataMap?.activities.get(0)?.resultData?.priorityElements.get(0)?.displayName ?: ""}</th>
             <th>Experiment Descriptors</th>
             <th>Child Elements</th>
             <g:if test="${!experimentDataMap?.activities?.isEmpty()}">
@@ -35,10 +35,13 @@
                     <th>Concentration Response Plot</th>
                 </g:if>
             </g:if>
-            <th>Misc Data</th>
+            <g:if test="${experimentDataMap?.activities?.get(0)?.resultData?.hasConcentrationResponseSeries()}">
+                <th>Misc Data</th>
+            </g:if>
         </tr>
         </thead>
         <g:each in="${experimentDataMap?.activities}" var="activity">
+            <% PriorityElement priorityElement = activity?.resultData?.priorityElements.get(0) %>
             <tr>
                 <td>
                     <a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${activity.sid}">
@@ -61,11 +64,8 @@
                     </g:if>
                 </td>
                 <td>
-                    <g:if test="${activity.potency != null}">
-                        <%
-                            ExperimentalValue potency = new ExperimentalValue(new Double(activity.potency), false)
-                        %>
-                        ${potency.toString()}
+                    <g:if test="${priorityElement.value != null}">
+                        ${priorityElement.value}
                     </g:if>
                 </td>
                 <td>
@@ -74,7 +74,7 @@
                         <g:if test="${rootElement.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
                     </g:each>
                 </td>
-                <% PriorityElement priorityElement = activity?.resultData?.priorityElements.get(0) %>
+
                 <td>
                     <g:each in="${priorityElement.childElements}" var="childElement">
 
@@ -92,7 +92,7 @@
                     String yAxisLabel = concRespSeries.getYAxisLabel()
                     %>
                     <td>
-                         <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
+                        <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
                             <%
                                 String responseValue = concentrationResponsePoint.value
                                 Double concentrationValue = concentrationResponsePoint.testConcentration
