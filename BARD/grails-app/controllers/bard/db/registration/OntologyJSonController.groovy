@@ -41,6 +41,7 @@ class OntologyJSonController {
 			println "params.section: " + params.section
 			List<Descriptor> descriptors = ontologyDataAccessService.getAttributeDescriptors(params.section, params.term)
 			println "# of Attribute Descriptors: " + descriptors.size()
+            descriptors = descriptors.findAll{it.elementStatus != ElementStatus.Retired}
 			if(descriptors){
 				List attributes = new ArrayList();
 				for (d in descriptors) {
@@ -69,7 +70,7 @@ class OntologyJSonController {
 			println "params.attributeId: " + params.attributeId
 			Long eid = params.attributeId.toLong()
 			List<Descriptor> descriptors = ontologyDataAccessService.getValueDescriptors(params.attributeId.toLong(), params.section, params.term)
-			
+            descriptors = descriptors.findAll{it.elementStatus != ElementStatus.Retired}
 			if(descriptors){
 				println "# of Value Descriptors: " + descriptors.size()
 				List attributes = new ArrayList();
