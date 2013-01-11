@@ -137,11 +137,10 @@ function locationHashChanged(returnLocation) {
             $('#annotations-info').trigger('click');
         }
     }
-    if (returnLocation.hash.startsWith('#accordionDescriptionContent_')) {
+    if (returnLocation.hash.indexOf('#accordionDescriptionContent_') == 0) {//startsWith()
         //then this is a description node
         toggleCollapse(returnLocation.href);
         $(returnLocation.hash).trigger('click');
-
     }
 
 }
