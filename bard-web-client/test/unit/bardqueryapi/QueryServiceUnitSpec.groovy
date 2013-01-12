@@ -69,8 +69,29 @@ class QueryServiceUnitSpec extends Specification {
         service.compoundRestService = compoundRestService
         service.projectRestService = projectRestService
         service.substanceRestService = substanceRestService
+        service.experimentRestService = experimentRestService
     }
 
+    /**
+     * We tests the non-null case with an integration test
+     */
+    void "test findExperimentDataById Null Experiment"() {
+        given:
+        final Long experimentId = 2L
+        final Integer top = 10
+        final Integer skip = 0
+        when:
+        Map resultsMap = service.findExperimentDataById(experimentId, top, skip)
+        then:
+        experimentRestService.getExperimentById(_) >> {null}
+        and:
+        assert resultsMap
+        assert resultsMap.experiment == null
+        assert resultsMap.total == 0
+        assert resultsMap.activities.isEmpty()
+        assert resultsMap.role == null
+
+    }
     void "test findSubstancesByCid #label"() {
         when:
         List<Long> sids = service.findSubstancesByCid(cid)

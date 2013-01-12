@@ -19,6 +19,8 @@ import querycart.QueryCartService
 import spock.lang.Unroll
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.rest.spring.experiment.ResultData
+import bard.core.rest.spring.experiment.CurveFitParameters
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -40,7 +42,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test retrieveExperimentalData degenerate case"() {
         when: "we have a molecularSpreadSheetService"
-        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([],[],[])
+        MolSpreadSheetData molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([], [], [])
 
         then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
         assertNotNull molSpreadSheetData
@@ -180,7 +182,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert !compound1.hasErrors()
         MolSpreadSheetData molSpreadSheetData = null
         if (queryCartService.weHaveEnoughDataToMakeASpreadsheet()) {
-            molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([compound.externalId],[assay1.externalId,assay.externalId],[])
+            molSpreadSheetData = molecularSpreadSheetService.retrieveExperimentalDataFromIds([compound.externalId], [assay1.externalId, assay.externalId], [])
         }
         assertNotNull molSpreadSheetData
 
@@ -383,53 +385,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-    void "test findExperimentDataById #label"() {
 
-        when: "We call the findExperimentDataById method with the experimentId #experimentId"
-        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
-
-        then: "We get back the expected map"
-        assert experimentDataMap
-        final Long totalActivities = experimentDataMap.total
-        assert totalActivities
-        final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
-        assert activities
-        assert activities.size() == 10
-        for (SpreadSheetActivity spreadSheetActivity : activities) {
-            assert spreadSheetActivity
-            assert spreadSheetActivity.cid
-            assert spreadSheetActivity.eid
-            assert spreadSheetActivity.sid
-            assert spreadSheetActivity.hillCurveValueList
-        }
-        where:
-        label                                              | experimentId   | top | skip
-        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
-        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
-    }
-
-
-    void "test convertSpreadSheetActivityToCompoundInformation"() {
-
-        when: "We call the findExperimentDataById method with the experimentId #experimentId"
-        final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(experimentId, top, skip)
-
-        then: "We get back the expected map"
-        assert experimentDataMap
-        final Long totalActivities = experimentDataMap.total
-        assert totalActivities
-        final List<SpreadSheetActivity> activities = experimentDataMap.spreadSheetActivities
-        def returnMap = molecularSpreadSheetService.convertSpreadSheetActivityToCompoundInformation(activities)
-        assertNotNull returnMap
-        assertNotNull returnMap."compoundAdapters"
-        assertNotNull returnMap."facets"
-        assertNotNull returnMap."nHits"
-
-        where:
-        label                                              | experimentId   | top | skip
-        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
-        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
-    }
 
 
 
@@ -480,17 +436,15 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         and: "We call the activities method on the restExperimentService"
         final ExperimentData experimentData = this.experimentRestService.activities(experimentId, compoundETag);
-        final List<Activity> searchResults = experimentData.activities
-        and: "We extract the first element in the collection"
-        Activity experimentValue = searchResults.get(0)
-        when: "We call the extractActivitiesFromExperiment method with the experimentValue"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
-        then: "We a spreadSheetActivity"
-        assert spreadSheetActivity
-        assert spreadSheetActivity.cid
-        assert spreadSheetActivity.eid
-        assert spreadSheetActivity.sid
-        assert spreadSheetActivity.hillCurveValueList[0]
+        final List<Activity> activities = experimentData.activities
+        when: "We extract the first element in the collection"
+        Activity activity = activities.get(0)
+        then:
+        assert activity
+        assert activity.cid
+        assert activity.eid
+        assert activity.sid
+        assert activity.resultData
         where:
         label                                    | cids                                                   | experimentId
         "An existing experiment with activities" | [new Long(164981), new Long(411519), new Long(483860)] | new Long(1326)
@@ -523,13 +477,15 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         ExperimentData experimentIterator = this.experimentRestService.activities(experimentId, etag);
         then: "We expect to see non-null activitiy for each compound"
         int countValues = 0
-        for (Activity experimentValue : experimentIterator.activities) {
-            SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
-            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
-            if ((hillCurveValue.s0 != null) &&
-                    (hillCurveValue.sinf != null) &&
-                    (hillCurveValue.coef != null)) {
-                countValues++;
+        for (Activity activity : experimentIterator.activities) {
+            ResultData resultData = activity.resultData
+            CurveFitParameters curveFitParameters = resultData?.priorityElements.get(0)?.concentrationResponseSeries?.curveFitParameters
+            if (curveFitParameters) {
+                if ((curveFitParameters.s0 != null) &&
+                        (curveFitParameters.SInf != null) &&
+                        (curveFitParameters.hillCoef != null)) {
+                    countValues++;
+                }
             }
         }
         assert countValues > 1
@@ -543,16 +499,18 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
         List<Long> compoundList = compoundIterator.subList(0, 2)
         String etag = compoundRestService.newETag("find experiment 346 data", compoundList); // etag for 3 compounds
-        ExperimentData experimentIterator = this.experimentRestService.activities(experimentId, etag);
+        ExperimentData experimentData = this.experimentRestService.activities(experimentId, etag);
         then: "We expect to see non-null activitiy for each compound"
         int countValues = 0
-        for (Activity experimentValue : experimentIterator.activities) {
-            SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
-            HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
-            if ((hillCurveValue.s0 != null) &&
-                    (hillCurveValue.sinf != null) &&
-                    (hillCurveValue.coef != null)) {
-                countValues++;
+        for (Activity activity : experimentData.activities) {
+            ResultData resultData = activity.resultData
+            CurveFitParameters curveFitParameters = resultData?.priorityElements.get(0)?.concentrationResponseSeries?.curveFitParameters
+            if (curveFitParameters) {
+                if ((curveFitParameters.s0 != null) &&
+                        (curveFitParameters.SInf != null) &&
+                        (curveFitParameters.hillCoef != null)) {
+                    countValues++;
+                }
             }
         }
         assert countValues > 1

@@ -131,7 +131,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment()
         then:
-        this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
+        this.queryService.findExperimentDataById(_, _, _) >> {experimentData}
         assert response.status == 200
     }
 
@@ -139,7 +139,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(eid)
         then:
-        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
+        _ * this.queryService.findExperimentDataById(_, _, _) >> {experimentData}
         assert response.status == statusCode
 
         where:
@@ -157,7 +157,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(id)
         then:
-        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
+        _ * this.queryService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
         assert response.status == 404
         assert flash.message == "Problem finding Experiment ${id}"
 

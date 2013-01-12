@@ -33,9 +33,6 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         final List<Long> cids = this.experimentRestService.compoundsForExperiment(eid)
         then:
         assert !cids.isEmpty()
-        for (Long cid : cids) {
-            println cid
-        }
     }
 
     void "test findProjectsByAssayId #label=#adid"() {

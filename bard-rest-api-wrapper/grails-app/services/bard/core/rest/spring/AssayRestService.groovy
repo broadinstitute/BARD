@@ -20,7 +20,7 @@ class AssayRestService extends AbstractRestService {
     public AssayAnnotation findAnnotations(final Long adid) {
         final String resource = getResource(adid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
-        println(resource)
+
         final AssayAnnotation annotations = (AssayAnnotation)getForObject(url.toURI(), AssayAnnotation.class)
         return annotations;
     }
