@@ -98,21 +98,6 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundAnnotations.anno_key.size() == compoundAnnotations.anno_val.size()
     }
 
-    void "test getCompoundAnnotationsFromStructureSearch()"() {
-        given:
-        final String smiles = "O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O";
-        StructureSearchParams structureSearchParams = new StructureSearchParams(smiles, StructureSearchParams.Type.Superstructure);
-        structureSearchParams.setSkip((long) 0).setTop((long) 2);
-        CompoundResult compoundResult = compoundRestService.findCompoundsByFreeTextSearch(structureSearchParams);
-        and:
-        Compound compound = compoundResult.compounds.get(0)
-
-        when:
-        CompoundAnnotations compoundAnnotations = compoundRestService.findAnnotations(compound.cid)
-        then:
-        assert compoundAnnotations
-        assert compoundAnnotations.anno_key.size() == compoundAnnotations.anno_val.size()
-    }
 
     void "test findAnnotations"() {
         given:
