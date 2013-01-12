@@ -11,14 +11,15 @@ import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Target
 import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.project.ProjectAbstract
 
 
 public class ProjectAdapter implements ProjectAdapterInterface {
-    final ProjectExpanded project
+    final ProjectAbstract project
     final Double score
     final NameDescription matchingField
 
-    public ProjectAdapter(ProjectExpanded project, Double score=0, NameDescription nameDescription=null) {
+    public ProjectAdapter(ProjectAbstract project, Double score=0, NameDescription nameDescription=null) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription

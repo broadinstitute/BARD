@@ -69,8 +69,8 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert project.id != null
         assert project.name
         assert project.description
-        assert project.eids
-        assert project.aids
+        assert project.experiments
+        assert project.assays
         assert project.experimentCount
         where:
         label                                               | pid
@@ -105,8 +105,8 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert project.id != null
         assert project.name
         assert project.description
-        assert project.eids
-        assert project.aids
+        assert project.experiments
+        assert project.assays
         assert project.experimentCount
         where:
         label                                  | pid

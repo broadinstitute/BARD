@@ -125,7 +125,7 @@
                         </g:each>
 
                     </td>
-                    <g:if test="${!concentrationResponsePoints.isEmpty()}">
+                    <g:if test="${!concentrationResponsePoints?.isEmpty()}">
                         <td>
                             <img alt="Plot for CID ${activity.cid}" title="Plot for CID ${activity.cid}"
                                  src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',

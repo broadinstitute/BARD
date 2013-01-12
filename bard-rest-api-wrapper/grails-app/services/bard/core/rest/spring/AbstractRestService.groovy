@@ -399,6 +399,7 @@ abstract class AbstractRestService {
 
     public Object postExchange(String url, HttpEntity<List> entity, Class clazz) {
         try {
+            println(url)
             StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
             this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; entity=${entity?.dump()}; class=${clazz}")

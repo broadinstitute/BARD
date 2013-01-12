@@ -372,17 +372,14 @@ class QueryService implements IQueryService {
     Map showProject(final Long projectId) {
         if (projectId) {
             final ProjectExpanded project = projectRestService.getProjectById(projectId)
-
-            //TODO: Here we make 2 other calls to the server to get the experiments and assays associated with this project
-            //TODO: Since we only display the names of the experiments and assays we should ask NCGC to change the payload to supply the names and ids
             if (project) {
-                final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(projectId)
+                final List<ExperimentSearch> experiments = project.experiments
                 if (experiments) {
                     experiments.sort {
                         it.role
                     }
                 }
-                final List<Assay> assays = projectRestService.findAssaysByProjectId(projectId)
+                final List<Assay> assays = project.assays
                 final ProjectAdapter projectAdapter = new ProjectAdapter(project)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }

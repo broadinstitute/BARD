@@ -94,7 +94,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         0 * restTemplate.postExchange(_, _, _, _)
         assert experimentSearchResult == null
         where:
-        label                        | eids
+        label                        | getExperiments
         "With null eids"             | null
         "With an empty list of eids" | []
     }
