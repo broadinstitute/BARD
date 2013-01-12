@@ -70,7 +70,7 @@ class BardWebInterfaceController {
                 if (experimentDataMap) {
                     final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
                     if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                        render(template: 'experimentResult', model: modelMap)
+                        render(template: 'experimentResultData', model: modelMap)
                         return
                     }
                     //this should do a full page reload

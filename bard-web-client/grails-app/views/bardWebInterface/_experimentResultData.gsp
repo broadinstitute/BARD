@@ -19,6 +19,9 @@
 </p>
 
 <div class="row-fluid">
+    <div class="pagination">
+        <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
+    </div>
     <table class="table table-condensed">
         <thead>
         <tr>
