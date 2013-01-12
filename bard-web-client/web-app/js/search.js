@@ -9,6 +9,9 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
 var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
+
+//SMILES validation (JavaScript) beyond a length of 5
+var SMILES_MATCHING_REGEX = /^([^J][0-9BCOHNSOPrIFla@+\-\[\]\(\)\\\/%=#$,.~&!]{6,})$/ig;
 var TAB_ICON_CLASS = 'badge badge-important';
 
 $(document).ready(function () {
@@ -132,14 +135,13 @@ function handleStructureSearch(url, currentFormId) {
         type:'POST',
         data:$(searchForm).serialize(),
         cache:false,
-        //timeout: 10000,
         beforeSend:function () {
             resetTabsForStructureSearches();
             $("#compounds").html(bigSpinnerImage);
         },
         success:function (data) {
             $("#compounds").html(data);
-            var compoundTotal = ' Compounds <span class="'+ TAB_ICON_CLASS +'">' + $("#totalCompounds").val() + '</span>';
+            var compoundTotal = ' Compounds <span class="' + TAB_ICON_CLASS + '">' + $("#totalCompounds").val() + '</span>';
 
             $("#compoundsTab").html(compoundTotal);
             $("#compounds").tab('show');
@@ -181,7 +183,7 @@ function handleSearch(controllerAction, currentFormId, tabId, totalHitsForResour
             var totalHits = $(totalHitsElement).val();
             var total = prefixOfTextToAppearOnTab;
             if (totalHits > 0) {
-                total += ' <span class="'+ TAB_ICON_CLASS +'">' + totalHits + '</span>';
+                total += ' <span class="' + TAB_ICON_CLASS + '">' + totalHits + '</span>';
             }
             else {
                 total += ' (0)'
@@ -285,7 +287,6 @@ function showTab(tabId) {
 function handleMainFormSubmit(searchString) {
 
     var searchType = findSearchType(searchString);
-
     switch (searchType.toUpperCase()) {
         case 'FREE_TEXT':
             handleAllFreeTextSearches();
@@ -315,6 +316,9 @@ function handleMainFormSubmit(searchString) {
             handleAllIdSearches();
             break;
         case 'STRUCTURE':
+            if ($.trim(searchString).match(SMILES_MATCHING_REGEX)) {
+                $("#searchString").val("exact:" + $.trim(searchString));
+            }
             handleStructureSearch('/bardwebclient/bardWebInterface/searchStructures', 'searchForm');
             break;
     }
@@ -411,8 +415,12 @@ function findSearchType(searchString) {
     if (!$.trim(searchString).length) {  //if this is an empty string, do nothing
         return "EMPTY";
     }
-    if (searchString.match(NUMBER_MATCHING_REGEX)) {//this is an id match
+    if ($.trim(searchString).match(NUMBER_MATCHING_REGEX)) {//this is an id match
         return "ID";
+    }
+    if ($.trim(searchString).match(SMILES_MATCHING_REGEX)) {
+
+        return "STRUCTURE"
     }
     //we want to find out if this is a Structure search
     var searchStringSplit = searchString.split(":");
