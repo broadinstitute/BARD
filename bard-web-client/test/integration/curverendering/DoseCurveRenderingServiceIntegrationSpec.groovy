@@ -1,6 +1,5 @@
 package curverendering
 
-import bard.core.HillCurveValue
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.experiment.Activity
@@ -8,7 +7,7 @@ import bard.core.rest.spring.experiment.ExperimentData
 import bardqueryapi.DrcCurveCommand
 import bardqueryapi.QueryService
 import grails.plugin.spock.IntegrationSpec
-import molspreadsheet.SpreadSheetActivity
+
 import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart
 import org.junit.After
@@ -45,7 +44,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
                 concentrations: [new Double(1), new Double(2)],
                 s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0, height: 200, width: 200, xAxisLabel: 'X', yAxisLabel: 'Y']
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand()
-        drcCurveCommand.ac50 = map.ac50
+        drcCurveCommand.slope = map.ac50
         drcCurveCommand.activities = map.activities
         drcCurveCommand.concentrations = map.concentrations
         drcCurveCommand.height = map.height

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bard.core.util.ExperimentalValueUtil; bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
@@ -93,8 +93,8 @@
                         CurveFitParameters curveFitParameters = concRespSeries.curveFitParameters
                     %>
                     <td>
-                        <table>
-                            <thead><th>${concRespSeries.getYAxisLabel()}</th><th>Concentration</th></thead>
+                        <table class="table table-striped table-condensed">
+                            <thead><tr><th>${concRespSeries.getYAxisLabel()}</th><th>Concentration</th></tr></thead>
                             <tbody>
                             <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
                                 <tr>
@@ -108,12 +108,12 @@
                     </td>
                     <g:if test="${!concentrationResponsePoints?.isEmpty()}">
                         <td>
-                            <img alt="Plot for CID ${activity.cid}" title="Plot for CID ${activity.cid}"
+                            <img alt="Plot for CID ${resultData.cid}" title="Plot for CID ${resultData.cid}"
                                  src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
-                                         params: [sinf: curveFitParameters.sInf,
-                                                 s0: curveFitParameters.s0,
-                                                 ac50: priorityElement.getSlope(),
-                                                 hillSlope: curveFitParameters.hillCoef,
+                                         params: [sinf: curveFitParameters.getSInf(),
+                                                 s0: curveFitParameters.getS0(),
+                                                 slope: priorityElement.getSlope(),
+                                                 hillSlope: curveFitParameters.getHillCoef(),
                                                  concentrations: doseResponsePointsMap.concentrations,
                                                  activities: doseResponsePointsMap.activities,
                                                  yAxisLabel: "${concRespSeries.getYAxisLabel()}",
@@ -123,9 +123,9 @@
                             <g:if test="${curveFitParameters != null}">
                                 <p>
                                     Slope : ${priorityElement.slope} <br/>
-                                    sInf : ${(new ExperimentalValue(curveFitParameters.sInf, false)).toString()}<br/>
-                                    s0 : ${(new ExperimentalValue(curveFitParameters.s0, false)).toString()}<br/>
-                                    HillSlope : ${(new ExperimentalValue(curveFitParameters.hillCoef, false)).toString()}<br/>
+                                    sInf : ${(new ExperimentalValueUtil(curveFitParameters.sInf, false)).toString()}<br/>
+                                    s0 : ${(new ExperimentalValueUtil(curveFitParameters.s0, false)).toString()}<br/>
+                                    HillSlope : ${(new ExperimentalValueUtil(curveFitParameters.hillCoef, false)).toString()}<br/>
                                 </p>
                                 <br/>
                                 <br/>

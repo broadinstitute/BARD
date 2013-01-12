@@ -14,7 +14,7 @@ class DrcCurveCommand {
     Double height
     Double s0
     Double sinf
-    Double ac50
+    Double slope
     Double hillSlope
     List<Double> concentrations = ListUtils.lazyList([], new ListUtilsFactory())
     List<Double> activities = ListUtils.lazyList([], new ListUtilsFactory())

@@ -15,7 +15,7 @@ class DoseCurveRenderingService {
             this.createDoseCurve(
                     drcCurveCommand.concentrations,
                     drcCurveCommand.activities,
-                    drcCurveCommand.ac50,
+                    drcCurveCommand.slope,
                     drcCurveCommand.hillSlope,
                     drcCurveCommand.s0,
                     drcCurveCommand.sinf,
