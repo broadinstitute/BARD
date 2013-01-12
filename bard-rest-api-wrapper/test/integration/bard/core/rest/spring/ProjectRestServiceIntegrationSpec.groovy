@@ -80,7 +80,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "use auto-suggest 'zinc ion binding as GO molecular function term' has problems bug: https://www.pivotaltracker.com/story/show/36709121"() {
         given:
-        final SearchParams searchParams = new SearchParams("zinc ion binding")
+        final SearchParams searchParams = new SearchParams("\"zinc ion binding\"")
         searchParams.setSkip(0)
         searchParams.setTop(10);
         List<String[]> filters = []
