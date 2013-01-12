@@ -19,7 +19,7 @@
 </p>
 
 <div class="row-fluid">
-    <div class="pagination">
+    <div class="pagination offset3">
         <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
     </div>
     <table class="table table-condensed">
@@ -143,8 +143,7 @@
             </tr>
         </g:each>
     </table>
-
-    <div class="pagination">
+    <div class="pagination offset3">
         <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
     </div>
 </div>
