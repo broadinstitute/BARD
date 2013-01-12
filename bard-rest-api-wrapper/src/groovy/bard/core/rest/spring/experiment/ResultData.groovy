@@ -92,6 +92,14 @@ public class ResultData extends JsonUtil {
         }
         return false
     }
+    public String getOutcome(){
+        for (RootElement rootElement: this.rootElements){
+            if(rootElement.hasOutcome()){
+                return rootElement.value
+            }
+        }
+        return ""
+    }
 }
 enum ResponseClassEnum {
     SP("Single Point"),

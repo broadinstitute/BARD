@@ -38,4 +38,14 @@ public class PriorityElement extends ActivityConcentration {
         }
         return false
     }
+    public String toDisplay(){
+        String display = ""
+        if(this.qualifier && this.qualifier != "="){
+           display = display + qualifier
+        }
+        if(this.value){
+            return display +  " " + this.value
+        }
+       return ""
+    }
 }

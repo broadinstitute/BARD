@@ -25,7 +25,7 @@ public class ActivityData extends JsonUtil {
 
     public String toDisplay() {
         StringBuilder stringBuilder = new StringBuilder()
-        if ("Score" != displayName && "Activity_Score" != displayName) {
+        if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName) {
             stringBuilder.append(displayName ? displayName + " : " : '')
 
             stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bard.core.util.ExperimentalValueTypeUtil; bard.core.util.ExperimentalValueUnitUtil; bard.core.util.ExperimentalValueUtil; results.ExperimentalValueType; results.ExperimentalValueUnit; results.ExperimentalValue; molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
@@ -55,7 +55,7 @@
                 <td>
                     <g:if test="${experimentData.potency}">
                         <%
-                            ExperimentalValue potency = new ExperimentalValue(experimentData.potency, false)
+                            ExperimentalValueUtil potency = new ExperimentalValueUtil(experimentData.potency, false)
                         %>
                         ${potency.toString()}
                     </g:if>
@@ -70,14 +70,14 @@
                                 String responseString = ""
                                 String concentrationString = ""
                                 if (responseValue != null) {
-                                    ExperimentalValue resp = new ExperimentalValue(responseValue, false)
+                                    ExperimentalValueUtil resp = new ExperimentalValueUtil(responseValue, false)
                                     responseString = resp.toString()
                                 }
                                 if (concentrationValue != null) {
-                                    ExperimentalValue conc =
-                                        new ExperimentalValue(concentrationValue,
-                                                ExperimentalValueUnit.getByValue(readout?.concentrationUnits),
-                                                ExperimentalValueType.numeric)
+                                    ExperimentalValueUtil conc =
+                                        new ExperimentalValueUtil(concentrationValue,
+                                                ExperimentalValueUnitUtil.getByValue(readout?.concentrationUnits),
+                                                ExperimentalValueTypeUtil.numeric)
                                     concentrationString = "@ " + conc.toString()
                                 }
                             %>
@@ -101,10 +101,10 @@
                             <br/>
                             <g:if test="${readout.slope}">
                                 <p>
-                                    AC50 : ${(new ExperimentalValue(readout.slope, false)).toString()} <br/>
-                                    sInf : ${(new ExperimentalValue(readout.sInf, false)).toString()}<br/>
-                                    s0 : ${(new ExperimentalValue(readout.s0, false)).toString()}<br/>
-                                    HillSlope : ${(new ExperimentalValue(readout.slope, false)).toString()}<br/>
+                                    AC50 : ${(new ExperimentalValueUtil(readout.slope, false)).toString()} <br/>
+                                    sInf : ${(new ExperimentalValueUtil(readout.sInf, false)).toString()}<br/>
+                                    s0 : ${(new ExperimentalValueUtil(readout.s0, false)).toString()}<br/>
+                                    HillSlope : ${(new ExperimentalValueUtil(readout.slope, false)).toString()}<br/>
                                 </p>
                                 <br/>
                                 <br/>

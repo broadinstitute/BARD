@@ -6,6 +6,7 @@ import molspreadsheet.MolSpreadSheetCellType
 import org.apache.commons.lang.NotImplementedException
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.util.ExperimentalValueTypeUtil
 
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
@@ -22,20 +23,20 @@ class ExperimentalValueTypeUnitSpec extends Specification {
 
 
         when: "We call the convert method"
-        final ExperimentalValueType experimentalValueType = ExperimentalValueType.convert(cellType)
+        final ExperimentalValueTypeUtil experimentalValueType = ExperimentalValueType.convert(cellType)
 
         then: "The resulting experimental value type should much the expected one"
         assert experimentalValueType == expectedExperimentalValueType
 
         where:
         label                  | cellType                                  | expectedExperimentalValueType
-        "Less Than Numeric"    | MolSpreadSheetCellType.lessThanNumeric    | ExperimentalValueType.lessThanNumeric
-        "Greater Than Numeric" | MolSpreadSheetCellType.greaterThanNumeric | ExperimentalValueType.greaterThanNumeric
-        "Percentage Numeric"   | MolSpreadSheetCellType.percentageNumeric  | ExperimentalValueType.percentageNumeric
-        "Numeric"              | MolSpreadSheetCellType.numeric            | ExperimentalValueType.numeric
-        "Image"                | MolSpreadSheetCellType.image              | ExperimentalValueType.image
-        "String"               | MolSpreadSheetCellType.string             | ExperimentalValueType.string
-        "Unknown"              | MolSpreadSheetCellType.unknown            | ExperimentalValueType.unknown
+        "Less Than Numeric"    | MolSpreadSheetCellType.lessThanNumeric    | ExperimentalValueTypeUtil.lessThanNumeric
+        "Greater Than Numeric" | MolSpreadSheetCellType.greaterThanNumeric | ExperimentalValueTypeUtil.greaterThanNumeric
+        "Percentage Numeric"   | MolSpreadSheetCellType.percentageNumeric  | ExperimentalValueTypeUtil.percentageNumeric
+        "Numeric"              | MolSpreadSheetCellType.numeric            | ExperimentalValueTypeUtil.numeric
+        "Image"                | MolSpreadSheetCellType.image              | ExperimentalValueTypeUtil.image
+        "String"               | MolSpreadSheetCellType.string             | ExperimentalValueTypeUtil.string
+        "Unknown"              | MolSpreadSheetCellType.unknown            | ExperimentalValueTypeUtil.unknown
 
     }
 

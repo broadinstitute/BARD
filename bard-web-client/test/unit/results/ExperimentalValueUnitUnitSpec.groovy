@@ -6,6 +6,7 @@ import molspreadsheet.MolSpreadSheetCellUnit
 import org.apache.commons.lang.NotImplementedException
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.util.ExperimentalValueUnitUtil
 
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
@@ -16,21 +17,21 @@ class ExperimentalValueUnitUnitSpec extends Specification {
         given:
 
         when: "#label"
-        final ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.getByDecimalValue(value)
+        final ExperimentalValueUnitUtil experimentalValueUnit = ExperimentalValueUnitUtil.getByDecimalValue(value)
 
         then: "Should equal the expected"
         assert experimentalValueUnit == expectedExperimentValueUnit
         where:
         label        | value | expectedExperimentValueUnit
-        "Molar"      | 0     | ExperimentalValueUnit.Molar
-        "MilliMolar" | -3    | ExperimentalValueUnit.Millimolar
-        "Micromolar" | -6    | ExperimentalValueUnit.Micromolar
-        "Nanomolar"  | -9    | ExperimentalValueUnit.Nanomolar
-        "Picomolar"  | -12   | ExperimentalValueUnit.Picomolar
-        "Femtomolar" | -15   | ExperimentalValueUnit.Femtomolar
-        "Attamolar"  | -18   | ExperimentalValueUnit.Attamolar
-        "Zeptomolar" | -21   | ExperimentalValueUnit.Zeptomolar
-        "Yoctomolar" | -24   | ExperimentalValueUnit.Yoctomolar
+        "Molar"      | 0     | ExperimentalValueUnitUtil.Molar
+        "MilliMolar" | -3    | ExperimentalValueUnitUtil.Millimolar
+        "Micromolar" | -6    | ExperimentalValueUnitUtil.Micromolar
+        "Nanomolar"  | -9    | ExperimentalValueUnitUtil.Nanomolar
+        "Picomolar"  | -12   | ExperimentalValueUnitUtil.Picomolar
+        "Femtomolar" | -15   | ExperimentalValueUnitUtil.Femtomolar
+        "Attamolar"  | -18   | ExperimentalValueUnitUtil.Attamolar
+        "Zeptomolar" | -21   | ExperimentalValueUnitUtil.Zeptomolar
+        "Yoctomolar" | -24   | ExperimentalValueUnitUtil.Yoctomolar
         "Null"       | 30    | null
 
 
@@ -40,23 +41,23 @@ class ExperimentalValueUnitUnitSpec extends Specification {
 
 
         when: "We call the convert method"
-        final ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.convert(molSpreadSheetCellUnit)
+        final ExperimentalValueUnitUtil experimentalValueUnit = ExperimentalValueUnit.convert(molSpreadSheetCellUnit)
 
         then: "The resulting experimental value type should much the expected one"
         assert experimentalValueUnit == expectedExperimentalValueUnit
 
         where:
         label                  | molSpreadSheetCellUnit            | expectedExperimentalValueUnit
-        "Less Than Numeric"    | MolSpreadSheetCellUnit.Molar      | ExperimentalValueUnit.Molar
-        "Greater Than Numeric" | MolSpreadSheetCellUnit.Millimolar | ExperimentalValueUnit.Millimolar
-        "Percentage Numeric"   | MolSpreadSheetCellUnit.Micromolar | ExperimentalValueUnit.Micromolar
-        "Numeric"              | MolSpreadSheetCellUnit.Nanomolar  | ExperimentalValueUnit.Nanomolar
-        "Image"                | MolSpreadSheetCellUnit.Picomolar  | ExperimentalValueUnit.Picomolar
-        "String"               | MolSpreadSheetCellUnit.Femtomolar | ExperimentalValueUnit.Femtomolar
-        "Unknown"              | MolSpreadSheetCellUnit.Attamolar  | ExperimentalValueUnit.Attamolar
-        "Unknown"              | MolSpreadSheetCellUnit.Zeptomolar | ExperimentalValueUnit.Zeptomolar
-        "Unknown"              | MolSpreadSheetCellUnit.Yoctomolar | ExperimentalValueUnit.Yoctomolar
-        "Unknown"              | MolSpreadSheetCellUnit.unknown    | ExperimentalValueUnit.unknown
+        "Less Than Numeric"    | MolSpreadSheetCellUnit.Molar      | ExperimentalValueUnitUtil.Molar
+        "Greater Than Numeric" | MolSpreadSheetCellUnit.Millimolar | ExperimentalValueUnitUtil.Millimolar
+        "Percentage Numeric"   | MolSpreadSheetCellUnit.Micromolar | ExperimentalValueUnitUtil.Micromolar
+        "Numeric"              | MolSpreadSheetCellUnit.Nanomolar  | ExperimentalValueUnitUtil.Nanomolar
+        "Image"                | MolSpreadSheetCellUnit.Picomolar  | ExperimentalValueUnitUtil.Picomolar
+        "String"               | MolSpreadSheetCellUnit.Femtomolar | ExperimentalValueUnitUtil.Femtomolar
+        "Unknown"              | MolSpreadSheetCellUnit.Attamolar  | ExperimentalValueUnitUtil.Attamolar
+        "Unknown"              | MolSpreadSheetCellUnit.Zeptomolar | ExperimentalValueUnitUtil.Zeptomolar
+        "Unknown"              | MolSpreadSheetCellUnit.Yoctomolar | ExperimentalValueUnitUtil.Yoctomolar
+        "Unknown"              | MolSpreadSheetCellUnit.unknown    | ExperimentalValueUnitUtil.unknown
 
 
     }
@@ -67,23 +68,23 @@ class ExperimentalValueUnitUnitSpec extends Specification {
 
 
         when: "We call the convert method"
-        final ExperimentalValueUnit experimentalValueUnit = ExperimentalValueUnit.convert(molSpreadSheetCellUnit)
+        final ExperimentalValueUnitUtil experimentalValueUnit = ExperimentalValueUnit.convert(molSpreadSheetCellUnit)
 
         then: "The resulting experimental value type should much the expected one"
         assert experimentalValueUnit == expectedExperimentalValueUnit
 
         where:
         label                  | molSpreadSheetCellUnit            | expectedExperimentalValueUnit
-        "Less Than Numeric"    | MolSpreadSheetCellUnit.Molar      | ExperimentalValueUnit.Molar
-        "Greater Than Numeric" | MolSpreadSheetCellUnit.Millimolar | ExperimentalValueUnit.Millimolar
-        "Percentage Numeric"   | MolSpreadSheetCellUnit.Micromolar | ExperimentalValueUnit.Micromolar
-        "Numeric"              | MolSpreadSheetCellUnit.Nanomolar  | ExperimentalValueUnit.Nanomolar
-        "Image"                | MolSpreadSheetCellUnit.Picomolar  | ExperimentalValueUnit.Picomolar
-        "String"               | MolSpreadSheetCellUnit.Femtomolar | ExperimentalValueUnit.Femtomolar
-        "Unknown"              | MolSpreadSheetCellUnit.Attamolar  | ExperimentalValueUnit.Attamolar
-        "Unknown"              | MolSpreadSheetCellUnit.Zeptomolar | ExperimentalValueUnit.Zeptomolar
-        "Unknown"              | MolSpreadSheetCellUnit.Yoctomolar | ExperimentalValueUnit.Yoctomolar
-        "Unknown"              | MolSpreadSheetCellUnit.unknown    | ExperimentalValueUnit.unknown
+        "Less Than Numeric"    | MolSpreadSheetCellUnit.Molar      | ExperimentalValueUnitUtil.Molar
+        "Greater Than Numeric" | MolSpreadSheetCellUnit.Millimolar | ExperimentalValueUnitUtil.Millimolar
+        "Percentage Numeric"   | MolSpreadSheetCellUnit.Micromolar | ExperimentalValueUnitUtil.Micromolar
+        "Numeric"              | MolSpreadSheetCellUnit.Nanomolar  | ExperimentalValueUnitUtil.Nanomolar
+        "Image"                | MolSpreadSheetCellUnit.Picomolar  | ExperimentalValueUnitUtil.Picomolar
+        "String"               | MolSpreadSheetCellUnit.Femtomolar | ExperimentalValueUnitUtil.Femtomolar
+        "Unknown"              | MolSpreadSheetCellUnit.Attamolar  | ExperimentalValueUnitUtil.Attamolar
+        "Unknown"              | MolSpreadSheetCellUnit.Zeptomolar | ExperimentalValueUnitUtil.Zeptomolar
+        "Unknown"              | MolSpreadSheetCellUnit.Yoctomolar | ExperimentalValueUnitUtil.Yoctomolar
+        "Unknown"              | MolSpreadSheetCellUnit.unknown    | ExperimentalValueUnitUtil.unknown
 
 
     }

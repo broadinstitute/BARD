@@ -3,6 +3,9 @@ package bard.core.rest.spring.experiment
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import bard.core.rest.spring.util.JsonUtil
+import bard.core.util.ExperimentalValueUtil
+import bard.core.util.ExperimentalValueUnitUtil
+import bard.core.util.ExperimentalValueTypeUtil
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,4 +55,44 @@ public class ConcentrationResponsePoint extends JsonUtil {
         this.childElements = childElements;
     }
 
+    public String toDisplay(ConcentrationResponseSeries concentrationResponseSeries) {
+        String responseValue = this.value
+        Double concentrationValue = this.testConcentration
+        String responseString = ""
+        String concentrationString = ""
+        if (responseValue) {
+            ExperimentalValueUtil resp = new ExperimentalValueUtil(new Double(responseValue), false)
+            responseString = resp.toString()
+        }
+        if (concentrationValue) {
+            ExperimentalValueUtil experimentalValueUtil =
+                new ExperimentalValueUtil(concentrationValue,
+                        ExperimentalValueUnitUtil.getByValue(concentrationResponseSeries.testConcentrationUnit),
+                        ExperimentalValueTypeUtil.numeric)
+            concentrationString = "@ " + experimentalValueUtil.toString()
+        }
+        return "${responseString} ${concentrationString}"
+    }
+
+    public String displayActivity() {
+        String responseValue = this.value
+        if (responseValue) {
+            ExperimentalValueUtil response = new ExperimentalValueUtil(new Double(responseValue), false)
+            return response.toString()
+        }
+
+        return ""
+    }
+
+    public String displayConcentration(ConcentrationResponseSeries concentrationResponseSeries) {
+        Double concentrationValue = this.testConcentration
+        if (concentrationValue) {
+            ExperimentalValueUtil experimentalValueUtil =
+                new ExperimentalValueUtil(concentrationValue,
+                        ExperimentalValueUnitUtil.getByValue(concentrationResponseSeries.testConcentrationUnit),
+                        ExperimentalValueTypeUtil.numeric)
+            return experimentalValueUtil.toString()
+        }
+        return ""
+    }
 }

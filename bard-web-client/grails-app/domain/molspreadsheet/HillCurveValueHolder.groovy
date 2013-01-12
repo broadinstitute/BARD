@@ -2,6 +2,7 @@ package molspreadsheet
 
 import org.slf4j.LoggerFactory
 import results.ExperimentalValue
+import bard.core.util.ExperimentalValueUtil
 
 class HillCurveValueHolder {
 
@@ -45,10 +46,10 @@ class HillCurveValueHolder {
         }
 
         if (numericalReturnValue != Double.NaN)  {
-            returnValue  = new ExperimentalValue(numericalReturnValue)
+            returnValue  = new ExperimentalValueUtil(numericalReturnValue)
         }
 
-        returnValue
+        return returnValue
     }
 
 

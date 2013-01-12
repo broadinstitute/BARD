@@ -47,7 +47,7 @@
                 PriorityElement priorityElement = null
                 ResultData resultData = activity?.resultData
                 if (resultData?.hasPriorityElements()) {
-                    priorityElement = resultData?.priorityElements.get(0)
+                    priorityElement = resultData?.priorityElements.get(0)  //we assume that there is only one priority element
                 }
             %>
             <tr>
@@ -64,21 +64,16 @@
                                        imageHeight="150"/>
                 </td>
                 <td>
-                    <g:if test="${activity.outcome != null}">
-                        <%
-                            ActivityOutcome activityOutcome = ActivityOutcome.findActivityOutcome(activity.outcome.intValue())
-                        %>
-                        ${activityOutcome.label}
+                    <g:if test="${resultData.getOutcome()}">
+                        ${resultData.getOutcome()}
                     </g:if>
                 </td>
                 <td>
-                    <g:if test="${priorityElement?.value != null}">
-                        ${priorityElement.qualifier ?: ''} ${priorityElement.value}
-                    </g:if>
+                    ${priorityElement.toDisplay()}
+
                 </td>
                 <td>
                     <g:each in="${resultData?.rootElements}" var="rootElement">
-
                         <g:if test="${rootElement.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
                     </g:each>
                 </td>
@@ -92,37 +87,23 @@
                     </td>
                 </g:if>
                 <g:each in="${priorityElement?.concentrationResponseSeries}" var="concRespSeries">
-                    <% List<ConcentrationResponsePoint> concentrationResponsePoints = concRespSeries.concentrationResponsePoints
-                    Map m = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
-                    List<Double> concentrations = m.concentrations
-                    List<Double> activities = m.activities
-                    CurveFitParameters curveFitParameters = concRespSeries.curveFitParameters
-                    List<ActivityData> miscDataList = concRespSeries.miscData
-                    String yAxisLabel = concRespSeries.getYAxisLabel()
+                    <%
+                        List<ConcentrationResponsePoint> concentrationResponsePoints = concRespSeries.concentrationResponsePoints
+                        Map doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
+                        CurveFitParameters curveFitParameters = concRespSeries.curveFitParameters
                     %>
                     <td>
-                        <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
-                            <%
-                                String responseValue = concentrationResponsePoint.value
-                                Double concentrationValue = concentrationResponsePoint.testConcentration
-                                String responseString = ""
-                                String concentrationString = ""
-                                if (responseValue != null) {
-                                    ExperimentalValue resp = new ExperimentalValue(new Double(responseValue), false)
-                                    responseString = resp.toString()
-                                }
-                                if (concentrationValue != null) {
-                                    ExperimentalValue conc =
-                                        new ExperimentalValue(concentrationValue,
-                                                ExperimentalValueUnit.getByValue(concRespSeries.testConcentrationUnit),
-                                                ExperimentalValueType.numeric)
-                                    concentrationString = "@ " + conc.toString()
-                                }
-                            %>
-
-                            ${responseString} ${concentrationString}
-                            <br/>
-                        </g:each>
+                        <table>
+                            <thead><th>${concRespSeries.getYAxisLabel()}</th><th>Concentration</th></thead>
+                            <tbody>
+                            <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
+                                <tr>
+                                    <td>${concentrationResponsePoint.displayActivity()}</td>
+                                    <td>${concentrationResponsePoint.displayConcentration(concRespSeries)}</td>
+                                </tr>
+                            </g:each>
+                            </tbody>
+                        </table>
 
                     </td>
                     <g:if test="${!concentrationResponsePoints?.isEmpty()}">
@@ -133,9 +114,9 @@
                                                  s0: curveFitParameters.s0,
                                                  ac50: priorityElement.getSlope(),
                                                  hillSlope: curveFitParameters.hillCoef,
-                                                 concentrations: concentrations,
-                                                 activities: activities,
-                                                 yAxisLabel: "${yAxisLabel}",
+                                                 concentrations: doseResponsePointsMap.concentrations,
+                                                 activities: doseResponsePointsMap.activities,
+                                                 yAxisLabel: "${concRespSeries.getYAxisLabel()}",
                                                  xAxisLabel: "Concentration ${priorityElement.testConcentrationUnit}"
                                          ])}"/>
                             <br/>
@@ -145,7 +126,6 @@
                                     sInf : ${(new ExperimentalValue(curveFitParameters.sInf, false)).toString()}<br/>
                                     s0 : ${(new ExperimentalValue(curveFitParameters.s0, false)).toString()}<br/>
                                     HillSlope : ${(new ExperimentalValue(curveFitParameters.hillCoef, false)).toString()}<br/>
-                                    ${priorityElement.toDisplay()}
                                 </p>
                                 <br/>
                                 <br/>
@@ -155,7 +135,7 @@
 
                     </g:if>
                     <td>
-                        <g:each in="${miscDataList}" var="miscData">
+                        <g:each in="${concRespSeries.miscData}" var="miscData">
                             ${miscData.toDisplay()} <br/>
                         </g:each>
                     </td>

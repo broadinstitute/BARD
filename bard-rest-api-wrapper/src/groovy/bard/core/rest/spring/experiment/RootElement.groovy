@@ -20,6 +20,13 @@ public class RootElement extends ActivityData {
     public void setChildElements(List<ActivityData> childElements) {
         this.childElements = childElements
     }
+    /**
+     *
+     * @return true if the display name is "Outcome"
+     */
+    public boolean hasOutcome(){
+        return this.displayName=="Outcome"
+    }
 
 }
 
