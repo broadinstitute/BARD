@@ -1,6 +1,8 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
+import bard.core.exceptions.RestApiException
+import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
@@ -19,9 +21,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.FutureTask
 
 import bard.core.rest.spring.compounds.*
-import spock.lang.IgnoreRest
-import bard.core.exceptions.RestApiException
-import bard.core.helper.LoggerService
 
 @Unroll
 @TestFor(CompoundRestService)

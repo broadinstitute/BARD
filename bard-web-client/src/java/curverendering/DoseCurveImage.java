@@ -158,7 +158,7 @@ public class DoseCurveImage {
         if (curveParameters != null
                 && curveParameters.getS0() != null
                 && curveParameters.getSINF() != null
-                && curveParameters.getAC50() != null
+                && curveParameters.getSlope() != null
                 && curveParameters.getHILL_SLOPE() != null) {
 
             MutablePair<Double, Double> whereToStartAndStopOnXAxis = findWhereToStartAndStopOnXAxis(validX);
@@ -168,7 +168,7 @@ public class DoseCurveImage {
             int seriesIndex = dataset.getSeriesCount();
             dataset.addSeries(name + " fit",
                     generateDataForSigmoidCurve(curveParameters.getS0(),
-                            curveParameters.getSINF(), curveParameters.getAC50(),
+                            curveParameters.getSINF(), curveParameters.getSlope(),
                             curveParameters.getHILL_SLOPE(), xStart, xStop, 50));
             renderer.setSeriesLinesVisible(seriesIndex, true);
             renderer.setSeriesShapesVisible(seriesIndex, false);
@@ -368,13 +368,33 @@ public class DoseCurveImage {
      * @return {@link JFreeChart}
      */
     public static JFreeChart createDoseCurve(Drc drc, String xAxisLabel, String yAxisLabel, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
-        Map<String, Drc> curves = new HashMap<String, Drc>();
         List<Drc> drcs = new ArrayList<Drc>();
-        int colorIndex = 0;
         if (drc != null) {
+            drcs.add(drc);
+            return createDoseCurves(drcs, xAxisLabel, yAxisLabel, xNormMin, xNormMax, yNormMin, yNormMax);
+        }
+        return null;
+    }
+
+    /**
+     * Construct a JFreeChart from the given data
+     *
+     * @param drcs     - list of Dose response point
+     * @param xNormMin - The minimum normalized x value
+     * @param xNormMax - The maximum normalized x value
+     * @param yNormMin - The minimum normalized Y value
+     * @param yNormMax - The maximum normalized Y value
+     * @return {@link JFreeChart}
+     */
+    public static JFreeChart createDoseCurves(List<Drc> drcs, String xAxisLabel, String yAxisLabel, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+        Map<String, Drc> curves = new HashMap<String, Drc>();
+        int colorIndex = 0;
+        for (Drc drc : drcs) {
             drc.setColor(colors[colorIndex]);
             curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
-            drcs.add(drc);
+            ++colorIndex;
+        }
+        if (!drcs.isEmpty()) {
             Bounds bounds = findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
             return DoseCurveImage.createChart(curves, bounds, Color.BLACK, xAxisLabel, yAxisLabel);
         }

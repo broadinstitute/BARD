@@ -58,7 +58,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final List<ExpandedAssay> assays = assayResult.assays
         final ExpandedAssay assay = assays.get(0)
         when:
-         AssayAnnotation annotation = assayRestService.findAnnotations(assay.getId())
+        AssayAnnotation annotation = assayRestService.findAnnotations(assay.getId())
         then:
         assert annotation
         assert annotation.contexts
@@ -108,7 +108,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assertSuggestions(assays);
     }
-    //@IgnoreRest
+
     void testMultipleFilters() {
         given:
         //Do a search with no filters

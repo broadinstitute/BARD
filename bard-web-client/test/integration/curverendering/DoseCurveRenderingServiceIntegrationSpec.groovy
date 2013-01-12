@@ -2,21 +2,15 @@ package curverendering
 
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentData
 import bardqueryapi.DrcCurveCommand
 import bardqueryapi.QueryService
 import grails.plugin.spock.IntegrationSpec
-
 import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import bard.core.rest.spring.experiment.ResultData
-import bard.core.rest.spring.experiment.ConcentrationResponseSeries
-import bard.core.rest.spring.experiment.CurveFitParameters
-import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.*
 
 @Unroll
 class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
@@ -148,6 +142,58 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+    void "tests plot multiple curves on same graph #label"() {
+        given: "That we have created an ETag from a list of CIDs"
+        final ExperimentData experimentData = this.experimentRestService.activities(experimentId);
+        final List<Activity> searchResults = experimentData.activities
+
+        and: "We extract the first experimen tValue in the resulting collection"
+        Activity activity = searchResults.get(0)
+
+
+        and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
+        ResultData resultData = activity.resultData
+
+        when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
+        final PriorityElement priorityElement = resultData.priorityElements.get(0)
+        final List<ActivityConcentration> primaryElements = priorityElement.getPrimaryElements()
+        List<Curve> curves = []
+        String yaxis = ""
+        String xaxis = "Concetration " + priorityElement.testConcentrationUnit
+        for (ActivityConcentration primaryElement : primaryElements) {
+            final ConcentrationResponseSeries concentrationResponseSeries = primaryElement.getConcentrationResponseSeries()
+            yaxis = concentrationResponseSeries.getYAxisLabel()
+
+            final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+
+            final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+            Curve curve = new Curve(
+                    concentrations: map.concentrations,
+                    activities: map.activities,
+                    hillSlope: curveFitParameters.hillCoef,
+                    s0: curveFitParameters.s0,
+                    sinf: curveFitParameters.SInf,
+                    slope: primaryElement.getSlope())
+            curves.add(curve)
+        }
+        JFreeChart jFreeChart =
+            this.doseCurveRenderingService.
+                    createDoseCurves(curves,
+                            xaxis, yaxis, null, null, null, null)
+
+        then: "We expect to get back a JFreeChart back"
+        assert jFreeChart
+        final File file = new File("testChar.jpg")
+        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
+        assert file.exists()
+
+
+        where:
+        label                                    | experimentId
+        "An existing experiment with activities" | new Long(32)
+
+    }
+
     void "tests findDrcData"() {
         given: "That we have created an ETag from a list of CIDs"
         final Object compoundETag = compoundRestService.newETag("Compound ETags For Activities", cids);
@@ -176,7 +222,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
                     priorityElement.getSlope(),
                     curveFitParameters.hillCoef,
                     curveFitParameters.s0,
-                    curveFitParameters.SInf)
+                    curveFitParameters.SInf, java.awt.Color.BLACK)
 
         then: "We expect to get back a Drc object with the number of activities matching the number of concentrations"
         assert drc

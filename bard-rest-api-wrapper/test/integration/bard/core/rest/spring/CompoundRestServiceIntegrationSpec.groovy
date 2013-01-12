@@ -12,7 +12,6 @@ import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
-import spock.lang.IgnoreRest
 
 /**
  * Tests for CompoundRestService in JDO
@@ -21,7 +20,7 @@ import spock.lang.IgnoreRest
 @Unroll
 class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     CompoundRestService compoundRestService
-    @IgnoreRest
+
     void "test getSummaryForCompound"() {
         given:
         Long cid = 16760208

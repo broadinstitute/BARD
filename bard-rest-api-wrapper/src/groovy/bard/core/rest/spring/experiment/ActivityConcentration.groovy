@@ -26,4 +26,32 @@ public class ActivityConcentration extends ActivityData {
     public void setConcentrationResponseSeries(ConcentrationResponseSeries concentrationResponseSeries) {
         this.concentrationResponseSeries = concentrationResponseSeries
     }
+    public boolean hasPlot(){
+        if(this.concentrationResponseSeries|| this.primaryElements){
+            return true
+        }
+        return false
+    }
+    public Double getSlope(){
+        if(hasPlot()&&this.value){
+            return new Double(this.value)
+        }
+        return null
+    }
+    public boolean hasChildElements(){
+        if(this.childElements){
+            return true
+        }
+        return false
+    }
+    public String toDisplay(){
+        String display = ""
+        if(this.qualifier && this.qualifier != "="){
+            display = display + qualifier
+        }
+        if(this.value){
+            return display +  " " + this.value
+        }
+        return ""
+    }
 }
