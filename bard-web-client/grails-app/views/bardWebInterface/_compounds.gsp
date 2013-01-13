@@ -14,7 +14,8 @@
         <g:each var="compoundAdapter" in="${compoundAdapters}">
             <tr>
                 <td style="min-width: 180px;">
-                    <g:compoundOptions sid="${compoundAdapter.pubChemCID}" cid="${compoundAdapter.pubChemCID}" smiles="${compoundAdapter.structureSMILES}" imageWidth="180" imageHeight="150"/>
+                    <g:compoundOptions sid="${compoundAdapter.pubChemCID}" cid="${compoundAdapter.pubChemCID}"
+                                       smiles="${compoundAdapter.structureSMILES}" imageWidth="180" imageHeight="150"/>
                 </td>
                 <td>
                     <h3>
@@ -39,8 +40,7 @@
                                         type="${querycart.QueryItemType.Compound}"
                                         smiles="${compoundAdapter.getStructureSMILES()}"
                                         numActive="${compoundAdapter.numberOfActiveAssays}"
-                                        numAssays="${compoundAdapter.numberOfAssays}"
-                    />
+                                        numAssays="${compoundAdapter.numberOfAssays}"/>
                     <dl>
                         <g:if test="${compoundAdapter.highlight}">
                             <dt>Search Match:</dt>
@@ -53,7 +53,7 @@
                                     <span class="badge badge-info">${compoundAdapter?.numberOfActiveAssays} / ${compoundAdapter?.numberOfAssays}</span>
                                 </div>
 
-                                 </div>
+                            </div>
                         </dd>
 
                         <dt>Scaffold Promiscuity Analysis:</dt>
@@ -68,9 +68,12 @@
         </g:each>
     </table>
 
-    <div class="pagination">
-        <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}", nhits: "${nhits ? nhits : 0}"]'/>
-    </div>
+    <g:if test="${params.max || params.offset}">
+        <div class="pagination">
+            <g:paginate total="${nhits ? nhits : 0}"
+                        params='[searchString: "${searchString}", nhits: "${nhits ? nhits : 0}"]'/>
+        </div>
+    </g:if>
 </g:if>
 <g:else>
     <div class="tab-message">No search results found</div>

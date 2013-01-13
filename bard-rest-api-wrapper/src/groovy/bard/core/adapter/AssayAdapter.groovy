@@ -1,9 +1,9 @@
 package bard.core.adapter;
 
 
-import bard.core.Value
 import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.AssayAnnotation
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
@@ -14,12 +14,14 @@ public class AssayAdapter implements AssayAdapterInterface{
     final AbstractAssay assay
     final Double score
     final NameDescription matchingField
+    final List<AssayAnnotation> annotations;
 
 
-    public AssayAdapter(final AbstractAssay assay, final Double score=0, final NameDescription nameDescription=null) {
+    public AssayAdapter(final AbstractAssay assay, final Double score=0, final NameDescription nameDescription=null, final List<AssayAnnotation> annotations = null ) {
         this.assay = assay
         this.score = score
         this.matchingField = nameDescription
+        this.annotations = annotations
     }
 
     @Override
@@ -91,9 +93,8 @@ public class AssayAdapter implements AssayAdapterInterface{
         return assay.source
     }
 
-    public Collection<Value> getAnnotations() {
-        Collection<Value> annos = new ArrayList<Value>();
-        return annos;
+    public List<AssayAnnotation> getAnnotations() {
+        return annotations
     }
 
     public List<String> getKeggDiseaseNames() {

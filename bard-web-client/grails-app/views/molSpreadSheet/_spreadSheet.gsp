@@ -2,20 +2,20 @@
 <%@ page import="molspreadsheet.MolSpreadSheetCellType; molspreadsheet.MolSpreadSheetCell;" %>
 <%@ page import="com.metasieve.shoppingcart.ShoppingCartService;" %>
 <script type="text/javascript">
-    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-        "num-html-pre": function ( a ) {
-            var x = a.replace( /<.*?>/g, "" );
-            return parseFloat( x );
+    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "num-html-pre":function (a) {
+            var x = a.replace(/<.*?>/g, "");
+            return parseFloat(x);
         },
 
-        "num-html-asc": function ( a, b ) {
+        "num-html-asc":function (a, b) {
             return ((a < b) ? -1 : ((a > b) ? 1 : 0));
         },
 
-        "num-html-desc": function ( a, b ) {
+        "num-html-desc":function (a, b) {
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         }
-    } );
+    });
 </script>
 
 <script type="text/javascript">
@@ -51,6 +51,7 @@
         </g:if>
     });
 </script>
+
 <div class="row-fluid">
     <g:if test="${flash.message}">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
@@ -64,13 +65,16 @@
     <div class="span10">
         <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
             <g:set var="columnWidth" value="${100.0 / ((molSpreadSheetData?.getColumnCount() - 1) as float)}"/>
-                <label class="checkbox" class="pull-left">
-                    <input type="checkbox" defaultChecked="checked" checked name="showPromiscuityScores"
-                           id="showPromiscuityScores">
-                    Hide Promiscuity Scores
-                </label>
-                <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol" title="Transpose array elements">T</a>
-             <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
+            <span>
+                <input type="checkbox" class="pull-left" defaultChecked="checked" checked
+                       name="showPromiscuityScores"
+                       id="showPromiscuityScores">
+
+                <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
+            </span>
+            <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol"
+               title="Transpose array elements">T</a>
+            <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <thead>
                 <tr class="molSpreadSheetHead">
@@ -128,7 +132,7 @@
                         <g:imageCell cid="${cid}" smiles="${retrievedSmiles}"/>
                     </td>
                     <td class="molSpreadSheet" property="cid">
-                        <g:cidCell  cid="${cid}"/>
+                        <g:cidCell cid="${cid}"/>
                     </td>
 
                     <td class="molSpreadSheet">
@@ -139,7 +143,8 @@
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 4}">
                         <g:each var="colCnt" in="${4..(molSpreadSheetData.getColumnCount() - 1)}">
-                            <g:exptDataCell colCnt="${colCnt}" spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt)}"/>
+                            <g:exptDataCell colCnt="${colCnt}"
+                                            spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt)}"/>
                         </g:each>
                     </g:if>
                     </tr>
@@ -154,9 +159,9 @@
     </div>
 
     <div class="span10 pull-right">
-<g:if test="${molSpreadSheetData?.getRowCount() > 0}">
-    <export:formats formats="['csv', 'excel', 'pdf']"/>
-</g:if>
+        <g:if test="${molSpreadSheetData?.getRowCount() > 0}">
+            <export:formats formats="['csv', 'excel', 'pdf']"/>
+        </g:if>
     </div>
 </div>
 

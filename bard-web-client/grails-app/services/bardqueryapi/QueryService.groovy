@@ -30,9 +30,10 @@ import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.experiment.ResponseClassEnum
+import bard.core.rest.spring.assays.AssayAnnotation
 
 class QueryService implements IQueryService {
-    final static String PROBE_ETAG_NAME = 'MLP Probes'
+    final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
 
     /**
      * {@link QueryHelperService}
@@ -136,7 +137,7 @@ class QueryService implements IQueryService {
     }
 
     Map showProbeList() {
-        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_NAME)
+        final CompoundResult compoundResult = compoundRestService.findCompoundsByETag(PROBE_ETAG_ID)
         final List<CompoundAdapter> compoundAdapters = queryHelperService.compoundsToAdapters(compoundResult)
         return [
                 compoundAdapters: compoundAdapters,
@@ -359,7 +360,8 @@ class QueryService implements IQueryService {
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
-            final AssayAdapter assayAdapter = new AssayAdapter(assay)
+            final List<AssayAnnotation> annotations = assayRestService.findAnnotations(assayId)
+            final AssayAdapter assayAdapter = new AssayAdapter(assay, 0, null, annotations)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
         }
         return [:]

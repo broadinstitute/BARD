@@ -65,26 +65,25 @@
                     <div class="page-header">
                         <h1>Assay and Biology Details</h1>
                     </div>
-
                     <div>
-                        <g:if test="${assayAdapter?.keggDiseaseCategories}">
-                            <dl>
-                                %{--TODO: Make annother call to get other annotations--}%
+                        <dl>
+                            %{--<g:each in="${assayAdapter?.annotations}" var="annotation">--}%
+                                %{--<dt>${annotation.key}</dt>--}%
+                                %{--<dd>${annotation.display}</dd>--}%
+                            %{--</g:each>--}%
+                            <g:if test="${assayAdapter?.keggDiseaseCategories}">
                                 <dt>Kegg Disease Categories</dt>
                                 <g:each in="${assayAdapter.keggDiseaseCategories}" var="annotation">
-
                                     <dd>${annotation}</dd>
                                 </g:each>
-                            </dl>
-                        </g:if>
-                        <g:if test="${assayAdapter?.keggDiseaseNames}">
-                            <dl>
+                            </g:if>
+                            <g:if test="${assayAdapter?.keggDiseaseNames}">
                                 <dt>Kegg Disease Names</dt>
                                 <g:each in="${assayAdapter.keggDiseaseNames}" var="annotation">
                                     <dd>${annotation}</dd>
                                 </g:each>
-                            </dl>
-                        </g:if>
+                            </g:if>
+                        </dl>
                     </div>
 
                 </section>

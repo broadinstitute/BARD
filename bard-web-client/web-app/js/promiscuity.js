@@ -1,8 +1,7 @@
-
 var waitingImage = '<img src="/bardwebclient/static/images/ajax-loader.gif" alt="loading" title="loading"/>';
 
 var PromiscuityHandler = {
-    setup : function() {
+    setup:function () {
         $(".promiscuity:not(.processed)").each(function () {
             var promiscuityDivId = $(this).attr('id');
 
@@ -12,24 +11,31 @@ var PromiscuityHandler = {
                 type:'GET',
                 cache:false,
                 //timeout: 10000,
-                beforeSend: function() {
+                beforeSend:function () {
                     $('#' + promiscuityDivId).html(waitingImage);
                 },
                 success:function (promData) {
                     $('#' + promiscuityDivId).html(promData);
-                    $('.popover-link').popover({
-                        content: function() {
+                    $('#' + promiscuityDivId + ' .popover-link').popover({
+                        content:function () {
                             var scaffoldId = $(this).attr('data-detail-id');
                             return $('#' + scaffoldId).html();
                         },
-                        placement: 'bottom',
-                        html: true
-                    });
+                        placement:'bottom',
+                        html:true,
+                        trigger:'manual',
+                        animation:false
+                    }).click(function (ee) {
+                            $('.popover-link').not(this).popover('hide');
+                            $(this).popover('toggle');
+                            //needed to block firing of the document's click event which would hide in return all popoevers (used when the user clicks away)
+                            ee.stopPropagation();
+                        });
                 },
-                error:function() {
+                error:function () {
                     $('#' + promiscuityDivId).html('No data found');
                 },
-                complete:function() {
+                complete:function () {
                     $(this).addClass("processed");
                 }
             });
@@ -40,8 +46,8 @@ var PromiscuityHandler = {
 $(document).on('search.complete', '#compounds', PromiscuityHandler.setup);
 
 $(document).ready(function () {
-//    $(document).on("click", "html", function () {
-//        $('.popover-link').popover('hide');
-//    });
+    $(document).on("click", "html:not(.popover-link)", function (ee) {
+        $('.popover-link').popover('hide');
+    });
     PromiscuityHandler.setup();
 });

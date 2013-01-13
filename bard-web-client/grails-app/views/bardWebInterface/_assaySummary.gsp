@@ -3,22 +3,24 @@
         <dt>Assay Type:</dt>
         <dd>${assayAdapter.type}</dd>
     </g:if>
-    %{--<g:if test="${assay.getValue('assay format')}">--}%
-        %{--<dt>Assay Format:</dt>--}%
-        %{--<dd>${assay.getValue('assay format').value}</dd>--}%
-    %{--</g:if>--}%
-    %{--<g:if test="${assay.getValue('detection method type')}">--}%
-        %{--<dt>Detection Method:</dt>--}%
-        %{--<dd>${assay.getValue('detection method type').value}</dd>--}%
-    %{--</g:if>--}%
-    %{--<g:if test="${assay.getValue('detection instrument name')}">--}%
-        %{--<dt>Detection Instrument:</dt>--}%
-        %{--<dd>${assay.getValue('detection instrument name').value}</dd>--}%
-    %{--</g:if>--}%
-    %{--<g:if test="${assay.getValue('assay footprint')}">--}%
-        %{--<dt>Assay Footprint:</dt>--}%
-        %{--<dd>${assay.getValue('assay footprint').value}</dd>--}%
-    %{--</g:if>--}%
+    <g:each in="${assayAdapter?.annotations}" var="annotation">
+        <g:if test="${annotation.key == 'assay format'}">
+            <dt>Assay Format:</dt>
+            <dd>${annotation.display}</dd>
+        </g:if>
+        <g:if test="${annotation.key == 'detection method type'}">
+            <dt>Detection Method:</dt>
+            <dd>${annotation.display}</dd>
+        </g:if>
+        <g:if test="${annotation.key == 'detection instrument name'}">
+            <dt>Detection Instrument:</dt>
+            <dd>${annotation.display}</dd>
+        </g:if>
+        <g:if test="${annotation.key == 'assay footprint'}">
+            <dt>Assay Footprint:</dt>
+            <dd>${annotation.display}</dd>
+        </g:if>
+    </g:each>
     <g:if test="${assayAdapter.source}">
         <dt>Assay Designer:</dt>
         <dd>${assayAdapter.source}</dd>
