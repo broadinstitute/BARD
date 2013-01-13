@@ -7,7 +7,7 @@
         <r:require modules="showProjectAssay,compoundOptions"/>
     </head>
 
-    <body>
+    <body data-spy="scroll" data-target=".bs-docs-sidebar">
         <div class="row-fluid">
             <div class="span12 page-header">
                 <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.id})</small></h1>
@@ -65,19 +65,34 @@
             </div>
         </div>
 
-        <div class="row-fluid">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span3 bs-docs-sidebar">
+                    <ul class="nav bs-docs-sidenav nav-list" data-spy="affix">
+                        <li><a href="#annotations-info"><i
+                                class="icon-chevron-right"></i>Annotations</a></li>
+                        <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
 
-            <div class="span12 accordion" id="accordionParent">
+                        <g:if test="${projectAdapter.targets}">
+                            <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets</a></li>
+                        </g:if>
+                        <g:if test="${projectAdapter.documents}">
+                            <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications</a></li>
+                        </g:if>
+                        <li><a href="#experiments-info"><i
+                                class="icon-chevron-right"></i> Experiments</a>
+                        </li>
+                        <li><a href="#assays-info"><i class="icon-chevron-right"></i> Assays</a></li>
+                    </ul>
+                </div>
 
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#annotations-info" class="accordion-toggle" data-toggle="collapse"
-                           data-parent="#accordionParent" data-target="#annotations-info"><i
-                                class="icon-chevron-right"></i> Annotations (${projectAdapter?.numberOfAnnotations})</a>
-                    </div>
+                <div class="span9">
+                    <section id="annotations-info">
+                        <div class="page-header">
+                            <h1>Annotations (${projectAdapter?.numberOfAnnotations})</h1>
+                        </div>
 
-                    <div id="annotations-info" class="accordion-body collapse">
-                        <div class="accordion-inner">
+                        <div>
                             <dl>
                                 <g:each in="${projectAdapter?.annotations}" var="annotation">
                                     <dt>${annotation.id}</dt>
@@ -104,54 +119,38 @@
                                 </dl>
                             </g:if>
                         </div>
-                    </div>
+                    </section>
+                    <section id="description-info">
+                        <div class="page-header">
+                            <h1>Description</h1>
+                        </div>
 
-                </div>
-
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#description-info" class="accordion-toggle" data-toggle="collapse"
-                           data-target="#description-info" data-parent="#accordionParent"><i
-                                class="icon-chevron-right"></i> Description</a>
-                    </div>
-
-                    <div id="description-info" class="accordion-body collapse">
-                        <div class="accordion-inner">
+                        <div>
                             <g:textBlock>${projectAdapter?.description}</g:textBlock>
                         </div>
-                    </div>
+                    </section>
 
-                </div>
-                <g:if test="${projectAdapter.targets}">
-                    <g:render template="targets" model="['targets': projectAdapter.targets]"/>
-                </g:if>
-                <g:if test="${projectAdapter.documents}">
-                    <g:render template="publications" model="['documents': projectAdapter.documents]"/>
-                </g:if>
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#experiments-info" class="accordion-toggle" data-toggle="collapse"
-                           data-target="#experiments-info" data-parent="#accordionParent"><i
-                                class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})</a>
-                    </div>
+                    <g:if test="${projectAdapter.targets}">
+                        <g:render template="targets" model="['targets': projectAdapter.targets]"/>
+                    </g:if>
+                    <g:if test="${projectAdapter.documents}">
+                        <g:render template="publications" model="['documents': projectAdapter.documents]"/>
+                    </g:if>
+                    <section id="experiments-info">
+                        <div class="page-header">
+                            <h1>Experiments (${projectAdapter?.getNumberOfExperiments()})</h1>
+                        </div>
 
-                    <div id="experiments-info" class="accordion-body collapse">
-                        <div class="accordion-inner">
+                        <div>
                             <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false]"/>
                         </div>
-                    </div>
+                    </section>
+                    <section id="assays-info">
+                        <div class="page-header">
+                            <h1>Assays (${assays?.size()})</h1>
+                        </div>
 
-                </div>
-
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#assays-info" class="accordion-toggle" data-toggle="collapse"
-                           data-target="#assays-info" data-parent="#accordionParent"><i
-                                class="icon-chevron-right"></i> Assays (${assays?.size()})</a>
-                    </div>
-
-                    <div id="assays-info" class="accordion-body collapse">
-                        <div class="accordion-inner">
+                        <div>
                             <g:each var="assay" in="${assays}" status="i">
                                 <div>
                                     <p>
@@ -161,10 +160,8 @@
                                 </div>
                             </g:each>
                         </div>
-                    </div>
-
+                    </section>
                 </div>
-
             </div>
         </div>
     </body>
