@@ -8,7 +8,7 @@
 
 
 <%-- A template for both project and assay def, edit card --%>
-<div id="card-${context.id}" class="span6 card roundedBorder card-table-container">
+<div id="card-${context.id}" class="card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">${context.preferredName}</div>
@@ -35,8 +35,8 @@
                         <div class="btn-group">
                             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
-                                <li><a href="#" onclick="moveCardItem(${instanceId}, ${contextItem.id})"><i class="icon-move"></i> Move</a></li>
+                                %{--<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>--}%
+                                <li><a href="#" onclick="moveCardItem(${contextOwner.id}, ${contextItem.id})"><i class="icon-move"></i> Move</a></li>
                                 <li><a href="#" onclick="deleteCardItem(${contextItem.id}, ${context.id})"><i class="icon-trash"></i> Delete</a></li>
                             </ul>
                         </div>

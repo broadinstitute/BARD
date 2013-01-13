@@ -24,10 +24,6 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     }
 
     void 'test show'() {
-        given:
-        defineBeans {
-            cardFactoryService(CardFactoryService)
-        }
 
         when:
         params.id = assay.id
