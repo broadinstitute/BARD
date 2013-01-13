@@ -79,7 +79,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return project.experimentCount.intValue()
     }
     public List<Document> getDocuments(){
-        return [project.getPublications()]
+        return project.getPublications()
     }
     public List<Target> getTargets(){
        return project.getTargets()

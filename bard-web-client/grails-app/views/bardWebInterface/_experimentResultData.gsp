@@ -110,13 +110,13 @@
                         <td>
                             <img alt="Plot for CID ${resultData.cid}" title="Plot for CID ${resultData.cid}"
                                  src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
-                                         params: [sinf: curveFitParameters.getSInf(),
-                                                 s0: curveFitParameters.getS0(),
-                                                 slope: priorityElement.getSlope(),
-                                                 hillSlope: curveFitParameters.getHillCoef(),
+                                         params: [sinf: curveFitParameters?.getSInf(),
+                                                 s0: curveFitParameters?.getS0(),
+                                                 slope: priorityElement?.getSlope(),
+                                                 hillSlope: curveFitParameters?.getHillCoef(),
                                                  concentrations: doseResponsePointsMap.concentrations,
                                                  activities: doseResponsePointsMap.activities,
-                                                 yAxisLabel: "${concRespSeries.getYAxisLabel()}",
+                                                 yAxisLabel: "${concRespSeries?.getYAxisLabel()}",
                                                  xAxisLabel: "Concentration ${priorityElement.testConcentrationUnit}"
                                          ])}"/>
                             <br/>
