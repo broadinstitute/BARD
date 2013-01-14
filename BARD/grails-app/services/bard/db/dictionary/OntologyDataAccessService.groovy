@@ -37,7 +37,7 @@ class OntologyDataAccessService {
 			if(results){
 				List<Descriptor> allDescriptors = new ArrayList<Descriptor>()
 				for(ad in results){
-					query = AssayDescriptor.where{(parent {id == ad.id}) && (fullPath ==~ path + "%") && (leaf == true) && (label ==~ term + "%") }
+					query = AssayDescriptor.where{(parent {id == ad.id}) && (fullPath ==~ path + "%") && (leaf == true) && (label ==~ "%" + term + "%") }
 					def descriptors = query.list()
 					allDescriptors.addAll(descriptors)
 				}
@@ -51,7 +51,7 @@ class OntologyDataAccessService {
 			if(results){
 				List<Descriptor> allDescriptors = new ArrayList<Descriptor>()
 				for(ad in results){
-					query = BiologyDescriptor.where{(parent {id == ad.id}) && (fullPath ==~ path + "%") && (leaf == true) && (label ==~ term + "%") }
+					query = BiologyDescriptor.where{(parent {id == ad.id}) && (fullPath ==~ path + "%") && (leaf == true) && (label ==~ "%" + term + "%") }
 					def descriptors = query.list()
 					allDescriptors.addAll(descriptors)
 				}
@@ -65,7 +65,7 @@ class OntologyDataAccessService {
 			if(results){
 				List<Descriptor> allDescriptors = new ArrayList<Descriptor>()
 				for(ad in results){
-					query = InstanceDescriptor.where{(parent {id == ad.id}) && (fullPath ==~ path + "%") && (leaf == true) && (label ==~ term + "%") }
+					query = InstanceDescriptor.where{(parent {id == ad.id}) && (fullPath ==~ path + "%") && (leaf == true) && (label ==~ "%" + term + "%") }
 					def descriptors = query.list()
 					allDescriptors.addAll(descriptors)
 				}

@@ -51,8 +51,8 @@ class AddItemWizardController {
 		redirect(action: 'pages')
 	}
 	
-	def addItemWizard(Long assayContextId, String cardSection){
-		render(template: "common/ajaxflow", model: [assayContextId: assayContextId, path: cardSection])
+	def addItemWizard(Long assayId, Long assayContextId, String cardSection){
+		render(template: "common/ajaxflow", model: [assayId: assayId, assayContextId: assayContextId, path: cardSection])
 	}
 
 	/**
@@ -85,7 +85,7 @@ class AddItemWizardController {
 			flow.attribute = null;
 			flow.valueType = null;
 			flow.fixedValue = null;
-
+			flow.itemSaved = false;
 			success()
 		}
 
@@ -224,6 +224,7 @@ class AddItemWizardController {
 					def isSaved = assayContextService.saveItemInCard(flow.attribute, flow.valueType, flow.fixedValue)
 					if(isSaved){
 						println "New item was successfully added to the card"
+						flow.itemSaved = true;
 //						AssayContext assayContext = AssayContext.get(flow.attribute.assayContextIdValue)
 //						Assay assay = assayContext.assay
 //						println "Assay ID: " + assay.id + "  Name: " + assay.assayName
