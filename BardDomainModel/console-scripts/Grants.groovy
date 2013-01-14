@@ -3,18 +3,18 @@ import groovy.sql.Sql
 def sql = new Sql(ctx.dataSource)
 def application = grailsApplication
 
-List<String> usernames = ['SCHATWIN', 'BARD_DEV', 'SBRUDZ', 'DATA_MIG', 'YCRUZ', 'SOUTHERN', 'BARD_QA', 'BARD_CI', 'DSTONICH', 'BALEXAND', 'DDURKIN', 'JASIEDU', 'XIAORONG','DLAHR_BARD']
-String currentUsername = application?.config?.dataSource?.username?.toUpperCase()
+List<String> schemaNames = application?.config?.migrations?.grantSelects?.schemas
+String currentUsername = application?.config?.dataSource?.username
 
 def tablenames = sql.rows('''select table_name from user_tables order by table_name''').collect{it.TABLE_NAME}
 
 def result = sql.withBatch(100){stmt ->
     for(tablename in tablenames){
         try{
-            for (username in usernames) {
-                if( username != currentUsername ){
-                    String grant = "GRANT SELECT ON ${tablename} TO ${username}"
-                    println(grant)
+            for (schemaName in schemaNames) {
+                if( schemaName.toUpperCase() != currentUsername.toUpperCase() ){
+                    String grant = "GRANT SELECT ON ${tablename} TO ${schemaName}"
+                   // println(grant)
                     stmt.addBatch(grant)
                 }
             }
@@ -26,6 +26,5 @@ def result = sql.withBatch(100){stmt ->
 }
 
 println(result.size())
-
 
 

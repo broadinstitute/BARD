@@ -11,6 +11,13 @@ import bard.db.registration.AttributeType
  * 4. Convert text field to numerical values where appropriate (e.g, '680 nm' --> 680, and the 'nm' part is discarded)
  */
 class AttributesContentsCleaner {
+
+    private final Map attributeNameMapping
+
+    public AttributesContentsCleaner(Map attributeNameMapping) {
+        this.attributeNameMapping = attributeNameMapping
+    }
+
     /**
      * Clean up all the key/value pairs names to:
      * 1. remove the '| | |' prefix
@@ -18,34 +25,47 @@ class AttributesContentsCleaner {
      * 3. convert to standard names based on the attributeNameMapping map
      * 4. Convert text field to numerical values where appropriate (e.g, '680 nm' --> 680, and the 'nm' part is discarded)
      */
-    void clean(List<AssayDto> assayDtoList, Map attributeNameMapping) {
+    void clean(List<AssayDto> assayDtoList) {
 
         for (AssayDto assayDto : assayDtoList) {
             //clean assay contexts
-            List<ContextDTO> contextListCleaned = new ArrayList<ContextDTO>(assayDto.assayContextDTOList.size())
+            List<ContextDTO> contextListCleaned = new LinkedList<ContextDTO>()
+
             for (ContextDTO assayContextDTO : assayDto.assayContextDTOList) {
-                contextListCleaned.add(cleanContext(assayContextDTO, attributeNameMapping))
+                final ContextDTO cleanContextDTO = cleanContext(assayContextDTO)
+                if (cleanContextDTO != null) {
+                    contextListCleaned.add(cleanContextDTO)
+                }
             }
             assayDto.assayContextDTOList = contextListCleaned
 
             //clean measure contexts
-            contextListCleaned = new ArrayList<ContextDTO>(assayDto.measureContextDTOList.size())
+            contextListCleaned = new LinkedList<ContextDTO>()
             for (ContextDTO measureContextDTO : assayDto.measureContextDTOList) {
-                contextListCleaned.add(cleanContext(measureContextDTO, attributeNameMapping))
+                final ContextDTO cleanContextDTO = cleanContext(measureContextDTO)
+                if (cleanContextDTO != null) {
+                    contextListCleaned.add(cleanContextDTO)
+                }
             }
             assayDto.measureContextDTOList = contextListCleaned
         }
     }
 
-    private static ContextDTO cleanContext(ContextDTO assayContextDTO, Map attributeNameMapping) {
-        final ContextDTO cleanAssayContextDTO = new ContextDTO()
+    /**
+     * returns a cleaned ContextDTO, unless the attribute type is not free and a value is not provided, in which case
+     * returns null
+     * @param contextDTO
+     * @return
+     */
+    private ContextDTO cleanContext(ContextDTO contextDTO) {
+        final ContextDTO cleanContextDTO = new ContextDTO()
 
-        cleanAssayContextDTO.name = assayContextDTO.name
-        cleanAssayContextDTO.aid = assayContextDTO.aid
+        cleanContextDTO.name = contextDTO.name
+        cleanContextDTO.aid = contextDTO.aid
 
-        for (ContextItemDto attribute : assayContextDTO.attributes) {
+        for (ContextItemDto attribute : contextDTO.attributes) {
 
-            String ky = trimAndMapKey(attribute.key, attributeNameMapping)
+            String ky = trimAndMapKey(attribute.key)
 
             def val = attribute.value
             if (attribute.value instanceof String) {
@@ -68,22 +88,24 @@ class AttributesContentsCleaner {
                 }
             }
 
-            if ((attribute.attributeType != AttributeType.Free) && !val) return //Unless the attribute-type is Free, skip attributes with empty value
+            if ((attribute.attributeType != AttributeType.Free) && !val) {
+                return null//Unless the attribute-type is Free, skip attributes with empty value
+            }
 
-            String concentrationUnits = trimAndMapKey(attribute.concentrationUnits, attributeNameMapping)
+            String concentrationUnits = trimAndMapKey(attribute.concentrationUnits)
 
             ContextItemDto attr = new ContextItemDto(attribute)
             attr.key = ky
             attr.value = val
             attr.concentrationUnits = concentrationUnits
 
-            cleanAssayContextDTO.attributes << attr
+            cleanContextDTO.attributes << attr
         }
 
-        return cleanAssayContextDTO
+        return cleanContextDTO
     }
 
-    private static String trimAndMapKey(String key, Map attributeNameMapping) {
+    private String trimAndMapKey(String key) {
         String trimmedKey = StringUtils?.split(key, '|')?.toList()?.last()?.trim()
 
         String matchedKey = attributeNameMapping.keySet().find { String keyInMap -> return StringUtils.equalsIgnoreCase(keyInMap, trimmedKey)}

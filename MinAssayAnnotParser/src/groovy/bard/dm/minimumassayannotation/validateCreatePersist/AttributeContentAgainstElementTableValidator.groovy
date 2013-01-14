@@ -21,36 +21,50 @@ class AttributeContentAgainstElementTableValidator {
     /**
      * Make sure that all the attribute's key and value match against valid values in the Element table
      *
-     * @param assayContextList
+     * @param contextList
      */
-    boolean validate(List<ContextDTO> assayContextList, Map attributeNameMapping) {
+    boolean validate(List<ContextDTO> contextDTOList, Map attributeNameMapping) {
 
-        assayContextList.each {ContextDTO assayContextDTO ->
-            assayContextDTO.attributes.each {ContextItemDto attribute ->
+        boolean blankContextDto = false
+        Long prevAid = null
 
-                if (! checkForElement(attribute.key, assayContextDTO.aid, assayContextDTO.name)) {
-                    return false
-                }
-
-                //Check that the value is defined in the database,
-                // except for the ones that are numeric values or a type-in field or a Free-type field
-                if (attribute.value &&
-                        (attribute.value instanceof String) &&
-                        !attribute.typeIn &&
-                        (attribute.attributeType != AttributeType.Free)) {
-
-                    if (! checkForElement(attribute.value, assayContextDTO.aid, assayContextDTO.name)) {
+        for (ContextDTO contextDTO : contextDTOList) {
+            if (contextDTO != null) {
+                for (ContextItemDto contextItemDto : contextDTO.attributes) {
+                    if (! checkForElement(contextItemDto.key, contextDTO.aid, contextDTO.name)) {
                         return false
                     }
 
-                }
+                    //Check that the value is defined in the database,
+                    // except for the ones that are numeric values or a type-in field or a Free-type field
+                    if (contextItemDto.value &&
+                            (contextItemDto.value instanceof String) &&
+                            !contextItemDto.typeIn &&
+                            (contextItemDto.attributeType != AttributeType.Free)) {
 
-                //If concentration units are present check that they are defined in the database
-                if (attribute.concentrationUnits) {
-                    if (! checkForElement(attribute.concentrationUnits, assayContextDTO.aid, assayContextDTO.name)) {
-                        return false
+                        if (! checkForElement(contextItemDto.value, contextDTO.aid, contextDTO.name)) {
+                            return false
+                        }
+
+                    }
+
+                    //If concentration units are present check that they are defined in the database
+                    if (contextItemDto.concentrationUnits) {
+                        if (! checkForElement(contextItemDto.concentrationUnits, contextDTO.aid, contextDTO.name)) {
+                            return false
+                        }
                     }
                 }
+
+                prevAid = contextDTO.aid
+            } else {
+                Log.logger.error("null contextDTO found.  Previous non-null aid: $prevAid")
+                blankContextDto = true
+            }
+
+            if (blankContextDto) {
+                Log.logger.error("null contextDTO found.  Subsequent non-null aid: ${contextDTO?.aid}")
+                blankContextDto = false
             }
         }
 

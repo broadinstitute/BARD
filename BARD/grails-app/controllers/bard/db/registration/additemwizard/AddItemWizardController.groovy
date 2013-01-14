@@ -75,7 +75,7 @@ class AddItemWizardController {
 			// wizard tabs. Also see common/_tabs.gsp for more information
 			flow.page = 0
 			flow.pages = [
-				[title: 'Attribute', description: 'Define attibute'],
+				[title: 'Attribute', description: 'Define attribute'],
 				[title: 'Value Type', description: 'Value type'],
 				[title: 'Define Value', description: 'Define value'],
 				[title: 'Review & Confirm', description: 'Review and save your entries'],

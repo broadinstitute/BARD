@@ -33,7 +33,7 @@
         <g:each in="${bard.db.model.IDocumentType.DOCUMENT_TYPE_DISPLAY_ORDER}" var="type">
             <g:set var="documentTypeList" value="${documentMap.get(type)}"/>
             <g:if test="${documentTypeList}">
-                <h4>${type}<g:if test="${documentTypeList.size()>1}">(s)</g:if>:</h4>
+                <h4>${type}<g:if test="${documentTypeList.size()>1 && !bard.db.model.IDocumentType.DOCUMENT_TYPE_COMMENTS == type}">s</g:if>:</h4>
                 <dl class="dl-horizontal">
                 <g:each in="${documentTypeList}" var="document">
                     <dt><g:message code="document.content.label" default="Name:"/></dt>

@@ -7,7 +7,6 @@ class AssayDefinitionController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    CardFactoryService cardFactoryService
     AssayContextService assayContextService
 
     def index() {
@@ -25,7 +24,7 @@ class AssayDefinitionController {
             return
         }
         flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), assayInstance.id])
-		redirect(action: "show", id: assayInstance.id)
+        redirect(action: "show", id: assayInstance.id)
     }
 
     def show() {
@@ -34,27 +33,23 @@ class AssayDefinitionController {
         if (!assayInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
-        }
-        else{
+        } else {
             flash.message = null
         }
         [assayInstance: assayInstance]
     }
 
-	def edit() {
-		def assayInstance = Assay.get(params.id)
+    def edit() {
+        def assayInstance = Assay.get(params.id)
 
-		if (!assayInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-			return
-		}
-		else
-			flash.message = null
-
-		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
-
-		[assayInstance: assayInstance, cardDtoMap: cardDtoMap]
-	}
+        if (!assayInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return
+        } else {
+            flash.message = null
+        }
+        [assayInstance: assayInstance]
+    }
 
     def findById() {
         if (params.assayId && params.assayId.isLong()) {
@@ -75,8 +70,7 @@ class AssayDefinitionController {
                     render(view: "findByName", params: params, model: [assays: assays])
                 else
                     redirect(action: "show", id: assays.get(0).id)
-            }
-            else
+            } else
                 flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'assay.label', default: 'Assay'), "name", params.assayName])
 
         }
@@ -88,16 +82,16 @@ class AssayDefinitionController {
         AssayContext targetAssayContext = target.assayContext
         int index = targetAssayContext.assayContextItems.indexOf(target)
         assayContextService.addItem(index, source, targetAssayContext)
-        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
-        render(template: "cards", model: [cardDtoMap: cardDtoMap])
+        Assay assay = targetAssayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
     def addItemToCard(Long src_assay_context_item_id, Long target_assay_context_id) {
         AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
         AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
         assayContextService.addItem(source, targetAssayContext)
-        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
-        render(template: "cards", model: [cardDtoMap: cardDtoMap])
+        Assay assay = targetAssayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
 
@@ -105,8 +99,7 @@ class AssayDefinitionController {
         AssayContextItem sourceAssayContextItem = AssayContextItem.findById(src_assay_context_item_id)
         AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
         assayContextService.updateContextName(targetAssayContext, sourceAssayContextItem)
-        CardDto cardDto = cardFactoryService.createCardDto(targetAssayContext)
-        render(template: "cardDto", model: [card: cardDto])
+        render(template: "/context/list", model: [contextOwner: targetAssayContext, contexts: targetAssayContext.groupContexts(), subTemplate: 'edit'])
     }
 
 
@@ -114,45 +107,43 @@ class AssayDefinitionController {
         def assayContextItem = AssayContextItem.get(assay_context_item_id)
         if (assayContextItem) {
             AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
-            CardDto cardDto = cardFactoryService.createCardDto(assayContext)
-            render(template: "cardDto", model: [card: cardDto])
+            Assay assay = assayContext.assay
+            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
         }
     }
 
     def deleteEmptyCard(Long assay_context_id) {
         AssayContext assayContext = AssayContext.findById(assay_context_id)
         Assay assay = assayContext.assay
-        if (assayContext.assayContextItems.size() == 0 && assayContext.measures.empty) {
+        if (assayContext.assayContextItems.size() == 0) {
             assay.removeFromAssayContexts(assayContext)
-            assayContext.delete()
+            assayContext.delete(flush: true)
         }
-        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assay)
-        render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def createOrEditCardName(String edit_card_name, Long assayId, Long assayContextId){
-        AssayContext assayContext = assayContextService.createOrEditCardName(assayId, assayContextId, edit_card_name)
-        Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayContext.assay)
-        render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
+    def createOrEditCardName(String edit_card_name, Long instanceId, Long contextId) {
+        AssayContext assayContext = assayContextService.createOrEditCardName(instanceId, contextId, edit_card_name)
+        Assay assay = assayContext.assay
+        render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-	def showMoveItemForm(Long assayId, Long itemId){
-		def assayInstance = Assay.get(assayId)
-		if (!assayInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), assayId])
+    def showMoveItemForm(Long assayId, Long itemId) {
+        def assayInstance = Assay.get(assayId)
+        if (!assayInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), assayId])
             return
-		}
-		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assayInstance)
-		render(template: "moveItemForm", model: [cardDtoMap: cardDtoMap, assayId: assayId, itemId: itemId])
-	}
+        }
+        render(template: "moveItemForm", model: [instance: assayInstance, assayId: assayId, itemId: itemId])
+    }
 
-	def moveCardItem(Long cardId, Long assayContextItemId, Long assayId){
-		AssayContext targetAssayContext = AssayContext.findById(cardId)
-		AssayContextItem source = AssayContextItem.findById(assayContextItemId)
-		assayContextService.addItem(source, targetAssayContext)
-		Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(targetAssayContext.assay)
-		render(template: "cards", model: [cardDtoMap: cardDtoMap, assayId: assayId])
-	}
+    def moveCardItem(Long cardId, Long assayContextItemId, Long assayId) {
+        AssayContext targetAssayContext = AssayContext.findById(cardId)
+        AssayContextItem source = AssayContextItem.findById(assayContextItemId)
+        assayContextService.addItem(source, targetAssayContext)
+        Assay assay = targetAssayContext.assay
+        render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
 
 
 }
