@@ -13,7 +13,7 @@
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">${context.preferredName}</div>
             <div class="cardMenu">
-                <div class="btn-group">
+                <div class="btn-group dropup">
                     %{-- <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a> --}%
                     <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span></a>
                     <ul class="dropdown-menu" style="z-index:3999;">
@@ -32,9 +32,9 @@
                     <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
                     <td class="valuedLabel">${contextItem.valueDisplay}</td>
                     <td class="deleteItemButton">
-                        <div class="btn-group">
+                        <div class="btn-group dropup" >
                             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" style="z-index: 10000;">
                                 %{--<li><a href="#"><i class="icon-pencil"></i> Edit</a></li>--}%
                                 <li><a href="#"  onclick="moveCardItem(${contextOwner.id}, ${contextItem.id});return false;"><i class="icon-move"></i> Move</a></li>
                                 <li><a href="#" onclick="deleteCardItem(${contextItem.id}, ${context.id});return false;"><i class="icon-trash"></i> Delete</a></li>
