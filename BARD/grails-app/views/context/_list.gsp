@@ -9,7 +9,9 @@
                     <div class="span6">
                         <g:each in="${contextColumnList}" var="context">
                             <g:render template="../contextItem/${subTemplate}"
-                                      model="[contextOwner: contextOwner, context: context]"/>
+                                      model="[contextOwner: contextOwner,
+                                              context: context,
+                                              cardSection: entry.key]"/>
                         </g:each>
                     </div>
                 </g:each>
