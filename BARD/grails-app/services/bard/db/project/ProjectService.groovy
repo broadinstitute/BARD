@@ -88,4 +88,36 @@ class ProjectService {
         if (!projectStep) return
         deleteProjectStep(projectStep, true)
     }
+
+    /**
+     * Associate an experiment with a project if it is not already associated
+     * @param experiment
+     * @param project
+     */
+    void addExperimentToProject(Experiment experiment, Project project) {
+        if (!isExperimentAssociatedWithProject(experiment, project)) {
+            ProjectExperiment pe = new ProjectExperiment(experiment: experiment, project: project)
+            project.addToProjectExperiments(pe)
+            experiment.addToProjectExperiments(pe)
+            pe.save()
+        }
+        project.save()
+        experiment.save()
+    }
+
+    /**
+     * Check if an experiment is associated with a project or not
+     * @param experiment
+     * @param project
+     * @return
+     */
+    boolean isExperimentAssociatedWithProject(Experiment experiment, Project project ) {
+        boolean isAssociated = false
+        experiment.projectExperiments.each{
+            ProjectExperiment pe ->
+            if (pe.project.id == project?.id)
+                isAssociated = true
+        }
+        return isAssociated
+    }
 }
