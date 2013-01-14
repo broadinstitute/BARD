@@ -1,7 +1,6 @@
 package bard.db.registration.additemwizard
 
 import bard.db.registration.AssayContextService;
-import bard.db.registration.CardFactoryService;
 import bard.db.dictionary.*;
 import bard.db.registration.*;
 
@@ -40,7 +39,6 @@ class AddItemWizardController {
 	// (see http://www.grails.org/plugin/grom)
 	def pluginManager
 	AssayContextService assayContextService
-	CardFactoryService cardFactoryService
 	
 	/**
 	 * index method, redirect to the webflow
@@ -229,8 +227,6 @@ class AddItemWizardController {
 //						AssayContext assayContext = AssayContext.get(flow.attribute.assayContextIdValue)
 //						Assay assay = assayContext.assay
 //						println "Assay ID: " + assay.id + "  Name: " + assay.assayName
-//						Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assay)
-//						render(template: "cards", model: [cardDtoMap: cardDtoMap])
 						success()
 					} else {
 						println "ERROR - unable to add item to the card"
