@@ -25,10 +25,4 @@ environments {
             url = "jdbc:h2:mem:testDb;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE"
         }
     }
-    production {
-        dataSource {
-            dbCreate = "create-drop"
-            url = "jdbc:h2:prodDb;MVCC=TRUE;DB_CLOSE_ON_EXIT=FALSE"
-        }
-    }
 }
