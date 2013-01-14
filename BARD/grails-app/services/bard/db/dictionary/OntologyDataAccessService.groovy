@@ -15,15 +15,15 @@ class OntologyDataAccessService {
 	public List<Descriptor> getAttributeDescriptors(String path, String label){
 		def results
 		if(path && path.startsWith(ASSAY_DESCRIPTOR)){
-			results = AssayDescriptor.findAllByFullPathLikeAndLabelIlike(path + "%", label + "%")
+			results = AssayDescriptor.findAllByFullPathLikeAndLabelIlike(path + "%", "%" + label + "%")
 		}
 		else 
 		if(path && path.startsWith(BIOLOGY_DESCRIPTOR)){
-			results = BiologyDescriptor.findAllByFullPathLikeAndLabelIlike(path + "%", label + "%")
+			results = BiologyDescriptor.findAllByFullPathLikeAndLabelIlike(path + "%", "%" + label + "%")
 		}
 		else
 		if(path && path.startsWith(INSTANCE_DESCRIPTOR)){
-			results = InstanceDescriptor.findAllByFullPathLikeAndLabelIlike(path + "%", label + "%")
+			results = InstanceDescriptor.findAllByFullPathLikeAndLabelIlike(path + "%", "%" + label + "%")
 		}
 
 		return results

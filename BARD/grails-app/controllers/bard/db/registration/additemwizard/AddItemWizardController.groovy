@@ -1,5 +1,10 @@
 package bard.db.registration.additemwizard
 
+import bard.db.registration.AssayContextService;
+import bard.db.registration.CardFactoryService;
+import bard.db.dictionary.*;
+import bard.db.registration.*;
+
 /**
  * ajaxflow Controller
  *
@@ -34,6 +39,8 @@ class AddItemWizardController {
 	// notifications to the unified notifications daemon
 	// (see http://www.grails.org/plugin/grom)
 	def pluginManager
+	AssayContextService assayContextService
+	CardFactoryService cardFactoryService
 	
 	/**
 	 * index method, redirect to the webflow
@@ -215,10 +222,26 @@ class AddItemWizardController {
 					if (pluginManager.getGrailsPlugin('grom')) ".persisting instances to the database...".grom()
 
 					// put your bussiness logic in here
-					success()
+					println "Preparing to start saving"
+					def isSaved = assayContextService.saveItemInCard(flow.attribute, flow.valueType, flow.fixedValue)
+					if(isSaved){
+						println "New item was successfully added to the card"
+//						AssayContext assayContext = AssayContext.get(flow.attribute.assayContextIdValue)
+//						Assay assay = assayContext.assay
+//						println "Assay ID: " + assay.id + "  Name: " + assay.assayName
+//						Map<String , CardDto> cardDtoMap = cardFactoryService.createCardDtoMapForAssay(assay)
+//						render(template: "cards", model: [cardDtoMap: cardDtoMap])
+						success()
+					} else {
+						println "ERROR - unable to add item to the card"
+						flow.page = 4
+						error()
+					}
+					
 				} catch (Exception e) {
 					// put your error handling logic in
 					// here
+					println "Exception -> " + e
 					flow.page = 4
 					error()
 				}

@@ -95,9 +95,4 @@ class OntologyJSonController {
 		}
 	}
 	
-	def saveItemInCard(AttributeCommand attributeCmd, ValueTypeCommand valueTypeCmd, FixedValueCommand fixedValueCmd){
-		if(valueTypeCmd?.valueTypeOption?.equals(AttributeType.Fixed)){
-			
-		}
-	}
 }

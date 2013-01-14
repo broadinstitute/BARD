@@ -36,7 +36,7 @@
                 console.log('calling initializePageOne()');
         	}
         	var autoOpts = {
-        			minLength: 1,
+        			minLength: 2,
         			//source: "/BARD/ontologyJSon/getDescriptors",
         			source: function( request, response ) {            			
             			var sectionPath = $("#sectionPath").val();
@@ -94,6 +94,7 @@
         			select: function( event, ui ) {
                         $( "#currentChoice" ).val( ui.item.value );
                         $( "#unit" ).val( ui.item.unit );
+                        $( "#valueId" ).val( ui.item.elementId );
                     }
                 			
         	}
