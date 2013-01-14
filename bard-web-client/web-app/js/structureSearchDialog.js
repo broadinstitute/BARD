@@ -1,8 +1,12 @@
 var adjustMarvinSketchWindow = function () {
     var width = window.innerWidth / 2;
     var height = window.innerHeight / 2;
-    document.MarvinSketch.width = width
-    document.MarvinSketch.height = height
+    if (width && document.MarvinSketch.width) {
+        document.MarvinSketch.width = width
+    }
+    if (height && document.MarvinSketch.height) {
+        document.MarvinSketch.height = height
+    }
 }
 
 
