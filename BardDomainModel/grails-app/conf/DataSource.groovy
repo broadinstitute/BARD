@@ -1,12 +1,22 @@
+/**
+ * NOTE all database connection info is externalized
+ */
 dataSource {
     pooled = true
-    driverClassName = "org.h2.Driver"
-    username = "sa"
-    password = ""
     // defaulting to using validate unless we specify something different on command line
     // you can't always use the validation option for database migration dbm- commmands
     // say bootstrapping a fresh schema, in this case you can turn off validation
-    dbCreate = System.getProperty('dataSource.dbCreate')?:"validate"
+    dbCreate = System.getProperty('dataSource.dbCreate') ?: "validate"
+    properties {
+        maxActive = 50
+        maxIdle = 25
+        minIdle = 5
+        initialSize = 5
+        minEvictableIdleTimeMillis = 60000
+        timeBetweenEvictionRunsMillis = 60000
+        maxWait = 10000
+        validationQuery = "select 1 from dual"
+    }
 }
 hibernate {
     cache.use_second_level_cache = true
@@ -14,20 +24,4 @@ hibernate {
     cache.region.factory_class = 'net.sf.ehcache.hibernate.EhCacheRegionFactory'
     format_sql = true
     use_sql_comments = true
-}
-// environment specific settings
-environments {
-    development {
-        dataSource {
-            dbCreate = "create-drop"
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
-        }
-    }
-
-    test {
-        dataSource {
-            dbCreate = "create-drop"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
-        }
-    }
 }

@@ -1,6 +1,16 @@
 $(document).ready(function () {
 
-	$("#accordion").accordion({ autoHeight:false, collapsible:true});
+    //bind show event to accordion
+    $('.collapse').on('show', function () {
+        var icon = $(this).siblings().find("i.icon-chevron-right");
+        icon.removeClass('icon-chevron-right').addClass('icon-chevron-down');
+    });
+    //bind hide event to accordion
+    $('.collapse').on('hide', function () {
+        var icon = $(this).siblings().find("i.icon-chevron-down");
+        icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
+    });
+
 	$("#dialog:ui-dialog").dialog("destroy");
 
 	$("#addNewBtn").button({
@@ -147,11 +157,9 @@ $(document).ready(function () {
 function initDnd() {
     $("caption.assay_context").dblclick(function () {
         var assayContextId = $(this).attr('id');
-        var name = $(this).find('p').text();
-        $("#edit_card_name").val(name);
-        $("#assayContextId").val(assayContextId);
-        $("#dialog_edit_card").dialog({title:"Edit Card Name"});
-        $("#dialog_edit_card").dialog("open");
+        var name = $(this).find('div.cardTitle').text();
+        editCardName(assayContextId, name)
+
     });
 
 	$("button", ".deleteCardButton").button({
@@ -304,7 +312,7 @@ function deleteCardItem(itemId, assayContextId){
 	        url:'../deleteItemFromCard',
 	        data:data,
 	        success:function (data) {
-	        	$("div#" + assayContextId).replaceWith(data);
+	        	$("div#cardHolder").html(data);
 	            initDnd();
 	        }
 	    });
@@ -416,7 +424,7 @@ function deleteCard(cardId){
 
 function editCardName(cardId, cardName) {
     $("#edit_card_name").val(cardName);
-    $("#assayContextId").val(cardId);
+    $("#contextId").val(cardId);
     $("#dialog_edit_card").dialog({title:"Edit Card Name"});
     $("#dialog_edit_card").dialog("open");
 }
