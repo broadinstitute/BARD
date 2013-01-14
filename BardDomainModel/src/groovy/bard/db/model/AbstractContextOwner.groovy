@@ -24,7 +24,10 @@ abstract class AbstractContextOwner {
         Map<String, List<AbstractContext>> mapByPath = getContexts().groupBy { AbstractContext context ->
             String mapKey = 'uncategorized cards'
             Descriptor descriptor = context.preferredDescriptor
-            if (descriptor) {
+            if (context.contextName?.startsWith('Annotations for')){
+                mapKey = 'project management > experiment' // hack to group contexts with name Annotations for AC50 into the project management > experiment section
+            }
+            else if (descriptor) {
                 mapKey = descriptor.generateOntologyBreadCrumb(2)
             }
             mapKey
