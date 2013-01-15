@@ -484,3 +484,17 @@ td.molSpreadSheet{
 .compound-info-dropdown .dropdown-menu a {
     padding: 0;
 }
+.centerEverything {
+    text-align: center;
+}
+.shiftTextUp {
+    position: relative;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: xx-small;
+    top: -8px;
+}
+.tinytextsqueeze {
+    position: relative;
+    top: -8px;
+}

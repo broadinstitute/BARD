@@ -73,7 +73,16 @@
                 <p style="padding-left: 15px;">Hide Promiscuity Scores</p>
             </span>
             <a href="../molSpreadSheet/index?transpose=true&norefresh=true" class="pull-right tranposeSymbol"
-               title="Transpose array elements">T</a>
+               title="Transpose columns and rows">
+                <div class="centerEverything">
+                    T<br/>
+
+                    <div class="shiftTextUp">
+                        Transpose columns<br/>
+                        <span class="tinytextsqueeze">and rows</span>
+                    </div>
+                </div>
+            </a>
             <table cellpadding="0" cellspacing="0" border="0" class="molSpreadSheet display" id="molspreadsheet"
                    width="100%">
                 <thead>
