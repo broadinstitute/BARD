@@ -14,6 +14,7 @@ import grails.converters.JSON
 class TreeRenderTagLib {
     /* methods for rendering trees */
 
+    /*
     class Link {
         String title;
         String link;
@@ -26,26 +27,22 @@ class TreeRenderTagLib {
         String xref;
         List<Tree> children = [];
     }
+    */
 
-    private Tree createTreeFromMeasure(Measure measure) {
-        Tree tree = new Tree();
-        tree.key = measure.id;
-        tree.title = measure.resultType.label;
+    private Map createTreeFromMeasure(Measure measure) {
+        def key = measure.id;
+        def title = measure.resultType.label;
         if(measure.statsModifier != null) {
-            tree.title += " (" + measure.statsModifier.label + ")"
+            title += " (" + measure.statsModifier.label + ")"
         }
 
-        for(assayContextMeasure in measure.assayContextMeasures) {
-            AssayContext context = assayContextMeasure.assayContext;
-
-            tree.links.add(new Link(title: context.contextName, link: "#card-"+context.id))
-        }
+        def children = []
 
         for(m in measure.childMeasures) {
-            tree.children.add(createTreeFromMeasure(m))
+            children.add(createTreeFromMeasure(m))
         }
 
-        return tree;
+        return [key: key, title: title, children: children];
     }
 
     def recursiveRenderTree(out, tag, children) {
@@ -64,8 +61,7 @@ class TreeRenderTagLib {
         out << "</"+tag+">";
     }
 
-    /** Render a set of measures as unordered list */
-    def renderMeasuresAsTree = { attrs, body ->
+    def renderMeasuresAsJSONTree = { attrs, body ->
         def measures = attrs.measures;
         def children = []
 
@@ -73,6 +69,25 @@ class TreeRenderTagLib {
             children.add(createTreeFromMeasure(measure))
         }
 
-        recursiveRenderTree(out, "ul", children);
+        out << new JSON(children).toString()
+    }
+
+    def dynaTree = { attrs, body ->
+        def id = attrs.id
+        def measures = attrs.measures;
+
+        out << r.script() {
+            out <<  '               $(function(){\n' +
+                    '                    $("#'+id+'").dynatree({\n' +
+                    '                        onActivate: function(node) {\n' +
+                    '                            $(".measure-detail-card").hide(); \n' +
+                    '                            $("#measure-details-"+node.data.key).show(); \n' +
+                    '                        },\n' +
+                    '                        children: '+g.renderMeasuresAsJSONTree([measures:measures],null)+'\n' +
+                    '                    });\n' +
+                    '                });' +
+                    ''
+        }
+        out << "<div id=\"${id}\"></div>"
     }
 }

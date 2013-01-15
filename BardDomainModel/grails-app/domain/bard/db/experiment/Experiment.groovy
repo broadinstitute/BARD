@@ -63,4 +63,8 @@ class Experiment {
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+
+    String getDisplayName() {
+        return id + "-" + experimentName
+    }
 }
