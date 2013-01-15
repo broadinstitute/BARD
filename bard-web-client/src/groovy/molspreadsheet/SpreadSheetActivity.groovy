@@ -49,11 +49,6 @@ class SpreadSheetActivity {
                 extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElements)
             }
         }
-//        if (readouts) {
-//            for (Readout readout : readouts) {
-//                readOutToHillCurveValue(resultTypeNames, readout)
-//            }
-//        }
     }
 
     /***

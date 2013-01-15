@@ -1,11 +1,14 @@
 package molspreadsheet
 
 import bard.core.HillCurveValue
+import bard.core.rest.spring.experiment.ConcentrationResponseSeries
+import bard.core.rest.spring.experiment.PriorityElement
 import bardqueryapi.ActivityOutcome
-
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.experiment.CurveFitParameters
+import bard.core.rest.spring.experiment.ConcentrationResponsePoint
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -143,23 +146,149 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        final HillCurveValue hillCurveValue = new HillCurveValue()
-        hillCurveValue.id = 1
-        hillCurveValue.sinf = 1d
-        hillCurveValue.s0 = 1d
-        hillCurveValue.slope = 1d
-        hillCurveValue.coef = 1d
-        hillCurveValue.conc = [1d]
-        hillCurveValue.response = [1d]
-        spreadSheetActivity.hillCurveValueList = [hillCurveValue,hillCurveValue]
-
+        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: 0.47d)
+        spreadSheetActivity.priorityElementList = [priorityElement,priorityElement]
 
         when:
         MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
 
         then:
         assertNotNull(molSpreadSheetCell)
-        assert  molSpreadSheetCell.spreadSheetActivityStorage.columnNames.size()==1
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==2
+    }
+
+
+    void "Test  MolSpreadSheetCell constructor in case of no value"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(displayName: "testName")
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==0
+    }
+
+
+    void "Test  MolSpreadSheetCell constructor in case of no displayName"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(value: 0.47d)
+        priorityElement.responseUnit='nM'
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==1
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].identifier=='nM'
+    }
+    void "Test  MolSpreadSheetCell constructor in case of no displayName and no response unit"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(value: 0.47d)
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==1
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].identifier==' '
+    }
+
+
+
+    void "Test  MolSpreadSheetCell constructor with curve parms"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(value: 0.47d,displayName: "colname")
+        ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries()
+        concentrationResponseSeries.concentrationResponsePoints = []
+        concentrationResponseSeries.concentrationResponsePoints  << new ConcentrationResponsePoint(testConcentration: 0.1d, value: 0.1d)
+        concentrationResponseSeries.concentrationResponsePoints  << new ConcentrationResponsePoint(testConcentration: 0.2d, value: 0.2d)
+        CurveFitParameters curveFitParameters = new CurveFitParameters(s0: 1.0d,
+                sInf: 1.0d,
+                hillCoef: 1.0d)
+        concentrationResponseSeries.curveFitParameters =  curveFitParameters
+        priorityElement.concentrationResponseSeries = concentrationResponseSeries
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==1
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].identifier=='colname'
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].s0==1.0d
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].conc.size()==2
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].response.size()==2
+    }
+
+
+
+
+    void "Test  MolSpreadSheetCell constructor in case of one column names"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: 0.47d)
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==1
+    }
+
+
+
+    void "Test  MolSpreadSheetCell constructor with qualifiers"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: 0.47d)
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+
+        when:
+        priorityElement.qualifier = qualifier
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.molSpreadSheetCellType ==  TypeOfMolSpreadSheetCell
+
+        where:
+        qualifier       | TypeOfMolSpreadSheetCell
+        ">"             | MolSpreadSheetCellType.greaterThanNumeric
+        "<"             | MolSpreadSheetCellType.lessThanNumeric
+        "="             | MolSpreadSheetCellType.numeric
     }
 
 

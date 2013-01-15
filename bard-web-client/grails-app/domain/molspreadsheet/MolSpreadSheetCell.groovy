@@ -118,7 +118,7 @@ class MolSpreadSheetCell {
                     } else {
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
                     }
-                    hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(counter)
+                    hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(identifierString)
                     this.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
                     this.spreadSheetActivityStorage.qualifier = this.molSpreadSheetCellType
                     counter++
