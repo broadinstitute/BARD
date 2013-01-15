@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import bard.core.rest.spring.project.ProjectExpanded
 
 class ProjectRestService extends AbstractRestService {
 
@@ -22,10 +23,10 @@ class ProjectRestService extends AbstractRestService {
      * @param pid
      * @return {@link bard.core.rest.spring.project.Project}
      */
-    public Project getProjectById(final Long pid) {
+    public ProjectExpanded getProjectById(final Long pid) {
         final String url = this.buildEntityURL() + "?expand={expand}"
         final Map map = [id: pid, expand: "true"]
-        final Project project = (Project) this.getForObject(url, Project.class, map)
+        final ProjectExpanded project = this.getForObject(url, ProjectExpanded.class, map)  as ProjectExpanded
         return project
 
     }

@@ -58,9 +58,9 @@ class AssayRestServiceUnitSpec extends Specification {
         given:
         Long adid = 200
         when:
-        List<AssayAnnotation> annotations = service.findAnnotations(adid)
+        AssayAnnotation annotations = service.findAnnotations(adid)
         then:
-        this.restTemplate.getForObject(_, _) >> {[new AssayAnnotation()]}
+        this.restTemplate.getForObject(_, _) >> {new AssayAnnotation()}
         assert annotations
     }
 

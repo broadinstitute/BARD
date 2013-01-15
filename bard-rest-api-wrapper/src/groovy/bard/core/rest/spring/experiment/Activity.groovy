@@ -3,9 +3,20 @@ package bard.core.rest.spring.experiment
 import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.apache.commons.lang.StringUtils
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Activity extends JsonUtil {
+  @JsonIgnore
+  ObjectMapper objectMapper = new ObjectMapper()
+
+
+    @JsonIgnore
+    private ResultData resultData
+    @JsonProperty("resultJson")
+    private String resultJson
 
     @JsonProperty("exptDataId")
     private String exptDataId;
@@ -32,6 +43,14 @@ public class Activity extends JsonUtil {
     @JsonProperty("resourcePath")
     private String resourcePath;
 
+    @JsonProperty("resultJson")
+    public String getResultJson() {
+        return resultJson
+    }
+    @JsonProperty("resultJson")
+    public void setResultJson(String resultJson) {
+        this.resultJson = resultJson
+    }
     @JsonProperty("exptDataId")
     public String getExptDataId() {
         return exptDataId;
@@ -133,11 +152,13 @@ public class Activity extends JsonUtil {
     }
 
     @JsonProperty("readouts")
+    @Deprecated
     public List<Readout> getReadouts() {
         return readouts;
     }
 
     @JsonProperty("readouts")
+    @Deprecated
     public void setReadouts(List<Readout> readouts) {
         this.readouts = readouts;
     }
@@ -151,4 +172,25 @@ public class Activity extends JsonUtil {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
+    /**
+     * Convert the ResultJson string to a data object
+     * Since this is expensive we want to do it only once
+     * @return
+     */
+    public ResultData getResultData() {
+        if(this.resultData != null){
+            return this.resultData
+        }
+        if(StringUtils.isBlank(this.resultJson)){
+           return null
+        }
+       this.resultData = objectMapper.readValue(this.resultJson, ResultData.class)
+
+        //convert the string to data object
+        return resultData
+    }
+    public boolean hasConcentrationSeries(){
+        return getResultData()?.hasConcentrationResponseSeries()
+    }
+
 }

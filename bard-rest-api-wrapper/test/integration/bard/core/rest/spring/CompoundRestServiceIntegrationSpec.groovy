@@ -2,6 +2,7 @@ package bard.core.rest.spring
 
 import bard.core.SearchParams
 import bard.core.SuggestParams
+import bard.core.exceptions.RestApiException
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.util.Counts
@@ -9,10 +10,8 @@ import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
-import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
-import bard.core.exceptions.RestApiException
 
 /**
  * Tests for CompoundRestService in JDO
@@ -35,6 +34,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundSummary.ntest
         assert compoundSummary.testedAssays
         assert compoundSummary.testedExptdata
+        assert compoundSummary.testedExptdata.resultData
     }
 
     void "test retrieving assays from a compound #label"() {
@@ -98,21 +98,6 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundAnnotations.anno_key.size() == compoundAnnotations.anno_val.size()
     }
 
-    void "test getCompoundAnnotationsFromStructureSearch()"() {
-        given:
-        final String smiles = "O=S(*C)(Cc1ccc2ncc(CCNC)c2c1)=O";
-        StructureSearchParams structureSearchParams = new StructureSearchParams(smiles, StructureSearchParams.Type.Superstructure);
-        structureSearchParams.setSkip((long) 0).setTop((long) 2);
-        CompoundResult compoundResult = compoundRestService.findCompoundsByFreeTextSearch(structureSearchParams);
-        and:
-        Compound compound = compoundResult.compounds.get(0)
-
-        when:
-        CompoundAnnotations compoundAnnotations = compoundRestService.findAnnotations(compound.cid)
-        then:
-        assert compoundAnnotations
-        assert compoundAnnotations.anno_key.size() == compoundAnnotations.anno_val.size()
-    }
 
     void "test findAnnotations"() {
         given:
@@ -142,7 +127,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
 
         for (Compound compound : compounds) {
-            assert compound.getName(), "Compound  must have a name"
+            assert compound.getIupacName(), "Compound  must have a name"
         }
 
         final List<Facet> facets = compoundResult.getFacets();

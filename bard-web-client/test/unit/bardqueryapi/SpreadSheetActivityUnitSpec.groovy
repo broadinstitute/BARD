@@ -1,10 +1,11 @@
 package bardqueryapi
 
 import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.Readout
+import bard.core.rest.spring.experiment.PriorityElement
 import molspreadsheet.SpreadSheetActivity
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.experiment.ConcentrationResponseSeries
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -15,30 +16,68 @@ class SpreadSheetActivityUnitSpec extends Specification {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         when:
-        spreadSheetActivity.readOutsToHillCurveValues([], [])
+        spreadSheetActivity.readOutsToHillCurveValues(null, [])
         then:
         assert !spreadSheetActivity.hillCurveValueList
     }
 
-    void "test readOutToHillCurveValue with empty Read outs"() {
+    void "test extractExperimentalValuesFromAPriorityElement with empty priorityElement"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        Readout readout = new Readout()
+        PriorityElement priorityElement = new  PriorityElement ()
         List<String> resultTypeNames = []
         when:
-        spreadSheetActivity.readOutToHillCurveValue(resultTypeNames, readout)
+        spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
-        assert resultTypeNames
+        resultTypeNames.size() == 1
+        resultTypeNames[0] ==  ""
     }
-    void "test readOutToHillCurveValue"() {
+    void "test extractExperimentalValuesFromAPriorityElement"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        Readout readout = new Readout(name: "name")
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
         List<String> resultTypeNames = []
         when:
-        spreadSheetActivity.readOutToHillCurveValue(resultTypeNames, readout)
+        spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
-        assert resultTypeNames
+        resultTypeNames.size() == 1
+        resultTypeNames[0] ==  "columnName"
+    }
+    void "test extractExperimentalValuesFromAPriorityElement backup name"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(responseUnit: "uM")
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        priorityElement.concentrationResponseSeries = concentrationResponseSeries
+        List<String> resultTypeNames = []
+        when:
+        spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
+        then:
+        resultTypeNames.size() == 1
+        resultTypeNames[0] ==  "columnName"
+    }
+    void "test extractExperimentalValuesFromAPriorityElement with repeated column name"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        List<String> resultTypeNames = ["columnName"]
+        when:
+        spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
+        then:
+        resultTypeNames.size() == 1
+        resultTypeNames[0] ==  "columnName"
+    }
+    void "test extractExperimentalValuesFromAPriorityElement with non-repeated column name"() {
+        given:
+        SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName1")
+        List<String> resultTypeNames = ["columnName2"]
+        when:
+        spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
+        then:
+        resultTypeNames.size() == 2
+        resultTypeNames[0] == "columnName2"
+        resultTypeNames[1] == "columnName1"
     }
 
     void "test addPotency #label"() {

@@ -89,6 +89,10 @@ describe("Testing search.js", function () {
             searchString = "PID:1,2A,A123,560";
             expect(findSearchType(searchString)).not.toEqual("PID");
         });
+        it("should return the string 'STRUCTURE' when we pass in O=C(Nc1c(cccc1C)C)CN(CC)CC", function () {
+            searchString = "O=C(Nc1c(cccc1C)C)CN(CC)CC";
+            expect(findSearchType(searchString)).toEqual("STRUCTURE");
+        });
         it("should return the string 'STRUCTURE' when we pass in Exact:CC", function () {
             searchString = "Exact:CC";
             expect(findSearchType(searchString)).toEqual("STRUCTURE");

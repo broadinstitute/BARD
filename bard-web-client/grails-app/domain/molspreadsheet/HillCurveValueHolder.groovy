@@ -1,21 +1,22 @@
 package molspreadsheet
 
 import org.slf4j.LoggerFactory
-import results.ExperimentalValue
+import bard.core.util.ExperimentalValueUtil
 
 class HillCurveValueHolder {
 
     static belongsTo = [spreadSheetActivityStorage: SpreadSheetActivityStorage]
     private final log = LoggerFactory.getLogger(this.class.name)
 
-        String identifier = ""
-        Integer subColumnIndex = 0
-        Double s0
-        Double sInf
-        Double slope
-        Double coef
-        java.util.List<java.lang.Double> conc = []
-        java.util.List<java.lang.Double> response = []
+    String identifier = ""
+    Integer subColumnIndex = 0
+    Double s0
+    Double sInf
+    Double slope
+    Double coef
+    java.util.List<java.lang.Double> conc = []
+    java.util.List<java.lang.Double> response = []
+    String qualifier = ""
 
     static constraints = {
         identifier nullable: false
@@ -41,14 +42,14 @@ class HillCurveValueHolder {
             numericalReturnValue = response[0]
         } else  {
             //TODO: find the business rule describing desired actions under these circumstances
-           log.info "Problem identified by HillCurveValueHolder: no slope and as well no single valued response"
+            log.info "Problem identified by HillCurveValueHolder: no slope and as well no single valued response"
         }
 
         if (numericalReturnValue != Double.NaN)  {
-            returnValue  = new ExperimentalValue(numericalReturnValue)
+            returnValue  = new ExperimentalValueUtil(numericalReturnValue)
         }
 
-        returnValue
+        qualifier+returnValue
     }
 
 

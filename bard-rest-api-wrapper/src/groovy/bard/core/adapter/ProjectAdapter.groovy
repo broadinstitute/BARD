@@ -6,19 +6,20 @@ import bard.core.Probe
 import bard.core.Value
 import bard.core.interfaces.EntityNamedSources
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.project.Project
 import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.project.ProjectAbstract
 
 
 public class ProjectAdapter implements ProjectAdapterInterface {
-    final Project project
+    final ProjectAbstract project
     final Double score
     final NameDescription matchingField
 
-    public ProjectAdapter(Project project, Double score=0, NameDescription nameDescription=null) {
+    public ProjectAdapter(ProjectAbstract project, Double score=0, NameDescription nameDescription=null) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription

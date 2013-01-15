@@ -6,8 +6,10 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
+import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
+import molspreadsheet.SpreadSheetActivity
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -25,6 +27,49 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     @After
     void tearDown() {
 
+    }
+
+    void "test findExperimentDataById #label"() {
+
+        when: "We call the findExperimentDataById method with the experimentId #experimentId"
+        final Map experimentDataMap = queryService.findExperimentDataById(experimentId, top, skip)
+
+        then: "We get back the expected map"
+        assert experimentDataMap
+        final Long totalActivities = experimentDataMap.total
+        assert totalActivities
+        final List<Activity> activities = experimentDataMap.activities
+        assert activities
+        assert activities.size() == 10
+        for (Activity activity : activities) {
+            assert activity
+            assert activity.cid
+            assert activity.eid
+            assert activity.sid
+            assert activity.resultData
+        }
+        where:
+        label                                              | experimentId   | top | skip
+        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
+        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
+    }
+
+    void "test convertSpreadSheetActivityToCompoundInformation"() {
+
+        when: "We call the findExperimentDataById method with the experimentId #experimentId"
+        final Map experimentDataMap = queryService.findExperimentDataById(experimentId, top, skip)
+
+        then: "We get back the expected map"
+        assert experimentDataMap
+        final Long totalActivities = experimentDataMap.total
+        assert totalActivities
+        final List<Activity> activities = experimentDataMap.activities
+        assert activities
+
+        where:
+        label                                              | experimentId   | top | skip
+        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
+        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
     }
 
     void "test findPromiscuityScoreForCID #label"() {
@@ -205,7 +250,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "dna repair"              | "dna repair"         | 0    | 10  | 10                | []
         "dna repair with filters" | "dna repair"         | 0    | 10  | 1                 | [new SearchFilter("tpsa", "55.1")]
         "dna repair skip and top" | "dna repair"         | 10   | 10  | 10                | []
-        "biological process"      | "biological process" | 0    | 10  | 10                | []
+        "biological process"      | "biological process" | 0    | 10  | 4                 | []
 
     }
 
@@ -240,7 +285,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "dna repair"              | "\"dna repair\""         | 0    | 10  | 10             | []
         "dna repair with filters" | "\"dna repair\""         | 0    | 10  | 10             | [new SearchFilter("gobp_term", "DNA repair"), new SearchFilter("gobp_term", "response to UV-C")]
         "dna repair skip and top" | "\"dna repair\""         | 10   | 10  | 10             | []
-        "biological process"      | "\"biological process\"" | 0    | 10  | 10             | []
+        "biological process"      | "\"biological process\"" | 0    | 10  | 4              | []
 
     }
 
@@ -275,7 +320,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "dna repair"                      | "\"dna repair\""     | 0    | 10  | 10               | []
         "dna repair skip and top"         | "\"dna repair\""     | 10   | 10  | 10               | []
         "biological process"              | "biological process" | 0    | 10  | 10               | []
-        "biological process with filters" | "biological process" | 0    | 10  | 10               | [new SearchFilter("num_expt", "6")]
+        "biological process with filters" | "biological process" | 0    | 10  | 4                | [new SearchFilter("num_expt", "6")]
 
     }
 

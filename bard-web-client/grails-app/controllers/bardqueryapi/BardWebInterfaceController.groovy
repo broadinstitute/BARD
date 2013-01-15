@@ -66,11 +66,11 @@ class BardWebInterfaceController {
                 Map<String, Integer> searchParams = handleSearchParams()
                 final Integer top = searchParams.top
                 final Integer skip = searchParams.skip
-                final Map experimentDataMap = molecularSpreadSheetService.findExperimentDataById(id, top, skip)
+                final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip)
                 if (experimentDataMap) {
                     final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
                     if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                        render(template: 'experimentResult', model: modelMap)
+                        render(template: 'experimentResultData', model: modelMap)
                         return
                     }
                     //this should do a full page reload

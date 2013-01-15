@@ -1,24 +1,21 @@
 package curverendering
 
-import bard.core.HillCurveValue
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentData
 import bardqueryapi.DrcCurveCommand
+import bardqueryapi.QueryService
 import grails.plugin.spock.IntegrationSpec
-import molspreadsheet.MolecularSpreadSheetService
-import molspreadsheet.SpreadSheetActivity
 import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import bard.core.rest.spring.experiment.*
 
 @Unroll
 class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
-    MolecularSpreadSheetService molecularSpreadSheetService
+    QueryService queryService
     CompoundRestService compoundRestService
     ExperimentRestService experimentRestService
     DoseCurveRenderingService doseCurveRenderingService
@@ -41,7 +38,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
                 concentrations: [new Double(1), new Double(2)],
                 s0: 0.2, sinf: 2.2, ac50: 2.1, hillSlope: 2.0, height: 200, width: 200, xAxisLabel: 'X', yAxisLabel: 'Y']
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand()
-        drcCurveCommand.ac50 = map.ac50
+        drcCurveCommand.slope = map.ac50
         drcCurveCommand.activities = map.activities
         drcCurveCommand.concentrations = map.concentrations
         drcCurveCommand.height = map.height
@@ -68,19 +65,24 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         final List<Activity> searchResults = activityValueSearchResult.activities
 
         and: "We extract the first experimen tValue in the resulting collection"
-        final Activity experimentValue = (Activity) searchResults.get(0)
+        final Activity activity = (Activity) searchResults.get(0)
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        ResultData resultData = activity.resultData
+
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
+        final PriorityElement priorityElement = resultData.priorityElements.get(0)
+        final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
+        final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
         JFreeChart jFreeChart =
             this.doseCurveRenderingService.
-                    createDoseCurve(spreadSheetActivity.hillCurveValueList[0].conc as List<Double>,
-                            spreadSheetActivity.hillCurveValueList[0].response as List<Double>,
-                            spreadSheetActivity.hillCurveValueList[0].slope,
-                            spreadSheetActivity.hillCurveValueList[0].coef,
-                            spreadSheetActivity.hillCurveValueList[0].s0,
-                            spreadSheetActivity.hillCurveValueList[0].sinf,
+                    createDoseCurve(map.concentrations,
+                            map.activities,
+                            priorityElement.getSlope(),
+                            curveFitParameters.hillCoef,
+                            curveFitParameters.s0,
+                            curveFitParameters.SInf,
                             'X', 'Y', null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"
@@ -106,16 +108,26 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         final List<Activity> searchResults = experimentData.activities
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Activity experimentValue = searchResults.get(0)
+        Activity activity = searchResults.get(0)
+
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        ResultData resultData = activity.resultData
 
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
-        final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
-        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.conc as List<Double>,
-                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf, 'X', 'Y',
-                null, null, null, null)
+        final PriorityElement priorityElement = resultData.priorityElements.get(0)
+        final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
+        final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+        JFreeChart jFreeChart =
+            this.doseCurveRenderingService.
+                    createDoseCurve(map.concentrations,
+                            map.activities,
+                            priorityElement.getSlope(),
+                            curveFitParameters.hillCoef,
+                            curveFitParameters.s0,
+                            curveFitParameters.SInf,
+                            'X', 'Y', null, null, null, null)
 
         then: "We expect to get back a JFreeChart back"
         assert jFreeChart
@@ -130,6 +142,58 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+    void "tests plot multiple curves on same graph #label"() {
+        given: "That we have created an ETag from a list of CIDs"
+        final ExperimentData experimentData = this.experimentRestService.activities(experimentId);
+        final List<Activity> searchResults = experimentData.activities
+
+        and: "We extract the first experimen tValue in the resulting collection"
+        Activity activity = searchResults.get(0)
+
+
+        and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
+        ResultData resultData = activity.resultData
+
+        when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
+        final PriorityElement priorityElement = resultData.priorityElements.get(0)
+        final List<ActivityConcentration> primaryElements = priorityElement.getPrimaryElements()
+        List<Curve> curves = []
+        String yaxis = ""
+        String xaxis = "Concetration " + priorityElement.testConcentrationUnit
+        for (ActivityConcentration primaryElement : primaryElements) {
+            final ConcentrationResponseSeries concentrationResponseSeries = primaryElement.getConcentrationResponseSeries()
+            yaxis = concentrationResponseSeries.getYAxisLabel()
+
+            final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+
+            final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+            Curve curve = new Curve(
+                    concentrations: map.concentrations,
+                    activities: map.activities,
+                    hillSlope: curveFitParameters.hillCoef,
+                    s0: curveFitParameters.s0,
+                    sinf: curveFitParameters.SInf,
+                    slope: primaryElement.getSlope())
+            curves.add(curve)
+        }
+        JFreeChart jFreeChart =
+            this.doseCurveRenderingService.
+                    createDoseCurves(curves,
+                            xaxis, yaxis, null, null, null, null)
+
+        then: "We expect to get back a JFreeChart back"
+        assert jFreeChart
+        final File file = new File("testChar.jpg")
+        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
+        assert file.exists()
+
+
+        where:
+        label                                    | experimentId
+        "An existing experiment with activities" | new Long(32)
+
+    }
+
     void "tests findDrcData"() {
         given: "That we have created an ETag from a list of CIDs"
         final Object compoundETag = compoundRestService.newETag("Compound ETags For Activities", cids);
@@ -139,16 +203,26 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
 
         and: "We extract the first experimen tValue in the resulting collection"
-        Activity experimentValue = experimentIterator.activities.get(0)
+        Activity activity = experimentIterator.activities.get(0)
+
 
         and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
+        ResultData resultData = activity.resultData
 
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
-        final HillCurveValue hillCurveValue = spreadSheetActivity.getHillCurveValueList()[0]
+        final PriorityElement priorityElement = resultData.priorityElements.get(0)
+        final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
+        final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+
         final Drc drc =
-            this.doseCurveRenderingService.findDrcData(hillCurveValue.conc as List<Double>,
-                    hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf)
+            this.doseCurveRenderingService.findDrcData(
+                    map.concentrations,
+                    map.activities,
+                    priorityElement.getSlope(),
+                    curveFitParameters.hillCoef,
+                    curveFitParameters.s0,
+                    curveFitParameters.SInf, java.awt.Color.BLACK)
 
         then: "We expect to get back a Drc object with the number of activities matching the number of concentrations"
         assert drc
@@ -162,33 +236,6 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         label                                    | cids                                                      | experimentId
         "An existing experiment with activities" | [new Long(2836861), new Long(5882673), new Long(5604367)] | new Long(346)
 
-    }
-
-    void "tests findDrcData No AC50"() {
-        given: "That we have an Experiment"
-        final Long experimentId = new Long(1326)
-
-        and: "We call the activities method on the restExperimentService with the experiment and the ETag"
-        final ExperimentData experimentIterator = this.experimentRestService.activities(experimentId);
-
-        and: "We extract the first experimen tValue in the resulting collection"
-        Activity experimentValue = experimentIterator.activities.get(0)
-
-
-        and: "We call the extractActivitiesFromExperiment method with the experiment Value to get the SpreadSheetActivity"
-        SpreadSheetActivity spreadSheetActivity = molecularSpreadSheetService.extractActivitiesFromExperiment(experimentValue)
-
-        when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
-        final HillCurveValue hillCurveValue = spreadSheetActivity.hillCurveValueList[0]
-        JFreeChart jFreeChart = this.doseCurveRenderingService.createDoseCurve(hillCurveValue.conc as List<Double>,
-                hillCurveValue.response as List<Double>, hillCurveValue.slope, hillCurveValue.coef, hillCurveValue.s0, hillCurveValue.sinf, 'X', 'Y',
-                null, null, null, null)
-
-        then: "We expect to get back a JFreeChart back"
-        assert jFreeChart
-        final File file = new File("testCharNoFit.jpg")
-        ChartUtilities.saveChartAsJPEG(file, jFreeChart, 500, 500);
-        assert file.exists()
     }
 
 }

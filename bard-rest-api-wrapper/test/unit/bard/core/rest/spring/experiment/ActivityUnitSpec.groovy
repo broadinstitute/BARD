@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.Readout
 
 @Unroll
 class ActivityUnitSpec extends Specification {
@@ -79,15 +77,6 @@ class ActivityUnitSpec extends Specification {
            "resourcePath": "/exptdata/197.859140"
        }
 '''
-
-    void setup() {
-
-    }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
     void "test activity"() {
         when:
         Activity activity = objectMapper.readValue(ACTIVITY_JSON, Activity.class)
@@ -96,14 +85,14 @@ class ActivityUnitSpec extends Specification {
         assert activity.exptDataId == "197.859140"
         assert activity.eid == 519
         assert activity.cid == 5389251
-        assert activity.sid==859140
-        assert activity.bardExptId== 197
-        assert activity.runset=="default"
-        assert activity.outcome== 2
-        assert activity.score== 78
-        assert activity.classification==0
-        assert activity.potency== null
-        assert activity.resourcePath=="/exptdata/197.859140"
+        assert activity.sid == 859140
+        assert activity.bardExptId == 197
+        assert activity.runset == "default"
+        assert activity.outcome == 2
+        assert activity.score == 78
+        assert activity.classification == 0
+        assert activity.potency == null
+        assert activity.resourcePath == "/exptdata/197.859140"
 
         assert activity.readouts
         Readout readOut = activity.readouts.get(0)

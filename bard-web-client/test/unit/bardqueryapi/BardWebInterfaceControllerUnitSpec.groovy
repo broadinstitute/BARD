@@ -30,8 +30,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import spock.lang.IgnoreRest
-
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
@@ -131,7 +129,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment()
         then:
-        this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
+        this.queryService.findExperimentDataById(_, _, _) >> {experimentData}
         assert response.status == 200
     }
 
@@ -139,7 +137,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(eid)
         then:
-        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {experimentData}
+        _ * this.queryService.findExperimentDataById(_, _, _) >> {experimentData}
         assert response.status == statusCode
 
         where:
@@ -157,7 +155,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(id)
         then:
-        _ * this.molecularSpreadSheetService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
+        _ * this.queryService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
         assert response.status == 404
         assert flash.message == "Problem finding Experiment ${id}"
 

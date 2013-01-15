@@ -21,8 +21,15 @@ import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
-
 import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.experiment.ExperimentShow
+import bard.core.rest.spring.experiment.ExperimentData
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResultData
+import bard.core.rest.spring.experiment.ResponseClassEnum
 import bard.core.rest.spring.assays.AssayAnnotation
 
 class QueryService implements IQueryService {
@@ -36,6 +43,7 @@ class QueryService implements IQueryService {
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
+    ExperimentRestService experimentRestService
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search
@@ -191,9 +199,9 @@ class QueryService implements IQueryService {
         return this.compoundRestService.getSummaryForCompound(cid)
     }
 
-        /*
-       * Returns an unexpanded list of sids
-        */
+    /*
+   * Returns an unexpanded list of sids
+    */
 
     List<Long> findSubstancesByCid(Long cid) {
         if (cid) {
@@ -228,6 +236,51 @@ class QueryService implements IQueryService {
         }
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
+    /**
+     * Used for Show Experiment Page. Perhaps we should move this to the Query Service
+     * @param experimentId
+     * @param top
+     * @param skip
+     * @return Map of data to use to display an experiment
+     */
+    Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) {
+        List<Activity> activities = []
+        boolean hasPlot = false
+        final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+        long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
+        if (experimentShow) {
+            final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
+            activities = experimentData.activities
+
+        }
+        String priorityDisplay = ""
+        boolean hasChildElements = false
+        for (Activity activity : activities) {
+            final ResultData resultData = activity.resultData
+            if (resultData) {
+
+
+                if (resultData?.hasPriorityElements()) {
+                    final PriorityElement priorityElement = resultData?.priorityElements.get(0)
+                    if (!priorityDisplay) {
+                        priorityDisplay = priorityElement.displayName
+
+                    }
+                    if(!hasChildElements){
+                        hasChildElements = priorityElement.hasChildElements()
+                    }
+                }
+                if (!hasPlot && resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
+                    hasPlot = true
+
+                }
+            }
+            if (hasPlot && priorityDisplay && hasChildElements) {
+                break
+            }
+        }
+        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot, priorityDisplay: priorityDisplay, hasChildElements: hasChildElements]
     }
 
     /**
@@ -307,7 +360,7 @@ class QueryService implements IQueryService {
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
-            final List<AssayAnnotation> annotations = assayRestService.findAnnotations(assayId)
+            final List<AssayAnnotation> annotations = [assayRestService.findAnnotations(assayId)]
             final AssayAdapter assayAdapter = new AssayAdapter(assay, 0, null, annotations)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
         }
@@ -320,18 +373,15 @@ class QueryService implements IQueryService {
      */
     Map showProject(final Long projectId) {
         if (projectId) {
-            final Project project = projectRestService.getProjectById(projectId)
-
-            //TODO: Here we make 2 other calls to the server to get the experiments and assays associated with this project
-            //TODO: Since we only display the names of the experiments and assays we should ask NCGC to change the payload to supply the names and ids
+            final ProjectExpanded project = projectRestService.getProjectById(projectId)
             if (project) {
-                final List<ExperimentSearch> experiments = projectRestService.findExperimentsByProjectId(projectId)
+                final List<ExperimentSearch> experiments = project.experiments
                 if (experiments) {
                     experiments.sort {
                         it.role
                     }
                 }
-                final List<Assay> assays = projectRestService.findAssaysByProjectId(projectId)
+                final List<Assay> assays = project.assays
                 final ProjectAdapter projectAdapter = new ProjectAdapter(project)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }

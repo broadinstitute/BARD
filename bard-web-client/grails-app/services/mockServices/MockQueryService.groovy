@@ -763,6 +763,11 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
                 appliedFilters: [:]
         ]
     }
+
+    @Override
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
 class MockAssayAdapter implements AssayAdapterInterface {
     String name

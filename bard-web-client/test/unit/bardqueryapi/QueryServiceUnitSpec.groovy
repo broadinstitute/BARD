@@ -25,6 +25,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.SubstanceRestService
+import bard.core.rest.spring.project.ProjectExpanded
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -46,7 +47,7 @@ class QueryServiceUnitSpec extends Specification {
     @Shared Assay assay1 = new Assay(name: "A1")
     @Shared Compound compound1 = new Compound(name: "C1")
     @Shared Compound compound2 = new Compound(name: "C2")
-    @Shared Project project1 = new Project(name: "P1")
+    @Shared ProjectExpanded project1 = new ProjectExpanded(name: "P1")
     @Shared Project project2 = new Project(name: "P2")
     @Shared Map compoundAdapterMap1 = [compoundAdapters: [], facets: null, nHits: 0, eTag: null]
     @Shared Map compoundAdapterMap2 = [compoundAdapters: [], facets: [], nHits: 0, eTag: null]
@@ -68,8 +69,29 @@ class QueryServiceUnitSpec extends Specification {
         service.compoundRestService = compoundRestService
         service.projectRestService = projectRestService
         service.substanceRestService = substanceRestService
+        service.experimentRestService = experimentRestService
     }
 
+    /**
+     * We tests the non-null case with an integration test
+     */
+    void "test findExperimentDataById Null Experiment"() {
+        given:
+        final Long experimentId = 2L
+        final Integer top = 10
+        final Integer skip = 0
+        when:
+        Map resultsMap = service.findExperimentDataById(experimentId, top, skip)
+        then:
+        experimentRestService.getExperimentById(_) >> {null}
+        and:
+        assert resultsMap
+        assert resultsMap.experiment == null
+        assert resultsMap.total == 0
+        assert resultsMap.activities.isEmpty()
+        assert resultsMap.role == null
+
+    }
     void "test findSubstancesByCid #label"() {
         when:
         List<Long> sids = service.findSubstancesByCid(cid)

@@ -17,7 +17,7 @@
 
     <body>
         <div id="experimentalResults">
-            <g:render template='experimentResult' model='[experimentDataMap: experimentDataMap]'/>
+            <g:render template='experimentResultData' model='[experimentDataMap: experimentDataMap]'/>
         </div>
     </body>
 </html>

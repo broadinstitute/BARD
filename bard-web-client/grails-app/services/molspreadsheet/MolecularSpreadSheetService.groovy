@@ -195,16 +195,18 @@ class MolecularSpreadSheetService {
                     molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
                 }
-                for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size() - 1) {
-                    String finalKey = "${row}_${(exptNumberColTracker++)}"
-                    if (spreadSheetActivityStorage == null) {
-                        if (molSpreadSheetCell != null) {
-                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
+                if (molSpreadSheetData.mssHeaders[col].size()>0) {
+                    for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size() - 1) {
+                        String finalKey = "${row}_${(exptNumberColTracker++)}"
+                        if (spreadSheetActivityStorage == null) {
+                            if (molSpreadSheetCell != null) {
+                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
+                            } else {
+                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
+                            }
                         } else {
-                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
+                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell, experimentNum)
                         }
-                    } else {
-                        molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell, experimentNum)
                     }
                 }
             }
