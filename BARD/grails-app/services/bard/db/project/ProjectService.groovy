@@ -106,6 +106,29 @@ class ProjectService {
     }
 
     /**
+     * Add link between two experiments that are associated with the project. The candidate link can not be duplicate with any existing one.
+     * The candidate link can not result any cycle of graph.
+     * @param fromExperiment
+     * @param toExperiment
+     * @param project
+     */
+    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Project project){
+        if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
+            !isExperimentAssociatedWithProject(toExperiment, project))
+            return
+        ProjectExperiment peFrom = ProjectExperiment.findByProjectAndExperiment(project, fromExperiment)
+        ProjectExperiment peTo = ProjectExperiment.findByProjectAndExperiment(project, toExperiment)
+        ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(peFrom, peTo)
+        if (ps) // do not want to add one already exist
+            return
+        // TODO: check if there will be a circle if we add this link, if there is, return, otherwise, add
+        ProjectStep newPs = new ProjectStep(previousProjectExperiment: peFrom, nextProjectExperiment: peTo)
+        newPs.save(flush: true)
+        peFrom.addToFollowingProjectSteps(newPs)
+        peTo.addToPrecedingProjectSteps(newPs)
+    }
+
+    /**
      * Check if an experiment is associated with a project or not
      * @param experiment
      * @param project

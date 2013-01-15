@@ -2,7 +2,8 @@
     <input type="hidden" id="projectIdForStep" name="projectIdForStep" value="${instanceId}"/>
     <div id="stepGraph" style="display: none">${pegraph} </div>
     <div>
-        <div class="span12"><button id="addExperimentToProject" class="btn btn-primary">Add Experiment</button></div>
+        <div class="span12"><button id="addExperimentToProject" class="btn btn-primary">Add Experiment</button>
+            <button id="linkExperiment" class="btn btn-primary">Link Experiment</button></div>
     </div>
     <div>
     <canvas id="viewport" width="800" height="600"></canvas>
