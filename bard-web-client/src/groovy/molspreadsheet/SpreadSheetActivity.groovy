@@ -2,7 +2,9 @@ package molspreadsheet
 
 import bard.core.HillCurveValue
 import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.Readout
+import bard.core.rest.spring.experiment.ActivityConcentration
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResultData
 import bardqueryapi.ActivityOutcome
 
 /**
@@ -16,6 +18,8 @@ class SpreadSheetActivity {
     Double potency
     ActivityOutcome activityOutcome = ActivityOutcome.UNSPECIFIED
     List<HillCurveValue> hillCurveValueList = []
+    List<ActivityConcentration>  activityConcentrationList = []
+    List<PriorityElement>  priorityElementList = []
 
     public void activityToSpreadSheetActivity(final Activity activity, final List<String> resultTypeNames) {
         this.cid = activity.cid
@@ -23,8 +27,8 @@ class SpreadSheetActivity {
         this.sid = activity.sid
         this.addPotency(activity)
         this.addOutCome(activity)
-        final List<Readout> readouts = activity.readouts
-        readOutsToHillCurveValues(readouts, resultTypeNames)
+        ResultData resultData = activity.resultData
+        readOutsToHillCurveValues(resultData, resultTypeNames)
     }
 
     void addPotency(final Activity activity) {
@@ -39,25 +43,39 @@ class SpreadSheetActivity {
         }
     }
 
-    void readOutsToHillCurveValues(final List<Readout> readouts, final List<String> resultTypeNames) {
-        if (readouts) {
-            for (Readout readout : readouts) {
-                readOutToHillCurveValue(resultTypeNames, readout)
+    void readOutsToHillCurveValues(final ResultData resultData, final List<String> resultTypeNames) {
+        if (resultData){
+            for (PriorityElement priorityElements in resultData.priorityElements){
+                extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElements)
             }
+        }
+//        if (readouts) {
+//            for (Readout readout : readouts) {
+//                readOutToHillCurveValue(resultTypeNames, readout)
+//            }
+//        }
+    }
+
+    /***
+     * This is where we retrieve the curve
+     */
+    void extractExperimentalValuesFromAPriorityElement(final List<String> resultTypeNames, final PriorityElement priorityElement ) {
+        this.priorityElementList << priorityElement
+        String columnHeaderName = priorityElement.displayName ?: priorityElement.concentrationResponseSeries?.responseUnit ?: ""
+        if (!resultTypeNames.contains(columnHeaderName)) {
+            resultTypeNames.add(columnHeaderName)
         }
     }
 
-    void readOutToHillCurveValue(final List<String> resultTypeNames, final Readout readout) {
-        final HillCurveValue hillCurveValue = readout.toHillCurveValue()
-       // if (hillCurveValue) {
-          //  if (hillCurveValue.id) {
-                if (!resultTypeNames.contains(hillCurveValue.id)) {
-                    resultTypeNames.add(hillCurveValue.id)
-                }
-                this.hillCurveValueList << hillCurveValue
-            //}
-       // }
 
-    }
+
+
+//    void readOutToHillCurveValue(final List<String> resultTypeNames, final PriorityElement priorityElement ) {
+//        final HillCurveValue hillCurveValue = resultData.toHillCurveValue()
+//        if (!resultTypeNames.contains(hillCurveValue.id)) {
+//            resultTypeNames.add(hillCurveValue.id)
+//        }
+//        this.hillCurveValueList << hillCurveValue
+//    }
 
 }

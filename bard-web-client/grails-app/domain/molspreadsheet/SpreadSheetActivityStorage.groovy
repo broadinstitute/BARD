@@ -1,7 +1,6 @@
 package molspreadsheet
 
 import bardqueryapi.ActivityOutcome
-
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
 
@@ -17,6 +16,7 @@ class SpreadSheetActivityStorage {
     List<HillCurveValueHolder> hillCurveValueHolderList  =  []
     List<Double> columnNames  = []
     Double potency
+    String qualifier = ""
 
     static constraints = {
         eid(nullable: true)
@@ -30,6 +30,14 @@ class SpreadSheetActivityStorage {
 
     SpreadSheetActivityStorage() {
 
+    }
+
+
+    void setQualifier(MolSpreadSheetCellType molSpreadSheetCellType){
+        if (molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric)
+            qualifier = ">"
+        else if (molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric  )
+            qualifier = "<"
     }
     /**
      *  This seems to be used only in unit tests
@@ -53,18 +61,20 @@ class SpreadSheetActivityStorage {
         this.sid =  spreadSheetActivityStorage.sid
         this.activityOutcome =  spreadSheetActivityStorage.activityOutcome
         this.potency =  spreadSheetActivityStorage.potency
-        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
-           this.hillCurveValueHolderList =  [ spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]  ]
+        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())  {
+            HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]
+            hillCurveValueHolder.qualifier =  spreadSheetActivityStorage.qualifier
+            this.hillCurveValueHolderList =  [ hillCurveValueHolder ]
+        }
         if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
             this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
     }
 
-
 /**
-     *
-     * @param o
-     * @return
-     */
+ *
+ * @param o
+ * @return
+ */
     boolean equals(Object o) {
 
         if (o == null) {

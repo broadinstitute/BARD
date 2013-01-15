@@ -1,6 +1,7 @@
 package molspreadsheet
 
-import bard.core.HillCurveValue
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.CurveFitParameters
 
 class MolSpreadSheetCell {
     // static final int SPREAD_SHEET_PRECISION = 3
@@ -89,19 +90,40 @@ class MolSpreadSheetCell {
                 cid: spreadSheetActivity.cid,
                 sid: spreadSheetActivity.sid,
                 activityOutcome: spreadSheetActivity.activityOutcome)
-        for (HillCurveValue hillCurveValue in spreadSheetActivity.hillCurveValueList) {
-            HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder(identifier: hillCurveValue.id,
-                    s0: hillCurveValue.s0,
-                    sInf: hillCurveValue.sInf,
-                    slope: hillCurveValue.slope,
-                    coef: hillCurveValue.coef,
-                    conc: hillCurveValue.conc,
-                    response: hillCurveValue.response)
-            if (!this.spreadSheetActivityStorage.columnNames.contains(hillCurveValue.id)) {
-                this.spreadSheetActivityStorage.columnNames << hillCurveValue.id
+        int counter = 0
+        for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
+            if ((priorityElement.value == null)||(priorityElement.value == "")) {
+                activity = false;
+                intInternalValue = 0
+            }   else {
+                String identifierString = priorityElement.displayName ?: priorityElement.responseUnit  ?: " "
+                Double value = Double.parseDouble(priorityElement.value)
+                if (priorityElement.qualifier == ">") {
+                    this.molSpreadSheetCellType =  MolSpreadSheetCellType.greaterThanNumeric
+                } else  if (priorityElement.qualifier == "<")  {
+                    this.molSpreadSheetCellType =  MolSpreadSheetCellType.lessThanNumeric
+                }
+                if (value != null) {
+                    HillCurveValueHolder hillCurveValueHolder
+                    if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
+                        CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries?.curveFitParameters
+                        hillCurveValueHolder = new HillCurveValueHolder(
+                                identifier: identifierString,
+                                s0: curveFitParameters.s0,
+                                sInf: curveFitParameters.sInf,
+                                slope: (value*0.000001d),
+                                coef: curveFitParameters.hillCoef,
+                                conc: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
+                                response: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.value)
+                    } else {
+                        hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
+                    }
+                    hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(counter)
+                    this.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                    this.spreadSheetActivityStorage.qualifier = this.molSpreadSheetCellType
+                    counter++
+                }
             }
-            hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(hillCurveValue.id)
-            this.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
         }
 
     }
