@@ -50,21 +50,29 @@ class ProjectController {
         render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
     }
 
+    def linkExperiment (Long fromExperimentId, Long toExperimentId, Long projectId){
+        def project = Project.findById(projectId)
+        def fromExperiment = Experiment.findById(fromExperimentId)
+        def toExperiment = Experiment.findById(toExperimentId)
+        projectService.linkExperiment(fromExperiment, toExperiment, project)
+        project = Project.findById(projectId)
+        render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+    }
+
     // Current the client send a list of displaynames of experiments.
     def associateExperimentsToProject() {
         // TODO: need to see why there is [] at the end of the parameter name
-        def param1 = params['selectedExperiments[]']
+        // get all values regardless none, single, or multiple
+        def param1 = request.getParameterValues('selectedExperiments[]')
         def projectId = params['projectId']
         def project = Project.findById(projectId)
+        // get rid of duplicated selection if there is any
         Set<String> selectedExperiments = new HashSet<String>()
-        // ugly way to handle array being passed in as selected.
-        if (param1 instanceof String) {
-            selectedExperiments.add(param1)
-        }else{
-            param1.each{
-                selectedExperiments.add(it)
-            }
+
+        param1.each{
+            selectedExperiments.add(it)
         }
+
         selectedExperiments.each{ String experimentDisplayName ->
             def experimentId = experimentDisplayName.split("-")[0]
             def experiment = Experiment.findById(experimentId)

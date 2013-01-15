@@ -48,7 +48,43 @@ $(document).ready(function () {
             }
         },
         close: function() {
+        }
+    });
 
+    $( "#linkExperiment" )
+        .button()
+        .click(function() {
+            $( "#dialog_link_experiment" ).dialog( "open" );
+        });
+    $( "#dialog_link_experiment" ).dialog({
+        autoOpen: false,
+        height: 400,
+        width: 500,
+        modal: true,
+        buttons: {
+            "Link Experiment": function() {
+                var projectId = $("#projectIdForStep").val();
+                var fromExperimentId = $("#fromExperimentId").val();
+                var toExperimentId = $("#toExperimentId").val();
+                var data = {'fromExperimentId':fromExperimentId, 'toExperimentId':toExperimentId, 'projectId':projectId};
+                $.ajax
+                    ({
+                        url:"../linkExperiment",
+                        dataType:'json',
+                        data:data,
+                        cache:false,
+                        success:function (data) {
+
+                        }
+                    });
+                $( this ).dialog( "close" );
+
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        },
+        close: function() {
         }
     });
 
@@ -112,7 +148,7 @@ $(document).ready(function () {
     }
 
     function clearAvailableExperiment() {
-       // $( "#availableExperiment").text("")
+        $("#selectedExperiments option:ge(0)").remove()
     }
 
     $("input:radio[name=addExperimentBy]").change(function(){
