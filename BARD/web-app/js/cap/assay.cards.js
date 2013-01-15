@@ -442,6 +442,15 @@ function launchAddItemWizard(assayId, assayContextId, cardSection){
         data:data,
         success:function (data) {
 //        	alert(data);
+        	$("#dialog_add_item_wizard").dialog("option", "buttons",[				
+        	     {
+        	           text: "Cancel",
+        	           class: "btn",
+        	           click: function(){
+        	                $( this ).dialog( "close" );
+        	           }
+        	     }
+        	]);
         	$("#dialog_add_item_wizard").html(data);
         	$("#dialog_add_item_wizard").dialog("open");
         },

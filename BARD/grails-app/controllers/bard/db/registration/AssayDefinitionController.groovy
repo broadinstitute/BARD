@@ -93,6 +93,16 @@ class AssayDefinitionController {
         Assay assay = targetAssayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
+	
+	def reloadCardHolder(Long assayId){
+		def assay = Assay.get(assayId)
+		if (assay) {
+			render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+		} else {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+			return
+		}
+	}
 
 
     def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {

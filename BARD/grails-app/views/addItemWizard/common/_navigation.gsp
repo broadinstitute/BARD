@@ -13,5 +13,6 @@
 <af:navigation 
 	events="[previous:[label:'&laquo; prev',show: showPrevious], next:[label:'next &raquo;', show:showNext], save:[label:'Save &raquo;', show:showSave]]" 
 	separator="&nbsp; | &nbsp;" 
-	class="btn" 
+	class="btn"
+	afterSuccess="afterSuccess(${page});"
 />

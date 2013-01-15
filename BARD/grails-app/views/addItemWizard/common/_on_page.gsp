@@ -19,34 +19,51 @@
 %>
 <script type="text/javascript">
 		$(document).ready(function() {			
-			initializePageOne();			
+						
 		})
         function onPage() {
-                if (console) {
-                        console.log('calling onPage() which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
-                }
-    			console.log('sectionPath var = ' + $("#sectionPath").val());
-    			console.log('cardAssayContextId var = ' + $("#cardAssayContextId").val());
+               	outputToConsole('calling onPage() which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
                 initializePageOne();
-                initializePageThree();
+        }
+
+        function afterSuccess(page){
+            var currentPage = page + 1;
+        	outputToConsole('calling afterSuccess(page) which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
+           	outputToConsole('I am on wizard page ' + currentPage);
+           	initializePageOne();
+           	initializePageThree();
+           	//if(currentPage == 1){
+           		//initializePageOne();
+            //}
+            //else if(currentPage == 3){
+            	//initializePageThree();
+            //}
+            if(currentPage == 5){
+            	initializeFinalPage();
+            }
+        }
+
+        function outputToConsole(message){
+        	if (console) {
+                console.log(message);
+        	}
         }
 
         function initializePageOne(){
-        	if (console) {
-                console.log('calling initializePageOne()');
-        	}
+			
+        	outputToConsole('calling initializePageOne()');
         	var autoOpts = {
         			minLength: 2,
         			//source: "/BARD/ontologyJSon/getDescriptors",
         			source: function( request, response ) {            			
             			var sectionPath = $("#sectionPath").val();
-            			console.log('Auto-complete sectionPath var = ' + sectionPath);
+            			outputToConsole('Auto-complete sectionPath var = ' + sectionPath);
             			var cardAssayContextId = $("#cardAssayContextId").val();
-            			console.log('Auto-complete cardAssayContextId var = ' + cardAssayContextId);
+            			outputToConsole('Auto-complete cardAssayContextId var = ' + cardAssayContextId);
             			$("#path").val(sectionPath);
             			$("#assayContextIdValue").val(cardAssayContextId);
-            			console.log('cardAssaySection var = ' + $("#path").val());
-            			console.log('assayContextId var = ' + $("#assayContextIdValue").val());
+            			outputToConsole('cardAssaySection var = ' + $("#path").val());
+            			outputToConsole('assayContextId var = ' + $("#assayContextIdValue").val());
         				$.getJSON( 
                 				"/BARD/ontologyJSon/getDescriptors",
                 				{
@@ -68,18 +85,15 @@
         }
 
         function initializePageThree(){
-        	if (console) {
-                console.log('calling initializePagThree()');
-        	}
+			
+        	outputToConsole('calling initializePageThree()');
         	var autoOpts = {
         			minLength: 1,
-        			//source: "/BARD/ontologyJSon/getDescriptors",
         			source: function( request, response ) {
             			var cardAssaySection = $("#sectionPath").val();
-            			//cardAssaySection = "assay protocol> assay component"
             			var elementId = $("#attributeElementId").val();
-            			console.log('cardAssaySection var = ' + cardAssaySection);
-            			console.log('elementId var = ' + elementId);
+            			outputToConsole('cardAssaySection var = ' + cardAssaySection);
+            			outputToConsole('elementId var = ' + elementId);
         				$.getJSON( 
                 				"/BARD/ontologyJSon/getValueDescriptors",
                 				{
@@ -99,6 +113,46 @@
                 			
         	}
         	$( "#valueTextField" ).autocomplete(autoOpts);
+        }
+
+        function initializeFinalPage(){
+        	outputToConsole('calling initializeFinalPage()');
+
+        	var assayId = $("#cardAssayId").val();
+        	var assayContextId = $("#cardAssayContextId").val();
+        	var cardSection = $("#sectionPath").val();			      	
+        	
+        	$("#dialog_add_item_wizard").dialog("option", "buttons",[
+        	  	{
+        	    	text: "Add another item",
+        	        class: "btn btn-primary",
+        	        click: function(){
+        	        	$( this ).dialog( "close" );
+        	        	launchAddItemWizard(assayId, assayContextId, cardSection);
+        	        }
+        	    },				
+				{
+					text: "Close",
+					class: "btn",
+					click: function(){
+						$( this ).dialog( "close" );
+    				}
+				}
+      		]);
+        	
+        	var data = {'assayId':assayId};
+        	$.ajax({
+            	type:'POST',
+                url:'../reloadCardHolder',
+                data:data,
+                success:function (data) {
+                	$("div#cardHolder").html(data);
+     	    	   	initDnd();
+                },
+                error:function (jqXHR, textStatus, errorThrown){
+                	alert("Error: " + textStatus);
+                }
+            });
         }
 </script>
 

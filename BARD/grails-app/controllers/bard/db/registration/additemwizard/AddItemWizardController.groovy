@@ -52,6 +52,7 @@ class AddItemWizardController {
 	}
 	
 	def addItemWizard(Long assayId, Long assayContextId, String cardSection){
+		println "addItemWizard -> Assay ID: " + assayId
 		render(template: "common/ajaxflow", model: [assayId: assayId, assayContextId: assayContextId, path: cardSection])
 	}
 
