@@ -22,31 +22,15 @@ class TreeRenderTagLibUnitSpec extends TagLibSpec {
         loadCodec(HTMLCodec)
     }
 
-    void 'test rendering nested measurements'() {
+    void 'test rendering json measurements'() {
         given: 'a measurement with a child'
         Measure child = Measure.build(resultType: Element.build(label: "child"))
         Measure parent = Measure.build(resultType: Element.build(label: "parent"), childMeasures: [child] as Set)
 
-        when: 'we render this as html'
-        def result = renderMeasuresAsTree([measures:[parent]])
+        when: 'we render this as json'
+        def result = renderMeasuresAsJSONTree([measures:[parent]])
 
         then:
-        result.replace("\n", "") == "<ul><li>parent <ul><li>child </li></ul></li></ul>"
-    }
-
-    void 'test rendering multiple links'() {
-        given: 'a measurement associated with two AssayContexts'
-        Measure measure = Measure.build(resultType: Element.build(label: "label"))
-        AssayContext ac1 = AssayContext.build(contextName: "context1", id: 1)
-        AssayContext ac2 = AssayContext.build(contextName: "context2", id: 2)
-        measure.assayContextMeasures = [
-                AssayContextMeasure.build(assayContext: ac1, measure: measure),
-                AssayContextMeasure.build(assayContext: ac2, measure: measure) ] as Set
-
-        when:
-        def result = renderMeasuresAsTree([measures:[measure]])
-
-        then:
-        result.replace("\n", "") == "<ul><li>label <a href=\"#card-1\">context1</a>, <a href=\"#card-2\">context2</a></li></ul>"
+        result.replace("\n", "") == "[{\"key\":2,\"title\":\"parent\",\"children\":[{\"key\":1,\"title\":\"child\",\"children\":[]}]}]"
     }
 }
