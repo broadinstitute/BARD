@@ -121,7 +121,9 @@ class ProjectService {
         ProjectStep ps = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(peFrom, peTo)
         if (ps) // do not want to add one already exist
             return
-        // TODO: check if there will be a circle if we add this link, if there is, return, otherwise, add
+        // check if there will be a cycle by adding this link, if there is, return, otherwise, add
+        if (!isDAG(project, peFrom, peTo))
+            return
         ProjectStep newPs = new ProjectStep(previousProjectExperiment: peFrom, nextProjectExperiment: peTo)
         newPs.save(flush: true)
         peFrom.addToFollowingProjectSteps(newPs)
@@ -142,5 +144,44 @@ class ProjectService {
                 isAssociated = true
         }
         return isAssociated
+    }
+
+    /**
+     * Determine if the connected portion of projectexperiment graph is still a DAG (Directed acyclic graph) by adding a link between two ProjectExperiment.
+     * The connected portion of original graph should always be a DAG.
+     * So start from the added edge, check if there is any violation
+     * @param project
+     * @param experiment
+     * @return
+     */
+    boolean isDAG(Project project, ProjectExperiment fromPe, ProjectExperiment toPe) {
+        List<Long> visited = []
+        List<Long> visiting = []
+        visiting.add(fromPe.id)
+        visiting.add(toPe.id)  // this is the candidate link
+        boolean isDag = true
+        while (visiting.size() > 0) {
+            Long current = visiting.remove(0)
+            if (visited.contains(current)) {
+                isDag = false
+                break
+            }
+            processNode(current, visiting)
+            visited.add(current)
+        }
+        return isDag
+    }
+
+    /**
+     * Process current node by adding outgoing nodes connected with current nodes to the visiting queue
+     * @param currentId
+     * @param visiting
+     */
+    void processNode(Long currentId, List<Long> visiting) {
+        ProjectExperiment pe = ProjectExperiment.findById(currentId)
+        pe.followingProjectSteps.each{
+            ProjectStep step ->
+            visiting.add(step.nextProjectExperiment.id)
+        }
     }
 }
