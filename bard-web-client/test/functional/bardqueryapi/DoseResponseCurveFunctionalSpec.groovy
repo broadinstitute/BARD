@@ -23,7 +23,7 @@ class DoseResponseCurveFunctionalSpec extends Specification {
         when: 'We send an HTTP POST request to the Dose response curve service'
         HttpResponseDecorator serverResponse =
             (HttpResponseDecorator) http.post(
-                    path: 'doseResponseCurve',
+                    path: 'doseResponseCurve/doseResponseCurve',
                     body: postBody,
                     requestContentType: URLENC
             )
