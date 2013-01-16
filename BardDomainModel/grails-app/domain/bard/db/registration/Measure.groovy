@@ -41,4 +41,19 @@ class Measure {
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
+
+    /**
+     * @return concatenation of resultType.label and statsModifier.label if statsModifier is defined otherwise just the resultType.label
+     */
+    String getDisplayLabel(){
+        String statsModifierLabel = statsModifier? "(${statsModifier.label})" : null
+        return [resultType.label, statsModifierLabel].findAll().join(' ')
+    }
+
+    /**
+     * @return childMeasures sorted by displayLabel case insensitive
+     */
+    List<Measure> getChildrenMeasuresSorted(){
+        childMeasures.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
+    }
 }

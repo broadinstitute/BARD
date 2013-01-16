@@ -31,14 +31,11 @@ class TreeRenderTagLib {
 
     private Map createTreeFromMeasure(Measure measure) {
         def key = measure.id;
-        def title = measure.resultType.label;
-        if(measure.statsModifier != null) {
-            title += " (" + measure.statsModifier.label + ")"
-        }
+        def title = measure.displayLabel
 
         def children = []
 
-        for(m in measure.childMeasures) {
+        for(m in measure.childrenMeasuresSorted) {
             children.add(createTreeFromMeasure(m))
         }
 

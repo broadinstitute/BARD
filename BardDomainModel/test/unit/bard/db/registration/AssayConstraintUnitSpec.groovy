@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
@@ -13,7 +14,7 @@ import static test.TestUtils.createString
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@Build(Assay)
+@Build([Assay, Element, Measure])
 @Unroll
 class AssayConstraintUnitSpec extends Specification {
     Assay domainInstance
@@ -281,6 +282,22 @@ class AssayConstraintUnitSpec extends Specification {
         desc         | valueUnderTest | valid | errorCode
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
+    }
+
+    void "test getChildrenSorted by displayLabel case insensitive input:#input expected: #expected"() {
+        when:
+        for (String label in input) {
+            domainInstance.addToMeasures(Measure.build(resultType: Element.build(label: label), assay: domainInstance))
+        }
+
+        then:
+        domainInstance.getRootMeasuresSorted()*.displayLabel == expected
+
+        where:
+        input           | expected
+        ['b', 'a']      | ['a', 'b']
+        ['B', 'a']      | ['a', 'B']
+        ['c', 'B', 'a'] | ['a', 'B', 'c']
     }
 
 }

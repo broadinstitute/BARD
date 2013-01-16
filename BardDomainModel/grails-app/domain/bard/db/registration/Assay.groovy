@@ -4,7 +4,7 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
 
-class Assay extends AbstractContextOwner{
+class Assay extends AbstractContextOwner {
 
     private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -68,7 +68,6 @@ class Assay extends AbstractContextOwner{
         return assayContextItems as List<AssayContextItem>
     }
 
-
     /**
      * duck typing to look like project
      * @return assayDocuments
@@ -91,12 +90,20 @@ class Assay extends AbstractContextOwner{
     }
 
 
-    List<AssayContext> getContexts(){
+    List<AssayContext> getContexts() {
         this.assayContexts
     }
 
 
-    def getRootMeasures() {
-        return measures.findAll {it.parentMeasure == null}
+    List<Measure> getRootMeasures() {
+        return measures.findAll { it.parentMeasure == null }
     }
+
+    /**
+     * @return a list of Measures without parents sorted by displayLabel case insensitive
+     */
+    List<Measure> getRootMeasuresSorted() {
+        return measures.findAll { it.parentMeasure == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
+    }
+
 }
