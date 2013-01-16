@@ -54,7 +54,7 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         where:
         label                 | cid  | statusCode
         "Empty CID String"    | null | HttpServletResponse.SC_BAD_REQUEST
-        "CID- Does not exist" | -1   | HttpServletResponse.SC_BAD_REQUEST
+        "CID- Does not exist" | -1   | HttpServletResponse.SC_NOT_FOUND
     }
 
     def "Test Search querying: #label"() {

@@ -17,6 +17,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.HttpClientErrorException
 
 abstract class AbstractRestService {
     String baseUrl
@@ -270,23 +271,32 @@ abstract class AbstractRestService {
     }
 
     public String newETag(final String name, final List<Long> ids) {
-        final Map<String, Long> etags = [:]
-        final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        if (ids) {
-            map.add("ids", ids.join(","));
-        }
-        map.add("name", name)
-
-        final HttpEntity entity = new HttpEntity(map, new HttpHeaders());
         final String url = this.buildURLToCreateETag()
+        try {
+            final Map<String, Long> etags = [:]
+            final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            if (ids) {
+                map.add("ids", ids.join(","));
+            }
+            map.add("name", name)
 
-        final HttpEntity exchange = restTemplate.exchange(url, HttpMethod.POST, entity, Object.class);
-        HttpHeaders headers = exchange.getHeaders()
+            final HttpEntity entity = new HttpEntity(map, new HttpHeaders());
 
-        this.extractETagsFromResponseHeader(headers, 0, etags)
 
-        // there should only be one ETag returned
-        return firstETagFromMap(etags)
+            final HttpEntity exchange = restTemplate.exchange(url, HttpMethod.POST, entity, Object.class);
+            HttpHeaders headers = exchange.getHeaders()
+
+            this.extractETagsFromResponseHeader(headers, 0, etags)
+
+            // there should only be one ETag returned
+            return firstETagFromMap(etags)
+        } catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(url.toString(), httpClientErrorException)
+            throw httpClientErrorException
+        } catch (RestClientException restClientException) {
+            log.error(url.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
     }
     /**
      *   We will only get the first etag from the map, actually right now only one is returned
@@ -309,14 +319,24 @@ abstract class AbstractRestService {
 
     public int putETag(final String etag, final List<Long> ids) {
         validatePutETag(etag, ids)
-        final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-        map.add("ids", ids.join(","));
-
-        final HttpEntity<Integer> entity = new HttpEntity(map, new HttpHeaders());
         final String url = this.buildURLToPutETag() + etag
-        final HttpEntity<String> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
-        Integer count = Integer.parseInt(exchange.getBody())
-        return count;
+
+        try {
+
+            final MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("ids", ids.join(","));
+
+            final HttpEntity<Integer> entity = new HttpEntity(map, new HttpHeaders());
+            final HttpEntity<String> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            Integer count = Integer.parseInt(exchange.getBody())
+            return count;
+        } catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(url.toString(), httpClientErrorException)
+            throw httpClientErrorException
+        } catch (RestClientException restClientException) {
+            log.error(url.toString(), restClientException)
+            throw new RestApiException(restClientException)
+        }
     }
 
     /**
@@ -362,6 +382,10 @@ abstract class AbstractRestService {
             def result = this.restTemplate.getForObject(uri, clazz)
             this.loggerService.stopStopWatch(sw, "method=getForObject(URI uri, Class clazz); uri='${uri}'; class=${clazz}")
             return result
+        }
+        catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(uri.toString(), httpClientErrorException)
+            throw httpClientErrorException
         } catch (RestClientException restClientException) {
             log.error(uri.toString(), restClientException)
             throw new RestApiException(restClientException)
@@ -376,6 +400,10 @@ abstract class AbstractRestService {
             def result = this.restTemplate.getForObject(uri, clazz, map)
             this.loggerService.stopStopWatch(sw, "method=getForObject(final String uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
             return result
+        }
+        catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(uri.toString(), httpClientErrorException)
+            throw httpClientErrorException
         } catch (RestClientException restClientException) {
             final String uriString = uri + map
             log.error(uriString, restClientException)
@@ -390,7 +418,12 @@ abstract class AbstractRestService {
             def result = this.restTemplate.postForObject(uri, map, clazz)
             this.loggerService.stopStopWatch(sw, "method=postForObject(final URI uri, final Class clazz, Map map = [:]); uri='${uri}'; class=${clazz}; map=${map}")
             return result
-        } catch (RestClientException restClientException) {
+        }
+        catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(uri.toString(), httpClientErrorException)
+            throw httpClientErrorException
+        }
+        catch (RestClientException restClientException) {
             final String uriString = uri.toString() + map
             log.error(uriString, restClientException)
             throw new RestApiException(restClientException)
@@ -404,7 +437,12 @@ abstract class AbstractRestService {
             def result = restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
             this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; entity=${entity?.dump()}; class=${clazz}")
             return result
-        } catch (RestClientException restClientException) {
+        }
+        catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(url, httpClientErrorException)
+            throw httpClientErrorException
+        }
+        catch (RestClientException restClientException) {
             log.error(url.toString(), restClientException)
             throw new RestApiException(restClientException)
         }
@@ -416,6 +454,9 @@ abstract class AbstractRestService {
             def result = restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
             this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; entity=${entity?.dump()}; class=${clazz}")
             return result
+        } catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
+            log.error(uri.toString(), httpClientErrorException)
+            throw httpClientErrorException
         } catch (RestClientException restClientException) {
             log.error(uri.toString(), restClientException)
             throw new RestApiException(restClientException)

@@ -17,7 +17,7 @@ public class AssayAdapter implements AssayAdapterInterface{
     final List<AssayAnnotation> annotations;
 
 
-    public AssayAdapter(final AbstractAssay assay, final Double score=0, final NameDescription nameDescription=null, final List<AssayAnnotation> annotations = null ) {
+    public AssayAdapter(final AbstractAssay assay, final Double score=0, final NameDescription nameDescription=null, final List<AssayAnnotation> annotations = [] ) {
         this.assay = assay
         this.score = score
         this.matchingField = nameDescription
