@@ -25,7 +25,7 @@
 
     <div class="row-fluid">
         <div class="span6">
-            %{--<g:render template="assaySummary" model="[assayAdapter: assayAdapter]"/>--}%
+            <g:render template="assaySummary" model="[assayAdapter: assayAdapter]"/>
         </div>
 
         <div class="span6">
@@ -67,22 +67,11 @@
                     </div>
                     <div>
                         <dl>
-                            %{--<g:each in="${assayAdapter?.annotations}" var="annotation">--}%
+                            %{--TODO: See pivotal tracker story : https://www.pivotaltracker.com/story/show/38271045--}%
+                            %{--  <g:each in="${assayAdapter?.annotations}" var="annotation">--}%
                                 %{--<dt>${annotation.key}</dt>--}%
                                 %{--<dd>${annotation.display}</dd>--}%
                             %{--</g:each>--}%
-                            <g:if test="${assayAdapter?.keggDiseaseCategories}">
-                                <dt>Kegg Disease Categories</dt>
-                                <g:each in="${assayAdapter.keggDiseaseCategories}" var="annotation">
-                                    <dd>${annotation}</dd>
-                                </g:each>
-                            </g:if>
-                            <g:if test="${assayAdapter?.keggDiseaseNames}">
-                                <dt>Kegg Disease Names</dt>
-                                <g:each in="${assayAdapter.keggDiseaseNames}" var="annotation">
-                                    <dd>${annotation}</dd>
-                                </g:each>
-                            </g:if>
                         </dl>
                     </div>
 
