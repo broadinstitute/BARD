@@ -63,7 +63,7 @@ class SpreadsheetElementsTagLib {
                                                     params: [
                                                             sinf: hillCurveValueHolder.sInf,
                                                             s0: hillCurveValueHolder.s0,
-                                                            ac50: hillCurveValueHolder.slope,
+                                                            slope: hillCurveValueHolder.slope,
                                                             hillSlope: hillCurveValueHolder.coef,
                                                             concentrations: hillCurveValueHolder.conc,
                                                             activities: hillCurveValueHolder.response,
