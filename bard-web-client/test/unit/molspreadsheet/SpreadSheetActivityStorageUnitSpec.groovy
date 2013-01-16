@@ -109,9 +109,6 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         assertNotNull(spreadSheetActivityStorage)
         assert spreadSheetActivityStorage.sid == 1
         assert spreadSheetActivityStorage.activityOutcome == ActivityOutcome.ACTIVE
-//        assertNull(spreadSheetActivityStorage.hillCurveValueS0)
-//        assertNull(spreadSheetActivityStorage.hillCurveValueResponse)
-//        assertNull(spreadSheetActivityStorage.hillCurveValueSlope)
     }
 
 
@@ -158,6 +155,53 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
     }
 
 
+
+
+    void "Test  MolSpreadSheetCell constructor a blank value"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: "")
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.activity ==  MolSpreadSheetCellActivityOutcome.Unspecified
+        molSpreadSheetCell.toString() == null
+    }
+
+
+
+
+    void "Test  MolSpreadSheetCell constructor a null value"() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.INACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: null)
+        spreadSheetActivity.priorityElementList = [priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.activity ==  MolSpreadSheetCellActivityOutcome.Unknown
+        assertNotNull molSpreadSheetCell.spreadSheetActivityStorage
+        assertNotNull molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==1
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].toString()=="--"
+    }
+
+
+
+
     void "Test  MolSpreadSheetCell constructor in case of no value"() {
         given:
         final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
@@ -172,7 +216,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
 
         then:
         assertNotNull(molSpreadSheetCell)
-        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==0
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==1
     }
 
 

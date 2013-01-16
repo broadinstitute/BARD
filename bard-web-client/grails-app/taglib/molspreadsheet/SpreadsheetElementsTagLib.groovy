@@ -13,7 +13,7 @@ class SpreadsheetElementsTagLib {
         }
 
         def cidCell =  { attrs, body ->
-            out << """<a href="${this.createLink(controller:'bardWebInterface', action: 'showCompound', id: attrs.cid)}">${attrs.cid}</a>"""
+            out << """<a  class="molspreadcell" href="${this.createLink(controller:'bardWebInterface', action: 'showCompound', id: attrs.cid)}">${attrs.cid}</a>"""
         }
 
 
@@ -40,13 +40,14 @@ class SpreadsheetElementsTagLib {
             if (hillCurveValueHolder?.conc?.size() > 1) {
                 mandatePopover = "drc-popover-link "
             }
+            MolSpreadSheetCellActivityOutcome molSpreadSheetCellActivityOutcome = MolSpreadSheetCellActivityOutcome.newMolSpreadSheetCellActivityOutcome(attrs.spreadSheetActivityStorage.activityOutcome)
             if (hillCurveValueHolder?.identifier) {
                 out << """<div data-detail-id="drc_${attrs.spreadSheetActivityStorage.sid}_${currentCol}"
-                               class="${mandatePopover}btn btn-link"
+                               class="${mandatePopover}btn btn-link molspreadcell"
                                data-original-title="${hillCurveValueHolder.identifier}"
                                data-html="true"
                                data-trigger="hover">
-                          ${hillCurveValueHolder.toString()}</div>"""
+                          <FONT COLOR="${molSpreadSheetCellActivityOutcome.color}">${hillCurveValueHolder.toString()}</FONT></div>"""
             }
             out << """</p>"""
             if (hillCurveValueHolder?.conc?.size() > 1) {
@@ -78,6 +79,7 @@ class SpreadsheetElementsTagLib {
                           Not tested in this experiment
                       </td>"""
         }
+
 
 
     }

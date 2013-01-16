@@ -498,3 +498,40 @@ td.molSpreadSheet{
     position: relative;
     top: -8px;
 }
+.molspreadcell{
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: large;
+    color: #0000A0;
+}
+a:link.molspreadcell {
+    font-weight: normal;
+    color: #0000A0;
+}
+a:visited.molspreadcell {
+    font-weight: normal;
+    color: #0000A0;
+}
+a:hover.molspreadcell {
+    font-weight: normal;
+    color: #0000A0;
+}
+a:active.molspreadcell {
+    font-weight: normal;
+    color: #0000A0;
+}
+div.colorkeyholder {
+    margin: 0 auto;
+    border-width: 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: rgb(245, 245, 245);
+    border-width: 0px;
+}
+table.colorkey td {
+    margin: 0 auto;
+    height: 7px;
+    padding-left: 15px;
+    width: 10px;
+    border-width: 0px;
+}

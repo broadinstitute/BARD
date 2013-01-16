@@ -59,7 +59,7 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
 
         where:
         molSpreadSheetCellType                    | inputString | resultingString | activity
-        MolSpreadSheetCellType.identifier         | "3"         | "3"             | true
+        MolSpreadSheetCellType.identifier         | "3"         | "3"             | MolSpreadSheetCellActivityOutcome.Unknown
     }
 
 
@@ -110,7 +110,7 @@ class MolSpreadSheetCellUnitUnitSpec extends Specification {
     void "test overriden toString(): #label"() {
         when:
         MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell()
-        molSpreadSheetCell.activity = true
+        molSpreadSheetCell.activity = MolSpreadSheetCellActivityOutcome.Unknown
         molSpreadSheetCell.molSpreadSheetCellType = molSpreadSheetCellType
         molSpreadSheetCell.strInternalValue = 'something'
         molSpreadSheetCell.intInternalValue = 2

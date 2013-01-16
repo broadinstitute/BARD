@@ -47,6 +47,8 @@ class HillCurveValueHolder {
 
         if (numericalReturnValue != Double.NaN)  {
             returnValue  = new ExperimentalValueUtil(numericalReturnValue)
+        } else {
+            returnValue  = '--'
         }
 
         qualifier+returnValue

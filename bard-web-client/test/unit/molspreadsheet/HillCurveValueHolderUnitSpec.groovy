@@ -91,7 +91,7 @@ class HillCurveValueHolderUnitSpec extends Specification{
         47.89       |   null        |   "47.9"
         null        |   47.89       |   "47.9"
         47.89       |   47.89       |   "47.9"
-        null        |   null        |    "Missing data qualifier"
+        null        |   null        |   "--"
 
     }
 
