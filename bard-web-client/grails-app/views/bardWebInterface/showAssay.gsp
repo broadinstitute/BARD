@@ -25,7 +25,7 @@
 
     <div class="row-fluid">
         <div class="span6">
-            <g:render template="assaySummary" model="[assayAdapter: assayAdapter]"/>
+            %{--<g:render template="assaySummary" model="[assayAdapter: assayAdapter]"/>--}%
         </div>
 
         <div class="span6">

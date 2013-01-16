@@ -5,12 +5,12 @@ import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
+import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
-import bard.core.exceptions.RestApiException
-import bard.core.rest.spring.project.ProjectExpanded
 
 /**
  * Tests for ProjectRestService
@@ -120,7 +120,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         when: "The get method is called with the given PID: #pid"
         projectRestService.getProjectById(pid)
         then: "No Project is returned"
-        thrown(RestApiException)
+        thrown(HttpClientErrorException)
         where:
         label                                     | pid
         "Find a non-existing ProjectSearchResult" | new Integer(-1)

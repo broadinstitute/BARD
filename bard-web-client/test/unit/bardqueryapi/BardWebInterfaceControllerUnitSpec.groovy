@@ -100,10 +100,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label              | cid  | statusCode                | sids
-        "Null CID"         | null | HttpServletResponse.SC_OK | []
-        "Existing CID"     | 567  | HttpServletResponse.SC_OK | [2, 3]
-        "CID with no SIDs" | 56   | HttpServletResponse.SC_OK | []
+        label              | cid  | statusCode                         | sids
+        "Null CID"         | null | HttpServletResponse.SC_BAD_REQUEST | []
+        "Existing CID"     | 567  | HttpServletResponse.SC_OK          | [2, 3]
+        "CID with no SIDs" | 56   | HttpServletResponse.SC_OK          | []
 
     }
 
@@ -143,7 +143,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                          | eid  | statusCode                         | experimentData
         "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST | null
-        "EID- Not Found"               | 234  | HttpServletResponse.SC_NOT_FOUND   | null
+        "EID- Not Found"               | 234  | HttpServletResponse.SC_OK          | null
         "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
                 role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId: 1)]
@@ -156,9 +156,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.showExperiment(id)
         then:
         _ * this.queryService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
-        assert response.status == 404
-        assert flash.message == "Problem finding Experiment ${id}"
-
+        assert response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
     void "test promiscuity action #label"() {
@@ -185,7 +183,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.promiscuity(cid)
         then:
         _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw new HttpException("Error Message")}
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
     void "test promiscuity action with status code 404"() {
@@ -453,12 +451,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         _ * this.queryService.structureSearch(_, _, _, _, _, _) >> {compoundAdapterMap}
         and:
-        flash.message == flashMessage
         response.status == statusCode
         where:
         label                 | searchString | flashMessage                                                                | filters        | statusCode                         | compoundAdapterMap
         "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
-        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_BAD_REQUEST | null
+        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | HttpServletResponse.SC_NOT_FOUND   | null
         "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
         "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
         "Success With CID"    | "Exact:222"  | null                                                                        | []             | HttpServletResponse.SC_OK          | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
@@ -499,7 +496,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         then:
         _ * this.queryService.structureSearch(_, _, _, _, _, 0) >> {new RuntimeException("Error Message")}
         and:
-        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        response.status == HttpServletResponse.SC_BAD_REQUEST
     }
     /**
      *
@@ -690,8 +687,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                                             | cid  | compoundAdapter           | expectedCID | expectedView                     | statusCode
         "Render show compound page"                       | 872  | buildCompoundAdapter(872) | 872         | "/bardWebInterface/showCompound" | 200
-        "Render not found Compound string, null Adapter"  | null | null                      | null        | null                             | 404
-        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872) | null        | "/bardWebInterface/showCompound" | 200
+        "Render not found Compound string, null Adapter"  | null | null                      | null        | null                             | 400
+        "Render not found Compound with Compound Adpater" | null | buildCompoundAdapter(872) | null        | null                             | 400
         "Compound does not exist"                         | -1   | null                      | null        | null                             | 404
 
     }
@@ -726,9 +723,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         where:
         label                    | adid   | name   | assayAdapter                                                       | expectedAssayView             | statusCode
         "Return an assayAdapter" | 485349 | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
-        "A null AssayAdapter"    | null   | "Test" | [assayAdapter: null, experiments: []]                              | null                          | 404
-        "Assay ADID is null"     | null   | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
-        "Assay Adapter is null"  | null   | "Test" | null                                                               | null                          | 500
+        "A null AssayAdapter"    | null   | "Test" | [assayAdapter: null, experiments: []]                              | null                          | 400
+        "Assay ADID is null"     | null   | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | null                          | 400
+        "Assay Adapter is null"  | null   | "Test" | null                                                               | null                          | 400
 
     }
 
@@ -760,10 +757,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         }
         assert response.status == statusCode
         where:
-        label                                 | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
-        "Return a ProjectSearchResult"        | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
-        "ProjectSearchResult PID is null"     | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 404
-        "ProjectSearchResult Adapter is null" | null   | "Test" | null                                                                   | null                            | 404
+        label                          | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
+        "Return a ProjectSearchResult" | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
+        "Project PID is null"          | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 400
+        "Project Adapter is null"      | null   | "Test" | null                                                                   | null                            | 400
     }
 
 

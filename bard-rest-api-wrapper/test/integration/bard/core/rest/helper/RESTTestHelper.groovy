@@ -136,7 +136,6 @@ class RESTTestHelper {
             assert facet
             assert facet.facetName
             assert facet.counts
-            assert facet.counts.additionalProperties
         }
     }
 
