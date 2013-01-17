@@ -53,7 +53,34 @@ class AssayContextService {
         }
         return assayContext
     }
-	
+
+    public void associateContext(Measure measure, AssayContext context) {
+        AssayContextMeasure assayContextMeasure = new AssayContextMeasure();
+        assayContextMeasure.measure = measure;
+        assayContextMeasure.assayContext = context;
+        measure.assayContextMeasures.add(assayContextMeasure)
+        context.assayContextMeasures.add(assayContextMeasure)
+    }
+
+    public boolean disassociateContext(Measure measure, AssayContext context) {
+        AssayContextMeasure found = null;
+        for(assayContextMeasure in context.assayContextMeasures) {
+            if (assayContextMeasure.measure == measure && assayContextMeasure.assayContext) {
+                found = assayContextMeasure;
+                break;
+            }
+        }
+
+        if (found == null) {
+            return false;
+        } else {
+            measure.removeFromAssayContextMeasures(found)
+            context.removeFromAssayContextMeasures(found)
+            found.delete(flush: true)
+            return true;
+        }
+    }
+
 	public saveItemInCard(AttributeCommand attributeCmd, ValueTypeCommand valueTypeCmd, FixedValueCommand fixedValueCmd){		
 		def isSaved = false
 		String valueType = valueTypeCmd?.valueTypeOption

@@ -1,11 +1,12 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST"]
 
     AssayContextService assayContextService
 
@@ -49,6 +50,79 @@ class AssayDefinitionController {
             flash.message = null
         }
         [assayInstance: assayInstance]
+    }
+
+    def editMeasure() {
+        def assayInstance = Assay.get(params.id)
+        if (!assayInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return
+        } else {
+            flash.message = null
+        }
+
+        [assayInstance: assayInstance]
+    }
+
+    def deleteMeasure() {
+        def measure = Measure.get(params.measureId)
+        measure.delete()
+        redirect(action: "editMeasure", id: params.id)
+    }
+
+    def addMeasure() {
+        def resultType = Element.get(params.resultTypeId)
+
+        def parentMeasure = null
+        if (params.parentMeasureId) {
+            parentMeasure = Measure.get(params.parentMeasureId)
+        }
+
+        def statsModifier = null
+        if (params.statsModifier) {
+            statsModifier = Element.get(params.statsModifierId)
+        }
+
+        def entryUnit = null
+        if (params.entryUnit) {
+            entryUnit = Element.get(params.entryUnitId)
+        }
+
+        assayContextService.addMeasure(resultType, statsModifier, entryUnit)
+
+        redirect(action: "editMeasure", id: params.id)
+    }
+
+    def disassociateContext() {
+        def measure = Measure.get(params.measureId)
+        def context = AssayContext.get(params.assayContextId)
+
+        if(measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else if (context == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+        } else {
+            flash.message = null
+            assayContextService.disassociateContext(measure, context)
+        }
+
+        redirect(action: "editMeasure", id: context.assay.id)
+    }
+
+    def associateContext() {
+        def measure = Measure.get(params.measureId)
+        def context = AssayContext.get(params.assayContextId)
+
+        if(measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else if (context == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+        } else {
+            flash.message = null
+            assayContextService.associateContext(measure, context)
+        }
+
+        redirect(action: "editMeasure", id: context.assay.id)
     }
 
     def findById() {

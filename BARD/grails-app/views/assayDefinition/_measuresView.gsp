@@ -1,5 +1,4 @@
 <r:require module="dynatree"/>
-<!-- g:renderMeasuresAsJSONTree measures="${assayInstance.rootMeasures}" -->
 <div>
     <g:if test="${assayInstance?.measures}">
         <div class="row-fluid">

@@ -75,17 +75,25 @@ class TreeRenderTagLib {
     def dynaTree = { attrs, body ->
         def id = attrs.id
         def measures = attrs.measures;
+        def editable = attrs.editable;
 
         out << r.script() {
-            out <<  '               $(function(){\n' +
-                    '                    $("#'+id+'").dynatree({\n' +
-                    '                        onActivate: function(node) {\n' +
-                    '                            $(".measure-detail-card").hide(); \n' +
-                    '                            $("#measure-details-"+node.data.key).show(); \n' +
-                    '                        },\n' +
-                    '                        children: '+g.renderMeasuresAsJSONTree([measures:measures],null)+'\n' +
-                    '                    });\n' +
-                    '                });' +
+            out <<  '$(function(){\n' +
+                    ' $("#'+id+'").dynatree({\n' +
+                    '  onActivate: function(node) {\n' +
+                    '   $(".measure-detail-card").hide(); \n' +
+                    '   $("#measure-details-"+node.data.key).show(); \n' +
+                    '  },\n';
+            if (editable) {
+                out <<  'dnd: { preventVoidMoves: true, \n' +
+                        'onDragStart: function(node) { return true; }, \n' +
+                        'onDragEnter: function(node, sourceNode) {return ["over", "before", "after"] }, \n' +
+                        'onDrop: function(node, sourceNode, hitMode, ui, draggable) { sourceNode.move(node, hitMode) }\n' +
+                        '},'
+            }
+            out << '  children: '+g.renderMeasuresAsJSONTree([measures:measures],null)+'\n';
+            out <<  ' });\n' +
+                    '});' +
                     ''
         }
         out << "<div id=\"${id}\"></div>"
