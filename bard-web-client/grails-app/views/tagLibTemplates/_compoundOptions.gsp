@@ -22,6 +22,9 @@ Similarity:CCC
                 </g:if>
                 <li><a href="#" data-detail-id="sid_${sid}" class="analogs"
                        data-structure-search-params="Similarity:${cid}">Search For Analogs</a></li>
+                <li>
+                    <g:link controller="molSpreadSheet" action="showExperimentDetails" params="[cid: cid, transpose: true]">Show Experimental Details</g:link>
+                </li>
             </ul>
         </span>
     </div>
