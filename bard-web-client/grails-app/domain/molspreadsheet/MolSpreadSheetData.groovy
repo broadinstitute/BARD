@@ -114,11 +114,15 @@ class MolSpreadSheetData {
                 }
             }
         }
-        //TODO: Assay Names seems to be zero in some cases. Is it possible?
+
         if (assayNames) {
             for (int i in 0..(assayNames.size() - 1)) {
-                returnValue << ["assayName": assayNames[i], "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": experimentFullNameList[i]]
-
+                String fullAssayName = 'Data error: please contact your system administrator'   // This message should never be displayed
+                if (assayNames[i]!=null)  {    // Assay name should never be null -- this is a safety measure
+                    int columnOfAssay = mapColumnsToAssay.find{ it.value == assayNames[i]}.key
+                    fullAssayName = mapColumnsToAssayName[columnOfAssay]
+                }
+                returnValue << ["assayName": assayNames[i], "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName]
             }
         }
         returnValue
