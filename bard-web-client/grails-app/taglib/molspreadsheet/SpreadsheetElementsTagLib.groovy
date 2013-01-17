@@ -76,7 +76,8 @@ class SpreadsheetElementsTagLib {
             }
         }  else {
             out << """<td class="molSpreadSheet" property="var${currentCol}">
-                          Not tested in this experiment
+                          <div rel="tooltip" data-original-title="Not tested in this experiment" class="molspreadcell">
+                          <font color="${MolSpreadSheetCellActivityOutcome.Unspecified.color}">N.T.</font></div>
                       </td>"""
         }
 
