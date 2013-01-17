@@ -11,57 +11,116 @@
 </head>
 
 <body>
-	<div class="row-fluid">
-	    <div class="span12">
-	    	<div class="well well-small">
-	        	<div class="pull-left">
-	        		<h4>Edit Assay Definition (ADID: ${assayInstance?.id})</h4>
-	        	</div>
-	        	<g:if test="${assayInstance?.id}">
-	        	<div class="pull-right">
-	        		<g:link action="show" id="${assayInstance?.id}" class="btn btn-small btn-primary">Finish Editing</g:link>
-	        		%{--<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>--}%
-	        	</div>
-	        	</g:if>
-	        </div>
-	    </div>
-	</div>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="well well-small">
+            <div class="pull-left">
+                <h4>Edit Assay Definition (ADID: ${assayInstance?.id})</h4>
+            </div>
+            <g:if test="${assayInstance?.id}">
+                <div class="pull-right">
+                    <g:link action="show" id="${assayInstance?.id}"
+                            class="btn btn-small btn-primary">Finish Editing</g:link>
+                    %{--<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>--}%
+                </div>
+            </g:if>
+        </div>
+    </div>
+</div>
 
-	<div class="alert">
- 		<button type="button" class="close" data-dismiss="alert">×</button>
-  		<strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
-	</div>
+<div class="alert">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
+</div>
 
-    <g:if test="${flash.message}">
-	    <div class="row-fluid">
-		    <div class="span12">
-		        <div class="ui-widget">
-		            <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-		                <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-		                    <strong>${flash.message}</strong>
-		            </div>
-		        </div>
-		    </div>
-	    </div>
-    </g:if>
+<g:if test="${flash.message}">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="ui-widget">
+                <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+                    <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+                        <strong>${flash.message}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</g:if>
 
-    <g:if test="${assayInstance?.id}">
-	    <div class="row-fluid">
-	        <div id="accordion" class="span12">
-	            <h3><a href="#">Summary</a></h3>
-	            <g:render template="assaySummaryView" model="['assayInstance': assayInstance]"/>
+<g:if test="${assayInstance?.id}">
+    <div class="row-fluid">
+        <div class="row-fluid">
+            <div id="accordion-foo" class="span12 accordion">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse"
+                           data-target="#target-summary-info">
+                            <i class="icon-chevron-down"></i>
+                            Summary
+                        </a>
 
-	            <h3><a href="#">Assay and Biology Details</a></h3>
-	            <g:render template="cardDtoEditView" model="['cardDtoMap': cardDtoMap, 'assayId': assayInstance.id]"/>
+                        <div id="target-summary-info" class="accordion-body in collapse">
+                            <div class="accordion-inner">
+                                <g:render template="../summary/show" model="['summary': assayInstance]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-	            <h3><a href="#">Documents</a></h3>
-	            <g:render template="assayDocumentsView" model="['assayInstance': assayInstance]"/>
 
-	            <h3><a href="#">Measures</a></h3>
-	            <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
-	        </div>    <!-- End accordion -->
-	    </div>
-    </g:if>
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a href="#contexts-header" id="contexts-header" class="accordion-toggle" data-toggle="collapse"
+                           data-target="#target-contexts-info">
+                            <i class="icon-chevron-down"></i>
+                            Contexts
+                        </a>
+
+                        <div id="target-contexts-info" class="accordion-body in collapse">
+                            <div class="accordion-inner">
+                                <g:render template="../context/edit"
+                                          model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a href="#measures-header" id="measures-header" class="accordion-toggle" data-toggle="collapse"
+                           data-target="#target-measures-info">
+                            <i class="icon-chevron-down"></i>
+                            Measures
+                        </a>
+
+                        <div id="target-measures-info" class="accordion-body in collapse">
+                            <div class="accordion-inner">
+                                <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a href="#documents-header" id="documents-header" class="accordion-toggle"
+                           data-toggle="collapse"
+                           data-target="#target-documents-info">
+                            <i class="icon-chevron-down"></i>
+                            Documents
+                        </a>
+
+                        <div id="target-documents-info" class="accordion-body in collapse">
+                            <div class="accordion-inner">
+                                <g:render template="../document/show" model="['documents': assayInstance.documents]"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    <!-- End accordion -->
+        </div>
+
+    </div>
+</g:if>
 
 </body>
 </html>

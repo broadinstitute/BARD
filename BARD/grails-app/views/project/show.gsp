@@ -95,7 +95,7 @@
 
                     <div id="target-experiment-and-step-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment]"/>
+                            <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment, 'instanceId': instance.id]"/>
                         </div>
                     </div>
                 </div>

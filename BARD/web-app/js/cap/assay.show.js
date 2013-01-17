@@ -12,7 +12,5 @@ $(document).ready(function () {
         icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
     });
 
-    $("#dialog:ui-dialog").dialog("destroy");
-
 });
 

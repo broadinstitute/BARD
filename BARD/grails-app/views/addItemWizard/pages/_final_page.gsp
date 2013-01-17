@@ -8,10 +8,14 @@
 %>
 <af:page>
 
-<h2>Saved!</h2>
+<div class="alert alert-success">
+ 	<button type="button" class="close" data-dismiss="alert">×</button>
+  	<strong>The item have been successfully saved.</strong>
+</div>
+
 <g:set var="currentValue" value="${ attribute?.currentValue }" />
 <g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
-<g:set var="valueText" value="${ fixedValue?.currentChoice + " " + fixedValue?.valueUnits + " " + fixedValue?.valueQualifier}" />
+<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.currentChoice + " " + fixedValue?.valueUnits }" />
 <g:render template="common/itemWizardSelectionsTable" model="['attribute': currentValue, 'valueType': valueTypeOption, 'value': valueText]"/>
 
 </af:page>

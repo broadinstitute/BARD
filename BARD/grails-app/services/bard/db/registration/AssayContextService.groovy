@@ -1,5 +1,10 @@
 package bard.db.registration
 
+import bard.db.registration.additemwizard.AttributeCommand;
+import bard.db.registration.additemwizard.FixedValueCommand;
+import bard.db.registration.additemwizard.ValueTypeCommand;
+import bard.db.dictionary.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
@@ -48,4 +53,37 @@ class AssayContextService {
         }
         return assayContext
     }
+	
+	public saveItemInCard(AttributeCommand attributeCmd, ValueTypeCommand valueTypeCmd, FixedValueCommand fixedValueCmd){		
+		def isSaved = false
+		String valueType = valueTypeCmd?.valueTypeOption
+		String attributeType = AttributeType.Fixed
+		println "ValueTypeOption:  " + valueTypeCmd?.valueTypeOption
+		println "AttributeType.Fixed:  " + AttributeType.Fixed
+		if(valueType.equals(attributeType)){
+			println "Saving item with AttributeType = Fixed ..."
+			AssayContext assayContext = AssayContext.get(attributeCmd.assayContextIdValue)
+			Element attributeElement = Element.get(attributeCmd.elementId)
+			if(assayContext && attributeElement){				
+				AssayContextItem newAssayContextItem = new AssayContextItem()
+				newAssayContextItem.setAttributeType(AttributeType.Fixed);
+				if(fixedValueCmd?.valueId){
+					Element valueElement = Element.get(fixedValueCmd.valueId)
+					newAssayContextItem.attributeElement = attributeElement
+					newAssayContextItem.valueElement = valueElement
+					newAssayContextItem.valueDisplay = valueElement.label
+					assayContext.addToAssayContextItems(newAssayContextItem)
+					assayContext.save()
+					println "Done saving item."
+				}
+				else{
+					
+				}
+				isSaved = true
+			}
+			
+		}
+		return isSaved;
+	}
+	
 }

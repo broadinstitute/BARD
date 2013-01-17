@@ -22,6 +22,11 @@ modules = {
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
 	}
+    dynatree {
+        dependsOn 'jquery, jquery-ui'
+        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
+        resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
+    }
 	jqueryform {
 		resource url: '/js/jquery.form.js'
 	}
@@ -33,6 +38,8 @@ modules = {
 	}
     projectstep {
         resource url: '/js/projectstep/arbor.js'
+        resource url: '/js/projectstep/projectstep.show.js'
+        resource url: '/js/projectstep/projectstep.edit.js'
     }
 	images {
 	}

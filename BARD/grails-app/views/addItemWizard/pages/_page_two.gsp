@@ -23,7 +23,7 @@
 
 
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="fixed" checked>
+  <input type="radio" name="valueTypeOption" value="Fixed" checked>
   <strong>Fixed</strong> - Every experiment always has the same value for the attribute "cell line equals HeLa"
 </label>
 <label class="radio">
@@ -31,11 +31,11 @@
   <strong>List</strong> - Every experiment has one of the entries in the list for the attribute "cell line one of HeLa, CHO, MM"
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="range">
+  <input type="radio" name="valueTypeOption" value="Range">
   <strong>Range</strong> - Every experiment has a value within the provided range for the attribute "cell density between 10 and 100 cells / well"
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="free">
+  <input type="radio" name="valueTypeOption" value="Free">
   <strong>Free</strong> - Every experiment must provide a value for the attribute, but there is no restriction on that value "cell density specified by experiment"
 </label>
 

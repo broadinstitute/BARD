@@ -75,7 +75,7 @@ grails.project.dependency.resolution = {
 		compile(":jquery-validation-ui:1.4")
 		compile ":webflow:2.0.0"
 		compile ":ajaxflow:0.2.4"
-        //compile ":console:1.2"
+        compile ":console:1.2"
         compile ":clover:3.1.6"
 
         // runtime scope

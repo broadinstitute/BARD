@@ -1,5 +1,9 @@
 package bard.db.registration.additemwizard
 
+import bard.db.registration.AssayContextService;
+import bard.db.dictionary.*;
+import bard.db.registration.*;
+
 /**
  * ajaxflow Controller
  *
@@ -34,6 +38,7 @@ class AddItemWizardController {
 	// notifications to the unified notifications daemon
 	// (see http://www.grails.org/plugin/grom)
 	def pluginManager
+	AssayContextService assayContextService
 	
 	/**
 	 * index method, redirect to the webflow
@@ -46,8 +51,9 @@ class AddItemWizardController {
 		redirect(action: 'pages')
 	}
 	
-	def addItemWizard(Long assayContextId, String cardSection){
-		render(template: "common/ajaxflow", model: [assayContextId: assayContextId, path: cardSection])
+	def addItemWizard(Long assayId, Long assayContextId, String cardSection){
+		println "addItemWizard -> Assay ID: " + assayId
+		render(template: "common/ajaxflow", model: [assayId: assayId, assayContextId: assayContextId, path: cardSection])
 	}
 
 	/**
@@ -68,7 +74,7 @@ class AddItemWizardController {
 			// wizard tabs. Also see common/_tabs.gsp for more information
 			flow.page = 0
 			flow.pages = [
-				[title: 'Attribute', description: 'Define attibute'],
+				[title: 'Attribute', description: 'Define attribute'],
 				[title: 'Value Type', description: 'Value type'],
 				[title: 'Define Value', description: 'Define value'],
 				[title: 'Review & Confirm', description: 'Review and save your entries'],
@@ -80,7 +86,7 @@ class AddItemWizardController {
 			flow.attribute = null;
 			flow.valueType = null;
 			flow.fixedValue = null;
-
+			flow.itemSaved = false;
 			success()
 		}
 
@@ -215,10 +221,25 @@ class AddItemWizardController {
 					if (pluginManager.getGrailsPlugin('grom')) ".persisting instances to the database...".grom()
 
 					// put your bussiness logic in here
-					success()
+					println "Preparing to start saving"
+					def isSaved = assayContextService.saveItemInCard(flow.attribute, flow.valueType, flow.fixedValue)
+					if(isSaved){
+						println "New item was successfully added to the card"
+						flow.itemSaved = true;
+//						AssayContext assayContext = AssayContext.get(flow.attribute.assayContextIdValue)
+//						Assay assay = assayContext.assay
+//						println "Assay ID: " + assay.id + "  Name: " + assay.assayName
+						success()
+					} else {
+						println "ERROR - unable to add item to the card"
+						flow.page = 4
+						error()
+					}
+					
 				} catch (Exception e) {
 					// put your error handling logic in
 					// here
+					println "Exception -> " + e
 					flow.page = 4
 					error()
 				}
