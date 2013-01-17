@@ -14,6 +14,7 @@ import bard.core.rest.spring.project.ProjectResult
 import bardqueryapi.IQueryService
 import bardqueryapi.SearchFilter
 import bard.core.rest.spring.experiment.*
+import bard.core.SearchParams
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
@@ -22,6 +23,25 @@ class MolecularSpreadSheetService {
     AssayRestService assayRestService
     CompoundRestService compoundRestService
     ProjectRestService projectRestService
+
+
+
+    public ExperimentData activitiesByEIDs(final List<Long> eids, final SearchParams searchParams) {
+        return experimentRestService.activitiesByEIDs(eids, searchParams)
+
+    }
+
+    public ExperimentData activitiesByADIDs(final List<Long> adids, final SearchParams searchParams) {
+        return experimentRestService.activitiesByADIDs(adids, searchParams)
+    }
+
+    public ExperimentData activitiesBySIDs(final List<Long> sids, final SearchParams searchParams) {
+        return experimentRestService.activitiesBySIDs(sids, searchParams)
+    }
+
+    public ExperimentData activitiesByCIDs(final List<Long> cids, final SearchParams searchParams) {
+        return experimentRestService.activitiesByCIDs(cids, searchParams)
+    }
 
     protected void addTableHeader(final MolSpreadSheetData molSpreadSheetData, final LinkedHashMap<String, Object> spreadSheetTable) {
 

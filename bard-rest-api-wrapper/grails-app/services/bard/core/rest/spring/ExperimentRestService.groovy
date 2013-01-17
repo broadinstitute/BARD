@@ -9,11 +9,83 @@ import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.experiment.*
+import bard.core.SearchParams
 
 class ExperimentRestService extends AbstractRestService {
 
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
+    }
+
+    public ExperimentData activitiesByEIDs(final List<Long> eids, final SearchParams searchParams) {
+        if (eids) {
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("eids", eids.join(","));
+            final String urlString = buildURLToExperimentData(searchParams)
+            final URL url = new URL(urlString)
+            final List<Activity> activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
+            ExperimentData experimentData = new ExperimentData()
+            experimentData.setActivities(activities)
+            return experimentData
+        }
+        return null
+
+    }
+
+    public ExperimentData activitiesByADIDs(final List<Long> adids, final SearchParams searchParams) {
+        if (adids) {
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("aids", adids.join(","));
+            final String urlString = buildURLToExperimentData(searchParams)
+            final URL url = new URL(urlString)
+            final List<Activity> activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
+            ExperimentData experimentData = new ExperimentData()
+            experimentData.setActivities(activities)
+            return experimentData
+        }
+        return null
+    }
+    public ExperimentData activitiesBySIDs(final List<Long> sids, final SearchParams searchParams) {
+        if (sids) {
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("sids", sids.join(","));
+            final String urlString = buildURLToExperimentData(searchParams)
+            final URL url = new URL(urlString)
+            final List<Activity> activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
+            ExperimentData experimentData = new ExperimentData()
+            experimentData.setActivities(activities)
+            return experimentData
+        }
+        return null
+    }
+
+    public ExperimentData activitiesByCIDs(final List<Long> cids, final SearchParams searchParams) {
+        if (cids) {
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("cids", cids.join(","));
+            final String urlString = buildURLToExperimentData(searchParams)
+            final URL url = new URL(urlString)
+            final List<Activity> activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
+            ExperimentData experimentData = new ExperimentData()
+            experimentData.setActivities(activities)
+            return experimentData
+        }
+        return null
+    }
+
+    String buildURLToExperimentData(final SearchParams searchParams) {
+        final StringBuilder resource =
+            new StringBuilder(this.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
+
+        if (searchParams.getTop()) {
+            resource.append(RestApiConstants.QUESTION_MARK)
+            resource.append(RestApiConstants.SKIP).
+                    append(searchParams.getSkip()).
+                    append(RestApiConstants.TOP).
+                    append(searchParams.getTop())
+        }
+        return resource.toString()
+
     }
     /**
      *
