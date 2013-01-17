@@ -57,6 +57,7 @@
 }
 
 .cardMenu {
-	float:right;
+	float:left;
  	width:7%;
+    text-align:left;
 }

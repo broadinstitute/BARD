@@ -16,7 +16,7 @@
                 <div class="btn-group dropup">
                     %{-- <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a> --}%
                     <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span></a>
-                    <ul class="dropdown-menu" style="z-index:3999;">
+                    <ul class="dropdown-menu" style="z-index:3999;position:relative; left:-115px;">
                         <li><a href="#" onclick="editCardName(${context.id}, '${context.preferredName}');return false;"><i class="icon-pencil"></i> Edit card name</a></li>
                         <li><a href="#" onclick="launchAddItemWizard(${context.assay.id}, ${context.id}, '${cardSection.replace(' > ', '> ')}');return false;"><i class="icon-road"></i> Add item wizard</a></li>
 
