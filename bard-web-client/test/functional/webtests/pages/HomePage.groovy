@@ -26,6 +26,8 @@ class QueryCartModule extends Module {
         viewQueryCartButton { $("a", text: "View/edit") }
         visualizeButton { $("a", text: "Visualize") }
         molSpreadsheetLink(to: MolSpreadsheetPage) { $("a", text: "Molecular Spreadsheet") }
-        contentSummary { $("ul.unstyled.horizontal-list") }
+        assayDefContentSummary { $("ul.unstyled.horizontal-list li", 0) }
+        compoundContentSummary { $("ul.unstyled.horizontal-list li", 1) }
+        projectContentSummary { $("ul.unstyled.horizontal-list li", 2) }
     }
 }

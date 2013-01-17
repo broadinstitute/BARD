@@ -17,7 +17,12 @@ class ResultsPage extends HomePage {
 
         addAssayToCart { assayId ->
             $(".addToCartCheckbox[data-cart-id=\"$assayId\"][data-cart-type=AssayDefinition]").click()
-            waitFor(10, 0.5) { queryCart.contentSummary.text() != "Empty" }
+            waitFor(10, 0.5) { queryCart.assayDefContentSummary.text().contains("assay definition") }
+        }
+
+        addCompoundToCart { compoundId ->
+            $(".addToCartCheckbox[data-cart-id=\"$compoundId\"][data-cart-type=Compound]").click()
+            waitFor(10, 0.5) { queryCart.compoundContentSummary.text().contains("compound") }
         }
     }
 }
