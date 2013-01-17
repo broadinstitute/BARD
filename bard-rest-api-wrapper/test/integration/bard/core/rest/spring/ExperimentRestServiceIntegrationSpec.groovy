@@ -6,6 +6,7 @@ import grails.plugin.spock.IntegrationSpec
 import spock.lang.Timeout
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
+import bard.core.SearchParams
 
 /**
  * Tests for ProjectRestService
@@ -15,6 +16,58 @@ import bard.core.rest.spring.experiment.*
 class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     ExperimentRestService experimentRestService
     CompoundRestService compoundRestService
+    void "test activitiesByCIDs"() {
+        given:
+        final List<Long> cids = [5926293, 6197]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData activitiesByCIDs = experimentRestService.activitiesByCIDs(cids, searchParams)
+
+        then:
+        assert activitiesByCIDs
+        assert activitiesByCIDs.activities
+        assert activitiesByCIDs.activities.size() == 10
+    }
+
+    void "test activitiesBySIDs"() {
+        given:
+        final List<Long> sids = [67101, 67121]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData activitiesBySIDs = experimentRestService.activitiesBySIDs(sids, searchParams)
+
+        then:
+        assert activitiesBySIDs
+        assert activitiesBySIDs.activities
+        assert activitiesBySIDs.activities.size() == 10
+    }
+
+    void "test activitiesByADIDs"() {
+        given:
+        final List<Long> adids = [10, 11]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData activitiesByADIDs = experimentRestService.activitiesByADIDs(adids, searchParams)
+
+        then:
+        assert activitiesByADIDs
+        assert activitiesByADIDs.activities
+        assert activitiesByADIDs.activities.size() == 10
+    }
+
+    void "test activitiesByEIDs"() {
+        given:
+        final List<Long> eids = [10, 11]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData activitiesByEIDs = experimentRestService.activitiesByEIDs(eids, searchParams)
+
+        then:
+        assert activitiesByEIDs
+        assert activitiesByEIDs.activities
+        assert activitiesByEIDs.activities.size() == 10
+    }
+
 
 
     void "test pull other values out of an experiment"() {
