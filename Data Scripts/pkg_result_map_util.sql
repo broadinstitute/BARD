@@ -22,72 +22,6 @@ CREATE GLOBAL TEMPORARY TABLE temp_context_item (
 
 ---------------------------------------------------------------------------------
 
-CREATE OR REPLACE PACKAGE Result_map_util
-AS
-
-    -- this type must match the cursor cur_rm_measure
-    /*        e.experiment_id,
-              e.assay_id,
-              el.element_id result_type_id,
-              el_sm.element_id stats_modifier_id,
-              rm.aid,
-              rm.resulttype,
-              rm.stats_modifier,
-              rm.relationship,
-              rm.tid,
-              rm.series_nos,
-              rm.parent_tids*/
-    TYPE r_resulttype IS RECORD (
-          EXPERIMENT_ID   experiment.experiment_id%TYPE,
-          ASSAY_ID        experiment.assay_id%TYPE,
-          RESULT_TYPE_ID  element.element_id%type,
-          STATS_MODIFIER_ID element.element_id%type,
-          AID             southern.result_map.aid%type,
-          RESULTTYPE      southern.result_map.resultType%type,
-          STATS_MODIFIER  southern.result_map.stats_modifier%type,
-          relationship    southern.result_map.relationship%TYPE,
-          TID             southern.result_map.tid%type,
-          SERIES_NOS      varchar2(4000),
-          PARENT_TIDS     varchar2(4000)
-          );
-
-    TYPE t_result_Maps IS TABLE OF southern.result_map%rowtype;
-
-    TYPE t_string IS varray (1) OF VARCHAR2(40);
-
-    PROCEDURE transfer_result_map (avi_AID IN VARCHAR2 DEFAULT NULL);
-
-    PROCEDURE save_measure_and_children (ani_recursion_level  IN binary_integer,
-                                         ani_parent_measure_id IN NUMBER,
-                                         ari_resulttype IN r_resulttype);
-
---    function save_measure (ani_parent_measure_id IN NUMBER,
---                          ari_measure IN r_resulttype)
---        RETURN NUMBER;
-
---    FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
---        RETURN NUMBER;
-
---    PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
---                               ani_measure_id IN number);
-
---    PROCEDURE save_exprmt_measure (ani_experiment_id IN number,
---                                ani_measure_id IN number,
---                                ani_parent_measure_id IN NUMBER,
---                                avi_relationship IN varchar2);
-
---    PROCEDURE delete_measure (ani_assay_id IN NUMBER,
---                             ani_experiment_id IN number,
---                             avi_owner IN varchar2);
-
---    procedure log_error (an_errnum   in  number,
---                  av_errmsg  in varchar2,
---                  av_location    in varchar2,
---                  av_comment in varchar2 default null);
-
-END Result_map_util;
-/
-
 PROMPT CREATE OR REPLACE PACKAGE result_map_util
 CREATE OR REPLACE PACKAGE result_map_util
 AS
@@ -384,7 +318,7 @@ as
             GROuP BY aid, resulttype, stats_modifier, relationship, tid) rm,
             external_reference er,
             experiment e,
-            element el,
+            result_type_element el,
             element el_sm
         WHERE er.ext_assay_ref = 'aid=' || rm.aid
           AND e.experiment_id = er.experiment_id
@@ -406,8 +340,7 @@ as
 
             FOR lr_rm_measure IN cur_rm_measure (lr_assay_experiment.aid)
             LOOP
-                lr_rm_resultType := lr_rm_measure;
-                -- this is a recursive call!
+                 -- this is a recursive call!
 --                Dbms_Output.put_line (' send to first recursion '
 --                      || 'exprt_id=' || lr_rm_measure.experiment_id
 --                      || ', assay_id=' || lr_rm_measure.assay_id
@@ -424,7 +357,7 @@ as
 
             END LOOP;
 
-            -- clean up the display_orders
+            -- clean up the display_orders for this assay
             UPDATE assay_context_item aci
             SET display_order =
                 (SELECT Count(*)
@@ -702,8 +635,8 @@ as
             VALUES
                 (ln_assay_context_id,
                  ari_resultType.assay_id,
-                 'Context for ' || ari_resultType.resultType,
-                 'Result Detail',
+                 'Annotations for ' || ari_resultType.resultType,
+                 'Project management> experiment>',
                  0,
                  pv_modified_by);
             -- cycle thru the items saving each as you go

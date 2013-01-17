@@ -19,7 +19,7 @@ AS
             WHERE aci.assay_context_id = ac.assay_context_id
               AND e.element_id = aci.attribute_id
               AND ac.assay_id = Nvl(cn_assay_id, ac.assay_id)
-              AND ac.context_name NOT LIKE 'Context for%'
+              AND (ac.context_name NOT LIKE 'Annotation%' OR ac.context_name IS NULL)
             GROUP BY ac.assay_id,
                   ac.assay_context_id,
                   e.label) grp_attr
@@ -27,6 +27,7 @@ AS
             grp_attr.assay_context_id;
 
     lv_context_name  element.label%TYPE;
+    lv_context_group  assay_context.context_group%TYPE;
 
 BEGIN
     -- get a list of assay_contexts with a count of the items
@@ -44,6 +45,14 @@ BEGIN
                  -- we're guaranteed just one from the count(*) in the curosr
                 AND e.element_id = aci.attribute_id;
 
+              SELECT SubStr(full_path, InStr(full_path, '>') +2, InStr(full_path, '>', 1,3)-InStr(full_path, '>'))
+              INTO lv_context_group
+              FROM bard_tree
+              WHERE label = lv_context_name
+              AND ROWNUM = 1;
+
+              lv_context_group := Nvl(lv_context_group, 'unclassified>');
+
          ELSIF lr_assay_context.attributes LIKE '%assay component role%'
          THEN
 --    if group contains 'assay component role'
@@ -57,6 +66,8 @@ BEGIN
                     FROM element
                     WHERE label = 'assay component role')
                AND ROWNUM = 1;
+
+              lv_context_group := 'assay protocol> assay component>';
 
          ELSIF lr_assay_context.attributes LIKE '%assay component type%'
          THEN
@@ -72,11 +83,15 @@ BEGIN
                     WHERE label = 'assay component type')
                AND ROWNUM = 1;
 
+              lv_context_group := 'assay protocol> assay component>';
+
          ELSIF lr_assay_context.attributes LIKE '%detection%'
          THEN
 --    if group contains 'detection'
 --    then set name = value
              lv_context_name := 'detection method';
+
+             lv_context_group := 'assay protocol> assay readout>';
 
          ELSIF lr_assay_context.attributes LIKE '%readout%'
          THEN
@@ -84,11 +99,15 @@ BEGIN
 --    then set name = value
              lv_context_name := 'assay readout';
 
+             lv_context_group := 'assay protocol> assay readout>';
+
          ELSIF lr_assay_context.attributes LIKE '%wavelength%'
          THEN
 --    if group contains 'fluorescence/luminescence'
 --    then set name = value
              lv_context_name := 'fluorescence/luminescence';
+
+             lv_context_group := 'assay protocol> assay design>';
 
          ELSIF lr_assay_context.attributes LIKE '%number%'
          THEN
@@ -96,17 +115,22 @@ BEGIN
 --    then set name = value
              lv_context_name := 'result detail';
 
+             lv_context_group := 'project management> experiment>';
+
          ELSIF lr_assay_context.attributes LIKE '%biolog%'
          THEN
 --    if group contains 'biology/ical'
 --    then set name = value
              lv_context_name := 'biology';
 
+             lv_context_group := 'biology>';
+
          ELSIF lr_assay_context.attributes LIKE '%protein%'
          THEN
 --    if group contains 'biology/ical'
 --    then set name = value
              lv_context_name := 'biological component';
+             lv_context_group := 'biology>';
 
          ELSIF lr_assay_context.attributes LIKE '%assay format%'
                 OR
@@ -115,17 +139,20 @@ BEGIN
 --    if group contains 'assay format'
 --    then set name = 'assay protocol'
              lv_context_name := 'assay protocol';
+             lv_context_group := 'assay protocol> assay format>';
 
          ELSE
              --lv_context_name := NULL;
              lv_context_name := 'Type a name here';
+             lv_context_group := 'unclassified>';
          END IF;
 
         IF lv_context_name IS NOT NULL
         THEN
 
           UPDATE assay_context ac
-          SET context_name = lv_context_name
+          SET context_name = lv_context_name,
+              context_group = lv_context_group
           WHERE assay_context_id = lr_assay_context.assay_context_id;
 
         END IF;

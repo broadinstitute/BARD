@@ -17,11 +17,6 @@ CREATE INDEX idx_result_type_tree_unit ON result_type_tree(result_type_name);
 CREATE INDEX idx_stats_modifier_unit ON stats_modifier_tree(label);
 
 
-
-PROMPT CREATE OR REPLACE TRIGGER fk_result_map_element
-DROP TRIGGER fk_result_map_element;
-
-
 CREATE OR REPLACE TRIGGER fk_result_map_element
  BEFORE update
         --OR insert
@@ -42,7 +37,8 @@ DECLARE
     ln_found  NUMBER;
 
 BEGIN
-     IF :new.resultType IS NOT null
+     IF :new.resultType IS NOT NULL
+        AND (:new.resulttype != :OLD.resultType OR :old.resulttype IS null)
      THEN
         SELECT Count(*)
         INTO ln_found
@@ -57,6 +53,7 @@ BEGIN
      END IF;
 
      IF :new.contextItem IS NOT null
+        AND (:new.contextItem != :OLD.contextItem OR :old.contextItem IS null)
      THEN
         SELECT Count(*)
         INTO ln_found
@@ -93,6 +90,7 @@ BEGIN
      END IF;
 
      IF :new.stats_modifier IS NOT null
+        AND (:new.stats_modifier != :OLD.stats_modifier OR :old.stats_modifier IS null)
      THEN
         SELECT Count(*)
         INTO ln_found
@@ -107,6 +105,7 @@ BEGIN
      END IF;
 
      IF :new.attribute1 IS NOT null
+        AND (:new.attribute1 != :OLD.attribute1 OR :old.attribute1 IS null)
      THEN
         SELECT Count(*)
         INTO ln_found
@@ -142,6 +141,7 @@ BEGIN
         END IF;
      END IF;
      IF :new.attribute2 IS NOT null
+        AND (:new.attribute2 != :OLD.attribute2 OR :old.attribute2 IS null)
      THEN
         SELECT Count(*)
         INTO ln_found
@@ -179,6 +179,7 @@ BEGIN
      END IF;
 
      IF :new.concentrationUnit IS NOT null
+        AND (:new.concentrationUnit != :OLD.concentrationUnit OR :old.concentrationUnit IS null)
      THEN
         SELECT Count(*)
         INTO ln_found

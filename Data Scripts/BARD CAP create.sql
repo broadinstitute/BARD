@@ -833,7 +833,7 @@ CREATE TABLE ASSAY_DOCUMENT(
     Date_Created         TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
     Last_Updated         TIMESTAMP(6),
     MODIFIED_BY          VARCHAR2(40),
-    CONSTRAINT CK_ASSAY_DOCUMENT_TYPE CHECK (Document_Type IN ('Description', 'Protocol', 'Comments', 'Paper', 'External URL', 'Other')),
+    CONSTRAINT CK_ASSAY_DOCUMENT_TYPE CHECK (Document_Type IN ('Description', 'Protocol', 'Comments', 'Publication', 'Paper', 'External URL', 'Other')),
     CONSTRAINT PK_ASSAY_DOCUMENT PRIMARY KEY (Assay_document_ID)
 )
 ;
@@ -1490,7 +1490,7 @@ CREATE TABLE PROJECT_DOCUMENT(
     DATE_CREATED           TIMESTAMP(6)     NOT NULL,
     LAST_UPDATED           TIMESTAMP(6),
     MODIFIED_BY            VARCHAR2(40),
-    CONSTRAINT CK_PROJECT_DOCUMENT_TYPE CHECK (DOCUMENT_TYPE IN ('Description', 'Protocol', 'Comments', 'Paper', 'External URL', 'Other')),
+    CONSTRAINT CK_PROJECT_DOCUMENT_TYPE CHECK (DOCUMENT_TYPE IN ('Description', 'Protocol', 'Comments', 'Publication', 'Paper', 'External URL', 'Other')),
     CONSTRAINT PK_PROJECT_DOCUMENT PRIMARY KEY (PROJECT_DOCUMENT_ID)
 )
 ;
