@@ -10,7 +10,12 @@
     <body data-spy="scroll" data-target=".bs-docs-sidebar">
         <div class="row-fluid">
             <div class="span12 page-header">
-                <h1>Project: ${projectAdapter?.name} <small>(Project ID: ${projectAdapter?.id})</small></h1>
+
+                <h1>Project: ${projectAdapter?.name}
+                    <g:if test="${projectAdapter.hasProbes()}">
+                        <span class="badge badge-info">Probe</span>
+                    </g:if>
+                    <small>(Project ID: ${projectAdapter?.id})</small></h1>
                 <g:saveToCartButton id="${projectAdapter?.id}"
                                     name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
                                     type="${querycart.QueryItemType.Project}"/>

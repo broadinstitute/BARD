@@ -47,6 +47,8 @@ class MolSpreadSheetDataUnitSpec extends Specification {
         molSpreadSheetData.mapColumnsToAssay[6]='2199'
         molSpreadSheetData.experimentFullNameList<<'Fluorescence-based dose response'
         molSpreadSheetData.experimentFullNameList<<'HTS small molecules'
+        molSpreadSheetData.mapColumnsToAssayName[4]='Fluorescence-based dose response'
+        molSpreadSheetData.mapColumnsToAssayName[5]='HTS small molecules'
         List <LinkedHashMap<String,String>> returnValue  = molSpreadSheetData.determineResponseTypesPerAssay()
 
         then:
@@ -59,6 +61,69 @@ class MolSpreadSheetDataUnitSpec extends Specification {
         assert returnValue[1]."numberOfResultTypes"==2
         assert returnValue[1]."fullAssayName"=='HTS small molecules'
     }
+
+    void "test determineResponseTypesPerAssay - error condition 1"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        assertNotNull(molSpreadSheetData)
+        molSpreadSheetData.mapColumnsToAssay[0]='Fluorescence-based dose response'
+        molSpreadSheetData.experimentFullNameList<<'Fluorescence-based dose response'
+        molSpreadSheetData.mapColumnsToAssayName[0]='HTS small molecules'
+        List <LinkedHashMap<String,String>> returnValue  = molSpreadSheetData.determineResponseTypesPerAssay()
+
+        then:
+        assertNotNull returnValue
+        assert returnValue.size()==0
+    }
+
+    void "test determineResponseTypesPerAssay - error condition 2"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        assertNotNull(molSpreadSheetData)
+        molSpreadSheetData.mapColumnsToAssay[0]=''
+        molSpreadSheetData.mapColumnsToAssay[1]=''
+        molSpreadSheetData.mapColumnsToAssay[2]=''
+        molSpreadSheetData.mapColumnsToAssay[3]=''
+        molSpreadSheetData.mapColumnsToAssay[4]='346'
+        molSpreadSheetData.experimentFullNameList<<'Fluorescence-based dose response'
+        molSpreadSheetData.mapColumnsToAssayName[5]='HTS small molecules'
+        List <LinkedHashMap<String,String>> returnValue  = molSpreadSheetData.determineResponseTypesPerAssay()
+
+        then:
+        assertNotNull returnValue
+        returnValue.size()==1
+        returnValue[0]."assayName" == "346"
+        returnValue[0]."numberOfResultTypes" == 1
+        returnValue[0]."fullassayName" == null
+    }
+
+    void "test determineResponseTypesPerAssay - error condition 3"() {
+        given:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+
+        when:
+        assertNotNull(molSpreadSheetData)
+        molSpreadSheetData.mapColumnsToAssay[0]=''
+        molSpreadSheetData.mapColumnsToAssay[1]=''
+        molSpreadSheetData.mapColumnsToAssay[2]=''
+        molSpreadSheetData.mapColumnsToAssay[3]=''
+        molSpreadSheetData.mapColumnsToAssay[4]=null
+        molSpreadSheetData.experimentFullNameList<<'Fluorescence-based dose response'
+        molSpreadSheetData.mapColumnsToAssayName[5]='HTS small molecules'
+        List <LinkedHashMap<String,String>> returnValue  = molSpreadSheetData.determineResponseTypesPerAssay()
+
+        then:
+        assertNotNull returnValue
+        assert returnValue.size()==1
+        returnValue[0]."assayName" == null
+        returnValue[0]."numberOfResultTypes" == 1
+        returnValue[0]."fullAssayName" == 'Data error: please contact your system administrator'
+    }
+
 
     void "test determineResponseTypesPerAssay - mapColumnsToAssay is Empty"() {
         given:

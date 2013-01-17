@@ -69,12 +69,12 @@
                     </g:if>
                 </td>
                 <td>
-                    ${priorityElement.toDisplay()}
+                    ${priorityElement?.toDisplay()}
 
                 </td>
                 <td>
                     <g:each in="${resultData?.rootElements}" var="rootElement">
-                        <g:if test="${rootElement.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
+                        <g:if test="${rootElement?.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
                     </g:each>
                 </td>
                 <g:if test="${experimentDataMap?.hasChildElements}">

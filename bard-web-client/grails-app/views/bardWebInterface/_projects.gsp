@@ -15,6 +15,9 @@
                 <h3><g:link action="showProject" id="${projectAdapter.id}"
                             params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
                 </h3>
+                <g:if test="${projectAdapter.hasProbes()}">
+                    <span class="badge badge-info">Probe</span>
+                </g:if>
                 <g:saveToCartButton id="${projectAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(projectAdapter.name)}"
                                     type="${querycart.QueryItemType.Project}"/>
