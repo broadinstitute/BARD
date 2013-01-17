@@ -1,3 +1,4 @@
+<%@ page import="querycart.QueryItemType" %>
 %{-- structureSearchString is of the form StructureSearchType:smiles or cid
 examples Similarity:1234
 Similarity:CCC
@@ -14,7 +15,8 @@ Similarity:CCC
     </g:else>
     <div class="compound-info-dropdown">
         <span class="btn-group">
-            <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-info-sign"></i> <span class="caret"></span>
+            <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><i class="icon-info-sign"></i> <span
+                    class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <g:if test="${smiles}">
@@ -22,6 +24,19 @@ Similarity:CCC
                 </g:if>
                 <li><a href="#" data-detail-id="sid_${sid}" class="analogs"
                        data-structure-search-params="Similarity:${cid}">Search For Analogs</a></li>
+                <li>
+                    <g:link controller="molSpreadSheet" action="showExperimentDetails"
+                            params="[cid: cid, transpose: true]">Show Experimental Details</g:link>
+                </li>
+                <li>
+                    <a name="saveToCartLink" class="addToCartLink"
+                       data-cart-name="${name}"
+                       data-cart-id="${cid}"
+                       data-cart-type="${QueryItemType.Compound}"
+                       data-cart-smiles="${smiles}"
+                       data-cart-numActive="${numActive}"
+                       data-cart-numAssays="${numAssays}">Save to Cart for analysis</a>
+                </li>
             </ul>
         </span>
     </div>

@@ -14,8 +14,15 @@
         <g:each var="compoundAdapter" in="${compoundAdapters}">
             <tr>
                 <td style="min-width: 180px;">
-                    <g:compoundOptions sid="${compoundAdapter.pubChemCID}" cid="${compoundAdapter.pubChemCID}"
-                                       smiles="${compoundAdapter.structureSMILES}" imageWidth="180" imageHeight="150"/>
+                    <g:compoundOptions
+                            sid="${compoundAdapter.pubChemCID}"
+                            cid="${compoundAdapter.pubChemCID}"
+                            smiles="${compoundAdapter.structureSMILES}"
+                            name="${JavaScriptUtility.cleanup(compoundAdapter.name)}"
+                            numActive="${compoundAdapter.numberOfActiveAssays}"
+                            numAssays="${compoundAdapter.numberOfAssays}"
+                            imageWidth="180"
+                            imageHeight="150"/>
                 </td>
                 <td>
                     <h3>

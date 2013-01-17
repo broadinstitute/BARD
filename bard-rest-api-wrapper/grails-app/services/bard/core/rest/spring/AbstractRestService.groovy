@@ -23,7 +23,7 @@ abstract class AbstractRestService {
     String baseUrl
     String promiscuityUrl
     RestTemplate restTemplate
-    final static int multiplier = 5;
+    final static int multiplier = 5
     LoggerService loggerService
 
     /**

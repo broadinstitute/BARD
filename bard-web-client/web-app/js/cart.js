@@ -5,45 +5,45 @@
 function QueryCart() {
 }
 
-QueryCart.prototype.toggleDetailsHandler = function() {
+QueryCart.prototype.toggleDetailsHandler = function () {
     $(".panel").toggle("fast");
     $(".trigger").toggleClass("active");
     return false;
 };
 
-QueryCart.prototype.refreshSummaryView = function() {
-    var ajaxLocation='#summaryView';
+QueryCart.prototype.refreshSummaryView = function () {
+    var ajaxLocation = '#summaryView';
     jQuery.ajax({  type:'GET',
         url:'/bardwebclient/queryCart/refreshSummaryView',
-        success:function(data){
+        success:function (data) {
             jQuery(ajaxLocation).html(data);
         }
     });
 };
 
-QueryCart.prototype.refreshDetailsView = function() {
-    var ajaxLocation='#detailView';
+QueryCart.prototype.refreshDetailsView = function () {
+    var ajaxLocation = '#detailView';
     jQuery.ajax({  type:'GET',
         url:'/bardwebclient/queryCart/refreshDetailsView',
-        success:function(data){
+        success:function (data) {
             jQuery(ajaxLocation).html(data);
         }
     });
 };
 
-QueryCart.prototype.addItemToCartHandler = function() {
+QueryCart.prototype.addItemToCartHandler = function () {
     var id = $(this).attr('data-cart-id');
     var name = $(this).attr('data-cart-name');
     var type = $(this).attr('data-cart-type');
     var smiles = $(this).attr('data-cart-smiles');
     var numActive = $(this).attr('data-cart-numActive');
-    var numAssays=$(this).attr('data-cart-numAssays');
+    var numAssays = $(this).attr('data-cart-numAssays');
     jQuery.ajax({  type:'POST',
         data:{
-            'id': id,
-            'type': type,
-            'name': name,
-            'smiles': smiles,
+            'id':id,
+            'type':type,
+            'name':name,
+            'smiles':smiles,
             'numActive':numActive,
             'numAssays':numAssays
         },
@@ -55,12 +55,12 @@ QueryCart.prototype.addItemToCartHandler = function() {
     return true;
 };
 
-QueryCart.prototype.removeItemFromCartHandler = function() {
+QueryCart.prototype.removeItemFromCartHandler = function () {
     var id = $(this).attr('data-cart-id');
     var type = $(this).attr('data-cart-type');
     jQuery.ajax({  type:'POST',
-        data:{'id': id,
-            'type': type},
+        data:{'id':id,
+            'type':type},
         url:'/bardwebclient/queryCart/removeItem',
         success:function (data) {
             queryCart.publishCartChangeEvent('cart.itemRemoved', id);
@@ -69,13 +69,13 @@ QueryCart.prototype.removeItemFromCartHandler = function() {
     return true;
 };
 
-QueryCart.prototype.removeAll = function() {
+QueryCart.prototype.removeAll = function () {
     jQuery.ajax({  type:'POST',
         url:'/bardwebclient/queryCart/removeAll',
-        success:function(data){
+        success:function (data) {
             queryCart.publishCartChangeEvent('cart.itemRemoved');
         },
-        error:function(XMLHttpRequest,textStatus,errorThrown){
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
             alert('problem clearing cart');
             console.log(errorThrown);
         }
@@ -83,11 +83,11 @@ QueryCart.prototype.removeAll = function() {
     return false;
 };
 
-QueryCart.prototype.publishCartChangeEvent = function(eventName, itemChangedId) {
+QueryCart.prototype.publishCartChangeEvent = function (eventName, itemChangedId) {
     $('.addToCartCheckbox,#summaryView,#detailView').trigger(eventName, itemChangedId);
 };
 
-QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
+QueryCart.prototype.refreshInCartCheckboxes = function (event, idToTarget) {
     var id = $(this).attr('data-cart-id');
     if (idToTarget != null && idToTarget != id) {
         return false;
@@ -96,9 +96,9 @@ QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
     var elementToUpdate = $(this);
     jQuery.ajax({  type:'POST',
         url:'/bardwebclient/queryCart/isInCart',
-        data:{'id': id,
-            'type': type},
-        success:function(data){
+        data:{'id':id,
+            'type':type},
+        success:function (data) {
             if (data == 'false') {
                 elementToUpdate.prop('checked', false);
             }
@@ -106,14 +106,14 @@ QueryCart.prototype.refreshInCartCheckboxes = function(event, idToTarget) {
                 elementToUpdate.prop('checked', true);
             }
         },
-        error:function(XMLHttpRequest,textStatus,errorThrown){
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
             alert('problem refreshing');
             console.log(errorThrown);
         }
     });
 };
 
-QueryCart.prototype.init = function() {
+QueryCart.prototype.init = function () {
     $(document).on('click', '.trigger', this.toggleDetailsHandler);
     $(document).on('click', '.removeItemFromCart', this.removeItemFromCartHandler);
     $(document).on('click', '.removeAllFromCart', this.removeAll);
@@ -126,6 +126,8 @@ QueryCart.prototype.init = function() {
     $(document).on('cart.itemRemoved', '#summaryView', this.refreshSummaryView);
     $(document).on('cart.itemRemoved', '#detailView', this.refreshDetailsView);
     $(document).on('cart.refreshCheckboxes', '.addToCartCheckbox', this.refreshInCartCheckboxes);
+//    This is for the addToCart link we give in each compound's option pull-down menu
+    $(document).on('click', '.addToCartLink', this.addItemToCartHandler);
 };
 
 var queryCart = new QueryCart();

@@ -18,8 +18,8 @@ class MolSpreadSheetController {
         render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh] )
     }
 
-    def showExperimentDetails(Long pid, Long cid) {
-        render(view: 'molecularSpreadSheet', model: [cid: cid, pid: pid])
+    def showExperimentDetails(Long pid, Long cid, Boolean transpose) {
+        render(view: 'molecularSpreadSheet', model: [cid: cid, pid: pid, transpose: transpose])
     }
 
     def molecularSpreadSheet() {
