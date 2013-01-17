@@ -1,10 +1,9 @@
 <r:require module="dynatree"/>
-<!-- g:renderMeasuresAsJSONTree measures="${assayInstance.rootMeasures}" -->
 <div>
     <g:if test="${assayInstance?.measures}">
         <div class="row-fluid">
             <div class="span6">
-                <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}"/>
+                <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasuresSorted}"/>
             </div>
 
             <div class="span6">
@@ -14,7 +13,7 @@
                 <%-- Statically render every measurement details as not displayed.  Selecting nodes in tree will display one card --%>
                 <g:each in="${assayInstance.measures}" var="measure">
                     <div id="measure-details-${measure.id}" class="measure-detail-card" style="display: none">
-                    <h1>${measure.resultType?.label} ${measure?.statsModifier?.label}</h1>
+                    <h1>${measure.getDisplayLabel()}</h1>
                     <p><strong>Definition:</strong> ${measure.resultType?.description}</p>
                     <g:if test="${measure.assayContextMeasures.empty}">
                         <p>No assay contexts associated with this measure</p>

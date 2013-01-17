@@ -3,7 +3,9 @@ package bard.db.project
 import bard.db.experiment.Experiment
 import grails.converters.JSON
 import bard.db.registration.Assay
+import grails.plugins.springsecurity.Secured
 
+@Secured(['isFullyAuthenticated()'])
 class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService
@@ -36,7 +38,6 @@ class ProjectController {
         def project = Project.findById(projectId)
         projectService.removeExperimentFromProject(experiment, project)
         project = Project.findById(projectId)
-        // TODO: render template seemed not working, an alternative is modify the graph at the view, arbor provides function to prune node
         render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
     }
 
@@ -46,7 +47,6 @@ class ProjectController {
         def project = Project.findById(projectId)
         projectService.removeEdgeFromProject(fromExperiment, toExperiment, project)
         project = Project.findById(projectId)
-        // TODO: render template seemed not working, an alternative is modify the graph at the view, arbor provides function to prune node
         render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
     }
 
