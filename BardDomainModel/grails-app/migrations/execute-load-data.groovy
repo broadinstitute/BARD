@@ -33,15 +33,4 @@ databaseChangeLog = {
             }
         }
     }
-
-    changeSet(author: "pmontgom", id: "populate bard_tree", dbms: 'oracle', context: 'load-data', runAlways: 'true') {
-        grailsChange {
-            change {
-                sql.call('''
-                        insert into bard_tree select * from data_mig.bard_tree d where not exists ( select 1 from bard_tree s where s.node_id = d.node_id)
-                    ''')
-            }
-        }
-    }
-
 }
