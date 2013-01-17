@@ -35,6 +35,9 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return ""
 
     }
+    public boolean hasProbes(){
+        return project?.hasProbes()
+    }
     public Double getScore() {
         return score
     }

@@ -338,4 +338,14 @@ public class ProjectAbstract extends JsonUtil {
     public void setExperimentCount(long experimentCount) {
         this.experimentCount = experimentCount;
     }
+
+    public boolean hasProbes() {
+        if (this.probes) {
+            return true
+        }
+        if (this.probeIds) {
+            return true
+        }
+        return false
+    }
 }
