@@ -8,6 +8,7 @@ import mockServices.MockQueryService
 import org.springframework.web.client.RestTemplate
 import java.util.concurrent.Executors
 import bard.core.rest.spring.SubstanceRestService
+import bard.core.rest.spring.DataExportRestService
 
 /**
  * Spring Configuration of resources
@@ -15,6 +16,11 @@ import bard.core.rest.spring.SubstanceRestService
 beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
+    final String exportApiKey = grailsApplication.config.dataexport.apikey
+    final String elementAcceptType = grailsApplication.config.dataexport.element.accept.type
+    final String exportElementBaseURL = grailsApplication.config.dataexport.element.url
+
+
     restTemplate(RestTemplate)
 
     compoundRestService(CompoundRestService) {
@@ -24,7 +30,13 @@ beans = {
         executorService = Executors.newCachedThreadPool()
         loggerService = ref('loggerService')
     }
-
+    dataExportRestService(DataExportRestService) {
+        dataExportApiKey = exportApiKey
+        dictionaryElementAcceptType = elementAcceptType
+        dataExportElementBaseURL = exportElementBaseURL
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
     experimentRestService(ExperimentRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
@@ -59,6 +71,7 @@ beans = {
                 assayRestService = ref('assayRestService')
                 substanceRestService=ref('substanceRestService')
                 experimentRestService=ref('experimentRestService')
+                dataExportRestService=ref('dataExportRestService')
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here

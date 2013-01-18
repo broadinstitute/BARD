@@ -1,9 +1,15 @@
 package bard.core.rest.spring.experiment
 
+import bard.core.rest.spring.DataExportRestService
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import org.springframework.mock.web.MockServletContext
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import grails.test.mixin.Mock
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
 class RootElementUnitSpec extends Specification {
@@ -48,13 +54,30 @@ class RootElementUnitSpec extends Specification {
         "displayName":"Outcome","dictElemId":899,"value":"Active"
     }
   '''
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock()
+         dataExportRestService =  Mock(DataExportRestService)
+    }
 
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
     void "test root element no child"() {
         when:
         final RootElement rootElement = objectMapper.readValue(ROOT_ELEMENT, RootElement.class)
         then:
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+
         assert rootElement
-        assert rootElement.displayName== "Outcome"
+        assert rootElement.pubChemDisplayName== "Outcome"
         assert rootElement.dictElemId==899
         assert rootElement.value=="Active"
 
@@ -65,8 +88,11 @@ class RootElementUnitSpec extends Specification {
         when:
         final RootElement rootElement = objectMapper.readValue(ROOT_ELEMENTS_WITH_CHILD_NODES, RootElement.class)
         then:
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+
         assert rootElement
-        assert rootElement.displayName=="AvgGluFoldShift"
+        assert rootElement.pubChemDisplayName=="AvgGluFoldShift"
         assert rootElement.dictElemId==1387
         assert rootElement.value=="26.7"
 
@@ -74,7 +100,7 @@ class RootElementUnitSpec extends Specification {
         assert childElements
         assert childElements.size() == 5
         for(ActivityData activityData in childElements){
-            assert activityData.displayName
+            assert activityData.pubChemDisplayName
             assert activityData.dictElemId
             assert activityData.value
         }

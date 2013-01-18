@@ -10,13 +10,21 @@ class DataExportRestService extends AbstractRestService {
     String dictionaryElementAcceptType
     String dataExportElementBaseURL
 
+
+    String findDictionaryElementLabelById(final Long dictionaryId){
+        final DictionaryElement dictionaryElement = findDictionaryElementById(dictionaryId)
+        if(dictionaryElement){
+            return dictionaryElement.label
+        }
+        return null
+    }
     /**
      *
      * @param dictionaryId - Given a dictionary Id , return the element
      * @return the element
      */
-    DictionaryElement findDictionaryElement(final Long dictionaryId) {
-        SSLTrustManager.enableSSL()//enable SSL sp we can call the data export API
+    DictionaryElement findDictionaryElementById(final Long dictionaryId) {
+        SSLTrustManager.enableSSL()//enable SSL so we can call the data export API
         final HttpHeaders requestHeaders = new HttpHeaders();
         requestHeaders.set("APIKEY", this.dataExportApiKey);
         requestHeaders.set("Accept", this.dictionaryElementAcceptType)

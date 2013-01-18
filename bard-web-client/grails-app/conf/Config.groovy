@@ -13,6 +13,10 @@ grails.serverURL = "http://localhost:${server.port}/bardwebclient"
 bard.cap.home = "http://localhost:8081/BARD/"
 bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
 
+//Override in config file
+dataexport.apikey= "test"
+dataexport.element.accept.type = "application/vnd.bard.cap+xml;type=element"
+dataexport.element.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary/element/"
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

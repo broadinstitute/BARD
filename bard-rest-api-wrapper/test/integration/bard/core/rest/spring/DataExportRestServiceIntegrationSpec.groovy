@@ -11,7 +11,7 @@ class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "#label"() {
         when:
-        final DictionaryElement dictionaryElement = dataExportRestService.findDictionaryElement(dictionaryId)
+        final DictionaryElement dictionaryElement = dataExportRestService.findDictionaryElementById(dictionaryId)
         then:
         assert dictionaryElement
         assert dictionaryElement.elementId == dictionaryId

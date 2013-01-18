@@ -29,8 +29,7 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-            %{--We should probably do this server side--}%
-            <th>${experimentDataMap?.priorityDisplay ?: ""}</th>
+             <th>${experimentDataMap?.priorityDisplay ?: ""}</th>
             <th>Experiment Descriptors</th>
             <g:if test="${experimentDataMap?.hasChildElements}">
                 <th>Child Elements</th>
@@ -69,6 +68,7 @@
                     </g:if>
                 </td>
                 <td>
+
                     ${priorityElement?.toDisplay()}
 
                 </td>

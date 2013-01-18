@@ -1,6 +1,5 @@
 package bard.core.rest.spring.experiment
 
-import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonInclude
 
@@ -25,7 +24,7 @@ public class RootElement extends ActivityData {
      * @return true if the display name is "Outcome"
      */
     public boolean hasOutcome(){
-        return this.displayName=="Outcome"
+        return this.pubChemDisplayName=="Outcome"
     }
 
 }
