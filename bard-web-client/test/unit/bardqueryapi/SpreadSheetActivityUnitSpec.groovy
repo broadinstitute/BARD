@@ -6,12 +6,34 @@ import molspreadsheet.SpreadSheetActivity
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.ConcentrationResponseSeries
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.DataExportRestService
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @Unroll
 class SpreadSheetActivityUnitSpec extends Specification {
+
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock()
+        dataExportRestService =  Mock(DataExportRestService)
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+    }
+
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
     void "test readOutsToHillCurveValues"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
