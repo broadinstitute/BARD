@@ -1,66 +1,27 @@
 bard-client
 ===========
 
-This repository contains Java client code forked from [BARD](https://github.com/ncatsdpiprobedev/bard) REST api. 
-To compile, simply type
-```
-./gradlew compile
-```
+This is an in-place plugin for the bardwebclient
 
-To run test cases for the REST implementation, type
-```
-./gradlew tests
-```
-or run it from intellij or eclipse
+Running Tests:
 
-To generate idea files do:
+In your .grails directory, create a folder bard-rest-api-wrapper, then create a
+file bard-rest-api-wrapper-commons-config.groovy.
+In this file add the following:
 
-```
-./gradlew idea
-```
+ncgc.server.root.url = THE_URL_TO_THE_NCGC_SERVER //for example "http://bard.nih.gov/api/v12"
+promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/" //URL to promiscuity plugin
 
-To generate eclipse files do:
-```
-./gradlew eclipse
-```
+dataexport.apikey=YOUR_DATA_EXPORT_API_KEY
+dataexport.element.accept.type="application/vnd.bard.cap+xml;type=element"
+dataexport.element.url=THE_URL_TO_THE_ELEMENT_RESOURCE For example on QA it is
+//"https://bard-qa.broadinstitute.org/dataExport/api/dictionary/element/"
+Replace the variables with the appropriate values
 
-jar files
-=========
+Open a grails command window into this directory and run:
 
-To create a jar file for distribution 
-first edit gradle.properties to add the version.
+grails test-app unit: integration:
 
-Note that the version should correspond to the REST-API version.
+If you are using an IDE like Intellij you can use its grails command to run the tests
 
-So if the REST-API is at version 7 simply replace the version value in the properties file with v7.
-then type :
-```
-./gradlew jar
-```
-
-This creates a jar file in the build/lib directory
-bard-client-version.jar
-
-Where version is the version you specified in the property file
-
-
-dependencies
-============
-
-For the REST implementation, the following jar files in the ```lib```
-directory are required:
-
-```
-httpcore-4.1.jar
-httpclient-4.1.1.jar
-commons-logging-1.1.1.jar
-jackson-core-asl-1.9.2.jar
-jackson-mapper-asl-1.9.2.jar
-jchem.jar
-````
-
-Note that ```jchem.jar``` is required only if the
-```CompoundService``` is used.
-
-Also note that we use our own jchem.jar file named ChemAxonJChemBase-5.10.jar which is located in the lib directory
 
