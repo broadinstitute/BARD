@@ -50,11 +50,11 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.status == 200
 
         where:
-        label                           | norefresh     | transpose
-        "no refresh your transpose"     | null          | null
-        "refresh only"                  | "true"        | null
-        "transpose only"                | null          | "true"
-        "refresh and transpose"         | null          | "true"
+        label                       | norefresh | transpose
+        "no refresh your transpose" | null      | null
+        "refresh only"              | "true"    | null
+        "transpose only"            | null      | "true"
+        "refresh and transpose"     | null      | "true"
 
     }
 
@@ -75,17 +75,16 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.status == 200
 
         where:
-        label                           | norefresh     | transpose |   molSpreadSheetData
-        "no refresh your transpose"     | null          | null      |   null
-        "refresh only"                  | "true"        | null      |   null
-        "transpose only"                | null          | "true"    |   null
-        "refresh and transpose"         | "true"        | "true"    |   null
-        "no refresh your transpose"     | null          | null      |   new MolSpreadSheetData()
-        "refresh only"                  | "true"        | null      |   new MolSpreadSheetData()
-        "transpose only"                | null          | "true"    |   new MolSpreadSheetData()
-        "refresh and transpose"         | "true"        | "true"    |   new MolSpreadSheetData()
+        label                       | norefresh | transpose | molSpreadSheetData
+        "no refresh your transpose" | null      | null      | null
+        "refresh only"              | "true"    | null      | null
+        "transpose only"            | null      | "true"    | null
+        "refresh and transpose"     | "true"    | "true"    | null
+        "no refresh your transpose" | null      | null      | new MolSpreadSheetData()
+        "refresh only"              | "true"    | null      | new MolSpreadSheetData()
+        "transpose only"            | null      | "true"    | new MolSpreadSheetData()
+        "refresh and transpose"     | "true"    | "true"    | new MolSpreadSheetData()
     }
-
 
 //    void "test no flash"() {
 //        given:
@@ -97,7 +96,6 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 //        then:
 //        assert response.status == 200
 //    }
-
 
 
     void "test Index"() {
@@ -150,6 +148,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.contentAsString.contains("molecular spreadsheet")
         assert response.status == 200
     }
+
     void "test molecularSpreadSheet with data - With Exception"() {
         when:
         controller.molecularSpreadSheet()
@@ -203,7 +202,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
     void "test showExperimentDetails() #label"() {
         when:
-        controller.showExperimentDetails(pid, cid)
+        controller.showExperimentDetails(pid, cid, transpose)
 
         then:
 
@@ -212,7 +211,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.status == expectedResponseStatus
 
         where:
-        label               | pid | cid | expectedView                           | expectedResponseStatus
-        'valid cid and pid' | 1   | 2   | '/molSpreadSheet/molecularSpreadSheet' | 200
+        label               | pid | cid | transpose | expectedView                           | expectedResponseStatus
+        'valid cid and pid' | 1   | 2   | true      | '/molSpreadSheet/molecularSpreadSheet' | 200
     }
 }

@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>Molecular spreadsheet</title>
+    <title>BioAssay Research Database: Molecular spreadsheet</title>
     <r:require modules="molecularSpreadSheet,promiscuity,compoundOptions"/>
 </head>
 

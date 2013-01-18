@@ -12,11 +12,13 @@ import geb.Module
 class MolSpreadsheetPage extends HomePage {
     static url = "molSpreadSheet/molecularSpreadSheet"
 
-    static at =  { title == "Molecular spreadsheet" }
+    static at =  {
+        title.contains("Molecular spreadsheet")
+    }
 
     static content = {
         hidePromiscuityScoresButton { $("input#showPromiscuityScores") }
-        molSpreadsheetRows(wait: true) { index ->
+        molSpreadsheetRows(wait: 10) { index ->
             moduleList MolSpreadsheetRow, $("table tbody tr", index)
         }
     }
@@ -24,7 +26,6 @@ class MolSpreadsheetPage extends HomePage {
 
 class MolSpreadsheetRow extends Module {
     static content = {
-//        cell { $("tr td.molSpreadsheet", it) }
-        cid { $("td", it)[1].text() }
+        cid { $("td a", it)[0].text() }
     }
 }
