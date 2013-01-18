@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.DataExportRestService
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
 class ResultDataUnitSpec extends Specification {
@@ -450,7 +454,7 @@ class ResultDataUnitSpec extends Specification {
 
     void validateRootElementActivityData(final String responseClass, final ActivityData activityData, boolean hasQualifier) {
         assert activityData.dictElemId
-        assert activityData.displayName
+        assert activityData.pubChemDisplayName
 
         assert activityData.qualifier == true == hasQualifier
         assert activityData.responseUnit
@@ -461,7 +465,7 @@ class ResultDataUnitSpec extends Specification {
 
     void validateRootElements(List<RootElement> rootElements) {
         for (RootElement rootElement : rootElements) {
-            assert rootElement.displayName
+            assert rootElement.pubChemDisplayName
         }
     }
 
@@ -469,17 +473,34 @@ class ResultDataUnitSpec extends Specification {
         for (PriorityElement priorityElement : priorityElements) {
             assert priorityElement
             assert !priorityElement.primaryElements
-            assert priorityElement.displayName
+            assert priorityElement.pubChemDisplayName
             if (hasChildElement) {
                 assert priorityElement.childElements
             }
         }
     }
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock()
+        dataExportRestService =  Mock(DataExportRestService)
+    }
 
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
     void "test all JSON #label"() {
         when:
         ResultData resultJson = objectMapper.readValue(currentJSON, ResultData.class)
         then:
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+
         assert resultJson
         assert resultJson.responseClass
         assert resultJson.bardExptId

@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.DataExportRestService
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
-class PriotityElementUnitSpec extends Specification {
+class PriorityElementUnitSpec extends Specification {
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
 
@@ -147,12 +151,29 @@ class PriotityElementUnitSpec extends Specification {
     "displayName":"Average IC90","responseUnit":"um","value":"0.51"
    }
 '''
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock(GrailsWebApplicationContext)
+        dataExportRestService =  Mock(DataExportRestService)
+    }
 
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
 
     void "test all #label"() {
         when:
         PriorityElement priorityElement = objectMapper.readValue(currentJSON, PriorityElement.class)
         then:
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+
         assert priorityElement
         assert !priorityElement.primaryElements
 
@@ -177,7 +198,7 @@ class PriotityElementUnitSpec extends Specification {
 
             assert miscDataList
             for(ActivityData miscData in miscDataList){
-                assert miscData.displayName
+                assert miscData.pubChemDisplayName
                 assert miscData.value
             }
 
@@ -190,7 +211,7 @@ class PriotityElementUnitSpec extends Specification {
             assert childElements
             assert childElements.size() == 4
             for (ActivityData activityData : childElements) {
-                assert activityData.displayName
+                assert activityData.pubChemDisplayName
                 assert activityData.dictElemId
                 assert activityData.testConcentration
                 assert activityData.testConcentrationUnit
@@ -210,32 +231,5 @@ class PriotityElementUnitSpec extends Specification {
         "SP"                    | "SP"          | SP_bid_4567_aid_844255_single_point_with_no_element_nesting_available_JSON  | false           | false
         "SP_NO_NESTING"         | "SP"          | SP_bid_4020_aid_463170_simple_fold_change_average_with_element_nesting_JSON | true            | false
     }
-
-//    void "test result JSON"() {
-//        when:
-//        ResultJson resultJson = objectMapper.readValue(RESULT_JSON, ResultJson.class)
-//        then:
-//        assert resultJson.bardExptId == 883
-//        assert resultJson.responseClass == "CR_NO_SER"
-//        assert resultJson.sid == 4238174
-//        assert resultJson.cid == 3233285
-//
-//
-//        final List<PriorityElement> priorityElements = resultJson.priorityElements
-//        assert priorityElements
-//        assert priorityElements.size() == 1
-//        final PriorityElement priorityElement = priorityElements.get(0)
-//        assert priorityElement.dictElemId == 959
-//        assert priorityElement.displayName == "Qualified AC50"
-//        assert priorityElement.value == "1.98e-007"
-//
-//
-//        final List<RootElement> rootElements = resultJson.rootElements
-//        assert rootElements
-//
-//
-//    }
-
-
 }
 

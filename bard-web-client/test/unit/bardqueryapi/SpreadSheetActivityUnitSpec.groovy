@@ -35,7 +35,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
         List<String> resultTypeNames = []
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
@@ -47,7 +47,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(responseUnit: "uM")
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
         priorityElement.concentrationResponseSeries = concentrationResponseSeries
         List<String> resultTypeNames = []
         when:
@@ -59,7 +59,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement with repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
         List<String> resultTypeNames = ["columnName"]
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
@@ -70,7 +70,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement with non-repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName1")
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName1")
         List<String> resultTypeNames = ["columnName2"]
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)

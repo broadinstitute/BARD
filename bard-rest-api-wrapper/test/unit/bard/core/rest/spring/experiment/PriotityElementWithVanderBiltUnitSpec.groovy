@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.DataExportRestService
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
 class PriotityElementWithVanderBiltUnitSpec extends Specification {
@@ -906,7 +910,21 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
      ]
   }
 '''
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock()
+        dataExportRestService =  Mock(DataExportRestService)
+    }
 
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
     void assertActivityConcentration(final ActivityConcentration activityConcentration) {
         final ConcentrationResponseSeries concentrationResponseSeries = activityConcentration.concentrationResponseSeries
         assert concentrationResponseSeries
@@ -936,7 +954,7 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
     }
 
     void assertActivityData(final ActivityData activityData) {
-        assert activityData.displayName
+        assert activityData.pubChemDisplayName
         assert activityData.dictElemId
         assert activityData.value
     }
@@ -951,7 +969,10 @@ class PriotityElementWithVanderBiltUnitSpec extends Specification {
         when:
         PriorityElement priorityElement = objectMapper.readValue(VANDER_BILT_EXAMPLE_1, PriorityElement.class)
         then:
-        assert priorityElement.displayName == "AvgGluPotency"
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+
+        assert priorityElement.pubChemDisplayName == "AvgGluPotency"
         assert priorityElement.dictElemId == 961
         assert priorityElement.responseUnit == "um"
         assert priorityElement.testConcentrationUnit == "uM"

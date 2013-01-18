@@ -1,12 +1,20 @@
 package bard.core.rest.spring.experiment
 
+import bard.core.rest.spring.util.JsonUtil
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import bard.core.rest.spring.util.JsonUtil
-
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConcentrationResponseSeries extends JsonUtil {
+
+    @JsonIgnore
+    def ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
+    @JsonIgnore
+    def dataExportRestService = ctx.dataExportRestService
+
 
 
     @JsonProperty("responseUnit")
@@ -23,15 +31,16 @@ public class ConcentrationResponseSeries extends JsonUtil {
     private List<ActivityData> miscData = new ArrayList<ActivityData>();
 
 
-    public String getYAxisLabel(){
-        String label = null
+    public String getDictionaryLabel(){
         if(dictElemId){
-            label = CR_DICT_ID_TO_TERMS.get(dictElemId.intValue())
+           return dataExportRestService.findDictionaryElementLabelById(this.dictElemId)
         }
-        if(!label){
-            label = responseUnit
-        }
-        return label
+        return responseUnit
+
+    }
+    public String getYAxisLabel(){
+
+        return getDictionaryLabel()
     }
 
     @JsonProperty("responseUnit")
@@ -105,41 +114,4 @@ public class ConcentrationResponseSeries extends JsonUtil {
         return [activities: activities, concentrations: concentrations]
 
     }
-
-    public final static Map<Integer, String> CR_DICT_ID_TO_TERMS = [
-            982: "percent response",
-            986: "percent activity",
-            991: "percent G2-M arrested",
-            992: "percent viability",
-            994: "percent bound",
-            996: "percent activation",
-            998: "percent inhibition",
-            1004: "percent augmentation",
-            1005: "percent count",
-            1006: "percent current ",
-            1007: "percent displacement ",
-            1008: "percent efficacy ",
-            1009: "percent efflux ",
-            1010: "percent emax bottom ",
-            1011: "percent emax top ",
-            1012: "percent of control ",
-            1013: "percent survival ",
-            1014: "percent toxicity ",
-            1016: "percent effect",
-            1322: "percent cellular ATP content",
-            1324: "percent side scatter shift",
-            1330: "percent capsule formation",
-            1340: "blank percent cv",
-            1359: "percent area",
-            1361: "percent induction",
-            1415: "percent G1 arrested",
-            1416: "percent S arrested",
-            1417: "percent subG1 arrested",
-            1448: "control percent cv",
-            1483: "percent intensity",
-            1484: "percent cells",
-            1485: "percent increase",
-            1486: "percent remaining",
-            1487: "percent unblocked"
-    ]
 }

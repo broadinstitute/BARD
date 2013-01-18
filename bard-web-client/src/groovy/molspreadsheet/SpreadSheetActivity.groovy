@@ -56,21 +56,11 @@ class SpreadSheetActivity {
      */
     void extractExperimentalValuesFromAPriorityElement(final List<String> resultTypeNames, final PriorityElement priorityElement ) {
         this.priorityElementList << priorityElement
-        String columnHeaderName = priorityElement.displayName ?: priorityElement.concentrationResponseSeries?.responseUnit ?: ""
+        //TODO: Read from CAP
+        String columnHeaderName = priorityElement.getDictionaryLabel() ?: priorityElement.concentrationResponseSeries?.getDictionaryLabel() ?: ""
         if (!resultTypeNames.contains(columnHeaderName)) {
             resultTypeNames.add(columnHeaderName)
         }
     }
-
-
-
-
-//    void readOutToHillCurveValue(final List<String> resultTypeNames, final PriorityElement priorityElement ) {
-//        final HillCurveValue hillCurveValue = resultData.toHillCurveValue()
-//        if (!resultTypeNames.contains(hillCurveValue.id)) {
-//            resultTypeNames.add(hillCurveValue.id)
-//        }
-//        this.hillCurveValueList << hillCurveValue
-//    }
 
 }

@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.DataExportRestService
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
 class ConcentrationResponseSeriesUnitSpec extends Specification {
@@ -49,20 +53,37 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
     }
     '''
 
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock(GrailsWebApplicationContext)
+        dataExportRestService =  Mock(DataExportRestService)
+    }
 
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
 
     void "test JSON #label"() {
         when:
         ConcentrationResponseSeries concentrationResponseSeries = objectMapper.readValue(JSON_DATA, ConcentrationResponseSeries.class)
         final List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
         then:
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+
         assert concentrationResponsePoints
         assert concentrationResponsePoints.size() == 1
         final List<ActivityData> childElements = concentrationResponsePoints.get(0).childElements
         assert childElements
         assert childElements.size() == 1
         for(ActivityData childElement in childElements){
-            assert childElement.displayName
+            assert childElement.pubChemDisplayName
             assert childElement.dictElemId
             assert childElement.testConcentration
             assert childElement.testConcentrationUnit
@@ -72,7 +93,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         assert miscDataList
         assert miscDataList.size() == 5
         for(ActivityData activityData in miscDataList){
-            assert activityData.displayName
+            assert activityData.pubChemDisplayName
             assert activityData.value
         }
 
