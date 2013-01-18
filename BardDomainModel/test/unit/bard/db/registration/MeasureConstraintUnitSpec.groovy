@@ -21,7 +21,7 @@ import static test.TestUtils.createString
 @Unroll
 class MeasureConstraintUnitSpec extends Specification {
 
-    def domainInstance
+    Measure domainInstance
 
     @Before
     void doSetup() {
@@ -40,9 +40,9 @@ class MeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest  | valid | errorCode
-        'null not valid' | {null}          | false | 'nullable'
-        'valid assay'    | {Assay.build()} | true  | null
+        desc             | valueUnderTest    | valid | errorCode
+        'null not valid' | { null }          | false | 'nullable'
+        'valid assay'    | { Assay.build() } | true  | null
 
     }
 
@@ -58,9 +58,9 @@ class MeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest    | valid | errorCode
-        'null not valid'   | {null}            | false | 'nullable'
-        'valid resultType' | {Element.build()} | true  | null
+        desc               | valueUnderTest      | valid | errorCode
+        'null not valid'   | { null }            | false | 'nullable'
+        'valid resultType' | { Element.build() } | true  | null
 
     }
 
@@ -76,9 +76,9 @@ class MeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                  | valueUnderTest    | valid | errorCode
-        'null valid'          | {null}            | true  | null
-        'valid parentMeasure' | {Measure.build()} | true  | null
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid parentMeasure' | { Measure.build() } | true  | null
 
     }
 
@@ -94,9 +94,9 @@ class MeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc              | valueUnderTest    | valid | errorCode
-        'null valid'      | {null}            | true  | null
-        'valid entryUnit' | {Element.build()} | true  | null
+        desc              | valueUnderTest      | valid | errorCode
+        'null valid'      | { null }            | true  | null
+        'valid entryUnit' | { Element.build() } | true  | null
 
     }
 
@@ -112,9 +112,9 @@ class MeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                         | valueUnderTest    | valid | errorCode
-        'null valid'                 | {null}            | true  | null
-        'valid statsModifier' | {Element.build()} | true  | null
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid statsModifier' | { Element.build() } | true  | null
 
     }
 
@@ -169,5 +169,37 @@ class MeasureConstraintUnitSpec extends Specification {
         desc         | valueUnderTest | valid | errorCode
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
+    }
+
+    void "test displayLabel logic"() {
+        when:
+        domainInstance.resultType = Element.build(label: resultTypeLabel)
+        domainInstance.statsModifier = statsModifier.call()
+
+        then:
+        domainInstance.displayLabel == displayLabel
+
+        where:
+        desc                   | resultTypeLabel   | statsModifier                                  | displayLabel
+        'just resultTypeLabel' | 'resultTypeLabel' | { null }                                       | 'resultTypeLabel'
+        'both labels'          | 'resultTypeLabel' | { Element.build(label: 'statsModifierLabel') } | 'resultTypeLabel (statsModifierLabel)'
+
+    }
+
+    void "test getChildrenSorted by displayLabel case insensitive input:#input expected: #expected"() {
+        when:
+        for (String label in input) {
+            domainInstance.addToChildMeasures(Measure.build(resultType: Element.build(label: label),
+                    assay: domainInstance.assay))
+        }
+
+        then:
+        domainInstance.childrenMeasuresSorted*.displayLabel == expected
+
+        where:
+        input           | expected
+        ['b', 'a']      | ['a', 'b']
+        ['B', 'a']      | ['a', 'B']
+        ['c', 'B', 'a'] | ['a', 'B', 'c']
     }
 }

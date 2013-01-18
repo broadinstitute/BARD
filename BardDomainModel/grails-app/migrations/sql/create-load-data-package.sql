@@ -262,6 +262,34 @@ END reset_sequence;
                 MODIFIED_BY
             from data_mig.unit_conversion;
 
+            insert into bard_tree (          NODE_ID,
+                                             PARENT_NODE_ID,
+                                             ELEMENT_ID,
+                                             ELEMENT_STATUS,
+                                             LABEL,
+                                             IS_LEAF,
+                                             FULL_PATH,
+                                             DESCRIPTION,
+                                             ABBREVIATION,
+                                             SYNONYMS,
+                                             EXTERNAL_URL,
+                                             UNIT_ID
+            )
+              select
+                NODE_ID,
+                PARENT_NODE_ID,
+                ELEMENT_ID,
+                ELEMENT_STATUS,
+                LABEL,
+                IS_LEAF,
+                FULL_PATH,
+                DESCRIPTION,
+                ABBREVIATION,
+                SYNONYMS,
+                EXTERNAL_URL,
+                UNIT_ID
+              from data_mig.bard_tree d where not exists ( select 1 from bard_tree s where s.node_id = d.node_id);
+
             manage_ontology.make_trees;
             commit;
 
