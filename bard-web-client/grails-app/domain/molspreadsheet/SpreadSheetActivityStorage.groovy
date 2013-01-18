@@ -17,6 +17,8 @@ class SpreadSheetActivityStorage {
     List<Double> columnNames  = []
     Double potency
     String qualifier = ""
+    String responseUnit  = ''
+
 
     static constraints = {
         eid(nullable: true)
@@ -50,6 +52,7 @@ class SpreadSheetActivityStorage {
         this.activityOutcome = spreadSheetActivity.activityOutcome
         this.potency = spreadSheetActivity.potency
     }
+
     /**
      *
      * @param spreadSheetActivityStorage
@@ -61,6 +64,7 @@ class SpreadSheetActivityStorage {
         this.sid =  spreadSheetActivityStorage.sid
         this.activityOutcome =  spreadSheetActivityStorage.activityOutcome
         this.potency =  spreadSheetActivityStorage.potency
+        this.responseUnit = spreadSheetActivityStorage.responseUnit
         if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())  {
             HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]
             hillCurveValueHolder.qualifier =  spreadSheetActivityStorage.qualifier
@@ -68,6 +72,18 @@ class SpreadSheetActivityStorage {
         }
         if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
             this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
+    }
+
+
+    String printUnits () {
+        String returnValue
+        if (responseUnit == null)
+            returnValue = ''
+        else if (responseUnit == 'percent')
+            returnValue = '%'
+        else
+            returnValue = responseUnit.toString()
+        returnValue
     }
 
 /**

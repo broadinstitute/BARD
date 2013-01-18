@@ -94,6 +94,7 @@ class MolSpreadSheetCell {
                 activityOutcome: spreadSheetActivity.activityOutcome)
         int counter = 0
         for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
+            this.spreadSheetActivityStorage.responseUnit = priorityElement.responseUnit
             if (priorityElement.value == "") {       // does this ever happen
                 activity = MolSpreadSheetCellActivityOutcome.Unspecified
                 intInternalValue = 0

@@ -47,7 +47,7 @@ class SpreadsheetElementsTagLib {
                                data-original-title="${hillCurveValueHolder.identifier}"
                                data-html="true"
                                data-trigger="hover">
-                          <FONT COLOR="${molSpreadSheetCellActivityOutcome.color}">${hillCurveValueHolder.toString()}</FONT></div>"""
+                          <FONT COLOR="${molSpreadSheetCellActivityOutcome.color}"><nobr>${hillCurveValueHolder.toString()} ${attrs.spreadSheetActivityStorage.printUnits()}</nobr></FONT></div>"""
             }
             out << """</p>"""
             if (hillCurveValueHolder?.conc?.size() > 1) {
