@@ -53,7 +53,7 @@
 
                     <div id="target-summary-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../summary/show" model="['summary': assayInstance]"/>
+                            <g:render template="showSummary" model="['assay': assayInstance]"/>
                         </div>
                     </div>
                 </div>

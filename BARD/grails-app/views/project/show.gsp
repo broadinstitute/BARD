@@ -60,7 +60,7 @@
 
                     <div id="target-summary-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../summary/show" model="['summary': instance]"/>
+                            <g:render template="showSummary" model="['project': instance]"/>
                         </div>
                     </div>
                 </div>

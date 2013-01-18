@@ -82,13 +82,6 @@ class Assay extends AbstractContextOwner {
     String getName() {
         this.assayName
     }
-    /**
-     * duck typing to look like project for summary/_show template
-     */
-    String getDescription() {
-        this.assayName
-    }
-
 
     List<AssayContext> getContexts() {
         this.assayContexts
