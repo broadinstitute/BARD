@@ -37,7 +37,7 @@ class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
         then: "The Molecular Spreadsheet should not appear -- instead it should request that the user enter a compound"
         at MolSpreadsheetPage
         waitFor(10, 0.5){ $("div#molecularSpreadSheet") }
-        waitFor(3, 0.5){ $("div.alert") }
+        waitFor(10, 0.5){ $("div.alert") }
         assert checkFor($("div.alert"), "Cannot display molecular spreadsheet without at least one compound")
     }
 
