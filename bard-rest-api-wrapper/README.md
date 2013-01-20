@@ -17,7 +17,7 @@ dataexport.apikey=YOUR_DATA_EXPORT_API_KEY
 dataexport.dictionary.accept.type= "application/vnd.bard.cap+xml;type=dictionary"
 dataexport.dictionary.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
 ```
-For example on QA it is //"https://bard-qa.broadinstitute.org/dataExport/api/dictionary/element/"
+For example on QA it is //"https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
 Replace the variables with the appropriate values
 
 Open a grails command window into this directory and run:
