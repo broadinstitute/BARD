@@ -100,20 +100,26 @@ public class ResultData extends JsonUtil {
         }
         return ""
     }
+    public boolean isMapped(){
+        return getResponseClassEnum().isMapped()
+    }
 }
 enum ResponseClassEnum {
-    SP("Single Point"),
-    CR_SER("Concentration Response"),
-    CR_NO_SER("Probable Concentration Response but no Series"),
-    UNCLASS("Unclassified"),
-    MULTCONC("Multiple Test Concentrations")
+    SP("Single Point",true),
+    CR_SER("Concentration Response",true),
+    CR_NO_SER("Probable Concentration Response but no Series",false),
+    UNCLASS("Unclassified",false),
+    MULTCONC("Multiple Test Concentrations",false)
 
     final String description
-
-    ResponseClassEnum(String description) {
+    final boolean isMapped
+    ResponseClassEnum(String description, boolean isMapped) {
         this.description = description
+        this.isMapped = isMapped
     }
-
+    boolean isMapped(){
+        return this.isMapped
+    }
     static ResponseClassEnum toEnum(String representation){
        return ResponseClassEnum.valueOf(representation)
     }
