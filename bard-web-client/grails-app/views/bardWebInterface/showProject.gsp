@@ -73,7 +73,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3 bs-docs-sidebar">
-                    <ul id="twitterBootstrapAffixNavBar" class="nav nav-list bs-docs-sidenav" data-spy="affix">
+                    <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar" data-spy="affix">
                         <li><a href="#annotations-info"><i
                                 class="icon-chevron-right"></i>Annotations</a></li>
                         <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
