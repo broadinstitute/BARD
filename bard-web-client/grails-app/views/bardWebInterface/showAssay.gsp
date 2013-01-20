@@ -3,23 +3,8 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <r:require modules="showProjectAssay"/>
+    <r:require modules="showProjectAssay, twitterBootstrapAffix"/>
     <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
-    <r:script>
-        $(document).ready(function () {
-            $('#showAssayNavBar').affix({
-                offset:$('#showAssayNavBar').position()
-            });
-        });
-    </r:script>
-    <style>
-    .affix {
-        position: fixed;
-        top: 10px;
-        height:100%;
-        overflow:auto
-    }
-    </style>
 </head>
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -62,7 +47,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3 bs-docs-sidebar">
-            <ul id="showAssayNavBar" class="nav nav-list bs-docs-sidenav">
+            <ul id="twitterBootstrapAffixNavBar" class="nav nav-list bs-docs-sidenav">
                 <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
                 <g:if test="${assayAdapter.targets}">
                     <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets</a></li>
