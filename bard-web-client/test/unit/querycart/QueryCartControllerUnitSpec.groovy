@@ -10,6 +10,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import bardqueryapi.InetAddressUtil
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(QueryCartController)
@@ -26,6 +27,8 @@ class QueryCartControllerUnitSpec extends Specification {
     static final String MOCK_DETAILS_CONTENT = 'mock summary content'
 
     void setup() {
+        controller.metaClass.mixin([InetAddressUtil])
+
         this.shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
         this.queryCartService = Mock(QueryCartService)

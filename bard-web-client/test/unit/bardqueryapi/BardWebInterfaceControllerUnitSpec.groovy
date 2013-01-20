@@ -50,7 +50,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     @Shared String EMPTY_STRING = ''
 
     void setup() {
-        controller.metaClass.mixin(SearchHelper)
+        controller.metaClass.mixin([SearchHelper,InetAddressUtil])
+
         queryService = Mock(QueryService)
         molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.queryService = this.queryService

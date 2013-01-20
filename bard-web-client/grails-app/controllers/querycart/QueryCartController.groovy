@@ -3,8 +3,10 @@ package querycart
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import bardqueryapi.InetAddressUtil
 
 @Secured(['isFullyAuthenticated()'])
+@Mixin(InetAddressUtil)
 class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
@@ -126,7 +128,8 @@ class QueryCartController {
             }
         }
         catch (IllegalArgumentException e) {
-            log.error("Invalid QueryItemType ${params.type}", e)
+            final String errorMessage = "Invalid QueryItemType ${params.type}. IP: " + getAddressFromRequest()
+            log.error(errorMessage, e)
             errorResponse.status = 400
             errorResponse.text = "Invalid QueryItemType [${params.type}] passed as params.type"
         }
@@ -143,7 +146,7 @@ class QueryCartController {
             }
         }
         catch (NumberFormatException e) {
-            log.error("Invalid ID ${params.id}", e)
+            log.error("Invalid ID ${params.id}. IP: " + getAddressFromRequest(), e)
             errorResponse.status = 400
             errorResponse.text = "Invalid ID [${params.id}] passed as params.id"
         }
