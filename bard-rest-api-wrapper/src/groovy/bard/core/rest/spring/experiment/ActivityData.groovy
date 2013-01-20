@@ -55,7 +55,7 @@ public class ActivityData extends JsonUtil {
         //look up the element in the CAP
         String displayName = getDictionaryLabel()
         final StringBuilder stringBuilder = new StringBuilder()
-        if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName) {
+        if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName && "PubChem activity score" != displayName) {
             stringBuilder.append(displayName ? displayName + " : " : '')
 
             stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");
