@@ -23,6 +23,7 @@ import org.springframework.web.client.HttpClientErrorException
  * To change this template use File | Settings | File Templates.
  */
 @Mixin(SearchHelper)
+@Mixin(InetAddressUtil)
 @Secured(['isFullyAuthenticated()'])
 class BardWebInterfaceController {
     def shoppingCartService
@@ -88,7 +89,8 @@ class BardWebInterfaceController {
         catch (Exception ee) {
 
             String message = "Problem finding Experiment ${id}"
-            log.error(ee)
+            log.error(message + ". IP " + getAddressFromRequest(), ee)
+
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "${message}")
         }
@@ -107,7 +109,8 @@ class BardWebInterfaceController {
                 render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
             }
             else { //status code of NOT OK returned. Usually CID has no promiscuity score
-                log.error(results.message)
+                log.error(results.message + ". IP " + getAddressFromRequest())
+
                 return response.sendError(results.status,
                         "${results.message}")
             }
@@ -117,7 +120,8 @@ class BardWebInterfaceController {
 
         } catch (Exception ee) { //error is thrown
             String errorMessage = "A server side error occurred and we could not retrieve a promiscuity score for ${cid}"
-            log.error(ee)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), ee)
+
 
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "${errorMessage}")
@@ -142,7 +146,7 @@ class BardWebInterfaceController {
                 final String searchTypeString = searchStringSplit[0]
                 final String ids = searchStringSplit[1]
                 handleIdSearchInput(searchTypeString, ids, "CID", "Input String start with CID:", "Please enter CIDs after the string CID:")
-                 //assign the list of ids only to the command object
+                //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
 
@@ -171,7 +175,8 @@ class BardWebInterfaceController {
             handleClientInputErrors(httpClientErrorException, message)
         }
         catch (Exception exp) {
-            log.error(exp)
+            log.error("IP " + getAddressFromRequest(), exp)
+
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Compound search has encountered an Internal Error. Please try again")
         }
@@ -214,7 +219,8 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "Error searching for assays by IDs"
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
+
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "${errorMessage}")
         }
@@ -257,7 +263,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = 'Error while searching project by ids : ' + searchCommand.searchString
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     "${errorMessage}")
         }
@@ -292,7 +298,7 @@ class BardWebInterfaceController {
         catch (Exception exp) {
 
             final String errorMessage = "Structure search has encountered an error:\n${exp.message}"
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     errorMessage)
         }
@@ -320,7 +326,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "Show compound page has encountered an error while trying to fetch SIDs:\n${exp.message} "
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     errorMessage)
         }
@@ -353,7 +359,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "Show compound page has encountered an error:\n${exp.message}"
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     errorMessage)
         }
@@ -388,7 +394,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
         }
 
@@ -418,7 +424,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "Search For Project By Id ${projectId}:\n${exp.message}"
-            log.error(exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(), errorMessage)
         }
 
@@ -463,7 +469,7 @@ class BardWebInterfaceController {
         }
         catch (Exception exp) {
             final String errorMessage = "AutoComplete encoutered an error :\n${exp.message}"
-            log.error(errorMessage, exp)
+            log.error(errorMessage + ". IP " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
                     errorMessage)
         }
@@ -485,6 +491,7 @@ class BardWebInterfaceController {
  * We would use this helper class as Mixin for
  * the RestController
  */
+@Mixin(InetAddressUtil)
 class SearchHelper {
     void handleIdSearchInput(String searchTypeString, String ids, String prefix, String messageForPrefix, String messageForIds) {
         if (!prefix.equals(searchTypeString.trim().toUpperCase())) {
@@ -494,9 +501,6 @@ class SearchHelper {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, messageForIds)
         }
     }
-
-//    org.springframework.context.ApplicationContext ctx = org.codehaus.groovy.grails.web.context.ServletContextHolder.servletContext.getAttribute(org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes.APPLICATION_CONTEXT);
-//    MobileService mobileService = ctx.getBean('mobileService')
 
     Map handleStructureSearch(final bardqueryapi.IQueryService queryService, final SearchCommand searchCommand) {
         final Map structureSearchResultsMap = [:]
@@ -513,8 +517,6 @@ class SearchHelper {
 
             final String searchTypeString = searchStringSplit[0]
             final String inputAfterColon = searchStringSplit[1]
-            //TODO: validate that prefix is a structure search type
-            //TODO: validate that postfix is not the empty string
             //if smiles is a number then assume that is is a CID
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
@@ -565,7 +567,7 @@ class SearchHelper {
             handleClientInputErrors(httpClientErrorException, message)
         }
         catch (Exception exp) {
-            log.error("Error performing assay search", exp)
+            log.error("Error performing assay search. IP: " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Assay search has encountered an error:\n${exp.message}")
         }
@@ -602,7 +604,7 @@ class SearchHelper {
             handleClientInputErrors(httpClientErrorException, message)
         }
         catch (Exception exp) {
-            log.error("Error performing compound search", exp)
+            log.error("Error performing compound search. IP: " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "Compound search has encountered an error:\n${exp.message}")
         }
@@ -635,7 +637,7 @@ class SearchHelper {
             handleClientInputErrors(httpClientErrorException, "Could not find Project with given search String ${searchCommand.searchString}")
         }
         catch (Exception exp) {
-            log.error(exp)
+            log.error("Error performing project search. IP: " + getAddressFromRequest(), exp)
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "ProjectSearchResult search has encountered an error:\n${exp.message}")
         }
@@ -643,21 +645,18 @@ class SearchHelper {
 
     protected void handleClientInputErrors(HttpClientErrorException httpClientErrorException, String message) {
         if (httpClientErrorException.statusCode == HttpStatus.NOT_FOUND) {
-            log.warn(httpClientErrorException)
-            response.sendError(httpClientErrorException.statusCode.value(),
-                    "${message}")
-
+            log.warn(message + ". IP " + getAddressFromRequest(), httpClientErrorException)
         } else {
-            log.error(message)
-            response.sendError(httpClientErrorException.statusCode.value(),
-                    "${message}")
-
+            log.error(message + ". IP " + getAddressFromRequest(), httpClientErrorException)
         }
+        response.sendError(httpClientErrorException.statusCode.value(),
+                "${message}")
     }
 
     protected boolean isBadRequests(def input, String message) {
         if (!input) {//this is a bad request
-            log.error(message)
+            log.error(message + ". IP " + getAddressFromRequest())
+
             response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "${message}")
             return true
