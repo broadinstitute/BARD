@@ -6,14 +6,17 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import bard.core.rest.spring.util.DictionaryElement
+import bard.rest.api.wrapper.Dummy
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConcentrationResponseSeries extends JsonUtil {
 
-    @JsonIgnore
-    def ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-    @JsonIgnore
-    def dataExportRestService = ctx.dataExportRestService
+   @JsonIgnore
+   Dummy dummy = new Dummy()
+//    def ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
+//    @JsonIgnore
+//    def dataExportRestService = ctx.dataExportRestService
 
 
 
@@ -31,14 +34,22 @@ public class ConcentrationResponseSeries extends JsonUtil {
     private List<ActivityData> miscData = new ArrayList<ActivityData>();
 
 
-    public String getDictionaryLabel(){
-        if(dictElemId){
-           return dataExportRestService.findDictionaryElementLabelById(this.dictElemId)
+    public String getDictionaryLabel() {
+        if (dictElemId) {
+
+            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            String label = null
+            if(dictionaryElement){
+              label = dictionaryElement.label
+            }
+            if (label) {
+                return label
+            }
         }
         return responseUnit
-
     }
-    public String getYAxisLabel(){
+
+    public String getYAxisLabel() {
 
         return getDictionaryLabel()
     }

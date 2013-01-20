@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.util.DictionaryElement
+import bard.rest.api.wrapper.Dummy
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityData extends JsonUtil {
@@ -25,17 +27,27 @@ public class ActivityData extends JsonUtil {
     @JsonProperty("qualifierValue")
     private String qualifier;
     @JsonIgnore
-    GrailsWebApplicationContext ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-    @JsonIgnore
-    def dataExportRestService = ctx.dataExportRestService
+    Dummy dummy = new Dummy()
+//    @JsonIgnore
+//    GrailsWebApplicationContext ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
+//    @JsonIgnore
+//    def dataExportRestService = ctx.dataExportRestService
 
-    public String getDictionaryLabel(){
-        if(dictElemId){
-            return dataExportRestService.findDictionaryElementLabelById(this.dictElemId)
+    public String getDictionaryLabel() {
+        if (dictElemId) {
+            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            String label = null
+            if (dictionaryElement) {
+                return dictionaryElement.label
+            }
+            if (label) {
+                return label
+            }
         }
         return pubChemDisplayName
 
     }
+
     public String toDisplay() {
         //look up the element in the CAP
         String displayName = getDictionaryLabel()

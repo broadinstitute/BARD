@@ -15,9 +15,7 @@ import javax.xml.bind.annotation.XmlAttribute
 //<label>assay protocol</label>
 //    <link rel='edit' href='https://bard-qa.broadinstitute.org/dataExport/api/dictionary/element/3' type='application/vnd.bard.cap+xml;type=element' />
 //</element>
-
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name = "element")
+@XmlAccessorType( XmlAccessType.NONE )
 public class DictionaryElement {
     @XmlAttribute
     Long elementId
@@ -25,6 +23,10 @@ public class DictionaryElement {
     String label
     @XmlAttribute
     String elementStatus
+
+    @XmlElement
+    String description
+
 
     public DictionaryElement() {
 

@@ -13,8 +13,9 @@ beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
     final String exportApiKey = grailsApplication.config.dataexport.apikey
-    final String elementAcceptType = grailsApplication.config.dataexport.element.accept.type
-    final String exportElementBaseURL = grailsApplication.config.dataexport.element.url
+    final String exportAcceptType = grailsApplication.config.dataexport.dictionary.accept.type
+    final String exportDictionaryURL = grailsApplication.config.dataexport.dictionary.url
+
 
 
     restTemplate(RestTemplate)
@@ -27,13 +28,7 @@ beans = {
         executorService = Executors.newCachedThreadPool()
         loggerService = ref('loggerService')
     }
-    dataExportRestService(DataExportRestService) {
-        dataExportApiKey = exportApiKey
-        dictionaryElementAcceptType = elementAcceptType
-        dataExportElementBaseURL = exportElementBaseURL
-        restTemplate = ref('restTemplate')
-        loggerService = ref('loggerService')
-    }
+
     experimentRestService(ExperimentRestService) {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
@@ -51,6 +46,14 @@ beans = {
     }
     substanceRestService(SubstanceRestService) {
         baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+
+    dataExportRestService(DataExportRestService) {
+        dataExportApiKey = exportApiKey
+        dictionaryAcceptType = exportAcceptType
+        dataExportDictionaryURL = exportDictionaryURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
