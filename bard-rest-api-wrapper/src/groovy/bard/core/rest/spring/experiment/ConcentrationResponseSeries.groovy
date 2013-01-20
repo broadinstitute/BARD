@@ -14,10 +14,6 @@ public class ConcentrationResponseSeries extends JsonUtil {
 
    @JsonIgnore
    Dummy dummy = new Dummy()
-//    def ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-//    @JsonIgnore
-//    def dataExportRestService = ctx.dataExportRestService
-
 
 
     @JsonProperty("responseUnit")
@@ -48,7 +44,15 @@ public class ConcentrationResponseSeries extends JsonUtil {
         }
         return responseUnit
     }
-
+    public String getDictionaryDescription() {
+        if (dictElemId) {
+            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            if (dictionaryElement) {
+                return dictionaryElement.description
+            }
+        }
+        return responseUnit
+    }
     public String getYAxisLabel() {
 
         return getDictionaryLabel()
