@@ -47,7 +47,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3 bs-docs-sidebar">
-            <ul id="twitterBootstrapAffixNavBar" class="nav nav-list bs-docs-sidenav">
+            <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
                 <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
                 <g:if test="${assayAdapter.targets}">
                     <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets</a></li>
