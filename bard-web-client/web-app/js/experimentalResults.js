@@ -3,6 +3,7 @@ var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebclient/static/
 
 
 $(document).ready(function () {
+    $("[rel=tooltip]").tooltip();
 //    var url = $('#experimentalResults').attr('href');
 //    populatePage(url);
     // hang on popstate event triggered by pressing back/forward button in browser
