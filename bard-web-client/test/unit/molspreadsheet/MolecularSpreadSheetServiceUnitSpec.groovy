@@ -62,10 +62,12 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         when:
-        molSpreadSheetData.mssHeaders << ['a']
-        molSpreadSheetData.mssHeaders << ['b']
-        molSpreadSheetData.mssHeaders << ['c']
-        molSpreadSheetData.mssHeaders << ['e', 'f', 'g']
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'c')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'e'),
+                new MolSpreadSheetColSubHeader(columnTitle:'f'),
+                new MolSpreadSheetColSubHeader(columnTitle:'g')])
         MolSpreadSheetCell molSpreadSheetCell0 = new MolSpreadSheetCell("2", MolSpreadSheetCellType.image)
         molSpreadSheetCell0.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
         MolSpreadSheetCell molSpreadSheetCell1 = new MolSpreadSheetCell("2", MolSpreadSheetCellType.string)
@@ -98,9 +100,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
 
         when:
-        molSpreadSheetData.mssHeaders << ['a']
-        molSpreadSheetData.mssHeaders << ['b']
-        molSpreadSheetData.mssHeaders << ['c']
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'c')])
         molSpreadSheetData.mssData = [:]
         molSpreadSheetData.rowPointer[0L] = 0
         LinkedHashMap<String, Object> dataForExporting = service.prepareForExport(molSpreadSheetData)
@@ -159,11 +161,13 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test prepareMapOfColumnsToAssay "() {
         when:
         final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders << ['a']
-        molSpreadSheetData.mssHeaders << ['b']
-        molSpreadSheetData.mssHeaders << ['c']
-        molSpreadSheetData.mssHeaders << ['d']
-        molSpreadSheetData.mssHeaders << ['e', 'f', 'g']
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'c')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'d')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'e'),
+                new MolSpreadSheetColSubHeader(columnTitle:'f'),
+                new MolSpreadSheetColSubHeader(columnTitle:'g')])
         service.prepareMapOfColumnsToAssay(molSpreadSheetData)
         molSpreadSheetData.experimentNameList << 'a'
 
@@ -271,11 +275,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
 
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 4
-        assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("Active vs Tested across all Assay Definitions")
+        assert molSpreadSheetData.getColumns().size() == 4
+        assert molSpreadSheetData.getColumns().contains("Struct")
+        assert molSpreadSheetData.getColumns().contains("CID")
+        assert molSpreadSheetData.getColumns().contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.getColumns().contains("Active vs Tested across all Assay Definitions")
     }
 
 
@@ -290,11 +294,11 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 4
-        assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("Active vs Tested across all Assay Definitions")
+        assert molSpreadSheetData.getColumnCount() == 4
+        assert molSpreadSheetData.getColumns().contains("Struct")
+        assert molSpreadSheetData.getColumns().contains("CID")
+        assert molSpreadSheetData.getColumns().contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.getColumns().contains("Active vs Tested across all Assay Definitions")
     }
 
 
@@ -308,15 +312,19 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
         when: "we want to pull out the active values"
         service.populateMolSpreadSheetColumnMetadata(molSpreadSheetData, experimentList)
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList << new MolSpreadSheetColSubHeader(columnTitle : 'a')
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList << new MolSpreadSheetColSubHeader(columnTitle : 'b')
+        molSpreadSheetData.mssHeaders[6].molSpreadSheetColSubHeaderList << new MolSpreadSheetColSubHeader(columnTitle : 'c' )
+        molSpreadSheetData.mssHeaders[6].molSpreadSheetColSubHeaderList << new MolSpreadSheetColSubHeader(columnTitle : 'd' )
 
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
 
-        assert molSpreadSheetData.mssHeaders.size() == 7
-        assert molSpreadSheetData.mssHeaders.flatten().contains("Struct")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("CID")
-        assert molSpreadSheetData.mssHeaders.flatten().contains("UNM Promiscuity Analysis")
+        assert molSpreadSheetData.getColumnCount() == 8
+        assert molSpreadSheetData.getColumns().contains("Struct")
+        assert molSpreadSheetData.getColumns().contains("CID")
+        assert molSpreadSheetData.getColumns().contains("UNM Promiscuity Analysis")
     }
 
 
@@ -338,7 +346,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 0
+        assert molSpreadSheetData.getColumnCount() == 0
     }
 
 
@@ -355,7 +363,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "prove that the active values are available"
         assertNotNull molSpreadSheetData
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssHeaders.flatten().size() == 0
+        assert molSpreadSheetData.getColumnCount() == 0
     }
 
 

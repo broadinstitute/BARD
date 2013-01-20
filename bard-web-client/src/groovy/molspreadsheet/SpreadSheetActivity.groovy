@@ -21,7 +21,7 @@ class SpreadSheetActivity {
     List<ActivityConcentration>  activityConcentrationList = []
     List<PriorityElement>  priorityElementList = []
 
-    public void activityToSpreadSheetActivity(final Activity activity, final List<String> resultTypeNames) {
+    public void activityToSpreadSheetActivity(final Activity activity, final List <MolSpreadSheetColSubHeader> resultTypeNames) {    //List <MolSpreadSheetColSubHeader>
         this.cid = activity.cid
         this.eid = activity.eid
         this.sid = activity.sid
@@ -43,7 +43,7 @@ class SpreadSheetActivity {
         }
     }
 
-    void readOutsToHillCurveValues(final ResultData resultData, final List<String> resultTypeNames) {
+    void readOutsToHillCurveValues(final ResultData resultData, final List <MolSpreadSheetColSubHeader> resultTypeNames) {
         if (resultData){
             for (PriorityElement priorityElements in resultData.priorityElements){
                 extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElements)
@@ -54,11 +54,11 @@ class SpreadSheetActivity {
     /***
      * This is where we retrieve the curve
      */
-    void extractExperimentalValuesFromAPriorityElement(final List<String> resultTypeNames, final PriorityElement priorityElement ) {
+    void extractExperimentalValuesFromAPriorityElement(final List <MolSpreadSheetColSubHeader> resultTypeNames, final PriorityElement priorityElement ) {
         this.priorityElementList << priorityElement
         String columnHeaderName = priorityElement.displayName ?: priorityElement.concentrationResponseSeries?.responseUnit ?: ""
-        if (!resultTypeNames.contains(columnHeaderName)) {
-            resultTypeNames.add(columnHeaderName)
+        if (!resultTypeNames*.columnTitle.contains(columnHeaderName)) {
+            resultTypeNames << new MolSpreadSheetColSubHeader( columnTitle:  columnHeaderName)
         }
     }
 

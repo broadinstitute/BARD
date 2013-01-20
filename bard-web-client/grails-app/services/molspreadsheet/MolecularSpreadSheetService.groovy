@@ -215,8 +215,9 @@ class MolecularSpreadSheetService {
                     molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
                 }
-                if (molSpreadSheetData.mssHeaders[col].size()>0) {
-                    for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].size() - 1) {
+                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()>0){//} molSpreadSheetData.getSubColumns().size()>0) {
+//                    if (molSpreadSheetData.mssHeaders[col].columnTitle.size()>0) {
+                        for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size() - 1) {
                         String finalKey = "${row}_${(exptNumberColTracker++)}"
                         if (spreadSheetActivityStorage == null) {
                             if (molSpreadSheetCell != null) {
@@ -362,14 +363,14 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<ExperimentSearch> experimentList) {
 
         // now retrieve the header names from the assays
-        molSpreadSheetData.mssHeaders << ["Struct"]
-        molSpreadSheetData.mssHeaders << ["CID"]
-        molSpreadSheetData.mssHeaders << ["UNM Promiscuity Analysis"]
-        molSpreadSheetData.mssHeaders << ["Active vs Tested across all Assay Definitions"]
+        molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Struct')])
+        molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'CID')])
+        molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'UNM Promiscuity Analysis')])
+        molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Active vs Tested across all Assay Definitions')])
         for (ExperimentSearch experiment : experimentList) {
             molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
             molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}"
-            molSpreadSheetData.mssHeaders << []
+            molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[])
         }
     }
 
@@ -533,7 +534,8 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mapColumnsToAssay = [:]
         int columnIndex = 0
         int assayIndex = 0
-        for (List<String> listOfColumnSubheadings in molSpreadSheetData.mssHeaders) {
+        for (MolSpreadSheetColumnHeader molSpreadSheetColumnHeader  in molSpreadSheetData.mssHeaders) {
+            List<String> listOfColumnSubheadings  = molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList*.columnTitle
             if (columnIndex < START_DYNAMIC_COLUMNS) {
                 molSpreadSheetData.mapColumnsToAssay[columnIndex++] = ""
             } else {
@@ -555,7 +557,7 @@ class MolecularSpreadSheetService {
      */
     SpreadSheetActivity extractActivitiesFromExperiment(MolSpreadSheetData molSpreadSheetData, final Integer experimentCount, final Activity experimentValue) {
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        spreadSheetActivity.activityToSpreadSheetActivity(experimentValue, molSpreadSheetData.mssHeaders[START_DYNAMIC_COLUMNS + experimentCount])
+        spreadSheetActivity.activityToSpreadSheetActivity(experimentValue, molSpreadSheetData.getSubColumnList(START_DYNAMIC_COLUMNS + experimentCount))
         return spreadSheetActivity
     }
     /**
@@ -564,8 +566,8 @@ class MolecularSpreadSheetService {
      * @param spreadSheetActivity
      * @param activity
      */
-    void addCurrentActivityToSpreadSheet(List<String> columnNames, SpreadSheetActivity spreadSheetActivity, final Activity activity) {
-        spreadSheetActivity.activityToSpreadSheetActivity(activity, columnNames)
+    void addCurrentActivityToSpreadSheet(List <MolSpreadSheetColSubHeader> dummyColumnNames, SpreadSheetActivity spreadSheetActivity, final Activity activity) {
+        spreadSheetActivity.activityToSpreadSheetActivity(activity, dummyColumnNames)
     }
     /**
      *
@@ -573,7 +575,7 @@ class MolecularSpreadSheetService {
      * @return SpreadSheetActivity
      */
     SpreadSheetActivity extractActivitiesFromExperiment(final Activity activity) {
-        final List<String> dummyHeadersList = []
+        List <MolSpreadSheetColSubHeader> dummyHeadersList = []
         final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, activity)
         return spreadSheetActivity

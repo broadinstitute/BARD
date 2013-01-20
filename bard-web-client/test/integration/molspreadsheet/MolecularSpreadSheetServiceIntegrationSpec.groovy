@@ -1,14 +1,10 @@
 package molspreadsheet
 
-import bard.core.HillCurveValue
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentData
-import bard.core.rest.spring.experiment.ExperimentSearch
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
@@ -17,10 +13,9 @@ import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
 import spock.lang.Unroll
+import bard.core.rest.spring.experiment.*
 
 import static junit.framework.Assert.assertNotNull
-import bard.core.rest.spring.experiment.ResultData
-import bard.core.rest.spring.experiment.CurveFitParameters
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -204,7 +199,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         finalExperimentList.addAll(experiments)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         100.times {
-            molSpreadSheetData.mssHeaders << []
+            molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
 
         String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [4540 as Long, 4544 as Long, 4549 as Long, 4552 as Long])
@@ -239,7 +234,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         5.times {
-            molSpreadSheetData.mssHeaders << []
+            molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
         String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [1074927 as Long, 1074929 as Long, 1077518 as Long])
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
@@ -265,7 +260,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         5.times {
-            molSpreadSheetData.mssHeaders << []
+            molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
         //List<Long> compounds = []
         //compounds << 364 as Long
@@ -293,7 +288,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         4.times {
-            molSpreadSheetData.mssHeaders << []
+            molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
         String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [364 as Long])
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
@@ -625,7 +620,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void assertDataForSpreadSheetExist(MolSpreadSheetData molSpreadSheetData) {
         assert molSpreadSheetData != null
         for (int rowCnt in 0..(molSpreadSheetData.rowCount - 1)) {
-            for (int colCnt in 0..(molSpreadSheetData.mssHeaders.flatten().size() - 1)) {
+            for (int colCnt in 0..(molSpreadSheetData.getColumnCount() - 1)) {
                 assertNotNull(molSpreadSheetData.mssData["${rowCnt}_${colCnt}"])
             }
 
@@ -635,11 +630,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     MolSpreadSheetData generateFakeData() {
         molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders = [["Chemical Structure"],
-                ["CID"],
-                ["DNA polymerase (Q9Y253) ADID : 1 IC50"],
-                ["Serine-protein kinase (Q13315) ADID : 1 IC50"],
-                ["Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789"]]
+        molSpreadSheetData.mssHeaders = [new MolSpreadSheetColumnHeader (columnTitle: ["Chemical Structure"]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'CID')]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'DNA polymerase (Q9Y253) ADID : 1 IC50')]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Serine-protein kinase (Q13315) ADID : 1 IC50')]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789')]) ]
         molSpreadSheetData.mssData.put("0_0", new MolSpreadSheetCell("1", MolSpreadSheetCellType.string))
         molSpreadSheetData.mssData.put("0_1", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.identifier))
         molSpreadSheetData.mssData.put("0_2", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.greaterThanNumeric))

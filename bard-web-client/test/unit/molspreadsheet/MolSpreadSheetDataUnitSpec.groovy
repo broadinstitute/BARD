@@ -171,10 +171,13 @@ class MolSpreadSheetDataUnitSpec extends Specification {
     void "Test getSubColumns in typical case"() {
         given:
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders << []
-        molSpreadSheetData.mssHeaders << ['one']
-        molSpreadSheetData.mssHeaders << ['one', 'two']
-        molSpreadSheetData.mssHeaders << ['one', 'two', 'three']
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader ()
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'one')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'one'),
+                new MolSpreadSheetColSubHeader(columnTitle:'two')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'one'),
+                new MolSpreadSheetColSubHeader(columnTitle:'two'),
+                new MolSpreadSheetColSubHeader(columnTitle:'three')])
 
         when:
         List<String> numberOfSubColumns = molSpreadSheetData.getSubColumns(experimentCount)
@@ -309,9 +312,9 @@ class MolSpreadSheetDataUnitSpec extends Specification {
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         assertNotNull(molSpreadSheetData)
 
-        molSpreadSheetData.mssHeaders << ["col 1"]
-        molSpreadSheetData.mssHeaders << ["col 2"]
-        molSpreadSheetData.mssHeaders << ["col 3"]
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'col 1')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'col 2')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'col 3')])
         molSpreadSheetData.rowPointer[1 as Long] = 47
         molSpreadSheetData.rowPointer[2 as Long] = 48
 

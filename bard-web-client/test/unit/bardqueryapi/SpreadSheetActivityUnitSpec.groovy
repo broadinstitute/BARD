@@ -6,6 +6,7 @@ import molspreadsheet.SpreadSheetActivity
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.ConcentrationResponseSeries
+import molspreadsheet.MolSpreadSheetColSubHeader
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -25,23 +26,23 @@ class SpreadSheetActivityUnitSpec extends Specification {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         PriorityElement priorityElement = new  PriorityElement ()
-        List<String> resultTypeNames = []
+        List <MolSpreadSheetColSubHeader> resultTypeNames = []
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
         resultTypeNames.size() == 1
-        resultTypeNames[0] ==  ""
+        resultTypeNames[0].columnTitle ==  ""
     }
     void "test extractExperimentalValuesFromAPriorityElement"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
-        List<String> resultTypeNames = []
+        List <MolSpreadSheetColSubHeader> resultTypeNames = []
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
         resultTypeNames.size() == 1
-        resultTypeNames[0] ==  "columnName"
+        resultTypeNames[0].columnTitle ==  "columnName"
     }
     void "test extractExperimentalValuesFromAPriorityElement backup name"() {
         given:
@@ -49,35 +50,35 @@ class SpreadSheetActivityUnitSpec extends Specification {
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(responseUnit: "uM")
         PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
         priorityElement.concentrationResponseSeries = concentrationResponseSeries
-        List<String> resultTypeNames = []
+        List <MolSpreadSheetColSubHeader> resultTypeNames = []
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
         resultTypeNames.size() == 1
-        resultTypeNames[0] ==  "columnName"
+        resultTypeNames[0].columnTitle ==  "columnName"
     }
     void "test extractExperimentalValuesFromAPriorityElement with repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
-        List<String> resultTypeNames = ["columnName"]
+        PriorityElement priorityElement = new  PriorityElement (displayName: 'columnName')
+        List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName') ]
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
         resultTypeNames.size() == 1
-        resultTypeNames[0] ==  "columnName"
+        resultTypeNames[0].columnTitle == 'columnName'
     }
     void "test extractExperimentalValuesFromAPriorityElement with non-repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         PriorityElement priorityElement = new  PriorityElement (displayName: "columnName1")
-        List<String> resultTypeNames = ["columnName2"]
+        List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName2') ]
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
         resultTypeNames.size() == 2
-        resultTypeNames[0] == "columnName2"
-        resultTypeNames[1] == "columnName1"
+        resultTypeNames[0].columnTitle == "columnName2"
+        resultTypeNames[1].columnTitle == "columnName1"
     }
 
     void "test addPotency #label"() {

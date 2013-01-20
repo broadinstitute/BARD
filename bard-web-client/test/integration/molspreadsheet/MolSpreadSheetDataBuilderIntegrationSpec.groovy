@@ -369,11 +369,11 @@ class MolSpreadSheetDataBuilderIntegrationSpec extends IntegrationSpec {
 //
     MolSpreadSheetData generateFakeData() {
         molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders = ["Chemical Structure",
-                "CID",
-                "DNA polymerase (Q9Y253) ADID : 1 IC50",
-                "Serine-protein kinase (Q13315) ADID : 1 IC50",
-                "Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789"]
+        molSpreadSheetData.mssHeaders = [new MolSpreadSheetColumnHeader (columnTitle: ["Chemical Structure"]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'CID')]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'DNA polymerase (Q9Y253) ADID : 1 IC50')]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Serine-protein kinase (Q13315) ADID : 1 IC50')]) ,
+                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789')]) ]
         molSpreadSheetData.mssData.put("0_0", new MolSpreadSheetCell("1", MolSpreadSheetCellType.string))
         molSpreadSheetData.mssData.put("0_1", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.identifier))
         molSpreadSheetData.mssData.put("0_2", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.greaterThanNumeric))

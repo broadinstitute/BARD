@@ -8,7 +8,7 @@ class MolSpreadSheetData {
     Map<String, MolSpreadSheetCell> mssData = [:]
     Map<Long, Integer> rowPointer = [:]
     Map<Long, Integer> columnPointer = [:]
-    List<List<String>> mssHeaders = []
+    List<MolSpreadSheetColumnHeader> mssHeaders = []
     List<String> experimentNameList = []
     List<String> experimentFullNameList = []
     Map<Integer, String> mapColumnsToAssay = [:]
@@ -65,7 +65,7 @@ class MolSpreadSheetData {
      */
     int getColumnCount() {
         if (mssHeaders) {
-            return mssHeaders.flatten().size()
+            return getColumns().size()
         }
         return 0
 
@@ -82,17 +82,23 @@ class MolSpreadSheetData {
 
     List<String> getSubColumns(int experimentCount) {
         List<String> subColumns = []
-        if (experimentCount < this.mssHeaders.size())
-            subColumns = this.mssHeaders[experimentCount]
+        if (experimentCount < getSuperColumnCount())
+            subColumns = this.mssHeaders[experimentCount].molSpreadSheetColSubHeaderList*.columnTitle
+        subColumns
+    }
+
+    List <MolSpreadSheetColSubHeader> getSubColumnList(int experimentCount) {
+        List<String> subColumns = []
+        if (experimentCount < getSuperColumnCount())
+            subColumns = this.mssHeaders[experimentCount].molSpreadSheetColSubHeaderList
         subColumns
     }
 
 
 
-
     List<String> getColumns() {
         if (mssHeaders) {
-            return mssHeaders.flatten()
+            return mssHeaders*.molSpreadSheetColSubHeaderList*.columnTitle.flatten()
         }
         return []
 
@@ -137,7 +143,6 @@ class MolSpreadSheetData {
         mssData(nullable: false)
         rowPointer(nullable: false)
         columnPointer(nullable: false)
-        //mssHeaders (nullable: false)
         molSpreadsheetDerivedMethod(nullable: true)
     }
 
