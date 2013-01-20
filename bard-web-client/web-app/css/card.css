@@ -1,0 +1,120 @@
+.btn-tiny {
+  padding: 0px 0px;
+  line-height: 0px;
+}
+
+.drophover {
+    background-color: yellow;
+    border-color: red;
+}
+
+.table caption.drophoverCaption {
+    background-color: green;
+}
+
+div.drophoverCard{
+    border: 2px solid green;
+    padding-left: 5px;
+    padding-right: 10px;
+}
+div.drophoverCard table.table{
+    margin-right: 5px;
+}
+
+.roundedBorder {
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+table.table {
+    margin-bottom: 0px;
+    padding: 0px;
+}
+
+table.table th, table.table td {
+    margin-left: 1px;
+    margin-right: 1px;
+    line-height: 14px;
+    padding: 1px;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid #DDD;
+}
+table.table td.attributeLabel {
+    width: 35%;
+}
+table.table td.valuedLabel {
+    width: 63%;
+}
+table.table td.deleteItemButton {
+    width: 2%;
+}
+.card-table-container{
+    background-color: #ffffff;
+    //overflow-x:auto;
+}
+.card-group {
+    border: 1px solid #000000;
+    border-color: #a9a9a9;
+    margin: 5px;
+}
+
+
+.assay-protocol {
+    background-color: #ddeeff;
+}
+.assay-protocol--assay-component {
+    background-color: #ddeeff;
+}
+
+.assay-protocol--assay-design {
+    background-color: #d2e3f4;
+}
+
+.assay-protocol--assay-format {
+    background-color: #c8d9ea;
+}
+
+.assay-protocol--assay-readout {
+    background-color: #becfe0;
+}
+
+.assay-protocol--assay-type {
+    background-color: #b4c5d6;
+}
+
+.biology{
+    background-color: #90ee90;
+}
+
+.biology--biological-process {
+    background-color: #90ee90;
+}
+
+.biology--molecular-interaction {
+    background-color:  #a8eea8;
+}
+
+.biology--molecular-target {
+    background-color:  #c0eec0;
+}
+.project-management {
+    background-color: #EEEE99;
+}
+.project-management--experiment {
+    background-color: #EEEE99;
+}
+
+.project-management--experiment-panel-name {
+    background-color: #F6F6B7;
+}
+
+.project-management--project-information {
+    background-color: #FFFFD5;
+}
+.unknown-section {
+
+}

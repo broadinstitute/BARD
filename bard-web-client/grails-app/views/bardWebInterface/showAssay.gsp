@@ -66,15 +66,11 @@
                     <h1>Assay and Biology Details</h1>
                 </div>
 
-                <div>
-                    <dl>
-                        %{--TODO: See pivotal tracker story : https://www.pivotaltracker.com/story/show/38271045--}%
-                        %{--  <g:each in="${assayAdapter?.annotations}" var="annotation">--}%
-                        %{--<dt>${annotation.key}</dt>--}%
-                        %{--<dd>${annotation.display}</dd>--}%
-                        %{--</g:each>--}%
-                    </dl>
+                <div id="cardView" class="cardView" class="row-fluid">
+                    <g:render template="listContexts"
+                              model="[contextOwner: assayAdapter, contexts: contexts, subTemplate: 'show']"/>
                 </div>
+                <g:render template="showContextItems" model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
 
             </section>
             <g:if test="${assayAdapter.targets}">

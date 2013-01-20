@@ -20,6 +20,8 @@ modules = {
         //Polyfill for handling History
         resource url: "js/html5historyapi/history.js"
         resource url: "js/coreShowProjectAssay.js"
+        // Stylesheet for context card view
+        resource url: "css/card.css"
     }
     //Adding version allows clients to not cache javascript
     search {
