@@ -435,7 +435,7 @@ abstract class AbstractRestService {
 
             StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(url, HttpMethod.POST, entity, clazz);
-            this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; entity=${entity?.dump()}; class=${clazz}")
+            this.loggerService.stopStopWatch(sw, "method=postExchange(String url, HttpEntity<List> entity, Class clazz); url='${url}'; class=${clazz}")
             return result
         }
         catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
@@ -452,7 +452,7 @@ abstract class AbstractRestService {
         try {
             StopWatch sw = this.loggerService.startStopWatch()
             def result = restTemplate.exchange(uri, HttpMethod.GET, entity, clazz);
-            this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; entity=${entity?.dump()}; class=${clazz}")
+            this.loggerService.stopStopWatch(sw, "method=getExchange(URI uri, HttpEntity<List> entity, Class clazz); uri='${uri}'; class=${clazz}")
             return result
         } catch (HttpClientErrorException httpClientErrorException) { //throws a 4xx exception
             log.error(uri.toString(), httpClientErrorException)

@@ -29,7 +29,7 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-             <th><a href="#" rel="tooltip" data-placement="top" data-title="${experimentDataMap?.priorityDescription ?: ''}">${experimentDataMap?.priorityDisplay ?: ""}</a></th>
+             <th><a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${experimentDataMap?.priorityDescription ?: ''}">${experimentDataMap?.priorityDisplay ?: ""}</a></th>
             <th>Experiment Descriptors</th>
             <g:if test="${experimentDataMap?.hasChildElements}">
                 <th>Child Elements</th>
@@ -97,7 +97,7 @@
                             <thead><tr>
                                 <th>
 
-                                    <a href="#" rel="tooltip" data-placement="top" data-title="${concRespSeries?.dictionaryDescription ?: ''}">${concRespSeries.dictionaryLabel}</a>
+                                    <a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${concRespSeries?.dictionaryDescription ?: ''}">${concRespSeries.dictionaryLabel}</a>
                                 </th>
                                 <th>Concentration</th>
                             </tr>
@@ -143,7 +143,7 @@
                     </g:if>
                     <td>
                         <g:each in="${concRespSeries.miscData}" var="miscData">
-                            <a href="#" rel="tooltip" data-placement="top" data-title="${miscData?.dictionaryDescription ?: ''}">${miscData.toDisplay()}</a>
+                            <a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${miscData?.dictionaryDescription ?: ''}">${miscData.toDisplay()}</a>
                             <br/>
                         </g:each>
                     </td>

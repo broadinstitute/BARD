@@ -4,21 +4,18 @@ var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebclient/static/
 
 $(document).ready(function () {
     $("[rel=tooltip]").tooltip();
-//    var url = $('#experimentalResults').attr('href');
-//    populatePage(url);
     // hang on popstate event triggered by pressing back/forward button in browser
     window.onpopstate = function (event) {
         var returnLocation = history.location || document.location;
         event.preventDefault();	// prevent the default action behaviour to happen
         populatePage(returnLocation);
     };
-
-
-    //TODO: revisit
-    //Trigger this event just in case someone bookmarks any of the accordions
-    // $(window).trigger('hashchange');
-    // var returnLocation = history.location || document.location;
-    //locationHashChanged(returnLocation);
+    $(document).on("click", "a.desc_tip", function (event) {
+        return false;
+    });
+    $(document).on("mouseover", "a.desc_tip", function (event) {
+        $(this).tooltip();
+    });
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
     $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
