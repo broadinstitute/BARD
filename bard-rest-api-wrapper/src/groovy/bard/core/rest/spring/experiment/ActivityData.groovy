@@ -27,24 +27,27 @@ public class ActivityData extends JsonUtil {
     @JsonProperty("qualifierValue")
     private String qualifier;
     @JsonIgnore
-    Dummy dummy = new Dummy()
-//    @JsonIgnore
-//    GrailsWebApplicationContext ctx = ServletContextHolder.servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-//    @JsonIgnore
-//    def dataExportRestService = ctx.dataExportRestService
+    final Dummy dummy = new Dummy()
 
     public String getDictionaryLabel() {
         if (dictElemId) {
             final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
-            String label = null
             if (dictionaryElement) {
                 return dictionaryElement.label
             }
-            if (label) {
-                return label
-            }
         }
         return pubChemDisplayName
+
+    }
+
+    public String getDictionaryDescription() {
+        if (dictElemId) {
+            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            if (dictionaryElement) {
+                return dictionaryElement.description
+            }
+        }
+        return responseUnit
 
     }
 

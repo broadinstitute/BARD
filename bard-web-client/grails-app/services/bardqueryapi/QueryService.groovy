@@ -257,6 +257,7 @@ class QueryService implements IQueryService {
 
         }
         String priorityDisplay = ""
+        String priorityDescription = ""
         boolean hasChildElements = false
         for (Activity activity : activities) {
             final ResultData resultData = activity.resultData
@@ -268,6 +269,7 @@ class QueryService implements IQueryService {
                     if (!priorityDisplay) {
                         if (!priorityDisplay) {
                             priorityDisplay = priorityElement.getDictionaryLabel()
+                            priorityDescription = priorityElement.getDictionaryDescription()
                         }
 
                     }
@@ -284,7 +286,11 @@ class QueryService implements IQueryService {
                 break
             }
         }
-        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot, priorityDisplay: priorityDisplay, hasChildElements: hasChildElements]
+        return [total: totalNumberOfRecords, activities: activities,
+                experiment: experimentShow, hasPlot: hasPlot,
+                priorityDisplay: priorityDisplay,
+                priorityDescription:priorityDescription,
+                hasChildElements: hasChildElements]
     }
 
     /**
