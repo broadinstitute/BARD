@@ -26,24 +26,27 @@ public class DataExportRestService extends AbstractRestService {
      */
     public void loadDictionary() {
         CapDictionary capDictionary = getDictionary()
-        final List<DictionaryElement> dictionaryElements = capDictionary.elements
+        final List<DictionaryElement> dictionaryElements = capDictionary.elements ?: []
         for (DictionaryElement dictionaryElement : dictionaryElements) {
             dictionaryElementMap.put(dictionaryElement.elementId, dictionaryElement)
         }
     }
 
     private CapDictionary getDictionary() {
-        SSLTrustManager.enableSSL()//enable SSL so we can call the data export API
-        final HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.set("APIKEY", this.dataExportApiKey);
-        requestHeaders.set("Accept", this.dictionaryAcceptType)
-        final HttpEntity<CapDictionary> entity = new HttpEntity<CapDictionary>(requestHeaders);
-
-
-        final URL url = new URL(this.dataExportDictionaryURL)
-        final HttpEntity<CapDictionary> exchange = getExchange(url.toURI(), entity, CapDictionary.class) as HttpEntity<CapDictionary>
-        final CapDictionary capDictionary = exchange.getBody()
-        return capDictionary
+        try {
+            SSLTrustManager.enableSSL()//enable SSL so we can call the data export API
+            final HttpHeaders requestHeaders = new HttpHeaders();
+            requestHeaders.set("APIKEY", this.dataExportApiKey);
+            requestHeaders.set("Accept", this.dictionaryAcceptType)
+            final HttpEntity<CapDictionary> entity = new HttpEntity<CapDictionary>(requestHeaders);
+            final URL url = new URL(this.dataExportDictionaryURL)
+            final HttpEntity<CapDictionary> exchange = getExchange(url.toURI(), entity, CapDictionary.class) as HttpEntity<CapDictionary>
+            final CapDictionary capDictionary = exchange.getBody()
+            return capDictionary
+        } catch (Exception ee) {
+            log.error(ee) //log the error and then continue
+        }
+        return new CapDictionary()
 
     }
     /**

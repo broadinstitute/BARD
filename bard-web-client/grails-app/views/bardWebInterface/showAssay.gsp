@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <r:require modules="showProjectAssay, twitterBootstrapAffix"/>
+    <r:require modules="showProjectAssay,twitterBootstrapAffix" />
     <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
 </head>
 
@@ -56,24 +56,18 @@
                 <g:if test="${assayAdapter.documents}">
                     <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications</a></li>
                 </g:if>
-                <li><a href="#result-info"><i class="icon-chevron-right"></i>Experiments</a></li>
+                <li><a href="#result-info"><i class="icon-chevron-right"></i>Experiments (${experiments.size()})</a></li>
             </ul>
         </div>
 
         <div class="span9">
             <section id="assay-bio-info">
                 <div class="page-header">
-                    <h1>Assay and Biology Details</h1>
+                    <h3>Assay and Biology Details</h3>
                 </div>
 
-                <div>
-                    <dl>
-                        %{--TODO: See pivotal tracker story : https://www.pivotaltracker.com/story/show/38271045--}%
-                        %{--  <g:each in="${assayAdapter?.annotations}" var="annotation">--}%
-                        %{--<dt>${annotation.key}</dt>--}%
-                        %{--<dd>${annotation.display}</dd>--}%
-                        %{--</g:each>--}%
-                    </dl>
+                <div id="cardView" class="cardView" class="row-fluid">
+                    <g:render template="listContexts" model="[annotations: assayAdapter.annotations]"/>
                 </div>
 
             </section>
@@ -82,10 +76,10 @@
             </g:if>
             <section id="document-info">
                 <div class="page-header">
-                    <h1>Documents
+                    <h3>Documents
                         <small>(${[(assayAdapter.protocol ? 'protocol' : 'no protocol'),
                                 (assayAdapter.description ? 'description' : 'no description'),
-                                (assayAdapter.comments ? 'comments' : 'no comments')].join(', ')})</small></h1>
+                                (assayAdapter.comments ? 'comments' : 'no comments')].join(', ')})</small></h3>
                 </div>
 
                 <g:render template="assayDocuments" model="['assayAdapter': assayAdapter]"/>
@@ -97,7 +91,7 @@
             </g:if>
             <section id="result-info">
                 <div class="page-header">
-                    <h1>Experiments (${experiments.size()})</h1>
+                    <h3>Experiments (${experiments.size()})</h3>
                 </div>
                 <g:render template="experiments"
                           model="[experiments: experiments, showAssaySummary: false]"/>

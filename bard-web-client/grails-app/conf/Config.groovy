@@ -108,6 +108,7 @@ grails {
             basic.realmName = 'WEBQUERY'
             filterChain.chainMap = [
                     '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
             ]
 

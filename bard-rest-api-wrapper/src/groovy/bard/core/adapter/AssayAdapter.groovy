@@ -1,14 +1,11 @@
 package bard.core.adapter;
 
 
-import bard.core.rest.spring.assays.AbstractAssay
-import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.assays.AssayAnnotation
-import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
 import bard.core.interfaces.*
+import bard.core.rest.spring.assays.*
 
 public class AssayAdapter implements AssayAdapterInterface{
     final AbstractAssay assay

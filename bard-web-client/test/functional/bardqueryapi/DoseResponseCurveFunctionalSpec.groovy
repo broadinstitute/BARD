@@ -12,12 +12,20 @@ import static groovyx.net.http.ContentType.URLENC
 class DoseResponseCurveFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
+    String userName = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.username}
+    String password = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.password}
+
+
+    void authenticate(RESTClient http) {
+        http.auth.basic this.userName, this.password
+    }
 
     def "test Render a dose response Curve #label"() {
         given: "That we have successfully logged into the system and created a valid request"
         String requestUrl = "${baseUrl}/"
         RESTClient http = new RESTClient(requestUrl)
         def postBody = createPostBody()
+        authenticate(http)
 
 
         when: 'We send an HTTP POST request to the Dose response curve service'

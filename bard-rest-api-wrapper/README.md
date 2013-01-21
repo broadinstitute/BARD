@@ -14,10 +14,10 @@ ncgc.server.root.url = THE_URL_TO_THE_NCGC_SERVER //for example "http://bard.nih
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/" //URL to promiscuity plugin
 
 dataexport.apikey=YOUR_DATA_EXPORT_API_KEY
-dataexport.element.accept.type="application/vnd.bard.cap+xml;type=element"
-dataexport.element.url=THE_URL_TO_THE_ELEMENT_RESOURCE 
+dataexport.dictionary.accept.type= "application/vnd.bard.cap+xml;type=dictionary"
+dataexport.dictionary.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
 ```
-For example on QA it is //"https://bard-qa.broadinstitute.org/dataExport/api/dictionary/element/"
+For example on QA it is //"https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
 Replace the variables with the appropriate values
 
 Open a grails command window into this directory and run:

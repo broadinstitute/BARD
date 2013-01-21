@@ -5,15 +5,18 @@ import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import querycart.QueryCartService
 import javax.servlet.http.HttpServletResponse
+import bardqueryapi.InetAddressUtil
+import bardqueryapi.BardUtilitiesService
 
 @Secured(['isFullyAuthenticated()'])
+@Mixin(InetAddressUtil)
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService
     ExportService exportService
     QueryCartService queryCartService
     GrailsApplication grailsApplication  //inject GrailsApplication
     RetainSpreadsheetService retainSpreadsheetService
-
+    BardUtilitiesService bardUtilitiesService
     def index() {
         render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh] )
     }
@@ -69,7 +72,7 @@ class MolSpreadSheetController {
         } catch (Exception ee) {
             String errorMessage = "Could not generate SpreadSheet for current Query Cart Contents"
             flash.message = errorMessage
-            log.error(errorMessage, ee)
+            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), ee)
             return response.sendError(HttpServletResponse.SC_BAD_REQUEST,
                     "${flash.message}")
         }

@@ -19,6 +19,8 @@
 </p>
 
 <div class="row-fluid">
+
+
     <div class="pagination offset3">
         <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
     </div>
@@ -73,6 +75,9 @@
 
                 </td>
                 <td>
+                    <g:if test="${!resultData.isMapped()}">
+                        <b>TIDs not yet mapped to a result hierarchy</b><br/><br/>
+                    </g:if>
                     <g:each in="${resultData?.rootElements}" var="rootElement">
                         <g:if test="${rootElement?.toDisplay()}">${rootElement.toDisplay()} <br/></g:if>
                     </g:each>

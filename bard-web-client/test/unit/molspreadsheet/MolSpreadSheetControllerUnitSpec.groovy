@@ -10,6 +10,8 @@ import querycart.QueryItem
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bardqueryapi.InetAddressUtil
+import bardqueryapi.BardUtilitiesService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -20,6 +22,7 @@ import spock.lang.Unroll
 @Unroll
 class MolSpreadSheetControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
+    BardUtilitiesService bardUtilitiesService
     ExportService exportService
     QueryCartService queryCartService
     RetainSpreadsheetService retainSpreadsheetService = new RetainSpreadsheetService()
@@ -28,7 +31,11 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
 
 
     void setup() {
+        controller.metaClass.mixin([InetAddressUtil])
+
         controller.retainSpreadsheetService = retainSpreadsheetService
+        bardUtilitiesService = Mock(BardUtilitiesService)
+        controller.bardUtilitiesService = bardUtilitiesService
         this.molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         this.exportService = Mock(ExportService)

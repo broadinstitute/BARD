@@ -1,13 +1,17 @@
 package querycart
 
+import bardqueryapi.BardUtilitiesService
+import bardqueryapi.InetAddressUtil
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
+@Mixin(InetAddressUtil)
 class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
+    BardUtilitiesService bardUtilitiesService
 
     def refreshSummaryView() {
         render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
@@ -126,7 +130,9 @@ class QueryCartController {
             }
         }
         catch (IllegalArgumentException e) {
-            log.error("Invalid QueryItemType ${params.type}", e)
+            final String errorMessage = "Invalid QueryItemType ${params.type}." + getUserIpAddress(bardUtilitiesService.username)
+
+            log.error(errorMessage, e)
             errorResponse.status = 400
             errorResponse.text = "Invalid QueryItemType [${params.type}] passed as params.type"
         }
@@ -143,7 +149,7 @@ class QueryCartController {
             }
         }
         catch (NumberFormatException e) {
-            log.error("Invalid ID ${params.id}", e)
+            log.error("Invalid ID ${params.id}.  " +  getUserIpAddress(bardUtilitiesService.username), e)
             errorResponse.status = 400
             errorResponse.text = "Invalid ID [${params.id}] passed as params.id"
         }
