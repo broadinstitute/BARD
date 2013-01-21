@@ -1,35 +1,13 @@
 PROMPT CREATE OR REPLACE PACKAGE manage_ontology
 CREATE OR REPLACE package manage_ontology
-as
-    pv_tree_assay_descriptor varchar2(31) := 'ASSAY_DESCRIPTOR';
-    pv_tree_biology_descriptor varchar2(31) := 'BIOLOGY_DESCRIPTOR';
-    pv_tree_instance_descriptor varchar2(31) := 'INSTANCE_DESCRIPTOR';
-    pv_tree_dictionary varchar2(31) := 'DICTIONARY';
-    pv_tree_stats_modifier varchar2(31) := 'STATS_MODIFIER';
+AS
+-- SCHATWIN 1_18_13  only need these package constants for special
+-- tables where the cols are not the same as BARD_TREE
+
     pv_tree_result_type varchar2(31) := 'RESULT_TYPE';
     pv_tree_unit varchar2(31) := 'UNIT';
     pv_tree_stage varchar2(31) := 'STAGE';
     pv_tree_laboratory varchar2(31) := 'LABORATORY';
-
---    procedure delete_old_tree(avi_tree_name in varchar2,
---                            ano_error out number,
---                            avo_errmsg out varchar2);
-
---    procedure walk_down_the_tree(ani_element_id in number,
---                                anio_node_id in out number,
---                                ani_parent_node_id in number,
---                                avi_relationship_type in varchar2,
---                                avi_tree_name in varchar2,
---                                ani_recursion_level number,
---                                ano_error out number,
---                                avo_errmsg out varchar2);
-
---    procedure Save_node (ari_element in element%rowtype,
---                                ani_node_id in number,
---                                ani_parent_node_id in number,
---                                avi_tree_name in varchar2,
---                                ano_error out number,
---                                avo_errmsg out varchar2);
 
     procedure make_trees (avi_tree_name in varchar2 default null);
 
@@ -91,8 +69,11 @@ as
     as
     --
     -- schatwin 8_17_12  added "_tree" to all the materialized view tables
-    --
+    -- schatwin 1_18_13  generalized by using execute immediate
+        lv_sql  VARCHAR2(1000);
+
     begin
+        /*
         if avi_tree_name = pv_tree_assay_descriptor
         then
             delete from assay_descriptor_tree;
@@ -126,10 +107,19 @@ as
         then
             delete from dictionary_tree;
 
+        elsif avi_tree_name = pv_tree_BARD
+        then
+            delete from BARD_tree;
+
         elsif avi_tree_name = pv_tree_stats_modifier
         then
             delete from stats_modifier_tree;
         end if;
+        */
+
+        lv_sql := 'delete from ' || avi_tree_name || '_TREE';
+
+        EXECUTE IMMEDIATE lv_sql;
 
         trace('Delete from ' || avi_tree_name || ' '|| to_char(sql%rowcount) || ' rows' );
 
@@ -140,9 +130,11 @@ as
     procedure Set_is_leaf_flag (avi_tree_name IN varchar2)
 
     AS
-
+        lv_sql  VARCHAR2(1000);
+        ln_is_leaf    number;
 
     BEGIN
+       /*
        if avi_tree_name = pv_tree_assay_descriptor
         then
             update assay_descriptor_tree a
@@ -196,7 +188,7 @@ as
             update stats_modifier_tree a
             SET is_leaf = 'Y'
             WHERE NOT EXISTS (SELECT 1
-                FROM stage_tree a2
+                FROM STATS_MODIFIER_tree a2
                 WHERE a.node_id = a2.parent_node_id);
 
         elsif avi_tree_name = pv_tree_dictionary
@@ -204,7 +196,15 @@ as
             update dictionary_tree a
             SET is_leaf = 'Y'
             WHERE NOT EXISTS (SELECT 1
-                FROM stage_tree a2
+                FROM DICTIONARY_tree a2
+                WHERE a.node_id = a2.parent_node_id);
+
+        elsif avi_tree_name = pv_tree_BARD
+        then
+            update BARD_tree a
+            SET is_leaf = 'Y'
+            WHERE NOT EXISTS (SELECT 1
+                FROM BARD_tree a2
                 WHERE a.node_id = a2.parent_node_id);
 
         elsif avi_tree_name = pv_tree_laboratory
@@ -212,6 +212,28 @@ as
             -- do nothing as there is no is_leaf in this table
             null;
         end if;
+        */
+
+        SELECT Count(*)
+        INTO ln_is_leaf
+        FROM cols
+        WHERE table_name = avi_tree_name || '_TREE'
+          AND column_name = 'IS_LEAF';
+
+        IF ln_is_leaf > 0
+        THEN
+            lv_sql := 'update ' || avi_tree_name ||'_TREE a
+            SET is_leaf = ''Y''
+            WHERE NOT EXISTS (SELECT 1
+                FROM ' || avi_tree_name ||'_TREE a2
+                WHERE a.node_id = a2.parent_node_id)';
+
+            EXECUTE IMMEDIATE lv_sql;
+
+        END IF;
+
+        trace('update is_leaf in ' || avi_tree_name || ' '|| to_char(sql%rowcount) || ' rows' );
+
 
     END Set_is_leaf_flag;
 
@@ -225,9 +247,11 @@ as
     as
     --
     -- schatwin 8_17_12  added "_tree" to all the materialized view tables
-    --
-
+    -- schatwin 1_18_13  made generic by using execute immediate
+    --                   except for laboratory,stage, unit, result_type which are all special
+        lv_sql    VARCHAR2(1000);
     begin
+        /*
         if avi_tree_name = pv_tree_assay_descriptor
         then
             insert into assay_descriptor_tree
@@ -318,6 +342,35 @@ as
         elsif avi_tree_name = pv_tree_dictionary
         then
             insert into dictionary_tree
+                (node_id,
+                parent_node_id,
+                element_id,
+                label,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                external_URL,
+                unit_id,
+                element_status)
+                values
+                (ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                'N',
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.external_URL,
+                ari_element.unit_id,
+                ari_element.element_status);
+
+        elsif avi_tree_name = pv_tree_BARD
+        then
+            insert into BARD_tree
                 (node_id,
                 parent_node_id,
                 element_id,
@@ -461,6 +514,176 @@ as
         else
             null;
         end if;
+        */
+
+        if avi_tree_name = pv_tree_result_type
+        then
+            lv_sql := 'insert into ' || avi_tree_name || '_TREE
+                (node_id,
+                parent_node_id,
+                result_type_id,
+                result_type_name,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                base_unit_id,
+                result_type_status)
+                values
+                (:ani_node_id,
+                :ani_parent_node_id,
+                :element_id,
+                :label,
+                :description,
+                :avi_full_path,
+                ''N'',
+                :abbreviation,
+                :synonyms,
+                :unit_id,
+                :element_status)';
+
+            EXECUTE IMMEDIATE lv_sql
+            USING IN ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.unit_id,
+                ari_element.element_status;
+
+        elsif avi_tree_name = pv_tree_unit
+        then
+            lv_sql := 'insert into ' || avi_tree_name || '_TREE
+                (node_id,
+                parent_node_id,
+                unit_id,
+                unit,
+                abbreviation,
+                description,
+                full_path,
+                is_leaf)
+                values
+                (:ani_node_id,
+                :ani_parent_node_id,
+                :element_id,
+                :label,
+                :abbreviation,
+                :description,
+                :avi_full_path,
+                ''N'')';
+
+            EXECUTE IMMEDIATE lv_sql
+            USING IN ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                Nvl(ari_element.abbreviation, ari_element.label),
+                ari_element.abbreviation,
+                ari_element.label || ': ' || ari_element.description,
+                avi_full_path;
+
+        elsif avi_tree_name = pv_tree_stage
+        then
+            lv_sql := 'insert into ' || avi_tree_name || '_TREE
+                (node_id,
+                parent_node_id,
+                stage_id,
+                stage,
+                stage_status,
+                description,
+                full_path,
+                is_leaf)
+                values
+                (:ani_node_id,
+                :ani_parent_node_id,
+                :element_id,
+                :label,
+                :element_status,
+                :description,
+                :avi_full_path,
+                ''N'')';
+
+            EXECUTE IMMEDIATE lv_sql
+            USING IN ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.element_status,
+                ari_element.description,
+                avi_full_path;
+
+        elsif avi_tree_name = pv_tree_laboratory
+        then
+            lv_sql := 'insert into ' || avi_tree_name || '_TREE
+                (node_id,
+                parent_node_id,
+                laboratory_id,
+                laboratory,
+                laboratory_status,
+                description)
+                values
+                (:ani_node_id,
+                :ani_parent_node_id,
+                :element_id,
+                :label,
+                :element_status,
+                :description)';
+
+            EXECUTE IMMEDIATE lv_sql
+            USING IN ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.element_status,
+                ari_element.description;
+
+        else
+            lv_sql := 'insert into ' || avi_tree_name || '_TREE
+                (node_id,
+                parent_node_id,
+                element_id,
+                label,
+                description,
+                full_path,
+                is_leaf,
+                abbreviation,
+                synonyms,
+                external_URL,
+                unit_id,
+                element_status)
+                values
+                (:ani_node_id,
+                :ani_parent_node_id,
+                :element_id,
+                :label,
+                :description,
+                :avi_full_path,
+                ''N'',
+                :abbreviation,
+                :synonyms,
+                :external_URL,
+                :unit_id,
+                :element_status)';
+
+            EXECUTE IMMEDIATE lv_sql
+            USING IN ani_node_id,
+                ani_parent_node_id,
+                ari_element.element_id,
+                ari_element.label,
+                ari_element.description,
+                avi_full_path,
+                ari_element.abbreviation,
+                ari_element.synonyms,
+                ari_element.external_URL,
+                ari_element.unit_id,
+                ari_element.element_status;
+
+        end if;
+
+
         trace('Saved node ID='|| to_char(ani_node_id)
              || ' in tree=' || avi_tree_name
              || ' parent_ID=' || to_char(ani_parent_node_id)
@@ -577,12 +800,16 @@ as
     as
     cursor cur_tree_root
         -- adds the Element as a join to get the label and descriptions (8/16/12)
+        -- select only trees that have tables in the DB
         is select tr.*, e.description, e.label
            from tree_root tr,
             element e
            where e.element_id = tr.element_id
              and (tree_name = upper(avi_tree_name)
-              or avi_tree_Name is null);
+              or avi_tree_Name is null)
+             AND EXISTS (SELECT 1
+                  FROM tabs
+                  WHERE table_name = tree_name || '_TREE');
 
     lr_tree_root tree_root%rowtype;
     lr_element element%rowtype;
@@ -850,4 +1077,3 @@ as
 
 end manage_ontology;
 /
-
