@@ -8,6 +8,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+
 import java.awt.image.BufferedImage
 
 /**
@@ -23,10 +24,14 @@ import java.awt.image.BufferedImage
 class ChemAxonControllerUnitSpec extends Specification {
     ChemAxonService chemAxonService
     QueryService queryService
+    BardUtilitiesService bardUtilitiesService
     @Shared
     CompoundAdapter compoundAdapter = buildCompoundAdapter(1234, 'C1=CC2=C(C=C1)C=CC=C2')
 
     void setup() {
+        controller.metaClass.mixin(InetAddressUtil)
+        bardUtilitiesService = Mock(BardUtilitiesService)
+        controller.bardUtilitiesService = bardUtilitiesService
         chemAxonService = Mock(ChemAxonService)
         controller.chemAxonService = this.chemAxonService
         queryService = Mock(QueryService)
@@ -41,7 +46,7 @@ class ChemAxonControllerUnitSpec extends Specification {
         final String type = response.contentType
 
         then:
-        chemAxonService.getDefaultImage(width, height) >> {new BufferedImage(width,height,5)}
+        chemAxonService.getDefaultImage(width, height) >> {new BufferedImage(width, height, 5)}
         0 * chemAxonService.generateStructurePNG(_, _, _) >> {bytesArra}
         assert type == "image/png"
         assert response.contentAsByteArray
