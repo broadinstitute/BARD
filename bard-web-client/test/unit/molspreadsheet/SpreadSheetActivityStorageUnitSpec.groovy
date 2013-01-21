@@ -143,7 +143,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d)
         spreadSheetActivity.priorityElementList = [priorityElement,priorityElement]
 
         when:
@@ -163,7 +163,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: "")
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: "")
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -184,7 +184,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.INACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: null)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: null)
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -208,7 +208,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(displayName: "testName")
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName")
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -264,7 +264,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(value: 0.47d,displayName: "colname")
+        PriorityElement priorityElement = new PriorityElement(value: 0.47d, pubChemDisplayName: "colname")
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries()
         concentrationResponseSeries.concentrationResponsePoints = []
         concentrationResponseSeries.concentrationResponsePoints  << new ConcentrationResponsePoint(testConcentration: 0.1d, value: 0.1d)
@@ -297,7 +297,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d)
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -316,7 +316,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(displayName: "testName", value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d)
         spreadSheetActivity.priorityElementList = [priorityElement]
 
 

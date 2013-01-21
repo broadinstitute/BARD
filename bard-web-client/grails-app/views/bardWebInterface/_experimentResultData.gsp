@@ -29,8 +29,7 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-            %{--We should probably do this server side--}%
-            <th>${experimentDataMap?.priorityDisplay ?: ""}</th>
+             <th><a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${experimentDataMap?.priorityDescription ?: ''}">${experimentDataMap?.priorityDisplay ?: ""}</a></th>
             <th>Experiment Descriptors</th>
             <g:if test="${experimentDataMap?.hasChildElements}">
                 <th>Child Elements</th>
@@ -69,6 +68,7 @@
                     </g:if>
                 </td>
                 <td>
+
                     ${priorityElement?.toDisplay()}
 
                 </td>
@@ -94,7 +94,14 @@
                     %>
                     <td>
                         <table class="table table-striped table-condensed">
-                            <thead><tr><th>${concRespSeries.getYAxisLabel()}</th><th>Concentration</th></tr></thead>
+                            <thead><tr>
+                                <th>
+
+                                    <a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${concRespSeries?.dictionaryDescription ?: ''}">${concRespSeries.dictionaryLabel}</a>
+                                </th>
+                                <th>Concentration</th>
+                            </tr>
+                            </thead>
                             <tbody>
                             <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
                                 <tr>
@@ -136,7 +143,8 @@
                     </g:if>
                     <td>
                         <g:each in="${concRespSeries.miscData}" var="miscData">
-                            ${miscData.toDisplay()} <br/>
+                            <a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${miscData?.dictionaryDescription ?: ''}">${miscData.toDisplay()}</a>
+                            <br/>
                         </g:each>
                     </td>
                 </g:each>

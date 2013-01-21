@@ -2,11 +2,18 @@ import grails.util.Environment
 
 //Override in config file
 dataexport.apikey= "test"
-dataexport.element.accept.type = "application/vnd.bard.cap+xml;type=element"
-dataexport.element.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary/element/"
-
-// configuration for plugin testing - will not be included in the plugin zip
-
+dataexport.dictionary.accept.type= "application/vnd.bard.cap+xml;type=dictionary"
+dataexport.dictionary.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
+//cacheable plugin
+grails.cache.config = {
+    cache {
+        name 'dictionaryElements'
+        eternal false
+        overflowToDisk true
+        maxElementsInMemory 10000
+        maxElementsOnDisk 10000000
+    }
+}
 ncgc.server.root.url = "http://bard.nih.gov/api/v12"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 

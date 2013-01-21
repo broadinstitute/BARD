@@ -56,21 +56,16 @@ class SpreadSheetActivity {
      */
     void extractExperimentalValuesFromAPriorityElement(final List <MolSpreadSheetColSubHeader> resultTypeNames, final PriorityElement priorityElement ) {
         this.priorityElementList << priorityElement
-        String columnHeaderName = priorityElement.displayName ?: priorityElement.concentrationResponseSeries?.responseUnit ?: ""
+//        String columnHeaderName = priorityElement.displayName ?: priorityElement.concentrationResponseSeries?.responseUnit ?: ""
+        String columnHeaderName = priorityElement.getDictionaryLabel() ?: priorityElement.concentrationResponseSeries?.getDictionaryLabel() ?: ""
         if (!resultTypeNames*.columnTitle.contains(columnHeaderName)) {
             resultTypeNames << new MolSpreadSheetColSubHeader( columnTitle:  columnHeaderName)
         }
-    }
-
-
-
-
-//    void readOutToHillCurveValue(final List<String> resultTypeNames, final PriorityElement priorityElement ) {
-//        final HillCurveValue hillCurveValue = resultData.toHillCurveValue()
-//        if (!resultTypeNames.contains(hillCurveValue.id)) {
-//            resultTypeNames.add(hillCurveValue.id)
+        //TODO: Read from CAP
+//        String columnHeaderName = priorityElement.getDictionaryLabel() ?: priorityElement.concentrationResponseSeries?.getDictionaryLabel() ?: ""
+//        if (!resultTypeNames.contains(columnHeaderName)) {
+//            resultTypeNames.add(columnHeaderName)
 //        }
-//        this.hillCurveValueList << hillCurveValue
-//    }
+    }
 
 }

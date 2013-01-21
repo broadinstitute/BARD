@@ -83,6 +83,7 @@ grails.project.dependency.resolution = {
         compile ":google-analytics:2.0"
         compile ":mail:1.0.1"
         compile ":greenmail:1.3.3"
+        compile ":cache:1.0.1"
     }
 }
 

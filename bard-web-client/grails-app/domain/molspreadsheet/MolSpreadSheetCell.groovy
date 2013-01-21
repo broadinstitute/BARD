@@ -99,7 +99,7 @@ class MolSpreadSheetCell {
                 activity = MolSpreadSheetCellActivityOutcome.Unspecified
                 intInternalValue = 0
             }   else {
-                String identifierString = priorityElement.displayName ?: priorityElement.responseUnit  ?: " "
+                 String identifierString = priorityElement.getDictionaryLabel() ?: priorityElement.responseUnit  ?: " "
                 if (priorityElement.qualifier == ">") {
                     this.molSpreadSheetCellType =  MolSpreadSheetCellType.greaterThanNumeric
                 } else  if (priorityElement.qualifier == "<")  {

@@ -7,12 +7,35 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.ConcentrationResponseSeries
 import molspreadsheet.MolSpreadSheetColSubHeader
+import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.DataExportRestService
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @Unroll
 class SpreadSheetActivityUnitSpec extends Specification {
+
+    ServletContext servletContext
+    GrailsWebApplicationContext ctx
+    DataExportRestService dataExportRestService
+    void setup() {
+        servletContext = Mock(ServletContext)
+        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
+        ctx = Mock()
+        dataExportRestService =  Mock(DataExportRestService)
+        servletContext.getAttribute(_)>>{ctx}
+        ctx.dataExportRestService()>>{dataExportRestService}
+    }
+
+    void cleanup() {
+        //Clean up the metaClass mocking we added.
+        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
+        remove ServletContextHolder
+    }
     void "test readOutsToHillCurveValues"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
@@ -36,8 +59,11 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
         List <MolSpreadSheetColSubHeader> resultTypeNames = []
+//        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
+//        List<String> resultTypeNames = []
+//>>>>>>> abc0dee9893cb3fe90c6da91df072726a23e0d62
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
@@ -48,7 +74,7 @@ class SpreadSheetActivityUnitSpec extends Specification {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(responseUnit: "uM")
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName")
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
         priorityElement.concentrationResponseSeries = concentrationResponseSeries
         List <MolSpreadSheetColSubHeader> resultTypeNames = []
         when:
@@ -60,8 +86,11 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement with repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: 'columnName')
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: 'columnName')
         List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName') ]
+//        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
+//        List<String> resultTypeNames = ["columnName"]
+//>>>>>>> abc0dee9893cb3fe90c6da91df072726a23e0d62
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
@@ -71,8 +100,11 @@ class SpreadSheetActivityUnitSpec extends Specification {
     void "test extractExperimentalValuesFromAPriorityElement with non-repeated column name"() {
         given:
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        PriorityElement priorityElement = new  PriorityElement (displayName: "columnName1")
-        List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName2') ]
+        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName1")
+        List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName2')]
+//        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName1")
+//        List<String> resultTypeNames = ["columnName2"]
+//>>>>>>> abc0dee9893cb3fe90c6da91df072726a23e0d62
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:

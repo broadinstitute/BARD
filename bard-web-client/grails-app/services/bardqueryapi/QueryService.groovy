@@ -31,6 +31,7 @@ import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.experiment.ResponseClassEnum
 import bard.core.rest.spring.assays.AssayAnnotation
+import bard.core.rest.spring.DataExportRestService
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -44,6 +45,7 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
+    DataExportRestService dataExportRestService
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search
@@ -255,6 +257,7 @@ class QueryService implements IQueryService {
 
         }
         String priorityDisplay = ""
+        String priorityDescription = ""
         boolean hasChildElements = false
         for (Activity activity : activities) {
             final ResultData resultData = activity.resultData
@@ -264,10 +267,13 @@ class QueryService implements IQueryService {
                 if (resultData?.hasPriorityElements()) {
                     final PriorityElement priorityElement = resultData?.priorityElements.get(0)
                     if (!priorityDisplay) {
-                        priorityDisplay = priorityElement.displayName
+                        if (!priorityDisplay) {
+                            priorityDisplay = priorityElement.getDictionaryLabel()
+                            priorityDescription = priorityElement.getDictionaryDescription()
+                        }
 
                     }
-                    if(!hasChildElements){
+                    if (!hasChildElements) {
                         hasChildElements = priorityElement.hasChildElements()
                     }
                 }
@@ -280,7 +286,11 @@ class QueryService implements IQueryService {
                 break
             }
         }
-        return [total: totalNumberOfRecords, activities: activities, experiment: experimentShow, hasPlot: hasPlot, priorityDisplay: priorityDisplay, hasChildElements: hasChildElements]
+        return [total: totalNumberOfRecords, activities: activities,
+                experiment: experimentShow, hasPlot: hasPlot,
+                priorityDisplay: priorityDisplay,
+                priorityDescription:priorityDescription,
+                hasChildElements: hasChildElements]
     }
 
     /**

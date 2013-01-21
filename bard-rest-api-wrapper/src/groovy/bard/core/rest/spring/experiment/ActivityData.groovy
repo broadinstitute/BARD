@@ -1,14 +1,19 @@
 package bard.core.rest.spring.experiment
 
-
 import bard.core.rest.spring.util.JsonUtil
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
+import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
+import bard.core.rest.spring.util.DictionaryElement
+import bard.rest.api.wrapper.Dummy
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityData extends JsonUtil {
     @JsonProperty("displayName")
-    private String displayName;
+    private String pubChemDisplayName;
     @JsonProperty("dictElemId")
     private long dictElemId;
     @JsonProperty("value")
@@ -21,10 +26,35 @@ public class ActivityData extends JsonUtil {
     private String testConcentrationUnit;
     @JsonProperty("qualifierValue")
     private String qualifier;
+    @JsonIgnore
+    final Dummy dummy = new Dummy()
 
+    public String getDictionaryLabel() {
+        if (dictElemId) {
+            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            if (dictionaryElement) {
+                return dictionaryElement.label
+            }
+        }
+        return pubChemDisplayName
+
+    }
+
+    public String getDictionaryDescription() {
+        if (dictElemId) {
+            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            if (dictionaryElement) {
+                return dictionaryElement.description
+            }
+        }
+        return responseUnit
+
+    }
 
     public String toDisplay() {
-        StringBuilder stringBuilder = new StringBuilder()
+        //look up the element in the CAP
+        String displayName = getDictionaryLabel()
+        final StringBuilder stringBuilder = new StringBuilder()
         if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName) {
             stringBuilder.append(displayName ? displayName + " : " : '')
 
@@ -38,13 +68,13 @@ public class ActivityData extends JsonUtil {
     }
 
     @JsonProperty("displayName")
-    public String getDisplayName() {
-        return displayName;
+    public String getPubChemDisplayName() {
+        return pubChemDisplayName;
     }
 
     @JsonProperty("displayName")
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setPubChemDisplayName(String pubChemDisplayName) {
+        this.pubChemDisplayName = pubChemDisplayName;
     }
 
     @JsonProperty("dictElemId")

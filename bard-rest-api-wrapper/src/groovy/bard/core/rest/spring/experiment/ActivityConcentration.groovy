@@ -1,8 +1,12 @@
 package bard.core.rest.spring.experiment
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonIgnore
+import org.codehaus.groovy.grails.web.context.ServletContextHolder as SCH
+import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes as GA
 
 public class ActivityConcentration extends ActivityData {
+
     @JsonProperty("concResponseSeries")
     private ConcentrationResponseSeries concentrationResponseSeries
 
@@ -27,7 +31,7 @@ public class ActivityConcentration extends ActivityData {
         this.concentrationResponseSeries = concentrationResponseSeries
     }
     public boolean hasPlot(){
-        if(this.concentrationResponseSeries|| this.primaryElements){
+        if(this.concentrationResponseSeries){
             return true
         }
         return false

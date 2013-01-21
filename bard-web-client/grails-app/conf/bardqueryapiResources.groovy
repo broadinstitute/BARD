@@ -77,4 +77,8 @@ modules = {
     jqueryMobileInit {
         resource url: "js/jqueryMobileInit.js"
     }
+    twitterBootstrapAffix {
+        resource url: "css/twitterBootstrapAffix.css"
+        resource url: "js/twitterBootstrapAffix.js"
+    }
 }

@@ -24,9 +24,13 @@ grails.project.dependency.resolution = {
             exclude "xml-api"
         }
         compile 'org.apache.commons:commons-lang3:3.1'
-        compile 'com.fasterxml.jackson.core:jackson-annotations:2.0.0'
-        compile 'com.fasterxml.jackson.core:jackson-core:2.0.0'
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.0.0'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.1.2'
+        compile 'com.fasterxml.jackson.core:jackson-core:2.1.2'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.1.2'
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.1.2'
+        compile 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.1.2'
+        compile 'org.codehaus.woodstox:stax2-api:3.1.1'
+        compile 'org.codehaus.woodstox:woodstox-core-asl:4.1.2'
 
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test("org.spockframework:spock-core:0.6-groovy-1.8") {
@@ -44,6 +48,7 @@ grails.project.dependency.resolution = {
         test ":spock:0.6"
         test ":codenarc:0.15"
         compile ":clover:3.1.6"
+        compile ":cache:1.0.1"
     }
 }
 clover {

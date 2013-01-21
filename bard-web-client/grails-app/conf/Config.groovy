@@ -13,12 +13,25 @@ grails.serverURL = "http://localhost:${server.port}/bardwebclient"
 bard.cap.home = "http://localhost:8081/BARD/"
 bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
 
+//Override in config file
+dataexport.apikey= "test"
+dataexport.dictionary.accept.type= "application/vnd.bard.cap+xml;type=dictionary"
+dataexport.dictionary.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 
+grails.cache.config = {
+    cache {
+        name 'dictionaryElements'
+        eternal false
+        overflowToDisk true
+        maxElementsInMemory 10000
+        maxElementsOnDisk 10000000
+    }
+}
 grails.mime.types = [
         html: ['text/html', 'application/xhtml+xml'],
         xml: ['text/xml', 'application/xml'],

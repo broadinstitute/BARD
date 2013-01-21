@@ -28,15 +28,17 @@ Similarity:CCC
                     <g:link controller="molSpreadSheet" action="showExperimentDetails"
                             params="[cid: cid, transpose: true]">Show Experimental Details</g:link>
                 </li>
-                <li>
-                    <a name="saveToCartLink" class="addToCartLink"
-                       data-cart-name="${name}"
-                       data-cart-id="${cid}"
-                       data-cart-type="${QueryItemType.Compound}"
-                       data-cart-smiles="${smiles}"
-                       data-cart-numActive="${numActive}"
-                       data-cart-numAssays="${numAssays}">Save to Cart for analysis</a>
-                </li>
+                <g:if test="${smiles && name && numActive && numAssays}">
+                    <li>
+                        <a href="javascript:void(0);" name="saveToCartLink" class="addToCartLink"
+                           data-cart-name="${name}"
+                           data-cart-id="${cid}"
+                           data-cart-type="${QueryItemType.Compound}"
+                           data-cart-smiles="${smiles}"
+                           data-cart-numActive="${numActive}"
+                           data-cart-numAssays="${numAssays}">Save to Cart For Analysis</a>
+                    </li>
+                </g:if>
             </ul>
         </span>
     </div>

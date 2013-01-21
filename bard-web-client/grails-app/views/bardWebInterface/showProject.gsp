@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="logoSearchCartAndFooter"/>
         <title>BARD : Project : ID ${projectAdapter?.id}</title>
-        <r:require modules="showProjectAssay,compoundOptions"/>
+        <r:require modules="showProjectAssay,compoundOptions, twitterBootstrapAffix"/>
     </head>
 
     <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -73,7 +73,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span3 bs-docs-sidebar">
-                    <ul class="nav bs-docs-sidenav nav-list" data-spy="affix">
+                    <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar" data-spy="affix">
                         <li><a href="#annotations-info"><i
                                 class="icon-chevron-right"></i>Annotations</a></li>
                         <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
