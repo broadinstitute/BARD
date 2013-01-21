@@ -5,11 +5,6 @@
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <r:require modules="showProjectAssay,twitterBootstrapAffix"/>
     <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
-    <r:script>
-        $(document).ready(function () {
-            $('body').scrollspy({target:'.bs-docs-sidebar'});
-        });
-    </r:script>
 </head>
 
 <body>
