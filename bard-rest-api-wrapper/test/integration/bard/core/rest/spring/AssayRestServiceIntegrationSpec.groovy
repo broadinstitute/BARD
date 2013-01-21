@@ -33,7 +33,12 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assert assayResult.etag
         assert assayResult.facetsToValues
         assert annotation
-        assert annotation.contexts
+        final List<Context> contexts = annotation.contexts
+        assert contexts
+        final List<List<Context>> layouts = Context.splitForColumnLayout(contexts)
+        assert layouts
+        final List<Context> contexts1 = layouts.get(0)
+        assert contexts1
         assert annotation.docs
         assert annotation.measures
     }
@@ -66,25 +71,6 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assert annotation.measures
 
     }
-
-    /**
-     * Test filter application
-     * We do a search without filters, then we do one with known filters and compare the results
-     * They should not return the same number of results
-     */
-
-    /**
-     * Test filter application
-     * We do a search without filters, then we do one with known filters and compare the results
-     * They should not return the same number of results
-     */
-    /**
-     * Test filter application
-     * We expect an OR when we use one or more filters from the same category
-     * <p/>
-     * Here we use "spectrophotometry method"  and  "image-based" both from the
-     * detection method category
-     */
 
     /**
      * typing in zinc, and choosing the auto-suggest option:

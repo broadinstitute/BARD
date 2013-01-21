@@ -43,7 +43,7 @@ public class ActivityConcentration extends ActivityData {
         return null
     }
     public boolean hasChildElements(){
-        if(this.childElements){
+        if(this.childElements || this.concentrationResponseSeries.hasChildElements()){
             return true
         }
         return false

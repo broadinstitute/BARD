@@ -27,7 +27,7 @@ public class ActivityData extends JsonUtil {
     @JsonProperty("qualifierValue")
     private String qualifier;
     @JsonIgnore
-    final Dummy dummy = new Dummy()
+    Dummy dummy = new Dummy()
 
     public String getDictionaryLabel() {
         if (dictElemId) {
