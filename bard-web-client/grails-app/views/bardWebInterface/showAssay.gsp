@@ -1,13 +1,13 @@
-<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <!DOCTYPE html>
+<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <r:require modules="showProjectAssay,twitterBootstrapAffix" />
+    <r:require modules="showProjectAssay,twitterBootstrapAffix"/>
     <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
 </head>
 
-<body data-spy="scroll" data-target=".bs-docs-sidebar">
+<body>
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>Assay Definition: ${assayAdapter?.name}
@@ -56,7 +56,8 @@
                 <g:if test="${assayAdapter.documents}">
                     <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications</a></li>
                 </g:if>
-                <li><a href="#result-info"><i class="icon-chevron-right"></i>Experiments (${experiments.size()})</a></li>
+                <li><a href="#result-info"><i class="icon-chevron-right"></i>Experiments (${experiments.size()})</a>
+                </li>
             </ul>
         </div>
 

@@ -55,7 +55,7 @@ public class ConcentrationResponsePoint extends JsonUtil {
         this.childElements = childElements;
     }
 
-    public String toDisplay(ConcentrationResponseSeries concentrationResponseSeries) {
+    public String toDisplay(String testConcentrationUnit) {
         String responseValue = this.value
         Double concentrationValue = this.testConcentration
         String responseString = ""
@@ -67,7 +67,7 @@ public class ConcentrationResponsePoint extends JsonUtil {
         if (concentrationValue) {
             ExperimentalValueUtil experimentalValueUtil =
                 new ExperimentalValueUtil(concentrationValue,
-                        ExperimentalValueUnitUtil.getByValue(concentrationResponseSeries.testConcentrationUnit),
+                        ExperimentalValueUnitUtil.getByValue(testConcentrationUnit),
                         ExperimentalValueTypeUtil.numeric)
             concentrationString = "@ " + experimentalValueUtil.toString()
         }
@@ -84,12 +84,12 @@ public class ConcentrationResponsePoint extends JsonUtil {
         return ""
     }
 
-    public String displayConcentration(ConcentrationResponseSeries concentrationResponseSeries) {
+    public String displayConcentration(String testConcentrationUnit) {
         Double concentrationValue = this.testConcentration
         if (concentrationValue) {
             ExperimentalValueUtil experimentalValueUtil =
                 new ExperimentalValueUtil(concentrationValue,
-                        ExperimentalValueUnitUtil.getByValue(concentrationResponseSeries.testConcentrationUnit),
+                        ExperimentalValueUnitUtil.getByValue(testConcentrationUnit),
                         ExperimentalValueTypeUtil.numeric)
             return experimentalValueUtil.toString()
         }

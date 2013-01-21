@@ -32,7 +32,7 @@ public class DataExportRestService extends AbstractRestService {
         }
     }
 
-    private CapDictionary getDictionary() {
+    public CapDictionary getDictionary() {
         try {
             SSLTrustManager.enableSSL()//enable SSL so we can call the data export API
             final HttpHeaders requestHeaders = new HttpHeaders();

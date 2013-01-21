@@ -12,8 +12,8 @@ import bard.rest.api.wrapper.Dummy
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConcentrationResponseSeries extends JsonUtil {
 
-   @JsonIgnore
-   Dummy dummy = new Dummy()
+    @JsonIgnore
+    Dummy dummy = new Dummy()
 
 
     @JsonProperty("responseUnit")
@@ -29,21 +29,26 @@ public class ConcentrationResponseSeries extends JsonUtil {
     @JsonProperty("miscData")
     private List<ActivityData> miscData = new ArrayList<ActivityData>();
 
+    public boolean hasChildElements() {
+        for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
+            if (concentrationResponsePoint.childElements) {
+                return true
+            }
+        }
+        return false
+    }
 
     public String getDictionaryLabel() {
         if (dictElemId) {
 
             final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
-            String label = null
-            if(dictionaryElement){
-              label = dictionaryElement.label
-            }
-            if (label) {
-                return label
+            if (dictionaryElement) {
+                return dictionaryElement.label
             }
         }
         return responseUnit
     }
+
     public String getDictionaryDescription() {
         if (dictElemId) {
             final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
@@ -53,6 +58,7 @@ public class ConcentrationResponseSeries extends JsonUtil {
         }
         return responseUnit
     }
+
     public String getYAxisLabel() {
 
         return getDictionaryLabel()

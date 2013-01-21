@@ -64,7 +64,7 @@ public class Context extends JsonUtil {
         }
         List<Context> secondColumnContexts = contexts - firstColumnContexts
         def splitContexts = [firstColumnContexts, secondColumnContexts].findAll() // eliminates any empty lists
-        splitContexts
+        return splitContexts
     }
 
 }

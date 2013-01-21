@@ -10,4 +10,9 @@ $(document).ready(function () {
     $(document).on('click', '.twitterBootstrapAffixNavBar', function () {
         window.scrollTo(window.pageXOffset, window.pageYOffset - 1);
     });
+
+    //This is needed to attach the SpyScroll to the body of the page
+    $(document).ready(function () {
+        $('body').scrollspy({target:'.bs-docs-sidebar'});
+    });
 });
