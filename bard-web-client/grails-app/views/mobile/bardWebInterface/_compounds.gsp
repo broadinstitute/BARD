@@ -43,13 +43,6 @@
 
                                 </div>
                             </dd>
-
-                            <dt>Scaffold Promiscuity Analysis:</dt>
-                            <dd>
-                                <div class="promiscuity"
-                                     href="${createLink(controller: 'bardWebInterface', action: 'promiscuity', params: [cid: compoundAdapter.pubChemCID])}"
-                                     id="${compoundAdapter.pubChemCID}_prom"></div>
-                            </dd>
                         </dl>
                     </td>
                 </tr>
