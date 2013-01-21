@@ -39,11 +39,10 @@ class ProjectController {
         try{
             projectService.removeExperimentFromProject(experiment, project)
             project = Project.findById(projectId)
-            render "Experiment is removed, reload the page to show changes"
         // TODO: render template not working, as we may use different package to render graph, we defer making template working later
-        // render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+           render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (UserFixableException e) {
-            render e.message
+            render 'serviceError:'+e.message
         }
     }
 
@@ -54,11 +53,10 @@ class ProjectController {
         try {
             projectService.removeEdgeFromProject(fromExperiment, toExperiment, project)
             project = Project.findById(projectId)
-            render "Link is removed, reload the page to show changes"
             // TODO: render template not working, as we may use different package to render graph, we defer making template working later
-            //render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (UserFixableException e) {
-            render e.message
+            render 'serviceError:'+e.message
         }
     }
 

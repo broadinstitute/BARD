@@ -172,12 +172,13 @@ function findExperimentInput(selected, allValues){
 }
 
 function handleSuccess(data){
+    $("#serviceResponse").css("font-size","16px")
     if (data.substring(0, 12) === "serviceError") {
         $("#serviceResponse").css("color","red")
         $("#serviceResponse").text(data)
     }
     else {
-        $("#serviceResponse").css("color","green")
+        $("#serviceResponse").css("color","#FF00FF")
         $("#serviceResponse").text("Success! Reload the page to view changes.")
     }
     $("#serviceResponse").show()
