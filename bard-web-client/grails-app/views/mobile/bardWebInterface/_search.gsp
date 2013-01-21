@@ -18,14 +18,15 @@
                            value="${flash.searchString ?: params?.searchString}"/>
                 </div>
 
-            %{--<button value="Search" name="search" id="searchButton" data-theme="b" type="submit" class="ui-btn-hidden"--}%
-            %{--aria-disabled="false" data-inline="true" data-theme="b">Submit</button>--}%
+                <button value="Search" name="search" id="searchButton" data-theme="b" type="submit"
+                        class="ui-btn-hidden"
+                        aria-disabled="false" data-inline="true" data-theme="b">Submit</button>
 
-                <a id="searchButton" data-inline="true" data-transition="slide" data-role="button" href="#searchResults"
-                   data-corners="true"
-                   data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"
-                   class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-b"><span
-                        class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Submit</span></span></a>
+                %{--<a id="searchButton" data-inline="true" data-transition="slide" data-role="button" href="#searchResults"--}%
+                   %{--data-corners="true"--}%
+                   %{--data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="b"--}%
+                   %{--class="ui-btn ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-up-b"><span--}%
+                        %{--class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Submit</span></span></a>--}%
             </g:form>
         </div>
 
