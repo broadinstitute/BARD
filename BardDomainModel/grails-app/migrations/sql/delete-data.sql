@@ -2,6 +2,7 @@
 -- Empty all tables of data
 --
 -- materialized views
+delete from BARD_TREE;
 delete from ASSAY_DESCRIPTOR_TREE;
 delete from BIOLOGY_DESCRIPTOR_TREE;
 delete from INSTANCE_DESCRIPTOR_TREE;

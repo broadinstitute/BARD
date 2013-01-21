@@ -62,15 +62,15 @@
 							<table class="gridtable">
 								<thead>
 									<tr>
-										<g:sortableColumn property="id" title="${message(code: 'assay.id.label', default: 'ID')}" />
-										<g:sortableColumn property="assayName" title="${message(code: 'assay.assayName.label', default: 'Assay Name')}" />
-										<g:sortableColumn property="designedBy" title="${message(code: 'assay.designedBy.label', default: 'Designed By')}" />
+										<g:sortableColumn property="id" title="${message(code: 'assay.id.label', default: 'ID')}" params="${params}" />
+										<g:sortableColumn property="assayName" title="${message(code: 'assay.assayName.label', default: 'Assay Name')}" params="${params}"/>
+										<g:sortableColumn property="designedBy" title="${message(code: 'assay.designedBy.label', default: 'Designed By')}" params="${params}"/>
 									</tr>
 								</thead>
 								<tbody>
 								<g:each in="${assays}" status="i" var="assayInstance">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-										<td>${fieldValue(bean: assayInstance, field: "id")}</td>
+										<td>${assayInstance.id}</td>
 										<td><g:link action="show" id="${assayInstance.id}">${fieldValue(bean: assayInstance, field: "assayName")}</g:link></td>
 										<td>${fieldValue(bean: assayInstance, field: "designedBy")}</td>
 									</tr>

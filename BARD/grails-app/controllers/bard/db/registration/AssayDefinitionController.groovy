@@ -65,14 +65,24 @@ class AssayDefinitionController {
     def findByName() {
         if (params.assayName) {
             def assays = Assay.findAllByAssayNameIlike("%${params.assayName}%")
-            if (assays?.size() != 0) {
-                if (assays.size() > 1)
-                    render(view: "findByName", params: params, model: [assays: assays])
-                else
-                    redirect(action: "show", id: assays.get(0).id)
-            } else
+            if (assays?.size() > 1){
+                if (params.sort == null) {
+                    params.sort = "id"
+                }
+                assays.sort{
+                    a, b->
+                    if (params.order == 'desc') {
+                        b."${params.sort}" <=> a."${params.sort}"
+                    } else {
+                        a."${params.sort}" <=> b."${params.sort}"
+                    }
+                }
+                render(view: "findByName", params: params, model: [assays: assays])
+            }
+            else if (assays?.size() == 1)
+                redirect(action: "show", id: assays.get(0).id)
+            else
                 flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'assay.label', default: 'Assay'), "name", params.assayName])
-
         }
     }
 

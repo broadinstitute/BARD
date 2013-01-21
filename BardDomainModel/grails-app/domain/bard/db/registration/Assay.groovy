@@ -56,9 +56,6 @@ class Assay extends AbstractContextOwner {
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
-        
-        measures(lazy: false)
-        assayContexts(lazy: false)
     }
 
     static transients = ['assayContextItems']
@@ -85,13 +82,6 @@ class Assay extends AbstractContextOwner {
     String getName() {
         this.assayName
     }
-    /**
-     * duck typing to look like project for summary/_show template
-     */
-    String getDescription() {
-        this.assayName
-    }
-
 
     List<AssayContext> getContexts() {
         this.assayContexts

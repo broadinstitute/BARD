@@ -136,7 +136,7 @@
                     <xs:enumeration value="Description"/>
                     <xs:enumeration value="Protocol"/>
                     <xs:enumeration value="Comments"/>
-                    <xs:enumeration value="Paper"/>
+                    <xs:enumeration value="Publication"/>
                     <xs:enumeration value="External URL"/>
                     <xs:enumeration value="Other"/>
                 </xs:restriction>

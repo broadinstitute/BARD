@@ -30,7 +30,6 @@ class AssayContext extends AbstractContext{
         sort("ASSAY_CONTEXT_ID") // default sort order
         id(column: "ASSAY_CONTEXT_ID", generator: "sequence", params: [sequence: 'ASSAY_CONTEXT_ID_SEQ'])
         assayContextItems(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
-        assayContextMeasures(lazy: false)
     }
 
     /**

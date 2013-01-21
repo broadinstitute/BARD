@@ -56,7 +56,7 @@
     <div class="row-fluid">
         <div id="accordion" class="span12">
             <h3><a href="#">Summary</a></h3>
-            <g:render template="../summary/show" model="['summary': instance]"/>
+            <g:render template="showSummary" model="['project': instance]"/>
 
             <h3><a href="#">Documents</a></h3>
             <g:render template="../document/show" model="['documents': instance.documents]"/>

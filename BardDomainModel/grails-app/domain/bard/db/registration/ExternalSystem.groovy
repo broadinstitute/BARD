@@ -14,9 +14,9 @@ class ExternalSystem {
     Date lastUpdated
     String modifiedBy
 
-    Set<ExternalSystem> externalSystems = [] as Set
+    Set<ExternalReference> externalReferences = [] as Set
 
-    static hasMany = [externalSystems: ExternalReference]
+    static hasMany = [externalReferences: ExternalReference]
 
     static mapping = {
         id(column: 'EXTERNAL_SYSTEM_ID', generator: 'sequence', params: [sequence: 'EXTERNAL_SYSTEM_ID_SEQ'])
