@@ -535,3 +535,10 @@ table.colorkey td {
     width: 10px;
     border-width: 0px;
 }
+
+.bs-docs-sidenav {
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}

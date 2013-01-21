@@ -94,7 +94,7 @@
                 <div class="span9">
                     <section id="annotations-info">
                         <div class="page-header">
-                            <h1>Annotations (${projectAdapter?.numberOfAnnotations})</h1>
+                            <h3>Annotations (${projectAdapter?.numberOfAnnotations})</h3>
                         </div>
 
                         <div>
@@ -127,7 +127,7 @@
                     </section>
                     <section id="description-info">
                         <div class="page-header">
-                            <h1>Description</h1>
+                            <h3>Description</h3>
                         </div>
 
                         <div>
@@ -143,7 +143,7 @@
                     </g:if>
                     <section id="experiments-info">
                         <div class="page-header">
-                            <h1>Experiments (${projectAdapter?.getNumberOfExperiments()})</h1>
+                            <h3>Experiments (${projectAdapter?.getNumberOfExperiments()})</h3>
                         </div>
 
                         <div>
@@ -152,7 +152,7 @@
                     </section>
                     <section id="assays-info">
                         <div class="page-header">
-                            <h1>Assays (${assays?.size()})</h1>
+                            <h3>Assays (${assays?.size()})</h3>
                         </div>
 
                         <div>
