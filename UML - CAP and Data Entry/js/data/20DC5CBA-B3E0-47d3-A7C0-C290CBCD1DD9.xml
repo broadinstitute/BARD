@@ -1,1 +1,2 @@
-tocTab[tocTab.length] = new Array("0.6.1", "1", "Values and units", "EARoot/EA6/EA1010.htm", "4.png", "", "", "{49CFC04A-F162-4fe9-AF73-13EF3A050032}", "Package");
+tocTab[tocTab.length] = new Array("0.6.1", "1", "External Ontologies", "EARoot/EA6/EA1036.htm", "4.png", "", "", "{26FFEC4F-D3AE-44c7-88C8-3EF90B60FCAD}", "Package");
+tocTab[tocTab.length] = new Array("0.6.2", "1", "Values and units", "EARoot/EA6/EA1037.htm", "4.png", "", "", "{49CFC04A-F162-4fe9-AF73-13EF3A050032}", "Package");

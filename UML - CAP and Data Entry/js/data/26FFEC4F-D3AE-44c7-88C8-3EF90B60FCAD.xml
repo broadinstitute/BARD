@@ -1,0 +1,9 @@
+tocTab[tocTab.length] = new Array("0.6.1:1", "", "External Ontologies", "EARoot/EA6/EA1/EA1038.htm", "175.png", "115", "0", "", "Logical diagram0","{5A25E1BB-0214-4a42-AE2C-398EBCA64DBD}");
+tocTab[tocTab.length] = new Array("0.6.1:2", "", "Validate and external entry from an API", "EARoot/EA6/EA1/EA1040.htm", "185.png", "116", "0", "", "Sequence diagram0","{4045DCA3-8B82-4bce-951F-4AEAB25984E5}");
+tocTab[tocTab.length] = new Array("0.6.1:3", "", "CAP", "EARoot/EA6/EA1/EA1042.htm", "6.png", "1183", "0", "", "Actor0","{E66A01C1-1519-453f-8BAD-F165C794EF07}");
+tocTab[tocTab.length] = new Array("0.6.1:4", "", "externalOntologyAPI", "EARoot/EA6/EA1/EA1043.htm", "5.png", "1179", "0", "", "Class0","{564163B7-95AE-4245-9E6C-3C6EF590693D}");
+tocTab[tocTab.length] = new Array("0.6.1:5", "", "externalOntologyGO", "EARoot/EA6/EA1/EA1044.htm", "5.png", "1182", "0", "", "Class0","{F82F402A-566F-487b-B4F8-9F862F92A3EF}");
+tocTab[tocTab.length] = new Array("0.6.1:6", "", "externalOntologyNCBI", "EARoot/EA6/EA1/EA1045.htm", "5.png", "1180", "0", "", "Class0","{89159AC4-E262-4774-9B8C-EF6EC6B95766}");
+tocTab[tocTab.length] = new Array("0.6.1:7", "", "«Interface» externalOntologyService", "EARoot/EA6/EA1/EA1046.htm", "5.png", "1178", "0", "", "Class0","{3876951F-D51B-416c-BF3C-81331836A6B0}");
+tocTab[tocTab.length] = new Array("0.6.1:8", "", "externalOntologyUO", "EARoot/EA6/EA1/EA1047.htm", "5.png", "1181", "0", "", "Class0","{29AEFD66-46C0-4c2f-8513-59FA678BA285}");
+tocTab[tocTab.length] = new Array("0.6.1:9", "", "found name = name", "EARoot/EA6/EA1/EA1048.htm", "101.png", "1184", "0", "", "InteractionFragment0","{129A8A9C-8470-4313-843F-3E45867D921A}");

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Create an Assay Definition</title>
+<title>delete the assay definition</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Create an Assay Definition", " : "))</script>  : Public   UseCase</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("delete the assay definition", " : "))</script>  : Public   UseCase</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/5/2012 5:38:23 PM</td>
+			<td width="85%" class="ObjectDetailsValue">10/18/2012 11:09:04 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">10/15/2012 8:34:27 AM</td>
+			<td class="ObjectDetailsValue">10/18/2012 4:18:39 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,14 +87,15 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{02417C78-BC5F-4556-8675-A30D93006B50}</td>
+			<td class="ObjectDetailsValue">{BC342E37-86C6-4ccb-915B-1CD7B8F1E0E5}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA527.htm">CAP Use cases</a></td>
+			<td class="ObjectDetailsValue"><a href="EA526.htm">CAP Use cases</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes"> given an existing assay definition, a scientist reviews the assay definition, decides it is not needed, and then deletes the assay definition.&#160; &lt;br /&gt;&lt;/p&gt;&lt;p&gt;Special case:&#160; If the scientist is a super-user (curator) and if there are experiments associated with the assay definition, the scientist re-assigns these experiments to other assay definitions&lt;br /&gt;&lt;/p&gt;</div>
+
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
@@ -110,7 +111,7 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="40%" class="TableRow" valign="top">
-						<a href="../EA1/EA511.htm">Assay Registrar</a><br />
+						<a href="../EA1/EA511.htm">BARD administrator</a><br />
 						Actor &nbsp;
 					</td>
 					<td width="30%" class="TableRow" valign="top">
@@ -124,8 +125,8 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink471" onclick="parent.toggleDiv('detailsDIVLink471','DetailsImageLink471')" />Details:
-							<div id="detailsDIVLink471" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink469" onclick="parent.toggleDiv('detailsDIVLink469','DetailsImageLink469')" />Details:
+							<div id="detailsDIVLink469" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -146,8 +147,8 @@ function nameClassifier(name, separator)
 			</tr>	
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="2">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario472" onclick="parent.toggleDiv('detailsDIVScenario472','DetailsImageScenario472')" />Details:
-						<div id="detailsDIVScenario472" class="DetailsDiv" >
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageScenario470" onclick="parent.toggleDiv('detailsDIVScenario470','DetailsImageScenario470')" />Details:
+						<div id="detailsDIVScenario470" class="DetailsDiv" >
 						&nbsp;
 						</div>
 					</div>
@@ -163,19 +164,7 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA571.htm">Start a new, blank assay definition</a></td>
-					<td width="15%" class="TableRow" valign="top">UseCase</td>
-					<td width="15%" class="TableRow" valign="top">Generalization</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA553.htm">Clone an existing assay for editing</a></td>
-					<td width="15%" class="TableRow" valign="top">UseCase</td>
-					<td width="15%" class="TableRow" valign="top">Generalization</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA559.htm">Edit an assay definition</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA571.htm">Transfer experiment to another assay</a></td>
 					<td width="15%" class="TableRow" valign="top">UseCase</td>
 					<td width="15%" class="TableRow" valign="top">Extends</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>

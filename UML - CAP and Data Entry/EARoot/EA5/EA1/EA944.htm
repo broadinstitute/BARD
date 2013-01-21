@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Tree tables</title>
+<title>clean up value_display (remove row_no)</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Tree tables", " : "))</script>  : Public  &lt;&lt;table&gt;&gt; Class</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("clean up value_display (remove row_no)", " : "))</script>  : Public   Activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">4/30/2012 2:08:20 PM</td>
+			<td width="85%" class="ObjectDetailsValue">12/6/2012 12:59:52 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">4/30/2012 2:32:56 PM</td>
+			<td class="ObjectDetailsValue">12/9/2012 2:48:14 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,102 +87,82 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{2D96543D-8051-4739-A3F8-8803947E044C}</td>
+			<td class="ObjectDetailsValue">{486BE04B-93D5-4eb6-817B-C1DFA667EAB2}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA935.htm">Manage_Ontology</a></td>
+			<td class="ObjectDetailsValue"><a href="EA940.htm">Grouping BAO annotations</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('Operations');" id="OperationsTitle">Operations</li>
-			<li onClick="parent.toggleItem('MessagesFrom');" id="MessagesFromTitle">Messages From</li>
+			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
+			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 		</ul>
-<div class="ItemBody" id="OperationsTable">
-	<table border="0" cellspacing="0" cellpadding="0" class="Table">
-		<tr>
-			<td width="100%" class="TableHeading">Operation</td>
-		</tr>
-						<tr>
-				<td width="100%" class="TableRow">
-					<i>Public</i><br />
-					<strong>insert into</strong>():
-				</td>
-			</tr>
-			<tr>
-				<td class="TableRowBottomDashed"  colspan="1">
-					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations1151" onclick="parent.toggleDiv('detailsDIVOperations1151','DetailsImageOperations1151')" />Details:
-						<div id="detailsDIVOperations1151" class="DetailsDiv" >
-					<i>  </i>
-					<table>
-						<tr>
-							<td valign = "top"><i></i><span style="margin-left: .7cm;"> </span></td>
-							<td></td>
-						</tr>
-					</table>
-					
-					
-					
-						</div>
-					</div>
-				</td>
-			</tr>
-
-		</table>
-</div>		<div class="ItemBody" id="MessagesFromTable">
+		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Message</td>
+					<td width="50%" class="TableHeading">Name</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA942.htm">«package» Manage_Ontology</a></td>
-					<td width="50%" class="TableRow" valign="top">delete from </td>
+					<td width="50%" class="TableRow" valign="top">
+						<a href="EA945.htm">compute new context_names</a><br />
+						Activity &nbsp;
+					</td>
+					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
 				</tr>
-		   		<tr>
+				<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1152" onclick="parent.toggleDiv('detailsDIVMessage1152', 'DetailsImageMessage1152')" />Details:
-							<div id="detailsDIVMessage1152" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow1125" onclick="parent.toggleDiv('detailsDIVLinkFlow1125', 'DetailsImageLinkFlow1125')" />Details:
+							<div id="detailsDIVLinkFlow1125" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA942.htm">«package» Manage_Ontology</a></td>
-					<td width="50%" class="TableRow" valign="top">insert into <tree_name></td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1153" onclick="parent.toggleDiv('detailsDIVMessage1153', 'DetailsImageMessage1153')" />Details:
-							<div id="detailsDIVMessage1153" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA942.htm">«package» Manage_Ontology</a></td>
-					<td width="50%" class="TableRow" valign="top">insert into <tree_name></td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1154" onclick="parent.toggleDiv('detailsDIVMessage1154', 'DetailsImageMessage1154')" />Details:
-							<div id="detailsDIVMessage1154" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="FlowFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="50%" class="TableHeading">Element</td>
+					<td width="50%" class="TableHeading">Name</td>
+				</tr>
+				<tr>
+					<td width="50%" class="TableRow" valign="top">
+						<a href="EA966.htm">reset the display_order</a><br />
+						Activity &nbsp;
+					</td>
+					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
+				</tr>
+				<tr>
+					<td class="TableRowBottomDashed"  colspan="2">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow1126" onclick="parent.toggleDiv('detailsDIVLinkFlow1126', 'DetailsImageLinkFlow1126')" />Details:
+							<div id="detailsDIVLinkFlow1126" class="DetailsDiv" >
+							&nbsp;
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>

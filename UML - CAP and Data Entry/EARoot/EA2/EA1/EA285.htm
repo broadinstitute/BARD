@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Create Schema script</title>
+<title>ERD model</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Create Schema script", " : "))</script>  : Public  &lt;&lt;information&gt;&gt; Information</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("ERD model", " : "))</script>  : Public  &lt;&lt;information&gt;&gt; Information</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/26/2012 9:32:04 AM</td>
+			<td width="85%" class="ObjectDetailsValue">9/26/2012 8:52:12 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">9/26/2012 9:32:15 AM</td>
+			<td class="ObjectDetailsValue">9/26/2012 8:52:25 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,7 +87,7 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{A5B3ED0B-DE6D-43e3-BFCD-16E737EC3E0D}</td>
+			<td class="ObjectDetailsValue">{49D5E26F-75F1-4a24-937C-E1DDB9F6C654}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
@@ -97,30 +97,35 @@ function nameClassifier(name, separator)
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
+			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="FlowToTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+		<div class="ItemBody" id="LinksTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
+					<td width="30%" class="TableHeading">Object</td>
+					<td width="15%" class="TableHeading">Type</td>
+					<td width="15%" class="TableHeading">Connection</td>
+					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA282.htm">Check out</a><br />
-						Action &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
+					<td width="30%" class="TableRow" valign="top"><a href="EA289.htm">«process» Manual edit script & test locally</a></td>
+					<td width="15%" class="TableRow" valign="top">Activity</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow58" onclick="parent.toggleDiv('detailsDIVLinkFlow58', 'DetailsImageLinkFlow58')" />Details:
-							<div id="detailsDIVLinkFlow58" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA287.htm">«process» Generate change script</a></td>
+					<td width="15%" class="TableRow" valign="top">Activity</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA288.htm">«process» Generate drop and create script</a></td>
+					<td width="15%" class="TableRow" valign="top">Activity</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
 			</table>
 		</div>
 	</div>

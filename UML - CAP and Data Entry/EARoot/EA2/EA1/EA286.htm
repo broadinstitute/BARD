@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>DATA_MIG Change script</title>
+<title>execute specific SQL</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("DATA_MIG Change script", " : "))</script>  : Public  &lt;&lt;information&gt;&gt; Information</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("execute specific SQL", " : "))</script>  : Public  &lt;&lt;process&gt;&gt; Process</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/26/2012 8:54:43 AM</td>
+			<td width="85%" class="ObjectDetailsValue">9/26/2012 10:21:28 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">9/26/2012 8:55:00 AM</td>
+			<td class="ObjectDetailsValue">9/26/2012 10:22:11 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,18 +87,20 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{16E30CA1-D195-46c6-A551-222FACAF0ED2}</td>
+			<td class="ObjectDetailsValue">{AF9B7EE7-3684-4c8d-9F97-8BC183F348AE}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
 			<td class="ObjectDetailsValue"><a href="EA270.htm">Data base management</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">to bring the data into the state the developer needs</div>
+
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -108,30 +110,15 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="50%" class="TableRow" valign="top">
-						<a href="EA312.htm">Manual edit script & test locally</a><br />
-						Activity &nbsp;
+						<a href="EA293.htm">New Developer schema</a><br />
+						Object &nbsp;
 					</td>
 					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow59" onclick="parent.toggleDiv('detailsDIVLinkFlow59', 'DetailsImageLinkFlow59')" />Details:
-							<div id="detailsDIVLinkFlow59" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA323.htm">Run script on DATA_MIG</a><br />
-						Activity &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow60" onclick="parent.toggleDiv('detailsDIVLinkFlow60', 'DetailsImageLinkFlow60')" />Details:
-							<div id="detailsDIVLinkFlow60" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow51" onclick="parent.toggleDiv('detailsDIVLinkFlow51', 'DetailsImageLinkFlow51')" />Details:
+							<div id="detailsDIVLinkFlow51" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -147,30 +134,30 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="50%" class="TableRow" valign="top">
-						<a href="EA312.htm">Manual edit script & test locally</a><br />
+						<a href="EA294.htm">Run drop and create script</a><br />
 						Activity &nbsp;
 					</td>
 					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow61" onclick="parent.toggleDiv('detailsDIVLinkFlow61', 'DetailsImageLinkFlow61')" />Details:
-							<div id="detailsDIVLinkFlow61" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow52" onclick="parent.toggleDiv('detailsDIVLinkFlow52', 'DetailsImageLinkFlow52')" />Details:
+							<div id="detailsDIVLinkFlow52" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
 					</td>
 				</tr>				<tr>
 					<td width="50%" class="TableRow" valign="top">
-						<a href="EA296.htm">Generate change script</a><br />
+						<a href="EA296.htm">Run permissions script</a><br />
 						Activity &nbsp;
 					</td>
 					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow62" onclick="parent.toggleDiv('detailsDIVLinkFlow62', 'DetailsImageLinkFlow62')" />Details:
-							<div id="detailsDIVLinkFlow62" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow53" onclick="parent.toggleDiv('detailsDIVLinkFlow53', 'DetailsImageLinkFlow53')" />Details:
+							<div id="detailsDIVLinkFlow53" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -178,7 +165,20 @@ function nameClassifier(name, separator)
 				</tr>
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>
