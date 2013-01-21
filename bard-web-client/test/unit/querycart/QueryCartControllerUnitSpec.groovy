@@ -11,6 +11,8 @@ import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 import bardqueryapi.InetAddressUtil
+import grails.plugins.springsecurity.SpringSecurityService
+import bardqueryapi.BardUtilitiesService
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(QueryCartController)
@@ -20,6 +22,7 @@ class QueryCartControllerUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
     CartAssay cartAssay
+    BardUtilitiesService bardUtilitiesService
 
     static final Long ID_IN_CART = 1
     static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
@@ -27,7 +30,9 @@ class QueryCartControllerUnitSpec extends Specification {
     static final String MOCK_DETAILS_CONTENT = 'mock summary content'
 
     void setup() {
-        controller.metaClass.mixin([InetAddressUtil])
+        controller.metaClass.mixin(InetAddressUtil)
+        bardUtilitiesService = Mock(BardUtilitiesService)
+        controller.bardUtilitiesService = bardUtilitiesService
 
         this.shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService

@@ -43,6 +43,16 @@ class InetAddressUtil {
             return forwardedFor;
         return request.getRemoteAddr();
     }
+    public String getUserIpAddress(String userName){
+        String ipAddress = getAddressFromRequest()
+        StringBuilder message = new StringBuilder()
+        message.append("  user:")
+        message.append(userName)
+        message.append("  IP:")
+        message.append(ipAddress)
+        return message.toString()
+
+    }
 
 //    public String getHostnameFromRequest() {
 //        String addr = getAddressFromRequest(request);

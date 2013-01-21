@@ -30,6 +30,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
@@ -42,7 +43,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     QueryService queryService
     ShoppingCartService shoppingCartService
     MobileService mobileService
-
+    BardUtilitiesService bardUtilitiesService
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
     @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
     @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
@@ -50,14 +51,19 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     @Shared String EMPTY_STRING = ''
 
     void setup() {
-        controller.metaClass.mixin([SearchHelper,InetAddressUtil])
+        controller.metaClass.mixin(InetAddressUtil)
+        bardUtilitiesService = Mock(BardUtilitiesService)
+        controller.metaClass.mixin(SearchHelper)
+        controller.bardUtilitiesService = bardUtilitiesService
 
         queryService = Mock(QueryService)
+
         molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.queryService = this.queryService
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
+
         views['/bardWebInterface/_assays.gsp'] = 'mock content'
         views['/bardWebInterface/_projects.gsp'] = 'mock content'
         views['/bardWebInterface/_compounds.gsp'] = 'mock content'
@@ -97,6 +103,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.findSubstanceIds(cid)
         then:
+        // _*controller.isBadRequest(_,_)>>{return false}
         _ * this.queryService.findSubstancesByCid(_) >> {sids}
         assert response.status == statusCode
 
@@ -210,7 +217,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleAssaySearches(this.queryService, searchCommand)
+        controller.handleAssaySearches(this.queryService, searchCommand, "user")
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
         assert response.status == statusCode
@@ -238,7 +245,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleProjectSearches(this.queryService, searchCommand)
+        controller.handleProjectSearches(this.queryService, searchCommand, "user")
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
         assert response.status == statusCode
@@ -261,7 +268,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleCompoundSearches(this.queryService, searchCommand)
+        controller.handleCompoundSearches(this.queryService, searchCommand, false,"user")
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         assert response.status == statusCode
