@@ -5,6 +5,7 @@
         <div class="span12"><button id="addExperimentToProject" class="btn btn-primary">Add Experiment</button>
             <button id="linkExperiment" class="btn btn-primary">Link Experiment</button></div>
     </div>
+    <div id="serviceResponse" style="display: none"></div>
     <div>
     <canvas id="viewport" width="800" height="600"></canvas>
     </div>

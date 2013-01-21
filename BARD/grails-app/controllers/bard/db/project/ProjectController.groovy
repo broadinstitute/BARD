@@ -36,33 +36,50 @@ class ProjectController {
     def removeExperimentFromProject(Long experimentId, Long projectId) {
         def experiment = Experiment.findById(experimentId)
         def project = Project.findById(projectId)
-        projectService.removeExperimentFromProject(experiment, project)
-        project = Project.findById(projectId)
-        render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        try{
+            projectService.removeExperimentFromProject(experiment, project)
+            project = Project.findById(projectId)
+            render "Experiment is removed, reload the page to show changes"
+        // TODO: render template not working, as we may use different package to render graph, we defer making template working later
+        // render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (UserFixableException e) {
+            render e.message
+        }
     }
 
     def removeEdgeFromProject(Long fromExperimentId, Long toExperimentId, Long projectId) {
         def fromExperiment = Experiment.findById(fromExperimentId)
         def toExperiment = Experiment.findById(toExperimentId)
         def project = Project.findById(projectId)
-        projectService.removeEdgeFromProject(fromExperiment, toExperiment, project)
-        project = Project.findById(projectId)
-        render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        try {
+            projectService.removeEdgeFromProject(fromExperiment, toExperiment, project)
+            project = Project.findById(projectId)
+            render "Link is removed, reload the page to show changes"
+            // TODO: render template not working, as we may use different package to render graph, we defer making template working later
+            //render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (UserFixableException e) {
+            render e.message
+        }
     }
 
     def linkExperiment (Long fromExperimentId, Long toExperimentId, Long projectId){
         def project = Project.findById(projectId)
         def fromExperiment = Experiment.findById(fromExperimentId)
         def toExperiment = Experiment.findById(toExperimentId)
-        projectService.linkExperiment(fromExperiment, toExperiment, project)
-        project = Project.findById(projectId)
-        render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        try{
+            projectService.linkExperiment(fromExperiment, toExperiment, project)
+            project = Project.findById(projectId)
+            //render "Link between experiment is added, reload the page to show changes"
+            // TODO: render template not working, as we may use different package to render graph, we defer making template working later
+            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        }catch(UserFixableException e) {
+            render 'serviceError:'+e.message
+        }
     }
 
     // Current the client send a list of displaynames of experiments.
     def associateExperimentsToProject() {
-        // TODO: need to see why there is [] at the end of the parameter name
-        // get all values regardless none, single, or multiple
+        // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
         def param1 = request.getParameterValues('selectedExperiments[]')
         def projectId = params['projectId']
         def project = Project.findById(projectId)
@@ -73,13 +90,18 @@ class ProjectController {
             selectedExperiments.add(it)
         }
 
+        try {
         selectedExperiments.each{ String experimentDisplayName ->
             def experimentId = experimentDisplayName.split("-")[0]
             def experiment = Experiment.findById(experimentId)
             projectService.addExperimentToProject(experiment, project)
+            // TODO: render template not working, as we may use different package to render graph, we defer making template working later
+            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         }
-        render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
-    }
+        }catch (UserFixableException e){
+            render 'serviceError:'+e.message
+        }
+     }
 
     def ajaxFindAvailableExperimentByName(String experimentName, Long projectId){
         List<Experiment> experiments = Experiment.findAllByExperimentNameIlike("%${experimentName}%")

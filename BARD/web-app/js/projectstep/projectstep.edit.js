@@ -33,11 +33,11 @@ $(document).ready(function () {
                 $.ajax
                     ({
                         url:"../associateExperimentsToProject",
-                        dataType:'json',
+                        //dataType:'json',
                         data:data,
                         cache:false,
-                        success:function (data) {
-
+                        success:function(data) {
+                            handleSuccess(data)
                         }
                     });
                 $( this ).dialog( "close" );
@@ -66,15 +66,15 @@ $(document).ready(function () {
                 var projectId = $("#projectIdForStep").val();
                 var fromExperimentId = $("#fromExperimentId").val();
                 var toExperimentId = $("#toExperimentId").val();
-                var data = {'fromExperimentId':fromExperimentId, 'toExperimentId':toExperimentId, 'projectId':projectId};
+                var inputdata = {'fromExperimentId':fromExperimentId, 'toExperimentId':toExperimentId, 'projectId':projectId};
                 $.ajax
                     ({
                         url:"../linkExperiment",
-                        dataType:'json',
-                        data:data,
+                        //dataType:'jsonP',
+                        data:inputdata,
                         cache:false,
-                        success:function (data) {
-
+                        success:function(data) {
+                            handleSuccess(data)
                         }
                     });
                 $( this ).dialog( "close" );
@@ -171,6 +171,17 @@ function findExperimentInput(selected, allValues){
     }
 }
 
+function handleSuccess(data){
+    if (data.substring(0, 12) === "serviceError") {
+        $("#serviceResponse").css("color","red")
+        $("#serviceResponse").text(data)
+    }
+    else {
+        $("#serviceResponse").css("color","green")
+        $("#serviceResponse").text("Success! Reload the page to view changes.")
+    }
+    $("#serviceResponse").show()
+}
 
 function deleteItem(experimentId, projectId){
     $("#dialog_confirm_delete_item").dialog("option", "buttons",[
@@ -183,9 +194,8 @@ function deleteItem(experimentId, projectId){
                     type:'POST',
                     url:'../removeExperimentFromProject',
                     data:data,
-                    success:function (data) {
-                        //                      $("div#" + assayContextId).replaceWith(data);
-                        //                       initDnd();
+                    success:function(data) {
+                        handleSuccess(data)
                     }
                 });
                 $( this ).dialog( "close" );
@@ -214,9 +224,8 @@ function deleteEdge(fromId, toId, projectId){
                     type:'POST',
                     url:'../removeEdgeFromProject',
                     data:data,
-                    success:function (data) {
-                        //                      $("div#" + assayContextId).replaceWith(data);
-                        //                       initDnd();
+                    success:function(data) {
+                        handleSuccess(data)
                     }
                 });
                 $( this ).dialog( "close" );
