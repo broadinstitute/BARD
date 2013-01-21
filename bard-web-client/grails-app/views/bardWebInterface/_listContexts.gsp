@@ -1,17 +1,12 @@
+<%@ page import="bard.core.rest.spring.assays.Context" %>
 <div id="cardHolder" class="span12">
-    <g:each in="${contexts}" var="entry">
-        <div id="${entry.key}" class="roundedBorder card-group ${entry.key.replaceAll(/( |> )/, '-')}">
+    <g:each in="${annotations}" var="annotationSet">
+        <div class="roundedBorder card-group">
             <div class="row-fluid">
-                <strong class="span12">${entry.key}</strong>
-            </div>
-            <div class="row-fluid">
-                <g:each in="${contextOwner.splitForColumnLayout(entry.value)}" var="contextColumnList">
+                <g:each in="${Context.splitForColumnLayout(annotationSet.contexts)}" var="contextColumnList">
                     <div class="span6">
                         <g:each in="${contextColumnList}" var="context">
-                            <g:render template="../contextItem/${subTemplate}"
-                                      model="[contextOwner: contextOwner,
-                                              context: context,
-                                              cardSection: entry.key]"/>
+                            <g:render template="showContextItems" model="[context: context]"/>
                         </g:each>
                     </div>
                 </g:each>

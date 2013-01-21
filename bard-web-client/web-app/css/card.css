@@ -61,7 +61,14 @@ table.table td.deleteItemButton {
     border-color: #a9a9a9;
     margin: 5px;
 }
-
+.table caption {
+    font-size: 14px;
+    background-color: #C3D9FF;
+    font-weight:bold;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
 
 .assay-protocol {
     background-color: #ddeeff;

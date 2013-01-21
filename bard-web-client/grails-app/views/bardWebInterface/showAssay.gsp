@@ -67,10 +67,8 @@
                 </div>
 
                 <div id="cardView" class="cardView" class="row-fluid">
-                    <g:render template="listContexts"
-                              model="[contextOwner: assayAdapter, contexts: contexts, subTemplate: 'show']"/>
+                    <g:render template="listContexts" model="[annotations: assayAdapter.annotations]"/>
                 </div>
-                <g:render template="showContextItems" model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
 
             </section>
             <g:if test="${assayAdapter.targets}">

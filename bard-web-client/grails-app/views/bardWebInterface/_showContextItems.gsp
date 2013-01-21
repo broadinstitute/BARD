@@ -13,20 +13,20 @@
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">
                 <p>${context.name}</p>
-                <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
-                    <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
-                        <g:each in="${context.assayContextMeasures}" status="i" var="assayContextMeasure">
-                            <a href="#measures-header">${assayContextMeasure.measure.displayLabel}<g:if test="${i < context.assayContextMeasures.size() - 1}">,  </g:if></a>
-                        </g:each>
-                    </p>
-                </g:if>
             </div>
         </caption>
         <tbody>
-        <g:each in="${context.contextItems}" status="i" var="contextItem">
+        <g:each in="${context.getComps()}" status="i" var="contextItem">
             <tr id="${contextItem.id}" class='context_item_row'>
-                <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
-                <td class="valuedLabel">${contextItem.valueDisplay}</td>
+                <td class="attributeLabel">${contextItem.key}</td>
+                <td class="valuedLabel">
+                    <g:if test="${contextItem.url}">
+                        <a href="${contextItem.url}" target="_blank">${contextItem.display}</a>
+                    </g:if>
+                    <g:else>
+                        ${contextItem.display}
+                    </g:else>
+                </td>
             </tr>
         </g:each>
         </tbody>

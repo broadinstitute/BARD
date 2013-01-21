@@ -46,4 +46,25 @@ public class Context extends JsonUtil {
         this.comps = comps;
     }
 
+    /**
+     * a hack to try and split the contexts into columns of relatively equal contextItems
+     *
+     * an attempt at limiting white space and compressing the view
+     *
+     * @param contexts
+     * @return list of up to 2 lists
+     */
+    static List<List<Context>> splitForColumnLayout(List<Context> contexts) {
+        int totalNumContextItems = contexts.collect { it.getComps().size() }.sum()
+        int half = totalNumContextItems / 2
+        int count = 0
+        List<Context> firstColumnContexts = contexts.findAll { context ->
+            count += context.getComps().size();
+            count <= half
+        }
+        List<Context> secondColumnContexts = contexts - firstColumnContexts
+        def splitContexts = [firstColumnContexts, secondColumnContexts].findAll() // eliminates any empty lists
+        splitContexts
+    }
+
 }
