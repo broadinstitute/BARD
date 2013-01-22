@@ -46,7 +46,7 @@ public class ConcentrationResponseSeries extends JsonUtil {
                 return dictionaryElement.label
             }
         }
-        return responseUnit
+        return ""
     }
 
     public String getDictionaryDescription() {
@@ -56,7 +56,7 @@ public class ConcentrationResponseSeries extends JsonUtil {
                 return dictionaryElement.description
             }
         }
-        return responseUnit
+        return ""
     }
 
     public String getYAxisLabel() {

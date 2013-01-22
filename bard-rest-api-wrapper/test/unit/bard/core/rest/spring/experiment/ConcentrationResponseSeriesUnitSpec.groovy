@@ -107,14 +107,14 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         where:
         label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
         "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(description: "label") | "label"             | 1
-        "Has a DictElemId, but not in dictionary" | 221        | null                                        | "pubChem"           | 1
-        "Has no DictElemId"                       | 0          | null                                        | "pubChem"           | 0
+        "Has a DictElemId, but not in dictionary" | 221        | null                                        | ""                  | 1
+        "Has no DictElemId"                       | 0          | null                                        | ""                  | 0
 
     }
 
     void "test getDictionaryLabel #label"() {
         given:
-        ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(dictElemId: dictElemId, responseUnit: "pubChem")
+        ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(dictElemId: dictElemId)
         Dummy dummy = new Dummy()
         dummy.dataExportRestService = dataExportRestService
         concentrationResponseSeries.dummy = dummy
@@ -127,8 +127,8 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         where:
         label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions
         "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(label: "label") | "label"       | 1
-        "Has a DictElemId, but not in dictionary" | 221        | null                                  | "pubChem"     | 1
-        "Has no DictElemId"                       | 0          | null                                  | "pubChem"     | 0
+        "Has a DictElemId, but not in dictionary" | 221        | null                                  | ""            | 1
+        "Has no DictElemId"                       | 0          | null                                  | ""            | 0
 
     }
 

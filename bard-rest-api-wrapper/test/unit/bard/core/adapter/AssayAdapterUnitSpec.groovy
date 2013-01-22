@@ -163,7 +163,7 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.score == score
         assert assayAdapter.matchingField.name == nameDescription.name
         assert assayAdapter.matchingField.description == nameDescription.description
-        assert assayAdapter.highlight == "Score: 2.0 Matched Field: name"
+        assert assayAdapter.highlight == "Matched Field: name"
         assert assayAdapter.documentIds
         assert assayAdapter.targetIds
         assert !assayAdapter.documents
@@ -197,7 +197,7 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.score == score
         assert assayAdapter.matchingField.name == nameDescription.name
         assert assayAdapter.matchingField.description == nameDescription.description
-        assert assayAdapter.highlight == "Score: 2.0 Matched Field: name"
+        assert assayAdapter.highlight == "Matched Field: name"
         assert assayAdapter.documentIds
         assert assayAdapter.targetIds
         assert assayAdapter.documents

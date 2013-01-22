@@ -54,8 +54,8 @@ class ActivityDataUnitSpec extends Specification {
         assert activityData.responseUnit == "um"
         assert activityData.testConcentrationUnit == "uM"
         assert activityData.getDictionaryLabel() == "IC50"
-        assert activityData.getDictionaryDescription() == "um"
-        assert activityData.toDisplay() == display
+        assert activityData.getDictionaryDescription() == "IC50"
+        assert activityData.toDisplay().trim() == display.trim()
         assert activityData.qualifier == qualifier
 
         where:
@@ -91,7 +91,7 @@ class ActivityDataUnitSpec extends Specification {
 
     void "test getDictionaryDescription #label"() {
         given:
-        ActivityData activityData = new ActivityData(dictElemId: dictElemId, responseUnit: "pubChem")
+        ActivityData activityData = new ActivityData(dictElemId: dictElemId, pubChemDisplayName: "pubChem")
         Dummy dummy = new Dummy()
         dummy.dataExportRestService = dataExportRestService
         activityData.dummy = dummy
