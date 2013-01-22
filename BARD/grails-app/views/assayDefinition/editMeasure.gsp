@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require modules="core,bootstrap,assaycards"/>
-    <script src="${resource(dir: 'js', file: 'cap-ui.js')}" type="text/javascript"></script>
+    <script src="${resource(dir: 'js', file: 'editMeasures.js')}" type="text/javascript"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <meta name="layout" content="basic"/>
     <title>Edit Measures</title>
