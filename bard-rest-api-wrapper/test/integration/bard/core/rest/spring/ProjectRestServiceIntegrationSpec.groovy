@@ -216,7 +216,6 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     /**
      *
      */
-    @IgnoreRest
     void "test Get Projects with facets, #label"() {
         given:
         final Object etag = projectRestService.newETag("Some Collection", pids);
