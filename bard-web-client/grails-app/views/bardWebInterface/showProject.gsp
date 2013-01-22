@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Project : ID ${projectAdapter?.id}</title>
-    <r:require modules="showProjectAssay,compoundOptions, twitterBootstrapAffix"/>
+    <r:require modules="showProjectAssay,compoundOptions,twitterBootstrapAffix"/>
 </head>
 
 <body>

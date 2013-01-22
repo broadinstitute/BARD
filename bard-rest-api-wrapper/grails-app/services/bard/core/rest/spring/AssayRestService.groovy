@@ -2,7 +2,7 @@ package bard.core.rest.spring
 
 import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
-import bard.core.rest.spring.assays.AssayAnnotation
+
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.assays.AssayResult
@@ -14,14 +14,15 @@ import org.springframework.http.HttpHeaders
 
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import bard.core.rest.spring.assays.BardAnnotation
 
 class AssayRestService extends AbstractRestService {
 
-    public AssayAnnotation findAnnotations(final Long adid) {
+    public BardAnnotation findAnnotations(final Long adid) {
         final String resource = getResource(adid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
 
-        final AssayAnnotation annotations = (AssayAnnotation)getForObject(url.toURI(), AssayAnnotation.class)
+        final BardAnnotation annotations = (BardAnnotation)getForObject(url.toURI(), BardAnnotation.class)
         return annotations;
     }
     /**

@@ -3,7 +3,7 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.interfaces.RestApiConstants
-import bard.core.rest.spring.assays.AssayAnnotation
+
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
 import bard.core.rest.spring.assays.AssayResult
@@ -12,7 +12,8 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.helper.LoggerService
-import org.apache.commons.lang3.time.StopWatch
+
+import bard.core.rest.spring.assays.BardAnnotation
 
 @Unroll
 @TestFor(AssayRestService)
@@ -58,9 +59,9 @@ class AssayRestServiceUnitSpec extends Specification {
         given:
         Long adid = 200
         when:
-        AssayAnnotation annotations = service.findAnnotations(adid)
+        BardAnnotation annotations = service.findAnnotations(adid)
         then:
-        this.restTemplate.getForObject(_, _) >> {new AssayAnnotation()}
+        this.restTemplate.getForObject(_, _) >> {new BardAnnotation()}
         assert annotations
     }
 

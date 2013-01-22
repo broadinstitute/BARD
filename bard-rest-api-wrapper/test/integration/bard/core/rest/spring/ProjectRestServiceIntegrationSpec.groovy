@@ -12,6 +12,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 import spock.lang.IgnoreRest
+import bard.core.rest.spring.util.Document
 
 /**
  * Tests for ProjectRestService
@@ -29,6 +30,21 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         final Map<String, List<String>> ps = projectRestService.suggest(suggestParams);
         then:
         assertSuggestions(ps);
+    }
+    void testProjectsWithPublications(){
+        given:
+        Long pid = 31
+
+        when:
+        final ProjectExpanded projectExpanded = projectRestService.getProjectById(pid)
+
+        then:
+        final List<Document> publications = projectExpanded.getPublications()
+        assert publications
+        assert publications.size() >= 1
+        Document publication = publications.get(0)
+        assert publication
+
     }
     /**
      * Copied from RESTTestServices#testServices9

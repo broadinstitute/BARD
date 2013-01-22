@@ -6,11 +6,11 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-class AssayAnnotationUnitSpec extends Specification {
+class BardAnnotationUnitSpec extends Specification {
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
 
-    public static final String ASSAY_ANNOTATION = '''
+    public static final String BARD_ANNOTATION = '''
 {
    "contexts":[
       {
@@ -83,14 +83,14 @@ class AssayAnnotationUnitSpec extends Specification {
 
     void "test serialization to AssayAnnotation"() {
         when:
-        final AssayAnnotation assayAnnotation = objectMapper.readValue(ASSAY_ANNOTATION, AssayAnnotation.class)
+        final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
         then:
-        assert assayAnnotation.measures
-        assert assayAnnotation.measures.size() == 1
-        assert assayAnnotation.docs
-        assert assayAnnotation.docs.size() == 1
-        assert assayAnnotation.contexts
-        assert assayAnnotation.contexts.size()==1
+        assert bardAnnotation.measures
+        assert bardAnnotation.measures.size() == 1
+        assert bardAnnotation.docs
+        assert bardAnnotation.docs.size() == 1
+        assert bardAnnotation.contexts
+        assert bardAnnotation.contexts.size()==1
 
 
     }

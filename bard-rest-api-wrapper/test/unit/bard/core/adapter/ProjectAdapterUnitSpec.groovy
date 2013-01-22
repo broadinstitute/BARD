@@ -29,14 +29,10 @@ class ProjectAdapterUnitSpec extends Specification {
        "gocc_term": null,
        "av_dict_label":
        [
-           "X01 MH083262-01",
-           "NCGC"
         ],
        "ak_dict_label":
        [
-           "grant number",
-           "laboratory name"
-       ],
+        ],
        "kegg_disease_names":
        [
            "Lou Gehrig's disease"
@@ -104,35 +100,20 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.getId() == 17
         assert projectAdapter.name == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
         assert projectAdapter.description == "NIH Molecular Libraries Probe"
-        assert projectAdapter.getGrantNumber() == "X01 MH083262-01"
-        assert projectAdapter.getLaboratoryName() == "NCGC"
+
+
         assert projectAdapter.getProbes()
         assert projectAdapter.numberOfExperiments == 12
-        assert projectAdapter.annotations
-        assert projectAdapter.dictionaryTerms
-        assert projectAdapter.keggAnnotations
-        assert projectAdapter.matchingField.name=="name"
+        assert !projectAdapter.annotations
+
+        assert projectAdapter.matchingField.name == "name"
         assert projectAdapter.score == 2
-        assert projectAdapter.matchingField.description=="description"
+        assert projectAdapter.matchingField.description == "description"
         assert projectAdapter.highlight == "Score: 2.0 Matched Field: name"
         assert projectAdapter.targets
         assert !projectAdapter.documents
         assert projectAdapter.hasProbes()
-        assert projectAdapter.numberOfAnnotations == 4
-        assert projectAdapter.getKeggAnnotations()
-        assert projectAdapter.getKeggDiseaseCategories()
-        assert projectAdapter.getKeggDiseaseNames()
-    }
-
-    void "test with grantNo"() {
-
-        given:
-        final Project project = new Project(grantNo: "X01 MH083262-01")
-        when:
-        ProjectAdapter projectAdapter = new ProjectAdapter(project)
-        then:
-        assert projectAdapter.getGrantNumber() == "X01 MH083262-01"
-        assert !projectAdapter.highlight
+        assert projectAdapter.numberOfAnnotations == 0
     }
 
 

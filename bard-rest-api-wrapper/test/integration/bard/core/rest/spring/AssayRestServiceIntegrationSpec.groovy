@@ -11,7 +11,6 @@ import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
-import spock.lang.IgnoreRest
 
 /**
  * Tests for RESTAssayService in JDO
@@ -27,7 +26,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final AssayResult assayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
         final long adid = assayResult.assays.get(0).id
         when:
-        final AssayAnnotation annotation = assayRestService.findAnnotations(adid)
+        final BardAnnotation annotation = assayRestService.findAnnotations(adid)
         then:
         assert assayResult.metaData
         assert assayResult.link
@@ -48,7 +47,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         given:
         final ExpandedAssay assay = assayRestService.getAssayById(2868);
         when:
-        final AssayAnnotation annotation = assayRestService.findAnnotations(assay.id)
+        final BardAnnotation annotation = assayRestService.findAnnotations(assay.id)
         then:
         assert annotation
         assert annotation.contexts
@@ -64,7 +63,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final List<ExpandedAssay> assays = assayResult.assays
         final ExpandedAssay assay = assays.get(0)
         when:
-        AssayAnnotation annotation = assayRestService.findAnnotations(assay.getId())
+        BardAnnotation annotation = assayRestService.findAnnotations(assay.getId())
         then:
         assert annotation
         assert annotation.contexts
