@@ -112,5 +112,12 @@ class AssayContextService {
 		}
 		return isSaved;
 	}
-	
+
+    public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit) {
+        Measure measure = new Measure(assay: assayInstance, resultType: resultType, statsModifier: statsModifier, entryUnit: entryUnit, parentMeasure: parentMeasure);
+        assayInstance.addToMeasures(measure)
+        measure.save()
+
+        return measure
+    }
 }

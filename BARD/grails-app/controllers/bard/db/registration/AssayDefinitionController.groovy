@@ -6,7 +6,7 @@ import grails.plugins.springsecurity.Secured
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure : "POST"]
 
     AssayContextService assayContextService
 
@@ -71,6 +71,7 @@ class AssayDefinitionController {
     }
 
     def addMeasure() {
+        def assayInstance = Assay.get(params.id)
         def resultType = Element.get(params.resultTypeId)
 
         def parentMeasure = null
@@ -79,17 +80,18 @@ class AssayDefinitionController {
         }
 
         def statsModifier = null
-        if (params.statsModifier) {
-            statsModifier = Element.get(params.statsModifierId)
+        if (params.statisticName) {
+            statsModifier = Element.findByLabel(params.statisticName)
         }
 
         def entryUnit = null
-        if (params.entryUnit) {
-            entryUnit = Element.get(params.entryUnitId)
+        if (params.entryUnitName) {
+            entryUnit = Element.findByLabel(params.entryUnitName)
         }
 
-        assayContextService.addMeasure(resultType, statsModifier, entryUnit)
+        Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit)
 
+        flash.message = "Successfully added measure " + newMeasure.displayLabel
         redirect(action: "editMeasure", id: params.id)
     }
 

@@ -3,6 +3,7 @@
 <html>
 <head>
     <r:require modules="core,bootstrap,assaycards"/>
+    <script src="${resource(dir: 'js', file: 'cap-ui.js')}" type="text/javascript"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <meta name="layout" content="basic"/>
     <title>Edit Measures</title>
@@ -47,38 +48,54 @@
         <div class="span6">
 
             <h4>Add a measure</h4>
-            <a href="#saveModal" role="button" class="btn" data-toggle="modal">Click to add new measure at the top of the hierarchy</a>
+            <a id="add-measure-at-top" href="#saveModal" role="button" class="btn" data-toggle="modal">Click to add new measure at the top of the hierarchy</a>
+            <r:script>
+                $("#add-measure-at-top").on("click", function(){ $("#add-parent-id").val("") });
+            </r:script>
+
+            <%-- initially invisible dialog for adding a new measure --%>
             <div id="saveModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <h3 id="saveModalLabel">Add a new measure</h3>
                 </div>
                 <div class="modal-body">
-                    <g:form class="form-horizontal" id="${assayInstance.id}">
+                    <g:form class="form-horizontal" id="${assayInstance.id}" name="add-measure-form" action="addMeasure">
+                        <input type="hidden" id="add-parent-id" value="" name="parentMeasureId"/>
                         <div class="control-group">
-                            <label class="control-label" for="inputMeasure">Measure</label>
+                            <label class="control-label" for="resultTypeName">Result Type</label>
                             <div class="controls">
-                                <input type="text" id="inputMeasure" placeholder="Measure name">
+                                <input type="text" id="resultTypeName" name="resultTypeName" placeholder="Result type name">
+                                <input type="hidden" id="resultTypeId" name="resultTypeId"/>
+                                <r:script>
+                                    enableAutoCompleteOntology("#resultTypeName", "result type", "#resultTypeId");
+                                </r:script>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="inputStatistic">Statistic</label>
+                            <label class="control-label" for="statisticName">Statistic (optional)</label>
                             <div class="controls">
-                                <input type="text" id="inputStatistic" placeholder="Statistic name">
+                                <input type="text" id="statisticName" name="statisticName" placeholder="Statistic name">
+                                <r:script>
+                                    enableAutoCompleteOntology("#statisticName", "result type", "#resultTypeId");
+                                </r:script>
                             </div>
                         </div>
                     </g:form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn-primary" id="add-measure-button">Save</button>
                 </div>
             </div>
+            <r:script>
+                $("#add-measure-button").on("click", function(){$("#add-measure-form").submit()})
+            </r:script>
 
             <h4>Moving Measures</h4>
             <p>To change the location of a measure in the tree, select the name and drag it to the new location.</p>
             <h3>Measures</h3>
             <r:require module="dynatree"/>
-            <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}" editable="true"/>
+            <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}"/>
         </div>
 
         <div class="span6">
@@ -93,7 +110,10 @@
                     <p><strong>Definition:</strong> ${measure.resultType?.description}</p>
 
                     <h4>Add child measure</h4>
-                    <a href="#saveModal" role="button" class="btn" data-toggle="modal">Click to add new measure under ${measure.resultType?.label}</a>
+                    <a id="add-measure-under-id-${measure.id}" href="#saveModal" role="button" class="btn" data-toggle="modal">Click to add new measure under ${measure.resultType?.label}</a>
+                    <r:script>
+                        $("#add-measure-under-id-${measure.id}").on("click", function(){ $("#add-parent-id").val("${measure.id}") });
+                    </r:script>
 
                     <h4>Add association</h4>
                     <p>To associate this measure with a context, select the context below and click "associate".</p>
@@ -136,7 +156,10 @@
                         </g:each>
                     </g:else>
 
-                    <button type="button" class="btn">Click to delete ${measure.resultType?.label} entirely</button>
+                    <g:form id="${assayInstance.id}" action="deleteMeasure">
+                        <input type="hidden" name="measureId" value="${measure.id}"/>
+                        <button type="button" class="btn" onclick="this.form.submit()">Click to delete ${measure.resultType?.label} entirely</button>
+                    </g:form>
 
                 </div>
             </g:each>
