@@ -154,4 +154,17 @@ public class Comp extends JsonUtil {
         this.related = related;
     }
 
+    static List<List<Comp>> splitForColumnLayout(List<Comp> comps) {
+        int totalNumContextItems = comps.size()
+        int half = Math.ceil(totalNumContextItems / 2) //make the first column the longest in case of an odd number of elements.
+
+        if (totalNumContextItems) {
+            List<Comp> firstColumnComps = comps[0..(half - 1)]
+            List<Comp> secondColumnComps = comps - firstColumnComps
+            def splitComps = [firstColumnComps, secondColumnComps].findAll() // eliminates any empty lists
+            return splitComps
+        }
+
+        return []
+    }
 }

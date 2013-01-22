@@ -56,7 +56,7 @@ public class Context extends JsonUtil {
      * @return list of up to 2 lists
      */
     static List<List<Context>> splitForColumnLayout(List<Context> contexts) {
-        int totalNumContextItems = contexts.collect { it.getComps().size() }.sum()
+        int totalNumContextItems = contexts.collect { it?.getComps()?.size() ?: 0 }.sum() ?: 0
         int half = totalNumContextItems / 2
         int count = 0
         List<Context> firstColumnContexts = contexts.findAll { context ->

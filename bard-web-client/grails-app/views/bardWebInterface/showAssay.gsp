@@ -49,6 +49,7 @@
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
                 <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
+                <li><a href="#assay-bio-info-misc"><i class="icon-chevron-right"></i>Assay and Biology Details - Miscellaneous</a></li>
                 <g:if test="${assayAdapter.targets}">
                     <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets</a></li>
                 </g:if>
@@ -69,6 +70,16 @@
 
                 <div id="cardView" class="cardView" class="row-fluid">
                     <g:render template="listContexts" model="[annotations: assayAdapter.annotations]"/>
+                </div>
+
+            </section>
+            <section id="assay-bio-info-misc">
+                <div class="page-header">
+                    <h3>Assay and Biology Details - Miscellaneous</h3>
+                </div>
+
+                <div id="cardViewMisc" class="cardView" class="row-fluid">
+                    <g:render template="listMiscellaneous" model="[annotations: assayAdapter.annotations]"/>
                 </div>
 
             </section>
