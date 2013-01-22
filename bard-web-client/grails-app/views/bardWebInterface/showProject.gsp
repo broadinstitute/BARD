@@ -77,6 +77,8 @@
             <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar" data-spy="affix">
                 <li><a href="#annotations-info"><i
                         class="icon-chevron-right"></i>Annotations</a></li>
+                <li><a href="#annotations-info-misc"><i
+                        class="icon-chevron-right"></i>Annotations - Miscellaneous</a></li>
                 <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
 
                 <g:if test="${projectAdapter.targets}">
@@ -98,34 +100,21 @@
                     <h3>Annotations (${projectAdapter?.numberOfAnnotations})</h3>
                 </div>
 
-                <div>
-                    <dl>
-                        <g:each in="${projectAdapter?.annotations}" var="annotation">
-                            <dt>${annotation.id}</dt>
-                            <dd>${annotation.value}</dd>
-                        </g:each>
-                    </dl>
-                    <g:if test="${projectAdapter?.keggDiseaseCategories}">
-                        <dl>
-                            %{--TODO: Make annother call to get other annotations--}%
-                            <dt>Kegg Disease Categories</dt>
-                            <g:each in="${projectAdapter.keggDiseaseCategories}" var="annotation">
-
-                                <dd>${annotation}</dd>
-                            </g:each>
-                        </dl>
-                    </g:if>
-                    <g:if test="${projectAdapter?.keggDiseaseNames}">
-                        <dl>
-                            <dt>Kegg Disease Names</dt>
-                            <g:each in="${projectAdapter.keggDiseaseNames}" var="annotation">
-
-                                <dd>${annotation}</dd>
-                            </g:each>
-                        </dl>
-                    </g:if>
+                <div id="cardView" class="cardView" class="row-fluid">
+                    <g:render template="listContexts" model="[annotations: projectAdapter.annotations]"/>
                 </div>
             </section>
+            <section id="annotations-info-misc">
+                <div class="page-header">
+                    <h3>Annotations - Miscellaneous</h3>
+                </div>
+
+                <div id="cardViewMisc" class="cardView" class="row-fluid">
+                    <g:render template="listMiscellaneous" model="[annotations: projectAdapter.annotations]"/>
+                </div>
+
+            </section>
+
             <section id="description-info">
                 <div class="page-header">
                     <h3>Description</h3>
