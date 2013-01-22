@@ -15,7 +15,7 @@ import bard.core.interfaces.*
 import bard.core.rest.spring.compounds.CompoundSummary
 import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
-import bard.core.rest.spring.assays.AssayAnnotation
+import bard.core.rest.spring.assays.BardAnnotation
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -790,9 +790,9 @@ class MockAssayAdapter implements AssayAdapterInterface {
         super()
     }
 
-    public List<AssayAnnotation> getAnnotations() {
-        final List<AssayAnnotation> annos = new ArrayList<AssayAnnotation>();
-        AssayAnnotation annotation = new AssayAnnotation()
+    public List<BardAnnotation> getAnnotations() {
+        final List<BardAnnotation> annos = new ArrayList<BardAnnotation>();
+        BardAnnotation annotation = new BardAnnotation()
         annotation.key = "target"
         annotation.value = "WEE1"
         annos.add(annotation)
@@ -944,14 +944,14 @@ class MockProjectAdapter implements ProjectAdapterInterface {
     }
 
     @Override
-    Collection<Value> getAnnotations() {
+    List<BardAnnotation> getAnnotations() {
         if (!annotations) {
-            this.annotations = new ArrayList<Value>();
-            final Map<String, String> terms = getDictionaryTerms()
-            for (String key : terms.keySet()) {
-                Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
-                this.annotations.add(value)
-            }
+            this.annotations = new ArrayList<BardAnnotation>();
+//            final Map<String, String> terms = getDictionaryTerms()
+//            for (String key : terms.keySet()) {
+//                Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
+//                this.annotations.add(value)
+//            }
         }
         return annotations//To change body of implemented methods use File | Settings | File Templates.
     }

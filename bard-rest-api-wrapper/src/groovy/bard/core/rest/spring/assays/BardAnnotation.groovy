@@ -10,7 +10,7 @@ import bard.core.rest.spring.util.JsonUtil
  * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AssayAnnotation  extends JsonUtil {
+public class BardAnnotation extends JsonUtil {
 
     @JsonProperty("contexts")
     private List<Context> contexts = new ArrayList<Context>();

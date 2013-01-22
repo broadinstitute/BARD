@@ -1,7 +1,7 @@
 package bard.core.interfaces;
 
 
-import bard.core.rest.spring.assays.AssayAnnotation
+import bard.core.rest.spring.assays.BardAnnotation
 
 public interface AssayAdapterInterface {
     public String getName()
@@ -28,7 +28,7 @@ public interface AssayAdapterInterface {
 
     public String getSource()
 
-    public List<AssayAnnotation> getAnnotations()
+    public List<BardAnnotation> getAnnotations()
 
     public List<String> getKeggDiseaseNames()
 

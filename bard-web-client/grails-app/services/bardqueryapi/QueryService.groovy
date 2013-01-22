@@ -30,7 +30,7 @@ import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.experiment.ResponseClassEnum
-import bard.core.rest.spring.assays.AssayAnnotation
+import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.DataExportRestService
 
 class QueryService implements IQueryService {
@@ -370,7 +370,7 @@ class QueryService implements IQueryService {
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
-            final List<AssayAnnotation> annotations = [assayRestService.findAnnotations(assayId)]
+            final List<BardAnnotation> annotations = [assayRestService.findAnnotations(assayId)]
             final AssayAdapter assayAdapter = new AssayAdapter(assay, 0, null, annotations)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
         }
@@ -384,6 +384,7 @@ class QueryService implements IQueryService {
     Map showProject(final Long projectId) {
         if (projectId) {
             final ProjectExpanded project = projectRestService.getProjectById(projectId)
+            final List<BardAnnotation> annotations = [projectRestService.findAnnotations(projectId)]
             if (project) {
                 final List<ExperimentSearch> experiments = project.experiments
                 if (experiments) {
@@ -392,7 +393,7 @@ class QueryService implements IQueryService {
                     }
                 }
                 final List<Assay> assays = project.assays
-                final ProjectAdapter projectAdapter = new ProjectAdapter(project)
+                final ProjectAdapter projectAdapter = new ProjectAdapter(project,0,null,annotations)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }
         }
