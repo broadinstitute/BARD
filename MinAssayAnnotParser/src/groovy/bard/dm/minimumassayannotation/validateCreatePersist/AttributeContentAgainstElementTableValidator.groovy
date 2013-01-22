@@ -25,53 +25,39 @@ class AttributeContentAgainstElementTableValidator {
      */
     boolean validate(List<ContextDTO> contextDTOList, Map attributeNameMapping) {
 
-        boolean blankContextDto = false
-        Long prevAid = null
-
+        boolean result = true;
         for (ContextDTO contextDTO : contextDTOList) {
-            if (contextDTO != null) {
-                for (ContextItemDto contextItemDto : contextDTO.attributes) {
-                    if (! checkForElement(contextItemDto.key, contextDTO.aid, contextDTO.name)) {
-                        return false
-                    }
+            for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
 
-                    //Check that the value is defined in the database,
-                    // except for the ones that are numeric values or a type-in field or a Free-type field
-                    if (contextItemDto.value &&
-                            (contextItemDto.value instanceof String) &&
-                            !contextItemDto.typeIn &&
-                            (contextItemDto.attributeType != AttributeType.Free)) {
+                //have deliberately placed result as the second operand so that the checkForElement method
+                //is run so that all elements are checked
+                result = checkForElement(contextItemDto.key, contextDTO) && result
 
-                        if (! checkForElement(contextItemDto.value, contextDTO.aid, contextDTO.name)) {
-                            return false
-                        }
+                //Check that the value is defined in the database,
+                // except for the ones that are numeric values or a type-in field or a Free-type field
+                if (contextItemDto.value &&
+                        (contextItemDto.value instanceof String) &&
+                        !contextItemDto.typeIn &&
+                        (contextItemDto.attributeType != AttributeType.Free)) {
 
-                    }
-
-                    //If concentration units are present check that they are defined in the database
-                    if (contextItemDto.concentrationUnits) {
-                        if (! checkForElement(contextItemDto.concentrationUnits, contextDTO.aid, contextDTO.name)) {
-                            return false
-                        }
-                    }
+                    //have deliberately placed result as the second operand so that the checkForElement method
+                    //is run so that all elements are checked
+                    result = checkForElement(contextItemDto.value, contextDTO) && result
                 }
 
-                prevAid = contextDTO.aid
-            } else {
-                Log.logger.error("null contextDTO found.  Previous non-null aid: $prevAid")
-                blankContextDto = true
-            }
-
-            if (blankContextDto) {
-                Log.logger.error("null contextDTO found.  Subsequent non-null aid: ${contextDTO?.aid}")
-                blankContextDto = false
+                //If concentration units are present check that they are defined in the database
+                if (contextItemDto.concentrationUnits != null) {
+                    //have deliberately placed result as the second operand so that the checkForElement method
+                    //is run so that all elements are checked
+                    result = checkForElement(contextItemDto.concentrationUnits, contextDTO) && result
+                }
             }
         }
 
-        return true
+        return result
     }
 
-    private boolean checkForElement(String elementLabel, Long aid, String assayContextDtoName) {
+    private boolean checkForElement(String elementLabel, ContextDTO contextDTO) {
         Element element = Element.findByLabelIlike(elementLabel)
 
         if (element) {
@@ -79,7 +65,7 @@ class AttributeContentAgainstElementTableValidator {
         } else {
             final String message = "Attributes in context not found in database:  $elementLabel"
             Log.logger.error(message)
-            loadResultsWriter.write(aid, null, assayContextDtoName, ContextLoadResultsWriter.LoadResultType.fail, message)
+            loadResultsWriter.write(contextDTO, null, ContextLoadResultsWriter.LoadResultType.fail, null, 0, message)
 
             return false
         }

@@ -60,17 +60,17 @@ class AssayContextGroupsBuilder {
         List<ContextItemDto> resultDetails = [new ContextItemDto('2/AH', '$/AH', AttributeType.Free),
                 new ContextItemDto('2/AI', '$/AI', AttributeType.Free)]
 
-        List<ContextGroup> spreadsheetAssayContextGroups = [new ContextGroup(name: 'processOrTarget', attributes: processOrTarget),
-                new ContextGroup(name: 'assayFormat', attributes: assayFormat),
-                new ContextGroup(name: 'assayComponent', attributes: assayComponent),
-                new ContextGroup(name: 'assayDetection', attributes: assayDetection),
-                new ContextGroup(name: 'assayReadout', attributes: assayReadout),
-                new ContextGroup(name: 'assayDetector', attributes: assayDetector),
-                new ContextGroup(name: 'assayFootprint', attributes: assayFootprint),
-                new ContextGroup(name: 'assayExcitation', attributes: assayExcitation),
-                new ContextGroup(name: 'assayAbsorbance', attributes: assayAbsorbance),
-                new ContextGroup(name: 'resultActivityThreshold', attributes: resultActivityThreshold),
-                new ContextGroup(name: 'resultDetails', attributes: resultDetails)]
+        List<ContextGroup> spreadsheetAssayContextGroups = [new ContextGroup(name: 'processOrTarget', contextItemDtoList: processOrTarget),
+                new ContextGroup(name: 'assayFormat', contextItemDtoList: assayFormat),
+                new ContextGroup(name: 'assayComponent', contextItemDtoList: assayComponent),
+                new ContextGroup(name: 'assayDetection', contextItemDtoList: assayDetection),
+                new ContextGroup(name: 'assayReadout', contextItemDtoList: assayReadout),
+                new ContextGroup(name: 'assayDetector', contextItemDtoList: assayDetector),
+                new ContextGroup(name: 'assayFootprint', contextItemDtoList: assayFootprint),
+                new ContextGroup(name: 'assayExcitation', contextItemDtoList: assayExcitation),
+                new ContextGroup(name: 'assayAbsorbance', contextItemDtoList: assayAbsorbance),
+                new ContextGroup(name: 'resultActivityThreshold', contextItemDtoList: resultActivityThreshold),
+                new ContextGroup(name: 'resultDetails', contextItemDtoList: resultDetails)]
 
         return spreadsheetAssayContextGroups
     }
