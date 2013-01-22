@@ -304,7 +304,6 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-    @IgnoreRest
     void "test that we can create an ETag from a list of experiments"() {
         when: "we have list of cart compounds"
         List<CartProject> cartProjectList = []

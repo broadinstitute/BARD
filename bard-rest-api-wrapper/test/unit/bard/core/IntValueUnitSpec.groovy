@@ -35,6 +35,7 @@ class IntValueUnitSpec extends Specification {
         "[0 TO 10] < [10 TO 20]"     | new IntValue(source: dataSource, id: "[0 TO 10]", value: 4)  | new IntValue(source: dataSource, id: "[10 TO 20]", value: 2) | -1
         "[10 TO 20] > [0 TO 10]"     | new IntValue(source: dataSource, id: "[10 TO 20]", value: 4) | new IntValue(source: dataSource, id: "[0 TO 10]", value: 2)  | 1
         "[10 TO 20] > [10 TO 20]"    | new IntValue(source: dataSource, id: "[10 TO 20]", value: 4) | new IntValue(source: dataSource, id: "[10 TO 20]", value: 2) | 0
+        "[* TO 10] > [10 TO *]"      | new IntValue(source: dataSource, id: "[* TO 10]", value: 4)  | new IntValue(source: dataSource, id: "[10 TO *]", value: 2)  | -1
 
     }
 
@@ -75,6 +76,16 @@ class IntValueUnitSpec extends Specification {
         where:
         label                   | intValue
         "Empty arg constructor" | new IntValue()
+    }
+
+    void "test handle Filters On Properties"() {
+        given:
+        IntValue intValue1 = new IntValue(source: dataSource, id: "[1 TO *]", value: 4)
+        IntValue intValue2 = new IntValue(source: dataSource, id: "[* TO 10]", value: 4)
+        when:
+        int found = IntValue.handleFiltersOnProperties(intValue1, intValue2)
+        then:
+        assert found == 1
     }
 
 }

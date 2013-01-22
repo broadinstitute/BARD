@@ -190,7 +190,11 @@ public class Activity extends JsonUtil {
         return resultData
     }
     public boolean hasConcentrationSeries(){
-        return getResultData()?.hasConcentrationResponseSeries()
+        final ResultData resultData = getResultData()
+        if(resultData){
+            return resultData.hasConcentrationResponseSeries()
+        }
+        return false
     }
 
 }

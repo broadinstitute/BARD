@@ -116,7 +116,8 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.matchingField.description=="description"
         assert projectAdapter.highlight == "Score: 2.0 Matched Field: name"
         assert projectAdapter.targets
-//        assert !projectAdapter.documents
+        assert !projectAdapter.documents
+        assert projectAdapter.hasProbes()
         assert projectAdapter.numberOfAnnotations == 4
         assert projectAdapter.getKeggAnnotations()
         assert projectAdapter.getKeggDiseaseCategories()

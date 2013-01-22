@@ -1,14 +1,12 @@
 package bard.core.rest.spring.experiment
 
+import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.util.DictionaryElement
+import bard.rest.api.wrapper.Dummy
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import javax.servlet.ServletContext
-import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import bard.core.rest.spring.DataExportRestService
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import bard.rest.api.wrapper.Dummy
 
 @Unroll
 class ActivityDataUnitSpec extends Specification {
@@ -64,6 +62,71 @@ class ActivityDataUnitSpec extends Specification {
         label                   | JSON_DATA           | hasQualifier | display             | qualifier
         "JSON Has qualifier"    | JSON_WITH_QUALIFIER | true         | "IC50 : =1.949 um " | "="
         "JSON Has no qualifier" | JSON_NO_QUALIFIER   | false        | "IC50 : 1.949 um "  | null
+    }
+
+    void "test toDisplay #label"() {
+        given:
+        ActivityData activityData = new ActivityData(testConcentration: testConcentration, responseUnit: responseUnit, qualifier: qualifier, testConcentrationUnit: "um")
+        activityData.metaClass.getDictionaryLabel = {dictionaryLabel}
+        Dummy dummy = new Dummy()
+        dummy.dataExportRestService = dataExportRestService
+        activityData.dummy = dummy
+        when:
+        final String display = activityData.toDisplay()
+
+        then:
+        assert expectedDisplay.trim() == display.trim()
+        where:
+        label                         | qualifier | responseUnit | testConcentration | dictionaryLabel          | expectedDisplay
+        "IC50"                        | ">"       | "um"         | null              | "IC50"                   | "IC50 : > um"
+        "Not in dictionary"           | ""        | ""           | null              | null                     | " "
+        "IC50 with testConcentration" | ""        | ""           | 223               | "IC50"                   | "IC50 :     Test Concentration:223.0 um"
+        "Outcome"                     | ""        | ""           | 221               | "Outcome"                | ""
+        "PubChem activity score"      | ""        | ""           | 1                 | "PubChem activity score" | ""
+        "Activity_Score"              | ""        | ""           | 2                 | "Activity_Score"         | ""
+        "Score"                       | ""        | ""           | 3                 | "Score"                  | ""
+
+    }
+
+
+    void "test getDictionaryDescription #label"() {
+        given:
+        ActivityData activityData = new ActivityData(dictElemId: dictElemId, responseUnit: "pubChem")
+        Dummy dummy = new Dummy()
+        dummy.dataExportRestService = dataExportRestService
+        activityData.dummy = dummy
+        when:
+        final String foundDescription = activityData.getDictionaryDescription()
+
+        then:
+        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        assert expectedDescription == foundDescription
+        where:
+        label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
+        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(description: "label") | "label"             | 1
+        "Has a DictElemId, but not in dictionary" | 221        | null                                        | "pubChem"           | 1
+        "Has no DictElemId"                       | 0          | null                                        | "pubChem"           | 0
+
+    }
+
+    void "test getDictionaryLabel #label"() {
+        given:
+        ActivityData activityData = new ActivityData(dictElemId: dictElemId, pubChemDisplayName: "pubChem")
+        Dummy dummy = new Dummy()
+        dummy.dataExportRestService = dataExportRestService
+        activityData.dummy = dummy
+        when:
+        final String foundLabel = activityData.getDictionaryLabel()
+
+        then:
+        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        assert expectedLabel == foundLabel
+        where:
+        label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions
+        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(label: "label") | "label"       | 1
+        "Has a DictElemId, but not in dictionary" | 221        | null                                  | "pubChem"     | 1
+        "Has no DictElemId"                       | 0          | null                                  | "pubChem"     | 0
+
     }
 
 

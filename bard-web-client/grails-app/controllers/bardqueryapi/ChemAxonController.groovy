@@ -32,11 +32,8 @@ class ChemAxonController {
             }
 
 
-            byte[] bytes = []
+            byte[] bytes = chemAxonService.generateStructurePNG(smiles, w, h)
 
-            if (smiles) {
-                bytes = chemAxonService.generateStructurePNG(smiles, w, h)
-            }
 
             response.contentType = 'image/png'
             response.outputStream.setBytes(bytes)
@@ -58,6 +55,7 @@ class ChemAxonController {
             log.error("Could not generate structure for cid : ${cid}" + getUserIpAddress(bardUtilitiesService.username), ee)
         }
     }
+
     def marvinSketch() {}
 
 

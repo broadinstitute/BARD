@@ -25,6 +25,24 @@ class ExperimentRestServiceUnitSpec extends Specification {
         service.loggerService = this.loggerService
     }
 
+    void "activitiesByEIDs"() {
+
+        when:
+        final ExperimentData eids = service.activitiesByEIDs([], new SearchParams())
+
+        and:
+        final ExperimentData adids = service.activitiesByADIDs([], new SearchParams())
+        and:
+        final ExperimentData cids = service.activitiesByCIDs([],new SearchParams())
+        and:
+        final ExperimentData sids = service.activitiesBySIDs([], new SearchParams())
+        then:
+        assert !eids
+        assert !adids
+        assert !cids
+        assert !sids
+    }
+
     void "activities with no ETag"() {
         given:
         final Long experimentId = new Long("2")

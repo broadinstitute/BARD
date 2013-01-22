@@ -1,6 +1,7 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
+import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
@@ -9,12 +10,9 @@ import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.substances.SubstanceResult
 import bard.core.rest.spring.util.SubstanceSearchType
 import grails.test.mixin.TestFor
-import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.exceptions.RestApiException
-import bard.core.helper.LoggerService
 
 @Unroll
 @TestFor(SubstanceRestService)
@@ -43,19 +41,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         "Existing Substance"     | 179 | new Substance() | true
         "Non-Existing Substance" | -1  | null            | false
     }
-//
-//    void "getSubstanceById with Exception #label"() {
-//        when:
-//        final Substance foundSubstance = service.getSubstanceById(sid)
-//
-//        then:
-//        restTemplate.getForObject(_, _, _) >> {new RestClientException()}
-//        thrown(RestApiException)
-//        assert foundSubstance == null
-//        where:
-//        label                    | sid
-//        "Non-Existing Substance" | -1
-//    }
+
 
     void "getResourceContext"() {
 
@@ -177,7 +163,7 @@ class SubstanceRestServiceUnitSpec extends Specification {
         when:
         SubstanceResult substanceResult = service.findSubstances(SubstanceSearchType.MLSMR, searchParam)
         then:
-        restTemplate.getForObject(_, _,_) >> {new SubstanceResult()}
+        restTemplate.getForObject(_, _, _) >> {new SubstanceResult()}
         assert substanceResult
 
     }

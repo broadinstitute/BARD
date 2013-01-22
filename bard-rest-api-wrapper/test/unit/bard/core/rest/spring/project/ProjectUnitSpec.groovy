@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.Probe
+import bard.core.rest.spring.compounds.Compound
 
 @Unroll
 class ProjectUnitSpec extends Specification {
@@ -106,12 +108,14 @@ class ProjectUnitSpec extends Specification {
        "experimentCount": 12
     }
     '''
+
     void "test serialization to Project - Free Text Search"() {
         when:
         final Project project = objectMapper.readValue(PROJECT_FROM_FREE_TEXT, Project.class)
         then:
         assert project.projId == project.projectId
     }
+
     void "test serialization to Project"() {
         when:
         final Project project = objectMapper.readValue(PROJECT, Project.class)
@@ -145,6 +149,22 @@ class ProjectUnitSpec extends Specification {
         assert !project.getGocc_term()
         assert project.getClassification() == 0
         assert project.getPublications() == null
+        assert project.hasProbes()
+    }
+
+    void "test has Probes #label"() {
+        given:
+        ProjectAbstract projectAbstract = createdProjectAbstract
+        when:
+        boolean hasProbes = projectAbstract.hasProbes()
+        then:
+        assert hasProbes == expected
+        where:
+        label                   | expected | createdProjectAbstract
+        "Has list of Probes"    | true     | new ProjectAbstract(probes: [new Compound()])
+        "Has list of Probe Ids" | true     | new ProjectAbstract(probeIds: [2, 3])
+        "Has no Probes"         | false    | new ProjectAbstract()
+
     }
 
 

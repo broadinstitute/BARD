@@ -155,8 +155,18 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert experimentData
         final List<Activity> activities = experimentData.activities
         Activity activity = activities.get(0)
-        final ResultData resultData = activity.getResultData()
+
+        ResultData resultData = activity.getResultData()
         assert resultData
+        ResultData resultData1 = activity.getResultData() //we call this twice because we want to make sure that the serialization happens only once
+        assert resultData1
+        assert resultData.getPriorityElements().size() == resultData1.getPriorityElements().size()
+        final ConcentrationResponseSeries concentrationResponseSeries = resultData.getPriorityElements().get(0).getConcentrationResponseSeries()
+        assert concentrationResponseSeries
+        assert concentrationResponseSeries.getDictionaryDescription()
+        assert concentrationResponseSeries.getDictionaryLabel()
+        final Map<String, ArrayList<Double>> points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        assert points
         where:
         label                                        | experimentId
         "For an existing experiment with activities" | new Long(346)
