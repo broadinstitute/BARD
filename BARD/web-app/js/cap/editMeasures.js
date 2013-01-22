@@ -3,10 +3,10 @@ function enableAutoCompleteOntology (textFieldSelector, section, idFieldSelector
     minLength: 2,
     source: function( request, response ) {
       $.getJSON( 
-         "/BARD/ontologyJSon/getDescriptors",
+         "/BARD/ontologyJSon/getLabelsFromTree",
             {
-              term: request.term,
-              section: section
+              label: request.term,
+              tree: section
             }, 
             response
           );
