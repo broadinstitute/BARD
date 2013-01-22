@@ -129,7 +129,7 @@
                                                  concentrations: doseResponsePointsMap.concentrations,
                                                  activities: doseResponsePointsMap.activities,
                                                  yAxisLabel: "${concRespSeries?.getYAxisLabel()}",
-                                                 xAxisLabel: "Concentration ${priorityElement.testConcentrationUnit}"
+                                                 xAxisLabel: "Log Concentration ${priorityElement.testConcentrationUnit}"
                                          ])}"/>
                             <br/>
                             <g:if test="${curveFitParameters != null}">
