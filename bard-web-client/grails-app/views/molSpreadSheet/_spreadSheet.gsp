@@ -4,7 +4,7 @@
 <script type="text/javascript">
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
-            var x = a.replace(/<.*?>/g, "");
+            var x = a.replace(/<.*?>/g, "").replace(/[^\d]/g,"");
             return parseFloat(x);
         },
 
