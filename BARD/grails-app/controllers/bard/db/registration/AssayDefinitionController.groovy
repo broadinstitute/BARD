@@ -147,7 +147,7 @@ class AssayDefinitionController {
 
     def findByName() {
         if (params.assayName) {
-            def assays = Assay.findAllByAssayNameIlike("%${params.assayName}%")
+            def assays = Assay.findAllByAssayNameIlikeOrAssayShortNameIlike("%${params.assayName}%", "%${params.assayName}%")
             if (assays?.size() > 1){
                 if (params.sort == null) {
                     params.sort = "id"
