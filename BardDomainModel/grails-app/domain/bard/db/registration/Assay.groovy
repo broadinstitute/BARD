@@ -55,7 +55,7 @@ class Assay extends AbstractContextOwner {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true')
     }
 
     static transients = ['assayContextItems']
