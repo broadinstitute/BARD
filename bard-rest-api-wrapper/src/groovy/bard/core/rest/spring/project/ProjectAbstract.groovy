@@ -54,8 +54,7 @@ public class ProjectAbstract extends JsonUtil {
     private List<Compound> probes = new ArrayList<Compound>();
     @JsonProperty("probeIds")
     private List<String> probeIds = new ArrayList<String>();
-    @JsonProperty("publications")
-    private List<Document> publications;
+
     @JsonProperty("targets")
     private List<Target> targets = new ArrayList<Target>();
     @JsonProperty("resourcePath")
@@ -296,17 +295,6 @@ public class ProjectAbstract extends JsonUtil {
     @JsonProperty("probeIds")
     public void setProbeIds(List<String> probeIds) {
         this.probeIds = probeIds;
-    }
-
-
-    @JsonProperty("publications")
-    public List<Document> getPublications() {
-        return publications;
-    }
-
-    @JsonProperty("publications")
-    public void setPublications(List<Document> publications) {
-        this.publications = publications;
     }
 
     @JsonProperty("targets")
