@@ -18,7 +18,17 @@ public class AssayAnnotation  extends JsonUtil {
     private List<Measure> measures = new ArrayList<Measure>();
     @JsonProperty("docs")
     private List<Doc> docs = new ArrayList<Doc>();
+    @JsonProperty("misc")
+    private List<Comp> otherAnnotations = new ArrayList<Comp>();
+    @JsonProperty("misc")
+    public List<Comp> getOtherAnnotations() {
+        return otherAnnotations;
+    }
 
+    @JsonProperty("misc")
+    public void setOtherAnnotations(List<Comp> otherAnnotations) {
+        this.otherAnnotations = otherAnnotations;
+    }
     @JsonProperty("contexts")
     public List<Context> getContexts() {
         return contexts;

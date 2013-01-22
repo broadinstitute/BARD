@@ -22,7 +22,7 @@ public class CompoundSummary extends JsonUtil {
     private int nhit;
 
     @JsonProperty("hitAssays")
-    private List<String> hitAssays = new ArrayList<String>();
+    private List<Assay> hitAssays = new ArrayList<Assay>();
 
     @JsonProperty("hitExptdata")
     private List<Activity> hitExptdata = new ArrayList<Activity>();
@@ -60,12 +60,12 @@ public class CompoundSummary extends JsonUtil {
     }
 
     @JsonProperty("hitAssays")
-    public List<String> getHitAssays() {
+    public List<Assay> getHitAssays() {
         return hitAssays;
     }
 
     @JsonProperty("hitAssays")
-    public void setHitAssays(List<String> hitAssays) {
+    public void setHitAssays(List<Assay> hitAssays) {
         this.hitAssays = hitAssays;
     }
 

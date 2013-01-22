@@ -6,6 +6,7 @@ import bard.core.rest.spring.experiment.ExperimentSearch
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import bard.core.rest.spring.util.Document
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjectExpanded extends ProjectAbstract {
@@ -13,6 +14,18 @@ public class ProjectExpanded extends ProjectAbstract {
     private List<ExperimentSearch> experiments = new ArrayList<ExperimentSearch>();
     @JsonProperty("aids")
     private List<Assay> assays = new ArrayList<Assay>();
+    @JsonProperty("publications")
+    private List<Document> publications;
+
+    @JsonProperty("publications")
+    public List<Document> getPublications() {
+        return publications;
+    }
+
+    @JsonProperty("publications")
+    public void setPublications(List<Document> publications) {
+        this.publications = publications;
+    }
 
     @JsonProperty("eids")
     public List<ExperimentSearch> getExperiments() {

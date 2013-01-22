@@ -30,4 +30,17 @@ public class Project extends ProjectAbstract {
     public void setAids(List<Long> aids) {
         this.aids = aids
     }
+    @JsonProperty("publications")
+    private List<Long> publications;
+
+    @JsonProperty("publications")
+    public List<Long> getPublications() {
+        return publications;
+    }
+
+    @JsonProperty("publications")
+    public void setPublications(List<Long> publications) {
+        this.publications = publications;
+    }
+
 }
