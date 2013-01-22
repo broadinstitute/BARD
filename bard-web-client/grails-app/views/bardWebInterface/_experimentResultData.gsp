@@ -134,7 +134,7 @@
                             <br/>
                             <g:if test="${curveFitParameters != null}">
                                 <p>
-                                    Slope : ${priorityElement.slope} <br/>
+                                    ${experimentDataMap?.priorityDisplay?:''} : ${priorityElement.slope} <br/>
                                     sInf : ${(new ExperimentalValueUtil(curveFitParameters.sInf, false)).toString()}<br/>
                                     s0 : ${(new ExperimentalValueUtil(curveFitParameters.s0, false)).toString()}<br/>
                                     HillSlope : ${(new ExperimentalValueUtil(curveFitParameters.hillCoef, false)).toString()}<br/>
