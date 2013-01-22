@@ -5,9 +5,21 @@ package bard.dm.minimumassayannotation
  */
 class ContextGroup {
     String name;
-    List<ContextItemDto> attributes = [];
+    List<ContextItemDto> contextItemDtoList = [];
 }
 
 class ContextDTO extends ContextGroup {
     Long aid
+
+    boolean wasSaved
+
+    @Override
+    String toString() {
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder.append(name).append("\n")
+        for (ContextItemDto contextItemDto : contextItemDtoList) {
+            stringBuilder.append(contextItemDto).append("\n")
+        }
+        return stringBuilder.toString()
+    }
 }

@@ -18,7 +18,7 @@ class Log {
     private static FileAppender fileAppender
 
     public static Logger initializeLogger(String filePath) {
-        logger = Logger.getLogger("parseCarsSpreadsheetScriptLogger")
+        logger = Logger.getLogger("AnnotationLoader")
         logger.setLevel(Level.ALL)
 
         fileAppender = new FileAppender(new SimpleLayout(),  filePath, false)

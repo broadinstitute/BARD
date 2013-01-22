@@ -7,11 +7,13 @@ import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.util.CellReference
 import org.apache.poi.ss.util.CellUtil
 import bard.dm.Log
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Iterates over all the attribute-pairs in each context and build a contextDTO
  */
 class ContextDtoFromContextGroupCreator {
+
     /**
      * Iterates over all the attribute-pairs in each context and builds a contextDTO
      *
@@ -22,41 +24,49 @@ class ContextDtoFromContextGroupCreator {
     ContextDTO create(ContextGroup contextGroup, Row row, Sheet sheet) {
         ContextDTO contextDTO = new ContextDTO()
 
-        contextGroup.attributes.each {ContextItemDto attribute ->
+        for (ContextItemDto cellLocsContextItemDto : contextGroup.contextItemDtoList) {
             //Get the attribute's key-content from cell
-            String attKeyCellId = attribute.key
-            def attrKey = getCellContent(attKeyCellId, row, sheet)
-            if (attrKey)
-                assert attrKey instanceof String, "Key must be a string (Row=${row.rowNum + 1}/CellID=${attKeyCellId})"
+            String keyCellId = cellLocsContextItemDto.key
+            def keyDef = getCellContent(keyCellId, row, sheet)
+            String key = getTrimStringOrNullFromDef(keyDef)
 
             //Get the attribute's qualifier-content from cell
-            String attQualifierCellId = attribute.qualifier
-            def attrQualifier = attQualifierCellId ? getCellContent(attQualifierCellId, row, sheet) : attQualifierCellId
-            if (attrQualifier)
-                assert attrQualifier instanceof String, "Qualifier must be a string: '${attrQualifier}' (Row=${row.rowNum + 1}/CellID=${attQualifierCellId})"
+            String qualifierCellId = cellLocsContextItemDto.qualifier
+            def qualifierDef = qualifierCellId ? getCellContent(qualifierCellId, row, sheet) : qualifierCellId
+            String qualifier = getTrimStringOrNullFromDef(qualifierDef)
 
             //Get the attribute's value-content from cell
-            String attValueCell = attribute.value
-            def attrValue = getCellContent(attValueCell, row, sheet)
+            String valueCell = cellLocsContextItemDto.value
+            def value = getCellContent(valueCell, row, sheet)
 
-            //TODO add this check back, but only write to log that the discrepancy occurred.
-//            //Attribute key must exist; attribute value must exist UNLESS it is of type Free
-//            if ((!attrKey) || (!attrValue && (attribute.attributeType != AttributeType.Free))) return
             //Attribute ket and value must exist
-            if (!attrKey || !attrValue) return
+            if (StringUtils.isEmpty(key) || !value) {
+                return null
+            }
 
             //Get the attribute's concentration-unit value from cell
-            String attConcentrationUnitsCellId = attribute.concentrationUnits
-            def attrConcentrationUnits = attConcentrationUnitsCellId ? getCellContent(attConcentrationUnitsCellId, row, sheet) : attConcentrationUnitsCellId
-            if (attrConcentrationUnits)
-                assert attrConcentrationUnits instanceof String, "ConcentrationUnits must be a string (Row=${row.rowNum + 1}/CellID=${attConcentrationUnitsCellId})"
+            String concentrationUnitsCellId = cellLocsContextItemDto.concentrationUnits
+            def concentrationUnitsDef = concentrationUnitsCellId ? getCellContent(concentrationUnitsCellId, row, sheet) : concentrationUnitsCellId
+            String concentrationUnits = getTrimStringOrNullFromDef(concentrationUnitsDef)
 
             //Create a new attribute and add it to the context's attributes collection.
-            ContextItemDto attr = new ContextItemDto(attrKey, attrValue, attribute.attributeType, attribute.typeIn, attrQualifier, attrConcentrationUnits)
+            ContextItemDto contextItemDto = new ContextItemDto(key, value, cellLocsContextItemDto.attributeType,
+                    cellLocsContextItemDto.typeIn, qualifier, concentrationUnits)
 
-            contextDTO.attributes << attr
+            contextDTO.contextItemDtoList.add(contextItemDto)
         }
         return contextDTO
+    }
+
+    private static String getTrimStringOrNullFromDef(def item) {
+        if (item != null) {
+            String itemString = item.toString().trim()
+            if (itemString.length() > 0) {
+                return itemString
+            }
+        }
+
+        return null
     }
 
     /**

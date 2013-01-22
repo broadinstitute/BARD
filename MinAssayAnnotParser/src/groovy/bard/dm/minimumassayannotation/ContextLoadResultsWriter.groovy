@@ -14,11 +14,22 @@ class ContextLoadResultsWriter {
 
     public ContextLoadResultsWriter(String resultFilePath) {
         writer = new BufferedWriter(new FileWriter(resultFilePath))
-        writer.writeLine("aid, adid, load_result_type, num_potential_contexts_to_load, num_existing_contexts, num_contexts_loaded, message")
+        writer.writeLine("aid, adid, context_name, load_result_type, num_potential_contexts_to_load, num_existing_contexts, num_contexts_loaded, message")
     }
 
-    public void write(def aid, Long adid, String contextName, LoadResultType resultType, String message) {
-        def lineData = [aid, adid, contextName, resultType, message]
+
+
+    public void write(ContextDTO contextDTO, Long adid, LoadResultType resultType, Integer numExistingContextsInDb,
+                      int numContextsLoaded, String message) {
+        write(contextDTO?.aid, adid, contextDTO?.name, resultType, contextDTO?.contextItemDtoList?.size(), numExistingContextsInDb,
+                numContextsLoaded, message)
+    }
+
+    private void write(def aid, Long adid, String name, LoadResultType resultType, Integer numPotentialContextsToLoad,
+                       Integer numExistingContextsInDb, int numContextsLoaded, String message) {
+
+        def lineData = [aid, adid, name, resultType, numPotentialContextsToLoad, numExistingContextsInDb,
+                numContextsLoaded, message]
         StringBuilder line = new StringBuilder()
         for (def lineDatum : lineData) {
             line.append(StringUtils.defaultString(lineDatum.toString())).append(", ")
@@ -26,7 +37,6 @@ class ContextLoadResultsWriter {
 
         writer.writeLine(line.toString())
     }
-
 
     public void close() {
         writer.close()
