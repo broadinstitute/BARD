@@ -13,10 +13,20 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.project.ProjectExpanded
 
+import bard.core.rest.spring.assays.BardAnnotation
+
 class ProjectRestService extends AbstractRestService {
 
     public String getResourceContext() {
         return RestApiConstants.PROJECTS_RESOURCE
+    }
+
+    public BardAnnotation findAnnotations(final Long pid) {
+        final String resource = getResource(pid.toString() + RestApiConstants.ANNOTATIONS)
+        final URL url = new URL(resource)
+
+        final BardAnnotation annotations = (BardAnnotation)getForObject(url.toURI(), BardAnnotation.class)
+        return annotations;
     }
     /**
      *

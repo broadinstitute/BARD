@@ -3,6 +3,7 @@ package bard.core.interfaces;
 
 import bard.core.Probe
 import bard.core.Value
+import bard.core.rest.spring.assays.BardAnnotation
 
 public interface ProjectAdapterInterface {
 
@@ -22,7 +23,7 @@ public interface ProjectAdapterInterface {
 
     public Integer getNumberOfExperiments();
 
-    public Collection<Value> getAnnotations();
+    public List<BardAnnotation> getAnnotations();
 
     public Map<String, String> getDictionaryTerms();
 

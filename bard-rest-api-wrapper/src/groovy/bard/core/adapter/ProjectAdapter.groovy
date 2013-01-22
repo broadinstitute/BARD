@@ -11,18 +11,23 @@ import bard.core.rest.spring.project.ProjectAbstract
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.project.ProjectExpanded
 
 public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
     final Double score
     final NameDescription matchingField
-
-    public ProjectAdapter(ProjectAbstract project, Double score=0, NameDescription nameDescription=null) {
+    final List<BardAnnotation> annotations
+    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, List<BardAnnotation> annotations = []) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription
+        this.annotations = annotations
     }
-
+    public Map<String, String> getDictionaryTerms(){
+        return [:]
+    }
     @Override
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
@@ -80,36 +85,19 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return project.experimentCount.intValue()
     }
     public List<Document> getDocuments(){
-        return project.getPublications()
+        if(project instanceof ProjectExpanded){
+           ((ProjectExpanded)project).getPublications()
+        }
+        return []
     }
     public List<Target> getTargets(){
        return project.getTargets()
     }
-    public Collection<Value> getAnnotations() {
-        final Collection<Value> annos = new ArrayList<Value>();
-        final Map<String, String> terms = getDictionaryTerms()
-        for (String key : terms.keySet()) {
-            Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
-            annos.add(value)
-        }
-
-        return annos;
+    public List<BardAnnotation> getAnnotations() {
+      return this.annotations
     }
     public int getNumberOfAnnotations(){
-        return this.annotations.size() + this.getKeggDiseaseCategories().size() + this.getKeggDiseaseNames().size()
-    }
-    public Map<String, String> getDictionaryTerms() {
-        Map<String, String> dictionaryTerms = [:]
-        final List<String> keys = project.getAk_dict_label()
-        final List<String> values = project.getAv_dict_label()
-        assert keys.size() == values.size()
-        int nkeys = keys.size()
-        for (int index = 0; index < nkeys; index++) {
-            String key = keys.get(index)
-            String value = values.get(index)
-            dictionaryTerms.put(key, value)
-        }
-        return dictionaryTerms
+        return this.annotations.size()
     }
 
     public Map<String, List<String>> getKeggAnnotations() {
