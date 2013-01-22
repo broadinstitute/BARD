@@ -33,7 +33,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         String matchFieldName = getMatchingField()?.getName()
         if(matchFieldName){
             //TODO: Talk to Steve about formating
-            return "Score: " + this.getScore() + " Matched Field: " + matchFieldName
+            return "Matched Field: " + matchFieldName
         }
         return ""
 
