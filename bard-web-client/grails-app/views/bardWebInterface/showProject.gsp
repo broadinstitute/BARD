@@ -82,22 +82,22 @@
                 <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
 
                 <g:if test="${projectAdapter.targets}">
-                    <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets</a></li>
+                    <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets (${projectAdapter.targets.size()})</a></li>
                 </g:if>
                 <g:if test="${projectAdapter.documents}">
-                    <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications</a></li>
+                    <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications (${projectAdapter.documents.size()})</a></li>
                 </g:if>
                 <li><a href="#experiments-info"><i
-                        class="icon-chevron-right"></i> Experiments</a>
+                        class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})</a>
                 </li>
-                <li><a href="#assays-info"><i class="icon-chevron-right"></i> Assays</a></li>
+                <li><a href="#assays-info"><i class="icon-chevron-right"></i> Assays (${assays?.size()})</a></li>
             </ul>
         </div>
 
         <div class="span9">
             <section id="annotations-info">
                 <div class="page-header">
-                    <h3>Annotations (${projectAdapter?.numberOfAnnotations})</h3>
+                    <h3>Annotations</h3>
                 </div>
 
                 <div id="cardView" class="cardView" class="row-fluid">
@@ -133,7 +133,7 @@
             </g:if>
             <section id="experiments-info">
                 <div class="page-header">
-                    <h3>Experiments (${projectAdapter?.getNumberOfExperiments()})</h3>
+                    <h3>Experiments</h3>
                 </div>
 
                 <div>
@@ -142,7 +142,7 @@
             </section>
             <section id="assays-info">
                 <div class="page-header">
-                    <h3>Assays (${assays?.size()})</h3>
+                    <h3>Assays </h3>
                 </div>
 
                 <div>

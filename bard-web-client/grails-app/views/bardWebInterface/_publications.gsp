@@ -1,6 +1,6 @@
 <section id="publication-info">
     <div class="page-header">
-        <h3>Publications(${documents.size()})</h3>
+        <h3>Publications</h3>
     </div>
     <g:each in="${documents}" var="document">
         <dl>

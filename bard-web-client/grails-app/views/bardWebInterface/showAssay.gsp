@@ -51,11 +51,11 @@
                 <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
                 <li><a href="#assay-bio-info-misc"><i class="icon-chevron-right"></i>Assay and Biology Details - Miscellaneous</a></li>
                 <g:if test="${assayAdapter.targets}">
-                    <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets</a></li>
+                    <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets (${assayAdapter.targets.size()})</a></li>
                 </g:if>
                 <li><a href="#document-info"><i class="icon-chevron-right"></i>Documents</a></li>
                 <g:if test="${assayAdapter.documents}">
-                    <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications</a></li>
+                    <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications (${assayAdapter.documents.size()})</a></li>
                 </g:if>
                 <li><a href="#result-info"><i class="icon-chevron-right"></i>Experiments (${experiments.size()})</a>
                 </li>
@@ -103,7 +103,7 @@
             </g:if>
             <section id="result-info">
                 <div class="page-header">
-                    <h3>Experiments (${experiments.size()})</h3>
+                    <h3>Experiments</h3>
                 </div>
                 <g:render template="experiments"
                           model="[experiments: experiments, showAssaySummary: false]"/>

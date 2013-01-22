@@ -8,12 +8,20 @@ import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
 import bard.core.rest.spring.util.DictionaryElement
 import bard.rest.api.wrapper.Dummy
+import org.apache.log4j.Logger
+import org.apache.log4j.Level
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConcentrationResponseSeries extends JsonUtil {
 
     @JsonIgnore
     Dummy dummy = new Dummy()
+    @JsonIgnore
+    static Logger log
+    static {
+        this.log = Logger.getLogger(ConcentrationResponseSeries.class)
+        log.setLevel(Level.INFO)
+    }
 
 
     @JsonProperty("responseUnit")
@@ -129,8 +137,13 @@ public class ConcentrationResponseSeries extends JsonUtil {
         List<Double> activities = []
 
         for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
-            concentrations.add(concentrationResponsePoint.testConcentration)
-            activities.add(new Double(concentrationResponsePoint.value))
+            if (concentrationResponsePoint.testConcentration && concentrationResponsePoint.value) {
+                concentrations.add(concentrationResponsePoint.testConcentration)
+                activities.add(new Double(concentrationResponsePoint.value))
+            }
+            else {
+                log.warn("Concentration point/value can not be empty: '${concentrationResponsePoint.testConcentration}/${concentrationResponsePoint.value}'")
+            }
         }
         return [activities: activities, concentrations: concentrations]
 

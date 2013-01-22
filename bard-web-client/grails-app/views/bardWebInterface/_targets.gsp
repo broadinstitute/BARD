@@ -1,6 +1,6 @@
 <section id="target-info">
     <div class="page-header">
-        <h3>Targets (${targets.size()})</h3>
+        <h3>Targets</h3>
     </div>
 
     <g:each in="${targets}" var="target">
