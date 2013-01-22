@@ -88,7 +88,7 @@ class Assay extends AbstractContextOwner {
     }
 
 
-    List<Measure> getRootMeasures() {
+    Collection<Measure> getRootMeasures() {
         return measures.findAll { it.parentMeasure == null }
     }
 
