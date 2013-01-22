@@ -129,9 +129,9 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         then:
         results1.contains("Not tested in this experiment")
         results2.replaceAll("\\s", "") == """<tdclass="molSpreadSheet"property="var1"><p></p>""".toString()
-        results3.contains("btn btn-link molspreadcell")
+        results3.contains("molspreadcell")
         results4.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=1.0&slope=1.0&hillSlope=1.0")
-        results5.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=&slope=&hillSlope=&concentrations=1.0&concentrations=2.0&activities=1.0&activities=2.0&yAxisLabel=")
+        results5.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=&slope=&hillSlope=&concentrations=1.0&concentrations=2.0&activities=1.0&activities=2.0")
     }
 
 
