@@ -94,6 +94,7 @@
                 <g:set var="assayHeaders" value="${molSpreadSheetData.determineResponseTypesPerAssay()}"/>
                 <g:if test="${(assayHeaders.size() > 0)}">
                     <g:set var="assayHeaderIterator" value="${assayHeaders.iterator()}"/>
+                    <g:set var="columnDictionaryLookup" value="${molSpreadSheetData?.getColumnsDescr()}"/>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${currentRowCounter > 3}">
                             <tr>
@@ -108,7 +109,13 @@
                                     </th>
                                 </g:if>
                                 <% rowsToSkipBeforeNextAssayid-- %>
-                                <th class="molSpreadSheetHeadData">${colHeader}
+                                <th class="molSpreadSheetHeadData">
+                                    <g:if test="${columnDictionaryLookup[currentRowCounter]}">
+                                        <a href="#" rel="tooltip" class="desc_tip mssheader" data-placement="top" data-title="${columnDictionaryLookup[currentRowCounter]}">${colHeader}</a>
+                                    </g:if>
+                                    <g:else>
+                                        ${colHeader}
+                                    </g:else>
                                 </th>
 
                                 <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">

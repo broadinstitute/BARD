@@ -105,6 +105,16 @@ class MolSpreadSheetData {
     }
 
 
+    List<String> getColumnsDescr() {
+        if (mssHeaders) {
+            return mssHeaders*.molSpreadSheetColSubHeaderList*.unitsInColumn.flatten()
+        }
+        return []
+
+    }
+
+
+
 
     List<LinkedHashMap<String, String>> determineResponseTypesPerAssay() {
         List<LinkedHashMap<String, String>> returnValue = []

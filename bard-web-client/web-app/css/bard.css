@@ -390,14 +390,16 @@ div.wellmod {
 
 table.molSpreadSheet{
     border-bottom: 1px black solid;
-    /*border-left: 1px black solid;*/
-    /*border-right: 1px black solid;*/
     border-collapse: collapse;
     border-spacing: 0px;
     padding: 0;
     margin: 0;
     width: 100%;
     color: black;
+}
+a.mssheader{
+    color: #000000;
+    text-decoration: none;
 }
 thead.molSpreadSheetHead{
     height: 60px;

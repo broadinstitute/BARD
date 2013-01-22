@@ -116,9 +116,16 @@
                 </tr>
                 <tr class="molSpreadSheetHead">
                     <% column = 0 %>
+                    <g:set var="columnDictionaryLookup" value="${molSpreadSheetData?.getColumnsDescr()}"/>
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column > 3}">
-                            <th class="molSpreadSheetHeadData">${colHeader}
+                            <th class="molSpreadSheetHeadData">
+                                <g:if test="${columnDictionaryLookup[column]}">
+                                   <a href="#" rel="tooltip" class="desc_tip mssheader" data-placement="top" data-title="${columnDictionaryLookup[column]}">${colHeader}</a>
+                                </g:if>
+                                <g:else>
+                                    ${colHeader}
+                                </g:else>
                             </th>
                         </g:if>
                         <% column++ %>

@@ -539,11 +539,26 @@ class MolecularSpreadSheetService {
             if (columnIndex < START_DYNAMIC_COLUMNS) {
                 molSpreadSheetData.mapColumnsToAssay[columnIndex++] = ""
             } else {
+                for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList){
+                    for (int rowCnt in 0..molSpreadSheetData.rowCount)  {
+                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData?.findSpreadSheetActivity(rowCnt, columnIndex)
+                        if (spreadSheetActivityStorage)  {
+                            if (molSpreadSheetColSubHeader.unitsInColumn == null) {
+                                molSpreadSheetColSubHeader.unitsInColumn =  spreadSheetActivityStorage.dictionaryDescription
+                                molSpreadSheetColSubHeader.unitsInColumnAreUniform = true
+                            }  else {
+                                if (molSpreadSheetColSubHeader.unitsInColumn != spreadSheetActivityStorage.dictionaryDescription) {
+                                    molSpreadSheetColSubHeader.unitsInColumnAreUniform = false
+                                }
+                            }
+                        }
+                    }
+                }
                 for (String columnSubheadings in listOfColumnSubheadings) {
                     molSpreadSheetData.mapColumnsToAssayName[columnIndex] = molSpreadSheetData.experimentFullNameList[assayIndex].toString()
                     molSpreadSheetData.mapColumnsToAssay[columnIndex++] = molSpreadSheetData.experimentNameList[assayIndex].toString()
                 }
-                assayIndex++
+                 assayIndex++
             }
         }
     }
