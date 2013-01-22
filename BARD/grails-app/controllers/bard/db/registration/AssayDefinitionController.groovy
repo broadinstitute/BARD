@@ -1,14 +1,16 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.dictionary.OntologyDataAccessService
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure : "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure : "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
+    OntologyDataAccessService ontologyDataAccessService;
 
     def index() {
         redirect(action: "description", params: params)
@@ -53,6 +55,11 @@ class AssayDefinitionController {
     }
 
     def editMeasure() {
+        // while not directly used in the rendering of this page, make sure the tree is cached before rendering the
+        // edit page to ensure the autocomplete comes up quickly when the user tries.
+        // Perhaps a better approach would be to simply ensure some loading indicator is more predominant when the autocomplete is running.
+        ontologyDataAccessService.ensureTreeCached()
+
         def assayInstance = Assay.get(params.id)
         if (!assayInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
