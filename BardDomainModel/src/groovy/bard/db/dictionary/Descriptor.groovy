@@ -75,7 +75,7 @@ abstract class Descriptor<T extends Descriptor> {
      */
     String generateOntologyBreadCrumb(int pathLength) {
         int toIndexExclusive = Math.min(pathLength, path.size())
-        path.subList(0, toIndexExclusive).collect { it.label }.join(' > ')
+        path.subList(0, toIndexExclusive).collect { it.label }.join('> ') + '>'
     }
 
 

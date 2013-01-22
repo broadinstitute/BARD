@@ -63,56 +63,56 @@ table.table td.deleteItemButton {
 }
 
 
-.assay-protocol {
+.assay-protocol- {
     background-color: #ddeeff;
 }
-.assay-protocol--assay-component {
+.assay-protocol--assay-component- {
     background-color: #ddeeff;
 }
 
-.assay-protocol--assay-design {
+.assay-protocol--assay-design- {
     background-color: #d2e3f4;
 }
 
-.assay-protocol--assay-format {
+.assay-protocol--assay-format- {
     background-color: #c8d9ea;
 }
 
-.assay-protocol--assay-readout {
+.assay-protocol--assay-readout- {
     background-color: #becfe0;
 }
 
-.assay-protocol--assay-type {
+.assay-protocol--assay-type- {
     background-color: #b4c5d6;
 }
 
-.biology{
+.biology-{
     background-color: #90ee90;
 }
 
-.biology--biological-process {
+.biology--biological-process- {
     background-color: #90ee90;
 }
 
-.biology--molecular-interaction {
+.biology--molecular-interaction- {
     background-color:  #a8eea8;
 }
 
-.biology--molecular-target {
+.biology--molecular-target- {
     background-color:  #c0eec0;
 }
-.project-management {
+.project-management- {
     background-color: #EEEE99;
 }
-.project-management--experiment {
+.project-management--experiment- {
     background-color: #EEEE99;
 }
 
-.project-management--experiment-panel-name {
+.project-management--experiment-panel-name- {
     background-color: #F6F6B7;
 }
 
-.project-management--project-information {
+.project-management--project-information- {
     background-color: #FFFFD5;
 }
 .unknown-section {
