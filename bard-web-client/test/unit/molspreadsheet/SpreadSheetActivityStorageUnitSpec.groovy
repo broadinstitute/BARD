@@ -143,7 +143,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d, childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         spreadSheetActivity.priorityElementList = [priorityElement,priorityElement]
 
         when:
@@ -184,7 +184,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.INACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: null)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: null,childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -208,7 +208,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName")
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -226,7 +226,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(value: 0.47d, childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         priorityElement.responseUnit='nM'
         spreadSheetActivity.priorityElementList = [priorityElement]
 
@@ -244,7 +244,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(value: 0.47d, childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -297,7 +297,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d, childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         spreadSheetActivity.priorityElementList = [priorityElement]
 
         when:
@@ -316,7 +316,7 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         spreadSheetActivity.sid = 1 as Long
         spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
         spreadSheetActivity.potency = 3 as Double
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d)
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d, childElements: [], concentrationResponseSeries: new ConcentrationResponseSeries())
         spreadSheetActivity.priorityElementList = [priorityElement]
 
 
