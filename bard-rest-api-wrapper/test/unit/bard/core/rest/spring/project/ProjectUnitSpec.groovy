@@ -6,6 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.Probe
 import bard.core.rest.spring.compounds.Compound
+import bard.core.rest.spring.util.Document
 
 @Unroll
 class ProjectUnitSpec extends Specification {
@@ -91,7 +92,10 @@ class ProjectUnitSpec extends Specification {
        [
            1472
        ],
-       "publications": null,
+       "publications":
+       [
+            19399246
+        ],
        "targets":
        [
            {
@@ -148,7 +152,10 @@ class ProjectUnitSpec extends Specification {
         assert !project.getGomf_term()
         assert !project.getGocc_term()
         assert project.getClassification() == 0
-        assert project.getPublications() == null
+        final List<String> publications = project.getPublications()
+        assert publications
+        final String document = publications.get(0)
+        assert document
         assert project.hasProbes()
     }
 

@@ -11,6 +11,7 @@ import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
+import spock.lang.IgnoreRest
 
 /**
  * Tests for ProjectRestService

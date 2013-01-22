@@ -247,7 +247,36 @@ class CompoundSummaryUnitSpec extends Specification {
        "nhit": 1,
        "hitAssays":
        [
-           "/assays/1420"
+                    {
+            "aid": 492961,
+            "bardAssayId": 3377,
+            "capAssayId": 1284,
+            "category": 2,
+            "type": 0,
+            "summary": 0,
+            "assays": 0,
+            "classification": 0,
+            "name": "qHTS Assay to Find Inhibitors of T. brucei phosphofructokinase: hit validation",
+            "source": "NCGC",
+            "grantNo": null,
+            "deposited": null,
+            "updated": null,
+            "documents": [
+            19084537,
+            15955817,
+            11512153
+            ],
+            "targets": [ ],
+            "experiments": [
+            3377
+            ],
+            "projects": [
+            282
+            ],
+            "kegg_disease_names": [ ],
+            "kegg_disease_cat": [ ],
+            "resourcePath": "/assays/3377"
+           }
        ],
        "ntest": 2,
        "hitExptdata":

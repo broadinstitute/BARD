@@ -21,7 +21,7 @@ class ProjectRestService extends AbstractRestService {
     /**
      *
      * @param pid
-     * @return {@link bard.core.rest.spring.project.Project}
+     * @return {@link bard.core.rest.spring.project.ProjectExpanded}
      */
     public ProjectExpanded getProjectById(final Long pid) {
         final String url = this.buildEntityURL() + "?expand={expand}"

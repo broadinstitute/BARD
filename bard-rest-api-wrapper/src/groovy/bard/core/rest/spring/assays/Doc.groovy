@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
+ *  TODO: Context is the same as Measure and Doc. Unify them
  * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
