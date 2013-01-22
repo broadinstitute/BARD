@@ -57,7 +57,8 @@
                                 <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}"
                                        target="_blank">View CID ${probe.cid} in PubChem</a></li>
                                 <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
-                                            params="[cid: probe.cid, pid: projectAdapter.id]" data-placement="top"
+                                            params="[cid: probe.cid, pid: projectAdapter.id, transpose: true]"
+                                            data-placement="top"
                                             class="projectTooltip"
                                             rel="tooltip"
                                             data-original-title="">Show Experimental Details</g:link></li>

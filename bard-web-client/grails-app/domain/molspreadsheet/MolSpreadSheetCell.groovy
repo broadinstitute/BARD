@@ -99,12 +99,19 @@ class MolSpreadSheetCell {
                 activity = MolSpreadSheetCellActivityOutcome.Unspecified
                 intInternalValue = 0
             }   else {
+                // Get the units
                  String identifierString = priorityElement.getDictionaryLabel() ?: priorityElement.responseUnit  ?: " "
+                // Check for an identifier.  We can ignore "=", since we only care about the identifier the changes something
                 if (priorityElement.qualifier == ">") {
                     this.molSpreadSheetCellType =  MolSpreadSheetCellType.greaterThanNumeric
                 } else  if (priorityElement.qualifier == "<")  {
                     this.molSpreadSheetCellType =  MolSpreadSheetCellType.lessThanNumeric
                 }
+                // Check for child elements, and save them if they are available
+                if (priorityElement.hasChildElements()) {
+                    this.spreadSheetActivityStorage.childElements = priorityElement.childElements
+                }
+                // Gather up the curve values if they exist
                 HillCurveValueHolder hillCurveValueHolder
                 if (priorityElement.value == null) {
                     hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)

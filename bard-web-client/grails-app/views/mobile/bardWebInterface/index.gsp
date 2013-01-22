@@ -17,9 +17,7 @@
     <r:script>
         $(document).ready(function () {
             $('#searchButton').click(function () {
-//              Triggers the search process (in search.js). We use the button-link instead of a standard button-submit element
-                var searchString = $("#searchString").val();
-                handleMainFormSubmit(searchString);
+                $.mobile.changePage($('#searchResults'));
             });
 
 //          Hnadle the proble-list ajax-updating

@@ -111,7 +111,7 @@
                             <g:each in="${concentrationResponsePoints}" var="concentrationResponsePoint">
                                 <tr>
                                     <td>${concentrationResponsePoint.displayActivity()}</td>
-                                    <td>${concentrationResponsePoint.displayConcentration(concRespSeries)}</td>
+                                    <td>${concentrationResponsePoint.displayConcentration(concRespSeries.testConcentrationUnit)}</td>
                                 </tr>
                             </g:each>
                             </tbody>

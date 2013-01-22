@@ -4,10 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import javax.servlet.ServletContext
-import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import bard.core.rest.spring.DataExportRestService
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
 class ConcentrationResponsePointUnitSpec extends Specification {
@@ -45,32 +41,15 @@ class ConcentrationResponsePointUnitSpec extends Specification {
      }
     '''
 
-    ServletContext servletContext
-    GrailsWebApplicationContext ctx
-    DataExportRestService dataExportRestService
-    void setup() {
-        servletContext = Mock(ServletContext)
-        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
-        ctx = Mock()
-        dataExportRestService =  Mock(DataExportRestService)
-    }
-
-    void cleanup() {
-        //Clean up the metaClass mocking we added.
-        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
-        remove ServletContextHolder
-    }
-
-    void "test JSON #label"() {
+    void "test concentration response point"() {
         when:
         ConcentrationResponsePoint concentrationResponsePoint = objectMapper.readValue(JSON_DATA, ConcentrationResponsePoint.class)
         then:
-        servletContext.getAttribute(_)>>{ctx}
-        ctx.dataExportRestService()>>{dataExportRestService}
-
         assert concentrationResponsePoint.testConcentration
         assert concentrationResponsePoint.value
-
+        assert concentrationResponsePoint.toDisplay("uM") =="1.96 @ 0.985 nM"
+        assert concentrationResponsePoint.displayActivity()=="1.96"
+        assert concentrationResponsePoint.displayConcentration("uM")=="0.985 nM"
         final List<ActivityData> childElements = concentrationResponsePoint.childElements
         assert childElements
         assert childElements.size() == 3

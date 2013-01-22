@@ -4,10 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import javax.servlet.ServletContext
-import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import bard.core.rest.spring.DataExportRestService
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
 class ActivityConcentrationUnitSpec extends Specification {
@@ -170,29 +166,16 @@ class ActivityConcentrationUnitSpec extends Specification {
        }
     }
 '''
-    ServletContext servletContext
-    GrailsWebApplicationContext ctx
-    DataExportRestService dataExportRestService
-    void setup() {
-        servletContext = Mock(ServletContext)
-        ServletContextHolder.metaClass.static.getServletContext = {servletContext}
-        ctx = Mock()
-        dataExportRestService =  Mock(DataExportRestService)
-    }
 
-    void cleanup() {
-        //Clean up the metaClass mocking we added.
-        def remove = GroovySystem.metaClassRegistry.&removeMetaClass
-        remove ServletContextHolder
-    }
-    void "test JSON #label"() {
+    void "test #label"() {
         when:
         ActivityConcentration activityConcentration = objectMapper.readValue(JSON_DATA, ActivityConcentration.class)
         then:
-        servletContext.getAttribute(_)>>{ctx}
-        ctx.dataExportRestService()>>{dataExportRestService}
-
         assert activityConcentration
+        assert activityConcentration.hasPlot()
+        assert activityConcentration.getSlope()
+        assert activityConcentration.hasChildElements() ==hasChildElements
+        assert activityConcentration.toDisplay()
         assert activityConcentration.pubChemDisplayName
         assert activityConcentration.dictElemId
         assert activityConcentration.value
@@ -203,20 +186,20 @@ class ActivityConcentrationUnitSpec extends Specification {
         assert concResponseSeries.curveFitParameters
         final List<ConcentrationResponsePoint> concRespPoints = concResponseSeries.concentrationResponsePoints
         assert concRespPoints
-        for(ConcentrationResponsePoint concRespPoint in concRespPoints){
+        for (ConcentrationResponsePoint concRespPoint in concRespPoints) {
             assert concRespPoint.testConcentration
             assert concRespPoint.value
         }
         assert concResponseSeries.miscData
-        for(ActivityData miscData in concResponseSeries.miscData){
+        for (ActivityData miscData in concResponseSeries.miscData) {
             assert miscData.pubChemDisplayName
         }
-        if(hasChildElements){
+        if (hasChildElements) {
             final ConcentrationResponsePoint concRespPoint = concRespPoints.get(0)
             final List<ActivityData> childElements = concRespPoint.childElements
             assert childElements
             assert childElements.size() == 3
-            for(ActivityData childElement in childElements){
+            for (ActivityData childElement in childElements) {
                 assert childElement.pubChemDisplayName
             }
         }
@@ -228,7 +211,17 @@ class ActivityConcentrationUnitSpec extends Specification {
         "JSON Has no Child Elements and no qualifier" | JSON_NO_CHILD_ELEMENT_NO_QUALIFIER | false
         "JSON has Child Elements"                     | JSON_WITH_CHILD_ELEMENTS           | true
     }
+   void "Empty fields"(){
+       when:
+       ActivityConcentration activityConcentration = new ActivityConcentration()
+       then:
+       assert !activityConcentration.hasPlot()
+       assert !activityConcentration.getSlope()
+       assert !activityConcentration.toDisplay()
 
+
+
+   }
 
 }
 

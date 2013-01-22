@@ -27,7 +27,7 @@
         });
         $('td:nth-child(3)').toggle();
         $('#promiscuitycol').toggle();
-        $("[rel=tooltip]").tooltip();
+        $("[rel=tooltip]").tooltip({container:'body'});
         <g:if test="${((molSpreadSheetData?.getRowCount() > 0) && (molSpreadSheetData.getColumnCount()>4))}">
         $('#molspreadsheet').dataTable({
                     "bStateSave":false,

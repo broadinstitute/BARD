@@ -3,6 +3,7 @@ package molspreadsheet
 import bardqueryapi.ActivityOutcome
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
+import bard.core.rest.spring.experiment.ActivityData
 
 class SpreadSheetActivityStorage {
 
@@ -18,6 +19,7 @@ class SpreadSheetActivityStorage {
     Double potency
     String qualifier = ""
     String responseUnit  = ''
+    List<ActivityData> childElements = []
 
 
     static constraints = {
@@ -65,6 +67,7 @@ class SpreadSheetActivityStorage {
         this.activityOutcome =  spreadSheetActivityStorage.activityOutcome
         this.potency =  spreadSheetActivityStorage.potency
         this.responseUnit = spreadSheetActivityStorage.responseUnit
+        this.childElements = spreadSheetActivityStorage.childElements
         if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())  {
             HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]
             hillCurveValueHolder.qualifier =  spreadSheetActivityStorage.qualifier
