@@ -54,21 +54,21 @@ class SpreadsheetElementsTagLib {
             }
             MolSpreadSheetCellActivityOutcome molSpreadSheetCellActivityOutcome = MolSpreadSheetCellActivityOutcome.newMolSpreadSheetCellActivityOutcome(attrs.spreadSheetActivityStorage.activityOutcome)
             if (hillCurveValueHolder?.identifier) {
+                String  resultValueHolder =  hillCurveValueHolder.toString()
                  out << """<div data-detail-id="drc_${attrs.spreadSheetActivityStorage.sid}_${currentCol}"
-                               class="${mandatePopover}btn btn-link molspreadcell"
+                               class="${mandatePopover} molspreadcell"
                                data-original-title="${hillCurveValueHolder.identifier}"
                                data-html="true"
                                data-trigger="hover">"""
                 if (childElements?.length() > 0) {
                     out << """<div
                            rel="tooltip"
-                           style="float: left; margin-left: 2px; margin-right: 50;"
                            data-container="body"
                            data-html="true"
                            data-original-title="${childElements.toString()}"
                            data-trigger="hover">"""
                 }
-                out << """<FONT COLOR="${molSpreadSheetCellActivityOutcome.color}"><nobr>${hillCurveValueHolder.toString()} ${attrs.spreadSheetActivityStorage.printUnits()}</nobr></FONT>"""
+                out << """<FONT COLOR="${molSpreadSheetCellActivityOutcome.color}"><nobr>${resultValueHolder} ${attrs.spreadSheetActivityStorage.printUnits(resultValueHolder)}</nobr></FONT>"""
                 if (childElements?.length() > 0) {
                     out << """</div>"""
                 }
@@ -93,7 +93,8 @@ class SpreadsheetElementsTagLib {
                                     hillSlope: hillCurveValueHolder.coef,
                                     concentrations: hillCurveValueHolder.conc,
                                     activities: hillCurveValueHolder.response,
-                                    yAxisLabel: hillCurveValueHolder.identifier
+                                    xAxisLabel: hillCurveValueHolder.xAxisLabel,
+                                    yAxisLabel: hillCurveValueHolder.yAxisLabel
                             ]
                     )
                 }"/>

@@ -91,7 +91,7 @@ class MolSpreadSheetCell {
         this.spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: spreadSheetActivity.eid,
                 cid: spreadSheetActivity.cid,
                 sid: spreadSheetActivity.sid,
-                activityOutcome: spreadSheetActivity.activityOutcome)
+                activityOutcome: spreadSheetActivity.activityOutcome )
         int counter = 0
         for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
             this.spreadSheetActivityStorage.responseUnit = priorityElement.responseUnit
@@ -118,6 +118,8 @@ class MolSpreadSheetCell {
                 }  else {
                     Double value = Double.parseDouble(priorityElement.value)
                     if (value != null) {
+                        this.spreadSheetActivityStorage.dictionaryDescription =  priorityElement.concentrationResponseSeries?.dictionaryDescription ?: ''
+                        this.spreadSheetActivityStorage.dictionaryLabel =  priorityElement.concentrationResponseSeries?.dictionaryLabel ?: ''
                         if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
                             CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
                             hillCurveValueHolder = new HillCurveValueHolder(
@@ -126,8 +128,12 @@ class MolSpreadSheetCell {
                                     sInf: curveFitParameters.sInf,
                                     slope: (value*0.000001d),
                                     coef: curveFitParameters.hillCoef,
-                                    conc: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
-                                    response: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.value)
+//                                    conc: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
+//                                    response: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.value,
+                                    conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
+                                    response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
+                                    xAxisLabel: priorityElement.testConcentrationUnit,
+                                    yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel() )
                         } else {
                             hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
                         }

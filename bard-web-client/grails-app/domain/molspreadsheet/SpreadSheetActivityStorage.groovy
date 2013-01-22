@@ -20,6 +20,8 @@ class SpreadSheetActivityStorage {
     String qualifier = ""
     String responseUnit  = ''
     List<ActivityData> childElements = []
+    String dictionaryDescription  = ''
+    String dictionaryLabel  = ''
 
 
     static constraints = {
@@ -28,6 +30,9 @@ class SpreadSheetActivityStorage {
         sid(nullable: true)
         activityOutcome(nullable: true)
         potency(nullable: true)
+        responseUnit(nullable: true)
+        dictionaryDescription(nullable: true)
+        dictionaryLabel(nullable: true)
     }
 
 
@@ -75,17 +80,23 @@ class SpreadSheetActivityStorage {
         }
         if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
             this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
+        this.dictionaryDescription = spreadSheetActivityStorage.dictionaryDescription
+        this.dictionaryLabel =  spreadSheetActivityStorage.dictionaryLabel
     }
 
 
-    String printUnits () {
+    String printUnits (String resultValueHolder = '') {
         String returnValue
-        if (responseUnit == null)
+        if (resultValueHolder == '--') { // if we have a null value and we don't want to print out any units for it
             returnValue = ''
-        else if (responseUnit == 'percent')
-            returnValue = '%'
-        else
-            returnValue = responseUnit.toString()
+        }  else {
+            if (responseUnit == null)
+                returnValue = ''
+            else if (responseUnit == 'percent')
+                returnValue = '%'
+            else
+                returnValue = responseUnit.toString()
+        }
         returnValue
     }
 

@@ -17,6 +17,8 @@ class HillCurveValueHolder {
     java.util.List<java.lang.Double> conc = []
     java.util.List<java.lang.Double> response = []
     String qualifier = ""
+    String xAxisLabel = ''
+    String yAxisLabel = ''
 
     static constraints = {
         identifier nullable: false
@@ -25,6 +27,8 @@ class HillCurveValueHolder {
         sInf nullable: true
         slope nullable: true
         coef  nullable: true
+        xAxisLabel nullable: true
+        yAxisLabel  nullable: true
     }
 
 
