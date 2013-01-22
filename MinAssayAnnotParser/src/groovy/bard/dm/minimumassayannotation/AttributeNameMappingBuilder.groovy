@@ -172,7 +172,41 @@ class AttributeNameMappingBuilder {
                 'Storem PhosphorImager': 'Storm PhosphorImager',
                 'signal increase corresponding to cell survival': 'signal increase',
                 'percent by volume': 'volume percentage',
-                'cell surface expression': 'cell surface expression assay']
+                'cell surface expression': 'cell surface expression assay',
+
+                //dlahr 1-20-2013 starts here
+                'dilution factor': 'dilution',
+                'percent hematocrit':'hematocrit',
+                'hours':'hour',
+                'degree celcius':'degree celsius',
+                'Bio-Rad Chemi-Doc Plus Imager':'Biorad ChemiDoc Plus Imager',
+                'OD600':'optical density',
+                'GE Typhoon 8600':'Typhoon 8600 Variable Mode Imager',
+                'FDSS':'Hamamatsu FDSS',
+                'Biorad ChemiDoc XRS':'Biorad ChemiDoc XRS imaging system',
+                'Marburg virus':'Marburg marburgvirus',
+                'AlphaScreen SureFire Erk reagent':'PerkinElmer AlphaScreen SureFire ERK reagent',
+                'cells/µL':'cells per microliter',
+                'Optical density (OD)':'optical density',
+                'FDSS 6000':'Hamamatsu FDSS 6000',
+                'FDSS 7000':'Hamamatsu FDSS 7000',
+                'cultured tissue':'cultured tissue name',
+                '≥':'>=',
+                '≤':'<=',
+                'Chinese Hamster':'Cricetulus griseus',
+                'maximal inhibition':'maximum percent inhibition',
+                'cells/well':'number per well',
+                'GE/Amersham (Thermo)  INCell 1000':'GE/Amersham (Thermo) INCell 1000',
+                'fold selectivity index':'fold-selectivity index',
+                '50 percent viability':'50-percent viability',
+                'peptide-peptide interaction assay':'protein-protein interaction assay',
+                'peptie-peptide':'protein-protein interaction assay',
+                'Peptide complex format':'protein complex format',
+                'percent non-arrested':'percent non-arrested cells',
+                'percent G2-M arrested':'percent G2-M arrested cells',
+                'fold dilution':'dilution',
+                'protein expression':'protein expression assay'
+        ]
 
         return attributeNameMapping
     }
