@@ -26,7 +26,7 @@ public class AssayAdapter implements AssayAdapterInterface{
         String matchFieldName = getMatchingField()?.getName()
         if(matchFieldName){
             //TODO: Talk to Steve about formatting
-            return "Score: " + this.getScore() + " Matched Field: " + matchFieldName
+            return "Matched Field: " + matchFieldName
         }
         return ""
 
