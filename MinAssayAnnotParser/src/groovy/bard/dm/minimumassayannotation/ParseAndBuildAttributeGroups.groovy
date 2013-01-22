@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Row
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Parses the input-stream spreadsheet and extracts all the values from the cells based on the list of attribute-groups.
@@ -14,8 +15,12 @@ class ParseAndBuildAttributeGroups {
 
     private final ContextLoadResultsWriter loadResultsWriter
 
+    private final ContextDtoFromContextGroupCreator contextDtoFromContextGroupCreator
+
     public ParseAndBuildAttributeGroups(ContextLoadResultsWriter loadResultsWriter) {
         this.loadResultsWriter = loadResultsWriter
+
+        contextDtoFromContextGroupCreator = new ContextDtoFromContextGroupCreator()
     }
 
     /**
@@ -27,75 +32,97 @@ class ParseAndBuildAttributeGroups {
      * @param assayGroup
      * @return
      */
-    List<AssayDto> build(File inputFile, int START_ROW, List<List<ContextGroup>> contextGroupList) {
-        final Workbook wb
+    List<AssayDto> build(File inputFile, int START_ROW, List<List<ContextGroup>> contextGroupListList) {
+
         try {
-            wb = new XSSFWorkbook(new FileInputStream(inputFile))
+            final Workbook wb = new XSSFWorkbook(new FileInputStream(inputFile))
+
+            Sheet sheet = wb.getSheetAt(0);
+
+            List<AssayDto> assayDtoList = new LinkedList<AssayDto>()
+
+            AssayDto currentAssayDto = getFirstAssayDto(sheet, START_ROW, inputFile)
+            if (currentAssayDto != null) {
+                assayDtoList.add(currentAssayDto)
+            } else {
+                return assayDtoList
+            }
+
+            List<ContextGroup> assayContextGroupList = contextGroupListList[0]
+            List<ContextGroup> measureContextGroupList = contextGroupListList[1]
+
+            Iterator<Row> rowIterator = getIteratorAtStartOfAids(sheet, START_ROW)
+            Row row
+            while (rowIterator.hasNext() && (row = rowIterator.next()).rowNum < maxRowNum) {
+
+                //Get the current AID
+                String aidFromCell = contextDtoFromContextGroupCreator.getCellContentByRowAndColumnIds(row, 'A')
+                //if we encountered a new AID, update the current-aid with the new one. Else, leave the existing one.
+                if (aidFromCell) {
+                    aidFromCell = aidFromCell.trim()
+
+                    if (currentAssayDto.aidFromCell != aidFromCell) {
+                        currentAssayDto = new AssayDto(aidFromCell, inputFile, row.rowNum)
+                        assayDtoList.add(currentAssayDto)
+                    }
+                }
+
+                //Iterate over all assay-groups' contexts
+                for (ContextGroup assayContextGroup : assayContextGroupList) {
+                    ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(assayContextGroup, row, sheet)
+
+                    if (assayContextDTO != null && assayContextDTO.contextItemDtoList) {
+                        assayContextDTO.aid = currentAssayDto.aid
+                        assayContextDTO.name = assayContextGroup.name
+
+                        currentAssayDto.assayContextDTOList.add(assayContextDTO)
+                    }
+                }
+
+                //Iterate over all measure-groups' contexts
+                for (ContextGroup measureContextGroup : measureContextGroupList) {
+                    ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(measureContextGroup, row, sheet)
+
+                    if (measureContextDTO != null && measureContextDTO.contextItemDtoList) {
+                        measureContextDTO.aid = currentAssayDto.aid
+                        measureContextDTO.name = measureContextGroup.name
+                        currentAssayDto.measureContextDTOList.add(measureContextDTO)
+                    }
+                }
+
+            }
+
+            return assayDtoList
         } catch (Exception e) {
             throw new CouldNotReadExcelFileException(e.message, e)
         }
-
-        List<AssayDto> assayDtoList = new LinkedList<AssayDto>()
-        AssayDto currentAssayDto = null
-
-        Sheet sheet = wb.getSheetAt(0);
-        Integer aid = null
-        Integer rowCount = 0 //rows in spreadsheet are zero-based
-
-        List<ContextGroup> assayGroup = contextGroupList[0]
-        List<ContextGroup> measureContextGroups = contextGroupList[1]
-
-        for (Row row : sheet) {
-            if (rowCount < START_ROW - 1) {//skip the header rows
-                rowCount++
-                continue
-            }
-            if (rowCount++ > maxRowNum) break //don't parse into the vocabulary section
+    }
 
 
-            ContextDtoFromContextGroupCreator contextDtoFromContextGroupCreator = new ContextDtoFromContextGroupCreator()
+    private AssayDto getFirstAssayDto(Sheet sheet, int START_ROW, File inputFile) {
+        Iterator<Row> rowIterator = getIteratorAtStartOfAids(sheet, START_ROW)
 
-            //Get the current AID
-            String aidFromCell = contextDtoFromContextGroupCreator.getCellContentByRowAndColumnIds(row, 'A')
-            //if we encountered a new AID, update the current-aid with the new one. Else, leave the existing one.
-            if (aidFromCell) {
-                aidFromCell = aidFromCell.trim()
-
-                if ((currentAssayDto != null && currentAssayDto.aidFromCell != aidFromCell)
-                        || null == currentAssayDto) {
-
-                    currentAssayDto = new AssayDto(aidFromCell, inputFile, row.rowNum)
-                    assayDtoList.add(currentAssayDto)
-                }
-            }
-
-
-            //Iterate over all assay-groups' contexts
-            assayGroup.each {ContextGroup contextGroup ->
-                ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
-
-                if (assayContextDTO.attributes) {
-                    assayContextDTO.aid = currentAssayDto.aid
-                    assayContextDTO.name = contextGroup.name
-
-                    currentAssayDto.assayContextDTOList.add(assayContextDTO)
-                }
-            }
-
-            //Iterate over all measure-groups' contexts
-            measureContextGroups.each {ContextGroup contextGroup ->
-                ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(contextGroup, row, sheet)
-
-                if (measureContextDTO.attributes) {
-                    measureContextDTO.aid = currentAssayDto.aid
-                    measureContextDTO.name = contextGroup.name
-                    currentAssayDto.measureContextDTOList.add(measureContextDTO)
-                }
-            }
-
+        int rowNum = -1;
+        String aidFromCell = null
+        while (rowIterator.hasNext() && null == aidFromCell) {
+            Row row = rowIterator.next();
+            aidFromCell = contextDtoFromContextGroupCreator.getCellContentByRowAndColumnIds(row, 'A')
+            rowNum = row.rowNum
         }
 
-        return assayDtoList
+        if (! StringUtils.isEmpty(aidFromCell)) {
+            return new AssayDto(aidFromCell.trim(), inputFile, rowNum)
+        } else {
+            return null
+        }
+    }
+
+    private static Iterator<Row> getIteratorAtStartOfAids(Sheet sheet, int START_ROW) {
+        Iterator<Row> rowIterator = sheet.rowIterator();
+
+        while (rowIterator.hasNext() && rowIterator.next().rowNum < (START_ROW - 1)) { }
+
+        return rowIterator;
     }
 }
 

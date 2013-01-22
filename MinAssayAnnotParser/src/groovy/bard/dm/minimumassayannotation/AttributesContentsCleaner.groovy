@@ -63,14 +63,14 @@ class AttributesContentsCleaner {
         cleanContextDTO.name = contextDTO.name
         cleanContextDTO.aid = contextDTO.aid
 
-        for (ContextItemDto attribute : contextDTO.attributes) {
+        for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
 
-            String ky = trimAndMapKey(attribute.key)
+            String ky = trimAndMapKey(contextItemDto.key)
 
-            def val = attribute.value
-            if (attribute.value instanceof String) {
+            def val = contextItemDto.value
+            if (contextItemDto.value instanceof String) {
                 //remove '| | |' prefix
-                String valStr = StringUtils.split(attribute.value as String, '|').toList().last().trim()
+                String valStr = StringUtils.split(contextItemDto.value as String, '|').toList().last().trim()
 
                 String matchedValue = attributeNameMapping.keySet().find { String key ->
                     return StringUtils.equalsIgnoreCase(key, valStr)}
@@ -88,18 +88,17 @@ class AttributesContentsCleaner {
                 }
             }
 
-            if ((attribute.attributeType != AttributeType.Free) && !val) {
+            if ((contextItemDto.attributeType != AttributeType.Free) && !val) {
                 return null//Unless the attribute-type is Free, skip attributes with empty value
             }
 
-            String concentrationUnits = trimAndMapKey(attribute.concentrationUnits)
+            ContextItemDto cleanContextItemDto = new ContextItemDto(contextItemDto)
+            cleanContextItemDto.key = ky
+            cleanContextItemDto.value = val
+            cleanContextItemDto.concentrationUnits = trimAndMapKey(contextItemDto.concentrationUnits)
+            cleanContextItemDto.qualifier = trimAndMapKey(contextItemDto.qualifier)
 
-            ContextItemDto attr = new ContextItemDto(attribute)
-            attr.key = ky
-            attr.value = val
-            attr.concentrationUnits = concentrationUnits
-
-            cleanContextDTO.attributes << attr
+            cleanContextDTO.contextItemDtoList.add(cleanContextItemDto)
         }
 
         return cleanContextDTO
