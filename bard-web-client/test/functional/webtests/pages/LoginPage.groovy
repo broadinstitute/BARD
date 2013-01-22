@@ -15,7 +15,7 @@ class LoginPage extends ScaffoldPage {
     static content = {
         loginForm { $("form") }
         errorMessage { $("div.login_message") }
-        signIn { $("input", value: "Login") }
+        signIn { $("button", type: "submit") }
     }
 
     HomePage logIn(String username, String password) {

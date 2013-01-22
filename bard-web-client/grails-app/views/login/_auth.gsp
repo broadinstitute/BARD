@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>BioAssay Research Database</title>
     <r:require modules="core,bootstrap"/>
     <r:layoutResources/>
 
@@ -51,10 +52,18 @@
 <div class="container">
 
     <form class="form-signin" action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
+
         <div style="text-align: center;">
             <img src="${resource(dir: 'images', file: 'bard_logo_small.png')}" alt="BioAssay Research Database"/>
         </div>
         <br>
+
+        <g:if test='${flash.message}'>
+            <div class='login_message'>
+                <strong>${flash.message}</strong>
+            </div>
+        </g:if>
+
 
         <h2 class="form-signin-heading">Please sign in</h2>
 
