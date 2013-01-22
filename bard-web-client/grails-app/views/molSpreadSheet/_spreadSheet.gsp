@@ -5,7 +5,8 @@
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
             var x = a.replace(/<.*?>/g, "").replace(/[^\d]/g,"");
-            return parseFloat(x);
+            var y = '0'+x;   // This way numerics are changed, but null values become numeric
+            return parseFloat(y);
         },
 
         "num-html-asc":function (a, b) {
