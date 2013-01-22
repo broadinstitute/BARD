@@ -83,13 +83,16 @@
                         <i class="icon-chevron-down"></i>
                         Measures
                     </a>
+                    <div class="pull-right">
+                        <g:link action="editMeasure" id="${assayInstance?.id}" class="btn btn-small btn-info">Edit Measures</g:link>
+                    </div>
+                </div>
 
                     <div id="target-measures-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
                             <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
                         </div>
                     </div>
-                </div>
             </div>
 
             <div class="accordion-group">
