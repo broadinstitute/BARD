@@ -1,5 +1,6 @@
 package molspreadsheet
 
+import bard.core.SearchParams
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
@@ -9,12 +10,14 @@ import bard.core.rest.spring.assays.AbstractAssay
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.assays.ExpandedAssayResult
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentData
+import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bardqueryapi.IQueryService
 import bardqueryapi.SearchFilter
-import bard.core.rest.spring.experiment.*
-import bard.core.SearchParams
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
@@ -484,48 +487,7 @@ class MolecularSpreadSheetService {
             allExperiments.addAll(experimentResult.experiments)
         }
     }
-    /**
-     * Used for Show Experiment Page. Perhaps we should move this to the Query Service
-     * @param experimentId
-     * @param top
-     * @param skip
-     * @return Map of data to use to display an experiment
-     */
-    Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) {
-        final List<SpreadSheetActivity> spreadSheetActivities = []
 
-        final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
-        long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
-        if (experimentShow) {
-            final ExperimentData experimentData = extractActivityValuesWithExperiment(experimentId, top, skip)
-            final List<Activity> activityValues = experimentData.activities
-            spreadSheetActivities = createSpreadSheetActivitiesFromActivityValues(activityValues)
-
-        }
-        return [total: totalNumberOfRecords, spreadSheetActivities: spreadSheetActivities, experiment: experimentShow]
-    }
-    /**
-     * Used by show Experiment Page
-     * @param experimentId
-     * @param top
-     * @param skip
-     * @return ExperimentData
-     */
-    protected ExperimentData extractActivityValuesWithExperiment(final Long experimentId, final Integer top, final Integer skip) {
-        return experimentRestService.activities(experimentId, null, top, skip)
-    }
-    /**
-     * @param activityValues
-     * @return list
-     */
-    protected List<SpreadSheetActivity> createSpreadSheetActivitiesFromActivityValues(final List<Activity> activityValues) {
-        List<SpreadSheetActivity> spreadSheetActivities = []
-        for (Activity experimentValue : activityValues) {
-            SpreadSheetActivity spreadSheetActivity = extractActivitiesFromExperiment(experimentValue)
-            spreadSheetActivities.add(spreadSheetActivity)
-        }
-        return spreadSheetActivities
-    }
     /**
      *
      * @param molSpreadSheetData
@@ -539,11 +501,26 @@ class MolecularSpreadSheetService {
             if (columnIndex < START_DYNAMIC_COLUMNS) {
                 molSpreadSheetData.mapColumnsToAssay[columnIndex++] = ""
             } else {
+                for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList){
+                    for (int rowCnt in 0..molSpreadSheetData.rowCount)  {
+                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData?.findSpreadSheetActivity(rowCnt, columnIndex)
+                        if (spreadSheetActivityStorage)  {
+                            if (molSpreadSheetColSubHeader.unitsInColumn == null) {
+                                molSpreadSheetColSubHeader.unitsInColumn =  spreadSheetActivityStorage.dictionaryDescription
+                                molSpreadSheetColSubHeader.unitsInColumnAreUniform = true
+                            }  else {
+                                if (molSpreadSheetColSubHeader.unitsInColumn != spreadSheetActivityStorage.dictionaryDescription) {
+                                    molSpreadSheetColSubHeader.unitsInColumnAreUniform = false
+                                }
+                            }
+                        }
+                    }
+                }
                 for (String columnSubheadings in listOfColumnSubheadings) {
                     molSpreadSheetData.mapColumnsToAssayName[columnIndex] = molSpreadSheetData.experimentFullNameList[assayIndex].toString()
                     molSpreadSheetData.mapColumnsToAssay[columnIndex++] = molSpreadSheetData.experimentNameList[assayIndex].toString()
                 }
-                assayIndex++
+                 assayIndex++
             }
         }
     }

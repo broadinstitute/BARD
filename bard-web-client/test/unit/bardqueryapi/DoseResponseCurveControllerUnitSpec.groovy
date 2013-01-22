@@ -7,6 +7,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
 import grails.plugins.springsecurity.SpringSecurityService
+import curverendering.Curve
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -18,6 +19,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
 
     DoseCurveRenderingService doseCurveRenderingService
     BardUtilitiesService bardUtilitiesService
+
     void setup() {
         controller.metaClass.mixin(InetAddressUtil)
         doseCurveRenderingService = Mock(DoseCurveRenderingService)
@@ -49,7 +51,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         byte[] array = null
         mockCommandObject(DrcCurveCommand)
         Map paramMap = [activities: [new Double(1), new Double(2)],
-                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0, xAxisLabel:'X',  yAxisLabel:'Y']
+                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0, xAxisLabel: 'X', yAxisLabel: 'Y']
 
         controller.metaClass.getParams {-> paramMap}
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
@@ -67,7 +69,7 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         def array = [0, 0, 0, 0, 0] as byte[]
         mockCommandObject(DrcCurveCommand)
         Map paramMap = [activities: [new Double(1), new Double(2)],
-                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0, xAxisLabel:'X',  yAxisLabel:'Y']
+                concentrations: [new Double(1), new Double(2)], s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0, xAxisLabel: 'X', yAxisLabel: 'Y']
 
         controller.metaClass.getParams {-> paramMap}
         DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
@@ -79,4 +81,73 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         doseCurveRenderingService.createDoseCurve(_) >> {array}
         assert response.status == 200
     }
+
+    void "test doseResponseCurves action"() {
+
+        given:
+        List<Curve> curves =
+            [
+                    new Curve(
+                            activities: [new Double(1), new Double(2)],
+                            concentrations: [new Double(1), new Double(2)],
+                            s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0
+                    )
+            ]
+        def byteArray = [0, 0, 0, 0, 0] as byte[]
+
+        mockCommandObject(DrcCurveCommand)
+        Map paramMap = [curves: curves, xAxisLabel: 'X', yAxisLabel: 'Y']
+
+        controller.metaClass.getParams {-> paramMap}
+        DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
+
+        when:
+        controller.doseResponseCurves(drcCurveCommand)
+        then:
+        doseCurveRenderingService.createDoseCurves(_) >> {byteArray}
+        assert response.status == 200
+
+    }
+
+    void "test doseResponseCurves action null Command Object"() {
+        given:
+        byte[] array = null
+
+        mockCommandObject(DrcCurveCommand)
+        DrcCurveCommand drcCurveCommand = null
+        when:
+        controller.doseResponseCurves(drcCurveCommand)
+        then:
+        _ * doseCurveRenderingService.createDoseCurve(_) >> {array}
+        assert flash.message == 'Points required in order to draw a Dose Response Curve'
+        assert response.status == 500
+    }
+
+    void "test doseResponseCurves action null bytes"() {
+
+        given:
+        List<Curve> curves =
+            [
+                    new Curve(
+                            activities: [new Double(1), new Double(2)],
+                            concentrations: [new Double(1), new Double(2)],
+                            s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0
+                    )
+            ]
+        def byteArray = null
+
+        mockCommandObject(DrcCurveCommand)
+        Map paramMap = [curves: curves, xAxisLabel: 'X', yAxisLabel: 'Y']
+
+        controller.metaClass.getParams {-> paramMap}
+        DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
+
+        when:
+        controller.doseResponseCurve(drcCurveCommand)
+
+        then:
+        doseCurveRenderingService.createDoseCurve(_) >> {byteArray}
+        assert response.status == 500
+    }
+
 }

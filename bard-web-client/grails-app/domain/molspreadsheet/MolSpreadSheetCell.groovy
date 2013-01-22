@@ -118,8 +118,8 @@ class MolSpreadSheetCell {
                 }  else {
                     Double value = Double.parseDouble(priorityElement.value)
                     if (value != null) {
-                        this.spreadSheetActivityStorage.dictionaryDescription =  priorityElement.concentrationResponseSeries?.dictionaryDescription ?: ''
-                        this.spreadSheetActivityStorage.dictionaryLabel =  priorityElement.concentrationResponseSeries?.dictionaryLabel ?: ''
+                        this.spreadSheetActivityStorage.dictionaryDescription =  priorityElement.getDictionaryDescription() ?: ''
+                        this.spreadSheetActivityStorage.dictionaryLabel =  priorityElement.getDictionaryLabel() ?: ''
                         if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
                             CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
                             hillCurveValueHolder = new HillCurveValueHolder(
@@ -128,8 +128,6 @@ class MolSpreadSheetCell {
                                     sInf: curveFitParameters.sInf,
                                     slope: (value*0.000001d),
                                     coef: curveFitParameters.hillCoef,
-//                                    conc: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
-//                                    response: spreadSheetActivity.priorityElementList[0].concentrationResponseSeries.concentrationResponsePoints*.value,
                                     conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
                                     response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
                                     xAxisLabel: priorityElement.testConcentrationUnit,
