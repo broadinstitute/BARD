@@ -80,8 +80,8 @@ class AssayDefinitionController {
         }
 
         def statsModifier = null
-        if (params.statisticName) {
-            statsModifier = Element.findByLabel(params.statisticName)
+        if (params.statisticId) {
+            statsModifier = Element.get(params.statisticId)
         }
 
         def entryUnit = null

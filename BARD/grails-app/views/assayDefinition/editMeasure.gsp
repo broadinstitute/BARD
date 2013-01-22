@@ -3,7 +3,7 @@
 <html>
 <head>
     <r:require modules="core,bootstrap,assaycards"/>
-    <script src="${resource(dir: 'js', file: 'editMeasures.js')}" type="text/javascript"></script>
+    <script src="${resource(dir: 'js/cap', file: 'editMeasures.js')}" type="text/javascript"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <meta name="layout" content="basic"/>
     <title>Edit Measures</title>
@@ -67,7 +67,7 @@
                                 <input type="text" id="resultTypeName" name="resultTypeName" placeholder="Result type name">
                                 <input type="hidden" id="resultTypeId" name="resultTypeId"/>
                                 <r:script>
-                                    enableAutoCompleteOntology("#resultTypeName", "result type", "#resultTypeId");
+                                    enableAutoCompleteOntology("#resultTypeName", "RESULT_TYPE", "#resultTypeId");
                                 </r:script>
                             </div>
                         </div>
@@ -75,8 +75,9 @@
                             <label class="control-label" for="statisticName">Statistic (optional)</label>
                             <div class="controls">
                                 <input type="text" id="statisticName" name="statisticName" placeholder="Statistic name">
+                                <input type="hidden" id="statisticId" name="statisticId"/>
                                 <r:script>
-                                    enableAutoCompleteOntology("#statisticName", "result type", "#resultTypeId");
+                                    enableAutoCompleteOntology("#statisticName", "STATS_MODIFIER", "#statisticId");
                                 </r:script>
                             </div>
                         </div>
