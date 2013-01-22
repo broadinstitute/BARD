@@ -29,10 +29,10 @@
         <dd><g:fieldValue bean="${assay}" field="assayType"/></dd>
 
         <dt><g:message code="default.dateCreated.label"/>:</dt>
-        <dd><g:formatDate date="${assay.dateCreated}" format="yyyy-mm-dd"/></dd>
+        <dd><g:formatDate date="${assay.dateCreated}" format="yyyy-MM-dd"/></dd>
 
         <dt><g:message code="default.lastUpdated.label"/>:</dt>
-        <dd><g:formatDate date="${assay.lastUpdated}" format="yyyy-mm-dd"/>&nbsp;</dd>
+        <dd><g:formatDate date="${assay.lastUpdated}" format="yyyy-MM-dd"/>&nbsp;</dd>
 
     </dl>
 </div>
