@@ -69,20 +69,51 @@ class TreeRenderTagLib {
         out << new JSON(children).toString()
     }
 
+    /* Render a dynaTree for rendering measures which is configured by the following parameters:
+    *
+    * measures: the set of root measures to use for the tree
+    * editable: if true, will allow drag and drop of node
+    * dropCallback: method name to call when a node has been dropped.  Will be passed destNode, sourceNode, hitMode, ui, draggable
+    * activateCallback : method name to call when a node has been activated
+    *
+    * The various callbacks can be specified in the body of the tag.
+    */
     def dynaTree = { attrs, body ->
         def id = attrs.id
         def measures = attrs.measures;
+        def editable = attrs.editable;
+        def activateCallback = attrs.activateCallback;
+
+        def dropCallback = attrs.dropCallback;
 
         out << r.script() {
-            out <<  '               $(function(){\n' +
-                    '                    $("#'+id+'").dynatree({\n' +
-                    '                        onActivate: function(node) {\n' +
-                    '                            $(".measure-detail-card").hide(); \n' +
-                    '                            $("#measure-details-"+node.data.key).show(); \n' +
-                    '                        },\n' +
-                    '                        children: '+g.renderMeasuresAsJSONTree([measures:measures],null)+'\n' +
-                    '                    });\n' +
-                    '                });' +
+            out << body()
+
+            out <<  '$(function(){\n' +
+                    ' $("#'+id+'").dynatree({\n' +
+                    '  onActivate: function(node) {\n' +
+                    '   $(".measure-detail-card").hide(); \n' +
+                    '   $("#measure-details-"+node.data.key).show(); \n'
+            if(activateCallback) {
+                out << activateCallback + "(node);"
+            }
+            out <<  '  },\n';
+            if (editable) {
+                out <<  'dnd: { preventVoidMoves: true, \n' +
+                        'onDragStart: function(node) { return true; }, \n' +
+                        'onDragEnter: function(node, sourceNode) {return ["over"] }, \n' +
+                        'onDrop: function(node, sourceNode, hitMode, ui, draggable) {  '
+                if(dropCallback) {
+                    out << dropCallback + "(node, sourceNode, hitMode, ui, draggable); \n";
+                } else {
+                    out << "sourceNode.move(node, hitMode);"
+                }
+                out <<  ' }\n' +
+                        '},'
+            }
+            out << '  children: '+g.renderMeasuresAsJSONTree([measures:measures],null)+'\n';
+            out <<  ' });\n' +
+                    '});' +
                     ''
         }
         out << "<div id=\"${id}\"></div>"

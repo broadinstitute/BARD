@@ -1,13 +1,16 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
+import bard.db.dictionary.OntologyDataAccessService
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure : "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
+    OntologyDataAccessService ontologyDataAccessService;
 
     def index() {
         redirect(action: "description", params: params)
@@ -49,6 +52,86 @@ class AssayDefinitionController {
             flash.message = null
         }
         [assayInstance: assayInstance]
+    }
+
+    def editMeasure() {
+        // while not directly used in the rendering of this page, make sure the tree is cached before rendering the
+        // edit page to ensure the autocomplete comes up quickly when the user tries.
+        // Perhaps a better approach would be to simply ensure some loading indicator is more predominant when the autocomplete is running.
+        ontologyDataAccessService.ensureTreeCached()
+
+        def assayInstance = Assay.get(params.id)
+        if (!assayInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return
+        } else {
+            flash.message = null
+        }
+
+        [assayInstance: assayInstance]
+    }
+
+    def deleteMeasure() {
+        def measure = Measure.get(params.measureId)
+        measure.delete()
+        redirect(action: "editMeasure", id: params.id)
+    }
+
+    def addMeasure() {
+        def assayInstance = Assay.get(params.id)
+        def resultType = Element.get(params.resultTypeId)
+
+        def parentMeasure = null
+        if (params.parentMeasureId) {
+            parentMeasure = Measure.get(params.parentMeasureId)
+        }
+
+        def statsModifier = null
+        if (params.statisticId) {
+            statsModifier = Element.get(params.statisticId)
+        }
+
+        def entryUnit = null
+        if (params.entryUnitName) {
+            entryUnit = Element.findByLabel(params.entryUnitName)
+        }
+
+        Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit)
+
+        flash.message = "Successfully added measure " + newMeasure.displayLabel
+        redirect(action: "editMeasure", id: params.id)
+    }
+
+    def disassociateContext() {
+        def measure = Measure.get(params.measureId)
+        def context = AssayContext.get(params.assayContextId)
+
+        if(measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else if (context == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+        } else {
+            flash.message = null
+            assayContextService.disassociateContext(measure, context)
+        }
+
+        redirect(action: "editMeasure", id: context.assay.id)
+    }
+
+    def associateContext() {
+        def measure = Measure.get(params.measureId)
+        def context = AssayContext.get(params.assayContextId)
+
+        if(measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else if (context == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+        } else {
+            flash.message = null
+            assayContextService.associateContext(measure, context)
+        }
+
+        redirect(action: "editMeasure", id: context.assay.id)
     }
 
     def findById() {
