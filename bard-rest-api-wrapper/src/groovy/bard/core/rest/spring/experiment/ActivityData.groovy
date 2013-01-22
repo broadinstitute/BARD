@@ -44,7 +44,7 @@ public class ActivityData extends JsonUtil {
                 return dictionaryElement.description
             }
         }
-        return responseUnit
+        return pubChemDisplayName
 
     }
 
