@@ -54,9 +54,10 @@ class DoseResponseCurveController {
             if (drcCurveCommand) {
                 drcCurveCommand.width = width
                 drcCurveCommand.height = height
-                byte[] bytes = this.doseCurveRenderingService.createDoseCurves(drcCurveCommand.curves)
+                byte[] bytes = this.doseCurveRenderingService.createDoseCurves(drcCurveCommand)
                 response.contentType = 'image/png'
                 response.outputStream.setBytes(bytes)
+                return
             } else {
                 flash.message = 'Points required in order to draw a Dose Response Curve'
                 log.error(flash.message + getUserIpAddress(bardUtilitiesService.username))
