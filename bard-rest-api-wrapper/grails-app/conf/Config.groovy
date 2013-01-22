@@ -3,7 +3,7 @@ import grails.util.Environment
 //Override in config file
 dataexport.apikey= "test"
 dataexport.dictionary.accept.type= "application/vnd.bard.cap+xml;type=dictionary"
-dataexport.dictionary.url = "https://bard-qa.broadinstitute.org/dataExport/api/dictionary"
+dataexport.dictionary.url = "https://bard-dev.broadinstitute.org/dataExport/api/dictionary"
 //cacheable plugin
 grails.cache.config = {
     cache {
