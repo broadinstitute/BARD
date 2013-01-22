@@ -34,7 +34,13 @@ class OntologyJSonController {
 			}
 		}
 	}
-	
+
+    def getLabelsFromTree() {
+        List<OntologyDataAccessService.ElementSummary> elements = ontologyDataAccessService.getElementsFromTree(params.tree, params.label)
+        List results = elements.collect { [label: it.label, elementId: it.elementId]}
+        render results as JSON
+    }
+
 	def getDescriptors(){
 		if(params?.term && params?.section){
 			println "params.term: " + params.term
@@ -49,7 +55,6 @@ class OntologyJSonController {
 						"label" : d.label,
 						"value" : d.label,
 						"elementId" : d.element.id,
-//						"fpath" : d.fullPath
 					]
 					attributes.add(item)
 				}
