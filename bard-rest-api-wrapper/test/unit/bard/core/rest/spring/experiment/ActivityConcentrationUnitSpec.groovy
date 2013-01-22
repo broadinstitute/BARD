@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.rest.api.wrapper.Dummy
+import bard.core.rest.spring.DataExportRestService
 
 @Unroll
 class ActivityConcentrationUnitSpec extends Specification {
@@ -137,7 +139,7 @@ class ActivityConcentrationUnitSpec extends Specification {
                       "testConcUnit":"uM",
                       "testConc":1000.0,
                       "value":"105.693"
-                   },
+                    },
                    {
                       "displayName":"Rep1ForExperiment3_1000_uM",
                       "dictElemId":1016,
@@ -166,19 +168,26 @@ class ActivityConcentrationUnitSpec extends Specification {
        }
     }
 '''
+    DataExportRestService dataExportRestService = Mock(DataExportRestService)
 
     void "test #label"() {
+        given:
+        Dummy dummy = new Dummy()
+        dummy.dataExportRestService = dataExportRestService
         when:
         ActivityConcentration activityConcentration = objectMapper.readValue(JSON_DATA, ActivityConcentration.class)
+        activityConcentration.dummy = dummy
         then:
         assert activityConcentration
-        assert activityConcentration.hasPlot()
-        assert activityConcentration.getSlope()
-        assert activityConcentration.hasChildElements() ==hasChildElements
-        assert activityConcentration.toDisplay()
-        assert activityConcentration.pubChemDisplayName
         assert activityConcentration.dictElemId
         assert activityConcentration.value
+
+        assert activityConcentration.toDisplay()
+        assert activityConcentration.hasPlot()
+        assert activityConcentration.getSlope()
+        assert activityConcentration.hasChildElements() == hasChildElements
+        assert activityConcentration.toDisplay()
+        assert activityConcentration.pubChemDisplayName
         final ConcentrationResponseSeries concResponseSeries = activityConcentration.concentrationResponseSeries
         assert concResponseSeries
         assert concResponseSeries.testConcentrationUnit
@@ -195,6 +204,7 @@ class ActivityConcentrationUnitSpec extends Specification {
             assert miscData.pubChemDisplayName
         }
         if (hasChildElements) {
+
             final ConcentrationResponsePoint concRespPoint = concRespPoints.get(0)
             final List<ActivityData> childElements = concRespPoint.childElements
             assert childElements
@@ -202,6 +212,10 @@ class ActivityConcentrationUnitSpec extends Specification {
             for (ActivityData childElement in childElements) {
                 assert childElement.pubChemDisplayName
             }
+        } else {
+            assert activityConcentration.getDictionaryDescription()
+            assert activityConcentration.getDictionaryLabel()
+
         }
 
 
@@ -211,17 +225,22 @@ class ActivityConcentrationUnitSpec extends Specification {
         "JSON Has no Child Elements and no qualifier" | JSON_NO_CHILD_ELEMENT_NO_QUALIFIER | false
         "JSON has Child Elements"                     | JSON_WITH_CHILD_ELEMENTS           | true
     }
-   void "Empty fields"(){
-       when:
-       ActivityConcentration activityConcentration = new ActivityConcentration()
-       then:
-       assert !activityConcentration.hasPlot()
-       assert !activityConcentration.getSlope()
-       assert !activityConcentration.toDisplay()
 
+    void "Empty fields #label"() {
+        when:
+        ActivityConcentration activityConcentration = new ActivityConcentration(qualifier: qualifier, value: value)
+        then:
+        assert !activityConcentration.hasPlot()
+        assert !activityConcentration.getSlope()
+        assert activityConcentration.toDisplay() == expectedDisplay
 
+        where:
+        label                          | qualifier | expectedDisplay | value
+        "Qualifier=='=' and has value" | "="       | " 2"            | "2"
+        "Qualifier=='>' and has Value" | ">"       | "> 2"           | "2"
+        "Qualifier==null"              | ""        | ""              | ""
 
-   }
+    }
 
 }
 

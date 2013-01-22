@@ -1,14 +1,11 @@
 package bard.core.rest.spring.experiment
 
+import bard.core.rest.spring.util.DictionaryElement
 import bard.core.rest.spring.util.JsonUtil
+import bard.rest.api.wrapper.Dummy
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import bard.core.rest.spring.util.DictionaryElement
-import bard.rest.api.wrapper.Dummy
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityData extends JsonUtil {
@@ -60,7 +57,7 @@ public class ActivityData extends JsonUtil {
 
             stringBuilder.append(qualifier ?: '').append(value ?: '').append(" ").append(responseUnit ?: "").append(" ");
             if (testConcentration) {
-                stringBuilder.append("  Test Concentration:").append(testConcentration).append(testConcentrationUnit)
+                stringBuilder.append("  Test Concentration:").append(testConcentration).append(" ").append(testConcentrationUnit)
             }
         }
         return stringBuilder.toString()

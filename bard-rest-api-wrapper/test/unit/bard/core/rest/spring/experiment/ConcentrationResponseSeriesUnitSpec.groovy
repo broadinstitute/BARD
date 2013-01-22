@@ -52,20 +52,18 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
     }
     '''
 
+    DataExportRestService dataExportRestService = Mock(DataExportRestService)
 
 
     void "test JSON #label"() {
         given:
         Dummy dummy = new Dummy()
-        DataExportRestService dataExportRestService = Mock(DataExportRestService)
         dummy.dataExportRestService = dataExportRestService
         when:
         ConcentrationResponseSeries concentrationResponseSeries = objectMapper.readValue(JSON_DATA, ConcentrationResponseSeries.class)
         concentrationResponseSeries.dummy = dummy
         final List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
         then:
-        dummy.dataExportRestService >> {dataExportRestService}
-        dataExportRestService.findDictionaryElementById(_)>>{new DictionaryElement(elementId: 2,label: "label",elementStatus: "status",description: "description")}
         assert !concentrationResponseSeries.responseUnit
         assert !concentrationResponseSeries.getDictionaryLabel()
         assert !concentrationResponseSeries.getDictionaryDescription()
@@ -90,6 +88,47 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
             assert activityData.pubChemDisplayName
             assert activityData.value
         }
+
+    }
+
+
+    void "test getDictionaryDescription #label"() {
+        given:
+        ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(dictElemId: dictElemId, responseUnit: "pubChem")
+        Dummy dummy = new Dummy()
+        dummy.dataExportRestService = dataExportRestService
+        concentrationResponseSeries.dummy = dummy
+        when:
+        final String foundDescription = concentrationResponseSeries.getDictionaryDescription()
+
+        then:
+        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        assert expectedDescription == foundDescription
+        where:
+        label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
+        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(description: "label") | "label"             | 1
+        "Has a DictElemId, but not in dictionary" | 221        | null                                        | "pubChem"           | 1
+        "Has no DictElemId"                       | 0          | null                                        | "pubChem"           | 0
+
+    }
+
+    void "test getDictionaryLabel #label"() {
+        given:
+        ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(dictElemId: dictElemId, responseUnit: "pubChem")
+        Dummy dummy = new Dummy()
+        dummy.dataExportRestService = dataExportRestService
+        concentrationResponseSeries.dummy = dummy
+        when:
+        final String foundLabel = concentrationResponseSeries.getDictionaryLabel()
+
+        then:
+        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        assert expectedLabel == foundLabel
+        where:
+        label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions
+        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(label: "label") | "label"       | 1
+        "Has a DictElemId, but not in dictionary" | 221        | null                                  | "pubChem"     | 1
+        "Has no DictElemId"                       | 0          | null                                  | "pubChem"     | 0
 
     }
 
