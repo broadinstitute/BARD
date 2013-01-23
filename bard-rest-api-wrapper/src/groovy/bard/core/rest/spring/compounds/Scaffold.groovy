@@ -97,9 +97,9 @@ public class Scaffold implements Comparable<Scaffold> {
  * Warning Levels
  */
 public enum WarningLevel {
-    none(0, 4000),
-    moderate(4000, 10000),
-    severe(10000, Double.MAX_VALUE)
+    none(0, 100),
+    moderate(100, 300),
+    severe(300, Double.MAX_VALUE)
 
     WarningLevel(Double minThreshold, Double maxThreshold) {
         this.minThreshold = minThreshold
