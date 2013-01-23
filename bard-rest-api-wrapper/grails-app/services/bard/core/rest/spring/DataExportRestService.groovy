@@ -31,7 +31,7 @@ public class DataExportRestService extends AbstractRestService {
             dictionaryElementMap.put(dictionaryElement.elementId, dictionaryElement)
         }
     }
-
+    @Cacheable('dictionaryElements')
     public CapDictionary getDictionary() {
         try {
             SSLTrustManager.enableSSL()//enable SSL so we can call the data export API

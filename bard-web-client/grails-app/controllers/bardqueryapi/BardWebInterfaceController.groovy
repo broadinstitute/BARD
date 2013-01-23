@@ -36,6 +36,7 @@ class BardWebInterfaceController {
     //An AfterInterceptor to handle mobile-view routing.
     def afterInterceptor = [action: this.&handleMobile]
 
+
     protected handleMobile(model, modelAndView) {
         if (modelAndView && mobileService.detect(request)) {
             String newView = '/mobile' + modelAndView.viewName

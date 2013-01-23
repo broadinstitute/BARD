@@ -257,7 +257,8 @@ class QueryService implements IQueryService {
 
         }
         String priorityDisplay = ""
-        String priorityDescription = ""
+
+        Long dictionaryId = null
         boolean hasChildElements = false
         for (Activity activity : activities) {
             final ResultData resultData = activity.resultData
@@ -269,7 +270,11 @@ class QueryService implements IQueryService {
                     if (!priorityDisplay) {
                         if (!priorityDisplay) {
                             priorityDisplay = priorityElement.getDictionaryLabel()
-                            priorityDescription = priorityElement.getDictionaryDescription()
+                            String priorityDescription = priorityElement.getDictionaryDescription()
+                            if (priorityDescription) {
+                                dictionaryId = priorityElement.getDictElemId()
+                            }
+
                         }
 
                     }
@@ -289,7 +294,7 @@ class QueryService implements IQueryService {
         return [total: totalNumberOfRecords, activities: activities,
                 experiment: experimentShow, hasPlot: hasPlot,
                 priorityDisplay: priorityDisplay,
-                priorityDescription:priorityDescription,
+                dictionaryId: dictionaryId,
                 hasChildElements: hasChildElements]
     }
 
@@ -393,7 +398,7 @@ class QueryService implements IQueryService {
                     }
                 }
                 final List<Assay> assays = project.assays
-                final ProjectAdapter projectAdapter = new ProjectAdapter(project,0,null,annotations)
+                final ProjectAdapter projectAdapter = new ProjectAdapter(project, 0, null, annotations)
                 return [projectAdapter: projectAdapter, experiments: experiments, assays: assays]
             }
         }

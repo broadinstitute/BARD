@@ -31,7 +31,14 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-             <th><a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${experimentDataMap?.priorityDescription ?: ''}">${experimentDataMap?.priorityDisplay ?: ""}</a></th>
+             <th>
+                 ${experimentDataMap?.priorityDisplay ?: ""}
+                 <g:if test="${experimentDataMap?.dictionaryId}">
+                     <a href="/bardwebclient/dictionaryTerms/#${experimentDataMap?.dictionaryId}" target="datadictionary">
+                         <i class="icon-question-sign"></i>
+                     </a>
+                 </g:if>
+            </th>
             <th>Experiment Descriptors</th>
             <g:if test="${experimentDataMap?.hasChildElements}">
                 <th>Child Elements</th>
@@ -101,8 +108,10 @@
                         <table class="table table-striped table-condensed">
                             <thead><tr>
                                 <th>
-
-                                    <a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${concRespSeries?.dictionaryDescription ?: ''}">${concRespSeries.dictionaryLabel}</a>
+                                    ${concRespSeries.dictionaryLabel}
+                                    <g:if test="${concRespSeries?.dictionaryDescription}">
+                                        <a  href="/bardwebclient/dictionaryTerms/#${concRespSeries?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                                    </g:if>
                                 </th>
                                 <th>Concentration</th>
                             </tr>
@@ -148,7 +157,9 @@
                     </g:if>
                     <td>
                         <g:each in="${concRespSeries.miscData}" var="miscData">
-                            <a href="#" rel="tooltip" class="desc_tip" data-placement="top" data-title="${miscData?.dictionaryDescription ?: ''}">${miscData.toDisplay()}</a>
+                            <g:if test="${miscData?.dictionaryDescription}">
+                                ${miscData.toDisplay()}<a href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                            </g:if>
                             <br/>
                         </g:each>
                     </td>
