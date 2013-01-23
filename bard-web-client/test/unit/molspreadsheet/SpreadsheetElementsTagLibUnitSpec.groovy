@@ -3,6 +3,7 @@ package molspreadsheet
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.experiment.ActivityData
 
 /**
  *   These are the tags that are used to build the different cells within a molecular spreadsheet.  The same methods
@@ -93,9 +94,12 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
      */
     void "test exptDataCell"() {
         given:
-        SpreadSheetActivityStorage spreadSheetActivityStorage1  // null
-        SpreadSheetActivityStorage spreadSheetActivityStorage2 = new SpreadSheetActivityStorage() // empty
-        SpreadSheetActivityStorage spreadSheetActivityStorage3 = new SpreadSheetActivityStorage() // containing only a hillCurveValueHolder with single point data
+        //-- the null SpreadSheetActivityStorage test
+        SpreadSheetActivityStorage spreadSheetActivityStorage1
+        //-- the empty SpreadSheetActivityStorage test
+        SpreadSheetActivityStorage spreadSheetActivityStorage2 = new SpreadSheetActivityStorage()
+        //--  containing only a hillCurveValueHolder with single point data
+        SpreadSheetActivityStorage spreadSheetActivityStorage3 = new SpreadSheetActivityStorage()
         final HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder()
         hillCurveValueHolder.identifier = 1
         hillCurveValueHolder.s0 = 1d
@@ -104,7 +108,8 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         hillCurveValueHolder.conc = [1d]
         hillCurveValueHolder.response = [1d]
         spreadSheetActivityStorage3.hillCurveValueHolderList  = [hillCurveValueHolder]
-        SpreadSheetActivityStorage spreadSheetActivityStorage4 = new SpreadSheetActivityStorage()   // hillCurveValueHolder with multiple point data is handled differently
+        //--  hillCurveValueHolder with multiple point data is handled differently
+        SpreadSheetActivityStorage spreadSheetActivityStorage4 = new SpreadSheetActivityStorage()
         final HillCurveValueHolder hillCurveValueHolder1 = new HillCurveValueHolder()
         hillCurveValueHolder1.identifier = 1
         hillCurveValueHolder1.s0 = 1d
@@ -113,11 +118,17 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         hillCurveValueHolder1.conc = [1d,2d]
         hillCurveValueHolder1.response = [1d,2d]
         spreadSheetActivityStorage4.hillCurveValueHolderList  = [hillCurveValueHolder1]
-        SpreadSheetActivityStorage spreadSheetActivityStorage5 = new SpreadSheetActivityStorage() // This is an ill formed  hillCurveValueHolder -- test it too
+        //--   This is an ill formed  hillCurveValueHolder -- test it too
+        SpreadSheetActivityStorage spreadSheetActivityStorage5 = new SpreadSheetActivityStorage()
         final HillCurveValueHolder hillCurveValueHolder2 = new HillCurveValueHolder()
         hillCurveValueHolder2.conc = [1d,2d]
         hillCurveValueHolder2.response = [1d,2d]
-        spreadSheetActivityStorage5.hillCurveValueHolderList  = [hillCurveValueHolder2]
+        spreadSheetActivityStorage5.hillCurveValueHolderList  = [hillCurveValueHolder1]
+        //-- hillCurveValueHolder with Child elements
+        SpreadSheetActivityStorage spreadSheetActivityStorage6 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage6.childElements = [new ActivityData(),new ActivityData()]
+        spreadSheetActivityStorage6.hillCurveValueHolderList  = [hillCurveValueHolder1]
+
 
         when:
         String results1 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage1])
@@ -125,13 +136,15 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         String results3 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage3])
         String results4 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage4])
         String results5 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage5])
+        String results6 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage6])
 
         then:
         results1.contains("Not tested in this experiment")
         results2.replaceAll("\\s", "") == """<tdclass="molSpreadSheet"property="var1"><p></p>""".toString()
         results3.contains("molspreadcell")
         results4.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=1.0&slope=1.0&hillSlope=1.0")
-        results5.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=&slope=&hillSlope=&concentrations=1.0&concentrations=2.0&activities=1.0&activities=2.0")
+        results5.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=")
+        results6.contains("<FONT COLOR=\"#000000\"><nobr>")
     }
 
 
