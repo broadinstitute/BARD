@@ -50,12 +50,12 @@
                         <i class="icon-chevron-down"></i>
                         Summary
                     </a>
+                </div>
 
                     <div id="target-summary-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
                             <g:render template="showSummary" model="['assay': assayInstance]"/>
                         </div>
-                    </div>
                 </div>
             </div>
 
@@ -67,13 +67,13 @@
                         <i class="icon-chevron-down"></i>
                         Contexts
                     </a>
+                </div>
 
                     <div id="target-contexts-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
                             <g:render template="../context/show"
                                       model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
                         </div>
-                    </div>
                 </div>
             </div>
 
@@ -84,11 +84,6 @@
                         <i class="icon-chevron-down"></i>
                         Measures
                     </a>
-
-                    <div class="pull-right">
-                        <g:link action="editMeasure" id="${assayInstance?.id}"
-                                class="btn btn-small btn-info">Edit Measures</g:link>
-                    </div>
                 </div>
 
                 <div id="target-measures-info" class="accordion-body in collapse">

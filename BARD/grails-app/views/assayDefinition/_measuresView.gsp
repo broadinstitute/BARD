@@ -7,6 +7,10 @@
             </div>
 
             <div class="span6">
+                <div class="pull-right">
+                    <g:link action="editMeasure" id="${assayInstance?.id}"
+                            class="btn btn-small btn-info">Edit Measures</g:link>
+                </div>
                 <div id="measure-details-none" class="measure-detail-card">
                     <strong>Select a measure on the tree to the left and the details about that measure will appear here.</strong>
                 </div>
