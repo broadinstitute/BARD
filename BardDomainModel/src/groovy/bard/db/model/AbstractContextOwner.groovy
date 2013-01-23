@@ -22,7 +22,7 @@ abstract class AbstractContextOwner {
      */
     Map<String, AbstractContext> groupContexts() {
         Map<String, List<AbstractContext>> mapByPath = getContexts().groupBy { AbstractContext context ->
-            context.getContextGroup()
+            context.getContextGroup().toLowerCase()
         }
         mapByPath as TreeMap<String, List<AbstractContext>>
     }
