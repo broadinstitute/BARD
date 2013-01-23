@@ -124,10 +124,14 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         hillCurveValueHolder2.conc = [1d,2d]
         hillCurveValueHolder2.response = [1d,2d]
         spreadSheetActivityStorage5.hillCurveValueHolderList  = [hillCurveValueHolder1]
-        //-- hillCurveValueHolder with Child elements
+        //-- hillCurveValueHolder with Child elements and a typical HillCurveValueHolder
         SpreadSheetActivityStorage spreadSheetActivityStorage6 = new SpreadSheetActivityStorage()
         spreadSheetActivityStorage6.childElements = [new ActivityData(),new ActivityData()]
         spreadSheetActivityStorage6.hillCurveValueHolderList  = [hillCurveValueHolder1]
+        //-- hillCurveValueHolder with Child elements and a degenerate HillCurveValueHolder -- in this case the child element should not be printed
+        SpreadSheetActivityStorage spreadSheetActivityStorage7 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage7.childElements = [new ActivityData(),new ActivityData()]
+        spreadSheetActivityStorage7.hillCurveValueHolderList  = [hillCurveValueHolder2]
 
 
         when:
@@ -137,6 +141,7 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         String results4 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage4])
         String results5 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage5])
         String results6 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage6])
+        String results7 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7])
 
         then:
         results1.contains("Not tested in this experiment")
@@ -145,6 +150,7 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         results4.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=1.0&slope=1.0&hillSlope=1.0")
         results5.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=")
         results6.contains("<FONT COLOR=\"#000000\"><nobr>")
+        (!results7.contains("<FONT COLOR=\"#000000\"><nobr>"))
     }
 
 
