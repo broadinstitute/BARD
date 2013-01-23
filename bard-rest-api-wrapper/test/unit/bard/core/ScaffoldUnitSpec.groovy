@@ -22,13 +22,13 @@ class ScaffoldUnitSpec extends Specification {
         assert warningLevel
         warningLevel == expectedWarningLevel
         where:
-        label                 | scaffold                                                 | expectedWarningLevel
-        "With pScore=0"       | new Scaffold(scafsmi: "CC", pScore: new Double(0))       | WarningLevel.none
-        "With pScore=3999.99" | new Scaffold(scafsmi: "CC", pScore: new Double(399.99))  | WarningLevel.none
-        "With pScore=4000"    | new Scaffold(scafsmi: "CC", pScore: new Double(4000))    | WarningLevel.moderate
-        "With pScore=9999.99" | new Scaffold(scafsmi: "CC", pScore: new Double(9999.99)) | WarningLevel.moderate
-        "With pScore=10000"   | new Scaffold(scafsmi: "CC", pScore: new Double(10000))   | WarningLevel.severe
-        "With pScore=20000"   | new Scaffold(scafsmi: "CC", pScore: new Double(20000))   | WarningLevel.severe
+        label                | scaffold                                                | expectedWarningLevel
+        "With pScore=0"      | new Scaffold(scafsmi: "CC", pScore: new Double(0))      | WarningLevel.none
+        "With pScore=99.99"  | new Scaffold(scafsmi: "CC", pScore: new Double(99.99))  | WarningLevel.none
+        "With pScore=100"    | new Scaffold(scafsmi: "CC", pScore: new Double(100))    | WarningLevel.moderate
+        "With pScore=299.99" | new Scaffold(scafsmi: "CC", pScore: new Double(299.99)) | WarningLevel.moderate
+        "With pScore=300"    | new Scaffold(scafsmi: "CC", pScore: new Double(300))    | WarningLevel.severe
+        "With pScore=20000"  | new Scaffold(scafsmi: "CC", pScore: new Double(20000))  | WarningLevel.severe
     }
 
     void "scaffold.hashCode #label"() {
