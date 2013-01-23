@@ -8,7 +8,7 @@
 <div>
     <dl class="dl-horizontal">
         <dt><g:message code="default.id.label" default="Fix i18n"/>:</dt>
-        <dd><g:fieldValue bean="${assay}" field="id"/></dd>
+        <dd>${assay.id}</dd>
 
         <dt><g:message code="assay.assayVersion.label" default="Fix i18n"/>:</dt>
         <dd><g:fieldValue bean="${assay}" field="assayVersion"/></dd>
