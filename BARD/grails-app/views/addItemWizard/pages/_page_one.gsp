@@ -17,6 +17,12 @@
 </div>
 <input class="input-xlarge" type="text" id="attributeTextField" name='attributeText' placeholder="Search for Attribute">
  -->
+<g:hasErrors bean="${attribute}">
+	<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		<g:renderErrors bean="${attribute}"/>
+	</div>
+</g:hasErrors>
 
 <g:textField class="input-xlarge" id="attributeTextField" name='attributeText' placeholder="Search for Attribute" />
 <input type="hidden" id="elementId" name="elementId" value="${ attribute?.elementId }"/>

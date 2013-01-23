@@ -77,7 +77,8 @@
         			select: function( event, ui ) {
                         $( "#currentValue" ).val( ui.item.value );
                         $( "#elementId" ).val( ui.item.elementId );  
-                        $( "#attributeElementId" ).val(ui.item.elementId);                 
+                        $( "#attributeElementId" ).val(ui.item.elementId);
+                        outputToConsole("Attribute Element ID: " + ui.item.elementId);           
                     }
                 			
         	}

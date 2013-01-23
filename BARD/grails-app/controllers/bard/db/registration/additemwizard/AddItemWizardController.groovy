@@ -17,11 +17,19 @@ class AttributeCommand implements Serializable {
 	String path
 	String assayContextIdValue
 	String currentValue
+	
+	static constraints = {
+		currentValue(nullable: false, blank: false)
+	}
 }
 
 class ValueTypeCommand implements Serializable {
 
 	String valueTypeOption
+	
+	static constraints = {
+		valueTypeOption(nullable: false, blank: false)
+	}
 }
 
 class FixedValueCommand implements Serializable {
@@ -30,6 +38,10 @@ class FixedValueCommand implements Serializable {
 	String currentChoice
 	String valueQualifier
 	String valueUnits
+	
+	static constraints = {
+		currentChoice(nullable: false, blank: false)
+	}
 }
 
 class AddItemWizardController {
@@ -87,6 +99,7 @@ class AddItemWizardController {
 			flow.valueType = null;
 			flow.fixedValue = null;
 			flow.itemSaved = false;
+			
 			success()
 		}
 
@@ -118,9 +131,11 @@ class AddItemWizardController {
 				success()
 			}
 			on("next") { AttributeCommand cmd ->
+				if(cmd.hasErrors()){
+					flow.attribute = cmd
+					return error()
+				}
 				flow.attribute = cmd
-//				println "calling closure for AttributeCommand ${cmd.dump()}"
-//				println "Params: ${params}"
 				flow.page = 2
 				success()
 			}.to "pageTwo"
@@ -148,10 +163,14 @@ class AddItemWizardController {
 				success()
 			}
 			on("next"){ValueTypeCommand cmd ->
-				 flow.valueType = cmd
-				 println "calling closure for ValueTypeCommand ${cmd.dump()}"
-				 flow.page = 3
-				 success()							
+				if(cmd.hasErrors()){
+					flow.valueType = cmd
+					return error()
+				}
+				flow.valueType = cmd
+				flow.page = 3
+				
+				success()							
 			}.to "pageThree"
 			on("previous").to "pageOne"
 			on("toPageOne").to "pageOne"
@@ -173,8 +192,12 @@ class AddItemWizardController {
 				success()
 			}
 			on("next"){ FixedValueCommand cmd ->
+				if(cmd.hasErrors()){
+					flow.fixedValue = cmd
+					return error()
+				}
 				flow.fixedValue = cmd
-				println "calling closure for FixedValueCommand ${cmd.dump()}"
+//				println "calling closure for FixedValueCommand ${cmd.dump()}"
 				flow.page = 4
 				success()
 			}.to "pageFour"

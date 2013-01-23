@@ -1,5 +1,7 @@
 package bard.db.registration
 
+import java.util.List;
+
 import bard.db.dictionary.*;
 import bard.db.registration.*;
 import bard.db.registration.additemwizard.*;
@@ -94,6 +96,25 @@ class OntologyJSonController {
 				}
 			}
 		}
+	}
+	
+	def getBaseUnits(){
+//		if(params?.elementId && params?.toUnitId){
+//			List<UnitTree> units = ontologyDataAccessService.getBaseUnits(params.elementId.toLong(), params.toUnitId.toLong())
+//			if(units){
+//				render(contentType: "text/json") {
+//					for (u in units) {
+//						element u.label
+//					}
+//				}
+//			}
+//			else{
+//				println "Units is null."
+//				render(contentType: "text/json") {
+//					element "null"
+//				}
+//			}
+//		}		
 	}
 	
 }

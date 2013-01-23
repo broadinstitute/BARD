@@ -75,4 +75,31 @@ class OntologyDataAccessService {
 		println "Results - Descriptor list size:" + results?.size()
 		return results
 	}
+	
+	public Map<Long, String> getBaseUnits(Long elementId, Long toUnitId){
+		List<Long> resultsOne = UnitConversion.executeQuery("select uc.fromUnit.id from UnitConversion uc where toUnit.id = ?", toUnitId)
+		List<Long> resultsTwo = Element.executeQuery("select e.id from Element e where id = ?", elementId)
+		resultsOne.addAll(resultsTwo)
+		List<Long> unionAll = resultsOne
+		String parametizedString = getInParametizedQueryString(unionAll);
+		List<UnitTree> unitResults = UnitTree.executeQuery("from UnitTree ut where ut.element.id in (" + parametizedString + ")", unionAll)
+		println "# of Unit Results: " + unitResults.size()
+		Map<Long, String> unitsMap = [:];
+		for(UnitTree u in unitResults){
+			unitsMap.put(u.id, u.label)
+		}
+		return unitsMap		
+	}
+	
+	private String getInParametizedQueryString(List theList){
+		String parametizedString = "";
+		int counter = 0;
+		for(item in theList){
+			counter++
+			parametizedString = parametizedString + "?"
+			if(counter != theList.size())
+				parametizedString = parametizedString + ", "
+		}
+		return parametizedString
+	}
 }
