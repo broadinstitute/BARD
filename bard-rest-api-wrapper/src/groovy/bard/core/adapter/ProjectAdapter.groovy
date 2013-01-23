@@ -11,6 +11,9 @@ import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.assays.Context
 
 public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
@@ -119,4 +122,13 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return this.annotations.size()
     }
 
+    public Boolean areAnnotationsEmpty() {
+        Boolean foundSomething = this.annotations.find {BardAnnotation annotation ->
+            annotation.contexts.find {Context context ->
+                context.getComps().find()
+            }
+        }
+
+        return foundSomething ?: false
+    }
 }
