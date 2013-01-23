@@ -213,7 +213,6 @@ class ActivityConcentrationUnitSpec extends Specification {
                 assert childElement.pubChemDisplayName
             }
         } else {
-            assert activityConcentration.getDictionaryDescription()
             assert activityConcentration.getDictionaryLabel()
 
         }

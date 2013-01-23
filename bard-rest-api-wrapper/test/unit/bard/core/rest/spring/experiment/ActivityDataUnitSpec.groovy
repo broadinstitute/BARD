@@ -54,7 +54,7 @@ class ActivityDataUnitSpec extends Specification {
         assert activityData.responseUnit == "um"
         assert activityData.testConcentrationUnit == "uM"
         assert activityData.getDictionaryLabel() == "IC50"
-        assert activityData.getDictionaryDescription() == "IC50"
+        assert activityData.getDictionaryDescription() == null
         assert activityData.toDisplay().trim() == display.trim()
         assert activityData.qualifier == qualifier
 
@@ -104,8 +104,8 @@ class ActivityDataUnitSpec extends Specification {
         where:
         label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
         "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(description: "label") | "label"             | 1
-        "Has a DictElemId, but not in dictionary" | 221        | null                                        | "pubChem"           | 1
-        "Has no DictElemId"                       | 0          | null                                        | "pubChem"           | 0
+        "Has a DictElemId, but not in dictionary" | 221        | null                                        | null                | 1
+        "Has no DictElemId"                       | 0          | null                                        | null                | 0
 
     }
 

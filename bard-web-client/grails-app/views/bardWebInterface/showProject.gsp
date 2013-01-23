@@ -25,14 +25,6 @@
 <div class="row-fluid">
     <div class="span4">
         <dl class="dl-horizontal dl-horizontal-wide">
-            <g:if test="${projectAdapter?.grantNumber}">
-                <dt>Grant Number:</dt>
-                <dd>${projectAdapter.grantNumber}</dd>
-            </g:if>
-            <g:if test="${projectAdapter?.laboratoryName}">
-                <dt>Laboratory Name:</dt>
-                <dd>${projectAdapter.laboratoryName}</dd>
-            </g:if>
             <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                 <dt>Number Of Experiments:</dt>
                 <dd><span class="badge badge-info">${projectAdapter.getNumberOfExperiments()}</span></dd>

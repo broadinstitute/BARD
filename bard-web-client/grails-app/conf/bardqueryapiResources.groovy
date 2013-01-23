@@ -16,6 +16,11 @@ modules = {
     }
     images {
     }
+    dictionaryPage {
+        resource url:"js/html5historyapi/history.js"
+        resource url:'/js/jquery-table-sorter/jquery.tablesorter.min.js'
+        resource url: '/js/jquery-table-sorter/theme.default.css'
+    }
     showProjectAssay {
         //Polyfill for handling History
         resource url: "js/html5historyapi/history.js"
