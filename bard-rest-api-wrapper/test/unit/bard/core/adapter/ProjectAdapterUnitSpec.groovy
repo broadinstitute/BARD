@@ -104,7 +104,7 @@ class ProjectAdapterUnitSpec extends Specification {
 
         assert projectAdapter.getProbes()
         assert projectAdapter.numberOfExperiments == 12
-        assert !projectAdapter.annotations
+        assert projectAdapter.annotations
 
         assert projectAdapter.matchingField.name == "name"
         assert projectAdapter.score == 2
@@ -113,7 +113,7 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.targets
         assert !projectAdapter.documents
         assert projectAdapter.hasProbes()
-        assert projectAdapter.numberOfAnnotations == 0
+        assert projectAdapter.numberOfAnnotations == 1
     }
 
 
