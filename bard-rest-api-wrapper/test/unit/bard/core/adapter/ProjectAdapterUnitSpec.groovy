@@ -9,6 +9,8 @@ import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.assays.Context
 import bard.core.rest.spring.assays.Comp
+import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.util.Document
 
 @Unroll
 class ProjectAdapterUnitSpec extends Specification {
