@@ -11,7 +11,7 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
 
 //SMILES validation (JavaScript) beyond a length of 5
-var SMILES_MATCHING_REGEX = /^([^J][0-9BCOHNSOPrIFla@+\-\[\]\(\)\\\/%=#$,.~&!]{6,})$/ig;
+var SMILES_MATCHING_REGEX = /^(exact: *|substructure: *|superstructure: *|similarity: *)([^J][0-9BCOHNSOPrIFla@+\-\[\]\(\)\\\/%=#$,.~&!]{6,})$/ig;
 var TAB_ICON_CLASS = 'badge badge-important';
 
 $(document).ready(function () {
@@ -317,7 +317,9 @@ function handleMainFormSubmit(searchString) {
             break;
         case 'STRUCTURE':
             if ($.trim(searchString).match(SMILES_MATCHING_REGEX)) {
-                $("#searchString").val("exact:" + $.trim(searchString));
+                var splt = $.trim(searchString).split(':');
+                var srchStr = splt[0].toLowerCase() + ':' + $.trim(splt[1]);
+                $("#searchString").val(srchStr);
             }
             handleStructureSearch('/bardwebclient/bardWebInterface/searchStructures', 'searchForm');
             break;
