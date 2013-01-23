@@ -11,7 +11,6 @@
     </div>
     <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
         <h4>Detail</h4>
-        <p>a place holder to show you just clicked, put href after implemented experiment detail page</p>
         <g:render template='/project/editstep'/>
         <h5>Experiment Id: </h5>
         <table id="nodelinkTable" style="display: none">
