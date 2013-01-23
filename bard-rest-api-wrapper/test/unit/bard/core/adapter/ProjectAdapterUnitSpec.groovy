@@ -6,6 +6,8 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.util.NameDescription
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.project.ProjectExpanded
 
 @Unroll
 class ProjectAdapterUnitSpec extends Specification {
@@ -90,6 +92,52 @@ class ProjectAdapterUnitSpec extends Specification {
     }
     '''
 
+    String EXPANDED_PROJECT='''
+{
+    "projectId": 31,
+    "category": 0,
+    "type": 0,
+    "classification": 0,
+    "name": "Summary of Chemical Antagonists IAP-family anti-apoptotic proteins",
+    "description": "Data Source: Sanford-Burnham Center for Chemical Genomics",
+    "source": "Burnham Center for Chemical Genomics",
+     "publications": [
+        {
+            "title": "Cytochrome c: can't live with it--can't live without it.",
+            "doi": "null",
+            "abs": "null",
+            "pubmedId": 9393848,
+            "resourcePath": "/documents/9393848"
+        }
+    ],
+    "targets": [
+        {
+            "acc": "P98170",
+            "name": "E3 ubiquitin-protein ligase XIAP",
+            "description": null,
+            "status": "Reviewed",
+            "url": "http://www.uniprot.org/uniprot/P98170",
+            "geneId": 331,
+            "taxId": 9606,
+            "resourcePath": "/targets/accession/P98170"
+        }
+    ],
+    "resourcePath": "/projects/31",
+    "experimentCount": 11
+}
+    '''
+    void "test highlight"() {
+        when:
+        ProjectAdapter projectAdapter = new ProjectAdapter(null)
+        then:
+        assert !projectAdapter.matchingField
+        assert !projectAdapter.highlight
+        assert !projectAdapter.hasProbes()
+
+
+    }
+
+
     void "test getters"() {
 
         given:
@@ -100,7 +148,6 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.getId() == 17
         assert projectAdapter.name == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
         assert projectAdapter.description == "NIH Molecular Libraries Probe"
-
 
         assert projectAdapter.getProbes()
         assert projectAdapter.numberOfExperiments == 12
@@ -115,6 +162,26 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.hasProbes()
         assert projectAdapter.numberOfAnnotations == 1
     }
+
+    void "test Expanded Project"() {
+
+        given:
+        final ProjectExpanded project = objectMapper.readValue(EXPANDED_PROJECT, ProjectExpanded.class)
+        when:
+        ProjectAdapter projectAdapter = new ProjectAdapter(project, 2, new NameDescription(name: "name", description: "description"))
+        then:
+        assert projectAdapter.getId() == 31
+        assert projectAdapter.name
+        assert projectAdapter.description
+        assert projectAdapter.documents
+        assert projectAdapter.documents.size() == 1
+        final Document document = projectAdapter.documents.get(0)
+        assert document.title == "Cytochrome c: can't live with it--can't live without it."
+        assert document.pubmedId==9393848
+        assert document.resourcePath == "/documents/9393848"
+
+    }
+
 
 
 }

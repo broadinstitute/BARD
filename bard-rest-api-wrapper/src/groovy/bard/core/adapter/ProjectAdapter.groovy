@@ -78,7 +78,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
 
     public List<Document> getDocuments() {
         if (project instanceof ProjectExpanded) {
-            ((ProjectExpanded) project).getPublications()
+            return ((ProjectExpanded) project).getPublications()
         }
         return []
     }
