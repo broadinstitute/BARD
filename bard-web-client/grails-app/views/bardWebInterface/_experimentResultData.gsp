@@ -34,7 +34,9 @@
              <th>
                  ${experimentDataMap?.priorityDisplay ?: ""}
                  <g:if test="${experimentDataMap?.dictionaryId}">
-                     <a class="btn" href="/bardwebclient/dictionaryTerms/#${experimentDataMap?.dictionaryId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                     <a href="/bardwebclient/dictionaryTerms/#${experimentDataMap?.dictionaryId}" target="datadictionary">
+                         <i class="icon-question-sign"></i>
+                     </a>
                  </g:if>
             </th>
             <th>Experiment Descriptors</th>
@@ -108,7 +110,7 @@
                                 <th>
                                     ${concRespSeries.dictionaryLabel}
                                     <g:if test="${concRespSeries?.dictionaryDescription}">
-                                        <a class="btn" href="/bardwebclient/dictionaryTerms/#${concRespSeries?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                                        <a  href="/bardwebclient/dictionaryTerms/#${concRespSeries?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
                                     </g:if>
                                 </th>
                                 <th>Concentration</th>
@@ -156,7 +158,7 @@
                     <td>
                         <g:each in="${concRespSeries.miscData}" var="miscData">
                             <g:if test="${miscData?.dictionaryDescription}">
-                                ${miscData.toDisplay()}<a class="btn" href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                                ${miscData.toDisplay()}<a href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
                             </g:if>
                             <br/>
                         </g:each>
