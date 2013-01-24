@@ -21,10 +21,10 @@ class WarningLevelUnitSpec extends Specification {
         assert description
         description == expectedDescription
         where:
-        label                   | expectedDescription                     | warningLevel
-        "WarningLevel.none"     | "none (between 0.0 and 4000.0)"         | WarningLevel.none
-        "WarningLevel.moderate" | "moderate (between 4000.0 and 10000.0)" | WarningLevel.moderate
-        "WarningLevel.severe"   | "severe (> 10000.0)"                    | WarningLevel.severe
+        label                   | expectedDescription                  | warningLevel
+        "WarningLevel.none"     | "none (between 0.0 and 100.0)"       | WarningLevel.none
+        "WarningLevel.moderate" | "moderate (between 100.0 and 300.0)" | WarningLevel.moderate
+        "WarningLevel.severe"   | "severe (> 300.0)"                   | WarningLevel.severe
     }
 
     void "test Get WarningLevel #label"() {
@@ -34,13 +34,13 @@ class WarningLevelUnitSpec extends Specification {
         assert warningLevel
         warningLevel == expectedWarningLevel
         where:
-        label                 | pScore              | expectedWarningLevel
-        "With pScore=0"       | new Double(0)       | WarningLevel.none
-        "With pScore=3999.99" | new Double(399.99)  | WarningLevel.none
-        "With pScore=4000"    | new Double(4000)    | WarningLevel.moderate
-        "With pScore=9999.99" | new Double(9999.99) | WarningLevel.moderate
-        "With pScore=10000"   | new Double(10000)   | WarningLevel.severe
-        "With pScore=20000"   | new Double(20000)   | WarningLevel.severe
+        label                | pScore             | expectedWarningLevel
+        "With pScore=0"      | new Double(0)      | WarningLevel.none
+        "With pScore=99.99"  | new Double(99.99)  | WarningLevel.none
+        "With pScore=100"    | new Double(100)    | WarningLevel.moderate
+        "With pScore=299.99" | new Double(299.99) | WarningLevel.moderate
+        "With pScore=300"    | new Double(300)    | WarningLevel.severe
+        "With pScore=20000"  | new Double(20000)  | WarningLevel.severe
     }
 
 }

@@ -61,9 +61,6 @@ class SpreadSheetActivityUnitSpec extends Specification {
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
         List <MolSpreadSheetColSubHeader> resultTypeNames = []
-//        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
-//        List<String> resultTypeNames = []
-//>>>>>>> abc0dee9893cb3fe90c6da91df072726a23e0d62
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
@@ -88,9 +85,6 @@ class SpreadSheetActivityUnitSpec extends Specification {
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: 'columnName')
         List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName') ]
-//        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName")
-//        List<String> resultTypeNames = ["columnName"]
-//>>>>>>> abc0dee9893cb3fe90c6da91df072726a23e0d62
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
@@ -102,9 +96,6 @@ class SpreadSheetActivityUnitSpec extends Specification {
         SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
         PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName1")
         List <MolSpreadSheetColSubHeader> resultTypeNames  = [new MolSpreadSheetColSubHeader(columnTitle:'columnName2')]
-//        PriorityElement priorityElement = new  PriorityElement (pubChemDisplayName: "columnName1")
-//        List<String> resultTypeNames = ["columnName2"]
-//>>>>>>> abc0dee9893cb3fe90c6da91df072726a23e0d62
         when:
         spreadSheetActivity.extractExperimentalValuesFromAPriorityElement(resultTypeNames, priorityElement)
         then:
