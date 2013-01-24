@@ -126,9 +126,9 @@ class MolSpreadSheetCell {
                                     identifier: identifierString,
                                     s0: curveFitParameters.s0,
                                     sInf: curveFitParameters.sInf,
-                                    slope: (value*0.000001d),
+                                    slope: value,
                                     coef: curveFitParameters.hillCoef,
-                                    conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration.collect {it*0.000001},
+                                    conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
                                     response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
                                     xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
                                     yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel() )
