@@ -72,7 +72,7 @@
 
             <h3><a href="#">Assay and Biology Details</a></h3>
             <div class="cardView">
-                <%--<table>
+                <table>
                 <tr><td>
                     <g:each in="${cardDtoList}" status="cardIndex" var="card">
 
@@ -96,7 +96,7 @@
                     </g:each>
                 </td></tr>
                 </table>
-            --%></div>
+            </div>
 
     <!-- Assay Documents fields -->
 			<h3><a href="#">Documents</a></h3>
