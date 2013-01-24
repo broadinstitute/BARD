@@ -28,7 +28,11 @@ abstract class AbstractContextOwner {
      */
     List<ContextGroup> groupContexts() {
         Map<String, List<AbstractContext>> mapByPath = getContexts().groupBy { AbstractContext context ->
-            context.getContextGroup().toLowerCase().trim()
+            def contextGroup =context.getContextGroup()
+            if (contextGroup == null) {
+                return "unclassified>"
+            }
+            return contextGroup.toLowerCase().trim()
         }
 
         /* These ten groups are what is currently in the database for groups.  In the future, we'd like to move these group

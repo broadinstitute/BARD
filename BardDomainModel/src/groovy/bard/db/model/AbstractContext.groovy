@@ -43,14 +43,6 @@ abstract class AbstractContext {
 
     /**
      *
-     * @return use the contextGroup in the db or try and generate one
-     */
-    String getContextGroup() {
-        this.contextGroup ?: "unclassified>"
-    }
-
-    /**
-     *
      * @return
      */
     Descriptor getPreferredDescriptor() {
