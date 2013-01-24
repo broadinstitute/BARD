@@ -256,5 +256,15 @@ class AssayDefinitionController {
         render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
+    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy) {
+        def assayInstance = Assay.findById(instanceId)
+        assayInstance.assayName = assayName
+        assayInstance.designedBy = designedBy
+        assayInstance.assayStatus = AssayStatus.valueOf(AssayStatus.class, assayStatus)
+        assayInstance.save(flush: true)
+        assayInstance = Assay.findById(instanceId)
+        render(template: "summaryDetail", model: [assay: assayInstance])
+    }
+
 
 }
