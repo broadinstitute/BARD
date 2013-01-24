@@ -101,11 +101,10 @@
                                 <g:if test="${(rowsToSkipBeforeNextAssayid == 0)}">
                                     <g:set var="currentAssayIdHeader" value="${assayHeaderIterator.next()}"/>
                                     <% rowsToSkipBeforeNextAssayid = currentAssayIdHeader."numberOfResultTypes" %>
-                                    <th class="molSpreadSheetHeadData" rel="tooltip"
-                                        rowspan="<%=rowsToSkipBeforeNextAssayid%>"
-                                        title="<%=currentAssayIdHeader."fullAssayName"%>"><a
+                                    <th class="molSpreadSheetHeadData"
+                                        rowspan="<%=rowsToSkipBeforeNextAssayid%>"><a
                                             href="../bardWebInterface/showAssay/<%=currentAssayIdHeader."assayName"%>">
-                                        ADID=<%=currentAssayIdHeader."assayName"%></a>
+                                        <%=currentAssayIdHeader."fullAssayName"%></a>
                                     </th>
                                 </g:if>
                                 <% rowsToSkipBeforeNextAssayid-- %>

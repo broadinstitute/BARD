@@ -38,9 +38,9 @@ class SpreadsheetElementsTagLib {
             HillCurveValueHolder hillCurveValueHolder = attrs.spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
             out << """<td class="molSpreadSheet" property="var${currentCol}">
                       <p>"""
-            String mandatePopover = ""
+            Boolean weHaveACurveToDisplay = ""
             if (hillCurveValueHolder?.conc?.size() > 1) {
-                mandatePopover = "drc-popover-link "
+                weHaveACurveToDisplay = true
             }
             String childElements = ""
             if (attrs.spreadSheetActivityStorage.childElements?.size() > 0) {
@@ -55,9 +55,13 @@ class SpreadsheetElementsTagLib {
             MolSpreadSheetCellActivityOutcome molSpreadSheetCellActivityOutcome = MolSpreadSheetCellActivityOutcome.newMolSpreadSheetCellActivityOutcome(attrs.spreadSheetActivityStorage.activityOutcome)
             if (hillCurveValueHolder?.identifier) {
                 String  resultValueHolder =  hillCurveValueHolder.toString()
-                 out << """<div data-detail-id="drc_${attrs.spreadSheetActivityStorage.sid}_${currentCol}"
-                               class="${mandatePopover} molspreadcell"
-                               data-original-title="${hillCurveValueHolder.identifier}"
+                out << """<div data-detail-id="drc_${attrs.spreadSheetActivityStorage.sid}_${currentCol}" """
+                if (weHaveACurveToDisplay)  {
+                    out << """     class="drc-popover-link molspreadcellunderline" """
+                } else {
+                    out << """     class="molspreadcell" """
+                }
+                out << """     data-original-title="${hillCurveValueHolder.identifier}"
                                data-html="true"
                                data-trigger="hover">"""
                 if (childElements?.length() > 0) {

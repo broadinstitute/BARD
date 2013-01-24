@@ -506,6 +506,13 @@ td.molSpreadSheet{
     font-size: large;
     color: #0000A0;
 }
+.molspreadcellunderline{
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: large;
+    text-decoration: underline;
+    color: #0000A0;
+}
 a:link.molspreadcell {
     font-weight: normal;
     color: #0000A0;

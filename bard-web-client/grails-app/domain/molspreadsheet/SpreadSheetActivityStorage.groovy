@@ -94,6 +94,8 @@ class SpreadSheetActivityStorage {
                 returnValue = ''
             else if (responseUnit == 'percent')
                 returnValue = '%'
+            else if (responseUnit == 'um')
+                returnValue = 'uM'
             else
                 returnValue = responseUnit.toString()
         }
