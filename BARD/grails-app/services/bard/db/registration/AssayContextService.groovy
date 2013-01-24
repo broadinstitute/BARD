@@ -41,15 +41,18 @@ class AssayContextService {
         return assayContext
     }
 
-    public AssayContext createOrEditCardName(Long assayId, Long assayContextId, String name){
-        AssayContext assayContext = AssayContext.get(assayContextId)
+    public AssayContext createCard(Long assayId, String name, String cardSection) {
         Assay assay = Assay.get(assayId)
+        AssayContext assayContext = new AssayContext(contextName: name, contextGroup: cardSection)
+        assay.addToAssayContexts(assayContext)
+        assayContext.save(flush: true)
+        return assayContext
+    }
+
+    public AssayContext updateCardName(Long assayContextId, String name){
+        AssayContext assayContext = AssayContext.get(assayContextId)
         if(assayContext && assayContext.contextName != name){
             assayContext.contextName = name
-        }
-        else{
-            assayContext = new AssayContext(contextName: name)
-            assay.addToAssayContexts(assayContext)
         }
         return assayContext
     }

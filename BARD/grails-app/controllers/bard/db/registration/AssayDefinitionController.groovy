@@ -7,7 +7,7 @@ import grails.plugins.springsecurity.Secured
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure : "POST", addMeasure: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
     OntologyDataAccessService ontologyDataAccessService;
@@ -106,7 +106,7 @@ class AssayDefinitionController {
         def measure = Measure.get(params.measureId)
         def context = AssayContext.get(params.assayContextId)
 
-        if(measure == null) {
+        if (measure == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
         } else if (context == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
@@ -122,7 +122,7 @@ class AssayDefinitionController {
         def measure = Measure.get(params.measureId)
         def context = AssayContext.get(params.assayContextId)
 
-        if(measure == null) {
+        if (measure == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
         } else if (context == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
@@ -148,21 +148,20 @@ class AssayDefinitionController {
     def findByName() {
         if (params.assayName) {
             def assays = Assay.findAllByAssayNameIlikeOrAssayShortNameIlike("%${params.assayName}%", "%${params.assayName}%")
-            if (assays?.size() > 1){
+            if (assays?.size() > 1) {
                 if (params.sort == null) {
                     params.sort = "id"
                 }
-                assays.sort{
-                    a, b->
-                    if (params.order == 'desc') {
-                        b."${params.sort}" <=> a."${params.sort}"
-                    } else {
-                        a."${params.sort}" <=> b."${params.sort}"
-                    }
+                assays.sort {
+                    a, b ->
+                        if (params.order == 'desc') {
+                            b."${params.sort}" <=> a."${params.sort}"
+                        } else {
+                            a."${params.sort}" <=> b."${params.sort}"
+                        }
                 }
                 render(view: "findByName", params: params, model: [assays: assays])
-            }
-            else if (assays?.size() == 1)
+            } else if (assays?.size() == 1)
                 redirect(action: "show", id: assays.get(0).id)
             else
                 flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'assay.label', default: 'Assay'), "name", params.assayName])
@@ -186,16 +185,16 @@ class AssayDefinitionController {
         Assay assay = targetAssayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
-	
-	def reloadCardHolder(Long assayId){
-		def assay = Assay.get(assayId)
-		if (assay) {
-			render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-		} else {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-			return
-		}
-	}
+
+    def reloadCardHolder(Long assayId) {
+        def assay = Assay.get(assayId)
+        if (assay) {
+            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+        } else {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return
+        }
+    }
 
 
     def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
@@ -225,10 +224,19 @@ class AssayDefinitionController {
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def createOrEditCardName(String edit_card_name, Long instanceId, Long contextId) {
-        AssayContext assayContext = assayContextService.createOrEditCardName(instanceId, contextId, edit_card_name)
+    def createCard(Long instanceId, String cardName, String cardSection) {
+        if (instanceId == null) {
+            throw new RuntimeException("bad instance")
+        }
+        AssayContext assayContext = assayContextService.createCard(instanceId, cardName, cardSection)
         Assay assay = assayContext.assay
-        render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
+
+    def updateCardName(String edit_card_name, Long contextId) {
+        AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
+        Assay assay = assayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
     def showMoveItemForm(Long assayId, Long itemId) {
