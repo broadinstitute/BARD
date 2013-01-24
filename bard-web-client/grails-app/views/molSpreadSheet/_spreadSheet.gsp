@@ -120,12 +120,10 @@
                     <g:each var="colHeader" in="${molSpreadSheetData?.getColumns()}">
                         <g:if test="${column > 3}">
                             <th class="molSpreadSheetHeadData">
+                                ${colHeader}
                                 <g:if test="${columnDictionaryLookup[column]}">
-                                   <a href="#" rel="tooltip" class="desc_tip mssheader" data-placement="top" data-title="${columnDictionaryLookup[column]}">${colHeader}</a>
+                                   <a href="#" rel="tooltip" class="desc_tip mssheader" data-placement="top" data-title="${columnDictionaryLookup[column]}"><i class="icon-question-sign"></i></a>
                                 </g:if>
-                                <g:else>
-                                    ${colHeader}
-                                </g:else>
                             </th>
                         </g:if>
                         <% column++ %>
