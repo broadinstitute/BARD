@@ -34,8 +34,8 @@ class ScaffoldUnitSpec extends Specification {
     void "scaffold.hashCode #label"() {
         given: "A valid Scaffold"
         Scaffold scaffold =
-            new Scaffold(scafsmi: "CC", pScore: new Double(0), cTested: 1, scafid: 1, cActive: 1,
-                    aTested: 1, aActive: 1, sTested: 1, sActive: 1, inDrug: false)
+            new Scaffold(scafsmi: "CC", pScore: new Double(0), sTested: 1, scafid: 1, sActive: 1,
+                    aTested: 1, aActive: 1, wTested: 1, wActive: 1, inDrug: false)
 
         when: "We call the hashCode method"
         final int hashCode = scaffold.hashCode()
@@ -47,11 +47,11 @@ class ScaffoldUnitSpec extends Specification {
     void "scaffold.compareTo #label"() {
         given: "Valid Scafold Objects"
         Scaffold scaffold1 =
-            new Scaffold(scafsmi: "CC", pScore: new Double(0), cTested: cTested1, scafid: 1, cActive: 1,
-                    aTested: 1, aActive: 1, sTested: 1, sActive: 1, inDrug: false)
+            new Scaffold(scafsmi: "CC", pScore: new Double(0), sTested: cTested1, scafid: 1, sActive: 1,
+                    aTested: 1, aActive: 1, wTested: 1, wActive: 1, inDrug: false)
         Scaffold scaffold2 =
-            new Scaffold(scafsmi: "CC", pScore: new Double(0), cTested: cTested2, scafid: 1, cActive: 1,
-                    aTested: 1, aActive: 1, sTested: 1, sActive: 1, inDrug: false)
+            new Scaffold(scafsmi: "CC", pScore: new Double(0), sTested: cTested2, scafid: 1, sActive: 1,
+                    aTested: 1, aActive: 1, wTested: 1, wActive: 1, inDrug: false)
         when: "We call the compareTo method with objects"
         final int compareToVal = scaffold1.compareTo(scaffold2)
         then: "We expected the method to return the expected value"
@@ -72,10 +72,10 @@ class ScaffoldUnitSpec extends Specification {
         assert returnedValue == expectedAnswer
         where:
         label                      | scaffold1                  | scaffold2                  | expectedAnswer
-        "this equals that"         | new Scaffold(cTested: 200) | new Scaffold(cTested: 200) | true
-        "that is null"             | new Scaffold(cTested: 201) | null                       | false
-        "this != that"             | new Scaffold(cTested: 201) | new Scaffold(cTested: 205) | false
-        "this.class != that.class" | new Scaffold(cTested: 201) | 200                        | false
+        "this equals that"         | new Scaffold(sTested: 200) | new Scaffold(sTested: 200) | true
+        "that is null"             | new Scaffold(sTested: 201) | null                       | false
+        "this != that"             | new Scaffold(sTested: 201) | new Scaffold(sTested: 205) | false
+        "this.class != that.class" | new Scaffold(sTested: 201) | 200                        | false
     }
 
 }

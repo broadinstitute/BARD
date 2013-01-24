@@ -306,8 +306,20 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         then: "A Compound is returned with the expected information"
         assert promiscuityScore
         assert promiscuityScore.cid == cid
-        assert promiscuityScore.scaffolds
-        assert promiscuityScore.scaffolds.size() == scaffoldSize
+        final List<Scaffold> scaffolds = promiscuityScore.scaffolds
+        assert scaffolds
+        assert scaffolds.size() == scaffoldSize
+        Scaffold scaffold = scaffolds.get(0)
+        assert scaffold.scafid == 53
+        assert scaffold.pScore == 456.0
+        assert scaffold.scafsmi == "c1ccc2cccnc2c1"
+        assert scaffold.sTested
+        assert scaffold.sActive
+        assert scaffold.aTested
+        assert scaffold.aActive
+        assert scaffold.wTested
+        assert scaffold.inDrug
+
         where:
         label                            | cid  | scaffoldSize
         "A CID With A Promiscuity Score" | 2722 | 1

@@ -18,9 +18,9 @@
                     <ul>
                         <li>Promiscuity Score: ${scaffold.pScore}</li>
                         <li>Warning Level: ${scaffold.warningLevel?.description}</li>
-                        <li>Occurs in ${scaffold.cTested} compounds, of which ${scaffold.cActive} tested active</li>
-                        <li>Active in ${scaffold.aActive} assays out of ${scaffold.aTested}</li>
                         <li>Occurs in ${scaffold.sTested} substances, of which ${scaffold.sActive} tested active</li>
+                        <li>Active in ${scaffold.aActive} assays out of ${scaffold.aTested}</li>
+                        <li>Occurs in ${scaffold.wTested} samples (wells), of which ${scaffold.wActive} samples (wells) active</li>
                         <li>This scaffold is ${scaffold.inDrug ? '<b>present in one or more</b>' : 'not present in any'} known drugs</li>
                     </ul>
                     <p><small>Jeremy J. Yang, Oleg Ursu, Cristian Bologa, Ramona F. Curpan, Liliana Halip, Christopher A. Lipinski, Larry A. Sklar and Tudor I. Oprea,
