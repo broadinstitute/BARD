@@ -137,9 +137,13 @@ $(document).ready(function () {
             });
         },
         select: function( event, ui ) {
-            setAvailableExperiment(ui.item.label)
+            setAvailableExperimentAfterSelect(ui.item.label)
         }
     });
+    // Somehow the setAvailableExperiment added multiple duplicate item selected from dropdown, a hack to get one
+    function setAvailableExperimentAfterSelect(data) {
+        $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
+    }
 
     function setAvailableExperiment(data) {
         for (var i = 0; i < data.length; i++) {
