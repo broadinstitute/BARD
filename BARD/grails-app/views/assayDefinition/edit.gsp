@@ -74,13 +74,13 @@
                             <i class="icon-chevron-down"></i>
                             Contexts
                         </a>
+                    </div>
 
-                        <div id="target-contexts-info" class="accordion-body in collapse">
+                    <div id="target-contexts-info" class="accordion-body in collapse">
                             <div class="accordion-inner">
                                 <g:render template="../context/edit"
                                           model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
                             </div>
-                        </div>
                     </div>
                 </div>
 

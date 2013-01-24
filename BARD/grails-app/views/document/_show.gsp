@@ -47,7 +47,7 @@
                             </a>
                         </g:if>
                         <g:else>
-                            <g:fieldValue bean="${document}" field="documentContent"/>
+                            <g:renderWithBreaks text="${document.documentContent}"/>
                         </g:else>
                     </dd>
                     <br/>
