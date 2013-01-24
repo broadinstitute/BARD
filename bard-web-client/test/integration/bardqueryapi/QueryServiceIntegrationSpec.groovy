@@ -69,7 +69,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                                              | experimentId   | top | skip
         "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
-        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
+        "An existing experiment with activities - skip 10" | new Long(1536) | 10  | 10
+
     }
 
     void "test findPromiscuityScoreForCID #label"() {

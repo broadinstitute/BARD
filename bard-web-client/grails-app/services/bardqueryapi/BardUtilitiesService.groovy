@@ -6,7 +6,7 @@ class BardUtilitiesService {
 
     SpringSecurityService springSecurityService
     String getUsername() {
-        def principal = springSecurityService?.principal
+        def principal = springSecurityService.principal
         return principal?.hasProperty("username") ? principal.username : null
     }
 }

@@ -26,6 +26,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.SubstanceRestService
 import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.compounds.CompoundSummary
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -72,6 +73,16 @@ class QueryServiceUnitSpec extends Specification {
         service.experimentRestService = experimentRestService
     }
 
+    void "test getSummaryForCompound"() {
+        given:
+        Long cid = new Long(222)
+        when:
+        CompoundSummary compoundSummary = service.getSummaryForCompound(cid)
+        then:
+        1 * compoundRestService.getSummaryForCompound(cid) >> {new CompoundSummary(nhit: 2)}
+        assert compoundSummary
+
+    }
     /**
      * We tests the non-null case with an integration test
      */
@@ -92,6 +103,7 @@ class QueryServiceUnitSpec extends Specification {
         assert resultsMap.role == null
 
     }
+
     void "test findSubstancesByCid #label"() {
         when:
         List<Long> sids = service.findSubstancesByCid(cid)
@@ -348,7 +360,8 @@ class QueryServiceUnitSpec extends Specification {
         "Empty ProjectSearchResult Id list" | []                             | null                 | 0                     | 0                    | null
 
     }
-    void "test showProbeList"(){
+
+    void "test showProbeList"() {
         when:
         Map map = service.showProbeList()
         then:
@@ -365,7 +378,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         final CompoundResult expandedCompoundResult = new CompoundResult(compounds: [new Compound(smiles: smiles)])
         when:
-        service.structureSearch(smiles, structureSearchParamsType,[],10,0,10)
+        service.structureSearch(smiles, structureSearchParamsType, [], 10, 0, 10)
         then:
         compoundRestService.structureSearch(_) >> {expandedCompoundResult}
 

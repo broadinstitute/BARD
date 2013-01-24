@@ -14,13 +14,13 @@ import grails.plugins.springsecurity.SpringSecurityService
  */
 @Unroll
 @TestFor(BardUtilitiesService)
-class BardUtilitiesServiceSpec extends Specification {
+class BardUtilitiesServiceUnitSpec extends Specification {
     SpringSecurityService springSecurityService = Mock(SpringSecurityService)
 
 
     void "test getUsername"() {
         given:
-        String currentUser="TEST"
+        String currentUser = "TEST"
         service.springSecurityService = springSecurityService
         when:
         String username = service.getUsername()
@@ -29,9 +29,18 @@ class BardUtilitiesServiceSpec extends Specification {
         assert username == currentUser
     }
 
+    void "test getUsername no principal"() {
+        given:
+        service.springSecurityService = springSecurityService
+        when:
+        String username = service.getUsername()
+        then:
+        springSecurityService.getPrincipal() >> {null}
+        assert !username
+    }
+
     void "test getUsername No User"() {
         given:
-        String currentUser="TEST"
         service.springSecurityService = springSecurityService
         when:
         String username = service.getUsername()

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import spock.lang.IgnoreRest
 
 @Unroll
 class ConcentrationResponsePointUnitSpec extends Specification {

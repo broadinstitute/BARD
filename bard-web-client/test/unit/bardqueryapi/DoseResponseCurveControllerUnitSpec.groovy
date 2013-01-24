@@ -1,13 +1,12 @@
 package bardqueryapi
 
+import curverendering.Curve
 import curverendering.DoseCurveRenderingService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
-import grails.plugins.springsecurity.SpringSecurityService
-import curverendering.Curve
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -80,6 +79,29 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
         then:
         doseCurveRenderingService.createDoseCurve(_) >> {array}
         assert response.status == 200
+    }
+
+    void "test doseResponseCurves with exception"() {
+        given:
+        List<Curve> curves =
+            [
+                    new Curve(
+                            activities: [new Double(1), new Double(2)],
+                            concentrations: [new Double(1), new Double(2)],
+                            s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0
+                    )
+            ]
+        mockCommandObject(DrcCurveCommand)
+        Map paramMap = [curves: curves, xAxisLabel: 'X', yAxisLabel: 'Y']
+
+        controller.metaClass.getParams {-> paramMap}
+        DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
+
+        when:
+        controller.doseResponseCurves(drcCurveCommand)
+        then:
+        doseCurveRenderingService.createDoseCurves(_) >> {throw new Exception()}
+        assert response.status == 500
     }
 
     void "test doseResponseCurves action"() {

@@ -638,7 +638,8 @@ class SearchHelper {
                     appliedFilters: getAppliedFilters(searchFilters, projectsByTextSearch.facets)])
         }
         catch (HttpClientErrorException httpClientErrorException) {
-            handleClientInputErrors(httpClientErrorException, "Could not find Project with given search String ${searchCommand.searchString}", username)
+            final String message = "Could not find Project with given search String ${searchCommand.searchString}"
+            handleClientInputErrors(httpClientErrorException, message, username)
         }
         catch (Exception exp) {
             log.error("Error performing project search." + getUserIpAddress(username), exp)

@@ -239,6 +239,38 @@ class QueryService implements IQueryService {
         int nhits = compoundAdapters.size()
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
+
+    Map extractExperimentDetails(final List<Activity> activities) {
+        String priorityDisplay = ""
+        Long dictionaryId
+        boolean hasChildElements = false
+        boolean hasPlot = false
+        for (Activity activity : activities) {
+            final ResultData resultData = activity.resultData
+            if (resultData) {
+                if (resultData.hasPriorityElements()) {
+                    final PriorityElement priorityElement = resultData.priorityElements.get(0)
+                    if (!priorityDisplay) {//if we have not already assigned one
+                        priorityDisplay = priorityElement.getDictionaryLabel()
+                        String priorityDescription = priorityElement.getDictionaryDescription()
+                        if (priorityDescription) {
+                            dictionaryId = priorityElement.getDictElemId()
+                        }
+                    }
+                    if (!hasChildElements) {
+                        hasChildElements = priorityElement.hasChildElements()
+                    }
+                }
+                if (!hasPlot && resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
+                    hasPlot = true
+                }
+            }
+            if (hasPlot && priorityDisplay && hasChildElements) {
+                break
+            }
+        }
+        return [priorityDisplay: priorityDisplay, dictionaryId: dictionaryId, hasPlot: hasPlot, hasChildElements: hasChildElements]
+    }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service
      * @param experimentId
@@ -248,54 +280,22 @@ class QueryService implements IQueryService {
      */
     Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) {
         List<Activity> activities = []
-        boolean hasPlot = false
         final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
         long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
+        Map experimentDetails = [:]
+
         if (experimentShow) {
             final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
             activities = experimentData.activities
+            experimentDetails = extractExperimentDetails(activities)
 
         }
-        String priorityDisplay = ""
 
-        Long dictionaryId = null
-        boolean hasChildElements = false
-        for (Activity activity : activities) {
-            final ResultData resultData = activity.resultData
-            if (resultData) {
-
-
-                if (resultData?.hasPriorityElements()) {
-                    final PriorityElement priorityElement = resultData?.priorityElements.get(0)
-                    if (!priorityDisplay) {
-                        if (!priorityDisplay) {
-                            priorityDisplay = priorityElement.getDictionaryLabel()
-                            String priorityDescription = priorityElement.getDictionaryDescription()
-                            if (priorityDescription) {
-                                dictionaryId = priorityElement.getDictElemId()
-                            }
-
-                        }
-
-                    }
-                    if (!hasChildElements) {
-                        hasChildElements = priorityElement.hasChildElements()
-                    }
-                }
-                if (!hasPlot && resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
-                    hasPlot = true
-
-                }
-            }
-            if (hasPlot && priorityDisplay && hasChildElements) {
-                break
-            }
-        }
         return [total: totalNumberOfRecords, activities: activities,
-                experiment: experimentShow, hasPlot: hasPlot,
-                priorityDisplay: priorityDisplay,
-                dictionaryId: dictionaryId,
-                hasChildElements: hasChildElements]
+                experiment: experimentShow, hasPlot: experimentDetails.hasPlot,
+                priorityDisplay: experimentDetails.priorityDisplay,
+                dictionaryId: experimentDetails.dictionaryId,
+                hasChildElements: experimentDetails.hasChildElements]
     }
 
     /**
