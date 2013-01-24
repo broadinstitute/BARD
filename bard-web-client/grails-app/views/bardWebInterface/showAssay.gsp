@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
+<%@ page import="bard.core.rest.spring.assays.BardAnnotation; bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
@@ -48,14 +48,21 @@
     <div class="row-fluid">
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
-                <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
-                <li><a href="#assay-bio-info-misc"><i class="icon-chevron-right"></i>Assay and Biology Details - Miscellaneous</a></li>
+                <g:if test="${BardAnnotation.areAnnotationsEmpty(assayAdapter.annotations)}">
+                    <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
+                </g:if>
+                <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(assayAdapter.annotations)}">
+                    <li><a href="#assay-bio-info-misc"><i
+                            class="icon-chevron-right"></i>Assay and Biology Details - Miscellaneous</a></li>
+                </g:if>
                 <g:if test="${assayAdapter.targets}">
-                    <li><a href="#target-info"><i class="icon-chevron-right"></i>Targets (${assayAdapter.targets.size()})</a></li>
+                    <li><a href="#target-info"><i
+                            class="icon-chevron-right"></i>Targets (${assayAdapter.targets.size()})</a></li>
                 </g:if>
                 <li><a href="#document-info"><i class="icon-chevron-right"></i>Documents</a></li>
                 <g:if test="${assayAdapter.documents}">
-                    <li><a href="#publication-info"><i class="icon-chevron-right"></i>Publications (${assayAdapter.documents.size()})</a></li>
+                    <li><a href="#publication-info"><i
+                            class="icon-chevron-right"></i>Publications (${assayAdapter.documents.size()})</a></li>
                 </g:if>
                 <li><a href="#result-info"><i class="icon-chevron-right"></i>Experiments (${experiments.size()})</a>
                 </li>
@@ -63,26 +70,30 @@
         </div>
 
         <div class="span9">
-            <section id="assay-bio-info">
-                <div class="page-header">
-                    <h3>Assay and Biology Details</h3>
-                </div>
+            <g:if test="${BardAnnotation.areAnnotationsEmpty(assayAdapter.annotations)}">
+                <section id="assay-bio-info">
+                    <div class="page-header">
+                        <h3>Assay and Biology Details</h3>
+                    </div>
 
-                <div id="cardView" class="cardView" class="row-fluid">
-                    <g:render template="listContexts" model="[annotations: assayAdapter.annotations]"/>
-                </div>
+                    <div id="cardView" class="cardView" class="row-fluid">
+                        <g:render template="listContexts" model="[annotations: assayAdapter.annotations]"/>
+                    </div>
 
-            </section>
-            <section id="assay-bio-info-misc">
-                <div class="page-header">
-                    <h3>Assay and Biology Details - Miscellaneous</h3>
-                </div>
+                </section>
+            </g:if>
+            <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(assayAdapter.annotations)}">
+                <section id="assay-bio-info-misc">
+                    <div class="page-header">
+                        <h3>Assay and Biology Details - Miscellaneous</h3>
+                    </div>
 
-                <div id="cardViewMisc" class="cardView" class="row-fluid">
-                    <g:render template="listMiscellaneous" model="[annotations: assayAdapter.annotations]"/>
-                </div>
+                    <div id="cardViewMisc" class="cardView" class="row-fluid">
+                        <g:render template="listMiscellaneous" model="[annotations: assayAdapter.annotations]"/>
+                    </div>
 
-            </section>
+                </section>
+            </g:if>
             <g:if test="${assayAdapter.targets}">
                 <g:render template="targets" model="['targets': assayAdapter.targets]"/>
             </g:if>

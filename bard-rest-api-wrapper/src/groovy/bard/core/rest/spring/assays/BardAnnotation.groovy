@@ -20,6 +20,7 @@ public class BardAnnotation extends JsonUtil {
     private List<Doc> docs = new ArrayList<Doc>();
     @JsonProperty("misc")
     private List<Comp> otherAnnotations = new ArrayList<Comp>();
+
     @JsonProperty("misc")
     public List<Comp> getOtherAnnotations() {
         return otherAnnotations;
@@ -29,6 +30,7 @@ public class BardAnnotation extends JsonUtil {
     public void setOtherAnnotations(List<Comp> otherAnnotations) {
         this.otherAnnotations = otherAnnotations;
     }
+
     @JsonProperty("contexts")
     public List<Context> getContexts() {
         return contexts;
@@ -57,5 +59,33 @@ public class BardAnnotation extends JsonUtil {
     @JsonProperty("docs")
     public void setDocs(List<Doc> docs) {
         this.docs = docs;
+    }
+
+    /**
+     * Checks if any of the annotations list actually contains some one or more non-empty context items ([Annotations] -> [Context] -> [Context items == Comp]
+     * @param annotations
+     * @return
+     */
+    public static Boolean areAnnotationsEmpty(List<BardAnnotation> annotations) {
+        Boolean foundSomething = annotations.find {BardAnnotation annotation ->
+            annotation.contexts.find {Context context ->
+                context.getComps().find()
+            }
+        }
+
+        return foundSomething ?: false
+    }
+
+    /**
+     * Checks if any of the annotations list actually contains some one or more non-empty otherAnnotations items ([Annotations] -> [otherAnnotations items == Comp]
+     * @param annotations
+     * @return
+     */
+    public static Boolean areOtherAnnotationsEmpty(List<BardAnnotation> annotations) {
+        Boolean foundSomething = annotations.find {BardAnnotation annotation ->
+            annotation.otherAnnotations.find() //List<Comp>
+        }
+
+        return foundSomething ?: false
     }
 }

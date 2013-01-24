@@ -1,9 +1,7 @@
 package bard.core.adapter;
 
 
-import bard.core.DataSource
 import bard.core.Probe
-import bard.core.Value
 import bard.core.interfaces.EntityNamedSources
 import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.compounds.Compound
@@ -13,7 +11,6 @@ import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
 import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.project.ProjectExpanded
-import bard.core.rest.spring.assays.Context
 
 public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
@@ -123,15 +120,5 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     //TODO Perhaps convert to values
     public List<String> getKeggDiseaseCategories() {
         return project.getKegg_disease_cat()
-    }
-
-    public Boolean areAnnotationsEmpty() {
-        Boolean foundSomething = this.annotations.find {BardAnnotation annotation ->
-            annotation.contexts.find {Context context ->
-                context.getComps().find()
-            }
-        }
-
-        return foundSomething ?: false
     }
 }

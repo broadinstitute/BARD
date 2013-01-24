@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.project.Project
+import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.util.NameDescription
 
 @Unroll
 class BardAnnotationUnitSpec extends Specification {
@@ -90,11 +93,38 @@ class BardAnnotationUnitSpec extends Specification {
         assert bardAnnotation.docs
         assert bardAnnotation.docs.size() == 1
         assert bardAnnotation.contexts
-        assert bardAnnotation.contexts.size()==1
+        assert bardAnnotation.contexts.size() == 1
 
 
     }
 
+    void "test areAnnotationsEmpty() #label"() {
+        when:
+        Boolean result = BardAnnotation.areAnnotationsEmpty(annotations)
 
+        then:
+        assert result == expectedResult
+
+        where:
+        label                      | annotations                                                        | expectedResult
+        'no annotations at all'    | []                                                                 | false
+        'a single empty annotatin' | [new BardAnnotation()]                                             | false
+        'a single empty Context'   | [new BardAnnotation(contexts: [new Context()])]                    | false
+        'a non-empty annotations'  | [new BardAnnotation(contexts: [new Context(comps: [new Comp()])])] | true
+    }
+
+    void "test areOtherAnnotationsEmpty() #label"() {
+        when:
+        Boolean result = BardAnnotation.areOtherAnnotationsEmpty(annotations)
+
+        then:
+        assert result == expectedResult
+
+        where:
+        label                        | annotations                                          | expectedResult
+        'no otherAnnotations at all' | []                                                   | false
+        'a single empty annotatin'   | [new BardAnnotation()]                               | false
+        'a non-empty annotations'    | [new BardAnnotation(otherAnnotations: [new Comp()])] | true
+    }
 }
 
