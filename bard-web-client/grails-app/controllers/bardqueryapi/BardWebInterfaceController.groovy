@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  *
@@ -105,10 +106,10 @@ class BardWebInterfaceController {
         }
         //Get the Promiscuity score for this CID
         try {
-            Map results = queryService.findPromiscuityScoreForCID(cid)
+            Map results = queryService.findPromiscuityForCID(cid)
             if (results.status == 200) {
-                final PromiscuityScore promiscuityScore = results.promiscuityScore
-                render(template: 'promiscuity', model: [scaffolds: promiscuityScore.scaffolds])
+                final Promiscuity promiscuity = results.promiscuityScore
+                render(template: 'promiscuity', model: [scaffolds: promiscuity.promiscuityScaffolds])
             }
             else { //status code of NOT OK returned. Usually CID has no promiscuity score
                 log.error(results.message + getUserIpAddress(bardUtilitiesService.username))

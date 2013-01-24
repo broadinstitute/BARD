@@ -32,6 +32,7 @@ import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.experiment.ResponseClassEnum
 import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.compounds.Promiscuity
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -441,7 +442,9 @@ class QueryService implements IQueryService {
      * return Map
      * Success would return [status: 200, message: 'Success', promiscuityScore: promiscuityScore]
      * Failure would return [status: 404, message: "Error getting Promiscuity Score for ${CID}", promiscuityScore: null]
+     * Use  findPromiscuityForCID(Long cid) instead
      */
+    @Deprecated
     public Map findPromiscuityScoreForCID(Long cid) {
         final PromiscuityScore promiscuityScore = compoundRestService.findPromiscuityScoreForCompound(cid);
         if (promiscuityScore) {
@@ -449,5 +452,18 @@ class QueryService implements IQueryService {
         }
         return [status: 404, message: "Error getting Promiscuity Score for ${cid}", promiscuityScore: null]
     }
-
+    /**
+     *
+     * @param cid
+     * return Map
+     * Success would return [status: 200, message: 'Success', promiscuityScore: promiscuityScore]
+     * Failure would return [status: 404, message: "Error getting Promiscuity Score for ${CID}", promiscuityScore: null]
+     */
+    public Map findPromiscuityForCID(Long cid) {
+        final Promiscuity promiscuity = compoundRestService.findPromiscuityForCompound(cid);
+        if (promiscuity) {
+            return [status: 200, message: 'Success', promiscuityScore: promiscuity]
+        }
+        return [status: 404, message: "Error getting Promiscuity Score for ${cid}", promiscuityScore: null]
+    }
 }

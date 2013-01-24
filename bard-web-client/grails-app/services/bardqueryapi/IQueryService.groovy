@@ -22,6 +22,15 @@ public interface IQueryService {
      * Failure would return [status: HHTTP Error Code, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
      */
     Map findPromiscuityScoreForCID(final Long cid);
+    /**
+     *
+     * @param cid
+     * return Map
+     * Success would return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
+     * Failure would return [status: HHTTP Error Code, message: "Error getting Promiscuity Score for ${fullURL}", promiscuityScore: null]
+     */
+    Map findPromiscuityForCID(final Long cid);
+
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search

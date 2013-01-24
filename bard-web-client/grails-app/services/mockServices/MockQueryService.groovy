@@ -16,6 +16,7 @@ import bard.core.rest.spring.compounds.CompoundSummary
 import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.compounds.Promiscuity
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -398,7 +399,40 @@ class MockQueryService implements IQueryService {
         constructMockProjectAdapter()
         constructMockExperiment()
     }
-
+    public static final String PROMISCUITY = '''
+    {
+        "hscafs":
+        [
+           {
+               "wTested": 17064,
+                "sActive": 51,
+                "wActive": 1876,
+                "aTested": 479,
+                "sTested": 51,
+                "pScore": 2445,
+                "scafid": 46705,
+                "aActive": 222,
+                "inDrug": true,
+                "smiles": "O=C1C=CC(=N)c2ccccc12"
+            }
+        ],
+        "cid": 752424
+     }
+     '''
+    /**
+     *
+     * @param cid
+     * return Map
+     * Success would return [status: 200, message: 'Success', promiscuityScore: promiscuityScore]
+     * Failure would return [status: 404, message: "Error getting Promiscuity Score for ${CID}", promiscuityScore: null]
+     */
+    public Map findPromiscuityForCID(Long cid) {
+        final Promiscuity promiscuity = objectMapper.readValue(PROMISCUITY, Promiscuity.class)
+        if (promiscuity) {
+            return [status: 200, message: 'Success', promiscuityScore: promiscuity]
+        }
+        return [status: 404, message: "Error getting Promiscuity Score for ${cid}", promiscuityScore: null]
+    }
 
     Map findPromiscuityScoreForCID(final Long cid) {
         return [scores: [20, 30], status: 200, message: "Success"]

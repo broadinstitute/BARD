@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlRootElement
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "hscaf")
+@Deprecated
+//Use PromiscuityScaffold Instead
 public class Scaffold implements Comparable<Scaffold> {
 
 

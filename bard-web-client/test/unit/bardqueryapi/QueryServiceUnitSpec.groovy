@@ -27,6 +27,7 @@ import spock.lang.Unroll
 import bard.core.rest.spring.SubstanceRestService
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -595,6 +596,23 @@ class QueryServiceUnitSpec extends Specification {
         service.findFiltersInSearchBox(searchFilters, "gobp_term:DNA Repair")
         then:
         queryHelperService.findFiltersInSearchBox(_, _) >> {}
+    }
+
+    void "test findPromiscuityForCID #label"() {
+        when:
+        final Map promiscuityMap = service.findPromiscuityForCID(cid)
+        then:
+        compoundRestService.findPromiscuityForCompound(_) >> {promiscuity}
+
+        assert promiscuityMap.status == expectedStatus
+        assert promiscuityMap.message == expectedMessage
+        assert promiscuityMap.promiscuityScore?.cid == promiscuity?.cid
+        where:
+        label                              | cid   | promiscuity                | expectedStatus | expectedMessage
+        "Returns a Promiscuity Score"      | 1234  | new Promiscuity(cid: 1234) | 200            | "Success"
+        "Returns a null Promiscuity Score" | 23435 | null                       | 404            | "Error getting Promiscuity Score for 23435"
+
+
     }
 
     void "test findPromiscuityScoreForCID #label"() {

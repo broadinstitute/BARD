@@ -32,6 +32,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.rest.spring.compounds.PromiscuityScaffold
+import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -185,14 +187,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {promiscuityScoreMap}
+        _ * this.queryService.findPromiscuityForCID(_) >> {promiscuityScoreMap}
         assert response.status == statusCode
 
         where:
-        label                          | cid  | statusCode                                   | scaffolds                  | promiscuityScore
-        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                       | null
-        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                       | null
-        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 22)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
+        label                          | cid  | statusCode                                   | scaffolds                                       | promiscuityScore
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                                            | null
+        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                                            | null
+        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new PromiscuityScaffold(promiscuityScore: 22)] | new Promiscuity(cid: 567, promiscuityScaffolds: [new PromiscuityScaffold(promiscuityScore: 222)])
     }
 
     void "test promiscuity action with exception"() {
@@ -201,7 +203,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw exceptionType}
+        _ * this.queryService.findPromiscuityForCID(_) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -217,7 +219,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {map}
+        _ * this.queryService.findPromiscuityForCID(_) >> {map}
         assert response.status == HttpServletResponse.SC_NOT_FOUND
     }
 
