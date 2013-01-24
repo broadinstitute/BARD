@@ -14,25 +14,49 @@ abstract class AbstractContextOwner {
 
     abstract List getContexts()
 
+    public static class ContextGroup {
+        String key;
+        String description;
+        List<AbstractContext> value;
+    }
+
     /**
      * Create a map where all the assayContexts are grouped a common root in the ontology hierarchy based on a prefered
      * descriptor for the context.
      *
      * @return a Map keyed by the first 2 levels of the ontology hierarchy path with a each key having a list of assayContexts
      */
-    Map<String, AbstractContext> groupContexts() {
+    List<ContextGroup> groupContexts() {
         Map<String, List<AbstractContext>> mapByPath = getContexts().groupBy { AbstractContext context ->
-            String mapKey = 'uncategorized cards'
-            Descriptor descriptor = context.preferredDescriptor
-            if (context.contextName?.startsWith('Annotations for')){
-                mapKey = 'project management > experiment' // hack to group contexts with name Annotations for AC50 into the project management > experiment section
-            }
-            else if (descriptor) {
-                mapKey = descriptor.generateOntologyBreadCrumb(2)
-            }
-            mapKey
+            context.getContextGroup().toLowerCase().trim()
         }
-        mapByPath as TreeMap<String, List<AbstractContext>>
+
+        /* These ten groups are what is currently in the database for groups.  In the future, we'd like to move these group
+           definitions out of this code and someplace where the RDM or some end users can maintain it.
+        */
+        def groupDesc = [
+                "assay protocol> assay component>":"",
+                "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
+                "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
+                "assay protocol> assay readout>":"",
+                "assay protocol> assay type>":"", // relatively small list
+                "biology> molecular interaction>":"",
+                "biology>":"",
+                "result type> item count>":"",
+                "project management> project information>":"",
+                "project management> experiment>":"",
+                "unclassified>":""
+        ]
+
+        mapByPath.keySet().each { if(!groupDesc.containsKey(it)) groupDesc.put(it, "") }
+
+        return (groupDesc.keySet() as List).collect {
+            def group = mapByPath.get(it)
+            if (group == null)
+                group = []
+
+            return new ContextGroup(key: it, description: groupDesc.get(it), value: group)
+        }
     }
 
     /**
@@ -44,7 +68,10 @@ abstract class AbstractContextOwner {
      * @return list of up to 2 lists
      */
     List<List<AbstractContext>> splitForColumnLayout(List<AbstractContext> contexts) {
-        int totalNumContextItems = contexts.collect { it.getContextItems().size() }.sum()
+        int totalNumContextItems = 0
+        if (contexts.size() > 0) {
+            totalNumContextItems = contexts.collect { it.getContextItems().size() }.sum()
+        }
         int half = totalNumContextItems / 2
         int count = 0
         List<AssayContext> firstColumnContexts = contexts.findAll { context ->

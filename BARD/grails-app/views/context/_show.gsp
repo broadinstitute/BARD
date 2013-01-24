@@ -9,6 +9,6 @@
 <div id="cardView" class="cardView" class="row-fluid">
     <div class="row-fluid">
         <g:render template="/context/list"
-                  model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'show']"/>
+                  model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'show', renderEmptyGroups: false]"/>
     </div>
 </div>
