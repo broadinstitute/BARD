@@ -16,7 +16,7 @@
     </div>
 
     <div class="row-fluid">
-        <g:render template="/context/list" model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'edit']"/>
+        <g:render template="/context/list" model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'edit', renderEmptyGroups: true]"/>
     </div>
 
     <div id="dialog_edit_card">
