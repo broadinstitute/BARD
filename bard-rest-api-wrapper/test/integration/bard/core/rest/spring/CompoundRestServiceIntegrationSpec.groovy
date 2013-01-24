@@ -298,6 +298,19 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         label                             | cid      | scaffoldSize
         "A CID with no Promiscuity Score" | 16760208 | 0
     }
+    /**
+     *
+     */
+    void "test Get Promiscuity No Score #label"() {
+
+        when: "The getPromiscuity method is called with the CID: #cid"
+        this.compoundRestService.findPromiscuityForCompound(cid)
+        then: "A Compound is returned with the expected information"
+        thrown(HttpClientErrorException)
+        where:
+        label                             | cid      | scaffoldSize
+        "A CID with no Promiscuity Score" | 16760208 | 0
+    }
 
     void "test findPromiscuityScore #label"() {
 
@@ -306,11 +319,50 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         then: "A Compound is returned with the expected information"
         assert promiscuityScore
         assert promiscuityScore.cid == cid
-        assert promiscuityScore.scaffolds
-        assert promiscuityScore.scaffolds.size() == scaffoldSize
+        final List<Scaffold> scaffolds = promiscuityScore.scaffolds
+        assert scaffolds
+        assert scaffolds.size() == scaffoldSize
+        Scaffold scaffold = scaffolds.get(0)
+        assert scaffold.scafid == 53
+        assert scaffold.pScore == 456.0
+        assert scaffold.scafsmi == "c1ccc2cccnc2c1"
+        assert scaffold.sTested
+        assert scaffold.sActive
+        assert scaffold.aTested
+        assert scaffold.aActive
+        assert scaffold.wTested
+        assert scaffold.inDrug
+
         where:
         label                            | cid  | scaffoldSize
         "A CID With A Promiscuity Score" | 2722 | 1
+    }
+
+    void "test findPromiscuity #label"() {
+
+        when: "The getPromiscuity method is called with the CID: #cid"
+        final Promiscuity promiscuity = this.compoundRestService.findPromiscuityForCompound(cid)
+        then: "A Compound is returned with the expected information"
+        assert promiscuity
+        assert promiscuity.cid == cid
+        final List<PromiscuityScaffold> scaffolds = promiscuity.promiscuityScaffolds
+        assert scaffolds
+        assert scaffolds.size() == scaffoldSize
+        PromiscuityScaffold scaffold = scaffolds.get(0)
+        assert scaffold.scaffoldId == 53
+        assert scaffold.promiscuityScore == 456.0
+        assert scaffold.smiles == "c1ccc2cccnc2c1"
+        assert scaffold.testedSubstances
+        assert scaffold.activeSubstances
+        assert scaffold.testedAssays
+        assert scaffold.activeAssays
+        assert scaffold.testedWells
+        assert scaffold.activeWells
+        assert scaffold.inDrug
+
+        where:
+        label                      | cid  | scaffoldSize
+        "A CID With A Promiscuity" | 2722 | 1
     }
     /**
      *

@@ -23,11 +23,6 @@ class ChemAxonService {
         JChemBinFormat jchemBinFormat = new JChemBinFormat(width: width, height: height, imageFormat: 'png', transparencyBackground: true);
         return generateImageBytes(smiles, jchemBinFormat);
     }
-
-    public String toSmiles(final String mol) {
-        Molecule molecule = MolImporter.importMol(mol);
-        return MolExporter.exportToFormat(molecule, "smiles:a-H")
-    }
     /**
      *
      * @param smiles

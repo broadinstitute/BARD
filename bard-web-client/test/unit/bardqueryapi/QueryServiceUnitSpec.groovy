@@ -26,6 +26,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.SubstanceRestService
 import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -72,6 +74,16 @@ class QueryServiceUnitSpec extends Specification {
         service.experimentRestService = experimentRestService
     }
 
+    void "test getSummaryForCompound"() {
+        given:
+        Long cid = new Long(222)
+        when:
+        CompoundSummary compoundSummary = service.getSummaryForCompound(cid)
+        then:
+        1 * compoundRestService.getSummaryForCompound(cid) >> {new CompoundSummary(nhit: 2)}
+        assert compoundSummary
+
+    }
     /**
      * We tests the non-null case with an integration test
      */
@@ -92,6 +104,7 @@ class QueryServiceUnitSpec extends Specification {
         assert resultsMap.role == null
 
     }
+
     void "test findSubstancesByCid #label"() {
         when:
         List<Long> sids = service.findSubstancesByCid(cid)
@@ -348,7 +361,8 @@ class QueryServiceUnitSpec extends Specification {
         "Empty ProjectSearchResult Id list" | []                             | null                 | 0                     | 0                    | null
 
     }
-    void "test showProbeList"(){
+
+    void "test showProbeList"() {
         when:
         Map map = service.showProbeList()
         then:
@@ -365,7 +379,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         final CompoundResult expandedCompoundResult = new CompoundResult(compounds: [new Compound(smiles: smiles)])
         when:
-        service.structureSearch(smiles, structureSearchParamsType,[],10,0,10)
+        service.structureSearch(smiles, structureSearchParamsType, [], 10, 0, 10)
         then:
         compoundRestService.structureSearch(_) >> {expandedCompoundResult}
 
@@ -582,6 +596,23 @@ class QueryServiceUnitSpec extends Specification {
         service.findFiltersInSearchBox(searchFilters, "gobp_term:DNA Repair")
         then:
         queryHelperService.findFiltersInSearchBox(_, _) >> {}
+    }
+
+    void "test findPromiscuityForCID #label"() {
+        when:
+        final Map promiscuityMap = service.findPromiscuityForCID(cid)
+        then:
+        compoundRestService.findPromiscuityForCompound(_) >> {promiscuity}
+
+        assert promiscuityMap.status == expectedStatus
+        assert promiscuityMap.message == expectedMessage
+        assert promiscuityMap.promiscuityScore?.cid == promiscuity?.cid
+        where:
+        label                              | cid   | promiscuity                | expectedStatus | expectedMessage
+        "Returns a Promiscuity Score"      | 1234  | new Promiscuity(cid: 1234) | 200            | "Success"
+        "Returns a null Promiscuity Score" | 23435 | null                       | 404            | "Error getting Promiscuity Score for 23435"
+
+
     }
 
     void "test findPromiscuityScoreForCID #label"() {

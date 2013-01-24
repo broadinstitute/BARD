@@ -332,12 +332,20 @@ class CompoundRestServiceUnitSpec extends Specification {
         given:
         final Long cid = 200
         when:
-        final PromiscuityScore compound = service.findPromiscuityScoreForCompound(cid)
+        final PromiscuityScore promiscuityScore = service.findPromiscuityScoreForCompound(cid)
         then:
         restTemplate.getForObject(_, _, _) >> {new PromiscuityScore()}
-        assert compound != null
+        assert promiscuityScore != null
     }
-
+    void "findPromiscuityForCompound"() {
+        given:
+        final Long cid = 200
+        when:
+        final Promiscuity promiscuity = service.findPromiscuityForCompound(cid)
+        then:
+        restTemplate.getForObject(_, _, _) >> {new Promiscuity()}
+        assert promiscuity != null
+    }
     void "getSynonymsForCompound"() {
         when:
         List<String> synonyms = service.getSynonymsForCompound(200)

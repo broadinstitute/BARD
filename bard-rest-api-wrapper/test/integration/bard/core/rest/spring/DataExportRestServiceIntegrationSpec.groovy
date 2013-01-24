@@ -3,8 +3,6 @@ package bard.core.rest.spring
 import bard.core.rest.spring.util.DictionaryElement
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
-import bard.core.rest.spring.util.CapDictionary
-import spock.lang.IgnoreRest
 
 @Unroll
 class DataExportRestServiceIntegrationSpec extends IntegrationSpec {

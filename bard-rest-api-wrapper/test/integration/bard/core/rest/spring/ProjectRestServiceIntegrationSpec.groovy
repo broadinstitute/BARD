@@ -7,12 +7,11 @@ import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
-import spock.lang.IgnoreRest
-import bard.core.rest.spring.util.Document
 
 /**
  * Tests for ProjectRestService

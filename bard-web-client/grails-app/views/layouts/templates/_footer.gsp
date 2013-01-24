@@ -16,7 +16,7 @@
     </div>
 
     <div class="span2 right-aligned">
-        <a href="http://www.chemaxon.com/"><img src="${resource(dir: 'images', file: 'chemaxon_logo.gif')}"
+        <a href="http://www.chemaxon.com/" target="chemAxon"><img src="${resource(dir: 'images', file: 'chemaxon_logo.gif')}"
                                                 alt="Powered by ChemAxon"/></a>
     </div>
 </div>

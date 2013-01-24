@@ -62,7 +62,15 @@ class CompoundRestService extends AbstractRestService {
     public String buildPromiscuityScoreURL() {
         return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}&repr={mediaType}").toString();
     }
-
+    /**
+     * something like 'plugins/badapple/prom/cid/'
+     * The url to get a promiscuity score from the badapple plugin
+     * Url is a URLTemplate
+     * @return the relative url to the promiscuity plugin
+     */
+    public String buildPromiscuityURL() {
+        return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}").toString();
+    }
     protected String buildQueryForTestedAssays(final Long cid,
                                                final boolean activeOnly) {
         StringBuilder url = new StringBuilder();
@@ -227,7 +235,9 @@ class CompoundRestService extends AbstractRestService {
      * this Should probably take a Compound as an arg, instead of a Long
      * @param cid -
      * @return {@link PromiscuityScore}
+     * Use at #findPromiscuityForCompound instead
      */
+    @Deprecated
     public PromiscuityScore findPromiscuityScoreForCompound(final Long cid) {
         final String url = buildPromiscuityScoreURL()
         final Map map = [cid: cid, expand: "true", mediaType: "XML"]
@@ -235,6 +245,19 @@ class CompoundRestService extends AbstractRestService {
         return promiscuityScore;
 
     }
+    /**
+     * this Should probably take a Compound as an arg, instead of a Long
+     * @param cid -
+     * @return {@link PromiscuityScore}
+     */
+    public Promiscuity findPromiscuityForCompound(final Long cid) {
+        final String url = buildPromiscuityURL()
+        final Map map = [cid: cid, expand: "true"]
+        final Promiscuity promiscuity = (Promiscuity) getForObject(url, Promiscuity.class, map)
+        return promiscuity;
+
+    }
+
     /**
      *
      * @param compound

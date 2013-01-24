@@ -23,6 +23,8 @@ import molspreadsheet.MolecularSpreadSheetService
 import molspreadsheet.SpreadSheetActivity
 import org.apache.http.HttpException
 import org.json.JSONArray
+import org.springframework.http.HttpStatus
+import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.servlet.ModelAndView
 import querycart.CartAssay
 import spock.lang.Shared
@@ -30,6 +32,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import bard.core.rest.spring.compounds.PromiscuityScaffold
+import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -121,8 +125,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.findSubstanceIds(id)
         then:
-        this.queryService.findSubstancesByCid(_) >> {throw new HttpException("Some message")}
-        assert response.status == 500
+        this.queryService.findSubstancesByCid(_) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
 
     }
 
@@ -163,8 +172,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(id)
         then:
-        _ * this.queryService.findExperimentDataById(_, _, _) >> {throw new HttpException("Some message")}
-        assert response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        _ * this.queryService.findExperimentDataById(_, _, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
     void "test promiscuity action #label"() {
@@ -174,14 +187,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {promiscuityScoreMap}
+        _ * this.queryService.findPromiscuityForCID(_) >> {promiscuityScoreMap}
         assert response.status == statusCode
 
         where:
-        label                          | cid  | statusCode                                   | scaffolds                  | promiscuityScore
-        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                       | null
-        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                       | null
-        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new Scaffold(pScore: 22)] | new PromiscuityScore(cid: 567, scaffolds: [new Scaffold(pScore: 222)])
+        label                          | cid  | statusCode                                   | scaffolds                                       | promiscuityScore
+        "Empty Null CID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST           | null                                            | null
+        "CID- Internal Server Error"   | 234  | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null                                            | null
+        "Success"                      | 567  | HttpServletResponse.SC_OK                    | [new PromiscuityScaffold(promiscuityScore: 22)] | new Promiscuity(cid: 567, promiscuityScaffolds: [new PromiscuityScaffold(promiscuityScore: 222)])
     }
 
     void "test promiscuity action with exception"() {
@@ -190,8 +203,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {throw new HttpException("Error Message")}
-        assert response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        _ * this.queryService.findPromiscuityForCID(_) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
     }
 
     void "test promiscuity action with status code 404"() {
@@ -201,10 +219,89 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityScoreForCID(_) >> {map}
+        _ * this.queryService.findPromiscuityForCID(_) >> {map}
         assert response.status == HttpServletResponse.SC_NOT_FOUND
     }
-    // return [status: resp.status, message: 'Success', promiscuityScore: promiscuityScore]
+
+
+    void "test handle Assay Searches with Exceptions #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.AssayFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "searchString"]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        params.skip = "0"
+        params.top = "10"
+        controller.handleAssaySearches(this.queryService, searchCommand, "user")
+        then:
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
+
+    }
+
+    void "test handleClientInputErrors"() {
+        //HttpClientErrorException httpClientErrorException, String message, String user
+        when:
+        controller.handleClientInputErrors(exceptionType, "m", "u")
+        then:
+        assert response.status == statusCode
+        where:
+        label             | exceptionType                                        | statusCode
+        "Not Found"       | new HttpClientErrorException(HttpStatus.NOT_FOUND)   | HttpServletResponse.SC_NOT_FOUND
+        "Other Exception" | new HttpClientErrorException(HttpStatus.BAD_REQUEST) | HttpServletResponse.SC_BAD_REQUEST
+
+
+    }
+
+    void "test handle Project Searches with Exceptions #label"() {
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.ProjectFacetForm.toString()
+        Map paramMap = [
+                formName: FacetFormType.ProjectFacetForm.toString(),
+                searchString: "searchString",
+                filters: searchFilters1
+        ]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        controller.handleProjectSearches(this.queryService, searchCommand, Boolean.FALSE, "user")
+        then:
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+    }
+
+    void "test handle Compound Searches with Exceptions #label"() {
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString", filters: searchFilters1]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        params.skip = "0"
+        params.top = "10"
+        controller.handleCompoundSearches(this.queryService, searchCommand, false, "user")
+        then:
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+    }
 
     void "test handle Assay Searches #label"() {
         given:
@@ -268,7 +365,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleCompoundSearches(this.queryService, searchCommand, false,"user")
+        controller.handleCompoundSearches(this.queryService, searchCommand, false, "user")
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         assert response.status == statusCode
@@ -470,6 +567,25 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+
+    void "test structure search with exception #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString"]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        when:
+        request.method = 'GET'
+        controller.searchStructures(searchCommand)
+        then:
+        this.queryService.findFiltersInSearchBox(_, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+    }
+
     void "test handleStructureSearch#label"() {
         given:
         mockCommandObject(SearchCommand)
@@ -574,6 +690,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+
     void "test searchAssaysByIDs action #label"() {
         given:
         mockCommandObject(SearchCommand)
@@ -596,6 +713,48 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Search Assays By Non existing Ids"   | "12, 47"          | null                                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
         "Search Assays By Id No Filters"      | "1234, 4567"      | [assayAdapters: [buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
+
+    }
+
+    void "test searchAssaysByIDs with Exception #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "searchString"]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+
+        when:
+        request.method = 'GET'
+        controller.searchAssaysByIDs(searchCommand)
+        then:
+        queryService.findAssaysByADIDs(_, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
+
+    }
+
+    void "test searchProjectsByIDs with Exception #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: "searchString"]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        when:
+        request.method = 'GET'
+        controller.searchProjectsByIDs(searchCommand)
+        then:
+        queryService.findProjectsByPIDs(_, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
 
     }
 
@@ -623,6 +782,26 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+    void "test searchCompoundsByIDs With Exception #label"() {
+        given:
+        String searchString = "1234"
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        when:
+        request.method = 'GET'
+        controller.searchCompoundsByIDs(searchCommand)
+        then:
+        queryService.findCompoundsByCIDs(_, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+    }
+
     void "test searchProjectsByIDs Empty Search String"() {
         given:
         mockCommandObject(SearchCommand)
@@ -646,6 +825,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
 
     }
+
 
     void "test searchCompoundsByIDs Empty Search String"() {
         given:
@@ -708,8 +888,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.showAssay(adid)
         then:
-        queryService.showAssay(_) >> { new RuntimeException("ee") }
-        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        queryService.showAssay(_) >> { throw exceptionType }
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
     }
 
     void "test showAssay #label"() {
@@ -744,8 +929,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.showProject(pid)
         then:
-        queryService.showProject(_) >> { new RuntimeException("ee") }
-        response.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        queryService.showProject(_) >> { throw exceptionType }
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
     void "test showProject #label"() {
@@ -877,6 +1066,19 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         []               | [searchFilters[0]] | []                  | "no (empty) filter; one facet; no overlapping"
         [facet1]         | []                 | []                  | "one filter; no (empty) facet; no overlapping"
         []               | []                 | []                  | "no (empty) filter; no (empty) facet; no overlapping"
+    }
+
+    void "test handleIdSearchInput #label"() {
+        when:
+        controller.handleIdSearchInput(searchStringType, ids, prefix, messageForPrefix, messageForIds)
+        then:
+        HttpClientErrorException e = thrown()
+        assert e.statusCode == HttpStatus.BAD_REQUEST
+        assert e.statusText == expectedMessage
+        where:
+        label                                    | searchStringType | ids   | messageForPrefix | messageForIds | prefix | expectedStatusCode | expectedMessage
+        "Prefix different from searchStringType" | "A"              | "123" | "mp"             | "mi"          | "B"    | 400                | "mp"
+        "ids is blank"                           | "A"              | ""    | "mp"             | "mi"          | "A"    | 400                | "mi"
     }
 
     void "test handleMobile #label"() {
