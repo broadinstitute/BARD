@@ -3,10 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'table.css')}" type="text/css">
     <g:layoutHead/>
     <r:layoutResources/>
     <title>BARD: Catalog of Assay Protocols</title>
+    <r:external uri="/css/layout.css"/>
+    <r:external uri="/css/table.css"/>
 </head>
 
 <body>
@@ -31,16 +32,6 @@
                                 <li><a href="/BARD/assayDefinition/findByName">Find assay by Name</a></li>
                             </ul>
                         </li>
-                        %{--<li class="dropdown">--}%
-                        %{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">--}%
-                        %{--Projects--}%
-                        %{--<b class="caret"></b>--}%
-                        %{--</a>--}%
-                        %{--<ul class="dropdown-menu">--}%
-                        %{--<li><a href="/BARD/assayDefinition/findById">Find project by ID</a></li>--}%
-                        %{--<li><a href="/BARD/assayDefinition/findByName">Find project by Name</a></li>--}%
-                        %{--</ul>--}%
-                        %{--</li>--}%
                         <li>
                             <g:link url="${grailsApplication.config.bard.home.page}">Bard Web Client</g:link>
                         </li>
@@ -73,9 +64,16 @@
             <g:layoutBody/>
         </div>
     </div>
+
+    <div class="row-fluid">
+        <div class="span12 cap-footer">
+            <b>Version:</b> ${grailsApplication?.metadata['app.version']} <b>branch:</b> ${grailsApplication?.metadata['git.branch.name']} <b>revision:</b> ${grailsApplication?.metadata['git.branch.version']}
+        </div>
+    </div>
 </div>
 
 %{-- <div id="spinner" class="spinner" style="display:none;"><g:message code="spinner.alt" default="Loading&hellip;"/></div>  --}%
+
 <r:layoutResources/>
 </body>
 </html>
