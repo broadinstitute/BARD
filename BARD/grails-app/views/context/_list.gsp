@@ -2,8 +2,11 @@
     <g:each in="${contexts}" var="entry">
         <div id="${entry.key}" class="roundedBorder card-group ${entry.key.trim().replaceAll(/( |>)/, '-')}">
             <div class="row-fluid">
-                <strong class="span12">${entry.key}</strong>
+                <h2>${entry.key}</h2>
             </div>
+            <p>
+                ${entry.description}
+            </p>
             <div class="row-fluid">
                 <g:each in="${contextOwner.splitForColumnLayout(entry.value)}" var="contextColumnList">
                     <div class="span6">
