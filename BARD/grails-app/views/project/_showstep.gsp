@@ -15,10 +15,6 @@
     </div>
 
     <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
-        <h4>Detail</h4>
-
-        <p><g:link>${instance}</g:link></p>
-
         <g:render template='/project/editstep'/>
 
         <h5>Experiment Id:</h5>
