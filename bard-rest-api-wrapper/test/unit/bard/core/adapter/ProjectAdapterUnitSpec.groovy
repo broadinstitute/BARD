@@ -184,27 +184,6 @@ class ProjectAdapterUnitSpec extends Specification {
         assert document.resourcePath == "/documents/9393848"
 
     }
-
-
-
-    void "test areAnnotationsEmpty() #label"() {
-        given:
-        final Project project = objectMapper.readValue(PROJECT, Project.class)
-
-        when:
-        ProjectAdapter projectAdapter = new ProjectAdapter(project, 2, new NameDescription(name: "name", description: "description"), annotations)
-        Boolean result = projectAdapter.areAnnotationsEmpty()
-
-        then:
-        assert result == expectedResult
-
-        where:
-        label                      | annotations                                                        | expectedResult
-        'no annotations at all'    | []                                                                 | false
-        'a single empty annotatin' | [new BardAnnotation()]                                             | false
-        'a single empty Context'   | [new BardAnnotation(contexts: [new Context()])]                    | false
-        'a non-empty annotations'  | [new BardAnnotation(contexts: [new Context(comps: [new Comp()])])] | true
-    }
 }
 
 

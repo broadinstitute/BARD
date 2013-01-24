@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
+<%@ page import="bard.core.rest.spring.assays.BardAnnotation; bardqueryapi.JavaScriptUtility; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,12 +67,14 @@
     <div class="row-fluid">
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar" data-spy="affix">
-                <g:if test="${projectAdapter.areAnnotationsEmpty()}">
+                <g:if test="${BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
                     <li><a href="#annotations-info"><i
                             class="icon-chevron-right"></i>Annotations</a></li>
                 </g:if>
-                <li><a href="#annotations-info-misc"><i
-                        class="icon-chevron-right"></i>Annotations - Miscellaneous</a></li>
+                <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(projectAdapter.annotations)}">
+                    <li><a href="#annotations-info-misc"><i
+                            class="icon-chevron-right"></i>Annotations - Miscellaneous</a></li>
+                </g:if>
                 <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
 
                 <g:if test="${projectAdapter.targets}">
@@ -91,7 +93,7 @@
         </div>
 
         <div class="span9">
-            <g:if test="${projectAdapter.areAnnotationsEmpty()}">
+            <g:if test="${BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
                 <section id="annotations-info">
                     <div class="page-header">
                         <h3>Annotations</h3>
@@ -102,17 +104,18 @@
                     </div>
                 </section>
             </g:if>
-            <section id="annotations-info-misc">
-                <div class="page-header">
-                    <h3>Annotations - Miscellaneous</h3>
-                </div>
+            <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(projectAdapter.annotations)}">
+                <section id="annotations-info-misc">
+                    <div class="page-header">
+                        <h3>Annotations - Miscellaneous</h3>
+                    </div>
 
-                <div id="cardViewMisc" class="cardView" class="row-fluid">
-                    <g:render template="listMiscellaneous" model="[annotations: projectAdapter.annotations]"/>
-                </div>
+                    <div id="cardViewMisc" class="cardView" class="row-fluid">
+                        <g:render template="listMiscellaneous" model="[annotations: projectAdapter.annotations]"/>
+                    </div>
 
-            </section>
-
+                </section>
+            </g:if>
             <section id="description-info">
                 <div class="page-header">
                     <h3>Description</h3>
