@@ -6,15 +6,15 @@ import bard.db.registration.additemwizard.*;
 import grails.converters.JSON
 
 class OntologyJSonController {
-	
+
 	OntologyDataAccessService ontologyDataAccessService
 
     def index() {
 		redirect(action: "getAssayContextItems", params: params)
 	}
-	
+
 	def getAssayContextItems(){
-		if(params.assayContextId && params.assayContextId.isLong()){			
+		if(params.assayContextId && params.assayContextId.isLong()){
 			List<AssayContextItem> assayContextItems = ontologyDataAccessService.getElementsInTree(params.assayContextId.toLong(), "test")
 			render(contentType: "text/json") {
 				if(assayContextItems){
@@ -36,13 +36,14 @@ class OntologyJSonController {
 		if(params?.term && params?.section){
 			List<Descriptor> descriptors = ontologyDataAccessService.getAttributeDescriptors(params.section, params.term)
             descriptors = descriptors.findAll{it.elementStatus != ElementStatus.Retired}
-			if(descriptors){
+            Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
+			if(uniqueElements){
 				List attributes = new ArrayList();
-				for (d in descriptors) {
+				for (Element element in uniqueElements) {
 					def item = [
-						"label" : d.label,
-						"value" : d.label,
-						"elementId" : d.element.id,
+						"label" : element.label,
+						"value" : element.label,
+						"elementId" : element.id,
 					]
 					attributes.add(item)
 				}
@@ -50,21 +51,22 @@ class OntologyJSonController {
 			}
 		}
 	}
-	
+
 	def getValueDescriptors(){
 		if(params?.term && params?.section && params?.attributeId){
 			Long eid = params.attributeId.toLong()
 			List<Descriptor> descriptors = ontologyDataAccessService.getValueDescriptors(params.attributeId.toLong(), params.section, params.term)
-            descriptors = descriptors.findAll{it.elementStatus != ElementStatus.Retired}
-			if(descriptors){
+
+            Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
+			if(uniqueElements){
 				List attributes = new ArrayList();
-				for (d in descriptors) {
-					def unit = d?.unit?.abbreviation
-					unit = unit ?: (d?.unit?.label ?: "")
+				for (Element element in uniqueElements) {
+					def unit = element?.unit?.abbreviation
+					unit = unit ?: (element?.unit?.label ?: "")
 					def item = [
-						"label" : d.label,
-						"value" : d.label,
-						"elementId" : d.element.id,
+						"label" : element.label,
+						"value" : element.label,
+						"elementId" : element.id,
 						"unit" : unit
 					]
 					attributes.add(item)
@@ -73,5 +75,5 @@ class OntologyJSonController {
 			}
 		}
 	}
-	
+
 }
