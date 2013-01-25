@@ -266,5 +266,8 @@ class AssayDefinitionController {
         render(template: "summaryDetail", model: [assay: assayInstance])
     }
 
-
+    def showEditSummary(Long instanceId) {
+        def assayInstance = Assay.findById(instanceId)
+        render(template: "editSummary", model: [assay: assayInstance])
+    }
 }

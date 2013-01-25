@@ -3,6 +3,7 @@ $(document).ready(function () {
         .button()
         .click(function() {
             $( "#dialog_edit_summary" ).dialog( "open" );
+            initFunction();
         });
     $( "#dialog_edit_summary" ).dialog({
         autoOpen: false,
@@ -15,10 +16,7 @@ $(document).ready(function () {
                 var assayStatus = $("#assayStatus option:selected").text()
                 var assayName = $("#assayName").val();
                 var designedBy = $("#designedBy").val();
-                if(!assayName || 0 === assayName || (/^\s*$/).test(assayName)){
-                    alert("Assay Name field is required and cannot be empty");
-                    return false;
-                }
+                if (!validateRequiredField(assayName, "assayNameValidation")) return false;
                 var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy};
                 $.ajax
                     ({
@@ -32,12 +30,50 @@ $(document).ready(function () {
                 $( this ).dialog( "close" );
             },
             Cancel: function() {
+                resetAfterCloseOrCancel();
                 $( this ).dialog( "close" );
             }
         },
         close: function() {
+            resetAfterCloseOrCancel();
         }
     });
 });
+
+function validateRequiredField(fieldName, messageHolder){
+    if( !fieldName || 0 === fieldName || (/^\s*$/).test(fieldName)) {
+        $("#"+messageHolder).html("Required and cannot be empty");
+        return false;
+    }
+    return true;
+};
+
+function initFunction() {
+    $("input#assayName").blur(function()
+    {    var assayName = $(this).val();
+        validateRequiredField(assayName, "assayNameValidation");
+        $("input#assayName").focus();
+    });
+    $("input#assayName").click(function()
+    {
+        $("#assayNameValidation").html("");
+    });
+}
+
+function resetAfterCloseOrCancel() {
+    var instanceId = $("#assayId").text();
+    $("#editSummaryForm").clearForm();
+    // Need to reload the original data
+    var inputdata = {'instanceId':instanceId};
+    $.ajax
+        ({
+            url:"../showEditSummary",
+            data:inputdata,
+            cache:false,
+            success:function(responseText, statusText, xhr, jqForm){
+                $("#dialog_edit_summary").html(responseText);
+            }
+        });
+}
 
 
