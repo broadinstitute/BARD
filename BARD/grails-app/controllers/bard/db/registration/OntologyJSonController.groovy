@@ -54,7 +54,6 @@ class OntologyJSonController {
 
 	def getValueDescriptors(){
 		if(params?.term && params?.section && params?.attributeId){
-			Long eid = params.attributeId.toLong()
 			List<Descriptor> descriptors = ontologyDataAccessService.getValueDescriptors(params.attributeId.toLong(), params.section, params.term)
 
             Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
