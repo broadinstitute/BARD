@@ -3,9 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BARD/BARD.iml" filepath="$PROJECT_DIR$/BARD/BARD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BARD/BARD-grailsPlugins.iml" filepath="$PROJECT_DIR$/BARD/BARD-grailsPlugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/BardDomainModel/BardDomainModel.iml" filepath="$PROJECT_DIR$/BardDomainModel/BardDomainModel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/BardDomainModel/BardDomainModel-grailsPlugins.iml" filepath="$PROJECT_DIR$/BardDomainModel/BardDomainModel-grailsPlugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/dataExport/dataExport.iml" filepath="$PROJECT_DIR$/dataExport/dataExport.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dataExport/dataExport-grailsPlugins.iml" filepath="$PROJECT_DIR$/dataExport/dataExport-grailsPlugins.iml" />
     </modules>
   </component>
 </project>
