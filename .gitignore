@@ -14,7 +14,6 @@ atlassian-ide-plugin.xml
 *.zip
 .idea/workspace.xml
 .idea/misc.xml
-.idea/vcs.xml
 logs/
 *.log
 *~
