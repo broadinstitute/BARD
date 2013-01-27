@@ -187,7 +187,7 @@ class DoseCurveImageUnitSpec extends Specification {
 
     void "test addConfidenceBounds"() {
         given:
-        CurveParameters curveParameters
+        CurveParameters curveParameters=null
         Color curveColor = Color.ORANGE
         XYPlot plot = new XYPlot()
         when:

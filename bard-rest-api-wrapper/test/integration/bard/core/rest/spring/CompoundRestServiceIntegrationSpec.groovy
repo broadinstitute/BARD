@@ -13,6 +13,7 @@ import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
 import org.springframework.web.client.HttpClientErrorException
+import spock.lang.IgnoreRest
 
 /**
  * Tests for CompoundRestService in JDO
@@ -110,6 +111,26 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundAnnotations.anno_key.size() == compoundAnnotations.anno_val.size()
     }
 
+    /**
+     * Should take care of SOLR Exceptions reported to NCGC
+     */
+    void "testFiltersWithCompoundService with number ranges"() {
+        given:
+        String uriWithFilters = compoundRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(mwt:%5B100+TO+200%5D),&skip=0&top=10&expand=true"
+        URI uri = new URI(uriWithFilters)
+        when:
+        CompoundResult compoundResult = this.compoundRestService.getForObject(uri, CompoundResult)
+        then:
+        assert compoundResult
+        final List<Compound> compounds = compoundResult.compounds
+        assert compounds, "CompoundService SearchResults must not be null"
+        assert !compounds.isEmpty(), "CompoundService SearchResults must not be empty"
+        assert compoundResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
+        final List<Facet> facets = compoundResult.getFacets();
+        assert facets != null, "List of Facets is not null"
+        assert !facets.isEmpty(), "List of Facets is not empty"
+
+    }
 
     void testFiltersWithCompoundService() {
         given:

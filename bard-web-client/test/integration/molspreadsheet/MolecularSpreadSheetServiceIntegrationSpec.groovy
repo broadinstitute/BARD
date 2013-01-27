@@ -16,6 +16,8 @@ import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
 
 import static junit.framework.Assert.assertNotNull
+import bard.core.SearchParams
+import spock.lang.IgnoreRest
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -29,10 +31,52 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     QueryCartService queryCartService
     ShoppingCartService shoppingCartService
 
+    void "test activitiesByEIDs"() {
+        given:
+        final List<Long> eids = [10, 11]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData experimentData = molecularSpreadSheetService.activitiesByEIDs(eids, searchParams)
+        then:
+        assert experimentData
+        assert experimentData.activities
 
+    }
 
-    @Before
-    void setup() {
+    void "test activitiesByCIDs"() {
+        given:
+        final List<Long> cids = [223321, 1486788]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData experimentData = molecularSpreadSheetService.activitiesByCIDs(cids, searchParams)
+        then:
+        assert experimentData
+        assert experimentData.activities
+
+    }
+
+    void "test activitiesBySIDs"() {
+        given:
+        final List<Long> sids = [17410952, 17412946]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData experimentData = molecularSpreadSheetService.activitiesBySIDs(sids, searchParams)
+        then:
+        assert experimentData
+        assert experimentData.activities
+
+    }
+
+    void "test activitiesByADIDs"() {
+        given:
+        final List<Long> adids = [10, 11]
+        final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
+        when:
+        final ExperimentData experimentData = molecularSpreadSheetService.activitiesByADIDs(adids, searchParams)
+        then:
+        assert experimentData
+        assert experimentData.activities
+
     }
 
     void "test retrieveExperimentalData degenerate case"() {
@@ -629,11 +673,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     MolSpreadSheetData generateFakeData() {
         molSpreadSheetData = new MolSpreadSheetData()
-        molSpreadSheetData.mssHeaders = [new MolSpreadSheetColumnHeader (columnTitle: ["Chemical Structure"]) ,
-                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'CID')]) ,
-                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'DNA polymerase (Q9Y253) ADID : 1 IC50')]) ,
-                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Serine-protein kinase (Q13315) ADID : 1 IC50')]) ,
-                new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789')]) ]
+        molSpreadSheetData.mssHeaders = [new MolSpreadSheetColumnHeader(columnTitle: ["Chemical Structure"]),
+                new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList: [new MolSpreadSheetColSubHeader(columnTitle: 'CID')]),
+                new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList: [new MolSpreadSheetColSubHeader(columnTitle: 'DNA polymerase (Q9Y253) ADID : 1 IC50')]),
+                new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList: [new MolSpreadSheetColSubHeader(columnTitle: 'Serine-protein kinase (Q13315) ADID : 1 IC50')]),
+                new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList: [new MolSpreadSheetColSubHeader(columnTitle: 'Tyrosine-DNA phosphodiesterase 1 (Q9NUW8) ADID: 514789')])]
         molSpreadSheetData.mssData.put("0_0", new MolSpreadSheetCell("1", MolSpreadSheetCellType.string))
         molSpreadSheetData.mssData.put("0_1", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.identifier))
         molSpreadSheetData.mssData.put("0_2", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.greaterThanNumeric))
