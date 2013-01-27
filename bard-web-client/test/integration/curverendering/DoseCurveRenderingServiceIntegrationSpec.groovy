@@ -31,6 +31,25 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+    void "test doseResponseCurves"() {
+        given:
+        List<Curve> curves =
+            [
+                    new Curve(
+                            activities: [new Double(1), new Double(2)],
+                            concentrations: [new Double(1), new Double(2)],
+                            s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0
+                    )
+            ]
+        DrcCurveCommand drcCurveCommand = new DrcCurveCommand(curves: curves, xAxisLabel: 'X', yAxisLabel: 'Y', width: 20, height: 20)
+
+        when:
+        final byte[] doseCurve = doseCurveRenderingService.createDoseCurves(drcCurveCommand)
+        then:
+        assert doseCurve.length
+
+    }
+
     void "tests createDoseCurve with CommandObject"() {
 
         given:

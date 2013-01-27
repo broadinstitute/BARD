@@ -9,8 +9,8 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.interfaces.ExperimentRole
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.PromiscuityScore
-import bard.core.rest.spring.compounds.Scaffold
+import bard.core.rest.spring.compounds.Promiscuity
+import bard.core.rest.spring.compounds.PromiscuityScaffold
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.Project
 import bardwebquery.CompoundOptionsTagLib
@@ -32,8 +32,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.rest.spring.compounds.PromiscuityScaffold
-import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -303,6 +301,25 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
+
+    void "test showProbeList"() {
+        when:
+        controller.showProbeList()
+        then:
+        queryService.showProbeList() >> {[facets: "test"]}
+        assert response.status == 200
+        assert response.text.contains('name="totalCompounds" id="totalCompounds"')
+    }
+
+
+    void "turnoffMobileExperience"() {
+        when:
+        controller.turnoffMobileExperience()
+        then:
+        assert response.status == HttpServletResponse.SC_MOVED_TEMPORARILY
+        assert response.redirectedUrl == '/bardWebInterface/index'
+    }
+
     void "test handle Assay Searches #label"() {
         given:
         mockCommandObject(SearchCommand)
@@ -314,16 +331,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleAssaySearches(this.queryService, searchCommand, "user")
+        controller.handleAssaySearches(this.queryService, searchCommand, isMobile, "user")
         then:
         _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
         assert response.status == statusCode
 
         where:
-        label                                  | searchString  | statusCode                                   | assayAdapterMap
-        "Empty Search String - Bad Request"    | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
-        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+        label                                  | searchString  | isMobile | statusCode                                   | assayAdapterMap
+        "Empty Search String - Bad Request"    | ""            | false    | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | false    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | false    | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
+        "Success"                              | "1234,5678"   | true     | HttpServletResponse.SC_OK                    | [assayAdapters: [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")], facets: [], nHits: 2]
 
 
     }
@@ -342,16 +360,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleProjectSearches(this.queryService, searchCommand, "user")
+        controller.handleProjectSearches(this.queryService, searchCommand, isMobile, "user")
         then:
         _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
         assert response.status == statusCode
 
         where:
-        label                                  | searchString  | statusCode                                   | projectAdapterMap
-        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
-        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+        label                                  | searchString  | statusCode                                   | isMobile | projectAdapterMap
+        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | false    | null
+        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | false    | null
+        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | false    | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
+        "Success, with Mobile"                 | "1234,5678"   | HttpServletResponse.SC_OK                    | true     | [projectAdapters: [buildProjectAdapter(1234, "assay1"), buildProjectAdapter(1234, "assay2")], facets: [], nHits: 2]
 
     }
 
@@ -365,16 +384,17 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         params.skip = "0"
         params.top = "10"
-        controller.handleCompoundSearches(this.queryService, searchCommand, false, "user")
+        controller.handleCompoundSearches(this.queryService, searchCommand, isMobile, "user")
         then:
         _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
         assert response.status == statusCode
 
         where:
-        label                                  | searchString  | statusCode                                   | compoundAdapterMap
-        "Empty Search String"                  | ""            | HttpServletResponse.SC_BAD_REQUEST           | null
-        "Search String- Internal Server Error" | "Some String" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
-        "Success"                              | "1234,5678"   | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        label                                  | searchString  | isMobile | statusCode                                   | compoundAdapterMap
+        "Empty Search String"                  | ""            | false    | HttpServletResponse.SC_BAD_REQUEST           | null
+        "Search String- Internal Server Error" | "Some String" | false    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | null
+        "Success"                              | "1234,5678"   | false    | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success"                              | "1234,5678"   | true     | HttpServletResponse.SC_OK                    | [compoundAdapters: [buildCompoundAdapter(1234), buildCompoundAdapter(4567)], facets: [], nHits: 2]
     }
 
     void "test apply Filters to projects #label"() {
@@ -567,7 +587,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-
     void "test structure search with exception #label"() {
         given:
         mockCommandObject(SearchCommand)
@@ -579,11 +598,32 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        this.queryService.findFiltersInSearchBox(_, _) >> {throw exceptionType}
+        this.queryService.structureSearch(_, _, _, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
         where:
-        label                                | exceptionType                                      | statusCode
-        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        label                                | exceptionType                                      | max  | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | "10" | HttpServletResponse.SC_NOT_FOUND
+
+    }
+
+
+    void "test structure search with runtime exception #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString", max: "max"]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        when:
+        request.method = 'GET'
+        controller.searchStructures(searchCommand)
+        then:
+        this.queryService.structureSearch(_, _, _, _, _, _) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                       | exceptionType   | max   | statusCode
+        "Throws a RuntimeException" | new Exception() | "max" | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
     }
 
     void "test handleStructureSearch#label"() {
@@ -894,8 +934,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         label                                | exceptionType                                      | statusCode
         "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
         "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-
     }
+
 
     void "test showAssay #label"() {
 
@@ -914,11 +954,12 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         }
         assert response.status == statusCode
         where:
-        label                    | adid   | name   | assayAdapter                                                       | expectedAssayView             | statusCode
-        "Return an assayAdapter" | 485349 | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | 200
-        "A null AssayAdapter"    | null   | "Test" | [assayAdapter: null, experiments: []]                              | null                          | 400
-        "Assay ADID is null"     | null   | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | null                          | 400
-        "Assay Adapter is null"  | null   | "Test" | null                                                               | null                          | 400
+        label                      | adid   | name   | assayAdapter                                                       | expectedAssayView             | statusCode
+        "Return an assayAdapter"   | 485349 | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showAssay" | HttpServletResponse.SC_OK
+        "A null AssayAdapter"      | null   | "Test" | [assayAdapter: null, experiments: []]                              | null                          | HttpServletResponse.SC_BAD_REQUEST
+        "Assay ADID is null"       | null   | "Test" | [assayAdapter: buildAssayAdapter(485349, "Test"), experiments: []] | null                          | HttpServletResponse.SC_BAD_REQUEST
+        "Assay Adapter is null"    | null   | "Test" | null                                                               | null                          | HttpServletResponse.SC_BAD_REQUEST
+        "Returns an Empty Adapter" | 1234   | "Test" | [:]                                                                | null                          | HttpServletResponse.SC_NOT_FOUND
 
     }
 
@@ -955,9 +996,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
         where:
         label                          | pid    | name   | projectAdapter                                                         | expectedProjectView             | statusCode
-        "Return a ProjectSearchResult" | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | 200
-        "Project PID is null"          | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | 400
-        "Project Adapter is null"      | null   | "Test" | null                                                                   | null                            | 400
+        "Return a ProjectSearchResult" | 485349 | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | "/bardWebInterface/showProject" | HttpServletResponse.SC_OK
+        "Project PID is null"          | null   | "Test" | [projectAdapter: buildProjectAdapter(485349, "Test"), experiments: []] | null                            | HttpServletResponse.SC_BAD_REQUEST
+        "Project Adapter is null"      | null   | "Test" | null                                                                   | null                            | HttpServletResponse.SC_BAD_REQUEST
+        "Project Adapter is null"      | 1234   | "Test" | [:]                                                                    | null                            | HttpServletResponse.SC_NOT_FOUND
+
     }
 
 

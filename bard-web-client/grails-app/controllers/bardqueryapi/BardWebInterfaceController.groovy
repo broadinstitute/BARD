@@ -4,7 +4,7 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.MolecularSpreadSheetService
@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.rest.spring.compounds.Promiscuity
 
 /**
  *
@@ -297,10 +296,8 @@ class BardWebInterfaceController {
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
             final String message = "Search String ${searchCommand.searchString} Not found"
             handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
-
         }
         catch (Exception exp) {
-
             final String errorMessage = "Structure search has encountered an error:\n${exp.message}"
             log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),

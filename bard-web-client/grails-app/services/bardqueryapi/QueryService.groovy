@@ -6,33 +6,17 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.CompoundRestService
-import bard.core.rest.spring.ProjectRestService
-import bard.core.rest.spring.SubstanceRestService
-import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.assays.AssayResult
-import bard.core.rest.spring.assays.ExpandedAssay
-import bard.core.rest.spring.assays.ExpandedAssayResult
-import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.compounds.CompoundResult
-import bard.core.rest.spring.compounds.PromiscuityScore
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentShow
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.StructureSearchParams
-import bard.core.rest.spring.compounds.CompoundSummary
-import bard.core.rest.spring.experiment.ExperimentShow
-import bard.core.rest.spring.experiment.ExperimentData
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.project.ProjectExpanded
-import bard.core.rest.spring.experiment.PriorityElement
-import bard.core.rest.spring.experiment.ResultData
-import bard.core.rest.spring.experiment.ResponseClassEnum
-import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.rest.spring.DataExportRestService
-import bard.core.rest.spring.compounds.Promiscuity
+import bard.core.rest.spring.*
+import bard.core.rest.spring.assays.*
+import bard.core.rest.spring.compounds.*
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -46,7 +30,6 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
-    DataExportRestService dataExportRestService
     //========================================================== Free Text Searches ================================
     /**
      * Find Compounds by Text search
@@ -241,37 +224,6 @@ class QueryService implements IQueryService {
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
-    Map extractExperimentDetails(final List<Activity> activities) {
-        String priorityDisplay = ""
-        Long dictionaryId
-        boolean hasChildElements = false
-        boolean hasPlot = false
-        for (Activity activity : activities) {
-            final ResultData resultData = activity.resultData
-            if (resultData) {
-                if (resultData.hasPriorityElements()) {
-                    final PriorityElement priorityElement = resultData.priorityElements.get(0)
-                    if (!priorityDisplay) {//if we have not already assigned one
-                        priorityDisplay = priorityElement.getDictionaryLabel()
-                        String priorityDescription = priorityElement.getDictionaryDescription()
-                        if (priorityDescription) {
-                            dictionaryId = priorityElement.getDictElemId()
-                        }
-                    }
-                    if (!hasChildElements) {
-                        hasChildElements = priorityElement.hasChildElements()
-                    }
-                }
-                if (!hasPlot && resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
-                    hasPlot = true
-                }
-            }
-            if (hasPlot && priorityDisplay && hasChildElements) {
-                break
-            }
-        }
-        return [priorityDisplay: priorityDisplay, dictionaryId: dictionaryId, hasPlot: hasPlot, hasChildElements: hasChildElements]
-    }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service
      * @param experimentId
@@ -288,7 +240,7 @@ class QueryService implements IQueryService {
         if (experimentShow) {
             final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
             activities = experimentData.activities
-            experimentDetails = extractExperimentDetails(activities)
+            experimentDetails = this.queryHelperService.extractExperimentDetails(activities)
 
         }
 

@@ -16,10 +16,15 @@ import bard.core.rest.spring.util.NameDescription
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResponseClassEnum
+import bard.core.rest.spring.experiment.ResultData
+import bard.core.rest.spring.experiment.Activity
 
 class QueryHelperService {
 
     /**
+     * TODO: Put in properties file
      *  These are the terms that we would use for autosuggest
      *   Add more terms as we go along
      *  We should store this in a database so it becomes easy to manage
@@ -36,6 +41,47 @@ class QueryHelperService {
             'iupac_name': 'IUPAC Name',
             'preferred_term': 'Preferred Term'
     ]
+
+    Map extractMapFromResultData(ResultData resultData) {
+        if (resultData.hasPriorityElements()) {
+            boolean hasPlot = false
+            final PriorityElement priorityElement = resultData.priorityElements.get(0)
+            final boolean hasChildElements = priorityElement.hasChildElements()
+            final Map priorityMap = this.extractPriorityDisplayDescription(priorityElement)
+            if (resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
+                hasPlot = true
+            }
+            priorityMap.put("hasPlot", hasPlot)
+            priorityMap.put("hasChildElements", hasChildElements)
+            return priorityMap
+        }
+        return [priorityDisplay: '', priorityDescription: '', dictionaryId: 0, hasPlot: false, hasChildElements: false]
+
+    }
+
+    Map extractExperimentDetails(final List<Activity> activities) {
+        Map priorityMap = [:]
+        for (Activity activity : activities) {
+            final ResultData resultData = activity.resultData
+            if (resultData) {
+                priorityMap = extractMapFromResultData(resultData)
+                if (priorityMap.hasPlot && priorityMap.priorityDisplay && priorityMap.hasChildElements) {
+                    break
+                }
+            }
+        }
+        return [priorityDisplay: priorityMap.priorityDisplay, dictionaryId: priorityMap.dictionaryId, hasPlot: priorityMap.hasPlot, hasChildElements: priorityMap.hasChildElements]
+    }
+
+    Map extractPriorityDisplayDescription(PriorityElement priorityElement) {
+        String priorityDisplay = priorityElement.getDictionaryLabel()
+        String priorityDescription = priorityElement.getDictionaryDescription()
+        Long dictionaryId = null
+        if (priorityDescription) {
+            dictionaryId = priorityElement.getDictElemId()
+        }
+        return [priorityDisplay: priorityDisplay, priorityDescription: priorityDescription, dictionaryId: dictionaryId]
+    }
 
     //filters that starts with a number or '[' to denote ranges
     final static Pattern FILTER_NUMBER_RANGES = Pattern.compile("^(\\d+.*|-\\d+.*)");
@@ -129,7 +175,7 @@ class QueryHelperService {
                 score = metaData.getScore(compound.id.toString())
                 nameDescription = metaData.getMatchingField(compound.id.toString())
             }
-            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound,score,nameDescription)
+            final CompoundAdapter compoundAdapter = new CompoundAdapter(compound, score, nameDescription)
             compoundAdapters.add(compoundAdapter)
         }
         return compoundAdapters

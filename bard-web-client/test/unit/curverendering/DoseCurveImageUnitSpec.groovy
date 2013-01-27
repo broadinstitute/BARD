@@ -7,6 +7,9 @@ import spock.lang.Unroll
 
 import java.awt.Color
 import org.jfree.chart.JFreeChart
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer
+import org.jfree.data.xy.DefaultXYDataset
+import org.jfree.chart.plot.XYPlot
 
 @Unroll
 class DoseCurveImageUnitSpec extends Specification {
@@ -18,14 +21,14 @@ class DoseCurveImageUnitSpec extends Specification {
         // Tear down logic here
     }
     /**
-     * {@link DoseCurveImage#createAndConfigureYAxis(Bounds, Color,String)}
+     * {@link DoseCurveImage#createAndConfigureYAxis(Bounds, Color, String)}
      */
     void "test Create and Configure Y-Axis"() {
         given:
         Color axisColor = Color.BLACK
 
         when:
-        final NumberAxis yAxis = DoseCurveImage.createAndConfigureYAxis(null, axisColor,"Y")
+        final NumberAxis yAxis = DoseCurveImage.createAndConfigureYAxis(null, axisColor, "Y")
         then:
         assert yAxis
         assert yAxis.autoRangeIncludesZero
@@ -35,14 +38,14 @@ class DoseCurveImageUnitSpec extends Specification {
         assert yAxis.label == "Y"
     }
     /**
-     * {@link DoseCurveImage#createAndConfigureXAxis(Bounds, Color,String)}
+     * {@link DoseCurveImage#createAndConfigureXAxis(Bounds, Color, String)}
      */
     void "test Create and Configure X-Axis"() {
         given:
         Color axisColor = Color.BLACK
 
         when:
-        final NumberAxis xAxis = DoseCurveImage.createAndConfigureXAxis(null, axisColor,"X")
+        final NumberAxis xAxis = DoseCurveImage.createAndConfigureXAxis(null, axisColor, "X")
         then:
         assert xAxis
         assert !xAxis.autoRangeIncludesZero
@@ -165,19 +168,119 @@ class DoseCurveImageUnitSpec extends Specification {
         assert bounds.xMin == 10
         assert bounds.yMin == 1
     }
+
+    void "test addFittedCurve"() {
+        given:
+        String name = null
+        DefaultXYDataset dataset = null
+        XYLineAndShapeRenderer renderer = null
+
+        CurveParameters curveParameters = null
+        Color curveColor = null
+        double[] validX = null
+        when:
+        DoseCurveImage.addFittedCurve(name, dataset, renderer, curveParameters, curveColor, validX)
+        then:
+        assert renderer == null
+
+    }
+
+    void "test addConfidenceBounds"() {
+        given:
+        CurveParameters curveParameters
+        Color curveColor = Color.ORANGE
+        XYPlot plot = new XYPlot()
+        when:
+        DoseCurveImage.addConfidenceBounds(curveParameters, curveColor, plot)
+        then:
+        assert !plot.annotations
+
+    }
+
+    void "test createDoseCurve"() {
+        given:
+        final Double slope = new Double(2)
+        final Double HILL_SLOPE = new Double(2)
+        final Double S0 = new Double(2)
+        final Double SINF = new Double(2)
+        final Double lower95CL = new Double(2)
+        final Double upper95CL = new Double(2)
+        final Date resultTime = new Date()
+        List<Double> concentrations = [new Double(2), new Double(4)]
+        List<Double> activities = [new Double(2), new Double(4)]
+        List<Boolean> isValid = [true, true];
+        CurveParameters curveParameters = new CurveParameters(slope, resultTime, HILL_SLOPE, S0, SINF, lower95CL, upper95CL)
+        Color color = Color.BLACK;
+
+
+        Drc drc = new Drc(concentrations, activities, isValid, curveParameters, color)
+        String xAxisLabel = "X"
+        String yAxisLabel = "Y"
+        Double xNormMin = new Double(2)
+        Double xNormMax = new Double(2)
+        Double yNormMin = new Double(2)
+        Double yNormMax = new Double(2)
+        when:
+        JFreeChart jFreeChart = DoseCurveImage.createDoseCurve(drc, xAxisLabel, yAxisLabel, xNormMin, xNormMax, yNormMin, yNormMax)
+        then:
+        assert jFreeChart
+    }
+
+    void "test createDoseCurves with empty drc list"() {
+        given:
+        String xAxisLabel = "X"
+        String yAxisLabel = "Y"
+        Double xNormMin = new Double(2)
+        Double xNormMax = new Double(2)
+        Double yNormMin = new Double(2)
+        Double yNormMax = new Double(2)
+        when:
+        JFreeChart jFreeChart = DoseCurveImage.createDoseCurves([], xAxisLabel, yAxisLabel, xNormMin, xNormMax, yNormMin, yNormMax)
+        then:
+        assert !jFreeChart
+    }
+
+    void "test createDoseCurves"() {
+        given:
+        final Double slope = new Double(2)
+        final Double HILL_SLOPE = new Double(2)
+        final Double S0 = new Double(2)
+        final Double SINF = new Double(2)
+        final Double lower95CL = new Double(2)
+        final Double upper95CL = new Double(2)
+        final Date resultTime = new Date()
+        List<Double> concentrations = [new Double(2), new Double(4)]
+        List<Double> activities = [new Double(2), new Double(4)]
+        List<Boolean> isValid = [true, true];
+        CurveParameters curveParameters = new CurveParameters(slope, resultTime, HILL_SLOPE, S0, SINF, lower95CL, upper95CL)
+        Color color = Color.BLACK;
+
+
+        Drc drc = new Drc(concentrations, activities, isValid, curveParameters, color)
+        String xAxisLabel = "X"
+        String yAxisLabel = "Y"
+        Double xNormMin = new Double(2)
+        Double xNormMax = new Double(2)
+        Double yNormMin = new Double(2)
+        Double yNormMax = new Double(2)
+        when:
+        JFreeChart jFreeChart = DoseCurveImage.createDoseCurves([drc], xAxisLabel, yAxisLabel, xNormMin, xNormMax, yNormMin, yNormMax)
+        then:
+        assert jFreeChart
+    }
     /**
      * {@link DoseCurveImage}
      */
-    void "test create Dose Curve with null DRC"(){
-        when:"We call the createDoseCurve method with a null Drc object"
-        final JFreeChart curve = DoseCurveImage.createDoseCurve(null,null,null, null, null, null, null)
+    void "test create Dose Curve with null DRC"() {
+        when: "We call the createDoseCurve method with a null Drc object"
+        final JFreeChart curve = DoseCurveImage.createDoseCurve(null, null, null, null, null, null, null)
         then: "We expect a null curve back"
         assert !curve
     }
     /**
      * {@link DoseCurveImage}
      */
-    void "test find Bounds with non-null Normalized values"(){
+    void "test find Bounds with non-null Normalized values"() {
         when:
         final Bounds bounds = DoseCurveImage.findBounds([], 1, 2, 1, 2)
         then: "We expect a null curve back"

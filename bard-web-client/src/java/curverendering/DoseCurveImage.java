@@ -153,7 +153,8 @@ public class DoseCurveImage {
         return startStop;
     }
 
-    public static void addFittedCurve(String name, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer, CurveParameters curveParameters, Color curveColor, double[] validX) {
+    public static void addFittedCurve(String name, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer,
+                                      CurveParameters curveParameters, Color curveColor, double[] validX) {
         // add the fitted curve (if possible)
         if (curveParameters != null
                 && curveParameters.getS0() != null
@@ -206,7 +207,7 @@ public class DoseCurveImage {
         addConfidenceBounds(curveParameters, curveColor, plot);
     }
 
-    private static void addConfidenceBounds(CurveParameters curveParameters, Color curveColor, XYPlot plot) {
+    public static void addConfidenceBounds(CurveParameters curveParameters, Color curveColor, XYPlot plot) {
         // add confidence bounds
         if (curveParameters != null
                 && curveParameters.getS0() != null
@@ -389,12 +390,12 @@ public class DoseCurveImage {
     public static JFreeChart createDoseCurves(List<Drc> drcs, String xAxisLabel, String yAxisLabel, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
         Map<String, Drc> curves = new HashMap<String, Drc>();
         int colorIndex = 0;
-        for (Drc drc : drcs) {
-            drc.setColor(colors[colorIndex]);
-            curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
-            ++colorIndex;
-        }
         if (!drcs.isEmpty()) {
+            for (Drc drc : drcs) {
+                drc.setColor(colors[colorIndex]);
+                curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
+                ++colorIndex;
+            }
             Bounds bounds = findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
             return DoseCurveImage.createChart(curves, bounds, Color.BLACK, xAxisLabel, yAxisLabel);
         }

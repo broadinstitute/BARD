@@ -4,12 +4,19 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.DataExportRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ActivityData
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.util.DictionaryElement
+import bard.rest.api.wrapper.Dummy
 import grails.test.mixin.TestFor
 import spock.lang.Shared
 import spock.lang.Specification
@@ -24,12 +31,63 @@ class QueryServiceHelperUnitSpec extends Specification {
     @Shared Map<String, String> EMPTY_LABEL = [label: "", value: ""]
     @Shared Map<String, String> GO_TERM = [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: "a", filterValue: "b")]
+    @Shared String display = "display"
+    @Shared String description = "description"
+    @Shared long dictElemId = 211
 
-    void setup() {
+
+    void "test extractExperimentDetails #label"() {
+        when:
+        Map map = service.extractExperimentDetails(activities)
+        then:
+
+        assert map == expectedMap
+        where:
+        label                      | activities       | expectedMap
+        "Empty Activities"         | []               | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
+        "Activity, no Result Data" | [new Activity()] | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
     }
 
-    void tearDown() {
-        // Tear down logic here
+
+    void "test extractExperimentDetails with activities"() {
+        given:
+        final DictionaryElement dictionaryElement = new DictionaryElement(elementId: dictElemId, label: display, description: description)
+        DataExportRestService dataExportRestService = Mock(DataExportRestService)
+        Dummy d = new Dummy()
+        d.dataExportRestService = dataExportRestService
+
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()])
+        priorityElement.dummy = d
+        Map expectedMap = [priorityDisplay: display, dictionaryId: dictElemId, hasPlot: true, hasChildElements: true]
+        List<Activity> activities = [new Activity(resultData: new ResultData(responseClass: "CR_SER",
+                priorityElements: [priorityElement]))]
+        when:
+        Map map = service.extractExperimentDetails(activities)
+        then:
+        d.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        assert map == expectedMap
+    }
+
+    void "test extractPriorityDisplayDescription #label"() {
+        given:
+        DataExportRestService dataExportRestService = Mock(DataExportRestService)
+        Dummy d = new Dummy()
+        d.dataExportRestService = dataExportRestService
+
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: expectedPriorityDisplay, dictElemId: dictId)
+        priorityElement.dummy = d
+        when:
+        Map map = service.extractPriorityDisplayDescription(priorityElement)
+        then:
+        d.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        assert map.priorityDisplay == expectedPriorityDisplay
+        assert map.priorityDescription == expectedPriorityDescription
+        assert map.dictionaryId == expectedDictionaryId
+        where:
+        label                      | expectedPriorityDisplay | expectedPriorityDescription | dictId     | expectedDictionaryId | dictionaryElement
+        "Map with dictionaryID"    | display                 | description                 | dictElemId | dictElemId           | new DictionaryElement(elementId: dictElemId, label: display, description: description)
+        "Map without dictionaryID" | display                 | null                        | 0          | null                 | null
+
     }
     /**
      * {@link QueryHelperService#convertSearchFiltersToFilters(List)}
