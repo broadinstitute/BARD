@@ -15,7 +15,7 @@
                 <div data-role="fieldcontain">
                     <label for="searchString">Search BARD:</label>
                     <input type="text" id="searchString" name="searchString"
-                           value="${flash.searchString ?: params?.searchString}"/>
+                           value="${flash.searchString ?: params?.searchString ?:''}"/>
                 </div>
 
                 <button value="Search" name="search" id="searchButton" data-theme="b" type="submit"

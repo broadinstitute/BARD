@@ -8,8 +8,18 @@
 <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">
         <div class="input-append">
-            <g:textField id="searchString" name="searchString" value="${flash.searchString ?: params?.searchString}"
-                         class="span10"/>
+            <g:if test="${flash?.searchString}">
+                <g:textField id="searchString" name="searchString" value="${flash.searchString}"
+                             class="span10"/>
+            </g:if>
+            <g:elseif test="${params?.searchString}">
+                <g:textField id="searchString" name="searchString" value="${params?.searchString}"
+                             class="span10"/>
+            </g:elseif>
+            <g:else>
+                <g:textField id="searchString" name="searchString" value="" class="span10"/>
+            </g:else>
+
             <g:submitButton name="search" value="Search" class="btn btn-primary span2" id="searchButton"/>
         </div>
     </div>

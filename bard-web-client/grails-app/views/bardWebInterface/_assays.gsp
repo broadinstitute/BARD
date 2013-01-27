@@ -12,8 +12,16 @@
     <ul class="unstyled results">
         <g:each var="assayAdapter" in="${assayAdapters}">
             <li>
-                <h3><g:link action="showAssay" id="${assayAdapter.id}"
-                            params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link>
+                <h3>
+                    <g:if test="${searchString}">
+                        <g:link action="showAssay" id="${assayAdapter.id}"
+                                params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link>
+                    </g:if>
+                    <g:else>
+                        <g:link action="showAssay"
+                                id="${assayAdapter.id}">${assayAdapter.name} <small>(ADID: ${assayAdapter.id})</small></g:link>
+                    </g:else>
+
                 </h3>
                 <g:saveToCartButton id="${assayAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(assayAdapter.name)}"

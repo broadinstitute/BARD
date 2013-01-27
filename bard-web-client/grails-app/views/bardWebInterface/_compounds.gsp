@@ -25,15 +25,29 @@
                 </td>
                 <td>
                     <h3>
-                        <g:link action="showCompound" id="${compoundAdapter.pubChemCID}"
-                                params='[searchString: "${searchString}"]'>
-                            <g:if test="${compoundAdapter.name}">
-                                ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
-                            </g:if>
-                            <g:else>
-                                PubChem CID: ${compoundAdapter.pubChemCID}
-                            </g:else>
-                        </g:link>
+                        <g:if test="${searchString}">
+                            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}"
+                                    params='[searchString: "${searchString}"]'>
+                                <g:if test="${compoundAdapter.name}">
+                                    ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
+                                </g:if>
+                                <g:else>
+                                    PubChem CID: ${compoundAdapter.pubChemCID}
+                                </g:else>
+                            </g:link>
+                        </g:if>
+                        <g:else>
+                            <g:link action="showCompound" id="${compoundAdapter.pubChemCID}">
+                                <g:if test="${compoundAdapter.name}">
+                                    ${compoundAdapter.name} <small>(PubChem CID: ${compoundAdapter.pubChemCID})</small>
+                                </g:if>
+                                <g:else>
+                                    PubChem CID: ${compoundAdapter.pubChemCID}
+                                </g:else>
+                            </g:link>
+                        </g:else>
+
+
                         <g:if test="${compoundAdapter.isDrug()}">
                             <span class="badge badge-success">Drug</span>
                         </g:if>

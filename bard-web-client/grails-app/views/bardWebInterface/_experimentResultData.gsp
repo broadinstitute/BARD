@@ -11,15 +11,23 @@
 <p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
 
 <p>
-    <b>Assay ID : <g:link controller="bardWebInterface" action="showAssay"
-                          id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
-        ${experimentDataMap?.experiment?.adid}
-    </g:link>
+    <b>Assay ID :
+    <g:if test="${searchString}">
+        <g:link controller="bardWebInterface" action="showAssay"
+                id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
+            ${experimentDataMap?.experiment?.adid}
+        </g:link>
+    </g:if>
+    <g:else>
+        <g:link controller="bardWebInterface" action="showAssay"
+                id="${experimentDataMap?.experiment?.adid}">
+            ${experimentDataMap?.experiment?.adid}
+        </g:link>
+    </g:else>
     </b>
 </p>
 
 <div class="row-fluid">
-
 
     <div class="pagination offset3">
         <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
@@ -31,13 +39,14 @@
             <th>CID</th>
             <th>Structure</th>
             <th>Outcome</th>
-             <th>
-                 ${experimentDataMap?.priorityDisplay ?: ""}
-                 <g:if test="${experimentDataMap?.dictionaryId}">
-                     <a href="/bardwebclient/dictionaryTerms/#${experimentDataMap?.dictionaryId}" target="datadictionary">
-                         <i class="icon-question-sign"></i>
-                     </a>
-                 </g:if>
+            <th>
+                ${experimentDataMap?.priorityDisplay ?: ""}
+                <g:if test="${experimentDataMap?.dictionaryId}">
+                    <a href="/bardwebclient/dictionaryTerms/#${experimentDataMap?.dictionaryId}"
+                       target="datadictionary">
+                        <i class="icon-question-sign"></i>
+                    </a>
+                </g:if>
             </th>
             <th>Experiment Descriptors</th>
             <g:if test="${experimentDataMap?.hasChildElements}">
@@ -65,7 +74,12 @@
                         ${activity.sid}</a>
                 </td>
                 <td>
-                    <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: activity.cid, searchString: "${searchString}"])}">${activity.cid}</a>
+                    <g:if test="${searchString}">
+                        <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: activity.cid, searchString: "${searchString}"])}">${activity.cid}</a>
+                    </g:if>
+                    <g:else>
+                        <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: activity.cid])}">${activity.cid}</a>
+                    </g:else>
                 </td>
                 <td style="min-width: 180px;">
                     <g:compoundOptions sid="${activity.sid}" cid="${activity.cid}" imageWidth="180"
@@ -110,7 +124,8 @@
                                 <th>
                                     ${concRespSeries.dictionaryLabel}
                                     <g:if test="${concRespSeries?.dictionaryDescription}">
-                                        <a  href="/bardwebclient/dictionaryTerms/#${concRespSeries?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                                        <a href="/bardwebclient/dictionaryTerms/#${concRespSeries?.dictElemId}"
+                                           target="datadictionary"><i class="icon-question-sign"></i></a>
                                     </g:if>
                                 </th>
                                 <th>Concentration</th>
@@ -143,7 +158,7 @@
                             <br/>
                             <g:if test="${curveFitParameters != null}">
                                 <p>
-                                    ${experimentDataMap?.priorityDisplay?:''} : ${priorityElement.slope} <br/>
+                                    ${experimentDataMap?.priorityDisplay ?: ''} : ${priorityElement.slope} <br/>
                                     sInf : ${(new ExperimentalValueUtil(curveFitParameters.sInf, false)).toString()}<br/>
                                     s0 : ${(new ExperimentalValueUtil(curveFitParameters.s0, false)).toString()}<br/>
                                     HillSlope : ${(new ExperimentalValueUtil(curveFitParameters.hillCoef, false)).toString()}<br/>
@@ -158,7 +173,8 @@
                     <td>
                         <g:each in="${concRespSeries.miscData}" var="miscData">
                             <g:if test="${miscData?.dictionaryDescription}">
-                                ${miscData.toDisplay()}<a href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}" target="datadictionary"><i class="icon-question-sign"></i></a>
+                                ${miscData.toDisplay()}<a href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}"
+                                                          target="datadictionary"><i class="icon-question-sign"></i></a>
                             </g:if>
                             <br/>
                         </g:each>
@@ -167,6 +183,7 @@
             </tr>
         </g:each>
     </table>
+
     <div class="pagination offset3">
         <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
     </div>

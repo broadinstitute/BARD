@@ -15,8 +15,14 @@
                         </p>
 
                         <p><span>
-                            <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}"
-                                    params='[searchString: "${searchString}"]'>View Results</g:link>
+                            <g:if test="${searchString}">
+                                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}"
+                                        params='[searchString: "${searchString}"]'>View Results</g:link>
+                            </g:if>
+                            <g:else>
+                                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}">View Results</g:link>
+                            </g:else>
+
                             <g:if test="${showAssaySummary}">
                                  <div><g:render template="assaySummary"
                                                model="[assayAdapter: experiment?.getAssay()]"/></div>

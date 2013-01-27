@@ -12,8 +12,16 @@
     <ul class="unstyled results">
         <g:each var="projectAdapter" in="${projectAdapters}">
             <li>
-                <h3><g:link action="showProject" id="${projectAdapter.id}"
-                            params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                <h3>
+                    <g:if test="${searchString}">
+                        <g:link action="showProject" id="${projectAdapter.id}"
+                                params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                    </g:if>
+                    <g:else>
+                        <g:link action="showProject"
+                                id="${projectAdapter.id}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                    </g:else>
+
                 </h3>
                 <g:if test="${projectAdapter.hasProbes()}">
                     <span class="badge badge-info">Probe</span>
