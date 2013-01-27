@@ -108,7 +108,7 @@ class BardLoginControllerUnitSpec extends Specification {
     void "test authfail() #label"() {
         when:
         controller.session.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, exception)
-        def result = controller.authfail()
+        controller.authfail()
 
         then:
         assert flash.message == expectedResult
@@ -121,6 +121,22 @@ class BardLoginControllerUnitSpec extends Specification {
         'DisabledException'           | new DisabledException('')           | 'springSecurity.errors.login.disabled'
         'LockedException'             | new LockedException('')             | 'springSecurity.errors.login.locked'
         'general exception'           | 'exception'                         | 'springSecurity.errors.login.fail'
+        'no exception'                | false                               | ''
+    }
+
+    void "test authfail() isAjax #label"() {
+        when:
+        controller.session.setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, 'exception')
+        controller.authfail()
+
+        then:
+        this.springSecurityService.isAjax(_) >> {isAjax}
+        assert (isAjax) ? (response?.json?.'error' == expectedResult) : (response.redirectedUrl == '/bardLogin/auth')
+
+        where:
+        label          | isAjax | expectedResult
+        'isAjax=true'  | true   | 'springSecurity.errors.login.fail'
+        'isAjax=false' | false  | null
     }
 
     void "test ajaxSuccess()"() {
