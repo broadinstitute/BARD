@@ -62,22 +62,18 @@ grails.project.dependency.resolution = {
 
     plugins {
         // build scope
-        build ":tomcat:$grailsVersion"
-        compile ":hibernate:$grailsVersion"
         build ":codenarc:0.15"
+        compile ":hibernate:$grailsVersion"
+        build ":tomcat:$grailsVersion"
 
         // compile scope
-        compile ":grails-ui:1.2.3"
-        compile ":yui:2.8.2.1"
-        compile ":twitter-bootstrap:2.2.2"
-        compile ":elastic-search:0.4.5-SNAPSHOT"
+        compile ":ajaxflow:0.2.4"
         compile ":cbipcrowdauthentication:0.3.0"
-        compile(":build-test-data:2.0.3")
-		compile(":jquery-validation-ui:1.4")
-		compile ":webflow:2.0.0"
-		compile ":ajaxflow:0.2.4"
-        compile ":console:1.2"
         compile ":clover:3.1.6"
+        compile ":console:1.2"
+        compile(":jquery-validation-ui:1.4")
+        compile ":twitter-bootstrap:2.2.2"
+        compile ":webflow:2.0.0"
 
         // runtime scope
         runtime ":jquery:1.7.1"
@@ -85,10 +81,9 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
 
         // test scope
-        test ":spock:0.6"
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
-
+        test ":spock:0.6"
         // provided  scope
     }
 }

@@ -33,7 +33,7 @@ grails.project.dependency.resolution = {
         // so adding explicitly here
         build(":rest-client-builder:1.0.2") { export = false }
         build(":release:2.0.2") { export = false }
-        build ":improx:0.1" { export = false } // Interactive Mode Proxy; useful for IDE integration
+        build(":improx:0.1") { export = false } // Interactive Mode Proxy; useful for IDE integration
 
         compile(":clover:3.1.6") { export = false }
         compile(":console:1.2") { export = false }
