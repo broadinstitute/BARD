@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContextOwner
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,7 @@ import bard.db.experiment.Experiment
  * Time: 10:53 PM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectExperiment {
+class ProjectExperiment extends AbstractContextOwner{
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
@@ -45,5 +46,10 @@ class ProjectExperiment {
     static mapping = {
         id(column: "PROJECT_EXPERIMENT_ID", generator: "sequence", params: [sequence: 'PROJECT_EXPERIMENT_ID_SEQ'])
         projectExperimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+    }
+
+    @Override
+    List getContexts() {
+        return projectExperimentContexts;
     }
 }

@@ -10,9 +10,9 @@
         <dd><g:fieldValue bean="${project}" field="description"/></dd>
 
         <dt><g:message code="default.dateCreated.label" default="Fix i18n"/></dt>
-        <dd><g:formatDate date="${project.dateCreated}"/></dd>
+        <dd><g:formatDate date="${project.dateCreated}" format="yyyy-MM-dd"/>&nbsp;</dd>
 
         <dt><g:message code="default.lastUpdated.label" default="Fix i18n"/></dt>
-        <dd><g:formatDate date="${project.lastUpdated}"/></dd>
+        <dd><g:formatDate date="${project.lastUpdated}" format="yyyy-MM-dd"/>&nbsp;</dd>
     </dl>
 </div>

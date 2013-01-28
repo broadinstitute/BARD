@@ -2,6 +2,8 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.TestMixin
+import grails.test.mixin.domain.DomainClassUnitTestMixin
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -13,7 +15,8 @@ import spock.lang.Unroll
  * Time: 11:30 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([AssayContext, AssayContextItem])
+@Build([AssayContext, AssayContextItem, Measure])
+@TestMixin(DomainClassUnitTestMixin.class)
 @Unroll
 class AssayContextServiceUnitSpec extends Specification {
 
@@ -84,6 +87,32 @@ class AssayContextServiceUnitSpec extends Specification {
         'addItem at index 1'    | 2                            | 1                | 3
 
     }
+
+    void "test associate and disassociate measure with context"() {
+        given:
+        mockDomain(AssayContextMeasure.class)
+        AssayContext context = AssayContext.build()
+        Measure measure = Measure.build()
+
+        when:
+        service.associateContext(measure, context)
+
+        then:
+        measure.assayContextMeasures.size() == 1
+        context.assayContextMeasures.size() == 1
+        measure.assayContextMeasures.first() == context.assayContextMeasures.first()
+        AssayContextMeasure link = measure.assayContextMeasures.first()
+        link.measure == measure
+        link.assayContext == context
+
+        when:
+        service.disassociateContext(measure, context)
+
+        then:
+        measure.assayContextMeasures.size() == 0
+        context.assayContextMeasures.size() == 0
+    }
+
 
     private void assertItemAdded(AssayContext targetAssayContext, AssayContextItem draggedAssayContextItem, int sizeAfterAdd, int indexOfAddedItem) {
         assert draggedAssayContextItem.assayContext == targetAssayContext

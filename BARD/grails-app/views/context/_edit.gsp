@@ -12,11 +12,25 @@
 <div id="cardView" class="cardView" class="row-fluid">
 
     <div class="row-fluid">
-        <div class="span12"><button id="addNewBtn" class="btn btn-primary">Add New Card</button></div>
+        <g:render template="/context/list" model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'edit', renderEmptyGroups: true]"/>
     </div>
 
-    <div class="row-fluid">
-        <g:render template="/context/list" model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'edit']"/>
+    <r:script>
+        registerAddNewCardButtons()
+    </r:script>
+
+    <div id="dialog_new_card">
+        <form id="new_card_form" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="edit_card_name">Name:</label>
+
+                <div class="controls">
+                    <input type="text" id="new_card_name" name="cardName" placeholder="Enter Card Name">
+                </div>
+            </div>
+            <input type="hidden" id="new_card_section" name="cardSection" value=""/>
+            <input type="hidden" name="instanceId" value="${contextOwner.id}"/>
+        </form>
     </div>
 
     <div id="dialog_edit_card">

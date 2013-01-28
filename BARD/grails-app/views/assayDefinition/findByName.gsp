@@ -63,15 +63,17 @@
 								<thead>
 									<tr>
 										<g:sortableColumn property="id" title="${message(code: 'assay.id.label', default: 'ID')}" params="${params}" />
-										<g:sortableColumn property="assayName" title="${message(code: 'assay.assayName.label', default: 'Assay Name')}" params="${params}"/>
+                                        <g:sortableColumn property="assayShortName" title="${message(code: 'assay.assayShortName.label', default: 'Assay Short Name')}" params="${params}"/>
+                                        <g:sortableColumn property="assayName" title="${message(code: 'assay.assayName.label', default: 'Assay Name')}" params="${params}"/>
 										<g:sortableColumn property="designedBy" title="${message(code: 'assay.designedBy.label', default: 'Designed By')}" params="${params}"/>
 									</tr>
 								</thead>
 								<tbody>
 								<g:each in="${assays}" status="i" var="assayInstance">
 									<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-										<td>${assayInstance.id}</td>
-										<td><g:link action="show" id="${assayInstance.id}">${fieldValue(bean: assayInstance, field: "assayName")}</g:link></td>
+										<td><g:link action="show" id="${assayInstance.id}">${assayInstance.id}</g:link></td>
+                                        <td>${fieldValue(bean: assayInstance, field: "assayShortName")}</td>
+										<td>${fieldValue(bean: assayInstance, field: "assayName")}</td>
 										<td>${fieldValue(bean: assayInstance, field: "designedBy")}</td>
 									</tr>
 								</g:each>

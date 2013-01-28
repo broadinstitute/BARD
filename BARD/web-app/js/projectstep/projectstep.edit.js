@@ -13,7 +13,7 @@ $(document).ready(function () {
     $( "#addExperimentToProject" )
         .button()
         .click(function() {
-            clearAvailableExperiment()
+            clearAvailableExperiment();
             $( "#dialog_add_experiment_step" ).dialog( "open" );
         });
 
@@ -54,6 +54,7 @@ $(document).ready(function () {
     $( "#linkExperiment" )
         .button()
         .click(function() {
+            $("#linkExperimentForm").clearForm();
             $( "#dialog_link_experiment" ).dialog( "open" );
         });
     $( "#dialog_link_experiment" ).dialog({
@@ -90,6 +91,9 @@ $(document).ready(function () {
 
     $( "#addByExperimentId" ).change(function () {
         var experimentId = $(this).val();
+        if( !experimentId || 0 === experimentId || (/^\s*$/).test(experimentId)) {
+            return false;
+        }
         var projectId = $("#projectIdForStep").val();
         var data = {'experimentId':experimentId, 'projectId': projectId};
         $.ajax
@@ -106,6 +110,9 @@ $(document).ready(function () {
     });
     $( "#addByAssayId" ).change(function () {
         var assayId = $(this).val();
+        if( !assayId || 0 === assayId || (/^\s*$/).test(assayId)) {
+            return false;
+        }
         var projectId = $("#projectIdForStep").val();
         var data = {'assayId':assayId, 'projectId': projectId};
         $.ajax
@@ -137,9 +144,13 @@ $(document).ready(function () {
             });
         },
         select: function( event, ui ) {
-            setAvailableExperiment(ui.item.label)
+            setAvailableExperimentAfterSelect(ui.item.label)
         }
     });
+    // Somehow the setAvailableExperiment added multiple duplicate item selected from dropdown, a hack to get one
+    function setAvailableExperimentAfterSelect(data) {
+        $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
+    }
 
     function setAvailableExperiment(data) {
         for (var i = 0; i < data.length; i++) {
@@ -148,7 +159,12 @@ $(document).ready(function () {
     }
 
     function clearAvailableExperiment() {
-        $("#selectedExperiments option:ge(0)").remove()
+        $("#selectedExperiments option:gt(0)").remove();
+        $("#selectedExperiments option:eq(0)").remove();
+        $("#addExperimentForm").clearForm();
+        $("#addByExperimentId").hide();
+        $("#addByAssayId").hide();
+        $("#addByExperimentName").hide();
     }
 
     $("input:radio[name=addExperimentBy]").change(function(){

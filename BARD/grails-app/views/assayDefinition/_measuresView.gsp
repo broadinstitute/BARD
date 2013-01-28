@@ -1,17 +1,21 @@
 <r:require module="dynatree"/>
 <div>
-    <g:if test="${assayInstance?.measures}">
+    <g:if test="${measures}">
         <div class="row-fluid">
             <div class="span6">
-                <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasuresSorted}"/>
+                <g:dynaTree id="measure-tree" measures="${rootMeasuresSorted}"/>
             </div>
 
             <div class="span6">
+                <div class="pull-right">
+                    <g:link action="editMeasure" id="${assayInstance?.id}"
+                            class="btn btn-small btn-info">Edit Measures</g:link>
+                </div>
                 <div id="measure-details-none" class="measure-detail-card">
                     <strong>Select a measure on the tree to the left and the details about that measure will appear here.</strong>
                 </div>
                 <%-- Statically render every measurement details as not displayed.  Selecting nodes in tree will display one card --%>
-                <g:each in="${assayInstance.measures}" var="measure">
+                <g:each in="${measures}" var="measure">
                     <div id="measure-details-${measure.id}" class="measure-detail-card" style="display: none">
                     <h1>${measure.getDisplayLabel()}</h1>
                     <p><strong>Definition:</strong> ${measure.resultType?.description}</p>

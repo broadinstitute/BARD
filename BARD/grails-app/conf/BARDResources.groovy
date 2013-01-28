@@ -41,6 +41,9 @@ modules = {
         resource url: '/js/projectstep/projectstep.show.js'
         resource url: '/js/projectstep/projectstep.edit.js'
     }
+    summary{
+        resource url: '/js/cap/editSummary.js'
+    }
 	images {
 	}
 }

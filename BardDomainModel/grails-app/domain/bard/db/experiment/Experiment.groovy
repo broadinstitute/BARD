@@ -1,12 +1,13 @@
 package bard.db.experiment
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
 import bard.db.project.ProjectStep
 import bard.db.project.ProjectExperiment
 
-class Experiment {
+class Experiment  extends AbstractContextOwner{
 
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int EXPERIMENT_NAME_MAX_SIZE = 1000
@@ -29,7 +30,7 @@ class Experiment {
     Date lastUpdated
     String modifiedBy
 
-    // TODO results can appearently be very large 10 million rows
+    // TODO results can apparently be very large 10 million rows
     List<ExperimentContext> experimentContexts = []
     Set<ProjectExperiment> projectExperiments = [] as Set
     Set<ExternalReference> externalReferences = [] as Set
@@ -66,5 +67,10 @@ class Experiment {
 
     String getDisplayName() {
         return id + "-" + experimentName
+    }
+
+    @Override
+    List getContexts() {
+        return experimentContexts;
     }
 }
