@@ -47,6 +47,6 @@ class AssayLoadResultsWriter {
     }
 
     public enum LoadResultType {
-        success, assayContextSuccessOnly, fail
+        success, assayContextSuccessOnly, nothingToLoad, fail
     }
 }

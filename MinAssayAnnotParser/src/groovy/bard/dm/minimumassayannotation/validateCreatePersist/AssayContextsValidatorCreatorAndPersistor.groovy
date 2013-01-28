@@ -239,7 +239,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                             //NOTE:  no break here b/c we want to keep looking for duplicates
                         } else {
                             //do not save the assayContext because it is a subset of one that is already in the database
-                            Log.logger.info("assay: ${assayContext.assay.id} not saving a new assay context because it is a subset of existing assay context in the database ${assayContextOrig.id}")
+                            Log.logger.info("assay: ${assayContext.assay.id} AID: ${contextDTO.aid} not saving a new assay context because it is a subset of existing assay context in the database ${assayContextOrig.id}")
                             doSave = false
                             break
                         }

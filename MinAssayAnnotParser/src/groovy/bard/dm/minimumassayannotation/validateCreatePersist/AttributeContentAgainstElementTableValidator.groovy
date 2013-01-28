@@ -23,15 +23,19 @@ class AttributeContentAgainstElementTableValidator {
      *
      * @param contextList
      */
-    boolean validate(List<ContextDTO> contextDTOList, Map attributeNameMapping) {
+    void removeInvalid(List<ContextDTO> contextDTOList, Map attributeNameMapping) {
 
-        boolean result = true;
-        for (ContextDTO contextDTO : contextDTOList) {
+        Iterator<ContextDTO> contextDTOIterator = contextDTOList.iterator()
+        while (contextDTOIterator.hasNext()) {
+            ContextDTO contextDTO = contextDTOIterator.next()
+
+            boolean isValid = true;
+
             for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
 
                 //have deliberately placed result as the second operand so that the checkForElement method
                 //is run so that all elements are checked
-                result = checkForElement(contextItemDto.key, contextDTO) && result
+                isValid  = checkForElement(contextItemDto.key, contextDTO) && isValid
 
                 //Check that the value is defined in the database,
                 // except for the ones that are numeric values or a type-in field or a Free-type field
@@ -42,19 +46,21 @@ class AttributeContentAgainstElementTableValidator {
 
                     //have deliberately placed result as the second operand so that the checkForElement method
                     //is run so that all elements are checked
-                    result = checkForElement(contextItemDto.value, contextDTO) && result
+                    isValid  = checkForElement(contextItemDto.value, contextDTO) && isValid
                 }
 
                 //If concentration units are present check that they are defined in the database
                 if (contextItemDto.concentrationUnits != null) {
                     //have deliberately placed result as the second operand so that the checkForElement method
                     //is run so that all elements are checked
-                    result = checkForElement(contextItemDto.concentrationUnits, contextDTO) && result
+                    isValid  = checkForElement(contextItemDto.concentrationUnits, contextDTO) && isValid
                 }
             }
-        }
 
-        return result
+            if (!isValid) {
+                contextDTOIterator.remove()
+            }
+        }
     }
 
     private boolean checkForElement(String elementLabel, ContextDTO contextDTO) {

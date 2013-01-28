@@ -11,14 +11,17 @@ import org.apache.commons.lang3.StringUtils
  * an attribute group represents a group of key/value pairs (attributes) that should all be group together in a single assay or project context.
  */
 class ParseAndBuildAttributeGroups {
-    private static final int maxRowNum = 6000
+    private static final String finishedMark = "finished"
+
+    private final int maxRowNum
 
     private final ContextLoadResultsWriter loadResultsWriter
 
     private final ContextDtoFromContextGroupCreator contextDtoFromContextGroupCreator
 
-    public ParseAndBuildAttributeGroups(ContextLoadResultsWriter loadResultsWriter) {
+    public ParseAndBuildAttributeGroups(ContextLoadResultsWriter loadResultsWriter, int maxRowNum) {
         this.loadResultsWriter = loadResultsWriter
+        this.maxRowNum = maxRowNum
 
         contextDtoFromContextGroupCreator = new ContextDtoFromContextGroupCreator()
     }
@@ -51,9 +54,10 @@ class ParseAndBuildAttributeGroups {
             List<ContextGroup> assayContextGroupList = contextGroupListList[0]
             List<ContextGroup> measureContextGroupList = contextGroupListList[1]
 
+            boolean foundFinishedMark = false
             Iterator<Row> rowIterator = getIteratorAtStartOfAids(sheet, START_ROW)
             Row row
-            while (rowIterator.hasNext() && (row = rowIterator.next()).rowNum < maxRowNum) {
+            while (rowIterator.hasNext() && !foundFinishedMark && (row = rowIterator.next()).rowNum < maxRowNum) {
 
                 //Get the current AID
                 String aidFromCell = contextDtoFromContextGroupCreator.getCellContentByRowAndColumnIds(row, 'A')
@@ -61,35 +65,38 @@ class ParseAndBuildAttributeGroups {
                 if (aidFromCell) {
                     aidFromCell = aidFromCell.trim()
 
-                    if (currentAssayDto.aidFromCell != aidFromCell) {
+                    foundFinishedMark = aidFromCell.equalsIgnoreCase(finishedMark)
+
+                    if (!foundFinishedMark && currentAssayDto.aidFromCell != aidFromCell) {
                         currentAssayDto = new AssayDto(aidFromCell, inputFile, row.rowNum)
                         assayDtoList.add(currentAssayDto)
                     }
                 }
 
-                //Iterate over all assay-groups' contexts
-                for (ContextGroup assayContextGroup : assayContextGroupList) {
-                    ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(assayContextGroup, row, sheet)
+                if (!foundFinishedMark) {
+                    //Iterate over all assay-groups' contexts
+                    for (ContextGroup assayContextGroup : assayContextGroupList) {
+                        ContextDTO assayContextDTO = contextDtoFromContextGroupCreator.create(assayContextGroup, row, sheet)
 
-                    if (assayContextDTO != null && assayContextDTO.contextItemDtoList) {
-                        assayContextDTO.aid = currentAssayDto.aid
-                        assayContextDTO.name = assayContextGroup.name
+                        if (assayContextDTO != null && assayContextDTO.contextItemDtoList) {
+                            assayContextDTO.aid = currentAssayDto.aid
+                            assayContextDTO.name = assayContextGroup.name
 
-                        currentAssayDto.assayContextDTOList.add(assayContextDTO)
+                            currentAssayDto.assayContextDTOList.add(assayContextDTO)
+                        }
+                    }
+
+                    //Iterate over all measure-groups' contexts
+                    for (ContextGroup measureContextGroup : measureContextGroupList) {
+                        ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(measureContextGroup, row, sheet)
+
+                        if (measureContextDTO != null && measureContextDTO.contextItemDtoList) {
+                            measureContextDTO.aid = currentAssayDto.aid
+                            measureContextDTO.name = measureContextGroup.name
+                            currentAssayDto.measureContextDTOList.add(measureContextDTO)
+                        }
                     }
                 }
-
-                //Iterate over all measure-groups' contexts
-                for (ContextGroup measureContextGroup : measureContextGroupList) {
-                    ContextDTO measureContextDTO = contextDtoFromContextGroupCreator.create(measureContextGroup, row, sheet)
-
-                    if (measureContextDTO != null && measureContextDTO.contextItemDtoList) {
-                        measureContextDTO.aid = currentAssayDto.aid
-                        measureContextDTO.name = measureContextGroup.name
-                        currentAssayDto.measureContextDTOList.add(measureContextDTO)
-                    }
-                }
-
             }
 
             return assayDtoList

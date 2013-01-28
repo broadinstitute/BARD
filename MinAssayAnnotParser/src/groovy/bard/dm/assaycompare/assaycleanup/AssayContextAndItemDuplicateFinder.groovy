@@ -58,7 +58,7 @@ class AssayContextAndItemDuplicateFinder {
     }
 
 
-    private static buildLimitedAssayContexts(AssayMatch assayMatch, AssayContextItemCompare itemCompare) {
+    private static void buildLimitedAssayContexts(AssayMatch assayMatch, AssayContextItemCompare itemCompare) {
         //create a "limited" assay context for each "full" assay context
         //the limited assay context will not contain duplicate assay context items
         for (AssayContext context : assayMatch.assay.assayContexts) {

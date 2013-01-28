@@ -30,30 +30,29 @@ class ContextDtoFromContextGroupCreator {
             def keyDef = getCellContent(keyCellId, row, sheet)
             String key = getTrimStringOrNullFromDef(keyDef)
 
-            //Get the attribute's qualifier-content from cell
-            String qualifierCellId = cellLocsContextItemDto.qualifier
-            def qualifierDef = qualifierCellId ? getCellContent(qualifierCellId, row, sheet) : qualifierCellId
-            String qualifier = getTrimStringOrNullFromDef(qualifierDef)
-
             //Get the attribute's value-content from cell
             String valueCell = cellLocsContextItemDto.value
             def value = getCellContent(valueCell, row, sheet)
 
             //Attribute ket and value must exist
-            if (StringUtils.isEmpty(key) || !value) {
-                return null
+            if (!StringUtils.isEmpty(key) && value) {
+                //Get the attribute's qualifier-content from cell
+                String qualifierCellId = cellLocsContextItemDto.qualifier
+                def qualifierDef = qualifierCellId ? getCellContent(qualifierCellId, row, sheet) : qualifierCellId
+                String qualifier = getTrimStringOrNullFromDef(qualifierDef)
+
+
+                //Get the attribute's concentration-unit value from cell
+                String concentrationUnitsCellId = cellLocsContextItemDto.concentrationUnits
+                def concentrationUnitsDef = concentrationUnitsCellId ? getCellContent(concentrationUnitsCellId, row, sheet) : concentrationUnitsCellId
+                String concentrationUnits = getTrimStringOrNullFromDef(concentrationUnitsDef)
+
+                //Create a new attribute and add it to the context's attributes collection.
+                ContextItemDto contextItemDto = new ContextItemDto(key, value, cellLocsContextItemDto.attributeType,
+                        cellLocsContextItemDto.typeIn, qualifier, concentrationUnits)
+
+                contextDTO.contextItemDtoList.add(contextItemDto)
             }
-
-            //Get the attribute's concentration-unit value from cell
-            String concentrationUnitsCellId = cellLocsContextItemDto.concentrationUnits
-            def concentrationUnitsDef = concentrationUnitsCellId ? getCellContent(concentrationUnitsCellId, row, sheet) : concentrationUnitsCellId
-            String concentrationUnits = getTrimStringOrNullFromDef(concentrationUnitsDef)
-
-            //Create a new attribute and add it to the context's attributes collection.
-            ContextItemDto contextItemDto = new ContextItemDto(key, value, cellLocsContextItemDto.attributeType,
-                    cellLocsContextItemDto.typeIn, qualifier, concentrationUnits)
-
-            contextDTO.contextItemDtoList.add(contextItemDto)
         }
         return contextDTO
     }

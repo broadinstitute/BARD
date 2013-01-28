@@ -17,15 +17,13 @@ import bard.dm.minimumassayannotation.AssayLoadResultsWriter
 import bard.db.dictionary.Element
 
 
-Log.initializeLogger("test/exampleData/logsAndOutput/dlahr_test_2013-01-21.log")
-final Date startDate = new Date()
-Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
-
-final String baseModifiedBy = "dlahr_test_2013-01-21"
+final String baseModifiedBy = "dlahr_test_2013-01-23"
+final String baseOutputPath = "test/exampleData/logsAndOutput/"
+Log.initializeLogger("${baseOutputPath}${baseModifiedBy}.log")
 Log.logger.setLevel(Level.INFO)
 
-
-
+final Date startDate = new Date()
+Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
 final ElementAdder elementAdder = new ElementAdder(baseModifiedBy)
 elementAdder.add(["percent parasitemia":"percent content or parasites in the blood",
@@ -50,10 +48,18 @@ elementAdder.add(["percent parasitemia":"percent content or parasites in the blo
         "Cricetulus griseus":"Chinese Hamster",
         "Tecan Freedom Evo 150":null,
         "Streptococcus pyogenes":"spherical gram-positive bacteria",
-        "BMG Pherastar":null
+        "BMG Pherastar":null,
+        "Alpco insulin ELISA assay kit":null,
+
+        //jasonR starts here
+        "SpectraMax M5 Multi-Mode Microplate Reader":null,
+        "Perkin Elmer LabChip EZReader":null,
+        "HT1080":null,
+        "cytometer":null,
+        "SDS-PAGE":null
 ])
 
-final Integer START_ROW = 3 //1-based
+final Integer START_ROW = 2 //0-based
 
 List<File> inputFileList = new LinkedList<File>()
 
@@ -86,13 +92,14 @@ List<ContextGroup> spreadsheetAssayContextGroups = (new AssayContextGroupsBuilde
 List<ContextItemDto> resultType = [new ContextItemDto('2/Y', '$/Y', AttributeType.Fixed)]
 List<ContextGroup> spreadsheetResultTypeContextGroups = [new ContextGroup(name: 'resultType', contextItemDtoList: resultType)]
 
-final String contextLoadResultFilePath = "test/exampleData/logsAndOutput/minAssayAnnotParseResults.csv"
+final String contextLoadResultFilePath = "${baseOutputPath}minAssayAnnotParseResults.csv"
 final ContextLoadResultsWriter loadResultsWriter =
     new ContextLoadResultsWriter(contextLoadResultFilePath)
-AssayLoadResultsWriter assayLoadResultsWriter =
-    new AssayLoadResultsWriter("test/exampleData/logsAndOutput/fileAndAssayStatsForMinAssayAnnotParse.csv")
+final AssayLoadResultsWriter assayLoadResultsWriter =
+    new AssayLoadResultsWriter("${baseOutputPath}fileAndAssayStatsForMinAssayAnnotParse.csv")
+final FileHashMap fileHashMap = new FileHashMap("${baseOutputPath}hash_file.csv")
 
-final ParseAndBuildAttributeGroups parseAndBuildAttributeGroups = new ParseAndBuildAttributeGroups(loadResultsWriter)
+final ParseAndBuildAttributeGroups parseAndBuildAttributeGroups = new ParseAndBuildAttributeGroups(loadResultsWriter, 80)
 final Map attributeNameMapping = (new AttributeNameMappingBuilder()).build()
 final AttributesContentsCleaner attributesContentsCleaner = new AttributesContentsCleaner(attributeNameMapping)
 final AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator =
@@ -102,13 +109,11 @@ final AssayContextsValidatorCreatorAndPersistor assayContextsValidatorCreatorAnd
 final MeasureContextsValidatorCreatorAndPersistor measureContextsValidatorCreatorAndPersistor =
     new MeasureContextsValidatorCreatorAndPersistor(baseModifiedBy, loadResultsWriter, false)
 
-Map<String, Integer> filePathHashCodeMap = new HashMap<String, Integer>()
+
 try {
     for (File inputFile : inputFileList) {
-        Log.logger.info("${new Date()} processing file ${inputFile.absolutePath}")
-        final int fileHash = inputFile.absolutePath.hashCode()
-        filePathHashCodeMap.put(inputFile.absolutePath, fileHash)
-        Log.logger.info("file path hashcode $fileHash")
+        final int fileHash = fileHashMap.addFile(inputFile)
+        Log.logger.info("${new Date()} processing file ${inputFile.absolutePath} hashCode: $fileHash")
 
         println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
 
@@ -123,15 +128,14 @@ try {
 
             for (AssayDto assayDto : assayDtoList) {
                 if (assayDto.aid) {
-                    //want both of these to run so we determine all the dictionary terms that need to be either corrected
-                    //in the spreadsheet, aliased, or mapped
-                    final boolean areAssayContextsValid = attributeContentAgainstElementTableValidator.validate(assayDto.assayContextDTOList, attributeNameMapping)
-                    final boolean areMeasureContextsValid = attributeContentAgainstElementTableValidator.validate(assayDto.measureContextDTOList, attributeNameMapping)
+                    attributeContentAgainstElementTableValidator.removeInvalid(assayDto.assayContextDTOList, attributeNameMapping)
+                    attributeContentAgainstElementTableValidator.removeInvalid(assayDto.measureContextDTOList, attributeNameMapping)
 
-                    if (areAssayContextsValid && areMeasureContextsValid) {
+                    if (assayDto.assayContextDTOList.size() > 0 || assayDto.measureContextDTOList.size() >0) {
                         final String currentModifiedBy = "${baseModifiedBy}_FH$fileHash"
                         assayContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
                         if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
+
                             measureContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
                             if (measureContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.measureContextDTOList)) {
                                 assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success, null)
@@ -144,8 +148,7 @@ try {
                                     "failed to load assay contexts (and did not try measure contexts  - for details see $contextLoadResultFilePath")
                         }
                     } else {
-                        assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                                "aid had invalid attributes in assay contexts or measure contexts")
+                        assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.nothingToLoad, null)
                     }
                 } else {
                     assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
@@ -164,20 +167,43 @@ try {
 } finally {
     loadResultsWriter.close()
     assayLoadResultsWriter.close()
+    fileHashMap.close()
 
     final Date endDate = new Date()
     final double durationMin = (endDate.time - startDate.time) / 60000.0
     Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
     Log.close()
-
-    println("filepath hashcodes that were appended onto modified by statements")
-    for (File inputFile : inputFileList) {
-        final int filePathHash = filePathHashCodeMap.get(inputFile.absolutePath)
-        println("$filePathHash inputFile.absolutePath")
-    }
 }
 
 return
+
+class FileHashMap {
+    private final Map<File, Integer> fileHashCodeMap
+
+    private final BufferedWriter writer
+
+    FileHashMap(String outputFilename) {
+        fileHashCodeMap = new HashMap<File, Integer>()
+
+        writer = new BufferedWriter(new FileWriter(outputFilename))
+        writer.writeLine("hash_code,file_path")
+    }
+
+    int addFile(File file) {
+        final int hashCode = file.absolutePath.hashCode()
+
+        if (!fileHashCodeMap.containsKey(file)) {
+            fileHashCodeMap.put(file, hashCode)
+            writer.writeLine("$hashCode,${file.absolutePath}")
+        }
+
+        return hashCode
+    }
+
+    void close() {
+        writer.close()
+    }
+}
 
 
 class ElementAdder {

@@ -205,7 +205,13 @@ class AttributeNameMappingBuilder {
                 'percent non-arrested':'percent non-arrested cells',
                 'percent G2-M arrested':'percent G2-M arrested cells',
                 'fold dilution':'dilution',
-                'protein expression':'protein expression assay'
+                'protein expression':'protein expression assay',
+
+                //jasonr 1-22-2013 starts here
+                'Acumen EX3':'TTP LabTech Acumen',
+                'SDS-PAGE gel':'SDS-PAGE',
+                'sds page':'SDS-PAGE',
+                'BriteLite Plus (Perkin Elmer)':'PerkinElmer BriteLite'
         ]
 
         return attributeNameMapping
