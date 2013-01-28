@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assaycards"/>
+    <r:require modules="core,bootstrap,assaycards,select2"/>
     <script src="${resource(dir: 'js/cap', file: 'editMeasures.js')}" type="text/javascript"></script>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <meta name="layout" content="basic"/>
@@ -63,22 +63,20 @@
                         <p>In the fields below, search for terms by typing and suggestions will be presented.  To make a selection, choose from the popup list that appears. </p>
                         <input type="hidden" id="add-parent-id" value="" name="parentMeasureId"/>
                         <div class="control-group">
-                            <label class="control-label" for="resultTypeName">Result Type</label>
+                            <label class="control-label" for="resultTypeId">Result Type</label>
                             <div class="controls">
-                                <input type="text" id="resultTypeName" name="resultTypeName" placeholder="Result type name">
                                 <input type="hidden" id="resultTypeId" name="resultTypeId"/>
                                 <r:script>
-                                    enableAutoCompleteOntology("#resultTypeName", "RESULT_TYPE", "#resultTypeId");
+                                    enableAutoCompleteOntology("RESULT_TYPE", "#resultTypeId");
                                 </r:script>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="statisticName">Statistic (optional)</label>
+                            <label class="control-label" for="statisticId">Statistic (optional)</label>
                             <div class="controls">
-                                <input type="text" id="statisticName" name="statisticName" placeholder="Statistic name">
                                 <input type="hidden" id="statisticId" name="statisticId"/>
                                 <r:script>
-                                    enableAutoCompleteOntology("#statisticName", "STATS_MODIFIER", "#statisticId");
+                                    enableAutoCompleteOntology("STATS_MODIFIER", "#statisticId");
                                 </r:script>
                             </div>
                         </div>
@@ -89,6 +87,7 @@
                     <button class="btn btn-primary" id="add-measure-button">Save</button>
                 </div>
             </div>
+
             <r:script>
                 $("#add-measure-button").on("click", function(){$("#add-measure-form").submit()})
             </r:script>

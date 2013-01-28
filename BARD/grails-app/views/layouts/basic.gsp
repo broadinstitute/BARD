@@ -57,10 +57,11 @@
 
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span12"><br><br>
-
+        <div class="span12">
+            <div class="spinner-container">
             <div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"
                                                                                             default="Loading&hellip;"/></div>
+            </div>
             <g:layoutBody/>
         </div>
     </div>

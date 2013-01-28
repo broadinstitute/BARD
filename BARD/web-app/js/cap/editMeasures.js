@@ -1,22 +1,24 @@
-function enableAutoCompleteOntology (textFieldSelector, section, idFieldSelector) {
-  var autoOpts = {
-    minLength: 2,
-    source: function( request, response ) {
-      $.getJSON( 
-         "/BARD/ontologyJSon/getLabelsFromTree",
-            {
-              label: request.term,
-              tree: section
-            }, 
-            response
-          );
-      },
+function enableAutoCompleteOntology (section, idFieldSelector) {
+    $(idFieldSelector).select2({
+        minimumInputLength: 2,
+        width: "70%",
+        placeholder: "Start typing",
+        query: function(query) {
 
-    select: function( event, ui ) {
-      $( idFieldSelector ).val( ui.item.elementId );
-    }                    
-  }
-  
-  $( textFieldSelector ).autocomplete(autoOpts);
+            $.getJSON(
+                "/BARD/ontologyJSon/getLabelsFromTree",
+                {
+                    label: query.term,
+                    tree: section
+                },
+                function(data, textStatus, jqXHR) {
+                    var selectData = {results:[]}
+                    $.each(data, function(index, val) {
+                        selectData.results.push({id: val.elementId, text: val.label})
+                    })
+                    query.callback(selectData)
+                }
+            );
+        }
+    })
 }
-

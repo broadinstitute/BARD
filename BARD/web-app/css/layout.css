@@ -5,3 +5,7 @@
     text-align: center;
     margin: 1em;
 }
+
+.spinner-container {
+    height: 2em;
+}
