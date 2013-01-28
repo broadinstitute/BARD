@@ -25,7 +25,7 @@ grails.project.dependency.resolution = {
     checksums true // Whether to verify checksums on resolve
 
     repositories {
-        inherit false
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
         mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
