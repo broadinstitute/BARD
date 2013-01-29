@@ -126,7 +126,6 @@ class OntologyDataAccessService {
             query.setReadOnly(true)
             results = query.list()
         }
-        println "Results - Descriptor list size:" + results?.size()
         return results
     }
 	
