@@ -63,6 +63,7 @@ grails.project.dependency.resolution = {
         // build scope
         build ":codenarc:0.15"
         compile ":hibernate:$grailsVersion"
+        build ":improx:0.1" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"
 
         // compile scope
