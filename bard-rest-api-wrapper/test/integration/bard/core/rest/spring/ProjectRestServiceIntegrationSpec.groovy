@@ -213,6 +213,25 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         Collection<Long> projectIds1 = searchResults1.projects.collect { Project project -> project.id as Long }
         assert projectIds1 != projectIds2
     }
+    /**
+     *
+     */
+    void "test REST Project Service test filters with number ranges"() {
+        given:
+        String uriWithFilters = projectRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(num_expt:%5B5+TO+10%5D),&skip=0&top=10&expand=true"
+        URI uri = new URI(uriWithFilters)
+        when:
+        ProjectResult projectResult = (ProjectResult)this.projectRestService.getForObject(uri, ProjectResult)
+        then:
+        assert projectResult
+        final List<Project> projects = projectResult.projects
+        assert projects, "ProjectRestService SearchResults must not be null"
+        assert !projects.isEmpty(), "ProjectRestService SearchResults must not be empty"
+        assert projectResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
+        final List<Facet> facets = projectResult.getFacets();
+        assert facets != null, "List of Facets is not null"
+        assert !facets.isEmpty(), "List of Facets is not empty"
+    }
 
     /**
      *
