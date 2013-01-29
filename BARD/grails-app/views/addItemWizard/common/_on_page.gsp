@@ -32,12 +32,6 @@
            	outputToConsole('I am on wizard page ' + currentPage);
            	initializePageOne();
            	initializePageThree();
-           	//if(currentPage == 1){
-           		//initializePageOne();
-            //}
-            //else if(currentPage == 3){
-            	//initializePageThree();
-            //}
             if(currentPage == 5){
             	initializeFinalPage();
             }
@@ -52,67 +46,77 @@
         function initializePageOne(){
 			
         	outputToConsole('calling initializePageOne()');
-        	var autoOpts = {
-        			minLength: 2,
-        			//source: "/BARD/ontologyJSon/getDescriptors",
-        			source: function( request, response ) {            			
-            			var sectionPath = $("#sectionPath").val();
-            			outputToConsole('Auto-complete sectionPath var = ' + sectionPath);
-            			var cardAssayContextId = $("#cardAssayContextId").val();
-            			outputToConsole('Auto-complete cardAssayContextId var = ' + cardAssayContextId);
-            			$("#path").val(sectionPath);
-            			$("#assayContextIdValue").val(cardAssayContextId);
-            			outputToConsole('cardAssaySection var = ' + $("#path").val());
-            			outputToConsole('assayContextId var = ' + $("#assayContextIdValue").val());
-        				$.getJSON( 
-                				"/BARD/ontologyJSon/getDescriptors",
-                				{
-                            		term: request.term,
-                            		section: sectionPath
-                            	}, 
-                            	response 
-                        );
-            		},
 
-        			select: function( event, ui ) {
-                        $( "#currentValue" ).val( ui.item.value );
-                        $( "#elementId" ).val( ui.item.elementId );  
-                        $( "#attributeElementId" ).val(ui.item.elementId);                 
-                    }
-                			
-        	}
-        	$( "#attributeTextField" ).autocomplete(autoOpts);
+            $("#attributeTextField").select2({
+                minimumInputLength: 2,
+                width: "70%",
+                placeholder: "Search for attribute name",
+                query: function(query) {
+                    var sectionPath = $("#sectionPath").val();
+                    console.log("querying for "+query.term+" "+sectionPath)
+                    $.getJSON(
+                            "/BARD/ontologyJSon/getDescriptors",
+                            {
+                                term: query.term,
+                                section: sectionPath
+                            },
+                            function(data, textStatus, jqXHR) {
+                                console.log("got response "+data)
+                                var selectData = {results:[]}
+                                $.each(data, function(index, val) {
+                                    selectData.results.push({id: val.elementId, text: val.label})
+                                })
+                                console.log("calling callback")
+                                query.callback(selectData)
+                            }
+                    );
+                }
+            }).on("change", function(e) {
+               $("#attributeElementId").val(e.val)
+            })
         }
 
-        function initializePageThree(){
-			
-        	outputToConsole('calling initializePageThree()');
-        	var autoOpts = {
-        			minLength: 1,
-        			source: function( request, response ) {
-            			var cardAssaySection = $("#sectionPath").val();
-            			var elementId = $("#attributeElementId").val();
-            			outputToConsole('cardAssaySection var = ' + cardAssaySection);
-            			outputToConsole('elementId var = ' + elementId);
-        				$.getJSON( 
-                				"/BARD/ontologyJSon/getValueDescriptors",
-                				{
-                            		term: request.term,
-                            		section: cardAssaySection,
-                            		attributeId: elementId
-                            	}, 
-                            	response 
-                        );
-            		},
 
-        			select: function( event, ui ) {
-                        $( "#currentChoice" ).val( ui.item.value );
-                        $( "#unit" ).val( ui.item.unit );
-                        $( "#valueId" ).val( ui.item.elementId );
-                    }
-                			
-        	}
-        	$( "#valueTextField" ).autocomplete(autoOpts);
+
+        function initializePageThree(){
+            outputToConsole('calling initializePageThree()');
+
+            $("#valueId").select2({
+                minimumInputLength: 2,
+                width: "70%",
+                placeholder: "Search for attribute name",
+                query: function(query) {
+                    var cardAssaySection = $("#sectionPath").val();
+                    var elementId = $("#attributeElementId").val();
+                    outputToConsole('cardAssaySection var = ' + cardAssaySection);
+                    outputToConsole('elementId var = ' + elementId);
+                    $.getJSON(
+                            "/BARD/ontologyJSon/getValueDescriptors",
+                            {
+                                term: query.term,
+                                section: cardAssaySection,
+                                attributeId: elementId
+                            },
+                            function(data, textStatus, jqXHR) {
+                                console.log("got response "+data)
+                                var selectData = {results:[]}
+                                $.each(data, function(index, val) {
+                                    selectData.results.push({id: val.elementId, text: val.label})
+                                })
+                                console.log("calling callback")
+                                query.callback(selectData)
+                            }
+                    );
+                }
+            })
+
+/*
+                select: function( event, ui ) {
+                    $( "#currentChoice" ).val( ui.item.value );
+                    $( "#unit" ).val( ui.item.unit );
+                    $( "#valueId" ).val( ui.item.elementId );
+                }
+*/
         }
 
         function initializeFinalPage(){

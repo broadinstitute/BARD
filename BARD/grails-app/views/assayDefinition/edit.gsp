@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assaycards"/>
+    <r:require modules="core,bootstrap,assaycards,select2"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">

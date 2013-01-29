@@ -8,9 +8,9 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>${attribute}</td>	
+			<td>${attribute}</td>
 			<td>${valueType}</td>						
-			<td>${value}</td>								
+			<td>${value}</td>
 		</tr>
 	</tbody>
 </table>

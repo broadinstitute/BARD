@@ -116,11 +116,6 @@
 	padding: 10px 0px 10px 0px;
 }
 
-.ajaxFlow .content a, .ajaxFlow .content a:visited {
-	color: red;
-	text-decoration: none;
-}
-
 /** START :: buttons inside the ajaxflow **/
 .ajaxFlow .prevnext {
     cursor: pointer;

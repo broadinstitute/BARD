@@ -4,12 +4,11 @@
  */
 %>
 <af:page>
-<g:set var="currentValue" value="${ attribute?.currentValue }" />
-<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
-<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.currentChoice + " " + fixedValue?.valueUnits }" />
-<g:render template="common/itemWizardSelectionsTable" model="['attribute': currentValue, 'valueType': valueTypeOption, 'value': valueText]"/>
+    <g:set var="valueText" value="${valueQualifier + " " + valueName + " " + valueUnits}"/>
+    <g:render template="common/itemWizardSelectionsTable"
+              model="['attribute': attributeName, 'valueType': valueTypeOption, 'value': valueText]"/>
 
-<h1>Please review the information for this item above.</h1>
+    <h1>Please review the information for this item above.</h1>
 <p>
 	Click <strong>"Save"</strong> below to create the new item (cannot use "Previous" after this)
 </p>
