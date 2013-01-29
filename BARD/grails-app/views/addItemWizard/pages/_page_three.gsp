@@ -26,7 +26,7 @@
 
 <label class="control-label" >Units:</label>
 <div class="controls">
-	<g:select name="valueUnits" from="${applicationContext.ontologyDataAccessService.getBaseUnits(1451, 1078)}" noSelection="['': '']"  optionValue="value" optionKey="key"/>
+	<g:select name="valueUnits" from="${}" noSelection="['': '']"  optionValue="value" optionKey="key"/>
 </div>
 <%--<input class="input-xlarge" type="text" id="valueUnits" name='valueUnits'  value="${ fixedValue?.valueUnits }"> --%>
 

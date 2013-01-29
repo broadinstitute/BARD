@@ -64,7 +64,7 @@ class AssayDefinitionController {
 
     def findByName() {
         if (params.assayName) {
-            def assays = Assay.findAllByAssayNameIlike("%${params.assayName}%")
+            def assays = Assay.findAllByAssayShortNameIlike("%${params.assayName}%")
             if (assays?.size() != 0) {
                 if (assays.size() > 1)
                     render(view: "findByName", params: params, model: [assays: assays])
