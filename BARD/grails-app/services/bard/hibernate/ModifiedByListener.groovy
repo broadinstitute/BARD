@@ -1,13 +1,8 @@
 package bard.hibernate
 
 import grails.plugins.springsecurity.SpringSecurityService
-import org.hibernate.event.PreInsertEvent
-import org.hibernate.event.PreInsertEventListener
-import org.hibernate.event.PreUpdateEvent
-import org.hibernate.event.PreUpdateEventListener
-
-import org.hibernate.event.AbstractPreDatabaseOperationEvent
 import groovy.transform.InheritConstructors
+import org.hibernate.event.*
 
 /**
  * Listener to set modifiedBy for all entities modified in CAP.
@@ -29,14 +24,15 @@ class ModifiedByListener implements PreInsertEventListener, PreUpdateEventListen
     }
 
     private void updateModifiedBy(AbstractPreDatabaseOperationEvent abstractEvent) {
-        String username = springSecurityService.getPrincipal()?.username
-        if (username) {
-            abstractEvent.entity.modifiedBy = username
-        }
-        else{
-            throw new AuthenticatedUserRequired('An authenticated user was expected this point');
+        if (abstractEvent.hasProperty("modifiedBy")) {
+            String username = springSecurityService.getPrincipal()?.username
+            if (username) {
+                abstractEvent.entity.modifiedBy = username
+            } else {
+                throw new AuthenticatedUserRequired('An authenticated user was expected this point');
+            }
         }
     }
 }
 @InheritConstructors
-class AuthenticatedUserRequired extends RuntimeException{}
+class AuthenticatedUserRequired extends RuntimeException {}
