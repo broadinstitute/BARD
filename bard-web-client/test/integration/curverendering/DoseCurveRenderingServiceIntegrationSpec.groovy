@@ -7,8 +7,6 @@ import bardqueryapi.QueryService
 import grails.plugin.spock.IntegrationSpec
 import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart
-import org.junit.After
-import org.junit.Before
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
 
@@ -20,24 +18,18 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
     ExperimentRestService experimentRestService
     DoseCurveRenderingService doseCurveRenderingService
 
-
-    @Before
-    void setup() {
-
-    }
-
-    @After
-    void tearDown() {
-
-    }
-
     void "test doseResponseCurves"() {
         given:
         List<Curve> curves =
             [
                     new Curve(
-                            activities: [new Double(1), new Double(2)],
-                            concentrations: [new Double(1), new Double(2)],
+                            activities: [
+                                    new Double(1), new Double(2)
+                            ],
+                            concentrations:
+                                    [
+                                            new Double(1), new Double(2)
+                                    ],
                             s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0
                     )
             ]
@@ -112,8 +104,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        label                                    | cids                                                      | experimentId
-        "An existing experiment with activities" | [new Long(2836861), new Long(5882673), new Long(5604367)] | new Long(346)
+        label                                    | cids                        | experimentId
+        "An existing experiment with activities" | [72574L, 5405444L, 650462L] | 10282
 
     }
 
@@ -156,8 +148,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        label                                    | cids                                                      | experimentId
-        "An existing experiment with activities" | [new Long(2836861), new Long(5882673), new Long(5604367)] | new Long(346)
+        label                                    | cids                        | experimentId
+        "An existing experiment with activities" | [72574L, 5405444L, 650462L] | 10282
 
     }
 
@@ -209,7 +201,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                    | experimentId
-        "An existing experiment with activities" | new Long(32)
+        "An existing experiment with activities" | new Long(14117)
 
     }
 
@@ -252,8 +244,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         //we need to assert the curve parameters
 
         where:
-        label                                    | cids                                                      | experimentId
-        "An existing experiment with activities" | [new Long(2836861), new Long(5882673), new Long(5604367)] | new Long(346)
+        label                                    | cids                        | experimentId
+        "An existing experiment with activities" | [72574L, 5405444L, 650462L] | 10282
 
     }
 

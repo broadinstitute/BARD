@@ -13,7 +13,7 @@ import spock.lang.Shared
  * To change this template use File | Settings | File Templates.
  */
 class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
-    @Shared String assayId = "1617"
+    @Shared String assayId = "9741"
     @Shared String compoundId = "5389617"
 
     void setup() { // pre-condition of each test: user is logged in

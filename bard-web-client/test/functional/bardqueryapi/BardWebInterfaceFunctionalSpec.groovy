@@ -100,10 +100,10 @@ class BardWebInterfaceFunctionalSpec extends Specification {
         assert !serverResponse.data.any { it.toString().contains("errorCode") }
 
         where:
-        label                   | searchString              | searchAction
-        "Find Projects By Id"   | "1772,%20805,%201074"     | "searchProjectsByIDs"
-        "Find Assays By Id"     | "600,644,666"             | "searchAssaysByIDs"
-        "Find Compounds By CID" | "3235555,3235556,3235557" | "searchCompoundsByIDs"
+        label                   | searchString               | searchAction
+        "Find Projects By Id"   | "1581,%201563,%2017481772" | "searchProjectsByIDs"
+        "Find Assays By Id"     | "5155,5158,5157"         | "searchAssaysByIDs"
+        "Find Compounds By CID" | "3235555,3235556,3235557"  | "searchCompoundsByIDs"
     }
 
     def "Test Search with Filters : #label"() {

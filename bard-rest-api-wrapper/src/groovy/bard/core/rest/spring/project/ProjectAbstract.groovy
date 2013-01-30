@@ -12,6 +12,9 @@ public class ProjectAbstract extends JsonUtil {
 
 
     private long projectId;
+    @JsonProperty("capProjectId")
+    private long capProjectId
+
     @JsonProperty("category")
     private long category;
     @JsonProperty("type")
@@ -74,6 +77,17 @@ public class ProjectAbstract extends JsonUtil {
     @JsonProperty("projectId")
     public void setProjectId(long projectId) {
         this.projectId = projectId;
+    }
+
+    @JsonProperty("capProjectId")
+    public long getCapProjectId() {
+        return this.capProjectId
+    }
+
+
+    @JsonProperty("capProjectId")
+    public void setCapProjectId(long capProjectId) {
+        this.capProjectId = capProjectId
     }
 
     @JsonProperty("proj_id")

@@ -13,21 +13,15 @@ import molspreadsheet.SpreadSheetActivity
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import spock.lang.Shared
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     QueryService queryService
 
-    @Before
-    void setup() {
-
-    }
-
-    @After
-    void tearDown() {
-
-    }
+    @Shared
+    List<Long> PIDS = [1581, 1563, 1748]
 
     void "test findExperimentDataById #label"() {
 
@@ -49,29 +43,11 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
             assert activity.resultData
         }
         where:
-        label                                              | experimentId   | top | skip
-        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
-        "An existing experiment with activities - skip 10" | new Long(1326) | 10  | 10
+        label                                              | experimentId    | top | skip
+        "An existing experiment with activities - skip 0"  | new Long(13902) | 10  | 0
+        "An existing experiment with activities - skip 10" | new Long(13902) | 10  | 10
     }
 
-    void "test convertSpreadSheetActivityToCompoundInformation"() {
-
-        when: "We call the findExperimentDataById method with the experimentId #experimentId"
-        final Map experimentDataMap = queryService.findExperimentDataById(experimentId, top, skip)
-
-        then: "We get back the expected map"
-        assert experimentDataMap
-        final Long totalActivities = experimentDataMap.total
-        assert totalActivities
-        final List<Activity> activities = experimentDataMap.activities
-        assert activities
-
-        where:
-        label                                              | experimentId   | top | skip
-        "An existing experiment with activities - skip 0"  | new Long(1326) | 10  | 0
-        "An existing experiment with activities - skip 10" | new Long(1536) | 10  | 10
-
-    }
 
     void "test findPromiscuityScoreForCID #label"() {
         when:
@@ -120,7 +96,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Show Project"() {
         given:
-        final Integer projectId = 129
+        final Integer projectId = 1581
         when: "Client enters a project ID and the showProject method is called"
         Map projectAdapterMap = queryService.showProject(projectId)
         then: "The ProjectSearchResult is found"
@@ -128,6 +104,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         ProjectAdapter projectAdapter = projectAdapterMap.projectAdapter
         assert projectAdapter
         assert projectAdapter.project
+        assert projectAdapter.getCapProjectId()
         assert projectId == projectAdapter.id
         assert projectAdapter.name
         assert projectAdapter.description
@@ -137,7 +114,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     void "test Show Assay"() {
         given:
 
-        Integer assayId = 644
+        Integer assayId = 5644
         when: "Client enters a assay ID and the showAssay method is called"
         Map assayMap = queryService.showAssay(assayId)
 
@@ -150,7 +127,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayAdapter.comments
         assert assayAdapter.type == AssayType.Other
         assert assayAdapter.role == AssayRole.Primary
-        assert assayAdapter.category == AssayCategory.MLPCN
+        assert assayAdapter.category == AssayCategory.Unknown
         assert assayAdapter.description
     }
     /**
@@ -291,7 +268,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test find Assays By APIDs #label"() {
+    void "test find Assays By ADIDs #label"() {
         when: ""
         final Map assayAdapterMap = queryService.findAssaysByADIDs(apids)
 
@@ -303,8 +280,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert assayAdapters.size() == apids.size()
         where:
         label                         | apids
-        "Single APID"                 | [644]
-        "Search with a list of APIDs" | [644, 600, 666]
+        "Single APID"                 | [5155]
+        "Search with a list of APIDs" | [5155, 5158, 5157]
     }
 
     void "test find Projects By Text Search #label"() {
@@ -315,14 +292,11 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert !projectAdapters.isEmpty()
         assert projectAdapterMap.facets
-        assert projectAdapterMap.nHits >= numberOfProjects
+        assert projectAdapterMap.nHits > 0
         where:
-        label                             | searchString         | skip | top | numberOfProjects | filters
-        "dna repair"                      | "\"dna repair\""     | 0    | 10  | 10               | []
-        "dna repair skip and top"         | "\"dna repair\""     | 10   | 10  | 10               | []
-        "biological process"              | "biological process" | 0    | 10  | 10               | []
-        "biological process with filters" | "biological process" | 0    | 10  | 4                | [new SearchFilter("num_expt", "6")]
-
+        label                     | searchString         | skip | top | filters
+        "dna repair"              | "\"dna repair\""     | 0    | 10  | []
+        "biological process"      | "biological process" | 0    | 10  | []
     }
 
     void "test find Projects By PIDs #label"() {
@@ -337,7 +311,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapters.size() == pids.size()
         where:
         label                               | pids
-        "Single PID"                        | [129]
-        "Search with a list of project ids" | [129, 102, 100]
+        "Single PID"                        | [PIDS.get(0)]
+        "Search with a list of project ids" | PIDS
     }
 }

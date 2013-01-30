@@ -12,6 +12,7 @@ import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
+import spock.lang.Shared
 
 /**
  * Tests for ProjectRestService
@@ -20,6 +21,10 @@ import spock.lang.Unroll
 @Unroll
 class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     ProjectRestService projectRestService
+    @Shared
+    List<Long> PIDS = [1581, 1563, 1748]
+    //@Shared
+    //Long PROJECT_WITH_PROBE=1963
 
     void testProjectSuggestions() {
         given:
@@ -30,9 +35,10 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assertSuggestions(ps);
     }
-    void testProjectsWithPublications(){
+
+    void testProjectsWithPublications() {
         given:
-        Long pid = 31
+        Long pid = PIDS.get(0)
 
         when:
         final ProjectExpanded projectExpanded = projectRestService.getProjectById(pid)
@@ -51,14 +57,14 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     void testFiltersWithProjectService() {
         given:
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["num_expt", "6"] as String[])
+        filters.add(["target_name", "Bloom syndrome protein"] as String[])
 
         //construct Search Params
         final SearchParams searchParams = new SearchParams("dna repair", filters);
         when:
         ProjectResult projectSearchResult = this.projectRestService.findProjectsByFreeTextSearch(searchParams);
         then:
-        assert projectSearchResult, "ProjectService SearchResults must not be null"
+        assert projectSearchResult, "ProjectSearchResults must not be null"
 
         List<Project> projects = projectSearchResult.projects
         assert !projects.isEmpty(), "ProjectService SearchResults must not be empty"
@@ -70,28 +76,28 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert !facets.isEmpty(), "List of Facets is not empty"
 
     }
-
-    void "test project with probe #label"() {
-        when: "The get method is called with the given PID: #pid"
-        final ProjectExpanded project = projectRestService.getProjectById(pid)
-        then: "A Project is returned with the expected information"
-        assert project
-        assert pid == project.projectId
-        assert project.getProbes();
-        final Compound compound = project.getProbes().get(0)
-        assert compound.cid == 9795907
-        assert compound.probeId == "ML103"
-        assert compound.url == "https://mli.nih.gov/mli/?dl_id=976"
-        assert project.id != null
-        assert project.name
-        assert project.description
-        assert project.experiments
-        assert project.assays
-        assert project.experimentCount
-        where:
-        label                                               | pid
-        "Find an existing ProjectSearchResult with a Probe" | new Integer(17)
-    }
+     //TODO: Commenting out till probes are associated to Projects in warehouse
+//    void "test project with probe #label"() {
+//        when: "The get method is called with the given PID: #pid"
+//        final ProjectExpanded project = projectRestService.getProjectById(pid)
+//        then: "A Project is returned with the expected information"
+//        assert project
+//        assert pid == project.projectId
+//        assert project.getProbes();
+//        final Compound compound = project.getProbes().get(0)
+//        assert compound.cid == 9795907
+//        assert compound.probeId == "ML103"
+//        assert compound.url == "https://mli.nih.gov/mli/?dl_id=976"
+//        assert project.id != null
+//        assert project.name
+//        assert project.description
+//        assert project.experiments
+//        assert project.assays
+//        assert project.experimentCount
+//        where:
+//        label                                               | pid
+//        "Find an existing ProjectSearchResult with a Probe" | PROJECT_WITH_PROBE
+//    }
 
 
     void "use auto-suggest 'zinc ion binding as GO molecular function term' has problems bug: https://www.pivotaltracker.com/story/show/36709121"() {
@@ -126,7 +132,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert project.experimentCount
         where:
         label                                  | pid
-        "Find an existing ProjectSearchResult" | new Integer(129)
+        "Find an existing ProjectSearchResult" | new Integer(1581)
     }
     /**
      *
@@ -218,14 +224,14 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test REST Project Service test filters with number ranges"() {
         given:
-        String uriWithFilters = projectRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(num_expt:%5B5+TO+10%5D),&skip=0&top=10&expand=true"
+        String uriWithFilters = projectRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(num_expt:%5B10+TO+*%5D),&skip=0&top=10&expand=true"
         URI uri = new URI(uriWithFilters)
         when:
-        ProjectResult projectResult = (ProjectResult)this.projectRestService.getForObject(uri, ProjectResult)
+        ProjectResult projectResult = (ProjectResult) this.projectRestService.getForObject(uri, ProjectResult)
         then:
         assert projectResult
         final List<Project> projects = projectResult.projects
-        assert projects, "ProjectRestService SearchResults must not be null"
+        assert projects, "Projects must not be null"
         assert !projects.isEmpty(), "ProjectRestService SearchResults must not be empty"
         assert projectResult.numberOfHits > 0, "CompoundService SearchResults must have at least one element"
         final List<Facet> facets = projectResult.getFacets();
@@ -276,8 +282,8 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert projectSearchResult.numberOfHits == pids.size()
         where:
         label                               | pids
-        "Search with a list of project ids" | [129, 102, 100]
-        "Search with a single project id"   | [129]
+        "Search with a list of project ids" | PIDS
+        "Search with a single project id"   | [PIDS.get(0)]
     }
 
     void "test count"() {

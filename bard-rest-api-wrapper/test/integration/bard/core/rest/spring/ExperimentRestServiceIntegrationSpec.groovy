@@ -1,12 +1,13 @@
 package bard.core.rest.spring
 
+import bard.core.SearchParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
 import grails.plugin.spock.IntegrationSpec
+import spock.lang.Shared
 import spock.lang.Timeout
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
-import bard.core.SearchParams
 
 /**
  * Tests for ProjectRestService
@@ -16,9 +17,21 @@ import bard.core.SearchParams
 class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     ExperimentRestService experimentRestService
     CompoundRestService compoundRestService
+    @Shared
+    List<Long> TEST_CIDS = [5926293, 6197]
+    @Shared
+    List<Long> TEST_SIDS = [67101, 67121]
+    @Shared
+    List<Long> TEST_ADIDS = [5155, 5156]
+    @Shared
+    List<Long> TEST_EIDS = [13902, 14980]
+    @Shared
+    List<Long> TEST_EID_LONG_LIST = [460, 461, 197, 198, 4171, 3278, 3274, 3277, 2362, 2637]
+
+
     void "test activitiesByCIDs"() {
         given:
-        final List<Long> cids = [5926293, 6197]
+        final List<Long> cids = TEST_CIDS
         final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
         when:
         final ExperimentData activitiesByCIDs = experimentRestService.activitiesByCIDs(cids, searchParams)
@@ -31,7 +44,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test activitiesBySIDs"() {
         given:
-        final List<Long> sids = [67101, 67121]
+        final List<Long> sids = TEST_SIDS
         final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
         when:
         final ExperimentData activitiesBySIDs = experimentRestService.activitiesBySIDs(sids, searchParams)
@@ -44,7 +57,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test activitiesByADIDs"() {
         given:
-        final List<Long> adids = [10, 11]
+        final List<Long> adids = TEST_ADIDS
         final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
         when:
         final ExperimentData activitiesByADIDs = experimentRestService.activitiesByADIDs(adids, searchParams)
@@ -57,7 +70,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test activitiesByEIDs"() {
         given:
-        final List<Long> eids = [10, 11]
+        final List<Long> eids = TEST_EIDS
         final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
         when:
         final ExperimentData activitiesByEIDs = experimentRestService.activitiesByEIDs(eids, searchParams)
@@ -84,12 +97,12 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert projectCollection.size() == projectCount
         where:
         label                | experimentid
-        "Find an experiment" | new Long(346)
+        "Find an experiment" | TEST_EIDS.get(0)
     }
 
     void "testExperiment"() {
         given:
-        final List<Long> experimentIds = [460, 461, 197, 198, 4171, 3278, 3274, 3277, 2362, 2637]
+        final List<Long> experimentIds = TEST_EID_LONG_LIST
         when:
         final ExperimentSearchResult experimentResult = experimentRestService.searchExperimentsByIds(experimentIds)
         then:
@@ -98,7 +111,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert experimentResult.experiments.size() == experimentIds.size()
     }
 
-    void "test step through entire Experiment iterator #experimentId"() {
+    void "test step through entire Experiment #experimentId"() {
 
         when: "The get method is called with the given experiment ID: #experimentId"
         final ExperimentShow experimentShow = this.experimentRestService.getExperimentById(experimentId)
@@ -108,8 +121,8 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assertExperimentSearchResult(experimentShow)
         where:
         label                | experimentId
-        "Find an experiment" | new Long(346)  // short expt (3000 values)
-        "Find an experiment" | new Long(1326)  // longer expt (193717 values) -- runs for 8 minutes!
+        "Find an experiment" | TEST_EIDS.get(0) // short expt (3000 values)
+        "Find an experiment" | TEST_EIDS.get(1)  // longer expt (193717 values) -- runs for 8 minutes!
     }
 
     void "test retrieving the experimental data for known compounds in an experiment #label"() {
@@ -127,13 +140,13 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         }
 
         where:
-        label                            | experimentid   | cids
-        "Search with a list of CIDs"     | new Long(883)  | [3233285, 3234360, 3235360]
-        "Search with a single of CID"    | new Long(2273) | [16001802]
-        "Search with another set of CID" | new Long(2273) | [3237462, 3240101, 16001802]
+        label                            | experimentid    | cids
+        "Search with a list of CIDs"     | new Long(11795) | [16452494, 16014490]
+        "Search with a single of CID"    | new Long(11795) | [16452494]
+        "Search with another set of CID" | new Long(11795) | [16453200, 16446093]
     }
 
-    @Timeout(10)
+
     void "tests getExperimentActivities #label"() {
         when: "We call the restExperimentService.activities method with the experiment"
         final ExperimentData experimentData = experimentRestService.activities(experimentId);
@@ -144,7 +157,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert activities
         where:
         label                                        | experimentId
-        "For an existing experiment with activities" | new Long(346)
+        "For an existing experiment with activities" | TEST_EIDS.get(0)
     }
 
     void "tests new json #label"() {
@@ -165,15 +178,16 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert concentrationResponseSeries
         assert concentrationResponseSeries.getDictionaryDescription()
         assert concentrationResponseSeries.getDictionaryLabel()
-        final Map<String, ArrayList<Double>> points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final Map<String, List<Double>> points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
         assert points
         where:
         label                                        | experimentId
-        "For an existing experiment with activities" | new Long(346)
+        "For an existing experiment with activities" | TEST_EIDS.get(0)
     }
+
     void "testExperimentActivity"() {
         given:
-        final Long experimentId = 197
+        final Long experimentId = TEST_EIDS.get(0)
         when:
         final ExperimentData experimentData = experimentRestService.activities(experimentId)
         then:
@@ -183,9 +197,9 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     public void "testExperimentActivityWithCompounds"() {
         given: "That an etag is created from a list of compound IDs"
-        final String etag = compoundRestService.newETag("foo cids", [3237462L, 3240101L, 16001802L]);
+        final String etag = compoundRestService.newETag("foo cids", [644794L, 645320L, 646386L]);
         and: "That an experiment exists"
-        final Long experimentId = 2273
+        final Long experimentId = 14743
         when: "Experiment with the compound etags"
         final ExperimentData experimentData = experimentRestService.activities(experimentId, etag)
         then:
@@ -199,7 +213,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert activities.size() == 3
     }
     /**
-     * Step through the experiment with the iterator
+     * Step through the experiment
      * @param experiment
      */
     void assertExperimentSearchResult(final ExperimentShow experimentShow) {

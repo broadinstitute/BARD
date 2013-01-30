@@ -89,34 +89,14 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     }
 
     public List<BardAnnotation> getAnnotations() {
-        final List<String> keggDiseaseCat = project.getKegg_disease_cat()
-        final List<String> keggDiseaseNames = project.getKegg_disease_names()
 
-        //add kegg annotations
-        //TODO: Note that the Kegg annotations would become part of the main annotations in v13 of the API
-        if (keggDiseaseCat || keggDiseaseNames) {
-            BardAnnotation bardAnnotation
-            if (!this.annotations) {
-                bardAnnotation = new BardAnnotation()
-                this.annotations.add(bardAnnotation)
-            }
-            bardAnnotation = annotations.get(0)
-
-            for (String keggName : project.kegg_disease_names) {
-                Comp comp = new Comp(key: "Disease", display: "KEGG Disease Name", value: keggName)
-                bardAnnotation.otherAnnotations.add(comp)
-            }
-
-            for (String keggCat : project.kegg_disease_cat) {
-                Comp comp = new Comp(key: "Disease", display: "KEGG Disease Category", value: keggCat)
-                bardAnnotation.otherAnnotations.add(comp)
-            }
-
-        }
         return this.annotations
     }
 
     public int getNumberOfAnnotations() {
         return this.annotations.size()
+    }
+    public Long getCapProjectId(){
+        return project.getCapProjectId()
     }
 }

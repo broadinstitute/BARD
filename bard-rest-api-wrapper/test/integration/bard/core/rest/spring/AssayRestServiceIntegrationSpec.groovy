@@ -3,14 +3,15 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
-import bard.core.rest.spring.util.Counts
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
+import spock.lang.Shared
 import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
+import spock.lang.IgnoreRest
 
 /**
  * Tests for RESTAssayService in JDO
@@ -19,7 +20,8 @@ import static org.junit.Assert.assertTrue
 @Unroll
 class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     AssayRestService assayRestService
-
+    @Shared
+    List<Long> ADIDS_FOR_TESTS = [5155, 5158, 5157]
     void "getAssayAnnotationFromSearch"() {
         given:
         final SearchParams searchParams = new SearchParams("dna repair")
@@ -45,7 +47,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "getAssayAnnotationFromId"() {
         given:
-        final ExpandedAssay assay = assayRestService.getAssayById(2868);
+        final ExpandedAssay assay = assayRestService.getAssayById(5644);
         when:
         final BardAnnotation annotation = assayRestService.findAnnotations(assay.id)
         then:
@@ -58,8 +60,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "getAssayAnnotationFromIds"() {
         given:
-        List<Long> adids = [600L, 2868L]
-        final ExpandedAssayResult assayResult = assayRestService.searchAssaysByIds(adids)
+        final ExpandedAssayResult assayResult = assayRestService.searchAssaysByIds(ADIDS_FOR_TESTS)
         final List<ExpandedAssay> assays = assayResult.assays
         final ExpandedAssay assay = assays.get(0)
         when:
@@ -121,34 +122,8 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         then:
 
         List<Facet> facets = assayServiceSearchResultsWithNoFilters.getFacets();
-        int countHomogenous = 0;
-        int countFluorPol = 0;
-        int countFluorIntensity = 0;
-        int countbioluminescence = 0;
-        for (Facet facet : facets) {
-            if (facet.getFacetName().equals("detection_method_type")) {
-                final Counts counts = facet.counts
-                final Map<String, Object> properties = counts.getAdditionalProperties()
-                Object child = properties.get("homogeneous time-resolved fluorescence");
-                countHomogenous = new Integer(child.toString());
-
-                child = properties.get("fluorescence polarization");
-                countFluorPol = new Integer(child.toString());
-
-                child = properties.get("fluorescence intensity");
-                countFluorIntensity = new Integer(child.toString());
-
-                child = properties.get("bioluminescence");
-                countbioluminescence = new Integer(child.toString());
-            }
-        }
-        int sumOfFiltersReturnedIntiallyBySystem = countbioluminescence + countFluorIntensity + countFluorPol + countHomogenous;
-
-        final long countWithFilters = assayServiceSearchResultsWithFilters.numberOfHits
-
-        assertTrue("The total number of hits after applying the filters," + countWithFilters + "  should not exceed the sum of " +
-                "the filters returned by the system, " + sumOfFiltersReturnedIntiallyBySystem +
-                " prior to applying the filters", countWithFilters <= sumOfFiltersReturnedIntiallyBySystem);
+        assert facets.size()
+        assert assayServiceSearchResultsWithNoFilters.numberOfHits > assayServiceSearchResultsWithFilters.numberOfHits
     }
 
 
@@ -303,7 +278,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assertAssay(assay)
         where:
         label      | adid
-        "Assay ID" | 644
+        "Assay ID" | ADIDS_FOR_TESTS.get(0)
     }
 
     void "test  getETags(long top, long skip)"() {
@@ -327,7 +302,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assertAssays(assayResult.assays)
         where:
         label                             | adids
-        "Search with a list of assay ids" | [3894, 4174, 4202]
+        "Search with a list of assay ids" | ADIDS_FOR_TESTS
     }
 
     public void "testServices Free Text Search"() {
@@ -373,8 +348,8 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assert assayResult.numberOfHits == adids.size()
         where:
         label                             | adids
-        "Search with a list of assay ids" | [3894, 4174, 4202]
-        "Search with a single assay id"   | [3894]
+        "Search with a list of assay ids" | ADIDS_FOR_TESTS
+        "Search with a single assay id"   | [ADIDS_FOR_TESTS.get(0)]
     }
 /**
  *
@@ -449,20 +424,6 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         "Search" | "zinc receptor" | 0    | 10  | 10
     }
 
-    /**
-     *
-     */
-//    void "test Fail, Assay #adid does not exist "() {
-//
-//        when: "The get method is called with the given ADID: #adid"
-//        final Assay assay = this.assayRestService.getAssayById(adid)
-//        then: "A Null Assay is returned"
-//        assert !assay
-//        where:
-//        label                       | adid
-//        "Find a non-existing Assay" | new Integer(-644)
-//    }
-
 /**
  *
  */
@@ -477,18 +438,5 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         assertFacetIdsAreUnique(searchResult.facets)
     }
 
-//    void "test get assay annotations #label"() {
-//        when: "A list of assays"
-//        final Collection<Assay> assays = this.restAssayService.get(adids)
-//        AssayAdapter assayAdapter = new AssayAdapter(assays[0])
-//
-//        then:
-//        assert !assays.isEmpty()
-////        assert !assayAdapter.annotations.isEmpty()
-//
-//        where:
-//        label         | adids
-//        "Single ADID" | [2868]
-//    }
 
 }

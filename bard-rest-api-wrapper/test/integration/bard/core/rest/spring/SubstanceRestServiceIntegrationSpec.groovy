@@ -10,22 +10,29 @@ import bard.core.rest.spring.substances.SubstanceResult
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.rest.spring.util.SubstanceSearchType
+import spock.lang.Shared
 
 @Unroll
 class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
     SubstanceRestService substanceRestService
-
+    @Shared
+    List<Long> SIDS_FOR_TESTING = [136349013, 136349014, 136349015, 842899]
+    @Shared
+    List<Long> EIDS_FOR_TESTING = [11795, 10790]
+    @Shared
+    Long CID_FOR_TESTING = 2722
 
     void "getSubstanceById sid - 6820697"() {
         given:
         Long sid = 6820697
+        Long expectedCID = 600
         when:
         final Substance substance = substanceRestService.getSubstanceById(sid)
         then:
         assert substance
-        assert substance.getId() == 6820697
+        assert substance.getId() == sid
         assert substance.getSid() == substance.getId()
-        assert substance.getCid() == 600
+        assert substance.getCid() == expectedCID
         assert substance.getDepRegId() == "6914582"
         assert substance.getSourceName() == "ChemDB"
         assert substance.getUrl() == "http://cdb.ics.uci.edu/CHEMDB/Web/cgibin/ChemicalDetailWeb.py?chemical_id=6914582"
@@ -55,23 +62,20 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
             assert activity
         }
         where:
-        label                        | sids                        | bardExperimentIds
-        "With sids and exptdata ids" | [103050164, 103050165, 333] | [1417, 1418]
+        label                        | sids             | bardExperimentIds
+        "With sids and exptdata ids" | SIDS_FOR_TESTING | EIDS_FOR_TESTING
     }
 
     void "findSubstancesByCid Expanded Search"() {
-        given:
-        Long cid = 2722
         when:
-        List<Substance> substances = substanceRestService.findSubstancesByCidExpandedSearch(cid)
+        List<Substance> substances = substanceRestService.findSubstancesByCidExpandedSearch(CID_FOR_TESTING)
         then:
         assert substances
     }
+
     void "findSubstancesByCid Not expanded"() {
-        given:
-        Long cid = 2722
         when:
-        List<Long> substances = substanceRestService.findSubstancesByCid(cid)
+        List<Long> substances = substanceRestService.findSubstancesByCid(CID_FOR_TESTING)
         then:
         assert substances
         assert substances.contains(new Long(70319))
@@ -79,7 +83,7 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "findExperimentDataBySid"() {
         given:
-        final Long sid = 103050164
+        final Long sid = SIDS_FOR_TESTING.get(0)
         when:
         ExperimentData experimentData = substanceRestService.findExperimentDataBySid(sid)
         then:
@@ -92,7 +96,7 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "findExperimentsBySid"() {
         given:
-        final Long sid = 103050164
+        final Long sid = SIDS_FOR_TESTING.get(0)
         when:
         ExperimentSearchResult experimentSearchResult = substanceRestService.findExperimentsBySid(sid)
         then:
@@ -106,7 +110,7 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
         final SearchParams searchParam = new SearchParams(skip: 0, top: 10)
         final SubstanceSearchType substanceSearchType = SubstanceSearchType.MLSMR
         when:
-        SubstanceResult substanceResult = substanceRestService.findSubstances(substanceSearchType,searchParam)
+        SubstanceResult substanceResult = substanceRestService.findSubstances(substanceSearchType, searchParam)
         then:
         assert substanceResult
         assert substanceResult.substances

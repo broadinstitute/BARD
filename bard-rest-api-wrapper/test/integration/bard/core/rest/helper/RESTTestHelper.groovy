@@ -76,11 +76,11 @@ class RESTTestHelper {
      * @param isFreeTextSearch
      */
     void assertAssay(final ExpandedAssay assay) {
-        assert assay.aid
+        assert assay.aid >= 0
         assert assay.comments
         assert assay.name
         assert assay.description
-        assert assay.category
+        assert assay.category >= 0
         assert assay.type >= 0
         assert assay.experiments
         assert assay.projects

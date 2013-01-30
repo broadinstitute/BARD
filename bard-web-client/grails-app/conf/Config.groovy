@@ -4,7 +4,7 @@ import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 //TODO: Override in dev, qa and prod to point to the current stable release
-ncgc.server.root.url = "http://bard.nih.gov/api/v12"
+ncgc.server.root.url = "http://bard.nih.gov/api/v13"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
 server.port = System.properties.getProperty('server.port') ?: 8080
@@ -12,6 +12,7 @@ grails.serverURL = "http://localhost:${server.port}/bardwebclient"
 //URL to the ROOT of the cap server
 bard.cap.home = "http://localhost:8081/BARD/"
 bard.cap.assay = "${bard.cap.home}assayDefinition/show/"
+bard.cap.project="${bard.cap.home}project/show/"
 
 //Override in config file
 dataexport.apikey= "test"

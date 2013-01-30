@@ -1,16 +1,13 @@
 package bard.core.adapter
 
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectExpanded
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.util.NameDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.util.NameDescription
-import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.rest.spring.assays.Context
-import bard.core.rest.spring.assays.Comp
-import bard.core.rest.spring.project.ProjectExpanded
-import bard.core.rest.spring.util.Document
 
 @Unroll
 class ProjectAdapterUnitSpec extends Specification {
@@ -154,7 +151,7 @@ class ProjectAdapterUnitSpec extends Specification {
 
         assert projectAdapter.getProbes()
         assert projectAdapter.numberOfExperiments == 12
-        assert projectAdapter.annotations
+        assert !projectAdapter.annotations
 
         assert projectAdapter.matchingField.name == "name"
         assert projectAdapter.score == 2
@@ -163,7 +160,7 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.targets
         assert !projectAdapter.documents
         assert projectAdapter.hasProbes()
-        assert projectAdapter.numberOfAnnotations == 1
+        assert projectAdapter.numberOfAnnotations == 0
     }
 
     void "test Expanded Project"() {

@@ -1,5 +1,6 @@
 package molspreadsheet
 
+import bard.core.SearchParams
 import bard.core.rest.spring.AssayRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.ExperimentRestService
@@ -7,17 +8,15 @@ import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
-import org.junit.Before
 import querycart.CartAssay
 import querycart.CartCompound
 import querycart.CartProject
 import querycart.QueryCartService
+import spock.lang.Shared
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
 
 import static junit.framework.Assert.assertNotNull
-import bard.core.SearchParams
-import spock.lang.IgnoreRest
 
 @Unroll
 class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
@@ -30,10 +29,19 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     ProjectRestService projectRestService
     QueryCartService queryCartService
     ShoppingCartService shoppingCartService
+    @Shared
+    List<Long> TEST_EIDS = [13902, 14980]
+    @Shared
+    List<Long> TEST_ADIDS = [5155, 5156]
+    @Shared
+    Long TEST_PID = 1963
+    @Shared
+    Long TEST_CID = 9795907
+
 
     void "test activitiesByEIDs"() {
         given:
-        final List<Long> eids = [10, 11]
+        final List<Long> eids = TEST_EIDS
         final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
         when:
         final ExperimentData experimentData = molecularSpreadSheetService.activitiesByEIDs(eids, searchParams)
@@ -69,7 +77,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test activitiesByADIDs"() {
         given:
-        final List<Long> adids = [10, 11]
+        final List<Long> adids = TEST_ADIDS
         final SearchParams searchParams = new SearchParams(top: 10, skip: 0)
         when:
         final ExperimentData experimentData = molecularSpreadSheetService.activitiesByADIDs(adids, searchParams)
@@ -272,7 +280,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test extractMolSpreadSheetData"() {
         given:
-        long assayId1 = 519
+        long assayId1 =TEST_ADIDS.get(0)
 
         when: "we have a molecularSpreadSheetService"
         List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
@@ -280,7 +288,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         5.times {
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
-        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [1074927 as Long, 1074929 as Long, 1077518 as Long])
+        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [6603008 as Long, 6602571 as Long, 6602616 as Long])
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 experiments,
                 etag)
@@ -295,11 +303,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         }
     }
 
-
-
-    void "test extractMolSpreadSheetData with no compounds selected"() {
+   void "test extractMolSpreadSheetData with no compounds selected"() {
         given:
-        long assayId1 = 346
+        long assayId1 = TEST_ADIDS.get(1) //use this specific ADID because it comes back fairly quickly
         when: "we have a molecularSpreadSheetService"
         List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId1)
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
@@ -349,7 +355,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test that we can create an ETag from a list of experiments"() {
         when: "we have list of cart compounds"
         List<CartProject> cartProjectList = []
-        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364)
+        cartProjectList << new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", TEST_PID)
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId)
         String eTag = molecularSpreadSheetService.retrieveImpliedCompoundsEtagFromAssaySpecification(finalExperimentList)
 
@@ -412,7 +418,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     void "test cartProjectsToExperiments"() {
         when: "we have a molecularSpreadSheetService"
         List<CartProject> cartProjectList = []
-        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", 364))
+        cartProjectList.add(new CartProject("Summary of Flow Cytometry HTS of Small Molecules that Regulate V-ATPase Proton Transport in Yeast", TEST_PID))
         List<ExperimentSearch> finalExperimentList = molecularSpreadSheetService.projectIdsToExperiments(cartProjectList*.externalId)
 
         then: "we should be able to generate a list of spreadsheet activity elements"
@@ -440,7 +446,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert experiments
         where:
         label                                | cartAssays
-        "An existing assay with experiments" | [new CartAssay("Test", 519)]
+        "An existing assay with experiments" | [new CartAssay("Test", TEST_ADIDS.get(0))]
     }
 
     void "tests empty cartAssaysToExperiments"() {
@@ -484,33 +490,33 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assert activity.sid
         assert activity.resultData
         where:
-        label                                    | cids                                                   | experimentId
-        "An existing experiment with activities" | [new Long(164981), new Long(411519), new Long(483860)] | new Long(1326)
+        label                                    | cids                        | experimentId
+        "An existing experiment with activities" | [644794L, 645320L, 646386L] | 14743
 
     }
 
     void "test retrieve single value"() {
         given: "That we have created"
-        Long experimentId = new Long(883)
-        final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
+        Long experimentId = TEST_EIDS.get(0)
+        final List<Long> compounds = experimentRestService.compoundsForExperiment(experimentId)
         when: "We call the findAct"
 
-        List<Long> compoundList = compoundIterator.subList(0, 2)
+        List<Long> compoundList = compounds.subList(0, 2)
         String etag = compoundRestService.newETag("find an experiment", compoundList);
-        ExperimentData eiter = this.experimentRestService.activities(experimentId, etag);
-        assertNotNull eiter
-        assert eiter.activities
-        Activity value = eiter.activities.get(0)
+        ExperimentData experimentData = this.experimentRestService.activities(experimentId, etag);
+        assertNotNull experimentData
+        assert experimentData.activities
+        Activity value = experimentData.activities.get(0)
         then: "We expect experiments for each of the assays to be found"
         assert value
     }
 
     void "test retrieve multiple values"() {
         given: "That we have identified experiemnt 346"
-        final Long experimentId = new Long(346)
-        final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
+        final Long experimentId = TEST_EIDS.get(0)
+        final List<Long> compounds = experimentRestService.compoundsForExperiment(experimentId)
         when: "We call for the activities"
-        List<Long> compoundList = compoundIterator.subList(0, 3)
+        List<Long> compoundList = compounds.subList(0, 3)
         String etag = compoundRestService.newETag("find experiment 346 data", compoundList); // etag for 3 compounds
         ExperimentData experimentIterator = this.experimentRestService.activities(experimentId, etag);
         then: "We expect to see non-null activitiy for each compound"
@@ -530,12 +536,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     }
 
     void "test retrieve multiple values from specific expt"() {
-        given: "That we have identified project 274"
-        final Long experimentId = new Long(1140)
+        given: "That we have identified"
+        final Long experimentId = TEST_EIDS.get(0)
 
         when: "We call for the activities"
-        final List<Long> compoundIterator = experimentRestService.compoundsForExperiment(experimentId)
-        List<Long> compoundList = compoundIterator.subList(0, 2)
+        final List<Long> compounds = experimentRestService.compoundsForExperiment(experimentId)
+        List<Long> compoundList = compounds.subList(0, 2)
         String etag = compoundRestService.newETag("find experiment 346 data", compoundList); // etag for 3 compounds
         ExperimentData experimentData = this.experimentRestService.activities(experimentId, etag);
         then: "We expect to see non-null activitiy for each compound"
@@ -560,7 +566,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         given: "That we casn retrieve the expts for project 274" //////////
 
         List<Long> cartProjectIdList = new ArrayList<Long>()
-        cartProjectIdList.add(new Long(274))
+        cartProjectIdList.add(TEST_PID)
         List<ExperimentSearch> allExperiments = []
         for (Long projectId : cartProjectIdList) {
             List<Assay> assays = projectRestService.findAssaysByProjectId(projectId)
@@ -574,7 +580,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         when: "We define an etag for a compound used in this project"  /////////////
 
         List<Long> cartCompoundIdList = new ArrayList<Long>()
-        cartCompoundIdList.add(new Long(5281847))
+        cartCompoundIdList.add(TEST_CID)
         String etag = compoundRestService.newETag((new Date()).toString(), cartCompoundIdList);
 
 

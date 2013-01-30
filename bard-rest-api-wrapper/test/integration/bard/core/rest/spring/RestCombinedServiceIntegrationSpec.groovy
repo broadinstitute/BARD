@@ -13,13 +13,23 @@ import bard.core.rest.spring.project.ProjectResult
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.rest.spring.project.ProjectExpanded
+import spock.lang.Shared
 
 /**
  * Tests for RESTAssayService in JDO
  */
 @Unroll
 class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
-     ProjectRestService projectRestService
+    @Shared
+    Long TEST_PID = 1963
+    @Shared
+    Long TEST_EID = 13902
+    @Shared
+    Long TEST_ADID = 8777
+    @Shared
+    Long TEST_CID = 9795907
+
+    ProjectRestService projectRestService
     ExperimentRestService experimentRestService
     CompoundRestService compoundRestService
     AssayRestService assayRestService
@@ -28,7 +38,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test find compounds with experiment ID"() {
         given:
-        final Long eid = 883
+        final Long eid = TEST_EID
         when:
         final List<Long> cids = this.experimentRestService.compoundsForExperiment(eid)
         then:
@@ -47,10 +57,11 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
         for (Project project : projects) {
             assert project.getProjectId()
+            assert project.getCapProjectId()
         }
         where:
         label      | adid
-        "Assay ID" | 2868
+        "Assay ID" | TEST_ADID
 
     }
 
@@ -66,14 +77,14 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                           | adid
-        "Search with a single assay id" | 644
+        "Search with a single assay id" | TEST_ADID
     }
     /**
      *
      */
     void "test findAssaysByCID"() {
         given:
-        Long cid = 999
+        Long cid = TEST_CID
         when:
         final AssayResult assayResult = this.compoundRestService.findAssaysByCID(cid)
         then:
@@ -91,13 +102,13 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                       | cid
-        "Find an existing compound" | 2722
+        "Find an existing compound" | TEST_CID
     }
 
 
     void "test findCompoundsByExperimentId"() {
         given:
-        Long eid = 2273
+        Long eid = TEST_EID
         when:
         CompoundResult compoundResult = this.experimentRestService.findCompoundsByExperimentId(eid)
 
@@ -110,7 +121,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "test findExperimentsByProjectId"() {
         given:
-        Long pid = 17
+        Long pid = TEST_PID
         when:
         List<Assay> assays = this.projectRestService.findAssaysByProjectId(pid)
         then:
@@ -124,7 +135,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         // Both approaches seem to produce the same results, but this alternate approach is more concise.
 
         final List<Long> cartProjectIdList = new ArrayList<Long>()
-        cartProjectIdList.add(new Long(274))
+        cartProjectIdList.add(new Long(TEST_PID))
         ProjectResult projectResult = this.projectRestService.searchProjectsByIds(cartProjectIdList)
         final List<Project> projects = projectResult.projects
         final List<ExperimentSearch> allExperiments = []
@@ -134,7 +145,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         }
         when: "We define an etag for a compound used in this project"  /////////////
         final List<Long> cartCompoundIdList = new ArrayList<Long>()
-        cartCompoundIdList.add(new Long(5281847))
+        cartCompoundIdList.add(new Long(TEST_CID))
         String etag = this.compoundRestService.newETag((new Date()).toString(), cartCompoundIdList);
 
 
@@ -169,7 +180,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         }
         where:
         label                           | adid
-        "Search with a single assay id" | 644
+        "Search with a single assay id" | TEST_ADID
     }
 
     void "test Get Assays with projects #label"() {
@@ -188,7 +199,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                           | adid
-        "Search with a single assay id" | 644
+        "Search with a single assay id" | TEST_ADID
     }
 
     void "test Project From Single Assay #label=#adid"() {
@@ -204,7 +215,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         }
         where:
         label      | adid
-        "Assay ID" | 2868
+        "Assay ID" | TEST_ADID
 
     }
 
@@ -225,7 +236,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         }
         where:
         label                                  | pid
-        "Find an existing ProjectSearchResult" | 179
+        "Find an existing ProjectSearchResult" | TEST_PID
     }
 
     void "test projects with assays #label"() {
@@ -242,12 +253,12 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         assert !assays.isEmpty()
         where:
         label                                  | pid
-        "Find an existing ProjectSearchResult" | new Integer(179)
+        "Find an existing ProjectSearchResult" | TEST_PID
     }
 
     void "testExperimentsFromSingleProject"() {
         given:
-        ProjectExpanded project = this.projectRestService.getProjectById(1);
+        ProjectExpanded project = this.projectRestService.getProjectById(TEST_PID);
         assert project
 
         when:
@@ -269,13 +280,13 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         assert experimentData.activities
         assert experimentData.activities.get(0)
         where:
-        label                | experimentid  | numVals
-        "Find an experiment" | new Long(883) | 2
+        label                | experimentid
+        "Find an experiment" | new Long(TEST_EID)
     }
 
     void "test findAssaysByProjectId"() {
         given:
-        Long pid = 17
+        Long pid = TEST_PID
         when:
         List<ExperimentSearch> experiments = this.projectRestService.findExperimentsByProjectId(pid)
         then:
@@ -286,7 +297,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test findProjectsByExperimentId"() {
         given:
-        final Long eid = 197
+        final Long eid = TEST_EID
         when:
         final ProjectResult projectResult = experimentRestService.findProjectsByExperimentId(eid)
 
@@ -297,7 +308,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
 
     void "test findExperimentsByCID"() {
         given:
-        Long cid = 313619
+        Long cid = TEST_CID
         when:
         ExperimentSearchResult experimentResult = this.compoundRestService.findExperimentsByCID(cid)
         then:
