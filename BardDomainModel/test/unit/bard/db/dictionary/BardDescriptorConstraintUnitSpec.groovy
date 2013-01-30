@@ -7,19 +7,18 @@ import spock.lang.Unroll
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
- * Date: 11/15/12
- * Time: 4:37 PM
+ * Date: 1/30/13
+ * Time: 11:07 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([BiologyDescriptor,Element])
+@Build([BardDescriptor, Element])
 @Unroll
-class BiologyDescriptorConstraintUnitSpec extends AbstractDescriptorConstraintUnitSpec {
+class BardDescriptorConstraintUnitSpec extends AbstractDescriptorConstraintUnitSpec {
 
     @Before
     @Override
     void doSetup() {
-        domainInstance = BiologyDescriptor.buildWithoutSave()
-        parent = BiologyDescriptor.buildWithoutSave()
+        domainInstance = BardDescriptor.buildWithoutSave()
+        parent = BardDescriptor.build()
     }
-
 }

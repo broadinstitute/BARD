@@ -18,6 +18,10 @@ testDataConfig {
         }
         'bard.db.registration.ExternalReference' {
         }
+        'bard.db.dictionary.BardDictionaryDescriptor' {
+            def i = -1
+            id = {-> i-- }
+        }
         'bard.db.dictionary.BardDescriptor' {
             def i = -1
             id = {-> i-- }
