@@ -36,8 +36,7 @@ class OntologyJSonController {
 
 	def getDescriptors(){
 		if(params?.term && params?.section){
-			List<Descriptor> descriptors = ontologyDataAccessService.getAttributeDescriptors(params.section, params.term)
-            descriptors = descriptors.findAll{it.elementStatus != ElementStatus.Retired}
+			List<Descriptor> descriptors = ontologyDataAccessService.getAttributeDescriptors(params.term)
             Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
 				List attributes = new ArrayList();
 				for (Element element in uniqueElements) {
