@@ -20,6 +20,7 @@ class ProjectAdapterUnitSpec extends Specification {
        "category": 0,
        "type": 0,
        "classification": 0,
+       "capProjectId":20,
        "name": "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)",
        "description": "NIH Molecular Libraries Probe",
        "source": "NCGC",
@@ -148,6 +149,7 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.getId() == 17
         assert projectAdapter.name == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
         assert projectAdapter.description == "NIH Molecular Libraries Probe"
+        assert projectAdapter.capProjectId==20
 
         assert projectAdapter.getProbes()
         assert projectAdapter.numberOfExperiments == 12

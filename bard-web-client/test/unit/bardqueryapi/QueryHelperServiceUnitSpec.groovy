@@ -27,7 +27,7 @@ import spock.lang.Unroll
  */
 @Unroll
 @TestFor(QueryHelperService)
-class QueryServiceHelperUnitSpec extends Specification {
+class QueryHelperServiceUnitSpec extends Specification {
     @Shared Map<String, String> EMPTY_LABEL = [label: "", value: ""]
     @Shared Map<String, String> GO_TERM = [label: "Go Biological Process as <strong>GO Biological Process Term</strong>", value: "gobp_term:\"Go Biological Process\""]
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: "a", filterValue: "b")]
@@ -48,6 +48,20 @@ class QueryServiceHelperUnitSpec extends Specification {
         "Activity, no Result Data" | [new Activity()] | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
     }
 
+
+    void "test extractMapFromResultData #label"() {
+        when:
+        Map foundMap = service.extractMapFromResultData(resultData)
+        then:
+        assert expectedMap == foundMap
+
+        where:
+        label                                   | resultData                                                                                                       | expectedMap
+        "Has Priority, ResponseClass=CR_SER"    | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_NO_SER" | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: false, hasChildElements: false]
+        "No Priority, ResponseClass=CR_NO_SER"  | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [priorityDisplay: '', priorityDescription: '', dictionaryId: 0, hasPlot: false, hasChildElements: false]
+
+    }
 
     void "test extractExperimentDetails with activities"() {
         given:

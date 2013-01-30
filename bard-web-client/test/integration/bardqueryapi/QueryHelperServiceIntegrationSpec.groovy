@@ -6,7 +6,7 @@ import org.junit.Before
 import spock.lang.Unroll
 
 @Unroll
-class QueryServiceHelperIntegrationSpec extends IntegrationSpec {
+class QueryHelperServiceIntegrationSpec extends IntegrationSpec {
 
     QueryHelperService queryHelperService
 

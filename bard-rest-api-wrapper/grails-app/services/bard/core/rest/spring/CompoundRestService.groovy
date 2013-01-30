@@ -7,7 +7,6 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.project.ProjectResult
-import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.MetaData
 import bard.core.rest.spring.util.StructureSearchParams
 import org.springframework.http.HttpEntity

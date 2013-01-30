@@ -11,7 +11,6 @@ import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
-import spock.lang.IgnoreRest
 
 /**
  * Tests for RESTAssayService in JDO
