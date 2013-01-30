@@ -1,13 +1,16 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
+import bard.db.dictionary.OntologyDataAccessService
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
+    OntologyDataAccessService ontologyDataAccessService;
 
     def index() {
         redirect(action: "description", params: params)
@@ -51,6 +54,86 @@ class AssayDefinitionController {
         [assayInstance: assayInstance]
     }
 
+    def editMeasure() {
+        // while not directly used in the rendering of this page, make sure the tree is cached before rendering the
+        // edit page to ensure the autocomplete comes up quickly when the user tries.
+        // Perhaps a better approach would be to simply ensure some loading indicator is more predominant when the autocomplete is running.
+        ontologyDataAccessService.ensureTreeCached()
+
+        def assayInstance = Assay.get(params.id)
+        if (!assayInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return
+        } else {
+            flash.message = null
+        }
+
+        [assayInstance: assayInstance]
+    }
+
+    def deleteMeasure() {
+        def measure = Measure.get(params.measureId)
+        measure.delete()
+        redirect(action: "editMeasure", id: params.id)
+    }
+
+    def addMeasure() {
+        def assayInstance = Assay.get(params.id)
+        def resultType = Element.get(params.resultTypeId)
+
+        def parentMeasure = null
+        if (params.parentMeasureId) {
+            parentMeasure = Measure.get(params.parentMeasureId)
+        }
+
+        def statsModifier = null
+        if (params.statisticId) {
+            statsModifier = Element.get(params.statisticId)
+        }
+
+        def entryUnit = null
+        if (params.entryUnitName) {
+            entryUnit = Element.findByLabel(params.entryUnitName)
+        }
+
+        Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit)
+
+        flash.message = "Successfully added measure " + newMeasure.displayLabel
+        redirect(action: "editMeasure", id: params.id)
+    }
+
+    def disassociateContext() {
+        def measure = Measure.get(params.measureId)
+        def context = AssayContext.get(params.assayContextId)
+
+        if (measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else if (context == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+        } else {
+            flash.message = null
+            assayContextService.disassociateContext(measure, context)
+        }
+
+        redirect(action: "editMeasure", id: context.assay.id)
+    }
+
+    def associateContext() {
+        def measure = Measure.get(params.measureId)
+        def context = AssayContext.get(params.assayContextId)
+
+        if (measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else if (context == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+        } else {
+            flash.message = null
+            assayContextService.associateContext(measure, context)
+        }
+
+        redirect(action: "editMeasure", id: context.assay.id)
+    }
+
     def findById() {
         if (params.assayId && params.assayId.isLong()) {
             def assayInstance = Assay.findById(params.assayId.toLong())
@@ -64,15 +147,24 @@ class AssayDefinitionController {
 
     def findByName() {
         if (params.assayName) {
-            def assays = Assay.findAllByAssayShortNameIlike("%${params.assayName}%")
-            if (assays?.size() != 0) {
-                if (assays.size() > 1)
-                    render(view: "findByName", params: params, model: [assays: assays])
-                else
-                    redirect(action: "show", id: assays.get(0).id)
-            } else
+            def assays = Assay.findAllByAssayNameIlikeOrAssayShortNameIlike("%${params.assayName}%", "%${params.assayName}%")
+            if (assays?.size() > 1) {
+                if (params.sort == null) {
+                    params.sort = "id"
+                }
+                assays.sort {
+                    a, b ->
+                        if (params.order == 'desc') {
+                            b."${params.sort}" <=> a."${params.sort}"
+                        } else {
+                            a."${params.sort}" <=> b."${params.sort}"
+                        }
+                }
+                render(view: "findByName", params: params, model: [assays: assays])
+            } else if (assays?.size() == 1)
+                redirect(action: "show", id: assays.get(0).id)
+            else
                 flash.message = message(code: 'default.not.found.property.message', args: [message(code: 'assay.label', default: 'Assay'), "name", params.assayName])
-
         }
     }
 
@@ -93,16 +185,16 @@ class AssayDefinitionController {
         Assay assay = targetAssayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
-	
-	def reloadCardHolder(Long assayId){
-		def assay = Assay.get(assayId)
-		if (assay) {
-			render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-		} else {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-			return
-		}
-	}
+
+    def reloadCardHolder(Long assayId) {
+        def assay = Assay.get(assayId)
+        if (assay) {
+            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+        } else {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return
+        }
+    }
 
 
     def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
@@ -132,10 +224,19 @@ class AssayDefinitionController {
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def createOrEditCardName(String edit_card_name, Long instanceId, Long contextId) {
-        AssayContext assayContext = assayContextService.createOrEditCardName(instanceId, contextId, edit_card_name)
+    def createCard(Long instanceId, String cardName, String cardSection) {
+        if (instanceId == null) {
+            throw new RuntimeException("bad instance")
+        }
+        AssayContext assayContext = assayContextService.createCard(instanceId, cardName, cardSection)
         Assay assay = assayContext.assay
-        render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
+
+    def updateCardName(String edit_card_name, Long contextId) {
+        AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
+        Assay assay = assayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
     def showMoveItemForm(Long assayId, Long itemId) {
@@ -155,5 +256,18 @@ class AssayDefinitionController {
         render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
+    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy) {
+        def assayInstance = Assay.findById(instanceId)
+        assayInstance.assayName = assayName
+        assayInstance.designedBy = designedBy
+        assayInstance.assayStatus = AssayStatus.valueOf(AssayStatus.class, assayStatus)
+        assayInstance.save(flush: true)
+        assayInstance = Assay.findById(instanceId)
+        render(template: "summaryDetail", model: [assay: assayInstance])
+    }
 
+    def showEditSummary(Long instanceId) {
+        def assayInstance = Assay.findById(instanceId)
+        render(template: "editSummary", model: [assay: assayInstance])
+    }
 }

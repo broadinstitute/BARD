@@ -64,7 +64,7 @@ abstract class AbstractDocumentConstraintUnitSpec extends Specification {
         'valid value'      | 'Description'                            | true  | null
         'valid value'      | 'Protocol'                               | true  | null
         'valid value'      | 'Comments'                               | true  | null
-        'valid value'      | 'Paper'                                  | true  | null
+        'valid value'      | 'Publication'                            | true  | null
         'valid value'      | 'External URL'                           | true  | null
         'valid value'      | 'Other'                                  | true  | null
         //        'exactly at limit' | createString(DOCUMENT_TYPE_MAX_SIZE)     | true  | null

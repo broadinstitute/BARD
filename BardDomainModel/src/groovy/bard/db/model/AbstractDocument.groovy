@@ -22,7 +22,7 @@ abstract class AbstractDocument implements IDocumentType {
 
     static constraints = {
         documentName(blank: false, maxSize: DOCUMENT_NAME_MAX_SIZE)
-        documentType(blank: false, maxSize: DOCUMENT_TYPE_MAX_SIZE, inList: [DOCUMENT_TYPE_DESCRIPTION, DOCUMENT_TYPE_PROTOCOL, DOCUMENT_TYPE_COMMENTS, DOCUMENT_TYPE_PAPER, DOCUMENT_TYPE_EXTERNAL_URL, DOCUMENT_TYPE_OTHER])
+        documentType(blank: false, maxSize: DOCUMENT_TYPE_MAX_SIZE, inList: [DOCUMENT_TYPE_DESCRIPTION, DOCUMENT_TYPE_PROTOCOL, DOCUMENT_TYPE_COMMENTS, DOCUMENT_TYPE_PUBLICATION, DOCUMENT_TYPE_EXTERNAL_URL, DOCUMENT_TYPE_OTHER])
         documentContent(nullable: true, blank: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap, assayshow,projectstep"/>
+    <r:require modules="core,bootstrap,assayshow,projectstep"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -24,12 +24,13 @@
             <div class="pull-left">
                 <h4>View Project (PID: ${instance?.id})</h4>
             </div>
-            <g:if test="${instance?.id}">
-                <div class="pull-right">
-                    <g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Edit</g:link>
-                    <g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Clone</g:link>
-                </div>
-            </g:if>
+            %{--The edit function is broken in project, temporary hide this for ESP demo--}%
+            %{--<g:if test="${instance?.id}">--}%
+                %{--<div class="pull-right">--}%
+                    %{--<g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Edit</g:link>--}%
+                    %{--<g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Clone</g:link>--}%
+                %{--</div>--}%
+            %{--</g:if>--}%
         </div>
     </div>
 </div>
@@ -60,7 +61,7 @@
 
                     <div id="target-summary-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../summary/show" model="['summary': instance]"/>
+                            <g:render template="showSummary" model="['project': instance]"/>
                         </div>
                     </div>
                 </div>

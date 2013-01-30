@@ -14,13 +14,24 @@ class AssayLoadResultsWriter {
 
     public AssayLoadResultsWriter(String resultFilePath) {
         writer = new BufferedWriter(new FileWriter(resultFilePath))
-        writer.writeLine("filename, row_num, aid, status, message")
+        writer.writeLine("filename, row_num, aid, status, num_context_saved, message")
     }
 
     public void write(AssayDto assayDto, LoadResultType resultType, String message) {
+        int numContextsSaved = 0;
+        if (resultType != LoadResultType.fail) {
+            for (List<ContextDTO> contextDTOList : [assayDto.assayContextDTOList, assayDto.measureContextDTOList]) {
+                for (ContextDTO contextDTO : contextDTOList) {
+                    if (contextDTO.wasSaved) {
+                        numContextsSaved += 1
+                    }
+                }
+            }
+        }
+
         final def aidOutput = assayDto.aid ? assayDto.aid : assayDto.aidFromCell
 
-        def lineData = [assayDto.sourceFile.name, assayDto.rowNum, aidOutput, resultType, message]
+        def lineData = [assayDto.sourceFile.name, assayDto.rowNum, aidOutput, resultType, numContextsSaved, message]
 
         StringBuilder line = new StringBuilder()
         for (def lineDatum : lineData) {
@@ -36,6 +47,6 @@ class AssayLoadResultsWriter {
     }
 
     public enum LoadResultType {
-        success, assayContextSuccessOnly, fail
+        success, assayContextSuccessOnly, nothingToLoad, fail
     }
 }

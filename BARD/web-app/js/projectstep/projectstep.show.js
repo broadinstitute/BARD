@@ -120,7 +120,7 @@ var Renderer = function(canvas){
                     var str2 = ')" style="font-family:arial;color:red;font-size:10px;"><i class="icon-trash"></i>Remove from Project</a></td>'
                     selected = (nearest.distance < 50) ? nearest : null
                     resetAfterClick()
-                    $('#nodelink').text(selected.node.data.link)
+                    $('#nodelink').html("<a href='/BARD/experiment/show/"+selected.node.data.link+"'>"+selected.node.data.link+"</a>")
                     $('#nodelinkTable').show()
                     var fromSelectedNode =  particleSystem.getEdgesFrom(selected.node)
                     for (var i = 0; i < fromSelectedNode.length; i++) {

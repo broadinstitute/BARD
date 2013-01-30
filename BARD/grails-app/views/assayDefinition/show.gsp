@@ -50,12 +50,12 @@
                         <i class="icon-chevron-down"></i>
                         Summary
                     </a>
+                </div>
 
                     <div id="target-summary-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../summary/show" model="['summary': assayInstance]"/>
+                            <g:render template="showSummary" model="['assay': assayInstance]"/>
                         </div>
-                    </div>
                 </div>
             </div>
 
@@ -67,12 +67,13 @@
                         <i class="icon-chevron-down"></i>
                         Contexts
                     </a>
+                </div>
 
                     <div id="target-contexts-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../context/show" model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
+                            <g:render template="../context/show"
+                                      model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
                         </div>
-                    </div>
                 </div>
             </div>
 
@@ -83,11 +84,12 @@
                         <i class="icon-chevron-down"></i>
                         Measures
                     </a>
+                </div>
 
-                    <div id="target-measures-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
-                        </div>
+                <div id="target-measures-info" class="accordion-body in collapse">
+                    <div class="accordion-inner">
+                        <g:render template="measuresView"
+                                  model="['measures': assayInstance.measures, 'rootMeasuresSorted': assayInstance.rootMeasuresSorted]"/>
                     </div>
                 </div>
             </div>

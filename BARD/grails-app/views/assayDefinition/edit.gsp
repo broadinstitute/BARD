@@ -1,8 +1,8 @@
-ƒ<%@ page import="bard.db.registration.*" %>
+<%@ page import="bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap, assaycards"/>
+    <r:require modules="core,bootstrap,assaycards"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -60,7 +60,7 @@
 
                         <div id="target-summary-info" class="accordion-body in collapse">
                             <div class="accordion-inner">
-                                <g:render template="../summary/show" model="['summary': assayInstance]"/>
+                                <g:render template="showSummary" model="['assay': assayInstance]"/>
                             </div>
                         </div>
                     </div>
@@ -74,13 +74,13 @@
                             <i class="icon-chevron-down"></i>
                             Contexts
                         </a>
+                    </div>
 
-                        <div id="target-contexts-info" class="accordion-body in collapse">
+                    <div id="target-contexts-info" class="accordion-body in collapse">
                             <div class="accordion-inner">
                                 <g:render template="../context/edit"
                                           model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
                             </div>
-                        </div>
                     </div>
                 </div>
 

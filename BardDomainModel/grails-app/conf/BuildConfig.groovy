@@ -1,3 +1,5 @@
+import grails.util.Environment
+
 grails.project.work.dir = "target"
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
@@ -31,17 +33,28 @@ grails.project.dependency.resolution = {
         // so adding explicitly here
         build(":rest-client-builder:1.0.2") { export = false }
         build(":release:2.0.2") { export = false }
+        build(":improx:0.1") { export = false } // Interactive Mode Proxy; useful for IDE integration
 
-        compile(":spock:0.6") {export = false}
-
-        compile(":database-migration:1.1") { export = true }
-        compile(":build-test-data:2.0.3") { export =  true }
-        compile(":console:1.2") { export = false }
-        compile(":fixtures:1.1") { 
-            export = true
-            excludes('svn')
-        }
         compile(":clover:3.1.6") { export = false }
+        compile(":console:1.2") { export = false }
+        compile(":database-migration:1.1") { export = true }
+        compile(":spock:0.6") { export = false }
+        /**
+         * including build test data for all environments except production, oracleqa, oracledev
+         */
+        switch (Environment.current.name) {
+            case ('production'):
+            case ('oracleqa'):
+            case ('oracledev'):
+                break
+            default:
+                compile(":build-test-data:2.0.3") { export = true }
+                compile(":fixtures:1.1") {
+                    export = true
+                    excludes('svn')
+                }
+                break
+        }
     }
 }
 

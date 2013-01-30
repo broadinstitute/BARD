@@ -15,14 +15,6 @@ beans = {
         httpClient = ref('httpClient')
         authorization = ref('clientBasicAuth')
     }
-    elasticSearchService(elasticsearchplugin.ElasticSearchService) {
-        elasticSearchBaseUrl = grailsApplication.config.bard.services.elasticSearchService.restNode.baseUrl
-        assayIndexName = 'assays'
-        assayIndexTypeName = 'assay'
-        compoundIndexName = 'compounds'
-        compoundIndexTypeName = 'compound'
-        queryExecutorService = ref('queryExecutorService')
-    }
 
     modifiedByListener(ModifiedByListener) {
         springSecurityService = ref('springSecurityService')
@@ -38,6 +30,5 @@ beans = {
         grailsApplication = application
     }
     inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService)
-
 
 }

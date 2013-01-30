@@ -32,4 +32,9 @@ class ContextItemDto {
         this.qualifier = contextItemDto.qualifier
         this.concentrationUnits = contextItemDto.concentrationUnits
     }
+
+    @Override
+    String toString() {
+        return "$key $value $attributeType $typeIn $qualifier $concentrationUnits"
+    }
 }

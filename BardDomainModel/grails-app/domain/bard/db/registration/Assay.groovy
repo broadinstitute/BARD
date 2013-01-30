@@ -4,7 +4,7 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
 
-class Assay extends AbstractContextOwner{
+class Assay extends AbstractContextOwner {
 
     private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -55,7 +55,7 @@ class Assay extends AbstractContextOwner{
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
-        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true')
     }
 
     static transients = ['assayContextItems']
@@ -67,7 +67,6 @@ class Assay extends AbstractContextOwner{
         }
         return assayContextItems as List<AssayContextItem>
     }
-
 
     /**
      * duck typing to look like project
@@ -83,20 +82,21 @@ class Assay extends AbstractContextOwner{
     String getName() {
         this.assayName
     }
-    /**
-     * duck typing to look like project for summary/_show template
-     */
-    String getDescription() {
-        this.assayName
-    }
 
-
-    List<AssayContext> getContexts(){
+    List<AssayContext> getContexts() {
         this.assayContexts
     }
 
 
-    def getRootMeasures() {
-        return measures.findAll {it.parentMeasure == null}
+    Collection<Measure> getRootMeasures() {
+        return measures.findAll { it.parentMeasure == null }
     }
+
+    /**
+     * @return a list of Measures without parents sorted by displayLabel case insensitive
+     */
+    List<Measure> getRootMeasuresSorted() {
+        return measures.findAll { it.parentMeasure == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
+    }
+
 }

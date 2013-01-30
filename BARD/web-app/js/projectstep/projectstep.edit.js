@@ -13,7 +13,7 @@ $(document).ready(function () {
     $( "#addExperimentToProject" )
         .button()
         .click(function() {
-            clearAvailableExperiment()
+            clearAvailableExperiment();
             $( "#dialog_add_experiment_step" ).dialog( "open" );
         });
 
@@ -33,11 +33,11 @@ $(document).ready(function () {
                 $.ajax
                     ({
                         url:"../associateExperimentsToProject",
-                        dataType:'json',
+                        //dataType:'json',
                         data:data,
                         cache:false,
-                        success:function (data) {
-
+                        success:function(data) {
+                            handleSuccess(data)
                         }
                     });
                 $( this ).dialog( "close" );
@@ -54,6 +54,7 @@ $(document).ready(function () {
     $( "#linkExperiment" )
         .button()
         .click(function() {
+            $("#linkExperimentForm").clearForm();
             $( "#dialog_link_experiment" ).dialog( "open" );
         });
     $( "#dialog_link_experiment" ).dialog({
@@ -66,15 +67,15 @@ $(document).ready(function () {
                 var projectId = $("#projectIdForStep").val();
                 var fromExperimentId = $("#fromExperimentId").val();
                 var toExperimentId = $("#toExperimentId").val();
-                var data = {'fromExperimentId':fromExperimentId, 'toExperimentId':toExperimentId, 'projectId':projectId};
+                var inputdata = {'fromExperimentId':fromExperimentId, 'toExperimentId':toExperimentId, 'projectId':projectId};
                 $.ajax
                     ({
                         url:"../linkExperiment",
-                        dataType:'json',
-                        data:data,
+                        //dataType:'jsonP',
+                        data:inputdata,
                         cache:false,
-                        success:function (data) {
-
+                        success:function(data) {
+                            handleSuccess(data)
                         }
                     });
                 $( this ).dialog( "close" );
@@ -90,6 +91,9 @@ $(document).ready(function () {
 
     $( "#addByExperimentId" ).change(function () {
         var experimentId = $(this).val();
+        if( !experimentId || 0 === experimentId || (/^\s*$/).test(experimentId)) {
+            return false;
+        }
         var projectId = $("#projectIdForStep").val();
         var data = {'experimentId':experimentId, 'projectId': projectId};
         $.ajax
@@ -106,6 +110,9 @@ $(document).ready(function () {
     });
     $( "#addByAssayId" ).change(function () {
         var assayId = $(this).val();
+        if( !assayId || 0 === assayId || (/^\s*$/).test(assayId)) {
+            return false;
+        }
         var projectId = $("#projectIdForStep").val();
         var data = {'assayId':assayId, 'projectId': projectId};
         $.ajax
@@ -137,9 +144,13 @@ $(document).ready(function () {
             });
         },
         select: function( event, ui ) {
-            setAvailableExperiment(ui.item.label)
+            setAvailableExperimentAfterSelect(ui.item.label)
         }
     });
+    // Somehow the setAvailableExperiment added multiple duplicate item selected from dropdown, a hack to get one
+    function setAvailableExperimentAfterSelect(data) {
+        $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
+    }
 
     function setAvailableExperiment(data) {
         for (var i = 0; i < data.length; i++) {
@@ -148,7 +159,12 @@ $(document).ready(function () {
     }
 
     function clearAvailableExperiment() {
-        $("#selectedExperiments option:ge(0)").remove()
+        $("#selectedExperiments option:gt(0)").remove();
+        $("#selectedExperiments option:eq(0)").remove();
+        $("#addExperimentForm").clearForm();
+        $("#addByExperimentId").hide();
+        $("#addByAssayId").hide();
+        $("#addByExperimentName").hide();
     }
 
     $("input:radio[name=addExperimentBy]").change(function(){
@@ -171,6 +187,18 @@ function findExperimentInput(selected, allValues){
     }
 }
 
+function handleSuccess(data){
+    $("#serviceResponse").css("font-size","16px")
+    if (data.substring(0, 12) === "serviceError") {
+        $("#serviceResponse").css("color","red")
+        $("#serviceResponse").text(data)
+    }
+    else {
+        $("#serviceResponse").css("color","#FF00FF")
+        $("#serviceResponse").text("Success! Reload the page to view changes.")
+    }
+    $("#serviceResponse").show()
+}
 
 function deleteItem(experimentId, projectId){
     $("#dialog_confirm_delete_item").dialog("option", "buttons",[
@@ -183,9 +211,8 @@ function deleteItem(experimentId, projectId){
                     type:'POST',
                     url:'../removeExperimentFromProject',
                     data:data,
-                    success:function (data) {
-                        //                      $("div#" + assayContextId).replaceWith(data);
-                        //                       initDnd();
+                    success:function(data) {
+                        handleSuccess(data)
                     }
                 });
                 $( this ).dialog( "close" );
@@ -214,9 +241,8 @@ function deleteEdge(fromId, toId, projectId){
                     type:'POST',
                     url:'../removeEdgeFromProject',
                     data:data,
-                    success:function (data) {
-                        //                      $("div#" + assayContextId).replaceWith(data);
-                        //                       initDnd();
+                    success:function(data) {
+                        handleSuccess(data)
                     }
                 });
                 $( this ).dialog( "close" );

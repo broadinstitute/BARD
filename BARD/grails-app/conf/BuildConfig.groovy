@@ -21,24 +21,23 @@ grails.project.dependency.resolution = {
     checksums true // Whether to verify checksums on resolve
 
     repositories {
-        inherits false // Whether to inherit repository definitions from plugins
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
         mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
-        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "bardGrailsCentral")
-        grailsCentral()
+        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
     }
     dependencies {
         // build scope
 
         // compile scope
-
-        // runtime scope
-        runtime 'mysql:mysql-connector-java:5.1.16'
-        runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         compile('cbip:cbip_encoding:0.1') {
             excludes "junit"
         }
+        compile "org.grails:grails-webflow:$grailsVersion"
+
+        // runtime scope
+        runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
 
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
@@ -62,32 +61,30 @@ grails.project.dependency.resolution = {
 
     plugins {
         // build scope
-        build ":tomcat:$grailsVersion"
-        compile ":hibernate:$grailsVersion"
         build ":codenarc:0.15"
+        compile ":hibernate:$grailsVersion"
+        build ":tomcat:$grailsVersion"
+
         // compile scope
-        compile ":grails-ui:1.2.3"
-        compile ":yui:2.8.2.1"
-        compile ":twitter-bootstrap:2.1.0"
-        compile ":elastic-search:0.4.5-SNAPSHOT"
+        compile ":ajaxflow:0.2.4"
         compile ":cbipcrowdauthentication:0.3.0"
-        compile(":build-test-data:2.0.3")
-		compile(":jquery-validation-ui:1.4")
-		compile ":webflow:2.0.0"
-		compile ":ajaxflow:0.2.4"
-        compile ":console:1.2"
         compile ":clover:3.1.6"
+        compile ":console:1.2"
+        compile ":jquery-validation-ui:1.4"
+        compile ":twitter-bootstrap:2.2.2"
+        compile(':webflow:2.0.0') {
+            exclude 'grails-webflow'
+        }
 
         // runtime scope
-
         runtime ":jquery:1.7.1"
         runtime ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
+
         // test scope
-        test ":spock:0.6"
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
-
+        test ":spock:0.6"
         // provided  scope
     }
 }
@@ -108,7 +105,7 @@ codenarc {
 
 clover {
     //initstring = "bardwebclover.db"
-    directories: ['src/java','src/groovy', 'grails-app']
+    directories: ['src/java', 'src/groovy', 'grails-app']
     includes = ['**/*.groovy', '**/*.java']
     excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*', '**/mockServices/**.*']
 }

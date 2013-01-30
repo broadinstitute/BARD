@@ -23,55 +23,47 @@ class AttributeContentAgainstElementTableValidator {
      *
      * @param contextList
      */
-    boolean validate(List<ContextDTO> contextDTOList, Map attributeNameMapping) {
+    void removeInvalid(List<ContextDTO> contextDTOList, Map attributeNameMapping) {
 
-        boolean blankContextDto = false
-        Long prevAid = null
+        Iterator<ContextDTO> contextDTOIterator = contextDTOList.iterator()
+        while (contextDTOIterator.hasNext()) {
+            ContextDTO contextDTO = contextDTOIterator.next()
 
-        for (ContextDTO contextDTO : contextDTOList) {
-            if (contextDTO != null) {
-                for (ContextItemDto contextItemDto : contextDTO.attributes) {
-                    if (! checkForElement(contextItemDto.key, contextDTO.aid, contextDTO.name)) {
-                        return false
-                    }
+            boolean isValid = true;
 
-                    //Check that the value is defined in the database,
-                    // except for the ones that are numeric values or a type-in field or a Free-type field
-                    if (contextItemDto.value &&
-                            (contextItemDto.value instanceof String) &&
-                            !contextItemDto.typeIn &&
-                            (contextItemDto.attributeType != AttributeType.Free)) {
+            for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
 
-                        if (! checkForElement(contextItemDto.value, contextDTO.aid, contextDTO.name)) {
-                            return false
-                        }
+                //have deliberately placed result as the second operand so that the checkForElement method
+                //is run so that all elements are checked
+                isValid  = checkForElement(contextItemDto.key, contextDTO) && isValid
 
-                    }
+                //Check that the value is defined in the database,
+                // except for the ones that are numeric values or a type-in field or a Free-type field
+                if (contextItemDto.value &&
+                        (contextItemDto.value instanceof String) &&
+                        !contextItemDto.typeIn &&
+                        (contextItemDto.attributeType != AttributeType.Free)) {
 
-                    //If concentration units are present check that they are defined in the database
-                    if (contextItemDto.concentrationUnits) {
-                        if (! checkForElement(contextItemDto.concentrationUnits, contextDTO.aid, contextDTO.name)) {
-                            return false
-                        }
-                    }
+                    //have deliberately placed result as the second operand so that the checkForElement method
+                    //is run so that all elements are checked
+                    isValid  = checkForElement(contextItemDto.value, contextDTO) && isValid
                 }
 
-                prevAid = contextDTO.aid
-            } else {
-                Log.logger.error("null contextDTO found.  Previous non-null aid: $prevAid")
-                blankContextDto = true
+                //If concentration units are present check that they are defined in the database
+                if (contextItemDto.concentrationUnits != null) {
+                    //have deliberately placed result as the second operand so that the checkForElement method
+                    //is run so that all elements are checked
+                    isValid  = checkForElement(contextItemDto.concentrationUnits, contextDTO) && isValid
+                }
             }
 
-            if (blankContextDto) {
-                Log.logger.error("null contextDTO found.  Subsequent non-null aid: ${contextDTO?.aid}")
-                blankContextDto = false
+            if (!isValid) {
+                contextDTOIterator.remove()
             }
         }
-
-        return true
     }
 
-    private boolean checkForElement(String elementLabel, Long aid, String assayContextDtoName) {
+    private boolean checkForElement(String elementLabel, ContextDTO contextDTO) {
         Element element = Element.findByLabelIlike(elementLabel)
 
         if (element) {
@@ -79,7 +71,7 @@ class AttributeContentAgainstElementTableValidator {
         } else {
             final String message = "Attributes in context not found in database:  $elementLabel"
             Log.logger.error(message)
-            loadResultsWriter.write(aid, null, assayContextDtoName, ContextLoadResultsWriter.LoadResultType.fail, message)
+            loadResultsWriter.write(contextDTO, null, ContextLoadResultsWriter.LoadResultType.fail, null, 0, message)
 
             return false
         }
