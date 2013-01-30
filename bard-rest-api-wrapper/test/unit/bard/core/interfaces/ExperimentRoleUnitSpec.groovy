@@ -6,13 +6,6 @@ import spock.lang.Unroll
 @Unroll
 class ExperimentRoleUnitSpec extends Specification {
 
-    void setup() {
-    }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
     void "test valueOf #label"() {
 
         when:

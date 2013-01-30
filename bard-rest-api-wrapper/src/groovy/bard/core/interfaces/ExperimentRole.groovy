@@ -3,12 +3,12 @@ package bard.core.interfaces;
 
 public enum ExperimentRole {
     Unknown(-1),
-    Primary(1),
-    Counterscreen(2),
-    SecondaryConfirmation(3),
-    SecondaryAlternative(4),
-    SecondaryOrthogonal(5),
-    SecondarySelectivity(6);
+    Primary(0),
+    Counterscreen(1),
+    SecondaryConfirmation(2),
+    SecondaryAlternative(3),
+    SecondaryOrthogonal(4),
+    SecondarySelectivity(5);
     private int role
     ExperimentRole(int role){
       this.role = role
