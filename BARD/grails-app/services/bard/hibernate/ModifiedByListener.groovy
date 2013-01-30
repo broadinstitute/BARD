@@ -24,10 +24,11 @@ class ModifiedByListener implements PreInsertEventListener, PreUpdateEventListen
     }
 
     private void updateModifiedBy(AbstractPreDatabaseOperationEvent abstractEvent) {
-        if (abstractEvent.hasProperty("modifiedBy")) {
+        def entity = abstractEvent.entity
+        if (entity.hasProperty("modifiedBy")) {
             String username = springSecurityService.getPrincipal()?.username
             if (username) {
-                abstractEvent.entity.modifiedBy = username
+                entity.modifiedBy = username
             } else {
                 throw new AuthenticatedUserRequired('An authenticated user was expected this point');
             }
