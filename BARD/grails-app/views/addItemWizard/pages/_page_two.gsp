@@ -16,7 +16,7 @@
 </g:hasErrors>
 
 <g:set var="currentValue" value="${ attribute?.currentValue }" />
-<g:render template="common/itemWizardSelectionsTable" model="['attribute': currentValue, 'valueType': 'Not define yet', 'value': 'Not define yet']"/>
+<g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeName, 'valueType': 'Not define yet', 'value': 'Not define yet']"/>
 
 <h1>Value type defines the restriction that is placed on the values associated with the chosen attribute:</h1>
 

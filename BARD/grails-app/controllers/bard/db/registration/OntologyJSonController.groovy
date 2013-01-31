@@ -39,7 +39,6 @@ class OntologyJSonController {
 			List<Descriptor> descriptors = ontologyDataAccessService.getAttributeDescriptors(params.section, params.term)
             descriptors = descriptors.findAll{it.elementStatus != ElementStatus.Retired}
             Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
-			if(uniqueElements){
 				List attributes = new ArrayList();
 				for (Element element in uniqueElements) {
 					def item = [
@@ -50,7 +49,6 @@ class OntologyJSonController {
 					attributes.add(item)
 				}
                 render attributes as JSON
-			}
 		}
 	}
 
@@ -59,21 +57,19 @@ class OntologyJSonController {
 			List<Descriptor> descriptors = ontologyDataAccessService.getValueDescriptors(params.attributeId.toLong(), params.section, params.term)
 
             Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
-			if(uniqueElements){
-				List attributes = new ArrayList();
-				for (Element element in uniqueElements) {
-					def unit = element?.unit?.abbreviation
-					unit = unit ?: (element?.unit?.label ?: "")
-					def item = [
-						"label" : element.label,
-						"value" : element.label,
-						"elementId" : element.id,
-						"unit" : unit
-					]
-					attributes.add(item)
-				}
-				render attributes as JSON
-			}
+            List attributes = new ArrayList();
+            for (Element element in uniqueElements) {
+                def unit = element?.unit?.abbreviation
+                unit = unit ?: (element?.unit?.label ?: "")
+                def item = [
+                    "label" : element.label,
+                    "value" : element.label,
+                    "elementId" : element.id,
+                    "unit" : unit
+                ]
+                attributes.add(item)
+            }
+            render attributes as JSON
 		}
 	}
 	

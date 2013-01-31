@@ -11,7 +11,7 @@ class BardDescriptor extends Descriptor<BardDescriptor> {
     public static String ROOT_PREFIX = "BARD> "
 
     static mapping = {
-        table('DATA_MIG.BARD_TREE')
+        table('BARD_TREE')
         id(column: 'NODE_ID', generator: 'assigned')
         version(false)
         leaf(column: 'IS_LEAF', type: 'yes_no')
