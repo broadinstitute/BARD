@@ -22,6 +22,18 @@ WHERE display_order !=
      WHERE aci2.exprmt_context_id = aci.exprmt_context_id
        AND aci2.exprmt_context_item_id < aci.exprmt_context_item_id);
 
+UPDATE prjct_exprmt_cntxt_item aci
+SET display_order =
+    (SELECT Count(*)
+     FROM prjct_exprmt_cntxt_item aci2
+     WHERE aci2.prjct_exprmt_context_id = aci.prjct_exprmt_context_id
+       AND aci2.prjct_exprmt_cntxt_item_id < aci.prjct_exprmt_cntxt_item_id)
+WHERE display_order !=
+      (SELECT Count(*)
+     FROM prjct_exprmt_cntxt_item aci2
+     WHERE aci2.prjct_exprmt_context_id = aci.prjct_exprmt_context_id
+       AND aci2.prjct_exprmt_cntxt_item_id < aci.prjct_exprmt_cntxt_item_id);
+
 UPDATE project_context_item aci
 SET display_order =
     (SELECT Count(*)
@@ -109,6 +121,18 @@ WHERE display_order !=
      WHERE aci2.experiment_id = aci.experiment_id
        AND aci2.exprmt_context_id < aci.exprmt_context_id);
 
+UPDATE prjct_exprmt_context aci
+SET display_order =
+    (SELECT Count(*)
+     FROM prjct_exprmt_context aci2
+     WHERE aci2.project_experiment_id = aci.project_experiment_id
+       AND aci2.prjct_exprmt_context_id < aci.prjct_exprmt_context_id)
+WHERE display_order !=
+      (SELECT Count(*)
+     FROM prjct_exprmt_context aci2
+     WHERE aci2.project_experiment_id = aci.project_experiment_id
+       AND aci2.prjct_exprmt_context_id < aci.prjct_exprmt_context_id);
+
 COMMIT;
 
 /*
@@ -117,6 +141,12 @@ SET exprmt_context_item_id =
     (SELECT Count(*)
       FROM exprmt_context_item  eci2
       WHERE eci2.exprmt_context_item_id <= eci.exprmt_context_item_id);
+
+UPDATE prjct_exprmt_cntxt_item eci
+SET prjct_exprmt_cntxt_item_id =
+    (SELECT Count(*)
+      FROM prjct_exprmt_cntxt_item  eci2
+      WHERE eci2.prjct_exprmt_cntxt_item_id <= eci.prjct_exprmt_cntxt_item_id);
 
 UPDATE exprmt_measure eci
 SET exprmt_measure_id =
@@ -136,6 +166,12 @@ SET assay_context_measure_id =
       FROM assay_context_measure  eci2
       WHERE eci2.assay_context_measure_id <= eci.assay_context_measure_id);
 */
+
+UPDATE element_hierarchy eci
+SET element_hierarchy_id =
+    (SELECT Count(*)
+      FROM element_hierarchy  eci2
+      WHERE eci2.element_hierarchy_id <= eci.element_hierarchy_id);
 
 
 DECLARE
