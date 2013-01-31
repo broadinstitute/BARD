@@ -161,7 +161,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull molSpreadSheetData.mssHeaders
         assert molSpreadSheetData.mssData.size() == 10
         assert molSpreadSheetData.rowPointer.size() == 2
-        assert molSpreadSheetData.columnPointer.size() == 0
+        assert molSpreadSheetData.columnPointer.size() == 2
         assert molSpreadSheetData.mssHeaders.size() == 5
     }
 
@@ -239,6 +239,39 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
 
 
+    void "test expanded populateMolSpreadSheetData"() {
+        given:
+        Long assayId1 = 2199
+        Long assayId2 = 730
+        when: "we have a molecularSpreadSheetService"
+        assertNotNull molecularSpreadSheetService
+
+ //       List<ExperimentSearch> finalExperimentList  = assayRestService.findExperimentsByAssayId(assayId1)
+        List<ExperimentSearch> finalExperimentList  = [new ExperimentSearch(),new ExperimentSearch()]
+        List<SpreadSheetActivity> spreadSheetActivityList = [new SpreadSheetActivity (cid: 4540 as Long, eid: 47 as Long),
+                                                             new SpreadSheetActivity (cid: 777 as Long, eid: 888 as Long)]
+        molSpreadSheetData.rowPointer[4540 as Long] = 0
+        Map<String, MolSpreadSheetCell> dataMap = [:]
+
+        molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
+                finalExperimentList,
+                spreadSheetActivityList,
+                dataMap)
+
+
+
+        then: "we should be able to generate a list of spreadsheet activity elements"
+        dataMap.size() != 0
+        dataMap["0_4"] != null
+        dataMap["0_4"].activity.toString() == "Uninitialized"
+        dataMap["0_4"].activity.name() == "Unknown"
+        assertNotNull molSpreadSheetData.mssData
+    }
+
+
+
+
+
     void "test populateMolSpreadSheetData"() {
         given:
         Long assayId1 = 2199
@@ -256,9 +289,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [4540 as Long, 4544 as Long, 4549 as Long, 4552 as Long])
 
-        List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
-                finalExperimentList,
-                etag)
+        List<SpreadSheetActivity> spreadSheetActivityList2 = [new SpreadSheetActivity (cid: 4540 as Long, eid: 47 as Long) ]
         molSpreadSheetData.rowPointer[4540 as Long] = 0
         molSpreadSheetData.rowPointer[4544 as Long] = 1
         molSpreadSheetData.rowPointer[4549 as Long] = 2
@@ -266,7 +297,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
-                spreadSheetActivityList,
+                spreadSheetActivityList2,
                 dataMap)
 
 
@@ -275,6 +306,9 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull molSpreadSheetData.mssData
         assert molSpreadSheetData.mssData.size() == 0
     }
+
+
+
 
 
 
@@ -696,6 +730,8 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.mssData.put("1_4", new MolSpreadSheetCell("3888711", MolSpreadSheetCellType.lessThanNumeric))
         molSpreadSheetData.rowPointer.put(5342L, 0)
         molSpreadSheetData.rowPointer.put(5344L, 0)
+        molSpreadSheetData.columnPointer.put(47L, 0)
+        molSpreadSheetData.columnPointer.put(48L, 0)
         molSpreadSheetData
     }
 }

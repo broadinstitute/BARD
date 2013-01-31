@@ -9,6 +9,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.CurveFitParameters
 import bard.core.rest.spring.experiment.ConcentrationResponsePoint
+import bard.core.rest.spring.experiment.ActivityData
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -32,11 +33,36 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
     void "Smoke test can we build a spreadsheet activity storage data"() {
         when:
         SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage()
-//        spreadSheetActivityStorage.hillCurveValueHolderList <<  hillCurveValueHolder
 
         then:
         assertNotNull(spreadSheetActivityStorage)
     }
+
+
+
+
+
+    void "Test print units "() {
+        given:
+        final SpreadSheetActivityStorage spreadSheetActivityStorage = new SpreadSheetActivityStorage(responseUnit: responseUnit)
+
+        when:
+        String printedUnit =  spreadSheetActivityStorage.printUnits(resultHolder)
+
+        then:
+        printedUnit == expectedPrintedUnit
+
+        where:
+        resultHolder        | expectedPrintedUnit   | responseUnit
+        '--'                | ''                    | null
+        ''                  | ''                    | null
+        ''                  | '%'                   | 'percent'
+        ''                  | 'uM'                  | 'um'
+        ''                  | 'whatever'            | 'whatever'
+    }
+
+
+
 
     void "Test constraints for molecular spreadsheet data"() {
         given:
@@ -135,6 +161,30 @@ class SpreadSheetActivityStorageUnitSpec extends Specification {
         assert spreadSheetActivityStorage.sid == 1
         assert spreadSheetActivityStorage.activityOutcome == ActivityOutcome.ACTIVE
     }
+
+
+
+    void "Test  MolSpreadSheetCell constructor in case of non-null child elements "() {
+        given:
+        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+        spreadSheetActivity.sid = 1 as Long
+        spreadSheetActivity.activityOutcome = ActivityOutcome.ACTIVE
+        spreadSheetActivity.potency = 3 as Double
+        ActivityData activityData = new ActivityData()
+        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: "testName", value: 0.47d, childElements: [activityData], concentrationResponseSeries: new ConcentrationResponseSeries())
+        spreadSheetActivity.priorityElementList = [priorityElement,priorityElement]
+
+        when:
+        MolSpreadSheetCell molSpreadSheetCell =  new  MolSpreadSheetCell(spreadSheetActivity)
+
+        then:
+        assertNotNull(molSpreadSheetCell)
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size()==2
+    }
+
+
+
+
 
 
     void "Test  MolSpreadSheetCell constructor in case of multiple identical column names"() {

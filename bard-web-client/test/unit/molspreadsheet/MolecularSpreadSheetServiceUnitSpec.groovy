@@ -118,34 +118,6 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     }
 
-//    void "test findActivitiesForCompounds"() {
-//        given:
-//        Long experimentId = 2
-//        String compoundETag = null
-//        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
-//        //add a null value
-//        experimentData.activities.add(null)
-//        when:
-//        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experimentId, compoundETag)
-//        then:
-//        experimentRestService.activities(_, _) >> {experimentData}
-//        assert !spreadSheetActivities.isEmpty()
-//    }
-//    void "test findActivitiesForCompounds with skip and top"() {
-//        given:
-//        Long experimentId = 2
-//        int skip = 0
-//        int top = 2
-//        String compoundETag = null
-//        ExperimentData experimentData = new ExperimentData(activities: [new Activity(potency: 2.0), new Activity(potency: 3.0)])
-//        //add a null value
-//        experimentData.activities.add(null)
-//        when:
-//        List<SpreadSheetActivity> spreadSheetActivities = service.findActivitiesForCompounds(experimentId, compoundETag,top,skip)
-//        then:
-//        experimentRestService.activities(_, _,_,_) >> {experimentData}
-//        assert !spreadSheetActivities.isEmpty()
-//    }
     void "test assays To Experiments"() {
         given:
         Collection<Assay> assays = [new Assay(assayId: 2)]
@@ -174,6 +146,61 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         then: "we want to pull out the active values"
         assertNotNull molSpreadSheetData
         assert molSpreadSheetData.mapColumnsToAssay.size() == 7
+    }
+
+    void "test prepareMapOfColumnsToAssay inner loops"() {
+        when:
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'c')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'d')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'e',unitsInColumn: "uM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'f',unitsInColumn: "uM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'g')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'h',unitsInColumn: "uM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'i',unitsInColumn: "pM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'j')])
+        molSpreadSheetData.rowPointer[47 as Long]  =  1
+        molSpreadSheetData.rowPointer[48 as Long]  =  2
+        molSpreadSheetData.rowPointer[49 as Long]  =  3
+        molSpreadSheetData.experimentNameList << 'a'
+        MolSpreadSheetCell molSpreadSheetCell0 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell0.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        MolSpreadSheetCell molSpreadSheetCell1 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell1.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        MolSpreadSheetCell molSpreadSheetCell2 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell2.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        molSpreadSheetData.mssData.put("0_4", molSpreadSheetCell0)
+        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("2_4", molSpreadSheetCell2)
+        molSpreadSheetData.mssData.put("0_5", molSpreadSheetCell0)
+        molSpreadSheetData.mssData.put("1_5", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("2_5", molSpreadSheetCell2)
+        service.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        println 'hello'
+
+        then: "we want to pull out the active values"
+        assertNotNull molSpreadSheetData
+        molSpreadSheetData.mapColumnsToAssay.size() == 10
+        molSpreadSheetData.mssHeaders.size() == 6
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[0].columnTitle=='e'
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[0].unitsInColumn=='uM'
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[0].unitsInColumnAreUniform==false
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[1].columnTitle=='f'
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[1].unitsInColumn=='uM'
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[1].unitsInColumnAreUniform==false
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[2].columnTitle=='g'
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[2].unitsInColumnAreUniform==true
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[0].columnTitle=='h'
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[0].unitsInColumn=='uM'
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[0].unitsInColumnAreUniform==true
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[1].columnTitle=='i'
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[1].unitsInColumn=='pM'
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[1].unitsInColumnAreUniform==true
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[2].columnTitle=='j'
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[2].unitsInColumn==null
+        molSpreadSheetData.mssHeaders[5].molSpreadSheetColSubHeaderList[2].unitsInColumnAreUniform==true
     }
 
 

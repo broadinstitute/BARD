@@ -30,6 +30,72 @@ class MolSpreadSheetDataUnitSpec extends Specification {
         assertNotNull molSpreadSheetData.rowPointer
     }
 
+    void "test getColumnsDescr with no headers"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        List<String> columnsDescr = molSpreadSheetData.getColumnsDescr()
+
+        then:
+        columnsDescr.size()  == 0
+    }
+
+    void "test getColumnsDescr with headers"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        MolSpreadSheetColumnHeader molSpreadSheetColumnHeader = new MolSpreadSheetColumnHeader ()
+        MolSpreadSheetColSubHeader molSpreadSheetColSubHeader1 =  new MolSpreadSheetColSubHeader()
+        molSpreadSheetColSubHeader1.unitsInColumn = 'uM'
+        MolSpreadSheetColSubHeader molSpreadSheetColSubHeader2 =  new MolSpreadSheetColSubHeader()
+        molSpreadSheetColSubHeader2.unitsInColumn = 'pM'
+        molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList =[molSpreadSheetColSubHeader1,molSpreadSheetColSubHeader2]
+        molSpreadSheetData.mssHeaders =  [molSpreadSheetColumnHeader]
+        List<String> columnsDescr = molSpreadSheetData.getColumnsDescr()
+
+        then:
+        columnsDescr.size()  == 2
+        columnsDescr[0]  == 'uM'
+        columnsDescr[1]  == 'pM'
+    }
+
+
+    void "test getSubColumns with headers"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        MolSpreadSheetColumnHeader molSpreadSheetColumnHeader = new MolSpreadSheetColumnHeader ()
+        MolSpreadSheetColSubHeader molSpreadSheetColSubHeader1 =  new MolSpreadSheetColSubHeader()
+        molSpreadSheetColSubHeader1.unitsInColumn = 'uM'
+        MolSpreadSheetColSubHeader molSpreadSheetColSubHeader2 =  new MolSpreadSheetColSubHeader()
+        molSpreadSheetColSubHeader2.unitsInColumn = 'pM'
+        molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList =[molSpreadSheetColSubHeader1,molSpreadSheetColSubHeader2]
+        molSpreadSheetData.mssHeaders =  [molSpreadSheetColumnHeader]
+        List<String> subColumns0 = molSpreadSheetData. getSubColumns(0)
+        List<String> subColumns1 = molSpreadSheetData. getSubColumns(1)
+
+        then:
+        subColumns0.size()  == 2
+        subColumns1.size()  == 0
+    }
+
+
+
+    void "test getSubColumnList with headers"() {
+        when:
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        MolSpreadSheetColumnHeader molSpreadSheetColumnHeader = new MolSpreadSheetColumnHeader ()
+        MolSpreadSheetColSubHeader molSpreadSheetColSubHeader1 =  new MolSpreadSheetColSubHeader()
+        molSpreadSheetColSubHeader1.unitsInColumn = 'uM'
+        MolSpreadSheetColSubHeader molSpreadSheetColSubHeader2 =  new MolSpreadSheetColSubHeader()
+        molSpreadSheetColSubHeader2.unitsInColumn = 'pM'
+        molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList =[molSpreadSheetColSubHeader1,molSpreadSheetColSubHeader2]
+        molSpreadSheetData.mssHeaders =  [molSpreadSheetColumnHeader]
+        List<MolSpreadSheetColSubHeader> retrievedMolSpreadSheetColSubHeader0 = molSpreadSheetData. getSubColumns(0)
+        List<MolSpreadSheetColSubHeader> retrievedMolSpreadSheetColSubHeader1 = molSpreadSheetData. getSubColumns(1)
+
+        then:
+        retrievedMolSpreadSheetColSubHeader0.size()  == 2
+        retrievedMolSpreadSheetColSubHeader1.size()  == 0
+    }
+
 
 
     void "test determineResponseTypesPerAssay"() {
