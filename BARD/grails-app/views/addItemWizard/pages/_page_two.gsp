@@ -8,13 +8,12 @@
 %>
 <af:page>
 
-%{-- 
-<input class="input-xlarge" type="text" id="elementId1" name='elementId1' value='${ attribute?.elementId }'>
-<input class="input-xlarge" type="text" id="path1" name='path1' value='${ attribute?.path }'>
-<input class="input-xlarge" type="text" id="assayContextId1" name='assayContextId1' value='${ attribute?.assayContextIdValue }'>
-<input class="input-xlarge" type="text" id="currentValue1" name='currentValue1' value='${ attribute?.currentValue }'>
-<input class="input-xlarge" type="text" id="pageNumber" name='pageNumber' value='${ page }'>
---}%
+<g:hasErrors bean="${valueType}">
+	<div class="alert alert-error">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		<g:renderErrors bean="${valueType}"/>
+	</div>
+</g:hasErrors>
 
 <g:set var="currentValue" value="${ attribute?.currentValue }" />
 <g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeName, 'valueType': 'Not define yet', 'value': 'Not define yet']"/>

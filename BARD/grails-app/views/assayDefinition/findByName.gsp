@@ -10,7 +10,7 @@
 	$(document).ready(function() {
 		var autoOpts = {
 			source: "/BARD/assayJSon/getNames",
-			minLength: 2
+			minLength: 3
 		}
 	 	$( "#name" ).autocomplete(autoOpts);
 	 	$( "#results_accordion" ).accordion({ autoHeight: false });

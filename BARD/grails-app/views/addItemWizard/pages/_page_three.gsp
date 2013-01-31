@@ -1,4 +1,5 @@
 <%@ page import="bard.db.registration.*" %>
+<%@ page import="bard.db.dictionary.*" %>
 
 <af:page>
 
