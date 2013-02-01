@@ -112,7 +112,7 @@
 
                     <div id="target-documents-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../document/show" model="['documents': instance.documents]"/>
+                            <g:render template="/document/list" model="['documents': instance.documents, documentTemplate: '/document/show']"/>
                         </div>
                     </div>
                 </div>
