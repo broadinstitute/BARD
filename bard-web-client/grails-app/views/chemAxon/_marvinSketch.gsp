@@ -1,7 +1,4 @@
 <%-- Sets up the MarvinSketch applet. Additional MarvinSketch param could be set here --%>
-<script type="text/javascript" src="js/dojo-min/dojo/dojo.js"></script>
-<script type="text/javascript" src="js/jsDraw/Scilligence.JSDraw2.js"></script>
-<script type="text/javascript" src="js/jsDraw/license.js"></script>
 <script type="text/javascript" SRC="${request.contextPath}/marvin/marvin.js"></script>
 <script type="text/javascript" src="${request.contextPath}/marvin/js2java.js"></script>
 <script type="text/javascript">
@@ -115,54 +112,6 @@
             }
         }
         return structureSearchType
-    }
-
-
-    //Implements the JSDraw popup/modal editor dialog
-    var dialog = null;
-
-    function showJSDrawEditor() {
-        if (dialog == null) {
-            // create the parent div to told the editor and the radio and submit buttons. params: (parent, element type, element text, CSS styles, attributes)
-            var dialogDiv = scilligence.Utils.createElement(null, "div", null, {width:"auto"}, { class:""});
-            // create the editor dialog div (jsdraw editor placeholder)
-            var jsDrawEditorDiv = scilligence.Utils.createElement(dialogDiv, "div");
-            //control-group div
-            var controlsGroupDiv = scilligence.Utils.createElement(dialogDiv, "div", null, {textAlign:"left"}, {class:'control-group'});
-            // radio-buttons div
-            var controlsDiv = scilligence.Utils.createElement(controlsGroupDiv, "div", null, {textAlign:"left"}, {class:'controls'});
-            // create the radio buttons; use the same element name to create the radio-groups.
-            var labelElm = scilligence.Utils.createElement(controlsDiv, "label", "Exact", null, {class:'radio inline'});
-            scilligence.Utils.createElement(labelElm, "radio", null, null, {name:"structureSearchType"});
-            var labelElm = scilligence.Utils.createElement(controlsDiv, "label", "Substructure", null, {class:'radio inline'});
-            scilligence.Utils.createElement(labelElm, "radio", null, null, {name:"structureSearchType"});
-            var labelElm = scilligence.Utils.createElement(controlsDiv, "label", "Similarity", null, {class:'radio inline'});
-            scilligence.Utils.createElement(labelElm, "radio", null, null, {name:"structureSearchType"});
-            var labelElm = scilligence.Utils.createElement(controlsDiv, "label", "Superstructure", null, {class:'radio inline'});
-            scilligence.Utils.createElement(labelElm, "radio", null, null, {name:"structureSearchType"});
-            // submit-button div
-            controlsDiv = scilligence.Utils.createElement(controlsGroupDiv, "div", null, {textAlign:"right"}, {class:'controls'});
-            var submitButton = scilligence.Utils.createElement(controlsDiv, "Button", "Search", null, {class:'btn'});
-            dojo.connect(submitButton, "onclick", onSearch);
-
-            // finally, create the JSDraw editor dialog
-            dialog = new JSDraw2.Dialog("Draw or Paste a Structure", dialogDiv);
-            dialog.editor = new JSDraw2.Editor(jsDrawEditorDiv, {width:750, height:350, skin:"w8", sendquery:false, showfilemenu:false });
-        }
-
-        dialog.show();
-
-//    var molfile = dojo.byId("testdata").value;
-//    dialog.editor.setMolfile(molfile);
-        dlg.editor.readCookie();
-    }
-
-    function onSearch() {
-        dialog.editor.writeCookie();
-
-        var smiles = dialog.editor.getSmiles();
-        dialog.hide();
-        alert(smiles);
     }
 </script>
 

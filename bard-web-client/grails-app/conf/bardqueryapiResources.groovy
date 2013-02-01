@@ -40,7 +40,7 @@ modules = {
         resource url: "js/compoundOptions.js"
     }
     structureSearch {
-        resource url: "js/structureSearchDialog.js", disposition: "head"
+        resource url: "js/structureSearchDialog.js"
     }
     autocomplete {
         resource url: "js/autocomplete.js"
