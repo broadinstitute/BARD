@@ -4,7 +4,7 @@
 <script type="text/javascript" src="js/jsDraw/Scilligence.JSDraw2.js"></script>
 <script type="text/javascript" src="js/jsDraw/license.js"></script>
 
-%{--<r:require modules="structureSearch"/>--}%
+<r:require modules="structureSearch"/>
 
 <g:hiddenField name="searchTypes" id="searchTypes" value="${StructureSearchParams.Type.values().join(':')}"/>
 
