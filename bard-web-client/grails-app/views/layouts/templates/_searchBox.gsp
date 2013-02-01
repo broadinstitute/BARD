@@ -1,4 +1,5 @@
-<r:require module="autocomplete"/>
+%{--<r:require modules="autocomplete, structureSearch"/>--}%
+<r:require modules="autocomplete"/>
 <noscript>
     <a href="http://www.enable-javascript.com/" target="javascript">
         <img src="${resource(dir: 'images', file: 'enable_js.png')}"
@@ -26,7 +27,7 @@
 
     <div class="row-fluid">
         <div class="span10">
-            <div class="pull-right"><a data-toggle="modal" href="#modalDiv">
+            <div class="pull-right"><a data-toggle="modal" href="javascript:showJSDrawEditor()">
                 <img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure"
                      title="Draw or paste a structure"/> Draw or paste a structure</a> or <a
                     data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>

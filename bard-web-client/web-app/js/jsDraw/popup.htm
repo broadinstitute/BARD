@@ -1,0 +1,58 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+</head>
+<body>
+
+<div id="jsd" style="width: 660px; height: 350px;border:1px solid gray"></div>
+<script type="text/javascript">    dojo.addOnLoad(function () { new JSDraw('jsd'); setJsdValue(); });</script>
+
+<div style='text-align:center; padding-top:10px;'>
+<button onclick='done()'>Save</button>
+</div>
+
+<script type="text/javascript">
+    function done() {
+        var jsd = JSDraw.get('jsd');
+        parent.jsdrawpopupcallback(jsd);
+    }
+
+    function setJsdValue(value) {
+        var jsd = JSDraw.get('jsd');
+        var data = value != null ? value.value : frameElement.getAttribute("data");
+        var datafmt = value != null ? value.format : frameElement.getAttribute("datafmt");
+        if (datafmt == "molfile")
+            jsd.setMolfile(data);
+        else if (datafmt == "xml")
+            jsd.setHtml(data);
+    }
+</script>
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

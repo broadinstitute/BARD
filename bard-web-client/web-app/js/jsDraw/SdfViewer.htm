@@ -1,0 +1,76 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+// JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw2.Table - View and publish SDF</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Service.aspx'></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+<h2>JSDraw2.Table - SDFViewer</h2>
+<b>Usage</b>:     http://www.olncloud.com/oln/jsdraw/SDFViewer.aspx?<i style='color:red'>[SDF_URL_ADDRESS]</i><br />
+Or you can type the url below:</br>
+URL of SDF file: <input id='url' size=60 /> <button onclick='loadUrl(dojo.byId("url").value)'>Load</button>
+
+<div id='div1'></div>
+
+<script type="text/javascript">
+
+    var jss = null;
+
+    function loadUrl(url) {
+        if (url == null || url == "")
+            return;
+        JsUtils.jsonp("http://www.olncloud.com/oln/jsdraw/Service.aspx?cmd=downloadfile", function (ret) { loadSdf(ret); }, { url: url });
+    }
+
+    function loadSdf(ret) {
+        if (ret.data == null || ret.data == "")
+            return;
+
+        if (jss == null)
+            jss = new JSDraw2.Table(null, { data: ret.data, spreadsheet: true, searchable: true, removehydrogens: true }, "div1");
+        else
+            jss.setSdf(ret.data, null, null, true);
+    }
+
+    dojo.addOnLoad(function () {
+        var s = window.location + "";
+        var p = s.indexOf("?");
+        var url = p <= 0 ? null : s.substr(p + 1);
+
+        loadUrl(url);
+    });
+</script>
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

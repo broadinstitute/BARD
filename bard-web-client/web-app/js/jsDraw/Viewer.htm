@@ -1,0 +1,60 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw - A Javascript Chemical Structure Editor/Viewer</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body class='tundra'>
+
+<h2>Use OLN JSDraw as Molecule/Reaction Viewer</h2>
+
+<table><tr><td>
+Molecule 1: (double-click to edit)<br />
+<div class='JSDraw' id="div2" style="width: 330px; height: 330px;border:1px solid gray" popup dataformat='molurl' data='data/mol1.mol.txt'></div>
+</td><td>
+Molecule 2:<br />
+<div class='JSDraw' id="div1" style="width: 330px; height: 330px;border:1px solid gray" viewonly dataformat='molurl' data='data/mol2.mol.txt'></div>
+</td></tr></table>
+
+<br />
+<table><tr><td>
+Reaction 1:<br />
+<div class='JSDraw' id="div3" style="width: 664px; height: 200px;border:1px solid gray" viewonly dataformat='rxnurl' data='data/rxn1.rxn.txt'></div>
+</td></tr><tr><td>
+Reaction 2:<br />
+<div class='JSDraw' id="div4" style="width: 664px; height: 200px;border:1px solid gray" viewonly dataformat='rxnurl' data='data/rxn2.rxn.txt'></div>
+</td></tr></table>
+
+<script type="text/javascript"> JSDraw.init();</script>
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

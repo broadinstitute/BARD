@@ -1,0 +1,4 @@
+// Licensed to: (Evaluation)
+// Product: JSDraw
+// Expiration Date: 2013-Feb-28
+JSDraw2.licensecode="405533742301412436892781761723242424252424231217161617161717171723141512181";

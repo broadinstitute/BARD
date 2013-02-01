@@ -1,0 +1,340 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>
+JSDraw
+</title></head>
+<body>
+    
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+<h2>JSDraw 2 - A Javascript Chemical Structure Editor/Viewer</h2>
+
+<p><b>JSDraw</b> brings chemistry capabilities to your web pages.  With this javascript libary you can display and draw
+chemical structures in web pages, which works cross browser, including IE, Firefox, Safari, Opera and Chrome, crose platform,
+including Window, Mac, Linux, and even iPhone, Android and other mobile devices.</p>
+
+<div class='JSDraw' id="div1" skin='w8' style="width: 920px; height: 500px;border:1px solid gray" dataformat='molfile' data='
+ChemJSDraw11100923052D
+
+ 18 19  0  0  0  0  0  0  0  0  1 V2000
+    7.1760   -6.4480    0.0000 C   0  0
+    5.8250   -5.6680    0.0000 C   0  0
+    5.8250   -4.1080    0.0000 C   0  0
+    8.5270   -5.6680    0.0000 C   0  0
+    8.5270   -4.1080    0.0000 C   0  0
+    7.1760   -3.3280    0.0000 C   0  0
+    9.8780   -6.4480    0.0000 C   0  0
+   11.2290   -5.6680    0.0000 C   0  0
+   11.2290   -4.1080    0.0000 C   0  0
+    9.8780   -3.3280    0.0000 C   0  0
+   12.5800   -6.4480    0.0000 C   0  0
+   12.5800   -8.0080    0.0000 C   0  0
+   13.9310   -5.6680    0.0000 C   0  0
+   15.2820   -6.4480    0.0000 N   0  0
+   15.2820   -8.0080    0.0000 C   0  0
+   16.6330   -5.6680    0.0000 C   0  0
+   13.9310   -4.1080    0.0000 O   0  0
+    7.1760   -8.0080    0.0000 N   0  0
+  1  2  1  0
+  2  3  2  0
+  1  4  2  0
+  4  5  1  0
+  5  6  2  0
+  6  3  1  0
+  7  4  1  0
+  7  8  2  0
+  8  9  1  0
+  9 10  2  0
+ 10  5  1  0
+  8 11  1  0
+ 11 12  1  0
+ 11 13  1  0
+ 13 14  1  0
+ 14 15  1  0
+ 14 16  1  0
+ 13 17  2  0
+  1 18  1  0
+M  END'></div>
+
+
+<script type="text/javascript">
+    dojo.addOnLoad(function () {
+        var jsd2 = new JSDraw("div1");
+    });
+</script>
+
+<br />
+<b>Major Features: </b><br />
+(<font color=red>Because of browser security settings, some demos may not work if loading from your local computers</font>)
+<ul style='margin-top:0px;'>
+<li>Different Editor <a href='Size.htm'>Size</a></li>
+<li>Full-functional chemical structure editor (<a href='Demo.htm'>demo</a>)</li>
+<li>High-quality chemical strcture rendering (<a href='Viewer.htm'>demo</a>)</li>
+<li>One-line-script to publish SDF file (<a href='SDFList.htm'>SDF List</a>, <a href='SDFGrid.htm'>SDF Grid</a>)</li>
+<li>Intelligent, editable and searchable (substructure, fullstructure) chemical structure table control (<a href='Spreadsheet.htm'>demo</a>)</li>
+<li>Substructure search</li>
+<li>Stereochemistry supported</li>
+<li>Reaction and reaction map supported (<a href='ReactionMap.htm'>demo</a>)</li>
+<li>Annotation supported</li>
+<li>Highlighting query or scaffold</li>
+<li>Completely cross browser, cross platform</li>
+<li>Inputting Mol file, Rxn file, SDF file</li>
+<li>Exporting Mol file, Rxn file, SMILES, SMARTS(<a href='Query.htm'>demo</a>), Html, Formula, Mol weight</li>
+<li>Customizable plug-in architecture (<a href='plugin.htm'>demo</a>)</li>
+<li>Atom Tag(<a href='AtomTag.htm'>demo</a>)</li>
+<li>HTML/Image column type (<a href='ImageColumn.htm'>demo</a>)</li>
+<li>Name2structure integrating with Chemistry Spreadsheet (<a href='N2s.htm'>demo</a>)</li>
+    <li>SDF File Viewer and Publisher (<a href='SDFViewer.htm?http://www.sigmaaldrich.com/etc/medialib/docs/Aldrich/General_Information/sss_chloroformates.tmp'>demo</a>)</li>
+</ul>
+
+<br />
+<b>Some Drawing Tips:</b>
+<ul style='margin-top:0px;'>
+<li>Any tool can draw bond</li>
+<li>Click single bond to set double bond</li>
+<li>Mouse hove bonds and press 0-8 keys to set bond types</li>
+<li>Mouse hove atoms and press characters key to set atom types</li>
+<li>Mouse hove atom, bond, arrow or plus and press DEL key to delete objects</li>
+<li>Drag objects to change position</li>
+<li>Hold Ctrl key and drag selected objects to copy them</li>
+<li>Ctrl+C for copy, Ctrl+X for cut, Ctrl+V for paste, Ctrl+Z for undo and Ctrl+Y for redo</li>
+<li>Right click atom/bond/blank area for different context menu</li>
+</ul>
+
+<br />
+Example 1 (Viewer, using molurl):
+<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+&lt;div class='<font color=blue>JSDraw</font>' id="jsdraw1" style="width: 400px; height: 330px;border:1px solid gray" 
+    dataformat='molurl' <font color=blue>data</font>='mol1.mol.txt' <font color=blue>viewonly</font> &gt;&lt;/div&gt;
+</pre>
+<br />
+Example 2 (Editor, using molfile):
+<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+&lt;div class='<font color=blue>JSDraw</font>' id="jsdraw2" style="width: 500px; height: 300px;border:1px solid gray" 
+    dataformat='molfile' <font color=blue>data</font>='
+JSDraw
+
+  5  4  0  0  0  0  0  0  0  0  1 V2000
+    2.2994    2.0277    0.0000 O   0  0
+    3.2617    0.3611    0.0000 F   0  0
+    2.2994    0.9166    0.0000 C   0  0
+    1.3372    0.3611    0.0000 N   0  0
+    0.3750    0.9166    0.0000 Cl  0  0
+  3  1  2
+  3  2  1
+  4  3  1
+  5  4  1
+M  END'&gt;&lt;/div'&gt;
+</pre>
+<br />
+Example 3 (Editor, using JSDraw compatible html):
+<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+&lt;div class='JSDraw' style='width:600px;height:300px;' viewonly&gt;
+&lt;a i=1 e='C' p='10.192 6.656'&gt;&lt;/a&gt;
+&lt;a i=2 e='C' p='11.543 5.876'&gt;&lt;/a&gt;
+&lt;a i=3 e='C' p='12.894 6.656'&gt;&lt;/a&gt;
+&lt;a i=4 e='O' p='11.543 4.316'&gt;&lt;/a&gt;
+&lt;b a1=1 a2=2 t=1 r='black'&gt;&lt;/b&gt;
+&lt;b a1=2 a2=3 t=1 r='black'&gt;&lt;/b&gt;
+&lt;b a1=2 a2=4 t=2 r='black'&gt;&lt;/b&gt;
+&lt;/div&gt;
+</pre>
+<br />
+Example 4 (SDF Viewer):
+<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+&lt;script type="text/javascript"&gt;
+    new <font color=blue>JSDraw2.Table</font>("sdf4.sdf.txt", {grid:true, cols:5, width:200, height:120, searchable:true});
+&lt;/script&gt;
+</pre>
+
+    <br />
+        <strong>IE9</strong><br />
+    In order to let IE9 render graphics in SVG, which is much faster than 
+    traditional VML, you need include following meta tag in &lt;head&gt; section:<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge" &gt;</pre>
+
+<br />
+<b>class JSDraw2.Mol</b>
+<ul style='margin-top:0px;margin-bottom:0px;'>
+<li>JSDraw2.Mol was called JsMol in JSDraw 1.x</li>
+    <li>Constructor
+    <ul><li>new JSDraw2.Mol()</li>
+    </ul>
+</li>
+    <li>Members<ul style='margin-top:0px;margin-bottom:0px;'>
+        <li>atoms - an array contains all atoms</li>
+        <li>bonds - an array contains all bonds</li>
+        </ul>
+    </li>
+    <li>Methods<ul style='margin-top:0px;margin-bottom:0px;'>
+        <li>aamap(target, fullstructure) - Perform atom-by-atom mapping, and return the map 
+            if succeeded.&nbsp; target is a JsMol object; fullstructure to indicate to do a 
+            full-structure search.</li>
+        <li>cleanupRxn() - Clean up reaction</li>
+        <li>clear() - Remove all atoms and bonds</li>
+        <li>clone(selectOnly) - Clone a new JsMol object</li>
+        <li>flipX(x)</li>
+        <li>flipY(y)</li>
+        <li>fullstructureMatch(target) - Perform a full-structure search, and return true if 
+            succeeded</li>
+        <li>getExactMass()</li>
+        <li>getFormula(html)</li>
+        <li>getHtml()</li>
+        <li>getMolfile(rxn, v3000)</li>
+        <li>getMolWeight()</li>
+        <li>getRxnfile(groupbyplus, v3000)</li>
+        <li>getSmiles()</li>
+        <li>isEmpty()</li>
+        <li>moveCenter()</li>
+        <li>scale(factor)</li>
+        <li>setColor(color)</li>
+        <li>setHtml(html)</li>
+        <li>setMolfile(molfile)</li>
+        <li>setRxnfile(rxnfile)</li>
+        <li>substructureMatch(target) - Perform a substructure search. and return true if 
+            succeeded</li>
+        </ul>
+    </li>
+</ul>
+<b>class JSDraw2.Editor</b>
+<ul style='margin-top:0px;margin-bottom:0px;'>
+<li>JSDraw2.Editor was called JSDraw in JSDraw 1.x</li>
+    <li>Constructor
+    <ul><li>new JSDraw2.Editor(div, [options]) - Convert div element into a structure editor 
+        immediately</li>
+    <li>JSDraw2.Editor.init() - Delay the operation to convert all DIV elements with class value 
+        as JSDraw into structure editors.&nbsp; Usually call this method before page 
+        onload() event.</li></ul>
+</li>
+<li>Parameters/options
+    <ul>
+    <li>biology - Set this flag to false to hide seqence button</li>
+        <li>dataformat - data format. It can be molfile, rxnfile, html</li>
+    <li>data - actual data</li>
+    <li>height</li>
+    <li>largeicon - use large toolbar icons for higher resolution</li>
+    <li>ondatachange - datachange event handler</li>
+    <li>plugins - plugins, as an array [{iconurl, tooltips, onclick}, ...]</li>
+    <li>popup - Create a viewer, and double-click to show popup editor</li>
+    <li>query - Set this flag to false to disable query atoms (A, R, X, Q, * etc.) in periodic table</li>
+        <li>removeHydrogens - Remove hydrogen atoms before show the structure</li>
+    <li>rxn - Set this flag to false to disable reaction buttons on toolbar</li>
+    <li>scale - A factore to zoom the whole editor, including toolbars. This is useful for iPad applications</li>
+        <li>skin - set this to &quot;w8&quot; to display the editor in JSDraw2 mode; leave this 
+            parameter to empty to display editor in classic mode (2.0)</li>
+        <li>sendquery - Set this flag to false to hide PubChem, ChemSpider search button</li>
+    <li>showimplicithydrogens - Set flag to false to hide implicit hydrogens</li>
+    <li>viewonly</li>
+    <li>width</li>
+        <li>buttonshape - circle, or square</li>
+        <li>popupwidth - Popup Editor width</li>
+        <li>popupheight - Popup Editor height</li>
+        <li>inktools - set this flag to false to hide ink tools</li>
+        <li>showfilemenu - set this flag to false to hide file menus</li>
+        <li>highlighterrors - set this flag to false not to highlight errors in reb box</li>
+        <li>showtoolbar - set this flag to false not to show toolbar</li>
+    </ul>
+    <li>Members<ul style='margin-top:0px;margin-bottom:0px;'>
+        <li>m - A JSDraw2.Mol object</li>
+        </ul>
+    </li>
+<li>Methods
+    <ul>
+    <li>cleanupRxn() - Clean up reaction</li>
+    <li>clear() - Remove all atoms, bonds and other objects</li>
+    <li>destory() - For Ajax applications, call this method to release memory.</li>
+    <li>fitToWindow([maxBondlength]) - Scale the structure to fit the window size.</li>
+    <li>getExactmass()</li>
+    <li>getFormula([html])</li>
+    <li>getMolfile(v3000)</li>
+    <li>getMolWeight()</li>
+    <li>getRxnfile(groupbyplus, v3000)</li>
+    <li>getSmiles() - Generate SMILES, including stereochemistry descriptors</li>
+    <li>getHtml([width], [height], [viewonly]) - Generate JSDraw compatible html</li>
+    <li>highlight(query) - Perform a substructure, and highlight the substructure if 
+        succeeded</li>
+    <li>moveCenter()</li>
+    <li>readCookie([cookie_name]) - Read the structure previously stored in cookie</li>
+    <li>setHtml(jsdrawHtml) - Set JSDraw compatible html</li>
+    <li>setMolfile(molfile)</li>
+    <li>setRxnfile(rxnfile)</li>
+    <li>sss(target) - Perform substructure search and returns the mapping</li>
+    <li>redo()</li>
+    <li>refresh() - Redraw the structure</li>
+    <li>setSize(width, height)</li>
+    <li>undo()</li>
+    <li>writeCookie([cookie_name]) - Wrote current structure in cookie</li>
+    </ul>
+</li>
+<li>Events
+    <ul><li>ondatachange(jsdraw)</li>
+    </ul>
+</li>
+</ul>
+
+<br />
+<b>class JSDraw2.Table</b>
+<ul style='margin-top:0px;margin-bottom:0px;'>
+<li>JSDraw2.Table was called JsSDF in JSDraw 1.x<li>Constructor
+    <ul><li>new JSDraw2.Table(sdfurl [,options [,div]])</li>
+    <li>JSDraw2.Table.init(sdfurl, options, div)</li></ul>
+<li>Parameters
+    <ul>
+    <li>columns - Define columns, including key, caption, width, type (structure, id, mf, mw, int, mass, volume, integer, real)</li>
+    <li>filter(molfile, attributes) - A function called at loading time to determine if that record can be displayed or not (<a href='SDFList_filter.htm'>demo</a>)</li>
+    <li>grid - Set this to true to show structures as grid (<a href='SDFGrid.htm'>demo</a>)</li>
+    <li>highlight - A molfile as the scaffold to be highlighted (<a href='SDFList_filter.htm'>demo</a>)</li>
+    <li>molheight - The height of structure cells</li>
+        <li>onCellChanged(cell) - Event handler</li>
+        <li>removeHydrogens - Remove hydrogen atoms before show the structure</li>
+    <li>searchable</li>
+    <li>showformula</li>
+    <li>showmolweight</li>
+    <li>spreadsheet - Set this flag to true to display "define columns" button on toolbar</li>
+    <li>viewonly</li>
+    </ul>
+<li>Methods
+    <ul>
+    <li>clear() - clear all rows</li>
+    <li>destory() - Call this method to release this JSDraw2.Table object to avoid memory leak.&nbsp; 
+        This is very important for Ajax applications.</li>
+    <li>highlight(scaffold) - scaffold is a molfile string, JsMol object, or JSDraw 
+        object</li>
+    <li>getSdf()</li>
+    <li>getXml()</li>
+    <li>insert(row, values)</li>
+    <li>getCell(row, col)</li>
+    <li>setXml(xml)</li>
+    <li>setSdf(sdf)</li>
+    </ul>
+</li>
+    <li>Events<ul style='margin-top:0px;margin-bottom:0px;'>
+        <li>onCellChanged(cell) - event fired when user change a cell value</li>
+        </ul>
+    </li>
+</ul>
+
+
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

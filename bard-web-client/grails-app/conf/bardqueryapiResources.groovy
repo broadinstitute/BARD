@@ -17,8 +17,8 @@ modules = {
     images {
     }
     dictionaryPage {
-        resource url:"js/html5historyapi/history.js"
-        resource url:'/js/jquery-table-sorter/jquery.tablesorter.min.js'
+        resource url: "js/html5historyapi/history.js"
+        resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
         resource url: '/js/jquery-table-sorter/theme.default.css'
     }
     showProjectAssay {
@@ -40,7 +40,7 @@ modules = {
         resource url: "js/compoundOptions.js"
     }
     structureSearch {
-        resource url: "js/structureSearchDialog.js"
+        resource url: "js/structureSearchDialog.js", disposition: "head"
     }
     autocomplete {
         resource url: "js/autocomplete.js"
@@ -87,5 +87,13 @@ modules = {
     twitterBootstrapAffix {
         resource url: "css/twitterBootstrapAffix.css"
         resource url: "js/twitterBootstrapAffix.js"
+    }
+    jsDraw {
+        dependsOn("dojo")
+        resource url: "js/jsDraw/Scilligence.JSDraw2.js", disposition: "head"
+        resource url: "js/jsDraw/license.js", disposition: "head"
+    }
+    dojo {
+        resource url: "js/dojo-min/dojo/dojo.js", disposition: "head"
     }
 }
