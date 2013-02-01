@@ -17,8 +17,6 @@ abstract class AbstractElement {
     private static final int SYNONYMS_MAX_SIZE = 1000
     private static final int BARD_URI_MAX_SIZE = 250
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
-    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
-    private static final int ELEMENT_STATUS_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
 
 
@@ -37,7 +35,7 @@ abstract class AbstractElement {
     String modifiedBy
 
     static constraints = {
-        elementStatus(nullable: false, maxSize: ELEMENT_STATUS_MAX_SIZE)
+        elementStatus(nullable: false)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
         unit(nullable: true)
@@ -47,7 +45,7 @@ abstract class AbstractElement {
         synonyms(nullable: true, maxSize: SYNONYMS_MAX_SIZE)
         externalURL(nullable: true, maxSize: EXTERNAL_URL_MAX_SIZE)
 
-        readyForExtraction(nullable: false, maxSize: READY_FOR_EXTRACTION_MAX_SIZE)
+        readyForExtraction(nullable: false)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

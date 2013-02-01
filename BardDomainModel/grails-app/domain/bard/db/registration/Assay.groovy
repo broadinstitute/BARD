@@ -6,11 +6,9 @@ import bard.db.model.AbstractContextOwner
 
 class Assay extends AbstractContextOwner {
 
-    private static final int ASSAY_STATUS_MAX_SIZE = 20
     private static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     private static final int DESIGNED_BY_MAX_SIZE = 100
-    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
@@ -38,12 +36,12 @@ class Assay extends AbstractContextOwner {
             assayDocuments: AssayDocument]
 
     static constraints = {
-        assayStatus(maxSize: ASSAY_STATUS_MAX_SIZE, blank: false)
+        assayStatus()
         assayShortName(maxSize: ASSAY_SHORT_NAME_MAX_SIZE, blank: false)
         assayName(maxSize: ASSAY_NAME_MAX_SIZE, blank: false)
         assayVersion(maxSize: ASSAY_VERSION_MAX_SIZE, blank: false)
         designedBy(nullable: true, maxSize: DESIGNED_BY_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+        readyForExtraction(nullable: false)
         // TODO we can use enum mapping for this http://stackoverflow.com/questions/3748760/grails-enum-mapping
         // the ' - ' is this issue in this case
         assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group', 'Template'])

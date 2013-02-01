@@ -52,7 +52,7 @@ class Result {
 
     static constraints = {
         resultStatus(maxSize: RESULT_STATUS_MAX_SIZE, nullable: false, inList: ["Pending", "Approved", "Rejected", "Mark for Deletion"])
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+        readyForExtraction(nullable: false)
 
         experiment()
         resultType()

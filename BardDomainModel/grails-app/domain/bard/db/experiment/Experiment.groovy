@@ -9,9 +9,7 @@ import bard.db.project.ProjectExperiment
 
 class Experiment  extends AbstractContextOwner{
 
-    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int EXPERIMENT_NAME_MAX_SIZE = 1000
-    private static final int EXPERIMENT_STATUS_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int DESCRIPTION_MAX_SIZE = 1000
 
@@ -50,8 +48,8 @@ class Experiment  extends AbstractContextOwner{
 
     static constraints = {
         experimentName(blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
-        experimentStatus(nullable: false, maxSize: EXPERIMENT_STATUS_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+        experimentStatus(nullable: false)
+        readyForExtraction( nullable: false)
         assay()
 
         runDateFrom(nullable: true)

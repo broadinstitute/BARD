@@ -3,7 +3,6 @@ package bard.db.project
 import bard.db.enums.ReadyForExtraction
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.ExternalReference
-import bard.db.dictionary.Descriptor
 
 class Project extends AbstractContextOwner {
     private static final int PROJECT_NAME_MAX_SIZE = 256
@@ -29,7 +28,7 @@ class Project extends AbstractContextOwner {
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
-            contexts:ProjectContext,
+            contexts: ProjectContext,
             documents: ProjectDocument]
 
     static mapping = {
@@ -39,7 +38,7 @@ class Project extends AbstractContextOwner {
     }
 
     static constraints = {
-        name( maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
+        name(maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
         // TODO make enum
         groupType(maxSize: GROUP_TYPE_MAX_SIZE, nullable: false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
