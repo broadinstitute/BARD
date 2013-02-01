@@ -173,4 +173,15 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         then:
         notThrown(Exception.class)
     }
+
+    void 'test move measure'() {
+        when:
+        assay = Assay.build(assayName:'Test')
+        Measure parent = Measure.build(assay: assay)
+        Measure child = Measure.build(assay: assay)
+        controller.moveMeasureNode(child.id, parent.id)
+
+        then:
+        child.parentMeasure == parent
+    }
 }

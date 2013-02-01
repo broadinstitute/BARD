@@ -96,7 +96,7 @@
             <p>To change the location of a measure in the tree, select the name and drag it to the new location.</p>
             <h3>Measures</h3>
             <r:require module="dynatree"/>
-            <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}"/>
+            <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}" dropCallback="measureNodeDropped"/>
         </div>
 
         <div class="span6">

@@ -53,7 +53,6 @@
                 placeholder: "Search for attribute name",
                 query: function(query) {
                     var sectionPath = $("#sectionPath").val();
-                    console.log("querying for "+query.term+" "+sectionPath)
                     $.getJSON(
                             "/BARD/ontologyJSon/getDescriptors",
                             {
@@ -61,12 +60,10 @@
                                 section: sectionPath
                             },
                             function(data, textStatus, jqXHR) {
-                                console.log("got response "+data)
                                 var selectData = {results:[]}
                                 $.each(data, function(index, val) {
                                     selectData.results.push({id: val.elementId, text: val.label})
                                 })
-                                console.log("calling callback")
                                 query.callback(selectData)
                             }
                     );
@@ -98,12 +95,10 @@
                                 attributeId: elementId
                             },
                             function(data, textStatus, jqXHR) {
-                                console.log("got response "+data)
                                 var selectData = {results:[]}
                                 $.each(data, function(index, val) {
                                     selectData.results.push({id: val.elementId, text: val.label})
                                 })
-                                console.log("calling callback")
                                 query.callback(selectData)
                             }
                     );
