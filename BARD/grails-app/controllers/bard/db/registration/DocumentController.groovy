@@ -1,6 +1,7 @@
 package bard.db.registration
 
 class DocumentController {
+    static allowedMethods = [save: "POST", update: "POST"]
 
     def edit() {
         def document = AssayDocument.get(params.id)
@@ -12,8 +13,6 @@ class DocumentController {
         }
 
         [document: document]
-
-        redirect(action: "show", id: document.assay.id)
     }
 
     def create() {
@@ -30,10 +29,13 @@ class DocumentController {
         }
 
         AssayDocument document = new AssayDocument()
+        document.properties["documentName", "documentType", "documentContent"] = params
         document.assay = assay
-        document.save()
+        document.dateCreated = new Date()
 
-        redirect(action: "show", id: assay.id)
+        if(document.save()) {
+            redirect(controller: "assayDefinition", action: "edit", id: assay.id)
+        }
     }
 
     def update() {
@@ -45,6 +47,22 @@ class DocumentController {
             flash.message = null
         }
 
-        redirect(action: "show", id: document.assay.id)
+        document.properties["documentName", "documentType", "documentContent"] = params
+
+        redirect(controller: "assayDefinition", action: "edit", id: document.assay.id)
+    }
+
+    def delete() {
+        def document = AssayDocument.get(params.id)
+        if (!document) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
+            return
+        } else {
+            flash.message = null
+        }
+
+        document.delete()
+
+        redirect(controller: "assayDefinition", action: "edit", id: document.assay.id)
     }
 }

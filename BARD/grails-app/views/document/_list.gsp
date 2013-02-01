@@ -13,13 +13,11 @@
             <g:set var="documentTypeList" value="${documentMap.get(type)}"/>
             <g:if test="${documentTypeList}">
                 <h4>${type}<g:if test="${documentTypeList.size()>1 && !bard.db.model.IDocumentType.DOCUMENT_TYPE_COMMENTS == type}">s</g:if>:</h4>
-                <dl class="dl-horizontal">
                 <g:each in="${documentTypeList}" var="document">
                     <g:render template="${documentTemplate}" model="${[document: document]}"/>
                 </g:each>
             </g:if>
         </g:each>
-        </dl>
     </g:if>
     <g:else>
         <span>No documents found</span>

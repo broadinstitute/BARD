@@ -8,13 +8,22 @@
     <title>Edit Assay Document</title>
 </head>
 
+
 <body>
 <div class="row-fluid">
     <div class="span12">
-        <g:form>
-            <input type="hidden" id="${document.id}">
-            <g:render template="editProperties"/>
-            <input type="submit" class="btn">
+        <g:form class="form-horizontal" action="update" >
+            <input type="hidden" value="${document.id}" name="id">
+
+            <g:render template="editProperties" model="${[document:document]}" />
+
+            <div class="control-group">
+                <div class="controls">
+                    <g:link controller="assayDefinition" action="edit" id="${document.assay.id}" class="btn">Cancel</g:link>
+                    <input type="submit" class="btn btn-primary" value="Update">
+                </div>
+            </div>
+
         </g:form>
     </div>
 </div>
