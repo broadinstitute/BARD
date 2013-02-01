@@ -15,20 +15,22 @@ beans = {
         httpClient = ref('httpClient')
         authorization = ref('clientBasicAuth')
     }
-
     modifiedByListener(ModifiedByListener) {
         springSecurityService = ref('springSecurityService')
     }
     hibernateEventListeners(HibernateEventListeners) {
         listenerMap = ['pre-insert': modifiedByListener,
-                'pre-update': modifiedByListener,
+                'pre-update': modifiedByListener
         ]
     }
-
+    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService){
+        grailsApplication = application
+    }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
         crowdClient = ref('crowdClient')
         grailsApplication = application
     }
-    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService)
-
+    userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService){
+        crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
+    }
 }
