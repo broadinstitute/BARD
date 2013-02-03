@@ -4,7 +4,7 @@ var dialog = null;
 function showJSDrawEditor() {
     if (dialog == null) {
         // create the parent div to told the editor and the radio and submit buttons. params: (parent, element type, element text, CSS styles, attributes)
-        var dialogDiv = scilligence.Utils.createElement(null, "div", null, {width:"auto"}, { class:""});
+        var dialogDiv = scilligence.Utils.createElement(null, "div", null, {width:"auto"}, { id: 'dialogDiv', class:""});
         // create the editor dialog div (jsdraw editor placeholder)
         var jsDrawEditorDiv = scilligence.Utils.createElement(dialogDiv, "div");
         //control-group div
@@ -14,13 +14,13 @@ function showJSDrawEditor() {
         // create the radio buttons; use the same element name to create the radio-group.
         $('#searchTypes').attr('value').split(':').forEach(function (searchType) {
             var labelElm = scilligence.Utils.createElement(controlsDiv, "label", searchType, null, {class:'radio inline'});
-            scilligence.Utils.createElement(labelElm, "radio", null, null, {name:"structureSearchType", checked:(searchType == 'Substructure')});
+            scilligence.Utils.createElement(labelElm, "radio", null, null, {name:"structureSearchType", value: searchType, checked:(searchType == 'Substructure')});
 
         });
         $('input[value="Substructure"]').attr('checked', 'checked');
         // submit-button div
         controlsDiv = scilligence.Utils.createElement(controlsGroupDiv, "div", null, {textAlign:"right"}, {class:'controls'});
-        var submitButton = scilligence.Utils.createElement(controlsDiv, "Button", "Search", null, {class:'btn'});
+        var submitButton = scilligence.Utils.createElement(controlsDiv, "Button", "Search", null, {class:'btn', id: 'structureSearchButton'});
         dojo.connect(submitButton, "onclick", onSearch);
 
         // finally, create the JSDraw editor dialog

@@ -24,9 +24,8 @@ class StructureSearchPage extends ScaffoldPage {
     }
 
     static content = {
-        structureModalDialog(required: true) { $("#modalDiv") }
-        structureRadioButton(required: true) { $("form").structureSearchType }
-        closeButton(required: true, to: HomePage) { $("a#closeButton.btn") }
+        structureModalDialog(required: true) { $("#dialogDiv") }
+        structureRadioButton(required: true) { $("input[type='radio']").structureSearchType }
         structureSearchButton(required: true, to: ResultsPage) { $("#structureSearchButton") }
         //do confirmation here
     }
