@@ -30,6 +30,7 @@ modules = {
     }
     //Adding version allows clients to not cache javascript
     search {
+        dependsOn('structureSearch')
         resource url: "js/search.js"
         resource url = "css/facetDiv.css"
     }
@@ -90,10 +91,10 @@ modules = {
     }
     jsDraw {
         dependsOn("dojo")
-        resource url: "js/jsDraw/Scilligence.JSDraw2.js", disposition: "head"
-        resource url: "js/jsDraw/license.js", disposition: "head"
+        resource url: "js/jsDraw/Scilligence.JSDraw2.js"
+        resource url: "js/jsDraw/license.js"
     }
     dojo {
-        resource url: "js/dojo-min/dojo/dojo.js", disposition: "head"
+        resource url: "js/dojo-min/dojo/dojo.js"
     }
 }
