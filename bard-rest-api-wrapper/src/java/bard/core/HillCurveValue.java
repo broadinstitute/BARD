@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.CompareToBuilder;
 import java.util.List;
 import java.util.ArrayList;
 
-
+@Deprecated
 public class HillCurveValue extends Value {
     private static final long serialVersionUID = 0x8952d92d94f21b00l;
     private static final double ln10 = 2.30258509299404568401;
