@@ -115,27 +115,30 @@ class MolSpreadSheetCell {
                 HillCurveValueHolder hillCurveValueHolder
                 if (priorityElement.value == null) {
                     hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
+                } else if (!MolSpreadSheetCellHelper.isNumeric(priorityElement.value)) {
+                    String stringRepresentationOfValue =  priorityElement.value as String
+                    hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
                 }  else {
-
                     Double value = Double.parseDouble(priorityElement.value)
-                    this.spreadSheetActivityStorage.dictionaryDescription =  priorityElement.getDictionaryDescription() ?: ''
-                    this.spreadSheetActivityStorage.dictionaryLabel =  priorityElement.getDictionaryLabel() ?: ''
-                    if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
-                        CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
-                        hillCurveValueHolder = new HillCurveValueHolder(
-                                identifier: identifierString,
-                                s0: curveFitParameters.s0,
-                                sInf: curveFitParameters.sInf,
-                                slope: value,
-                                coef: curveFitParameters.hillCoef,
-                                conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
-                                response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
-                                xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
-                                yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel() )
-                    } else {
-                        hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
+                    if (value != null) {
+                        this.spreadSheetActivityStorage.dictionaryDescription =  priorityElement.getDictionaryDescription() ?: ''
+                        this.spreadSheetActivityStorage.dictionaryLabel =  priorityElement.getDictionaryLabel() ?: ''
+                        if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
+                            CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
+                            hillCurveValueHolder = new HillCurveValueHolder(
+                                    identifier: identifierString,
+                                    s0: curveFitParameters.s0,
+                                    sInf: curveFitParameters.sInf,
+                                    slope: value,
+                                    coef: curveFitParameters.hillCoef,
+                                    conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
+                                    response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
+                                    xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
+                                    yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel() )
+                        } else {
+                            hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
+                        }
                     }
-
                 }
                 hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(identifierString)
                 this.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder

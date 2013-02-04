@@ -2,6 +2,21 @@ package molspreadsheet
 
 import bardqueryapi.ActivityOutcome
 
+class  MolSpreadSheetCellHelper {
+
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException numberFormatException)
+        {
+            return false;
+        }
+        return true;
+    }
+}
 
 enum MolSpreadSheetCellType {
     lessThanNumeric,
