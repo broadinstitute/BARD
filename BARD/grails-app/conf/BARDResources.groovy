@@ -44,6 +44,9 @@ modules = {
     summary{
         resource url: '/js/cap/editSummary.js'
     }
+    projectsummary{
+        resource url: '/js/cap/editProjectSummary.js'
+    }
 
 	images {
 	}

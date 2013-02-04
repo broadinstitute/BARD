@@ -1,5 +1,4 @@
 <div id="dialog_edit_summary" title="Edit Summary">
-    <r:require modules="summary"/>
     <form id="editSummaryForm">
     <dl class="dl-horizontal">
         <dt><g:message code="default.id.label" default="Fix i18n"/>:</dt>

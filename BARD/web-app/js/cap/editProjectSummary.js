@@ -1,23 +1,22 @@
 $(document).ready(function () {
-    $( "#editSummaryButton" )
+    $( "#editProjectSummaryButton" )
         .button()
         .click(function() {
-            $( "#dialog_edit_summary" ).dialog( "open" );
+            $( "#dialog_edit_project_summary" ).dialog( "open" );
             initFunction();
         });
-    $( "#dialog_edit_summary" ).dialog({
+    $( "#dialog_edit_project_summary" ).dialog({
         autoOpen: false,
         height: 400,
         width: 500,
         modal: true,
         buttons: {
             "Update Summary": function() {
-                var instanceId = $("#assayId").text();
-                var assayStatus = $("#assayStatus option:selected").text()
-                var assayName = $("#assayName").val();
-                var designedBy = $("#designedBy").val();
-                if (!validateRequiredField(assayName, "assayNameValidation")) return false;
-                var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy};
+                var instanceId = $("#projectId").text();
+                var projectName = $("#projectName").val();
+                var description = $("#description").val();
+                if (!validateRequiredField(projectName, "projectNameNameValidation")) return false;
+                var inputdata = {'instanceId':instanceId, 'projectName':projectName, 'description':description};
                 $.ajax
                     ({
                         url:"../editSummary",
@@ -49,18 +48,18 @@ function validateRequiredField(fieldName, messageHolder){
 };
 
 function initFunction() {
-    $("input#assayName").blur(function()
-    {    var assayName = $(this).val();
-        validateRequiredField(assayName, "assayNameValidation");
+    $("input#projectName").blur(function()
+    {    var projectName = $(this).val();
+        validateRequiredField(projectName, "projectNameValidation");
     });
-    $("input#assayName").click(function()
+    $("input#projectName").click(function()
     {
-        $("#assayNameValidation").html("");
+        $("#projectNameValidation").html("");
     });
 }
 
 function resetAfterCloseOrCancel() {
-    var instanceId = $("#assayId").text();
+    var instanceId = $("#projectId").text();
     $("#editSummaryForm").clearForm();
     // Need to reload the original data
     var inputdata = {'instanceId':instanceId};
@@ -70,7 +69,7 @@ function resetAfterCloseOrCancel() {
             data:inputdata,
             cache:false,
             success:function(responseText, statusText, xhr, jqForm){
-                $("#dialog_edit_summary").html(responseText);
+                $("#dialog_edit_project_summary").html(responseText);
             }
         });
 }

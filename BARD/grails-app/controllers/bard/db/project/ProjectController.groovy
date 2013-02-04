@@ -132,5 +132,19 @@ class ProjectController {
             exps.add(experiment)
         render exps.collect {it.displayName} as JSON
     }
+
+    def editSummary(Long instanceId, String projectName, String description) {
+        def instance = Project.findById(instanceId)
+        instance.name = projectName
+        instance.description = description
+        instance.save(flush: true)
+        instance = Project.findById(instanceId)
+        render(template: "summaryDetail", model: [project: instance])
+    }
+
+    def showEditSummary(Long instanceId) {
+        def instance = Project.findById(instanceId)
+        render(template: "editSummary", model: [project: instance])
+    }
 }
 

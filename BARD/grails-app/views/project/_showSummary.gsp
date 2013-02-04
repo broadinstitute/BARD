@@ -1,18 +1,7 @@
-<div>
-    <dl class="dl-horizontal">
-        <dt><g:message code="default.id.label" default="Fix i18n"/></dt>
-        <dd><g:fieldValue bean="${project}" field="id"/></dd>
-
-        <dt><g:message code="project.name.label" default="Fix i18n"/></dt>
-        <dd><g:fieldValue bean="${project}" field="name"/></dd>
-
-        <dt><g:message code="project.description.label" default="Fix i18n"/></dt>
-        <dd><g:fieldValue bean="${project}" field="description"/></dd>
-
-        <dt><g:message code="default.dateCreated.label" default="Fix i18n"/></dt>
-        <dd><g:formatDate date="${project.dateCreated}" format="yyyy-MM-dd"/>&nbsp;</dd>
-
-        <dt><g:message code="default.lastUpdated.label" default="Fix i18n"/></dt>
-        <dd><g:formatDate date="${project.lastUpdated}" format="yyyy-MM-dd"/>&nbsp;</dd>
-    </dl>
+<div id="showSummary">
+    <r:require modules="projectsummary"/>
+    <div class="span12"><button id="editProjectSummaryButton" class="btn btn-primary">Edit</button>
+    </div>
+    <g:render template='editSummary' model="['project': instance]"/>
+    <g:render template="summaryDetail" model="['project': instance]"/>
 </div>
