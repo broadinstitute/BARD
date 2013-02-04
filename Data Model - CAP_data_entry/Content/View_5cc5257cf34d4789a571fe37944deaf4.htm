@@ -26,7 +26,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW INSTANCE_ELEMENT AS</TT><BR><TT>SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by</TT><BR><TT>FROM ELEMENT El</TT><BR><TT>WHERE el.ELEMENT_ID in (select ELEMENT_ID from Instance_Descriptor_tree)</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW INSTANCE_ELEMENT AS</TT><BR><TT>SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by</TT><BR><TT>FROM ELEMENT El</TT><BR><TT>WHERE el.ELEMENT_ID in (select idt.ELEMENT_ID from Instance_Descriptor_tree idt)</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
