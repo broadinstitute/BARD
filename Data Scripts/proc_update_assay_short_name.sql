@@ -181,7 +181,7 @@ BEGIN
           THEN
               lv_assay_type := add_term( lv_assay_type, lr_item.value_display);
 
-          ELSIF lr_item.attribute in ('gene', 'Mendelian Inheritance in Man')
+          ELSIF lr_item.attribute in ('gene (Entrez)', 'OMIM term')
                 AND lr_item.context_name != 'target'
           THEN
               lv_biology_gene := add_term( lv_biology_gene, lr_item.value_display);
@@ -267,14 +267,14 @@ BEGIN
         -- assemble the name
         ----------------------------------------------------------------------------------------
         lv_short_name := lv_target;
-        lv_short_name := lv_short_name || ', ' ||lv_assay_format || ', ' || lv_assay_type;
+        lv_short_name := lv_short_name || '; ' ||lv_assay_format || '; ' || lv_assay_type;
         IF lv_biology != 'undefined'
         THEN
-            lv_short_name := lv_short_name || ' on ' || lv_biology;
+            lv_short_name := lv_short_name || '; on ' || lv_biology;
         END IF;
         IF lv_detection != 'unknown detection'
         THEN
-            lv_short_name := lv_short_name || ' using ' || lv_detection;
+            lv_short_name := lv_short_name || '; using ' || lv_detection;
         END IF;
         --
         ---------------------------------------------------------------------------
