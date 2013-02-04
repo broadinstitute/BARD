@@ -17,8 +17,8 @@ modules = {
     images {
     }
     dictionaryPage {
-        resource url:"js/html5historyapi/history.js"
-        resource url:'/js/jquery-table-sorter/jquery.tablesorter.min.js'
+        resource url: "js/html5historyapi/history.js"
+        resource url: '/js/jquery-table-sorter/jquery.tablesorter.min.js'
         resource url: '/js/jquery-table-sorter/theme.default.css'
     }
     showProjectAssay {
@@ -30,6 +30,7 @@ modules = {
     }
     //Adding version allows clients to not cache javascript
     search {
+        dependsOn('structureSearch')
         resource url: "js/search.js"
         resource url = "css/facetDiv.css"
     }
@@ -87,5 +88,13 @@ modules = {
     twitterBootstrapAffix {
         resource url: "css/twitterBootstrapAffix.css"
         resource url: "js/twitterBootstrapAffix.js"
+    }
+    jsDraw {
+        dependsOn("dojo")
+        resource url: "js/jsDraw/Scilligence.JSDraw2.js"
+        resource url: "js/jsDraw/license.js"
+    }
+    dojo {
+        resource url: "js/dojo-min/dojo/dojo.js"
     }
 }

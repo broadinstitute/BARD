@@ -15,10 +15,6 @@ class ChemAxonController {
     IQueryService queryService
     BardUtilitiesService bardUtilitiesService
 
-    def index() {
-        session.putValue('smiles', params.smiles)
-    }
-
     def generateStructureImageFromSmiles(String smiles, Integer width, Integer height) {
         try {
             Integer w = (width ?: 300) as Integer

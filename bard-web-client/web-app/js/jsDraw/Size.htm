@@ -1,0 +1,103 @@
+<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+// JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<title>JSDraw - A Javascript Chemical Structure Editor/Viewer</title>
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+<h2>JSDraw 2 Editor Size </h2>
+
+Classic Size (Traditional Web Application):
+<div>&lt;div class='JSDraw' id="div1" style="width: 660px; height: 300px;border:1px solid gray"&gt;&lt;/div&gt;</div>
+<div class='JSDraw' id="div1" style="width: 660px; height: 300px;border:1px solid gray" dataformat='molfile' data='
+ChemJSDraw11100923052D
+
+ 18 19  0  0  0  0  0  0  0  0  1 V2000
+    7.1760   -6.4480    0.0000 C   0  0
+    5.8250   -5.6680    0.0000 C   0  0
+    5.8250   -4.1080    0.0000 C   0  0
+    8.5270   -5.6680    0.0000 C   0  0
+    8.5270   -4.1080    0.0000 C   0  0
+    7.1760   -3.3280    0.0000 C   0  0
+    9.8780   -6.4480    0.0000 C   0  0
+   11.2290   -5.6680    0.0000 C   0  0
+   11.2290   -4.1080    0.0000 C   0  0
+    9.8780   -3.3280    0.0000 C   0  0
+   12.5800   -6.4480    0.0000 C   0  0
+   12.5800   -8.0080    0.0000 C   0  0
+   13.9310   -5.6680    0.0000 C   0  0
+   15.2820   -6.4480    0.0000 N   0  0
+   15.2820   -8.0080    0.0000 C   0  0
+   16.6330   -5.6680    0.0000 C   0  0
+   13.9310   -4.1080    0.0000 O   0  0
+    7.1760   -8.0080    0.0000 N   0  0
+  1  2  1  0
+  2  3  2  0
+  1  4  2  0
+  4  5  1  0
+  5  6  2  0
+  6  3  1  0
+  7  4  1  0
+  7  8  2  0
+  8  9  1  0
+  9 10  2  0
+ 10  5  1  0
+  8 11  1  0
+ 11 12  1  0
+ 11 13  1  0
+ 13 14  1  0
+ 14 15  1  0
+ 14 16  1  0
+ 13 17  2  0
+  1 18  1  0
+M  END'></div>
+
+
+<br />Tablet Size (Tablet Applications):
+<div>&lt;div class='JSDraw' id="div2" <font color=red>skin="w8"</font> style="width: 920px; height: 500px;border:1px solid gray"&gt;&lt;/div&gt;</div>
+<div class='JSDraw' id="div2" skin="w8" style="width: 920px; height: 500px;border:1px solid gray"></div>
+
+<br />Phone Size (Phone Applications):
+<div>&lt;div class='JSDraw' id="div3" <font color=red>skin="w8"</font> style="width: 320px; height: 400px;border:1px solid gray"&gt;&lt;/div&gt;</div>
+<div class='JSDraw' id="div3" skin="w8" style="width: 320px; height: 400px;border:1px solid gray"></div>
+
+<script type="text/javascript">
+    dojo.addOnLoad(function () {
+        var jsd2 = new JSDraw("div1");
+        new JSDraw("div2").setHtml(jsd2.getHtml());
+        new JSDraw("div3").setHtml(jsd2.getHtml());
+    });
+</script>
+
+
+
+
+<br />
+<br />
+<hr />
+Copyright Scilligence, 2011-2012 (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

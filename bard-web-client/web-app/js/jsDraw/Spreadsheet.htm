@@ -1,0 +1,74 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw2.Table - Intelligent Chemical Structure Spreadsheet</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+
+<h2>JSDraw2.Table - Intelligent Chemical Structure Spreadsheet</h2>
+
+<p>
+This is a demo to create an intelligent chemical structure table.  Here is what you can play with it
+</p>
+<ol>
+<li>Add row <input type='button' value='Insert Row' onclick='JSDraw2.Table.get("grid").insert(true)' /></li>
+<li>Modify columns <input type='button' value='Modify Columns' onclick='JSDraw2.Table.get("grid").defineCols()' /></li>
+<li>Double-click cells to edit them</li>
+<li>Molecular Formula and Molecular Weight are calculated automatically</li>
+<li>Effective Mass and Effective Moles are automatcially calculated based on Sample Mass and Purity</li>
+</ol>
+
+<div id='grid'></div>
+
+<script type="text/javascript">
+    dojo.addOnLoad(function () {
+        var columns = [{ key: '[structure]', caption: 'Structure' },
+            { key: "select", caption: "Flag", type: "checkbox", width: 50 },
+            { key: "type", caption: "Type", type: "select", items: ["", "Yes", "No"] },
+            { key: 'mf', caption: 'Mol. Formula', width: 90, type: 'mf', viewonly: true },
+            { key: 'mw', caption: 'Mol. Weight', width: 90, type: 'mw', viewonly: true },
+            { key: 'smiles', caption: 'Smiles', width: 220, type: "smiles", viewonly: true },
+            { key: 'samplemass', caption: 'Sample Mass', type: 'mass', width: 90 },
+            { key: 'purity', caption: 'Purity', type: 'percent' },
+            { key: 'effectivemass', caption: 'Effective Mass', formula: 'JsUtils.num2str(samplemass*purity,2,"g")', type: 'mass', width: 150 },
+            { key: 'effectivemoles', caption: 'Effective Moles', formula: 'JsUtils.num2str(effectivemass/mw,2,"mol")', type: 'moles', width: 120 }
+        ];
+
+        var jss = new JSDraw2.Table("data/sdf2.sdf.txt", { spreadsheet: true, pivot: false, columns: columns, width: '90%', editable: true, searchable: true, molwidth: 200 }, "grid");
+    });
+</script>
+
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

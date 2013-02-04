@@ -133,22 +133,6 @@ class ChemAxonControllerUnitSpec extends Specification {
     /**
      * {@link ActivityOutcome#getLabel()}
      */
-    void "test index() #label"() {
-        when:
-        controller.params.smiles = smiles
-        controller.index()
-
-        then:
-        assert controller.session.smiles == smiles
-
-        where:
-        label                  | smiles
-        "with a simple smiles" | 'C1=CC2=C(C=C1)C=CC=C2'
-    }
-
-    /**
-     * {@link ActivityOutcome#getLabel()}
-     */
     void "test marvinSketch()"() {
         when:
         controller.marvinSketch()
