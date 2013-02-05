@@ -51,6 +51,7 @@ grails.project.dependency.resolution = {
         build ":codenarc:0.15"
 
         compile ":functional-spock:0.6"
+        compile ":clover:3.1.6"
         compile ":spock:0.6"
         compile ":remote-control:1.2"
 
@@ -71,4 +72,10 @@ codenarc.reports = {
 }
 codenarc {
     exclusions = ['**/grails-app/migrations/*']
+}
+clover {
+    //initstring = "bardwebclover.db"
+    directories: ['src/java', 'src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['**/*Spec*.*', '**/conf/**']
 }
