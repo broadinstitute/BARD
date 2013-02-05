@@ -232,7 +232,7 @@ class BardWebInterfaceController {
  * Given a list of ProjectSearchResult ids, invoke this action
  */
     def searchProjectsByIDs(SearchCommand searchCommand) {
-        if (isHTTPBadRequest(searchCommand.searchString, 'Search String is required for project search by Ids',bardUtilitiesService.username)) {
+        if (isHTTPBadRequest(searchCommand.searchString, 'Search String is required for project search by Ids', bardUtilitiesService.username)) {
             return
         }
         try {
@@ -371,7 +371,7 @@ class BardWebInterfaceController {
  */
     def showAssay(Integer assayProtocolId) {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
-        if (isHTTPBadRequest(assayId, "Assay Id is required",bardUtilitiesService.username)) {
+        if (isHTTPBadRequest(assayId, "Assay Id is required", bardUtilitiesService.username)) {
             return
         }
         try {
@@ -391,7 +391,7 @@ class BardWebInterfaceController {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             String message = "Could not find Assay with ID ${assayId}"
-            handleClientInputErrors(httpClientErrorException, message,bardUtilitiesService.username)
+            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
         }
         catch (Exception exp) {
             final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
@@ -487,6 +487,7 @@ class BardWebInterfaceController {
         render(template: "/mobile/bardWebInterface/compounds", model: results)
     }
 
+    def jsDrawEditor() {}
 }
 /**
  * We would use this helper class as Mixin for

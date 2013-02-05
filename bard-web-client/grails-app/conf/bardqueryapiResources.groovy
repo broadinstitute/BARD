@@ -30,7 +30,6 @@ modules = {
     }
     //Adding version allows clients to not cache javascript
     search {
-        dependsOn('structureSearch')
         resource url: "js/search.js"
         resource url = "css/facetDiv.css"
     }
@@ -83,6 +82,7 @@ modules = {
         resource url: "css/bard-mobile.css"
     }
     jqueryMobileInit {
+        dependsOn('jqueryMobile')
         resource url: "js/jqueryMobileInit.js"
     }
     twitterBootstrapAffix {
