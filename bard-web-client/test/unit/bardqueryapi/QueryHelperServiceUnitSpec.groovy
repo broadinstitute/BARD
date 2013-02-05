@@ -44,8 +44,8 @@ class QueryHelperServiceUnitSpec extends Specification {
         assert map == expectedMap
         where:
         label                      | activities       | expectedMap
-        "Empty Activities"         | []               | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
-        "Activity, no Result Data" | [new Activity()] | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
+        "Empty Activities"         | []               | [priorityDisplay: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+        "Activity, no Result Data" | [new Activity()] | [priorityDisplay: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
     }
 
 
@@ -58,8 +58,8 @@ class QueryHelperServiceUnitSpec extends Specification {
         where:
         label                                   | resultData                                                                                                       | expectedMap
         "Has Priority, ResponseClass=CR_SER"    | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: true, hasChildElements: false]
-        "Has Priority, ResponseClass=CR_NO_SER" | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: false, hasChildElements: false]
-        "No Priority, ResponseClass=CR_NO_SER"  | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [priorityDisplay: '', priorityDescription: '', dictionaryId: 0, hasPlot: false, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_NO_SER" | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [priorityDisplay: 'display', priorityDescription: null, dictionaryId: null, hasPlot: false, hasChildElements: false]
+        "No Priority, ResponseClass=CR_NO_SER"  | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [priorityDisplay: '', priorityDescription: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
@@ -72,14 +72,14 @@ class QueryHelperServiceUnitSpec extends Specification {
 
         PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()])
         priorityElement.dummy = d
-        Map expectedMap = [priorityDisplay: display, dictionaryId: dictElemId, hasPlot: true, hasChildElements: true]
+        Map expectedMap = [priorityDisplay:display, dictionaryId:'211', hasPlot:true, hasChildElements:true, yNormMin:0.0, yNormMax:0.0]
         List<Activity> activities = [new Activity(resultData: new ResultData(responseClass: "CR_SER",
                 priorityElements: [priorityElement]))]
         when:
         Map map = service.extractExperimentDetails(activities)
         then:
         d.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
-        assert map == expectedMap
+        assert expectedMap == map
     }
 
     void "test extractPriorityDisplayDescription #label"() {

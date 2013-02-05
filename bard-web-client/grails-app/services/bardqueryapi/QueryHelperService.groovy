@@ -55,10 +55,12 @@ class QueryHelperService {
             }
             if (resultData.hasConcentrationResponseSeries()) {
                 final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
-                final List<Double> sorterdActivities = concentrationResponseSeries.sorterdActivities()
-                if (sorterdActivities) {
-                    priorityMap.put("yNormMin", sorterdActivities.get(0))
-                    priorityMap.put("yNormMax", sorterdActivities.last())
+                if (concentrationResponseSeries) {
+                    final List<Double> sorterdActivities = concentrationResponseSeries.sorterdActivities()
+                    if (sorterdActivities) {
+                        priorityMap.put("yNormMin", sorterdActivities.get(0))
+                        priorityMap.put("yNormMax", sorterdActivities.last())
+                    }
                 }
 
             }
@@ -66,7 +68,7 @@ class QueryHelperService {
             priorityMap.put("hasChildElements", hasChildElements)
             return priorityMap
         }
-        return [priorityDisplay: '', priorityDescription: '', dictionaryId: 0, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        return [priorityDisplay: '', priorityDescription: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
