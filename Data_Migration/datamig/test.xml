@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<nodes>
+	<node>
+		<name>Node 1</name>
+		<price>100</price>
+	</node>
+	<node>
+		<name>Node 2</name>
+		<price>23</price>
+	</node>
+	<node>
+		<name>Node 3</name>
+		<price>4353</price>
+	</node>
+	<node>
+		<name>Node 4</name>
+		<price>23.4</price>
+	</node>
+	<node>
+		<name>Node 5</name>
+		<price>12.4</price>
+		<resources>
+			<resource type="test">This will be in the output</resource>
+			<resource type="test1">This won't be in the output</resource>
+		</resources>
+	</node>
+</nodes>
