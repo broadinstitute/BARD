@@ -14,9 +14,10 @@ class StageDescriptor extends Descriptor<StageDescriptor> {
         table('STAGE_TREE')
         id(column: 'NODE_ID', generator: 'assigned')
         version(false)
-        leaf(column: 'IS_LEAF', type: 'yes_no')
         parent(column: 'PARENT_NODE_ID')
-        fullPath(column: 'FULL_PATH')
+        element(column: 'STAGE_ID')
+        leaf(column: 'IS_LEAF', type: 'yes_no')
+        elementStatus(column: 'STAGE_STATUS')
         label(column: 'STAGE')
     }
 
