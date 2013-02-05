@@ -15,7 +15,6 @@ class StageDescriptor extends Descriptor<StageDescriptor> {
         id(column: 'NODE_ID', generator: 'assigned')
         version(false)
         leaf(column: 'IS_LEAF', type: 'yes_no')
-        externalURL(column: 'EXTERNAL_URL')
         parent(column: 'PARENT_NODE_ID')
         fullPath(column: 'FULL_PATH')
         label(column: 'STAGE')
