@@ -33,7 +33,7 @@ class Result {
     Set<ResultHierarchy> resultHierarchiesForResult = [] as Set<ResultHierarchy>
     Set<ResultHierarchy> resultHierarchiesForParentResult = [] as Set<ResultHierarchy>
 
-
+    static QUALIFIER_VALUES = ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ ']
     static hasMany = [resultHierarchiesForParentResult: ResultHierarchy,
             resultHierarchiesForResult: ResultHierarchy,
             resultContextItems: ResultContextItem]
@@ -60,7 +60,7 @@ class Result {
         statsModifier(nullable: true)
         replicateNumber(nullable: true)
 
-        qualifier(nullable: true, blank: false, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
+        qualifier(nullable: true, blank: false, inList: QUALIFIER_VALUES)
         valueNum(nullable: true)
         valueMin(nullable: true)
         valueMax(nullable: true)
