@@ -5,8 +5,11 @@ grails.servlet.version = "2.5" // Change depending on target container complianc
 grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
-grails.server.port.http=8081
+grails.server.port.http = 8081
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
+
+def gebVersion = "0.7.2"
+def seleniumVersion = "2.25.0"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -18,50 +21,94 @@ grails.project.dependency.resolution = {
     checksums true // Whether to verify checksums on resolve
 
     repositories {
-        inherits true // Whether to inherit repository definitions from plugins
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
-        mavenRepo  "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+        mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
         grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
     }
     dependencies {
         // build scope
 
         // compile scope
+        compile('cbip:cbip_encoding:0.1') {
+            excludes "junit"
+        }
+        compile "org.grails:grails-webflow:$grailsVersion"
 
         // runtime scope
-         runtime 'mysql:mysql-connector-java:5.1.16'
+        runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
 
         // test scope
+        test "org.spockframework:spock-core:0.6-groovy-1.8"
+        test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor
+        test "org.codehaus.geb:geb-spock:$gebVersion"
+        test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
+            excludes "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion") {
+            exclude "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion") {
+            excludes "xml-apis"
+        }
+        test("org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion") {
+            excludes "xml-apis"
+        }
 
         // provided  scope
     }
 
     plugins {
         // build scope
+        build ":codenarc:0.15"
+        compile ":hibernate:$grailsVersion"
+        build ":improx:0.1" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"
 
         // compile scope
-        compile ":extjs4:4.1.0-RC.0"
-        compile ":grails-ui:1.2.3"
-        compile ":json-rest-api:1.0.11"
-        compile ":webflow:2.0.0"
-        compile ":yui:2.8.2.1"
-        compile ":bard-domain-model:0.1.7-SNAPSHOT"
+        compile ":ajaxflow:0.2.4"
+        compile ":cbipcrowdauthentication:0.3.0"
+        compile ":clover:3.1.6"
+        compile ":console:1.2"
+        compile ":jquery-validation-ui:1.4"
+        compile ":twitter-bootstrap:2.2.2"
+        compile(':webflow:2.0.0') {
+            exclude 'grails-webflow'
+        }
 
         // runtime scope
-        runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
-		runtime ":jquery-ui:1.8.15"
+        runtime ":jquery-ui:1.8.15"
         runtime ":resources:1.1.6"
 
         // test scope
+        test ":geb:$gebVersion"
+        test ":remote-control:1.2"
         test ":spock:0.6"
-
         // provided  scope
     }
-    // if you comment out the dependency above, you can 
-    // include a plugin by specifying the location of the unpacked source
-    // handy if you making lots of changes
-    //grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 }
+
+// making the domain plugin an in-place plugin
+grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
+
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
+}
+
+clover {
+    //initstring = "bardwebclover.db"
+    directories: ['src/java', 'src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['**/bardwebquery/**.*', '**/*Spec*.*', '**/mockServices/**.*', '**/conf/**', '**/GridController.*', '**/mockServices/**.*']
+}
+// used for tomcat when running grails run-war
+grails.tomcat.jvmArgs = ["-server", "-XX:MaxPermSize=256m", "-Xmx768m"]

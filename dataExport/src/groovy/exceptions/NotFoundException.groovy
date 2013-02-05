@@ -10,6 +10,6 @@ import groovy.transform.InheritConstructors
  * To change this template use File | Settings | File Templates.
  */
 @InheritConstructors
-class NotFoundException extends RuntimeException{
+class NotFoundException extends RuntimeException {
 
 }

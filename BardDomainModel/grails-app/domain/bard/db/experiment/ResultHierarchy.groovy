@@ -5,38 +5,42 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 class ResultHierarchy implements Serializable {
 
-	HierarchyType hierarchyType
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	Result result
-	Result parentResult
+    private static final int HIERARCHY_TYPE_MAX_SIZE = 20
+    private static final int MODIFIED_BY_MAX_SIZE = 40
 
-	int hashCode() {
-		def builder = new HashCodeBuilder()
-		builder.append result
-		builder.append parentResult
-		builder.toHashCode()
-	}
+    HierarchyType hierarchyType
+    Date dateCreated
+    Date lastUpdated
+    String modifiedBy
+    Result result
+    Result parentResult
 
-	boolean equals(other) {
-		if (other == null) return false
-		def builder = new EqualsBuilder()
-		builder.append result, other.resultId
-		builder.append parentResult, other.parentResultId
-		builder.isEquals()
-	}
+    int hashCode() {
+        def builder = new HashCodeBuilder()
+        builder.append result
+        builder.append parentResult
+        builder.toHashCode()
+    }
 
-	static belongsTo = [Result]
+    boolean equals(other) {
+        if (other == null) return false
+        def builder = new EqualsBuilder()
+        builder.append result, other.resultId
+        builder.append parentResult, other.parentResultId
+        builder.isEquals()
+    }
 
-	static mapping = {
-		id composite: ["result", "parentResult"]
-	}
+    static belongsTo = [Result]
 
-	static constraints = {
-		hierarchyType maxSize: 10
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-	}
+    static mapping = {
+        id composite: ["result", "parentResult"]
+    }
+
+    static constraints = {
+        hierarchyType maxSize: HIERARCHY_TYPE_MAX_SIZE
+
+        dateCreated(nullable: false)
+        lastUpdated(nullable: true)
+        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
 }

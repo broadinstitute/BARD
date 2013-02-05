@@ -5,7 +5,6 @@ import common.tests.XmlTestSamples
 import grails.converters.XML
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.RESTClient
-import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -25,6 +24,8 @@ class RootRestControllerFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api"
     String rootAcceptContentType = remote { ctx.grailsApplication.config.bard.data.export.bardexport.xml }
+    final String apiKeyHeader = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.header }
+    final String apiKeyHashed = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.hashed }
 
     def 'test GET Root Elements'() {
         given: "there is a service end point to get the root elements"
@@ -32,7 +33,7 @@ class RootRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for the root elements'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = rootAcceptContentType
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
         }
         then: 'We expect an XML representation of the root elements'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
@@ -47,7 +48,7 @@ class RootRestControllerFunctionalSpec extends Specification {
         when: 'We send an HTTP GET request for the root element with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = "some bogus"
-            headers.'APIKEY' = 'changeMe'
+            headers."${apiKeyHeader}" = apiKeyHashed
             response.failure = { resp ->
                 resp
             }

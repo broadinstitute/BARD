@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="coreSchema.xsd"/>
+    <xs:element name="experiments">
+        <xs:annotation>
+            <xs:documentation>Links to all experiment's that have not yet been uploaded by client.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence maxOccurs="1" minOccurs="0">
+                <xs:element ref="link" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>Link to next list of experiment's
+application/vnd.bard.cap+xml;type=experiments
+</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="count" type="xs:integer" use="required">
+                <xs:annotation>
+                    <xs:documentation>Number of experiments, ready for extraction</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="experiment">
+        <xs:annotation>
+            <xs:documentation>There are links to the assay,project,laboratory that this experiment belongs.
+There are also links to the set of results, resultContextItems
+and the Result Hierarchy associated to this experiment
+External reference will also be another link relation
+
+The link with 'edit' relation should be used to set the status of this experiment to 'uploaded' once it is consumed
+
+</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="experimentName" type="xs:string"/>
+                <xs:element minOccurs="0" ref="description"/>
+                <xs:element minOccurs="0" ref="contexts"/>
+                <xs:element minOccurs="0" name="experimentMeasures">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="experimentMeasure"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                    <xs:key name="experimentMeasureId_Key">
+                        <xs:selector xpath="experimentMeasure"/>
+                        <xs:field xpath="@experimentMeasureId"/>
+                    </xs:key>
+                    <xs:keyref name="parentExperimentMeasureRef_KeyRef"
+                        refer="experimentMeasureId_Key">
+                        <xs:selector xpath="experimentMeasure"/>
+                        <xs:field xpath="@parentExperimentMeasureRef"/>
+                    </xs:keyref>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" minOccurs="1" ref="link">
+                    <xs:annotation>
+                        <xs:documentation>Link to self
+Link to results
+Link to Project and Assay</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="experimentId" type="bardID" use="required"/>
+            <xs:attribute name="holdUntilDate" type="xs:dateTime" use="optional"/>
+            <xs:attribute name="runDateFrom" type="xs:dateTime" use="optional"/>
+            <xs:attribute name="runDateTo" type="xs:dateTime" use="optional"/>
+            <xs:attribute name="status" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Pending"/>
+                        <xs:enumeration value="Approved"/>
+                        <xs:enumeration value="Rejected"/>
+                        <xs:enumeration value="Revised"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ref="readyForExtraction" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="results">
+        <xs:annotation>
+            <xs:documentation>The results of a given experiment.
+</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence maxOccurs="1" minOccurs="1">
+                <xs:element maxOccurs="unbounded" ref="link">
+                    <xs:annotation>
+                        <xs:documentation>Link to next set of results
+Link to parent experiment
+</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="count" type="xs:integer" use="required">
+                <xs:annotation>
+                    <xs:documentation>The number of results associated with this object</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="result">
+        <xs:annotation>
+            <xs:documentation>An individual results. Has links back to parent experiment and to result types  and elements from the dictionary</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="resultType">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="0" ref="link"/>
+                        </xs:sequence>
+                        <xs:attribute name="label" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="substance">
+                    <xs:complexType>
+                        <xs:attribute name="sid" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" ref="resultContextItems"/>
+                <xs:element minOccurs="0" name="resultHierarchies">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="resultHierarchy" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:attribute name="parentResultId" type="bardID"/>
+                                    <xs:attribute name="hierarchyType">
+                                        <xs:simpleType>
+                                            <xs:restriction base="xs:string">
+                                                <xs:enumeration value="Child"/>
+                                                <xs:enumeration value="Derives"/>
+                                            </xs:restriction>
+                                        </xs:simpleType>
+                                    </xs:attribute>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" ref="link" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Link to experiment and next list of results if any</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="valueDisplay" type="xs:string" use="optional"/>
+            <xs:attribute name="valueNum" type="xs:float" use="optional"/>
+            <xs:attribute name="valueMin" type="xs:float" use="optional"/>
+            <xs:attribute name="valueMax" type="xs:float" use="optional"/>
+            <xs:attribute name="qualifier" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="0"/>
+                        <xs:maxLength value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="status" type="xs:string" use="optional"/>
+            <xs:attribute ref="readyForExtraction"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="resultContextItems">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="resultContextItem" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation>We include the group result context Id and the result context item Id so that the client can walk the tree from child to parent</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="attribute" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="link" minOccurs="0"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="label" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="valueControlled">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element ref="link" minOccurs="0"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="label" type="xs:string" use="required"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="extValueId" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="resultContextItemId" type="bardID" use="required"/>
+                        <xs:attribute name="parentGroup" type="bardID"/>
+                        <xs:attribute name="qualifier" type="xs:string"/>
+                        <xs:attribute name="valueDisplay" type="xs:string"/>
+                        <xs:attribute name="valueNum" type="xs:double"/>
+                        <xs:attribute name="valueMin" type="xs:double"/>
+                        <xs:attribute name="valueMax" type="xs:double"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:key name="ResultContextItem_Key">
+            <xs:selector xpath="resultContextItems/resultContextItem"/>
+            <xs:field xpath="@resultContextItemId"/>
+        </xs:key>
+        <xs:keyref name="ResultContextItem_KeyRef" refer="ResultContextItem_Key">
+            <xs:selector xpath="resultContextItems/resultContextItem"/>
+            <xs:field xpath="parentGroup"/>
+        </xs:keyref>
+    </xs:element>
+    <xs:complexType name="experimentContextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="experimentContextItemId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="experimentContexType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element ref="experimentContextItems"/>
+                </xs:sequence>
+                <xs:attribute name="experimentContextId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="experimentContextItems">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="experimentContextItem" type="experimentContextItemType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="experimentMeasure">
+        <xs:complexType>
+            <xs:attribute name="experimentMeasureId" type="bardID" use="required"/>
+            <xs:attribute name="measureRef" type="bardID" use="required"/>
+            <xs:attribute name="parentExperimentMeasureRef" type="bardID"/>
+            <xs:attribute name="parentChildRelationship"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

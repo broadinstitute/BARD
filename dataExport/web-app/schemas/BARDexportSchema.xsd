@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="coreSchema.xsd"/>
+    <xs:include schemaLocation="dictionarySchema.xsd"/>
+    <xs:include schemaLocation="assaySchema.xsd"/>
+    <xs:include schemaLocation="projectSchema.xsd"/>
+    <xs:include schemaLocation="experimentSchema.xsd"/>
+    <xs:include schemaLocation="externalReferencesSchema.xsd"/>
+    <xs:element name="bardexport">
+        <xs:annotation>
+            <xs:documentation>The root of the service.
+Here links for projects, assays, experiments
+dictionary, externalReferences and externalSystems</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="link"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

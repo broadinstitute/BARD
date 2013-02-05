@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
 
+import static groovyx.net.http.Method.PUT
+import static groovyx.net.http.ContentType.TEXT
+import bard.db.experiment.Experiment
+
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu
@@ -22,11 +26,14 @@ import static groovyx.net.http.Method.GET
 class ExperimentRestControllerFunctionalSpec extends Specification {
     RemoteControl remote = new RemoteControl()
     final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/experiments"
+    final String experimentBaseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "/api/experiments"
+
     String experimentsMediaType = remote { ctx.grailsApplication.config.bard.data.export.experiments.xml }
     String experimentMediaType = remote { ctx.grailsApplication.config.bard.data.export.experiment.xml }
 
     final String apiKeyHeader = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.header }
     final String apiKeyHashed = remote { ctx.grailsApplication.config.dataexport.externalapplication.apiKey.hashed }
+
 
     def 'test GET Experiments success'() {
         /**
@@ -44,7 +51,7 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
          */
 
         given: "there is a service end point to get the the list of experiments with status of ready"
-        RESTClient http = new RESTClient(baseUrl)
+        RESTClient http = new RESTClient("${baseUrl}")
         when: 'We send an HTTP GET request for the list of experiments with status of ready'
         def serverResponse = http.request(GET, XML) {
             headers.'Accept' = experimentsMediaType
@@ -55,7 +62,7 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         final String responseData = serverResponse.data.readLines().join()
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experiments)", responseData)
         XMLAssert.assertXpathEvaluatesTo("0", "count(//experiment)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//link)", responseData)
         XMLAssert.assertXpathEvaluatesTo('application/vnd.bard.cap+xml;type=experiment', "//link/@type", responseData)
         XMLAssert.assertXpathEvaluatesTo('related', "//link/@rel", responseData)
 
@@ -113,7 +120,7 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
     void 'test experiment 400 not bad request'() {
 
         given: "there is a service endpoint to get a experiment"
-        final RESTClient http = new RESTClient("${baseUrl}/10000")
+        final RESTClient http = new RESTClient("${experimentBaseUrl}/10000")
 
         when: 'We send an HTTP GET request, with the wrong mime type'
         def serverResponse = http.request(GET, XML) {
@@ -129,7 +136,7 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
 
     def 'test GET Experiment Success'() {
         given: "there is a service endpoint to get an experiment with id 1"
-        RESTClient http = new RESTClient("${baseUrl}/1")
+        RESTClient http = new RESTClient("${experimentBaseUrl}/1")
 
         when: 'We send an HTTP GET request for that experiment with the appropriate mime type'
         def serverResponse = http.request(GET, XML) {
@@ -139,13 +146,37 @@ class ExperimentRestControllerFunctionalSpec extends Specification {
         then: 'We expect an XML representation of that experiment'
 
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
         XMLAssert.assertXpathEvaluatesTo("1", "count(//experiment)", responseData)
         XMLAssert.assertXpathEvaluatesTo("0", "count(//experiments)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//resultContextItems)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("2", "count(//resultContextItem)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("Number of points", "//resultContextItem/attribute/@label", responseData)
-        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=element", "//resultContextItem/attribute/link/@type", responseData)
-        XMLAssert.assertXpathEvaluatesTo("10", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//experimentContextItems)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//experimentContextItem)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("Number of points", "//experimentContextItem/attribute/@label", responseData)
+        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=element", "//experimentContextItem/attribute/link/@type", responseData)
+        XMLAssert.assertXpathEvaluatesTo("8", "count(//link)", responseData)
     }
+
+    def 'test Update Experiment Success'(){
+        given: "there is a service endpoint to update the Experiment with id 386"
+        Experiment experiment = Experiment.get(1)
+        experiment.readyForExtraction = 'Ready'
+        RESTClient http = new RESTClient("${experimentBaseUrl}/1")
+
+        when: 'We send an HTTP PUT request for that Experiment with a Status of Complete and an ETAG Header of 1'
+
+        def serverResponse = http.request(PUT, TEXT) {
+            headers.'If-Match' = '0'
+            body = "Complete"
+            headers."${apiKeyHeader}" = apiKeyHashed
+        }
+        then: 'We expect an HTTP Status Code of OK, with the status of the Element now set to Complete'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').value == "1"
+
+    }
+
 }

@@ -1,20 +1,26 @@
 package dataexport.dictionary
 
+import dataexport.registration.MediaTypesDTO
+import groovy.sql.Sql
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+
+import javax.sql.DataSource
+
 import bard.db.dictionary.*
-import dataexport.registration.MediaTypesDTO
 
 /**
  *  This is wired in resources.groovy
  */
 class DictionaryExportHelperService {
     LinkGenerator grailsLinkGenerator
-    String elementMediaType
-    List<Laboratory> laboratories
+    MediaTypesDTO mediaTypesDTO
+    List<LaboratoryElement> laboratories
+    DataSource dataSource
 
-    DictionaryExportHelperService(final MediaTypesDTO mediaTypesDTO) {
-        this.elementMediaType = mediaTypesDTO.elementMediaType
+
+    String getElementMediaType(){
+        this.mediaTypesDTO.elementMediaType
     }
     /**
      * Root node for generating the entire dictionary
@@ -40,31 +46,16 @@ class DictionaryExportHelperService {
      * @param descriptorType
      */
     public void generateDescriptors(final MarkupBuilder xml) {
-        final List<AssayDescriptor> assayDescriptors = AssayDescriptor.findAll()
+        final Sql sql = new Sql(dataSource)
         xml.descriptors() {
-            for (AssayDescriptor descriptor : assayDescriptors) {
-                final DescriptorDTO descriptorDTO =
-                    new DescriptorDTO(
-                            descriptor
-                    )
-                generateDescriptor(xml, descriptorDTO)
+            for (AssayDescriptor descriptor in AssayDescriptor.list()) {
+                generateDescriptor(xml, descriptor)
             }
-            final List<BiologyDescriptor> biologyDescriptors = BiologyDescriptor.findAll()
-            for (BiologyDescriptor descriptor : biologyDescriptors) {
-                final DescriptorDTO descriptorDTO =
-                    new DescriptorDTO(
-                            descriptor
-                    )
-                generateDescriptor(xml, descriptorDTO)
+            for (BiologyDescriptor descriptor in BiologyDescriptor.list()) {
+                generateDescriptor(xml, descriptor)
             }
-
-            final List<InstanceDescriptor> instanceDescriptors = InstanceDescriptor.findAll()
-            for (InstanceDescriptor descriptor : instanceDescriptors) {
-                final DescriptorDTO descriptorDTO =
-                    new DescriptorDTO(
-                            descriptor
-                    )
-                generateDescriptor(xml, descriptorDTO)
+            for (InstanceDescriptor descriptor in InstanceDescriptor.list()) {
+                generateDescriptor(xml, descriptor)
             }
         }
     }
@@ -75,11 +66,12 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateStages(final MarkupBuilder xml) {
-        final List<Stage> stages = Stage.findAll()
+        final Sql sql = new Sql(dataSource)
 
         xml.stages() {
-            for (Stage stage : stages) {
-                generateStage(xml, stage)
+            List<StageTree> stageTrees = StageTree.list()
+            for (StageTree stageTree in stageTrees) {
+                generateStage(xml, stageTree)
             }
         }
     }
@@ -87,13 +79,21 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateLabs(final MarkupBuilder xml) {
-        laboratories = Laboratory.findAll()
-        if (laboratories) {
-            xml.laboratories() {
-                for (Laboratory laboratory : laboratories) {
-                    generateLab(xml, laboratory)
+        final Sql sql = new Sql(dataSource)
+        xml.laboratories() {
+            sql.eachRow('SELECT * FROM LABORATORY_TREE') { row ->
+                String parentName = null
+
+                final String label
+                final Long parentNodeId = row.PARENT_NODE_ID
+                if (parentNodeId) {
+                    def parentRow = sql.firstRow("SELECT LABORATORY FROM LABORATORY_TREE WHERE NODE_ID=?", [parentNodeId])
+                    parentName = parentRow.LABORATORY
                 }
+                LaboratoryElement laboratoryElement = LaboratoryElement.get(row.LABORATORY_ID)
+                generateLab(xml, new Laboratory(row, parentName, laboratoryElement?.label))
             }
+
         }
 
     }
@@ -103,21 +103,18 @@ class DictionaryExportHelperService {
  * @param xml
  * @param stageId
  */
-    public void generateStage(final MarkupBuilder xml, final Stage stage) {
-        final Map<String, String> attributes = generateAttributesForStage(stage, stage.parent)
+    public void generateStage(final MarkupBuilder xml, final StageTree stageTree) {
+        final Map<String, String> attributes = generateAttributesForStage(stageTree)
         xml.stage(attributes) {
-            if (stage.stage) {
-                stageName(stage.stage)
+            // TODO eleminate stageName
+            if (stageTree.element.label) {
+                stageName(stageTree.element.label)
             }
-            if (stage.description) {
-                description(stage.description)
+            if (stageTree.element.description) {
+                description(stageTree.element.description)
             }
-
-            final Element element = stage.element
-            if (element) {
-                final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
-                link(rel: 'related', href: "${href}", type: "${this.elementMediaType}")
-            }
+            final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: stageTree.element.id]).toString()
+            link(rel: 'related', href: "${href}", type: "${this.getElementMediaType()}")
         }
     }
 /**
@@ -126,7 +123,7 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateElements(final MarkupBuilder xml) {
-        List<Element> elements = Element.findAll()
+        List<Element> elements = Element.findAll(sort: 'id')
         xml.elements() {
             for (Element element : elements) {
                 generateElement(xml, element)
@@ -153,26 +150,21 @@ class DictionaryExportHelperService {
  * @param xml
  * @param resultTypeId
  */
-    public void generateResultType(final MarkupBuilder xml, final ResultType resultType) {
+    public void generateResultType(final MarkupBuilder xml, final ResultTypeTree resultTypeTree) {
 
-        final Map<String, String> attributes = generateAttributesForResultType(resultType)
+        final Map<String, String> attributes = generateAttributesForResultType(resultTypeTree)
 
         xml.resultType(attributes) {
+            resultTypeName(resultTypeTree.element.label)
+            if (resultTypeTree.element.description) {
+                description(resultTypeTree.element.description)
+            }
+            if (resultTypeTree.element.synonyms) {
+                synonyms(resultTypeTree.element.synonyms)
+            }
 
-            if (resultType.resultTypeName) {
-                resultTypeName(resultType.resultTypeName)
-            }
-            if (resultType.description) {
-                description(resultType.description)
-            }
-            if (resultType.synonyms) {
-                synonyms(resultType.synonyms)
-            }
-            final Element element = resultType.element
-            if (element) {
-                final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
-                link(rel: 'related', href: "${href}", type: "${this.elementMediaType}")
-            }
+            final String href = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: resultTypeTree.element.id]).toString()
+            link(rel: 'related', href: "${href}", type: "${this.getElementMediaType()}")
         }
     }
 /**
@@ -181,11 +173,13 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateResultTypes(final MarkupBuilder xml) {
-        final List<ResultType> resultTypes = ResultType.findAll()
+        final Sql sql = new Sql(dataSource)
+
 
         xml.resultTypes() {
-            for (ResultType resultType : resultTypes) {
-                generateResultType(xml, resultType)
+            sql.eachRow('SELECT * FROM RESULT_TYPE_TREE') { row ->
+                ResultTypeTree resultTypeTree = ResultTypeTree.read(row.NODE_ID)
+                generateResultType(xml, resultTypeTree)
             }
         }
     }
@@ -205,10 +199,12 @@ class DictionaryExportHelperService {
  * @param xml
  */
     public void generateUnits(final MarkupBuilder xml) {
-        final List<Unit> units = Unit.findAll()
+
+        final Sql sql = new Sql(dataSource)
         xml.units() {
-            for (Unit unit : units) {
-                generateUnit(xml, unit)
+            sql.eachRow('SELECT * FROM UNIT_TREE') { row ->
+                UnitTree unitTree = UnitTree.read(row.NODE_ID)
+                generateUnit(xml, unitTree)
             }
         }
     }
@@ -234,15 +230,15 @@ class DictionaryExportHelperService {
         }
     }
 /**
- * Generate a descriptor element for the given descriptorType
+ * Generate a descriptorRow element for the given descriptorType
  * @param xml
  * @param descriptorDTO
  * @param descriptorType
  */
-    public void generateDescriptor(final MarkupBuilder xml, final DescriptorDTO descriptorDTO) {
-        final Map<String, String> attributes = generateAttributesForDescriptor(descriptorDTO);
+    public void generateDescriptor(final MarkupBuilder xml, Descriptor descriptor) {
+        final Map<String, String> attributes = generateAttributesForDescriptor(descriptor);
         xml.descriptor(attributes) {
-            generateSingleDescriptor(xml, descriptorDTO)
+            generateSingleDescriptor(xml, descriptor)
         }
     }
 /**
@@ -257,17 +253,14 @@ class DictionaryExportHelperService {
 
 
         attributes.put('elementId', element.id?.toString())
-        attributes.put('readyForExtraction', element.readyForExtraction)
+        attributes.put('readyForExtraction', element.readyForExtraction.toString())
         if (element.elementStatus) {
-            attributes.put('elementStatus', element.elementStatus)
+            attributes.put('elementStatus', element.elementStatus.toString())
         }
         if (element.abbreviation) {
             attributes.put('abbreviation', element.abbreviation)
         }
 
-        if (element?.unit?.unit) {
-            attributes.put('unit', element.unit.unit)
-        }
         xml.element(attributes) {
             if (element.label) {
                 label(element.label)
@@ -283,9 +276,13 @@ class DictionaryExportHelperService {
             }
             //now generate links for editing the element
             //clients can use this link to indicate that they have consumed the element
-            final String ELEMENT_MEDIA_TYPE = this.elementMediaType
-            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id]).toString()
+            final String ELEMENT_MEDIA_TYPE = this.getElementMediaType()
+            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.id])
             link(rel: 'edit', href: "${elementHref}", type: "${ELEMENT_MEDIA_TYPE}")
+            if (element?.unit) {
+                final String unitHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: element.unit.id])
+                link(rel: 'related', href: "${unitHref}", type: "${ELEMENT_MEDIA_TYPE}")
+            }
 
         }
     }
@@ -300,17 +297,15 @@ class DictionaryExportHelperService {
         xml.elementHierarchy() {
             childElement(childElement: elementHierarchy.childElement.label) {
                 final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementHierarchy.childElement.id]).toString()
-                link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
+                link(rel: 'edit', href: "${elementHref}", type: "${this.getElementMediaType()}")
             }
-            if (elementHierarchy?.parentElement) {
+            if (elementHierarchy.parentElement) {
                 parentElement(parentElement: elementHierarchy.parentElement.label) {
                     final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: elementHierarchy.parentElement.id]).toString()
-                    link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
+                    link(rel: 'edit', href: "${elementHref}", type: "${this.getElementMediaType()}")
                 }
             }
-            if (elementHierarchy.relationshipType) {
-                relationshipType(elementHierarchy.relationshipType)
-            }
+            relationshipType(elementHierarchy.relationshipType)
         }
     }
 /**
@@ -320,84 +315,68 @@ class DictionaryExportHelperService {
  */
     public void generateLab(final MarkupBuilder xml, final Laboratory laboratory) {
         Map<String, String> attributes = [:]
-        if (laboratory.element) {
-            attributes.put('laboratoryElement', laboratory.element?.label)
+        if (laboratory) {
+            attributes.put('laboratoryElement', laboratory.elementLabel)
         }
 
-        if (laboratory.parent) {
-            attributes.put('parentLaboratory', laboratory.parent.laboratory)
+        if (laboratory.parentLaboratory) {
+            attributes.put('parentLaboratory', laboratory.parentLaboratory)
         }
         xml.laboratory(attributes) {
-            laboratoryName(laboratory.laboratory)
+            laboratoryName(laboratory.laboratoryName)
             description(laboratory.description)
         }
     }
 /**
  *
  * @param xml
- * @param unit
+ * @param unitTree
  */
     public void generateUnit(
             final MarkupBuilder xml,
-            final Unit unit
+            final UnitTree unitTree
     ) {
-        Unit parentUnit = null
-        if (unit.parentNodeId) {
-            parentUnit = Unit.findByNodeId(unit.parentNodeId)
-        }
-
-        final Map<String, String> attributes = generateAttributesForUnit(unit, parentUnit)
-
+        final Map<String, String> attributes = generateAttributesForUnit(unitTree)
         xml.unit(attributes) {
-
-            if (unit.description) {
-                description(unit.description)
+            if (unitTree.element.description) {
+                description(unitTree.element.description)
             }
         }
     }
 /**
- * Generate a single descriptor element from a DTO
+ * Generate a single descriptorRow element from a DTO
  *
  * <biologyDescriptor></biologyDescriptor>
  * @param xml
  * @param descriptorDTO
  */
-    public void generateSingleDescriptor(final MarkupBuilder xml, final DescriptorDTO descriptorDTO) {
-
-        if (descriptorDTO.elementStatus) {
-            xml.elementStatus(descriptorDTO.elementStatus)
+    public void generateSingleDescriptor(final MarkupBuilder xml, final Descriptor descriptor) {
+        xml.elementStatus(descriptor.element.elementStatus)
+        xml.label(descriptor.element.label)
+        if (descriptor.element.description) {
+            xml.description(descriptor.element.description)
         }
-        if (descriptorDTO.label) {
-            xml.label(descriptorDTO.label)
+        if (descriptor.element.synonyms) {
+            xml.synonyms(descriptor.element.synonyms)
         }
-        if (descriptorDTO.description) {
-            xml.description(descriptorDTO.description)
-        }
-        if (descriptorDTO.synonyms) {
-            xml.synonyms(descriptorDTO.synonyms)
-        }
-        if(descriptorDTO.elementId){
-            final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: descriptorDTO.elementId]).toString()
-            xml.link(rel: 'edit', href: "${elementHref}", type: "${this.elementMediaType}")
-
-        }
+        final String elementHref = grailsLinkGenerator.link(mapping: 'element', absolute: true, params: [id: descriptor.element.id]).toString()
+        xml.link(rel: 'edit', href: "${elementHref}", type: "${this.getElementMediaType()}")
     }
-/**
- *  Attributes for a Stage
- * @param stageId
- * @param parentStageId
- * @param stageStatus
- * @return Map for attribute
- */
-    public Map<String, String> generateAttributesForStage(final Stage stage, final Stage parentStage) {
+    /**
+     *  Attributes for a Stage
+     * @param stageId
+     * @param parentStageId
+     * @param stageStatus
+     * @return Map for attribute
+     */
+    public Map<String, String> generateAttributesForStage(final StageTree stageTree) {
         final Map<String, String> attributes = [:]
-
-        if (stage.element) {
-            attributes.put('stageElement', stage.element.label)
+        //use stageId to get the element label
+        if (stageTree.element.label) {
+            attributes.put('stageElement', stageTree.element.label)
         }
-
-        if (parentStage) {
-            attributes.put('parentStageName', parentStage.stage)
+        if (stageTree.parent) {
+            attributes.put('parentStageName', stageTree.parent.element.label)
         }
         return attributes
     }
@@ -407,16 +386,16 @@ class DictionaryExportHelperService {
         final Map<String, String> attributes = [:]
 
         if (unitConversion.fromUnit) {
-            attributes.put('fromUnit', unitConversion.fromUnit.unit)
+            attributes.put('fromUnit', unitConversion.fromUnit.label)
         }
         if (unitConversion.toUnit) {
-            attributes.put('toUnit', unitConversion.toUnit.unit)
+            attributes.put('toUnit', unitConversion.toUnit.label)
         }
         if (unitConversion.multiplier) {
             attributes.put('multiplier', unitConversion.multiplier.toString())
         }
         if (unitConversion.offset) {
-            attributes.put('offset', unitConversion.offset.toString())
+            attributes.put('offset', unitConversion?.offset?.toString())
         }
         return attributes
     }
@@ -427,119 +406,84 @@ class DictionaryExportHelperService {
  * @param unit
  * @return Map
  */
-    public Map<String, String> generateAttributesForUnit(final Unit unit, final Unit parentUnit) {
+    public Map<String, String> generateAttributesForUnit(final UnitTree unitTree) {
         final Map<String, String> attributes = [:]
-        if (unit.element) {
-            attributes.put('unitElement', unit.element.label)
+        attributes.put('unitElement', unitTree.element.label)
+        if (unitTree.parent) {
+            attributes.put('parentUnit', unitTree.parent.element.label)
+        }
+        return attributes
+    }
+    /**
+     *
+     * @param resultTypeDTO
+     * @return Map for attributes
+     */
+    public Map<String, String> generateAttributesForResultType(final ResultTypeTree resultTypeTree) {
+        final Map<String, String> attributes = [:]
+
+        //get the label of the element
+        attributes.put("resultTypeElement", resultTypeTree.element.label)
+        //get the result type of the parent
+        if (resultTypeTree.parent) {
+            attributes.put("parentResultType", resultTypeTree.parent.element.label)
+        }
+        if (resultTypeTree.element.abbreviation) {
+            attributes.put("abbreviation", resultTypeTree.element.abbreviation)
         }
 
-        if (parentUnit) {
-            attributes.put('parentUnit', parentUnit.unit)
+        if (resultTypeTree.baseUnit) {
+            attributes.put("baseUnit", resultTypeTree.baseUnit.label)
         }
-        if (unit.unit) {
-            attributes.put('unit', unit.unit)
+        if (resultTypeTree.element.elementStatus) {
+            attributes.put("resultTypeStatus", resultTypeTree.element.elementStatus)
         }
         return attributes
     }
 /**
- *
- * @param resultTypeDTO
- * @return Map for attributes
- */
-    public Map<String, String> generateAttributesForResultType(final ResultType resultType) {
-        final Map<String, String> attributes = [:]
-
-        if (resultType.element?.label) {
-            attributes.put("resultTypeElement", resultType.element.label)
-        }
-
-
-        if (resultType.parent?.resultTypeName) {
-            attributes.put("parentResultType", resultType.parent.resultTypeName)
-        }
-        if (resultType.abbreviation) {
-            attributes.put("abbreviation", resultType.abbreviation)
-        }
-
-        if (resultType.baseUnit) {
-            attributes.put("baseUnit", resultType.baseUnit.unit)
-        }
-        if (resultType.resultTypeStatus) {
-            attributes.put("resultTypeStatus", resultType.resultTypeStatus)
-        }
-        return attributes
-    }
-/**
- * Generate Attributes as a Map for a descriptor element
- * @param descriptorDTO
+ * Generate Attributes as a Map for a descriptorRow element
+ * @param descriptor
  * @return key value pairs to be used as attributes for element
  */
-    public Map<String, String> generateAttributesForDescriptor(final DescriptorDTO descriptorDTO) {
+    public Map<String, String> generateAttributesForDescriptor(final Descriptor descriptor) {
         final Map<String, String> attributes = [:]
 
 
-        if (descriptorDTO.parentDescriptorLabel) {
-            attributes.put('parentDescriptorLabel', descriptorDTO.parentDescriptorLabel)
+        if (descriptor.parent) {
+            attributes.put('parentDescriptorLabel', descriptor.parent.label)
         }
-        if (descriptorDTO.descriptorElement) {
-            attributes.put('descriptorElement', descriptorDTO.descriptorElement)
+        attributes.put('descriptorElement', descriptor.element.label)
+        if (descriptor.element.abbreviation) {
+            attributes.put('abbreviation', descriptor.element.abbreviation)
         }
-        if (descriptorDTO.abbreviation) {
-            attributes.put('abbreviation', descriptorDTO.abbreviation)
+        if (descriptor.element.externalURL) {
+            attributes.put('externalUrl', descriptor.element.externalURL)
         }
-        if (descriptorDTO.externalUrl) {
-            attributes.put('externalUrl', descriptorDTO.externalUrl)
+        if (descriptor.element.unit) {
+            attributes.put('unit', descriptor.element.unit.label)
         }
-        if (descriptorDTO.unit) {
-            attributes.put('unit', descriptorDTO.unit)
-        }
-        if (descriptorDTO.descriptor) {
-            attributes.put('descriptor', descriptorDTO.descriptor)
-        }
+        // TODO eliminate descriptorElement or descriptor, they'll always have the same value
+        attributes.put('descriptor', descriptor.element.label)
         return attributes;
     }
-
 }
+public class Laboratory {
+    String elementLabel
+    String parentLaboratory
+    String laboratoryName
+    String description
+    String laboratoryStatus
 
-class DescriptorDTO {
-    final String parentDescriptorLabel
-    final String descriptorElement
-    final String label
-    final String description
-    final String abbreviation
-    final String synonyms
-    final String externalUrl
-    final String unit
-    final String elementStatus
-    final String descriptor
-    final BigDecimal elementId
+    public Laboratory() {
 
-    //We do not type the parameters here because they could be any one of the three types
-    //We will be refactoring to make this redudant as soon as possible
-    DescriptorDTO(descriptor, descriptorLabel) {
-        this.parentDescriptorLabel = descriptor.parent?.label
-        this.descriptorElement = descriptor.element?.label
-        this.label = descriptor.label
-        this.description = descriptor.description
-        this.abbreviation = descriptor.abbreviation
-        this.synonyms = descriptor.synonyms
-        this.externalUrl = descriptor.externalURL
-        this.unit = descriptor.unit?.unit
-        this.elementStatus = descriptor.elementStatus
-        this.descriptor = descriptorLabel
-        this.elementId = descriptor.element?.id
     }
 
-    DescriptorDTO(BiologyDescriptor descriptor) {
-        this(descriptor, 'biology')
-    }
-
-    DescriptorDTO(AssayDescriptor descriptor) {
-        this(descriptor, 'assay')
-    }
-
-    DescriptorDTO(InstanceDescriptor descriptor) {
-        this(descriptor, 'instance')
+    public Laboratory(def laboratoryRow, final String parentLaboratory, final String elementLabel) {
+        this.parentLaboratory = parentLaboratory
+        this.elementLabel = elementLabel
+        this.laboratoryStatus = laboratoryRow.LABORATORY_STATUS
+        this.laboratoryName = laboratoryRow.LABORATORY
+        this.description = laboratoryRow.DESCRIPTION
     }
 
 }

@@ -1,10 +1,14 @@
 package common.tests
 
-import org.custommonkey.xmlunit.Diff
-import org.custommonkey.xmlunit.XMLUnit
-import org.custommonkey.xmlunit.DifferenceListener
-import org.custommonkey.xmlunit.DifferenceConstants
-import org.custommonkey.xmlunit.Difference
+import org.springframework.core.io.Resource
+
+import javax.xml.XMLConstants
+import javax.xml.transform.stream.StreamSource
+import javax.xml.validation.Schema
+import javax.xml.validation.SchemaFactory
+import javax.xml.validation.Validator
+
+import org.custommonkey.xmlunit.*
 
 /**
  * This class will not be packaged into a war file. We only need it for test purposes
@@ -41,5 +45,16 @@ class XmlTestAssertions {
             }
         });
         assert true == xmlDiff.similar()
+    }
+
+    /**
+     * @param schemaResource a org.springframework.core.io.Resource pointing to the schema
+     * @param xmlToValidate the xml as a string
+     */
+    static void validate(Resource schemaResource, String xmlToValidate) {
+        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+        final Schema schema = factory.newSchema(schemaResource.getFile())
+        final Validator validator = schema.newValidator()
+        validator.validate(new StreamSource(new StringReader(xmlToValidate)))
     }
 }

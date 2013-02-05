@@ -1,153 +1,124 @@
 package dataexport.registration
 
-import bard.db.registration.Assay
+import bard.db.dictionary.Element
+import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import dataexport.util.ResetSequenceUtil
+import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
-import org.custommonkey.xmlunit.XMLAssert
+import org.springframework.core.io.Resource
+import spock.lang.Unroll
 
-import javax.xml.XMLConstants
-import javax.xml.transform.stream.StreamSource
-import javax.xml.validation.Schema
-import javax.xml.validation.SchemaFactory
-import javax.xml.validation.Validator
+import javax.sql.DataSource
 
+import bard.db.registration.*
+import org.springframework.core.io.FileSystemResource
+
+@Unroll
 class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_ASSAY_EXPORT_SCHEMA = "test/integration/dataexport/registration/assaySchema.xsd"
-
     AssayExportHelperService assayExportHelperService
     Writer writer
     MarkupBuilder markupBuilder
-
+    DataSource dataSource
+    ResetSequenceUtil resetSequenceUtil
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
+        resetSequenceUtil = new ResetSequenceUtil(dataSource)
 
+        TestDataConfigurationHolder.reset()
+
+        ['ASSAY_ID_SEQ',
+                'ASSAY_CONTEXT_ID_SEQ',
+                'ASSAY_CONTEXT_ITEM_ID_SEQ',
+                'ASSAY_CONTEXT_MEASURE_ID_SEQ',
+                'ASSAY_DOCUMENT_ID_SEQ',
+                'ELEMENT_ID_SEQ',
+                'MEASURE_ID_SEQ'].each {
+            this.resetSequenceUtil.resetSequence(it)
+        }
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
-    void "test generate Measure Contexts #label #assayId"() {
+    void "test generate AssayContext with contextItems"() {
         given: "Given an Assay Id"
-        Assay assay = Assay.get(assayId)
+        Assay assay = Assay.build()
+        AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50')
+        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'software'), attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
+        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label'), attributeType: AttributeType.Fixed)
+
         when: "A service call is made to generate measure contexts for that Assay"
-        this.assayExportHelperService.generateMeasureContexts(this.markupBuilder, assay.measureContexts)
+        this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
+
         then: "An XML is generated that conforms to the expected XML"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                                | assayId             | results
-        "Existing Measure Context for assay" | new BigDecimal("1") | XmlTestSamples.MEASURE_CONTEXTS
+        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_CONTEXTS, this.writer.toString())
     }
 
-    void "test generate Measure Context Items #label #assayId"() {
-        given: "Given an Assay Id " + assayId
-        final Assay assay = Assay.get(assayId)
+    void "test generate AssayContext with measureRefs"() {
+        given: "Given an Assay Id"
+        Assay assay = Assay.build()
+        AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50')
+        Measure measure = Measure.build(assay: assay, resultType: Element.build(label: 'IC50'))
+        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(measure: measure, assayContext: assayContext)
 
-        when: "A service call is made to generate the measure context items for that Assay"
-        this.assayExportHelperService.generateMeasureContextItems(this.markupBuilder, assay.measureContextItems)
+        when: "A service call is made to generate measure contexts for that Assay"
+        this.assayExportHelperService.generateAssayContexts(this.markupBuilder, assay.assayContexts)
+
         then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContextItems)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//measureContextItem)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("4", "count(//link)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//attributeId)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//valueId)", this.writer.toString());
 
-        where:
-        label                                      | assayId             | results
-        "Existing Measure Context Items for assay" | new BigDecimal("1") | XmlTestSamples.MEASURE_CONTEXT_ITEMS
-
+        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_CONTEXT_WITH_MEASURES, this.writer.toString())
     }
 
-    void "test generate Measures #label #assayId"() {
-        given: "Given an Assay Id " + assayId
-        final Assay assay = Assay.get(assayId)
+    void "test generate Full Assay"() {
+        given:
+        Element element = Element.build()
+        Assay assay = Assay.build()
+        AssayContext assayContext = AssayContext.build(assay: assay)
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
+        AssayDocument.build(assay: assay)
 
-        when: "A service call is made to generate the measures for that Assay"
-        this.assayExportHelperService.generateMeasures(this.markupBuilder, assay.measures)
-        then: "An XML is generated that conforms to the expected XML"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                         | assayId             | results
-        "Existing Measures for assay" | new BigDecimal("1") | XmlTestSamples.MEASURES
-    }
+        Measure measure = Measure.build(assay: assay, resultType: element)
+        AssayContextMeasure.build(measure: measure, assayContext: assayContext)
 
-    void "test generate AssayDocument #label #assayId"() {
-        given: "Given an Assay Id " + assayId
-        final Assay assay = Assay.get(assayId)
 
-        when: "A service call is made to generate the measures for that Assay"
-        this.assayExportHelperService.generateAssayDocuments(this.markupBuilder, assay.assayDocuments)
-        then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("2", "count(//link)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=assayDoc", "//link/@type", this.writer.toString());
-        where:
-        label                          | assayId             | results
-        "Existing documents for assay" | new BigDecimal("1") | XmlTestSamples.ASSAY_DOCUMENTS
-
-    }
-
-    void "test generate Assay #label #assayId"() {
-        given: "Given an Assay Id " + assayId
-        final Assay assay = Assay.get(assayId)
-
-        when: "A service call is made to generate the measures for that Assay"
+        when:
         this.assayExportHelperService.generateAssay(this.markupBuilder, assay)
-        then: "An XML is generated that conforms to the expected XML"
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContext)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measure)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContextItems)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//measureContextItem)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("11", "count(//link)", this.writer.toString());
 
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_ASSAY_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(this.writer.toString())))
-        where:
-        label            | assayId
-        "Existing assay" | new BigDecimal("1")
+        then: "An XML is generated that conforms to the expected XML"
+        String actualXml = this.writer.toString()
+        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_FULL_DOC, actualXml)
+        XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
-    void "test generate Assays #label"() {
+    void "test generate Assays readyForExtraction"() {
         given: "Given there is at least one assay ready for extraction"
+        Assay.build(readyForExtraction: ReadyForExtraction.Ready)
+
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)
-        then: "An XML is generated that conforms to the expected XML"
-        XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", "//assays/@count", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("related", "//link/@rel", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("application/vnd.bard.cap+xml;type=assay", "//link/@type", this.writer.toString());
-        XMLAssert.assertXpathEvaluatesTo("http://localhost:8080/dataExport/api/assays/1", "//link/@href", this.writer.toString());
-        where:
-        label                           | results
-        "An Assay ready for extraction" | XmlTestSamples.ASSAYS
 
+        then: "An XML is generated that conforms to the expected XML"
+
+        XmlTestAssertions.assertResults(XmlTestSamples.ASSAYS, this.writer.toString())
     }
 
-    void "test generate Links For Assay #label"() {
+    void "test generate AssayDocument"() {
         given:
-        final String xpathTotalNumberOfLinks = "count(//link)"
-        final String xpathNumberOfLinksToAssay = "count(//link[@type='application/vnd.bard.cap+xml;type=assay'])"
-        final String xpathNumberOfLinksToAssays = "count(//link[@type='application/vnd.bard.cap+xml;type=assays'])"
+        AssayDocument assayDocument = AssayDocument.build(documentName: 'a doc', documentType: 'Protocol', documentContent: 'content')
 
-        when: "A service call is made to generate a list of links for an assay"
-        this.markupBuilder.links() {
-            this.assayExportHelperService.generateLinksForAssay(this.markupBuilder, new BigDecimal("1"))
-        }
-        then: "An XML is generated that conforms to the expected XML"
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        XMLAssert.assertXpathEvaluatesTo("3", xpathTotalNumberOfLinks, this.writer.toString())
-        XMLAssert.assertXpathEvaluatesTo("2", xpathNumberOfLinksToAssay, this.writer.toString())
-        XMLAssert.assertXpathEvaluatesTo("1", xpathNumberOfLinksToAssays, this.writer.toString())
-        where:
-        label                           | results
-        "An Assay ready for extraction" | XmlTestSamples.ASSAY_LINKS
+        when:
+        this.assayExportHelperService.generateDocument(this.markupBuilder, assayDocument)
+
+        then:
+        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_DOCUMENT, this.writer.toString())
+
+
     }
+
 }

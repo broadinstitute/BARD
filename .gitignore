@@ -10,3 +10,12 @@ web-app/WEB-INF/classes/
 stacktrace.log
 thumbs.db
 atlassian-ide-plugin.xml
+*.zip.sha1
+*.zip
+.idea/workspace.xml
+.idea/misc.xml
+out/
+logs/
+*.log
+*~
+.DS_Store

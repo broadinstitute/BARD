@@ -13,7 +13,7 @@ import grails.util.Environment
 // }
 
 //Number of experiments per page
-bard.experiments.max.per.page = 1000000
+bard.experiments.max.per.page = 10000
 
 //number of results per page
 bard.results.max.per.page = 5000
@@ -26,8 +26,10 @@ bard.data.export.experiments.xml = 'application/vnd.bard.cap+xml;type=experiment
 bard.data.export.experiment.xml = 'application/vnd.bard.cap+xml;type=experiment'
 bard.data.export.results.xml = 'application/vnd.bard.cap+xml;type=results'
 bard.data.export.result.xml = 'application/vnd.bard.cap+xml;type=result'
+//projects
 bard.data.export.projects.xml = 'application/vnd.bard.cap+xml;type=projects'
 bard.data.export.project.xml = 'application/vnd.bard.cap+xml;type=project'
+bard.data.export.project.doc.xml = 'application/vnd.bard.cap+xml;type=projectDoc'
 
 //assays
 bard.data.export.assays.xml = 'application/vnd.bard.cap+xml;type=assays'
@@ -39,6 +41,16 @@ bard.data.export.dictionary.resultType.xml = 'application/vnd.bard.cap+xml;type=
 bard.data.export.dictionary.xml = 'application/vnd.bard.cap+xml;type=dictionary'
 bard.data.export.dictionary.stage.xml = 'application/vnd.bard.cap+xml;type=stage'
 bard.data.export.dictionary.element.xml = 'application/vnd.bard.cap+xml;type=element'
+
+
+//external reference
+bard.data.export.externalreference.xml='application/vnd.bard.cap+xml;type=externalReference'
+bard.data.export.externalreferences.xml='application/vnd.bard.cap+xml;type=externalReferences'
+
+//external systems
+bard.data.export.externalsystem.xml ='application/vnd.bard.cap+xml;type=externalSystem'
+bard.data.export.externalsystems.xml='application/vnd.bard.cap+xml;type=externalSystems'
+
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
@@ -57,7 +69,13 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
                 "${bard.data.export.dictionary.xml}",
                 "${bard.data.export.dictionary.resultType.xml}",
                 "${bard.data.export.dictionary.stage.xml}",
-                "${bard.data.export.dictionary.element.xml}"
+                "${bard.data.export.dictionary.element.xml}",
+                "${bard.data.export.externalreference.xm}",
+                "${bard.data.export.externalreferences.xml}",
+                "${bard.data.export.externalsystems.xml}",
+                "${bard.data.export.externalsystem.xml}",
+                "${bard.data.export.project.doc.xml}"
+
 
         ],
         text: 'text/plain',
@@ -112,7 +130,7 @@ environments {
     }
 }
 
-grails.serverURL = System.properties.get('grails.serverUrl') ?: getServerUrl()
+grails.serverURL = System.properties.get('grails.serverURL') ?: getServerUrl()
 
 String getServerUrl() {
     switch (Environment.current.name) {
@@ -158,8 +176,6 @@ log4j = {
 
 dataexport.externalapplication.apiKey.header = 'APIKEY'
 dataexport.externalapplication.apiKey.hashed = 'changeMe'
-dataexport.externalapplication.ipAddress.whiteList = ['127.0.0.1': 'local address - IPv4', //localhost
-        '0:0:0:0:0:0:0:1': 'local address - IPv6'] //localhost
 
 /**
  * Loads external config files from the .grails subfolder in the user's home directory

@@ -1,34 +1,34 @@
 package dataexport.dictionary
 
+import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
-import grails.test.mixin.Mock
+import dataexport.registration.MediaTypesDTO
+import grails.buildtestdata.mixin.Build
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.dictionary.*
-import dataexport.registration.MediaTypesDTO
 
 /**
  *
  */
 @Unroll
-@Mock(Unit)
+@Build([UnitTree, Element, UnitConversion, StageTree])
 class DictionaryExportHelperServiceUnitSpec extends Specification {
-    DictionaryExportHelperService dictionaryExportHelperService
+    DictionaryExportHelperService dictionaryExportHelperService = new DictionaryExportHelperService()
     LinkGenerator grailsLinkGenerator
     Writer writer
     MarkupBuilder markupBuilder
 
     void setup() {
-        grailsLinkGenerator = Mock()
-        this.dictionaryExportHelperService =
-            new DictionaryExportHelperService(new MediaTypesDTO(elementMediaType: "xml"))
+        grailsLinkGenerator = Mock(LinkGenerator.class)
+        this.dictionaryExportHelperService.mediaTypesDTO = new MediaTypesDTO(elementMediaType: "xml")
         this.dictionaryExportHelperService.grailsLinkGenerator = grailsLinkGenerator
+
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
-
     }
 
     void tearDown() {
@@ -46,26 +46,26 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         mapResults == results
 
         where:
-        label                      | unitConversion                                                                                                                                                     | results
-        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Unit(unit: "fromUnit"), toUnit: new Unit(unit: "toUnit"), formula: "formula", offset: new Float("1"), multiplier: new Float("1")) | [fromUnit: 'fromUnit', toUnit: 'toUnit', multiplier: "1.0", offset: "1.0"]
-        "No Multiplier, No Offset" | new UnitConversion(fromUnit: new Unit(unit: "fromUnit"), toUnit: new Unit(unit: "toUnit"), formula: "formula")                                                     | [fromUnit: 'fromUnit', toUnit: 'toUnit']
+        label                      | unitConversion                                                                                                                                     | results
+        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula", offset: 1, multiplier: 1.0) | [fromUnit: 'fromUnit', toUnit: 'toUnit', multiplier: "1.0", offset: "1.0"]
+        "No Multiplier, No Offset" | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula")                             | [fromUnit: 'fromUnit', toUnit: 'toUnit']
     }
     /**
      * DictionaryExportHelperService#generateAttributesForUnit
      */
-    void "test Generate Attributes For Unit #label"() {
-        when:
-        final Map<String, String> mapResults =
-            this.dictionaryExportHelperService.generateAttributesForUnit(unit, parentUnit)
-        then:
-        mapResults == results
-
-        where:
-        label            | unit                                                   | parentUnit          | results
-        "Full Unit"      | new Unit(unit: "uM", element: new Element(label: "1")) | new Unit(unit: "2") | [unitElement: "1", parentUnit: "2", unit: "uM"]
-        "No parent Unit" | new Unit(unit: "uM", element: new Element(label: "2")) | null                | [unitElement: "2", unit: "uM"]
-        "No Unit term"   | new Unit(element: new Element(label: "3"))             | new Unit(unit: "1") | [unitElement: "3", parentUnit: "1"]
-    }
+//    void "test Generate Attributes For Unit #label"() {
+//        when:
+//        final Map<String, String> mapResults =
+//            this.dictionaryExportHelperService.generateAttributesForUnit(unit)
+//        then:
+//        mapResults == results
+//
+//        where:
+//        label            | unit                                                      | results
+//        "Full Unit"      | new Units(unit: "uM", elementLabel: "1", parentUnit: "2") | [unitElement: "1", parentUnit: "2", unit: "uM"]
+//        "No parent Unit" | new Units(unit: "uM", elementLabel: "2")                  | [unitElement: "2", unit: "uM"]
+//        "No Unit term"   | new Units(elementLabel: "3", parentUnit: "1")             | [unitElement: "3", parentUnit: "1"]
+//    }
 
     /**
      * DictionaryExportHelperService#generateAttributesForStage()
@@ -74,33 +74,33 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     void "test generate Attributes For Stage #label"() {
         when:
         final Map<String, String> mapResults =
-            this.dictionaryExportHelperService.generateAttributesForStage(stage, parentStage)
+            this.dictionaryExportHelperService.generateAttributesForStage(stage.call())
         then:
         mapResults == results
 
         where:
-        label                   | stage                                                        | parentStage           | results
-        "With all attributes"   | new Stage(stage: "stage1", element: new Element(label: "1")) | new Stage(stage: "2") | [stageElement: "1", parentStageName: "2"]
-        "With No Parent Statge" | new Stage(stage: "stage1", element: new Element(label: "2")) | null                  | [stageElement: "2"]
+        label                   | stage                                                                                                                | results
+        "With all attributes"   | { StageTree.build(element: Element.build(label: "1"), parent: StageTree.build(element: Element.build(label: "2"))) } | [stageElement: "1", parentStageName: "2"]
+        "With No Parent Statge" | { StageTree.build(element: Element.build(label: "2")) }                                                              | [stageElement: "2"]
 
     }
-    /**
-     * DictionaryExportHelperService#generateAttributesForResultType
-     */
-    void "test Generate Attributes For ResultType #label"() {
-        given:
-        when:
-        final Map<String, String> mapResults =
-            this.dictionaryExportHelperService.generateAttributesForResultType(dto)
-        then:
-        assert mapResults == results
-
-        where:
-        label                                       | dto                                                                                                                                                          | results
-        "Result Type attaributes no abbreviation"   | new ResultType(resultTypeName: "name", description: "des", synonyms: "sun", baseUnit: new Unit(unit: "uM"), resultTypeStatus: "Status")                      | [baseUnit: 'uM', resultTypeStatus: 'Status']
-        "Result Type attaributes with abbreviation" | new ResultType(resultTypeName: "name", description: "des", abbreviation: "abb", synonyms: "sun", baseUnit: new Unit(unit: "uM"), resultTypeStatus: "Status") | [abbreviation: 'abb', baseUnit: 'uM', resultTypeStatus: 'Status']
-
-    }
+//    /**
+//     * DictionaryExportHelperService#generateAttributesForResultType
+//     */
+//    void "test Generate Attributes For ResultType #label"() {
+//        given:
+//        when:
+//        final Map<String, String> mapResults =
+//            this.dictionaryExportHelperService.generateAttributesForResultType(dto)
+//        then:
+//        assert mapResults == results
+//
+//        where:
+//        label                                       | dto                                                                                                                                          | results
+//        "Result Type attaributes no abbreviation"   | new ResultType(resultTypeName: "name", description: "des", synonyms: "sun", baseUnit: "uM", resultTypeStatus: "Status")                      | [baseUnit: 'uM', resultTypeStatus: 'Status']
+//        "Result Type attaributes with abbreviation" | new ResultType(resultTypeName: "name", description: "des", abbreviation: "abb", synonyms: "sun", baseUnit: "uM", resultTypeStatus: "Status") | [abbreviation: 'abb', baseUnit: 'uM', resultTypeStatus: 'Status']
+//
+//    }
 
     /**
      * DictionaryExportHelperService#generateAttributesForResultType
@@ -108,30 +108,28 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
     void "test Generate Attributes For Descriptor #label"() {
         when:
         final Map<String, String> mapResults =
-            this.dictionaryExportHelperService.generateAttributesForDescriptor(dto)
+            this.dictionaryExportHelperService.generateAttributesForDescriptor(descriptor)
         then:
         assert mapResults == results
 
         where:
-        label                     | dto                                                                                                                                                                                                                                                                                                        | results
-        "Descriptor with only Id" | new DescriptorDTO(new AssayDescriptor(label: "label"))                                                                                                                                                                                                                                                     | [descriptor: 'assay']
-        "Full Descriptor"         | new DescriptorDTO(new AssayDescriptor(element: new Element(label: "label"), parent: new AssayDescriptor(label: "parentLabel"), label: "label", description: "des", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: new Unit(unit: "uM"), elementStatus: "elementStatus")) | [parentDescriptorLabel: "parentLabel", descriptorElement: "label", abbreviation: 'abb', externalUrl: 'http://www.broad.org', unit: 'uM', descriptor: 'assay']
+        label                        | descriptor                                                                                                                                                                                                                                                                  | results
+        "Descriptor with only label" | new AssayDescriptor(element: new Element(label: 'assay'))                                                                                                                                                                                                                   | [descriptor: 'assay', descriptorElement: 'assay']
+        "Full Descriptor"            | new AssayDescriptor(parent: new AssayDescriptor(label: "parentLabel"), element: new Element(label: 'assay', description: "des", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: new Element(label: "uM"), elementStatus: "elementStatus")) | [parentDescriptorLabel: "parentLabel", descriptorElement: "assay", abbreviation: 'abb', externalUrl: 'http://www.broad.org', unit: 'uM', descriptor: 'assay']
     }
+
 
     void "test generate Single Descriptor #label"() {
         when:
-        this.dictionaryExportHelperService.generateSingleDescriptor(this.markupBuilder, dto)
+        this.dictionaryExportHelperService.generateSingleDescriptor(this.markupBuilder, descriptor)
 
         then:
-        assert results == writer.toString()
+        assert writer.toString() == results
 
         where:
-        label                                | dto                                                                                                                                                                                                    | results
-        "Should return an empty xml element" | new DescriptorDTO(new AssayDescriptor())                                                                                                                                                               | ""
-        "Should return a full XML element"   | new DescriptorDTO(new AssayDescriptor(label: "label", description: "des", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Unit(unit: "cm"), elementStatus: "status")) | '''<elementStatus>status</elementStatus>
-<label>label</label>
-<description>des</description>
-<synonyms>syn</synonyms>'''
+        label                                | descriptor                                                                                                                                           | results
+        "Should return an empty xml element" | new AssayDescriptor(element: new Element(label: 'assay'))                                                                                            | XmlTestSamples.SINGLE_DESCRIPTOR_ELEMENTS
+        "Should return a full XML element"   | new AssayDescriptor(element: new Element(label: 'assay', description: "des", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org")) | XmlTestSamples.SINGLE_DESCRIPTOR_ALL_ELEMENTS
     }
 
     void "test generate Unit #label"() {
@@ -141,16 +139,14 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         this.dictionaryExportHelperService.generateUnit(this.markupBuilder, unit)
 
         then:
+        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                      | unit                                                                                                                | results
-        "Full Unit element"        | new Unit(element: new Element(label: "label"), parentNodeId: new Long("1"), unit: "cm", description: "Centimetres") | XmlTestSamples.SINGLE_UNIT
-        "Unit With no Parent"      | new Unit(element: new Element(label: "label"), unit: "cm", description: "Centimetres")                              | XmlTestSamples.SINGLE_UNIT_NO_PARENT
-        "Unit With no Description" | new Unit(element: new Element(label: "label"), parentNodeId: new Long("1"), unit: "cm")                             | XmlTestSamples.SINGLE_UNIT_NO_DESCRIPTION
-
-
+        label                      | unit                                                                                                                                          | results
+        "Full Unit element"        | new UnitTree(element: new Element(label: "cm", description: "Centimetres"), parent: new UnitTree(element: new Element(label: 'length unit'))) | XmlTestSamples.SINGLE_UNIT
+        "Unit With no Parent"      | new UnitTree(element: new Element(label: "cm", description: "Centimetres"))                                                                   | XmlTestSamples.SINGLE_UNIT_NO_PARENT
+        "Unit With no Description" | new UnitTree(element: new Element(label: "cm"))                                                                                               | XmlTestSamples.SINGLE_UNIT_NO_DESCRIPTION
     }
-
 
     void "test generate Lab #label"() {
 
@@ -159,9 +155,9 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                   | laboratory                                                                                                                                           | results
-        "Full Lab"              | new Laboratory(element: new Element(label: "Lab Element"), parent: new Laboratory(laboratory: "Parent"), description: "Desc", laboratory: "labName") | XmlTestSamples.LABORATORY_SAMPLE_FULL
-        "Full Lab no parent Id" | new Laboratory(element: new Element(label: "Lab Element"), description: "Desc", laboratory: "labName")                                               | XmlTestSamples.LABORATORY_SAMPLE_NO_PARENT
+        label                   | laboratory                                                                                                              | results
+        "Full Lab"              | new Laboratory(elementLabel: "Lab Element", parentLaboratory: "Parent", description: "Desc", laboratoryName: "labName") | XmlTestSamples.LABORATORY_SAMPLE_FULL
+        "Full Lab no parent Id" | new Laboratory(elementLabel: "Lab Element", description: "Desc", laboratoryName: "labName")                             | XmlTestSamples.LABORATORY_SAMPLE_NO_PARENT
 
     }
 
@@ -172,9 +168,9 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                     | stage                                                                                                                                | results
-        "Full Stage"              | new Stage(stage: "Stage", description: "desc", parent: new Stage(stage: "parentStage"), element: new Element(label: "elementLabel")) | XmlTestSamples.STAGE_FULL
-        "Full Stage no parent Id" | new Stage(stage: "Stage", description: "desc", element: new Element(label: "elementLabel"))                                          | XmlTestSamples.STAGE_NO_PARENT
+        label                     | stage                                                                                                                                              | results
+        "Full Stage"              | new StageTree(element: new Element(label: "elementLabel", description: "desc"), parent: new StageTree(element: new Element(label: "parentStage"))) | XmlTestSamples.STAGE_FULL
+        "Full Stage no parent Id" | new StageTree(element: new Element(label: "elementLabel", description: "desc"))                                                                    | XmlTestSamples.STAGE_NO_PARENT
     }
 
     void "test Generate Element Hierarchy #label"() {
@@ -196,22 +192,22 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                         | element                                                                                                                                                                                                       | results
-        "Full Element"                | new Element(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: new Unit(unit: "cm"), elementStatus: "status", readyForExtraction: "ready") | XmlTestSamples.ELEMENT_FULL
-        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: new Unit(unit: "cm"), elementStatus: "status", readyForExtraction: "ready")                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
+        label                         | element                                                                                                                                                                                                                     | results
+        "Full Element"                | new Element(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.Ready) | XmlTestSamples.ELEMENT_FULL
+        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.Ready)                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
     }
 
-    void "test generate Result Type #label"() {
-        when:
-        this.dictionaryExportHelperService.generateResultType(this.markupBuilder, resultType)
-        then:
-        XmlTestAssertions.assertResults(results, this.writer.toString())
-        where:
-        label                   | resultType                                                                                                                                                                                                                                                              | results
-        "Full Result Type"      | new ResultType(parent: new ResultType(resultTypeName: "resultTypeName"), element: new Element(label: "label"), resultTypeName: "resultTypeName", description: "desc", abbreviation: "abb", synonyms: "syn", resultTypeStatus: "status", baseUnit: new Unit(unit: "cm")) | XmlTestSamples.RESULT_TYPE_FULL
-        "Result Type no parent" | new ResultType(element: new Element(label: "label"), resultTypeName: "resultTypeName", description: "desc", abbreviation: "abb", synonyms: "syn", resultTypeStatus: "status")                                                                                           | XmlTestSamples.RESULT_TYPE_NO_PARENT
-
-    }
+//    void "test generate Result Type #label"() {
+//        when:
+//        this.dictionaryExportHelperService.generateResultType(this.markupBuilder, resultType)
+//        then:
+//        XmlTestAssertions.assertResults(results, this.writer.toString())
+//        where:
+//        label                   | resultType                                                                                                                                                                                                                | results
+//        "Full Result Type"      | new ResultType(parentResultTypeName: "resultTypeName", resultTypeLabel: "label", resultTypeName: "resultTypeName", description: "desc", abbreviation: "abb", synonyms: "syn", resultTypeStatus: "status", baseUnit: "cm") | XmlTestSamples.RESULT_TYPE_FULL
+//        "Result Type no parent" | new ResultType(resultTypeLabel: "label", resultTypeName: "resultTypeName", description: "desc", abbreviation: "abb", synonyms: "syn", resultTypeStatus: "status")                                                         | XmlTestSamples.RESULT_TYPE_NO_PARENT
+//
+//    }
 
     void "test generate Descriptor #label"() {
 
@@ -219,13 +215,12 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         when:
         this.dictionaryExportHelperService.generateDescriptor(this.markupBuilder, descriptor)
         then:
+        println(this.writer.toString())
 
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                 | descriptor                                                                                                                                                                                                 | results
-        "Assay descriptor"    | new DescriptorDTO(new AssayDescriptor(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Unit(unit: "cm"), elementStatus: "status"))    | XmlTestSamples.ASSAY_DESCRIPTOR_UNIT
-        "Biology Descriptor"  | new DescriptorDTO(new BiologyDescriptor(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Unit(unit: "cm"), elementStatus: "status"))  | XmlTestSamples.BIOLOGY_DESCRIPTOR_UNIT
-        "Instance Descriptor" | new DescriptorDTO(new InstanceDescriptor(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Unit(unit: "cm"), elementStatus: "status")) | XmlTestSamples.INSTANCE_DESCRIPTOR_UNIT
+        label              | descriptor                                                                                                                                                                            | results
+        "Assay descriptor" | new AssayDescriptor(element: new Element(label: "assay", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Element(label: 'cm'))) | XmlTestSamples.ASSAY_DESCRIPTOR_UNIT
 
 
     }
@@ -239,8 +234,9 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
 
         where:
-        label                      | unitConversion                                                                                                                                                     | results
-        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Unit(unit: "fromUnit"), toUnit: new Unit(unit: "toUnit"), formula: "formula", offset: new Float("1"), multiplier: new Float("1")) | XmlTestSamples.UNIT_CONVERSION_FULL
-        "No Multiplier, No Offset" | new UnitConversion(fromUnit: new Unit(unit: "fromUnit"), toUnit: new Unit(unit: "toUnit"), formula: "formula")                                                     | XmlTestSamples.UNIT_CONVERSION_NO_MULTIPLIER
+        label                      | unitConversion                                                                                                                                     | results
+
+        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula", offset: 1, multiplier: 1.0) | XmlTestSamples.UNIT_CONVERSION_FULL
+        "No Multiplier, No Offset" | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula")                             | XmlTestSamples.UNIT_CONVERSION_NO_MULTIPLIER
     }
 }

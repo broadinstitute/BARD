@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.Method.GET
 import org.custommonkey.xmlunit.XMLAssert
+import bard.db.project.Project
+
+import static groovyx.net.http.Method.PUT
+import static groovyx.net.http.ContentType.TEXT
 
 /**
  * Created with IntelliJ IDEA.
@@ -140,15 +144,18 @@ class AssayRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of that assay'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContexts)",responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContext)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContexts)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//assayContext)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measures)", responseData)
         XMLAssert.assertXpathEvaluatesTo("1", "count(//measure)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("1", "count(//measureContextItems)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("3", "count(//measureContextItem)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("2", "count(//assayContextItems)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("6", "count(//assayContextItem)", responseData)
         XMLAssert.assertXpathEvaluatesTo("2", "count(//assayDocument)", responseData)
-        XMLAssert.assertXpathEvaluatesTo("11", "count(//link)", responseData)
+        XMLAssert.assertXpathEvaluatesTo("17", "count(//link)", responseData)
     }
 
 
@@ -197,7 +204,29 @@ class AssayRestControllerFunctionalSpec extends Specification {
         }
         then: 'We expect an XML representation of that AssayDocument'
         assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').name == 'ETag'
+        assert serverResponse.getFirstHeader('ETag').value == '0'
         final String responseData = serverResponse.data.readLines().join()
         XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_DOCUMENT_SERVER, responseData)
+    }
+
+    def 'test Update Assay Success'() {
+        given: "there is a service endpoint to update the assay with id 1"
+        Project project = Project.get(1)
+        project.readyForExtraction = 'Ready'
+        RESTClient http = new RESTClient("${baseUrl}/1")
+
+        when: 'We send an HTTP PUT request for that Assay with a Status of Complete and an IF_Match header of 0'
+
+        def serverResponse = http.request(PUT, TEXT) {
+            headers.'If-Match' = '0'
+            body = "Complete"
+            headers."${apiKeyHeader}" = apiKeyHashed
+        }
+        then: 'We expect an HTTP Status Code of OK, with the status of the Assay now set to Complete'
+        assert serverResponse.statusLine.statusCode == HttpServletResponse.SC_OK
+        assert serverResponse.getFirstHeader('ETag')
+        assert serverResponse.getFirstHeader('ETag').value == "1"
     }
 }

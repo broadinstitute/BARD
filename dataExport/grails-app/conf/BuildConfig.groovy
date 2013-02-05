@@ -25,13 +25,14 @@ grails.project.dependency.resolution = {
     checksums true // Whether to verify checksums on resolve
 
     repositories {
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
         mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        build 'com.oracle:ojdbc6:11.2.0.2.0'
+        compile 'com.oracle:ojdbc6:11.2.0.2.0'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
@@ -40,15 +41,41 @@ grails.project.dependency.resolution = {
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
         // runtime 'mysql:mysql-connector-java:5.1.16'
         test 'xmlunit:xmlunit:1.3'
+        compile('cbip:cbip_encoding:0.1') {
+            excludes "junit"
+        }
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
-        runtime ":resources:1.1.6"
-        runtime ":bard-domain-model:0.1.7-SNAPSHOT"
-        compile ":functional-spock:0.6"
         build ":tomcat:$grailsVersion"
+        build ":codenarc:0.15"
+
+        compile ":functional-spock:0.6"
+        compile ":clover:3.1.6"
         compile ":spock:0.6"
         compile ":remote-control:1.2"
+
+        runtime ":hibernate:$grailsVersion"
+        runtime ":resources:1.1.6"
     }
+}
+
+// making the domain plugin an in-place plugin
+grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
+
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
+}
+clover {
+    //initstring = "bardwebclover.db"
+    directories: ['src/java', 'src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['**/*Spec*.*', '**/conf/**']
 }

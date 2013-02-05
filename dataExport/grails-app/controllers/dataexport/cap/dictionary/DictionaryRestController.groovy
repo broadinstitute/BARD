@@ -7,13 +7,13 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
-
+import dataexport.cap.registration.UpdateStatusHelper
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
  * ALL incoming request need to have a custom http header named 'APIKEY' and the correct MD5 hash value
  * In addition, the request's remote IP address has to be whitelisted in the commons-config file.
  */
-
+@Mixin(UpdateStatusHelper)
 class DictionaryRestController {
     DictionaryExportService dictionaryExportService
     GrailsApplication grailsApplication
@@ -22,9 +22,14 @@ class DictionaryRestController {
             resultType: "GET",
             stage: "GET",
             element: "GET",
-            updateElemet: "PATCH"
+            updateElement: "PUT"
     ]
 
+    static final String responseContentTypeEncoding = "UTF-8"
+
+    def index() {
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
+    }
     /**
      * Fetch the entire dictionary
      * @return
@@ -32,14 +37,13 @@ class DictionaryRestController {
     def dictionary() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.xml
-            response.contentType = mimeType
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                dictionaryExportService.generateDictionary(xml)
-
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                dictionaryExportService.generateDictionary(markupBuilder)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -54,15 +58,16 @@ class DictionaryRestController {
      * Get a result type given an element id
      * @return
      */
-    def resultType() {
+    def resultType(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.resultType.xml
-            response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params?.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                dictionaryExportService.generateResultType(xml, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = dictionaryExportService.generateResultType(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -82,16 +87,17 @@ class DictionaryRestController {
      * Get the stage with the given an element id
      * @return
      */
-    def stage() {
+    def stage(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.stage.xml
-            response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
 
-                dictionaryExportService.generateStage(xml, new Long(params.id))
+                final Long eTag = dictionaryExportService.generateStage(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -111,15 +117,16 @@ class DictionaryRestController {
  * Get the element with the given id
  * @return
  */
-    def element() {
+    def element(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.dictionary.element.xml
-            response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder xml = new MarkupBuilder(writer)
-                dictionaryExportService.generateElement(xml, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                Long eTag = dictionaryExportService.generateElement(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -137,8 +144,7 @@ class DictionaryRestController {
 /**
  * Update the status of the given element
  */
-    def updateElement() {
-        throw new RuntimeException("Not Yet Implemented")
+    def updateElement(final Long id) {
+      updateDomainObject(this.dictionaryExportService,id)
     }
-
 }

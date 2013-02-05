@@ -1,0 +1,31 @@
+<assay assayId='635' readyForExtraction='Ready' assayVersion='1.2' assayType='Regular' status='Active'>
+  <assayShortName>phenotypic, no format, no type on cell division cycle 25 homolog B (S. pombe) [Homo sapiens]</assayShortName>
+  <assayName>Cdc25B Catalytic Domain Protein Tyrosine Phosphatase Probe Assessment: Compound Dose Dependent Redox Cycling H2O2 Generation in 1.0 mM DTT</assayName>
+  <designedBy>University of Pittsburgh Molecular Library Screening Center</designedBy>
+  <assayContexts>
+    <assayContext assayContextId='1705' displayOrder='0'>
+      <contextName>&lt;Needs a name&gt;</contextName>
+      <assayContextItems>
+        <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='CDC25B, cell division cycle 25 homolog B (S. pombe) [Homo sapiens]'>
+          <attributeId label='gene'>
+            <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/880' type='application/vnd.bard.cap+xml;type=element' />
+          </attributeId>
+          <extValueId>994</extValueId>
+        </assayContextItem>
+        <assayContextItem displayOrder='1' attributeType='Fixed' valueDisplay='NP_004349 M-phase inducer phosphatase 2 isoform 2 [Homo sapiens]'>
+          <attributeId label='protein'>
+            <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/dictionary/element/882' type='application/vnd.bard.cap+xml;type=element' />
+          </attributeId>
+          <extValueId>4757950</extValueId>
+        </assayContextItem>
+      </assayContextItems>
+    </assayContext>
+  </assayContexts>
+  <link rel='edit' href='https://bard.broadinstitute.org/dataExport/api/assays/635' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/assays/635' type='application/vnd.bard.cap+xml;type=assay' />
+  <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/assays' type='application/vnd.bard.cap+xml;type=assays' />
+  <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/19772' type='application/vnd.bard.cap+xml;type=assayDoc' />
+  <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/19771' type='application/vnd.bard.cap+xml;type=assayDoc' />
+  <link rel='item' href='https://bard.broadinstitute.org/dataExport/api/assayDocument/19770' type='application/vnd.bard.cap+xml;type=assayDoc' />
+  <link rel='related' type='application/vnd.bard.cap+xml;type=experiment' href='https://bard.broadinstitute.org/dataExport/api/experiments/629' />
+</assay>

@@ -1,31 +1,17 @@
 package bard.db.registration
 
-class AssayDocument {
+import bard.db.model.AbstractDocument
 
-    static expose = 'assay-document'
+class AssayDocument extends AbstractDocument {
 
-	String documentName
-	String documentType
-	String documentContent
-	Date dateCreated
-	Date lastUpdated
-	String modifiedBy
-	Assay assay
+    Assay assay
 
-	static belongsTo = [assay: Assay]
+    static belongsTo = [assay: Assay]
 
-	static mapping = {
-		id column: "ASSAY_DOCUMENT_ID", generator: "assigned"
-        documentContent type: "text", sqlType: 'clob'
-	}
-
-	static constraints = {
-		documentName maxSize: 500
-		documentType maxSize: 20
-		documentContent nullable: true
-		dateCreated maxSize: 19
-		lastUpdated nullable: true, maxSize: 19
-		modifiedBy nullable: true, maxSize: 40
-	}
+    static mapping = {
+        table('ASSAY_DOCUMENT')
+        id(column: 'ASSAY_DOCUMENT_ID', generator: 'sequence', params: [sequence: 'ASSAY_DOCUMENT_ID_SEQ'])
+        documentContent(type: "text", sqlType: 'clob')
+    }
 
 }

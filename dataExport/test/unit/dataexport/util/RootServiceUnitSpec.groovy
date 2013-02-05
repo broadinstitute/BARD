@@ -2,31 +2,37 @@ package dataexport.util
 
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import dataexport.registration.MediaTypesDTO
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
-import dataexport.registration.MediaTypesDTO
 
 /**
  *
  */
 @Unroll
 class RootServiceUnitSpec extends Specification {
-    RootService rootService
+    RootService rootService = new RootService()
     LinkGenerator grailsLinkGenerator
     Writer writer
     MarkupBuilder markupBuilder
 
     void setup() {
-        grailsLinkGenerator = Mock()
-        final MediaTypesDTO mediaTypesDTO = new MediaTypesDTO(dictionaryMediaType: "dictionaryMediaType", assaysMediaType: "assaysMediaType", projectsMediaType: "projectsMediaType")
-        this.rootService =
-            new RootService(mediaTypesDTO)
+        grailsLinkGenerator = Mock(LinkGenerator.class)
+        final MediaTypesDTO mediaTypesDTO =
+            new MediaTypesDTO(
+                    dictionaryMediaType: "dictionaryMediaType",
+                    assaysMediaType: "assaysMediaType",
+                    projectsMediaType: "projectsMediaType",
+                    experimentsMediaType: "experimentsMediaType",
+                    externalSystemsMediaType: "externalSystems",
+                    externalReferencesMediaType: "externalReferences"
+            )
+        this.rootService.mediaTypesDTO = mediaTypesDTO
         this.rootService.grailsLinkGenerator = grailsLinkGenerator
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
-
     }
 
     void tearDown() {

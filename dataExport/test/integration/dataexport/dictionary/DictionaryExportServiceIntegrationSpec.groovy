@@ -1,68 +1,142 @@
 package dataexport.dictionary
 
+import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
+import dataexport.registration.BardHttpResponse
+import dataexport.util.ResetSequenceUtil
 import exceptions.NotFoundException
+import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import spock.lang.Unroll
 
+import javax.sql.DataSource
 import javax.xml.XMLConstants
 import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
 
+import bard.db.dictionary.*
+
+import static javax.servlet.http.HttpServletResponse.*
+import org.springframework.core.io.Resource
+import org.springframework.core.io.FileSystemResource
+
+@Unroll
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
-    static final String BARD_DICTIONARY_EXPORT_SCHEMA = "test/integration/dataexport/dictionary/dictionarySchema.xsd"
     DictionaryExportService dictionaryExportService
 
     Writer writer
     MarkupBuilder markupBuilder
 
+    DataSource dataSource
+    ResetSequenceUtil resetSequenceUtil
+    def fixtureLoader
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/dictionarySchema.xsd"))
+
     void setup() {
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(this.writer)
+        resetSequenceUtil = new ResetSequenceUtil(dataSource)
+
+        TestDataConfigurationHolder.reset()
+        this.resetSequenceUtil.resetSequence('ELEMENT_ID_SEQ')
     }
 
     void tearDown() {
         // Tear down logic here
     }
 
+    void "test update Not Found Status"() {
+        given: "Given a non-existing Element"
+        when: "We call the dictionary service to update this element"
+        this.dictionaryExportService.update(new Long(100000), 0, "Complete")
+
+        then: "An exception is thrown, indicating that the element does not exist"
+        thrown(NotFoundException)
+    }
+
+    void "test update #label"() {
+        given: "Given an Element with id #id and version #version"
+        Element e = Element.build(readyForExtraction: initialReadyForExtraction)
+
+        when: "We call the dictionary service to update this project"
+        final BardHttpResponse bardHttpResponse = this.dictionaryExportService.update(elementId, version, 'Complete')
+
+        then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
+        assert bardHttpResponse
+        assert bardHttpResponse.ETag == expectedETag
+        assert bardHttpResponse.httpResponseCode == expectedStatusCode
+        assert Element.get(elementId).readyForExtraction == expectedReadyForExtractionVal
+
+        where:
+        label                                             | expectedStatusCode     | expectedETag | elementId   | version | initialReadyForExtraction   | expectedReadyForExtractionVal
+        "Return OK and ETag 1 when status updated"        | SC_OK                  | 1            | 1           | 0       | ReadyForExtraction.Ready    | ReadyForExtraction.Complete
+        "Return CONFLICT and ETag 0"                      | SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | ReadyForExtraction.Ready    | ReadyForExtraction.Ready
+        "Return PRECONDITION_FAILED and ETag 0"           | SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | ReadyForExtraction.Ready    | ReadyForExtraction.Ready
+        "Return OK and ETag 0, Already completed Element" | SC_OK                  | new Long(0)  | new Long(1) | 0       | ReadyForExtraction.Complete | ReadyForExtraction.Complete
+    }
+
     void "test generate Stage"() {
+        given: "Given an Element with id #id and version #version"
+        def fixture = fixtureLoader.build {
+            stageElement(Element, label: 'IC50', description: 'Description')
+            stageTree(StageTree, element: stageElement)
+        }
+        fixture.stageTree.save(flush: true)
+
         when:
-        this.dictionaryExportService.generateStage(this.markupBuilder, element)
+        this.dictionaryExportService.generateStage(this.markupBuilder, elementId)
+
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
-        label   | element         | results
-        "Stage" | new Long("341") | XmlTestSamples.STAGE
+        label   | elementId | results
+        "Stage" | 1         | XmlTestSamples.STAGE
     }
 
     void "test generate Stage with non-existing id"() {
         when:
         this.dictionaryExportService.generateStage(this.markupBuilder, element)
+
         then:
         thrown(NotFoundException)
+
         where:
         label   | element
         "Stage" | new Long("300000000")
     }
 
     void "test generate ResultType"() {
+        given:
+        def fixture = fixtureLoader.build {
+            element(Element, label: 'IC50', elementStatus: ElementStatus.Published)
+            baseUnit(Element, label: 'uM')
+            resultTypeTree(ResultTypeTree, element: element, baseUnit: baseUnit)
+        }
+        fixture.resultTypeTree.save(flush: true)
+
         when:
-        this.dictionaryExportService.generateResultType(this.markupBuilder, element)
+        this.dictionaryExportService.generateResultType(this.markupBuilder, elementId)
+
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
-        label         | element         | results
-        "Result Type" | new Long("341") | XmlTestSamples.RESULT_TYPE
+        label         | elementId | results
+        "Result Type" | 1         | XmlTestSamples.RESULT_TYPE
     }
 
     void "test generate ResultType with non existing id"() {
         when:
         this.dictionaryExportService.generateResultType(this.markupBuilder, element)
+
         then:
         thrown(NotFoundException)
+
         where:
         label         | element
         "Result Type" | new Long("3410000000")
@@ -71,36 +145,59 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void "test generate Element With non existing Element Id"() {
         when:
         this.dictionaryExportService.generateElement(this.markupBuilder, element)
+
         then:
         thrown(NotFoundException)
+
         where:
         label     | element
         "Element" | new Long("30000000")
     }
 
     void "test generate Element"() {
+        given:
+        Element.build(label: 'uM', elementStatus: ElementStatus.Published, readyForExtraction: ReadyForExtraction.Ready)
 
         when:
-        this.dictionaryExportService.generateElement(this.markupBuilder, element)
+        this.dictionaryExportService.generateElement(this.markupBuilder, elementId)
+
         then:
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
+
         where:
-        label      | element         | results
-        "Elements" | new Long("386") | XmlTestSamples.ELEMENT
+        label      | elementId | results
+        "Elements" | 1         | XmlTestSamples.ELEMENT
     }
 
     void "test generate Dictionary"() {
+        given:
+
+        def fixture = fixtureLoader.build {
+            parentElement(Element, label: 'IC50')
+            childElement(Element, label: 'log IC50')
+            elementHierarchy(ElementHierarchy, relationshipType: 'subClassOf', parentElement: ref('parentElement'), childElement: ref('childElement'))
+        }
+        ResultTypeTree.build(id: 1)
+        StageTree.build(id: 1)
+        AssayDescriptor.build(id: 1)
+        BiologyDescriptor.build(id: 1)
+        InstanceDescriptor.build(id: 1)
+        LaboratoryTree.build(id: 1)
+        UnitTree.build(id: 1)
+        UnitConversion.build(fromUnit: Element.build(label: 'micromolar'),
+                toUnit: Element.build(label: 'millimolar'),
+                multiplier: 1000)
+
         when:
         this.dictionaryExportService.generateDictionary(this.markupBuilder)
+
         then:
-        XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
-        final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-        final Schema schema = factory.newSchema(new StreamSource(new FileReader(BARD_DICTIONARY_EXPORT_SCHEMA)))
-        final Validator validator = schema.newValidator()
-        validator.validate(new StreamSource(new StringReader(results)))
+        String actualXml = this.writer.toString()
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results, actualXml)
+        XmlTestAssertions.validate(schemaResource, actualXml)
+
         where:
         label        | results
         "Dictionary" | XmlTestSamples.DICTIONARY
     }
-
 }

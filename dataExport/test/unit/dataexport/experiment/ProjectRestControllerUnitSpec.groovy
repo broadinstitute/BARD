@@ -1,6 +1,6 @@
 package dataexport.experiment
 
-import bard.db.experiment.Project
+import bard.db.project.Project
 import dataexport.cap.experiment.ProjectRestController
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -45,34 +45,40 @@ class ProjectRestControllerUnitSpec extends Specification {
     /**
      *
      */
-    void "test  project fail #label #id"() {
+    void "test  project #label #id"() {
         when: "We send an HTTP GET request for a specific project"
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
+        //controller.params.id = id
 
-        controller.project()
+        controller.project(id)
         then:
         expectedResults == response.status
         where:
-        label                     | id   | mimeType                                    | expectedResults
-        "Expects 400 Bad request" | "2"  | "bogus.mime.type"                           | HttpServletResponse.SC_BAD_REQUEST
-        "Expects 400 Bad request" | null | "application/vnd.bard.cap+xml;type=project" | HttpServletResponse.SC_BAD_REQUEST
+        label                                  | id   | mimeType                                    | expectedResults
+        "Status Code 400, incorrect mime type" | 2    | "bogus.mime.type"                           | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 400, null id"             | null | "application/vnd.bard.cap+xml;type=project" | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                      | 5    | "application/vnd.bard.cap+xml;type=project" | HttpServletResponse.SC_OK
     }
+
+
     /**
      *
      */
-    void "test  project #label"() {
-        when: "We send an HTTP GET request for a specific project"
+    void "test  projectDocument #label #id"() {
+        when:
         request.method = 'GET'
         controller.request.addHeader(HttpHeaders.ACCEPT, mimeType)
-        controller.params.id = id
+        //controller.params.id = id
 
-        controller.project()
+        controller.projectDocument(id)
         then:
         expectedResults == response.status
         where:
-        label                        | id  | mimeType                                    | expectedResults
-        "Expects 200 OK For Project" | "5" | "application/vnd.bard.cap+xml;type=project" | HttpServletResponse.SC_OK
+        label                                 | id   | mimeType                                       | expectedResults
+        "Status Code 400,incorrect mime type" | 2    | "bogus.mime.type"                              | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 400, null id"            | null | "application/vnd.bard.cap+xml;type=projectDoc" | HttpServletResponse.SC_BAD_REQUEST
+        "Status Code 200"                     | 5    | "application/vnd.bard.cap+xml;type=projectDoc" | HttpServletResponse.SC_OK
+
     }
 }

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:documentation>All of the individual schema needed to do a data export</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="coreSchema.xsd"/>
+
+    <xs:element name="assay">
+        <xs:annotation>
+            <xs:documentation>Models an assay in the CAP. Maps to a mime type of
+application/vnd.bard.cap+xml;type=assay</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element default="" name="assayShortName">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="250"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="assayName">
+                    <xs:annotation>
+                        <xs:documentation>Name of the assay. Is this required?
+                                                                      </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:maxLength value="1000"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element minOccurs="0" name="designedBy" type="xs:string"/>
+                <xs:element minOccurs="0" name="assayContexts">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" ref="assayContext"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element minOccurs="0" name="measures">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="measure">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="resultTypeRef">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element ref="link" minOccurs="0"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                  use="required">
+                                                  <xs:annotation>
+                                                  <xs:documentation>label on Element that this references</xs:documentation>
+                                                  </xs:annotation>
+                                                </xs:attribute>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="statsModifierRef">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element minOccurs="0" ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                  use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="entryUnitRef">
+                                            <xs:annotation>
+                                                <xs:documentation>Unit and a link to the Unit element in the dictionary</xs:documentation>
+                                            </xs:annotation>
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element minOccurs="0" ref="link"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="label" type="xs:string"
+                                                  use="required"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="assayContextRefs">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element maxOccurs="unbounded"
+                                                  name="assayContextRef" type="bardID"/>
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="measureId" type="bardID" use="required"/>
+                                    <xs:attribute name="parentMeasureRef" type="bardID"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element maxOccurs="unbounded" ref="link"/>
+            </xs:sequence>
+            <xs:attribute name="assayId" type="bardID"/>
+            <xs:attribute default="1 " name="assayVersion" use="optional">
+                <xs:annotation>
+                    <xs:documentation>The assay version
+                                                                  </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="10"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="status">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Pending"/>
+                        <xs:enumeration value="Active"/>
+                        <xs:enumeration value="Superceded"/>
+                        <xs:enumeration value="Retired"/>
+
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute ref="readyForExtraction"/>
+            <xs:attribute name="assayType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Regular"/>
+                        <xs:enumeration value="Panel - Array"/>
+                        <xs:enumeration value="Panel - Group"/>
+                        <xs:enumeration value="Template"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+        <xs:key name="AssayContext_Key">
+            <xs:selector xpath="assayContexts/assayContext"/>
+            <xs:field xpath="@assayContextId"/>
+        </xs:key>
+        <xs:key name="Measure_Key">
+            <xs:selector xpath="measures/measure"/>
+            <xs:field xpath="@measureId"/>
+        </xs:key>
+        <xs:keyref name="Measure_KeyRef" refer="Measure_Key">
+            <xs:selector xpath="assayContexts/assayContext/measureRefs/measureRef"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="AssayContext_KeyRef" refer="AssayContext_Key">
+            <xs:selector xpath="measures/measure/assayContextRefs/assayContextRef"/>
+            <xs:field xpath="."/>
+        </xs:keyref>
+        <xs:keyref name="ParentMeasure_KeyRef" refer="Measure_Key">
+            <xs:selector xpath="measures/measure"/>
+            <xs:field xpath="@parentMeasureRef"/>
+        </xs:keyref>
+    </xs:element>
+    <xs:element name="assays">
+        <xs:annotation>
+            <xs:documentation>Links to Assays available for extraction</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="link"/>
+            </xs:sequence>
+            <xs:attribute name="count" type="xs:integer" use="required">
+                <xs:annotation>
+                    <xs:documentation>The number of available assays</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="assayContextItems">
+
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="assayContextItem"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="assayDocument" type="documentType"> </xs:element>
+    <xs:complexType name="assayContextItemType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextItemType">
+                <xs:attribute name="attributeType" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Fixed"/>
+                            <xs:enumeration value="List"/>
+                            <xs:enumeration value="Range"/>
+                            <xs:enumeration value="Free"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="assayContexType">
+        <xs:complexContent>
+            <xs:extension base="abstractContextType">
+                <xs:sequence>
+                    <xs:element ref="assayContextItems" minOccurs="0"/>
+                    <xs:element minOccurs="0" name="measureRefs">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="measureRef" type="bardID"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="assayContextId" type="bardID" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="assayContext" type="assayContexType"> </xs:element>
+    <xs:element name="assayContextItem" type="assayContextItemType"/>
+</xs:schema>

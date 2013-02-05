@@ -7,7 +7,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import grails.test.mixin.Mock
 
 /**
  *

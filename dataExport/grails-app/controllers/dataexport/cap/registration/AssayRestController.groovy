@@ -1,6 +1,7 @@
 package dataexport.cap.registration
 
 import dataexport.registration.AssayExportService
+import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -13,17 +14,22 @@ import javax.servlet.http.HttpServletResponse
  * ALL incoming request need to have a custom http header named 'APIKEY' and the correct MD5 hash value
  * In addition, the request's remote IP address has to be whitelisted in the commons-config file.
  */
-
+@Mixin(UpdateStatusHelper)
 class AssayRestController {
     AssayExportService assayExportService
     GrailsApplication grailsApplication
     static allowedMethods = [
-            assays: "GET",
-            assay: "GET",
-            updateAssay: "PATCH",
-            assayDocument: "GET"
+            assays: 'GET',
+            assay: 'GET',
+            updateAssay: 'PUT',
+            assayDocument: 'GET'
     ]
 
+    static final String responseContentTypeEncoding = "UTF-8"
+
+    def index() {
+        return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
+    }
     /**
      * Fetch assays with readyForExtraction of ready
      * @return
@@ -31,21 +37,21 @@ class AssayRestController {
     def assays() {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assays.xml
-            response.contentType = mimeType
             //do validations
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
-                final Writer writer = response.writer
-                //if we run into issues we should consider using StAX or StreamingMarkupBuilder
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
                 this.assayExportService.generateAssays(markupBuilder)
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
+
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message,ee)
+            log.error(ee.message, ee)
             //clean out groovy grails boiler plate stuff
             //e message body
             ee.printStackTrace()
@@ -55,15 +61,16 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    def assayDocument() {
+    def assayDocument(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.doc.xml
-            response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.assayExportService.generateAssayDocument(markupBuilder, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                final Long eTag = this.assayExportService.generateAssayDocument(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -84,15 +91,16 @@ class AssayRestController {
      * Get an assay with the given id
      * @return
      */
-    def assay() {
+    def assay(Integer id) {
         try {
             final String mimeType = grailsApplication.config.bard.data.export.assay.xml
-            response.contentType = mimeType
             //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && params.id) {
-                final Writer writer = response.writer
-                final MarkupBuilder markupBuilder = new MarkupBuilder(writer)
-                this.assayExportService.generateAssay(markupBuilder, new Long(params.id))
+            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
+                final StringWriter markupWriter = new StringWriter()
+                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
+                Long eTag = this.assayExportService.generateAssay(markupBuilder, new Long(id))
+                response.addHeader(HttpHeaders.ETAG, eTag.toString())
+                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 return
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
@@ -110,10 +118,52 @@ class AssayRestController {
     }
 
 /**
- * Update the status of the given element
+ * Update the status of the given assay
  */
-    def updateAssay() {
-        throw new RuntimeException("Not Yet Implemented")
+    def updateAssay(final Long id) {
+        updateDomainObject(this.assayExportService, id)
     }
 
 }
+/**
+ * We would use this helper class as Mixin for
+ * the RestController
+ */
+class UpdateStatusHelper {
+    final List<String> statusList = ["Pending", "Ready", "Started", "Complete"]
+    public BardHttpResponse updateDomainObject(final def service, final Long id) {
+
+        try {
+            final String requestBody = request?.reader?.text?.trim()
+            if(!requestBody){
+                response.status = HttpServletResponse.SC_BAD_REQUEST
+            }
+            else if(!statusList.contains(requestBody))  {
+                response.status = HttpServletResponse.SC_BAD_REQUEST
+            }
+            else{
+                final String ifMatchHeader = request.getHeader(HttpHeaders.IF_MATCH)
+                if (ifMatchHeader && id) {
+                    final BardHttpResponse bardHttpResponse = service.update(new Long(id), new Long(ifMatchHeader), requestBody)
+                    response.status = bardHttpResponse.httpResponseCode
+                    response.addHeader(HttpHeaders.ETAG, bardHttpResponse.ETag.toString())
+                    render ""
+                    return
+                }
+            }
+           response.status = HttpServletResponse.SC_BAD_REQUEST
+
+        } catch (NotFoundException notFoundException) {
+            log.error(notFoundException.message)
+            response.status = HttpServletResponse.SC_NOT_FOUND
+        } catch (Exception ee) {
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            log.error(ee.message)
+            ee.printStackTrace()
+        }
+        render ""
+        return
+    }
+
+}
+

@@ -7,7 +7,7 @@ class BardDomainModelGrailsPlugin {
     String groupId = 'org.grails.plugins'
 
     // the plugin version
-    def version = "0.1.7-SNAPSHOT"
+    def version = "0.1.9-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
@@ -19,6 +19,7 @@ class BardDomainModelGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp",
+        "src/groovy/test/"
     ]
 
     // TODO Fill in these fields
@@ -60,11 +61,13 @@ Provide domain objects for any objects wishing to directly access the Bard datab
          *
          *  based on the initialization that happens in the DatabaseMigrationGrailsPlugin.groovy
          */
-        File bardDomainModelPluginDir = GrailsPluginUtils.getPluginDirForName('bard-domain-model').getFile()
-        //println(bardDomainModelPluginDir.path)
-        String changelogLocationPath = new File(bardDomainModelPluginDir, MigrationUtils.changelogLocation).path
-        //println(changelogLocationPath)
-        migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
+        if ( !application.warDeployed ) {
+            File bardDomainModelPluginDir = GrailsPluginUtils.getPluginDirForName('bard-domain-model').getFile()
+            //println(bardDomainModelPluginDir.path)
+            String changelogLocationPath = new File(bardDomainModelPluginDir, MigrationUtils.changelogLocation).path
+            //println(changelogLocationPath)
+            migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
+        }
     }
 
     def doWithDynamicMethods = { ctx ->

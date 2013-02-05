@@ -79,6 +79,40 @@
         }
     }
     </style>
+
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            //http://completion.amazon.com/search/complete?method=completion&q=halo&search-alias=videogames&mkt=1&x=updateISSCompletion&noCacheIE=1295031912518
+            var filter = $("#searchbox").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "http://completion.amazon.com/search/complete",
+                        type: "GET",
+                        cache: false,
+                        dataType: "jsonp",
+                        success: function (data) {
+                            response(data[1]);
+                        },
+                        data: {
+                            q: request.term,
+                            "search-alias": "videogames",
+                            mkt: "1",
+                            callback: '?'
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
 </head>
 
 <body>

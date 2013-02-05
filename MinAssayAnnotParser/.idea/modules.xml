@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/MinAssayAnnotParser.iml" filepath="$PROJECT_DIR$/MinAssayAnnotParser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MinAssayAnnotParser-grailsPlugins.iml" filepath="$PROJECT_DIR$/MinAssayAnnotParser-grailsPlugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bardDomainspreadsheetmappingModel-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardDomainspreadsheetmappingModel-inplacePlugin.iml" />
+    </modules>
+  </component>
+</project>
+

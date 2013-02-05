@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-    changeSet(author: "ddurkin", id: "reset sequneces", dbms: 'oracle', runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "reset sequneces", dbms: 'oracle', context:'standard,load-data,delete-data',runAlways: 'true') {
         grailsChange {
             change {
                 def sequenceNames = []
@@ -12,7 +12,7 @@ databaseChangeLog = {
                     String tableName = sequenceName - '_ID_SEQ'
                     String maxIdQuery = "select max(${tableName}_ID) as max_id from ${tableName}"
                     try {
-                        int maxId = sql.rows(maxIdQuery)[0].max_id ?: 0
+                        int maxId = (sql.rows(maxIdQuery)[0].max_id ?: 0) as int
                         int startWithVal = maxId + 1
 
                         String dropSeqSql = "drop sequence ${sequenceName}"
@@ -31,5 +31,6 @@ databaseChangeLog = {
     }
 
 }
+
 
 

@@ -1,0 +1,5 @@
+<experiments count='3'>
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/experiments/1' type='application/vnd.bard.cap+xml;type=experiment' />
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
+  <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/experiments/3' type='application/vnd.bard.cap+xml;type=experiment' />
+</experiments>

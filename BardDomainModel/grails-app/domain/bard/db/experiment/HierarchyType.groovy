@@ -2,8 +2,8 @@ package bard.db.experiment
 
 public enum HierarchyType {
 	
-	CHILD("Child"),
-	DERIVES("Derives")
+	Child("Child"),
+	Derives("Derives")
 	
 	final String value
 	
@@ -20,6 +20,6 @@ public enum HierarchyType {
 	}
 	
 	static list(){
-		[CHILD, DERIVES]
+		[Child, Derives]
 	}
 }

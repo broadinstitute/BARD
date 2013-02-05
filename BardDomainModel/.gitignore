@@ -2,3 +2,7 @@
 *.sha1
 plugin.xml
 .idea/workspace.xml
+.idea/misc.xml
+.idea/gradle.xml
+.idea/dataSource*
+out/

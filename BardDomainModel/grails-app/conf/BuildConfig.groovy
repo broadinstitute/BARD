@@ -1,9 +1,11 @@
+import grails.util.Environment
+
 grails.project.work.dir = "target"
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
-//grails.project.war.file = "target/${appName}-${appVersion}.war"
+
 
 
 grails.project.dependency.resolution = {
@@ -14,32 +16,44 @@ grails.project.dependency.resolution = {
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     repositories {
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
         mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
-        // runtime 'mysql:mysql-connector-java:5.1.5'
         build 'com.oracle:ojdbc6:11.2.0.2.0'
     }
 
     plugins {
-        build(":tomcat:$grailsVersion"){
-            export = false
-        }
+        build(":tomcat:$grailsVersion") { export = false }
+        build(":codenarc:0.15") { export = false }
         // seems like rest client builder is required by release plugin but not getting included transitively
         // so adding explicitly here
-        build(":rest-client-builder:1.0.2"){
-            export = false
-        }
-        build(":release:2.0.2") {
-            export = false
-        }
-        compile(":database-migration:1.1"){
-            export = true
+        build(":rest-client-builder:1.0.2") { export = false }
+        build(":release:2.0.2") { export = false }
+        build(":improx:0.1") { export = false } // Interactive Mode Proxy; useful for IDE integration
+
+        compile(":clover:3.1.6") { export = false }
+        compile(":console:1.2") { export = false }
+        compile(":database-migration:1.1") { export = true }
+        compile(":spock:0.6") { export = false }
+        /**
+         * including build test data for all environments except production, oracleqa, oracledev
+         */
+        switch (Environment.current.name) {
+            case ('production'):
+            case ('oracleqa'):
+            case ('oracledev'):
+                break
+            default:
+                compile(":build-test-data:2.0.3") { export = true }
+                compile(":fixtures:1.1") {
+                    export = true
+                    excludes('svn')
+                }
+                break
         }
     }
 }
@@ -56,6 +70,23 @@ grails.project.repos.releases.url = "http://bard-repo.broadinstitute.org:8081/ar
 // grails.project.repos.releases.password = "changeme"
 
 grails.project.repos.snapshots.url = "http://bard-repo.broadinstitute.org:8081/artifactory/plugins-snapshot-local"
-//grails.project.repos.snapshots.username = "changeme"
-//grails.project.repos.snapshots.password = "changeme"
+grails.project.repos.snapshots.username = "changeme"
+grails.project.repos.snapshots.password = "changeme"
 
+codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.reports = {
+    html('html') {
+        outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
+        title = 'BARD CodeNarc Report'
+    }
+}
+codenarc {
+    exclusions = ['**/grails-app/migrations/*']
+}
+
+clover {
+    license.path = "${userHome}/.grails/clover.license"
+    directories: ['src/java', 'src/groovy', 'grails-app']
+    includes = ['**/*.groovy', '**/*.java']
+    excludes = ['test/**.*', '**/*Spec*.*', '**/conf/**', '**/migrations/**']
+}

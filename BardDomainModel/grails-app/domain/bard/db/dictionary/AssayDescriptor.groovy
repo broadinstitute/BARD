@@ -1,37 +1,22 @@
 package bard.db.dictionary
 
-class AssayDescriptor {
+/**
+ * Created with IntelliJ IDEA.
+ * User: ddurkin
+ * Date: 9/25/12
+ * Time: 10:01 PM
+ * To change this template use File | Settings | File Templates.
+ */
+class AssayDescriptor extends Descriptor<AssayDescriptor> {
 
-    static expose = 'assay-descriptor'
+    static mapping = {
+        table('ASSAY_DESCRIPTOR_TREE')
+        id(column: 'NODE_ID', generator: 'assigned')
+        version(false)
+        leaf(column: 'IS_LEAF', type: 'yes_no')
+        bardURI(column: 'BARD_URI')
+        externalURL(column: 'EXTERNAL_URL')
+        parent(column: 'PARENT_NODE_ID')
+    }
 
-	AssayDescriptor parent
-	Element element
-	String label
-	String description
-	String abbreviation
-	String synonyms
-	String externalURL
-	String elementStatus
-	Unit unit
-
-	static hasMany = [children: AssayDescriptor]
-
-	static mapping = {
-		id column: "node_id", generator: "assigned"
-		parent column: "parent_node_id"
-		externalURL column: "external_url"
-		unit column: "unit"
-		version false
-	}
-
-	static constraints = {
-		parent nullable: true
-		label maxSize: 128
-		description nullable: true, maxSize: 1000
-		abbreviation nullable: true, maxSize: 20
-		synonyms nullable: true, maxSize: 1000
-		externalURL nullable: true, maxSize: 1000
-		unit nullable: true
-		elementStatus maxSize: 20, nullable: false, inList: ["Pending", "Published", "Deprecated", "Retired"]
-	}
 }

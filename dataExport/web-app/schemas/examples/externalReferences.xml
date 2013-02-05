@@ -1,0 +1,20 @@
+<externalReferences count='3'>
+  <externalReference>
+    <externalAssayRef>aid=463119</externalAssayRef>
+    <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/externalSystems/1' type='application/vnd.bard.cap+xml;type=externalSystem' />
+    <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/2005' type='application/vnd.bard.cap+xml;type=externalReference' />
+    <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/externalReferences' type='application/vnd.bard.cap+xml;type=externalReferences' />
+  </externalReference>
+  <externalReference>
+    <externalAssayRef>aid=463120</externalAssayRef>
+    <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/externalSystems/1' type='application/vnd.bard.cap+xml;type=externalSystem' />
+    <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/2006' type='application/vnd.bard.cap+xml;type=externalReference' />
+    <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/externalReferences' type='application/vnd.bard.cap+xml;type=externalReferences' />
+  </externalReference>
+  <externalReference>
+    <externalAssayRef>aid=463122</externalAssayRef>
+    <link rel='related' href='https://bard.broadinstitute.org/dataExport/api/externalSystems/1' type='application/vnd.bard.cap+xml;type=externalSystem' />
+    <link rel='self' href='https://bard.broadinstitute.org/dataExport/api/externalReferences/2007' type='application/vnd.bard.cap+xml;type=externalReference' />
+    <link rel='up' href='https://bard.broadinstitute.org/dataExport/api/externalReferences' type='application/vnd.bard.cap+xml;type=externalReferences' />
+  </externalReference>
+</externalReferences>
