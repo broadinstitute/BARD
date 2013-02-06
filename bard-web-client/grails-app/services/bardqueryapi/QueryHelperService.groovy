@@ -20,6 +20,7 @@ import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ResponseClassEnum
 import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ConcentrationResponseSeries
 
 class QueryHelperService {
 
@@ -42,35 +43,82 @@ class QueryHelperService {
             'preferred_term': 'Preferred Term'
     ]
 
-    Map extractMapFromResultData(ResultData resultData) {
+    Map extractMapFromResultData(ResultData resultData, NormalizeAxis normalizeAxis) {
         if (resultData.hasPriorityElements()) {
             boolean hasPlot = false
             final PriorityElement priorityElement = resultData.priorityElements.get(0)
+
             final boolean hasChildElements = priorityElement.hasChildElements()
             final Map priorityMap = this.extractPriorityDisplayDescription(priorityElement)
             if (resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
                 hasPlot = true
             }
+            if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {
+                if (resultData.hasConcentrationResponseSeries()) {
+                    final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
+                    if (concentrationResponseSeries) {
+                        final List<Double> sorterdActivities = concentrationResponseSeries.sorterdActivities()
+                        if (sorterdActivities) {
+                            priorityMap.put("yNormMin", sorterdActivities.get(0))
+                            priorityMap.put("yNormMax", sorterdActivities.last())
+                        }
+                    }
+
+                }
+            } else {
+                priorityMap.put("yNormMin", null)
+                priorityMap.put("yNormMax", null)
+
+            }
             priorityMap.put("hasPlot", hasPlot)
             priorityMap.put("hasChildElements", hasChildElements)
             return priorityMap
         }
-        return [priorityDisplay: '', priorityDescription: '', dictionaryId: 0, hasPlot: false, hasChildElements: false]
+        return [priorityDisplay: '', priorityDescription: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
-    Map extractExperimentDetails(final List<Activity> activities) {
-        Map priorityMap = [:]
+    Map extractExperimentDetails(List<Activity> activities, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
+        Double yNormMin = 0
+        Double yNormMax = 0
+        boolean hasPlot = false
+        boolean hasChildElements = false
+        String priorityDisplay = ''
+        String dictionaryId
         for (Activity activity : activities) {
+
             final ResultData resultData = activity.resultData
+
             if (resultData) {
-                priorityMap = extractMapFromResultData(resultData)
-                if (priorityMap.hasPlot && priorityMap.priorityDisplay && priorityMap.hasChildElements) {
-                    break
+                Map priorityMap = extractMapFromResultData(resultData, normalizeAxis)
+                if (priorityMap.yNormMin) {
+                    if (priorityMap.yNormMin < yNormMin) {
+                        yNormMin = priorityMap.yNormMin
+                    }
                 }
+                if (priorityMap.yNormMax) {
+                    if (priorityMap.yNormMax > yNormMax) {
+                        yNormMax = priorityMap.yNormMax
+                    }
+                }
+                if (priorityMap.hasPlot) {
+                    hasPlot = true
+                }
+                if (priorityMap.hasChildElements) {
+                    hasChildElements = true
+                }
+                if (priorityMap.dictionaryId) {
+                    dictionaryId = priorityMap.dictionaryId
+                }
+                if (priorityMap.priorityDisplay) {
+                    priorityDisplay = priorityMap.priorityDisplay
+                }
+
             }
         }
-        return [priorityDisplay: priorityMap.priorityDisplay, dictionaryId: priorityMap.dictionaryId, hasPlot: priorityMap.hasPlot, hasChildElements: priorityMap.hasChildElements]
+        return [priorityDisplay: priorityDisplay, dictionaryId: dictionaryId,
+                hasPlot: hasPlot, hasChildElements: hasChildElements,
+                yNormMin: yNormMin, yNormMax: yNormMax]
     }
 
     Map extractPriorityDisplayDescription(PriorityElement priorityElement) {

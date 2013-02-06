@@ -16,6 +16,12 @@ $(document).ready(function () {
     $(document).on("mouseover", "a.desc_tip", function (event) {
         $(this).tooltip();
     });
+    $(document).on("submit", "#showExperimentForm", function (event) {
+        event.preventDefault();	// prevent the default action behaviour to happen
+        var url = $(this).attr('action') + "?" + $(this).serialize()
+        pushStateHandler(url)
+        populatePage(url);
+    });
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
     $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
@@ -27,6 +33,9 @@ $(document).ready(function () {
 
 
 });
+function handleFilteredQuery() {
+
+}
 //Handles pushing of state on history stack
 function pushStateHandler(url) {
     history.pushState(url, null, url);
@@ -39,6 +48,7 @@ function populatePage(url) {
         cache:false,
         //timeout: 10000,
         beforeSend:function () {
+            //use the main form page
             $('#experimentalResults').html(bigSpinnerImage);
         },
         success:function (experimentalResultsData) {

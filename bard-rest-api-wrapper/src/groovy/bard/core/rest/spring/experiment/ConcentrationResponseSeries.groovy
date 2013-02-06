@@ -132,12 +132,23 @@ public class ConcentrationResponseSeries extends JsonUtil {
         this.miscData = miscData;
     }
 
+    public List<Double> sorterdActivities() {
+        List<Double> activities = []
+
+        for (ConcentrationResponsePoint concentrationResponsePoint : this.concentrationResponsePoints) {
+            if (concentrationResponsePoint.value != null) {
+                activities.add(new Double(concentrationResponsePoint.value))
+            }
+        }
+        return activities.sort()
+    }
+
     public static Map toDoseResponsePoints(List<ConcentrationResponsePoint> concentrationResponsePoints) {
         List<Double> concentrations = []
         List<Double> activities = []
 
         for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
-            if (concentrationResponsePoint.testConcentration && concentrationResponsePoint.value) {
+            if (concentrationResponsePoint.testConcentration != null && concentrationResponsePoint.value != null) {
                 concentrations.add(concentrationResponsePoint.testConcentration)
                 activities.add(new Double(concentrationResponsePoint.value))
             }

@@ -87,13 +87,13 @@ class QueryServiceUnitSpec extends Specification {
     /**
      * We tests the non-null case with an integration test
      */
-    void "test findExperimentDataById Null Experiment"() {
+    void "test findExperimentDataById Null Experiment #label"() {
         given:
         final Long experimentId = 2L
         final Integer top = 10
         final Integer skip = 0
         when:
-        Map resultsMap = service.findExperimentDataById(experimentId, top, skip)
+        Map resultsMap = service.findExperimentDataById(experimentId, top, skip, normalizeYAxis, bardqueryapi.ActivityOutcome.ALL)
         then:
         experimentRestService.getExperimentById(_) >> {null}
         and:
@@ -102,7 +102,10 @@ class QueryServiceUnitSpec extends Specification {
         assert resultsMap.total == 0
         assert resultsMap.activities.isEmpty()
         assert resultsMap.role == null
-
+        where:
+        label                 | normalizeYAxis
+        "Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS
+        "DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS
     }
 
     void "test findSubstancesByCid #label"() {

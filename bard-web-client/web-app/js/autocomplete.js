@@ -4,8 +4,10 @@ $(document).ready(function () {
     var autoOpts = {
         source:"/bardwebclient/bardWebInterface/autoCompleteAssayNames",
         minLength:2,
-        html: true
+        html: true,
+        delay:1000
     };
+
     $("#searchString").autocomplete(autoOpts);
     $("#searchString").bind("autocompleteselect", function (event, ui) {
         $("#searchString").val(ui.item.value)

@@ -38,48 +38,54 @@ class QueryHelperServiceUnitSpec extends Specification {
 
     void "test extractExperimentDetails #label"() {
         when:
-        Map map = service.extractExperimentDetails(activities)
+        Map map = service.extractExperimentDetails(activities, normalizeYAxis)
         then:
 
         assert map == expectedMap
         where:
-        label                      | activities       | expectedMap
-        "Empty Activities"         | []               | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
-        "Activity, no Result Data" | [new Activity()] | [priorityDisplay: null, dictionaryId: null, hasPlot: null, hasChildElements: null]
+        label                      | normalizeYAxis              | activities       | expectedMap
+        "Empty Activities"         | NormalizeAxis.Y_NORM_AXIS   | []               | [priorityDisplay: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+        "Activity, no Result Data" | NormalizeAxis.Y_NORM_AXIS   | [new Activity()] | [priorityDisplay: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+        "Empty Activities"         | NormalizeAxis.Y_DENORM_AXIS | []               | [priorityDisplay: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+        "Activity, no Result Data" | NormalizeAxis.Y_DENORM_AXIS | [new Activity()] | [priorityDisplay: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+
     }
 
 
     void "test extractMapFromResultData #label"() {
         when:
-        Map foundMap = service.extractMapFromResultData(resultData)
+        Map foundMap = service.extractMapFromResultData(resultData, normalizeYAxis)
         then:
         assert expectedMap == foundMap
 
         where:
-        label                                   | resultData                                                                                                       | expectedMap
-        "Has Priority, ResponseClass=CR_SER"    | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: true, hasChildElements: false]
-        "Has Priority, ResponseClass=CR_NO_SER" | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: false, hasChildElements: false]
-        "No Priority, ResponseClass=CR_NO_SER"  | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [priorityDisplay: '', priorityDescription: '', dictionaryId: 0, hasPlot: false, hasChildElements: false]
+        label                                                  | normalizeYAxis              | resultData                                                                                                       | expectedMap
+        "Has Priority, ResponseClass=CR_SER"                   | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, yNormMin: null, yNormMax: null, hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_SER, Normalize Y-Axis" | NormalizeAxis.Y_NORM_AXIS   | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_NO_SER"                | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [priorityDisplay: display, priorityDescription: null, dictionaryId: null, yNormMin: null, yNormMax: null, hasPlot: false, hasChildElements: false]
+        "No Priority, ResponseClass=CR_NO_SER"                 | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [priorityDisplay: '', priorityDescription: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
-    void "test extractExperimentDetails with activities"() {
+    void "test extractExperimentDetails with activities #label"() {
         given:
         final DictionaryElement dictionaryElement = new DictionaryElement(elementId: dictElemId, label: display, description: description)
         DataExportRestService dataExportRestService = Mock(DataExportRestService)
         Dummy d = new Dummy()
         d.dataExportRestService = dataExportRestService
-
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()])
         priorityElement.dummy = d
-        Map expectedMap = [priorityDisplay: display, dictionaryId: dictElemId, hasPlot: true, hasChildElements: true]
         List<Activity> activities = [new Activity(resultData: new ResultData(responseClass: "CR_SER",
                 priorityElements: [priorityElement]))]
         when:
-        Map map = service.extractExperimentDetails(activities)
+        Map map = service.extractExperimentDetails(activities, normalizeYAxis)
         then:
         d.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
-        assert map == expectedMap
+        assert expectedMap == map
+
+        where:
+        label                      | normalizeYAxis              | priorityElement                                                                                               | expectedMap
+        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [priorityDisplay: display, dictionaryId: '211', hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
+        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [priorityDisplay: display, dictionaryId: '211', hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
     }
 
     void "test extractPriorityDisplayDescription #label"() {

@@ -371,8 +371,8 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'UNM Promiscuity Analysis')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Active vs Tested across all Assay Definitions')])
         for (ExperimentSearch experiment : experimentList) {
-            molSpreadSheetData.experimentNameList << "${experiment.id.toString()}"
-            molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}"
+            molSpreadSheetData.experimentNameList << "${experiment.assayId.toString()}".toString()
+            molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}".toString()
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[])
         }
     }

@@ -17,6 +17,8 @@ class DrcCurveCommand {
     Double sinf
     Double slope
     Double hillSlope
+    Double yNormMin
+    Double yNormMax
     List<Double> concentrations = ListUtils.lazyList([], new ListUtilsFactory())
     List<Double> activities = ListUtils.lazyList([], new ListUtilsFactory())
     List<Curve> curves = ListUtils.lazyList([], new ListCurveFactory())

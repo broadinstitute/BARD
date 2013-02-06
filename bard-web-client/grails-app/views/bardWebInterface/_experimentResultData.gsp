@@ -6,31 +6,33 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.core.util.ExperimentalValueUtil; bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit;  molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bardqueryapi.NormalizeAxis; bard.core.util.ExperimentalValueUtil; bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit;  molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 
-<p><b>Title: ${experimentDataMap?.experiment?.name}</b></p>
+<p>
+    <b>Title: ${experimentDataMap?.experiment?.name}</b>
+</p>
 
 <p>
     <b>Assay ID :
-    <g:if test="${searchString}">
-        <g:link controller="bardWebInterface" action="showAssay"
-                id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
-            ${experimentDataMap?.experiment?.adid}
-        </g:link>
-    </g:if>
-    <g:else>
-        <g:link controller="bardWebInterface" action="showAssay"
-                id="${experimentDataMap?.experiment?.adid}">
-            ${experimentDataMap?.experiment?.adid}
-        </g:link>
-    </g:else>
+        <g:if test="${searchString}">
+            <g:link controller="bardWebInterface" action="showAssay"
+                    id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
+                ${experimentDataMap?.experiment?.adid}
+            </g:link>
+        </g:if>
+        <g:else>
+            <g:link controller="bardWebInterface" action="showAssay"
+                    id="${experimentDataMap?.experiment?.adid}">
+                ${experimentDataMap?.experiment?.adid}
+            </g:link>
+        </g:else>
     </b>
 </p>
 
 <div class="row-fluid">
 
     <div class="pagination offset3">
-        <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
+        <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}", normalizeYAxis: "${experimentDataMap?.normalizeYAxis}"]'/>
     </div>
     <table class="table table-condensed">
         <thead>
@@ -144,6 +146,7 @@
                     </td>
                     <g:if test="${!concentrationResponsePoints?.isEmpty()}">
                         <td>
+                            <g:if test="${experimentDataMap.normalizeYAxis == bardqueryapi.NormalizeAxis.Y_NORM_AXIS}">
                             <img alt="Plot for CID ${resultData.cid}" title="Plot for CID ${resultData.cid}"
                                  src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
                                          params: [sinf: curveFitParameters?.getSInf(),
@@ -153,8 +156,25 @@
                                                  concentrations: doseResponsePointsMap.concentrations,
                                                  activities: doseResponsePointsMap.activities,
                                                  yAxisLabel: "${concRespSeries?.getYAxisLabel()}",
-                                                 xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}"
+                                                 xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
+                                                 yNormMin: "${experimentDataMap.yNormMin}",
+                                                 yNormMax: "${experimentDataMap.yNormMax}"
                                          ])}"/>
+                            </g:if>
+                            <g:else>
+                                <img alt="Plot for CID ${resultData.cid}" title="Plot for CID ${resultData.cid}"
+                                     src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
+                                             params: [sinf: curveFitParameters?.getSInf(),
+                                                     s0: curveFitParameters?.getS0(),
+                                                     slope: priorityElement?.getSlope(),
+                                                     hillSlope: curveFitParameters?.getHillCoef(),
+                                                     concentrations: doseResponsePointsMap.concentrations,
+                                                     activities: doseResponsePointsMap.activities,
+                                                     yAxisLabel: "${concRespSeries?.getYAxisLabel()}",
+                                                     xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}"
+                                             ])}"/>
+
+                            </g:else>
                             <br/>
                             <g:if test="${curveFitParameters != null}">
                                 <p>
@@ -185,6 +205,6 @@
     </table>
 
     <div class="pagination offset3">
-        <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}"]'/>
+        <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}", normalizeYAxis: "${experimentDataMap?.normalizeYAxis}"]'/>
     </div>
 </div>

@@ -64,7 +64,7 @@ class BardWebInterfaceController {
     def searchResults() {
     }
 
-    def showExperiment(Long id) {
+    def showExperiment(Long id, String normalizeYAxis,String activityOutcome) {
 
         if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
             return
@@ -74,9 +74,11 @@ class BardWebInterfaceController {
             Map<String, Integer> searchParams = handleSearchParams()
             final Integer top = searchParams.top
             final Integer skip = searchParams.skip
-            final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip)
+            NormalizeAxis normalizeAxis = normalizeYAxis?normalizeYAxis as NormalizeAxis:NormalizeAxis.Y_NORM_AXIS
+            ActivityOutcome outcome = activityOutcome?activityOutcome as ActivityOutcome:ActivityOutcome.ALL
+
+            final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
             final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
-            //TODO: Move this logic into a filter
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
                 render(template: 'experimentResultData', model: modelMap)
                 return

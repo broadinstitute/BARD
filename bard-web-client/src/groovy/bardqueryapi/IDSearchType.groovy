@@ -1,7 +1,6 @@
 package bardqueryapi
 
 /**
- * Place holder until this appears in the JDO
  *
  * An enum of IDs that we can search for
  */
@@ -27,7 +26,7 @@ enum IDSearchType {
         this.label = label;
     }
     /**
-     * @return the name
+     * @return the label
      */
     String getLabel() {
         return this.label;
