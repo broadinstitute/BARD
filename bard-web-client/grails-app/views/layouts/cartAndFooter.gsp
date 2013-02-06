@@ -5,6 +5,13 @@
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <head>
+    %{--<script type="text/javascript" src="${resource(dir: 'js/dojo-min/dojo', file: 'dojo.js')}"></script>--}%
+    %{--<script type="text/javascript" src="${resource(dir: 'js/jsDraw', file: 'Scilligence.JSDraw2.js')}"></script>--}%
+    %{--<script type="text/javascript" src="${resource(dir: 'js/jsDraw', file: 'license.js')}"></script>--}%
+    <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/jsDraw/Scilligence.JSDraw2.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/jsDraw/license.js"></script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle default="BioAssay Research Database"/></title>
