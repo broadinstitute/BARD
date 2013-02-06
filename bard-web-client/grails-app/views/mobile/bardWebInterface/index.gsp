@@ -82,8 +82,9 @@
 
         <p><br></p>
 
-        <p><a href="#probeList" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"
-              id="probeListTab">Probes (0)</a></p>
+        <a href="${createLink(controller: 'bardWebInterface', action: 'showProbeList')}" data-role="button"
+           data-icon="arrow-r" data-iconpos="right" data-transition="slide"
+           id="probeListTab">Probes (0)</a>
 
 
         <p><a href="#search" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"

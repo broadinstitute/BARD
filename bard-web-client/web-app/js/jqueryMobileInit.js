@@ -9,6 +9,7 @@
 //JQuery Mobile's default setting change
 $(document).bind("mobileinit", function(){
     //apply overrides here
+//    $.mobile.defaultPageTransition = 'none'
 });
 
 $(document).bind('pageinit', function() {

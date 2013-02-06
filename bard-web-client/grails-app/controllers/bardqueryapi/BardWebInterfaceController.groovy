@@ -484,7 +484,7 @@ class BardWebInterfaceController {
     def showProbeList() {
         Map results = queryService.showProbeList()
         results.put("searchString", flash.searchString)
-        render(template: "/mobile/bardWebInterface/compounds", model: results)
+        return results
     }
 
     def jsDrawEditor() {}
