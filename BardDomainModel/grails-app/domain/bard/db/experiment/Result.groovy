@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
+import org.codehaus.groovy.grails.orm.hibernate.cfg.IdentityEnumType
 
 class Result {
 
@@ -11,7 +12,7 @@ class Result {
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
 
     String resultStatus
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
 
     Experiment experiment
     Element resultType
@@ -45,6 +46,7 @@ class Result {
 
     static mapping = {
         id(column: "RESULT_ID", generator: "sequence", params: [sequence: 'RESULT_ID_SEQ'])
+
         resultType(column: "RESULT_TYPE_ID")
         qualifier(column: "qualifier", sqlType: "char", length: 2)
         replicateNumber(column: 'REPLICATE_NO')

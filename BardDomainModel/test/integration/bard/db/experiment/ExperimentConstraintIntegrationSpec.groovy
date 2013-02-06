@@ -1,13 +1,13 @@
 package bard.db.experiment
 
+import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
+import spock.lang.Unroll
 
 import static bard.db.experiment.Experiment.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.enums.ReadyForExtraction
-import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,61 +20,61 @@ import spock.lang.Unroll
 class ExperimentConstraintIntegrationSpec extends IntegrationSpec {
     Experiment domainInstance
 
-        @Before
-        void doSetup() {
-            domainInstance = Experiment.buildWithoutSave()
+    @Before
+    void doSetup() {
+        domainInstance = Experiment.buildWithoutSave()
+    }
+
+    void "test experimentName constraints #desc experimentName: '#valueUnderTest'"() {
+        final String field = 'experimentName'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test experimentName constraints #desc experimentName: '#valueUnderTest'"() {
-            final String field = 'experimentName'
+        where:
+        desc               | valueUnderTest                             | valid | errorCode
+        'null '            | null                                       | false | 'nullable'
+        'blank value'      | ''                                         | false | 'blank'
+        'blank value'      | '  '                                       | false | 'blank'
+        'too long'         | createString(EXPERIMENT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | createString(EXPERIMENT_NAME_MAX_SIZE)     | true  | null
+    }
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+    void "test experimentStatus constraints #desc experimentStatus: '#valueUnderTest'"() {
+        final String field = 'experimentStatus'
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc               | valueUnderTest                             | valid | errorCode
-            'null '            | null                                       | false | 'nullable'
-            'blank value'      | ''                                         | false | 'blank'
-            'blank value'      | '  '                                       | false | 'blank'
-            'too long'         | createString(EXPERIMENT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-            'exactly at limit' | createString(EXPERIMENT_NAME_MAX_SIZE)     | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test experimentStatus constraints #desc experimentStatus: '#valueUnderTest'"() {
-            final String field = 'experimentStatus'
+        where:
+        desc          | valueUnderTest            | valid | errorCode
+        'null'        | null                      | false | 'nullable'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+        'valid value' | ExperimentStatus.Pending  | true  | null
+        'valid value' | ExperimentStatus.Approved | true  | null
+        'valid value' | ExperimentStatus.Rejected | true  | null
+        'valid value' | ExperimentStatus.Revised  | true  | null
+    }
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
-
-            where:
-            desc          | valueUnderTest            | valid | errorCode
-            'null'        | null                      | false | 'nullable'
-
-            'valid value' | ExperimentStatus.Pending  | true  | null
-            'valid value' | ExperimentStatus.Approved | true  | null
-            'valid value' | ExperimentStatus.Rejected | true  | null
-            'valid value' | ExperimentStatus.Revised  | true  | null
-        }
-
-        void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
+    void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
             final String field = 'readyForExtraction'
 
             when: 'a value is set for the field under test'
@@ -90,168 +90,168 @@ class ExperimentConstraintIntegrationSpec extends IntegrationSpec {
             }
 
             where:
-            desc             | valueUnderTest              | valid | errorCode
-            'null not valid' | null                        | false | 'nullable'
+            desc             | valueUnderTest               | valid | errorCode
+            'null not valid' | null                         | false | 'nullable'
 
-            'valid valud'    | ReadyForExtraction.Pending  | true  | null
-            'valid value'    | ReadyForExtraction.Ready    | true  | null
-            'valid value'    | ReadyForExtraction.Started  | true  | null
-            'valid value'    | ReadyForExtraction.Complete | true  | null
+            'valid value'    | ReadyForExtraction.NOT_READY | true  | null
+            'valid value'    | ReadyForExtraction.READY     | true  | null
+            'valid value'    | ReadyForExtraction.STARTED   | true  | null
+            'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
         }
 
-        void "test runDateFrom constraints #desc runDateFrom: '#valueUnderTest'"() {
-            final String field = 'runDateFrom'
+    void "test runDateFrom constraints #desc runDateFrom: '#valueUnderTest'"() {
+        final String field = 'runDateFrom'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
-
-            where:
-            desc         | valueUnderTest | valid | errorCode
-            'null valid' | null           | true  | null
-            'date valid' | new Date()     | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test runDateTo constraints #desc runDateTo: '#valueUnderTest'"() {
-            final String field = 'runDateTo'
+        where:
+        desc         | valueUnderTest | valid | errorCode
+        'null valid' | null           | true  | null
+        'date valid' | new Date()     | true  | null
+    }
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+    void "test runDateTo constraints #desc runDateTo: '#valueUnderTest'"() {
+        final String field = 'runDateTo'
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc         | valueUnderTest | valid | errorCode
-            'null valid' | null           | true  | null
-            'date valid' | new Date()     | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test holdUntilDate constraints #desc holdUntilDate: '#valueUnderTest'"() {
-            final String field = 'holdUntilDate'
+        where:
+        desc         | valueUnderTest | valid | errorCode
+        'null valid' | null           | true  | null
+        'date valid' | new Date()     | true  | null
+    }
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+    void "test holdUntilDate constraints #desc holdUntilDate: '#valueUnderTest'"() {
+        final String field = 'holdUntilDate'
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc         | valueUnderTest | valid | errorCode
-            'null valid' | null           | true  | null
-            'date valid' | new Date()     | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test description constraints #desc description: '#valueUnderTest'"() {
-            final String field = 'description'
+        where:
+        desc         | valueUnderTest | valid | errorCode
+        'null valid' | null           | true  | null
+        'date valid' | new Date()     | true  | null
+    }
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+    void "test description constraints #desc description: '#valueUnderTest'"() {
+        final String field = 'description'
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc               | valueUnderTest                         | valid | errorCode
-            'blank value'      | ''                                     | false | 'blank'
-            'blank value'      | '  '                                   | false | 'blank'
-            'too long'         | createString(DESCRIPTION_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-
-            'exactly at limit' | createString(DESCRIPTION_MAX_SIZE)     | true  | null
-            'null valid'       | null                                   | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
+        where:
+        desc               | valueUnderTest                         | valid | errorCode
+        'blank value'      | ''                                     | false | 'blank'
+        'blank value'      | '  '                                   | false | 'blank'
+        'too long'         | createString(DESCRIPTION_MAX_SIZE + 1) | false | 'maxSize.exceeded'
 
-            final String field = 'modifiedBy'
+        'exactly at limit' | createString(DESCRIPTION_MAX_SIZE)     | true  | null
+        'null valid'       | null                                   | true  | null
+    }
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+    void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        final String field = 'modifiedBy'
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            where:
-            desc               | valueUnderTest                         | valid | errorCode
-            'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-            'blank valid'      | ''                                     | false | 'blank'
-            'blank valid'      | '  '                                   | false | 'blank'
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            'exactly at limit' | createString(MODIFIED_BY_MAX_SIZE)     | true  | null
-            'null valid'       | null                                   | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test dateCreated constraints #desc dateCreated: '#valueUnderTest'"() {
-            final String field = 'dateCreated'
+        where:
+        desc               | valueUnderTest                         | valid | errorCode
+        'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank valid'      | ''                                     | false | 'blank'
+        'blank valid'      | '  '                                   | false | 'blank'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+        'exactly at limit' | createString(MODIFIED_BY_MAX_SIZE)     | true  | null
+        'null valid'       | null                                   | true  | null
+    }
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+    void "test dateCreated constraints #desc dateCreated: '#valueUnderTest'"() {
+        final String field = 'dateCreated'
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            where:
-            desc             | valueUnderTest | valid | errorCode
-            'null not valid' | null           | false | 'nullable'
-            'date valid'     | new Date()     | true  | null
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
 
-        void "test lastUpdated constraints #desc lastUpdated: '#valueUnderTest'"() {
-            final String field = 'lastUpdated'
+        where:
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'date valid'     | new Date()     | true  | null
+    }
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+    void "test lastUpdated constraints #desc lastUpdated: '#valueUnderTest'"() {
+        final String field = 'lastUpdated'
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            where:
-            desc         | valueUnderTest | valid | errorCode
-            'null valid' | null           | true  | null
-            'date valid' | new Date()     | true  | null
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
+
+        where:
+        desc         | valueUnderTest | valid | errorCode
+        'null valid' | null           | true  | null
+        'date valid' | new Date()     | true  | null
+    }
 }

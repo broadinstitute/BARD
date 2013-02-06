@@ -136,7 +136,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate element with id"() {
         given:
 
-        final Element element = Element.build(label: 'uM', readyForExtraction: ReadyForExtraction.Ready, elementStatus: ElementStatus.Published)
+        final Element element = Element.build(label: 'uM', readyForExtraction: ReadyForExtraction.READY, elementStatus: ElementStatus.Published)
         when:
         this.dictionaryExportHelperService.generateElement(this.markupBuilder, element)
         then:

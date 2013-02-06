@@ -1,13 +1,13 @@
 package bard.db.experiment
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContextOwner
+import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
-import bard.db.project.ProjectStep
-import bard.db.project.ProjectExperiment
 
-class Experiment  extends AbstractContextOwner{
+class Experiment extends AbstractContextOwner {
 
     private static final int EXPERIMENT_NAME_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -15,7 +15,7 @@ class Experiment  extends AbstractContextOwner{
 
     String experimentName
     ExperimentStatus experimentStatus = ExperimentStatus.Pending
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     Assay assay
 
     Date runDateFrom
@@ -44,12 +44,13 @@ class Experiment  extends AbstractContextOwner{
     static mapping = {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])
         experimentContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
+        readyForExtraction(type: ReadyForExtractionEnumUserType)
     }
 
     static constraints = {
         experimentName(blank: false, maxSize: EXPERIMENT_NAME_MAX_SIZE)
         experimentStatus(nullable: false)
-        readyForExtraction( nullable: false)
+        readyForExtraction(nullable: false)
         assay()
 
         runDateFrom(nullable: true)

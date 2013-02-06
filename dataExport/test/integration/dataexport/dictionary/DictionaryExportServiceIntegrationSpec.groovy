@@ -12,11 +12,6 @@ import groovy.xml.MarkupBuilder
 import spock.lang.Unroll
 
 import javax.sql.DataSource
-import javax.xml.XMLConstants
-import javax.xml.transform.stream.StreamSource
-import javax.xml.validation.Schema
-import javax.xml.validation.SchemaFactory
-import javax.xml.validation.Validator
 
 import bard.db.dictionary.*
 
@@ -73,10 +68,10 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                             | expectedStatusCode     | expectedETag | elementId   | version | initialReadyForExtraction   | expectedReadyForExtractionVal
-        "Return OK and ETag 1 when status updated"        | SC_OK                  | 1            | 1           | 0       | ReadyForExtraction.Ready    | ReadyForExtraction.Complete
-        "Return CONFLICT and ETag 0"                      | SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | ReadyForExtraction.Ready    | ReadyForExtraction.Ready
-        "Return PRECONDITION_FAILED and ETag 0"           | SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | ReadyForExtraction.Ready    | ReadyForExtraction.Ready
-        "Return OK and ETag 0, Already completed Element" | SC_OK                  | new Long(0)  | new Long(1) | 0       | ReadyForExtraction.Complete | ReadyForExtraction.Complete
+        "Return OK and ETag 1 when status updated"        | SC_OK                  | 1            | 1           | 0       | ReadyForExtraction.READY    | ReadyForExtraction.COMPLETE
+        "Return CONFLICT and ETag 0"                      | SC_CONFLICT            | new Long(0)  | new Long(1) | -1      | ReadyForExtraction.READY    | ReadyForExtraction.READY
+        "Return PRECONDITION_FAILED and ETag 0"           | SC_PRECONDITION_FAILED | new Long(0)  | new Long(1) | 2       | ReadyForExtraction.READY    | ReadyForExtraction.READY
+        "Return OK and ETag 0, Already completed Element" | SC_OK                  | new Long(0)  | new Long(1) | 0       | ReadyForExtraction.COMPLETE | ReadyForExtraction.COMPLETE
     }
 
     void "test generate Stage"() {
@@ -156,7 +151,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Element"() {
         given:
-        Element.build(label: 'uM', elementStatus: ElementStatus.Published, readyForExtraction: ReadyForExtraction.Ready)
+        Element.build(label: 'uM', elementStatus: ElementStatus.Published, readyForExtraction: ReadyForExtraction.READY)
 
         when:
         this.dictionaryExportService.generateElement(this.markupBuilder, elementId)

@@ -193,8 +193,8 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                         | element                                                                                                                                                                                                                     | results
-        "Full Element"                | new Element(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.Ready) | XmlTestSamples.ELEMENT_FULL
-        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.Ready)                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
+        "Full Element"                | new Element(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY) | XmlTestSamples.ELEMENT_FULL
+        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY)                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
     }
 
 //    void "test generate Result Type #label"() {

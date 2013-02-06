@@ -127,7 +127,7 @@ class AssayExportHelperService extends ExportAbstractService {
      * @param markupBuilder
      */
     public void generateAssays(final MarkupBuilder markupBuilder) {
-        final List<Assay> assays = Assay.findAllByReadyForExtraction(ReadyForExtraction.Ready)
+        final List<Assay> assays = Assay.findAllByReadyForExtraction(ReadyForExtraction.READY)
 
         final int numberOfAssays = assays.size()
 

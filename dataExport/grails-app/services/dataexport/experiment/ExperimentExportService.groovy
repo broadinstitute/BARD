@@ -48,7 +48,7 @@ class ExperimentExportService extends ExportAbstractService {
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Experiment experiment = Experiment.findById(id)
         //make sure there are no children with a status other than 'Complete'
-        final int outStandingResults = Result.countByExperimentAndReadyForExtractionNotEqual(experiment, ReadyForExtraction.Complete)
+        final int outStandingResults = Result.countByExperimentAndReadyForExtractionNotEqual(experiment, ReadyForExtraction.COMPLETE)
         if (outStandingResults > 0) {//this experiments has results that have not yet been consumed
             return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_NOT_ACCEPTABLE, ETag: experiment.version)
         }
@@ -68,7 +68,7 @@ class ExperimentExportService extends ExportAbstractService {
         boolean hasMoreExperiments = false //This is used for paging, if there are more experiments than the threshold, add next link and return true
 
         String experimentIdQuery = 'select distinct experiment.id from Experiment experiment where experiment.readyForExtraction=:ready order by experiment.id asc'
-        List<Long> experimentIds = (List<Long>) Experiment.executeQuery(experimentIdQuery, [ready: ReadyForExtraction.Ready, offset: offset, max: end])
+        List<Long> experimentIds = (List<Long>) Experiment.executeQuery(experimentIdQuery, [ready: ReadyForExtraction.READY, offset: offset, max: end])
 
         final int numberOfExperiments = experimentIds.size()
         if (numberOfExperiments > this.numberRecordsPerPage) {

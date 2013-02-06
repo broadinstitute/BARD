@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.ExternalReference
 
@@ -14,7 +15,7 @@ class Project extends AbstractContextOwner {
     String name
     String groupType
     String description
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
 
     Date dateCreated
     Date lastUpdated
@@ -34,6 +35,7 @@ class Project extends AbstractContextOwner {
     static mapping = {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
         name(column: "PROJECT_NAME")
+        readyForExtraction(type: ReadyForExtractionEnumUserType)
         contexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 

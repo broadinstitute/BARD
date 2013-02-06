@@ -75,8 +75,8 @@ class ProjectExportServiceUnitSpec extends Specification {
         where:
         label                    | projectReadyForExtractionList       | results
         "no projects"            | []                                  | PROJECTS_NO_PROJECTS_READY
-        "one project"            | [Ready]                             | PROJECTS_ONE_PROJEC_READY
-        "only one project Ready" | [Ready, Pending, Started, Complete] | PROJECTS_ONE_PROJEC_READY
+        "one project"            | [READY]                             | PROJECTS_ONE_PROJEC_READY
+        "only one project Ready" | [READY, Pending, STARTED, COMPLETE] | PROJECTS_ONE_PROJEC_READY
     }
 
     void "test Generate Project Not Found Exception"() {
@@ -222,7 +222,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     void "test generate Project #label"() {
         given: "A Project"
-        map << [readyForExtraction: Ready]   // in this test always setting readyForExtraction to Ready
+        map << [readyForExtraction: READY]   // in this test always setting readyForExtraction to Ready
         final Project project = Project.build(map)
         numExtRef.times {ExternalReference.build(project: project)}
         numDoc.times {ProjectDocument.build(project: project)}

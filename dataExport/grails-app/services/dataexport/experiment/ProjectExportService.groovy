@@ -232,7 +232,7 @@ class ProjectExportService extends ExportAbstractService {
      * @param xml
      */
     public void generateProjects(def markupBuilder) {
-        final List<Project> projects = Project.findAllByReadyForExtraction(ReadyForExtraction.Ready)
+        final List<Project> projects = Project.findAllByReadyForExtraction(ReadyForExtraction.READY)
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {
