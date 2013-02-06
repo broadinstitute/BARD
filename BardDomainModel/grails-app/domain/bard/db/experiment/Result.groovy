@@ -11,7 +11,7 @@ class Result {
     private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
 
     String resultStatus
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
 
     Experiment experiment
     Element resultType

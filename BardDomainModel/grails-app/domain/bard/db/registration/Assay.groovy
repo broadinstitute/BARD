@@ -12,12 +12,12 @@ class Assay extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
-    AssayStatus assayStatus = AssayStatus.Pending
+    AssayStatus assayStatus = AssayStatus.Draft
     String assayShortName
     String assayName
     String assayVersion
     String designedBy
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
     String assayType = 'Regular'
 
     String modifiedBy

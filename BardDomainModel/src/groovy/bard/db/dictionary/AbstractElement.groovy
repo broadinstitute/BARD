@@ -28,7 +28,7 @@ abstract class AbstractElement {
     Element unit
     String bardURI
     String externalURL
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
 
     Date dateCreated = new Date()
     Date lastUpdated = new Date()

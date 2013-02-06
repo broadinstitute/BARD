@@ -8,8 +8,10 @@ package bard.db.registration
  * To change this template use File | Settings | File Templates.
  */
 enum AssayStatus {
-    Pending,
-    Active,
-    Superseded,
-    Retired
+    Draft,
+	Witnessed,
+	Finished,
+	Measures_Done,
+	Annotations_Done,
+	Retired
 }

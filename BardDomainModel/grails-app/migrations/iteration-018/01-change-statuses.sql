@@ -1,0 +1,42 @@
+ALTER TABLE DATA_MIG.ELEMENT DROP CONSTRAINT CK_ELEMENT_EXTRACTION
+/
+ALTER TABLE DATA_MIG.ELEMENT ADD CONSTRAINT CK_ELEMENT_EXTRACTION
+CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete'))
+/
+ALTER TABLE DATA_MIG.EXPERIMENT DROP CONSTRAINT CK_EXPERIMENT_EXTRACTION
+/
+ALTER TABLE DATA_MIG.EXPERIMENT ADD CONSTRAINT CK_EXPERIMENT_EXTRACTION
+CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete'))
+/
+ALTER TABLE DATA_MIG.PROJECT DROP CONSTRAINT CK_PROJECT_EXTRACTION
+/
+UPDATE project
+SET ready_for_extraction = 'Not Ready'
+WHERE ready_for_extraction = 'Pending'
+/
+ALTER TABLE DATA_MIG.PROJECT ADD CONSTRAINT CK_PROJECT_EXTRACTION
+CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete'))
+/
+ALTER TABLE DATA_MIG.RESULT DROP CONSTRAINT CK_RESULT_EXTRACTION
+/
+ALTER TABLE DATA_MIG.RESULT ADD CONSTRAINT CK_RESULT_EXTRACTION
+CHECK (Ready_For_Extraction IN ('Not Ready', 'Ready', 'Started', 'Complete'))
+/
+ALTER TABLE DATA_MIG.ASSAY DROP CONSTRAINT CK_ASSAY_EXTRACTION
+/
+ALTER TABLE DATA_MIG.ASSAY DROP CONSTRAINT CK_ASSAY_STATUS
+/
+ALTER TABLE DATA_MIG.ASSAY MODIFY(ASSAY_STATUS  DEFAULT 'Draft')
+/
+ALTER TABLE DATA_MIG.ASSAY ADD CONSTRAINT CK_ASSAY_EXTRACTION
+CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete'))
+/
+UPDATE assay
+SET assay_status = Decode( assay_status,
+                    'Pending', 'Draft',
+                    'Active', 'Finished',
+                    assay_status)
+/
+ALTER TABLE DATA_MIG.ASSAY ADD CONSTRAINT CK_ASSAY_STATUS
+CHECK (Assay_Status IN ('Draft', 'Witnessed', 'Finished', 'Measures Done', 'Annotations Done', 'Retired'))
+/

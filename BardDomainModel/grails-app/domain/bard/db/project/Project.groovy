@@ -14,7 +14,7 @@ class Project extends AbstractContextOwner {
     String name
     String groupType
     String description
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
 
     Date dateCreated
     Date lastUpdated

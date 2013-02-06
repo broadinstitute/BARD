@@ -1,7 +1,7 @@
 package bard.db.enums;
 
 public enum ReadyForExtraction {
-    Pending,
+    Not_Ready,
     Ready,
     Started,
     Complete

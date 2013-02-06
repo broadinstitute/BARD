@@ -15,7 +15,7 @@ class Experiment  extends AbstractContextOwner{
 
     String experimentName
     ExperimentStatus experimentStatus = ExperimentStatus.Pending
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.Not_Ready
     Assay assay
 
     Date runDateFrom
