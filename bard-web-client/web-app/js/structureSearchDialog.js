@@ -77,7 +77,7 @@ function adjustJSDrawEditorWindow() {
 //msketch_param('molLoaderFinishedEvent', 'javascript:insertCurrentSmiles();');
 //msketch_end();
 //
-////If there is a smiles tring in the search box insert it
+////If there is a smiles string in the search box insert it
 //function insertCurrentSmiles() {
 //    if (!SELECTED) {
 //        var currentSearch = $('#searchString').val();

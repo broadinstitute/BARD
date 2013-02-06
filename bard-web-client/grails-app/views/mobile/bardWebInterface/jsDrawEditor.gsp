@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <r:require modules="jquery, jquery-ui, jquery-theme"/>
     <r:layoutResources/>
+    %{--This whole section here of importing JQuery Mobile is needed because of issues with the resources manager and loading order.--}%
     <link rel="stylesheet" type="text/css"
           href="${request.contextPath}/css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.css"/>
     <link rel="stylesheet" type="text/css"
@@ -27,16 +28,27 @@
     <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/Scilligence.JSDraw2.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/license.js"></script>
-    <script>
+    <r:script>
+        var jsDrawEditor = null;
+
         dojo.addOnLoad(function () {
-            var jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false});
+            jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false});
             var width = dojo.window.getBox().w * 0.95;
-            var height = dojo.window.getBox().h * 0.8;
+            var height = dojo.window.getBox().h * 0.5;
             if (width && height && jsDrawEditor) {
                 jsDrawEditor.setSize(width, height)
             }
         });
-    </script>
+
+        //On clicking the Submit button, switch back to the SearchResult page and submit the search form
+        $(document).on('click', '#searchButtonMobile', function () {
+            var smiles = jsDrawEditor.getSmiles();
+            var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
+            var constructedSearch = structureSearchTypeSelected + ":" + smiles;
+            var changePageTo = "${createLink(controller: 'bardWebInterface', action: 'search')}" + "?searchString=" + constructedSearch;
+            $.mobile.changePage(changePageTo);
+        });
+    </r:script>
 </head>
 
 <body>
