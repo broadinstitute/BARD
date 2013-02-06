@@ -43,7 +43,7 @@ class QueryHelperService {
             'preferred_term': 'Preferred Term'
     ]
 
-    Map extractMapFromResultData(ResultData resultData) {
+    Map extractMapFromResultData(ResultData resultData, NormalizeAxis normalizeAxis) {
         if (resultData.hasPriorityElements()) {
             boolean hasPlot = false
             final PriorityElement priorityElement = resultData.priorityElements.get(0)
@@ -53,15 +53,21 @@ class QueryHelperService {
             if (resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
                 hasPlot = true
             }
-            if (resultData.hasConcentrationResponseSeries()) {
-                final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
-                if (concentrationResponseSeries) {
-                    final List<Double> sorterdActivities = concentrationResponseSeries.sorterdActivities()
-                    if (sorterdActivities) {
-                        priorityMap.put("yNormMin", sorterdActivities.get(0))
-                        priorityMap.put("yNormMax", sorterdActivities.last())
+            if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {
+                if (resultData.hasConcentrationResponseSeries()) {
+                    final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
+                    if (concentrationResponseSeries) {
+                        final List<Double> sorterdActivities = concentrationResponseSeries.sorterdActivities()
+                        if (sorterdActivities) {
+                            priorityMap.put("yNormMin", sorterdActivities.get(0))
+                            priorityMap.put("yNormMax", sorterdActivities.last())
+                        }
                     }
+
                 }
+            } else {
+                priorityMap.put("yNormMin", null)
+                priorityMap.put("yNormMax", null)
 
             }
             priorityMap.put("hasPlot", hasPlot)
@@ -72,7 +78,7 @@ class QueryHelperService {
 
     }
 
-    Map extractExperimentDetails(final List<Activity> activities) {
+    Map extractExperimentDetails(List<Activity> activities, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
         Double yNormMin = 0
         Double yNormMax = 0
         boolean hasPlot = false
@@ -80,9 +86,11 @@ class QueryHelperService {
         String priorityDisplay = ''
         String dictionaryId
         for (Activity activity : activities) {
+
             final ResultData resultData = activity.resultData
+
             if (resultData) {
-                Map priorityMap = extractMapFromResultData(resultData)
+                Map priorityMap = extractMapFromResultData(resultData, normalizeAxis)
                 if (priorityMap.yNormMin) {
                     if (priorityMap.yNormMin < yNormMin) {
                         yNormMin = priorityMap.yNormMin
@@ -109,7 +117,8 @@ class QueryHelperService {
             }
         }
         return [priorityDisplay: priorityDisplay, dictionaryId: dictionaryId,
-                hasPlot: hasPlot, hasChildElements: hasChildElements, yNormMin: yNormMin, yNormMax: yNormMax]
+                hasPlot: hasPlot, hasChildElements: hasChildElements,
+                yNormMin: yNormMin, yNormMax: yNormMax]
     }
 
     Map extractPriorityDisplayDescription(PriorityElement priorityElement) {

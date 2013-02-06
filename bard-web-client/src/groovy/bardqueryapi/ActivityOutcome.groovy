@@ -10,6 +10,7 @@ package bardqueryapi
  */
 enum ActivityOutcome {
 
+    ALL('All',0),
     /**
      *
      */
@@ -61,7 +62,7 @@ enum ActivityOutcome {
      * @param outComeValue
      * @return {@link ActivityOutcome}
      */
-    static ActivityOutcome  findActivityOutcome(int outComeValue){
+    static ActivityOutcome findActivityOutcome(int outComeValue){
 
         return activityOutcomes.get(new Integer(outComeValue));
     }

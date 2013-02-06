@@ -144,15 +144,15 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment()
         then:
-        this.queryService.findExperimentDataById(_, _, _) >> {experimentData}
+        this.queryService.findExperimentDataById(_, _, _, _, bardqueryapi.ActivityOutcome.ALL) >> {experimentData}
         assert response.status == 200
     }
 
     void "test showExperiment #label"() {
         when:
-        controller.showExperiment(eid)
+        controller.showExperiment(eid, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
-        _ * this.queryService.findExperimentDataById(_, _, _) >> {experimentData}
+        _ * this.queryService.findExperimentDataById(_, _, _, _,_) >> {experimentData}
         assert response.status == statusCode
 
         where:
@@ -164,13 +164,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
                 role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId: 1)]
     }
 
-    void "test showExperiment With Exception"() {
+    void "test showExperiment With Exception #label"() {
         given:
         Long id = 234
         when:
-        controller.showExperiment(id)
+        controller.showExperiment(id,NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
-        _ * this.queryService.findExperimentDataById(_, _, _) >> {throw exceptionType}
+        _ * this.queryService.findExperimentDataById(_, _, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode

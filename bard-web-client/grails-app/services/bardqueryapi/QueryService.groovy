@@ -231,16 +231,17 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map of data to use to display an experiment
      */
-    Map findExperimentDataById(final Long experimentId, final Integer top, final Integer skip) {
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome=ActivityOutcome.ALL) {
         List<Activity> activities = []
         final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
         long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
         Map experimentDetails = [:]
 
         if (experimentShow) {
+            //TODO: start using ETags
             final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
             activities = experimentData.activities
-            experimentDetails = this.queryHelperService.extractExperimentDetails(activities)
+            experimentDetails = this.queryHelperService.extractExperimentDetails(activities, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
 
         }
 
@@ -248,7 +249,11 @@ class QueryService implements IQueryService {
                 experiment: experimentShow, hasPlot: experimentDetails.hasPlot,
                 priorityDisplay: experimentDetails.priorityDisplay,
                 dictionaryId: experimentDetails.dictionaryId,
-                hasChildElements: experimentDetails.hasChildElements, yNormMin: experimentDetails.yNormMin, yNormMax: experimentDetails.yNormMax]
+                hasChildElements: experimentDetails.hasChildElements,
+                yNormMin: experimentDetails.yNormMin,
+                yNormMax: experimentDetails.yNormMax,
+                normalizeYAxis: normalizeAxis
+        ]
     }
 
     /**
