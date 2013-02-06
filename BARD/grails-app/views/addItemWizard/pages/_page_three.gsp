@@ -12,13 +12,14 @@
 
     <%-- This hidden field is needed for passing state needed for the ontology query --%>
     <input type="hidden" id="attributeElementId" value="${attributeId}">
-
-    <label class="control-label" for="valueQualifier"><g:message code="assay.qualifier.label" default="Qualifier" /></label>
-
+	
+	<g:if test="${valueTypeOption == AttributeType.Range }">
+	<label class="control-label" for="valueQualifier"><g:message code="assay.qualifier.label" default="Qualifier" /></label>
     <div  class="controls">
 	    <g:select name="valueQualifier" from="${AssayContextItem.constraints.qualifier.inList}" noSelection="['': '']"  value="${ fixedValue?.valueQualifier }"/>
     </div>
-
+	</g:if>
+	
     <label class="control-label" >Units:</label>
     <input class="input-xlarge" type="text" id="valueUnits" name='valueUnits'  value="${ fixedValue?.valueUnits }">
 
