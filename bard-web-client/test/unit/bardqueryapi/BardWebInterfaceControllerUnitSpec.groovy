@@ -741,7 +741,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test searchCompoundsByCIDs action"() {
+    void "test searchCompoundsByCIDs action #label"() {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
@@ -756,11 +756,11 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         response.status == statusCode
         where:
-        label                                   | searchString     | compoundAdapterMap                                     | statusCode                                   | filters
-        "Search Compounds By Ids"               | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(1234, "c1")]] | HttpServletResponse.SC_OK                    | searchFilters1
-        "Search Compounds By Non existing Ids"  | "12, 47"         | null                                                   | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
-        "Search Compounds By Id No Filters"     | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(1234, "c1")]] | HttpServletResponse.SC_OK                    | []
-        "Search Compounds By Id with Id syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(1234, "c1")]] | HttpServletResponse.SC_OK                    | []
+        label                                   | searchString     | compoundAdapterMap                               | statusCode                                   | filters
+        "Search Compounds By Ids"               | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(1234)]] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Compounds By Non existing Ids"  | "12, 47"         | null                                             | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Compounds By Id No Filters"     | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(1234)]] | HttpServletResponse.SC_OK                    | []
+        "Search Compounds By Id with Id syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(1234)]] | HttpServletResponse.SC_OK                    | []
 
     }
 
@@ -832,35 +832,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
-    void "test searchCompoundsByIDs action"() {
-        given:
-        mockCommandObject(SearchCommand)
-        params.formName = FacetFormType.CompoundFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap}
-        SearchCommand searchCommand = new SearchCommand(paramMap)
-        when:
-        request.method = 'GET'
-        controller.searchCompoundsByIDs(searchCommand)
-        then:
-        queryService.findCompoundsByCIDs(_, _) >> {compoundAdapterMap}
-        and:
-        assert response.status == statusCode
-        where:
-        label                                    | searchString     | compoundAdapterMap                                                     | statusCode                                   | filters
-        "Search Compounds By Id"                 | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | searchFilters1
-        "Search Compounds Non existing Ids"      | "12, 45"         | null                                                                   | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
-        "Search Compounds By Id No Filters"      | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
-        "Search Compounds By Id using ID Syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2] | HttpServletResponse.SC_OK                    | []
 
-
-    }
 
     void "test searchCompoundsByIDs With Exception #label"() {
         given:
         String searchString = "1234"
         mockCommandObject(SearchCommand)
-        params.formName = FacetFormType.CompoundFacetForm.CompoundFacetForm.toString()
+        params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
@@ -868,7 +846,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchCompoundsByIDs(searchCommand)
         then:
-        queryService.findCompoundsByCIDs(_, _) >> {throw exceptionType}
+        queryService.searchCompoundsByCids(_, _,_,_) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
