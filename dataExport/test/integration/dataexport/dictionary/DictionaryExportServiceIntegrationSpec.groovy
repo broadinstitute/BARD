@@ -1,5 +1,6 @@
 package dataexport.dictionary
 
+import bard.db.dictionary.*
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -9,15 +10,13 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.springframework.core.io.FileSystemResource
+import org.springframework.core.io.Resource
 import spock.lang.Unroll
 
 import javax.sql.DataSource
 
-import bard.db.dictionary.*
-
 import static javax.servlet.http.HttpServletResponse.*
-import org.springframework.core.io.Resource
-import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
@@ -167,11 +166,10 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void "test generate Dictionary"() {
         given:
 
-        def fixture = fixtureLoader.build {
-            parentElement(Element, label: 'IC50')
-            childElement(Element, label: 'log IC50')
-            elementHierarchy(ElementHierarchy, relationshipType: 'subClassOf', parentElement: ref('parentElement'), childElement: ref('childElement'))
-        }
+        Element parentElement = Element.build(label: 'IC50')
+        Element childElement = Element.build(label: 'log IC50')
+        ElementHierarchy elementHierarchy = ElementHierarchy.build(relationshipType: 'subClassOf', parentElement: parentElement, childElement: childElement)
+
         ResultTypeTree.build(id: 1)
         StageTree.build(id: 1)
         AssayDescriptor.build(id: 1)

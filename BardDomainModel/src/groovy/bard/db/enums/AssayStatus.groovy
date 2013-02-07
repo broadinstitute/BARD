@@ -7,22 +7,30 @@ package bard.db.enums
  * Time: 2:36 AM
  * To change this template use File | Settings | File Templates.
  */
-public enum AssayStatus implements IEnumUserType{
+public enum AssayStatus implements IEnumUserType {
     DRAFT("Draft"),
     WITNESSED("Witnessed"),
     FINISHED("Finished"),
     MEASURES_DONE("Measures Done"),
     ANNOTATIONS_DONE("Annotations Done"),
-    RETIRED("Retired");
+    RETIRED("Retired")
 
-    private final String id;
+    final String id;
 
     private AssayStatus(String id) {
-        this.id = id;
+        this.id = id
     }
 
-    public String getId() {
+    String getId() {
         return id
+    }
+
+    static AssayStatus byId(String id) {
+        AssayStatus assayStatus = values().find { it.id == id }
+        if (assayStatus) {
+            return assayStatus
+        }
+        throw new EnumNotFoundException("No enum found for id: $id")
     }
 
 }

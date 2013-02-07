@@ -66,7 +66,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         label                       | readyForExtractionList              | expectedXml
         "no experiments"            | []                                  | EXPERIMENTS_NONE_READY
         "one experiment ready"      | [READY]                             | EXPERIMENTS_ONE_READY
-        "only one experiment Ready" | [READY, Pending, STARTED, COMPLETE] | EXPERIMENTS_ONE_READY
+        "only one experiment Ready" | [READY,NOT_READY, STARTED, COMPLETE] | EXPERIMENTS_ONE_READY
     }
 
     void "test update #label"() {
@@ -75,7 +75,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         numResults.times {Result.build(readyForExtraction: READY, experiment: experiment)}
 
         when: "We call the experiment service to update this experiment"
-        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'Complete')
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'COMPLETE')
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
@@ -86,10 +86,10 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                                                | expectedStatusCode     | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
         "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | READY                     | COMPLETE
-        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | ReadyForExtraction.READY
-        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | READY                     | ReadyForExtraction.READY
-        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | READY                     | ReadyForExtraction.READY
-        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | COMPLETE                  | ReadyForExtraction.COMPLETE
+        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | READY
+        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | READY                     | READY
+        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | READY                     | READY
+        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | COMPLETE                  | COMPLETE
     }
 
     void "test update Not Found Status"() {
