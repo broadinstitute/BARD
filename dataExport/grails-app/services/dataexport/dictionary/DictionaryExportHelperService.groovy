@@ -253,7 +253,7 @@ class DictionaryExportHelperService {
 
 
         attributes.put('elementId', element.id?.toString())
-        attributes.put('readyForExtraction', element.readyForExtraction.toString())
+        attributes.put('readyForExtraction', element.readyForExtraction.getId())
         if (element.elementStatus) {
             attributes.put('elementStatus', element.elementStatus.toString())
         }

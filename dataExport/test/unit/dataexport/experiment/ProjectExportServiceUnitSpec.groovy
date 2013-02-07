@@ -2,6 +2,7 @@ package dataexport.experiment
 
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
+import bard.db.project.*
 import bard.db.registration.ExternalReference
 import common.tests.XmlTestAssertions
 import dataexport.registration.MediaTypesDTO
@@ -12,9 +13,9 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.db.project.*
 
 import static bard.db.enums.ReadyForExtraction.*
 import static common.tests.XmlTestSamples.*
@@ -73,10 +74,10 @@ class ProjectExportServiceUnitSpec extends Specification {
         XmlTestAssertions.validate(projectSchema, actualXml)
 
         where:
-        label                    | projectReadyForExtractionList       | results
-        "no projects"            | []                                  | PROJECTS_NO_PROJECTS_READY
-        "one project"            | [READY]                             | PROJECTS_ONE_PROJEC_READY
-        "only one project Ready" | [READY, Pending, STARTED, COMPLETE] | PROJECTS_ONE_PROJEC_READY
+        label                    | projectReadyForExtractionList         | results
+        "no projects"            | []                                    | PROJECTS_NO_PROJECTS_READY
+        "one project"            | [READY]                               | PROJECTS_ONE_PROJEC_READY
+        "only one project Ready" | [NOT_READY, READY, STARTED, COMPLETE] | PROJECTS_ONE_PROJEC_READY
     }
 
     void "test Generate Project Not Found Exception"() {
@@ -90,7 +91,7 @@ class ProjectExportServiceUnitSpec extends Specification {
     void "generate ProjectContext #label"() {
         given:
         ProjectContext context = ProjectContext.build(map)
-        numItems.times {ProjectContextItem.build(context: context)}
+        numItems.times { ProjectContextItem.build(context: context) }
 
         when:
         this.projectExportService.generateProjectContext(this.markupBuilder, context)
@@ -113,7 +114,7 @@ class ProjectExportServiceUnitSpec extends Specification {
     void "generate ProjectExperiment #label"() {
         given:
         ProjectExperiment projectExperiment = ProjectExperiment.build(mapClosure.call())
-        numContext.times {ProjectExperimentContext.build(projectExperiment: projectExperiment)}
+        numContext.times { ProjectExperimentContext.build(projectExperiment: projectExperiment) }
 
         when:
         this.projectExportService.generateProjectExperiment(this.markupBuilder, projectExperiment)
@@ -127,16 +128,16 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         where:
         label              | results                          | numContext | mapClosure
-        "Minimal"          | PROJECT_EXPERIMENT_MINIMAL       | 0          | {[:]}
-        "With stageRef"    | PROJECT_EXPERIMENT_WITH_STAGEREF | 0          | {[stage: Element.build(label: 'stage')]}
-        "With one context" | PROJECT_EXPERIMENT_WITH_CONTEXT  | 1          | {[:]}
+        "Minimal"          | PROJECT_EXPERIMENT_MINIMAL       | 0          | { [:] }
+        "With stageRef"    | PROJECT_EXPERIMENT_WITH_STAGEREF | 0          | { [stage: Element.build(label: 'stage')] }
+        "With one context" | PROJECT_EXPERIMENT_WITH_CONTEXT  | 1          | { [:] }
 
     }
 
     void "generate ProjectExperimentContext #label"() {
         given:
         ProjectExperimentContext projectExperimentContext = ProjectExperimentContext.build(map)
-        numItems.times {ProjectExperimentContextItem.build(context: projectExperimentContext)}
+        numItems.times { ProjectExperimentContextItem.build(context: projectExperimentContext) }
 
         when:
         this.projectExportService.generateProjectExperimentContext(this.markupBuilder, projectExperimentContext)
@@ -159,7 +160,7 @@ class ProjectExportServiceUnitSpec extends Specification {
     void "generate ProjectStep #label"() {
         given:
         ProjectStep projectStep = ProjectStep.build(map)
-        numContext.times {StepContext.build(projectStep: projectStep)}
+        numContext.times { StepContext.build(projectStep: projectStep) }
 
         when:
         this.projectExportService.generateProjectStep(this.markupBuilder, projectStep)
@@ -180,7 +181,7 @@ class ProjectExportServiceUnitSpec extends Specification {
     void "generate StepContext #label"() {
         given:
         StepContext stepContext = StepContext.build(map)
-        numItems.times {StepContextItem.build(stepContext: stepContext)}
+        numItems.times { StepContextItem.build(stepContext: stepContext) }
 
         when:
         this.projectExportService.generateStepContext(this.markupBuilder, stepContext)
@@ -220,12 +221,13 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     }
 
+    @IgnoreRest
     void "test generate Project #label"() {
         given: "A Project"
         map << [readyForExtraction: READY]   // in this test always setting readyForExtraction to Ready
         final Project project = Project.build(map)
-        numExtRef.times {ExternalReference.build(project: project)}
-        numDoc.times {ProjectDocument.build(project: project)}
+        numExtRef.times { ExternalReference.build(project: project) }
+        numDoc.times { ProjectDocument.build(project: project) }
         numPrjCtx.times { ProjectContext.build(project: project) }
         numPrjExp.times {
             ProjectExperiment pe = ProjectExperiment.build(project: project)
@@ -238,6 +240,9 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
+        println("expected")
+        println(results)
+        println("actual")
         println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)

@@ -67,7 +67,7 @@ class ProjectExportService extends ExportAbstractService {
         def attributes = [:]
         attributes.put('projectId', project.id)
         if (project.readyForExtraction) {
-            attributes.put('readyForExtraction', project.readyForExtraction.toString())
+            attributes.put('readyForExtraction', project.readyForExtraction.getId())
         }
         if (project.groupType) {
             attributes.put('groupType', project.groupType)

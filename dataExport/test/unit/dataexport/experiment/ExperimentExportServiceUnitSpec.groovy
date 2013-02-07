@@ -77,7 +77,8 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
+        println("expected: $results")
+        println("actualXml: $actualXml")
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
