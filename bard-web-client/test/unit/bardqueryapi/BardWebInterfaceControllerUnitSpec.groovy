@@ -771,7 +771,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "searchString"]
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "233"]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
@@ -793,7 +793,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: "searchString"]
+        Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: "111"]
         controller.metaClass.getParams {-> paramMap}
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
