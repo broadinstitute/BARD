@@ -55,8 +55,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         template.columns.get(1).name == "hill slope"
     }
 
-    void 'test initial parse'() {
-        when:
+    def createSampleFile() {
         Assay assay = Assay.build()
         Experiment experiment = Experiment.build(assay:assay)
         Measure inhibitionMeasure = Measure.build()
@@ -66,21 +65,28 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def constantItems = []
         ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: columns, constantItems: constantItems)
 
-        String sample = "\tAssay ID\t123\n"+
+        String sample = "\tExperiment ID\t123\n"+
                 "\n" +
                 "Row #\tSubstance\tReplicate #\tParent Row #\tInhibition\tEC50\n" +
                 "1\t100\t\t\t10\t\n" +
                 "2\t100\t\t1\t\t5\n"
 
+        return [sample: sample, template: template]
+    }
+
+    void 'test initial parse'() {
+        when:
+        def fixture = createSampleFile()
+
         ResultsService service = new ResultsService();
         service.itemService = new ItemService()
 
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(sample), errors, template)
+        ResultsService.InitialParse result = service.initialParse(new StringReader(fixture.sample), errors, fixture.template)
 
         then:
         result.constants.size() == 1
-        result.constants.get("Assay ID") == "123"
+        result.constants.get("Experiment ID") == "123"
         result.rows.size() == 2
         !errors.hasErrors()
 
@@ -99,6 +105,42 @@ class ResultsServiceSpec extends spock.lang.Specification {
         row1.parentRowNumber == 1
         row1.cells.size() == 1
         row1.cells.get(0).value == 5
+    }
+
+    @Unroll("test parsing problem: #desc")
+    void 'test parse failures'() {
+        when:
+        def fixture = createSampleFile()
+        // break apart table
+        def table = fixture.sample.split("\n").collect { it.split("\t") as List }
+        // mutate
+        def r = table.get(row)
+        while (column >= r.size()) {
+            r.add("")
+        }
+        r.set(column, newValue)
+        // reassemble
+        def sample = (table.collect { it.join("\t") }).join("\n")
+
+        ResultsService service = new ResultsService();
+        service.itemService = new ItemService()
+
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+        ResultsService.InitialParse result = service.initialParse(new StringReader(sample), errors, fixture.template)
+
+        then:
+        errors.errors.size() == expectedErrorCount
+
+        where:
+        desc                     | row | column | newValue | expectedErrorCount
+        "bad constant section"   | 0   | 0      | "x"      | 1
+        "bad constant name"      | 0   | 1      | "x"      | 1
+        "bad fixed column"       | 2   | 0      | "x"      | 1
+        "bad dynamic column"     | 2   | 4      | "x"      | 1
+        "duplicate column"       | 2   | 4      | "EC50"   | 1
+        "duplicate row number"   | 4   | 0      | "1"      | 1
+        "extra column"           | 3   | 6      | "1"      | 1
+        "missing row number"     | 3   | 0      | ""       | 1
     }
 
     @Unroll("test parsing cell containing #cellString")
@@ -293,23 +335,5 @@ class ResultsServiceSpec extends spock.lang.Specification {
         !(column.parseValue("pony") instanceof ResultsService.Cell)
     }
 
-//    void 'test parse element context item'() {
-//        def item = AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free)
-//
-//    }
 
-/*
-    void 'test parse failures'() {
-        where:
-        desc                     | row | column | newValue | expectedErrorCount
-        "bad constant section"   | 0   | 0      | "x"      | 1
-        "bad constant name"      | 0   | 1      | "x"      | 1
-        "bad fixed column"       | 2   | 0      | "x"      | 1
-        "bad dynamic column"     | 2   | 4      | "x"      | 1
-        "duplicate column"       | 2   | 4      | "EC50"   | 1
-        "duplicate row number"   | 4   | 0      | "1"      | 1
-        "extra column"           | 3   | 6      | "1"      | 1
-        "missing row number"     | 3   | 0      | ""       | 1
-    }
-    */
 }

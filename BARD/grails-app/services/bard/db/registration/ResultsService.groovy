@@ -269,7 +269,7 @@ class ResultsService {
         }
     }
 
-    Map<String, String> parseConstantRegion(LineReader reader,  ImportSummary errors) {
+    Map<String, String> parseConstantRegion(LineReader reader,  ImportSummary errors, Set allowedConstants) {
         Map header = [:]
 
         while(true) {
@@ -284,11 +284,21 @@ class ResultsService {
 
             String [] values = line.split("\t")
             if (values.length != 3) {
-                errors.addError(line, 1, values.length, "Wrong number of columns in initial header.  Expected 3 but got ${values.length} columns")
+                errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but got ${values.length} columns")
+                continue
+            }
+
+            if (!values[0].isEmpty()) {
+                errors.addError(reader.lineNumber, 0, "First column should be empty in the constant section at top of table")
                 continue
             }
 
             String key = values[1]
+            if (!allowedConstants.contains(key)) {
+                errors.addError(reader.lineNumber, 1, "Unknown name \"${key}\" in constant section")
+                continue
+            }
+
             String value = values[2]
             header.put(key, value)
         }
@@ -362,11 +372,20 @@ class ResultsService {
             return null
 
         def byName = [:]
+        def seenColumns = [] as Set
         template.columns.each { byName[it.name] = it }
 
         def columns = []
         for(int i=FIXED_COLUMNS.size();i<columnNames.length;i++) {
             def name = columnNames[i]
+
+            if (seenColumns.contains(name))
+            {
+                errors.addError(reader.lineNumber, i, "Duplicated column name \"${name}\"")
+                continue
+            }
+            seenColumns.add(name)
+
             def column = byName.get(name)
             if (column == null) {
                 errors.addError(reader.lineNumber, i, "Invalid column name \"${name}\"")
@@ -478,7 +497,11 @@ class ResultsService {
         LineReader reader = new LineReader(reader: new BufferedReader(input))
 
         // first section
-        Map constants = parseConstantRegion(reader, errors)
+        Set expectedNames = [] as Set
+        template.constantItems.each {expectedNames.add(it.name)}
+        expectedNames.add(EXPERIMENT_ID_LABEL)
+
+        Map constants = parseConstantRegion(reader, errors, expectedNames)
         if (errors.hasErrors())
             return
 
@@ -493,6 +516,7 @@ class ResultsService {
 
         // all data rows
         List rows = []
+        Set usedRowNumbers = [] as Set
         forEachDataRow(reader, columns, errors) { int lineNumber, List<String> values ->
             def parsed = safeParse(errors, values, lineNumber, [ parseInt, parseLong, parseOptInt, parseOptInt ])
 
@@ -505,6 +529,12 @@ class ResultsService {
             Long sid = parsed[1]
             Integer replicate = parsed[2]
             Integer parentRowNumber = parsed[3]
+
+            if (usedRowNumbers.contains(rowNumber)) {
+                errors.addError(lineNumber, 0, "Row number ${rowNumber} was duplicated")
+                return
+            }
+            usedRowNumbers.add(rowNumber)
 
             Row row = new Row (lineNumber: lineNumber, rowNumber: rowNumber, replicate: replicate, parentRowNumber: parentRowNumber, sid: sid)
 
