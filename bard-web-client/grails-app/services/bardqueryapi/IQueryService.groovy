@@ -44,6 +44,16 @@ public interface IQueryService {
     Map findCompoundsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
     /**
      *
+     * @param cids
+     * @param top
+     * @param skip
+     * @param searchFilters
+     * @return Map of results
+     */
+    Map searchCompoundsByCids(final List<Long> cids, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+
+        /**
+     *
      * @param capAssayIds
      * @param top
      * @param skip

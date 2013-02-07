@@ -13,6 +13,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
+import spock.lang.Shared
 
 /**
  * Tests for CompoundRestService in JDO
@@ -21,6 +22,35 @@ import bard.core.rest.spring.compounds.*
 @Unroll
 class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
     CompoundRestService compoundRestService
+    @Shared
+    List<Long> cids = [2722L, 5394L]
+
+    void "searchCompoundsByCIDs #label"() {
+        when:
+        CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(compoundIds, searchParams)
+        then:
+        assert (compoundResult != null) == expected
+        where:
+        label          | searchParams                       | compoundIds | expected
+        "With cids"    | new SearchParams(skip: 0, top: 10) | cids        | true
+        "With no cids" | new SearchParams(skip: 0, top: 10) | []          | false
+
+    }
+
+
+    void "searchCompoundsByCids withETags #label"() {
+        given: "That we have made a request with some cids that returns an etag"
+        CompoundResult compoundResultWithIds = compoundRestService.searchCompoundsByCids(compoundIds, searchParams)
+        when: "We use the returned etags to make another request"
+        List<Compound> compounds = compoundRestService.searchCompoundsByCids(searchParams, compoundResultWithIds?.etags)
+        then: "We get back the expected results"
+        assert (!compounds.isEmpty()) == expected
+        where:
+        label           | searchParams                       | compoundIds | expected
+        "With ETags"    | new SearchParams(skip: 0, top: 10) | cids        | true
+        "With no ETags" | new SearchParams(skip: 0, top: 10) | []          | false
+
+    }
 
     void "test getSummaryForCompound"() {
         given:
@@ -78,7 +108,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test getMultipleCompoundAnnotations"() {
         given:
-        List<Long> cids = [2722L, 5394L]
+
         CompoundResult cmpds = compoundRestService.searchCompoundsByIds(cids)
         when:
         CompoundAnnotations compoundAnnotations = compoundRestService.findAnnotations(cmpds.compounds.get(0).cid)
@@ -118,7 +148,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         String uriWithFilters = compoundRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(mwt:%5B100+TO+200%5D),&skip=0&top=10&expand=true"
         URI uri = new URI(uriWithFilters)
         when:
-        CompoundResult compoundResult = this.compoundRestService.getForObject(uri, CompoundResult)
+        CompoundResult compoundResult = (CompoundResult)this.compoundRestService.getForObject(uri, CompoundResult)
         then:
         assert compoundResult
         final List<Compound> compounds = compoundResult.compounds

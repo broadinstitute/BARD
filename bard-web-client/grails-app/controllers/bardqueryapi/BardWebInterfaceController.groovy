@@ -144,27 +144,33 @@ class BardWebInterfaceController {
         }
 
         try {
+
             String originalSearchString = searchCommand.searchString
             final String[] searchStringSplit = searchCommand.searchString.split(":")
-            if (searchStringSplit.length == 2) {  //if the search string is of the form CID:1234,3456...
+            if (searchStringSplit.length == 2) {  //if the search string is of the form ADID:1234,3456...
                 final String searchTypeString = searchStringSplit[0]
                 final String ids = searchStringSplit[1]
                 handleIdSearchInput(searchTypeString, ids, "CID", "Input String start with CID:", "Please enter CIDs after the string CID:")
-                //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
-
-            //we want to remove the duplicates from the search string
-            // removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
-            this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            Map<String, Integer> searchParams = handleSearchParams()
+            int top = searchParams.top
+            int skip = searchParams.skip
 
             //strip out all spaces
-            final List<Long> cids = searchStringToIdList(searchCommand.searchString)
+            final List<Long> compoundIds = searchStringToIdList(searchCommand.searchString)
 
-            Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids, searchFilters)
+            final List<Long> cids = []
+            for (def id : compoundIds) {
+                cids.add(new Long(id))
+            }
 
+            Map compoundAdapterMap = this.queryService.searchCompoundsByCids(cids, top, skip, searchFilters)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+
             render(template: 'compounds', model: [
                     compoundAdapters: compoundAdapters,
                     facets: compoundAdapterMap.facets,

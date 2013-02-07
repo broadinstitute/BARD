@@ -245,6 +245,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "Search with a list of CIDs" | [3235555, 3235556, 3235557, 3235558, 3235559, 3235560, 3235561, 3235562, 3235563, 3235564]
     }
 
+    void "test search compounds Ids #label"() {
+        when:
+        final Map compoundAdapterMap = queryService.searchCompoundsByCids(cids, top, skip, filters)
+        then:
+        List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+        assert numberOfCompounds == compoundAdapters.size()
+        assert numberOfCompounds == compoundAdapterMap.nHits
+
+        where:
+        label                      | cids            | skip | top | numberOfCompounds | filters
+        "Cap ID List"              | [2554, 3549980] | 0    | 10  | 2                 | []
+        "Empty Cap ID List"        | []              | 0    | 10  | 0                 | []
+        "Cap ID List with Filters" | [2554, 3549980] | 0    | 10  | 1                 | [new SearchFilter("mwt", "[100 TO 200]")]
+
+    }
+
     void "test find Assays By Text Search String #label"() {
         when: ""
         final Map assayAdapterMap = queryService.findAssaysByTextSearch(searchString, top, skip, filters)

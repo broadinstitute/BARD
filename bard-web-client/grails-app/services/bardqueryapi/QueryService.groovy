@@ -32,6 +32,26 @@ class QueryService implements IQueryService {
     ExperimentRestService experimentRestService
     //========================================================== Free Text Searches ================================
 
+    Map searchCompoundsByCids(final List<Long> cids, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+
+        final List<CompoundAdapter> foundCompoundAdapters = []
+        Collection<Value> facets = []
+        int nhits = 0
+        String eTag = null
+        if (cids) {
+
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+            //do the search
+            CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(cids,searchParams)
+
+            //convert to adapters
+            foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
+            facets = compoundResult.getFacetsToValues()
+            nhits = compoundResult.numberOfHits
+            eTag = compoundResult.etag
+        }
+        return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
     /**
      * Find Compounds by Text search
      *

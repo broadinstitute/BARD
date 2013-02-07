@@ -457,6 +457,28 @@ class QueryServiceUnitSpec extends Specification {
         ""                   | compoundAdapterMap2
 
     }
+
+    /**
+     * {@link QueryService#searchCompoundsByCids}
+     *
+     */
+    void "test Find Compounds by CIds #label"() {
+        given:
+        final CompoundResult compoundResult = Mock(CompoundResult)
+        when:
+        Map map = service.searchCompoundsByCids(cids, 10, 0, [])
+        then:
+
+        compoundRestService.searchCompoundsByCids(_, _) >> {compoundResult}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
+        queryHelperService.compoundsToAdapters(_) >> {compoundAdapter}
+        assert map.compoundAdapters.size() == foundMap.compoundAdapters.size()
+        where:
+        label                | cids      | foundMap            | compoundAdapter
+        "With Cap Ids"       | [1, 2, 3] | compoundAdapterMap1 | [new CompoundAdapter(compound1)]
+        "With empty Cap IDs" | []        | compoundAdapterMap2 | null
+
+    }
     /**
      * {@link QueryService#findCompoundsByTextSearch(String)}
      *

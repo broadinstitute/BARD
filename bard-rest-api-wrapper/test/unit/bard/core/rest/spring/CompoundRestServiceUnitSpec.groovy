@@ -40,8 +40,67 @@ class CompoundRestServiceUnitSpec extends Specification {
         service.loggerService = this.loggerService
     }
 
-    void tearDown() {
-        // Tear down logic here
+    void "searchCompoundsCapIds #label"() {
+        when:
+        List<Compound> compounds = service.searchCompoundsByCids(searchParams, etags)
+        then:
+        restTemplate.getForObject(_, _) >> {[new Compound()]}
+        assert (!compounds.isEmpty()) == expected
+        where:
+        label        | searchParams                       | etags          | expected
+        "With ETags" | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | true
+
+    }
+
+
+    void "searchCompoundsByCids(searchParams, etags) #label"() {
+        when:
+        List<Compound> compounds = service.searchCompoundsByCids(searchParams, etags)
+        then:
+        restTemplate.getForObject(_, _) >> {[new Compound()]}
+        assert (!compounds.isEmpty()) == expected
+        where:
+        label           | searchParams                       | etags          | expected
+        "With ETags"    | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | true
+        "With No ETags" | new SearchParams(skip: 0, top: 10) | [:]            | false
+
+    }
+
+    void "searchCompoundsByCids(final List<Long> capIds, final SearchParams searchParams) #label"() {
+        when:
+        CompoundResult compoundResult = service.searchCompoundsByCids(cids, searchParams)
+        then:
+        assert (compoundResult != null) == expected
+        where:
+        label          | searchParams                       | cids | expected
+        "With No CIDs" | new SearchParams(skip: 0, top: 10) | []   | false
+
+    }
+
+    void "buildQueryForETag #label"() {
+        when:
+        final String resourceURL = service.buildQueryForETag(searchParams, etag)
+        then:
+        assert resourceURL == expectedURL
+        where:
+        label            | searchParams                       | etag  | expectedURL
+        "With ETag"      | new SearchParams(skip: 0, top: 10) | "123" | "http://ncgc/compounds/etag/123?skip=0&top=10&expand=true"
+        "With Null ETag" | new SearchParams(skip: 0, top: 10) | null  | ""
+
+    }
+
+    void "buildSearchByCIdURLs #label"() {
+
+        when:
+        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams, "cid:")
+        then:
+        assert resourceURL == expectedURL
+        where:
+        label        | searchParams                       | capIds | expectedURL
+        "Two cids"   | new SearchParams(skip: 0, top: 10) | [1, 2] | "http://ncgc/search/compounds/?q=cid%3A1+or+cid%3A2&skip=0&top=10&expand=true"
+        "Single cid" | new SearchParams(skip: 0, top: 10) | [1]    | "http://ncgc/search/compounds/?q=cid%3A1&skip=0&top=10&expand=true"
+        "No CID"     | new SearchParams(skip: 0, top: 10) | []     | "http://ncgc/search/compounds/?q=&skip=0&top=10&expand=true"
+
     }
 
     void "validateSimilarityThreshold"() {
@@ -337,6 +396,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         restTemplate.getForObject(_, _, _) >> {new PromiscuityScore()}
         assert promiscuityScore != null
     }
+
     void "findPromiscuityForCompound"() {
         given:
         final Long cid = 200
@@ -346,6 +406,7 @@ class CompoundRestServiceUnitSpec extends Specification {
         restTemplate.getForObject(_, _, _) >> {new Promiscuity()}
         assert promiscuity != null
     }
+
     void "getSynonymsForCompound"() {
         when:
         List<String> synonyms = service.getSynonymsForCompound(200)

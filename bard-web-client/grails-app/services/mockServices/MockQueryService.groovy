@@ -813,6 +813,11 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     Map findProjectsByCapIds(List<Long> capProjectIds, Integer top, Integer skip, List<SearchFilter> searchFilters) {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    Map searchCompoundsByCids(List<Long> cids, Integer top, Integer skip, List<SearchFilter> searchFilters) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
 class MockAssayAdapter implements AssayAdapterInterface {
     String name

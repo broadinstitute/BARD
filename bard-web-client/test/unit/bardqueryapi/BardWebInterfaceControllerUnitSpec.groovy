@@ -729,7 +729,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByCapIds(_, _,_,_) >> {projectAdapterMap}
+        queryService.findProjectsByCapIds(_, _, _, _) >> {projectAdapterMap}
         and:
         response.status == statusCode
         where:
@@ -738,6 +738,29 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Search Projects By Non existing Ids"  | "12, 47"         | null                                                       | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
         "Search Projects By Id No Filters"     | "1234, 4567"     | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
         "Search Projects By Id with Id syntax" | "PID:1234, 4567" | [projectAdapters: [buildProjectAdapter(1234, "project1")]] | HttpServletResponse.SC_OK                    | []
+
+    }
+
+    void "test searchCompoundsByCIDs action"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.CompoundFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
+        controller.metaClass.getParams {-> paramMap}
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        when:
+        request.method = 'GET'
+        controller.searchCompoundsByIDs(searchCommand)
+        then:
+        queryService.searchCompoundsByCids(_, _, _, _) >> {compoundAdapterMap}
+        and:
+        response.status == statusCode
+        where:
+        label                                   | searchString     | compoundAdapterMap                                     | statusCode                                   | filters
+        "Search Compounds By Ids"               | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(1234, "c1")]] | HttpServletResponse.SC_OK                    | searchFilters1
+        "Search Compounds By Non existing Ids"  | "12, 47"         | null                                                   | HttpServletResponse.SC_INTERNAL_SERVER_ERROR | searchFilters1
+        "Search Compounds By Id No Filters"     | "1234, 4567"     | [compoundAdapters: [buildCompoundAdapter(1234, "c1")]] | HttpServletResponse.SC_OK                    | []
+        "Search Compounds By Id with Id syntax" | "CID:1234, 4567" | [compoundAdapters: [buildCompoundAdapter(1234, "c1")]] | HttpServletResponse.SC_OK                    | []
 
     }
 
@@ -754,7 +777,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
         then:
-        queryService.findAssaysByCapIds(_, _,_,_) >> {assayAdapterMap}
+        queryService.findAssaysByCapIds(_, _, _, _) >> {assayAdapterMap}
         and:
         assert response.status == statusCode
         where:
@@ -779,7 +802,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
         then:
-        queryService.findAssaysByCapIds(_, _,_,_) >> {throw exceptionType}
+        queryService.findAssaysByCapIds(_, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -800,7 +823,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByCapIds(_, _,_,_) >> {throw exceptionType}
+        queryService.findProjectsByCapIds(_, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
