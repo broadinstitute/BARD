@@ -13,7 +13,7 @@ public interface IQueryService {
     public CompoundSummary getSummaryForCompound(final Long cid);
 
 
-        List<Long> findSubstancesByCid(Long cid) ;
+    List<Long> findSubstancesByCid(Long cid);
     /**
      *
      * @param cid
@@ -42,6 +42,24 @@ public interface IQueryService {
      * @return Map of results
      */
     Map findCompoundsByTextSearch(final String searchString, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+    /**
+     *
+     * @param capAssayIds
+     * @param top
+     * @param skip
+     * @param searchFilters
+     * @return Map of results
+     */
+    Map findAssaysByCapIds(final List<Long> capAssayIds, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
+
+    /**
+     * @param capProjectIds
+     * @param top
+     * @param skip
+     * @param searchFilters
+     * @return Map of results
+     */
+    Map findProjectsByCapIds(final List<Long> capProjectIds, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
     /**
      * @param searchString
@@ -105,9 +123,9 @@ public interface IQueryService {
      * @param skip
      * @return Map of data to use to display an experiment
      */
-    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis, ActivityOutcome activityOutcome) ;
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis, ActivityOutcome activityOutcome);
 
-        /**
+    /**
      *
      * Given a list of Project Ids return all the projects that were found
      * @param projectIds

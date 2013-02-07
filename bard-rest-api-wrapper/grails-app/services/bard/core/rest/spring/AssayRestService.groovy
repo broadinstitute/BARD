@@ -15,14 +15,63 @@ import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.assays.Assay
 
 class AssayRestService extends AbstractRestService {
+
+    /**
+     *
+     * @param searchParams
+     * @param map of etags
+     * @return list of assays
+     */
+    public List<Assay> searchAssaysByCapIds(final SearchParams searchParams, Map<String, Long> etags) {
+        if (etags) {
+            final String etag = firstETagFromMap(etags)
+            final String urlString = buildQueryForETag(searchParams, etag)
+            final URL url = new URL(urlString)
+            final List<Assay> assays = getForObject(url.toURI(), List.class) as List<Assay>
+            return assays
+        }
+        return []
+    }
+
+    /**
+     *
+     * @param list of cap assay ids
+     * @param searchParams
+     * @param map of etags
+     * @return {@link AssayResult}
+     */
+    public AssayResult searchAssaysByCapIds(final List<Long> capIds, final SearchParams searchParams) {
+        if (capIds) {
+            final Map<String, Long> etags = [:]
+            final long skip = searchParams.getSkip()
+            HttpHeaders requestHeaders = new HttpHeaders();
+            HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
+
+
+            final String urlString = buildSearchByCapIdURLs(capIds, searchParams, "capAssayId:")
+            final URL url = new URL(urlString)
+            final HttpEntity<AssayResult> exchange = getExchange(url.toURI(), entity, AssayResult.class) as HttpEntity<AssayResult>
+            final AssayResult assaySearchResult = exchange.getBody()
+
+            final HttpHeaders headers = exchange.getHeaders()
+            extractETagsFromResponseHeader(headers, skip, etags)
+            assaySearchResult.setEtags(etags)
+            return assaySearchResult
+        }
+
+        return null
+
+    }
+
 
     public BardAnnotation findAnnotations(final Long adid) {
         final String resource = getResource(adid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
 
-        final BardAnnotation annotations = (BardAnnotation)getForObject(url.toURI(), BardAnnotation.class)
+        final BardAnnotation annotations = (BardAnnotation) getForObject(url.toURI(), BardAnnotation.class)
         return annotations;
     }
     /**
@@ -33,7 +82,7 @@ class AssayRestService extends AbstractRestService {
     public ExpandedAssay getAssayById(final Long adid) {
         final String url = buildEntityURL() + "?expand={expand}"
         final Map map = [id: adid, expand: "true"]
-        ExpandedAssay assay = (ExpandedAssay)getForObject(url, ExpandedAssay.class, map)
+        ExpandedAssay assay = (ExpandedAssay) getForObject(url, ExpandedAssay.class, map)
         return assay;
     }
     /**
@@ -78,7 +127,7 @@ class AssayRestService extends AbstractRestService {
         //just passing in the string would cause the URI to be encoded twice
         //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
-        final AssayResult assayResult = (AssayResult)getForObject(url.toURI(), AssayResult.class)
+        final AssayResult assayResult = (AssayResult) getForObject(url.toURI(), AssayResult.class)
         return assayResult
     }
 
@@ -131,7 +180,7 @@ class AssayRestService extends AbstractRestService {
                     append(RestApiConstants.QUESTION_MARK).
                     append(RestApiConstants.EXPAND_TRUE)
         final URL url = new URL(resource.toString())
-        ProjectResult projectResult = (ProjectResult)getForObject(url.toURI(), ProjectResult.class)
+        ProjectResult projectResult = (ProjectResult) getForObject(url.toURI(), ProjectResult.class)
         projectResult
 
     }

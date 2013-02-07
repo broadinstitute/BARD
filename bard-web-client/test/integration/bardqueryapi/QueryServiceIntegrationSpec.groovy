@@ -9,9 +9,8 @@ import bard.core.interfaces.AssayType
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
-
-import spock.lang.Unroll
 import spock.lang.Shared
+import spock.lang.Unroll
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -266,6 +265,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+    void "test find Assays Cap Ids #label"() {
+        when:
+        final Map assayAdapterMap = queryService.findAssaysByCapIds(capIDs, top, skip, filters)
+        then:
+        List<AssayAdapter> assayAdapters = assayAdapterMap.assayAdapters
+        assert numberOfAssays == assayAdapters.size()
+        assert numberOfAssays == assayAdapterMap.nHits
+
+        where:
+        label                      | capIDs             | skip | top | numberOfAssays | filters
+        "Cap ID List"              | [2934, 2945, 2946] | 0    | 10  | 3              | []
+        "Empty Cap ID List"        | []                 | 0    | 10  | 0              | []
+        "Cap ID List with Filters" | [2934, 2945, 2946] | 0    | 10  | 1              | [new SearchFilter("target_name", "Coagulation factor XII")]
+
+    }
+
     void "test find Assays By ADIDs #label"() {
         when: ""
         final Map assayAdapterMap = queryService.findAssaysByADIDs(apids)
@@ -292,9 +307,26 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.facets
         assert projectAdapterMap.nHits > 0
         where:
-        label                     | searchString         | skip | top | filters
-        "dna repair"              | "\"dna repair\""     | 0    | 10  | []
-        "biological process"      | "biological process" | 0    | 10  | []
+        label                | searchString         | skip | top | filters
+        "dna repair"         | "\"dna repair\""     | 0    | 10  | []
+        "biological process" | "biological process" | 0    | 10  | []
+    }
+
+    void "test find Projects Cap Ids #label"() {
+        when:
+        final Map projectAdapterMap = queryService.findProjectsByCapIds(capIDs, top, skip, filters)
+        then:
+        List<ProjectAdapter> projectAdapters = projectAdapterMap.projectAdapters
+        assert numberOfProjects == projectAdapters.size()
+        assert numberOfProjects == projectAdapterMap.nHits
+
+        where:
+        label                             | capIDs     | skip | top | numberOfProjects | filters
+        "Cap ID List"                     | [724, 246] | 0    | 10  | 2                | []
+        "Empty Cap ID List"               | []         | 0    | 10  | 0                | []
+        "Cap ID List with Filters"        | [724, 246] | 0    | 10  | 1                | [new SearchFilter("target_name", "Sentrin-specific protease 7")]
+        "Cap ID List with Number Filters" | [724, 246] | 0    | 10  | 2                | [new SearchFilter("num_expt", "[10 TO *]")]
+
     }
 
     void "test find Projects By PIDs #label"() {

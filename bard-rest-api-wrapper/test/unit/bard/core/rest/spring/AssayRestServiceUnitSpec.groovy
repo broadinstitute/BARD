@@ -14,6 +14,7 @@ import spock.lang.Unroll
 import bard.core.helper.LoggerService
 
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.assays.Assay
 
 @Unroll
 @TestFor(AssayRestService)
@@ -28,6 +29,69 @@ class AssayRestServiceUnitSpec extends Specification {
         service.baseUrl = "http://ncgc"
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
+    }
+
+    void "searchAssaysByCapIds #label"() {
+        when:
+        List<Assay> assays = service.searchAssaysByCapIds(searchParams, etags)
+        then:
+        restTemplate.getForObject(_, _) >> {[new Assay()]}
+        assert (!assays.isEmpty()) == expected
+        where:
+        label        | searchParams                       | etags          | expected
+        "With ETags" | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | true
+
+    }
+
+
+    void "searchAssaysByCapIds(searchParams, etags) #label"() {
+        when:
+        List<Assay> assays = service.searchAssaysByCapIds(searchParams, etags)
+        then:
+        restTemplate.getForObject(_, _) >> {[new Assay()]}
+        assert (!assays.isEmpty()) == expected
+        where:
+        label           | searchParams                       | etags          | expected
+        "With ETags"    | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | true
+        "With No ETags" | new SearchParams(skip: 0, top: 10) | [:]            | false
+
+    }
+
+    void "searchAssaysByCapIds(final List<Long> capIds, final SearchParams searchParams) #label"() {
+        when:
+        AssayResult assayResult = service.searchAssaysByCapIds(capIds, searchParams)
+        then:
+        assert (assayResult != null) == expected
+        where:
+        label             | searchParams                       | capIds | expected
+        "With No Cap IDs" | new SearchParams(skip: 0, top: 10) | []     | false
+
+    }
+
+    void "buildQueryForETag #label"() {
+        when:
+        final String resourceURL = service.buildQueryForETag(searchParams, etag)
+        then:
+        assert resourceURL == expectedURL
+        where:
+        label            | searchParams                       | etag  | expectedURL
+        "With ETag"      | new SearchParams(skip: 0, top: 10) | "123" | "http://ncgc/assays/etag/123?skip=0&top=10&expand=true"
+        "With Null ETag" | new SearchParams(skip: 0, top: 10) | null  | ""
+
+    }
+
+    void "buildSearchByCapIdURLs #label"() {
+
+        when:
+        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams, "capAssayId:")
+        then:
+        assert resourceURL == expectedURL
+        where:
+        label           | searchParams                       | capIds | expectedURL
+        "Two CAP Ids"   | new SearchParams(skip: 0, top: 10) | [1, 2] | "http://ncgc/search/assays/?q=capAssayId%3A1+or+capAssayId%3A2&skip=0&top=10&expand=true"
+        "Single CAP ID" | new SearchParams(skip: 0, top: 10) | [1]    | "http://ncgc/search/assays/?q=capAssayId%3A1&skip=0&top=10&expand=true"
+        "No CAP ID"     | new SearchParams(skip: 0, top: 10) | []     | "http://ncgc/search/assays/?q=&skip=0&top=10&expand=true"
+
     }
 
     void "firstETagFromMap #label"() {

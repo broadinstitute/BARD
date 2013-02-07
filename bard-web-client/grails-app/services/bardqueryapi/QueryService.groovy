@@ -31,6 +31,7 @@ class QueryService implements IQueryService {
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
     //========================================================== Free Text Searches ================================
+
     /**
      * Find Compounds by Text search
      *
@@ -62,6 +63,23 @@ class QueryService implements IQueryService {
         return [compoundAdapters: foundCompoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
+    Map findAssaysByCapIds(final List<Long> capAssayIds, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+        final List<AssayAdapter> foundAssayAdapters = []
+        Collection<Value> facets = []
+        int nhits = 0
+        String eTag = null
+        if (capAssayIds) {
+            //TODO: Add filters
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+            final AssayResult assayResult = assayRestService.searchAssaysByCapIds(capAssayIds, searchParams)
+            final List<AssayAdapter> adapters = this.queryHelperService.assaysToAdapters(assayResult)
+            foundAssayAdapters.addAll(adapters)
+            facets = assayResult.getFacetsToValues()
+            nhits = assayResult.numberOfHits
+            eTag = assayResult.etag
+        }
+        return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
     /**
      * @param searchString
      * @param top
@@ -89,7 +107,30 @@ class QueryService implements IQueryService {
         }
         return [assayAdapters: foundAssayAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
-
+    /**
+     * @param searchString
+     * @param top
+     * @param skip
+     * @param searchFilters {@link SearchFilter}'s
+     * @return Map of results
+     */
+    Map findProjectsByCapIds(final List<Long> capProjectIds, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
+        List<ProjectAdapter> foundProjectAdapters = []
+        Collection<Value> facets = []
+        int nhits = 0
+        String eTag = null
+        if (capProjectIds) {
+            //TODO: Add filters
+            final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
+            final ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capProjectIds, searchParams, [:])
+            final List<ProjectAdapter> adapters = this.queryHelperService.projectsToAdapters(projectResult)
+            foundProjectAdapters.addAll(adapters)
+            facets = projectResult.getFacetsToValues()
+            nhits = projectResult.numberOfHits
+            eTag = projectResult.etag
+        }
+        return [projectAdapters: foundProjectAdapters, facets: facets, nHits: nhits, eTag: eTag]
+    }
     /**
      * @param searchString
      * @param top
@@ -231,7 +272,7 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map of data to use to display an experiment
      */
-    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome=ActivityOutcome.ALL) {
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
         List<Activity> activities = []
         final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
         long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0

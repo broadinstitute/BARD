@@ -3,7 +3,6 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
-import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
@@ -11,8 +10,8 @@ import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
-import spock.lang.Unroll
 import spock.lang.Shared
+import spock.lang.Unroll
 
 /**
  * Tests for ProjectRestService
@@ -23,8 +22,37 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     ProjectRestService projectRestService
     @Shared
     List<Long> PIDS = [1581, 1563, 1748]
-    //@Shared
-    //Long PROJECT_WITH_PROBE=1963
+    @Shared
+    List<Long> CAP_PIDS = [724, 246]
+
+    void "searchProjectsByCapIds #label"() {
+        when:
+        ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capIds, searchParams, etags)
+        then:
+        assert (projectResult != null) == expected
+        where:
+        label                         | searchParams                       | etags | capIds   | expected
+        "With capIds no ETags"        | new SearchParams(skip: 0, top: 10) | [:]   | CAP_PIDS | true
+        "With no capIds and no ETags" | new SearchParams(skip: 0, top: 10) | [:]   | []       | false
+
+    }
+
+//    TODO: Uncomment when NCGC fixes
+//
+//    void "searchProjectsByCapIds withETags #label"() {
+//        given: "That we have made a request with some CAP Ids that returns an etag"
+//        ProjectResult projectResultWithIds = projectRestService.searchProjectsByCapIds(capIds, searchParams, etags)
+//        when: "We use the returned etags to make another request"
+//        ProjectResult projectResultWithETags = projectRestService.searchProjectsByCapIds([], searchParams, projectResultWithIds.etags)
+//        then: "We get back the expected results"
+//        assert (projectResultWithETags != null) == expected
+//        println projectResultWithETags
+//        where:
+//        label           | searchParams                       | etags | capIds   | expected
+//        "With ETags"    | new SearchParams(skip: 0, top: 10) | [:]   | CAP_PIDS | true
+//        "With no ETags" | new SearchParams(skip: 0, top: 10) | [:]   | []       | false
+//
+//    }
 
     void testProjectSuggestions() {
         given:
@@ -76,7 +104,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert !facets.isEmpty(), "List of Facets is not empty"
 
     }
-     //TODO: Commenting out till probes are associated to Projects in warehouse
+    //TODO: Commenting out till probes are associated to Projects in warehouse
 //    void "test project with probe #label"() {
 //        when: "The get method is called with the given PID: #pid"
 //        final ProjectExpanded project = projectRestService.getProjectById(pid)

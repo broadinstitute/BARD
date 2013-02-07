@@ -105,7 +105,6 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.findSubstanceIds(cid)
         then:
-        // _*controller.isBadRequest(_,_)>>{return false}
         _ * this.queryService.findSubstancesByCid(_) >> {sids}
         assert response.status == statusCode
 
@@ -730,7 +729,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByPIDs(_, _) >> {projectAdapterMap}
+        queryService.findProjectsByCapIds(_, _,_,_) >> {projectAdapterMap}
         and:
         response.status == statusCode
         where:
@@ -755,7 +754,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
         then:
-        queryService.findAssaysByADIDs(_, _) >> {assayAdapterMap}
+        queryService.findAssaysByCapIds(_, _,_,_) >> {assayAdapterMap}
         and:
         assert response.status == statusCode
         where:
@@ -780,7 +779,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
         then:
-        queryService.findAssaysByADIDs(_, _) >> {throw exceptionType}
+        queryService.findAssaysByCapIds(_, _,_,_) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -801,7 +800,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByPIDs(_, _) >> {throw exceptionType}
+        queryService.findProjectsByCapIds(_, _,_,_) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode

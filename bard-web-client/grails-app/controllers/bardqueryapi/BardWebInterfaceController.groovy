@@ -202,16 +202,22 @@ class BardWebInterfaceController {
                 handleIdSearchInput(searchTypeString, ids, "ADID", "Input String start with ADID:", "Please enter Assay Ids after the string ADID:")
                 searchCommand.searchString = ids
             }
-
-            //we want to remove the duplicates from the search string
-            //removeDuplicatesFromSearchString(searchCommand)
-            //after removing duplicates, reassign
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            Map<String, Integer> searchParams = handleSearchParams()
+            int top = searchParams.top
+            int skip = searchParams.skip
 
             final List<Long> adids = searchStringToIdList(searchCommand.searchString)
-            final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids, searchFilters)
 
-            render(template: 'assays', model: [
+            final List<Long> capIds = []
+            for (def id : adids) {
+                capIds.add(new Long(id))
+            }
+
+            final Map assayAdapterMap = this.queryService.findAssaysByCapIds(capIds, top, skip, searchFilters)
+            render(template: "assays", model: [
                     assayAdapters: assayAdapterMap.assayAdapters,
                     facets: assayAdapterMap.facets,
                     nhits: assayAdapterMap.nHits,
@@ -238,8 +244,10 @@ class BardWebInterfaceController {
             return
         }
         try {
+
             String originalSearchString = searchCommand.searchString
             final String[] searchStringSplit = searchCommand.searchString.split(":")
+
             if (searchStringSplit.length == 2) {  //if the search string is of the form PID:1234,3456...
                 final String searchTypeString = searchStringSplit[0]
                 final String ids = searchStringSplit[1]
@@ -247,13 +255,19 @@ class BardWebInterfaceController {
                 //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
-
-            //we want to remove the duplicates from the search string
-            //removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            Map<String, Integer> searchParams = handleSearchParams()
+            int top = searchParams.top
+            int skip = searchParams.skip
 
             final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
-            Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, searchFilters)
+            final List<Long> capIds = []
+            for (def id : projectIds) {
+                capIds.add(new Long(id))
+            }
+            Map projectAdapterMap = this.queryService.findProjectsByCapIds(capIds, top, skip, searchFilters)
             render(template: 'projects', model: [
                     projectAdapters: projectAdapterMap.projectAdapters,
                     facets: projectAdapterMap.facets,

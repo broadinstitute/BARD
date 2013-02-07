@@ -25,7 +25,7 @@ class ProjectRestService extends AbstractRestService {
         final String resource = getResource(pid.toString() + RestApiConstants.ANNOTATIONS)
         final URL url = new URL(resource)
 
-        final BardAnnotation annotations = (BardAnnotation)getForObject(url.toURI(), BardAnnotation.class)
+        final BardAnnotation annotations = (BardAnnotation) getForObject(url.toURI(), BardAnnotation.class)
         return annotations;
     }
     /**
@@ -36,11 +36,77 @@ class ProjectRestService extends AbstractRestService {
     public ProjectExpanded getProjectById(final Long pid) {
         final String url = this.buildEntityURL() + "?expand={expand}"
         final Map map = [id: pid, expand: "true"]
-        final ProjectExpanded project = this.getForObject(url, ProjectExpanded.class, map)  as ProjectExpanded
+        final ProjectExpanded project = this.getForObject(url, ProjectExpanded.class, map) as ProjectExpanded
         return project
 
     }
 
+
+    /**
+     *
+     * @param searchParams
+     * @param map of etags
+     * @return {@link bard.core.rest.spring.project.ProjectResult}
+     */
+    public ProjectResult searchProjectsByCapIds(final SearchParams searchParams, Map<String, Long> etags) {
+        if (etags) {
+            final String etag = firstETagFromMap(etags)
+            final String urlString = buildQueryForETag(searchParams, etag)
+            final URL url = new URL(urlString)
+            final ProjectResult projectSearchResult = (ProjectResult) getForObject(url.toURI(), ProjectResult.class)
+            projectSearchResult.setEtags(etags)
+            return projectSearchResult
+        }
+        return null
+    }
+    /**
+     *
+     * @param list of cap project ids
+     * @param searchParams
+     * @return {@link bard.core.rest.spring.project.ProjectResult}
+     */
+    public ProjectResult searchProjectsByCapIds(final List<Long> capIds, final SearchParams searchParams) {
+        if (capIds) {
+            final Map<String, Long> etags = [:]
+            final long skip = searchParams.getSkip()
+            HttpHeaders requestHeaders = new HttpHeaders();
+            HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
+
+
+            final String urlString = buildSearchByCapIdURLs(capIds, searchParams,"capProjectId:")
+            final URL url = new URL(urlString)
+            final HttpEntity<ProjectResult> exchange = getExchange(url.toURI(), entity, ProjectResult.class) as HttpEntity<ProjectResult>
+            final ProjectResult projectSearchResult = exchange.getBody()
+
+            final HttpHeaders headers = exchange.getHeaders()
+            extractETagsFromResponseHeader(headers, skip, etags)
+            projectSearchResult.setEtags(etags)
+            return projectSearchResult
+        }
+
+        return null
+
+    }
+    /**
+     *
+     * @param list of cap project ids
+     * @param searchParams
+     * @param map of etags
+     * @return {@link bard.core.rest.spring.project.ProjectResult}
+     */
+    public ProjectResult searchProjectsByCapIds(final List<Long> capIds, final SearchParams searchParams, Map<String, Long> etags) {
+
+        if (etags) {
+            return searchProjectsByCapIds(searchParams, etags)
+        }
+
+        if (capIds) {
+            return searchProjectsByCapIds(capIds, searchParams)
+        }
+
+        return null
+
+    }
     /**
      *
      * @param list of pids
@@ -79,9 +145,6 @@ class ProjectRestService extends AbstractRestService {
      */
     public ProjectResult findProjectsByFreeTextSearch(SearchParams searchParams) {
         final String urlString = this.buildSearchURL(searchParams)
-        //We are passing the URI because we have already encoded the string
-        //just passing in the string would cause the URI to be encoded twice
-        //see http://static.springsource.org/spring/docs/3.0.x/javadoc-api/org/springframework/web/client/RestTemplate.html
         final URL url = new URL(urlString)
         final ProjectResult projectSearchResult = (ProjectResult) this.getForObject(url.toURI(), ProjectResult.class)
         return projectSearchResult
