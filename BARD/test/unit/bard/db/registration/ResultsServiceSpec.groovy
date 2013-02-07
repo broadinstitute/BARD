@@ -204,17 +204,14 @@ class ResultsServiceSpec extends spock.lang.Specification {
         rci.attributeElement == attribute
     }
 
-/*
-    void 'test parse context item cell'() {
+    @Unroll("test parsing context item containing #cellString")
+    void 'test parse non-element context item cell'() {
         when:
-        Measure measure = Measure.build()
-        ResultsService.Column column = new ResultsService.Column(measure: measure)
+        ItemService itemService = new ItemService()
+        def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free)])[0]
+        ResultsService.Column column = new ResultsService.Column(item: item)
 
-        then:
-        column.getError(cellString) == null
-
-        when:
-        ResultsService.Cell cell = column.parse(cellString)
+        ResultsService.Cell cell = column.parseValue(cellString)
 
         then:
         cell.value == expectedValue
@@ -223,14 +220,83 @@ class ResultsServiceSpec extends spock.lang.Specification {
         cell.qualifier == expectedQualifier
 
         where:
-        desc                     | cellString | expectedValue | expectedQualifier | minVal | maxVal | element
-        "simple scalar"          | "1"        | 1.0           | null              | null   | null   | null
-        "scientific notation"    | "1e4"      | 1e4           | null              | null   | null   | null
-        "including qualifier"    | "<10"      | 10.0          | "<"               | null   | null   | null
-        "spaced qualifier"       | ">> 10"    | 10.0          | ">>"              | null   | null   | null
-        "range"                  | "2-3"      | null          | null              | 2.0    | 3.0    | null
+        desc                     | cellString | expectedValue | expectedQualifier | minVal | maxVal
+        "simple scalar"          | "1"        | 1.0           | "="              | null   | null
+        "scientific notation"    | "1e4"      | 1e4           | "="              | null   | null
+        "including qualifier"    | "<10"      | 10.0          | "<"               | null   | null
+        "spaced qualifier"       | ">> 10"    | 10.0          | ">>"              | null   | null
+        "range"                  | "2-3"      | null          | null              | 2.0    | 3.0
     }
-*/
+
+    void 'test parse context item from element list'() {
+        when:
+        def tubaElement = Element.build(label: "tuba")
+        def attribute = Element.build()
+        def context = AssayContext.build()
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, assayContext: context)
+        def trumpetElement = Element.build(label: "trumpet")
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, assayContext: context)
+        ItemService itemService = new ItemService()
+        def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
+        ResultsService.Column column = new ResultsService.Column(item: item)
+
+        ResultsService.Cell c0 = column.parseValue("tuba")
+
+        then:
+        c0.element == tubaElement
+
+        when:
+        ResultsService.Cell c1 = column.parseValue("trumpet")
+
+        then:
+        c1.element == trumpetElement
+
+        then:
+        !(column.parseValue("pony") instanceof ResultsService.Cell)
+    }
+
+
+    void 'test parse context item from value list'() {
+        when:
+        def attribute = Element.build()
+        def context = AssayContext.build()
+        def small = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 1e2 )
+        def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2 )
+        ItemService itemService = new ItemService()
+        def item = itemService.getLogicalItems([large, small])[0]
+        ResultsService.Column column = new ResultsService.Column(item: item)
+
+        ResultsService.Cell c0 = column.parseValue("1e2")
+
+        then:
+        c0.value == 1e2
+
+        when:
+        ResultsService.Cell c1 = column.parseValue("100")
+
+        then:
+        c1.value == 1e2
+
+        when:
+        ResultsService.Cell c2 = column.parseValue("200.0")
+
+        then:
+        c2.value == 2e2
+
+        when:
+        ResultsService.Cell c3 = column.parseValue("200.1")
+
+        then:
+        c3.value == 2e2
+
+        then:
+        !(column.parseValue("pony") instanceof ResultsService.Cell)
+    }
+
+//    void 'test parse element context item'() {
+//        def item = AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free)
+//
+//    }
 
 /*
     void 'test parse failures'() {

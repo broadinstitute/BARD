@@ -14,6 +14,12 @@ class ResultsService {
 
     static Pattern RANGE_PATTERN = Pattern.compile("([^-]+)-(.*)")
 
+    static Pattern NUMBER_PATTERN = Pattern.compile("[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?")
+
+    static boolean isNumber(value) {
+        return NUMBER_PATTERN.matcher(value).matches()
+    }
+
     static class Column {
         String name;
 
@@ -23,8 +29,51 @@ class ResultsService {
         // if this column represents a context item
         ItemService.Item item;
 
-        // return a string if error.  Otherwise returns a cell
+
+        // return a string if error.  Otherwise returns a Cell
         def parseValue(String value) {
+            Double rangeMax = null
+            Double rangeMin = null
+            String rangeName = null
+
+            if (item != null) {
+                if (item.type == AttributeType.List) {
+                    if (isNumber(value)) {
+                        float v = Float.parseFloat(value)
+                        float smallestDelta = Float.MAX_VALUE
+                        float closestValue = Float.NaN
+
+                        item.contextItems.each {
+                            def delta = Math.abs(it.valueNum - v)
+                            if (delta < smallestDelta) {
+                                smallestDelta = delta
+                                closestValue = it.valueNum
+                            }
+                        }
+                        return new Cell(value: closestValue, qualifier: "=", column: this)
+                    } else {
+                        def labelMap = [:]
+                        item.contextItems.each {
+                            if(it.valueElement != null)
+                                labelMap[it.valueElement.label] = it.valueElement
+                        }
+                        Element element = labelMap[value]
+                        if (element == null) {
+                            return "Could not find \"${value}\" among values in list: ${labelMap.keySet()}"
+                        }
+                        return new Cell(element: element, column: this)
+                    }
+                } else if (item.type == AttributeType.Free) {
+                    // pass through
+                } else if (item.type == AttributeType.Range) {
+                    rangeMin = item.contextItems[0].valueMin
+                    rangeMax = item.contextItems[0].valueMax
+                    rangeName = item.attributeElement.label
+                } else {
+                    throw new RuntimeException("Did not know how to handle attribute type "+item.type)
+                }
+            }
+
             String foundQualifier = null
 
             for(qualifier in Result.QUALIFIER_VALUES) {
@@ -53,8 +102,7 @@ class ResultsService {
                     return "Could not parse \"${value}\" as a range"
                 }
 
-                Cell cell = new Cell(minValue: minValue, maxValue: maxValue)
-                cell.column = this
+                Cell cell = new Cell(minValue: minValue, maxValue: maxValue, column: this)
                 return cell
             } else {
                 float a
@@ -67,8 +115,13 @@ class ResultsService {
                     return "Could not parse \"${value}\" as a number"
                 }
 
-                Cell cell = new Cell(value: a, qualifier: foundQualifier)
-                cell.column = this
+                if (rangeName != null) {
+                    if (a < rangeMin || a > rangeMax) {
+                        return "The value \"${a}\" outside of allowed range (${rangeMin} - ${rangeMax}) for ${rangeName}"
+                    }
+                }
+
+                Cell cell = new Cell(value: a, qualifier: foundQualifier, column: this)
 
                 return cell
             }
