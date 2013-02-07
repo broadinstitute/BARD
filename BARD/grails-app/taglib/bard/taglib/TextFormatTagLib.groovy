@@ -13,7 +13,8 @@ class TextFormatTagLib {
         def lines = text.split("\n")
         for(line in lines) {
             out << "<p>"
-            out << line.encodeAsHTML()
+//            out << line.encodeAsHTML()
+            out << line
             out << "</p>"
         }
     }

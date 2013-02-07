@@ -9,8 +9,8 @@ import groovy.xml.MarkupBuilder
 import org.custommonkey.xmlunit.XMLAssert
 import spock.lang.Unroll
 
-import static bard.db.enums.ReadyForExtraction.Complete
-import static bard.db.enums.ReadyForExtraction.Ready
+import static bard.db.enums.ReadyForExtraction.COMPLETE
+import static bard.db.enums.ReadyForExtraction.READY
 import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
@@ -53,7 +53,7 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Generate Result"() {
         given: "Given a Result with id #id and version #version"
-        Result result = Result.build(readyForExtraction: ReadyForExtraction.Ready)
+        Result result = Result.build(readyForExtraction: ReadyForExtraction.READY)
 
         when: "We call the result service to generate this result"
         this.resultExportService.generateResult(this.markupBuilder, result.id)
@@ -76,9 +76,9 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
         assert result.readyForExtraction == expectedReadyForExtraction
         where:
         label                                            | expectedStatusCode     | expectedETag | resultId | version | initialReadyForExtraction | expectedReadyForExtraction
-        "Return OK and ETag 1"                           | SC_OK                  | 1            | 533      | 0       | Ready                     | Complete
-        "Return CONFLICT and ETag 0"                     | SC_CONFLICT            | 0            | 533      | -1      | Ready                     | Ready
-        "Return PRECONDITION_FAILED and ETag 0"          | SC_PRECONDITION_FAILED | 0            | 533      | 2       | Ready                     | Ready
-        "Return OK and ETag 0, Already completed Result" | SC_OK                  | 0            | 532      | 0       | Complete                  | Complete
+        "Return OK and ETag 1"                           | SC_OK                  | 1            | 533      | 0       | READY                     | COMPLETE
+        "Return CONFLICT and ETag 0"                     | SC_CONFLICT            | 0            | 533      | -1      | READY                     | READY
+        "Return PRECONDITION_FAILED and ETag 0"          | SC_PRECONDITION_FAILED | 0            | 533      | 2       | READY                     | READY
+        "Return OK and ETag 0, Already completed Result" | SC_OK                  | 0            | 532      | 0       | COMPLETE                  | COMPLETE
     }
 }

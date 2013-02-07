@@ -98,7 +98,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Assays readyForExtraction"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: ReadyForExtraction.Ready)
+        Assay.build(readyForExtraction: ReadyForExtraction.READY)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)

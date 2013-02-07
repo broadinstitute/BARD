@@ -8,7 +8,6 @@ import spock.lang.Unroll
 import static bard.db.dictionary.AbstractElement.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,13 +42,11 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         where:
         desc             | valueUnderTest           | valid | errorCode
         'null not value' | null                     | false | 'nullable'
-        'valid valude'   | ElementStatus.Pending    | true  | null
-        'valid valude'   | ElementStatus.Published  | true  | null
-        'valid valude'   | ElementStatus.Deprecated | true  | null
-        'valid valude'   | ElementStatus.Retired    | true  | null
+        'valid value'   | ElementStatus.Pending    | true  | null
+        'valid value'   | ElementStatus.Published  | true  | null
+        'valid value'   | ElementStatus.Deprecated | true  | null
+        'valid value'   | ElementStatus.Retired    | true  | null
     }
-
-
 
     void "test label constraints #desc label: '#valueUnderTest'"() {
         final String field = 'label'
@@ -163,9 +160,9 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest                    | valid | errorCode
-        'null value'  | {null}                              | true  | null
-        'valid value' | {Element.build()}    | true  | null
+        desc          | valueUnderTest      | valid | errorCode
+        'null value'  | { null }            | true  | null
+        'valid value' | { Element.build() } | true  | null
     }
 
     void "test bardURI constraints #desc bardURI: '#valueUnderTest'"() {
@@ -233,13 +230,13 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc             | valueUnderTest              | valid | errorCode
-        'null not valid' | null                        | false | 'nullable'
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
 
-        'valid valud'    | ReadyForExtraction.Pending  | true  | null
-        'valid value'    | ReadyForExtraction.Ready    | true  | null
-        'valid value'    | ReadyForExtraction.Started  | true  | null
-        'valid value'    | ReadyForExtraction.Complete | true  | null
+        'valid valud'    | ReadyForExtraction.NOT_READY | true  | null
+        'valid value'    | ReadyForExtraction.READY     | true  | null
+        'valid value'    | ReadyForExtraction.STARTED   | true  | null
+        'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
 
     }
 

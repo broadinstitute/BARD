@@ -1,5 +1,7 @@
 package common.tests
 
+import org.apache.commons.lang.BooleanUtils
+import org.custommonkey.xmlunit.*
 import org.springframework.core.io.Resource
 
 import javax.xml.XMLConstants
@@ -7,8 +9,6 @@ import javax.xml.transform.stream.StreamSource
 import javax.xml.validation.Schema
 import javax.xml.validation.SchemaFactory
 import javax.xml.validation.Validator
-
-import org.custommonkey.xmlunit.*
 
 /**
  * This class will not be packaged into a war file. We only need it for test purposes
@@ -18,6 +18,10 @@ class XmlTestAssertions {
     public static void assertResults(final String expectedResults, final String generatedResults) {
         XMLUnit.setIgnoreWhitespace(true)
         Diff xmlDiff = new Diff(expectedResults, generatedResults)
+        if (BooleanUtils.isFalse(xmlDiff.similar())) {
+            println("expected: $expectedResults")
+            println("actual: $generatedResults")
+        }
         assert true == xmlDiff.similar()
     }
     /**
@@ -44,6 +48,10 @@ class XmlTestAssertions {
 
             }
         });
+        if (BooleanUtils.isFalse(xmlDiff.similar())) {
+            println("expected: $expectedResults")
+            println("actual: $generatedResults")
+        }
         assert true == xmlDiff.similar()
     }
 

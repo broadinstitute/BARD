@@ -1,11 +1,11 @@
-package bard.util;
+package bard.util.dbutil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.commons.dbutils.handlers.AbstractKeyedHandler;
 
-public class SimpleMapHandler<K, V> extends AbstractKeyedHandler {
+public class SimpleMapHandler extends AbstractKeyedHandler {
 
 	private int keyColumnIndex, valueColumnIndex;
 	private String keyColumnName, valueColumnName;
@@ -25,7 +25,7 @@ public class SimpleMapHandler<K, V> extends AbstractKeyedHandler {
 	}
 
 	@Override
-	protected V createRow(ResultSet rs) throws SQLException {
-		return (valueColumnName == null) ? (V) rs.getObject(valueColumnIndex) : (V) rs.getObject(valueColumnName);
+	protected Object createRow(ResultSet rs) throws SQLException {
+		return (valueColumnName == null) ? rs.getObject(valueColumnIndex) : rs.getObject(valueColumnName);
 	}
 }

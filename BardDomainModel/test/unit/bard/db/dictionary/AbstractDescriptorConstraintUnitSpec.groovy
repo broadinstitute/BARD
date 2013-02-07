@@ -70,10 +70,10 @@ abstract class AbstractDescriptorConstraintUnitSpec extends Specification {
         where:
         desc             | valueUnderTest           | valid | errorCode
         'null not value' | null                     | false | 'nullable'
-        'valid valude'   | ElementStatus.Pending    | true  | null
-        'valid valude'   | ElementStatus.Published  | true  | null
-        'valid valude'   | ElementStatus.Deprecated | true  | null
-        'valid valude'   | ElementStatus.Retired    | true  | null
+        'valid value'   | ElementStatus.Pending    | true  | null
+        'valid value'   | ElementStatus.Published  | true  | null
+        'valid value'   | ElementStatus.Deprecated | true  | null
+        'valid value'   | ElementStatus.Retired    | true  | null
     }
 
     void "test label constraints #desc label: '#valueUnderTest'"() {

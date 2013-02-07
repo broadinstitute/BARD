@@ -98,7 +98,7 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_MINIMAL = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -107,7 +107,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_OPTIONAL_PROPERTIES = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <description>description</description>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
@@ -117,7 +117,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_EXT_REF = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -127,7 +127,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_EXT_REF = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -138,7 +138,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_CONTEXT = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -152,7 +152,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_CONTEXT = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -169,7 +169,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -187,7 +187,7 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <experimentMeasures>
                 <experimentMeasure experimentMeasureId='1' measureRef='1'/>
@@ -199,7 +199,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Pending'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
             <experimentName>experimentName</experimentName>
             <experimentMeasures>
                 <experimentMeasure experimentMeasureId='1' measureRef='1'/>
@@ -244,7 +244,7 @@ class XmlTestSamples {
 
     static final String PROJECTS = '''
 <projects count='2'>
-    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <project projectId='1' readyForExtraction='Not Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
     <projectSteps>
       <projectStep projectStepId='1'>
@@ -259,7 +259,7 @@ class XmlTestSamples {
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
     </project>
-  <project projectId='2' readyForExtraction='Ready' groupType='Project'>
+  <project projectId='2' readyForExtraction='Not Ready' groupType='Project'>
     <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
@@ -269,7 +269,7 @@ class XmlTestSamples {
 
 
     static final String PROJECT = '''
-    <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+    <project projectId='1' readyForExtraction='Not Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>
   <projectSteps>
     <projectStep projectStepId='1'>
@@ -586,7 +586,7 @@ class XmlTestSamples {
     '''
 
     static final String ASSAY_NO_DESIGNER_UNIT = '''
-        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'>
           <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <link rel='edit' href='null' type='xml' />
@@ -625,7 +625,7 @@ class XmlTestSamples {
     </externalReference>
     '''
     static final String ASSAY_WITH_DESIGNER_NAME = '''
-        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'>
           <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <designedBy>Broad</designedBy>
@@ -634,7 +634,7 @@ class XmlTestSamples {
           <link rel='up' href='null' type='xml' />
         </assay> '''
     static final String ASSAY_WITH_DOCUMENT = '''
-         <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+         <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'>
           <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <link rel='edit' href='null' type='xml' />
@@ -813,7 +813,7 @@ class XmlTestSamples {
 '''
 
     static String ASSAY_FULL_DOC = '''
-        <assay assayId='1' readyForExtraction='Pending' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'>
           <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <assayContexts>
@@ -848,7 +848,7 @@ class XmlTestSamples {
         </assay>
      '''
     static String PROJECT_FROM_SERVER = '''
-   <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+   <project projectId='1' readyForExtraction='Not Ready' groupType='Project'>
    <projectName>Scripps special project #1</projectName>
    <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
    <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
@@ -856,7 +856,7 @@ class XmlTestSamples {
 
     '''
     static String PROJECTS_FROM_SERVER = '''
-<projects count='2'>  <project projectId='1' readyForExtraction='Ready' groupType='Project'>
+<projects count='2'>  <project projectId='1' readyForExtraction='Not Ready' groupType='Project'>
     <projectName>Scripps special project #1</projectName>    <projectSteps>
         <projectStep projectStepId='2'>        <description>2127 - MLPCN Malaria2 - Inhibitor</description>
             <link rel='related' href='http://localhost:8080/dataExport/api/experiments/2' type='application/vnd.bard.cap+xml;type=experiment' />
@@ -867,7 +867,7 @@ class XmlTestSamples {
     <link rel='edit' href='http://localhost:8080/dataExport/api/projects/1' type='application/vnd.bard.cap+xml;type=project' />
     <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
 </project>
-    <project projectId='2' readyForExtraction='Ready' groupType='Project'>
+    <project projectId='2' readyForExtraction='Not Ready' groupType='Project'>
         <projectName>2126 - MLPCN Malaria - Inhibitor</projectName>
         <link rel='edit' href='http://localhost:8080/dataExport/api/projects/2' type='application/vnd.bard.cap+xml;type=project' />
         <link rel='up' href='http://localhost:8080/dataExport/api/projects' type='application/vnd.bard.cap+xml;type=projects' />
@@ -1001,7 +1001,7 @@ class XmlTestSamples {
         </resultType>'''
 
     static String ELEMENT = '''
-    <element elementId='1' readyForExtraction='Ready' elementStatus='Published'>
+    <element elementId='1' readyForExtraction='Not Ready' elementStatus='Published'>
       <label>uM</label>
       <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
     </element>
@@ -1010,47 +1010,47 @@ class XmlTestSamples {
     static String DICTIONARY = '''
         <dictionary>
           <elements>
-            <element elementId='1' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='1' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>IC50</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='2' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='2' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>log IC50</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='3' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='3' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label1</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/3' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='4' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='4' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label2</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/4' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='5' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='5' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label3</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/5' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='6' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='6' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label4</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/6' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='7' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='7' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label5</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/7' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='8' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='8' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label6</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/8' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='9' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='9' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>label7</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/9' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='10' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='10' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>micromolar</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/10' type='application/vnd.bard.cap+xml;type=element' />
             </element>
-            <element elementId='11' readyForExtraction='Pending' elementStatus='Pending'>
+            <element elementId='11' readyForExtraction='Not Ready' elementStatus='Pending'>
               <label>millimolar</label>
               <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/11' type='application/vnd.bard.cap+xml;type=element' />
             </element>
@@ -1146,11 +1146,11 @@ class XmlTestSamples {
 
     static String ELEMENTS = '''
         <elements>
-          <element elementId='1' readyForExtraction='Pending' elementStatus='Pending'>
+          <element elementId='1' readyForExtraction='Not Ready' elementStatus='Pending'>
             <label>label1</label>
             <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
           </element>
-          <element elementId='2' readyForExtraction='Pending' elementStatus='Pending'>
+          <element elementId='2' readyForExtraction='Not Ready' elementStatus='Pending'>
             <label>label2</label>
             <link rel='edit' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
           </element>

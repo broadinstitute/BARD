@@ -1,6 +1,9 @@
 package bard.db.registration
 
+import bard.db.enums.AssayStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.hibernate.AssayStatusEnumUserType
+import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
 
@@ -20,7 +23,7 @@ class Assay extends AbstractContextOwner {
     String assayName
     String assayVersion
     String designedBy
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     String assayType = 'Regular'
 
     String modifiedBy
@@ -56,6 +59,8 @@ class Assay extends AbstractContextOwner {
 
     static mapping = {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
+        assayStatus(type: AssayStatusEnumUserType)
+        readyForExtraction(type: ReadyForExtractionEnumUserType)
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true')
     }
 

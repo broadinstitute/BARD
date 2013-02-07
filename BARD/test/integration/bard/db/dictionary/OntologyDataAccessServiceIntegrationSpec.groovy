@@ -31,7 +31,6 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         parent = BardDescriptor.build(fullPath: parentFullPath, leaf: false, parent: grandParent, label: 'parent')
     }
 
-    @IgnoreRest
     void "test getValueDescriptors with direct Children desc: '#desc' expectedLabels: #expectedLabels"() {
 
         given:
@@ -55,9 +54,9 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         "1 child with status Deprecated"               | ['child1']                        | 'child'    | [[elementStatus: ES.Deprecated, label: 'child1']]
         "1 child ensuring searchTerm trimmed"          | ['child1']                        | ' child'   | [[elementStatus: Published, label: 'child1']]
         "1 child with case insensitive contains match" | ['child1']                        | 'CHILD'    | [[elementStatus: Published, label: 'child1']]
-        "1 child of 2 due to Retire"                   | ['child2']                        | 'child'    | [[elementStatus: Retired, label: 'child1'], [leaf: true, elementStatus: Published, label: 'child2']]
-        "1 child of 2 due to search term"              | ['child2']                        | 'child2'   | [[elementStatus: Published, label: 'child1'], [leaf: true, elementStatus: Published, label: 'child2']]
-        "3 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | [[elementStatus: Published, label: 'c_child'], [leaf: true, elementStatus: Published, label: 'B_child'], [leaf: true, elementStatus: Published, label: 'a_child']]
+        "1 child of 2 due to Retire"                   | ['child2']                        | 'child'    | [[elementStatus: Retired, label: 'child1'], [elementStatus: Published, label: 'child2']]
+        "1 child of 2 due to search term"              | ['child2']                        | 'child2'   | [[elementStatus: Published, label: 'child1'], [elementStatus: Published, label: 'child2']]
+        "3 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
     }
 
     void "test getValueDescriptors with grandChildren desc: '#desc' expectedLabels: #expectedLabels"() {
@@ -83,9 +82,9 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         "1 child with status Deprecated"               | ['child1']                        | 'child'    | [[elementStatus: ES.Deprecated, label: 'child1']]
         "1 child ensuring searchTerm trimmed"          | ['child1']                        | ' child'   | [[elementStatus: Published, label: 'child1']]
         "1 child with case insensitive contains match" | ['child1']                        | 'CHILD'    | [[elementStatus: Published, label: 'child1']]
-        "1 child of 2 due to Retire"                   | ['child2']                        | 'child'    | [[elementStatus: Retired, label: 'child1'], [leaf: true, elementStatus: Published, label: 'child2']]
-        "1 child of 2 due to search term"              | ['child2']                        | 'child2'   | [[elementStatus: Published, label: 'child1'], [leaf: true, elementStatus: Published, label: 'child2']]
-        "3 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | [[elementStatus: Published, label: 'c_child'], [leaf: true, elementStatus: Published, label: 'B_child'], [leaf: true, elementStatus: Published, label: 'a_child']]
+        "1 child of 2 due to Retire"                   | ['child2']                        | 'child'    | [[elementStatus: Retired, label: 'child1'], [elementStatus: Published, label: 'child2']]
+        "1 child of 2 due to search term"              | ['child2']                        | 'child2'   | [[elementStatus: Published, label: 'child1'], [elementStatus: Published, label: 'child2']]
+        "3 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
     }
 
     void "test getAttributeDescriptors desc: '#desc' expectedLabels: #expectedLabels"() {

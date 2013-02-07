@@ -102,10 +102,12 @@ class OntologyDataAccessService {
                 from  bard_tree bt
                 where not EXISTS( select 1 from DICTIONARY_TREE dt where dt.ELEMENT_ID= bt.element_Id and dt.PARENT_NODE_ID != 0 )
                 and lower(bt.label) like :term
+                and bt.element_status != :elementStatus
                 order by lower(bt.label)
             """)
             query.addEntity(BardDescriptor)
             query.setString('term', "%${term?.trim()?.toLowerCase()}%")
+            query.setString('elementStatus', ElementStatus.Retired.name())
             query.setReadOnly(true)
             results = query.list()
         }
@@ -122,7 +124,6 @@ class OntologyDataAccessService {
                           from bard_tree
                           where element_id = :elementId) ancestor on ancestor.full_path = substr(bt.full_path, 0, length(ancestor.full_path))
                 where lower(bt.label) like :term
-                and bt.is_leaf = 'Y'
                 and bt.element_status != :elementStatus
                 order by lower(bt.label)
             """)
@@ -135,7 +136,7 @@ class OntologyDataAccessService {
         }
         return results
     }
-	
+
 	public Map<Long, String> getBaseUnits(Long elementId, Long toUnitId){
 		List<Long> resultsOne = UnitConversion.executeQuery("select uc.fromUnit.id from UnitConversion uc where toUnit.id = ?", toUnitId)
 		List<Long> resultsTwo = Element.executeQuery("select e.id from Element e where id = ?", elementId)
@@ -150,7 +151,7 @@ class OntologyDataAccessService {
 		}
 		return unitsMap
 	}
-	
+
 	private String getInParametizedQueryString(List theList){
 		String parametizedString = "";
 		int counter = 0;

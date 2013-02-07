@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
 import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
@@ -40,13 +41,14 @@ class AssayConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc             | valueUnderTest         | valid | errorCode
-        'null not valid' | null                   | false | 'nullable'
-        'valid value'    | AssayStatus.Pending    | true  | null
-        'valid value'    | AssayStatus.Active     | true  | null
-        'valid value'    | AssayStatus.Superseded | true  | null
-        'valid value'    | AssayStatus.Retired    | true  | null
-        // 'too long'         | createString(ASSAY_STATUS_MAX_SIZE) | false | 'maxSize.exceeded'  // can't seem to hit only getting not.inList
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
+        'valid value'    | AssayStatus.DRAFT            | true  | null
+        'valid value'    | AssayStatus.WITNESSED        | true  | null
+        'valid value'    | AssayStatus.FINISHED         | true  | null
+        'valid value'    | AssayStatus.MEASURES_DONE    | true  | null
+        'valid value'    | AssayStatus.ANNOTATIONS_DONE | true  | null
+        'valid value'    | AssayStatus.RETIRED          | true  | null
 
     }
 
@@ -176,17 +178,13 @@ class AssayConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc             | valueUnderTest              | valid | errorCode
-        'null not valid' | null                        | false | 'nullable'
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
 
-        'valid valud'    | ReadyForExtraction.Pending  | true  | null
-        'valid value'    | ReadyForExtraction.Ready    | true  | null
-        'valid value'    | ReadyForExtraction.Started  | true  | null
-        'valid value'    | ReadyForExtraction.Complete | true  | null
-
-        // ''                 | READY_FOR_EXTRACTION_MAX_SIZE | false | 'maxSize.exceeded'
-        // only see violation of inList not maxSize
-
+        'valid value'    | ReadyForExtraction.NOT_READY | true  | null
+        'valid value'    | ReadyForExtraction.READY     | true  | null
+        'valid value'    | ReadyForExtraction.STARTED   | true  | null
+        'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
     }
 
     void "test assayType constraints #desc assayType: '#valueUnderTest'"() {

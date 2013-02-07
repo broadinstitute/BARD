@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,7 +29,7 @@ abstract class AbstractElement {
     Element unit
     String bardURI
     String externalURL
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
 
     Date dateCreated = new Date()
     Date lastUpdated = new Date()
@@ -55,6 +56,7 @@ abstract class AbstractElement {
         id(column: 'ELEMENT_ID', generator: 'sequence', params: [sequence: 'ELEMENT_ID_SEQ'])
         bardURI(column: 'BARD_URI')
         externalURL(column: 'EXTERNAL_URL')
+        readyForExtraction(type: ReadyForExtractionEnumUserType)
     }
 }
 

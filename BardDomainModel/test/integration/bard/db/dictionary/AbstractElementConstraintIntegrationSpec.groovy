@@ -48,8 +48,8 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
         'null not value' | null                     | false | 'nullable'
         'valid value'    | ElementStatus.Pending    | true  | null
         'valid value'    | ElementStatus.Published  | true  | null
-        'valid valude'   | ElementStatus.Deprecated | true  | null
-        'valid valude'   | ElementStatus.Retired    | true  | null
+        'valid value'   | ElementStatus.Deprecated | true  | null
+        'valid value'   | ElementStatus.Retired    | true  | null
     }
 
     void "test label constraints #desc label: '#valueUnderTest'"() {
@@ -219,30 +219,30 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
 
-        final String field = 'readyForExtraction'
+            final String field = 'readyForExtraction'
 
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
+            when: 'a value is set for the field under test'
+            domainInstance[(field)] = valueUnderTest
+            domainInstance.validate()
 
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+            then: 'verify valid or invalid for expected reason'
+            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
+            and: 'verify the domainspreadsheetmapping can be persisted to the db'
+            if (valid) {
+                domainInstance == domainInstance.save(flush: true)
+            }
+
+            where:
+            desc             | valueUnderTest               | valid | errorCode
+            'null not valid' | null                         | false | 'nullable'
+
+            'valid valud'    | ReadyForExtraction.NOT_READY | true  | null
+            'valid value'    | ReadyForExtraction.READY     | true  | null
+            'valid value'    | ReadyForExtraction.STARTED   | true  | null
+            'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
+
         }
-
-        where:
-        desc             | valueUnderTest              | valid | errorCode
-        'null not valid' | null                        | false | 'nullable'
-
-        'valid valud'    | ReadyForExtraction.Pending  | true  | null
-        'valid value'    | ReadyForExtraction.Ready    | true  | null
-        'valid value'    | ReadyForExtraction.Started  | true  | null
-        'valid value'    | ReadyForExtraction.Complete | true  | null
-
-    }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 

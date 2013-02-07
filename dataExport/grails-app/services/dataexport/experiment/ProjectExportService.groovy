@@ -34,7 +34,7 @@ class ProjectExportService extends ExportAbstractService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Project project = Project.findById(id)
-        return utilityService.update(project, id, clientVersion, latestStatus as ReadyForExtraction, "Project")
+        return utilityService.update(project, id, clientVersion, ReadyForExtraction.byId(latestStatus), "Project")
     }
     /**
      * Generate projectStep
@@ -67,7 +67,7 @@ class ProjectExportService extends ExportAbstractService {
         def attributes = [:]
         attributes.put('projectId', project.id)
         if (project.readyForExtraction) {
-            attributes.put('readyForExtraction', project.readyForExtraction.toString())
+            attributes.put('readyForExtraction', project.readyForExtraction.getId())
         }
         if (project.groupType) {
             attributes.put('groupType', project.groupType)
@@ -232,7 +232,7 @@ class ProjectExportService extends ExportAbstractService {
      * @param xml
      */
     public void generateProjects(def markupBuilder) {
-        final List<Project> projects = Project.findAllByReadyForExtraction(ReadyForExtraction.Ready)
+        final List<Project> projects = Project.findAllByReadyForExtraction(ReadyForExtraction.READY)
         final int numberOfProjects = projects.size()
         markupBuilder.projects(count: numberOfProjects) {
             for (Project project : projects) {

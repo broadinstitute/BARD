@@ -1,21 +1,31 @@
-package bard.util;
+package bard.util.app;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.MultiKeyMap;
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.dbutils.QueryRunner;
 import org.dom4j.Document;
 import org.dom4j.Node;
 
+import bard.util.Util;
+import bard.util.dbutil.ColumnConverterHandler;
+
 import edu.scripps.fl.pubchem.web.entrez.EUtilsWebSession;
-import edu.scripps.fl.pubchem.web.entrez.transformer.*;
+import edu.scripps.fl.pubchem.web.entrez.transformer.BioSystemsTransformer;
+import edu.scripps.fl.pubchem.web.entrez.transformer.GeneTransformer;
+import edu.scripps.fl.pubchem.web.entrez.transformer.MeshTransformer;
+import edu.scripps.fl.pubchem.web.entrez.transformer.OmimTransformer;
+import edu.scripps.fl.pubchem.web.entrez.transformer.ProteinOrNucleotideTransformer;
+import edu.scripps.fl.pubchem.web.entrez.transformer.PubMedTransformer;
+import edu.scripps.fl.pubchem.web.entrez.transformer.TaxonomyTransformer;
 
 public class XRefLabelFetch {
 
 	// transformers convert an xml node to a pretty print string. 
-	Map<String, Transformer<Node, String>> dbs = new LinkedHashMap<String,Transformer<Node, String>>() {{
+	Map<String, Transformer> dbs = new LinkedHashMap<String,Transformer>() {{
 			put("biosystems", new BioSystemsTransformer());
 			put("pubmed", new PubMedTransformer(500));
 			put("gene", new GeneTransformer());
@@ -27,26 +37,24 @@ public class XRefLabelFetch {
 			put("taxonomy", new TaxonomyTransformer());
 	}};
 
-	public void process() throws Exception {
+	public MultiKeyMap process() throws Exception {
+		MultiKeyMap map = new MultiKeyMap();
 		for (String db : dbs.keySet()) {
 			// could change this sql statement to get ids from bard measure_context_item directly.
-			List<Long> ids = new QueryRunner().query(Util.getConnection2(),
+			List<Long> ids = (List<Long>) new QueryRunner().query(Util.getConnection(),
 					"select xref_identifier from xref where xref_database = ? and REGEXP_LIKE (xref_identifier, '^\\d+$')", new ColumnConverterHandler(1,
 							Long.class), db);
 			Document doc = EUtilsWebSession.getInstance().getSummariesAsDocument(ids, db);
 			List<Node> docSumNodes = doc.selectNodes("/eSummaryResult/DocumentSummarySet/DocumentSummary");
 			for (Node node : docSumNodes) {
 				String uid = node.valueOf("@uid");
-				String label = dbs.get(db).transform(node);
+				String label = dbs.get(db).transform(node).toString();
 				// field in bard is 500 chars. Pretty much only PubMed articles are longer than this and the transformer has its own solution.
 				if( label.length() > 500 )
 					label = label.substring(0, 496) + "...";
-				System.out.println(String.format("%s\t%s\t%s", uid, db, label));
+				map.put(uid, db, label);
 			}
 		}
-	}
-
-	public static void main(String[] args) throws Exception {
-		new XRefLabelFetch().process();
+		return map;
 	}
 }
