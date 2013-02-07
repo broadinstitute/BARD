@@ -53,7 +53,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Assay"
         when: "We call the assay service to update this assay"
-        this.assayExportService.update(new Long(100000), 0, COMPLETE.toString())
+        this.assayExportService.update(new Long(100000), 0, COMPLETE.getId())
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)

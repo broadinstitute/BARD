@@ -49,7 +49,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Project"
         when: "We call the project service to update this project"
-        this.projectExportService.update(new Long(100000), 0, COMPLETE.toString())
+        this.projectExportService.update(new Long(100000), 0, 'Complete')
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
