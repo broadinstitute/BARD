@@ -152,7 +152,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(eid, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
-        _ * this.queryService.findExperimentDataById(_, _, _, _,_) >> {experimentData}
+        _ * this.queryService.findExperimentDataById(_, _, _, _, _) >> {experimentData}
         assert response.status == statusCode
 
         where:
@@ -168,7 +168,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         Long id = 234
         when:
-        controller.showExperiment(id,NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
+        controller.showExperiment(id, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
         _ * this.queryService.findExperimentDataById(_, _, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
@@ -301,14 +301,26 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
     }
 
-
-    void "test showProbeList"() {
+    void "test showProbeList #label"() {
+        given:
+        params.searchString = searchString
         when:
         controller.showProbeList()
         then:
-        queryService.showProbeList() >> {[facets: "test"]}
+        mobileService.detect(_) >> {withMobile}
+        queryService.showProbeList() >> {resultsMap}
         assert response.status == 200
-        assert response.text.contains('name="totalCompounds" id="totalCompounds"')
+        assert response.text.contains(expectedView)
+
+
+        where:
+        label                                                 | searchString | withMobile | resultsMap                                                                                  | expectedView
+        "With Search String and Compound Adapters"            | "search"     | false      | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | ""
+        "With Search String and Compound Adapters and Mobile" | "search"     | true       | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | 'name="totalCompounds" id="totalCompounds"'
+        "With Search String, no Compound Adapters"            | "search"     | false      | [facets: [], nhits: 0, appliedFilters: [:]]                                                 | ""
+        "With Search String, no Compound Adapters and Mobile" | "search"     | true       | [facets: [], nhits: 0, appliedFilters: [:]]                                                 | 'name="totalCompounds" id="totalCompounds"'
+        "With no Search String"                               | ""           | false      | [compoundAdapters: [buildCompoundAdapter(1234)], facets: [], nhits: 1, appliedFilters: [:]] | ""
+
     }
 
 

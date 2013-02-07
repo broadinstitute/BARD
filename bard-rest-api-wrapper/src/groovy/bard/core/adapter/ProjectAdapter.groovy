@@ -2,16 +2,14 @@ package bard.core.adapter;
 
 
 import bard.core.Probe
-import bard.core.interfaces.EntityNamedSources
 import bard.core.interfaces.ProjectAdapterInterface
-import bard.core.rest.spring.assays.Comp
+import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.ProjectAbstract
+import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
-import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.rest.spring.project.ProjectExpanded
 
 public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
@@ -96,7 +94,8 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     public int getNumberOfAnnotations() {
         return this.annotations.size()
     }
-    public Long getCapProjectId(){
+
+    public Long getCapProjectId() {
         return project.getCapProjectId()
     }
 }

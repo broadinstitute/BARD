@@ -42,6 +42,7 @@ class QueryHelperService {
             'iupac_name': 'IUPAC Name',
             'preferred_term': 'Preferred Term'
     ]
+    final static String PROBE = "PROB"
 
     Map extractMapFromResultData(ResultData resultData, NormalizeAxis normalizeAxis) {
         if (resultData.hasPriorityElements()) {
@@ -134,6 +135,13 @@ class QueryHelperService {
     //filters that starts with a number or '[' to denote ranges
     final static Pattern FILTER_NUMBER_RANGES = Pattern.compile("^(\\d+.*|-\\d+.*)");
 
+    public void matchMLPProbe(final String term,final List<Map<String, String>> autoSuggestTerms){
+        if (term.toUpperCase().contains(PROBE)) {
+            final String label = "${term} as <strong> ML Probe</strong>"
+            final String value = "ML_Probes"
+            autoSuggestTerms.add([label: label, value: value])
+        }
+    }
     /**
      *
      * @param term
@@ -141,8 +149,11 @@ class QueryHelperService {
      * @return the list of maps to use for auto suggest
      */
     public List<Map<String, String>> autoComplete(final String term, final Map<String, List<String>> autoSuggestResponseFromJDO) {
-
         final List<Map<String, String>> autoSuggestTerms = []
+        if (term) {
+           matchMLPProbe(term,autoSuggestTerms)
+        }
+
 
         for (String key : autoSuggestResponseFromJDO.keySet()) {
             if (AUTO_SUGGEST_FILTERS.containsKey(key)) {
@@ -153,6 +164,7 @@ class QueryHelperService {
         }
         //we insert what the user has typed back into the map
         autoSuggestTerms.add(0, [label: term, value: term])
+        //if the term is ML_Pro
         return autoSuggestTerms
     }
     /**

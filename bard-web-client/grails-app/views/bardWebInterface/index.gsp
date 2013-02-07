@@ -44,6 +44,8 @@
         also <a href="http://bard.nih.gov">contribute</a> your own bioassay data, <a href="http://bard.nih.gov">install</a>
             a local copy of BARD, or extend the system by writing a <a href="http://bard.nih.gov">plug-in</a>.
         </p>
+        <p>To View a List of <g:link controller="bardWebInterface" action="search" params='[searchString:"ML_Probes"]'>All MLP Probes</g:link>
+        </p>
         <p>Example search queries:
             <ul class="examples">
                 <li><g:link controller="bardWebInterface" action="search" params='[searchString:"\"dna repair\""]'>"dna repair"</g:link> - search all documents and annotations attached to assay definitions, compounds, and projects for the phrase "dna repair"</li>
