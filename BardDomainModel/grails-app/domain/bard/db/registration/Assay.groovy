@@ -12,6 +12,9 @@ class Assay extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
+    public static String TEMPLATE_ASSAY_TYPE = "Template"
+    public static String RETIRED_ASSAY_TYPE = "Retired"
+
     AssayStatus assayStatus = AssayStatus.Pending
     String assayShortName
     String assayName

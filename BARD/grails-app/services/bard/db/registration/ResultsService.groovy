@@ -156,7 +156,13 @@ class ResultsService {
         def errors = []
 
         void addError(int line, int column, String message) {
-            errors << "${line}:${column} ${message}"
+            if (!tooMany()) {
+                if (line != 0) {
+                    errors << "On line ${line}, column ${column+1}: ${message}"
+                } else {
+                    errors << message
+                }
+            }
         }
 
         boolean hasErrors() {
@@ -205,6 +211,7 @@ class ResultsService {
     }
 
     ItemService itemService
+    PugService pugService
 
     Template generateMaxSchema(Experiment experiment) {
         def assay = experiment.assay
@@ -585,6 +592,10 @@ class ResultsService {
         def measuresPerContextItem = findRelationships(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template)
+
+        def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
+        missingSids.each { errors.addError(0,0, "Could not find substance with id ${it}")}
+
         def results = createResults(parsed, errors, measuresPerContextItem)
 
         errors.resultsCreated = results.size()

@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
 
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
+        runtime 'commons-net:commons-net:3.2'
 
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
