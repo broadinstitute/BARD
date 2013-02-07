@@ -13,7 +13,6 @@ import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -69,7 +68,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -98,7 +96,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -122,7 +119,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -144,7 +140,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -167,7 +162,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -188,7 +182,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -210,7 +203,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
@@ -221,7 +213,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
     }
 
-    @IgnoreRest
     void "test generate Project #label"() {
         given: "A Project"
         map << [readyForExtraction: READY]   // in this test always setting readyForExtraction to Ready
@@ -240,10 +231,6 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
-        println("expected")
-        println(results)
-        println("actual")
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 

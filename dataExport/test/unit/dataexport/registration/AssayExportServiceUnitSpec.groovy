@@ -55,8 +55,6 @@ class AssayExportServiceUnitSpec extends Specification {
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
-        println("expected: $results")
-        println("actualXml: $actualXml")
         XmlTestAssertions.assertResults(results, actualXml)
 //        XmlTestAssertions.validate(schemaResource, actualXml)
 

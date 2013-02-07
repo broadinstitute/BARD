@@ -167,7 +167,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
         when:
         this.dictionaryExportHelperService.generateStages(this.markupBuilder)
-        println(this.writer.toString())
 
         then:
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
@@ -204,7 +203,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         this.dictionaryExportHelperService.generateLabs(this.markupBuilder)
 
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
 
         where:
@@ -234,7 +232,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
                 multiplier: 1000)
 
         when:
-        println(this.writer.toString())
         this.dictionaryExportHelperService.generateDictionary(this.markupBuilder)
         then:
 

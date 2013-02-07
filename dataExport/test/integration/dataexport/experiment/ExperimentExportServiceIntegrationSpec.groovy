@@ -59,7 +59,6 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(expectedXml, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
@@ -112,7 +111,6 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
@@ -125,7 +123,6 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 

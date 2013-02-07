@@ -813,7 +813,7 @@ class XmlTestSamples {
 '''
 
     static String ASSAY_FULL_DOC = '''
-        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Pending'>
+        <assay assayId='1' readyForExtraction='Not Ready' assayVersion='assayVersi' assayType='Regular' status='Draft'>
           <assayShortName>assayShortName</assayShortName>
           <assayName>assayName</assayName>
           <assayContexts>

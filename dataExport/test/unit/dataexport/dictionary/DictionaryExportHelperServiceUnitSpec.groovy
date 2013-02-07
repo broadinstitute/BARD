@@ -139,8 +139,8 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         this.dictionaryExportHelperService.generateUnit(this.markupBuilder, unit)
 
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
         label                      | unit                                                                                                                                          | results
         "Full Unit element"        | new UnitTree(element: new Element(label: "cm", description: "Centimetres"), parent: new UnitTree(element: new Element(label: 'length unit'))) | XmlTestSamples.SINGLE_UNIT
@@ -214,10 +214,10 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
 
         when:
         this.dictionaryExportHelperService.generateDescriptor(this.markupBuilder, descriptor)
-        then:
-        println(this.writer.toString())
 
+        then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
         label              | descriptor                                                                                                                                                                            | results
         "Assay descriptor" | new AssayDescriptor(element: new Element(label: "assay", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Element(label: 'cm'))) | XmlTestSamples.ASSAY_DESCRIPTOR_UNIT
