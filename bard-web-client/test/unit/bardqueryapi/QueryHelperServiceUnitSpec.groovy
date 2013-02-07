@@ -88,6 +88,21 @@ class QueryHelperServiceUnitSpec extends Specification {
         "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [priorityDisplay: display, dictionaryId: '211', hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
     }
 
+    void "matchMLProbe #label"() {
+        when:
+        service.matchMLPProbe(term, autoSuggestTerms)
+        then:
+        assert expectedMapSize == autoSuggestTerms.size()
+
+        where:
+        label                  | term    | autoSuggestTerms | expectedMapSize
+        "Has Probe in name"    | "Probe" | []               | 1
+        "Has Prob in name"     | "Prob"  | []               | 1
+        "Does not match Probe" | "some"  | []               | 0
+
+
+    }
+
     void "test extractPriorityDisplayDescription #label"() {
         given:
         DataExportRestService dataExportRestService = Mock(DataExportRestService)
@@ -177,8 +192,6 @@ class QueryHelperServiceUnitSpec extends Specification {
     }
 
     void "test Auto Complete #label"() {
-        given: "map of possible filters"
-        final Map<String, List<String>> autoSuggestResponseFromJDO = [gobp_term: ["Go Biological Process"]]
         when: "#label"
         List<Map<String, String>> autoCompleteResults = service.autoComplete(term, autoSuggestResponseFromJDO)
 
@@ -186,11 +199,12 @@ class QueryHelperServiceUnitSpec extends Specification {
         expectedResults == autoCompleteResults
 
         where:
-        label                                          | currentAutoSuggestKey | term         | expectedResults
-        "Term exist in filters Map"                    | "gobp_term"           | "DNA Repair" | [[label: "DNA Repair", value: "DNA Repair"], GO_TERM]
-        "Current Suggest Key is null"                  | ""                    | "gobp_term"  | [[label: "gobp_term", value: "gobp_term"], GO_TERM]
-        "Term is null"                                 | "target_name:String"  | ""           | [EMPTY_LABEL, GO_TERM]
-        "Current Suggest Key is null and Term is null" | ""                    | ""           | [EMPTY_LABEL, GO_TERM]
+        label                                          | term         | expectedResults                                       | autoSuggestResponseFromJDO
+        "Term exist in filters Map"                    | "DNA Repair" | [[label: "DNA Repair", value: "DNA Repair"], GO_TERM] | [gobp_term: ["Go Biological Process"]]
+        "Term does not exist in filters Map"           | "stuff"      | [[label: "stuff", value: "stuff"]]                    | [some_term: ["Some Process"]]
+        "Current Suggest Key is null"                  | "gobp_term"  | [[label: "gobp_term", value: "gobp_term"], GO_TERM]   | [gobp_term: ["Go Biological Process"]]
+        "Term is null"                                 | ""           | [EMPTY_LABEL, GO_TERM]                                | [gobp_term: ["Go Biological Process"]]
+        "Current Suggest Key is null and Term is null" | ""           | [EMPTY_LABEL, GO_TERM]                                | [gobp_term: ["Go Biological Process"]]
 
     }
     /**

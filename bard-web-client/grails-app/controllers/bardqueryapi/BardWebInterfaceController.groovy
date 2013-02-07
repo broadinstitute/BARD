@@ -64,7 +64,7 @@ class BardWebInterfaceController {
     def searchResults() {
     }
 
-    def showExperiment(Long id, String normalizeYAxis,String activityOutcome) {
+    def showExperiment(Long id, String normalizeYAxis, String activityOutcome) {
 
         if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
             return
@@ -74,8 +74,8 @@ class BardWebInterfaceController {
             Map<String, Integer> searchParams = handleSearchParams()
             final Integer top = searchParams.top
             final Integer skip = searchParams.skip
-            NormalizeAxis normalizeAxis = normalizeYAxis?normalizeYAxis as NormalizeAxis:NormalizeAxis.Y_NORM_AXIS
-            ActivityOutcome outcome = activityOutcome?activityOutcome as ActivityOutcome:ActivityOutcome.ALL
+            NormalizeAxis normalizeAxis = normalizeYAxis ? normalizeYAxis as NormalizeAxis : NormalizeAxis.Y_NORM_AXIS
+            ActivityOutcome outcome = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
 
             final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
             final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
@@ -234,7 +234,7 @@ class BardWebInterfaceController {
  * Given a list of ProjectSearchResult ids, invoke this action
  */
     def searchProjectsByIDs(SearchCommand searchCommand) {
-        if (isHTTPBadRequest(searchCommand.searchString, 'Search String is required for project search by Ids',bardUtilitiesService.username)) {
+        if (isHTTPBadRequest(searchCommand.searchString, 'Search String is required for project search by Ids', bardUtilitiesService.username)) {
             return
         }
         try {
@@ -373,7 +373,7 @@ class BardWebInterfaceController {
  */
     def showAssay(Integer assayProtocolId) {
         Integer assayId = assayProtocolId ?: params.id as Integer//if 'assay' param is provided, use that; otherwise, try the default id one
-        if (isHTTPBadRequest(assayId, "Assay Id is required",bardUtilitiesService.username)) {
+        if (isHTTPBadRequest(assayId, "Assay Id is required", bardUtilitiesService.username)) {
             return
         }
         try {
@@ -393,7 +393,7 @@ class BardWebInterfaceController {
         }
         catch (HttpClientErrorException httpClientErrorException) {
             String message = "Could not find Assay with ID ${assayId}"
-            handleClientInputErrors(httpClientErrorException, message,bardUtilitiesService.username)
+            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
         }
         catch (Exception exp) {
             final String errorMessage = "Search For Assay Id ${assayId}:\n${exp.message}"
@@ -485,8 +485,19 @@ class BardWebInterfaceController {
 
     def showProbeList() {
         Map results = queryService.showProbeList()
-        results.put("searchString", flash.searchString)
-        render(template: "/mobile/bardWebInterface/compounds", model: results)
+        if (params.searchString) {
+            results.put("searchString", params.searchString)
+        }
+        String template = isMobile() ? "/mobile/bardWebInterface/compounds" : "compounds"
+        render(template: template,
+                model: [
+                        compoundAdapters: results.compoundAdapters,
+                        facets: [],
+                        nhits: results.compoundAdapters?.size(),
+                        appliedFilters: [:]
+                ]
+        )
+
     }
 
 }

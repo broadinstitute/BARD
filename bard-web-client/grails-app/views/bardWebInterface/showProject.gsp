@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Project : ID ${projectAdapter?.id}</title>
+    <title>BARD : Project : ID ${projectAdapter?.capProjectId}</title>
     <r:require modules="showProjectAssay,compoundOptions,twitterBootstrapAffix"/>
 </head>
 
@@ -15,7 +15,7 @@
             <g:if test="${projectAdapter.hasProbes()}">
                 <span class="badge badge-info">Probe</span>
             </g:if>
-            <small>(Project ID: ${projectAdapter?.id})</small></h1>
+            <small>(Project ID: ${projectAdapter?.capProjectId})</small></h1>
         <g:saveToCartButton id="${projectAdapter?.id}"
                             name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
                             type="${querycart.QueryItemType.Project}"/>

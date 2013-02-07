@@ -301,6 +301,11 @@ function handleMainFormSubmit(searchString) {
             showTab("compounds");
             handleSearch('/bardwebclient/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
+        case 'PROBES':
+            activateCurrentTab('compoundsTab');
+            showTab("compounds");
+            handleSearch('/bardwebclient/bardWebInterface/showProbeList', 'searchForm', 'compoundsTab', 'totalCompounds', 'Probes ', 'compounds');
+            break;
         case 'PID':
             activateCurrentTab('projectsTab');
             // $("#projects").tab('show');
@@ -423,6 +428,10 @@ function findSearchType(searchString) {
     if ($.trim(searchString).match(SMILES_MATCHING_REGEX)) {
 
         return "STRUCTURE"
+    }
+    if ($.trim(searchString).toUpperCase()=='ML_PROBES') {
+
+        return "PROBES"
     }
     //we want to find out if this is a Structure search
     var searchStringSplit = searchString.split(":");

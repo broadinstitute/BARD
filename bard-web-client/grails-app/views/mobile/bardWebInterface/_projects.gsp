@@ -12,7 +12,7 @@
                 <li>
                 %{--<h3>--}%
                     <g:link action="showProject" id="${projectAdapter.id}"
-                            params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                            params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                 %{--</h3>--}%
                     <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                         <dl>
