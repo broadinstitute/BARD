@@ -56,4 +56,10 @@ modules = {
         resource url: "/js/select2-release-3.2/select2.css"
         resource url: "/js/select2-release-3.2/select2.js"
     }
+
+    richtexteditor{
+        resource url: "/js/nicedit/nicEdit.js"
+        resource url: "/js/cap/editDocument.js"
+        resource url: "/images/nicedit/nicEditorIcons.gif"
+    }
 }
