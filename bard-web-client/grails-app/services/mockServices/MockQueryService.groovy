@@ -508,12 +508,12 @@ class MockQueryService implements IQueryService {
      * @param skip
      * @return of compounds
      */
-    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Double threshold, Integer top, Integer skip, Integer nhits) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
 
     @Override
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, Double threshold, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits) {
         return findCompoundsByTextSearch("", 10, 0, searchFilters)
     }
     //===================== Find Resources given a list of IDs ================================
@@ -801,6 +801,21 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
 
     @Override
     Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis, ActivityOutcome activityOutcme) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Map findAssaysByCapIds(List<Long> capAssayIds, Integer top, Integer skip, List<SearchFilter> searchFilters) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Map findProjectsByCapIds(List<Long> capProjectIds, Integer top, Integer skip, List<SearchFilter> searchFilters) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Map searchCompoundsByCids(List<Long> cids, Integer top, Integer skip, List<SearchFilter> searchFilters) {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

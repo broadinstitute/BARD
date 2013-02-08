@@ -9,9 +9,8 @@ import bard.core.interfaces.AssayType
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
-
-import spock.lang.Unroll
 import spock.lang.Shared
+import spock.lang.Unroll
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -133,7 +132,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search with CIDS #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(cid, structureSearchParamsType, [], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(cid, structureSearchParamsType, 0.90,[], top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -152,7 +151,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], 0.90,top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -177,7 +176,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test SubStructure Search #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [],0.90, top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -246,6 +245,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         "Search with a list of CIDs" | [3235555, 3235556, 3235557, 3235558, 3235559, 3235560, 3235561, 3235562, 3235563, 3235564]
     }
 
+    void "test search compounds Ids #label"() {
+        when:
+        final Map compoundAdapterMap = queryService.searchCompoundsByCids(cids, top, skip, filters)
+        then:
+        List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+        assert numberOfCompounds == compoundAdapters.size()
+        assert numberOfCompounds == compoundAdapterMap.nHits
+
+        where:
+        label                      | cids            | skip | top | numberOfCompounds | filters
+        "Cap ID List"              | [2554, 3549980] | 0    | 10  | 2                 | []
+        "Empty Cap ID List"        | []              | 0    | 10  | 0                 | []
+        "Cap ID List with Filters" | [2554, 3549980] | 0    | 10  | 1                 | [new SearchFilter("mwt", "[100 TO 200]")]
+
+    }
+
     void "test find Assays By Text Search String #label"() {
         when: ""
         final Map assayAdapterMap = queryService.findAssaysByTextSearch(searchString, top, skip, filters)
@@ -265,6 +280,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
+
+    void "test find Assays Cap Ids #label"() {
+        when:
+        final Map assayAdapterMap = queryService.findAssaysByCapIds(capIDs, top, skip, filters)
+        then:
+        List<AssayAdapter> assayAdapters = assayAdapterMap.assayAdapters
+        assert numberOfAssays == assayAdapters.size()
+        assert numberOfAssays == assayAdapterMap.nHits
+
+        where:
+        label                      | capIDs             | skip | top | numberOfAssays | filters
+        "Cap ID List"              | [2934, 2945, 2946] | 0    | 10  | 3              | []
+        "Empty Cap ID List"        | []                 | 0    | 10  | 0              | []
+        "Cap ID List with Filters" | [2934, 2945, 2946] | 0    | 10  | 1              | [new SearchFilter("target_name", "Coagulation factor XII")]
+
+    }
 
     void "test find Assays By ADIDs #label"() {
         when: ""
@@ -292,9 +323,26 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.facets
         assert projectAdapterMap.nHits > 0
         where:
-        label                     | searchString         | skip | top | filters
-        "dna repair"              | "\"dna repair\""     | 0    | 10  | []
-        "biological process"      | "biological process" | 0    | 10  | []
+        label                | searchString         | skip | top | filters
+        "dna repair"         | "\"dna repair\""     | 0    | 10  | []
+        "biological process" | "biological process" | 0    | 10  | []
+    }
+
+    void "test find Projects Cap Ids #label"() {
+        when:
+        final Map projectAdapterMap = queryService.findProjectsByCapIds(capIDs, top, skip, filters)
+        then:
+        List<ProjectAdapter> projectAdapters = projectAdapterMap.projectAdapters
+        assert numberOfProjects == projectAdapters.size()
+        assert numberOfProjects == projectAdapterMap.nHits
+
+        where:
+        label                             | capIDs     | skip | top | numberOfProjects | filters
+        "Cap ID List"                     | [724, 246] | 0    | 10  | 2                | []
+        "Empty Cap ID List"               | []         | 0    | 10  | 0                | []
+        "Cap ID List with Filters"        | [724, 246] | 0    | 10  | 1                | [new SearchFilter("target_name", "Sentrin-specific protease 7")]
+        "Cap ID List with Number Filters" | [724, 246] | 0    | 10  | 2                | [new SearchFilter("num_expt", "[10 TO *]")]
+
     }
 
     void "test find Projects By PIDs #label"() {

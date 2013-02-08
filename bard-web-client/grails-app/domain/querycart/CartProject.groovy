@@ -1,8 +1,5 @@
 package querycart
 
-import bardqueryapi.IQueryService
-import bard.core.adapter.ProjectAdapter
-
 class CartProject extends QueryItem {
 
     CartProject() {

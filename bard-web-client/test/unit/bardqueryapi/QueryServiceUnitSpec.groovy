@@ -382,7 +382,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         final CompoundResult expandedCompoundResult = new CompoundResult(compounds: [new Compound(smiles: smiles)])
         when:
-        service.structureSearch(smiles, structureSearchParamsType, [], 10, 0, 10)
+        service.structureSearch(smiles, structureSearchParamsType, [], 90, 10, 0, 10)
         then:
         compoundRestService.structureSearch(_) >> {expandedCompoundResult}
 
@@ -457,6 +457,28 @@ class QueryServiceUnitSpec extends Specification {
         ""                   | compoundAdapterMap2
 
     }
+
+    /**
+     * {@link QueryService#searchCompoundsByCids}
+     *
+     */
+    void "test Find Compounds by CIds #label"() {
+        given:
+        final CompoundResult compoundResult = Mock(CompoundResult)
+        when:
+        Map map = service.searchCompoundsByCids(cids, 10, 0, [])
+        then:
+
+        compoundRestService.searchCompoundsByCids(_, _) >> {compoundResult}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
+        queryHelperService.compoundsToAdapters(_) >> {compoundAdapter}
+        assert map.compoundAdapters.size() == foundMap.compoundAdapters.size()
+        where:
+        label                | cids      | foundMap            | compoundAdapter
+        "With Cap Ids"       | [1, 2, 3] | compoundAdapterMap1 | [new CompoundAdapter(compound1)]
+        "With empty Cap IDs" | []        | compoundAdapterMap2 | null
+
+    }
     /**
      * {@link QueryService#findCompoundsByTextSearch(String)}
      *
@@ -506,6 +528,27 @@ class QueryServiceUnitSpec extends Specification {
 
     }
     /**
+     * {@link QueryService#findAssaysByCapIds}
+     *
+     */
+    void "test Find Assays By Cap Ids #label"() {
+        given:
+        AssayResult assayResult = Mock(AssayResult)
+        when:
+        Map map = service.findAssaysByCapIds(capIds, 10, 0, [])
+        then:
+
+        assayRestService.searchAssaysByCapIds(_, _) >> {assayResult}
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
+        queryHelperService.assaysToAdapters(_) >> {[assayAdapter]}
+        assert map.assayAdapters.size() == foundMap.assayAdapters.size()
+        where:
+        label                | capIds    | foundMap         | assayAdapter
+        "With Cap Ids"       | [1, 2, 3] | assayAdapterMap1 | [new AssayAdapter(assay1)]
+        "With empty Cap IDs" | []        | assayAdapterMap2 | null
+
+    }
+    /**
      * {@link QueryService#findAssaysByTextSearch(String, Integer, Integer, List)}
      *
      */
@@ -552,7 +595,25 @@ class QueryServiceUnitSpec extends Specification {
         "Some Search String" | projectAdapterMap1 | [new ProjectAdapter(project1)]
         ""                   | projectAdapterMap2 | null
     }
-
+    /**
+     * {@link QueryService#findProjectsByCapIds}
+     *
+     */
+    void "test Find Projects by CAP IDs #label"() {
+        given:
+        ProjectResult projectResult = Mock(ProjectResult)
+        when:
+        Map map = service.findProjectsByCapIds(capIds, 10, 0, [])
+        then:
+        _ * projectRestService.searchProjectsByCapIds(_, _, _) >> {projectResult}
+        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
+        _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
+        assert map.projectAdapters.size() == foundMap.projectAdapters.size()
+        where:
+        label               | capIds    | foundMap           | projectAdapter
+        "With Cap IDs"      | [123, 34] | projectAdapterMap1 | [new ProjectAdapter(project1)]
+        "With Empty CapIds" | []        | projectAdapterMap2 | null
+    }
     /**
      * {@link QueryService#findProjectsByTextSearch(String)}
      *

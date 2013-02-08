@@ -147,27 +147,33 @@ class BardWebInterfaceController {
         }
 
         try {
+
             String originalSearchString = searchCommand.searchString
             final String[] searchStringSplit = searchCommand.searchString.split(":")
-            if (searchStringSplit.length == 2) {  //if the search string is of the form CID:1234,3456...
+            if (searchStringSplit.length == 2) {  //if the search string is of the form ADID:1234,3456...
                 final String searchTypeString = searchStringSplit[0]
                 final String ids = searchStringSplit[1]
                 handleIdSearchInput(searchTypeString, ids, "CID", "Input String start with CID:", "Please enter CIDs after the string CID:")
-                //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
-
-            //we want to remove the duplicates from the search string
-            // removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
-            this.queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            Map<String, Integer> searchParams = handleSearchParams()
 
             //strip out all spaces
-            final List<Long> cids = searchStringToIdList(searchCommand.searchString)
+            final List<Long> compoundIds = searchStringToIdList(searchCommand.searchString)
+            int top = compoundIds.size()
+            int skip = searchParams.skip
 
-            Map compoundAdapterMap = this.queryService.findCompoundsByCIDs(cids, searchFilters)
+            final List<Long> cids = []
+            for (def id : compoundIds) {
+                cids.add(new Long(id))
+            }
 
+            Map compoundAdapterMap = this.queryService.searchCompoundsByCids(cids, top, skip, searchFilters)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
+
             render(template: 'compounds', model: [
                     compoundAdapters: compoundAdapters,
                     facets: compoundAdapterMap.facets,
@@ -205,16 +211,21 @@ class BardWebInterfaceController {
                 handleIdSearchInput(searchTypeString, ids, "ADID", "Input String start with ADID:", "Please enter Assay Ids after the string ADID:")
                 searchCommand.searchString = ids
             }
-
-            //we want to remove the duplicates from the search string
-            //removeDuplicatesFromSearchString(searchCommand)
-            //after removing duplicates, reassign
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            Map<String, Integer> searchParams = handleSearchParams()
 
             final List<Long> adids = searchStringToIdList(searchCommand.searchString)
-            final Map assayAdapterMap = this.queryService.findAssaysByADIDs(adids, searchFilters)
+            int top = adids.size()
+            int skip = searchParams.skip
+            final List<Long> capIds = []
+            for (def id : adids) {
+                capIds.add(new Long(id))
+            }
 
-            render(template: 'assays', model: [
+            final Map assayAdapterMap = this.queryService.findAssaysByCapIds(capIds, top, skip, searchFilters)
+            render(template: "assays", model: [
                     assayAdapters: assayAdapterMap.assayAdapters,
                     facets: assayAdapterMap.facets,
                     nhits: assayAdapterMap.nHits,
@@ -241,8 +252,10 @@ class BardWebInterfaceController {
             return
         }
         try {
+
             String originalSearchString = searchCommand.searchString
             final String[] searchStringSplit = searchCommand.searchString.split(":")
+
             if (searchStringSplit.length == 2) {  //if the search string is of the form PID:1234,3456...
                 final String searchTypeString = searchStringSplit[0]
                 final String ids = searchStringSplit[1]
@@ -250,13 +263,19 @@ class BardWebInterfaceController {
                 //assign the list of ids only to the command object
                 searchCommand.searchString = ids
             }
-
-            //we want to remove the duplicates from the search string
-            //removeDuplicatesFromSearchString(searchCommand)
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
+            Map<String, Integer> searchParams = handleSearchParams()
 
             final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
-            Map projectAdapterMap = this.queryService.findProjectsByPIDs(projectIds, searchFilters)
+            int top = projectIds.size()
+            int skip = searchParams.skip
+            final List<Long> capIds = []
+            for (def id : projectIds) {
+                capIds.add(new Long(id))
+            }
+            Map projectAdapterMap = this.queryService.findProjectsByCapIds(capIds, top, skip, searchFilters)
             render(template: 'projects', model: [
                     projectAdapters: projectAdapterMap.projectAdapters,
                     facets: projectAdapterMap.facets,
@@ -488,8 +507,19 @@ class BardWebInterfaceController {
 
     def showProbeList() {
         Map results = queryService.showProbeList()
-        results.put("searchString", flash.searchString)
-        render(template: "/mobile/bardWebInterface/compounds", model: results)
+        if (params.searchString) {
+            results.put("searchString", params.searchString)
+        }
+        String template = isMobile() ? "/mobile/bardWebInterface/compounds" : "compounds"
+        render(template: template,
+                model: [
+                        compoundAdapters: results.compoundAdapters,
+                        facets: [],
+                        nhits: results.compoundAdapters?.size(),
+                        appliedFilters: [:]
+                ]
+        )
+
     }
 
     def jsDrawEditor() {}
@@ -500,6 +530,8 @@ class BardWebInterfaceController {
  */
 @Mixin(InetAddressUtil)
 class SearchHelper {
+    final String THRESHOLD_STRING = "THRESHOLD"
+
     void handleIdSearchInput(String searchTypeString, String ids, String prefix, String messageForPrefix, String messageForIds) {
         if (!prefix.equals(searchTypeString.trim().toUpperCase())) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, messageForPrefix)
@@ -517,21 +549,31 @@ class SearchHelper {
         final Integer nhits = searchParams.nhits
 
         removeDuplicatesFromSearchString(searchCommand)
+        //if the string contains similarity and threshold exists then strip it
         final String[] searchStringSplit = searchCommand.searchString.split(":")
-        if (searchStringSplit.length == 2) {
+
+
+        if (searchStringSplit.length >= 2) {
+            String thresholdValue = "90"
+            final String searchTypeString = searchStringSplit[0].trim()
+            final String inputAfterColon = searchStringSplit[1].trim()
+
+            if (searchCommand.searchString.toUpperCase().contains(THRESHOLD_STRING) && searchCommand.searchString.toUpperCase().contains(StructureSearchParams.Type.Similarity.toString().toUpperCase())) {
+                inputAfterColon = searchStringSplit[1].toUpperCase().replaceAll(THRESHOLD_STRING, "").trim()
+                thresholdValue = searchStringSplit[2].trim()
+            }
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
-            final String searchTypeString = searchStringSplit[0]
-            final String inputAfterColon = searchStringSplit[1]
             //if smiles is a number then assume that is is a CID
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
+
             Map compoundAdapterMap = null
             if (inputAfterColon.isInteger()) { //we assume that this is a CID
-                compoundAdapterMap = queryService.structureSearch(new Integer(inputAfterColon), searchType, searchFilters, top, skip, nhits)
+                compoundAdapterMap = queryService.structureSearch(new Integer(inputAfterColon), searchType, new Double(thresholdValue)/100, searchFilters, top, skip, nhits)
             } else {
-                compoundAdapterMap = queryService.structureSearch(inputAfterColon, searchType, searchFilters, top, skip, nhits)
+                compoundAdapterMap = queryService.structureSearch(inputAfterColon, searchType, searchFilters, new Double(thresholdValue)/100, top, skip, nhits)
             }
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [

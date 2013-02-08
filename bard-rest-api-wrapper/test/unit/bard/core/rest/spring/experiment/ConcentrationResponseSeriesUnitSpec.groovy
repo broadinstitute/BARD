@@ -132,6 +132,44 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
 
     }
 
+    void "sortedActivities"() {
+        given:
+        ConcentrationResponseSeries concentrationResponseSeries =
+            new ConcentrationResponseSeries(concentrationResponsePoints:
+                    [
+                            new ConcentrationResponsePoint(value: null, testConcentration: 2.0),
+                            new ConcentrationResponsePoint(value: "3", testConcentration: 3.0),
+                            new ConcentrationResponsePoint(value: "2", testConcentration: 2.0)
+                    ])
+
+        when:
+        final List<Double> activities = concentrationResponseSeries.sorterdActivities()
+        then:
+        assert activities
+        assert activities.size() == 2
+        assert activities.get(0) < activities.get(1)
+
+    }
+
+    void toDoseResponsePoints() {
+        given:
+        ConcentrationResponseSeries concentrationResponseSeries =
+            new ConcentrationResponseSeries(concentrationResponsePoints:
+                    [
+                            new ConcentrationResponsePoint(value: null, testConcentration: 2.0),
+                            new ConcentrationResponsePoint(value: "3", testConcentration: 3.0),
+                            new ConcentrationResponsePoint(value: "2", testConcentration: 2.0)
+                    ])
+
+
+        when:
+        final Map<String, List<Double>> points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        then:
+        assert points.activities.size() == 2
+        assert points.concentrations.size() == 2
+
+    }
+
 
 }
 

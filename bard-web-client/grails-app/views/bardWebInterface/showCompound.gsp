@@ -34,8 +34,11 @@
             <dd>
                 <div class="activeVrsTested">
                     <div>
-                        <span class="badge badge-info">${compound?.numberOfActiveAssays} / ${compound?.numberOfAssays}</span>
-                    </div>
+                        <span class="badge badge-info">
+                            <g:link controller="molSpreadSheet" action="showExperimentDetails" style="color: white; text-decoration: underline"
+                                    params="[cid: compound.pubChemCID, transpose: true]">${compound?.numberOfActiveAssays}</g:link>
+                            /${compound?.numberOfAssays}</span>
+                   </div>
 
                 </div>
             </dd>

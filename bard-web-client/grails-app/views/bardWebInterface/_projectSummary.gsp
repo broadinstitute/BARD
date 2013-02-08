@@ -1,7 +1,7 @@
 <dl class="dl-horizontal">
     <g:if test="${projectAdapter?.id}">
         <dt>ID:</dt>
-        <dd>${projectAdapter.id}</dd>
+        <dd>${projectAdapter.capProjectId}</dd>
     </g:if>
     <g:if test="${projectAdapter?.name}">
         <dt>Name:</dt>

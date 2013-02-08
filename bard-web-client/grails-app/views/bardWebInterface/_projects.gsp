@@ -15,11 +15,11 @@
                 <h3>
                     <g:if test="${searchString}">
                         <g:link action="showProject" id="${projectAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                                params='[searchString: "${searchString}"]'>${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                     </g:if>
                     <g:else>
                         <g:link action="showProject"
-                                id="${projectAdapter.id}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.id})</small></g:link>
+                                id="${projectAdapter.id}">${projectAdapter.name} <small>(Project ID: ${projectAdapter.capProjectId})</small></g:link>
                     </g:else>
 
                 </h3>
@@ -38,7 +38,14 @@
                 <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                     <dl>
                         <dt>Number Of Experiments:</dt>
-                        <dd><span class="badge badge-info">${projectAdapter.getNumberOfExperiments()}</span></dd>
+                        <dd>
+                            <span class="badge badge-info">
+                                <a href="/bardwebclient/bardWebInterface/showProject/${projectAdapter.id}#experiments-info"
+                                   style="color: white; text-decoration: underline">
+                                    ${projectAdapter.getNumberOfExperiments()}
+                                </a>
+                            </span>
+                        </dd>
                     </dl>
                 </g:if>
             </li>

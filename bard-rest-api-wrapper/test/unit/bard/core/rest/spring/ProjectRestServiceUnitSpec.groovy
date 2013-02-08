@@ -3,13 +3,13 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.assays.BardAnnotation
 
 @Unroll
 @TestFor(ProjectRestService)
@@ -26,8 +26,67 @@ class ProjectRestServiceUnitSpec extends Specification {
         service.loggerService = this.loggerService
     }
 
-    void tearDown() {
-        // Tear down logic here
+    void "searchProjectsByCapIds #label"() {
+        when:
+        ProjectResult projectResult = service.searchProjectsByCapIds(capIds, searchParams, etags)
+        then:
+        restTemplate.getForObject(_, _) >> {new ProjectResult()}
+        assert (projectResult != null) == expected
+        where:
+        label        | searchParams                       | etags          | capIds | expected
+        "With ETags" | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | []     | true
+
+    }
+
+
+    void "searchProjectsByCapIds(searchParams, etags) #label"() {
+        when:
+        ProjectResult projectResult = service.searchProjectsByCapIds(searchParams, etags)
+        then:
+        restTemplate.getForObject(_, _) >> {new ProjectResult()}
+        assert (projectResult != null) == expected
+        where:
+        label           | searchParams                       | etags          | expected
+        "With ETags"    | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | true
+        "With No ETags" | new SearchParams(skip: 0, top: 10) | [:]            | false
+
+    }
+
+    void "searchProjectsByCapIds(final List<Long> capIds, final SearchParams searchParams) #label"() {
+        when:
+        ProjectResult projectResult = service.searchProjectsByCapIds(capIds, searchParams)
+        then:
+        assert (projectResult != null) == expected
+        where:
+        label             | searchParams                       | capIds | expected
+        "With No Cap IDs" | new SearchParams(skip: 0, top: 10) | []     | false
+
+    }
+
+    void "buildQueryForETag #label"() {
+        when:
+        final String resourceURL = service.buildQueryForETag(searchParams, etag)
+        then:
+        assert resourceURL == expectedURL
+        where:
+        label            | searchParams                       | etag  | expectedURL
+        "With ETag"      | new SearchParams(skip: 0, top: 10) | "123" | "http://ncgc/projects/etag/123?skip=0&top=10&expand=true"
+        "With Null ETag" | new SearchParams(skip: 0, top: 10) | null  | ""
+
+    }
+
+    void "buildSearchByCapIdURLs #label"() {
+
+        when:
+        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams,"capProjectId:")
+        then:
+        assert resourceURL == expectedURL
+        where:
+        label           | searchParams                       | capIds | expectedURL
+        "Two CAP Ids"   | new SearchParams(skip: 0, top: 10) | [1, 2] | "http://ncgc/search/projects/?q=capProjectId%3A1+or+capProjectId%3A2&skip=0&top=10&expand=true"
+        "Single CAP ID" | new SearchParams(skip: 0, top: 10) | [1]    | "http://ncgc/search/projects/?q=capProjectId%3A1&skip=0&top=10&expand=true"
+        "No CAP ID"     | new SearchParams(skip: 0, top: 10) | []     | "http://ncgc/search/projects/?q=&skip=0&top=10&expand=true"
+
     }
 
     void "findAnnotations"() {
@@ -36,7 +95,7 @@ class ProjectRestServiceUnitSpec extends Specification {
         when:
         BardAnnotation foundBardAnnotation = service.findAnnotations(pid)
         then:
-        restTemplate.getForObject(_,_)>>{new BardAnnotation()}
+        restTemplate.getForObject(_, _) >> {new BardAnnotation()}
         assert foundBardAnnotation
 
 

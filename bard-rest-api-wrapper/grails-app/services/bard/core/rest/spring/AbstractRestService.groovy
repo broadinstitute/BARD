@@ -83,6 +83,36 @@ abstract class AbstractRestService {
                 append(RestApiConstants.EXPAND_TRUE).
                 toString();
     }
+    protected String buildSearchByCapIdURLs(final List<Long> capIds, final SearchParams searchParams, final String prefix) {
+        final List<String> queries = []
+        for (Long capId : capIds) {
+            queries.add(prefix + capId)
+        }
+        searchParams.query = queries.join(" or ")
+        final String searchURL = buildSearchURL(searchParams)
+
+        return searchURL
+    }
+    /**
+     * @param top
+     * @param skip
+     * @return String
+     */
+    protected String buildQueryForETag(final SearchParams searchParams, final String etag) {
+        if (etag) {
+            final String resource = buildETagQuery(etag)
+            return new StringBuilder(getResource(resource)).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.SKIP).
+                    append(searchParams.skip).
+                    append(RestApiConstants.TOP).
+                    append(searchParams.top).
+                    append(RestApiConstants.AMPERSAND).
+                    append(RestApiConstants.EXPAND_TRUE).
+                    toString();
+        }
+        return ""
+    }
 
     /**
      * @param etag

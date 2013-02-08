@@ -11,6 +11,7 @@ import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
+import spock.lang.IgnoreRest
 
 /**
  * Tests for RESTAssayService in JDO
@@ -21,6 +22,37 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     AssayRestService assayRestService
     @Shared
     List<Long> ADIDS_FOR_TESTS = [5155, 5158, 5157]
+
+    @Shared
+    List<Long> CAP_ADIDS = [2934, 2945, 2946]
+
+    void "searchAssaysByCapIds #label"() {
+        when:
+        AssayResult assayResult = assayRestService.searchAssaysByCapIds(capIds, searchParams)
+        then:
+        assert (assayResult != null) == expected
+        where:
+        label            | searchParams                       | capIds    | expected
+        "With capIds"    | new SearchParams(skip: 0, top: 10) | CAP_ADIDS | true
+        "With no capIds" | new SearchParams(skip: 0, top: 10) | []        | false
+
+    }
+
+
+    void "searchAssaysByCapIds withETags #label"() {
+        given: "That we have made a request with some CAP Ids that returns an etag"
+        AssayResult assayResultWithIds = assayRestService.searchAssaysByCapIds(capIds, searchParams)
+        when: "We use the returned etags to make another request"
+        List<Assay> assays = assayRestService.searchAssaysByCapIds(searchParams, assayResultWithIds?.etags)
+        then: "We get back the expected results"
+        assert (!assays.isEmpty()) == expected
+        where:
+        label           | searchParams                       | capIds    | expected
+        "With ETags"    | new SearchParams(skip: 0, top: 10) | CAP_ADIDS | true
+        "With no ETags" | new SearchParams(skip: 0, top: 10) | []        | false
+
+    }
+
     void "getAssayAnnotationFromSearch"() {
         given:
         final SearchParams searchParams = new SearchParams("dna repair")

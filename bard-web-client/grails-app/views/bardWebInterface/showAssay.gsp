@@ -4,14 +4,14 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <r:require modules="showProjectAssay,twitterBootstrapAffix"/>
-    <title>BARD : Assay Definition : ADID ${assayAdapter?.id}</title>
+    <title>BARD : Assay Definition : ADID ${assayAdapter?.capAssayId}</title>
 </head>
 
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>Assay Definition: ${assayAdapter?.name}
-            <small>(ADID: ${assayAdapter?.id})</small>
+            <small>(ADID: ${assayAdapter?.capAssayId})</small>
         </h1>
 
         <g:saveToCartButton id="${assayAdapter.id}"

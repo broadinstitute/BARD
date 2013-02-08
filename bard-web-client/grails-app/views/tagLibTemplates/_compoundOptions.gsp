@@ -23,7 +23,9 @@ Similarity:CCC
                     <li>Smiles : ${smiles}</li>
                 </g:if>
                 <li><a href="#" data-detail-id="sid_${sid}" class="analogs"
-                       data-structure-search-params="Similarity:${cid}">Search For Analogs</a></li>
+                       data-structure-search-params="Similarity:${cid}">Search For Analogs</a>
+                    &nbsp; &nbsp;Threshold % : <g:textField name="cutoff" value="90" size="4" id="cutoff"/>
+                </li>
                 <li>
                     <g:link controller="molSpreadSheet" action="showExperimentDetails"
                             params="[cid: cid, transpose: true]">Show Experimental Details</g:link>

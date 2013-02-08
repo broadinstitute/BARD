@@ -30,6 +30,52 @@ class CompoundRestService extends AbstractRestService {
 
     /**
      *
+     * @param searchParams
+     * @param map of etags
+     * @return list of compounds
+     */
+    public List<Compound> searchCompoundsByCids(final SearchParams searchParams, Map<String, Long> etags) {
+        if (etags) {
+            final String etag = firstETagFromMap(etags)
+            final String urlString = buildQueryForETag(searchParams, etag)
+            final URL url = new URL(urlString)
+            final List<Compound> compounds = getForObject(url.toURI(), List.class) as List<Compound>
+            return compounds
+        }
+        return []
+    }
+    /**
+     *
+     * @param list of cid ids
+     * @param searchParams
+     * @param map of etags
+     * @return {@link CompoundResult}
+     */
+    public CompoundResult searchCompoundsByCids(final List<Long> cids, final SearchParams searchParams) {
+        if (cids) {
+            final Map<String, Long> etags = [:]
+            final long skip = searchParams.getSkip()
+            HttpHeaders requestHeaders = new HttpHeaders();
+            HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
+
+
+            final String urlString = buildSearchByCapIdURLs(cids, searchParams, "cid:")
+            final URL url = new URL(urlString)
+            final HttpEntity<CompoundResult> exchange = getExchange(url.toURI(), entity, CompoundResult.class) as HttpEntity<CompoundResult>
+            final CompoundResult compoundResult = exchange.getBody()
+
+            final HttpHeaders headers = exchange.getHeaders()
+            extractETagsFromResponseHeader(headers, skip, etags)
+            compoundResult.setEtags(etags)
+            return compoundResult
+        }
+
+        return null
+
+    }
+
+    /**
+     *
      * @return a url prefix for free text compound searches
      */
     @Override
@@ -70,6 +116,7 @@ class CompoundRestService extends AbstractRestService {
     public String buildPromiscuityURL() {
         return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}").toString();
     }
+
     protected String buildQueryForTestedAssays(final Long cid,
                                                final boolean activeOnly) {
         StringBuilder url = new StringBuilder();
@@ -230,6 +277,8 @@ class CompoundRestService extends AbstractRestService {
         final CompoundResult compoundSearchResult = (CompoundResult) getForObject(url.toURI(), CompoundResult.class)
         return compoundSearchResult;
     }
+
+
     /**
      * this Should probably take a Compound as an arg, instead of a Long
      * @param cid -
