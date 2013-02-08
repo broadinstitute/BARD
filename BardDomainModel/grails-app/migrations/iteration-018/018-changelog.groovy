@@ -10,6 +10,7 @@ databaseChangeLog = {
         sqlFile(path:  "${migrationsDir}/iteration-018/02-add-bard-tree-parent-constraint.sql", stripComments: true)
     }
 
+    changeSet(author: "pmontgom", id: "iteration-018/03-simplify-substance-table.sql", dbms: 'oracle', context: 'standard') {
+        sqlFile(path:  "${migrationsDir}/iteration-018/03-simplify-substance-table.sql", stripComments: true)
+    }
 }
-
-
