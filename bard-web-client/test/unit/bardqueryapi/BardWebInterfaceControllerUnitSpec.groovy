@@ -585,7 +585,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, 0.90, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _, _, _, _, _) >> {compoundAdapterMap}
         and:
         response.status == statusCode
         where:
@@ -648,7 +648,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         Map map = controller.handleStructureSearch(this.queryService, searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, 0.90, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _, _, _, _, _) >> {compoundAdapterMap}
         and:
         assert response.status == 200
         where:

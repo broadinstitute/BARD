@@ -38,7 +38,14 @@
                 <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                     <dl>
                         <dt>Number Of Experiments:</dt>
-                        <dd><span class="badge badge-info">${projectAdapter.getNumberOfExperiments()}</span></dd>
+                        <dd>
+                            <span class="badge badge-info">
+                                <a href="/bardwebclient/bardWebInterface/showProject/${projectAdapter.id}#experiments-info"
+                                   style="color: white; text-decoration: underline">
+                                    ${projectAdapter.getNumberOfExperiments()}
+                                </a>
+                            </span>
+                        </dd>
                     </dl>
                 </g:if>
             </li>

@@ -382,7 +382,7 @@ class QueryServiceUnitSpec extends Specification {
         given:
         final CompoundResult expandedCompoundResult = new CompoundResult(compounds: [new Compound(smiles: smiles)])
         when:
-        service.structureSearch(smiles, structureSearchParamsType, [], 10, 0, 10)
+        service.structureSearch(smiles, structureSearchParamsType, [], 90, 10, 0, 10)
         then:
         compoundRestService.structureSearch(_) >> {expandedCompoundResult}
 

@@ -8,7 +8,7 @@ var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt
 // you can use to tell the regex engine that this pair of brackets should not create a backreference
 //You do that to optimize this regular expression
 //see http://www.regular-expressions.info/brackets.html
-var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*$/;
+var NUMBER_MATCHING_REGEX = /^\s*\d+\s*(?:,?\s*\d+\s*)*(threshold:\d+)*$/;
 
 //SMILES validation (JavaScript) beyond a length of 5
 var SMILES_MATCHING_REGEX = /^(exact: *|substructure: *|superstructure: *|similarity: *)([^J][0-9BCOHNSOPrIFla@+\-\[\]\(\)\\\/%=#$,.~&!]{6,})$/ig;
@@ -436,7 +436,7 @@ function findSearchType(searchString) {
     //we want to find out if this is a Structure search
     var searchStringSplit = searchString.split(":");
     var searchType = searchStringSplit[0];
-    if (searchStringSplit.length == 2 && $.trim(searchStringSplit[1]).length) { //has to be of the form Exact:CCC so there must be 2 things in the array
+    if (searchStringSplit.length >= 2 && $.trim(searchStringSplit[1]).length) { //has to be of the form Exact:CCC so there must be 2 things in the array
         searchType = searchType.toLowerCase();
         var stringAfterColon = $.trim(searchStringSplit[1]);
         switch (searchType) { //must be one of these to qualify as a structure search
@@ -461,7 +461,7 @@ function findSearchType(searchString) {
                 }
                 break;
         }
-    } else if (searchStringSplit.length == 2 && !$.trim(searchStringSplit[1]).length) { //e.g Exact: with no smile string
+    } else if (searchStringSplit.length >= 2 && !$.trim(searchStringSplit[1]).length) { //e.g Exact: with no smile string
         return "EMPTY";
     }
     return "FREE_TEXT"; //this a Free Text Search

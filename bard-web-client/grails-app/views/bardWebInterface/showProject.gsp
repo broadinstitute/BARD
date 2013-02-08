@@ -29,7 +29,14 @@
         <dl class="dl-horizontal dl-horizontal-wide">
             <g:if test="${projectAdapter?.getNumberOfExperiments()}">
                 <dt>Number Of Experiments:</dt>
-                <dd><span class="badge badge-info">${projectAdapter.getNumberOfExperiments()}</span></dd>
+                <dd>
+
+                    <span class="badge badge-info">
+                        <a href="#experiments-info"
+                           style="color: white; text-decoration: underline">
+                            ${projectAdapter.getNumberOfExperiments()}
+                        </a>
+                </span></dd>
             </g:if>
         </dl>
     </div>

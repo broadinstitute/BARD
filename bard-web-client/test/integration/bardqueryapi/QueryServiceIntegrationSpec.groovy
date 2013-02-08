@@ -132,7 +132,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search with CIDS #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(cid, structureSearchParamsType, [], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(cid, structureSearchParamsType, 0.90,[], top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -151,7 +151,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Structure Search #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], 0.90,top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
@@ -176,7 +176,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test SubStructure Search #label"() {
         when: ""
-        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [], top, skip)
+        final Map compoundAdapterMap = queryService.structureSearch(smiles, structureSearchParamsType, [],0.90, top, skip)
         then:
         assert compoundAdapterMap
         final List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters

@@ -42,7 +42,7 @@ class QueryService implements IQueryService {
 
             final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
             //do the search
-            CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(cids,searchParams)
+            CompoundResult compoundResult = compoundRestService.searchCompoundsByCids(cids, searchParams)
 
             //convert to adapters
             foundCompoundAdapters.addAll(this.queryHelperService.compoundsToAdapters(compoundResult))
@@ -178,9 +178,9 @@ class QueryService implements IQueryService {
     }
 
     //====================================== Structure Searches ========================================
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, Double threshold, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, Double threshold = 0.90, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
         final Compound compound = this.compoundRestService.getCompoundById(cid)
-        return structureSearch(compound.smiles, structureSearchParamsType, searchFilters,threshold, top, skip, nhits)
+        return structureSearch(compound.smiles, structureSearchParamsType, searchFilters, threshold, top, skip, nhits)
     }
 
     Map showProbeList() {
@@ -201,7 +201,7 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Double threshold, Integer top, Integer skip, Integer nhits) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Double threshold = 0.90, Integer top = 10, Integer skip = 0, Integer nhits = -1) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
         int numHits = nhits
