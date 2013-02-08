@@ -38,6 +38,7 @@
             if (width && height && jsDrawEditor) {
                 jsDrawEditor.setSize(width, height)
             }
+            jsDrawEditor.readCookie();
         });
 
         //On clicking the Submit button, switch back to the SearchResult page and submit the search form
@@ -46,7 +47,7 @@
             var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
             var constructedSearch = structureSearchTypeSelected + ":" + smiles;
             var changePageTo = "${createLink(controller: 'bardWebInterface', action: 'searchResults')}" + "?searchString=" + constructedSearch;
-//            $.mobile.changePage(changePageTo);
+            jsDrawEditor.writeCookie();
             window.location.href = changePageTo;
         });
     </r:script>
