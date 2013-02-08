@@ -18,7 +18,7 @@
                             name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                             type="${querycart.QueryItemType.AssayDefinition}"/>
         <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.capAssayId}"
-           title="Click To Edit Assay Definition In Cap" rel="tooltip">Edit in CAP</a>
+           title="Click To View Assay Definition In Cap" rel="tooltip">View in CAP</a>
     </div>
 </div>
 
@@ -36,13 +36,14 @@
                     <g:each in="${projects}" var="project">
                         <li>
 
-                        <g:if test="${searchString}">
-                            <g:link controller="bardWebInterface" action="showProject" id="${project.id}"
-                                    params='[searchString: "${searchString}"]'>${project.name}</g:link>
-                        </g:if>
-                        <g:else>
-                            <g:link controller="bardWebInterface" action="showProject" id="${project.id}">${project.name}</g:link>
-                        </g:else>
+                            <g:if test="${searchString}">
+                                <g:link controller="bardWebInterface" action="showProject" id="${project.id}"
+                                        params='[searchString: "${searchString}"]'>${project.name}</g:link>
+                            </g:if>
+                            <g:else>
+                                <g:link controller="bardWebInterface" action="showProject"
+                                        id="${project.id}">${project.name}</g:link>
+                            </g:else>
                         </li>
                     </g:each>
                 </ul>
