@@ -13,7 +13,7 @@
 
         <dt><g:message code="assay.assayStatus.label" default="Fix i18n"/>:</dt>
         <dd><g:select id="assayStatus" name="assayStatus"
-                      from="${bard.db.registration.AssayStatus.values()}"
+                      from="${bard.db.enums.AssayStatus.values()}"
                       value="${assay?.assayStatus}" /></dd>
 
         <dt><g:message code="assay.designedBy.label" default="Fix i18n"/>:</dt>
