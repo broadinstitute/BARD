@@ -26,6 +26,7 @@
 <g:form action="save">
     <input type="submit" class="btn btn-primary" value="Create"/>
     <input type="hidden" name="assayId" value="${assay.id}"/>
+
     <div class="row-fluid">
         <div id="accordion-foo" class="span12 accordion">
 
@@ -42,9 +43,23 @@
                     <div class="accordion-inner">
                         <table>
                             <tbody>
-                            <tr><td>Assay</td><td><g:link controller="assayDefinition" action="show" id="${assay.id}">${assay.name}</g:link></td></tr>
-                            <tr><td>Description</td><td><input type="text" name="description"/></td></tr>
-                            <tr><td>Experiment Name</td><td><input type="text" name="experimentName"/></td></tr>
+                            <tr><td>Assay</td><td><g:link controller="assayDefinition" action="show"
+                                                          id="${assay.id}">${assay.name}</g:link></td></tr>
+
+                            <tr><td>Experiment Name</td>
+                                <td>
+                                    <input type="text" name="experimentName" value="${fieldValue(bean: experiment, field: "experimentName")}"/>
+                                    <span class="error"><g:fieldError bean="${experiment}" field="experimentName"/></span>
+                                </td>
+                            </tr>
+
+                            <tr><td>Description</td>
+                                <td>
+                                    <input type="text" name="description"
+                                           value="${fieldValue(bean: experiment, field: "description")}"/>
+                                    <span class="error"><g:fieldError bean="${experiment}" field="description"/></span>
+                                </td>
+                            </tr>
 
                             </tbody>
                         </table>

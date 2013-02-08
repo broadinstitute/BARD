@@ -6,7 +6,7 @@ import bard.db.registration.Assay
 class ExperimentController {
     def create() {
         def assay = Assay.get(params.assayId)
-        [assay: assay]
+        [assay: assay, experiment: new Experiment()]
     }
 
     def save() {
@@ -15,10 +15,13 @@ class ExperimentController {
         Experiment experiment = new Experiment(assay: assay)
         experiment.properties["description","experimentName"] = params
         experiment.dateCreated = new Date()
+
+
         if (!experiment.save(flush: true)) {
-            flash.message = ""+experiment.errors
-            redirect(action: "create", params: [ assayId: params.assayId ])
+            println(experiment.errors)
+            render(view: "create", model: [assay: assay, experiment: experiment])
         } else {
+
             redirect(action: "show", id: experiment.id)
         }
     }
