@@ -58,13 +58,16 @@ class BardWebInterfaceController {
 
     def search() {
         flash.searchString = params.searchString
-        redirect(action: 'searchResults')
+        if (!isMobile()) {
+            redirect(action: 'searchResults')
+        }
     }
 
     def searchResults() {
+        return [params: params]
     }
 
-    def showExperiment(Long id, String normalizeYAxis,String activityOutcome) {
+    def showExperiment(Long id, String normalizeYAxis, String activityOutcome) {
 
         if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
             return
@@ -74,8 +77,8 @@ class BardWebInterfaceController {
             Map<String, Integer> searchParams = handleSearchParams()
             final Integer top = searchParams.top
             final Integer skip = searchParams.skip
-            NormalizeAxis normalizeAxis = normalizeYAxis?normalizeYAxis as NormalizeAxis:NormalizeAxis.Y_NORM_AXIS
-            ActivityOutcome outcome = activityOutcome?activityOutcome as ActivityOutcome:ActivityOutcome.ALL
+            NormalizeAxis normalizeAxis = normalizeYAxis ? normalizeYAxis as NormalizeAxis : NormalizeAxis.Y_NORM_AXIS
+            ActivityOutcome outcome = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
 
             final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
             final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
@@ -486,7 +489,7 @@ class BardWebInterfaceController {
     def showProbeList() {
         Map results = queryService.showProbeList()
         results.put("searchString", flash.searchString)
-        return results
+        render(template: "/mobile/bardWebInterface/compounds", model: results)
     }
 
     def jsDrawEditor() {}

@@ -45,8 +45,9 @@
             var smiles = jsDrawEditor.getSmiles();
             var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
             var constructedSearch = structureSearchTypeSelected + ":" + smiles;
-            var changePageTo = "${createLink(controller: 'bardWebInterface', action: 'search')}" + "?searchString=" + constructedSearch;
-            $.mobile.changePage(changePageTo);
+            var changePageTo = "${createLink(controller: 'bardWebInterface', action: 'searchResults')}" + "?searchString=" + constructedSearch;
+//            $.mobile.changePage(changePageTo);
+            window.location.href = changePageTo;
         });
     </r:script>
 </head>

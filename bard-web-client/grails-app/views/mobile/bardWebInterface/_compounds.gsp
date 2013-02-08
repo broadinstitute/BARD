@@ -51,7 +51,7 @@
 
         <g:if test="${params.max || params.offset}">
             <div id="paginateBar" class="pagination">
-                <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]'/>
+                <g:paginate total="${nhits ? nhits : 0}" params='[searchString: "${searchString}"]' data-ajax="false"/>
             </div>
         </g:if>
     </g:if>

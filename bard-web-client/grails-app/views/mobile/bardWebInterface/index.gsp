@@ -16,16 +16,12 @@
     <r:layoutResources/>
     <r:script>
         $(document).ready(function () {
-            $('#searchButton').click(function () {
-                $.mobile.changePage($('#searchResults'));
-            });
-
 //          Hnadle the proble-list ajax-updating
-            handleSearch('/bardwebclient/bardWebInterface/showProbeList', '', 'probeListTab', 'totalCompounds', 'Probes ', 'probeListDiv');
+            handleSearch("${createLink(controller: 'bardWebInterface', action: 'showProbeList')}", '', 'probeListTab', 'totalCompounds', 'Probes ', 'probeListDiv');
         });
 
         $(document).on('search.complete', '#probeList', function () {
-            //Restory the JQuery Mobile navigation button style after overriding the button's html with the total-value.
+            //Restore the JQuery Mobile navigation button style after overriding the button's html with the total-value.
             updateNavigationButtonStyle($('#probeListTab'));
 
             //We need to disable ajax behaviour on the pagination links for the mobile experience to work
@@ -33,14 +29,6 @@
             //Adjust the structure thumbnail images to the mobile screen size.
             adjustStructureThumbnailSize()
         });
-
-        $(document).on('search.complete', '#assaysDiv, #compoundsDiv, #projectsDiv', function () {
-            //Restory the JQuery Mobile navigation button style after overriding the button's html with the total-value.
-            updateNavigationButtonStyle($('#assaysTab'));
-            updateNavigationButtonStyle($('#compoundsTab'));
-            updateNavigationButtonStyle($('#projectsTab'));
-        });
-
 
         //Resize structure thumbnails with every window-resize even.
         $(window).resize(adjustStructureThumbnailSize);
@@ -82,19 +70,17 @@
 
         <p><br></p>
 
-        <a href="${createLink(controller: 'bardWebInterface', action: 'showProbeList')}" data-role="button"
+        <a href="#probeList" data-role="button"
            data-icon="arrow-r" data-iconpos="right" data-transition="slide"
            id="probeListTab">Probes (0)</a>
 
 
-        <p><a href="#search" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"
-              id="searchTab">Search BARD</a></p>
+        <a href="${createLink(controller: 'bardWebInterface', action: 'search')}" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"
+           id="searchTab">Search BARD</a>
     </div>
 </div>
 
-<g:render template="/mobile/bardWebInterface/search"/>
 <g:render template="/mobile/bardWebInterface/probeList"/>
-
 <r:layoutResources/>
 </body>
 </html>
