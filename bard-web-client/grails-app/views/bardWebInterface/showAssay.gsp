@@ -18,7 +18,7 @@
                             name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                             type="${querycart.QueryItemType.AssayDefinition}"/>
         <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.capAssayId}"
-           title="Click To View Assay Definition In Cap" rel="tooltip">View in CAP</a>
+           title="Click To View Assay Definition In CAP" rel="tooltip">View in CAP</a>
     </div>
 </div>
 
