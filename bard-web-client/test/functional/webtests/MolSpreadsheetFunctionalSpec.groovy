@@ -1,9 +1,9 @@
 package webtests
 
-import webtests.pages.HomePage
-import webtests.pages.ResultsPage
-import webtests.pages.MolSpreadsheetPage
 import spock.lang.Shared
+import webtests.pages.HomePage
+import webtests.pages.MolSpreadsheetPage
+import webtests.pages.ResultsPage
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +14,8 @@ import spock.lang.Shared
  */
 class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
     @Shared String assayId = "9741"
-    @Shared String compoundId = "5389617"
+    @Shared String capassayId = "3575"
+    @Shared String compoundId = "647878"
 
     void setup() { // pre-condition of each test: user is logged in
         logInSomeUser()
@@ -23,7 +24,7 @@ class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
     def "Test creating a molecular spreadsheet from a single assay definition"() {
         given: "An assay definition in the Query Cart"
         to HomePage
-        searchBox << "ADID:$assayId"
+        searchBox << "ADID:$capassayId"
         searchButton.click()
         at ResultsPage
         waitFor(20, 0.5) { assaysTab.text().contains("1") }   // Wait for assay definitions to populate the tab
@@ -45,7 +46,7 @@ class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
         given: "An assay definition and a compound in the Query Cart"
         to HomePage
         // Add the assay definition
-        searchBox = "ADID:$assayId"
+        searchBox = "ADID:$capassayId"
         searchButton.click()
         at ResultsPage
         waitFor(20, 0.5) { assaysTab.text().contains("1") }   // Wait for assay definitions to populate the tab

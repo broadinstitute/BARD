@@ -20,7 +20,7 @@
                             name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
                             type="${querycart.QueryItemType.Project}"/>
         <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.project}${projectAdapter?.capProjectId}"
-           title="Click To Edit Project In Cap" rel="tooltip">Edit in CAP</a>
+           title="Click To View Project In CAP" rel="tooltip">View in CAP</a>
     </div>
 </div>
 
