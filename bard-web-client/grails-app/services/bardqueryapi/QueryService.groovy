@@ -178,9 +178,9 @@ class QueryService implements IQueryService {
     }
 
     //====================================== Structure Searches ========================================
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, Double threshold, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits) {
         final Compound compound = this.compoundRestService.getCompoundById(cid)
-        return structureSearch(compound.smiles, structureSearchParamsType, searchFilters, top, skip, nhits)
+        return structureSearch(compound.smiles, structureSearchParamsType, searchFilters,threshold, top, skip, nhits)
     }
 
     Map showProbeList() {
@@ -201,7 +201,7 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters = [], Integer top = 10, Integer skip = 0, Integer nhits = -1) {
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Double threshold, Integer top, Integer skip, Integer nhits) {
         final List<CompoundAdapter> compoundAdapters = []
         Collection<Value> facets = []
         int numHits = nhits
@@ -212,7 +212,7 @@ class QueryService implements IQueryService {
                 new StructureSearchParams(smiles, structureSearchParamsType).setSkip(skip).setTop(top);
 
             if (structureSearchParamsType == StructureSearchParams.Type.Similarity) {
-                structureSearchParams.setThreshold(0.9)
+                structureSearchParams.setThreshold(threshold)
             }
             if (searchFilters) {
                 final List<String[]> filters = queryHelperService.convertSearchFiltersToFilters(searchFilters)

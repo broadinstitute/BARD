@@ -98,7 +98,7 @@ public interface IQueryService {
      * @param nhits - The number of hits if we already have it
      * @return Map
      */
-    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits);
+    Map structureSearch(Integer cid, StructureSearchParams.Type structureSearchParamsType, Double threshold, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits);
 
     Map showProbeList()
     /**
@@ -108,7 +108,7 @@ public interface IQueryService {
      * @param skip
      * @return Map
      */
-    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Integer top, Integer skip, Integer nhits);
+    Map structureSearch(String smiles, StructureSearchParams.Type structureSearchParamsType, List<SearchFilter> searchFilters, Double threshold, Integer top, Integer skip, Integer nhits);
 
     //===================== Find Resources given a list of IDs ================================
     /**

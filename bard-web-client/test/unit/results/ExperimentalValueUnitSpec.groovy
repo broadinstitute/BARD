@@ -8,16 +8,27 @@ import molspreadsheet.MolSpreadSheetCellUnit
 import bard.core.util.ExperimentalValueUnitUtil
 import bard.core.util.ExperimentalValueUtil
 import bard.core.util.ExperimentalValueTypeUtil
+import spock.lang.IgnoreRest
 
 @TestMixin(GrailsUnitTestMixin)
 @Unroll
 class ExperimentalValueUnitSpec extends Specification {
-    void setup() {
+    @IgnoreRest
+    void "test split"(){
+        given:
+        String input = "Similarity:1000 threshold:5666"
 
-    }
+        when:
+        final String[] split = input.split(":")
+        String CID = null
+        if(input.toUpperCase().contains("THRESHOLD") && input.toUpperCase().contains("SIMILARITY")){
+           CID = split[1].toUpperCase().replaceAll("THRESHOLD","").trim()
+        }
+        then:
+        println(split[0])
+        println(CID)
+        println(split[2])
 
-    void tearDown() {
-        // Tear down logic here
     }
 
     void "test Get By Value #label"() {

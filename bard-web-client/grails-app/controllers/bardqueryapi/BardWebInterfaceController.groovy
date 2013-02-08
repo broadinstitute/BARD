@@ -527,6 +527,8 @@ class BardWebInterfaceController {
  */
 @Mixin(InetAddressUtil)
 class SearchHelper {
+    final String THRESHOLD_STRING = "THRESHOLD"
+
     void handleIdSearchInput(String searchTypeString, String ids, String prefix, String messageForPrefix, String messageForIds) {
         if (!prefix.equals(searchTypeString.trim().toUpperCase())) {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, messageForPrefix)
@@ -544,21 +546,31 @@ class SearchHelper {
         final Integer nhits = searchParams.nhits
 
         removeDuplicatesFromSearchString(searchCommand)
+        //if the string contains similarity and threshold exists then strip it
         final String[] searchStringSplit = searchCommand.searchString.split(":")
-        if (searchStringSplit.length == 2) {
+
+
+        if (searchStringSplit.length >= 2) {
+            String thresholdValue = "90"
+            final String searchTypeString = searchStringSplit[0].trim()
+            final String inputAfterColon = searchStringSplit[1].trim()
+
+            if (searchCommand.searchString.toUpperCase().contains(THRESHOLD_STRING) && searchCommand.searchString.toUpperCase().contains(StructureSearchParams.Type.Similarity.toString().toUpperCase())) {
+                inputAfterColon = searchStringSplit[1].toUpperCase().replaceAll(THRESHOLD_STRING, "").trim()
+                thresholdValue = searchStringSplit[2].trim()
+            }
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
-            final String searchTypeString = searchStringSplit[0]
-            final String inputAfterColon = searchStringSplit[1]
             //if smiles is a number then assume that is is a CID
             //we make the first character capitalized to match the ENUM
             final StructureSearchParams.Type searchType = searchTypeString.toLowerCase().capitalize() as StructureSearchParams.Type
+
             Map compoundAdapterMap = null
             if (inputAfterColon.isInteger()) { //we assume that this is a CID
-                compoundAdapterMap = queryService.structureSearch(new Integer(inputAfterColon), searchType, searchFilters, top, skip, nhits)
+                compoundAdapterMap = queryService.structureSearch(new Integer(inputAfterColon), searchType, new Double(thresholdValue)/100, searchFilters, top, skip, nhits)
             } else {
-                compoundAdapterMap = queryService.structureSearch(inputAfterColon, searchType, searchFilters, top, skip, nhits)
+                compoundAdapterMap = queryService.structureSearch(inputAfterColon, searchType, searchFilters, new Double(thresholdValue)/100, top, skip, nhits)
             }
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [
