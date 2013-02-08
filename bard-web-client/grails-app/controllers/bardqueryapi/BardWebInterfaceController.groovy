@@ -157,11 +157,11 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             Map<String, Integer> searchParams = handleSearchParams()
-            int top = searchParams.top
-            int skip = searchParams.skip
 
             //strip out all spaces
             final List<Long> compoundIds = searchStringToIdList(searchCommand.searchString)
+            int top = compoundIds.size()
+            int skip = searchParams.skip
 
             final List<Long> cids = []
             for (def id : compoundIds) {
@@ -212,11 +212,10 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             Map<String, Integer> searchParams = handleSearchParams()
-            int top = searchParams.top
-            int skip = searchParams.skip
 
             final List<Long> adids = searchStringToIdList(searchCommand.searchString)
-
+            int top = adids.size()
+            int skip = searchParams.skip
             final List<Long> capIds = []
             for (def id : adids) {
                 capIds.add(new Long(id))
@@ -265,10 +264,10 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             Map<String, Integer> searchParams = handleSearchParams()
-            int top = searchParams.top
-            int skip = searchParams.skip
 
             final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
+            int top = projectIds.size()
+            int skip = searchParams.skip
             final List<Long> capIds = []
             for (def id : projectIds) {
                 capIds.add(new Long(id))
