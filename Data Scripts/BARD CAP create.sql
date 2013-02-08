@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Friday, November 30, 2012 09:09:12
+-- Date Created : Friday, February 7th 2013 09:09:12
 -- Target DBMS : Oracle 11g
 --
 
@@ -273,11 +273,11 @@ CREATE SEQUENCE ASSAY_ID_SEQ
 --
 
 --CREATE SEQUENCE BARD_ONTOLOGY_SEQ
---    START WITH 873
+--    START WITH 1692
 --    INCREMENT BY 1
 --    NOMINVALUE
---    NOMAXVALUE
---    CACHE 200
+--    MAXVALUE 9999999
+--    noCACHE
 --    NOORDER
 --;
 
@@ -709,19 +709,19 @@ CREATE SEQUENCE UNIT_CONVERSION_ID_SEQ
 
 CREATE TABLE ASSAY(
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
-    ASSAY_STATUS            VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    ASSAY_STATUS            VARCHAR2(20)      DEFAULT 'Draft' NOT NULL,
     Assay_Short_Name        VARCHAR2(250)     DEFAULT ' ' NOT NULL,
     ASSAY_NAME              VARCHAR2(1000 CHAR) NOT NULL,
     ASSAY_VERSION           VARCHAR2(10)      DEFAULT 1 NOT NULL,
     ASSAY_TYPE              VARCHAR2(20)      DEFAULT 'Regular' NOT NULL,
     DESIGNED_BY             VARCHAR2(100),
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     DATE_CREATED            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Pending', 'Active', 'Superseded', 'Retired')),
-    CONSTRAINT CK_ASSAY_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Draft', 'Witnessed', 'Finished', 'Measures Done', 'Annotations Done', 'Retired')),
+    CONSTRAINT CK_ASSAY_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT CK_ASSAY_TYPE CHECK (Assay_Type IN ('Regular', 'Panel - Array', 'Panel - Group', 'Template')),
     CONSTRAINT PK_ASSAY PRIMARY KEY (ASSAY_ID)
 )
@@ -925,13 +925,13 @@ CREATE TABLE ELEMENT(
     DESCRIPTION             VARCHAR2(1000),
     SYNONYMS                VARCHAR2(1000),
     EXTERNAL_URL            VARCHAR2(1000),
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT CK_ELEMENT_STATUS CHECK (Element_Status IN ('Pending', 'Published', 'Deprecated', 'Retired')),
-    CONSTRAINT CK_ELEMENT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_ELEMENT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT PK_ELEMENT PRIMARY KEY (ELEMENT_ID)
 )
 ;
@@ -982,7 +982,7 @@ CREATE TABLE EXPERIMENT(
     EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
     EXPERIMENT_NAME         VARCHAR2(1000)    NOT NULL,
     EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
     RUN_DATE_FROM           DATE,
     RUN_DATE_TO             DATE,
@@ -993,7 +993,7 @@ CREATE TABLE EXPERIMENT(
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Pending', 'Approved', 'Rejected', 'Revised')),
-    CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT PK_EXPERIMENT PRIMARY KEY (EXPERIMENT_ID)
 )
 ;
@@ -1459,12 +1459,12 @@ CREATE TABLE PROJECT(
     PROJECT_NAME            VARCHAR2(256)     NOT NULL,
     GROUP_TYPE              VARCHAR2(20)      DEFAULT 'Project' NOT NULL,
     DESCRIPTION             VARCHAR2(1000),
-    ready_for_extraction    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    ready_for_extraction    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_PROJECT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_PROJECT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT CK_PROJECT_TYPE CHECK (GROUP_TYPE in ('Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template')),
     CONSTRAINT PK_PROJECT PRIMARY KEY (PROJECT_ID)
 )
@@ -1591,7 +1591,7 @@ COMMENT ON TABLE Project_Step IS 'The annotations (context items) for a step sho
 CREATE TABLE RESULT(
     RESULT_ID               NUMBER(19, 0)     NOT NULL,
     RESULT_STATUS           VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
     RESULT_TYPE_ID          NUMBER(19, 0)     NOT NULL,
     STATS_MODIFIER_ID       NUMBER(19, 0),
@@ -1607,7 +1607,7 @@ CREATE TABLE RESULT(
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT CK_RESULT_STATUS CHECK (Result_Status IN ('Pending', 'Approved', 'Rejected', 'Mark for Deletion')),
-    CONSTRAINT CK_RESULT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_RESULT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT CK_RESULT_QUALIFIER CHECK (Qualifier IN ('= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ ')),
     CONSTRAINT PK_RESULT PRIMARY KEY (RESULT_ID)
 )
@@ -1822,15 +1822,15 @@ COMMENT ON COLUMN STEP_CONTEXT_ITEM.VALUE_DISPLAY IS 'This is not a general text
 
 CREATE TABLE SUBSTANCE(
     SUBSTANCE_ID        NUMBER(19, 0)     NOT NULL,
-    COMPOUND_ID         NUMBER(38, 0),
+--    COMPOUND_ID         NUMBER(38, 0),
     SMILES              VARCHAR2(4000),
-    MOLECULAR_WEIGHT    NUMBER(10, 3),
-    SUBSTANCE_TYPE      VARCHAR2(20)      NOT NULL,
+--    MOLECULAR_WEIGHT    NUMBER(10, 3),
+--    SUBSTANCE_TYPE      VARCHAR2(20)      DEFAULT 'small molecule' NOT NULL,
     VERSION             NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     DATE_CREATED        TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     LAST_UPDATED        TIMESTAMP(6),
     MODIFIED_BY         VARCHAR2(40),
-    CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
+--    CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
     CONSTRAINT PK_SUBSTANCE PRIMARY KEY (SUBSTANCE_ID)
 )
 ;
@@ -1943,7 +1943,7 @@ CREATE TABLE Unit_tree(
 create or replace view ASSAY_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE ELEMENT_ID in (select ELEMENT_ID from Assay_Descriptor_Tree)
+WHERE ELEMENT_ID in (select adt.ELEMENT_ID from Assay_Descriptor_Tree adt)
 ;
 
 COMMENT ON TABLE ASSAY_ELEMENT IS 'This view shows the unique list of elements used to assemble the assay_descriptor_tree'
@@ -1955,7 +1955,7 @@ COMMENT ON TABLE ASSAY_ELEMENT IS 'This view shows the unique list of elements u
 create or replace view BIOLOGY_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE el.ELEMENT_ID in (select ELEMENT_ID from Biology_Descriptor_tree)
+WHERE el.ELEMENT_ID in (select bdt.ELEMENT_ID from Biology_Descriptor_tree bdt)
 ;
 
 --
@@ -1965,7 +1965,7 @@ WHERE el.ELEMENT_ID in (select ELEMENT_ID from Biology_Descriptor_tree)
 create or replace view INSTANCE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE el.ELEMENT_ID in (select ELEMENT_ID from Instance_Descriptor_tree)
+WHERE el.ELEMENT_ID in (select idt.ELEMENT_ID from Instance_Descriptor_tree idt)
 ;
 
 --
@@ -1976,7 +1976,7 @@ create or replace view LABORATORY_ELEMENT
 (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT_ID, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) AS
 SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT_ID, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.Date_Created, El.Last_Updated, El.MODIFIED_BY
 FROM ELEMENT El
-WHERE ELEMENT_ID in (select ELEMENT_ID from Laboratory_tree)
+WHERE ELEMENT_ID in (select laboratory_ID from Laboratory_tree)
 ;
 
 --
@@ -1996,7 +1996,7 @@ WHERE el.ELEMENT_ID in (select RESULT_TYPE_ID from Result_type_tree)
 create or replace view STAGE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE el.ELEMENT_ID in (select ELEMENT_ID from Stage_tree)
+WHERE el.ELEMENT_ID in (select stage_ID from Stage_tree)
 ;
 
 --
