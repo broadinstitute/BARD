@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>External Reference</title>
+<title>Context Item</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("External Reference", " : "))</script>  : Public   Class</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Context Item", " : "))</script>  : Public abstract  Association Class</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">2/15/2012 12:28:32 PM</td>
+			<td width="85%" class="ObjectDetailsValue">8/17/2011 2:22:26 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">6/15/2012 1:03:23 PM</td>
+			<td class="ObjectDetailsValue">2/6/2013 9:05:19 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,18 +87,20 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{CD97345C-087A-427e-98C8-21BBA4A62650}</td>
+			<td class="ObjectDetailsValue">{F4EE1D3C-4585-4976-A82F-9FA7A624BCC8}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../EA774.htm">Project Management</a></td>
+			<td class="ObjectDetailsValue"><a href="../EA781.htm">Assay Catalog</a>, <a href="../EA787.htm">Experimental Results Data</a>, <a href="../../EA6/EA1/EA1053.htm">Context Items</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('Attributes');" id="AttributesTitle">Attributes</li>
+			<li onClick="parent.toggleItem('Operations');" id="OperationsTitle">Operations</li>
 			<li onClick="parent.toggleItem('AssociationsTo');" id="AssociationsToTitle">Associations To</li>
+			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
 <div class="ItemBody" id="AttributesTable">
 	<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -107,67 +109,77 @@ function nameClassifier(name, separator)
 		</tr>
 						<tr>
 				<td width="100%" class="TableRow">
-					<i>Protected string</i><br /><strong>&nbsp;&nbsp;external_Name</strong>
+					<i>Protected string</i><br /><strong>&nbsp;&nbsp;Context_item_type</strong>
 				</td>
 			</tr>
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="1">										
-					<a href="#" onclick="parent.toggleData('DetailsImageAttributes887')" style="text-decoration: none; color: #000000;"></BR><img src="../../../images/plus03.gif" align="absmiddle" id="DetailsImageAttributes887" border="0" />Details:
+					<a href="#" onclick="parent.toggleData('DetailsImageAttributes849')" style="text-decoration: none; color: #000000;"></BR><img src="../../../images/plus03.gif" align="absmiddle" id="DetailsImageAttributes849" border="0" />Details:
 					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
 					
-						<tr id="DetailsImageAttributes887_00" style="display: none;">
+						<tr id="DetailsImageAttributes849_00" style="display: none;">
 							<td width="75"><i>Alias:</i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes887_01" style="display: none;">
+						<tr id="DetailsImageAttributes849_01" style="display: none;">
 							<td width="75"><i>Initial:</i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes887_02" style="display: none;">
+						<tr id="DetailsImageAttributes849_02" style="display: none;">
 							<td width="75"><i>Stereotype: </i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes887_03" style="display: none;">
+						<tr id="DetailsImageAttributes849_03" style="display: none;">
 							<td width="75"><i>Ordered: </i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes887_03" style="display: none;">
+						<tr id="DetailsImageAttributes849_03" style="display: none;">
 							<td width="75"><i>Range: </i></td>
 							<td></td>
 						</tr>
 					</table>
 					
 					
-						&nbsp;
+						<div class="ObjectDetailsNotes"><table>
+	<tr>
+		<td valign="top">
+			<i>Notes: </i><span style="margin-left: .4cm;"> </span>
+		</td>
+		<td>
+			only 4 values: Fixed, Range, List, Number
+		</td>
+	</tr>
+</table></div>
+
 						
 				</td>
 			</tr>			<tr>
 				<td width="100%" class="TableRow">
-					<i>Protected int</i><br /><strong>&nbsp;&nbsp;System ID</strong>
+					<i>Protected boolean</i><br /><strong>&nbsp;&nbsp;value is mandatory</strong>
 				</td>
 			</tr>
 			<tr>
 				<td class="TableRowBottomDashed"  colspan="1">										
-					<a href="#" onclick="parent.toggleData('DetailsImageAttributes888')" style="text-decoration: none; color: #000000;"></BR><img src="../../../images/plus03.gif" align="absmiddle" id="DetailsImageAttributes888" border="0" />Details:
+					<a href="#" onclick="parent.toggleData('DetailsImageAttributes850')" style="text-decoration: none; color: #000000;"></BR><img src="../../../images/plus03.gif" align="absmiddle" id="DetailsImageAttributes850" border="0" />Details:
 					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
 					
-						<tr id="DetailsImageAttributes888_00" style="display: none;">
+						<tr id="DetailsImageAttributes850_00" style="display: none;">
 							<td width="75"><i>Alias:</i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes888_01" style="display: none;">
+						<tr id="DetailsImageAttributes850_01" style="display: none;">
 							<td width="75"><i>Initial:</i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes888_02" style="display: none;">
+						<tr id="DetailsImageAttributes850_02" style="display: none;">
 							<td width="75"><i>Stereotype: </i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes888_03" style="display: none;">
+						<tr id="DetailsImageAttributes850_03" style="display: none;">
 							<td width="75"><i>Ordered: </i></td>
 							<td></td>
 						</tr>
-						<tr id="DetailsImageAttributes888_03" style="display: none;">
+						<tr id="DetailsImageAttributes850_03" style="display: none;">
 							<td width="75"><i>Range: </i></td>
 							<td></td>
 						</tr>
@@ -180,7 +192,57 @@ function nameClassifier(name, separator)
 			</tr>
 	</table>
 </div>
-		<div class="ItemBody" id="AssociationsToTable">
+<div class="ItemBody" id="OperationsTable">
+	<table border="0" cellspacing="0" cellpadding="0" class="Table">
+		<tr>
+			<td width="100%" class="TableHeading">Operation</td>
+		</tr>
+						<tr>
+				<td width="100%" class="TableRow">
+					<i>Public</i><br />
+					<strong>setConvertor</strong>(					<a href="#" onclick="parent.toggleData('param{B5FD6DBA-84CC-4f05-934B-CA0BBD7BE94D}')" style="text-decoration: none; color: #000000;"><img src="../../../images/plus03.gif" align="absmiddle" id="param{B5FD6DBA-84CC-4f05-934B-CA0BBD7BE94D}" border="0" />clasType: string</a>, 
+					<table border="0" cellspacing="0" cellpadding="0" class="Table" style="padding: 4px 18px;">
+						<tr id="param{B5FD6DBA-84CC-4f05-934B-CA0BBD7BE94D}00" style="display: none;">
+							<td width="50"><strong>Default:</strong></td>
+							<td></td>
+						</tr>
+						<tr id="param{B5FD6DBA-84CC-4f05-934B-CA0BBD7BE94D}01" style="display: none;">
+							<td width="50"><strong>Kind:</strong></td>
+							<td>in</td>
+						</tr>
+						<tr id="param{B5FD6DBA-84CC-4f05-934B-CA0BBD7BE94D}02" style="display: none;">
+							<td width="50"><strong>Stereotype: </strong></td>
+							<td></td>
+						</tr>
+						<tr id="param{B5FD6DBA-84CC-4f05-934B-CA0BBD7BE94D}03" style="display: none;">
+							<td width="50"></td>
+							<td></td>
+						</tr>
+					</table>
+):domainConverter
+				</td>
+			</tr>
+			<tr>
+				<td class="TableRowBottomDashed"  colspan="1">
+					<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageOperations851" onclick="parent.toggleDiv('detailsDIVOperations851','DetailsImageOperations851')" />Details:
+						<div id="detailsDIVOperations851" class="DetailsDiv" >
+					<i>Sequential  </i>
+					<table>
+						<tr>
+							<td valign = "top"><i></i><span style="margin-left: .7cm;"> </span></td>
+							<td></td>
+						</tr>
+					</table>
+					
+					
+					
+						</div>
+					</div>
+				</td>
+			</tr>
+
+		</table>
+</div>		<div class="ItemBody" id="AssociationsToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="40%" class="TableHeading">Element</td>
@@ -189,7 +251,7 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="40%" class="TableRow" valign="top">
-						<a href="EA862.htm">Project</a><br />
+						<a href="EA848.htm">Context</a><br />
 						Class &nbsp;
 					</td>
 					<td width="30%" class="TableRow" valign="top">
@@ -203,8 +265,8 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink889" onclick="parent.toggleDiv('detailsDIVLink889','DetailsImageLink889')" />Details:
-							<div id="detailsDIVLink889" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink852" onclick="parent.toggleDiv('detailsDIVLink852','DetailsImageLink852')" />Details:
+							<div id="detailsDIVLink852" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -212,7 +274,7 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="40%" class="TableRow" valign="top">
-						<a href="EA850.htm">External System</a><br />
+						<a href="EA875.htm">Result Context</a><br />
 						Class &nbsp;
 					</td>
 					<td width="30%" class="TableRow" valign="top">
@@ -226,8 +288,8 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink890" onclick="parent.toggleDiv('detailsDIVLink890','DetailsImageLink890')" />Details:
-							<div id="detailsDIVLink890" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink853" onclick="parent.toggleDiv('detailsDIVLink853','DetailsImageLink853')" />Details:
+							<div id="detailsDIVLink853" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -235,7 +297,7 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td width="40%" class="TableRow" valign="top">
-						<a href="EA847.htm">Experiment</a><br />
+						<a href="../../EA6/EA1/EA1056.htm">domainConverter</a><br />
 						Class &nbsp;
 					</td>
 					<td width="30%" class="TableRow" valign="top">
@@ -249,12 +311,59 @@ function nameClassifier(name, separator)
 				</tr>
 				<tr>
 					<td class="TableRowBottomDashed"  colspan="3">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink891" onclick="parent.toggleDiv('detailsDIVLink891','DetailsImageLink891')" />Details:
-							<div id="detailsDIVLink891" class="DetailsDiv" >
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink854" onclick="parent.toggleDiv('detailsDIVLink854','DetailsImageLink854')" />Details:
+							<div id="detailsDIVLink854" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
 					</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="LinksTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Object</td>
+					<td width="15%" class="TableHeading">Type</td>
+					<td width="15%" class="TableHeading">Connection</td>
+					<td width="40%" class="TableHeading">Notes</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="../../EA6/EA1/EA1058.htm">fixedContextItem</a></td>
+					<td width="15%" class="TableRow" valign="top">Class</td>
+					<td width="15%" class="TableRow" valign="top">Generalization</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="../../EA6/EA1/EA1059.htm">freeContextItem</a></td>
+					<td width="15%" class="TableRow" valign="top">Class</td>
+					<td width="15%" class="TableRow" valign="top">Generalization</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="../../EA6/EA1/EA1063.htm">rangeContextItem</a></td>
+					<td width="15%" class="TableRow" valign="top">Class</td>
+					<td width="15%" class="TableRow" valign="top">Generalization</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="../../EA6/EA1/EA1060.htm">listContextItem</a></td>
+					<td width="15%" class="TableRow" valign="top">Class</td>
+					<td width="15%" class="TableRow" valign="top">Generalization</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA848.htm">Context</a></td>
+					<td width="15%" class="TableRow" valign="top">Class</td>
+					<td width="15%" class="TableRow" valign="top">Weak</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA875.htm">Result Context</a></td>
+					<td width="15%" class="TableRow" valign="top">Class</td>
+					<td width="15%" class="TableRow" valign="top">Strong</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
 			</table>
