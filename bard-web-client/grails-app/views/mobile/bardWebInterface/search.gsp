@@ -53,7 +53,7 @@
         </div>
     </div><!-- /content -->
 
-<g:link controller="bardWebInterface" action="search" data-role="button" data-inline="true" data-icon="back"
+<g:link controller="bardWebInterface" data-role="button" data-inline="true" data-icon="back" data-ajax="false"
         data-transition="none">Back</g:link>
 </div><!-- /page -->
 
