@@ -82,6 +82,8 @@ class QueryHelperService {
     Map extractExperimentDetails(List<Activity> activities, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
         Double yNormMin = 0
         Double yNormMax = 0
+        boolean firstMinValue = false
+        boolean firstMaxValue = false
         boolean hasPlot = false
         boolean hasChildElements = false
         String priorityDisplay = ''
@@ -92,14 +94,27 @@ class QueryHelperService {
 
             if (resultData) {
                 Map priorityMap = extractMapFromResultData(resultData, normalizeAxis)
+
                 if (priorityMap.yNormMin) {
-                    if (priorityMap.yNormMin < yNormMin) {
+                    if (!firstMinValue) {  //if this is the first min value we are seeing
                         yNormMin = priorityMap.yNormMin
+                        firstMinValue = true
+                    }
+                    else {
+                        if (priorityMap.yNormMin < yNormMin) {
+                            yNormMin = priorityMap.yNormMin
+                        }
                     }
                 }
                 if (priorityMap.yNormMax) {
-                    if (priorityMap.yNormMax > yNormMax) {
+                    if (!firstMaxValue) { //if this is the first max value we are seeing
                         yNormMax = priorityMap.yNormMax
+                        firstMaxValue = true
+                    }
+                    else {
+                        if (priorityMap.yNormMax > yNormMax) {
+                            yNormMax = priorityMap.yNormMax
+                        }
                     }
                 }
                 if (priorityMap.hasPlot) {
@@ -135,7 +150,7 @@ class QueryHelperService {
     //filters that starts with a number or '[' to denote ranges
     final static Pattern FILTER_NUMBER_RANGES = Pattern.compile("^(\\d+.*|-\\d+.*)");
 
-    public void matchMLPProbe(final String term,final List<Map<String, String>> autoSuggestTerms){
+    public void matchMLPProbe(final String term, final List<Map<String, String>> autoSuggestTerms) {
         if (term.toUpperCase().contains(PROBE)) {
             final String label = "${term} as <strong> ML Probe</strong>"
             final String value = "ML_Probes"
@@ -151,7 +166,7 @@ class QueryHelperService {
     public List<Map<String, String>> autoComplete(final String term, final Map<String, List<String>> autoSuggestResponseFromJDO) {
         final List<Map<String, String>> autoSuggestTerms = []
         if (term) {
-           matchMLPProbe(term,autoSuggestTerms)
+            matchMLPProbe(term, autoSuggestTerms)
         }
 
 
