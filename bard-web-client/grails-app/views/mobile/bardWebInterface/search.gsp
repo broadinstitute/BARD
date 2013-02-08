@@ -23,7 +23,8 @@
         </a>
 
         <div>
-            <g:form name="searchFormMobile" controller="bardWebInterface" action="searchResults" method="post" id="searchFormMobile" data-ajax="false">
+            <g:form name="searchFormMobile" controller="bardWebInterface" action="searchResults" method="post"
+                    id="searchFormMobile" data-ajax="false">
                 <div data-role="fieldcontain">
                     <label for="searchString">Search BARD:</label>
                     <input type="text" id="searchString" name="searchString"
@@ -52,9 +53,8 @@
         </div>
     </div><!-- /content -->
 
-    <p>
-        <a href="#home" data-role="button" data-inline="true" data-icon="back" data-transition="none">Back</a>
-    </p>
+<g:link controller="bardWebInterface" action="search" data-role="button" data-inline="true" data-icon="back"
+        data-transition="none">Back</g:link>
 </div><!-- /page -->
 
 <r:layoutResources/>
