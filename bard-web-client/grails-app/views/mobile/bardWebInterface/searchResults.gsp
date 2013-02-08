@@ -75,8 +75,10 @@
         <p><a href="#projectsDiv" data-role="button" data-icon="arrow-r" data-iconpos="right" data-transition="slide"
               id="projectsTab">Projects (0)</a></p>
 
-        <input type="button" id="backToSearch" data-role="button" data-inline="true" data-icon="back"
-               data-transition="none">Back</input>
+        <p><a id="backToSearch" href="" data-role="button" data-inline="true" data-icon="back"
+              data-transition="none">Back</a>
+            %{--<input type="button" id="backToSearch" data-role="button" data-inline="true" data-icon="back"--}%
+            %{--data-transition="none">Back</input>--}%
     </div>
 </div>
 
