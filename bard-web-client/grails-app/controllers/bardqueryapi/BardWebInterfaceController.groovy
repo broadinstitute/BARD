@@ -519,6 +519,7 @@ class BardWebInterfaceController {
 
     }
 
+    def jsDrawEditor() {}
 }
 /**
  * We would use this helper class as Mixin for

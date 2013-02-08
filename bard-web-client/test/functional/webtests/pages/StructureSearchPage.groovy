@@ -5,7 +5,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 
 class StructureSearchPage extends ScaffoldPage {
 
-    static url = ""
+    static url = "/bardWebInterface/jsDrawEditor"
 
     static at = {
         assert title ==~ /BioAssay Research Database/
@@ -18,15 +18,15 @@ class StructureSearchPage extends ScaffoldPage {
             assert $("input", name:"structureSearchType", value: "$structureSearchType")
         }
 
-        assert $("#structureSearchButton")
+        assert $("#searchButton")
 
         return true
     }
 
     static content = {
-        structureModalDialog(required: true) { $("#dialogDiv") }
+        structureModalDialog(required: true) { $("#jsDrawEditorDiv") }
         structureRadioButton(required: true) { $("input[type='radio']").structureSearchType }
-        structureSearchButton(required: true, to: ResultsPage) { $("#structureSearchButton") }
+        structureSearchButton(required: true, to: ResultsPage) { $("#searchButton") }
         //do confirmation here
     }
 }

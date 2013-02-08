@@ -26,7 +26,7 @@ class SearchFunctionalSpec extends BardFunctionalSpec {
         when:
         structureSearchLink.click()
         at StructureSearchPage
-        $('#searchForm').submit()
+        structureSearchButton.click()
 
         then:
         at HomePage
