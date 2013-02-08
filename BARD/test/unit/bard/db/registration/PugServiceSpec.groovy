@@ -47,6 +47,29 @@ class PugServiceSpec  extends spock.lang.Specification {
   </PCT-Data_output>
 </PCT-Data>
 """
+    static String pugProcessingResponse = """<?xml version="1.0"?>
+<!DOCTYPE PCT-Data PUBLIC "-//NCBI//NCBI PCTools/EN" "http://pubchem.ncbi.nlm.nih.gov/pug/pug.dtd">
+<PCT-Data>
+  <PCT-Data_output>
+    <PCT-OutputData>
+      <PCT-OutputData_status>
+        <PCT-Status-Message>
+          <PCT-Status-Message_status>
+            <PCT-Status value="success"/>
+          </PCT-Status-Message_status>
+        </PCT-Status-Message>
+      </PCT-OutputData_status>
+      <PCT-OutputData_output>
+        <PCT-OutputData_output_waiting>
+          <PCT-Waiting>
+            <PCT-Waiting_reqid>402936103567975582</PCT-Waiting_reqid>
+          </PCT-Waiting>
+        </PCT-OutputData_output_waiting>
+      </PCT-OutputData_output>
+    </PCT-OutputData>
+  </PCT-Data_output>
+</PCT-Data>
+"""
 
     def compressedStream(String content) {
         def compressedStream = new ByteArrayOutputStream()
@@ -56,6 +79,7 @@ class PugServiceSpec  extends spock.lang.Specification {
 
         return new ByteArrayInputStream(compressedStream.toByteArray())
     }
+
 
     def 'test validateSubstanceIds'() {
         setup:
@@ -69,18 +93,25 @@ class PugServiceSpec  extends spock.lang.Specification {
         netClientService.createHttpClient() >> httpClient
         netClientService.createFtpClient() >> ftpClient
 
-        httpClient.execute(_, _) >> pugResultReadyReponse
-        // send a response with id 1 present, 2 absent
-        ftpClient.retrieveFileStream(_) >> compressedStream("1\tCC\n2\n")
-
         PugService pugService = new PugService()
         pugService.netClientService = netClientService
+        pugService.timeBetweenRequests = 0
 
         when:
         def missing = pugService.validateSubstanceIds(["1","2"])
 
         then:
         // one id not found
+        // we get in progress message twice and then the file
+        interaction {
+            int index = 0;
+            httpClient.execute(_, _) >> { [pugProcessingResponse, pugProcessingResponse, pugResultReadyReponse][index++] }
+        }
+
+        then:
+        // send a response with id 1 present, 2 absent
+        1 * ftpClient.retrieveFileStream(_) >> compressedStream("1\tCC\n2\n")
+
         missing == ["2"]
 
         // one id freshly inserted

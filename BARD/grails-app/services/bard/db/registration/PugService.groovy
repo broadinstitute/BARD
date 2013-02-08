@@ -23,6 +23,7 @@ class PugService {
     static String PUG_URL = "http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi"
 
     NetClientService netClientService
+    long timeBetweenRequests = 30 * 1000; // retry every 30 seconds
 
     /** generates a query for asking about a previous request */
     String requestStatus(String id) {
@@ -147,13 +148,28 @@ class PugService {
         return missingFromPubchem
     }
 
+    Node find(Node xml, String tagName) {
+        // there's probably a better way
+        return (xml.depthFirst().find {it.name() == tagName})
+    }
+
     def getSubstancesFromPubchem(sids, callback) {
         def parsedResponse = executeQuery(substanceQuery(sids))
 
-        def status =((parsedResponse.depthFirst().find {it.name() == "PCT-Status"})."@value")
+        def status = find(parsedResponse, "PCT-Status")?."@value"
         assert status == "success"
 
-        def url = ((parsedResponse.depthFirst().find {it.name() == "PCT-Download-URL_url"}).text())
+        def reqId = find(parsedResponse, "PCT-Waiting_reqid")?.text()
+        if (reqId != null) {
+            while(true) {
+                Thread.sleep(timeBetweenRequests)
+                parsedResponse = executeQuery(requestStatus(reqId))
+                if (find(parsedResponse, "PCT-Download-URL_url") != null)
+                    break
+            }
+        }
+
+        def url = find(parsedResponse, "PCT-Download-URL_url")?.text()
         assert url != null
 
         //def reqId = getText(parsedResponse, "PCT-Waiting_reqid")
