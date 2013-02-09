@@ -11,7 +11,7 @@ class HomePage extends ScaffoldPage {
     }
 
     static content = {
-        searchBox() {$("#searchString")}
+        searchBox() {$("input#searchString[type='text']")}
         searchButton(to: ResultsPage) {$("#searchButton")}
         structureSearchLink(to: StructureSearchPage) {$("a", text: "Draw or paste a structure")}
 
