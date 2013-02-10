@@ -2,7 +2,6 @@ package bard.db.experiment
 
 class Substance {
 
-	Integer compoundId
 	String smiles
 	Date dateCreated
 	Date lastUpdated
@@ -15,7 +14,6 @@ class Substance {
 	}
 
 	static constraints = {
-		compoundId nullable: true
 		smiles nullable: true, maxSize: 4000
 		dateCreated(nullable: false)
 		lastUpdated nullable: true
