@@ -100,4 +100,9 @@ class AssayController {
             redirect(action: "show", id: params.id)
         }
     }
+
+    def listTemplates() {
+        def templates = Assay.findAllByAssayType(Assay.TEMPLATE_ASSAY_TYPE)
+        [templates : templates]
+    }
 }

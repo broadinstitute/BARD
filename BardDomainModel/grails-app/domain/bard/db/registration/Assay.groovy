@@ -17,6 +17,7 @@ class Assay extends AbstractContextOwner {
 
     public static String TEMPLATE_ASSAY_TYPE = "Template"
     public static String RETIRED_ASSAY_TYPE = "Retired"
+    public static String REGULAR_ASSAY_TYPE = "Regular"
 
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
