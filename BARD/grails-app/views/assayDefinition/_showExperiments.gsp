@@ -34,6 +34,8 @@
         </g:each>
     </ul>
 
+    <g:if test="${assayInstance.allowsNewExperiments()}">
     <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
             class="btn">Create a new experiment</g:link>
+    </g:if>
 </div>

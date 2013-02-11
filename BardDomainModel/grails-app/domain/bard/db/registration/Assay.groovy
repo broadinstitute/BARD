@@ -8,7 +8,6 @@ import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
 
 class Assay extends AbstractContextOwner {
-
     private static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     private static final int DESIGNED_BY_MAX_SIZE = 100
@@ -16,7 +15,6 @@ class Assay extends AbstractContextOwner {
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
     public static String TEMPLATE_ASSAY_TYPE = "Template"
-    public static String RETIRED_ASSAY_TYPE = "Retired"
     public static String REGULAR_ASSAY_TYPE = "Regular"
 
     AssayStatus assayStatus = AssayStatus.DRAFT
@@ -25,7 +23,7 @@ class Assay extends AbstractContextOwner {
     String assayVersion
     String designedBy
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
-    String assayType = 'Regular'
+    String assayType = REGULAR_ASSAY_TYPE
 
     String modifiedBy
     // grails auto-timestamp
@@ -106,4 +104,7 @@ class Assay extends AbstractContextOwner {
         return measures.findAll { it.parentMeasure == null }.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
     }
 
+    boolean allowsNewExperiments() {
+        return (assayStatus != AssayStatus.RETIRED && assayType != TEMPLATE_ASSAY_TYPE && measures.size() > 0)
+    }
 }
