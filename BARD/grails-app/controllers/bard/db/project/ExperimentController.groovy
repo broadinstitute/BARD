@@ -2,26 +2,23 @@ package bard.db.project
 
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
+import bard.db.registration.ExperimentService
 
 class ExperimentController {
-    def create() {
-        def assay = Assay.get(params.assayId)
+    ExperimentService experimentService;
+
+    def create(assayId) {
+        def assay = Assay.get(assayId)
         [assay: assay, experiment: new Experiment()]
     }
 
-    def save() {
-        def assay = Assay.get(params.assayId)
+    def save(assayId, String experimentName, String description) {
+        def assay = Assay.get(assayId)
 
-        Experiment experiment = new Experiment(assay: assay)
-        experiment.properties["description","experimentName"] = params
-        experiment.dateCreated = new Date()
-
-
-        if (!experiment.save(flush: true)) {
-            println(experiment.errors)
+        Experiment experiment = experimentService.createNewExperiment(assay, experimentName, description)
+        if (experiment.hasErrors()) {
             render(view: "create", model: [assay: assay, experiment: experiment])
         } else {
-
             redirect(action: "show", id: experiment.id)
         }
     }
