@@ -137,7 +137,9 @@ public class ConcentrationResponseSeries extends JsonUtil {
 
         for (ConcentrationResponsePoint concentrationResponsePoint : this.concentrationResponsePoints) {
             if (concentrationResponsePoint.value != null) {
-                activities.add(new Double(concentrationResponsePoint.value))
+                if (concentrationResponsePoint.value.isNumber()) {
+                    activities.add(new Double(concentrationResponsePoint.value))
+                }
             }
         }
         return activities.sort()
@@ -149,8 +151,11 @@ public class ConcentrationResponseSeries extends JsonUtil {
 
         for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
             if (concentrationResponsePoint.testConcentration != null && concentrationResponsePoint.value != null) {
-                concentrations.add(concentrationResponsePoint.testConcentration)
-                activities.add(new Double(concentrationResponsePoint.value))
+                if (concentrationResponsePoint.value.isNumber() && !concentrationResponsePoint.testConcentration.isNaN()) {
+                    concentrations.add(concentrationResponsePoint.testConcentration)
+                    activities.add(new Double(concentrationResponsePoint.value))
+                }
+
             }
             else {
                 log.warn("Concentration point/value can not be empty: '${concentrationResponsePoint.testConcentration}/${concentrationResponsePoint.value}'")

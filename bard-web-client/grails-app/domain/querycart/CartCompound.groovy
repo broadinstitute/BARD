@@ -13,7 +13,7 @@ class CartCompound extends QueryItem {
     CartCompound() {
         this.queryItemType = QueryItemType.Compound
     }
-
+    //TODO: Should only be called for testing, because validation is by passed
     CartCompound(String smiles, String name, Long compoundId, int numAssayActive, int numAssayTested) {
         this.smiles = smiles
         this.name = name
