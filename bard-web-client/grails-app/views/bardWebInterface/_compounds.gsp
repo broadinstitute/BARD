@@ -4,6 +4,12 @@
 <g:if test="${facets}">
     <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.CompoundFacetForm]"/>
     <div class="span9">
+    <g:if test="${params.max || params.offset}">
+        <div class="pagination">
+            <g:paginate total="${nhits ? nhits : 0}"
+                        params='[searchString: "${searchString}", nhits: "${nhits ? nhits : 0}"]'/>
+        </div>
+    </g:if>
 </g:if>
 <g:else>
     <div class="span12">

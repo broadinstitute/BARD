@@ -164,8 +164,9 @@ class BardWebInterfaceController {
             //strip out all spaces
             final List<Long> compoundIds = searchStringToIdList(searchCommand.searchString)
             int top = compoundIds.size()
-            int skip = searchParams.skip
-
+            int skip = 0
+            params.max = top
+            params.skip=0
             final List<Long> cids = []
             for (def id : compoundIds) {
                 cids.add(new Long(id))
@@ -218,7 +219,9 @@ class BardWebInterfaceController {
 
             final List<Long> adids = searchStringToIdList(searchCommand.searchString)
             int top = adids.size()
-            int skip = searchParams.skip
+            int skip = 0
+            params.max = top
+            params.skip=0
             final List<Long> capIds = []
             for (def id : adids) {
                 capIds.add(new Long(id))
@@ -270,7 +273,9 @@ class BardWebInterfaceController {
 
             final List<Long> projectIds = searchStringToIdList(searchCommand.searchString)
             int top = projectIds.size()
-            int skip = searchParams.skip
+            int skip = 0
+            params.max = top
+            params.skip=0
             final List<Long> capIds = []
             for (def id : projectIds) {
                 capIds.add(new Long(id))
