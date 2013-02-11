@@ -32,6 +32,16 @@
                                 <li><a href="/BARD/assayDefinition/findByName">Find assay by Name</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                Projects
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/BARD/project/findById">Find project by ID</a></li>
+                                <li><a href="/BARD/project/findByName">Find project by Name</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <g:link url="${grailsApplication.config.bard.home.page}">Bard Web Client</g:link>
                         </li>
