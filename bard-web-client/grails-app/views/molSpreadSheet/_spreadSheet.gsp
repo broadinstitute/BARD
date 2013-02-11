@@ -4,8 +4,18 @@
 <script type="text/javascript">
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
+            var y
+            // First remove HTML tags and any text
             var x = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
-            var y = '0'+x;   // This way numerics are changed, but null values become numeric
+            var stringlen= x.length
+            // Insert a zero in front of the number ( otherwise a number starting with a decimal is treated as text )
+            //  Special case: if the number is negative then the zero has to go behind the negative sign
+            if (x.substring(0,1)=='-') {
+                y = '-0'+x.substring(1, stringlen);
+            } else {
+                y = '0'+x;
+            }
+            // Finally we have an acceptable floating-point number. Convert it.
             return parseFloat(y);
         },
 
