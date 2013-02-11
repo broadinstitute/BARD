@@ -5,7 +5,7 @@ class CartProject extends QueryItem {
     CartProject() {
         this.queryItemType = QueryItemType.Project
     }
-
+    //TODO: This should only be used for testing
     CartProject(String projectName, Long projectIdStr) {
         this()
         this.name = projectName

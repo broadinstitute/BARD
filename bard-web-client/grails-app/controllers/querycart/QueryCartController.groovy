@@ -44,13 +44,22 @@ class QueryCartController {
                     String smiles = params.smiles
                     int numAssayActive = params.numActive ? new Integer(params.numActive) : 0
                     int numAssayTested = params.numAssays ? new Integer(params.numAssays) : 0
-                    item = new CartCompound(smiles, name, id, numAssayActive, numAssayTested)
+                    item = new CartCompound()
+                    item.smiles = smiles
+                    item.name = name
+                    item.externalId = id
+                    item.numAssayActive = numAssayActive
+                    item.numAssayTested = numAssayTested
                     break
                 case QueryItemType.Project:
-                    item = new CartProject(name, id)
+                    item = new CartProject()
+                    item.name = name
+                    item.externalId = id
                     break
                 case QueryItemType.AssayDefinition:
-                    item = new CartAssay(name, id)
+                    item = new CartAssay()
+                    item.name = name
+                    item.externalId = id
                     break
 ///CLOVER:OFF
                 default:
@@ -149,7 +158,7 @@ class QueryCartController {
             }
         }
         catch (NumberFormatException e) {
-            log.error("Invalid ID ${params.id}.  " +  getUserIpAddress(bardUtilitiesService.username), e)
+            log.error("Invalid ID ${params.id}.  " + getUserIpAddress(bardUtilitiesService.username), e)
             errorResponse.status = 400
             errorResponse.text = "Invalid ID [${params.id}] passed as params.id"
         }
