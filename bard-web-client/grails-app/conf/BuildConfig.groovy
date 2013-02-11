@@ -27,6 +27,9 @@ grails.project.dependency.resolution = {
     dependencies {
 
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
+        compile('cbip:cbip_encoding:0.1') {
+            excludes "junit"
+        }
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
         test("org.spockframework:spock-core:0.6-groovy-1.8") {
