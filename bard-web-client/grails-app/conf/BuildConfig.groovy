@@ -25,6 +25,7 @@ grails.project.dependency.resolution = {
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
+        build 'com.oracle:ojdbc6:11.2.0.2.0'
 
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         compile('cbip:cbip_encoding:0.1') {
