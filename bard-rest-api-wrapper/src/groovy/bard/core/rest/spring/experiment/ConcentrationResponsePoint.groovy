@@ -77,8 +77,10 @@ public class ConcentrationResponsePoint extends JsonUtil {
     public String displayActivity() {
         String responseValue = this.value
         if (responseValue) {
-            ExperimentalValueUtil response = new ExperimentalValueUtil(new Double(responseValue), false)
-            return response.toString()
+            if (responseValue.isNumber()) {
+                ExperimentalValueUtil response = new ExperimentalValueUtil(new Double(responseValue), false)
+                return response.toString()
+            }
         }
 
         return ""
