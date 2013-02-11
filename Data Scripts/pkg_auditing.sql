@@ -55,7 +55,7 @@ AS
             lv_string := 'TO_CHAR(' || avi_column_name || ')';
         ELSIF avi_data_type IN ('CLOB')
         THEN
-            lv_string := 'SUBSTR(TO_CHAR(' || avi_column_name || '),1,4000)';
+            lv_string := 'TO_CHAR(SUBSTR(' || avi_column_name || ',1,4000))';
         ELSIF avi_data_type IN ('DATE', 'TIMESTAMP(6)')
         THEN
             lv_string := 'TO_CHAR(' || avi_column_name || ', ''MM/DD/YYYY HH:MI:SS'')';
@@ -116,7 +116,7 @@ AS
         VALUES
             (ani_audit_id,
              avi_column_name,
-             avi_old_value);
+             Nvl(avi_old_value, 'NULL'));
 
     END save_audit_column;
 
@@ -163,7 +163,9 @@ AS
           lv_key_value  varchar2(1000);
           lv_compound_key VARCHAR2(4000);
           ln_comma BINARY_INTEGER;
-          lv_pk_columns VARCHAR2(500);
+          lv_pk_columns VARCHAR2(1000);
+          lv_all_pk_col_text VARCHAR2(5000);
+          lv_all_col_text VARCHAR2(10000);
 
           CURSOR cur_col (cv_table_name IN VARCHAR2,
                           cv_table_owner IN VARCHAR2)
@@ -198,8 +200,6 @@ AS
         lv_compound_key := avi_primary_key;
         FOR lr_col IN cur_col (lv_table_name, lv_owner)
         LOOP
-            lv_column_text := '    ' || convert_data_type_string (lr_col.column_name, lr_col.data_type) || ' ' || lr_col.column_name;
-            lv_sql := lv_sql || ',' || CR || lv_column_text;
             IF lr_col.is_pk = 'Y'
             THEN
                 IF AVI_PRIMARY_KEY IS NOT NULL
@@ -211,7 +211,7 @@ AS
                         lv_key_value := lv_compound_key;
                     ELSE
                         lv_key_value := SubStr(lv_compound_key, 1, ln_comma -1);
-                        lv_compound_key := SubStr(lv_compound_key, ln_comma + 1);
+                        lv_compound_key := SubStr(lv_compound_key, ln_comma + 2);
                     END IF;
                     IF lv_where IS NULL
                     THEN
@@ -221,8 +221,14 @@ AS
                     END IF;
                 END IF;
                 lv_pk_columns := lv_pk_columns || lr_col.column_name || ', ' ;
+                lv_all_pk_col_text := lv_all_pk_col_text || convert_data_type_string(lr_col.column_name, lr_col.data_type) || ' || '', '' || ';
+            ELSE
+                lv_column_text := convert_data_type_string (lr_col.column_name, lr_col.data_type) || ' ' || lr_col.column_name;
+                lv_all_col_text := lv_all_col_text || ',' || CR || '    ' || lv_column_text;
             END IF;
         END LOOP;
+        lv_sql := lv_sql || ',' || CR || '    ' || substr(lv_all_pk_col_text, 1, Length(lv_all_pk_col_text)-12) || ' primary_key';
+        lv_sql := lv_sql || lv_all_col_text;
 
         -- now the rest of the 1st clause
         lv_sql := lv_sql || CR || 'from ' || avi_table_name || CR
@@ -260,7 +266,7 @@ AS
             lv_sql := lv_sql || 'AND arl.primary_key = ''' || avi_primary_key || '''' || CR;
         END IF;
         lv_sql := lv_sql || 'GROUP BY  arl.username, arl.action, arl.audit_timestamp, arl.primary_key' || CR
-                  || 'ORDER BY ' || lv_pk_columns || ' audit_timestamp desc';
+                  || 'ORDER BY primary_key, audit_timestamp desc';
 
         --Dbms_Output.put_line(lv_sql);
 

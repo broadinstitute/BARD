@@ -29,7 +29,7 @@ AS
       FROM tabs
       WHERE table_name = 'AUDIT_ROW_LOG';
 
-      IF ln_table_exists < 1
+      IF ln_table_exists = 0
       THEN
           lv_sql := 'CREATE TABLE audit_row_log
   (audit_id NUMBER (19,0) NOT NULL,
@@ -41,16 +41,16 @@ AS
   username  VARCHAR2(30) NOT NULL,
   constraint pk_audit_row_log PRIMARY KEY (audit_id)
   )';
-
           EXECUTE IMMEDIATE lv_sql;
+      END IF;
 
-          SELECT Count(*) INTO ln_table_exists
-          FROM user_sequences
-          WHERE sequence_name = 'AUDIT_ID_SEQ';
+      SELECT Count(*) INTO ln_table_exists
+      FROM user_sequences
+      WHERE sequence_name = 'AUDIT_ID_SEQ';
 
-          IF ln_table_exists = 0
-          THEN
-              lv_sql := 'CREATE SEQUENCE audit_id_seq
+      IF ln_table_exists = 0
+      THEN
+          lv_sql := 'CREATE SEQUENCE audit_id_seq
     START WITH 1
     INCREMENT BY 1
     NOMINVALUE
@@ -58,8 +58,16 @@ AS
     NOCYCLE
     CACHE 200
     NOORDER';
-              EXECUTE IMMEDIATE lv_sql;
-          END IF;
+          EXECUTE IMMEDIATE lv_sql;
+      END IF;
+      SELECT Count(*) INTO ln_table_exists
+      FROM user_indexes
+      WHERE index_name = 'IDX_AUDIT_ROW_LOG_PRIMARY_KEY';
+
+      IF ln_table_exists = 0
+      THEN
+          LV_SQL := 'CREATE INDEX idx_audit_row_log_primary_key ON audit_row_log(primary_key)';
+          EXECUTE IMMEDIATE lv_sql;
       END IF;
       -----------------------------------------------------------
       -- audit_column_log

@@ -198,17 +198,29 @@ AS
         FOR lr_col IN cur_column (avi_table_name, avi_type)
         LOOP
             Dbms_Output.PUT_LINE( substr(avi_type, 1, 3) || ' ' ||lr_col.TABLE_name || '.' || lr_col.column_name || ': ' || Length(lv_sql));
-            IF Length(lv_sql) + 892 < 32767    -- 892 is the maximum length of the next piece and the ender section
-            then
-                lv_col := '    IF :new.' || lr_col.column_name || ' != :old.' || lr_col.column_name || CR
-                      || '      OR (:new.' || lr_col.column_name || ' IS NULL AND :old.' || lr_col.column_name || ' IS NOT NULL)' || CR
-                      || '      OR (:new.' || lr_col.column_name || ' IS NOT NULL AND :old.' || lr_col.column_name || ' IS NULL)' || CR
-                      || '    THEN' || CR
-                      || '       i := i + 1;' || CR
-                      || '       lt_columns(i).column_name := ''' || lr_col.column_name || ''';' || CR
-                      || '       lt_columns(i).old_value := ' || convert_data_type_string(':old.' || lr_col.column_name, lr_col.data_type) || ';' || CR
-                      || '       lt_columns(i).new_value := ' || convert_data_type_string(':new.' || lr_col.column_name, lr_col.data_type) || ';' || CR
-                      || '    END IF;' || CR;
+            IF Length(lv_sql) + 892 < 32767    -- 892 is the maximum length of the next piece and the end section
+            THEN
+                IF avi_type = 'UPDATE' THEN
+                    lv_col := '    IF :new.' || lr_col.column_name || ' != :old.' || lr_col.column_name || CR
+                          || '      OR (:new.' || lr_col.column_name || ' IS NULL AND :old.' || lr_col.column_name || ' IS NOT NULL)' || CR
+                          || '      OR (:new.' || lr_col.column_name || ' IS NOT NULL AND :old.' || lr_col.column_name || ' IS NULL)' || CR
+                          || '    THEN' || CR
+                          || '       i := i + 1;' || CR
+                          || '       lt_columns(i).column_name := ''' || lr_col.column_name || ''';' || CR
+                          || '       lt_columns(i).old_value := ' || convert_data_type_string(':old.' || lr_col.column_name, lr_col.data_type) || ';' || CR
+                          || '       lt_columns(i).new_value := ' || convert_data_type_string(':new.' || lr_col.column_name, lr_col.data_type) || ';' || CR
+                          || '    END IF;' || CR;
+                ELSIF AVI_TYPE = 'DELETE'
+                THEN
+                     lv_col := '       i := i + 1;' || CR
+                          || '       lt_columns(i).column_name := ''' || lr_col.column_name || ''';' || CR
+                          || '       lt_columns(i).old_value := ' || convert_data_type_string(':old.' || lr_col.column_name, lr_col.data_type) || ';' || CR ;
+                ELSIF AVI_TYPE = 'INSERT'
+                THEN
+                     lv_col := '       i := i + 1;' || CR
+                          || '       lt_columns(i).column_name := ''' || lr_col.column_name || ''';' || CR
+                          || '       lt_columns(i).new_value := ' || convert_data_type_string(':new.' || lr_col.column_name, lr_col.data_type) || ';' || CR ;
+                END IF;
 
                 lv_sql := lv_sql || lv_col;
             ELSE
