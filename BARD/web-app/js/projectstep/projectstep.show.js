@@ -1,4 +1,6 @@
 var Renderer = function(canvas){
+    var template = Handlebars.compile($("#node-selection-template").html())
+
     var canvas = $(canvas).get(0)
     var ctx = canvas.getContext("2d");
     var particleSystem
@@ -116,27 +118,15 @@ var Renderer = function(canvas){
                     }
                     var projectId = $('#projectIdForStep').val()
 
-                    var str1 = '<td><a href="#" onclick="deleteEdge('
-                    var str2 = ')" style="font-family:arial;color:red;font-size:10px;"><i class="icon-trash"></i>Remove from Project</a></td>'
-                    selected = (nearest.distance < 50) ? nearest : null
+                    var selected = (nearest.distance < 50) ? nearest : null
                     resetAfterClick()
-                    $('#nodelink').html("<a href='/BARD/experiment/show/"+selected.node.data.link+"'>"+selected.node.data.link+"</a>")
-                    $('#nodelinkTable').show()
+
                     var fromSelectedNode =  particleSystem.getEdgesFrom(selected.node)
-                    for (var i = 0; i < fromSelectedNode.length; i++) {
-                        $('#edgesTable > tbody:last').append("<tr><td>"+selected.node.data.link+
-                            "</td><td></td><td>"+fromSelectedNode[i].target.data.link+"</td>"
-                            +str1+selected.node.data.link+","+fromSelectedNode[i].target.data.link+","+projectId+str2+"</tr>");
-                    }
                     var toSelectedNode =  particleSystem.getEdgesTo(selected.node)
-                    for (var i = 0; i < toSelectedNode.length; i++) {
-                        $('#edgesTable > tbody:last').append("<tr><td>"+toSelectedNode[i].source.data.link+"</td><td></td><td>"+selected.node.data.link+"</td>"
-                            +str1+toSelectedNode[i].source.data.link+","+selected.node.data.link+","+projectId+str2+"</tr>");
-                    }
-                    $('#edgesTable').show()
-                    $('#nodeename').text(selected.node.data.ename)
-                    $('#nodeassay').text(selected.node.data.assay)
-                    $('#assaylink').attr("href", "/BARD/assayDefinition/show/"+selected.node.data.assay)
+
+                    var params = {fromSelectedNode: fromSelectedNode, toSelectedNode: toSelectedNode, selected: selected, projectId: projectId}
+                    $('#node-selection-details').html(template(params))
+
                     $(canvas).bind('mousemove', handler.dragged)
                     $(window).bind('mouseup', handler.dropped)
 
