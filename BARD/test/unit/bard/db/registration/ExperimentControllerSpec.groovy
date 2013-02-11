@@ -22,7 +22,8 @@ class ExperimentControllerSpec extends Specification {
     def 'test create'() {
         when:
         Assay assay = Assay.build()
-        def m = controller.create(assay.id)
+        params.assayId = assay.id
+        def m = controller.create()
 
         then:
         m.assay == assay
@@ -37,7 +38,10 @@ class ExperimentControllerSpec extends Specification {
 
         when:
         controller.experimentService = experimentService
-        controller.save(assay.id, "name", "desc")
+        params.assayId = assay.id
+        params.experimentName = "name"
+        params.description = "desc"
+        controller.save()
 
         then:
         1 * experimentService.createNewExperiment(assay, "name", "desc") >> experiment

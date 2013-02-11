@@ -16,6 +16,8 @@ class ResultsService {
 
     static Pattern NUMBER_PATTERN = Pattern.compile("[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?")
 
+    static String DELIMITER = ","
+
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
     }
@@ -28,7 +30,6 @@ class ResultsService {
 
         // if this column represents a context item
         ItemService.Item item;
-
 
         // return a string if error.  Otherwise returns a Cell
         def parseValue(String value) {
@@ -175,6 +176,7 @@ class ResultsService {
     }
 
     static String EXPERIMENT_ID_LABEL = "Experiment ID"
+    static String EXPERIMENT_NAME_LABEL = "Experiment Name"
     static List FIXED_COLUMNS = ["Row #", "Substance", "Replicate #", "Parent Row #"]
     static int MAX_ERROR_COUNT = 100;
 
@@ -187,7 +189,7 @@ class ResultsService {
             def lines = []
 
             lines.add(["",EXPERIMENT_ID_LABEL, experiment.id])
-            lines.add(["","Experiment Name", experiment.experimentName])
+            lines.add(["",EXPERIMENT_NAME_LABEL, experiment.experimentName])
 
             // add the fields for values that are constant across entire experiment
             constantItems.each { lines.add(["",it.name]) }
@@ -220,7 +222,7 @@ class ResultsService {
         def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
-        return generateSchema(experiment, itemService.getLogicalItems(assayItems), assay.measures as List, itemService.getLogicalItems(measureItems))
+        return generateSchema(experiment, itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect {it.measure} as List, itemService.getLogicalItems(measureItems))
     }
 
     /**
@@ -276,6 +278,15 @@ class ResultsService {
         }
     }
 
+    boolean allEmptyColumns(String line) {
+        String[] columns = line.split(DELIMITER);
+        for(column in columns) {
+            if (!column.isEmpty())
+                return false
+        }
+        return true
+    }
+
     Map<String, String> parseConstantRegion(LineReader reader,  ImportSummary errors, Set allowedConstants) {
         Map header = [:]
 
@@ -285,11 +296,11 @@ class ResultsService {
                 break;
 
             // initial header stops on first empty line
-            if (line.trim().length() == 0) {
+            if (allEmptyColumns(line)) {
                 break;
             }
 
-            String [] values = line.split("\t")
+            String [] values = line.split(DELIMITER)
             if (values.length != 3) {
                 errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but got ${values.length} columns")
                 continue
@@ -321,7 +332,7 @@ class ResultsService {
             if (line == null)
                 break;
 
-            List values = line.split("\t")
+            List values = line.split(DELIMITER)
 
             // verify and reshape columns
             while(values.size() < expectedColumnCount) {
@@ -343,7 +354,7 @@ class ResultsService {
         }
     }
 
-    def safeParse(ImportSummary errors, List<String> values, int lineNumber, List<Closure> fns) {
+    Object[] safeParse(ImportSummary errors, List<String> values, int lineNumber, List<Closure> fns) {
         boolean hadFailure = false;
 
         Object[] parsed = new Object[fns.size()]
@@ -366,7 +377,7 @@ class ResultsService {
 
     List<Column> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
         String header = reader.readLine()
-        def columnNames = header.split("\t")
+        def columnNames = header.split(DELIMITER)
 
         // validate the fixed columns are where they should be
         for(int i = 0;i<FIXED_COLUMNS.size();i++) {
@@ -419,11 +430,11 @@ class ResultsService {
         }
     }
 
-    def isLinked(Column measureColumn, Column itemColumn) {
+    boolean isLinked(Column measureColumn, Column itemColumn) {
         def key = new Tuple(measureColumn.measure, itemColumn.contextItem)
     }
 
-    def associateItemToResults(List<Result> results, List<Column> columns, Cell cell, Closure isLinked) {
+    void associateItemToResults(List<Result> results, List<Column> columns, Cell cell, Closure isLinked) {
         assert columns.size() == results.size()
 
         for(int i=0;i<results.size();i++) {
@@ -437,7 +448,7 @@ class ResultsService {
         }
     }
 
-    def createResults(InitialParse parse, ImportSummary errors, Map<AssayContextItem, Collection<Measure>> measuresPerContextItem) {
+    Collection<Result> createResults(InitialParse parse, ImportSummary errors, Map<AssayContextItem, Collection<Measure>> measuresPerContextItem) {
         def rowByNumber = [:]
         parse.rows.each {
             rowByNumber[it.rowNumber] = it
@@ -458,7 +469,8 @@ class ResultsService {
             def results = []
             for(cell in row.cells) {
                 if (cell.column.measure != null) {
-                    def result = new Result(qualifier: cell.qualifier, valueNum: cell.value, statsModifier: cell.column.measure.statsModifier, resultType: cell.column.measure.resultType, replicateNumber: row.replicate, substance: substance)
+                    String qualifier = cell.qualifier.length() == 1 ? cell.qualifier +" " : cell.qualifier;
+                    def result = new Result(qualifier: qualifier, valueNum: cell.value, statsModifier: cell.column.measure.statsModifier, resultType: cell.column.measure.resultType, replicateNumber: row.replicate, substance: substance, dateCreated: new Date(), resultStatus: "Pending")
                     results << result
                     resultByCell[cell] = result
                     cellByResult[result] = cell
@@ -507,6 +519,7 @@ class ResultsService {
         Set expectedNames = [] as Set
         template.constantItems.each {expectedNames.add(it.name)}
         expectedNames.add(EXPERIMENT_ID_LABEL)
+        expectedNames.add(EXPERIMENT_NAME_LABEL)
 
         Map constants = parseConstantRegion(reader, errors, expectedNames)
         if (errors.hasErrors())
@@ -585,20 +598,40 @@ class ResultsService {
         return result
     }
 
+    Map<AssayContextItem, Collection<Measure>> findRelationships(Experiment experiment) {
+        def map = [:]
+
+        experiment.assay.assayContextItems.each {
+            def measures = it.assayContext.assayContextMeasures.collect { it.measure }
+            map[it] = measures
+        }
+
+        return map
+    }
+
     ImportSummary importResults(Experiment experiment, InputStream input) {
         ImportSummary errors = new ImportSummary()
 
-        Template template = generateMaxSchema(experiment.assay)
+        Template template = generateMaxSchema(experiment)
         def measuresPerContextItem = findRelationships(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template)
+        if (parsed != null) {
+            def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
+            missingSids.each { errors.addError(0,0, "Could not find substance with id ${it}")}
 
-        def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
-        missingSids.each { errors.addError(0,0, "Could not find substance with id ${it}")}
+            def results = createResults(parsed, errors, measuresPerContextItem)
 
-        def results = createResults(parsed, errors, measuresPerContextItem)
+            // and persist these results to the DB
+            results.each {
+                it.experiment = experiment
+                if(!it.save()) {
+                    throw new RuntimeException(it.errors.toString())
+                }
+            }
 
-        errors.resultsCreated = results.size()
+            errors.resultsCreated = results.size()
+        }
 
         return errors
     }

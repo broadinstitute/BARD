@@ -1,5 +1,8 @@
 package bard.db.registration
 
+import grails.plugins.springsecurity.Secured
+
+@Secured(['isFullyAuthenticated()'])
 class DocumentController {
     static allowedMethods = [save: "POST", update: "POST"]
 

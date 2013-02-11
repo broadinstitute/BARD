@@ -7,27 +7,28 @@ class ItemService {
         String id
         AttributeType type
         Element attributeElement
+        AssayContext assayContext
         List contextItems
     }
 
-    def getLogicalItems(List<AssayContextItem> items) {
+    def getLogicalItems(Collection<AssayContextItem> items) {
         def logicalItems = []
         items.each {
             if(it.attributeType != AttributeType.List) {
-                logicalItems << new Item(id: "I${it.id}", type: it.attributeType, contextItems: [it], attributeElement: it.attributeElement)
+                logicalItems << new Item(id: "I${it.id}", type: it.attributeType, contextItems: [it], attributeElement: it.attributeElement, assayContext: it.assayContext)
             }
         }
 
         def listItems = items.findAll { it.attributeType == AttributeType.List }
         def grouped = listItems.groupBy { "L${it.assayContext.id}:${it.attributeElement.id}"}
         grouped.each {key, value ->
-            logicalItems << new Item(id: key, type: AttributeType.List, contextItems: value)
+            logicalItems << new Item(id: key, type: AttributeType.List, contextItems: value, attributeElement: value[0].attributeElement, assayContext: value[0].assayContext)
         }
 
         return logicalItems
     }
 
-    def getItem(String id) {
+    def get(String id) {
         if (id.startsWith("I")) {
             def item = AssayContextItem.get(id.substring(1))
             if (item == null)

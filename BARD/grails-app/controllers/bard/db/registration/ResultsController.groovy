@@ -1,11 +1,14 @@
 package bard.db.registration
 
 import bard.db.experiment.Experiment
+import grails.plugins.springsecurity.Secured
 import grails.util.GrailsWebUtil
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 import org.springframework.web.multipart.MultipartFile
 
 class FieldListCommand {
+    def itemService
+
     List contextItemIds
     List measureIds
     List measureItemIds
@@ -20,7 +23,7 @@ class FieldListCommand {
     }
 
     List<AssayContextItem> getContextItems() {
-        return queryList(AssayContextItem, contextItemIds)
+        return queryList(itemService, contextItemIds)
     }
 
     List<Measure> getMeasures() {
@@ -28,26 +31,27 @@ class FieldListCommand {
     }
 
     List<AssayContextItem> getMeasureItems() {
-        return queryList(AssayContextItem, measureItemIds)
+        return queryList(itemService, measureItemIds)
     }
 }
 
+@Secured(['isFullyAuthenticated()'])
 class ResultsController {
 
     def resultsService;
+    def itemService;
 
     def configureTemplate(String experimentId) {
         Experiment experiment = Experiment.get(experimentId)
 
         def assay = experiment.assay
         def assayItems = assay.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
-        // collapse lists to a single item by picking the first with a given attribute
-        assayItems = (assayItems.groupBy {it.attributeElement.id}).values().collect {it[0]}
+        def items = itemService.getLogicalItems(assayItems)
 
-        def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
-        assayItems.removeAll(measureItems)
+        def measureItems = items.findAll { it.assayContext.assayContextMeasures.size() > 0 }
+        items.removeAll(measureItems)
 
-        [experiment: experiment, assayItems: assayItems, measureItems: measureItems]
+        [experiment: experiment, assayItems: items, measureItems: measureItems]
     }
 
     def generatePreview (String experimentId, FieldListCommand fieldList) {
@@ -73,7 +77,7 @@ class ResultsController {
         Experiment experiment = Experiment.get(params.experimentId)
         MultipartFile f = request.getFile('resultsFile')
 
-        def summary = resultsService.importResults(experiment, f.inputStream)
+        ResultsService.ImportSummary summary = resultsService.importResults(experiment, f.inputStream)
 
         [summary: summary]
     }

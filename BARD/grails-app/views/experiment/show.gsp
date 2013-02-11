@@ -94,7 +94,7 @@
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data" action="${createLink(action: "uploadResults")}"
+                                <form method="POST" enctype="multipart/form-data" action="${createLink(action: "uploadResults", controller:"results")}"
                                       id="uploadResultsForm">
                                     <p>Uploading results will replace any results already stored for this experiment.</p>
 

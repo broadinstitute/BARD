@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
 import bard.db.experiment.Substance
@@ -19,7 +20,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment])
+@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
 class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {
@@ -29,6 +30,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
     void 'test create template from assay'() {
         when:
         // an assay with 1 measure, and two contexts, one of which is associated with the measure
+        // yes, this is a lot scaffolded data, but I think that is more a result of the design of the data model
+        // and I prefer using the real domain then mocking much of it out.
         Assay assay = Assay.build()
         Experiment experiment = Experiment.build(assay:assay)
         AssayContext assayContext = AssayContext.build(assay: assay)
@@ -40,6 +43,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         measureContext.assayContextMeasures = [assayContextMeasure] as Set
         assay.assayContexts = [assayContext, measureContext]
         assay.measures = [measure] as Set
+        experiment.experimentMeasures = [ExperimentMeasure.build(measure: measure)] as Set
 
         ResultsService service = new ResultsService();
         service.itemService = new ItemService()
@@ -65,11 +69,11 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def constantItems = []
         ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: columns, constantItems: constantItems)
 
-        String sample = "\tExperiment ID\t123\n"+
+        String sample = ",Experiment ID,123\n"+
                 "\n" +
-                "Row #\tSubstance\tReplicate #\tParent Row #\tInhibition\tEC50\n" +
-                "1\t100\t\t\t10\t\n" +
-                "2\t100\t\t1\t\t5\n"
+                "Row #,Substance,Replicate #,Parent Row #,Inhibition,EC50\n" +
+                "1,100,,,10,\n" +
+                "2,100,,1,,5\n"
 
         return [sample: sample, template: template]
     }
@@ -112,7 +116,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         def fixture = createSampleFile()
         // break apart table
-        def table = fixture.sample.split("\n").collect { it.split("\t") as List }
+        def table = fixture.sample.split("\n").collect { it.split(",") as List }
         // mutate
         def r = table.get(row)
         while (column >= r.size()) {
@@ -120,7 +124,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         }
         r.set(column, newValue)
         // reassemble
-        def sample = (table.collect { it.join("\t") }).join("\n")
+        def sample = (table.collect { it.join(",") }).join("\n")
 
         ResultsService service = new ResultsService();
         service.itemService = new ItemService()
@@ -196,7 +200,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         results.size() == 1
         Result result = results.first()
         result.replicateNumber == 1
-        result.qualifier == "="
+        result.qualifier == "= "
         result.valueNum == 5.0
         result.resultType == resultType
         result.substance == substance
@@ -235,7 +239,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         results.size() == 1
         Result rMeasure = results.first()
         rMeasure.replicateNumber == 1
-        rMeasure.qualifier == "="
+        rMeasure.qualifier == "= "
         rMeasure.valueNum == 5.0
         rMeasure.resultType == resultType
         rMeasure.substance == substance

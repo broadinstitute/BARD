@@ -21,7 +21,7 @@ class ExperimentService {
         Map measureToExpMeasure = [:]
 
         experiment.assay.measures.each { Measure measure ->
-            ExperimentMeasure expMeasure = new ExperimentMeasure(experiment: experiment, measure: measure)
+            ExperimentMeasure expMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date())
             measureToExpMeasure[measure] = expMeasure
         }
 
