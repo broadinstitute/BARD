@@ -38,7 +38,11 @@ class ItemService {
             int index = id.indexOf(":")
             String contextId = id.substring(1,index)
             String attributeTypeId = id.substring(index+1)
-            def items = AssayContextItem.findAllByAttributeElementAndAssayContext(contextId, attributeTypeId)
+
+            Element attribute = Element.get(attributeTypeId)
+            AssayContext context = AssayContext.get(contextId)
+
+            def items = AssayContextItem.findAllByAttributeElementAndAssayContext(attribute, context)
             return new Item(id: id, type: AttributeType.List, contextItems: items, attributeElement: items[0].attributeElement)
         }  else {
             throw new RuntimeException("invalid id ${id}")

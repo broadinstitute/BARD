@@ -8,18 +8,136 @@ import bard.db.experiment.ResultContextItem
 import bard.db.experiment.ResultHierarchy
 import bard.db.experiment.Substance
 
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class ResultsService {
 
-    static Pattern RANGE_PATTERN = Pattern.compile("([^-]+)-(.*)")
+    static String NUMBER_PATTERN_STRING = "[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?"
 
-    static Pattern NUMBER_PATTERN = Pattern.compile("[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?")
+    // pattern matching a number
+    static Pattern NUMBER_PATTERN = Pattern.compile(NUMBER_PATTERN_STRING)
+
+    static String QUALIFIER_PATTERN_STRING = (Result.QUALIFIER_VALUES.collect{ "(?:${it.trim()})"}).join("|")
+
+    // pattern matching a qualifier followed by a number
+    static Pattern QUALIFIED_NUMBER_PATTERN = Pattern.compile("(${QUALIFIER_PATTERN_STRING})?\\s*(${NUMBER_PATTERN_STRING})")
+
+    // pattern matching a range of numbers.  Doesn't actually check that the two parts are numbers
+    static Pattern RANGE_PATTERN = Pattern.compile("([^-]+)-(.*)")
 
     static String DELIMITER = ","
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
+    }
+
+    static def parseListValue(Column column, String value, List<AssayContextItem> contextItems) {
+        if (isNumber(value)) {
+            float v = Float.parseFloat(value)
+            float smallestDelta = Float.MAX_VALUE
+            float closestValue = Float.NaN
+
+            contextItems.each {
+                def delta = Math.abs(it.valueNum - v)
+                if (delta < smallestDelta) {
+                    smallestDelta = delta
+                    closestValue = it.valueNum
+                }
+            }
+            return new Cell(value: closestValue, qualifier: "=", column: column)
+        } else {
+            def labelMap = [:]
+            contextItems.each {
+                if(it.valueElement != null)
+                    labelMap[it.valueElement.label] = it.valueElement
+            }
+            Element element = labelMap[value]
+            if (element == null) {
+                return "Could not find \"${value}\" among values in list: ${labelMap.keySet()}"
+            }
+            return new Cell(element: element, column: column)
+        }
+    }
+
+    static def makeItemParser(ItemService.Item item) {
+        return { Column column, String value ->
+            if (item.type == AttributeType.List) {
+                return parseListValue(column, value, item.contextItems)
+            } else if (item.type == AttributeType.Free) {
+                return parseNumberOrRange(column, value)
+            } else if (item.type == AttributeType.Range) {
+                Double rangeMin = item.contextItems[0].valueMin
+                Double rangeMax = item.contextItems[0].valueMax
+                Double rangeName = item.attributeElement.label
+
+                float floatValue = Float.parseFloat(value)
+
+                if (floatValue < rangeMin || floatValue > rangeMax) {
+                    return "The value \"${floatValue}\" outside of allowed range (${rangeMin} - ${rangeMax}) for ${rangeName}"
+                }
+
+                return new Cell(value: floatValue, column: column)
+            } else {
+                throw new RuntimeException("Did not know how to handle attribute type "+item.type)
+            }
+        }
+    }
+
+    static def parseQualifiedNumber(Column column, String value) {
+        Matcher matcher = QUALIFIED_NUMBER_PATTERN.matcher(value)
+
+        if (matcher.matches()) {
+            String foundQualifier = matcher.group(1)
+            if (foundQualifier == null) {
+                foundQualifier = "="
+            }
+
+            float a
+            try
+            {
+                a = Float.parseFloat(matcher.group(2));
+            }
+            catch(NumberFormatException e)
+            {
+                return "Could not parse \"${matcher.group(2)}\" as a number"
+            }
+
+            Cell cell = new Cell(value: a, qualifier: foundQualifier, column: column)
+
+            return cell
+        } else {
+            return "Could not parse \"${value}\" as a number with optional qualifier"
+        }
+    }
+
+    static def parseRange(Column column, String value) {
+        def rangeMatch = RANGE_PATTERN.matcher(value)
+        if (rangeMatch.matches()) {
+            float minValue, maxValue
+            try
+            {
+                minValue = Float.parseFloat(rangeMatch.group(1));
+                maxValue = Float.parseFloat(rangeMatch.group(2));
+            }
+            catch(NumberFormatException e)
+            {
+                return "Could not parse \"${value}\" as a range"
+            }
+
+            Cell cell = new Cell(minValue: minValue, maxValue: maxValue, column: column)
+            return cell
+        }
+
+        return "Expected a range, but got \"${value}\""
+    }
+
+    static def parseNumberOrRange(Column column, String value) {
+        if (RANGE_PATTERN.matcher(value).matches()) {
+            return parseRange(column, value)
+        } else {
+            return parseQualifiedNumber(column, value)
+        }
     }
 
     static class Column {
@@ -31,101 +149,23 @@ class ResultsService {
         // if this column represents a context item
         ItemService.Item item;
 
+        Closure parser;
+
         // return a string if error.  Otherwise returns a Cell
         def parseValue(String value) {
-            Double rangeMax = null
-            Double rangeMin = null
-            String rangeName = null
+            return parser(this, value)
+        }
 
-            if (item != null) {
-                if (item.type == AttributeType.List) {
-                    if (isNumber(value)) {
-                        float v = Float.parseFloat(value)
-                        float smallestDelta = Float.MAX_VALUE
-                        float closestValue = Float.NaN
+        public Column(String name, Measure measure) {
+            this.name = name
+            this.measure = measure
+            this.parser = { Column column, String value -> parseNumberOrRange(column, value) }
+        }
 
-                        item.contextItems.each {
-                            def delta = Math.abs(it.valueNum - v)
-                            if (delta < smallestDelta) {
-                                smallestDelta = delta
-                                closestValue = it.valueNum
-                            }
-                        }
-                        return new Cell(value: closestValue, qualifier: "=", column: this)
-                    } else {
-                        def labelMap = [:]
-                        item.contextItems.each {
-                            if(it.valueElement != null)
-                                labelMap[it.valueElement.label] = it.valueElement
-                        }
-                        Element element = labelMap[value]
-                        if (element == null) {
-                            return "Could not find \"${value}\" among values in list: ${labelMap.keySet()}"
-                        }
-                        return new Cell(element: element, column: this)
-                    }
-                } else if (item.type == AttributeType.Free) {
-                    // pass through
-                } else if (item.type == AttributeType.Range) {
-                    rangeMin = item.contextItems[0].valueMin
-                    rangeMax = item.contextItems[0].valueMax
-                    rangeName = item.attributeElement.label
-                } else {
-                    throw new RuntimeException("Did not know how to handle attribute type "+item.type)
-                }
-            }
-
-            String foundQualifier = null
-
-            for(qualifier in Result.QUALIFIER_VALUES) {
-                qualifier = qualifier.trim()
-                if (value.startsWith(qualifier) && (foundQualifier == null || foundQualifier.length() < qualifier.length()) ) {
-                    foundQualifier = qualifier
-                }
-            }
-
-            if (foundQualifier == null) {
-                foundQualifier = "="
-            } else {
-                value = value.substring(foundQualifier.length()).trim()
-            }
-
-            def rangeMatch = RANGE_PATTERN.matcher(value)
-            if (rangeMatch.matches()) {
-                float minValue, maxValue
-                try
-                {
-                    minValue = Float.parseFloat(rangeMatch.group(1));
-                    maxValue = Float.parseFloat(rangeMatch.group(2));
-                }
-                catch(NumberFormatException e)
-                {
-                    return "Could not parse \"${value}\" as a range"
-                }
-
-                Cell cell = new Cell(minValue: minValue, maxValue: maxValue, column: this)
-                return cell
-            } else {
-                float a
-                try
-                {
-                    a = Float.parseFloat(value);
-                }
-                catch(NumberFormatException e)
-                {
-                    return "Could not parse \"${value}\" as a number"
-                }
-
-                if (rangeName != null) {
-                    if (a < rangeMin || a > rangeMax) {
-                        return "The value \"${a}\" outside of allowed range (${rangeMin} - ${rangeMax}) for ${rangeName}"
-                    }
-                }
-
-                Cell cell = new Cell(value: a, qualifier: foundQualifier, column: this)
-
-                return cell
-            }
+        public Column(String name, ItemService.Item item) {
+            this.item = item;
+            this.name = name;
+            this.parser = makeItemParser(item)
         }
     }
 
@@ -238,7 +278,7 @@ class ResultsService {
             String name = item.attributeElement.label
             usedNames.add(name)
 
-            Column column = new Column(name: name, item: item)
+            Column column = new Column(name, item)
             constants.add(column)
         }
 
@@ -247,7 +287,7 @@ class ResultsService {
             String name = measure.displayLabel
             usedNames.add(name)
 
-            Column column = new Column(name: name, measure: measure)
+            Column column = new Column(name, measure)
             columns.add(column)
         }
 
@@ -256,7 +296,7 @@ class ResultsService {
             String name = item.attributeElement.label
             usedNames.add(name)
 
-            Column column = new Column(name: name, item: item)
+            Column column = new Column(name, item)
             columns.add(column)
         }
 

@@ -65,7 +65,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         Measure inhibitionMeasure = Measure.build()
         Measure ec50Measure = Measure.build()
 
-        def columns = [new ResultsService.Column(name: "Inhibition", measure: inhibitionMeasure), new ResultsService.Column(name: "EC50", measure: ec50Measure)]
+        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
         def constantItems = []
         ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: columns, constantItems: constantItems)
 
@@ -151,7 +151,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
     void 'test parse measure cell'() {
         when:
         Measure measure = Measure.build()
-        ResultsService.Column column = new ResultsService.Column(measure: measure)
+        ResultsService.Column column = new ResultsService.Column("x", measure)
 
         ResultsService.Cell cell = column.parseValue(cellString)
 
@@ -183,7 +183,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         def resultType = Element.build()
         def measure = Measure.build(resultType: resultType)
-        def column = new ResultsService.Column(name: "a", measure: measure)
+        def column = new ResultsService.Column("a", measure)
         def cell = new ResultsService.Cell(column: column, qualifier: "=", value: 5)
         def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [cell], replicate: 1)
         def parse = new ResultsService.InitialParse(constants: [:], rows: [row])
@@ -218,8 +218,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute)])[0]
         def resultType = Element.build()
         def measure = Measure.build(resultType: resultType)
-        def measureColumn = new ResultsService.Column(name: "a", measure: measure)
-        def itemColumn = new ResultsService.Column(name: "b", item: item)
+        def measureColumn = new ResultsService.Column( "a", measure)
+        def itemColumn = new ResultsService.Column( "b", item)
 
         // construct a row of two cells: a measurement and an associated context
         def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "=", value: 5)
@@ -255,7 +255,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free)])[0]
-        ResultsService.Column column = new ResultsService.Column(item: item)
+        ResultsService.Column column = new ResultsService.Column("x", item)
 
         ResultsService.Cell cell = column.parseValue(cellString)
 
@@ -284,7 +284,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, assayContext: context)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
-        ResultsService.Column column = new ResultsService.Column(item: item)
+        ResultsService.Column column = new ResultsService.Column("x",item)
 
         ResultsService.Cell c0 = column.parseValue("tuba")
 
@@ -310,7 +310,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2 )
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([large, small])[0]
-        ResultsService.Column column = new ResultsService.Column(item: item)
+        ResultsService.Column column = new ResultsService.Column("x", item)
 
         ResultsService.Cell c0 = column.parseValue("1e2")
 
