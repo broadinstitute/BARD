@@ -9,8 +9,12 @@ import org.springframework.web.multipart.MultipartFile
 class FieldListCommand {
     def itemService
 
-    List contextItemIds
     List measureIds
+
+    List contextItemIds
+    List contextItemFrequency
+
+    List measureItemFrequency
     List measureItemIds
 
     List queryList(def clazz, List ids) {
@@ -22,8 +26,29 @@ class FieldListCommand {
         return items
     }
 
-    List<AssayContextItem> getContextItems() {
-        return queryList(itemService, contextItemIds)
+    List getIdsWithFrequency(List itemFrequencies, List itemIds, String frequencyToFind) {
+        if (itemFrequencies == null) {
+            assert itemIds == null
+            return []
+        }
+
+        def filteredIds = []
+
+        assert itemFrequencies.size() == itemIds.size()
+
+        for(int i=0;i<itemFrequencies.size();i++) {
+            String freq = itemFrequencies.get(i)
+            if (freq == frequencyToFind) {
+                filteredIds << itemIds[i]
+            }
+        }
+
+        return filteredIds
+    }
+
+    List<AssayContextItem> getExperimentContextItems() {
+        def ids = getIdsWithFrequency(contextItemFrequency, contextItemIds, "experiment") + getIdsWithFrequency(measureItemFrequency, measureItemIds, "experiment")
+        return queryList(itemService, ids)
     }
 
     List<Measure> getMeasures() {
@@ -31,7 +56,8 @@ class FieldListCommand {
     }
 
     List<AssayContextItem> getMeasureItems() {
-        return queryList(itemService, measureItemIds)
+        def ids = getIdsWithFrequency(measureItemFrequency, measureItemIds, "measurement")
+        return queryList(itemService, ids)
     }
 }
 
@@ -57,7 +83,7 @@ class ResultsController {
     def generatePreview (String experimentId, FieldListCommand fieldList) {
         Experiment experiment = Experiment.get(experimentId)
 
-        def schema = resultsService.generateSchema(experiment, fieldList.contextItems, fieldList.measures, fieldList.measureItems)
+        def schema = resultsService.generateSchema(experiment, fieldList.experimentContextItems, fieldList.measures, fieldList.measureItems)
 
         StringBuilder csv = new StringBuilder()
         for (row in schema.asTable()) {

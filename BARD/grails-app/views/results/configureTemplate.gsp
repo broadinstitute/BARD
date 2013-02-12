@@ -24,45 +24,71 @@
 
 <g:if test="${experiment?.id}">
     <div class="row-fluid">
-        <g:form class="form-horizontal" action="generatePreview">
+        <g:form action="generatePreview">
             <g:hiddenField name="experimentId" value="${experiment.id}"/>
 
+            <g:if test="${assayItems.size() > 0 || measureItems.size() > 0}">
+                <h4>Context items</h4>
             <g:if test="${assayItems.size() > 0}">
-                <h4>Select the context items you wish to include</h4>
+                <p>The following context items are not associated with any measure.   If you will be providing a value for this context items, select "Per experiment" to signify you'll be submitting a value that applies to the entire experiment.</p>
 
+                <div class="form-inline">
                 <g:each in="${assayItems}" var="item" status="index">
                     <div class="control-group">
                         <div class="controls">
-                            <label class="checkbox">
-                                <input type="checkbox" name="contextItemIds[${index}]" value="${item.id}"> ${item.attributeElement.label}
+                            <input type="hidden" name="contextItemIds[${index}]" value="${item.id}">
+
+                            <select name="contextItemFrequency[${index}]" id="contextItemFrequency[${index}]">
+                                <option value="none">Not provided</option>
+                                <option value="experiment">Per Experiment</option>
+                            </select>
+
+                            <label for="contextItemFrequency[${index}]">
+                                ${item.attributeElement.label}
                             </label>
+
                         </div>
                     </div>
                 </g:each>
+                </div>
+            </g:if>
+
+            <g:if test="${measureItems.size() > 0}">
+                <p>The following context items are associated with at least one measure. The items below can be provided once (meaning they will be applied to the entire experiment) or once per measurement.</p>
+
+                <div class="form-inline">
+                    <g:each in="${measureItems}" var="item" status="index">
+                        <div class="control-group">
+                            <div class="controls">
+                                <input type="hidden" name="measureItemIds[${index}]" value="${item.id}">
+
+                                <select name="measureItemFrequency[${index}]" id="measureItemFrequency[${index}]">
+                                    <option value="none">Not provided</option>
+                                    <option value="experiment">Per Experiment</option>
+                                    <option value="measurement">Per Measurement</option>
+                                </select>
+
+                                <label for="measureItemFrequency[${index}]">
+                                    ${item.attributeElement.label}
+                                </label>
+
+                            </div>
+                        </div>
+                    </g:each>
+                </div>
+            </g:if>
             </g:if>
 
             <g:if test="${experiment.assay.measures.size() > 0}">
-                <h4>Select the measures to include</h4>
+                <h4>Measures</h4>
+
+                <p>Select the measures that you will be providing for this result set.</p>
 
                 <g:each in="${experiment.assay.measures}" var="measure" status="index">
                     <div class="control-group">
                         <div class="controls">
                             <label class="checkbox">
                                 <input type="checkbox" name="measureIds[${index}]" value="${measure.id}"> ${measure.displayLabel}
-                            </label>
-                        </div>
-                    </div>
-                </g:each>
-            </g:if>
-
-            <g:if test="${measureItems.size() > 0}">
-                <h4>Select the context items that are associated with measures to include</h4>
-
-                <g:each in="${measureItems}" var="item" status="index">
-                    <div class="control-group">
-                        <div class="controls">
-                            <label class="checkbox">
-                                <input type="checkbox" name="measureItemIds[${index}]" value="${item.id}"> ${item.attributeElement.label}
                             </label>
                         </div>
                     </div>
