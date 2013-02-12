@@ -4,6 +4,7 @@ import bard.db.experiment.Experiment
 import grails.converters.JSON
 import bard.db.registration.Assay
 import grails.plugins.springsecurity.Secured
+import bard.db.dictionary.Element
 
 @Secured(['isFullyAuthenticated()'])
 class ProjectController {
@@ -81,6 +82,8 @@ class ProjectController {
         def param1 = request.getParameterValues('selectedExperiments[]')
         def projectId = params['projectId']
         def project = Project.findById(projectId)
+        def stageId = params['stageId']
+        def element = Element.findById(stageId)
         // get rid of duplicated selection if there is any
         Set<String> selectedExperiments = new HashSet<String>()
 
@@ -92,7 +95,7 @@ class ProjectController {
         selectedExperiments.each{ String experimentDisplayName ->
             def experimentId = experimentDisplayName.split("-")[0]
             def experiment = Experiment.findById(experimentId)
-            projectService.addExperimentToProject(experiment, project)
+            projectService.addExperimentToProject(experiment, project, element)
             // TODO: render template not working, as we may use different package to render graph, we defer making template working later
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         }

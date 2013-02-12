@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.experiment.Experiment
+import bard.db.dictionary.Element
 
 class ProjectService {
     /**
@@ -95,15 +96,14 @@ class ProjectService {
      * @param experiment
      * @param project
      */
-    void addExperimentToProject(Experiment experiment, Project project) {
+    void addExperimentToProject(Experiment experiment, Project project, Element stage) {
         if (isExperimentAssociatedWithProject(experiment, project))
             throw new UserFixableException("Experiement " + experiment.id + " is already associated with Project " + project.id)
 
-        ProjectExperiment pe = new ProjectExperiment(experiment: experiment, project: project)
+        ProjectExperiment pe = new ProjectExperiment(experiment: experiment, project: project, stage: stage)
         project.addToProjectExperiments(pe)
         experiment.addToProjectExperiments(pe)
         pe.save()
-
         project.save()
         experiment.save()
     }
