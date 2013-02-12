@@ -35,11 +35,10 @@ class OntologyJSonController {
     }
 
 	def getDescriptors(){
-		if(params?.term && params?.section){
-			List<Descriptor> descriptors = ontologyDataAccessService.getAttributeDescriptors(params.term)
-            Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
+		if(params?.term){
+			List<Element> elements = ontologyDataAccessService.getElementsForAttributes(params.term)
 				List attributes = new ArrayList();
-				for (Element element in uniqueElements) {
+				for (Element element in elements) {
 					def item = [
 						"label" : element.label,
 						"value" : element.label,
@@ -53,11 +52,9 @@ class OntologyJSonController {
 
 	def getValueDescriptors(){
 		if(params?.term && params?.section && params?.attributeId){
-			List<Descriptor> descriptors = ontologyDataAccessService.getValueDescriptors(params.attributeId.toLong(), params.section, params.term)
-
-            Set<Element> uniqueElements = descriptors.collect{ it.element } as Set
+            List<Element> elements = ontologyDataAccessService.getElementsForValues(params.attributeId.toLong(), params.term)
             List attributes = new ArrayList();
-            for (Element element in uniqueElements) {
+            for (Element element in elements) {
                 def unit = element?.unit?.abbreviation
                 unit = unit ?: (element?.unit?.label ?: "")
                 def item = [
@@ -71,7 +68,7 @@ class OntologyJSonController {
             render attributes as JSON
 		}
 	}
-	
+
 	def getBaseUnits(){
 //		if(params?.elementId && params?.toUnitId){
 //			List<UnitTree> units = ontologyDataAccessService.getBaseUnits(params.elementId.toLong(), params.toUnitId.toLong())
@@ -88,7 +85,7 @@ class OntologyJSonController {
 //					element "null"
 //				}
 //			}
-//		}		
+//		}
 	}
 
 }
