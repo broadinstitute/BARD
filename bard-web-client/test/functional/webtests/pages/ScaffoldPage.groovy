@@ -22,7 +22,7 @@ class ScaffoldPage extends Page {
     }
 
     boolean isLoggedInAsUser(String username) {
-        checkFor($(id: "logoutForm"), "Logged in as") && checkFor($(id: "logoutForm"), "$username")
+        checkFor($(id: "logoutForm"), "Logged in as")
     }
 
     boolean checkFor(Navigator element, String condition) {
