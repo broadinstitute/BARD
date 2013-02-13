@@ -8,6 +8,7 @@ import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.junit.Before
 import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
+import bard.db.enums.AssayStatus
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -172,5 +173,25 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
         then:
         notThrown(Exception.class)
+    }
+
+    void 'test edit summary'(){
+        when:
+        assay = Assay.build()
+        controller.editSummary(assay.id, AssayStatus.DRAFT.name(), "assayName", "designedBy")
+
+        then:
+        assay.assayStatus == AssayStatus.DRAFT
+    }
+
+    void 'test move measure'() {
+        when:
+        assay = Assay.build(assayName:'Test')
+        Measure parent = Measure.build(assay: assay)
+        Measure child = Measure.build(assay: assay)
+        controller.moveMeasureNode(child.id, parent.id)
+
+        then:
+        child.parentMeasure == parent
     }
 }

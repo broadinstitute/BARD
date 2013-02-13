@@ -59,6 +59,21 @@
                 </div>
             </div>
 
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#project-header" id="experiments-header" class="accordion-toggle" data-toggle="collapse"
+                       data-target="#target-experiments-info">
+                        <i class="icon-chevron-down"></i>
+                        Experiments
+                    </a>
+                </div>
+
+                <div id="target-experiments-info" class="accordion-body in collapse">
+                    <div class="accordion-inner">
+                        <g:render template="showExperiments" model="['assay': assayInstance]"/>
+                    </div>
+                </div>
+            </div>
 
             <div class="accordion-group">
                 <div class="accordion-heading">
@@ -104,7 +119,7 @@
 
                     <div id="target-documents-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../document/show" model="['documents': assayInstance.documents]"/>
+                            <g:render template="../document/list" model="[documents: assayInstance.documents, documentTemplate: '/document/show']"/>
                         </div>
                     </div>
                 </div>

@@ -127,7 +127,7 @@ class AssayExportHelperService extends ExportAbstractService {
      * @param markupBuilder
      */
     public void generateAssays(final MarkupBuilder markupBuilder) {
-        final List<Assay> assays = Assay.findAllByReadyForExtraction(ReadyForExtraction.Ready)
+        final List<Assay> assays = Assay.findAllByReadyForExtraction(ReadyForExtraction.READY)
 
         final int numberOfAssays = assays.size()
 
@@ -191,7 +191,7 @@ class AssayExportHelperService extends ExportAbstractService {
 
         final Map<String, String> attributes = [:]
         attributes.put("assayId", assay.id.toString())
-        attributes.put('readyForExtraction', assay.readyForExtraction.toString())
+        attributes.put('readyForExtraction', assay.readyForExtraction.getId())
         if (assay.assayVersion) {
             attributes.put('assayVersion', assay.assayVersion)
         }
@@ -199,7 +199,7 @@ class AssayExportHelperService extends ExportAbstractService {
             attributes.put('assayType', assay.assayType)
         }
         if (assay.assayStatus) {
-            attributes.put('status', assay.assayStatus.toString())
+            attributes.put('status', assay.assayStatus.getId())
         }
 
         markupBuilder.assay(attributes) {

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}] %-5p %c %m %n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="DEBUG" />
+			<param name="LevelMax" value="INFO" />
+		</filter>
+	</appender>
+
+	<appender name="STDERR" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.err" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}] %-5p %c %m %n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="WARN" />
+			<param name="LevelMax" value="FATAL" />
+		</filter>
+	</appender>
+
+
+	<appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${user.home}/.ChemXLDescriptors.log.xml" />
+		<param name="MaxFileSize" value="10MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="org.apache.log4j.xml.XMLLayout" />
+	</appender>
+	<!--
+		<appender name="SOCKET" class="org.apache.log4j.net.SocketAppender">
+		<param name="RemoteHost" value="localhost"/> <param name="Port"
+		value="4445"/> </appender>
+	-->
+
+	<appender name="EMAIL" class="org.apache.log4j.net.SMTPAppender">
+		<param name="BufferSize" value="512" />
+		<param name="SMTPHost" value="flmail1.fl.ad.scripps.edu" />
+		<param name="From" value="ChemXLDescriptors@scripps.edu" />
+		<param name="To" value="southern@scripps.edu" />
+		<param name="Subject" value="Function Server Error" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{ISO8601}] %-5p %c %m %n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="ERROR" />
+			<param name="LevelMax" value="FATAL" />
+		</filter>
+	</appender>
+
+	<category name="org.hibernate">
+		<priority value="ERROR" />
+	</category>
+	<category name="com.mchange.v2">
+		<priority value="INFO" />
+	</category>
+
+	<category name="org.apache.commons">
+		<priority value="INFO" />
+	</category>
+	<category name="httpclient">
+		<priority value="INFO" />
+	</category>
+	<category name="org.apache.axis2">
+		<priority value="INFO" />
+	</category>
+	<category name="org.apache.axiom">
+		<priority value="INFO" />
+	</category>
+	<category name="net.sf.ehcache">
+		<priority value="INFO" />
+	</category>
+	<category name="org.apache.commons.httpclient">
+		<priority value="ERROR" />
+	</category>
+	<category name="org.apache.http">
+		<priority value="ERROR" />
+	</category>
+
+	<category name="edu.scripps.fl.pubchem.PubChemFactory">
+		<priority value="DEBUG" />
+	</category>
+	<category name="edu.scripps.fl.pubchem.PubChemXMLFactory">
+		<priority value="INFO" />
+	</category>
+	<category name="edu.scripps.fl.pubchem.EUtilsFactory">
+		<priority value="INFO" />
+	</category>
+	<category name="edu.scripps.fl.pubchem">
+		<priority value="DEBUG" />
+	</category>
+	<category name="edu.scripps.fl.pubchem.app">
+		<priority value="INFO" />
+	</category>
+	<category name="edu.scripps.fl.pipeline">
+		<priority value="WARN" />
+	</category>
+	
+	<category name="edu.scripps.fl.pubchem.app.results">
+		<priority value="WARN" />
+	</category>
+	<category name="edu.scripps.fl.pubchem.app.summary">
+		<priority value="WARN" />
+	</category>
+ 
+	<root>
+		<level value="all" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="STDERR" />
+		<appender-ref ref="FILE" />
+		<!--
+			<appender-ref ref="SOCKET" /> <appender-ref ref="EMAIL" />
+		-->
+	</root>
+</log4j:configuration>

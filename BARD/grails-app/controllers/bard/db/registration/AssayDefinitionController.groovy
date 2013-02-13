@@ -3,6 +3,8 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import grails.plugins.springsecurity.Secured
+import org.json.JSONArray
+import bard.db.enums.AssayStatus
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
@@ -269,5 +271,16 @@ class AssayDefinitionController {
     def showEditSummary(Long instanceId) {
         def assayInstance = Assay.findById(instanceId)
         render(template: "editSummary", model: [assay: assayInstance])
+    }
+
+    def moveMeasureNode(Long measureId, Long parentMeasureId) {
+        Measure measure = Measure.get(measureId)
+        Measure parentMeasure = null
+        if (parentMeasureId) {
+            parentMeasure = Measure.get(parentMeasureId)
+        }
+        measure.parentMeasure = parentMeasure
+
+        render new JSONArray()
     }
 }

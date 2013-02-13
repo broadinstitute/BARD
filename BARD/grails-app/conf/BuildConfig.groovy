@@ -35,9 +35,12 @@ grails.project.dependency.resolution = {
             excludes "junit"
         }
         compile "org.grails:grails-webflow:$grailsVersion"
+        compile "org.apache.httpcomponents:httpclient:4.2.3"
+
 
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
+        runtime 'commons-net:commons-net:3.2'
 
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
@@ -63,6 +66,7 @@ grails.project.dependency.resolution = {
         // build scope
         build ":codenarc:0.15"
         compile ":hibernate:$grailsVersion"
+        build ":improx:0.1" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"
 
         // compile scope

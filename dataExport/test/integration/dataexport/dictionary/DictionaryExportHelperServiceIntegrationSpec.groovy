@@ -1,17 +1,17 @@
 package dataexport.dictionary
 
+import bard.db.dictionary.*
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.util.ResetSequenceUtil
 import grails.buildtestdata.TestDataConfigurationHolder
+import grails.plugin.fixtures.FixtureLoader
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import spock.lang.Unroll
 
 import javax.sql.DataSource
-
-import bard.db.dictionary.*
 
 @Unroll
 class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
@@ -20,7 +20,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     MarkupBuilder markupBuilder
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
-    def fixtureLoader
+    FixtureLoader fixtureLoader
 
     void setup() {
         this.writer = new StringWriter()
@@ -136,7 +136,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate element with id"() {
         given:
 
-        final Element element = Element.build(label: 'uM', readyForExtraction: ReadyForExtraction.Ready, elementStatus: ElementStatus.Published)
+        final Element element = Element.build(label: 'uM', readyForExtraction: ReadyForExtraction.READY, elementStatus: ElementStatus.Published)
         when:
         this.dictionaryExportHelperService.generateElement(this.markupBuilder, element)
         then:
@@ -150,7 +150,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate elements #label"() {
         given:
 
-        2.times {Element.build()}
+        2.times { Element.build() }
         when:
         this.dictionaryExportHelperService.generateElements(this.markupBuilder)
         then:
@@ -163,11 +163,10 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Stages"() {
         given:
-        2.times {def treeNode = StageTree.build(); treeNode.save(flush: true)}
+        2.times { def treeNode = StageTree.build(); treeNode.save(flush: true) }
 
         when:
         this.dictionaryExportHelperService.generateStages(this.markupBuilder)
-        println(this.writer.toString())
 
         then:
         XmlTestAssertions.assertResultsWithOverrideAttributes(results, this.writer.toString())
@@ -199,12 +198,11 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate Labs"() {
         given:
 
-        2.times {def treeNode = LaboratoryTree.build(); treeNode.save(flush: true)}
+        2.times { def treeNode = LaboratoryTree.build(); treeNode.save(flush: true) }
         when:
         this.dictionaryExportHelperService.generateLabs(this.markupBuilder)
 
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
 
         where:
@@ -217,11 +215,11 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate dictionary #label"() {
         given:
 
-        def fixture = fixtureLoader.build {
-            parentElement(Element, label: 'IC50')
-            childElement(Element, label: 'log IC50')
-            elementHierarchy(ElementHierarchy, relationshipType: 'subClassOf', parentElement: ref('parentElement'), childElement: ref('childElement'))
-        }
+
+        Element parentElement = Element.build(label: 'IC50')
+        Element childElement = Element.build(label: 'log IC50')
+        ElementHierarchy.build(relationshipType: 'subClassOf', parentElement: parentElement, childElement: childElement)
+
         ResultTypeTree.build(id: 1)
         StageTree.build(id: 1)
         AssayDescriptor.build(id: 1)
@@ -234,7 +232,6 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
                 multiplier: 1000)
 
         when:
-        println(this.writer.toString())
         this.dictionaryExportHelperService.generateDictionary(this.markupBuilder)
         then:
 

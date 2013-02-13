@@ -16,7 +16,7 @@ import grails.util.Environment
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
-grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
+grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
         xml: ['text/xml', 'application/xml'],
         text: 'text/plain',
         js: 'text/javascript',
@@ -25,7 +25,7 @@ grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
         css: 'text/css',
         csv: 'text/csv',
         all: '*/*',
-        json: ['application/json','text/json'],
+        json: ['application/json', 'text/json'],
         form: 'application/x-www-form-urlencoded',
         multipartForm: 'multipart/form-data'
 ]
@@ -43,7 +43,7 @@ grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
 // enable Sitemesh preprocessing of GSP pages
 grails.views.gsp.sitemesh.preprocess = true
-grails.views.javascript.library="jquery"
+grails.views.javascript.library = "jquery"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
@@ -54,7 +54,7 @@ grails.enable.native2ascii = true
 // packages to include in Spring bean scanning
 grails.spring.bean.packages = []
 // whether to disable processing of multi part requests
-grails.web.disable.multipart=false
+grails.web.disable.multipart = false
 
 // request parameters to mask when logging exceptions
 grails.exceptionresolver.params.exclude = ['password']
@@ -82,7 +82,7 @@ log4j = {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
 
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
+    error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
             'org.codehaus.groovy.grails.web.sitemesh', //  layouts
             'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
@@ -104,7 +104,7 @@ grails.plugin.reveng.jdbcDriverJarDep = 'mysql:mysql-connector-java:5.1.16'
 //grails.plugin.reveng.includeTables = ['Test_Measure_Context_Item']
 
 bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
-bard.home.page='http://localhost:8080/bardwebclient'
+bard.home.page = 'http://localhost:8080/bardwebclient'
 
 //grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
 grails {
@@ -112,10 +112,10 @@ grails {
         springsecurity {
             providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
             controllerAnnotations.staticRules = [
-                '/console/**': ['ROLE_CONSOLE_USER']
+                    '/console/**': ['ROLE_CONSOLE_USER']
             ]
             ipRestrictions = [
-                '/console/**': '127.0.0.1'
+                    '/console/**': '127.0.0.1'
             ]
         }
     }
@@ -126,9 +126,15 @@ CbipCrowd {
     application.username = 'bard'
     application.password = 'ChangeMe'
     applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE']
+    mockUsers {
+        integrationTestUser {
+            roles = ['ROLE_USER']
+            username = 'integrationTestUser'
+            password = 'integrationTestUser'
+            email = 'integrationTestUser@nowhere.com'
+        }
+    }
 }
-
-
 
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
@@ -148,7 +154,7 @@ if (appName) {
     String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
 
     List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
-    fileNames.each {fileName ->
+    fileNames.each { fileName ->
         String primaryFullName = "${primaryOverrideDirName}/${fileName}"
         String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
 
@@ -183,63 +189,63 @@ jqueryValidationUi {
        Constraint not found in the ConstraintsMap will trigger remote AJAX validation.
      */
     StringConstraintsMap = [
-            blank:'required', // inverse: blank=false, required=true
-            creditCard:'creditcard',
-            email:'email',
-            inList:'inList',
-            minSize:'minlength',
-            maxSize:'maxlength',
-            size:'rangelength',
-            matches:'matches',
-            notEqual:'notEqual',
-            url:'url',
-            nullable:'required',
-            unique:'unique',
-            validator:'validator'
+            blank: 'required', // inverse: blank=false, required=true
+            creditCard: 'creditcard',
+            email: 'email',
+            inList: 'inList',
+            minSize: 'minlength',
+            maxSize: 'maxlength',
+            size: 'rangelength',
+            matches: 'matches',
+            notEqual: 'notEqual',
+            url: 'url',
+            nullable: 'required',
+            unique: 'unique',
+            validator: 'validator'
     ]
 
     // Long, Integer, Short, Float, Double, BigInteger, BigDecimal
     NumberConstraintsMap = [
-            min:'min',
-            max:'max',
-            range:'range',
-            notEqual:'notEqual',
-            nullable:'required',
-            inList:'inList',
-            unique:'unique',
-            validator:'validator'
+            min: 'min',
+            max: 'max',
+            range: 'range',
+            notEqual: 'notEqual',
+            nullable: 'required',
+            inList: 'inList',
+            unique: 'unique',
+            validator: 'validator'
     ]
 
     CollectionConstraintsMap = [
-            minSize:'minlength',
-            maxSize:'maxlength',
-            size:'rangelength',
-            nullable:'required',
-            validator:'validator'
+            minSize: 'minlength',
+            maxSize: 'maxlength',
+            size: 'rangelength',
+            nullable: 'required',
+            validator: 'validator'
     ]
 
     DateConstraintsMap = [
-            min:'minDate',
-            max:'maxDate',
-            range:'rangeDate',
-            notEqual:'notEqual',
-            nullable:'required',
-            inList:'inList',
-            unique:'unique',
-            validator:'validator'
+            min: 'minDate',
+            max: 'maxDate',
+            range: 'rangeDate',
+            notEqual: 'notEqual',
+            nullable: 'required',
+            inList: 'inList',
+            unique: 'unique',
+            validator: 'validator'
     ]
 
     ObjectConstraintsMap = [
-            nullable:'required',
-            validator:'validator'
+            nullable: 'required',
+            validator: 'validator'
     ]
 
     CustomConstraintsMap = [
-            phone:'true', // International phone number validation
-            phoneUS:'true',
-            alphanumeric:'true',
-            letterswithbasicpunc:'true',
-            lettersonly:'true'
+            phone: 'true', // International phone number validation
+            phoneUS: 'true',
+            alphanumeric: 'true',
+            letterswithbasicpunc: 'true',
+            lettersonly: 'true'
     ]
 }
 

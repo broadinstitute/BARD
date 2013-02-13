@@ -19,6 +19,7 @@ class BiologyDescriptorConstraintUnitSpec extends AbstractDescriptorConstraintUn
     @Override
     void doSetup() {
         domainInstance = BiologyDescriptor.buildWithoutSave()
+        parent = BiologyDescriptor.buildWithoutSave()
     }
 
 }

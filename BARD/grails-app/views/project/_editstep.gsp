@@ -25,6 +25,14 @@
         <select id="selectedExperiments" name="selectedExperiments" multiple="multiple" tabindex="1" style="width: 400px">
         </select>
     </div>
+    <p>Select stage:</p>
+        <label for="stageId">Stage</label>
+
+            <input type="hidden" id="stageId" name="stageId"/>
+            <r:script>
+                enableAutoCompleteOntology("STAGE", "#stageId");
+            </r:script>
+
     </form>
 </div>
 <div id="dialog_link_experiment" title="Link experiments">

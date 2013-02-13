@@ -42,7 +42,7 @@ class AssayExportService {
      * Returns the HTTPStatus Code
      */
     public BardHttpResponse update(final Long assayId, final Long clientVersion, final String latestStatus) {
-       return utilityService.update(Assay.get(assayId),assayId,clientVersion,latestStatus as ReadyForExtraction,"Assay")
+       return utilityService.update(Assay.get(assayId),assayId,clientVersion,ReadyForExtraction.byId(latestStatus),"Assay")
     }
     /**
      * Stub for generating assays with status of Ready

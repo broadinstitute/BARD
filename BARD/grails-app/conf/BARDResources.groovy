@@ -27,22 +27,36 @@ modules = {
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
     }
+
 	jqueryform {
 		resource url: '/js/jquery.form.js'
 	}
+
 	assaycards {
 		resource url: '/js/cap/assay.cards.js'
 	}
+
 	assayshow {
 		resource url: '/js/cap/assay.show.js'
 	}
+
+    handlebars {
+        resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
+    }
+
     projectstep {
+        dependsOn "handlebars"
         resource url: '/js/projectstep/arbor.js'
         resource url: '/js/projectstep/projectstep.show.js'
         resource url: '/js/projectstep/projectstep.edit.js'
     }
+
     summary{
         resource url: '/js/cap/editSummary.js'
+    }
+
+    projectsummary{
+        resource url: '/js/cap/editProjectSummary.js'
     }
 
 	images {
@@ -52,5 +66,15 @@ modules = {
         dependsOn 'jquery'
         resource url: "/js/select2-release-3.2/select2.css"
         resource url: "/js/select2-release-3.2/select2.js"
+    }
+
+    accessontology {
+        resource url: "/js/cap/accessOntology.js"
+    }
+
+    richtexteditor{
+        resource url: "/js/nicedit/nicEdit.js"
+        resource url: "/js/cap/editDocument.js"
+        resource url: "/images/nicedit/nicEditorIcons.gif"
     }
 }

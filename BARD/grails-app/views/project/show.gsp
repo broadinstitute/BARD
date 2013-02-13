@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,projectstep"/>
+    <r:require modules="core,bootstrap,assayshow,projectstep,select2,accessontology"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -112,7 +112,7 @@
 
                     <div id="target-documents-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
-                            <g:render template="../document/show" model="['documents': instance.documents]"/>
+                            <g:render template="/document/list" model="['documents': instance.documents, documentTemplate: '/document/show']"/>
                         </div>
                     </div>
                 </div>

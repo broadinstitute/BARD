@@ -52,7 +52,6 @@ function initFunction() {
     $("input#assayName").blur(function()
     {    var assayName = $(this).val();
         validateRequiredField(assayName, "assayNameValidation");
-        $("input#assayName").focus();
     });
     $("input#assayName").click(function()
     {

@@ -1,9 +1,9 @@
 package bard.db.project
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.ExternalReference
-import bard.db.dictionary.Descriptor
 
 class Project extends AbstractContextOwner {
     private static final int PROJECT_NAME_MAX_SIZE = 256
@@ -15,7 +15,7 @@ class Project extends AbstractContextOwner {
     String name
     String groupType
     String description
-    ReadyForExtraction readyForExtraction = ReadyForExtraction.Pending
+    ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
 
     Date dateCreated
     Date lastUpdated
@@ -29,17 +29,18 @@ class Project extends AbstractContextOwner {
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
-            contexts:ProjectContext,
+            contexts: ProjectContext,
             documents: ProjectDocument]
 
     static mapping = {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
         name(column: "PROJECT_NAME")
+        readyForExtraction(type: ReadyForExtractionEnumUserType)
         contexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
     static constraints = {
-        name( maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
+        name(maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
         // TODO make enum
         groupType(maxSize: GROUP_TYPE_MAX_SIZE, nullable: false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)

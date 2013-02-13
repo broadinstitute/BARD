@@ -16,23 +16,20 @@ import spock.lang.Unroll
 class AssayServiceIntegrationSpec extends IntegrationSpec {
 
     AssayService assayService
-    def fixtureLoader
 
     void "test findByPubChemAid with fixtures #label"() {
 
         given:
-        def fixture = fixtureLoader.build {
-            assay1(Assay, assayName: 'assay1')
-            for (int i in 1..2) {
-                String experimentsAlias = "experiment${i}"
-                "${experimentsAlias}"(Experiment, experimentName: "${experimentsAlias}", assay: assay1)
-                "extRef${i}"(ExternalReference, extAssayRef: "aid=-${i}", experiment: ref("${experimentsAlias}"))
-            }
-
-            assay2(Assay, assayName: 'assay2')
-            experiment3(Experiment, experimentName: 'experiment3', assay: assay2)
-            extRef3(ExternalReference, extAssayRef: 'aid=-1', experiment: experiment3)
+        final Assay assay1 = Assay.build(assayName: 'assay1')
+        2.times { i ->
+            i++
+            final String experimentsAlias = "experiment${i}"
+            final Experiment experiment = Experiment.build(experimentName: experimentsAlias, assay: assay1)
+            final ExternalReference externalReference = ExternalReference.build(extAssayRef: "aid=-${i}", experiment: experiment)
         }
+        final Assay assay2 = Assay.build(assayName: 'assay2')
+        final Experiment experiment3 = Experiment.build(experimentName: 'experiment3', assay: assay2)
+        final ExternalReference externalReference = ExternalReference.build(extAssayRef: 'aid=-1', experiment: experiment3)
 
         when:
         List<Assay> foundAssays = assayService.findByPubChemAid(aid)

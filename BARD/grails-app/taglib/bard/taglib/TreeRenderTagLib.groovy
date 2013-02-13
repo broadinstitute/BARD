@@ -98,16 +98,17 @@ class TreeRenderTagLib {
                 out << activateCallback + "(node);"
             }
             out <<  '  },\n';
-            if (editable) {
+            if (dropCallback) {
                 out <<  'dnd: { preventVoidMoves: true, \n' +
                         'onDragStart: function(node) { return true; }, \n' +
-                        'onDragEnter: function(node, sourceNode) {return ["over"] }, \n' +
+                        'onDragEnter: function(node, sourceNode) { ' +
+                        '  if(node.getParent() == null || node.getParent().getParent() == null) {  ' +
+                        '    return ["over","after"];\n' +
+                        '  } else { ' +
+                        '   return ["over"] ' +
+                        '  }}, \n' +
                         'onDrop: function(node, sourceNode, hitMode, ui, draggable) {  '
-                if(dropCallback) {
-                    out << dropCallback + "(node, sourceNode, hitMode, ui, draggable); \n";
-                } else {
-                    out << "sourceNode.move(node, hitMode);"
-                }
+                out << dropCallback + "(node, sourceNode, hitMode, ui, draggable); \n";
                 out <<  ' }\n' +
                         '},'
             }

@@ -111,7 +111,8 @@
 
                         <div id="target-documents-info" class="accordion-body in collapse">
                             <div class="accordion-inner">
-                                <g:render template="../document/show" model="['documents': assayInstance.documents]"/>
+                                <g:link action="create" controller="document" params="${[assayId: assayInstance.id]}" class="btn">Add new document</g:link>
+                                <g:render template="../document/list" model="[documents: assayInstance.documents, documentTemplate: '/document/edit']"/>
                             </div>
                         </div>
                     </div>

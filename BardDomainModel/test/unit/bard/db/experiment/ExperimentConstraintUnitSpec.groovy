@@ -1,16 +1,16 @@
 package bard.db.experiment
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.registration.Assay
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import static bard.db.experiment.Experiment.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Shared
-import bard.db.registration.Assay
 
 /**
  * Created with IntelliJ IDEA.
@@ -99,13 +99,13 @@ class ExperimentConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc             | valueUnderTest              | valid | errorCode
-        'null not valid' | null                        | false | 'nullable'
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
 
-        'valid valud'    | ReadyForExtraction.Pending  | true  | null
-        'valid value'    | ReadyForExtraction.Ready    | true  | null
-        'valid value'    | ReadyForExtraction.Started  | true  | null
-        'valid value'    | ReadyForExtraction.Complete | true  | null
+        'valid value'    | ReadyForExtraction.NOT_READY | true  | null
+        'valid value'    | ReadyForExtraction.READY     | true  | null
+        'valid value'    | ReadyForExtraction.STARTED   | true  | null
+        'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
     }
 
     void "test assay constraints #desc assay: '#valueUnderTest'"() {

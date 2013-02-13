@@ -1,7 +1,9 @@
 package bard.db.registration
 
+import grails.plugins.springsecurity.Secured
 import org.springframework.dao.DataIntegrityViolationException
 
+@Secured(['isFullyAuthenticated()'])
 class AssayController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -99,5 +101,10 @@ class AssayController {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             redirect(action: "show", id: params.id)
         }
+    }
+
+    def listTemplates() {
+        def templates = Assay.findAllByAssayType(Assay.TEMPLATE_ASSAY_TYPE)
+        [templates : templates]
     }
 }

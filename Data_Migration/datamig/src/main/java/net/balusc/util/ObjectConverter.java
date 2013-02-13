@@ -32,6 +32,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Generic object converter.
@@ -262,7 +263,18 @@ public final class ObjectConverter {
     	reader.close();
     	return str;
 	}
+    
+    public static Double stringToDouble(String str) {
+    	Double dbl = Double.parseDouble(str);
+    	return dbl;
+    }
 	
     // You can implement more converter methods here.
 
+    public static BigDecimal stringToBigDecimal(String string) {
+    	if( StringUtils.isBlank(string))
+    		return null;
+    	return new BigDecimal(string);
+	}
+    
 }

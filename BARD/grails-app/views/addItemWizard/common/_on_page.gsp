@@ -18,8 +18,8 @@
  */
 %>
 <script type="text/javascript">
-		$(document).ready(function() {			
-						
+		$(document).ready(function() {
+
 		})
         function onPage() {
                	outputToConsole('calling onPage() which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
@@ -44,7 +44,7 @@
         }
 
         function initializePageOne(){
-			
+
         	outputToConsole('calling initializePageOne()');
 
             $("#attributeId").select2({
@@ -52,21 +52,16 @@
                 width: "70%",
                 placeholder: "Search for attribute name",
                 query: function(query) {
-                    var sectionPath = $("#sectionPath").val();
-                    console.log("querying for "+query.term+" "+sectionPath)
                     $.getJSON(
                             "/BARD/ontologyJSon/getDescriptors",
                             {
-                                term: query.term,
-                                section: sectionPath
+                                term: query.term
                             },
                             function(data, textStatus, jqXHR) {
-                                console.log("got response "+data)
                                 var selectData = {results:[]}
                                 $.each(data, function(index, val) {
                                     selectData.results.push({id: val.elementId, text: val.label})
                                 })
-                                console.log("calling callback")
                                 query.callback(selectData)
                             }
                     );
@@ -85,11 +80,10 @@
             outputToConsole('calling initializePageThree()');
 
             $("#valueId").select2({
-                minimumInputLength: 2,
+                minimumInputLength: 1,
                 width: "70%",
                 placeholder: "Search for attribute name",
                 query: function(query) {
-                    var cardAssaySection = $("#sectionPath").val();
                     var elementId = $("#attributeElementId").val();
                     outputToConsole('cardAssaySection var = ' + cardAssaySection);
                     outputToConsole('elementId var = ' + elementId);
@@ -97,16 +91,13 @@
                             "/BARD/ontologyJSon/getValueDescriptors",
                             {
                                 term: query.term,
-                                section: cardAssaySection,
                                 attributeId: elementId
                             },
                             function(data, textStatus, jqXHR) {
-                                console.log("got response "+data)
                                 var selectData = {results:[]}
                                 $.each(data, function(index, val) {
                                     selectData.results.push({id: val.elementId, text: val.label})
                                 })
-                                console.log("calling callback")
                                 query.callback(selectData)
                             }
                     );
@@ -126,7 +117,7 @@
         	outputToConsole('calling initializeFinalPage()');
 
         	var assayId = $("#cardAssayId").val();
-        	
+
         	var data = {'assayId':assayId};
         	$.ajax({
             	type:'POST',

@@ -1,5 +1,4 @@
 <div id="dialog_edit_summary" title="Edit Summary">
-    <r:require modules="summary"/>
     <form id="editSummaryForm">
     <dl class="dl-horizontal">
         <dt><g:message code="default.id.label" default="Fix i18n"/>:</dt>
@@ -14,7 +13,7 @@
 
         <dt><g:message code="assay.assayStatus.label" default="Fix i18n"/>:</dt>
         <dd><g:select id="assayStatus" name="assayStatus"
-                      from="${bard.db.registration.AssayStatus.values()}"
+                      from="${bard.db.enums.AssayStatus.values()}"
                       value="${assay?.assayStatus}" /></dd>
 
         <dt><g:message code="assay.designedBy.label" default="Fix i18n"/>:</dt>
