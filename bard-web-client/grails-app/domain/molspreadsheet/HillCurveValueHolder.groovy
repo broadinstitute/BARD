@@ -55,7 +55,12 @@ class HillCurveValueHolder {
             returnValue  = '--'
         }
 
-        qualifier+returnValue
+        if (returnValue.contains("--")) {
+            return returnValue
+        }
+        else {
+            return qualifier+returnValue
+        }
     }
 
 

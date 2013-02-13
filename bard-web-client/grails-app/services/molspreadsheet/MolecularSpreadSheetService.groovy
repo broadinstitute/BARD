@@ -219,8 +219,7 @@ class MolecularSpreadSheetService {
                     molSpreadSheetCell = dataMap[key]
                     spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
                 }
-                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()>0){//} molSpreadSheetData.getSubColumns().size()>0) {
-//                    if (molSpreadSheetData.mssHeaders[col].columnTitle.size()>0) {
+                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()>0){
                         for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size() - 1) {
                         String finalKey = "${row}_${(exptNumberColTracker++)}"
                         if (spreadSheetActivityStorage == null) {
@@ -265,20 +264,28 @@ class MolecularSpreadSheetService {
         int columnPointer = 0
         // we need to handle each experiment separately ( until NCGC can do this in the background )
         // Note that each experiment corresponds to a column in our spreadsheet
-        for (ExperimentSearch experiment in experimentList) {
+        //       for (ExperimentSearch experiment in experimentList) {
 
-            for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
-                if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
-                    int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
-                    int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
-                    String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
-                    MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
+        for (SpreadSheetActivity spreadSheetActivity in spreadSheetActivityList) {
+            if (molSpreadSheetData.rowPointer.containsKey(spreadSheetActivity.cid)) {
+                int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
+                int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
+                String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
+                MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
+                if (dataMap.containsKey(arrayKey)) {
+                    // we have multiple values for cell = ${arrayKey}.  If our existing value is null then use the non-null version
+                    if ((dataMap[arrayKey].spreadSheetActivityStorage == null) ||
+                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList == null) ||
+                            (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList.size() < 0)) {
+                        dataMap[arrayKey] = molSpreadSheetCell
+                        // TODO for now we will take the non-null value over the null value. Eventually of course
+                        //  the null values should be exiled from the database, but at least for now I see them sometimes
+                    }
+                } else {
                     dataMap[arrayKey] = molSpreadSheetCell
                 }
-                else {
-                    println "did not expect cid = ${spreadSheetActivity.cid}"
-                }
-
+            } else {
+                println "did not expect cid = ${spreadSheetActivity.cid}"
             }
             columnPointer++
         }
@@ -364,16 +371,16 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param experimentList
      */
-    protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, List<ExperimentSearch> experimentList) {
+    protected void populateMolSpreadSheetColumnMetadata(MolSpreadSheetData molSpreadSheetData, final List<ExperimentSearch> experimentList) {
 
         // now retrieve the header names from the assays
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Struct')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'CID')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'UNM Promiscuity Analysis')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Active vs Tested across all Assay Definitions')])
-        for (ExperimentSearch experiment : experimentList) {
-            molSpreadSheetData.experimentNameList << "${experiment.assayId.toString()}".toString()
-            molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}".toString()
+        for (ExperimentSearch experimentSearch in experimentList) {
+            molSpreadSheetData.experimentNameList << "${experimentSearch.assayId.toString()}".toString()
+            molSpreadSheetData.experimentFullNameList << "${experimentSearch.name.toString()}".toString()
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[])
         }
     }
@@ -401,10 +408,11 @@ class MolecularSpreadSheetService {
         for (Long assayId : assayIds) {
             //TODO: We probably could post all the ids to this url. We need to investigate
             final List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId)
-            if (experiments) {
-                allExperiments.addAll(experiments)
+            for (ExperimentSearch experimentSearch in experiments)  {
+                if (!allExperiments*.exptId.contains(experimentSearch.exptId) )
+                    allExperiments <<  experimentSearch
             }
-        }
+         }
 
         return allExperiments
     }
@@ -431,9 +439,13 @@ class MolecularSpreadSheetService {
         for (ExpandedAssay assay : assays) {
             final List<ExperimentSearch> experiments = assay.experiments
             if (experiments) {
-                allExperiments.addAll(experiments)
+//                allExperiments.addAll(experiments)
                 for (ExperimentSearch experimentSearch in experiments) {
-                    mapExperimentIdsToCapAssayIds[experimentSearch.assayId] =  assay.capAssayId
+                    if (!allExperiments*.exptId.contains(experimentSearch.exptId)){
+                        allExperiments <<  experimentSearch
+                        mapExperimentIdsToCapAssayIds[experimentSearch.assayId] =  assay.capAssayId
+                    }
+
                 }
             }
         }
@@ -461,14 +473,19 @@ class MolecularSpreadSheetService {
         for (Long individualCompoundId in cids) {
             List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, true)  // true = active only
             for (Assay assay in assays) {
-                mapExperimentIdsToCapAssayIds[assay.bardAssayId] =  assay.capAssayId
+                if (!allAssays*.assayId.contains(assay.bardAssayId)) {
+                    allAssays.add(assay)
+                    mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
+                }
             }
-            allAssays.addAll(assays)
+
+            //allAssays.addAll(assays)
         }
+
         return assaysToExperiments(allAssays)
     }
 
-    /**
+/**
      *
      * @param projectIds
      * @return list of Experiment's from a list of project Ids
@@ -487,6 +504,7 @@ class MolecularSpreadSheetService {
                     if (!mapExperimentIdsToCapAssayIds.containsKey(assay.bardAssayId)) {
                         mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
                     }
+
                 }
                 projectToExperiment(project.eids, allExperiments)
             }
@@ -557,18 +575,18 @@ class MolecularSpreadSheetService {
      * @param spreadSheetActivity
      * @param activity
      */
-    void addCurrentActivityToSpreadSheet(List <MolSpreadSheetColSubHeader> dummyColumnNames, SpreadSheetActivity spreadSheetActivity, final Activity activity) {
-        spreadSheetActivity.activityToSpreadSheetActivity(activity, dummyColumnNames)
-    }
+//    void addCurrentActivityToSpreadSheet(List <MolSpreadSheetColSubHeader> dummyColumnNames, SpreadSheetActivity spreadSheetActivity, final Activity activity) {
+//        spreadSheetActivity.activityToSpreadSheetActivity(activity, dummyColumnNames)
+//    }
     /**
      *
      * @param activity
      * @return SpreadSheetActivity
      */
-    SpreadSheetActivity extractActivitiesFromExperiment(final Activity activity) {
-        List <MolSpreadSheetColSubHeader> dummyHeadersList = []
-        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
-        addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, activity)
-        return spreadSheetActivity
-    }
+//    SpreadSheetActivity extractActivitiesFromExperiment(final Activity activity) {
+//        List <MolSpreadSheetColSubHeader> dummyHeadersList = []
+//        final SpreadSheetActivity spreadSheetActivity = new SpreadSheetActivity()
+//        addCurrentActivityToSpreadSheet(dummyHeadersList, spreadSheetActivity, activity)
+//        return spreadSheetActivity
+//    }
 }

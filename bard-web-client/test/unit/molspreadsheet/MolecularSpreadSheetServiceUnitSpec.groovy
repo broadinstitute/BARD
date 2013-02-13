@@ -216,6 +216,23 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
 
 
+
+    void "test convertSpreadSheetActivityToCompoundInformation"() {
+        given:
+        final List<SpreadSheetActivity> spreadSheetActivityList = []
+        spreadSheetActivityList << new SpreadSheetActivity(cid: 47L)
+
+        when:
+        Map map = service.convertSpreadSheetActivityToCompoundInformation(spreadSheetActivityList)
+
+        then:
+        queryService.findCompoundsByCIDs(_,_) >> {[123:456]}
+
+        assertNotNull map
+    }
+
+
+
     void "test null cmp iterator in retrieveImpliedCompoundsEtagFromAssaySpecification"() {
         given:
         final List<ExperimentSearch> experimentList = []
@@ -231,6 +248,64 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
         assertNull eTag
     }
+
+    void "test empty cmp response in retrieveImpliedCompoundsEtagFromAssaySpecification"() {
+        given:
+        final List<ExperimentSearch> experimentList = []
+        experimentList << new ExperimentSearch()
+
+        when:
+        String eTag = service.retrieveImpliedCompoundsEtagFromAssaySpecification(experimentList)
+
+        then:
+        compoundRestService.newETag(_, _) >> { null }
+        and:
+        experimentRestService.compoundsForExperiment(_) >> {[]}
+
+        assertNull eTag
+    }
+
+
+    void "test populateMolSpreadSheetData"() {
+        given:
+        final List<ExperimentSearch> experimentList = []
+        experimentList << new ExperimentSearch()
+        final List<SpreadSheetActivity> spreadSheetActivityList = []
+        spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L)
+        spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L)
+        Map<String, MolSpreadSheetCell> dataMap = [:]
+        dataMap["0_4"]  = new  MolSpreadSheetCell ()
+        MolSpreadSheetData molSpreadSheetData = new   MolSpreadSheetData ()
+        molSpreadSheetData.rowPointer[54687454L] = 0
+        molSpreadSheetData.columnPointer[3997L] = 0
+
+
+        when:
+        service.populateMolSpreadSheetData(molSpreadSheetData,experimentList,spreadSheetActivityList,dataMap)
+
+        then:
+        assert dataMap["0_4"]
+
+    }
+
+
+    void "test addFixedColumnData error case"() {
+        given:
+        final LinkedHashMap<String, String> mapForThisRow = [:]
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        final int rowCnt = 1
+        when:
+        service.addFixedColumnData(mapForThisRow, molSpreadSheetData, rowCnt)
+        then:
+        assert mapForThisRow.size() == 3
+        assert mapForThisRow["molstruct"] == "Unknown smiles"
+        assert mapForThisRow["cid"] == "-"
+        assert mapForThisRow["c3"] == "-"
+
+
+    }
+
+
 
     void "test addFixedColumnData"() {
         given:
