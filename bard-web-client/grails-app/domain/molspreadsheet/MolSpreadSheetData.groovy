@@ -8,6 +8,7 @@ class MolSpreadSheetData {
     Map<String, MolSpreadSheetCell> mssData = [:]
     Map<Long, Integer> rowPointer = [:]
     Map<Long, Integer> columnPointer = [:]
+    Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
     List<MolSpreadSheetColumnHeader> mssHeaders = []
     List<String> experimentNameList = []
     List<String> experimentFullNameList = []
@@ -138,7 +139,15 @@ class MolSpreadSheetData {
                     int columnOfAssay = mapColumnsToAssay.find{ it.value == assayNames[i]}.key
                     fullAssayName = mapColumnsToAssayName[columnOfAssay]
                 }
-                returnValue << ["assayName": assayNames[i], "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName]
+                //convert assay id to cap id
+                String capId = "U"
+                if (assayNames[i]) {
+                    Long assayId =  assayNames[i].toLong()
+                    if (mapExperimentIdsToCapAssayIds.containsKey(assayId)){
+                        capId =  mapExperimentIdsToCapAssayIds[assayId].toString()
+                    }
+                }
+                returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName]
             }
         }
         returnValue

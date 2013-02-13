@@ -18,6 +18,7 @@ import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bardqueryapi.IQueryService
 import bardqueryapi.SearchFilter
+import bard.core.rest.spring.project.ProjectExpanded
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
@@ -413,7 +414,7 @@ class MolecularSpreadSheetService {
      * @param assayIds
      * @return list
      */
-    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList, final List<Long> assayIds) {
+    protected List<ExperimentSearch> assaysToExperiments(List<ExperimentSearch> incomingExperimentList, final List<Long> assayIds, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
 
         List<ExperimentSearch> allExperiments
         if (incomingExperimentList) {
@@ -431,6 +432,9 @@ class MolecularSpreadSheetService {
             final List<ExperimentSearch> experiments = assay.experiments
             if (experiments) {
                 allExperiments.addAll(experiments)
+                for (ExperimentSearch experimentSearch in experiments) {
+                    mapExperimentIdsToCapAssayIds[experimentSearch.assayId] =  assay.capAssayId
+                }
             }
         }
         return allExperiments
@@ -441,21 +445,24 @@ class MolecularSpreadSheetService {
      * @param adids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> assayIdsToExperiments(final List<ExperimentSearch> incomingExperimentList, final List<Long> adids) {
-        return assaysToExperiments(incomingExperimentList, adids)
+    protected List<ExperimentSearch> assayIdsToExperiments(final List<ExperimentSearch> incomingExperimentList, final List<Long> adids, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
+        return assaysToExperiments(incomingExperimentList, adids, mapExperimentIdsToCapAssayIds)
     }
     /**
      *
      * @param cids
      * @return list of experiments
      */
-    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids) {
+    protected List<ExperimentSearch> compoundIdsToExperiments(final List<Long> cids, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
         if (!cids) {
             return []
         }
         List<Assay> allAssays = []
         for (Long individualCompoundId in cids) {
             List<Assay> assays = compoundRestService.getTestedAssays(individualCompoundId, true)  // true = active only
+            for (Assay assay in assays) {
+                mapExperimentIdsToCapAssayIds[assay.bardAssayId] =  assay.capAssayId
+            }
             allAssays.addAll(assays)
         }
         return assaysToExperiments(allAssays)
@@ -466,15 +473,21 @@ class MolecularSpreadSheetService {
      * @param projectIds
      * @return list of Experiment's from a list of project Ids
      */
-    protected List<ExperimentSearch> projectIdsToExperiments(final List<Long> projectIds) {
+    protected List<ExperimentSearch> projectIdsToExperiments(final List<Long> projectIds, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
         final ProjectResult projectResult = projectRestService.searchProjectsByIds(projectIds)
-        return projectsToExperiments(projectResult)
+        return projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds)
     }
 
-    protected List<ExperimentSearch> projectsToExperiments(final ProjectResult projectResult) {
+    protected List<ExperimentSearch> projectsToExperiments(final ProjectResult projectResult, Map<Long, Long> mapExperimentIdsToCapAssayIds) {
         final List<ExperimentSearch> allExperiments = []
         if (projectResult) {
             for (Project project : projectResult.projects) {
+                ProjectExpanded projectExpanded = projectRestService.getProjectById(project.projectId)
+                for (Assay assay in projectExpanded?.assays){
+                    if (!mapExperimentIdsToCapAssayIds.containsKey(assay.bardAssayId)) {
+                        mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
+                    }
+                }
                 projectToExperiment(project.eids, allExperiments)
             }
         }
@@ -487,6 +500,7 @@ class MolecularSpreadSheetService {
             allExperiments.addAll(experimentResult.experiments)
         }
     }
+
 
     /**
      *

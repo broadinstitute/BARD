@@ -4,19 +4,19 @@
 <script type="text/javascript">
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
-            var y
             // First remove HTML tags and any text
-            var x = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
-            var stringlen= x.length
+            var tagfreestr = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
+            var stringlen= tagfreestr.length
+            var textFormOfFloat
             // Insert a zero in front of the number ( otherwise a number starting with a decimal is treated as text )
             //  Special case: if the number is negative then the zero has to go behind the negative sign
-            if (x.substring(0,1)=='-') {
-                y = '-0'+x.substring(1, stringlen);
+            if (tagfreestr.substring(0,1)=='-') {
+                textFormOfFloat = '-0'+tagfreestr.substring(1, stringlen);
             } else {
-                y = '0'+x;
+                textFormOfFloat = '0'+tagfreestr;
             }
             // Finally we have an acceptable floating-point number. Convert it.
-            return parseFloat(y);
+            return parseFloat(textFormOfFloat);
         },
 
         "num-html-asc":function (a, b) {
@@ -120,7 +120,7 @@
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
                             title="<%=assayColumn."fullAssayName"%>"><a
                                 href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
-                            ADID=<%=assayColumn."assayName"%></a>
+                            ADID=<%=assayColumn."bardAssayId"%></a>
                         </th>
                     </g:each>
                 </tr>
