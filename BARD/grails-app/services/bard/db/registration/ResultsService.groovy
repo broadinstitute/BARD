@@ -739,6 +739,13 @@ class ResultsService {
                 }
             }
 
+            parsed.contexts.each {
+                it.experiment = experiment
+                if(!it.save()) {
+                    throw new RuntimeException(it.errors.toString())
+                }
+            }
+
             errors.resultsCreated = results.size()
         }
 
