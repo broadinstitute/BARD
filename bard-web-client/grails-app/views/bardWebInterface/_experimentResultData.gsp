@@ -17,13 +17,13 @@
         <g:if test="${searchString}">
             <g:link controller="bardWebInterface" action="showAssay"
                     id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
-                ${experimentDataMap?.experiment?.getAssays().get(0).capAssayId}
+                ${experimentDataMap?.experiment?.capAssayId}
             </g:link>
         </g:if>
         <g:else>
             <g:link controller="bardWebInterface" action="showAssay"
                     id="${experimentDataMap?.experiment?.adid}">
-                ${experimentDataMap?.experiment?.getAssays().get(0).capAssayId}
+                ${experimentDataMap?.capAssayId}
             </g:link>
         </g:else>
     </b>
