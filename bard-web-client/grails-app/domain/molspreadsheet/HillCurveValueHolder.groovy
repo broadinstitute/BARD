@@ -19,16 +19,18 @@ class HillCurveValueHolder {
     String qualifier = ""
     String xAxisLabel = ''
     String yAxisLabel = ''
-
+    static mapping = {
+        spreadSheetActivityStorage column: "spreadActStore"
+    }
     static constraints = {
         identifier nullable: false
-        identifier subColumnIndex: false
+        subColumnIndex nullable: false
         s0 nullable: true
         sInf nullable: true
         slope nullable: true
-        coef  nullable: true
+        coef nullable: true
         xAxisLabel nullable: true
-        yAxisLabel  nullable: true
+        yAxisLabel nullable: true
     }
 
 
@@ -37,27 +39,26 @@ class HillCurveValueHolder {
         String returnValue = "Missing data qualifier"
 
         Double numericalReturnValue = Double.NaN
-        if (slope  != null)   {
+        if (slope != null) {
             numericalReturnValue = slope
         }
-        else if ((response  != null) &&
-                (response.size()  == 1)  &&
-                (response[0]  != null)) {
+        else if ((response != null) &&
+                (response.size() == 1) &&
+                (response[0] != null)) {
             numericalReturnValue = response[0]
-        } else  {
+        } else {
             //TODO: find the business rule describing desired actions under these circumstances
             log.info "Problem identified by HillCurveValueHolder: no slope and as well no single valued response"
         }
 
-        if (numericalReturnValue != Double.NaN)  {
-            returnValue  = new ExperimentalValueUtil(numericalReturnValue)
+        if (numericalReturnValue != Double.NaN) {
+            returnValue = new ExperimentalValueUtil(numericalReturnValue)
         } else {
-            returnValue  = '--'
+            returnValue = '--'
         }
 
-        qualifier+returnValue
+        qualifier + returnValue
     }
-
 
 
 }

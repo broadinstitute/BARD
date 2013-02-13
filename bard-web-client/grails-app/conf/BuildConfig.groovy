@@ -75,7 +75,6 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
         compile ":functional-spock:0.6"
         compile ":twitter-bootstrap:2.1.0"
-        compile ":shopping-cart:0.8.2"
         compile ":cbipcrowdauthentication:0.3.0"
         build ":tomcat:$grailsVersion"
         test ":spock:0.6"
@@ -93,6 +92,7 @@ grails.project.dependency.resolution = {
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
+grails.plugin.location.'shopping-cart:0.8.2'="../shopping-cart-0.8.2"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {

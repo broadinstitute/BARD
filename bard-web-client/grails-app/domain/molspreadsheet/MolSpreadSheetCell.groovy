@@ -17,7 +17,10 @@ class MolSpreadSheetCell {
     String supplementalInternalValue
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
-
+    static mapping = {
+        spreadSheetActivityStorage column: "spreadActStore"
+        molSpreadSheetData column: "molData"
+    }
     static constraints = {
         activity(nullable: false)
         molSpreadSheetCellType(blank: false)

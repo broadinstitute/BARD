@@ -1,0 +1,58 @@
+<plugin name='shopping-cart' version='0.8.2' grailsVersion='1.1 &gt; *'>
+  <author>Bjoern Wilmsmann</author>
+  <authorEmail>bjoern@metasieve.com</authorEmail>
+  <title>Shopping cart plugin</title>
+  <description>Shopping cart plugin.
+</description>
+  <documentation>http://grails.org/plugin/shopping-cart</documentation>
+  <resources>
+    <resource>com.metasieve.shoppingcart.TestShoppingCartController</resource>
+    <resource>com.metasieve.shoppingcart.Quantity</resource>
+    <resource>com.metasieve.shoppingcart.Shoppable</resource>
+    <resource>com.metasieve.shoppingcart.ShoppingCart</resource>
+    <resource>com.metasieve.shoppingcart.ShoppingCartInterfaceTestProduct</resource>
+    <resource>com.metasieve.shoppingcart.ShoppingCartTestProduct</resource>
+    <resource>com.metasieve.shoppingcart.ShoppingItem</resource>
+    <resource>com.metasieve.shoppingcart.ShoppingCartService</resource>
+    <resource>com.metasieve.shoppingcart.ShoppingCartTagLib</resource>
+  </resources>
+  <dependencies>
+    <resolvers>
+      <resolver type='grailsPlugins' name='grailsPlugins' />
+    </resolvers>
+  </dependencies>
+  <behavior>
+    <method name='addToShoppingCart' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+    </method>
+    <method name='removeFromShoppingCart' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+    </method>
+    <method name='addQuantityToShoppingCart' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+      <argument type='java.lang.Object' />
+    </method>
+    <method name='removeQuantityFromShoppingCart' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+      <argument type='java.lang.Object' />
+    </method>
+    <method name='addToShoppingCartWithSessionID' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+      <argument type='java.lang.Object' />
+    </method>
+    <method name='removeFromShoppingCartWithSessionID' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+      <argument type='java.lang.Object' />
+    </method>
+    <method name='addQuantityToShoppingCartWithSessionID' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+      <argument type='java.lang.Object' />
+      <argument type='java.lang.Object' />
+    </method>
+    <method name='removeQuantityFromShoppingCartWithSessionID' artefact='UrlMappings' type='com.metasieve.shoppingcart.IShoppable'>
+      <description />
+      <argument type='java.lang.Object' />
+      <argument type='java.lang.Object' />
+    </method>
+  </behavior>
+</plugin>

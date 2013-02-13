@@ -8,4 +8,8 @@ class MolSpreadSheetColSubHeader {
 
     static constraints = {
     }
+    static mapping = {
+        table 'MolSSColSubHeader'
+        unitsInColumnAreUniform column: "unitsInColumnAreUniform"
+    }
 }

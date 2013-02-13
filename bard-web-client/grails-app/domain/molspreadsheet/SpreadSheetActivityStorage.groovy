@@ -8,22 +8,27 @@ import bard.core.rest.spring.experiment.ActivityData
 class SpreadSheetActivityStorage {
 
     static belongsTo = [molSpreadSheetCell: MolSpreadSheetCell]
-    static hasMany = [ hillCurveValueHolderList : HillCurveValueHolder  ]
+    static hasMany = [hillCurveValueHolderList: HillCurveValueHolder]
 
     Long eid
     Long cid
     Long sid
     ActivityOutcome activityOutcome
-    List<HillCurveValueHolder> hillCurveValueHolderList  =  []
-    List<Double> columnNames  = []
+    List<HillCurveValueHolder> hillCurveValueHolderList = []
+    List<Double> columnNames = []
     Double potency
     String qualifier = ""
-    String responseUnit  = ''
+    String responseUnit = ''
     List<ActivityData> childElements = []
-    String dictionaryDescription  = ''
-    String dictionaryLabel  = ''
+    String dictionaryDescription = ''
+    String dictionaryLabel = ''
 
+    static mapping = {
+        molSpreadSheetCell column: "molCell"
+        hillCurveValueHolderList column: "holderList"
+        hillCurveValueHolderList indexColumn:[name:"holderList_idx", type:Integer]
 
+    }
     static constraints = {
         eid(nullable: true)
         cid(nullable: true)
@@ -42,10 +47,10 @@ class SpreadSheetActivityStorage {
     }
 
 
-    void setQualifier(MolSpreadSheetCellType molSpreadSheetCellType){
+    void setQualifier(MolSpreadSheetCellType molSpreadSheetCellType) {
         if (molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric)
             qualifier = ">"
-        else if (molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric  )
+        else if (molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)
             qualifier = "<"
     }
     /**
@@ -65,31 +70,31 @@ class SpreadSheetActivityStorage {
      * @param spreadSheetActivityStorage
      * @param experimentIndex
      */
-    SpreadSheetActivityStorage(SpreadSheetActivityStorage spreadSheetActivityStorage, int experimentIndex ) {
-        this.eid =  spreadSheetActivityStorage.eid
-        this.cid =  spreadSheetActivityStorage.cid
-        this.sid =  spreadSheetActivityStorage.sid
-        this.activityOutcome =  spreadSheetActivityStorage.activityOutcome
-        this.potency =  spreadSheetActivityStorage.potency
+    SpreadSheetActivityStorage(SpreadSheetActivityStorage spreadSheetActivityStorage, int experimentIndex) {
+        this.eid = spreadSheetActivityStorage.eid
+        this.cid = spreadSheetActivityStorage.cid
+        this.sid = spreadSheetActivityStorage.sid
+        this.activityOutcome = spreadSheetActivityStorage.activityOutcome
+        this.potency = spreadSheetActivityStorage.potency
         this.responseUnit = spreadSheetActivityStorage.responseUnit
         this.childElements = spreadSheetActivityStorage.childElements
-        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())  {
+        if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size()) {
             HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.hillCurveValueHolderList[experimentIndex]
-            hillCurveValueHolder.qualifier =  spreadSheetActivityStorage.qualifier
-            this.hillCurveValueHolderList =  [ hillCurveValueHolder ]
+            hillCurveValueHolder.qualifier = spreadSheetActivityStorage.qualifier
+            this.hillCurveValueHolderList = [hillCurveValueHolder]
         }
         if (experimentIndex < spreadSheetActivityStorage.hillCurveValueHolderList?.size())
-            this.columnNames =  [ spreadSheetActivityStorage.columnNames[experimentIndex]  ]
+            this.columnNames = [spreadSheetActivityStorage.columnNames[experimentIndex]]
         this.dictionaryDescription = spreadSheetActivityStorage.dictionaryDescription
-        this.dictionaryLabel =  spreadSheetActivityStorage.dictionaryLabel
+        this.dictionaryLabel = spreadSheetActivityStorage.dictionaryLabel
     }
 
 
-    String printUnits (String resultValueHolder = '') {
+    String printUnits(String resultValueHolder = '') {
         String returnValue
         if (resultValueHolder == '--') { // if we have a null value and we don't want to print out any units for it
             returnValue = ''
-        }  else {
+        } else {
             if (responseUnit == null)
                 returnValue = ''
             else if (responseUnit == 'percent')

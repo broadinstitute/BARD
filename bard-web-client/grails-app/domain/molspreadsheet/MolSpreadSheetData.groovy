@@ -16,6 +16,19 @@ class MolSpreadSheetData {
     Map<Integer, String> mapColumnsToAssayName = [:]
     MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
 
+    static mapping = {
+        table 'MSData'
+
+        mapColumnsToAssay column: "colsToAssay"
+        rowPointer column: "rowPter"
+        columnPointer column: "columnPter"
+        mapExperimentIdsToCapAssayIds indexColumn: [name: "expToCapAssay_idx", type: Integer],
+                joinTable: [name: 'mexptocap', column: "expToCapAssayIds" ,key : 'exp_id', column: 'maptoexp']
+        mapColumnsToAssayName indexColumn: [name: "colsToAssayName_idx", type: Integer],
+                joinTable: [name: 'mcolsassayname', column: "colsToAssayName"]
+
+
+    }
     /**
      * Display a cell, as specified by a row and column
      * @param rowCnt
@@ -88,7 +101,7 @@ class MolSpreadSheetData {
         subColumns
     }
 
-    List <MolSpreadSheetColSubHeader> getSubColumnList(int experimentCount) {
+    List<MolSpreadSheetColSubHeader> getSubColumnList(int experimentCount) {
         List<String> subColumns = []
         if (experimentCount < getSuperColumnCount())
             subColumns = this.mssHeaders[experimentCount].molSpreadSheetColSubHeaderList
@@ -135,16 +148,16 @@ class MolSpreadSheetData {
         if (assayNames) {
             for (int i in 0..(assayNames.size() - 1)) {
                 String fullAssayName = 'Data error: please contact your system administrator'   // This message should never be displayed
-                if (assayNames[i]!=null)  {    // Assay name should never be null -- this is a safety measure
-                    int columnOfAssay = mapColumnsToAssay.find{ it.value == assayNames[i]}.key
+                if (assayNames[i] != null) {    // Assay name should never be null -- this is a safety measure
+                    int columnOfAssay = mapColumnsToAssay.find { it.value == assayNames[i]}.key
                     fullAssayName = mapColumnsToAssayName[columnOfAssay]
                 }
                 //convert assay id to cap id
                 String capId = "U"
                 if (assayNames[i]) {
-                    Long assayId =  assayNames[i].toLong()
-                    if (mapExperimentIdsToCapAssayIds.containsKey(assayId)){
-                        capId =  mapExperimentIdsToCapAssayIds[assayId].toString()
+                    Long assayId = assayNames[i].toLong()
+                    if (mapExperimentIdsToCapAssayIds.containsKey(assayId)) {
+                        capId = mapExperimentIdsToCapAssayIds[assayId].toString()
                     }
                 }
                 returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName]
