@@ -89,12 +89,7 @@ modules = {
         resource url: "css/twitterBootstrapAffix.css"
         resource url: "js/twitterBootstrapAffix.js"
     }
-    jsDraw {
-        dependsOn("dojo")
-        resource url: "js/jsDraw/Scilligence.JSDraw2.js"
-        resource url: "js/jsDraw/license.js"
-    }
-    dojo {
-        resource url: "js/dojo-min/dojo/dojo.js"
+    jsDrawEditor {
+        resource url: "js/jsDraw/jsDrawEditor.js"
     }
 }

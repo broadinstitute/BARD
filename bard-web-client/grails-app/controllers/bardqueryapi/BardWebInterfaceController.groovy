@@ -81,6 +81,9 @@ class BardWebInterfaceController {
             ActivityOutcome outcome = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
 
             final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
+            if (experimentDataMap) {
+                experimentDataMap.put('capAssayId', experimentDataMap.experiment?.getAssays()?.get(0)?.capAssayId)
+            }
             final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
                 render(template: 'experimentResultData', model: modelMap)
@@ -166,7 +169,7 @@ class BardWebInterfaceController {
             int top = compoundIds.size()
             int skip = 0
             params.max = top
-            params.skip=0
+            params.skip = 0
             final List<Long> cids = []
             for (def id : compoundIds) {
                 cids.add(new Long(id))
@@ -221,7 +224,7 @@ class BardWebInterfaceController {
             int top = adids.size()
             int skip = 0
             params.max = top
-            params.skip=0
+            params.skip = 0
             final List<Long> capIds = []
             for (def id : adids) {
                 capIds.add(new Long(id))
@@ -275,7 +278,7 @@ class BardWebInterfaceController {
             int top = projectIds.size()
             int skip = 0
             params.max = top
-            params.skip=0
+            params.skip = 0
             final List<Long> capIds = []
             for (def id : projectIds) {
                 capIds.add(new Long(id))
@@ -576,9 +579,9 @@ class SearchHelper {
 
             Map compoundAdapterMap = null
             if (inputAfterColon.isInteger()) { //we assume that this is a CID
-                compoundAdapterMap = queryService.structureSearch(new Integer(inputAfterColon), searchType, new Double(thresholdValue)/100, searchFilters, top, skip, nhits)
+                compoundAdapterMap = queryService.structureSearch(new Integer(inputAfterColon), searchType, new Double(thresholdValue) / 100, searchFilters, top, skip, nhits)
             } else {
-                compoundAdapterMap = queryService.structureSearch(inputAfterColon, searchType, searchFilters, new Double(thresholdValue)/100, top, skip, nhits)
+                compoundAdapterMap = queryService.structureSearch(inputAfterColon, searchType, searchFilters, new Double(thresholdValue) / 100, top, skip, nhits)
             }
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
             structureSearchResultsMap = [
