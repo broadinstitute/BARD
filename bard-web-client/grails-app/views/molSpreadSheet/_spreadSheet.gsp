@@ -4,7 +4,6 @@
 <script type="text/javascript">
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
-
             // First remove HTML tags and any text
             var tagfreestr = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
             var stringlen= tagfreestr.length
@@ -121,7 +120,7 @@
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
                             title="<%=assayColumn."fullAssayName"%>"><a
                                 href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
-                            ADID=<%=assayColumn."assayName"%></a>
+                            ADID=<%=assayColumn."bardAssayId"%></a>
                         </th>
                     </g:each>
                 </tr>

@@ -6,7 +6,7 @@ class BootStrap {
     DataExportRestService dataExportRestService
     def init = { servletContext ->
         //load dictionary if the data export api is available
-        dataExportRestService.getDictionary(ReloadCache.YES)
+        dataExportRestService.getDictionary()
     }
     def destroy = {
     }
