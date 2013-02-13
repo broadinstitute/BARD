@@ -39,25 +39,30 @@ class HillCurveValueHolder {
         String returnValue = "Missing data qualifier"
 
         Double numericalReturnValue = Double.NaN
-        if (slope != null) {
+        if (slope  != null)   {
             numericalReturnValue = slope
         }
-        else if ((response != null) &&
-                (response.size() == 1) &&
-                (response[0] != null)) {
+        else if ((response  != null) &&
+                (response.size()  == 1)  &&
+                (response[0]  != null)) {
             numericalReturnValue = response[0]
-        } else {
+        } else  {
             //TODO: find the business rule describing desired actions under these circumstances
             log.info "Problem identified by HillCurveValueHolder: no slope and as well no single valued response"
         }
 
-        if (numericalReturnValue != Double.NaN) {
-            returnValue = new ExperimentalValueUtil(numericalReturnValue)
+        if (numericalReturnValue != Double.NaN)  {
+            returnValue  = new ExperimentalValueUtil(numericalReturnValue)
         } else {
-            returnValue = '--'
+            returnValue  = '--'
         }
 
-        qualifier + returnValue
+        if (returnValue.contains("--")) {
+            return returnValue
+        }
+        else {
+            return qualifier+returnValue
+        }
     }
 
 

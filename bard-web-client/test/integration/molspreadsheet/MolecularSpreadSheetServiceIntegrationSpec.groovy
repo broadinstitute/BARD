@@ -287,12 +287,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
 
-        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [4540 as Long, 4544 as Long, 4549 as Long, 4552 as Long])
-
-        List<SpreadSheetActivity> spreadSheetActivityList2 = [new SpreadSheetActivity (cid: 4540 as Long, eid: 47 as Long) ]
+        List<SpreadSheetActivity> spreadSheetActivityList2 = [new SpreadSheetActivity (cid: 4540 as Long, eid: 3705 as Long) ]
         molSpreadSheetData.rowPointer[4540 as Long] = 0
         molSpreadSheetData.rowPointer[4544 as Long] = 1
         molSpreadSheetData.rowPointer[4549 as Long] = 2
+        molSpreadSheetData.columnPointer[3705 as Long] = 0
         Map<String, MolSpreadSheetCell> dataMap = [:]
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
