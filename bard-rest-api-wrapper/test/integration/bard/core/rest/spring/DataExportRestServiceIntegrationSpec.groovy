@@ -3,11 +3,25 @@ package bard.core.rest.spring
 import bard.core.rest.spring.util.DictionaryElement
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
+import spock.lang.IgnoreRest
+import bard.core.rest.spring.util.CapDictionary
 
 @Unroll
 class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
     DataExportRestService dataExportRestService
 
+
+    void "getDictionary #label"() {
+        when:
+        CapDictionary capDictionary = dataExportRestService.getDictionary()
+        then:
+        assert dataExportRestService.dictionaryElementMap.isEmpty() == isEmpty
+        where:
+        label                            | isEmpty
+        "Force a reload of cache"        | false
+        "Do not force a reload of cache" | false
+
+    }
 
     void "#label"() {
         when:

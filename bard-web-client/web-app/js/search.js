@@ -304,7 +304,7 @@ function handleMainFormSubmit(searchString) {
         case 'PROBES':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/bardwebclient/bardWebInterface/showProbeList', 'searchForm', 'compoundsTab', 'totalCompounds', 'Probes ', 'compounds');
+            handleSearch('/bardwebclient/bardWebInterface/showProbeList', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');

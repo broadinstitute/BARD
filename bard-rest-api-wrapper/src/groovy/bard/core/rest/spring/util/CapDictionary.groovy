@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.*;
 import java.util.List;
 @XmlAccessorType( XmlAccessType.NONE )
 @XmlRootElement(name = "dictionary")
-public class CapDictionary{
+public class CapDictionary implements Serializable{
 
 
     protected List<DictionaryElement> elements;
@@ -24,7 +24,9 @@ public class CapDictionary{
     }
 
     public void setElements(List<DictionaryElement> dictionaryElements) {
+
         this.elements = dictionaryElements;
     }
+
 }
 
