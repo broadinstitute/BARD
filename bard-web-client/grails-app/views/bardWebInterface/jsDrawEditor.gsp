@@ -6,41 +6,8 @@
     <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/Scilligence.JSDraw2.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/license.js"></script>
-    <r:require modules="jquery, jquery-ui, jquery-theme, core, bootstrap"/>
+    <r:require modules="jquery, jquery-ui, jquery-theme, core, bootstrap, jsDrawEditor"/>
     <r:layoutResources/>
-    <r:script>
-        var jsDrawEditor = null;
-
-        dojo.addOnLoad(function () {
-            jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false});
-            adjustJSDrawEditorWindow()
-            //Read cached structure
-            jsDrawEditor.readCookie();
-        });
-
-        //On clicking the Submit button, update the hidden field with search-type + smiles and cache the structure in local storage.
-        $(document).on('click', '#searchButton', function () {
-            var smiles = jsDrawEditor.getSmiles();
-            var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
-            var constructedSearch = structureSearchTypeSelected + ":" + smiles;
-            $('#searchString').attr('value', constructedSearch);
-            jsDrawEditor.writeCookie();
-        });
-
-        $(document).ready(function () {
-            $(window).resize(function () {
-                adjustJSDrawEditorWindow();
-            });
-        });
-
-        function adjustJSDrawEditorWindow() {
-            var width = $(window).width() - 30;
-            var height = $(window).height() - 150;
-            if (width && height && jsDrawEditor) {
-                jsDrawEditor.setSize(width, height)
-            }
-        }
-    </r:script>
 </head>
 
 <body>
@@ -50,8 +17,10 @@
         <g:form controller="bardWebInterface" action="searchResults">
         %{--Use this field to hold the smiles + search-type value--}%
             <g:hiddenField name="searchString" id="searchString" value=""/>
+            <g:hiddenField name="similaritySearchTypeValue" id="similaritySearchTypeValue"
+                           value="${StructureSearchParams.Type.Similarity}"/>
 
-            <div style="text-align: left">
+            <div style="text-align: left;">
                 <g:radioGroup name="structureSearchType"
                               values="${StructureSearchParams.Type.values()}"
                               value="${StructureSearchParams.Type.Substructure}"
@@ -60,6 +29,8 @@
                         ${it.radio} ${it.label}
                     </label>
                 </g:radioGroup>
+
+                <g:textField name="cutoff" value="90" size="4" id="cutoff"/>
             </div>
             <br/>
 
