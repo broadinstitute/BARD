@@ -11,7 +11,7 @@ public class DataExportRestService extends AbstractRestService {
     String dataExportApiKey
     String dictionaryAcceptType
     String dataExportDictionaryURL
-    Map<Long, DictionaryElement> dictionaryElementMap = [:]
+    final String SYNC_LOCK = ""
 
 
     public DataExportRestService() {
@@ -23,16 +23,13 @@ public class DataExportRestService extends AbstractRestService {
      * There aren't many dictionary elements (less than 2K at the time of writing) so we keep all of them in memory
      *
      * However, we should use a cache if this because a bottle neck
+     *
+     * In some cases the web application starts up before the data export api, or sometimes the data export api
+     *
+     * is down, so we are adding a conditional here, so we can force a reload if it evaluates to false
      */
-    public void loadDictionary() {
-        CapDictionary capDictionary = getDictionary()
-        final List<DictionaryElement> dictionaryElements = capDictionary.elements ?: []
-        for (DictionaryElement dictionaryElement : dictionaryElements) {
-            dictionaryElementMap.put(dictionaryElement.elementId, dictionaryElement)
-        }
-    }
-    @Cacheable('dictionaryElements')
-    public CapDictionary getDictionary() {
+    @Cacheable(value = 'dictionaryElements', condition = "#reloadCache.toString().equals('YES')")
+    public CapDictionary getDictionary(ReloadCache reloadCache) {
         try {
             SSLTrustManager.enableSSL()//enable SSL so we can call the data export API
             final HttpHeaders requestHeaders = new HttpHeaders();
@@ -42,6 +39,7 @@ public class DataExportRestService extends AbstractRestService {
             final URL url = new URL(this.dataExportDictionaryURL)
             final HttpEntity<CapDictionary> exchange = getExchange(url.toURI(), entity, CapDictionary.class) as HttpEntity<CapDictionary>
             final CapDictionary capDictionary = exchange.getBody()
+            capDictionary.loadDictionary()
             return capDictionary
         } catch (Exception ee) {
             log.error(ee) //log the error and then continue
@@ -53,9 +51,16 @@ public class DataExportRestService extends AbstractRestService {
      * @param dictionaryId - Given a dictionary Id , return the element
      * @return the element
      */
-    @Cacheable('dictionaryElements')
     DictionaryElement findDictionaryElementById(final Long dictionaryId) {
-        final DictionaryElement dictionaryElement = this.dictionaryElementMap.get(dictionaryId)
+        CapDictionary capDictionary = getDictionary(ReloadCache.YES)
+        if (!capDictionary.dictionaryElementMap) {
+
+            //this should force a reload of the cache, if the map is empty and the data export was down
+            synchronized (SYNC_LOCK) {
+                capDictionary = getDictionary(ReloadCache.NO)
+            }
+        }
+        final DictionaryElement dictionaryElement = capDictionary.dictionaryElementMap.get(dictionaryId)
         return dictionaryElement
     }
 
@@ -79,4 +84,8 @@ public class DataExportRestService extends AbstractRestService {
     }
 
 
+}
+enum ReloadCache {
+    YES,
+    NO
 }

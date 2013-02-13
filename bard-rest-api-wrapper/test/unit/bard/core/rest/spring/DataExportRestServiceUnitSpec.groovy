@@ -48,29 +48,10 @@ class DataExportRestServiceUnitSpec extends Specification {
         def remove = GroovySystem.metaClassRegistry.&removeMetaClass
     }
 
-    void "loadDictionary"() {
-        given:
-        service.metaClass.getDictionary = {new CapDictionary(elements: [new DictionaryElement()])}
-        when:
-        service.loadDictionary()
-        then:
-        assert service.dictionaryElementMap
-        assert !service.dictionaryElementMap.isEmpty()
-    }
-
-    void "loadDictionary Empty Map"() {
-        given:
-        service.metaClass.getDictionary = {new CapDictionary()}
-        when:
-        service.loadDictionary()
-        then:
-        assert !service.dictionaryElementMap
-        assert service.dictionaryElementMap.isEmpty()
-    }
 
     void "getDictionary with exception"() {
         when:
-        CapDictionary capDictionary = service.getDictionary()
+        CapDictionary capDictionary = service.getDictionary(ReloadCache.YES)
         then:
         service.metaClass.getExchange(_, _, _) >> {throw new Exception()}
         assert !capDictionary.elements

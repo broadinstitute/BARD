@@ -1,9 +1,4 @@
 <%@ page import="querycart.QueryItemType" %>
-%{-- structureSearchString is of the form StructureSearchType:smiles or cid
-examples Similarity:1234
-Similarity:CCC
-
---}%
 <div class="compound-info">
     <g:if test="${smiles}">
         <img alt="${smiles}"
