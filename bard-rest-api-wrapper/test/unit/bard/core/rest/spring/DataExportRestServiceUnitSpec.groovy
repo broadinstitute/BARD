@@ -51,7 +51,7 @@ class DataExportRestServiceUnitSpec extends Specification {
 
     void "getDictionary with exception"() {
         when:
-        CapDictionary capDictionary = service.getDictionary(ReloadCache.YES)
+        CapDictionary capDictionary = service.getDictionary()
         then:
         service.metaClass.getExchange(_, _, _) >> {throw new Exception()}
         assert !capDictionary.elements
