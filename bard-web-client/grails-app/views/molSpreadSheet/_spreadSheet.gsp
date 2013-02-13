@@ -120,7 +120,7 @@
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
                             title="<%=assayColumn."fullAssayName"%>"><a
                                 href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
-                            ADID=<%=assayColumn."assayName"%></a>
+                            ADID=<%=assayColumn."bardAssayId"%></a>
                         </th>
                     </g:each>
                 </tr>

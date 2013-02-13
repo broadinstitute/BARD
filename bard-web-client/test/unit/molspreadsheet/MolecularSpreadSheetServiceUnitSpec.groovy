@@ -129,6 +129,17 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
 
 
+    void "test assays To Experiments multi parm"() {
+        given:
+        Collection<Assay> assays = [new Assay(assayId: 2)]
+        when:
+        List<ExperimentSearch> experiments = service.assaysToExperiments(assays )
+        then:
+        assert experiments.isEmpty()
+    }
+
+
+
 
     void "test prepareMapOfColumnsToAssay "() {
         when:
@@ -248,8 +259,9 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
     void "test projectIdsToExperiments"() {
         given:
         final List<Long> pids = [2, 4]
+        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
         when:
-        final List<ExperimentSearch> experimentSearches = service.projectIdsToExperiments(pids)
+        final List<ExperimentSearch> experimentSearches = service.projectIdsToExperiments(pids, mapExperimentIdsToCapAssayIds)
         then:
         projectRestService.searchProjectsByIds(_) >> {projectResult}
         expectedNumberOfMethodCalls * experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch()])}
@@ -262,7 +274,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
     void "test projectsToExperiments #label"() {
         when:
-        List<ExperimentSearch> experiments = service.projectsToExperiments(projectResult)
+        Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
+        List<ExperimentSearch> experiments = service.projectsToExperiments(projectResult, mapExperimentIdsToCapAssayIds)
         then:
         expectedNumberOfMethodCalls * experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch()])}
         assert experiments.size() == expectedSize

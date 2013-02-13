@@ -19,7 +19,9 @@ class MolSpreadSheetDataBuilder {
     MolSpreadSheetData molSpreadSheetData
     Object etag
     Map<String, MolSpreadSheetCell> dataMap = [:]
+    Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
     List<SpreadSheetActivity> spreadSheetActivityList = []
+
 
     MolSpreadSheetDataBuilder() {
 
@@ -35,27 +37,27 @@ class MolSpreadSheetDataBuilder {
      *  This implementation does not require a Query Cart
      * @return
      */
-    Map deriveListOfExperimentsFromIds(List<Long> pids, List<Long> adids, List<Long> cids) {
+    Map deriveListOfExperimentsFromIds(List<Long> pids, List<Long> adids, List<Long> cids,  Map<Long, Long> mapExperimentIdsToCapAssayIds) {
         List<ExperimentSearch> experimentList = []
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = null
 
         try {
             // Any projects can be converted to assays, then assays to experiments
             if (!pids.isEmpty()) {
-                experimentList = molecularSpreadSheetService.projectIdsToExperiments(pids)
+                experimentList = molecularSpreadSheetService.projectIdsToExperiments(pids, mapExperimentIdsToCapAssayIds)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.NoCompounds_NoAssays_Projects
             }
 
             // Any assays explicitly selected on the cart are added to the  experimentList
             if (!adids.isEmpty()) {
-                experimentList = molecularSpreadSheetService.assayIdsToExperiments(experimentList, adids)
+                experimentList = molecularSpreadSheetService.assayIdsToExperiments(experimentList, adids, mapExperimentIdsToCapAssayIds)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.NoCompounds_Assays_NoProjects
             }
 
             // If we get to this point and have no experiments selected but we DO have a compound (s), then the user
             //  may be looking to derive their assays on the basis of compounds. We can do that.
             if ((experimentList.isEmpty()) && (!cids.isEmpty())) {
-                experimentList = molecularSpreadSheetService.compoundIdsToExperiments(cids)
+                experimentList = molecularSpreadSheetService.compoundIdsToExperiments(cids, mapExperimentIdsToCapAssayIds)
                 molSpreadsheetDerivedMethod = MolSpreadsheetDerivedMethod.Compounds_NoAssays_NoProjects
             }
 
@@ -76,6 +78,7 @@ class MolSpreadSheetDataBuilder {
         // this is the variable we plan to fill
         molSpreadSheetData = new MolSpreadSheetData()
         molSpreadSheetData.molSpreadsheetDerivedMethod = molSpreadsheetDerivedMethod
+        molSpreadSheetData.mapExperimentIdsToCapAssayIds = this.mapExperimentIdsToCapAssayIds
 
         // temp data sheet
         dataMap = [:]
@@ -122,7 +125,7 @@ class MolSpreadSheetDataBuilderDirector {
                                             final List<Long> adids,
                                             final List<Long> pids) {
 
-        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids)
+        Map deriveListOfExperiments = molSpreadSheetDataBuilder.deriveListOfExperimentsFromIds(pids, adids, cids, molSpreadSheetDataBuilder.mapExperimentIdsToCapAssayIds)
         List<ExperimentSearch> experimentList = deriveListOfExperiments.experimentList
         MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod = deriveListOfExperiments.molSpreadsheetDerivedMethod
 

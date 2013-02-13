@@ -1,5 +1,6 @@
 package molspreadsheet
 
+import bard.core.rest.spring.experiment.PriorityElement
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -47,6 +48,37 @@ class MolSpreadSheetCellUnitSpec extends Specification {
         assert molSpreadSheetCell.strInternalValue == ""
         assert molSpreadSheetCell.supplementalInternalValue == ""
     }
+
+
+
+
+
+    void "Test  MolSpreadSheetCell ctor"() {
+        given:
+        String value1 = null
+        String value2 = null
+        MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.image
+        SpreadSheetActivity spreadSheetActivity = new  SpreadSheetActivity()
+        PriorityElement priorityElement1 = new  PriorityElement()
+        priorityElement1.value = null
+        PriorityElement priorityElement2 = new  PriorityElement()
+        priorityElement2.value = "unexpected nonnumeric argument"
+        PriorityElement priorityElement3 = new  PriorityElement()
+        priorityElement3.value = "12.34"
+        spreadSheetActivity.priorityElementList = [priorityElement1,priorityElement2,priorityElement3]
+        when:
+        MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
+        println  molSpreadSheetCell.toString()
+        then:
+        molSpreadSheetCell.spreadSheetActivityStorage
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size() == 3
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].toString()=="--"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[1].toString()=="--"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[2].toString()=="12.3"
+    }
+
+
+
 
 
     void "Test that we can build a few  molecular spreadsheet cells"() {
