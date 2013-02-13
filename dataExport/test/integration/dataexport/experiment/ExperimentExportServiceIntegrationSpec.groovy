@@ -12,7 +12,6 @@ import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.sql.DataSource
@@ -60,24 +59,23 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(expectedXml, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
         label                       | readyForExtractionList              | expectedXml
         "no experiments"            | []                                  | EXPERIMENTS_NONE_READY
-        "one experiment ready"      | [Ready]                             | EXPERIMENTS_ONE_READY
-        "only one experiment Ready" | [Ready, Pending, Started, Complete] | EXPERIMENTS_ONE_READY
+        "one experiment ready"      | [READY]                             | EXPERIMENTS_ONE_READY
+        "only one experiment Ready" | [READY,NOT_READY, STARTED, COMPLETE] | EXPERIMENTS_ONE_READY
     }
 
     void "test update #label"() {
         given: "Given an Experiment with id #id and version #version"
         Experiment experiment = Experiment.build(readyForExtraction: initialReadyForExtraction)
-        numResults.times {Result.build(readyForExtraction: Ready, experiment: experiment)}
+        numResults.times {Result.build(readyForExtraction: READY, experiment: experiment)}
 
         when: "We call the experiment service to update this experiment"
-        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'Complete')
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'COMPLETE')
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
@@ -87,18 +85,18 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                                | expectedStatusCode     | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
-        "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | Ready                     | Complete
-        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | Ready                     | ReadyForExtraction.Ready
-        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | Ready                     | ReadyForExtraction.Ready
-        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | Ready                     | ReadyForExtraction.Ready
-        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | Complete                  | ReadyForExtraction.Complete
+        "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | READY                     | COMPLETE
+        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | READY
+        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | READY                     | READY
+        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | READY                     | READY
+        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | COMPLETE                  | COMPLETE
     }
 
     void "test update Not Found Status"() {
         given: "Given a non-existing Experiment"
 
         when: "We call the experiment service to update this experiment"
-        this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.Complete.toString())
+        this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE.toString())
 
         then: "An exception is thrown, indicating that the experiment does not exist"
         thrown(NotFoundException)
@@ -106,27 +104,25 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Experiment with id"() {
         given: "Given an Experiment"
-        final Experiment experiment = Experiment.build(readyForExtraction: Ready)
+        final Experiment experiment = Experiment.build(readyForExtraction: READY)
 
         when: "A service call is made to generate the experiment"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment.id)
 
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 
     void "test generate and validate Experiment"() {
         given: "Given an Experiment"
-        final Experiment experiment = Experiment.build(readyForExtraction: Ready)
+        final Experiment experiment = Experiment.build(readyForExtraction: READY)
 
         when: "A service call is made to generate the experiment"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
 
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 

@@ -44,7 +44,7 @@ class ResultExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
         final Result result = Result.findById(id)
-        return utilityService.update(result,id,clientVersion,latestStatus as ReadyForExtraction,"Result")
+        return utilityService.update(result,id,clientVersion,ReadyForExtraction.byId(latestStatus),"Result")
     }
     /**
      * Generate the results for a given experiment

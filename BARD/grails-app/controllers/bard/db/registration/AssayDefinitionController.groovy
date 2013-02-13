@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import grails.plugins.springsecurity.Secured
 import org.json.JSONArray
+import bard.db.enums.AssayStatus
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {

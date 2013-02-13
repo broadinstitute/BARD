@@ -14,8 +14,8 @@ import spock.lang.Unroll
 
 import javax.sql.DataSource
 
-import static bard.db.enums.ReadyForExtraction.Complete
-import static bard.db.enums.ReadyForExtraction.Ready
+import static bard.db.enums.ReadyForExtraction.COMPLETE
+import static bard.db.enums.ReadyForExtraction.READY
 import static javax.servlet.http.HttpServletResponse.*
 import org.springframework.core.io.FileSystemResource
 
@@ -49,7 +49,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Project"
         when: "We call the project service to update this project"
-        this.projectExportService.update(new Long(100000), 0, Complete.toString())
+        this.projectExportService.update(new Long(100000), 0, 'Complete')
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -70,10 +70,10 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                             | expectedStatusCode     | expectedETag | projectId | version | initialReadyForExtraction | expectedReadyForExtraction
-        "Return OK and ETag 1"                            | SC_OK                  | 1            | 1         | 0       | Ready                     | Complete
-        "Return CONFLICT and ETag 0"                      | SC_CONFLICT            | 0            | 1         | -1      | Ready                     | Ready
-        "Return PRECONDITION_FAILED and ETag 0"           | SC_PRECONDITION_FAILED | 0            | 1         | 2       | Ready                     | Ready
-        "Return OK and ETag 0, Already completed Project" | SC_OK                  | 0            | 1         | 0       | Complete                  | Complete
+        "Return OK and ETag 1"                            | SC_OK                  | 1            | 1         | 0       | READY                     | COMPLETE
+        "Return CONFLICT and ETag 0"                      | SC_CONFLICT            | 0            | 1         | -1      | READY                     | READY
+        "Return PRECONDITION_FAILED and ETag 0"           | SC_PRECONDITION_FAILED | 0            | 1         | 2       | READY                     | READY
+        "Return OK and ETag 0, Already completed Project" | SC_OK                  | 0            | 1         | 0       | COMPLETE                  | COMPLETE
     }
 
     void "test generate and validate Project "() {
@@ -100,7 +100,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Projects"() {
         given: "Given there is at least one project ready for extraction"
-        Project project = Project.build(readyForExtraction: Ready)
+        Project project = Project.build(readyForExtraction: READY)
         project.save(flush: true)
 
         when: "A service call is made to generate a list of projects ready to be extracted"

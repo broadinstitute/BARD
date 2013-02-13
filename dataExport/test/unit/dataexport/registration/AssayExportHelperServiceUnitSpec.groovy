@@ -58,7 +58,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         then: "A valid xml measure context is generated with the expected measure context id and name"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(assaySchema, actualXml)
 
@@ -98,7 +97,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         then: "We expect back an xml document"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(assaySchema, actualXml)
 
@@ -140,7 +138,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         when: "We attempt to generate a measure in xml"
         this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
 
         where:
@@ -167,7 +164,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(assaySchema, actualXml)
 

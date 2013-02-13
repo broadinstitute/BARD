@@ -35,7 +35,11 @@
            	</p>
             <br/>
             <p>
-                <a href="/BARD/assayDefinition/description"><img src="${resource(dir: 'images', file: 'lightBulbIcon.png')}" alt="Create New Assay" title="Create New Assay"/> Create a new assay from scratch</a> <br/><br/>
+                <g:link controller="assay" action="listTemplates">
+                    <img src="${resource(dir: 'images', file: 'lightBulbIcon.png')}" alt="Create New Assay" title="Create New Assay"/>
+                    List templates available for creating a new assay
+                </g:link>
+                <br/><br/>
                 <a href="/BARD/assayDefinition/findById"><img src="${resource(dir: 'images', file: 'magnifyingGlassIcon.png')}" alt="Find Exiting Assay" title="Find Exiting Assay"/> Find an existing assay to edit or clone</a><br/> <br/>
                 <a href="#"><img src="${resource(dir: 'images', file: 'starIcon.png')}" alt="View Favorite Assay" title="View Favorite Assay"/> View favorite assays</a><br/><br/>
                 <a href="#"><img src="${resource(dir: 'images', file: 'openBookIcon.png')}" alt="Read about assay terminology" title=" Read about assay terminology"/> Read about assay terminology in more detail</a><br/><br/>

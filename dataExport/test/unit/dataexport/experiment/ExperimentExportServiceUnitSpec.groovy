@@ -77,7 +77,6 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         then:
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
@@ -99,7 +98,6 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         then: "A valid xml measure is generated with the expected measure attributes, result type and entry unit"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 
@@ -122,7 +120,6 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
-        println(actualXml)
         XmlTestAssertions.assertResults(results, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
 

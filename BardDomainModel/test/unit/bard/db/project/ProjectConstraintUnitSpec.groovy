@@ -9,7 +9,6 @@ import spock.lang.Unroll
 import static bard.db.project.Project.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.project.Project
 
 /**
  * Created with IntelliJ IDEA.
@@ -124,13 +123,13 @@ class ProjectConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc             | valueUnderTest              | valid | errorCode
-        'null not valid' | null                        | false | 'nullable'
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
 
-        'valid valud'    | ReadyForExtraction.Pending  | true  | null
-        'valid value'    | ReadyForExtraction.Ready    | true  | null
-        'valid value'    | ReadyForExtraction.Started  | true  | null
-        'valid value'    | ReadyForExtraction.Complete | true  | null
+        'valid valud'    | ReadyForExtraction.NOT_READY | true  | null
+        'valid value'    | ReadyForExtraction.READY     | true  | null
+        'valid value'    | ReadyForExtraction.STARTED   | true  | null
+        'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {

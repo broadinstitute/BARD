@@ -20,18 +20,17 @@ import static test.TestUtils.createString
 @Unroll
 class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
 
-    def domainInstance
+    AssayContextMeasure domainInstance
 
     def fixtureLoader
 
     @Before
     void doSetup() {
-        def fixture = fixtureLoader.build {
-            assay(Assay)
-            assayContext(AssayContext, assay: assay)
-            measure(Measure, assay: assay, resultType: Element.build())
-        }
-        domainInstance = AssayContextMeasure.buildWithoutSave(assayContext: fixture.assayContext, measure: fixture.measure)
+
+        Assay assay = Assay.build()
+        AssayContext assayContext = AssayContext.build(assay: assay)
+        Measure measure = Measure.build(assay: assay, resultType: Element.build())
+        domainInstance = AssayContextMeasure.buildWithoutSave(assayContext: assayContext, measure: measure)
     }
 
     @After
@@ -53,9 +52,9 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                 | valueUnderTest         | valid | errorCode
-        'null not valid'     | {null}                 | false | 'nullable'
-        'valid assayContext' | {AssayContext.build()} | true  | null
+        desc                 | valueUnderTest           | valid | errorCode
+        'null not valid'     | { null }                 | false | 'nullable'
+        'valid assayContext' | { AssayContext.build() } | true  | null
 
     }
 
@@ -71,9 +70,9 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid measure'  | {Measure.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid measure'  | { Measure.build() } | true  | null
 
     }
 

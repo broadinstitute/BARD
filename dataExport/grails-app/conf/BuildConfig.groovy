@@ -49,6 +49,7 @@ grails.project.dependency.resolution = {
     plugins {
         build ":tomcat:$grailsVersion"
         build ":codenarc:0.15"
+        build ":improx:0.1" // Interactive Mode Proxy; useful for IDE integration
 
         compile ":functional-spock:0.6"
         compile ":clover:3.1.6"

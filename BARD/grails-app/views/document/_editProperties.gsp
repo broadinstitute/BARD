@@ -14,6 +14,8 @@
     </div>
 </div>
 
+<r:require modules="richtexteditor"/>
+
 <div class="control-group">
     <label class="control-label" for="documentContent"><g:message code="document.content.label" default="Content:"/></label>
     <div class="controls">

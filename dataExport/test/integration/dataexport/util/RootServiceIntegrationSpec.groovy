@@ -23,9 +23,8 @@ class RootServiceIntegrationSpec extends IntegrationSpec {
     void "test generate root links"() {
         when:
         rootService.generateRootElement(this.markupBuilder)
-        then:
 
-        println(this.writer.toString())
+        then:
         XmlTestAssertions.assertResults(results, writer.toString())
 
         XMLAssert.assertXpathEvaluatesTo("6", "count(//link)", writer.toString());

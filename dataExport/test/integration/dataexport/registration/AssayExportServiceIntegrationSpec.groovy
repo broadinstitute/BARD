@@ -15,8 +15,8 @@ import javax.sql.DataSource
 
 import bard.db.registration.*
 
-import static bard.db.enums.ReadyForExtraction.Complete
-import static bard.db.enums.ReadyForExtraction.Ready
+import static bard.db.enums.ReadyForExtraction.COMPLETE
+import static bard.db.enums.ReadyForExtraction.READY
 import static javax.servlet.http.HttpServletResponse.*
 import org.springframework.core.io.FileSystemResource
 
@@ -53,7 +53,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Assay"
         when: "We call the assay service to update this assay"
-        this.assayExportService.update(new Long(100000), 0, Complete.toString())
+        this.assayExportService.update(new Long(100000), 0, COMPLETE.getId())
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -74,10 +74,10 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                           | expectedStatusCode     | expectedETag | assayId | version | initialReadyForExtraction | expectedReadyForExtraction
-        "Return OK and ETag 1"                          | SC_OK                  | 1            | 1       | 0       | Ready                     | Complete
-        "Return CONFLICT and ETag 0"                    | SC_CONFLICT            | 0            | 1       | -1      | Ready                     | Ready
-        "Return PRECONDITION_FAILED and ETag 0"         | SC_PRECONDITION_FAILED | 0            | 1       | 2       | Ready                     | Ready
-        "Return OK and ETag 0, Already completed Assay" | SC_OK                  | 0            | 1       | 0       | Complete                  | Complete
+        "Return OK and ETag 1"                          | SC_OK                  | 1            | 1       | 0       | READY                     | COMPLETE
+        "Return CONFLICT and ETag 0"                    | SC_CONFLICT            | 0            | 1       | -1      | READY                     | READY
+        "Return PRECONDITION_FAILED and ETag 0"         | SC_PRECONDITION_FAILED | 0            | 1       | 2       | READY                     | READY
+        "Return OK and ETag 0, Already completed Assay" | SC_OK                  | 0            | 1       | 0       | COMPLETE                  | COMPLETE
     }
 
     void "test generate and validate AssayDocument"() {
@@ -117,7 +117,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Assays #label"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: Ready)
+        Assay.build(readyForExtraction: READY)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportService.generateAssays(this.markupBuilder)

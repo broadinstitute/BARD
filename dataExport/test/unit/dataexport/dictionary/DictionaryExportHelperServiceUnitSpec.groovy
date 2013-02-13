@@ -139,8 +139,8 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         this.dictionaryExportHelperService.generateUnit(this.markupBuilder, unit)
 
         then:
-        println(this.writer.toString())
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
         label                      | unit                                                                                                                                          | results
         "Full Unit element"        | new UnitTree(element: new Element(label: "cm", description: "Centimetres"), parent: new UnitTree(element: new Element(label: 'length unit'))) | XmlTestSamples.SINGLE_UNIT
@@ -193,8 +193,8 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
         label                         | element                                                                                                                                                                                                                     | results
-        "Full Element"                | new Element(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.Ready) | XmlTestSamples.ELEMENT_FULL
-        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.Ready)                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
+        "Full Element"                | new Element(label: "label", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY) | XmlTestSamples.ELEMENT_FULL
+        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY)                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
     }
 
 //    void "test generate Result Type #label"() {
@@ -214,10 +214,10 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
 
         when:
         this.dictionaryExportHelperService.generateDescriptor(this.markupBuilder, descriptor)
-        then:
-        println(this.writer.toString())
 
+        then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
+
         where:
         label              | descriptor                                                                                                                                                                            | results
         "Assay descriptor" | new AssayDescriptor(element: new Element(label: "assay", description: "desc", abbreviation: "abb", synonyms: "syn", externalURL: "http://broad.org", unit: new Element(label: 'cm'))) | XmlTestSamples.ASSAY_DESCRIPTOR_UNIT

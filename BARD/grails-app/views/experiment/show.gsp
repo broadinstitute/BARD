@@ -52,12 +52,14 @@
                             <tr><td>Description</td><td>${instance.description}</td></tr>
                             <tr><td>Experiment Name</td><td>${instance.experimentName}</td></tr>
 
-                            <tr><td>Assay</td><td><g:link controller="assayDefinition" action="show" id="${instance.assay.id}">${instance.assay.name}</g:link></td></tr>
+                            <tr><td>Assay</td><td><g:link controller="assayDefinition" action="show"
+                                                          id="${instance.assay.id}">${instance.assay.name}</g:link></td>
+                            </tr>
                             <tr><td>Status</td><td>${instance.experimentStatus}</td></tr>
                             <tr><td>Hold until</td><td>${instance.holdUntilDate}</td></tr>
                             <tr><td>Ready for extraction</td><td>${instance.readyForExtraction}</td></tr>
-                                <tr><td>Run Date from</td><td>${instance.runDateFrom}</td></tr>
-                                    <tr><td>Run Date to</td><td>${instance.runDateTo}</td></tr>
+                            <tr><td>Run Date from</td><td>${instance.runDateFrom}</td></tr>
+                            <tr><td>Run Date to</td><td>${instance.runDateTo}</td></tr>
 
                             <tr><td>External references</td><td>
                                 <ul>
@@ -75,11 +77,46 @@
 
                         <p>Referenced by projects:</p>
                         <ul>
-                        <g:each in="${instance.projectExperiments}" var="projectExperiment">
-                            <li><g:link controller="project" action="show" id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
-                        </g:each>
+                            <g:each in="${instance.projectExperiments}" var="projectExperiment">
+                                <li><g:link controller="project" action="show"
+                                            id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
+                            </g:each>
                         </ul>
 
+                        <g:link controller="results" action="configureTemplate" params="${[experimentId: instance.id]}"
+                                class="btn">Download a template</g:link>
+                        <a href="#uploadResultsModal" role="button" class="btn" data-toggle="modal">Upload results</a>
+                        <%-- Dialog for uploading results --%>
+                        <div id="uploadResultsModal" class="modal fade" tabindex="-1" role="dialog"
+                             aria-labelledby="uploadResultsModalLabel" aria-hidden="true">
+                            <div class="modal-header">
+                                <h3 id="uploadResultsModalLabel">Upload Results</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <form method="POST" enctype="multipart/form-data" action="${createLink(action: "uploadResults", controller:"results")}"
+                                      id="uploadResultsForm">
+                                    <p>Uploading results will replace any results already stored for this experiment.</p>
+
+                                    <p>Select a file to upload</p>
+                                    <input type="hidden" name="experimentId" value="${instance.id}">
+                                    <input type="file" name="resultsFile">
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                <button class="btn btn-primary" id="uploadResultsButton">Upload</button>
+                            </div>
+                        </div>
+
+                        <r:script>
+                            console.log("h")
+                            $("#uploadResultsButton").on("click", function () {
+                                console.log("b")
+                                $("#uploadResultsForm").submit()
+                            })
+                        </r:script>
 
                     </div>
                 </div>
@@ -114,11 +151,11 @@
                     </a>
                 </div>
 
-                    <div id="target-contexts-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:render template="../context/show"
-                                      model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
-                        </div>
+                <div id="target-contexts-info" class="accordion-body in collapse">
+                    <div class="accordion-inner">
+                        <g:render template="../context/show"
+                                  model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
+                    </div>
                 </div>
             </div>
 

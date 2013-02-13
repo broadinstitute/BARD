@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assaycards,select2"/>
-    <script src="${resource(dir: 'js/cap', file: 'editMeasures.js')}" type="text/javascript"></script>
+    <r:require modules="core,bootstrap,assaycards,select2,accessontology"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <meta name="layout" content="basic"/>
     <title>Edit Measures</title>
