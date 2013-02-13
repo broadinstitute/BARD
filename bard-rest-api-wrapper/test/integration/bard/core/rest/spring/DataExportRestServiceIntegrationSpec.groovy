@@ -13,15 +13,13 @@ class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "getDictionary #label"() {
         when:
-        CapDictionary capDictionary = dataExportRestService.getDictionary(reloadCache)
+        CapDictionary capDictionary = dataExportRestService.getDictionary()
         then:
-        assert capDictionary.dictionaryElementMap.isEmpty() == isEmpty
+        assert dataExportRestService.dictionaryElementMap.isEmpty() == isEmpty
         where:
-        label                                  | reloadCache     | isEmpty
-        "Force a reload of cache"              | ReloadCache.NO  | false
-        "Do not force a reload of cache"       | ReloadCache.YES | false
-        "Force a reload of cache again"        | ReloadCache.YES | false
-        "Do not force a reload of cache again" | ReloadCache.NO  | false
+        label                            | isEmpty
+        "Force a reload of cache"        | false
+        "Do not force a reload of cache" | false
 
     }
 
