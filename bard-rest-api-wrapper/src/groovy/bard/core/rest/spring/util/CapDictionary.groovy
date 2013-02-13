@@ -11,6 +11,8 @@ public class CapDictionary{
 
 
     protected List<DictionaryElement> elements;
+    //we keep the key value pair in a map so we can look them up easily
+    Map<Long, DictionaryElement> dictionaryElementMap = [:]
 
     public CapDictionary() {
 
@@ -24,7 +26,14 @@ public class CapDictionary{
     }
 
     public void setElements(List<DictionaryElement> dictionaryElements) {
+
         this.elements = dictionaryElements;
+    }
+    void loadDictionary() {
+        final List<DictionaryElement> dictionaryElements = this.elements ?: []
+        for (DictionaryElement dictionaryElement : dictionaryElements) {
+           dictionaryElementMap.put(dictionaryElement.elementId, dictionaryElement)
+        }
     }
 }
 
