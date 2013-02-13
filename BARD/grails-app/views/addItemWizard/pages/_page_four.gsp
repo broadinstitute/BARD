@@ -4,9 +4,11 @@
  */
 %>
 <af:page>
-    <g:set var="valueText" value="${valueQualifier + " " + valueName + " " + valueUnits}"/>
+	<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
+	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
+    <g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnits }" />
     <g:render template="common/itemWizardSelectionsTable"
-              model="['attribute': attributeName, 'valueType': valueTypeOption, 'value': valueText]"/>
+              model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': valueText]"/>
 
     <h1>Please review the information for this item above.</h1>
 <p>

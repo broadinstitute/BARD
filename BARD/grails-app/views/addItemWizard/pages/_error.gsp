@@ -11,7 +11,7 @@
 
 <div class="alert alert-error">
  	<button type="button" class="close" data-dismiss="alert">×</button>
-  	<strong>Error:</strong> We encountered an problem storing your data!
+  	<strong>Error:</strong> We encountered a problem storing your data!
 </div>
 
 <p>

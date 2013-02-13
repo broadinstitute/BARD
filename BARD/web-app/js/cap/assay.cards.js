@@ -171,16 +171,7 @@ $(document).ready(function () {
         zIndex: 3999,
         title: "Add Item Wizard"
     });
-    $("#dialog_add_item_wizard").dialog("option", "buttons", [
-        {
-            text: "Cancel",
-            class: "btn",
-            click: function () {
-                //$("#dialog_add_item_wizard_confirm_cancel").dialog( "open" );
-                $(this).dialog("close");
-            }
-        }
-    ]);
+    
 
     $("#dialog_confirm_delete_card").dialog({
         height: 250,
@@ -487,16 +478,7 @@ function launchAddItemWizard(assayId, assayContextId, cardSection) {
         url: '../../addItemWizard/addItemWizard',
         data: data,
         success: function (data) {
-//        	alert(data);
-            $("#dialog_add_item_wizard").dialog("option", "buttons", [
-                {
-                    text: "Cancel",
-                    class: "btn",
-                    click: function () {
-                        $(this).dialog("close");
-                    }
-                }
-            ]);
+//        	alert(data);            
             $("#dialog_add_item_wizard").html(data);
             $("#dialog_add_item_wizard").dialog("open");
         },

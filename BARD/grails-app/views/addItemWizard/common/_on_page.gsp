@@ -47,7 +47,7 @@
 			
         	outputToConsole('calling initializePageOne()');
 
-            $("#attributeTextField").select2({
+            $("#attributeId").select2({
                 minimumInputLength: 2,
                 width: "70%",
                 placeholder: "Search for attribute name",
@@ -73,6 +73,9 @@
                 }
             }).on("change", function(e) {
                $("#attributeElementId").val(e.val)
+               $("#attributeLabel").val(e.text)
+               outputToConsole('e.val = ' + e.val);
+               outputToConsole('e.text = ' + e.text);
             })
         }
 
@@ -123,26 +126,6 @@
         	outputToConsole('calling initializeFinalPage()');
 
         	var assayId = $("#cardAssayId").val();
-        	var assayContextId = $("#cardAssayContextId").val();
-        	var cardSection = $("#sectionPath").val();			      	
-        	
-        	$("#dialog_add_item_wizard").dialog("option", "buttons",[
-        	  	{
-        	    	text: "Add another item",
-        	        class: "btn btn-primary",
-        	        click: function(){
-        	        	$( this ).dialog( "close" );
-        	        	launchAddItemWizard(assayId, assayContextId, cardSection);
-        	        }
-        	    },				
-				{
-					text: "Close",
-					class: "btn",
-					click: function(){
-						$( this ).dialog( "close" );
-    				}
-				}
-      		]);
         	
         	var data = {'assayId':assayId};
         	$.ajax({
