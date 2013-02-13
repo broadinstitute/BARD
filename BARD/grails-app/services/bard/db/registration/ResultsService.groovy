@@ -2,6 +2,8 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
@@ -27,6 +29,14 @@ class ResultsService {
     static Pattern RANGE_PATTERN = Pattern.compile("([^-]+)-(.*)")
 
     static String DELIMITER = ","
+
+    static String EXPERIMENT_ID_LABEL = "Experiment ID"
+    static String EXPERIMENT_NAME_LABEL = "Experiment Name"
+    static List FIXED_COLUMNS = ["Row #", "Substance", "Replicate #", "Parent Row #"]
+    static int MAX_ERROR_COUNT = 100;
+
+    ItemService itemService
+    PugService pugService
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
@@ -190,6 +200,10 @@ class ResultsService {
         Float maxValue;
 
         Element element;
+
+        public Element getAttributeElement() {
+            return column.item.attributeElement;
+        }
     }
 
     static class ImportSummary {
@@ -215,10 +229,6 @@ class ResultsService {
         }
     }
 
-    static String EXPERIMENT_ID_LABEL = "Experiment ID"
-    static String EXPERIMENT_NAME_LABEL = "Experiment Name"
-    static List FIXED_COLUMNS = ["Row #", "Substance", "Replicate #", "Parent Row #"]
-    static int MAX_ERROR_COUNT = 100;
 
     static class Template {
         Experiment experiment;
@@ -251,9 +261,6 @@ class ResultsService {
             return names.collect {byName.get(it)}
         }
     }
-
-    ItemService itemService
-    PugService pugService
 
     Template generateMaxSchema(Experiment experiment) {
         def assay = experiment.assay
@@ -304,7 +311,10 @@ class ResultsService {
     }
 
     public static class InitialParse {
-        Map constants;
+        String experimentName;
+        Long experimentId;
+        List<ExperimentContext> contexts
+
         List<Row> rows;
     }
 
@@ -327,8 +337,14 @@ class ResultsService {
         return true
     }
 
-    Map<String, String> parseConstantRegion(LineReader reader,  ImportSummary errors, Set allowedConstants) {
+    InitialParse parseConstantRegion(LineReader reader,  ImportSummary errors, List<Column> experimentItemDefs) {
+        Map<String,Column> nameToColumn = [:]
+        Map<AssayContext,Collection<Cell>> groupedByContext = [:]
         Map header = [:]
+        InitialParse result = new InitialParse()
+
+        // populate map so we can look up columns by name
+        experimentItemDefs.each {nameToColumn[it.name] = it}
 
         while(true) {
             String line = reader.readLine();
@@ -352,7 +368,25 @@ class ResultsService {
             }
 
             String key = values[1]
-            if (!allowedConstants.contains(key)) {
+            if (key == EXPERIMENT_ID_LABEL) {
+                result.experimentId = Long.parseLong(values[2])
+            } else if (key == EXPERIMENT_NAME_LABEL) {
+                result.experimentName = values[2]
+            } else if (nameToColumn.get(key)) {
+                Column column = nameToColumn.get(key)
+
+                def parsed = column.parseValue(values[2])
+                if (parsed instanceof Cell) {
+                    List group = groupedByContext[column.item.assayContext]
+                    if (group == null) {
+                        group = []
+                        groupedByContext[column.item.assayContext] = group
+                    }
+                    group.add(parsed)
+                } else {
+                    errors.addError(0, 0, parsed)
+                }
+            } else {
                 errors.addError(reader.lineNumber, 1, "Unknown name \"${key}\" in constant section")
                 continue
             }
@@ -361,7 +395,42 @@ class ResultsService {
             header.put(key, value)
         }
 
-        return header
+        // translate cells into grouped context items
+        result.contexts = []
+        groupedByContext.values().each { Collection<Cell> cells ->
+            ExperimentContext context = new ExperimentContext()
+            for(cell in cells) {
+                ExperimentContextItem item = new ExperimentContextItem(attributeElement: cell.attributeElement,
+                        experimentContext: context,
+                        valueElement: cell.element,
+                        valueNum: cell.value,
+                        valueMin: cell.minValue,
+                        valueMax: cell.maxValue,
+                        qualifier: cell.qualifier)
+                context.experimentContextItems.add(item)
+            }
+            result.contexts.add(context)
+        }
+
+        return result
+    }
+
+    void foo() {
+        template.constantItems.each {nameToColumn[it.name] = it}
+        template.columns.each { if(it.item != null) { nameToColumn[it.name] = it } }
+        constants.entrySet().each { Map.Entry entry ->
+            if (entry.key == EXPERIMENT_ID_LABEL) {
+
+            } else if (entry.key == EXPERIMENT_NAME_LABEL) {
+
+            } else {
+                Column column = nameToColumn[entry.key]
+                if (column == null) {
+                    errors.addError(0, 0, "Did not know how to handle \"${entry.key}\" in the experiment level items")
+                } else {
+                }
+            }
+        }
     }
 
     void forEachDataRow(LineReader reader, List<Column> columns, ImportSummary errors, Closure fn) {
@@ -556,12 +625,10 @@ class ResultsService {
         LineReader reader = new LineReader(reader: new BufferedReader(input))
 
         // first section
-        Set expectedNames = [] as Set
-        template.constantItems.each {expectedNames.add(it.name)}
-        expectedNames.add(EXPERIMENT_ID_LABEL)
-        expectedNames.add(EXPERIMENT_NAME_LABEL)
-
-        Map constants = parseConstantRegion(reader, errors, expectedNames)
+        List potentialExperimentColumns = []
+        potentialExperimentColumns.addAll(template.constantItems)
+        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
+        InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
         if (errors.hasErrors())
             return
 
@@ -616,7 +683,9 @@ class ResultsService {
             rows.add(row)
         }
 
-        return new InitialParse(constants: constants, rows: rows)
+        result.rows = rows
+
+        return result
     }
 
     Map<AssayContextItem, Collection<Measure>> getItemsForMeasures(Assay assay) {
