@@ -34,17 +34,9 @@ class ResultsController {
     def configureTemplate(String experimentId) {
         Experiment experiment = Experiment.get(experimentId)
 
-        Set contextItems = [] as Set
-        def assay = experiment.experimentMeasures.each {
-            it.measure.assayContextMeasures.each {
-                def nonFixed = it.assayContext.contextItems.findAll { it.attributeType != AttributeType.Fixed }
-                contextItems.addAll(nonFixed)
-            }
-        }
+        def (experimentItems, measures, measureItems) = resultsService.generateMaxSchemaComponents(experiment)
 
-        def items = itemService.getLogicalItems(contextItems)
-
-        [experiment: experiment, items: items]
+        [experiment: experiment, experimentItems: experimentItems, items: measureItems]
     }
 
     def generatePreview (String experimentId, FieldListCommand fieldList) {

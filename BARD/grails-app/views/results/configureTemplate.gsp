@@ -31,6 +31,16 @@
             <g:if test="${items.size() > 0}">
                 <p>For each of the following annotations, check the ones for which you will load only a single value for the entire experiment</p>
 
+                <g:each in="${experimentItems}" var="item">
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" disabled checked> ${item.displayLabel}
+                            </label>
+                        </div>
+                    </div>
+                </g:each>
+
                 <g:each in="${items}" var="item" status="index">
                     <div class="control-group">
                         <div class="controls">
