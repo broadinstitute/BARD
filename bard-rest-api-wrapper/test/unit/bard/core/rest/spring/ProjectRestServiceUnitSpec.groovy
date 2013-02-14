@@ -10,6 +10,8 @@ import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.project.ProjectStep
+import spock.lang.IgnoreRest
 
 @Unroll
 @TestFor(ProjectRestService)
@@ -38,6 +40,13 @@ class ProjectRestServiceUnitSpec extends Specification {
 
     }
 
+    void "find project Steps"() {
+        when:
+        List<ProjectStep> projectSteps = service.findProjectSteps(123)
+        then:
+        restTemplate.getForObject(_, _) >> {[new ProjectStep()]}
+        assert projectSteps
+    }
 
     void "searchProjectsByCapIds(searchParams, etags) #label"() {
         when:
@@ -78,7 +87,7 @@ class ProjectRestServiceUnitSpec extends Specification {
     void "buildSearchByCapIdURLs #label"() {
 
         when:
-        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams,"capProjectId:")
+        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams, "capProjectId:")
         then:
         assert resourceURL == expectedURL
         where:

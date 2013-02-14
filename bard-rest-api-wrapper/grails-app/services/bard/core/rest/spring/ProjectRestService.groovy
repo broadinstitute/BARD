@@ -14,6 +14,7 @@ import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.project.ProjectExpanded
 
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.project.ProjectStep
 
 class ProjectRestService extends AbstractRestService {
 
@@ -28,6 +29,7 @@ class ProjectRestService extends AbstractRestService {
         final BardAnnotation annotations = (BardAnnotation) getForObject(url.toURI(), BardAnnotation.class)
         return annotations;
     }
+
     /**
      *
      * @param pid
@@ -40,7 +42,6 @@ class ProjectRestService extends AbstractRestService {
         return project
 
     }
-
 
     /**
      *
@@ -73,7 +74,7 @@ class ProjectRestService extends AbstractRestService {
             HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
 
 
-            final String urlString = buildSearchByCapIdURLs(capIds, searchParams,"capProjectId:")
+            final String urlString = buildSearchByCapIdURLs(capIds, searchParams, "capProjectId:")
             final URL url = new URL(urlString)
             final HttpEntity<ProjectResult> exchange = getExchange(url.toURI(), entity, ProjectResult.class) as HttpEntity<ProjectResult>
             final ProjectResult projectSearchResult = exchange.getBody()
@@ -197,5 +198,13 @@ class ProjectRestService extends AbstractRestService {
         List<ExperimentSearch> experiments = this.getForObject(url.toURI(), ExperimentSearch[].class) as List<ExperimentSearch>
         return experiments
 
+    }
+
+    public List<ProjectStep> findProjectSteps(final Long pid) {
+        final String resource = getResource(pid.toString() + RestApiConstants.STEPS)
+        final URL url = new URL(resource)
+
+        final List<ProjectStep> projectSteps = getForObject(url.toURI(), ProjectStep[].class) as List<ProjectStep>
+        return projectSteps;
     }
 }
