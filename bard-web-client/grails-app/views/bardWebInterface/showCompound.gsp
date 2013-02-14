@@ -100,7 +100,15 @@
     <div class="span5">
         <ul class="thumbnails">
             <li>
-                <g:compoundOptions sid="${compound?.pubChemCID}" cid="${compound?.pubChemCID}" smiles="${compound?.structureSMILES}" imageWidth="400" imageHeight="300"/>
+                <g:compoundOptions
+                        sid="${compound?.pubChemCID}"
+                        cid="${compound?.pubChemCID}"
+                        smiles="${compound?.structureSMILES}"
+                        name="${bardqueryapi.JavaScriptUtility.cleanup(compound?.name)}"
+                        numActive="${compound?.numberOfActiveAssays}"
+                        numAssays="${compound?.numberOfAssays}"
+                        imageWidth="400"
+                        imageHeight="300"/>
             </li>
         </ul>
     </div>
