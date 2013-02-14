@@ -33,7 +33,12 @@
 </g:if>
 
 <g:if test="${instance?.id}">
+    <p>
+        <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
+    </p>
+
     <div class="row-fluid">
+
         <div id="accordion-foo" class="span12 accordion">
 
             <div class="accordion-group">

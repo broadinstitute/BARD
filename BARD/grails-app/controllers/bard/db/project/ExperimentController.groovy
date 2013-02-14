@@ -14,19 +14,49 @@ class ExperimentController {
 
     def create() {
         def assay = Assay.get(params.assayId)
+
+        renderCreate(assay, new Experiment())
+    }
+
+    def edit() {
+        def experiment = Experiment.get(params.id)
+
+        renderEdit(experiment)
+    }
+
+    def renderEdit(Experiment experiment) {
+        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, true))
+
+        render(view: "edit", model: [experiment: experiment, measuresAsJsonTree: measuresAsJsonTree])
+    }
+
+    def renderCreate(Assay assay, Experiment experiment) {
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(assay, true))
 
-        println("measuresAsJsonTree=${measuresAsJsonTree}")
+        render(view: "create", model: [assay: assay, experiment: experiment, measuresAsJsonTree: measuresAsJsonTree])
+    }
 
-        [assay: assay, experiment: new Experiment(), measuresAsJsonTree: measuresAsJsonTree]
+    def update() {
+        def experiment = Experiment.get(params.id)
+        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo"] = params
+        if (!experiment.save(flush: true)) {
+            renderEdit(experiment)
+        } else {
+            redirect(action: "show", id: experiment.id)
+        }
     }
 
     def save() {
         def assay = Assay.get(params.assayId)
 
-        Experiment experiment = experimentService.createNewExperiment(assay, params.experimentName, params.description)
-        if (experiment.hasErrors()) {
-            render(view: "create", model: [assay: assay, experiment: experiment])
+        Experiment experiment = new Experiment()
+        experiment.assay = assay
+        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo"] = params
+        experiment.dateCreated = new Date()
+
+        if (!experiment.save(flush: true)) {
+            println("errors:"+experiment.errors)
+            renderCreate(assay, experiment)
         } else {
             redirect(action: "show", id: experiment.id)
         }

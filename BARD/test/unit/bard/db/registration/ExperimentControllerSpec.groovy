@@ -27,29 +27,26 @@ class ExperimentControllerSpec extends Specification {
         when:
         Assay assay = Assay.build()
         params.assayId = assay.id
-        def m = controller.create()
+        controller.create()
 
         then:
-        m.assay == assay
-        m.experiment.id == null
+        response.status == 200
     }
 
     def 'test save'() {
         setup:
         Assay assay = Assay.build()
-        Experiment experiment = Experiment.build(assay: assay)
-        ExperimentService experimentService = Mock(ExperimentService)
 
         when:
-        controller.experimentService = experimentService
         params.assayId = assay.id
         params.experimentName = "name"
         params.description = "desc"
         controller.save()
 
         then:
-        1 * experimentService.createNewExperiment(assay, "name", "desc") >> experiment
-        assert response.redirectedUrl == '/experiment/show/' + experiment.id
+        Experiment.getAll().size() == 1
+        def experiment = Experiment.getAll().first()
+        assert response.redirectedUrl == "/experiment/show/${experiment.id}"
     }
 
     def 'test show'() {
