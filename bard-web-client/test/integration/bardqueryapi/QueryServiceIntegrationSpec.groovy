@@ -11,6 +11,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
+import spock.lang.IgnoreRest
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -19,7 +20,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
 
     @Shared
     List<Long> PIDS = [1581, 1563, 1748]
-
     void "test findExperimentDataById #label"() {
 
         when: "We call the findExperimentDataById method with the experimentId #experimentId"
@@ -39,6 +39,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
             assert activity.sid
             assert activity.resultData
         }
+        assert experimentDataMap.compoundAdaptersMap
         where:
         label                                              | experimentId    | top | skip
         "An existing experiment with activities - skip 0"  | new Long(13902) | 10  | 0

@@ -6,11 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bardqueryapi.NormalizeAxis; bard.core.util.ExperimentalValueUtil; bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit;  molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bard.core.adapter.CompoundAdapter; bardqueryapi.NormalizeAxis; bard.core.util.ExperimentalValueUtil; bard.core.rest.spring.experiment.ResultData; bard.core.rest.spring.experiment.ActivityData; bard.core.rest.spring.experiment.PriorityElement; bardqueryapi.ActivityOutcome; bard.core.rest.spring.experiment.CurveFitParameters; bard.core.rest.spring.experiment.ConcentrationResponsePoint; bard.core.rest.spring.experiment.ConcentrationResponseSeries; results.ExperimentalValueType; results.ExperimentalValueUnit;  molspreadsheet.MolSpreadSheetCell; bard.core.interfaces.ExperimentValues" contentType="text/html;charset=UTF-8" %>
 
 <p>
     <b>Title: ${experimentDataMap?.experiment?.name}</b>
 </p>
+<%
+   Map compoundAdaptersMap = experimentDataMap.compoundAdaptersMap
+%>
 
 <p>
     <b>Assay ID :
@@ -68,6 +71,8 @@
                 if (resultData?.hasPriorityElements()) {
                     priorityElement = resultData?.priorityElements.get(0)  //we assume that there is only one priority element
                 }
+                CompoundAdapter compoundAdapter = compoundAdaptersMap.get(activity.cid)
+
             %>
             <tr>
                 <td>
@@ -84,9 +89,17 @@
                     </g:else>
                 </td>
                 <td style="min-width: 180px;">
-                    <g:compoundOptions sid="${activity.sid}" cid="${activity.cid}" imageWidth="180"
-                                       imageHeight="150"/>
-                </td>
+                    <g:compoundOptions
+                            sid="${activity.sid}"
+                            cid="${activity.cid}"
+                            smiles="${compoundAdapter.structureSMILES}"
+                            name="${bardqueryapi.JavaScriptUtility.cleanup(compoundAdapter.name)}"
+                            numActive="${compoundAdapter.numberOfActiveAssays}"
+                            numAssays="${compoundAdapter.numberOfAssays}"
+                            imageWidth="180"
+                            imageHeight="150"/>
+
+                 </td>
                 <td>
                     <g:if test="${resultData.getOutcome()}">
                         ${resultData.getOutcome()}

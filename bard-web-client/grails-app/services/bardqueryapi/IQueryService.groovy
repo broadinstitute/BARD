@@ -5,6 +5,8 @@ import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.compounds.CompoundSummary
 
 public interface IQueryService {
+
+    Map getProjectSteps(final Long pid);
     /**
      *
      * @param cid

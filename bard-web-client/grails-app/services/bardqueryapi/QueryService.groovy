@@ -17,6 +17,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
+import bard.core.rest.spring.project.ProjectStep
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -30,6 +31,12 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
+
+    Map getProjectSteps(Long pid) {
+        final List<ProjectStep> projectSteps = projectRestService.findProjectSteps(pid)
+        //convert to a form that you can use with JPlumb
+        return [:]
+    }
     //========================================================== Free Text Searches ================================
 
     Map searchCompoundsByCids(final List<Long> cids, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
@@ -295,15 +302,16 @@ class QueryService implements IQueryService {
     Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
         List<Activity> activities = []
         final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+
         long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
         Map experimentDetails = [:]
-
+        Map<Long, CompoundAdapter> compoundAdaptersMap = [:]
         if (experimentShow) {
             //TODO: start using ETags
             final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
             activities = experimentData.activities
             experimentDetails = this.queryHelperService.extractExperimentDetails(activities, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
-
+            compoundAdaptersMap = this.getCompoundsForCIDS(activities)
         }
 
         return [total: totalNumberOfRecords, activities: activities,
@@ -313,10 +321,21 @@ class QueryService implements IQueryService {
                 hasChildElements: experimentDetails.hasChildElements,
                 yNormMin: experimentDetails.yNormMin,
                 yNormMax: experimentDetails.yNormMax,
-                normalizeYAxis: normalizeAxis
+                normalizeYAxis: normalizeAxis,
+                compoundAdaptersMap: compoundAdaptersMap
         ]
     }
 
+    Map<Long, CompoundAdapter> getCompoundsForCIDS(List<Activity> activities) {
+        final Map<Long, CompoundAdapter> compoundAdapterMaps = [:]
+        final List<Long> cids = activities*.cid
+        final Map ds = findCompoundsByCIDs(cids)
+        final List<CompoundAdapter> compoundAdapters = ds.compoundAdapters
+        for (CompoundAdapter compoundAdapter : compoundAdapters) {
+            compoundAdapterMaps.put(compoundAdapter.id, compoundAdapter)
+        }
+        return compoundAdapterMaps
+    }
     /**
      * Given a list of Assay Ids return all the assays that were found
      * @param assayIds
