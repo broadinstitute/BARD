@@ -42,6 +42,9 @@ class AddItemWizardController {
         render(template: "common/ajaxflow", model: [assayId: assayId, assayContextId: assayContextId, path: cardSection])
     }
 
+    def addItem() {
+    }
+
     /**
      * WebFlow definition
      * @void

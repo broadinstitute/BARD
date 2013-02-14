@@ -73,4 +73,9 @@ modules = {
         resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"
     }
+
+    jqueryWizard {
+        dependsOn 'jquery-ui'
+        resource url: '/js/jquery.wizard-68d02b7ad2/jquery.wizard.js'
+    }
 }
