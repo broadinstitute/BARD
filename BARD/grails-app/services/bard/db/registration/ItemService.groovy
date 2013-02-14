@@ -9,6 +9,10 @@ class ItemService {
         Element attributeElement
         AssayContext assayContext
         List contextItems
+
+        String getDisplayLabel() {
+            return attributeElement.label
+        }
     }
 
     def getLogicalItems(Collection<AssayContextItem> items) {

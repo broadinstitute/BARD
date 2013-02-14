@@ -262,14 +262,19 @@ class ResultsService {
         }
     }
 
-    Template generateMaxSchema(Experiment experiment) {
+    List generateMaxSchemaComponents(Experiment experiment) {
         def assay = experiment.assay
 
         def assayItems = assay.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
         def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
-        return generateSchema(experiment, itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect {it.measure} as List, itemService.getLogicalItems(measureItems))
+        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect {it.measure} as List, itemService.getLogicalItems(measureItems)]
+    }
+
+    Template generateMaxSchema(Experiment experiment) {
+        def (experimentItems, measures, measureItems) = generateMaxSchemaComponents(experiment)
+        return generateSchema(experiment, experimentItems, measures, measureItems)
     }
 
     /**
