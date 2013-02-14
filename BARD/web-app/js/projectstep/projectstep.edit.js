@@ -10,6 +10,7 @@ $(document).ready(function () {
         title:"Delete item?"
     });
 
+
     $( "#addExperimentToProject" )
         .button()
         .click(function() {
@@ -25,11 +26,12 @@ $(document).ready(function () {
         buttons: {
             "Add Experiment": function() {
                 var projectId = $("#projectIdForStep").val();
+                var stageId = $("#stageId").val();
                 var selectedExperiments = [];
                 $("#selectedExperiments option:selected").each(function(i, selected){
                     selectedExperiments[i] = $(selected).val();
                 });
-                var data = {'selectedExperiments':selectedExperiments, 'projectId':projectId};
+                var data = {'selectedExperiments':selectedExperiments, 'projectId':projectId, 'stageId': stageId};
                 $.ajax
                     ({
                         url:"../associateExperimentsToProject",

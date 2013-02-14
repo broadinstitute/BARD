@@ -1,4 +1,10 @@
 <dl class="dl-horizontal">
+    <div>
+        <g:form action="delete" controller="document" id="${document.id}" onsubmit="confirm('Are you sure you wish to delete the document?')">
+            <g:link action="edit" controller="document" class="btn btn-primary" id="${document.id}">Edit</g:link>
+            <input type="submit" value="Delete" class="btn btn-primary">
+        </g:form>
+    </div>
     <dt><g:message code="document.content.label" default="Name:"/></dt>
     <dd><g:fieldValue bean="${document}" field="documentName"/></dd>
 

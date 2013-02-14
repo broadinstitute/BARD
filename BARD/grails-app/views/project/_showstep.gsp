@@ -22,9 +22,15 @@
         </div>
 
         <script id="node-selection-template" type="text/x-handlebars-template">
-            <h5>Experiment Id:</h5> <a href='/BARD/experiment/show/{{selected.node.data.link}}'>{{selected.node.data.link}}</a>
+            <h5>Experiment Id:</h5>
             <table>
                 <tbody>
+                <tr>
+                    <td><a href='/BARD/experiment/show/{{selected.node.data.link}}'>{{selected.node.data.link}}</a></td>
+                    <td><a href="#" onclick="deleteItem({{selected.node.data.link}}, ${instanceId});return false;"
+                           style="font-family:arial;color:red;font-size:10px;"><i
+                                class="icon-trash"></i>Remove from Project</a></td>
+                </tr>
                 </tbody>
             </table>
 
@@ -33,11 +39,11 @@
                 <tbody>
                 {{#each fromSelectedNode}}
                 <tr>
-                    <td>{{selected.node.data.link}}</td>
+                    <td>{{../selected.node.data.link}}</td>
                     <td></td>
                     <td>{{target.data.link}}</td>
                     <td>
-                        <a href="#" onclick="deleteEdge({{../selected.node.data.link}},{{target.data.link}},{{../projectId}})"
+                        <a href="#" onclick="deleteEdge({{../selected.node.data.link}},{{target.data.link}},{{../projectId}});return false;"
                            style="font-family:arial;color:red;font-size:10px;">
                             <i class="icon-trash"></i>
                             Remove from Project
@@ -50,9 +56,9 @@
                 <tr>
                     <td>{{source.data.link}}</td>
                     <td></td>
-                    <td>{{selected.node.data.link}}</td>
+                    <td>{{../selected.node.data.link}}</td>
                     <td>
-                        <a href="#" onclick="deleteEdge({{source.data.link}},{{../selected.node.data.link}},{{../projectId}})"
+                        <a href="#" onclick="deleteEdge({{source.data.link}},{{../selected.node.data.link}},{{../projectId}});return false;"
                            style="font-family:arial;color:red;font-size:10px;"><i class="icon-trash"></i>Remove from Project
                         </a>
                     </td>

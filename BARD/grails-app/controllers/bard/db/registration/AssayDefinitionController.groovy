@@ -5,6 +5,7 @@ import bard.db.dictionary.OntologyDataAccessService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import org.json.JSONArray
+import bard.db.enums.AssayStatus
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
@@ -48,7 +49,7 @@ class AssayDefinitionController {
         [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson]
     }
 
-    def edit() {
+    def editContext() {
         def assayInstance = Assay.get(params.id)
 
         if (!assayInstance) {

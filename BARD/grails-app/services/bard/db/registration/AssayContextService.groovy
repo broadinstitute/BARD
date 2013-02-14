@@ -83,9 +83,9 @@ class AssayContextService {
 
 	public saveItemInCard(AssayContext assayContext, Element attributeElement, String valueType, Element valueElement){
 		def isSaved = false
-		String attributeType = AttributeType.Fixed
+		String FixedAttributeType = AttributeType.Fixed
 		println "AttributeType.Fixed:  " + AttributeType.Fixed
-		if(valueType.equals(attributeType)){
+		if(valueType.equals(FixedAttributeType)){
 			println "Saving item with AttributeType = Fixed ..."
 			AssayContextItem newAssayContextItem = new AssayContextItem()
 			newAssayContextItem.setAttributeType(AttributeType.Fixed);

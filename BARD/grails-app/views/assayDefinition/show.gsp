@@ -19,7 +19,6 @@
             </div>
             <g:if test="${assayInstance?.id}">
                 <div class="pull-right">
-                    <g:link action="edit" id="${assayInstance?.id}" class="btn btn-small btn-info">Edit</g:link>
                     <g:link action="edit" id="${assayInstance?.id}" class="btn btn-small btn-info">Clone</g:link>
                 </div>
             </g:if>
@@ -119,6 +118,7 @@
 
                     <div id="target-documents-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
+                            <g:link action="create" controller="document" params="${[assayId: assayInstance.id]}" class="btn btn-primary">Add new document</g:link>
                             <g:render template="../document/list" model="[documents: assayInstance.documents, documentTemplate: '/document/show']"/>
                         </div>
                     </div>

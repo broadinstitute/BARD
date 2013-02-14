@@ -48,7 +48,7 @@ class DocumentControllerSpec extends Specification {
         controller.save()
 
         then:
-        response.redirectedUrl == '/assayDefinition/edit/'+assay.id
+        response.redirectedUrl == '/assayDefinition/show/'+assay.id
         AssayDocument.count() == 1
         def doc = AssayDocument.getAll().get(0)
         doc.assay == assay
@@ -68,7 +68,7 @@ class DocumentControllerSpec extends Specification {
         def model = controller.update()
 
         then:
-        response.redirectedUrl == '/assayDefinition/edit/'+assay.id
+        response.redirectedUrl == '/assayDefinition/show/'+assay.id
         document.documentContent=="new content"
         document.documentName == "new name"
         document.documentType == "Other"

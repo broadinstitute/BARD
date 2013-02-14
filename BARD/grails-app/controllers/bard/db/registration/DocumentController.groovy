@@ -37,7 +37,7 @@ class DocumentController {
         document.dateCreated = new Date()
 
         if(document.save()) {
-            redirect(controller: "assayDefinition", action: "edit", id: assay.id)
+            redirect(controller: "assayDefinition", action: "show", id: assay.id)
         }
     }
 
@@ -52,7 +52,7 @@ class DocumentController {
 
         document.properties["documentName", "documentType", "documentContent"] = params
 
-        redirect(controller: "assayDefinition", action: "edit", id: document.assay.id)
+        redirect(controller: "assayDefinition", action: "show", id: document.assay.id)
     }
 
     def delete() {
@@ -66,6 +66,6 @@ class DocumentController {
 
         document.delete()
 
-        redirect(controller: "assayDefinition", action: "edit", id: document.assay.id)
+        redirect(controller: "assayDefinition", action: "show", id: document.assay.id)
     }
 }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'AddItemWizard.css')}"/>
-    <title>Edit Assay Definition</title>
+    <title>Edit Assay Context</title>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
     <div class="span12">
         <div class="well well-small">
             <div class="pull-left">
-                <h4>Edit Assay Definition (ADID: ${assayInstance?.id})</h4>
+                <h4>Edit Assay Context (ADID: ${assayInstance?.id})</h4>
             </div>
             <g:if test="${assayInstance?.id}">
                 <div class="pull-right">
@@ -50,21 +50,7 @@
     <div class="row-fluid">
         <div class="row-fluid">
             <div id="accordion-foo" class="span12 accordion">
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse"
-                           data-target="#target-summary-info">
-                            <i class="icon-chevron-down"></i>
-                            Summary
-                        </a>
 
-                        <div id="target-summary-info" class="accordion-body in collapse">
-                            <div class="accordion-inner">
-                                <g:render template="showSummary" model="['assay': assayInstance]"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
 
                 <div class="accordion-group">
@@ -84,39 +70,6 @@
                     </div>
                 </div>
 
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#measures-header" id="measures-header" class="accordion-toggle" data-toggle="collapse"
-                           data-target="#target-measures-info">
-                            <i class="icon-chevron-down"></i>
-                            Measures
-                        </a>
-
-                        <div id="target-measures-info" class="accordion-body in collapse">
-                            <div class="accordion-inner">
-                                <g:render template="measuresView" model="['assayInstance': assayInstance]"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#documents-header" id="documents-header" class="accordion-toggle"
-                           data-toggle="collapse"
-                           data-target="#target-documents-info">
-                            <i class="icon-chevron-down"></i>
-                            Documents
-                        </a>
-
-                        <div id="target-documents-info" class="accordion-body in collapse">
-                            <div class="accordion-inner">
-                                <g:link action="create" controller="document" params="${[assayId: assayInstance.id]}" class="btn">Add new document</g:link>
-                                <g:render template="../document/list" model="[documents: assayInstance.documents, documentTemplate: '/document/edit']"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>    <!-- End accordion -->
         </div>
 
