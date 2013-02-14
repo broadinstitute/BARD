@@ -44,7 +44,7 @@ class AssayDefinitionController {
         [assayInstance: assayInstance]
     }
 
-    def edit() {
+    def editContext() {
         def assayInstance = Assay.get(params.id)
 
         if (!assayInstance) {
