@@ -1,6 +1,7 @@
 package bard.core.interfaces;
 
 public interface RestApiConstants {
+    final String STEPS="/steps";
     final String STRUCTURE = "[structure]";
     final String TYPE_SUB = "&type=sub";
     final String TYPE_SUP = "&type=sup";
