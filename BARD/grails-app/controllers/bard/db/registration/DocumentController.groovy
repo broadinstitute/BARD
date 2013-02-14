@@ -11,15 +11,12 @@ class DocumentController {
         if (!document) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
             return
-        } else {
-            flash.message = null
         }
-
         [document: document]
     }
 
     def create() {
-        [assayId : params.assayId]
+        [assayId: params.assayId]
     }
 
     def save() {
@@ -27,17 +24,16 @@ class DocumentController {
         if (!assay) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
-        } else {
-            flash.message = null
         }
 
         AssayDocument document = new AssayDocument()
         document.properties["documentName", "documentType", "documentContent"] = params
         document.assay = assay
-        document.dateCreated = new Date()
 
-        if(document.save()) {
-            redirect(controller: "assayDefinition", action: "show", id: assay.id)
+        if (document.save()) {
+            redirect(controller: "assayDefinition", action: "edit", id: document.assay.id, fragment:"document-${document.id}")
+        } else {
+            render(view: "create", model: [assayId: params.assayId, document: document])
         }
     }
 
@@ -45,14 +41,21 @@ class DocumentController {
         def document = AssayDocument.get(params.id)
         if (!document) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
+            render(view: "edit", assayId: params?.assayId)
             return
-        } else {
-            flash.message = null
         }
-
+        Long version = params?.version as Long
+        if (version && version != document?.version) {
+            document.errors.reject("default.optimistic.locking.failure", [document.getDomainClass().getNaturalName()] as Object[], "Optomistic lock failure")
+            render(view: "edit", model: [document: document])
+            return
+        }
         document.properties["documentName", "documentType", "documentContent"] = params
-
-        redirect(controller: "assayDefinition", action: "show", id: document.assay.id)
+        if (document?.save()) {
+            redirect(controller: "assayDefinition", action: "edit", id: document.assay.id, fragment:"document-${document.id}")
+        } else {
+            render(view: "edit", model: [document: document])
+        }
     }
 
     def delete() {
@@ -60,12 +63,8 @@ class DocumentController {
         if (!document) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
             return
-        } else {
-            flash.message = null
         }
-
         document.delete()
-
-        redirect(controller: "assayDefinition", action: "show", id: document.assay.id)
+        redirect(controller: "assayDefinition", action: "edit", id: document.assay.id, fragment: 'documents-header')
     }
 }

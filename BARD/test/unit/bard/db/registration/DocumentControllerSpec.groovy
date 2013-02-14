@@ -1,15 +1,11 @@
 package bard.db.registration
 
-import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
+import org.junit.Before
 import spock.lang.Specification
-
-import static org.junit.Assert.*
-
-import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -24,6 +20,7 @@ class DocumentControllerSpec extends Specification {
     @Before
     void setup() {
         assay = Assay.build()
+        assert flash.message == null
     }
 
     void tearDown() {
@@ -39,7 +36,7 @@ class DocumentControllerSpec extends Specification {
         model.assayId == assay.id
     }
 
-    void 'test save'() {
+    void 'test valid save'() {
         when:
         params.assayId = assay.id
         params.documentContent = "content"
@@ -48,16 +45,38 @@ class DocumentControllerSpec extends Specification {
         controller.save()
 
         then:
-        response.redirectedUrl == '/assayDefinition/show/'+assay.id
         AssayDocument.count() == 1
-        def doc = AssayDocument.getAll().get(0)
-        doc.assay == assay
-        doc.documentName == "name"
-        doc.documentType == "Publication"
-        doc.documentContent=="content"
+        AssayDocument assayDocument = assay.documents.first()
+        response.redirectedUrl == "/assayDefinition/edit/${assay.id}#document-${assayDocument.id}"
+        assayDocument.assay == assay
+        assayDocument.documentName == "name"
+        assayDocument.documentType == "Publication"
+        assayDocument.documentContent == "content"
     }
 
-    void 'test update'() {
+    void 'test save Assay Not found'() {
+        when:
+        params.assayId = assay.id
+        params.documentType = "Publication"
+        controller.save()
+
+        then:
+        view == 'document/create'
+
+
+    }
+
+    void 'test save invalid doc'() {
+        when:
+        params.assayId = assay.id
+        par
+        controller.save()
+
+        then:
+        flash.message == "default.not.found.message"
+    }
+
+    void 'test update succeed'() {
         when:
         AssayDocument document = AssayDocument.build(assay: assay)
         assert document.validate()
@@ -65,13 +84,23 @@ class DocumentControllerSpec extends Specification {
         params.documentContent = "new content"
         params.documentType = "Other"
         params.documentName = "new name"
-        def model = controller.update()
+        controller.update()
 
         then:
-        response.redirectedUrl == '/assayDefinition/show/'+assay.id
-        document.documentContent=="new content"
+        response.redirectedUrl == "/assayDefinition/edit/${assay.id}#document-${document.id}"
+        document.documentContent == "new content"
         document.documentName == "new name"
         document.documentType == "Other"
+    }
+
+    void 'test update fail doc not found'() {
+        when:
+        params.id = -1
+        params.assayId = assay.id
+        controller.update()
+
+        then:
+        flash.message == 'default.not.found.message'
     }
 
     void 'test edit'() {
