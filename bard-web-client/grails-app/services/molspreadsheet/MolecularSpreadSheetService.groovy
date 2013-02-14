@@ -538,10 +538,10 @@ class MolecularSpreadSheetService {
                         SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData?.findSpreadSheetActivity(rowCnt, columnIndex)
                         if (spreadSheetActivityStorage)  {
                             if (molSpreadSheetColSubHeader.unitsInColumn == null) {
-                                molSpreadSheetColSubHeader.unitsInColumn =  spreadSheetActivityStorage.dictionaryDescription
+                                molSpreadSheetColSubHeader.unitsInColumn =  spreadSheetActivityStorage.dictionaryId.toString()
                                 molSpreadSheetColSubHeader.unitsInColumnAreUniform = true
                             }  else {
-                                if (molSpreadSheetColSubHeader.unitsInColumn != spreadSheetActivityStorage.dictionaryDescription) {
+                                if (molSpreadSheetColSubHeader.unitsInColumn != spreadSheetActivityStorage.dictionaryId.toString()) {
                                     molSpreadSheetColSubHeader.unitsInColumnAreUniform = false
                                 }
                             }

@@ -94,21 +94,21 @@ class MolSpreadSheetCell {
         this.spreadSheetActivityStorage = new SpreadSheetActivityStorage(eid: spreadSheetActivity.eid,
                 cid: spreadSheetActivity.cid,
                 sid: spreadSheetActivity.sid,
-                activityOutcome: spreadSheetActivity.activityOutcome )
+                activityOutcome: spreadSheetActivity.activityOutcome)
         int counter = 0
         for (PriorityElement priorityElement in spreadSheetActivity.priorityElementList) {
             this.spreadSheetActivityStorage.responseUnit = priorityElement.responseUnit
             if (priorityElement.value == "") {       // does this ever happen
                 activity = MolSpreadSheetCellActivityOutcome.Unspecified
                 intInternalValue = 0
-            }   else {
+            } else {
                 // Get the units
-                 String identifierString = priorityElement.getDictionaryLabel() ?: priorityElement.responseUnit  ?: " "
+                String identifierString = priorityElement.dictionaryLabel ?: priorityElement.responseUnit ?: " "
                 // Check for an identifier.  We can ignore "=", since we only care about the identifier the changes something
                 if (priorityElement.qualifier == ">") {
-                    this.molSpreadSheetCellType =  MolSpreadSheetCellType.greaterThanNumeric
-                } else  if (priorityElement.qualifier == "<")  {
-                    this.molSpreadSheetCellType =  MolSpreadSheetCellType.lessThanNumeric
+                    this.molSpreadSheetCellType = MolSpreadSheetCellType.greaterThanNumeric
+                } else if (priorityElement.qualifier == "<") {
+                    this.molSpreadSheetCellType = MolSpreadSheetCellType.lessThanNumeric
                 }
                 // Check for child elements, and save them if they are available
                 if (priorityElement.hasChildElements()) {
@@ -119,28 +119,27 @@ class MolSpreadSheetCell {
                 if (priorityElement.value == null) {
                     hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
                 } else if (!MolSpreadSheetCellHelper.isNumeric(priorityElement.value)) {
-                    String stringRepresentationOfValue =  priorityElement.value as String
+                    String stringRepresentationOfValue = priorityElement.value as String
                     hillCurveValueHolder = new HillCurveValueHolder(identifier: "${identifierString} ${stringRepresentationOfValue}", slope: Double.NaN)
-                }  else {
-                    Double value = Double.parseDouble(priorityElement.value)
-                    if (value != null) {
-                        this.spreadSheetActivityStorage.dictionaryDescription =  priorityElement.getDictionaryDescription() ?: ''
-                        this.spreadSheetActivityStorage.dictionaryLabel =  priorityElement.getDictionaryLabel() ?: ''
-                        if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
-                            CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
-                            hillCurveValueHolder = new HillCurveValueHolder(
-                                    identifier: identifierString,
-                                    s0: curveFitParameters.s0,
-                                    sInf: curveFitParameters.sInf,
-                                    slope: value,
-                                    coef: curveFitParameters.hillCoef,
-                                    conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
-                                    response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
-                                    xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
-                                    yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel() )
-                        } else {
-                            hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
-                        }
+                } else {
+                    Double value = Double.parseDouble(priorityElement.value) // note from .isNumeric() above that this parse will be successful
+                    this.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
+                    this.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
+                    this.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
+                    if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
+                        CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
+                        hillCurveValueHolder = new HillCurveValueHolder(
+                                identifier: identifierString,
+                                s0: curveFitParameters.s0,
+                                sInf: curveFitParameters.sInf,
+                                slope: value,
+                                coef: curveFitParameters.hillCoef,
+                                conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
+                                response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
+                                xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
+                                yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel())
+                    } else {
+                        hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
                     }
                 }
                 hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(identifierString)

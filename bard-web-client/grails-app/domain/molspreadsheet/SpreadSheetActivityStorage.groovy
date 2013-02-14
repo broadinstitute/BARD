@@ -22,6 +22,7 @@ class SpreadSheetActivityStorage {
     List<ActivityData> childElements = []
     String dictionaryDescription = ''
     String dictionaryLabel = ''
+    int dictionaryId = 0
 
     static mapping = {
         molSpreadSheetCell column: "molCell"
@@ -87,6 +88,7 @@ class SpreadSheetActivityStorage {
             this.columnNames = [spreadSheetActivityStorage.columnNames[experimentIndex]]
         this.dictionaryDescription = spreadSheetActivityStorage.dictionaryDescription
         this.dictionaryLabel = spreadSheetActivityStorage.dictionaryLabel
+        this.dictionaryId = spreadSheetActivityStorage.dictionaryId
     }
 
 

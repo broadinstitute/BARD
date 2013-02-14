@@ -131,8 +131,13 @@
                         <g:if test="${column > 3}">
                             <th class="molSpreadSheetHeadData">
                                 ${colHeader}
+
                                 <g:if test="${columnDictionaryLookup[column]}">
-                                   <a href="#" rel="tooltip" class="desc_tip mssheader" data-placement="top" data-title="${columnDictionaryLookup[column]}"><i class="icon-question-sign"></i></a>
+                                    <a href="/bardwebclient/dictionaryTerms/#${columnDictionaryLookup[column]}"
+                                       class="desc_tip mssheader" data-placement="top"
+                                       target="datadictionary">
+                                        <i class="icon-question-sign"></i>
+                                    </a>
                                 </g:if>
                             </th>
                         </g:if>

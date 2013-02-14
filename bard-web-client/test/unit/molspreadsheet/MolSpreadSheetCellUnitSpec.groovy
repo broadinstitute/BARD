@@ -1,9 +1,11 @@
 package molspreadsheet
 
 import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ConcentrationResponseSeries
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.experiment.ConcentrationResponsePoint
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -55,9 +57,6 @@ class MolSpreadSheetCellUnitSpec extends Specification {
 
     void "Test  MolSpreadSheetCell ctor"() {
         given:
-        String value1 = null
-        String value2 = null
-        MolSpreadSheetCellType molSpreadSheetCellType = MolSpreadSheetCellType.image
         SpreadSheetActivity spreadSheetActivity = new  SpreadSheetActivity()
         PriorityElement priorityElement1 = new  PriorityElement()
         priorityElement1.value = null
@@ -65,16 +64,22 @@ class MolSpreadSheetCellUnitSpec extends Specification {
         priorityElement2.value = "unexpected nonnumeric argument"
         PriorityElement priorityElement3 = new  PriorityElement()
         priorityElement3.value = "12.34"
-        spreadSheetActivity.priorityElementList = [priorityElement1,priorityElement2,priorityElement3]
+        PriorityElement priorityElement4 = new  PriorityElement()
+        priorityElement4.concentrationResponseSeries = new ConcentrationResponseSeries()
+        priorityElement4.concentrationResponseSeries.concentrationResponsePoints = [new ConcentrationResponsePoint(value: "0.47", testConcentration: 47d)]
+        priorityElement4.value = "43.21"
+        spreadSheetActivity.priorityElementList = [priorityElement1,priorityElement2,priorityElement3,priorityElement4]
         when:
         MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
         println  molSpreadSheetCell.toString()
         then:
         molSpreadSheetCell.spreadSheetActivityStorage
-        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size() == 3
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size() == 4
         molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].toString()=="--"
         molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[1].toString()=="--"
         molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[2].toString()=="12.3"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[3].toString()=="43.2"
+        molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel == ''
     }
 
 
