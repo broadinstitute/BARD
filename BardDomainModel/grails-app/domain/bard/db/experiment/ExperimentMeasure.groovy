@@ -1,5 +1,7 @@
 package bard.db.experiment
 
+import bard.db.registration.Assay
+import bard.db.registration.AssayContextMeasure
 import bard.db.registration.Measure
 
 /**
@@ -23,6 +25,11 @@ class ExperimentMeasure {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
+
+    Set<ExperimentMeasure> childMeasures = [] as Set
+
+    static belongsTo = [parent: ExperimentMeasure]
+    static hasMany = [childMeasures: ExperimentMeasure]
 
     static constraints = {
         parent(nullable: true)
