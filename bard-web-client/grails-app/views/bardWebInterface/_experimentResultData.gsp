@@ -33,7 +33,8 @@
 </p>
 
 <div class="row-fluid">
-
+<g:hiddenField name="skip" id="skip" value="${params?.offset?:0}"/>
+<g:hiddenField name="top" id="top" value="${params?.max?:10}"/>
     <div class="pagination offset3">
         <g:paginate total="${experimentDataMap?.total ? experimentDataMap?.total : 0}" params='[id: "${params?.id}", normalizeYAxis: "${experimentDataMap?.normalizeYAxis}"]'/>
     </div>

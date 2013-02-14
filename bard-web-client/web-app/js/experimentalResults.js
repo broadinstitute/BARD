@@ -18,7 +18,10 @@ $(document).ready(function () {
     });
     $(document).on("submit", "#showExperimentForm", function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
-        var url = $(this).attr('action') + "?" + $(this).serialize()
+        var max = $('#top').val()
+        var offset = $('#skip').val()
+        var url = $(this).attr('action') + "?" + $(this).serialize() +'&max='+max+'&offset='+offset;
+
         pushStateHandler(url)
         populatePage(url);
     });
