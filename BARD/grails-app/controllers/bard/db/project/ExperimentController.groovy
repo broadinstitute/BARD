@@ -3,15 +3,22 @@ package bard.db.project
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.registration.ExperimentService
+import bard.db.registration.MeasureTreeService
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
 class ExperimentController {
     ExperimentService experimentService;
+    MeasureTreeService measureTreeService
 
     def create() {
         def assay = Assay.get(params.assayId)
-        [assay: assay, experiment: new Experiment()]
+        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(assay, true))
+
+        println("measuresAsJsonTree=${measuresAsJsonTree}")
+
+        [assay: assay, experiment: new Experiment(), measuresAsJsonTree: measuresAsJsonTree]
     }
 
     def save() {
@@ -32,6 +39,8 @@ class ExperimentController {
             return
         }
 
-        [instance: experimentInstance]
+        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
+
+        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree]
     }
 }

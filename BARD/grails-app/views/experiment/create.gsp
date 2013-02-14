@@ -41,33 +41,81 @@
 
                 <div class="accordion-body in collapse">
                     <div class="accordion-inner">
-                        <table>
-                            <tbody>
-                            <tr><td>Assay</td><td><g:link controller="assayDefinition" action="show"
-                                                          id="${assay.id}">${assay.name}</g:link></td></tr>
+                        <dl class="dl-horizontal">
 
-                            <tr><td>Experiment Name</td>
-                                <td>
-                                    <input type="text" name="experimentName" value="${fieldValue(bean: experiment, field: "experimentName")}"/>
-                                    <span class="error"><g:fieldError bean="${experiment}" field="experimentName"/></span>
-                                </td>
-                            </tr>
+                            <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
+                                                      id="${assay.id}">${assay.name}</g:link></dd>
 
-                            <tr><td>Description</td>
-                                <td>
-                                    <input type="text" name="description"
-                                           value="${fieldValue(bean: experiment, field: "description")}"/>
-                                    <span class="error"><g:fieldError bean="${experiment}" field="description"/></span>
-                                </td>
-                            </tr>
+                            <dt>Experiment Name</dt>
+                            <dd>
+                                <input type="text" name="experimentName"
+                                       value="${fieldValue(bean: experiment, field: "experimentName")}"/>
+                                <span class="error"><g:fieldError bean="${experiment}" field="experimentName"/></span>
+                            </dd>
 
-                            </tbody>
-                        </table>
+                            <dt>Description</dt><dd>
+                            <input type="text" name="description"
+                                   value="${fieldValue(bean: experiment, field: "description")}"/>
+                            <span class="error"><g:fieldError bean="${experiment}" field="description"/></span>
+                            </dd>
+
+                            <dt>Hold until date</dt><dd>
+                            <input type="text" name="holdUntilDate"
+                                   value="${fieldValue(bean: experiment, field: "holdUntilDate")}"/>
+                            <span class="error"><g:fieldError bean="${experiment}" field="holdUntilDate"/></span>
+                            </dd>
+
+                            <dt>Run Date From</dt><dd>
+                            <input type="text" name="holdUntilDate"
+                                   value="${fieldValue(bean: experiment, field: "runDateFrom")}"/>
+                            <span class="error"><g:fieldError bean="${experiment}" field="runDateFrom"/></span>
+                            </dd>
+
+                            <dt>Run Date To</dt><dd>
+                            <input type="text" name="holdUntilDate"
+                                   value="${fieldValue(bean: experiment, field: "runDateTo")}"/>
+                            <span class="error"><g:fieldError bean="${experiment}" field="runDateTo"/></span>
+                            </dd>
+
+                            <dt>Measures</dt><dd>
+                            <input type="text" name="measureIds" id="measureIds">
+                            </dd>
+
+                        </dl>
 
                     </div>
                 </div>
             </div>
 
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
+                       data-target="#target-contexts-info">
+                        <i class="icon-chevron-down"></i>
+                        Measures
+                    </a>
+                </div>
+
+                <div class="accordion-body in collapse">
+                    <div class="accordion-inner">
+
+                        <r:require module="dynatree"/>
+                        <div id="measure-tree"></div>
+                        <r:script>
+                            $("#measure-tree").dynatree({
+                                checkbox: true,
+                                onSelect: function(select, node) {
+                    				var selectedNodes = node.tree.getSelectedNodes();
+                    				var selectedKeys = $.map(selectedNodes, function(n){ return n.data.key });
+
+                    				$("#measureIds").val(selectedKeys.join(" "));
+                    			},
+                                children: ${measuresAsJsonTree} })
+                        </r:script>
+
+                    </div>
+                </div>
+            </div>
         </div>    <!-- End accordion -->
     </div>
 </g:form>

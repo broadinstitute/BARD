@@ -20,6 +20,10 @@ import spock.lang.Specification
 @Build([Assay, Experiment])
 class ExperimentControllerSpec extends Specification {
     def 'test create'() {
+        setup:
+        controller.measureTreeService = Mock(MeasureTreeService)
+        controller.measureTreeService.createMeasureTree(_,_) >> []
+
         when:
         Assay assay = Assay.build()
         params.assayId = assay.id
@@ -49,6 +53,10 @@ class ExperimentControllerSpec extends Specification {
     }
 
     def 'test show'() {
+        setup:
+        controller.measureTreeService = Mock(MeasureTreeService)
+        controller.measureTreeService.createMeasureTree(_,_) >> []
+
         when:
         Experiment exp = Experiment.build()
         params.id = exp.id

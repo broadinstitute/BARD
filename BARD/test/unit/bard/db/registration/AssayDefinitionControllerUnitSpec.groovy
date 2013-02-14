@@ -28,9 +28,13 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     }
 
     void 'test show'() {
+        setup:
+        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
+        measureTreeService.createMeasureTree(_, _) >> []
 
         when:
         params.id = assay.id
+        controller.measureTreeService = measureTreeService
         def model = controller.show()
 
         then:
@@ -57,6 +61,11 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 	}
 
     void 'test editMeasure'() {
+        setup:
+        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
+        measureTreeService.createMeasureTree(_, _) >> []
+        controller.measureTreeService = measureTreeService
+
         when:
             params.id = assay.id
             def model = controller.show()

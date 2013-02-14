@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import org.json.JSONArray
 
@@ -12,6 +13,7 @@ class AssayDefinitionController {
 
     AssayContextService assayContextService
     OntologyDataAccessService ontologyDataAccessService;
+    MeasureTreeService measureTreeService;
 
     def index() {
         redirect(action: "description", params: params)
@@ -33,14 +35,17 @@ class AssayDefinitionController {
 
     def show() {
         def assayInstance = Assay.get(params.id)
+        JSON measureTreeAsJson = null
 
         if (!assayInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         } else {
             flash.message = null
+            measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         }
-        [assayInstance: assayInstance]
+
+        [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson]
     }
 
     def edit() {
@@ -59,17 +64,19 @@ class AssayDefinitionController {
         // while not directly used in the rendering of this page, make sure the tree is cached before rendering the
         // edit page to ensure the autocomplete comes up quickly when the user tries.
         // Perhaps a better approach would be to simply ensure some loading indicator is more predominant when the autocomplete is running.
-        ontologyDataAccessService.ensureTreeCached()
+        ontologyDataAccessService.ensureTreeCached();
+        JSON measuresTreeAsJson = null;
 
         def assayInstance = Assay.get(params.id)
         if (!assayInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         } else {
-            flash.message = null
+            flash.message = null;
+            measuresTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false));
         }
 
-        [assayInstance: assayInstance]
+        [assayInstance: assayInstance, measuresTreeAsJson: measuresTreeAsJson]
     }
 
     def deleteMeasure() {

@@ -20,11 +20,7 @@ class ResultsControllerSpec extends Specification {
 
         when:
         FieldListCommand command = new FieldListCommand(itemService: itemService,
-                measureIds: [1],
-                contextItemIds: ["I:1", "I:2"],
-                contextItemFrequency: ["none", "experiment"],
-                measureItemFrequency: ["measurement", "experiment"],
-                measureItemIds: ["I:3", "I:4"])
+                contextItemIds: ["I:1", "I:2"])
 
         then:
         def expItems = command.getExperimentContextItems()
@@ -34,14 +30,7 @@ class ResultsControllerSpec extends Specification {
         def expItemsIds = expItems.collect { it.id }
 
         then:
+        expItemsIds.contains("I:1")
         expItemsIds.contains("I:2")
-        expItemsIds.contains("I:4")
-
-        when:
-        def mItems = command.getMeasureItems()
-
-        then:
-        mItems.size() == 1
-        mItems[0].id == "I:3"
     }
 }

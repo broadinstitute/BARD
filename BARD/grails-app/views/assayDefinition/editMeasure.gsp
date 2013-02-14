@@ -96,7 +96,28 @@
             <p>To change the location of a measure in the tree, select the name and drag it to the new location.</p>
             <h3>Measures</h3>
             <r:require module="dynatree"/>
-            <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}" dropCallback="measureNodeDropped"/>
+            <div id="measure-tree"></div>
+            <r:script>
+            $("#measure-tree").dynatree({
+                onActivate: function(node) {
+                    $(".measure-detail-card").hide();
+                    $("#measure-details-"+node.data.key).show();
+                },
+                dnd: {
+                    preventVoidMoves: true,
+                    onDragStart: function(node) { return true; },
+                    onDragEnter: function(node, sourceNode) {
+                        if(node.getParent() == null || node.getParent().getParent() == null) {
+                            return ["over","after"];
+                        } else {
+                            return ["over"]
+                        }
+                    },
+                    onDrop: measureNodeDropped
+                    },
+                children: ${measuresTreeAsJson}
+             });
+            </r:script>
         </div>
 
         <div class="span6">

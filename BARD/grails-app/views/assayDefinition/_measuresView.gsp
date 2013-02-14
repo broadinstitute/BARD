@@ -3,7 +3,17 @@
     <g:if test="${measures}">
         <div class="row-fluid">
             <div class="span6">
-                <g:dynaTree id="measure-tree" measures="${rootMeasuresSorted}"/>
+                <div id="measure-tree"></div>
+
+                <r:script>
+                $("#measure-tree").dynatree({
+                 onActivate: function(node) {
+                   $(".measure-detail-card").hide();
+                   $("#measure-details-"+node.data.key).show();
+                 },
+                 children: ${measureTreeAsJson}
+                 });
+                </r:script>
             </div>
 
             <div class="span6">

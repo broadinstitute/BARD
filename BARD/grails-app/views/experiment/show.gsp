@@ -47,33 +47,27 @@
 
                 <div class="accordion-body in collapse">
                     <div class="accordion-inner">
-                        <table>
-                            <tbody>
-                            <tr><td>Description</td><td>${instance.description}</td></tr>
-                            <tr><td>Experiment Name</td><td>${instance.experimentName}</td></tr>
+                        <%-- Added &nbsp; because there appears to be some problem with dd tags that causes them to shift up a row if a dd tag no content.  Need to investigate this further later. --%>
+                        <dl class="dl-horizontal">
+                            <dt>Description</dt><dd>${instance.description}&nbsp;</dd>
+                            <dt>Experiment Name</dt><dd>${instance.experimentName}&nbsp;</dd>
+                            <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
+                                                          id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
+                            <dt>Status</dt><dd>${instance.experimentStatus}&nbsp;</dd>
+                            <dt>Hold until</dt><dd>${instance.holdUntilDate}&nbsp;</dd>
+                            <dt>Run Date from</dt><dd>${instance.runDateFrom}&nbsp;</dd>
+                            <dt>Run Date to</dt><dd>${instance.runDateTo}&nbsp;</dd>
+                        </dl>
 
-                            <tr><td>Assay</td><td><g:link controller="assayDefinition" action="show"
-                                                          id="${instance.assay.id}">${instance.assay.name}</g:link></td>
-                            </tr>
-                            <tr><td>Status</td><td>${instance.experimentStatus}</td></tr>
-                            <tr><td>Hold until</td><td>${instance.holdUntilDate}</td></tr>
-                            <tr><td>Ready for extraction</td><td>${instance.readyForExtraction}</td></tr>
-                            <tr><td>Run Date from</td><td>${instance.runDateFrom}</td></tr>
-                            <tr><td>Run Date to</td><td>${instance.runDateTo}</td></tr>
-
-                            <tr><td>External references</td><td>
-                                <ul>
-                                    <g:each in="${instance.externalReferences}" var="xref">
-                                        <li>
-                                            ${xref.externalSystem.systemName}
-                                            ${xref.extAssayRef}
-                                        </li>
-                                    </g:each>
-                                </ul>
-
-                            </td></tr>
-                            </tbody>
-                        </table>
+                        <p>External references</p>
+                        <ul>
+                            <g:each in="${instance.externalReferences}" var="xref">
+                                <li>
+                                    ${xref.externalSystem.systemName}
+                                    ${xref.extAssayRef}
+                                </li>
+                            </g:each>
+                        </ul>
 
                         <p>Referenced by projects:</p>
                         <ul>
@@ -133,11 +127,13 @@
 
                 <div id="target-measures-info" class="accordion-body in collapse">
                     <div class="accordion-inner">
-                        <ul>
-                            <g:each in="${instance.experimentMeasures}" var="experimentMeasure">
-                                <li>${experimentMeasure.measure.displayLabel}</li>
-                            </g:each>
-                        </ul>
+
+                        <r:require module="dynatree"/>
+                        <div id="measure-tree"></div>
+                        <r:script>
+                            $("#measure-tree").dynatree({
+                                children: ${ measuresAsJsonTree } })
+                        </r:script>
                     </div>
                 </div>
             </div>
