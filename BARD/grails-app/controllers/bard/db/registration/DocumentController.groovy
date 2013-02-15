@@ -23,7 +23,6 @@ class DocumentController {
         def assay = Assay.get(params.assayId)
         if (!assay) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return
         }
 
         AssayDocument document = new AssayDocument()

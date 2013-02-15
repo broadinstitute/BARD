@@ -1,11 +1,13 @@
 package bard.db.registration
 
+import bard.db.model.IDocumentType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.junit.Before
 import spock.lang.Specification
+import test.TestUtils
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -40,7 +42,7 @@ class DocumentControllerSpec extends Specification {
         when:
         params.assayId = assay.id
         params.documentContent = "content"
-        params.documentType = "Publication"
+        params.documentType = IDocumentType.DOCUMENT_TYPE_PUBLICATION
         params.documentName = "name"
         controller.save()
 
@@ -50,30 +52,33 @@ class DocumentControllerSpec extends Specification {
         response.redirectedUrl == "/assayDefinition/edit/${assay.id}#document-${assayDocument.id}"
         assayDocument.assay == assay
         assayDocument.documentName == "name"
-        assayDocument.documentType == "Publication"
+        assayDocument.documentType == IDocumentType.DOCUMENT_TYPE_PUBLICATION
         assayDocument.documentContent == "content"
     }
 
     void 'test save Assay Not found'() {
         when:
-        params.assayId = assay.id
-        params.documentType = "Publication"
+        params.assayId = -1
         controller.save()
 
         then:
-        view == 'document/create'
-
+        view == "/document/create"
+        model.assayId == -1
+        flash.message=='default.not.found.message'
 
     }
 
     void 'test save invalid doc'() {
         when:
         params.assayId = assay.id
-        par
+        params.documentType= IDocumentType.DOCUMENT_TYPE_PUBLICATION
         controller.save()
 
         then:
-        flash.message == "default.not.found.message"
+        view == '/document/create'
+        model.assayId == assay.id
+        model.document.errors.hasErrors()
+        TestUtils.assertFieldValidationExpectations(model.document, 'documentName', false, 'nullable')
     }
 
     void 'test update succeed'() {
@@ -82,7 +87,7 @@ class DocumentControllerSpec extends Specification {
         assert document.validate()
         params.id = document.id
         params.documentContent = "new content"
-        params.documentType = "Other"
+        params.documentType = IDocumentType.DOCUMENT_TYPE_OTHER
         params.documentName = "new name"
         controller.update()
 
@@ -90,7 +95,7 @@ class DocumentControllerSpec extends Specification {
         response.redirectedUrl == "/assayDefinition/edit/${assay.id}#document-${document.id}"
         document.documentContent == "new content"
         document.documentName == "new name"
-        document.documentType == "Other"
+        document.documentType == IDocumentType.DOCUMENT_TYPE_OTHER
     }
 
     void 'test update fail doc not found'() {
