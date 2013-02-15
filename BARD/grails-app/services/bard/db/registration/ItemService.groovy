@@ -13,6 +13,21 @@ class ItemService {
         String getDisplayLabel() {
             return attributeElement.label
         }
+
+        boolean equals(o) {
+            if (this.is(o)) return true
+            if (!(o instanceof Item)) return false
+
+            Item item = (Item) o
+
+            if (id != item.id) return false
+
+            return true
+        }
+
+        int hashCode() {
+            return id.hashCode()
+        }
     }
 
     def getLogicalItems(Collection<AssayContextItem> items) {
