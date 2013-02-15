@@ -3,6 +3,8 @@ package bard.db.dictionary
 import bard.db.dictionary.ElementStatus as ES
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.hibernate.Session
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.dictionary.ElementStatus.*
@@ -19,6 +21,7 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
 
     BardDescriptor grandParent
     BardDescriptor parent
+    BardDictionaryDescriptor dictionaryParent
 
     OntologyDataAccessService ontologyDataAccessService
 
@@ -27,7 +30,7 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         grandParent = BardDescriptor.build(fullPath: "grandParent", leaf: false, label: 'grandParent')
         String parentFullPath = "${grandParent.fullPath}> parent"
         parent = BardDescriptor.build(fullPath: parentFullPath, leaf: false, parent: grandParent, label: 'parent')
-
+        dictionaryParent = BardDictionaryDescriptor.build()
         parent.save(flush: true)
     }
 
@@ -94,10 +97,10 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
 
         for (BardDescriptor bardDescriptor : bardDescriptors) {
             if (bardDescriptor.label in dictionaryEntryLabels) {
-                BardDictionaryDescriptor.build(element: bardDescriptor.element)
+                BardDictionaryDescriptor.build(element: bardDescriptor.element, parent: dictionaryParent)
             }
         }
-
+        BardDescriptor.withSession {Session session -> session.flush()}
 
         when:
         List<BardDescriptor> results = ontologyDataAccessService.getElementsForAttributes(searchTerm)
