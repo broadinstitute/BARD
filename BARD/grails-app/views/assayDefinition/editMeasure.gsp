@@ -58,7 +58,8 @@
                     <h3 id="saveModalLabel">Add a new measure</h3>
                 </div>
                 <div class="modal-body">
-                    <g:form class="form-horizontal" id="${assayInstance.id}" name="add-measure-form" action="addMeasure">
+                    <g:form class="form-horizontal" name="add-measure-form" action="addMeasure">
+                        <input type="hidden" name="id" value="${assayInstance.id}" />
                         <p>In the fields below, search for terms by typing and suggestions will be presented.  To make a selection, choose from the popup list that appears. </p>
                         <input type="hidden" id="add-parent-id" value="" name="parentMeasureId"/>
                         <div class="control-group">
