@@ -39,6 +39,7 @@ class AssayDefinitionController {
         JSON measureTreeAsJson = null
 
         if (!assayInstance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         } else {
@@ -53,11 +54,11 @@ class AssayDefinitionController {
         def assayInstance = Assay.get(params.id)
 
         if (!assayInstance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
-        } else {
-            flash.message = null
         }
+
         [assayInstance: assayInstance]
     }
 
@@ -65,15 +66,16 @@ class AssayDefinitionController {
         // while not directly used in the rendering of this page, make sure the tree is cached before rendering the
         // edit page to ensure the autocomplete comes up quickly when the user tries.
         // Perhaps a better approach would be to simply ensure some loading indicator is more predominant when the autocomplete is running.
+        println("editMeasure ${flash.message}")
         ontologyDataAccessService.ensureTreeCached();
         JSON measuresTreeAsJson = null;
 
         def assayInstance = Assay.get(params.id)
         if (!assayInstance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         } else {
-            flash.message = null;
             measuresTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false));
         }
 
@@ -82,7 +84,13 @@ class AssayDefinitionController {
 
     def deleteMeasure() {
         def measure = Measure.get(params.measureId)
-        measure.delete()
+
+        if (measure.childMeasures.size() != 0) {
+            flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it has children"
+        } else {
+            measure.delete()
+        }
+
         redirect(action: "editMeasure", id: params.id)
     }
 
