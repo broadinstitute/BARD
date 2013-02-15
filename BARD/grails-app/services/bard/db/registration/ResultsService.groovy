@@ -55,7 +55,7 @@ class ResultsService {
                     closestValue = it.valueNum
                 }
             }
-            return new Cell(value: closestValue, qualifier: "=", column: column)
+            return new Cell(value: closestValue, qualifier: "= ", column: column)
         } else {
             def labelMap = [:]
             contextItems.each {
@@ -100,7 +100,11 @@ class ResultsService {
         if (matcher.matches()) {
             String foundQualifier = matcher.group(1)
             if (foundQualifier == null) {
-                foundQualifier = "="
+                foundQualifier = "= "
+            }
+
+            if (foundQualifier.length() < 2) {
+                foundQualifier += " "
             }
 
             float a
@@ -207,8 +211,17 @@ class ResultsService {
     }
 
     static class ImportSummary {
-        def resultsCreated;
         def errors = []
+
+        // these are just collected for purposes of reporting the import summary at the end
+        int linesParsed = 0;
+        int resultsCreated = 0;
+        int experimentAnnotationsCreated = 0;
+        Map<String, Integer> resultsPerLabel = [:]
+        Set<Long> substanceIds = [] as Set
+        public int getSubstanceCount() {
+            return substanceIds.size()
+        }
 
         void addError(int line, int column, String message) {
             if (!tooMany()) {
@@ -228,7 +241,6 @@ class ResultsService {
             return errors.size() > MAX_ERROR_COUNT;
         }
     }
-
 
     static class Template {
         Experiment experiment;
@@ -319,7 +331,7 @@ class ResultsService {
         String experimentName;
         Long experimentId;
         List<ExperimentContext> contexts
-
+        int linesParsed;
         List<Row> rows;
     }
 
@@ -404,6 +416,7 @@ class ResultsService {
         result.contexts = []
         groupedByContext.values().each { Collection<Cell> cells ->
             ExperimentContext context = new ExperimentContext()
+            println("new context")
             for(cell in cells) {
                 ExperimentContextItem item = new ExperimentContextItem(attributeElement: cell.attributeElement,
                         experimentContext: context,
@@ -662,6 +675,11 @@ class ResultsService {
             Integer replicate = parsed[2]
             Integer parentRowNumber = parsed[3]
 
+            if (sid <= 0) {
+                errors.addError(lineNumber, 0, "Invalid substance id ${sid}")
+                return
+            }
+
             if (usedRowNumbers.contains(rowNumber)) {
                 errors.addError(lineNumber, 0, "Row number ${rowNumber} was duplicated")
                 return
@@ -689,6 +707,7 @@ class ResultsService {
         }
 
         result.rows = rows
+        result.linesParsed = reader.lineNumber
 
         return result
     }
@@ -730,30 +749,67 @@ class ResultsService {
         def measuresPerContextItem = findRelationships(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template)
-        if (parsed != null) {
+        if (parsed != null && !errors.hasErrors()) {
+            errors.linesParsed = parsed.linesParsed
+
             def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
-            missingSids.each { errors.addError(0,0, "Could not find substance with id ${it}")}
+
+            missingSids.each {
+                errors.addError(0, 0, "Could not find substance with id ${it}")
+            }
 
             def results = createResults(parsed, errors, measuresPerContextItem)
 
-            // and persist these results to the DB
-            results.each {
-                it.experiment = experiment
-                if(!it.save()) {
-                    throw new RuntimeException(it.errors.toString())
-                }
-            }
+            if (!errors.hasErrors()) {
+                // and persist these results to the DB
+                deleteExperimentResults(experiment)
 
-            parsed.contexts.each {
-                it.experiment = experiment
-                if(!it.save()) {
-                    throw new RuntimeException(it.errors.toString())
-                }
-            }
+                results.each {
+                    it.experiment = experiment
 
-            errors.resultsCreated = results.size()
+                    String label = it.displayLabel
+                    Integer count = errors.resultsPerLabel.get(label)
+                    if (count == null) {
+                        count = 0
+                    }
+                    errors.resultsPerLabel.put(label, count+1)
+                    errors.substanceIds.add(it.substance.id)
+                }
+
+                parsed.contexts.each {
+                    it.experiment = experiment
+                    experiment.addToExperimentContexts(it)
+
+                    errors.experimentAnnotationsCreated += it.contextItems.size()
+                }
+
+                errors.resultsCreated = results.size()
+            }
         }
 
         return errors
+    }
+
+    /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
+    public void deleteExperimentResults(Experiment experiment) {
+        // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
+        // walk the tree and delete all the objects.
+
+        new ArrayList(experiment.experimentContexts).each { context ->
+            new ArrayList(context.experimentContextItems).each { item ->
+                context.removeFromExperimentContextItems(item)
+                item.delete()
+            }
+            experiment.removeFromExperimentContexts(context)
+            context.delete()
+        }
+
+        new ArrayList(experiment.results).each { result ->
+            new ArrayList(result.resultContextItems).each { item ->
+                result.removeFromResultContextItems(item)
+                item.delete()
+            }
+            experiment.removeFromResults(result)
+        }
     }
 }

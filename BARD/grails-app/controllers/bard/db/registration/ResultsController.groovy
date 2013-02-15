@@ -76,6 +76,6 @@ class ResultsController {
 
         ResultsService.ImportSummary summary = resultsService.importResults(experiment, f.inputStream)
 
-        [summary: summary]
+        [summary: summary, experiment: experiment]
     }
 }
