@@ -20,6 +20,7 @@ testDataConfig {
         }
         'bard.db.dictionary.BardDictionaryDescriptor' {
             def i = -1
+            label = {-> "label${i}"}
             id = {-> i-- }
         }
         'bard.db.dictionary.BardDescriptor' {
