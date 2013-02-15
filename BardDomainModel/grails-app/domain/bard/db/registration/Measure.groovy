@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.experiment.ExperimentMeasure
 
 class Measure {
 
@@ -20,7 +21,7 @@ class Measure {
     Set<AssayContextMeasure> assayContextMeasures = [] as Set
 
     static belongsTo = [assay: Assay, parentMeasure: Measure]
-    static hasMany = [childMeasures: Measure, assayContextMeasures: AssayContextMeasure]
+    static hasMany = [childMeasures: Measure, assayContextMeasures: AssayContextMeasure, experimentMeasures: ExperimentMeasure]
 
     static mapping = {
         id(column: 'MEASURE_ID', generator: 'sequence', params: [sequence: 'MEASURE_ID_SEQ'])

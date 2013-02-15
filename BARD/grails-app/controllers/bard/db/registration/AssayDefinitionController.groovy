@@ -87,6 +87,8 @@ class AssayDefinitionController {
 
         if (measure.childMeasures.size() != 0) {
             flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it has children"
+        } else if (measure.experimentMeasures.size() != 0) {
+            flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it is used in an experiment definition"
         } else {
             measure.delete()
         }
