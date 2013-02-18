@@ -3,8 +3,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
 
-    <r:require modules="search,promiscuity,compoundOptions"/>
-
+    <r:require modules="search,promiscuity,compoundOptions,addAllItemsToCarts"/>
 </head>
 
 <body>

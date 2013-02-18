@@ -14,6 +14,10 @@
     <div class="span12">
 </g:else>
 <g:if test="${nhits > 0}">
+    <div align="right">
+        <g:selectAllItemsInPage mainDivName="projects"/>
+    </div>
+
     <ul class="unstyled results">
         <g:each var="projectAdapter" in="${projectAdapters}">
             <li>

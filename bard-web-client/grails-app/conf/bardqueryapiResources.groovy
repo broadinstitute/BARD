@@ -92,4 +92,7 @@ modules = {
     jsDrawEditor {
         resource url: "js/jsDraw/jsDrawEditor.js"
     }
+    addAllItemsToCarts {
+        resource url: "js/addAllItemsToCart.js"
+    }
 }

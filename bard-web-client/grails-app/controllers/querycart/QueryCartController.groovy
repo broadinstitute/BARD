@@ -80,6 +80,25 @@ class QueryCartController {
         return render(status: 200, text: "Added item [${item}] to cart")
     }
 
+    def addItems() {
+        def items = JSON.parse(params.items)
+        for (def item in items) {
+            params.id = item.id
+            params.type = item.type
+            params.name = item.name
+            params.smiles = item.smiles
+            params.numActive = item.numActive
+            params.numAssays = item.numAssays
+
+            addItem()
+
+            if (response.status != 200) {
+                return response
+            }
+        }
+        render(status: 200, text: "Added items [${params.items.dump()}] to cart")
+    }
+
     def removeItem() {
 
         Map errorResponse = [:]
@@ -183,4 +202,16 @@ class QueryCartController {
         return ['totalItemCount': totalItemCount, 'compounds': compounds, 'assayDefinitions': assayDefinitions, 'projects': projects]
     }
 
+}
+
+class CartItemsCommand {
+    CartItemDTO[] items
+}
+class CartItemDTO {
+    Long id
+    String type
+    String name
+    String smiles
+    Integer numActive
+    Integer numAssays
 }

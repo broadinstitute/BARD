@@ -15,6 +15,10 @@
     <div class="span12">
 </g:else>
 <g:if test="${nhits > 0}">
+    <div align="right">
+        <g:selectAllItemsInPage mainDivName="compounds"/>
+    </div>
+
     <table class="table table-striped">
         <g:each var="compoundAdapter" in="${compoundAdapters}">
             <tr>
