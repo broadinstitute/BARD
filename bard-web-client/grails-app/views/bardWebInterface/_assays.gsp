@@ -23,16 +23,16 @@
                 <h3>
                     <g:if test="${searchString}">
                         <g:link action="showAssay" id="${assayAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                params='[searchString: "${searchString}"]'>${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
                     </g:if>
                     <g:else>
                         <g:link action="showAssay"
-                                id="${assayAdapter.id}">${assayAdapter.name} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                id="${assayAdapter.id}">${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
                     </g:else>
 
                 </h3>
                 <g:saveToCartButton id="${assayAdapter.id}"
-                                    name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
+                                    name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>
                 <g:if test="${assayAdapter.highlight}">
                     <dl class="dl-horizontal">

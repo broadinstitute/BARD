@@ -10,12 +10,12 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Assay Definition: ${assayAdapter?.name}
+        <h1>Assay Definition: ${assayAdapter?.title}
             <small>(ADID: ${assayAdapter?.capAssayId})</small>
         </h1>
 
         <g:saveToCartButton id="${assayAdapter.id}"
-                            name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
+                            name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
                             type="${querycart.QueryItemType.AssayDefinition}"/>
         <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.capAssayId}"
            title="Click To View Assay Definition In CAP" rel="tooltip">View in CAP</a>

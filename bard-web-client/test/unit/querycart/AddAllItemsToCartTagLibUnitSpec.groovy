@@ -1,8 +1,8 @@
 package querycart
 
-import spock.lang.Unroll
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import spock.lang.Unroll
 
 @TestFor(AddAllItemsToCartTagLib)
 @Unroll
@@ -17,6 +17,6 @@ class AddAllItemsToCartTagLibUnitSpec extends Specification {
         String actualResults = applyTemplate(template).toString()
 
         then:
-        assert actualResults == '<input type="button" class="btn span2" id="addAllItemsToCart" value="Add All Items To Cart" name="addAllItemsToCart" mainDivName="assays">'
+        assert actualResults == "<div class='btn-group'><a class='btn' id='addAllItemsToCart'mainDivName='assays'><i id='addAllItemsToCartButtonIcon' class=''></i> Add All Items To Cart</a></div>"
     }
 }

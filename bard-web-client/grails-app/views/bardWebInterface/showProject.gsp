@@ -161,10 +161,10 @@
                             <p>
                                 <g:if test="${searchString}">
                                     <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}"
-                                            params='[searchString: "${searchString}"]'>${assay.name}</g:link>
+                                            params='[searchString: "${searchString}"]'>${assay.title}</g:link>
                                 </g:if>
                                 <g:else>
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.name}</g:link>
+                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.title}</g:link>
                                 </g:else>
                             </p>
                         </div>
