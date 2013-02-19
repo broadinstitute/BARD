@@ -174,7 +174,9 @@
                     <g:if test="${molSpreadSheetData.getColumnCount() > 4}">
                         <g:each var="colCnt" in="${4..(molSpreadSheetData.getColumnCount() - 1)}">
                             <g:exptDataCell colCnt="${colCnt}"
-                                            spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt)}"/>
+                                            spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt)}"
+                                            mssHeaders="${molSpreadSheetData?.mssHeaders}"
+                                            columnNumber="${colCnt}"/>
                         </g:each>
                     </g:if>
                     </tr>

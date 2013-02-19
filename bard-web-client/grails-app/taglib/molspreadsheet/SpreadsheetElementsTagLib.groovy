@@ -45,6 +45,34 @@ class SpreadsheetElementsTagLib {
 
 
     def exptDataCell = {   attrs, body ->
+        List<MolSpreadSheetColumnHeader> mssHeaders = attrs.mssHeaders
+        int columnNumber = attrs.columnNumber
+        Double yMinimum =  Double.NaN
+        Double yMaximum =  Double.NaN
+        // first let's look for any minimums and maximums for Y normalization
+        if ((columnNumber> 0) && (columnNumber < mssHeaders.size() )) {
+            MolSpreadSheetColumnHeader molSpreadSheetColumnHeader = attrs.mssHeaders[columnNumber]
+            if (molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList?.size()>0)  {
+                if (molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList?.size()>1)
+                    println 'wtf'
+                for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList) {
+                    if (molSpreadSheetColSubHeader.minimumResponse != Double.NaN){
+                        if ( (yMinimum == Double.NaN) ||
+                             (molSpreadSheetColSubHeader.minimumResponse < yMinimum) )    {
+                           yMinimum =  molSpreadSheetColSubHeader.minimumResponse
+                        }
+                    }
+                    if (molSpreadSheetColSubHeader.maximumResponse != Double.NaN)  {
+                        if ( (yMaximum == Double.NaN) ||
+                             (molSpreadSheetColSubHeader.maximumResponse > yMaximum))    {
+                            yMaximum =  molSpreadSheetColSubHeader.maximumResponse
+                        }
+
+                    }
+                }
+             }
+
+        }
         int currentCol = attrs.colCnt
         if (attrs.spreadSheetActivityStorage != null) {
             HillCurveValueHolder hillCurveValueHolder = attrs.spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
@@ -98,22 +126,48 @@ class SpreadsheetElementsTagLib {
                               <div class="center-aligned">
                                    <img alt="${attrs.spreadSheetActivityStorage.sid}"
                                         title="Substance Id : ${attrs.spreadSheetActivityStorage.sid}"
-                                        src="${
-                    this.createLink(
-                            controller: 'doseResponseCurve',
-                            action: 'doseResponseCurve',
-                            params: [
-                                    sinf: hillCurveValueHolder.sInf,
-                                    s0: hillCurveValueHolder.s0,
-                                    slope: hillCurveValueHolder.slope,
-                                    hillSlope: hillCurveValueHolder.coef,
-                                    concentrations: hillCurveValueHolder.conc,
-                                    activities: hillCurveValueHolder.response,
-                                    xAxisLabel: hillCurveValueHolder.xAxisLabel,
-                                    yAxisLabel: hillCurveValueHolder.yAxisLabel
-                            ]
-                    )
-                }"/>
+                                        src="""
+                if ((yMinimum != Double.NaN) &&
+                    (yMaximum !=  Double.NaN)) {
+                    out << """ "${
+                        this.createLink(
+                                controller: 'doseResponseCurve',
+                                action: 'doseResponseCurve',
+                                params: [
+                                        sinf: hillCurveValueHolder.sInf,
+                                        s0: hillCurveValueHolder.s0,
+                                        slope: hillCurveValueHolder.slope,
+                                        hillSlope: hillCurveValueHolder.coef,
+                                        concentrations: hillCurveValueHolder.conc,
+                                        activities: hillCurveValueHolder.response,
+                                        xAxisLabel: hillCurveValueHolder.xAxisLabel,
+                                        yAxisLabel: hillCurveValueHolder.yAxisLabel,
+                                        yNormMin:  yMinimum,
+                                        yNormMax:  yMaximum
+                                ]
+                        )
+                    }"
+                """
+                } else {
+                    out << """ "${
+                        this.createLink(
+                                controller: 'doseResponseCurve',
+                                action: 'doseResponseCurve',
+                                params: [
+                                        sinf: hillCurveValueHolder.sInf,
+                                        s0: hillCurveValueHolder.s0,
+                                        slope: hillCurveValueHolder.slope,
+                                        hillSlope: hillCurveValueHolder.coef,
+                                        concentrations: hillCurveValueHolder.conc,
+                                        activities: hillCurveValueHolder.response,
+                                        xAxisLabel: hillCurveValueHolder.xAxisLabel,
+                                        yAxisLabel: hillCurveValueHolder.yAxisLabel
+                                ]
+                        )
+                    }"
+                """
+                }
+                out << """/>
                                </div>
                            </div>
                         """
