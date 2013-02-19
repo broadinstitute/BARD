@@ -163,6 +163,130 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
     }
 
 
+    /**
+     * All the different types of experimental data going these cells
+     */
+    void "test y normalization"() {
+        given:
+        List<MolSpreadSheetColumnHeader> mssHeaders = []
+        List<MolSpreadSheetColumnHeader> mssHeaders2 = []
+        List<MolSpreadSheetColumnHeader> mssHeaders3 = []
+        List<MolSpreadSheetColumnHeader> mssHeaders4 = []
+        MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        //-- the null SpreadSheetActivityStorage test
+        SpreadSheetActivityStorage spreadSheetActivityStorage1
+        //-- the empty SpreadSheetActivityStorage test
+        SpreadSheetActivityStorage spreadSheetActivityStorage2 = new SpreadSheetActivityStorage()
+        //--  containing only a hillCurveValueHolder with single point data
+        SpreadSheetActivityStorage spreadSheetActivityStorage3 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage3.eid = 234L
+        molSpreadSheetData.columnPointer[234L]=0
+        mssHeaders << new MolSpreadSheetColumnHeader()
+        mssHeaders << new MolSpreadSheetColumnHeader()
+        mssHeaders << new MolSpreadSheetColumnHeader()
+        mssHeaders << new MolSpreadSheetColumnHeader()
+        mssHeaders << new MolSpreadSheetColumnHeader()
+        final HillCurveValueHolder hillCurveValueHolder = new HillCurveValueHolder()
+        hillCurveValueHolder.identifier = 1
+        hillCurveValueHolder.s0 = 1d
+        hillCurveValueHolder.slope = 1d
+        hillCurveValueHolder.coef = 1d
+        hillCurveValueHolder.conc = [1d]
+        hillCurveValueHolder.response = [1d]
+        spreadSheetActivityStorage3.hillCurveValueHolderList  = [hillCurveValueHolder]
+        //--  hillCurveValueHolder with multiple point data is handled differently
+        SpreadSheetActivityStorage spreadSheetActivityStorage4 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage4.eid = 234L
+        mssHeaders[4].molSpreadSheetColSubHeaderList = []
+        hillCurveValueHolder.identifier = 1
+        hillCurveValueHolder.s0 = 1d
+        hillCurveValueHolder.slope = 1d
+        hillCurveValueHolder.coef = 1d
+        hillCurveValueHolder.conc = [1d,2d]
+        hillCurveValueHolder.response = [1d,2d]
+        spreadSheetActivityStorage4.hillCurveValueHolderList  = [hillCurveValueHolder]
+        //--  hillCurveValueHolder with multiple point data is handled differently
+        SpreadSheetActivityStorage spreadSheetActivityStorage5 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage5.eid = 234L
+        mssHeaders[4].molSpreadSheetColSubHeaderList = [new MolSpreadSheetColSubHeader(minimumResponse: 0d, maximumResponse: 47d)]
+        hillCurveValueHolder.identifier = 1
+        hillCurveValueHolder.s0 = 1d
+        hillCurveValueHolder.slope = 1d
+        hillCurveValueHolder.coef = 1d
+        hillCurveValueHolder.conc = [1d,2d]
+        hillCurveValueHolder.response = [1d,2d]
+        spreadSheetActivityStorage5.hillCurveValueHolderList  = [hillCurveValueHolder]
+        // with multiple min and max records
+        SpreadSheetActivityStorage spreadSheetActivityStorage6 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage6.eid = 234L
+        mssHeaders2 << new MolSpreadSheetColumnHeader()
+        mssHeaders2 << new MolSpreadSheetColumnHeader()
+        mssHeaders2 << new MolSpreadSheetColumnHeader()
+        mssHeaders2 << new MolSpreadSheetColumnHeader()
+        mssHeaders2 << new MolSpreadSheetColumnHeader()
+        mssHeaders2[4].molSpreadSheetColSubHeaderList = [new MolSpreadSheetColSubHeader(minimumResponse: 4d, maximumResponse: 8d), new MolSpreadSheetColSubHeader(minimumResponse: 2d, maximumResponse: 94d), new MolSpreadSheetColSubHeader(minimumResponse: 22d, maximumResponse: 23d)]
+        hillCurveValueHolder.identifier = 1
+        hillCurveValueHolder.s0 = 1d
+        hillCurveValueHolder.slope = 1d
+        hillCurveValueHolder.coef = 1d
+        hillCurveValueHolder.conc = [1d,2d]
+        hillCurveValueHolder.response = [1d,2d]
+        spreadSheetActivityStorage6.hillCurveValueHolderList  = [hillCurveValueHolder]
+        // with null min and max
+        SpreadSheetActivityStorage spreadSheetActivityStorage7 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage7.eid = 234L
+        mssHeaders3 << new MolSpreadSheetColumnHeader()
+        mssHeaders3 << new MolSpreadSheetColumnHeader()
+        mssHeaders3 << new MolSpreadSheetColumnHeader()
+        mssHeaders3 << new MolSpreadSheetColumnHeader()
+        mssHeaders3 << new MolSpreadSheetColumnHeader()
+        mssHeaders3[4].molSpreadSheetColSubHeaderList = [new MolSpreadSheetColSubHeader(minimumResponse: Double.NaN, maximumResponse: Double.NaN)]
+        hillCurveValueHolder.identifier = 1
+        hillCurveValueHolder.s0 = 1d
+        hillCurveValueHolder.slope = 1d
+        hillCurveValueHolder.coef = 1d
+        hillCurveValueHolder.conc = [1d,2d]
+        hillCurveValueHolder.response = [1d,2d]
+        spreadSheetActivityStorage7.hillCurveValueHolderList  = [hillCurveValueHolder]
+        //--  degenerate case
+        SpreadSheetActivityStorage spreadSheetActivityStorage8 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage8.eid = 234L
+        spreadSheetActivityStorage8.eid = 234L
+        spreadSheetActivityStorage8.eid = 234L
+        mssHeaders4 << new MolSpreadSheetColumnHeader()
+        mssHeaders4 << new MolSpreadSheetColumnHeader()
+        mssHeaders4 << new MolSpreadSheetColumnHeader()
+        mssHeaders4 << new MolSpreadSheetColumnHeader()
+        mssHeaders4 << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:null )
+        hillCurveValueHolder.identifier = 1
+        hillCurveValueHolder.s0 = 1d
+        hillCurveValueHolder.slope = 1d
+        hillCurveValueHolder.coef = 1d
+        hillCurveValueHolder.conc = [1d,2d]
+        hillCurveValueHolder.response = [1d,2d]
+        spreadSheetActivityStorage8.hillCurveValueHolderList  = [hillCurveValueHolder]
+
+
+        when:
+        String results1 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage1, mssHeaders: mssHeaders, molSpreadSheetData: molSpreadSheetData])
+        String results2 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage2, mssHeaders: mssHeaders, molSpreadSheetData: molSpreadSheetData])
+        String results3 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage3, mssHeaders: mssHeaders, molSpreadSheetData: molSpreadSheetData])
+        String results4 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage4, mssHeaders: mssHeaders, molSpreadSheetData: molSpreadSheetData])
+        String results5 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage5, mssHeaders: mssHeaders2, molSpreadSheetData: molSpreadSheetData])
+        String results6 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage6, mssHeaders: mssHeaders2, molSpreadSheetData: molSpreadSheetData])
+        String results7 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7, mssHeaders: mssHeaders3, molSpreadSheetData: molSpreadSheetData])
+        String results8 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7, mssHeaders: mssHeaders4, molSpreadSheetData: molSpreadSheetData])
+
+        then:
+        results1.contains("Not tested in this experiment")
+        results2.replaceAll("\\s", "") == """<tdclass="molSpreadSheet"property="var1"><p></p>""".toString()
+        results3.contains("molspreadcell")
+        results4.contains("&yNormMin=0.0&yNormMax=47.0")
+        results5.contains("&yNormMin=2.0&yNormMax=94.0")
+        results6.contains("&yNormMin=2.0&yNormMax=94.0")
+        (!results7.contains("yNormMin"))
+        (!results8.contains("yNormMin"))
+    }
 
 
 }

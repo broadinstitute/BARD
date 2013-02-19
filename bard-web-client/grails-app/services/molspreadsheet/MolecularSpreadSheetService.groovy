@@ -535,7 +535,7 @@ class MolecularSpreadSheetService {
             } else {
                 for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList){
                     for (int rowCnt in 0..molSpreadSheetData.rowCount)  {
-                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData?.findSpreadSheetActivity(rowCnt, columnIndex)
+                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData.findSpreadSheetActivity(rowCnt, columnIndex)
                         if (spreadSheetActivityStorage)  {
                             // figure out if the column units are consistent
                             if (molSpreadSheetColSubHeader.unitsInColumn == null) {
