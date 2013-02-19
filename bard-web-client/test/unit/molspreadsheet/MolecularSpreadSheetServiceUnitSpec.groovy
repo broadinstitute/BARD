@@ -217,6 +217,55 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
 
 
 
+
+    void "test prepareMapOfColumnsToAssay min max determination"() {
+        when:
+        final MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'a')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'b')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'c')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'d')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'e',unitsInColumn: "uM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'f',unitsInColumn: "uM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'g')])
+        molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader (molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'h',unitsInColumn: "uM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'i',unitsInColumn: "pM"),
+                new MolSpreadSheetColSubHeader(columnTitle:'j')])
+        molSpreadSheetData.rowPointer[47 as Long]  =  1
+        molSpreadSheetData.rowPointer[48 as Long]  =  2
+        molSpreadSheetData.rowPointer[49 as Long]  =  3
+        molSpreadSheetData.experimentNameList << 'a'
+        MolSpreadSheetCell molSpreadSheetCell0 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell0.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        molSpreadSheetCell0.spreadSheetActivityStorage.hillCurveValueHolderList =[(new HillCurveValueHolder(response: [20d, 10d, 30d], conc: [0.01d, 0.1d, 1d])) ]
+         MolSpreadSheetCell molSpreadSheetCell1 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell1.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        molSpreadSheetCell1.spreadSheetActivityStorage.hillCurveValueHolderList =[(new HillCurveValueHolder(response: [ 0.8d, 0.7d, 0.9d], conc: [0.01d, 0.1d, 1d])) ]
+        MolSpreadSheetCell molSpreadSheetCell2 = new MolSpreadSheetCell("2.1", MolSpreadSheetCellType.numeric)
+        molSpreadSheetCell2.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
+        molSpreadSheetData.mssData.put("0_4", molSpreadSheetCell0)
+        molSpreadSheetData.mssData.put("1_4", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("2_4", molSpreadSheetCell2)
+        molSpreadSheetData.mssData.put("0_5", molSpreadSheetCell0)
+        molSpreadSheetData.mssData.put("1_5", molSpreadSheetCell1)
+        molSpreadSheetData.mssData.put("2_5", molSpreadSheetCell2)
+        service.prepareMapOfColumnsToAssay(molSpreadSheetData)
+        println 'hello'
+
+        then: "we want to pull out the active values"
+        assertNotNull molSpreadSheetData
+        molSpreadSheetData.mapColumnsToAssay.size() == 10
+        molSpreadSheetData.mssHeaders.size() == 6
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[0].minimumResponse == 0.7d
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[0].maximumResponse == 30d
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[1].minimumResponse == 0.7d
+        molSpreadSheetData.mssHeaders[4].molSpreadSheetColSubHeaderList[1].maximumResponse == 30d
+    }
+
+
+
+
+
     void "test convertSpreadSheetActivityToCompoundInformation"() {
         given:
         final List<SpreadSheetActivity> spreadSheetActivityList = []

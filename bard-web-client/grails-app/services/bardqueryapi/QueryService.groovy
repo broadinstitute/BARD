@@ -17,7 +17,11 @@ import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
+
 import bard.core.rest.spring.project.ProjectStep
+
+import bardqueryapi.experiment.ExperimentBuilder
+
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -149,7 +153,7 @@ class QueryService implements IQueryService {
         if (capProjectIds) {
             //TODO: Add filters
             final SearchParams searchParams = this.queryHelperService.constructSearchParams("", top, skip, searchFilters)
-            final ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capProjectIds, searchParams, [:])
+            final ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capProjectIds, searchParams)
             final List<ProjectAdapter> adapters = this.queryHelperService.projectsToAdapters(projectResult)
             foundProjectAdapters.addAll(adapters)
             facets = projectResult.getFacetsToValues()
@@ -292,6 +296,21 @@ class QueryService implements IQueryService {
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
+    WebQueryTableModel showExperimentalData(Long experimentId,
+                                            GroupTypes groupTypes,
+                                            List<FilterTypes> filterTypes,
+                                            SearchParams searchParams) {
+        Integer top = searchParams.top
+        Integer skip = searchParams.skip
+        NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
+        if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
+            normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
+        }
+        Map m = findExperimentDataById(experimentId, top, skip, normalizeAxis)
+        ExperimentBuilder experimentBuilder = new ExperimentBuilder()
+        return experimentBuilder.buildModel(m)
+
+    }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service
      * @param experimentId

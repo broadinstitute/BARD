@@ -152,8 +152,8 @@ class MolecularSpreadSheetService {
         String etag = null
         for (ExperimentSearch experiment : experimentList) {
             List<Long> idList = []
-            if (experiment.id) {
-                idList = this.experimentRestService.compoundsForExperiment(experiment.id)
+            if (experiment.bardExptId) {
+                idList = this.experimentRestService.compoundsForExperiment(experiment.bardExptId)
             }
             if (etag == null) {
                 etag = this.compoundRestService.newETag("${new Date().toString()}", idList);
@@ -180,9 +180,9 @@ class MolecularSpreadSheetService {
         for (ExperimentSearch experiment in experimentList) {
             ExperimentData experimentSearchResults
             if (etag) {
-                experimentSearchResults = experimentRestService.activities(experiment.id, etag)
+                experimentSearchResults = experimentRestService.activities(experiment.bardExptId, etag)
             } else {
-                experimentSearchResults = experimentRestService.activities(experiment.id)
+                experimentSearchResults = experimentRestService.activities(experiment.bardExptId)
             }
 
             // Now step through the result set and pull back  one value for each compound
@@ -378,9 +378,10 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'CID')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'UNM Promiscuity Analysis')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Active vs Tested across all Assay Definitions')])
-        for (ExperimentSearch experimentSearch in experimentList) {
-            molSpreadSheetData.experimentNameList << "${experimentSearch.assayId.toString()}".toString()
-            molSpreadSheetData.experimentFullNameList << "${experimentSearch.name.toString()}".toString()
+
+        for (ExperimentSearch experiment : experimentList) {
+            molSpreadSheetData.experimentNameList << "${experiment.bardAssayId.toString()}".toString()
+            molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}".toString()
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[])
         }
     }
@@ -409,7 +410,7 @@ class MolecularSpreadSheetService {
             //TODO: We probably could post all the ids to this url. We need to investigate
             final List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId)
             for (ExperimentSearch experimentSearch in experiments)  {
-                if (!allExperiments*.exptId.contains(experimentSearch.exptId) )
+                if (!allExperiments*.bardExptId.contains(experimentSearch.bardExptId) )
                     allExperiments <<  experimentSearch
             }
          }
@@ -441,9 +442,9 @@ class MolecularSpreadSheetService {
             if (experiments) {
 //                allExperiments.addAll(experiments)
                 for (ExperimentSearch experimentSearch in experiments) {
-                    if (!allExperiments*.exptId.contains(experimentSearch.exptId)){
+                    if (!allExperiments*.bardExptId.contains(experimentSearch.bardExptId)){
                         allExperiments <<  experimentSearch
-                        mapExperimentIdsToCapAssayIds[experimentSearch.assayId] =  assay.capAssayId
+                        mapExperimentIdsToCapAssayIds[experimentSearch.bardAssayId] =  assay.capAssayId
                     }
 
                 }
@@ -499,7 +500,7 @@ class MolecularSpreadSheetService {
         final List<ExperimentSearch> allExperiments = []
         if (projectResult) {
             for (Project project : projectResult.projects) {
-                ProjectExpanded projectExpanded = projectRestService.getProjectById(project.projectId)
+                ProjectExpanded projectExpanded = projectRestService.getProjectById(project.bardProjectId)
                 for (Assay assay in projectExpanded?.assays){
                     if (!mapExperimentIdsToCapAssayIds.containsKey(assay.bardAssayId)) {
                         mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
@@ -535,14 +536,48 @@ class MolecularSpreadSheetService {
             } else {
                 for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList){
                     for (int rowCnt in 0..molSpreadSheetData.rowCount)  {
-                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData?.findSpreadSheetActivity(rowCnt, columnIndex)
+                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData.findSpreadSheetActivity(rowCnt, columnIndex)
                         if (spreadSheetActivityStorage)  {
+                            // figure out if the column units are consistent
                             if (molSpreadSheetColSubHeader.unitsInColumn == null) {
                                 molSpreadSheetColSubHeader.unitsInColumn =  spreadSheetActivityStorage.dictionaryId.toString()
                                 molSpreadSheetColSubHeader.unitsInColumnAreUniform = true
                             }  else {
                                 if (molSpreadSheetColSubHeader.unitsInColumn != spreadSheetActivityStorage.dictionaryId.toString()) {
                                     molSpreadSheetColSubHeader.unitsInColumnAreUniform = false
+                                }
+                            }
+                            // extract a minimum and maximum value for any responses
+                            if (spreadSheetActivityStorage.hillCurveValueHolderList.size()>0) {
+                                for (HillCurveValueHolder hillCurveValueHolder in spreadSheetActivityStorage.hillCurveValueHolderList) {
+                                    if ((hillCurveValueHolder.response!=null)&&
+                                        (hillCurveValueHolder.response.size()>0)){
+                                        Double maxResponse =  hillCurveValueHolder.response[0]
+                                        for (Double instDouble in hillCurveValueHolder.response){
+                                            if (instDouble>maxResponse) {
+                                                maxResponse =  instDouble
+                                            }
+                                        }
+                                        if (maxResponse != Double.NaN){
+                                            if ((molSpreadSheetColSubHeader.maximumResponse == Double.NaN)  ||
+                                                    (maxResponse>molSpreadSheetColSubHeader.maximumResponse)) {
+                                                molSpreadSheetColSubHeader.maximumResponse =  maxResponse
+                                            }
+                                        }
+                                        Double minResponse =  hillCurveValueHolder.response[0]
+                                        for (Double instDouble in hillCurveValueHolder.response){
+                                            if (instDouble<minResponse) {
+                                                minResponse =  instDouble
+                                            }
+                                        }
+                                        if (minResponse != Double.NaN){
+                                            if ((molSpreadSheetColSubHeader.minimumResponse == Double.NaN)  ||
+                                                    (minResponse<molSpreadSheetColSubHeader.minimumResponse)) {
+                                                molSpreadSheetColSubHeader.minimumResponse =  minResponse
+                                            }
+                                        }
+
+                                    }
                                 }
                             }
                         }

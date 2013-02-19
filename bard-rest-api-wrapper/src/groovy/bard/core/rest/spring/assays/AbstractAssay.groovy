@@ -26,6 +26,10 @@ public class AbstractAssay extends JsonUtil {
     private long classification;
     @JsonProperty("name")
     private String name;
+
+
+    @JsonProperty("title")
+    private String title;
     @JsonProperty("source")
     private String source;
     @JsonProperty("grantNo")
@@ -62,7 +66,7 @@ public class AbstractAssay extends JsonUtil {
 
     public long getId() {
         if (this.bardAssayId) {
-            return bardAssayId
+            return this.bardAssayId
         }
         return this.assayId
     }
@@ -257,6 +261,14 @@ public class AbstractAssay extends JsonUtil {
     @JsonProperty("comments")
     public void setComments(String comments) {
         this.comments = comments;
+    }
+    @JsonProperty("title")
+    public String getTitle() {
+        return title
+    }
+    @JsonProperty("title")
+    public void setTitle(String title) {
+        this.title = title
     }
 
 }

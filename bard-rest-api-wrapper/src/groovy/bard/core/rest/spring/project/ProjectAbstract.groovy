@@ -1,7 +1,7 @@
 package bard.core.rest.spring.project
 
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.util.Document
+
 import bard.core.rest.spring.util.JsonUtil
 import bard.core.rest.spring.util.Target
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -10,8 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjectAbstract extends JsonUtil {
 
-
-    private long projectId;
+    @JsonProperty("bardProjectId")
+    private long bardProjectId;
     @JsonProperty("capProjectId")
     private long capProjectId
 
@@ -65,18 +65,18 @@ public class ProjectAbstract extends JsonUtil {
     @JsonProperty("experimentCount")
     private long experimentCount;
 
-    @JsonProperty("projectId")
-    public long getProjectId() {
-        return projectId;
+    @JsonProperty("bardProjectId")
+    public long getBardProjectId() {
+        return bardProjectId;
     }
 
     public long getId() {
-        return this.getProjectId()
+        return this.getBardProjectId()
     }
 
-    @JsonProperty("projectId")
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
+    @JsonProperty("bardProjectId")
+    public void setBardProjectId(long projectId) {
+        this.bardProjectId = projectId;
     }
 
     @JsonProperty("capProjectId")
@@ -92,13 +92,13 @@ public class ProjectAbstract extends JsonUtil {
 
     @JsonProperty("proj_id")
     public long getProjId() {
-        return this.projectId;
+        return this.bardProjectId;
     }
 
 
     @JsonProperty("proj_id")
     public void setProjId(long projId) {
-        this.projectId = projId;
+        this.bardProjectId = projId;
     }
 
     @JsonProperty("category")

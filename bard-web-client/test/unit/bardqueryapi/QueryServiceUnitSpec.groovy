@@ -605,7 +605,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findProjectsByCapIds(capIds, 10, 0, [])
         then:
-        _ * projectRestService.searchProjectsByCapIds(_, _, _) >> {projectResult}
+        _ * projectRestService.searchProjectsByCapIds(_, _) >> {projectResult}
         _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
         _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
         assert map.projectAdapters.size() == foundMap.projectAdapters.size()

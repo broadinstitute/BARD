@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.Probe
+
 import bard.core.rest.spring.compounds.Compound
-import bard.core.rest.spring.util.Document
 
 @Unroll
 class ProjectUnitSpec extends Specification {
@@ -22,7 +21,7 @@ class ProjectUnitSpec extends Specification {
 
     public static final String PROJECT = '''
     {
-       "projectId": 17,
+       "bardProjectId": 17,
        "category": 0,
        "type": 0,
        "classification": 0,
@@ -117,7 +116,7 @@ class ProjectUnitSpec extends Specification {
         when:
         final Project project = objectMapper.readValue(PROJECT_FROM_FREE_TEXT, Project.class)
         then:
-        assert project.projId == project.projectId
+        assert project.projId == project.bardProjectId
     }
 
     void "test serialization to Project"() {
@@ -125,7 +124,7 @@ class ProjectUnitSpec extends Specification {
         final Project project = objectMapper.readValue(PROJECT, Project.class)
         then:
         assert project.getId() == 17
-        assert project.getProjectId() == 17
+        assert project.getBardProjectId() == 17
         assert project.getName() == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
         assert project.getType() == 0
         assert project.getCategory() == 0

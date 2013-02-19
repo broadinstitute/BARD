@@ -81,47 +81,58 @@ public class ResultData extends JsonUtil {
     }
 
     public ResponseClassEnum getResponseClassEnum() {
-       return ResponseClassEnum.toEnum(this.responseClass)
+        return ResponseClassEnum.toEnum(this.responseClass)
     }
-    public boolean hasConcentrationResponseSeries(){
+
+    public boolean hasConcentrationResponseSeries() {
         return getResponseClassEnum() == ResponseClassEnum.CR_SER
     }
-    public boolean hasPriorityElements(){
-        if(this.priorityElements){
+
+    public boolean hasPriorityElements() {
+        if (this.priorityElements) {
             return true
         }
         return false
     }
-    public String getOutcome(){
-        for (RootElement rootElement: this.rootElements){
-            if(rootElement.hasOutcome()){
+
+    public String getOutcome() {
+        for (RootElement rootElement : this.rootElements) {
+            if (rootElement.hasOutcome()) {
                 return rootElement.value
             }
         }
         return ""
     }
-    public boolean isMapped(){
+
+    public boolean isMapped() {
         return getResponseClassEnum().isMapped()
+    }
+
+    boolean hasPlot() {
+        return this.responseClassEnum == ResponseClassEnum.CR_SER
     }
 }
 enum ResponseClassEnum {
-    SP("Single Point",true),
-    CR_SER("Concentration Response",true),
-    CR_NO_SER("Probable Concentration Response but no Series",false),
-    UNCLASS("Unclassified",false),
-    MULTCONC("Multiple Test Concentrations",false)
+    SP("Single Point", true),
+    CR_SER("Concentration Response", true),
+    CR_NO_SER("Probable Concentration Response but no Series", false),
+    UNCLASS("Unclassified", false),
+    MULTCONC("Multiple Test Concentrations", false)
 
     final String description
     final boolean isMapped
+
     ResponseClassEnum(String description, boolean isMapped) {
         this.description = description
         this.isMapped = isMapped
     }
-    boolean isMapped(){
+
+    boolean isMapped() {
         return this.isMapped
     }
-    static ResponseClassEnum toEnum(String representation){
-       return ResponseClassEnum.valueOf(representation)
+
+    static ResponseClassEnum toEnum(String representation) {
+        return ResponseClassEnum.valueOf(representation)
     }
 
 
