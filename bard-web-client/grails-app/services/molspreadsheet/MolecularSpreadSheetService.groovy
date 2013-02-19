@@ -151,8 +151,8 @@ class MolecularSpreadSheetService {
         String etag = null
         for (ExperimentSearch experiment : experimentList) {
             List<Long> idList = []
-            if (experiment.id) {
-                idList = this.experimentRestService.compoundsForExperiment(experiment.id)
+            if (experiment.bardExptId) {
+                idList = this.experimentRestService.compoundsForExperiment(experiment.bardExptId)
             }
             if (etag == null) {
                 etag = this.compoundRestService.newETag("${new Date().toString()}", idList);
@@ -179,9 +179,9 @@ class MolecularSpreadSheetService {
         for (ExperimentSearch experiment in experimentList) {
             ExperimentData experimentSearchResults
             if (etag) {
-                experimentSearchResults = experimentRestService.activities(experiment.id, etag)
+                experimentSearchResults = experimentRestService.activities(experiment.bardExptId, etag)
             } else {
-                experimentSearchResults = experimentRestService.activities(experiment.id)
+                experimentSearchResults = experimentRestService.activities(experiment.bardExptId)
             }
 
             // Now step through the result set and pull back  one value for each compound
@@ -371,7 +371,7 @@ class MolecularSpreadSheetService {
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'UNM Promiscuity Analysis')])
         molSpreadSheetData.mssHeaders << new  MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[new MolSpreadSheetColSubHeader(columnTitle:'Active vs Tested across all Assay Definitions')])
         for (ExperimentSearch experiment : experimentList) {
-            molSpreadSheetData.experimentNameList << "${experiment.assayId.toString()}".toString()
+            molSpreadSheetData.experimentNameList << "${experiment.bardAssayId.toString()}".toString()
             molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}".toString()
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[])
         }

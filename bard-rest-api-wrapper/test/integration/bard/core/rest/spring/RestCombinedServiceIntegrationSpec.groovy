@@ -56,7 +56,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         and:
 
         for (Project project : projects) {
-            assert project.getProjectId()
+            assert project.getBardProjectId()
             assert project.getCapProjectId()
         }
         where:
@@ -154,7 +154,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         int dataCount = 0
         for (ExperimentSearch experiment in allExperiments) {
 
-            ExperimentData experimentData = this.experimentRestService.activities(experiment.id, etag)
+            ExperimentData experimentData = this.experimentRestService.activities(experiment.bardExptId, etag)
             dataCount = dataCount + experimentData.activities.size()
         }
 
@@ -262,7 +262,7 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         assert project
 
         when:
-        List<ExperimentSearch> experiments = this.projectRestService.findExperimentsByProjectId(project.projectId)
+        List<ExperimentSearch> experiments = this.projectRestService.findExperimentsByProjectId(project.bardProjectId)
         then:
         assert experiments
     }

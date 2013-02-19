@@ -623,7 +623,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         int dataCount = 0
         for (ExperimentSearch experiment in allExperiments) {
 
-            ExperimentData experimentIterator = experimentRestService.activities(experiment.id, etag)
+            ExperimentData experimentIterator = experimentRestService.activities(experiment.bardExptId, etag)
             for (Activity experimentValue : experimentIterator.activities) {
                 dataCount++
             }

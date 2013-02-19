@@ -16,14 +16,14 @@
     <b>Assay ID :
         <g:if test="${searchString}">
             <g:link controller="bardWebInterface" action="showAssay"
-                    id="${experimentDataMap?.experiment?.adid}" params='[searchString: "${searchString}"]'>
-                ${experimentDataMap?.experiment?.adid}
+                    id="${experimentDataMap?.experiment?.bardAssayId}" params='[searchString: "${searchString}"]'>
+                ${experimentDataMap?.experiment?.capAssayId}
             </g:link>
         </g:if>
         <g:else>
             <g:link controller="bardWebInterface" action="showAssay"
-                    id="${experimentDataMap?.experiment?.adid}">
-                ${experimentDataMap?.experiment?.adid}
+                    id="${experimentDataMap?.experiment?.bardAssayId}">
+                ${experimentDataMap?.experiment?.capAssayId}
             </g:link>
         </g:else>
     </b>

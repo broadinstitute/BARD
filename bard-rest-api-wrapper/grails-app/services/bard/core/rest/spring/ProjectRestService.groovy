@@ -41,23 +41,22 @@ class ProjectRestService extends AbstractRestService {
 
     }
 
-
     /**
      *
      * @param searchParams
      * @param map of etags
      * @return {@link bard.core.rest.spring.project.ProjectResult}
      */
-    public ProjectResult searchProjectsByCapIds(final SearchParams searchParams, Map<String, Long> etags) {
+    public List<Project> searchProjectsByCapIds(final SearchParams searchParams, Map<String, Long> etags) {
+
         if (etags) {
             final String etag = firstETagFromMap(etags)
             final String urlString = buildQueryForETag(searchParams, etag)
             final URL url = new URL(urlString)
-            final ProjectResult projectSearchResult = (ProjectResult) getForObject(url.toURI(), ProjectResult.class)
-            projectSearchResult.setEtags(etags)
-            return projectSearchResult
+            final List<Project> projects = getForObject(url.toURI(), List.class) as List<Project>
+            return projects
         }
-        return null
+        return []
     }
     /**
      *
@@ -73,7 +72,7 @@ class ProjectRestService extends AbstractRestService {
             HttpEntity<List> entity = new HttpEntity<List>(requestHeaders);
 
 
-            final String urlString = buildSearchByCapIdURLs(capIds, searchParams,"capProjectId:")
+            final String urlString = buildSearchByCapIdURLs(capIds, searchParams, "capProjectId:")
             final URL url = new URL(urlString)
             final HttpEntity<ProjectResult> exchange = getExchange(url.toURI(), entity, ProjectResult.class) as HttpEntity<ProjectResult>
             final ProjectResult projectSearchResult = exchange.getBody()
@@ -82,26 +81,6 @@ class ProjectRestService extends AbstractRestService {
             extractETagsFromResponseHeader(headers, skip, etags)
             projectSearchResult.setEtags(etags)
             return projectSearchResult
-        }
-
-        return null
-
-    }
-    /**
-     *
-     * @param list of cap project ids
-     * @param searchParams
-     * @param map of etags
-     * @return {@link bard.core.rest.spring.project.ProjectResult}
-     */
-    public ProjectResult searchProjectsByCapIds(final List<Long> capIds, final SearchParams searchParams, Map<String, Long> etags) {
-
-        if (etags) {
-            return searchProjectsByCapIds(searchParams, etags)
-        }
-
-        if (capIds) {
-            return searchProjectsByCapIds(capIds, searchParams)
         }
 
         return null

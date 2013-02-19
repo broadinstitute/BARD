@@ -10,6 +10,7 @@ import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.project.Project
 
 @Unroll
 @TestFor(ProjectRestService)
@@ -28,9 +29,9 @@ class ProjectRestServiceUnitSpec extends Specification {
 
     void "searchProjectsByCapIds #label"() {
         when:
-        ProjectResult projectResult = service.searchProjectsByCapIds(capIds, searchParams, etags)
+        List<Project> projectResult = service.searchProjectsByCapIds(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {new ProjectResult()}
+        restTemplate.getForObject(_, _) >> {[new Project()]}
         assert (projectResult != null) == expected
         where:
         label        | searchParams                       | etags          | capIds | expected
@@ -41,15 +42,13 @@ class ProjectRestServiceUnitSpec extends Specification {
 
     void "searchProjectsByCapIds(searchParams, etags) #label"() {
         when:
-        ProjectResult projectResult = service.searchProjectsByCapIds(searchParams, etags)
+        List<Project> projectResult  = service.searchProjectsByCapIds(searchParams, etags)
         then:
-        restTemplate.getForObject(_, _) >> {new ProjectResult()}
+        restTemplate.getForObject(_, _) >> {[new Project()]}
         assert (projectResult != null) == expected
         where:
         label           | searchParams                       | etags          | expected
         "With ETags"    | new SearchParams(skip: 0, top: 10) | ["e1233": 123] | true
-        "With No ETags" | new SearchParams(skip: 0, top: 10) | [:]            | false
-
     }
 
     void "searchProjectsByCapIds(final List<Long> capIds, final SearchParams searchParams) #label"() {
@@ -78,7 +77,7 @@ class ProjectRestServiceUnitSpec extends Specification {
     void "buildSearchByCapIdURLs #label"() {
 
         when:
-        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams,"capProjectId:")
+        String resourceURL = service.buildSearchByCapIdURLs(capIds, searchParams, "capProjectId:")
         then:
         assert resourceURL == expectedURL
         where:

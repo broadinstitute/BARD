@@ -16,7 +16,7 @@ class ProjectAdapterUnitSpec extends Specification {
 
     public static final String PROJECT = '''
     {
-       "projectId": 17,
+       "bardProjectId": 17,
        "category": 0,
        "type": 0,
        "classification": 0,
@@ -95,7 +95,7 @@ class ProjectAdapterUnitSpec extends Specification {
 
     String EXPANDED_PROJECT='''
 {
-    "projectId": 31,
+    "bardProjectId": 31,
     "category": 0,
     "type": 0,
     "classification": 0,

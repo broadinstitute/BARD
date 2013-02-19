@@ -146,9 +146,9 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void "activities with experiment only"() {
         given:
         final Long experimentId = 200
-        final ExperimentSearch experimentSearch = new ExperimentSearch(exptId: experimentId)
+        final ExperimentSearch experimentSearch = new ExperimentSearch(bardExptId: experimentId)
         when:
-        ExperimentData experimentData = service.activities(experimentSearch.id)
+        ExperimentData experimentData = service.activities(experimentSearch.bardExptId)
         then:
         this.restTemplate.getForObject(_, _) >> {new ExperimentData(activities: [new Activity()])}
         assert experimentData

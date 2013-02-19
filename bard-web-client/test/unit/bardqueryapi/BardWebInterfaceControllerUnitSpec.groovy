@@ -137,7 +137,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         Map experimentData = [total: 2, experimentId: 222, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId: 1)]
+                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', bardAssayId: 1, capAssayId: 1)]
         params.id = "222"
         request.addHeader("X-Requested-With", "XMLHttpRequest")
         when:
@@ -160,7 +160,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         "EID- Not Found"               | 234  | HttpServletResponse.SC_OK          | null
         "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
                 new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', assayId: 1)]
+                role: ExperimentRole.Counterscreen, experiment: new ExperimentSearch(name: 'name', bardAssayId: 1,capAssayId: 1)]
     }
 
     void "test showExperiment With Exception #label"() {
@@ -1206,7 +1206,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     ProjectAdapter buildProjectAdapter(final Long pid, final String name) {
         final Project project = new Project()
         project.setName(name)
-        project.setProjectId(pid)
+        project.setBardProjectId(pid)
         return new ProjectAdapter(project)
     }
 }

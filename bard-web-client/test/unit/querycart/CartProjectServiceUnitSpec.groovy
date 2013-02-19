@@ -18,7 +18,7 @@ import bard.core.rest.spring.project.Project
 class CartProjectServiceUnitSpec extends Specification {
 
     IQueryService queryService
-    @Shared ProjectAdapter projectAdapter = new ProjectAdapter(new Project(name: "name1", projectId: 1L))
+    @Shared ProjectAdapter projectAdapter = new ProjectAdapter(new Project(name: "name1", bardProjectId: 1L))
 
     void setup() {
         queryService = Mock(QueryService)
