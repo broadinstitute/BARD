@@ -537,12 +537,46 @@ class MolecularSpreadSheetService {
                     for (int rowCnt in 0..molSpreadSheetData.rowCount)  {
                         SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData?.findSpreadSheetActivity(rowCnt, columnIndex)
                         if (spreadSheetActivityStorage)  {
+                            // figure out if the column units are consistent
                             if (molSpreadSheetColSubHeader.unitsInColumn == null) {
                                 molSpreadSheetColSubHeader.unitsInColumn =  spreadSheetActivityStorage.dictionaryId.toString()
                                 molSpreadSheetColSubHeader.unitsInColumnAreUniform = true
                             }  else {
                                 if (molSpreadSheetColSubHeader.unitsInColumn != spreadSheetActivityStorage.dictionaryId.toString()) {
                                     molSpreadSheetColSubHeader.unitsInColumnAreUniform = false
+                                }
+                            }
+                            // extract a minimum and maximum value for any responses
+                            if (spreadSheetActivityStorage.hillCurveValueHolderList.size()>0) {
+                                for (HillCurveValueHolder hillCurveValueHolder in spreadSheetActivityStorage.hillCurveValueHolderList) {
+                                    if ((hillCurveValueHolder.response!=null)&&
+                                        (hillCurveValueHolder.response.size()>0)){
+                                        Double maxResponse =  hillCurveValueHolder.response[0]
+                                        for (Double instDouble in hillCurveValueHolder.response){
+                                            if (instDouble>maxResponse) {
+                                                maxResponse =  instDouble
+                                            }
+                                        }
+                                        if (maxResponse != Double.NaN){
+                                            if ((molSpreadSheetColSubHeader.maximumResponse == Double.NaN)  ||
+                                                    (maxResponse>molSpreadSheetColSubHeader.maximumResponse)) {
+                                                molSpreadSheetColSubHeader.maximumResponse =  maxResponse
+                                            }
+                                        }
+                                        Double minResponse =  hillCurveValueHolder.response[0]
+                                        for (Double instDouble in hillCurveValueHolder.response){
+                                            if (instDouble<minResponse) {
+                                                minResponse =  instDouble
+                                            }
+                                        }
+                                        if (minResponse != Double.NaN){
+                                            if ((molSpreadSheetColSubHeader.minimumResponse == Double.NaN)  ||
+                                                    (minResponse<molSpreadSheetColSubHeader.minimumResponse)) {
+                                                molSpreadSheetColSubHeader.minimumResponse =  minResponse
+                                            }
+                                        }
+
+                                    }
                                 }
                             }
                         }
