@@ -286,4 +286,49 @@ class QueryCartControllerUnitSpec extends Specification {
         "bad type"  | ID_IN_CART | 'bad'
         "bad ID"    | 'bad'      | TYPE_IN_CART
     }
+
+
+    void "test successful addItems for #label"() {
+        given:
+        String itemsJSON = "[{'id': ${id}, 'type': ${type}, 'name': ${name}, 'smiles': ${smiles}, 'numActive': 1, 'numAssays': 3}]"
+        params.items = itemsJSON
+
+        when:
+        1 * queryCartService.addToShoppingCart(_ as QueryItem)
+
+        controller.addItems()
+
+        then:
+        assert response.status == HttpServletResponse.SC_OK
+
+        where:
+        label                        | type                          | id         | name   | smiles
+        "add new assay w/summary"    | QueryItemType.AssayDefinition | 2          | 'Test' | null
+        "add new compound w/summary" | QueryItemType.Compound        | 3          | 'Test' | 'C'
+        "add new project w/summary"  | QueryItemType.Project         | 4          | 'Test' | null
+        "add new assay w/details"    | QueryItemType.AssayDefinition | 5          | 'Test' | null
+        "add new compound w/details" | QueryItemType.Compound        | 6          | 'Test' | 'C'
+        "add new project w/details"  | QueryItemType.Project         | 7          | 'Test' | null
+        "add assay already in cart"  | TYPE_IN_CART                  | ID_IN_CART | 'foo'  | null
+    }
+
+
+    void "test failed addItems for #label"() {
+        given:
+        String itemsJSON = "[{'id': ${id}, 'type': ${type}, 'name': 'Test', 'smiles': 'C=C', 'numActive': 1, 'numAssays': 3}]"
+        params.items = itemsJSON
+
+        when:
+        0 * queryCartService.addToShoppingCart(_ as QueryItem)
+        controller.addItems()
+
+        then:
+        assert response.status == expectedStatus
+
+        where:
+        label          | type                  | id    | expectedStatus
+        "unknown type" | 'temp'                | 6     | HttpServletResponse.SC_BAD_REQUEST
+        "invalid id"   | QueryItemType.Project | -1    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+        "bad id"       | QueryItemType.Project | 'bad' | HttpServletResponse.SC_BAD_REQUEST
+    }
 }
