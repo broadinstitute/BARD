@@ -27,7 +27,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "searchProjectsByCapIds #label"() {
         when:
-        ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capIds, searchParams, etags)
+        ProjectResult projectResult = projectRestService.searchProjectsByCapIds(capIds, searchParams)
         then:
         assert (projectResult != null) == expected
         where:
@@ -37,22 +37,19 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-//    TODO: Uncomment when NCGC fixes
-//
-//    void "searchProjectsByCapIds withETags #label"() {
-//        given: "That we have made a request with some CAP Ids that returns an etag"
-//        ProjectResult projectResultWithIds = projectRestService.searchProjectsByCapIds(capIds, searchParams, etags)
-//        when: "We use the returned etags to make another request"
-//        ProjectResult projectResultWithETags = projectRestService.searchProjectsByCapIds([], searchParams, projectResultWithIds.etags)
-//        then: "We get back the expected results"
-//        assert (projectResultWithETags != null) == expected
-//        println projectResultWithETags
-//        where:
-//        label           | searchParams                       | etags | capIds   | expected
-//        "With ETags"    | new SearchParams(skip: 0, top: 10) | [:]   | CAP_PIDS | true
-//        "With no ETags" | new SearchParams(skip: 0, top: 10) | [:]   | []       | false
-//
-//    }
+
+
+    void "searchProjectsByCapIds withETags #label"() {
+        given: "That we have made a request with some CAP Ids that returns an etag"
+        ProjectResult projectResultWithIds = projectRestService.searchProjectsByCapIds(capIds, searchParams)
+        when: "We use the returned etags to make another request"
+        List<Project> projectResultWithETags = projectRestService.searchProjectsByCapIds(searchParams, projectResultWithIds.etags)
+        then: "We get back the expected results"
+        assert (projectResultWithETags != null) == expected
+        where:
+        label           | searchParams                       | capIds   | expected
+        "With ETags"    | new SearchParams(skip: 0, top: 10) | CAP_PIDS | true
+    }
 
     void testProjectSuggestions() {
         given:
@@ -151,7 +148,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         final ProjectExpanded project = projectRestService.getProjectById(pid)
         then: "An ProjectSearchResult is returned with the expected information"
         assert project
-        assert pid == project.projectId
+        assert pid == project.bardProjectId
         assert project.id != null
         assert project.name
         assert project.description

@@ -812,7 +812,10 @@ protection of diseased and normal cells, respectively. This assay will summarize
 
     private void constructMockExperiment() {
         MockExperiment mockedExperiment = new MockExperiment()
-        mockedExperiment.exptId = 1904
+        mockedExperiment.bardExptId = 1904
+        mockedExperiment.capExptId=1904
+        mockedExperiment.bardAssayId=1904
+        mockedExperiment.capAssayId=1904
         mockedExperiment.type = 2
         mockedExperiment.classification = 1
         mockedExperiment.category = 0
@@ -826,11 +829,11 @@ Assay Providers:\n
 Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.pubchemAid = 2528
-        mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
+        mockExperimentMap.put(mockedExperiment.bardExptId, mockedExperiment)
 
 
         mockedExperiment = new MockExperiment()
-        mockedExperiment.exptId = 2757
+        mockedExperiment.bardExptId= 2757
         mockedExperiment.type = ExperimentType.Summary.ordinal()
         mockedExperiment.classification = ExperimentRole.Primary.ordinal()
         mockedExperiment.category = ExperimentCategory.MLPCN.ordinal()
@@ -846,12 +849,12 @@ Assay Providers:\n
 Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.pubchemAid = 2386
-        mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
+        mockExperimentMap.put(mockedExperiment.bardExptId, mockedExperiment)
 
 
         mockedExperiment = new MockExperiment()
-        mockedExperiment.exptId = 3470
-        mockedExperiment.assayId = 37
+        mockedExperiment.bardExptId = 3470
+        mockedExperiment.bardAssayId = 37
         mockedExperiment.type = ExperimentType.Confirmatory.ordinal()
         mockedExperiment.classification = 0
         mockedExperiment.category = 1
@@ -863,7 +866,7 @@ Assay Providers:\n
 Screening Center PI: Austin, C.P.\n
 Screening Center: NIH Chemical Genomics Center [NCGC]'''
         mockedExperiment.pubchemAid = 2712
-        mockExperimentMap.put(mockedExperiment.id, mockedExperiment)
+        mockExperimentMap.put(mockedExperiment.bardExptId, mockedExperiment)
     }
 
     @Override

@@ -13,8 +13,10 @@ class ExperimentSearchUnitSpec extends Specification {
 
     final String EXPERIMENT_SEARCH_JSON = '''
     {
-       "exptId": 1472,
-       "assayId": 1472,
+       "bardExptId": 1472,
+       "bardAssayId": 1472,
+       "capAssayId": 1472,
+       "capExptId": 1472,
        "pubchemAid": 1460,
        "category": 2,
        "type": 2,
@@ -46,7 +48,10 @@ class ExperimentSearchUnitSpec extends Specification {
         final ExperimentSearch experimentSearch = objectMapper.readValue(EXPERIMENT_SEARCH_JSON, ExperimentSearch.class)
         then:
         assert experimentSearch
-        assert experimentSearch.exptId == 1472
+        assert experimentSearch.bardExptId == 1472
+        assert experimentSearch.bardAssayId == 1472
+        assert experimentSearch.capAssayId== 1472
+        assert experimentSearch.capExptId == 1472
         assert experimentSearch.resourcePath == "/experiments/1472"
         assert experimentSearch.projectIdList.size() == 1
         assert !experimentSearch.hasProbe
@@ -63,10 +68,9 @@ class ExperimentSearchUnitSpec extends Specification {
         assert experimentSearch.type == 2
         assert experimentSearch.summary == 0
         assert experimentSearch.assays == 0
-        assert experimentSearch.assayId == 1472
+        assert experimentSearch.bardAssayId == 1472
         assert experimentSearch.classification == 0
-        assert experimentSearch.getAdid() == 1472
-        assert experimentSearch.getId() == 1472
+        assert experimentSearch.getBardExptId() == 1472
         assert experimentSearch.getRole() == ExperimentRole.Primary
     }
 

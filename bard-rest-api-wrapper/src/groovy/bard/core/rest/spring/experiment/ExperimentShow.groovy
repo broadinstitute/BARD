@@ -20,16 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentShow extends ExperimentAbstract {
 
-    //TODO: This should change after de-duplication. Right now there is a 1-1 mapping between
-    //assays and experiments
-    @Override
-    public Long getAdid() {
-        if (assays) {
-            return assays.get(0).getId()
-        }
-        return null
-    }
-
     @JsonProperty("assayId")
     private List<Assay> assays = new ArrayList<Assay>();
 

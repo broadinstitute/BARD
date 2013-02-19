@@ -28,6 +28,12 @@ class WebQueryTableModel implements Serializable {
     /**
      * Creates an empty table
      */
+    public void setColumnHeaders(List<WebQueryValueModel> columnHeaders) {
+        this.columnHeaders = columnHeaders
+    }
+    /**
+     * Creates an empty table
+     */
     public WebQueryTableModel(List<WebQueryValueModel> columnHeaders, List<List<WebQueryValueModel>> data) {
         this.columnHeaders = columnHeaders
         this.data = data
@@ -127,7 +133,7 @@ class WebQueryTableModel implements Serializable {
  * @returns The value (<code>WebQueryValueModel</code>, possibly <code>null</code>) at
  *          the specified cell in the table.
  */
-    public Object getValueAt(int row, int column) {
+    public WebQueryValueModel getValueAt(int row, int column) {
         if (row < 0 || column < 0) {
             throw new IllegalArgumentException("Column and Row numbers must be >=0")
         }
@@ -137,7 +143,7 @@ class WebQueryTableModel implements Serializable {
         if (column >= columnHeaders.size()) {
             throw new IllegalArgumentException("Column must not be greater than the column size")
         }
-        return ((List<WebQueryValueModel>) data.get(row)).get(column);
+        return  data.get(row).get(column)
     }
 
 /**

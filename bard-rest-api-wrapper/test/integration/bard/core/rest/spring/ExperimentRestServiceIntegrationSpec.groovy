@@ -5,7 +5,6 @@ import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.assays.Assay
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
-import spock.lang.Timeout
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
 
@@ -88,7 +87,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         when: "The get method is called with the given experiment ID: #experimentid"
         final ExperimentShow experiment = this.experimentRestService.getExperimentById(experimentid)
         then: "An experiment is returned with the expected information"
-        assert experiment.getId() == experimentid
+        assert experiment.getBardExptId() == experimentid
         List<Assay> assays = experiment.getAssays()
         assert assays
         List<Long> projectCollection = experiment.getProjectIdList()
@@ -117,7 +116,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         final ExperimentShow experimentShow = this.experimentRestService.getExperimentById(experimentId)
         then: "An experiment is returned with the expected information"
         assert experimentShow
-        assert experimentShow.getId() == experimentId
+        assert experimentShow.getBardExptId() == experimentId
         assertExperimentSearchResult(experimentShow)
         where:
         label                | experimentId
@@ -195,7 +194,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert activities
     }
 
-    public void "testExperimentActivityWithCompounds"() {
+    void "testExperimentActivityWithCompounds"() {
         given: "That an etag is created from a list of compound IDs"
         final String etag = compoundRestService.newETag("foo cids", [644794L, 645320L, 646386L]);
         and: "That an experiment exists"
@@ -217,7 +216,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
      * @param experiment
      */
     void assertExperimentSearchResult(final ExperimentShow experimentShow) {
-        final ExperimentData experimentData = this.experimentRestService.activities(experimentShow.id)
+        final ExperimentData experimentData = this.experimentRestService.activities(experimentShow.bardExptId)
         final List<Activity> activities = experimentData.activities
         assert activities
         for (Activity activity : activities) {

@@ -27,7 +27,7 @@ class WebQueryValueModel {
     }
 
     public String toString(){
-        return ""
+        return value? value.toString():""
     }
 
 

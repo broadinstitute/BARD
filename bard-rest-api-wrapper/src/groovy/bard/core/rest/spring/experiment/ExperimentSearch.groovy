@@ -12,28 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ExperimentSearch extends ExperimentAbstract {
 
-    @JsonProperty("assayId")
-    private long assayId;
     @JsonProperty("assays")
     private long assays;
-
-    @Override
-    public Long getAdid() {
-        return assayId
-    }
-
-
-    @JsonProperty("assayId")
-    public long getAssayId() {
-        return assayId;
-    }
-
-    @JsonProperty("assayId")
-    public void setAssayId(long assayId) {
-        this.assayId = assayId;
-    }
-
-
 
     @JsonProperty("assays")
     public long getAssays() {
