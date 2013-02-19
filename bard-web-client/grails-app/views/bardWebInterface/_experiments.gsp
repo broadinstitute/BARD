@@ -6,7 +6,7 @@
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <h4>
-                            ${experiment.name} <small>(Experiment ID: ${experiment.id})</small>
+                            ${experiment.name} <small>(Experiment ID: ${experiment.capExptId})</small>
                         </h4>
 
                         <p><span class="label label-info">${experiment.getRole()}</span>
@@ -16,11 +16,11 @@
 
                         <p><span>
                             <g:if test="${searchString}">
-                                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}"
+                                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.bardExptId}"
                                         params='[searchString: "${searchString}"]'>View Results</g:link>
                             </g:if>
                             <g:else>
-                                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.id}">View Results</g:link>
+                                <g:link controller="bardWebInterface" action="showExperiment" id="${experiment.bardExptId}">View Results</g:link>
                             </g:else>
 
                             <g:if test="${showAssaySummary}">
