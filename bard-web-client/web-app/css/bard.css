@@ -551,3 +551,8 @@ table.colorkey td {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }
+.normalizationtext {
+    font-weight: normal;
+    color: #0000A0;
+    font-size: xx-small;
+}

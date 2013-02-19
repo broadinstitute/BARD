@@ -29,6 +29,7 @@ class MolSpreadSheetController {
         MolSpreadSheetData molSpreadSheetData
         Boolean transpose = (params.transpose=="true")
         Boolean noRefreshNeeded = (params.norefresh=="true")
+        int assayNormalizationSwap = params.ChangeNorm ?: 0
         try {
             List<Long> cids = []
             List<Long> pids = []
@@ -64,7 +65,7 @@ class MolSpreadSheetController {
                 if (transpose) {
                     render(template: 'tSpreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
                 } else {
-                    render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData])
+                    render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData,assayNormalizationSwap:assayNormalizationSwap])
                 }
             } else {
                 render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData()])

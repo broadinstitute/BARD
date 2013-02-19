@@ -14,6 +14,7 @@ class MolSpreadSheetData {
     List<String> experimentFullNameList = []
     Map<Integer, String> mapColumnsToAssay = [:]
     Map<Integer, String> mapColumnsToAssayName = [:]
+    Map<Integer, Boolean> mapColumnsNormalization = [:]
     MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
 
     static mapping = {
@@ -160,7 +161,7 @@ class MolSpreadSheetData {
                         capId = mapExperimentIdsToCapAssayIds[assayId].toString()
                     }
                 }
-                returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName]
+                returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName, "normalized": true]
             }
         }
         returnValue
