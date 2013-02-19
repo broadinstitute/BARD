@@ -42,7 +42,9 @@ public class AssayAdapter implements AssayAdapterInterface{
     public String getName() {
         return assay.name
     }
-
+    public String getTitle(){
+        return assay.title
+    }
     public Long getCapAssayId() {
         return assay.getCapAssayId()
     }
