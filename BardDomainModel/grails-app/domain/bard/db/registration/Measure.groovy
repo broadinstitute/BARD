@@ -19,6 +19,7 @@ class Measure {
 
     Set<Measure> childMeasures = [] as Set
     Set<AssayContextMeasure> assayContextMeasures = [] as Set
+    Set<ExperimentMeasure> experimentMeasures = [] as Set
 
     static belongsTo = [assay: Assay, parentMeasure: Measure]
     static hasMany = [childMeasures: Measure, assayContextMeasures: AssayContextMeasure, experimentMeasures: ExperimentMeasure]
