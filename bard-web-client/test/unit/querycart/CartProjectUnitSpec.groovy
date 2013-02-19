@@ -45,7 +45,7 @@ class CartProjectUnitSpec extends Specification {
         assert projectAsString == expectedTitle
 
         where:
-        label                         | projectName  | expectedTitle
+        label                                     | projectName  | expectedTitle
         "Empty ProjectSearchResult Name"          | ""           | ""
         "Null String as ProjectSearchResult Name" | ""           | ""
         "With ProjectSearchResult Name"           | "Some Title" | "Some Title"
@@ -133,8 +133,8 @@ class CartProjectUnitSpec extends Specification {
         cartProject.hasErrors() == !valid
 
         where:
-        label                      | projectName    | valid
-        "ProjectSearchResult Name is null"     | ""             | false
+        label                                  | projectName                | valid
+        "ProjectSearchResult Name is null"     | ""                         | false
         "ProjectSearchResult Name is not null" | "Some ProjectSearchResult" | true
     }
 }

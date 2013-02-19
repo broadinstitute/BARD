@@ -51,7 +51,7 @@ class QueryHelperService {
 
             final boolean hasChildElements = priorityElement.hasChildElements()
             final Map priorityMap = this.extractPriorityDisplayDescription(priorityElement)
-            if (resultData.responseClassEnum == ResponseClassEnum.CR_SER) {
+            if (resultData.hasPlot()) {
                 hasPlot = true
             }
             if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {

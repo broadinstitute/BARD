@@ -15,10 +15,16 @@ import com.fasterxml.jackson.annotation.JsonProperty
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class ExperimentAbstract extends JsonUtil {
 
+    @JsonProperty("bardExptId")
+    private long bardExptId;
+    @JsonProperty("capExptId")
+    private long capExptId
 
-    private long id;
-    @JsonProperty("exptId")
-    private long exptId;
+    @JsonProperty("bardAssayId")
+    private long bardAssayId
+    @JsonProperty("capAssayId")
+    private long capAssayId
+
     @JsonProperty("pubchemAid")
     private long pubchemAid;
     @JsonProperty("category")
@@ -52,22 +58,8 @@ public abstract class ExperimentAbstract extends JsonUtil {
     @JsonProperty("resourcePath")
     private String resourcePath;
 
-    @JsonProperty("exptId")
-    public long getExptId() {
-        return exptId;
-    }
 
-    @JsonProperty("exptId")
-    public void setExptId(long exptId) {
-        this.exptId = exptId;
-    }
 
-    public long getId() {
-        if (exptId) {
-            this.id = exptId
-        }
-        return id;
-    }
 
     @JsonProperty("pubchemAid")
     public long getPubchemAid() {
@@ -236,7 +228,37 @@ public abstract class ExperimentAbstract extends JsonUtil {
     public int getProjectCount() {
         return projectIdList.size()
     }
-
-    public abstract Long getAdid();
+    @JsonProperty("bardExptId")
+    long getBardExptId() {
+        return bardExptId
+    }
+    @JsonProperty("bardExptId")
+    void setBardExptId(long bardExptId) {
+        this.bardExptId = bardExptId
+    }
+    @JsonProperty("capExptId")
+    long getCapExptId() {
+        return capExptId
+    }
+    @JsonProperty("capExptId")
+    void setCapExptId(long capExptId) {
+        this.capExptId = capExptId
+    }
+    @JsonProperty("bardAssayId")
+    long getBardAssayId() {
+        return bardAssayId
+    }
+    @JsonProperty("bardAssayId")
+    void setBardAssayId(long bardAssayId) {
+        this.bardAssayId = bardAssayId
+    }
+    @JsonProperty("capAssayId")
+    long getCapAssayId() {
+        return capAssayId
+    }
+    @JsonProperty("capAssayId")
+    void setCapAssayId(long capAssayId) {
+        this.capAssayId = capAssayId
+    }
 
 }

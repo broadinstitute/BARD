@@ -14,6 +14,11 @@ class ExperimentDataFactoryService {
             SearchParams searchParams
     ) {
 
+        if (spreadSheetInput.eids) {
+            Long experimentId = spreadSheetInput.eids.get(0)
+            return queryService.showExperimentalData(experimentId,groupTypes,filterTypes,searchParams)
+         }
         return null
     }
+
 }

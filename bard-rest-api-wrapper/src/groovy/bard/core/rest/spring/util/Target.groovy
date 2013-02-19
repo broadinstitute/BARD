@@ -17,7 +17,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Target extends JsonUtil{
+    @JsonProperty("url")
+    public String getUrl() {
+        return url
+    }
+    @JsonProperty("url")
+    public void setUrl(String url) {
+        this.url = url
+    }
 
+    @JsonProperty("url")
+    private String url;
     @JsonProperty("acc")
     private String acc;
     @JsonProperty("name")

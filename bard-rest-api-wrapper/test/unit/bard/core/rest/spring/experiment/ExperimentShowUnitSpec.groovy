@@ -15,7 +15,7 @@ class ExperimentShowUnitSpec extends Specification {
 
 
     {
-       "exptId": 197,
+       "bardExptId": 197,
            "assayId":
    [
        {
@@ -82,19 +82,11 @@ class ExperimentShowUnitSpec extends Specification {
     }
 '''
 
-    void setup() {
-
-    }
-
-    void tearDown() {
-        // Tear down logic here
-    }
-
     void "test getId #label"() {
         when:
         ExperimentShow experimentShow = new ExperimentShow()
         then:
-        assert experimentShow.getId() == expectedId
+        assert experimentShow.getBardExptId() == expectedId
 
         where:
         label             | expectedId
@@ -105,11 +97,14 @@ class ExperimentShowUnitSpec extends Specification {
         when:
         ExperimentShow experimentShow = new ExperimentShow()
         then:
-        assert experimentShow.getAdid() == expectedId
+        assert experimentShow.getCapAssayId() == expectedId
+        assert experimentShow.getCapExptId() == expectedId
+        assert experimentShow.getBardAssayId() == expectedId
+        assert experimentShow.getBardExptId() == expectedId
 
         where:
         label          | expectedId
-        "Adid is null" | null
+        "Adid is null" | 0
     }
 
     void "test serialization to ExperimentShow"() {
@@ -117,7 +112,7 @@ class ExperimentShowUnitSpec extends Specification {
         final ExperimentShow experimentShow = objectMapper.readValue(EXPERIMENT_SHOW_JSON, ExperimentShow.class)
         then:
         assert experimentShow
-        assert experimentShow.exptId == 197
+        assert experimentShow.bardExptId == 197
         assert experimentShow.resourcePath == "/experiments/197"
         assert experimentShow.projectIdList.size() == 2
         assert !experimentShow.hasProbe
@@ -136,8 +131,7 @@ class ExperimentShowUnitSpec extends Specification {
         assert experimentShow.assays
         assert experimentShow.classification == 2
         assert experimentShow.assays.size() == 1
-        assert experimentShow.getAdid() == 197
-        assert experimentShow.getId() == 197
+        assert experimentShow.getBardExptId() == 197
         assert experimentShow.getProjectCount() == 2
         assert experimentShow.getAdditionalProperties()
         assert !experimentShow.equals("Some String")

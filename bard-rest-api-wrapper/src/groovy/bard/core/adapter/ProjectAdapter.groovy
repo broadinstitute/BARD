@@ -47,7 +47,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     }
 
     public Long getId() {
-        return project.projectId
+        return project.bardProjectId
 
     }
 

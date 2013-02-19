@@ -17,7 +17,7 @@ class ProjectResultUnitSpec extends Specification {
     {
       "collection": [
         {
-            "projectId": 234,
+            "bardProjectId": 234,
             "category": 0,
             "type": 0,
             "classification": 0,

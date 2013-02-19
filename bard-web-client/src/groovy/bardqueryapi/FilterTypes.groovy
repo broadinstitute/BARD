@@ -7,11 +7,17 @@ package bardqueryapi
  * Time: 7:18 PM
  * To change this template use File | Settings | File Templates.
  */
-enum FilterTypes{
-    ACTIVE("Only active Assays"),
+enum FilterTypes {
     TESTED("Tested Assays"),
     SHOW_OTHERS("Show Single Point, Primary, UnMapped Assays"),
-    SHOW_DOSE("Show Only Dose")
+    Y_DENORM_AXIS('DeNormalize Y-Axis');
+    String description
+    FilterTypes(String description){
+      this.description = description
+    }
+    String getDescription(){
+        return this.description
+    }
     //BY_DATA_QUALITY("Filter by Data quality. This should be its own enum. But not ready yet")
     //FIlTER By Annotations
 }
