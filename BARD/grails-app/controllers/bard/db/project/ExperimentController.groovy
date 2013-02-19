@@ -21,13 +21,15 @@ class ExperimentController {
     def edit() {
         def experiment = Experiment.get(params.id)
 
-        renderEdit(experiment)
+        renderEdit(experiment, experiment.assay)
     }
 
-    def renderEdit(Experiment experiment) {
-        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, true))
+    def renderEdit(Experiment experiment, Assay assay) {
 
-        render(view: "edit", model: [experiment: experiment, measuresAsJsonTree: measuresAsJsonTree])
+        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
+        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
+
+        render(view: "edit", model: [experiment: experiment, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree])
     }
 
     def renderCreate(Assay assay, Experiment experiment) {
@@ -39,8 +41,9 @@ class ExperimentController {
     def update() {
         def experiment = Experiment.get(params.id)
         experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo"] = params
+        experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
         if (!experiment.save(flush: true)) {
-            renderEdit(experiment)
+            renderEdit(experiment, experiment.assay)
         } else {
             redirect(action: "show", id: experiment.id)
         }

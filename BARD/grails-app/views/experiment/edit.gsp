@@ -27,7 +27,7 @@
     <input type="submit" class="btn btn-primary" value="Update"/>
     </p>
 
-    <g:render template="editFields" model="${[measuresAsJsonTree: measuresAsJsonTree, experiment: experiment, assay: experiment.assay]}"/>
+    <g:render template="editFields" model="${[experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, experiment: experiment, assay: experiment.assay]}"/>
 </g:form>
 
 </body>

@@ -54,10 +54,10 @@
                     <div class="accordion-inner">
                         <%-- Added &nbsp; because there appears to be some problem with dd tags that causes them to shift up a row if a dd tag no content.  Need to investigate this further later. --%>
                         <dl class="dl-horizontal">
-                            <dt>Description</dt><dd>${instance.description}&nbsp;</dd>
-                            <dt>Experiment Name</dt><dd>${instance.experimentName}&nbsp;</dd>
                             <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
-                                                          id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
+                                                  id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
+                            <dt>Experiment Name</dt><dd>${instance.experimentName}&nbsp;</dd>
+                            <dt>Description</dt><dd>${instance.description}&nbsp;</dd>
                             <dt>Status</dt><dd>${instance.experimentStatus}&nbsp;</dd>
                             <dt>Hold until</dt><dd>${instance.holdUntilDate}&nbsp;</dd>
                             <dt>Run Date from</dt><dd>${instance.runDateFrom}&nbsp;</dd>
@@ -66,10 +66,10 @@
 
                         <p>External references</p>
                         <ul>
-                            <g:each in="${instance.externalReferences}" var="xref">
+                            <g:each in="${instance.externalReferences}" var="xRef">
                                 <li>
-                                    ${xref.externalSystem.systemName}
-                                    ${xref.extAssayRef}
+                                    <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
+                                       target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
                                 </li>
                             </g:each>
                         </ul>

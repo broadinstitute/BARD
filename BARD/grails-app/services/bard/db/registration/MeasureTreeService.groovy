@@ -4,6 +4,29 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 
 class MeasureTreeService {
+
+    void copyKeyToMeasureId(elements, measuresUsed) {
+        for(c in elements) {
+            c.measureId = c.key;
+            if (measuresUsed.contains(c.key)) {
+                c.select=true
+            }
+            copyKeyToMeasureId(c.children, measuresUsed)
+        }
+    }
+
+    public List createMeasureTreeWithSelections(Assay assay, Experiment experiment, boolean contextsAsChildren) {
+        Set measuresUsed = [] as Set
+        experiment.experimentMeasures.each {
+            measuresUsed.add(it.measure.id)
+        }
+
+        List tree = createMeasureTree(assay, true)
+        copyKeyToMeasureId(tree, measuresUsed)
+
+        return tree;
+    }
+
     public List createMeasureTree(Assay assay, boolean contextsAsChildren) {
         def roots = []
 
@@ -40,6 +63,8 @@ class MeasureTreeService {
     public Map createTreeFromExperimentMeasure(ExperimentMeasure experimentMeasure, boolean contextsAsChildren) {
         def key = experimentMeasure.id;
         def title = experimentMeasure.measure.displayLabel
+        String relationship = experimentMeasure.parentChildRelationship
+        Long measureId = experimentMeasure.measure.id
 
         def children = []
 
@@ -54,7 +79,7 @@ class MeasureTreeService {
             }
         }
 
-        def map = [key: key, title: title, children: children, expand: true];
+        return [key: key, title: title, children: children, expand: true, relationship: relationship, measureId: measureId];
     }
 
     public Map createTreeFromMeasure(Measure measure, boolean contextsAsChildren) {
