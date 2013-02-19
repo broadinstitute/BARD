@@ -46,35 +46,44 @@ class SpreadsheetElementsTagLib {
 
     def exptDataCell = {   attrs, body ->
         List<MolSpreadSheetColumnHeader> mssHeaders = attrs.mssHeaders
-        int columnNumber = attrs.columnNumber
+        MolSpreadSheetData molSpreadSheetData = attrs.molSpreadSheetData
+        int columnNumber = 0
         Double yMinimum =  Double.NaN
         Double yMaximum =  Double.NaN
         // first let's look for any minimums and maximums for Y normalization
-        if ((columnNumber> 0) && (columnNumber < mssHeaders.size() )) {
-            MolSpreadSheetColumnHeader molSpreadSheetColumnHeader = attrs.mssHeaders[columnNumber]
-            if (molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList?.size()>0)  {
-                if (molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList?.size()>1)
-                    println 'wtf'
-                for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList) {
-                    if (molSpreadSheetColSubHeader.minimumResponse != Double.NaN){
-                        if ( (yMinimum == Double.NaN) ||
-                             (molSpreadSheetColSubHeader.minimumResponse < yMinimum) )    {
-                           yMinimum =  molSpreadSheetColSubHeader.minimumResponse
+         int currentCol = attrs.colCnt
+        if (attrs.spreadSheetActivityStorage != null) {
+            if (molSpreadSheetData.columnPointer.containsKey(attrs.spreadSheetActivityStorage.eid)) {
+                columnNumber =  molSpreadSheetData.columnPointer[attrs.spreadSheetActivityStorage.eid]
+            }
+            if ((columnNumber>=0) && (columnNumber < mssHeaders.size() )) {
+                MolSpreadSheetColumnHeader molSpreadSheetColumnHeader = attrs.mssHeaders[columnNumber+4]
+                if (molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList?.size()>0)  {
+                    // note: if (molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList?.size()>1) then we work across multiple expts
+                    for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList) {
+                        if (molSpreadSheetColSubHeader.minimumResponse != Double.NaN){
+                            if ( (yMinimum == Double.NaN) ||
+                                    (molSpreadSheetColSubHeader.minimumResponse < yMinimum) )    {
+                                yMinimum =  molSpreadSheetColSubHeader.minimumResponse
+                            }
                         }
-                    }
-                    if (molSpreadSheetColSubHeader.maximumResponse != Double.NaN)  {
-                        if ( (yMaximum == Double.NaN) ||
-                             (molSpreadSheetColSubHeader.maximumResponse > yMaximum))    {
-                            yMaximum =  molSpreadSheetColSubHeader.maximumResponse
-                        }
+                        if (molSpreadSheetColSubHeader.maximumResponse != Double.NaN)  {
+                            if ( (yMaximum == Double.NaN) ||
+                                    (molSpreadSheetColSubHeader.maximumResponse > yMaximum))    {
+                                yMaximum =  molSpreadSheetColSubHeader.maximumResponse
+                            }
 
+                        }
                     }
                 }
-             }
 
-        }
-        int currentCol = attrs.colCnt
-        if (attrs.spreadSheetActivityStorage != null) {
+            }
+
+
+
+
+
+
             HillCurveValueHolder hillCurveValueHolder = attrs.spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
             out << """<td class="molSpreadSheet" property="var${currentCol}">
                       <p>"""

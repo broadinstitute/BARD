@@ -176,7 +176,7 @@
                             <g:exptDataCell colCnt="${colCnt}"
                                             spreadSheetActivityStorage="${molSpreadSheetData?.findSpreadSheetActivity(rowCnt, colCnt)}"
                                             mssHeaders="${molSpreadSheetData?.mssHeaders}"
-                                            columnNumber="${colCnt}"/>
+                                            molSpreadSheetData="${molSpreadSheetData}"    />
                         </g:each>
                     </g:if>
                     </tr>

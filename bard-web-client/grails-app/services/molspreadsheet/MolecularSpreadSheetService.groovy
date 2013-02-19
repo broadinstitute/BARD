@@ -563,7 +563,7 @@ class MolecularSpreadSheetService {
                                                 molSpreadSheetColSubHeader.maximumResponse =  maxResponse
                                             }
                                         }
-                                        Double minResponse =  hillCurveValueHolder.response.min()
+                                        Double minResponse =  hillCurveValueHolder.response[0]
                                         for (Double instDouble in hillCurveValueHolder.response){
                                             if (instDouble<minResponse) {
                                                 minResponse =  instDouble
