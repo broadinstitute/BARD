@@ -66,7 +66,7 @@ public class AbstractAssay extends JsonUtil {
 
     public long getId() {
         if (this.bardAssayId) {
-            return bardAssayId
+            return this.bardAssayId
         }
         return this.assayId
     }

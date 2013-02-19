@@ -410,7 +410,7 @@ class MolecularSpreadSheetService {
             //TODO: We probably could post all the ids to this url. We need to investigate
             final List<ExperimentSearch> experiments = assayRestService.findExperimentsByAssayId(assayId)
             for (ExperimentSearch experimentSearch in experiments)  {
-                if (!allExperiments*.exptId.contains(experimentSearch.exptId) )
+                if (!allExperiments*.bardExptId.contains(experimentSearch.bardExptId) )
                     allExperiments <<  experimentSearch
             }
          }
@@ -442,9 +442,9 @@ class MolecularSpreadSheetService {
             if (experiments) {
 //                allExperiments.addAll(experiments)
                 for (ExperimentSearch experimentSearch in experiments) {
-                    if (!allExperiments*.exptId.contains(experimentSearch.exptId)){
+                    if (!allExperiments*.bardExptId.contains(experimentSearch.bardExptId)){
                         allExperiments <<  experimentSearch
-                        mapExperimentIdsToCapAssayIds[experimentSearch.assayId] =  assay.capAssayId
+                        mapExperimentIdsToCapAssayIds[experimentSearch.bardAssayId] =  assay.capAssayId
                     }
 
                 }
@@ -500,7 +500,7 @@ class MolecularSpreadSheetService {
         final List<ExperimentSearch> allExperiments = []
         if (projectResult) {
             for (Project project : projectResult.projects) {
-                ProjectExpanded projectExpanded = projectRestService.getProjectById(project.projectId)
+                ProjectExpanded projectExpanded = projectRestService.getProjectById(project.bardProjectId)
                 for (Assay assay in projectExpanded?.assays){
                     if (!mapExperimentIdsToCapAssayIds.containsKey(assay.bardAssayId)) {
                         mapExperimentIdsToCapAssayIds[assay.bardAssayId] = assay.capAssayId
