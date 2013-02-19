@@ -110,7 +110,14 @@
                                 <% rowsToSkipBeforeNextAssayid-- %>
                                 <th class="molSpreadSheetHeadData">
                                     <g:if test="${columnDictionaryLookup[currentRowCounter]}">
-                                        <a href="#" rel="tooltip" class="desc_tip mssheader" data-placement="top" data-title="${columnDictionaryLookup[currentRowCounter]}">${colHeader}</a>
+                                        ${colHeader}
+                                        <g:if test="${columnDictionaryLookup[currentRowCounter]}">
+                                            <a href="/bardwebclient/dictionaryTerms/#${columnDictionaryLookup[currentRowCounter]}"
+                                               class="desc_tip mssheader" data-placement="top"
+                                               target="datadictionary">
+                                                <i class="icon-question-sign"></i>
+                                            </a>
+                                        </g:if>
                                     </g:if>
                                     <g:else>
                                         ${colHeader}

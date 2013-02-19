@@ -80,13 +80,15 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
      */
     void "test activeVrsTestedCell #label"() {
         when:
-        String results = new  SpreadsheetElementsTagLib().activeVrsTestedCell([activeVrsTested: activeVrsTested])
+        String results = new  SpreadsheetElementsTagLib().activeVrsTestedCell([activeVrsTested: activeVrsTested, cid: 54])
         then:
         assert results.replaceAll("\\s", "")==result
         where:
         label           | activeVrsTested   | result
-        "activeVrsTestedCell cell"    | "99/100"            | """<div><spanclass="badgebadge-info">99/100</span></div>""".toString()
-        "activeVrsTestedCell cell"    | "1/999"             | """<div><spanclass="badgebadge-info">1/999</span></div>""".toString()
+        "activeVrsTestedCell cell"      | "99/100"            | """<div><spanclass="badgebadge-info">99/100</span></div>""".toString()
+        "activeVrsTestedCell cell"      | "1/999"             | """<div><spanclass="badgebadge-info">1/999</span></div>""".toString()
+        "bad input handled"             | "garbage"           | """<div><spanclass="badgebadge-info">garbage</span></div>""".toString()
+        "spaces give link"              | "15 / 47"           | """<div><spanclass="badgebadge-info"><ahref="/molSpreadSheet/showExperimentDetails?cid=54&transpose=true"style="color:white;text-decoration:underline">15</a>/47</div>""".toString()
     }
 
     /**
@@ -132,6 +134,10 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         SpreadSheetActivityStorage spreadSheetActivityStorage7 = new SpreadSheetActivityStorage()
         spreadSheetActivityStorage7.childElements = [new ActivityData(),new ActivityData()]
         spreadSheetActivityStorage7.hillCurveValueHolderList  = [hillCurveValueHolder2]
+        // check error case when child elements =null
+        SpreadSheetActivityStorage spreadSheetActivityStorage8 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage8.childElements = null
+        spreadSheetActivityStorage8.hillCurveValueHolderList  = [hillCurveValueHolder2]
 
 
         when:
@@ -142,6 +148,7 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         String results5 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage5])
         String results6 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage6])
         String results7 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7])
+        String results8 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7])
 
         then:
         results1.contains("Not tested in this experiment")
@@ -151,6 +158,8 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         results5.contains("/doseResponseCurve/doseResponseCurve?sinf=&s0=")
         results6.contains("<FONT COLOR=\"#000000\"><nobr>")
         (!results7.contains("<FONT COLOR=\"#000000\"><nobr>"))
+        results8.contains("doseResponseCurve/doseResponseCurve")
+        (!results8.contains("nobr"))
     }
 
 

@@ -169,7 +169,7 @@
                         <g:promiscuityCell cid="${cid}"/>
                     </td>
                     <td class="molSpreadSheet" property="cid">
-                        <g:activeVrsTestedCell activeVrsTested="${activeVrsTested}"/>
+                        <g:activeVrsTestedCell activeVrsTested="${activeVrsTested}"  cid="${cid}"/>
                     </td>
                     <g:if test="${molSpreadSheetData.getColumnCount() > 4}">
                         <g:each var="colCnt" in="${4..(molSpreadSheetData.getColumnCount() - 1)}">
