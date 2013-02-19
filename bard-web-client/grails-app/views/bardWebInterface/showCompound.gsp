@@ -23,7 +23,7 @@
                             type="${querycart.QueryItemType.Compound}"
                             smiles="${compound.getStructureSMILES()}"
                             numActive="${compound.numberOfActiveAssays}"
-                            numAssays="${compound.numberOfAssays}" />
+                            numAssays="${compound.numberOfAssays}"/>
     </div>
 </div>
 
@@ -35,10 +35,11 @@
                 <div class="activeVrsTested">
                     <div>
                         <span class="badge badge-info">
-                            <g:link controller="molSpreadSheet" action="showExperimentDetails" style="color: white; text-decoration: underline"
+                            <g:link controller="molSpreadSheet" action="showExperimentDetails"
+                                    style="color: white; text-decoration: underline"
                                     params="[cid: compound.pubChemCID, transpose: true]">${compound?.numberOfActiveAssays}</g:link>
                             /${compound?.numberOfAssays}</span>
-                   </div>
+                    </div>
 
                 </div>
             </dd>
@@ -50,7 +51,7 @@
                 <dt>Probe ID:</dt>
                 <dd>${compound.probeId}</dd>
             </g:if>
-             <g:if test="${compound?.getSynonyms()}">
+            <g:if test="${compound?.getSynonyms()}">
                 <dt>Synonyms:</dt>
                 <dd>${compound?.getSynonyms()?.collect {it}?.join(', ')}</dd>
             </g:if>
@@ -76,24 +77,42 @@
 <div class="row-fluid">
     <div class="span3">
         <dl class="dl-horizontal dl-horizontal-wide">
-            <dt>Molecular Weight:</dt>
-            <dd>${compound.mwt()}</dd>
-            <dt>Exact Mass:</dt>
-            <dd>${compound.exactMass()}</dd>
-            <dt>Rotatable Bonds:</dt>
-            <dd>${compound.rotatable()}</dd>
-            <dt>HBond Acceptors:</dt>
-            <dd>${compound.hbondAcceptor()}</dd>
-            <dt>HBond Donors:</dt>
-            <dd>${compound.hbondDonor()}</dd>
-            <dt>LogP:</dt>
-            <dd>${compound.logP()}</dd>
-            <dt>Total Polar Surface Area:</dt>
-            <dd>${compound.TPSA()}</dd>
-            <dt>Defined Stereo:</dt>
-            <dd>${compound.definedStereo()}</dd>
-            <dt>Stereocenters:</dt>
-            <dd>${compound.stereocenters()}</dd>
+            <g:if test="${compound.mwt()}">
+                <dt>Molecular Weight:</dt>
+                <dd>${compound.mwt()}</dd>
+            </g:if>
+            <g:if test="${compound.exactMass()}">
+                <dt>Exact Mass:</dt>
+                <dd>${compound.exactMass()}</dd>
+            </g:if>
+            <g:if test="${compound.rotatable()}">
+                <dt>Rotatable Bonds:</dt>
+                <dd>${compound.rotatable()}</dd>
+            </g:if>
+            <g:if test="${compound.hbondAcceptor()}">
+                <dt>HBond Acceptors:</dt>
+                <dd>${compound.hbondAcceptor()}</dd>
+            </g:if>
+            <g:if test="${compound.hbondDonor()}">
+                <dt>HBond Donors:</dt>
+                <dd>${compound.hbondDonor()}</dd>
+            </g:if>
+            <g:if test="${compound.logP()}">
+                <dt>LogP:</dt>
+                <dd>${compound.logP()}</dd>
+            </g:if>
+            <g:if test="${compound.TPSA()}">
+                <dt>Total Polar Surface Area:</dt>
+                <dd>${compound.TPSA()}</dd>
+            </g:if>
+            <g:if test="${compound.definedStereo()}">
+                <dt>Defined Stereo:</dt>
+                <dd>${compound.definedStereo()}</dd>
+            </g:if>
+            <g:if test="${compound.stereocenters()}">
+                <dt>Stereocenters:</dt>
+                <dd>${compound.stereocenters()}</dd>
+            </g:if>
         </dl>
     </div>
 
@@ -187,7 +206,8 @@
         </div>
     </div>
 </g:if>
-<div class="row-fluid" id="sids" href='${createLink(controller:"bardWebInterface", action: "findSubstanceIds", id:compound.id)}'>
+<div class="row-fluid" id="sids"
+     href='${createLink(controller: "bardWebInterface", action: "findSubstanceIds", id: compound.id)}'>
 
 </div>
 
