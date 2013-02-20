@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<div id="molecularSpreadSheet" href="${createLink(controller: 'molSpreadSheet', action: 'molecularSpreadSheet', params: [pid:pid, cid:cid, norefresh:norefresh, transpose:transpose])}">
+<div id="molecularSpreadSheet" href="${createLink(controller: 'molSpreadSheet', action: 'molecularSpreadSheet', params: [pid:pid, cid:cid, norefresh:norefresh, transpose:transpose, ChangeNorm:ChangeNorm])}">
  </div>
 
 <g:render template="spreadsheetColorKey" />

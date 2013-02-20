@@ -383,6 +383,7 @@ class MolecularSpreadSheetService {
             molSpreadSheetData.experimentNameList << "${experiment.bardAssayId.toString()}".toString()
             molSpreadSheetData.experimentFullNameList << "${experiment.name.toString()}".toString()
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader(molSpreadSheetColSubHeaderList:[])
+            molSpreadSheetData.mapColumnsNormalization["${experiment.bardAssayId.toString()}"]  = true
         }
     }
 

@@ -62,7 +62,7 @@
         </g:if>
     });
 </script>
-
+<% molSpreadSheetData.flipNormalizationForAdid (assayNormalizationSwap) %>
 <div class="row-fluid">
     <g:if test="${flash.message}">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>
@@ -120,7 +120,19 @@
                             colspan="<%=assayColumn."numberOfResultTypes"%>"
                             title="<%=assayColumn."fullAssayName"%>"><a
                                 href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
-                            ADID=<%=assayColumn."bardAssayId"%></a>
+                            ADID=<%=assayColumn."bardAssayId"%></a><br />
+                            <div class="normalizationtext">
+                                <g:if test="${assayColumn."normalized"}">
+                                    <a href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
+                                     Denormalize
+                                     </a>
+                                </g:if>
+                                <g:else>
+                                    <a href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
+                                    Normalize
+                                    </a>
+                                </g:else>
+                            </div>
                         </th>
                     </g:each>
                 </tr>
