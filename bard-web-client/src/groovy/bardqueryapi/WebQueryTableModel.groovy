@@ -12,6 +12,8 @@ package bardqueryapi
  */
 class WebQueryTableModel implements Serializable {
 
+    private Map<String, Object> additionalProperties = [:]
+
     //data
     private List<List<WebQueryValueModel>> data = new ArrayList<List<WebQueryValueModel>>()
 
@@ -25,6 +27,16 @@ class WebQueryTableModel implements Serializable {
      */
     public WebQueryTableModel() {
     }
+
+
+    public Map<String, Object> getAdditionalProperties() {
+        return this.additionalProperties;
+    }
+
+    public void setAdditionalProperties(String name, Object value) {
+        this.additionalProperties.put(name, value);
+    }
+
     /**
      * Creates an empty table
      */
@@ -143,7 +155,7 @@ class WebQueryTableModel implements Serializable {
         if (column >= columnHeaders.size()) {
             throw new IllegalArgumentException("Column must not be greater than the column size")
         }
-        return  data.get(row).get(column)
+        return data.get(row).get(column)
     }
 
 /**
