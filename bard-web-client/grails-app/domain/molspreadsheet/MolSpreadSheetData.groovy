@@ -30,6 +30,17 @@ class MolSpreadSheetData {
 
 
     }
+
+
+    static constraints = {
+        mssData(nullable: false)
+        rowPointer(nullable: false)
+        columnPointer(nullable: false)
+        molSpreadsheetDerivedMethod(nullable: true)
+    }
+
+
+
     /**
      * Display a cell, as specified by a row and column
      * @param rowCnt
@@ -152,6 +163,7 @@ class MolSpreadSheetData {
                 if (assayNames[i] != null) {    // Assay name should never be null -- this is a safety measure
                     int columnOfAssay = mapColumnsToAssay.find { it.value == assayNames[i]}.key
                     fullAssayName = mapColumnsToAssayName[columnOfAssay]
+                    this.mapExperimentIdsToCapAssayIds
                 }
                 //convert assay id to cap id
                 String capId = "U"
@@ -161,23 +173,40 @@ class MolSpreadSheetData {
                         capId = mapExperimentIdsToCapAssayIds[assayId].toString()
                     }
                 }
-                returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName, "normalized": true]
+                Boolean normalized = true
+                if (mapColumnsNormalization.containsKey(assayNames[i]))
+                    normalized =  mapColumnsNormalization[assayNames[i]]
+                returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName, "normalized": normalized]
             }
         }
         returnValue
     }
 
 
-
-
-
-
-    static constraints = {
-        mssData(nullable: false)
-        rowPointer(nullable: false)
-        columnPointer(nullable: false)
-        molSpreadsheetDerivedMethod(nullable: true)
+    void flipNormalizationForAdid ( Long assayIdAsALong ) {
+        // We have the CAP ID.  First converted to the Bard assay ID
+        Long bardAssayId = mapExperimentIdsToCapAssayIds.find{it.value == assayIdAsALong}?.key  ?: 0L
+        if (bardAssayId != 0)  {
+            String  assayIdAsAString = bardAssayId as String
+            if (mapColumnsNormalization.containsKey(assayIdAsAString)) {  // if we don't recognize the Aid then ignore the request
+                mapColumnsNormalization[assayIdAsAString]   = !(mapColumnsNormalization[assayIdAsAString])
+            }
+        }
     }
+
+    void flipNormalizationForAdid ( String aIdToFlip ) {
+        Long assayIdAsALong  =   0L
+        try {
+            assayIdAsALong  =   Long.valueOf(aIdToFlip)
+        } catch (NumberFormatException numberFormatException) {
+            // Since this parameter comes off the URL line we could get past anything.  If it isn't
+            //  numerical then simply ignore it
+        }
+        if (assayIdAsALong != 0L) {
+            flipNormalizationForAdid ( assayIdAsALong )
+        }
+   }
+
 
 
 }

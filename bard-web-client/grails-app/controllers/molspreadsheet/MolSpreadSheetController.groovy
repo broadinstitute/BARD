@@ -18,7 +18,7 @@ class MolSpreadSheetController {
     RetainSpreadsheetService retainSpreadsheetService
     BardUtilitiesService bardUtilitiesService
     def index() {
-        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh] )
+        render(view: 'molecularSpreadSheet', model: [transpose: params.transpose, norefresh: params.norefresh, ChangeNorm: params.ChangeNorm] )
     }
 
     def showExperimentDetails(Long pid, Long cid, Boolean transpose) {
@@ -29,7 +29,7 @@ class MolSpreadSheetController {
         MolSpreadSheetData molSpreadSheetData
         Boolean transpose = (params.transpose=="true")
         Boolean noRefreshNeeded = (params.norefresh=="true")
-        int assayNormalizationSwap = params.ChangeNorm ?: 0
+        String assayNormalizationSwap = params.ChangeNorm ?: "0"
         try {
             List<Long> cids = []
             List<Long> pids = []
@@ -68,7 +68,7 @@ class MolSpreadSheetController {
                     render(template: 'spreadSheet', model: [molSpreadSheetData: molSpreadSheetData,assayNormalizationSwap:assayNormalizationSwap])
                 }
             } else {
-                render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData()])
+                render(template: 'spreadSheet', model: [molSpreadSheetData: new MolSpreadSheetData(),assayNormalizationSwap:assayNormalizationSwap])
             }
         } catch (Exception ee) {
             String errorMessage = "Could not generate SpreadSheet for current Query Cart Contents"

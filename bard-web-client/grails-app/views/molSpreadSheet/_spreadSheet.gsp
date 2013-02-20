@@ -62,7 +62,7 @@
         </g:if>
     });
 </script>
-
+<% molSpreadSheetData.flipNormalizationForAdid (assayNormalizationSwap) %>
 <div class="row-fluid">
     <g:if test="${flash.message}">
         <div class="span12" role="status"><p style="color: #3A87AD;">${flash.message}</p></div>

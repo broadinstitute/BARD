@@ -79,11 +79,14 @@ class SpreadsheetElementsTagLib {
                 }
 
             }
-
-
-
-
-
+            // figure out normalization status
+            Boolean normalizeColumn = true
+            if (molSpreadSheetData != null){
+                String assayId =  molSpreadSheetData.experimentNameList[columnNumber]
+                if (molSpreadSheetData.mapColumnsNormalization.containsKey(assayId))  {
+                    normalizeColumn =  molSpreadSheetData.mapColumnsNormalization[assayId]
+                }
+            }
 
             HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
             out << """<td class="molSpreadSheet" property="var${currentCol}">
@@ -138,7 +141,8 @@ class SpreadsheetElementsTagLib {
                                         title="Substance Id : ${spreadSheetActivityStorage.sid}"
                                         src="""
                 if ((yMinimum != Double.NaN) &&
-                    (yMaximum !=  Double.NaN)) {
+                    (yMaximum !=  Double.NaN)  &&
+                    (normalizeColumn) ) {
                     out << """ "${
                         this.createLink(
                                 controller: 'doseResponseCurve',
