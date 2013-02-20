@@ -1,5 +1,7 @@
+import bard.db.util.SchemaResetService
 import grails.plugin.databasemigration.MigrationUtils
 import liquibase.resource.FileSystemResourceAccessor
+import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
 
 class BardDomainModelGrailsPlugin {
@@ -67,6 +69,11 @@ Provide domain objects for any objects wishing to directly access the Bard datab
             String changelogLocationPath = new File(bardDomainModelPluginDir, MigrationUtils.changelogLocation).path
             //println(changelogLocationPath)
             migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
+        }
+
+        schemaResetService(SchemaResetService) {
+            prefix = "SHADOW"
+            dataSource = ref("dataSource") //GrailsDomainClassProperty.DEFAULT_DATA_SOURCE
         }
     }
 

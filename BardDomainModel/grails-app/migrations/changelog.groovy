@@ -25,6 +25,7 @@ databaseChangeLog = {
     include file: 'drop-retired-tables.groovy'
     include file: 'reset-sequences.groovy'
     include file: 'grant-selects.groovy'
+    include file: 'save-initial-snapshot.groovy'
 }
 
 

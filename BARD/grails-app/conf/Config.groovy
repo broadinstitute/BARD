@@ -107,6 +107,7 @@ bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
 bard.home.page = 'http://localhost:8080/bardwebclient'
 
 //grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
+
 grails {
     plugins {
         springsecurity {

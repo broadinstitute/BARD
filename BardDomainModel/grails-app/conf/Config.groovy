@@ -60,6 +60,8 @@ log4j = {
 
     warn 'org.mortbay.log'
 
+    info 'bard.db.util.SchemaReset'
+
     // logs hibernate sql and params, slow but can be very helpful
 //    debug  'org.hibernate.SQL'
 //    trace 'org.hibernate.type.descriptor.sql.BasicBinder'
