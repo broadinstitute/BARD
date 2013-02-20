@@ -121,14 +121,14 @@
                             title="<%=assayColumn."fullAssayName"%>"><a
                                 href="../bardWebInterface/showAssay/<%=assayColumn."assayName"%>">
                             ADID=<%=assayColumn."bardAssayId"%></a><br />
-                            <div class="normalizationtext">
+                            <div>
                                 <g:if test="${assayColumn."normalized"}">
-                                    <a href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
+                                    <a class="normalizationtext" href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
                                      Denormalize
                                      </a>
                                 </g:if>
                                 <g:else>
-                                    <a href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
+                                    <a  class="normalizationtext" href="${createLink(controller: 'molSpreadSheet', action: 'index', params: [ChangeNorm:assayColumn."bardAssayId",norefresh:true])}">
                                     Normalize
                                     </a>
                                 </g:else>
