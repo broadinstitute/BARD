@@ -73,6 +73,7 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         given:
         params.norefresh = norefresh
         params.transpose = transpose
+        params.ChangeNorm = ChangeNorm
         controller.retainSpreadsheetService.molSpreadSheetData = molSpreadSheetData
 
         when:
@@ -82,15 +83,23 @@ class MolSpreadSheetControllerUnitSpec extends Specification {
         assert response.status == 200
 
         where:
-        label                       | norefresh | transpose | molSpreadSheetData
-        "no refresh your transpose" | null      | null      | null
-        "refresh only"              | "true"    | null      | null
-        "transpose only"            | null      | "true"    | null
-        "refresh and transpose"     | "true"    | "true"    | null
-        "no refresh your transpose" | null      | null      | new MolSpreadSheetData()
-        "refresh only"              | "true"    | null      | new MolSpreadSheetData()
-        "transpose only"            | null      | "true"    | new MolSpreadSheetData()
-        "refresh and transpose"     | "true"    | "true"    | new MolSpreadSheetData()
+        label                       | norefresh | transpose | molSpreadSheetData        |  ChangeNorm
+        "no refresh your transpose" | null      | null      | null                      |  null
+        "refresh only"              | "true"    | null      | null                      |  null
+        "transpose only"            | null      | "true"    | null                      |  ""
+        "refresh and transpose"     | "true"    | "true"    | null                      |  ""
+        "no refresh your transpose" | null      | null      | new MolSpreadSheetData()  |  null
+        "refresh only"              | "true"    | null      | new MolSpreadSheetData()  |  null
+        "transpose only"            | null      | "true"    | new MolSpreadSheetData()  |  ""
+        "refresh and transpose"     | "true"    | "true"    | new MolSpreadSheetData()  |  ""
+        "no refresh your transpose" | null      | null      | null                      |  "0"
+        "refresh only"              | "true"    | null      | null                      |  "0"
+        "transpose only"            | null      | "true"    | null                      |  "9388"
+        "refresh and transpose"     | "true"    | "true"    | null                      |  "9388"
+        "no refresh your transpose" | null      | null      | new MolSpreadSheetData()  |  "0"
+        "refresh only"              | "true"    | null      | new MolSpreadSheetData()  |  "0"
+        "transpose only"            | null      | "true"    | new MolSpreadSheetData()  |  "9388"
+        "refresh and transpose"     | "true"    | "true"    | new MolSpreadSheetData()  |  "9388"
     }
 
 //    void "test no flash"() {
