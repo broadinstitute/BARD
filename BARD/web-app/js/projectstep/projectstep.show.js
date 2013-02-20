@@ -61,7 +61,7 @@ var Renderer = function(canvas){
                 var wt = ctx.lineWidth
                 var arrowLength = 10 + wt
                 var arrowWidth = 5 + wt
-                ctx.fillStyle = "rgba(255, 0, 0, 1)"
+              //  ctx.fillStyle = "rgba(255, 0, 0, 1)"
 
                 // Rotate the context to point along the path
                 var dx = pt2.x-pt1.x, dy=pt2.y-pt1.y, len=Math.sqrt(dx*dx+dy*dy);
