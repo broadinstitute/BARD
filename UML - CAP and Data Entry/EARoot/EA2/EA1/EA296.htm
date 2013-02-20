@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Generate change script</title>
+<title>ETL transfer experiment to warehouse</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Generate change script", " : "))</script>  : Public  &lt;&lt;process&gt;&gt; Process</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("ETL transfer experiment to warehouse", " : "))</script>  : Public   Activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/26/2012 8:52:47 AM</td>
+			<td width="85%" class="ObjectDetailsValue">2/19/2013 5:16:03 PM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">9/26/2012 8:52:57 AM</td>
+			<td class="ObjectDetailsValue">2/19/2013 5:55:54 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -87,69 +87,19 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{4AF7C7D4-56B8-4544-946F-755B26642CA3}</td>
+			<td class="ObjectDetailsValue">{C8EC3569-01F8-4782-BA00-FBA74BBDC3FE}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA279.htm">Data base management</a></td>
+			<td class="ObjectDetailsValue"><a href="EA280.htm">Paths for result data points</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
-			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="FlowToTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA289.htm">DATA_MIG Change script</a><br />
-						Entity &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow64" onclick="parent.toggleDiv('detailsDIVLinkFlow64', 'DetailsImageLinkFlow64')" />Details:
-							<div id="detailsDIVLinkFlow64" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<div class="ItemBody" id="FlowFromTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Name</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top">
-						<a href="EA290.htm">DATA_MIG schema</a><br />
-						Object &nbsp;
-					</td>
-					<td width="50%" class="TableRow" valign="top">&nbsp;</td>					
-				</tr>
-				<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLinkFlow65" onclick="parent.toggleDiv('detailsDIVLinkFlow65', 'DetailsImageLinkFlow65')" />Details:
-							<div id="detailsDIVLinkFlow65" class="DetailsDiv" >
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
 		<div class="ItemBody" id="CustomPropertiesTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
@@ -172,9 +122,21 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA294.htm">«information» ERD model</a></td>
-					<td width="15%" class="TableRow" valign="top">Entity</td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA297.htm">«information» experiment structure XML</a></td>
+					<td width="15%" class="TableRow" valign="top">Object</td>
 					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA291.htm">«information» CAP result cache file</a></td>
+					<td width="15%" class="TableRow" valign="top">Object</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="../../EA7/EA1/EA1182.htm">«Dim DB» Data Warehouse</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
