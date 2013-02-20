@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
 import bard.core.SearchParams
+import bard.core.rest.spring.compounds.Compound
 
 /**
  *
@@ -77,7 +78,7 @@ class BardWebInterfaceController {
         Map<String, Integer> searchParams = handleSearchParams()
         SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
         final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput, GroupTypes.EXPERIMENT, [], new SearchParams(top: searchParams.top, skip: searchParams.skip))
-        render(view: 'webQueryModel', model:[webQueryTableModel: webQueryTableModel])
+        render(view: 'webQueryModel', model: [webQueryTableModel: webQueryTableModel])
     }
 
     def showExperiment(Long id, String normalizeYAxis, String activityOutcome) {
@@ -112,6 +113,32 @@ class BardWebInterfaceController {
         catch (Exception ee) {
 
             String message = "Problem finding Experiment ${id}"
+            log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
+
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "${message}")
+        }
+    }
+
+    def probe(String probeId) {
+        if (isHTTPBadRequest(probeId, 'Probe ID is a required Field', bardUtilitiesService.username)) {
+            return
+        }
+        try {
+            CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
+            if (compoundAdapter && compoundAdapter.bardProjectId != '-1') {
+                render(template: 'probes', model: [projectId: compoundAdapter.bardProjectId])
+            } else {
+                render text: "", contentType: 'text/plain'
+            }
+        }
+        catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
+            String message = "Probe with ID ${probeId} does not exists"
+            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
+        }
+        catch (Exception ee) {
+
+            String message = "Problem finding Probe ${probeId}"
             log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
 
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,

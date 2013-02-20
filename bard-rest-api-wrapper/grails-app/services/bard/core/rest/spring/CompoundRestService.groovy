@@ -44,6 +44,25 @@ class CompoundRestService extends AbstractRestService {
         }
         return []
     }
+
+//    Cannot cast object '''{cid=44552613, probeId=ML118, url=null, smiles=OC(=O)C(F)(F)F.CN1C(=O)C=C(OCCCC(=O)NC2=NC=CC(C)=C2)C3=CC=CC=C13,
+//name=4-(1-methyl-2-oxoquinolin-4-yl)oxy-N-(4-methylpyridin-2-yl)butanamide;2,2,2-trifluoroacetic acid,
+//iupacName=4-(1-methyl-2-oxoquinolin-4-yl)oxy-N-(4-methylpyridin-2-yl)butanamide;2,2,2-trifluoroacetic acid,
+// mwt=465.422, tpsa=109.0, exactMass=465.151, xlogp=null, complexity=632, rotatable=6, hbondAcceptor=9,
+// hbondDonor=2, compoundClass=Unassigned, numAssay=null, numActiveAssay=null, highlight=null,
+// resourcePath=/compounds/44552613, bardProjectid=-1}''' with class 'java.util.LinkedHashMap'
+//    to class 'bard.core.rest.spring.compounds.Compound' due to: org.codehaus.groovy.runtime.metaclass.MissingPropertyExceptionNoStack:
+//    No such property: bardProjectid for class: bard.core.rest.spring.compounds.Compound
+//    Possible solutions: bardProjectId
+    public Compound findProbe(String mlNumber) {
+        String urlToCompounds = getResource() + RestApiConstants.PROBEID + RestApiConstants.FORWARD_SLASH + mlNumber
+        final URL url = new URL(urlToCompounds)
+        final List<Compound> compounds = getForObject(url.toURI(), List.class) as List<Compound>
+        if(compounds){
+            return compounds.get(0)
+        }
+        return null
+    }
     /**
      *
      * @param list of cid ids

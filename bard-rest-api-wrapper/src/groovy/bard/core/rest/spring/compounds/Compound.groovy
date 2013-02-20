@@ -12,7 +12,8 @@ public class Compound extends JsonUtil {
     private String etag;
 
     private CompoundAnnotations compoundAnnotations
-
+    @JsonProperty("bardProjectid")
+    private String bardProjectid
     @JsonProperty("cid")
     private Integer cid;
     @JsonProperty("probeId")
@@ -327,7 +328,14 @@ public class Compound extends JsonUtil {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
-
+    @JsonProperty("bardProjectid")
+    public String getBardProjectid(){
+        return this.bardProjectid
+    }
+    @JsonProperty("bardProjectid")
+    public void setBardProjectid(String bardProjectId){
+        this.bardProjectid=bardProjectId
+    }
     public String getEtag() {
         return etag
     }

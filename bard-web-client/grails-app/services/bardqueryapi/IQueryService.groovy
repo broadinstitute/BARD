@@ -184,4 +184,6 @@ public interface IQueryService {
     public void findFiltersInSearchBox(final List<SearchFilter> searchFilters, final String searchString);
 
     public QueryHelperService getQueryHelperService()
+
+    public CompoundAdapter findProbe(String mlNumber)
 }

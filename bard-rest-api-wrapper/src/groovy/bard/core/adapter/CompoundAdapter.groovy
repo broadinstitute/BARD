@@ -176,4 +176,7 @@ public class CompoundAdapter implements CompoundAdapterInterface {
     public String resourcePath() {
         return compound.resourcePath
     }
+    public String getBardProjectId(){
+        return compound.getBardProjectid()
+    }
 }

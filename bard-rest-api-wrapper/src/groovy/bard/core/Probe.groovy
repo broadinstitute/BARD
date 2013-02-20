@@ -1,7 +1,5 @@
 package bard.core;
 
-import java.io.Serializable;
-
 /**
  * @author Jacob Asiedu
  */
@@ -11,12 +9,17 @@ public class Probe implements Serializable {
     final String probeId;
     final String url;
     final String smiles;
+    final String bardProjectId
 
-    public Probe(String cid, String probeId, String url, String smiles) {
+    public Probe(String cid, String probeId, String url, String smiles, String bardProjectId) {
         this.cid = cid;
         this.probeId = probeId;
         this.url = url ;
         this.smiles = smiles;
+        this.bardProjectId = bardProjectId
+    }
+    public String getBardProjectId(){
+        return this.bardProjectId
     }
     /**
      *

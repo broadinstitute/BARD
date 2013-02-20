@@ -50,6 +50,11 @@
             <g:if test="${compound?.probeId}">
                 <dt>Probe ID:</dt>
                 <dd>${compound.probeId}</dd>
+
+                <div id="probe"
+                     href="${createLink(controller: 'bardWebInterface', action: 'probe', params: [probeId: compound.probeId])}">
+                </div>
+
             </g:if>
             <g:if test="${compound?.getSynonyms()}">
                 <dt>Synonyms:</dt>

@@ -50,5 +50,6 @@ public interface RestApiConstants {
     final String TYPE = "type";
     final String CID = "cid";
     final String EXPTDATA_RESOURCE = "/exptdata";
+    final String PROBEID="/probeid";
     final String SMILES = "smiles";
 }

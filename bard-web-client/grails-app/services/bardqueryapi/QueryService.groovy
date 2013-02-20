@@ -522,4 +522,16 @@ class QueryService implements IQueryService {
         }
         return [status: 404, message: "Error getting Promiscuity Score for ${cid}", promiscuityScore: null]
     }
+    /**
+     *
+     * @param mlNumber
+     */
+    @Override
+    CompoundAdapter findProbe(String mlNumber) {
+        Compound compound = compoundRestService.findProbe(mlNumber)
+        if (compound) {
+            return new CompoundAdapter(compound)
+        }
+        return null
+    }
 }

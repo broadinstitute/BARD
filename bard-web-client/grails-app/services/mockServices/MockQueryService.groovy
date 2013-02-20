@@ -904,6 +904,11 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     Map searchCompoundsByCids(List<Long> cids, Integer top, Integer skip, List<SearchFilter> searchFilters) {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    CompoundAdapter findProbe(String mlNumber) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
 class MockAssayAdapter implements AssayAdapterInterface {
     String name
@@ -1071,7 +1076,7 @@ class MockProjectAdapter implements ProjectAdapterInterface {
 
     @Override
     List<Probe> getProbes() {
-        return [new Probe("2", "ML18", "http://bard.org", "CCC"), new Probe("28", "ML20", "http://bard.org", "CCCC")]  //To change body of implemented methods use File | Settings | File Templates.
+        return [new Probe("2", "ML18", "http://bard.org", "CCC", ""), new Probe("28", "ML20", "http://bard.org", "CCCC", "")]  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -64,7 +64,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         final List<Probe> probes = new ArrayList<Probe>()
         final List<Compound> compounds = project.getProbes()
         for (Compound compound : compounds) {
-            Probe probe = new Probe(compound.cid.toString(), compound.probeId, compound.url, compound.smiles)
+            Probe probe = new Probe(compound.cid.toString(), compound.probeId, compound.url, compound.smiles, project.bardProjectId?.toString())
             probes.add(probe)
         }
         return probes
