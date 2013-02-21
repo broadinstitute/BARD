@@ -29,7 +29,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
         if (matchFieldName) {
-            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName, this.class)
+            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName)
             return "Matched Field: " + matchFieldName
         }
         return ""
