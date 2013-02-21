@@ -13,7 +13,8 @@ window.onload = function () {
 
         //the Raphael set is obligatory, containing all you want to display
         var set = r.set().push(
-            r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))
+            //r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))
+             r.circle(-10, -13, 10).attr({"fill":"#fc0", "stroke-width":1}))
             .push(label);
 
         set.click(
@@ -41,7 +42,8 @@ window.onload = function () {
         var label = r.text(0, 10, n.label);
         //the Raphael set is obligatory, containing all you want to display
         var set = r.set().push(
-            r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))
+           // r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))
+            r.circle(-10, -13, 10).attr({"fill":"#fc0", "stroke-width":1}))
             .push(label);
         return set;
     };
@@ -62,8 +64,8 @@ window.onload = function () {
     var layouterIsolated = new Graph.Layout.Spring(gIsolated);
 
     /* draw the graph using the RaphaelJS draw implementation */
-    var renderer = new Graph.Renderer.Raphael('canvas', g, 800, 500);
-    var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 800, 150);
+    var renderer = new Graph.Renderer.Raphael('canvas', g, 700, 500);
+    var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 700, 150);
 
     redraw = function () {
         layouter.layout();
