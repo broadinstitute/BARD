@@ -15,6 +15,9 @@ import java.util.regex.Pattern
 
 class ResultsService {
 
+    // the number of lines to show the user after upload completes
+    static int LINES_TO_SHOW_USER = 10;
+
     static String NUMBER_PATTERN_STRING = "[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?"
 
     // pattern matching a number
@@ -59,14 +62,13 @@ class ResultsService {
         } else {
             def labelMap = [:]
             contextItems.each {
-                if(it.valueElement != null)
-                    labelMap[it.valueElement.label] = it.valueElement
+                labelMap[it.valueDisplay.trim()] = it
             }
-            Element element = labelMap[value]
-            if (element == null) {
+            AssayContextItem selectedItem = labelMap[value.trim()]
+            if (selectedItem == null) {
                 return "Could not find \"${value}\" among values in list: ${labelMap.keySet()}"
             }
-            return new Cell(element: element, column: column)
+            return new Cell(element: selectedItem.valueElement, valueDisplay: selectedItem.valueDisplay, column: column)
         }
     }
 
@@ -205,6 +207,8 @@ class ResultsService {
 
         Element element;
 
+        String valueDisplay;
+
         public Element getAttributeElement() {
             return column.item.attributeElement;
         }
@@ -219,6 +223,9 @@ class ResultsService {
         int experimentAnnotationsCreated = 0;
         Map<String, Integer> resultsPerLabel = [:]
         Set<Long> substanceIds = [] as Set
+
+        List<List> topLines = []
+
         public int getSubstanceCount() {
             return substanceIds.size()
         }
@@ -333,15 +340,23 @@ class ResultsService {
         List<ExperimentContext> contexts
         int linesParsed;
         List<Row> rows;
+        List<List<String>> topLines;
     }
 
     static class LineReader {
         BufferedReader reader;
         int lineNumber = 0;
 
+        List<List<String>> topLines = []
+
         String readLine() {
             lineNumber ++;
-            return reader.readLine();
+            String line = reader.readLine();
+
+            if (line != null && topLines.size() < LINES_TO_SHOW_USER)
+                topLines.add(line.split(","))
+
+            return line;
         }
     }
 
@@ -354,7 +369,7 @@ class ResultsService {
         return true
     }
 
-    InitialParse parseConstantRegion(LineReader reader,  ImportSummary errors, List<Column> experimentItemDefs) {
+    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, List<Column> experimentItemDefs) {
         Map<String,Column> nameToColumn = [:]
         Map<AssayContext,Collection<Cell>> groupedByContext = [:]
         Map header = [:]
@@ -708,6 +723,7 @@ class ResultsService {
 
         result.rows = rows
         result.linesParsed = reader.lineNumber
+        result.topLines = reader.topLines
 
         return result
     }
@@ -751,6 +767,9 @@ class ResultsService {
         def parsed = initialParse(new InputStreamReader(input), errors, template)
         if (parsed != null && !errors.hasErrors()) {
             errors.linesParsed = parsed.linesParsed
+
+            // populate the top few lines in the summary.
+            errors.topLines = parsed.topLines
 
             def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
 

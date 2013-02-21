@@ -32,8 +32,22 @@
             <g:each in="${summary.resultsPerLabel.entrySet()}" var="entry">
                 <li>${entry.key}: ${entry.value}</li>
             </g:each>
-    </ul>
+        </ul>
         </p>
+
+        <p>Top 10 lines of submitted file</p>
+        <table border="1">
+            <tbody>
+                <g:each in="${summary.topLines}" var="row">
+                <tr>
+                    <g:each in="${row}" var="cell">
+                        <td>${cell}</td>
+                    </g:each>
+                </tr>
+                </g:each>
+            </tbody>
+        </table>
+
     </g:else>
 
     <g:link action="show" controller="experiment" id="${experiment.id}">Return to Experiment's Details</g:link>
