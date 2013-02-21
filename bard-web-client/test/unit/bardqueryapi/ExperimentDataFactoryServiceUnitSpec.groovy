@@ -16,7 +16,7 @@ class ExperimentDataFactoryServiceUnitSpec extends Specification {
     void createTableModel() {
         given:
         SpreadSheetInput spreadSheetInput = new SpreadSheetInput()
-        GroupTypes groupTypes = GroupTypes.ASSAY
+        GroupByTypes groupTypes = GroupByTypes.ASSAY
         List<FilterTypes> filterTypes = []
         SearchParams searchParams = new SearchParams()
         when:

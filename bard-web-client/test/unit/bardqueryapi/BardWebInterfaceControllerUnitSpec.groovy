@@ -137,33 +137,30 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test showExperiment with Ajax"() {
         given:
-        Map experimentData = [total: 2, experimentId: 222, spreadSheetActivities: [
-                new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentRole.Counterscreen, experiment: new ExperimentShow(name: 'name', assays: [new Assay(capAssayId: 10)])]
+        WebQueryTableModel webQueryTableModel = new WebQueryTableModel()
+        webQueryTableModel.additionalProperties.put("experimentName", "experimentName")
 
         params.id = "222"
         request.addHeader("X-Requested-With", "XMLHttpRequest")
         when:
         controller.showExperiment()
         then:
-        this.queryService.findExperimentDataById(_, _, _, _, _) >> {experimentData}
+        this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
         assert response.status == 200
+        assert response.text.contains("Title: experimentName")
     }
 
     void "test showExperiment #label"() {
         when:
         controller.showExperiment(eid, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
-        _ * this.queryService.findExperimentDataById(_, _, _, _, _) >> {experimentData}
+        _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
         assert response.status == statusCode
 
         where:
-        label                          | eid  | statusCode                         | experimentData
+        label                          | eid  | statusCode                         | webQueryTableModel
         "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST | null
-        "EID- Not Found"               | 234  | HttpServletResponse.SC_OK          | null
-        "Success"                      | 567  | HttpServletResponse.SC_OK          | [total: 2, spreadSheetActivities: [
-                new SpreadSheetActivity(eid: new Long(567), cid: new Long(1), sid: new Long(20))],
-                role: ExperimentRole.Counterscreen, experiment: new ExperimentShow(name: 'name', assays: [new Assay(capAssayId: 10)])]
+        "Good request"                 | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel()
     }
 
     void "test showExperiment With Exception #label"() {
@@ -172,8 +169,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(id, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
-        _ * this.queryService.findExperimentDataById(_, _, _, _, _) >> {throw exceptionType}
-        _ * experimentDataFactoryService.createTableModel(_,_, _, _)  >> {new WebQueryTableModel()}
+        _ * experimentDataFactoryService.createTableModel(_, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -850,7 +846,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchCompoundsByIDs(searchCommand)
         then:
-        queryService.searchCompoundsByCids(_, _,_,_) >> {throw exceptionType}
+        queryService.searchCompoundsByCids(_, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode

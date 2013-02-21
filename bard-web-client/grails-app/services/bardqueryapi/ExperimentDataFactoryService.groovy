@@ -10,7 +10,7 @@ class ExperimentDataFactoryService {
 
     WebQueryTableModel createTableModel(
             SpreadSheetInput spreadSheetInput,
-            GroupTypes groupTypes,
+            GroupByTypes groupTypes,
             List<FilterTypes> filterTypes,
             SearchParams searchParams
     ) {

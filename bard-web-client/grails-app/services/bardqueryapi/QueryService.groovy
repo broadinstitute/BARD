@@ -298,7 +298,7 @@ class QueryService implements IQueryService {
     }
 
     WebQueryTableModel showExperimentalData(Long experimentId,
-                                            GroupTypes groupTypes,
+                                            GroupByTypes groupTypes,
                                             List<FilterTypes> filterTypes,
                                             SearchParams searchParams) {
         Integer top = searchParams.top

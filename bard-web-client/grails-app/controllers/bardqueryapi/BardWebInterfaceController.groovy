@@ -87,7 +87,7 @@ class BardWebInterfaceController {
             }
 
             final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
-                    GroupTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
+                    GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
             webQueryTableModel.additionalProperties.put("searchString", params.searchString)
             webQueryTableModel.additionalProperties.put("normalizeYAxis",normalizeAxis.toString())
 
