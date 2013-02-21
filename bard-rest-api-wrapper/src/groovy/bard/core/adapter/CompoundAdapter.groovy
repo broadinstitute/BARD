@@ -6,6 +6,7 @@ import bard.core.rest.spring.compounds.Compound
 import org.apache.commons.lang3.StringUtils
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.compounds.CompoundAnnotations
+import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class CompoundAdapter implements CompoundAdapterInterface {
     final Compound compound
@@ -55,6 +56,7 @@ public class CompoundAdapter implements CompoundAdapterInterface {
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
         if(matchFieldName){
+            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName)
             //TODO: Talk to Steve about formatting
             return "Matched Field: " + matchFieldName
         }

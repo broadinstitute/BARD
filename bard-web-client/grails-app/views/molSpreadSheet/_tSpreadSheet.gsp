@@ -83,8 +83,9 @@
                         colspan=2><%="${((columnHeaders?.size() > 3) ? (columnHeaders[3]) : 'inactive/active')}"%></th>
                     <g:each var="rowCnt" in="${0..(molSpreadSheetData.getRowCount() - 1)}">
                         <% String activeVrsTested = """${molSpreadSheetData?.displayValue(rowCnt, 3)?."value"}""".toString() %>
+                        <% String cid = """${molSpreadSheetData?.displayValue(rowCnt, 1)?."value"}""".toString() %>
                         <td class="molSpreadSheet" property="cid">
-                            <g:activeVrsTestedCell activeVrsTested="${activeVrsTested}"/>
+                            <g:activeVrsTestedCell activeVrsTested="${activeVrsTested}"  cid="${cid}"/>
                         </td>
                     </g:each>
                 </tr>
