@@ -34,6 +34,9 @@
             </g:each>
         </ul>
         </p>
+        <p>
+            Of those results, ${summary.resultsWithRelationships} had relationships to other results and a total of ${summary.resultAnnotations} result annotations were loaded.
+        </p>
 
         <p>Top 10 lines of submitted file</p>
         <table border="1">

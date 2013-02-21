@@ -39,7 +39,7 @@ def convertToJson(Result result) {
     obj.put("resultId", result.id)
     obj.put("resultTypeId", result.resultTypeId)
     obj.put("statsModifierId", result.statsModifierId)
-    obj.put("resultType", result.resultType.label)
+    obj.put("resultType", result.displayLabel)
     obj.put("valueNum", result.valueNum);
     obj.put("valueMin", result.valueMin);
     obj.put("valueMax", result.valueMax);

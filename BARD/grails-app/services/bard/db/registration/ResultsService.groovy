@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
@@ -225,6 +226,9 @@ class ResultsService {
         Map<String, Integer> resultsPerLabel = [:]
         Set<Long> substanceIds = [] as Set
 
+        int resultsWithRelationships = 0;
+        int resultAnnotations = 0;
+
         List<List> topLines = []
 
         public int getSubstanceCount() {
@@ -432,7 +436,6 @@ class ResultsService {
         result.contexts = []
         groupedByContext.values().each { Collection<Cell> cells ->
             ExperimentContext context = new ExperimentContext()
-            println("new context")
             for(cell in cells) {
                 ExperimentContextItem item = new ExperimentContextItem(attributeElement: cell.attributeElement,
                         experimentContext: context,
@@ -507,7 +510,7 @@ class ResultsService {
             } catch(Exception ex) {
                 errors.addError(lineNumber, i, "Could not parse \"${values[i]}\"")
                 hadFailure = true
-                ex.printStackTrace()
+//                ex.printStackTrace()
             }
         }
 
@@ -573,10 +576,6 @@ class ResultsService {
         }
     }
 
-    boolean isLinked(Column measureColumn, Column itemColumn) {
-        def key = new Tuple(measureColumn.measure, itemColumn.contextItem)
-    }
-
     void associateItemToResults(List<Result> results, List<Column> columns, Cell cell, Closure isLinked) {
         assert columns.size() == results.size()
 
@@ -584,14 +583,33 @@ class ResultsService {
             Column column = columns.get(i)
             Result result = results.get(i)
 
-            if (isLinked(column.measure, cell.column.item)) {
+            boolean linked = isLinked(column.measure, cell.column.item)
+            if (linked) {
                 ResultContextItem item = new ResultContextItem(result: result, attributeElement: cell.column.item.attributeElement, valueNum: cell.value, qualifier: cell.qualifier, valueMin: cell.minValue, valueMax: cell.maxValue, valueElement: cell.element)
                 result.resultContextItems.add(item)
             }
         }
     }
 
-    Collection<Result> createResults(InitialParse parse, ImportSummary errors, Map<AssayContextItem, Collection<Measure>> measuresPerContextItem) {
+    Map<Number, Collection<Number>> constructChildMap(Collection<Row> rows) {
+        Map map = [:]
+        for(row in rows) {
+            if (row.parentRowNumber != null) {
+                List<Number> childrenIds = map[row.parentRowNumber]
+
+                if (childrenIds == null) {
+                    childrenIds = new ArrayList();
+                    map[row.parentRowNumber] = childrenIds
+                }
+                childrenIds.add(row.rowNumber)
+            }
+        }
+
+        return map
+    }
+
+
+    Collection<Result> createResults(InitialParse parse, ImportSummary errors, Map<ItemService.Item, Collection<Measure>> measuresPerItem, Collection<ExperimentMeasure> experimentMeasures) {
         def rowByNumber = [:]
         parse.rows.each {
             rowByNumber[it.rowNumber] = it
@@ -622,26 +640,22 @@ class ResultsService {
             resultsByRowNumber[row.rowNumber] = results
         }
 
-        // create the parent/child links between measures
+        // validate all parent rows exist
         for(row in parse.rows) {
-            if (row.parentRowNumber == null)
-                continue
-
-            def results = []
-            ResultsService.Row parentRow = rowByNumber[row.parentRowNumber]
-            if (parentRow == null) {
+            if (row.parentRowNumber != null && !resultsByRowNumber.containsKey(row.parentRowNumber)) {
                 errors.addError(row.lineNumber, 0, "Could not find row ${row.parentRowNumber} but this row ${row.rowNumber} is a child")
-            } else {
-                // project cells to results and link the two rows
-                addHierachyRelationships(row.cells.collect {resultByCell[it]}, parentRow.cells.collect {resultByCell[it]})
             }
         }
 
+        // create the parent/child links between measures
+        createResultHierarchy(parse, rowByNumber, experimentMeasures, errors, resultByCell)
+
         // and finally create the context items
-        def isLinked = { measure, contextItem ->
-            if(measuresPerContextItem.containsKey(contextItem)) {
-                return measuresPerContextItem[contextItem].contains(measure)
+        def isLinked = { measure, item ->
+            if(measuresPerItem.containsKey(item)) {
+                return measuresPerItem[item].contains(measure)
             }
+            return false;
         }
         for(row in parse.rows) {
             def results = resultsByRowNumber.get(row.rowNumber)
@@ -653,6 +667,65 @@ class ResultsService {
         }
 
         return resultByCell.values()
+    }
+
+    private void createResultHierarchy(InitialParse parse, LinkedHashMap rowByNumber, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, LinkedHashMap resultByCell) {
+        Map<Number, Collection<Number>> parentToChildRows = constructChildMap(parse.rows)
+        for (row in parse.rows) {
+            // find all the cells which might have a parent-child relationship either due to being on the same
+            // row, or due to the rows being linked by parent id
+            List<Cell> possiblyRelatedCells = new ArrayList(row.cells)
+            Collection<Number> childIds = parentToChildRows[row.rowNumber]
+            if (childIds != null) {
+                for (childId in childIds) {
+                    possiblyRelatedCells.addAll(rowByNumber[childId].cells)
+                }
+            }
+
+            // group the cells by measure
+            Map<Measure, Collection<Cell>> cellsByMeasure = possiblyRelatedCells.groupBy { it.column.measure }
+
+            for (experimentMeasure in experimentMeasures) {
+                if (experimentMeasure.parent != null) {
+                    Collection<Cell> parentCells = cellsByMeasure[experimentMeasure.parent.measure];
+                    Collection<Cell> childCells = cellsByMeasure[experimentMeasure.measure];
+
+                    if (parentCells != null) {
+                        if (parentCells.size() > 1) {
+                            errors.addError(row.lineNumber, 0, "Parent child relationship between ${parentCells} and ${childCells} is ambiguous.  There are multiple possible ways to assign relationships between these cells")
+                        } else if (parentCells.size() == 1) {
+                            Cell parentCell = parentCells.first();
+                            Result parentResult = resultByCell[parentCell];
+
+                            for (childCell in childCells) {
+                                Result childResult = resultByCell[childCell];
+
+                                linkResults(experimentMeasure.parentChildRelationship, errors, row.lineNumber, childResult, parentResult)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void linkResults(relationship, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
+        HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
+        if (hierarchyType == null) {
+            // hack until values are consistent in database
+            if (relationship == "has Child") {
+                hierarchyType = HierarchyType.Child;
+            } else if (relationship == "Derived from") {
+                hierarchyType = HierarchyType.Derives;
+            } else {
+                errors.addError(lineNumber, 0, "Experiment measures had the relationship ${relationship} which was unrecognized");
+                return;
+            }
+        }
+
+        ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: hierarchyType, result: childResult, parentResult: parentResult)
+        childResult.resultHierarchiesForResult.add(resultHierarchy)
+        parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
     }
 
     InitialParse initialParse(Reader input, ImportSummary errors, Template template) {
@@ -748,10 +821,10 @@ class ResultsService {
         return result
     }
 
-    Map<AssayContextItem, Collection<Measure>> findRelationships(Experiment experiment) {
+    Map<ItemService.Item, Collection<Measure>> findRelationships(Experiment experiment) {
         def map = [:]
 
-        experiment.assay.assayContextItems.each {
+        itemService.getLogicalItems(experiment.assay.assayContextItems).each {
             def measures = it.assayContext.assayContextMeasures.collect { it.measure }
             map[it] = measures
         }
@@ -763,7 +836,7 @@ class ResultsService {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
-        def measuresPerContextItem = findRelationships(experiment)
+        def measuresPerItem = findRelationships(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template)
         if (parsed != null && !errors.hasErrors()) {
@@ -778,36 +851,47 @@ class ResultsService {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
             }
 
-            def results = createResults(parsed, errors, measuresPerContextItem)
+            def results = createResults(parsed, errors, measuresPerItem, experiment.experimentMeasures)
 
             if (!errors.hasErrors()) {
                 // and persist these results to the DB
-                deleteExperimentResults(experiment)
+                Collection<ExperimentContext>contexts = parsed.contexts;
 
-                results.each {
-                    it.experiment = experiment
-
-                    String label = it.displayLabel
-                    Integer count = errors.resultsPerLabel.get(label)
-                    if (count == null) {
-                        count = 0
-                    }
-                    errors.resultsPerLabel.put(label, count+1)
-                    errors.substanceIds.add(it.substance.id)
-                }
-
-                parsed.contexts.each {
-                    it.experiment = experiment
-                    experiment.addToExperimentContexts(it)
-
-                    errors.experimentAnnotationsCreated += it.contextItems.size()
-                }
-
-                errors.resultsCreated = results.size()
+                persist(experiment, results, errors, contexts)
             }
         }
 
         return errors
+    }
+
+    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts) {
+        deleteExperimentResults(experiment)
+
+        results.each {
+            it.experiment = experiment
+
+            String label = it.displayLabel
+            Integer count = errors.resultsPerLabel.get(label)
+            if (count == null) {
+                count = 0
+            }
+            errors.resultsPerLabel.put(label, count + 1)
+
+            errors.substanceIds.add(it.substance.id)
+
+            if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
+                errors.resultsWithRelationships ++;
+            errors.resultAnnotations += it.resultContextItems.size()
+        }
+
+        contexts.each {
+            it.experiment = experiment
+            experiment.addToExperimentContexts(it)
+
+            errors.experimentAnnotationsCreated += it.contextItems.size()
+        }
+
+        errors.resultsCreated = results.size()
     }
 
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
