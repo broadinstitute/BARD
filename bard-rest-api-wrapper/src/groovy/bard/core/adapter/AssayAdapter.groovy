@@ -6,6 +6,7 @@ import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
 import bard.core.interfaces.*
 import bard.core.rest.spring.assays.*
+import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class AssayAdapter implements AssayAdapterInterface{
     final AbstractAssay assay
@@ -25,6 +26,7 @@ public class AssayAdapter implements AssayAdapterInterface{
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
         if(matchFieldName){
+            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName, this.class)
             //TODO: Talk to Steve about formatting
             return "Matched Field: " + matchFieldName
         }
