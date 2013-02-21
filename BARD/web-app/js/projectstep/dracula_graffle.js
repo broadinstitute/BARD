@@ -15,6 +15,7 @@
  * returns:
  *      connection { draw = function() }
  */
+var template1 = Handlebars.compile($("#edge-selection-template").html())
 Raphael.fn.connection = function Connection(obj1, obj2, style) {
   var selfRef = this;
   /* create and return new connection */
@@ -109,7 +110,10 @@ Raphael.fn.connection = function Connection(obj1, obj2, style) {
               .attr({ stroke: style && style.stroke || "#000", fill: "none" })
               .toBack()
           .click(function(){
-              alert(obj1.id+ " clicked edge " + obj2.id)
+              var params = {fromNode:obj1.data.link, toNode:obj2.data.link}
+              $('#edge-selection-details').html(template1(params))
+
+             // alert(obj1.id+ " clicked edge " + obj2.id)
           }));
 
       edge.bg && edge.bg[move]({path:path})
@@ -117,7 +121,9 @@ Raphael.fn.connection = function Connection(obj1, obj2, style) {
               && selfRef.path(path)
               .attr({ stroke: style.fill.split("|")[0], fill: "none",
                 "stroke-width": style.fill.split("|")[1] || 3 }).toBack().click(function(){
-              alert(obj1.id+ " clicked edge " + obj2.id)
+              var params = {fromNode:obj1.data.link, toNode:obj2.data.link}
+              $('#edge-selection-details').html(template1(params))
+             // alert(obj1.id+ " clicked edge " + obj2.id)
           }));
       /* setting label */
       style && style.label

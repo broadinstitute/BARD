@@ -48,7 +48,7 @@ modules = {
         dependsOn "handlebars"
         //resource url: '/js/projectstep/arbor.js'
         //resource url: '/js/projectstep/projectstep.show.js'
-        //resource url: '/js/projectstep/projectstep.edit.js'
+        resource url: '/js/projectstep/projectstep.edit.js'
         resource url: '/js/projectstep/raphael.js'
         resource url: '/js/projectstep/dracula_graffle.js'
         resource url: '/js/projectstep/dracula_graph.js'

@@ -2,6 +2,8 @@ var redraw;
 
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 window.onload = function () {
+    var template = Handlebars.compile($("#node-selection-template").html())
+
     var g = new Graph();
     var gIsolated = new Graph();
 
@@ -19,13 +21,21 @@ window.onload = function () {
 
         set.click(
             function click() {
-                alert("id " + n.id)
-                var edges = n.edges;
-                var dis ="";
-                for (var i = 0; i < edges.length; i++) {
-                    dis = dis + n.data.i  + " " + edges[i].source.id + " " + edges[i].target.id
-                }
-                alert("clicked" + dis)
+                var projectId = $('#projectIdForStep').val();
+
+                resetAfterClick();
+//                var edges = n.edges;
+//
+//                var sources = new Array();
+//                var targets = new Array();
+//                var myMap = {};
+//                for (var i = 0; i < edges.length; i++) {
+//                    myMap[edges[i].source.id] = edges[i].target.id;
+//                }
+
+                var params = {selected: n, projectId: projectId}
+                $('#node-selection-details').html(template(params))
+
             }
         );
         return set;
@@ -33,9 +43,9 @@ window.onload = function () {
 
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
-        g.addNode(connectedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {"i": i}, render:render });
+        g.addNode(connectedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
+            ename: keyValues.ename}, render:render });
     }
-
 
     var isolatedNodes = graphInJSON.isolatedNodes;
     var renderIsolated = function (r, n) {
@@ -45,12 +55,24 @@ window.onload = function () {
            // r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))
             r.circle(-10, -13, 10).attr({"fill":"#fc0", "stroke-width":1}))
             .push(label);
+        set.click(
+            function click() {
+                var projectId = $('#projectIdForStep').val();
+                resetAfterClick();
+                var params = {selected: n, projectId: projectId}
+                $('#node-selection-details').html(template(params))
+
+            }
+        );
+
+
         return set;
     };
 
     for (var i = 0; i < isolatedNodes.length; i++) {
         var keyValues = isolatedNodes[i].keyValues;
-        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, render:renderIsolated});
+        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
+            ename: keyValues.ename}, render:renderIsolated});
     }
 
     var edges = graphInJSON.edges;
@@ -76,3 +98,11 @@ window.onload = function () {
     redraw();
 };
 
+function resetAfterClick(){
+    $('#nodelink').text("")
+    $("#edgesTable > tbody").find("tr:gt(0)").remove();
+    $("#edgesTable > tbody").find("tr:eq(0)").remove();
+    $('#nodeename').text("")
+    $('#nodeassay').text("")
+    $('#assaylink').attr("href", "")
+}
