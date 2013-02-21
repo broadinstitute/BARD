@@ -36,14 +36,18 @@ class ExperimentControllerSpec extends Specification {
     def 'test save'() {
         setup:
         Assay assay = Assay.build()
+        ExperimentService experimentService = Mock(ExperimentService)
+        controller.experimentService = experimentService
 
         when:
         params.assayId = assay.id
         params.experimentName = "name"
         params.description = "desc"
+        params.experimentTree = "[]"
         controller.save()
 
         then:
+        1*experimentService.updateMeasures(_,_)
         Experiment.getAll().size() == 1
         def experiment = Experiment.getAll().first()
         assert response.redirectedUrl == "/experiment/show/${experiment.id}"
