@@ -123,9 +123,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def tubaElement = Element.build(label: "tuba")
         def attribute = Element.build()
         def context = AssayContext.build()
-        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, assayContext: context)
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
-        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, assayContext: context)
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
         ResultsService.Column column = new ResultsService.Column("column", item)
@@ -346,9 +346,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def tubaElement = Element.build(label: "tuba")
         def attribute = Element.build()
         def context = AssayContext.build()
-        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, assayContext: context)
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
-        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, assayContext: context)
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
         ResultsService.Column column = new ResultsService.Column("x", item)

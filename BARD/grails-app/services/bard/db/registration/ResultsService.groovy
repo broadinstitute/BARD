@@ -62,7 +62,8 @@ class ResultsService {
         } else {
             def labelMap = [:]
             contextItems.each {
-                labelMap[it.valueDisplay.trim()] = it
+                if(it.valueDisplay != null)
+                    labelMap[it.valueDisplay.trim()] = it
             }
             AssayContextItem selectedItem = labelMap[value.trim()]
             if (selectedItem == null) {
