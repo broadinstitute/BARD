@@ -158,7 +158,7 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.matchingField.name == "name"
         assert projectAdapter.score == 2
         assert projectAdapter.matchingField.description == "description"
-        assert projectAdapter.highlight == "Matched Field: name"
+        assert projectAdapter.highlight == "Matched Field: Name"
         assert projectAdapter.targets
         assert !projectAdapter.documents
         assert projectAdapter.hasProbes()

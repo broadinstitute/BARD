@@ -10,6 +10,7 @@ import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.util.Target
+import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
@@ -28,6 +29,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
         if (matchFieldName) {
+            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName, this.class)
             return "Matched Field: " + matchFieldName
         }
         return ""
