@@ -23,10 +23,13 @@
 </g:if>
 
 <g:form action="save">
-    <input type="submit" class="btn btn-primary" value="Create"/>
     <input type="hidden" name="assayId" value="${assay.id}"/>
 
-    <g:render template="editFields" model="${[measuresAsJsonTree: measuresAsJsonTree, experiment: experiment, assay: assay]}"/>
+    <p>
+        <input type="submit" class="btn btn-primary" value="Create"/>
+    </p>
+
+    <g:render template="editFields" model="${[experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, experiment: experiment, assay: assay]}"/>
 </g:form>
 
 </body>

@@ -37,7 +37,6 @@ class ExperimentService {
                 experimentMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date());
                 experimentMeasure.save()
                 byId[id] = experimentMeasure;
-                println("saved ${experimentMeasure.id}")
             } else {
                 experimentMeasure = byId[id];
                 if (experimentMeasure == null) {
@@ -75,19 +74,10 @@ class ExperimentService {
 
         // now get rid of the unused measures
         unused.each {ExperimentMeasure measure ->
-            println("Deleting unused ${measure}, parent=${measure.parent}, children=${measure.childMeasures}")
-            println("in experiment: ${experiment.experimentMeasures.contains(measure)}")
-
-            for(e in experiment.experimentMeasures) {
-                if (e.parent == measure) {
-                    println("problem")
-                }
-            }
-
             measure.delete();
         }
 
-        println("done deleting");
+        println("Added ${experiment.experimentMeasures.size()} measures to tree")
     }
 
     Experiment createNewExperiment(Assay assay, String experimentName, String description) {

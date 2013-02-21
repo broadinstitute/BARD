@@ -25,17 +25,18 @@ class ExperimentController {
     }
 
     def renderEdit(Experiment experiment, Assay assay) {
-
-        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
-
-        render(view: "edit", model: [experiment: experiment, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree])
+        renderEditFieldsView("edit", experiment, assay);
     }
 
     def renderCreate(Assay assay, Experiment experiment) {
-        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(assay, true))
+        renderEditFieldsView("create", experiment, assay);
+    }
 
-        render(view: "create", model: [assay: assay, experiment: experiment, measuresAsJsonTree: measuresAsJsonTree])
+    def renderEditFieldsView(String viewName, Experiment experiment, Assay assay) {
+        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
+        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
+
+        render(view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree])
     }
 
     def update() {
@@ -56,11 +57,11 @@ class ExperimentController {
         experiment.assay = assay
         experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo"] = params
         experiment.dateCreated = new Date()
-
         if (!experiment.save(flush: true)) {
             println("errors:"+experiment.errors)
             renderCreate(assay, experiment)
         } else {
+            experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
             redirect(action: "show", id: experiment.id)
         }
     }
