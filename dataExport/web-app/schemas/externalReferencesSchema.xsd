@@ -7,23 +7,7 @@
     <xs:element name="externalReferences">
         <xs:complexType>
             <xs:sequence>
-                <xs:element maxOccurs="unbounded" name="externalReference">
-                    <xs:annotation>
-                        <xs:documentation>Has links to external system resources</xs:documentation>
-                    </xs:annotation>
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="externalAssayRef" type="xs:string"/>
-                            <xs:element maxOccurs="unbounded" ref="link">
-                                <xs:annotation>
-                                    <xs:documentation>Link to self
-Link to results
-Link to Project and Assay</xs:documentation>
-                                </xs:annotation>
-                            </xs:element>
-                        </xs:sequence>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element maxOccurs="unbounded" ref="externalReference"/>
             </xs:sequence>
             <xs:attribute name="count" type="xs:int" use="required"/>
         </xs:complexType>
@@ -31,21 +15,39 @@ Link to Project and Assay</xs:documentation>
     <xs:element name="externalSystems">
         <xs:complexType>
             <xs:sequence>
-                <xs:element maxOccurs="unbounded" name="externalSystem">
-                    <xs:annotation>
-                        <xs:documentation>Has links to self</xs:documentation>
-                    </xs:annotation>
-                    <xs:complexType>
-                        <xs:sequence>
-                            <xs:element name="systemUrl" type="xs:anyURI"/>
-                            <xs:element ref="link"/>
-                        </xs:sequence>
-                        <xs:attribute name="name" type="xs:string" use="required"/>
-                        <xs:attribute name="owner" type="xs:string"/>
-                    </xs:complexType>
-                </xs:element>
+                <xs:element maxOccurs="unbounded" ref="externalSystem"/>
             </xs:sequence>
             <xs:attribute name="count" type="xs:int" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="externalSystem">
+        <xs:annotation>
+            <xs:documentation>Has links to self</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="systemUrl" type="xs:anyURI"/>
+                <xs:element ref="link" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="owner" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="externalReference">
+        <xs:annotation>
+            <xs:documentation>Has links to external system resources</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="externalAssayRef" type="xs:string"/>
+                <xs:element maxOccurs="unbounded" ref="link">
+                    <xs:annotation>
+                        <xs:documentation>Link to self
+Link to results
+Link to Project and Assay</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 </xs:schema>

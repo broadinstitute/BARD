@@ -28,6 +28,8 @@ class Experiment extends AbstractContextOwner {
     Date lastUpdated
     String modifiedBy
 
+    Integer confidenceLevel = 1
+
     // TODO results can apparently be very large 10 million rows
     List<ExperimentContext> experimentContexts = []
     Set<ProjectExperiment> projectExperiments = [] as Set
@@ -58,7 +60,7 @@ class Experiment extends AbstractContextOwner {
         holdUntilDate(nullable: true)
 
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
-
+        confidenceLevel(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
