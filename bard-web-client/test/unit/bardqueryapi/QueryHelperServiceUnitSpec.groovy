@@ -21,6 +21,7 @@ import grails.test.mixin.TestFor
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.rest.spring.ExperimentRestService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Experiment Result : ${experimentId}</title>
+    <title>BARD : Experiment Result : ${webQueryTableModel.additionalProperties.capExptId}</title>
     <r:require modules="experimentData, bootstrap, compoundOptions"/>
 </head>
 
@@ -19,7 +19,7 @@
 </div>
 
 <div id="experimentalResults">
-    <g:render template='experimentResultData' model='[experimentDataMap: experimentDataMap]'/>
+    <g:render template='experimentResultData' model='[webQueryTableModel: webQueryTableModel]'/>
 </div>
 </body>
 </html>

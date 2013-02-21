@@ -21,6 +21,7 @@ import bard.core.rest.spring.compounds.*
 import bard.core.rest.spring.project.ProjectStep
 
 import bardqueryapi.experiment.ExperimentBuilder
+import bard.core.util.FilterTypes
 
 
 class QueryService implements IQueryService {
@@ -327,13 +328,14 @@ class QueryService implements IQueryService {
         Map<Long, CompoundAdapter> compoundAdaptersMap = [:]
         if (experimentShow) {
             //TODO: start using ETags
-            final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip)
+            final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip, [FilterTypes.TESTED])
             activities = experimentData.activities
             experimentDetails = this.queryHelperService.extractExperimentDetails(activities, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
             compoundAdaptersMap = this.getCompoundsForCIDS(activities)
         }
 
-        return [total: totalNumberOfRecords, activities: activities,
+        return [
+                total: totalNumberOfRecords, activities: activities,
                 experiment: experimentShow, hasPlot: experimentDetails.hasPlot,
                 priorityDisplay: experimentDetails.priorityDisplay,
                 dictionaryId: experimentDetails.dictionaryId,

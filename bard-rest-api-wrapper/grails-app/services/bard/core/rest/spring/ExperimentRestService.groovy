@@ -10,6 +10,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.experiment.*
 import bard.core.SearchParams
+import bard.core.util.FilterTypes
 
 class ExperimentRestService extends AbstractRestService {
 
@@ -146,7 +147,7 @@ class ExperimentRestService extends AbstractRestService {
         final List<Activity> activities = []
         ExperimentData experimentData = new ExperimentData()
         while (true) {
-            final String resource = buildExperimentQuery(experimentId, etag, top, skip);
+            final String resource = buildExperimentQuery(experimentId, etag, top, skip, [FilterTypes.TESTED]);
             final URL url = new URL(resource)
             int currentSize
             List<Activity> currentActivities
@@ -182,8 +183,8 @@ class ExperimentRestService extends AbstractRestService {
      * @param skip
      * @return ExperimentData
      */
-    public ExperimentData activities(final Long experimentId, final String etag, final Integer top, final Integer skip) {
-        final String resource = buildExperimentQuery(experimentId, etag, top, skip)
+    public ExperimentData activities(Long experimentId, String etag, Integer top, Integer skip, List<FilterTypes> filterType) {
+        final String resource = buildExperimentQuery(experimentId, etag, top, skip, filterType)
         final URL url = new URL(resource)
         ExperimentData experimentData
 

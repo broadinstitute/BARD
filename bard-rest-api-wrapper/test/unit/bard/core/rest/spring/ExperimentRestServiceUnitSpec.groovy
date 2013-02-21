@@ -9,6 +9,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
 import bard.core.helper.LoggerService
+import bard.core.util.FilterTypes
 
 @Unroll
 @TestFor(ExperimentRestService)
@@ -33,7 +34,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         and:
         final ExperimentData adids = service.activitiesByADIDs([], new SearchParams())
         and:
-        final ExperimentData cids = service.activitiesByCIDs([],new SearchParams())
+        final ExperimentData cids = service.activitiesByCIDs([], new SearchParams())
         and:
         final ExperimentData sids = service.activitiesBySIDs([], new SearchParams())
         then:
@@ -50,7 +51,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         final Integer top = 10
         final Integer skip = 0
         when:
-        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip)
+        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip, [FilterTypes.TESTED])
         then:
         this.restTemplate.getForObject(_, _) >> {new ExperimentData()}
         assert experimentData
@@ -64,7 +65,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         final Integer top = 10
         final Integer skip = 0
         when:
-        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip)
+        final ExperimentData experimentData = service.activities(experimentId, etag, top, skip, [FilterTypes.TESTED])
         then:
         this.restTemplate.getForObject(_, _) >> {[new Activity()]}
         assert experimentData
@@ -174,14 +175,14 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void "buildExperimentQuery #label"() {
 
         when:
-        String url = service.buildExperimentQuery(experimentId, etag, top, skip)
+        String url = service.buildExperimentQuery(experimentId, etag, top, skip, filters)
         then:
         assert url == expectedURL
         where:
-        label                  | experimentId | skip | top | etag   | expectedURL
-        "With ETag"            | 2            | 0    | 10  | "etag" | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
-        "No ETag"              | 2            | 0    | 10  | null   | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
-        "No ETag, Top is zero" | 2            | 0    | 0   | null   | "http://ncgc/experiments/2/exptdata?expand=true"
+        label                  | experimentId | skip | top | etag   | filters              | expectedURL
+        "With ETag"            | 2            | 0    | 10  | "etag" | [FilterTypes.TESTED] | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
+        "No ETag"              | 2            | 0    | 10  | null   | [FilterTypes.TESTED] | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
+        "No ETag, Top is zero" | 2            | 0    | 0   | null   | [FilterTypes.TESTED] | "http://ncgc/experiments/2/exptdata?expand=true"
     }
 
     void "getResourceCount with SearchParams #label"() {

@@ -1,16 +1,23 @@
 package bard.core.interfaces;
 
 public interface RestApiConstants {
-    final String STEPS="/steps";
+    final String QUESTION_MARK = "?";
+    final String AMPERSAND = "&";
+    final String STEPS = "/steps";
     final String STRUCTURE = "[structure]";
-    final String TYPE_SUB = "&type=sub";
-    final String TYPE_SUP = "&type=sup";
-    final String TYPE_EXACT = "&type=exact";
-    final String TYPE_SIM = "&type=sim";
-    final String CUTOFF = "&cutoff=";
-    final String FILTER_QUESTION = "?filter=";
-    final String FILTER = "&filter=";
+    final String TYPE_SUB = AMPERSAND + "type=sub";
+    final String TYPE_SUP = AMPERSAND + "type=sup";
+    final String TYPE_EXACT = AMPERSAND + "type=exact";
+    final String TYPE_SIM = AMPERSAND + "type=sim";
+    final String CUTOFF = AMPERSAND + "cutoff=";
+    final String FILTER = "filter=";
+    final String ACTIVE = "active";
 
+    final String FILTER_QUESTION = QUESTION_MARK + FILTER;
+
+    final String AMPERSAND_FILTER = AMPERSAND + FILTER;
+
+    final String FILTER_ACTIVE = AMPERSAND_FILTER + ACTIVE;
     final int MAXIMUM_NUMBER_OF_COMPOUNDS = 500;
     final int MAXIMUM_NUMBER_OF_EXPERIMENTS = 1000;
     final String ANNOTATIONS = "/annotations";
@@ -23,7 +30,7 @@ public interface RestApiConstants {
     final String PROJECTS_RESOURCE = "/projects";
     //relative path to the compounds resource
     final String COMPOUNDS_RESOURCE = "/compounds";
-    final String FILTER_ACTIVE = "&filter=active";
+
     final String SYNONYMS = "/synonyms";
     final String UTF_8 = "utf-8";
     final String FORWARD_SLASH = "/";
@@ -35,11 +42,10 @@ public interface RestApiConstants {
     final String COMMA = ",";
     final String _COUNT = "_count";
     final String SUGGEST = "suggest";
-    final String TOP = "&top=";
+    final String TOP = AMPERSAND + "top=";
     final String EXPAND_TRUE = "expand=true";
-    final String AMPERSAND = "&";
     final String SOLR_QUERY_PARAM_NAME = "q=";
-    final String QUESTION_MARK = "?";
+
     final String SUMMARY = "/summary";
     final String COLON = ":";
     final String RIGHT_PAREN = ")";
@@ -50,6 +56,6 @@ public interface RestApiConstants {
     final String TYPE = "type";
     final String CID = "cid";
     final String EXPTDATA_RESOURCE = "/exptdata";
-    final String PROBEID="/probeid";
+    final String PROBEID = "/probeid";
     final String SMILES = "smiles";
 }

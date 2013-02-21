@@ -1,4 +1,4 @@
-package bardqueryapi
+package bard.core.util
 
 /**
  * Created with IntelliJ IDEA.

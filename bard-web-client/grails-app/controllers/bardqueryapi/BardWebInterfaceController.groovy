@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
@@ -13,8 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.SearchParams
-import bard.core.rest.spring.compounds.Compound
+import bard.core.util.FilterTypes
 
 /**
  *
@@ -70,41 +70,33 @@ class BardWebInterfaceController {
         return [params: params]
     }
 
-    def showExperimentalData(Long id, String normalizeYAxis, String activityOutcome) {
-        if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
-            return
-        }
-        NormalizeAxis normalizeAxis = normalizeYAxis ? normalizeYAxis as NormalizeAxis : NormalizeAxis.Y_NORM_AXIS
-        Map<String, Integer> searchParams = handleSearchParams()
-        SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
-        final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput, GroupTypes.EXPERIMENT, [], new SearchParams(top: searchParams.top, skip: searchParams.skip))
-        render(view: 'webQueryModel', model: [webQueryTableModel: webQueryTableModel])
-    }
 
     def showExperiment(Long id, String normalizeYAxis, String activityOutcome) {
 
+
         if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
             return
         }
-
         try {
-            Map<String, Integer> searchParams = handleSearchParams()
-            final Integer top = searchParams.top
-            final Integer skip = searchParams.skip
             NormalizeAxis normalizeAxis = normalizeYAxis ? normalizeYAxis as NormalizeAxis : NormalizeAxis.Y_NORM_AXIS
-            ActivityOutcome outcome = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
-
-            final Map experimentDataMap = queryService.findExperimentDataById(id, top, skip, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
-            if (experimentDataMap) {
-                experimentDataMap.put('capAssayId', experimentDataMap.experiment?.getAssays()?.get(0)?.capAssayId)
+            Map<String, Integer> searchParams = handleSearchParams()
+            SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
+            final List<FilterTypes> filters = []
+            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS){
+                filters.add(FilterTypes.Y_DENORM_AXIS)
             }
-            final Map modelMap = [experimentId: params.id, experimentDataMap: experimentDataMap]
+
+            final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+                    GroupTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
+            webQueryTableModel.additionalProperties.put("searchString", params.searchString)
+            webQueryTableModel.additionalProperties.put("normalizeYAxis",normalizeAxis.toString())
+
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                render(template: 'experimentResultData', model: modelMap)
+                render(template: 'experimentResultData', model: [webQueryTableModel: webQueryTableModel])
                 return
             }
             //this should do a full page reload
-            render(view: 'showExperiment', model: modelMap)
+            render(view: 'showExperiment', model: [webQueryTableModel: webQueryTableModel])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
             String message = "Experiment with ID ${id} does not exists"

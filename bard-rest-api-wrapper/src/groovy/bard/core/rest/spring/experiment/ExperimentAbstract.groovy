@@ -39,6 +39,9 @@ public abstract class ExperimentAbstract extends JsonUtil {
     private long substances;
     @JsonProperty("compounds")
     private long compounds;
+
+    @JsonProperty("activeCompounds")
+    private long activeCompounds;
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")
@@ -58,8 +61,14 @@ public abstract class ExperimentAbstract extends JsonUtil {
     @JsonProperty("resourcePath")
     private String resourcePath;
 
-
-
+    @JsonProperty("activeCompounds")
+    public long getActiveCompounds() {
+        return activeCompounds
+    }
+    @JsonProperty("activeCompounds")
+    public void setActiveCompounds(long activeCompounds) {
+        this.activeCompounds = activeCompounds
+    }
 
     @JsonProperty("pubchemAid")
     public long getPubchemAid() {

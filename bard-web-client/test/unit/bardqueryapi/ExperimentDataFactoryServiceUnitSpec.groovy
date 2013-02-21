@@ -4,6 +4,7 @@ import bard.core.SearchParams
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
+import bard.core.util.FilterTypes
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions

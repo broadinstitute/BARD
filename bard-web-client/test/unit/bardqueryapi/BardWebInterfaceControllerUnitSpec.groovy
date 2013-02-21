@@ -11,7 +11,7 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.compounds.PromiscuityScaffold
-import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.experiment.ExperimentShow
 import bard.core.rest.spring.project.Project
 import bardwebquery.CompoundOptionsTagLib
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -32,7 +32,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.rest.spring.experiment.ExperimentShow
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -43,6 +42,7 @@ import bard.core.rest.spring.experiment.ExperimentShow
 @Unroll
 class BardWebInterfaceControllerUnitSpec extends Specification {
     MolecularSpreadSheetService molecularSpreadSheetService
+    ExperimentDataFactoryService experimentDataFactoryService
     QueryService queryService
     ShoppingCartService shoppingCartService
     MobileService mobileService
@@ -60,12 +60,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.bardUtilitiesService = bardUtilitiesService
 
         queryService = Mock(QueryService)
-
+        experimentDataFactoryService = Mock(ExperimentDataFactoryService)
         molecularSpreadSheetService = Mock(MolecularSpreadSheetService)
         controller.queryService = this.queryService
         controller.molecularSpreadSheetService = this.molecularSpreadSheetService
         shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
+        controller.experimentDataFactoryService = experimentDataFactoryService
 
         views['/bardWebInterface/_assays.gsp'] = 'mock content'
         views['/bardWebInterface/_projects.gsp'] = 'mock content'
@@ -172,6 +173,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.showExperiment(id, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
         then:
         _ * this.queryService.findExperimentDataById(_, _, _, _, _) >> {throw exceptionType}
+        _ * experimentDataFactoryService.createTableModel(_,_, _, _)  >> {new WebQueryTableModel()}
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode

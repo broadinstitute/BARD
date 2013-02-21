@@ -18,6 +18,7 @@ import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.HttpClientErrorException
+import bard.core.util.FilterTypes
 
 abstract class AbstractRestService {
     String baseUrl
@@ -44,7 +45,7 @@ abstract class AbstractRestService {
                 append(RestApiConstants.TOP).append(params.getNumSuggestion()).toString();
     }
 
-    String buildExperimentQuery(final Long experimentId, final String etag, final Integer top, final Integer skip) {
+    String buildExperimentQuery(Long experimentId, String etag, Integer top, Integer skip, List<FilterTypes> filterType) {
         final StringBuilder resource = new StringBuilder(getResource(experimentId.toString()));
 
         if (etag) {
@@ -60,6 +61,11 @@ abstract class AbstractRestService {
                     append(skip).
                     append(RestApiConstants.TOP).
                     append(top).
+                    append(RestApiConstants.AMPERSAND)
+        }
+        if (!filterType.contains(FilterTypes.TESTED)) {
+            resource.append(RestApiConstants.FILTER).
+                    append(RestApiConstants.ACTIVE).
                     append(RestApiConstants.AMPERSAND)
         }
         resource.append(RestApiConstants.EXPAND_TRUE);
@@ -83,6 +89,7 @@ abstract class AbstractRestService {
                 append(RestApiConstants.EXPAND_TRUE).
                 toString();
     }
+
     protected String buildSearchByCapIdURLs(final List<Long> capIds, final SearchParams searchParams, final String prefix) {
         final List<String> queries = []
         for (Long capId : capIds) {
@@ -240,7 +247,7 @@ abstract class AbstractRestService {
     protected String buildFilters(SearchParams params) {
         final StringBuilder f = new StringBuilder("");
         if (params.getFilters()) {
-            f.append(RestApiConstants.FILTER);
+            f.append(RestApiConstants.AMPERSAND_FILTER);
             String sep = "";
             for (String[] entry : params.getFilters()) {
                 f.append(sep).

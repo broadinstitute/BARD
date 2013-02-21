@@ -7,6 +7,7 @@ import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
+import spock.lang.IgnoreRest
 
 /**
  * Tests for ProjectRestService
@@ -109,7 +110,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert experimentResult.experiments
         assert experimentResult.experiments.size() == experimentIds.size()
     }
-
+    @IgnoreRest
     void "test step through entire Experiment #experimentId"() {
 
         when: "The get method is called with the given experiment ID: #experimentId"
