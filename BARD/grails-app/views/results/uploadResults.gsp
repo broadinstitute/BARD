@@ -15,7 +15,7 @@
         <ul>
             <g:each in="${summary.errors}" var="error">
                 <li>
-                    ${error}
+                    ${error.encodeAsHTML()}
                 </li>
             </g:each>
         </ul>
@@ -23,8 +23,20 @@
     <g:else>
         <h4>Success</h4>
 
-        <p>Uploaded ${summary.resultsCreated} values</p>
+        <p>${summary.linesParsed} lines successfully parsed.</p>
+        <p>Uploaded ${summary.resultsCreated} values for ${summary.substanceCount} substances</p>
+        <p>Created ${summary.experimentAnnotationsCreated} Experiment annotations</p>
+        <p>
+            Created the following number of results:
+        <ul>
+            <g:each in="${summary.resultsPerLabel.entrySet()}" var="entry">
+                <li>${entry.key}: ${entry.value}</li>
+            </g:each>
+    </ul>
+        </p>
     </g:else>
+
+    <g:link action="show" controller="experiment" id="${experiment.id}">Return to Experiment's Details</g:link>
 </div>
 
 </body>

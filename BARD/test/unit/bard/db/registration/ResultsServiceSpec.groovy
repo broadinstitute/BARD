@@ -109,9 +109,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         where:
         desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "="               | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "="               | null   | null
-        "including qualifier" | "<10"      | 10.0          | "<"               | null   | null
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
         "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0
     }
@@ -230,9 +230,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         where:
         desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "="               | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "="               | null   | null
-        "including qualifier" | "<10"      | 10.0          | "<"               | null   | null
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
         "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0
     }
@@ -334,9 +334,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         where:
         desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "="               | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "="               | null   | null
-        "including qualifier" | "<10"      | 10.0          | "<"               | null   | null
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
         "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0
     }

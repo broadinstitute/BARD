@@ -137,8 +137,6 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         "no child" | false    | 1                   | 0
     }
 
-
-
     void 'test associate context'() {
         when:
         assay = Assay.build(assayName:'Test')
