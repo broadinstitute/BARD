@@ -56,7 +56,7 @@ public class CompoundAdapter implements CompoundAdapterInterface {
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
         if(matchFieldName){
-            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName, this.class)
+            matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName)
             //TODO: Talk to Steve about formatting
             return "Matched Field: " + matchFieldName
         }
