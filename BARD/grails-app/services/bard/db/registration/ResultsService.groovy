@@ -250,6 +250,10 @@ class ResultsService {
 
             return null;
         }
+
+        String toString() {
+            "Cell(${column})"
+        }
     }
 
     static class ImportSummary {
@@ -514,13 +518,14 @@ class ResultsService {
             if (line == null)
                 break;
 
-            List values = line.split(DELIMITER)
+            List<String> values = line.split(DELIMITER)
 
             // verify and reshape columns
             while(values.size() < expectedColumnCount) {
                 values.add("")
             }
 
+            // verify there aren't too many columns
             while(values.size() > expectedColumnCount) {
                 String value = values.remove(values.size()-1)
                 if (value.trim().length() != 0) {
@@ -528,8 +533,18 @@ class ResultsService {
                 }
             }
 
-            // now that values is guaranteed to be the right length, pass to the callback
-            fn(reader.lineNumber, values)
+            // now that values is guaranteed to be the right length, make the entire row isn't empty
+            boolean allEmpty = true;
+            for(cell in values) {
+                if (!cell.isEmpty()) {
+                    allEmpty = false;
+                    break;
+                }
+            }
+
+            // pass to the callback
+            if (!allEmpty)
+                fn(reader.lineNumber, values)
 
             if (errors.tooMany())
                 break
@@ -743,7 +758,7 @@ class ResultsService {
                     Collection<Cell> parentCells = cellsByMeasure[experimentMeasure.parent.measure];
                     Collection<Cell> childCells = cellsByMeasure[experimentMeasure.measure];
 
-                    if (parentCells != null) {
+                    if (parentCells != null && childCells != null) {
                         if (parentCells.size() > 1) {
                             errors.addError(row.lineNumber, 0, "Parent child relationship between ${parentCells} and ${childCells} is ambiguous.  There are multiple possible ways to assign relationships between these cells")
                         } else if (parentCells.size() == 1) {
