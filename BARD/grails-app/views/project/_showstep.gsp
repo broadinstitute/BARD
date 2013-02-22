@@ -14,7 +14,7 @@
     <div id="canvas"></div>
     <div id="canvasIsolated"></div>
 
-    Ugly? <button id="redraw" onclick="redraw();">redraw</button> Still Ugly? Drag, Drop Nodes to Rearrange. But Sorry, You Can NOT Save It.
+    Ugly? <button id="redraw" onclick="redraw();">redraw</button> Still Ugly? Drag, Drop Nodes to Rearrange. But Sorry, You Can NOT Save It. We Can ADD save function if you really need it.
 
     <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
 
