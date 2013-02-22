@@ -40,7 +40,6 @@ class DocumentControllerIntegrationSpec extends IntegrationSpec {
 
         then:
 
-        controller.modelAndView.viewName == "/document/create"
         controller.modelAndView.model.document.assayId == -1
         controller.modelAndView.model.document.hasErrors()
         ValidationErrors errors = controller.modelAndView.model.document.errors
