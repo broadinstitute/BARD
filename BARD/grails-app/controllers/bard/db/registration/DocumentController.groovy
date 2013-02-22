@@ -11,7 +11,6 @@ class DocumentController {
 
     def create(DocumentCommand documentCommand) {
         documentCommand.clearErrors()
-        g.message()
         [document: documentCommand]
     }
 
