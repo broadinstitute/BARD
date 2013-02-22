@@ -439,11 +439,11 @@ Graph.Layout.Ordered.prototype = {
             node.layoutPosX = 0;
             node.layoutPosY = 0;
         }
-            var counter = 0;
+           var counter = 0;
             for (i in this.order) {
                 var node = this.order[i];
-                node.layoutPosX = counter;
-                node.layoutPosY = Math.random();
+                node.layoutPosX = Math.random();
+                node.layoutPosY = counter;
                 counter++;
             }
     },
@@ -468,6 +468,117 @@ Graph.Layout.Ordered.prototype = {
         this.graph.layoutMaxY = maxy;
     }
 };
+
+Graph.Layout.OrderedLevel = function(graph, order) {
+    this.graph = graph;
+    this.order = order;
+    this.layout();
+};
+Graph.Layout.OrderedLevel.prototype = {
+    layout: function() {
+        this.layoutPrepare();
+        this.layoutCalcBounds();
+    },
+
+    layoutPrepare: function(order) {
+        for (i in this.graph.nodes) {
+            var node = this.graph.nodes[i];
+            node.layoutPosX = 0;
+            node.layoutPosY = 0;
+        }
+        var counter = 0;
+        for (i in this.order) {
+            var node = this.order[i];
+            node.layoutPosX = Math.random();
+            node.layoutPosY = counter;
+            counter++;
+        }
+        var inCounter = 0;
+        var outCounter = 0;
+        for (i in this.graph.nodes) {
+            var node = this.graph.nodes[i];
+            if (node.data.inCount == "0") {
+                node.layoutPosX = inCounter
+                node.layoutPosY = 0;
+                inCounter+=2;
+            }
+            else if (node.data.outCount == "0"){
+                node.layoutPosX = outCounter;
+                node.layoutPosY = counter+1;
+                outCounter+=2;
+            }
+        }
+    },
+
+    layoutCalcBounds: function() {
+        var minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity;
+
+        for (i in this.graph.nodes) {
+            var x = this.graph.nodes[i].layoutPosX;
+            var y = this.graph.nodes[i].layoutPosY;
+
+            if(x > maxx) maxx = x;
+            if(x < minx) minx = x;
+            if(y > maxy) maxy = y;
+            if(y < miny) miny = y;
+        }
+
+        this.graph.layoutMinX = minx;
+        this.graph.layoutMaxX = maxx;
+
+        this.graph.layoutMinY = miny;
+        this.graph.layoutMaxY = maxy;
+    }
+};
+
+Graph.Layout.Isolated = function(graph, order) {
+    this.graph = graph;
+    this.order = order;
+    this.layout();
+};
+Graph.Layout.Isolated.prototype = {
+    layout: function() {
+        this.layoutPrepare();
+        this.layoutCalcBounds();
+    },
+
+    layoutPrepare: function(order) {
+        for (i in this.graph.nodes) {
+            var node = this.graph.nodes[i];
+            node.layoutPosX = 0;
+            node.layoutPosY = 0;
+        }
+        var counter = 0;
+        for (i in this.order) {
+            var node = this.order[i];
+            node.layoutPosX = counter;
+            node.layoutPosY = Math.random();
+            counter++;
+        }
+    },
+
+    layoutCalcBounds: function() {
+        var minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity;
+
+        for (i in this.graph.nodes) {
+            var x = this.graph.nodes[i].layoutPosX;
+            var y = this.graph.nodes[i].layoutPosY;
+
+            if(x > maxx) maxx = x;
+            if(x < minx) minx = x;
+            if(y > maxy) maxy = y;
+            if(y < miny) miny = y;
+        }
+
+        this.graph.layoutMinX = minx;
+        this.graph.layoutMaxX = maxx;
+
+        this.graph.layoutMinY = miny;
+        this.graph.layoutMaxY = maxy;
+    }
+};
+
+
 
 
 Graph.Layout.OrderedTree = function(graph, order) {

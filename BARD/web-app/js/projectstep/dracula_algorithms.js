@@ -554,7 +554,8 @@ function nodeid_sort(g) {
   var sorted_list = [];
   for (n in g.nodes)
     sorted_list.unshift(g.nodes[n]);
-  sorted_list.sort(function(a,b){ return a.id - b.id; })
+//  sorted_list.sort(function(a,b){ return a.id - b.id; })
+    sorted_list.sort(function(a,b){ return a.data.link - b.data.link; })
     return sorted_list;
 }
 

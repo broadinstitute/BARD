@@ -44,7 +44,7 @@ window.onload = function () {
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
         g.addNode(connectedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
-            ename: keyValues.ename}, render:render });
+            ename: keyValues.ename, inCount: keyValues.incount, outCount: keyValues.outcount}, render:render });
     }
 
     var isolatedNodes = graphInJSON.isolatedNodes;
@@ -79,11 +79,12 @@ window.onload = function () {
     for (var i = 0; i < edges.length; i++) {
         g.addEdge(edges[i].from, edges[i].to, {directed:true, stroke:"#bfa", fill:"#f00"});
     }
+    var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
 
     /* layout the graph using the Spring layout implementation */
-    var layouter = new Graph.Layout.Spring(g);
+    //var layouter = new Graph.Layout.Spring(g);
     /* layout the graph using the Spring layout implementation */
-    var layouterIsolated = new Graph.Layout.Spring(gIsolated);
+    var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
 
     /* draw the graph using the RaphaelJS draw implementation */
     var renderer = new Graph.Renderer.Raphael('canvas', g, 700, 500);
