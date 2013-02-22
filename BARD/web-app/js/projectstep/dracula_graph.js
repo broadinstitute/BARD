@@ -488,10 +488,10 @@ Graph.Layout.OrderedLevel.prototype = {
         }
         var counter = 0;
         for (i in this.order) {
+            counter++;
             var node = this.order[i];
             node.layoutPosX = Math.random();
             node.layoutPosY = counter;
-            counter++;
         }
         var inCounter = 0;
         var outCounter = 0;

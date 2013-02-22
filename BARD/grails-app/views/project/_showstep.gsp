@@ -9,6 +9,7 @@
     </div>
 
     <div id="serviceResponse" style="display: none"></div>
+    <div id="ajaxProgress" style="color:#5bb75b"> Please wait ... </div>
 
     <div id="canvas"></div>
     <div id="canvasIsolated"></div>

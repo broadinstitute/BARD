@@ -10,7 +10,86 @@ $(document).ready(function () {
         title:"Delete item?"
     });
 
+    $( "#addByExperimentId" ).change(function () {
+        var experimentId = $(this).val();
+        if( !experimentId || 0 === experimentId || (/^\s*$/).test(experimentId)) {
+            return false;
+        }
+        var projectId = $("#projectIdForStep").val();
+        var data = {'experimentId':experimentId, 'projectId': projectId};
+        $.ajax
+            ({
+                url:"../ajaxFindAvailableExperimentById",
+                dataType:'json',
+                data:data,
+                cache:false,
+                success:function (data) {
+                    setAvailableExperiment(data)
+                }
+            });
 
+    });
+    $( "#addByAssayId" ).change(function () {
+        var assayId = $(this).val();
+        if( !assayId || 0 === assayId || (/^\s*$/).test(assayId)) {
+            return false;
+        }
+        var projectId = $("#projectIdForStep").val();
+        var data = {'assayId':assayId, 'projectId': projectId};
+        $.ajax
+            ({
+                url:"../ajaxFindAvailableExperimentByAssayId",
+                dataType:'json',
+                data:data,
+                cache:false,
+                success:function (data) {
+                    setAvailableExperiment(data)
+                }
+            });
+
+    });
+
+
+    $( "#addByExperimentName" ).autocomplete({
+        source: function( request, response ) {
+            var experimentName = request.term
+            var projectId = $("#projectIdForStep").val();
+            var data = {'experimentName':experimentName, 'projectId': projectId};
+            $.ajax({
+                url:"../ajaxFindAvailableExperimentByName",
+                dataType:'json',
+                data: data,
+                success: function( data ) {
+                    response(data);
+                },
+                minLength: 3
+            });
+        },
+        select: function( event, ui ) {
+            setAvailableExperimentAfterSelect(ui.item.label)
+        }
+    });
+
+
+    $("input:radio[name=addExperimentBy]").change(function(){
+        var selected = $(this).val();
+        var allValues = ['addByExperimentId', 'addByAssayId', 'addByExperimentName']
+        findExperimentInput(selected, allValues);
+    });
+
+    initEditFunction();
+});
+
+function initEditFunction() {
+    $('#ajaxProgress')
+        .hide()  // hide it initially
+        .ajaxStart(function() {
+            $(this).show();
+        })
+        .ajaxStop(function() {
+            $(this).hide();
+        })
+    ;
     $( "#addExperimentToProject" )
         .button()
         .click(function() {
@@ -57,6 +136,7 @@ $(document).ready(function () {
         .button()
         .click(function() {
             $("#linkExperimentForm").clearForm();
+            $("#serviceResponse").html("");
             $( "#dialog_link_experiment" ).dialog( "open" );
         });
     $( "#dialog_link_experiment" ).dialog({
@@ -90,92 +170,28 @@ $(document).ready(function () {
         close: function() {
         }
     });
+}
 
-    $( "#addByExperimentId" ).change(function () {
-        var experimentId = $(this).val();
-        if( !experimentId || 0 === experimentId || (/^\s*$/).test(experimentId)) {
-            return false;
-        }
-        var projectId = $("#projectIdForStep").val();
-        var data = {'experimentId':experimentId, 'projectId': projectId};
-        $.ajax
-            ({
-                url:"../ajaxFindAvailableExperimentById",
-                dataType:'json',
-                data:data,
-                cache:false,
-                success:function (data) {
-                    setAvailableExperiment(data)
-                }
-            });
+// Somehow the setAvailableExperiment added multiple duplicate item selected from dropdown, a hack to get one
+function setAvailableExperimentAfterSelect(data) {
+    $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
+}
 
-    });
-    $( "#addByAssayId" ).change(function () {
-        var assayId = $(this).val();
-        if( !assayId || 0 === assayId || (/^\s*$/).test(assayId)) {
-            return false;
-        }
-        var projectId = $("#projectIdForStep").val();
-        var data = {'assayId':assayId, 'projectId': projectId};
-        $.ajax
-            ({
-                url:"../ajaxFindAvailableExperimentByAssayId",
-                dataType:'json',
-                data:data,
-                cache:false,
-                success:function (data) {
-                    setAvailableExperiment(data)
-                }
-            });
-
-    });
-
-    $( "#addByExperimentName" ).autocomplete({
-        source: function( request, response ) {
-            var experimentName = request.term
-            var projectId = $("#projectIdForStep").val();
-            var data = {'experimentName':experimentName, 'projectId': projectId};
-            $.ajax({
-                url:"../ajaxFindAvailableExperimentByName",
-                dataType:'json',
-                data: data,
-                success: function( data ) {
-                    response(data);
-                },
-                minLength: 3
-            });
-        },
-        select: function( event, ui ) {
-            setAvailableExperimentAfterSelect(ui.item.label)
-        }
-    });
-    // Somehow the setAvailableExperiment added multiple duplicate item selected from dropdown, a hack to get one
-    function setAvailableExperimentAfterSelect(data) {
+function setAvailableExperiment(data) {
+    for (var i = 0; i < data.length; i++) {
         $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
     }
+}
 
-    function setAvailableExperiment(data) {
-        for (var i = 0; i < data.length; i++) {
-            $("#selectedExperiments").append("<option value='" + data + "'>" + data + "</option>");
-        }
-    }
-
-    function clearAvailableExperiment() {
-        $("#selectedExperiments option:gt(0)").remove();
-        $("#selectedExperiments option:eq(0)").remove();
-        $("#addExperimentForm").clearForm();
-        $("#addByExperimentId").hide();
-        $("#addByAssayId").hide();
-        $("#addByExperimentName").hide();
-    }
-
-    $("input:radio[name=addExperimentBy]").change(function(){
-        var selected = $(this).val();
-        var allValues = ['addByExperimentId', 'addByAssayId', 'addByExperimentName']
-        findExperimentInput(selected, allValues);
-    });
-
-});
+function clearAvailableExperiment() {
+    $("#selectedExperiments option:gt(0)").remove();
+    $("#selectedExperiments option:eq(0)").remove();
+    $("#addExperimentForm").clearForm();
+    $("#addByExperimentId").hide();
+    $("#addByAssayId").hide();
+    $("#addByExperimentName").hide();
+    $("#serviceResponse").html("");
+}
 
 function findExperimentInput(selected, allValues){
     for (var i = 0; i < allValues.length; i++) {
@@ -196,10 +212,10 @@ function handleSuccess(data){
         $("#serviceResponse").text(data)
     }
     else {
-       // $("#serviceResponse").css("color","#FF00FF")
-       // $("#serviceResponse").text("Success! Reload the page to view changes.")
         $("#showstep").html(data);
         initFunction();
+        initEditFunction();
+        clearAvailableExperiment();
     }
     $("#serviceResponse").show()
 }
