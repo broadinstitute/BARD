@@ -1,12 +1,13 @@
 package bard.db.model
 
 import grails.plugin.spock.IntegrationSpec
+import org.junit.Before
+import spock.lang.Unroll
 
 import static bard.db.model.AbstractDocument.*
+import static bard.db.model.IDocumentType.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Unroll
-import org.junit.Before
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,7 @@ import org.junit.Before
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractDocumentConstraintIntegrationSpec extends IntegrationSpec{
+abstract class AbstractDocumentConstraintIntegrationSpec extends IntegrationSpec {
 
     def domainInstance
 
@@ -67,7 +68,7 @@ abstract class AbstractDocumentConstraintIntegrationSpec extends IntegrationSpec
         'valid value'      | 'Description'                            | true  | null
         'valid value'      | 'Protocol'                               | true  | null
         'valid value'      | 'Comments'                               | true  | null
-        'valid value'      | 'Publication'                                  | true  | null
+        'valid value'      | 'Publication'                            | true  | null
         'valid value'      | 'External URL'                           | true  | null
         'valid value'      | 'Other'                                  | true  | null
         //        'exactly at limit' | createString(DOCUMENT_TYPE_MAX_SIZE)     | true  | null
@@ -78,6 +79,7 @@ abstract class AbstractDocumentConstraintIntegrationSpec extends IntegrationSpec
         final String field = 'documentContent'
 
         when:
+        domainInstance.documentType = documentType
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 
@@ -85,12 +87,16 @@ abstract class AbstractDocumentConstraintIntegrationSpec extends IntegrationSpec
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                         | valueUnderTest         | valid | errorCode
-        'blank not valid'            | ''                     | false | 'blank'
-        'blank not valid'            | '   '                  | false | 'blank'
+        desc                                      | documentType               | valueUnderTest         | valid | errorCode
+        'blank not valid'                         | DOCUMENT_TYPE_DESCRIPTION  | ''                     | false | 'blank'
+        'blank not valid'                         | DOCUMENT_TYPE_DESCRIPTION  | '   '                  | false | 'blank'
+        'url expected for publication not valid'  | DOCUMENT_TYPE_PUBLICATION  | 'foo'                  | false | 'document.invalid.url.message'
+        'url expected for external url not valid' | DOCUMENT_TYPE_EXTERNAL_URL | 'foo'                  | false | 'document.invalid.url.message'
 
-        'null valid'                 | null                   | true  | null
-        'greater than varchar limit' | createString(4000 + 1) | true  | null
+        'url expected for publication valid'      | DOCUMENT_TYPE_PUBLICATION  | 'http://foo.bar'       | true  | null
+        'url expected for external url valid'     | DOCUMENT_TYPE_EXTERNAL_URL | 'http://foo.bar'       | true  | null
+        'null valid'                              | DOCUMENT_TYPE_DESCRIPTION  | null                   | true  | null
+        'greater than varchar limit'              | DOCUMENT_TYPE_DESCRIPTION  | createString(4000 + 1) | true  | null
 
     }
 
