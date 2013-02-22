@@ -79,7 +79,7 @@ class QueryHelperService {
 
     }
 
-    Map extractExperimentDetails(List<Activity> activities, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
+    Map extractExperimentDetails(List<Activity> activities, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS) {
         Double yNormMin = 0
         Double yNormMax = 0
         boolean firstMinValue = false

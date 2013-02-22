@@ -3,6 +3,7 @@ package bardqueryapi
 import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.util.FilterTypes
 
 public interface IQueryService {
 
@@ -135,7 +136,7 @@ public interface IQueryService {
      * @param skip
      * @return Map of data to use to display an experiment
      */
-    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis, ActivityOutcome activityOutcome);
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes);
 
     /**
      *

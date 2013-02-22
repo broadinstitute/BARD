@@ -303,11 +303,7 @@ class QueryService implements IQueryService {
                                             SearchParams searchParams) {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
-        NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
-        if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
-            normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
-        }
-        Map m = findExperimentDataById(experimentId, top, skip, normalizeAxis)
+        Map m = findExperimentDataById(experimentId, top, skip, filterTypes)
         ExperimentBuilder experimentBuilder = new ExperimentBuilder()
         return experimentBuilder.buildModel(m)
 
@@ -319,18 +315,23 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map of data to use to display an experiment
      */
-    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS, ActivityOutcome activityOutcome = ActivityOutcome.ALL) {
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes=[FilterTypes.TESTED]) {
         List<Activity> activities = []
         final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
-
-        long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
+        NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
+        if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
+            normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
+        }
+        long totalNumberOfRecords = filterTypes.contains(FilterTypes.TESTED) ? experimentShow?.getCompounds() ?:0 : experimentShow?.getActiveCompounds() ?:0
         Map experimentDetails = [:]
         Map<Long, CompoundAdapter> compoundAdaptersMap = [:]
         if (experimentShow) {
             //TODO: start using ETags
-            final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip, [FilterTypes.TESTED])
+
+            final ExperimentData experimentData = experimentRestService.activities(experimentId, null, top, skip, filterTypes)
             activities = experimentData.activities
-            experimentDetails = this.queryHelperService.extractExperimentDetails(activities, normalizeAxis, bardqueryapi.ActivityOutcome.ALL)
+
+            experimentDetails = this.queryHelperService.extractExperimentDetails(activities, normalizeAxis)
             compoundAdaptersMap = this.getCompoundsForCIDS(activities)
         }
 

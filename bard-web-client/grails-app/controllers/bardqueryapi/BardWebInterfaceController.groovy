@@ -70,7 +70,7 @@ class BardWebInterfaceController {
         return [params: params]
     }
 
-
+    //TODO: Use Command Object here. Bind the filters instead. Use the FilterTypes
     def showExperiment(Long id, String normalizeYAxis, String activityOutcome) {
 
 
@@ -78,18 +78,32 @@ class BardWebInterfaceController {
             return
         }
         try {
-            NormalizeAxis normalizeAxis = normalizeYAxis ? normalizeYAxis as NormalizeAxis : NormalizeAxis.Y_NORM_AXIS
+
             Map<String, Integer> searchParams = handleSearchParams()
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
+
+            //TODO: Use a command Object to bind this, most of the code below should be gone
             final List<FilterTypes> filters = []
-            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS){
+            NormalizeAxis normalizeAxis =  NormalizeAxis.Y_NORM_AXIS
+            if (normalizeYAxis){
+                normalizeAxis= normalizeYAxis as NormalizeAxis
+            }
+            ActivityOutcome activityOutcome1 = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
+            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
+            }
+            if (activityOutcome1 != ActivityOutcome.ACTIVE) {
+                filters.add(FilterTypes.TESTED)
             }
 
             final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
+            //TODO: these should become redundant if we use command objects. In any case these additional params should already be in the params object
             webQueryTableModel.additionalProperties.put("searchString", params.searchString)
-            webQueryTableModel.additionalProperties.put("normalizeYAxis",normalizeAxis.toString())
+            webQueryTableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
+            webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
+            webQueryTableModel.additionalProperties.put("id", id.toString())
+
 
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
                 render(template: 'experimentResultData', model: [webQueryTableModel: webQueryTableModel])

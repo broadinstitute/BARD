@@ -11,7 +11,6 @@ import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
-import spock.lang.IgnoreRest
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -23,7 +22,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
     void "test findExperimentDataById #label"() {
 
         when: "We call the findExperimentDataById method with the experimentId #experimentId"
-        final Map experimentDataMap = queryService.findExperimentDataById(experimentId, top, skip, bardqueryapi.NormalizeAxis.Y_NORM_AXIS, bardqueryapi.ActivityOutcome.ALL)
+        final Map experimentDataMap = queryService.findExperimentDataById(experimentId, top, skip, [bard.core.util.FilterTypes.TESTED])
 
         then: "We get back the expected map"
         assert experimentDataMap

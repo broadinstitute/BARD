@@ -93,7 +93,7 @@ class QueryServiceUnitSpec extends Specification {
         final Integer top = 10
         final Integer skip = 0
         when:
-        Map resultsMap = service.findExperimentDataById(experimentId, top, skip, normalizeYAxis, bardqueryapi.ActivityOutcome.ALL)
+        Map resultsMap = service.findExperimentDataById(experimentId, top, skip, [bard.core.util.FilterTypes.TESTED])
         then:
         experimentRestService.getExperimentById(_) >> {null}
         and:

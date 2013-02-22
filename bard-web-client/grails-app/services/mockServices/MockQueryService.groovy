@@ -16,9 +16,9 @@ import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
 import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.compounds.Promiscuity
-import bardqueryapi.NormalizeAxis
-import bardqueryapi.ActivityOutcome
+
 import bard.core.rest.spring.project.ProjectStep
+import bard.core.util.FilterTypes
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -886,7 +886,7 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     }
 
     @Override
-    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, NormalizeAxis normalizeAxis, ActivityOutcome activityOutcme) {
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes) {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
