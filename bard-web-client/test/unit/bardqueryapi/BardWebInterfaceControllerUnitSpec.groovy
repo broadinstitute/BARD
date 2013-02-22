@@ -32,6 +32,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
+import spock.lang.IgnoreRest
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -83,15 +84,20 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == 200
     }
 
-    void "test search"() {
+
+    void "test search #label"() {
         given:
-        final String searchString = "Search String"
         params.searchString = searchString
         when:
         controller.search()
         then:
-        assert response.status == 302
-        assert response.redirectedUrl == '/bardWebInterface/searchResults'
+        1 * this.mobileService.detect(_) >> {isMobile}
+        assert expectedStatusCode == response.status
+        assert response.redirectedUrl == expectedView
+        where:
+        label            | searchString    | isMobile | expectedStatusCode | expectedView
+        "Regular search" | "Search String" | false    | 302                | '/bardWebInterface/searchResults'
+        "Mobile Search"  | "Search String" | true     | 200                | null
     }
 
     void "test searchResults"() {
@@ -152,15 +158,48 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test showExperiment #label"() {
         when:
-        controller.showExperiment(eid, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
+        controller.showExperiment(eid, normalizeAxis, ActivityOutcome.ALL.toString())
         then:
         _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
         assert response.status == statusCode
 
         where:
-        label                          | eid  | statusCode                         | webQueryTableModel
-        "Empty Null EID - Bad Request" | null | HttpServletResponse.SC_BAD_REQUEST | null
-        "Good request"                 | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel()
+        label                              | eid  | statusCode                         | webQueryTableModel       | normalizeAxis
+        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null                     | NormalizeAxis.Y_NORM_AXIS.toString()
+        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | NormalizeAxis.Y_NORM_AXIS.toString()
+        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | NormalizeAxis.Y_DENORM_AXIS.toString()
+
+    }
+
+    void "test probe #label"() {
+        when:
+        controller.probe(probeId)
+        then:
+        _ * this.queryService.findProbe(probeId) >> {compoundAdapter}
+        assert statusCode == response.status
+
+        where:
+        label                                | probeId  | statusCode                         | compoundAdapter
+        "Empty Null probe ID - Bad Request"  | null     | HttpServletResponse.SC_BAD_REQUEST | null
+        "Good request"                       | "ML234"  | HttpServletResponse.SC_OK          | new CompoundAdapter(new Compound(bardProjectId: 1))
+        "Good request with not found probe"  | "ML2344" | HttpServletResponse.SC_NOT_FOUND   | new CompoundAdapter(new Compound(bardProjectId: -1))
+        "Good request with not null Adapter" | "ML233"  | HttpServletResponse.SC_NOT_FOUND   | null
+
+    }
+
+    void "test probe with exceptions #label"() {
+        given:
+        String id = "234"
+        when:
+        controller.probe(id)
+        then:
+        queryService.findProbe(_) >> {throw exceptionType}
+        assert response.status == statusCode
+        where:
+        label                                | exceptionType                                      | statusCode
+        "Throws an HttpClientErrorException" | new HttpClientErrorException(HttpStatus.NOT_FOUND) | HttpServletResponse.SC_NOT_FOUND
+        "Throws an Exception"                | new Exception()                                    | HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+
     }
 
     void "test showExperiment With Exception #label"() {
@@ -652,12 +691,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         and:
         assert response.status == 200
         where:
-        label                 | searchString | flashMessage                                                                | filters        | compoundAdapterMap
-        "Empty Search String" | ""           | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | null
-        "Throws Exception"    | "1234,5678"  | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | null
-        "Success"             | "Exact:CCC"  | null                                                                        | searchFilters1 | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
-        "Success No Filters"  | "Exact:CCC"  | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
-        "Success with CID"    | "Exact:222"  | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        label                          | searchString                  | flashMessage                                                                | filters        | compoundAdapterMap
+        "Empty Search String"          | ""                            | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | null
+        "Throws Exception"             | "1234,5678"                   | 'Search String is required, must be of the form StructureSearchType:Smiles' | searchFilters1 | null
+        "Success"                      | "Exact:CCC"                   | null                                                                        | searchFilters1 | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success No Filters"           | "Exact:CCC"                   | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Success with CID"             | "Exact:222"                   | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Has Similarity and threshold" | "Similarity:222 threshold:90" | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
+        "Has Similarity"               | "Similarity:222"              | null                                                                        | []             | [compoundAdapters: [buildCompoundAdapter(4567)], facets: [], nHits: 2]
 
     }
 

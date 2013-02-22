@@ -23,7 +23,7 @@ class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "#label"() {
+    void "Dictionary #label"() {
         when:
         final DictionaryElement dictionaryElement = dataExportRestService.findDictionaryElementById(dictionaryId)
         then:

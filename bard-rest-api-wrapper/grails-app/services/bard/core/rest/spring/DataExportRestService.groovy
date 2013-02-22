@@ -15,7 +15,7 @@ public class DataExportRestService extends AbstractRestService {
     //we keep the key value pair in a map so we can look them up easily
     Map<Long, DictionaryElement> dictionaryElementMap = [:]
 
-    private void loadDictionary(CapDictionary capDictionary) {
+    protected void loadDictionary(CapDictionary capDictionary) {
         final List<DictionaryElement> dictionaryElements = capDictionary.elements ?: []
         for (DictionaryElement dictionaryElement : dictionaryElements) {
             dictionaryElementMap.put(dictionaryElement.elementId, dictionaryElement)
@@ -66,6 +66,7 @@ public class DataExportRestService extends AbstractRestService {
             //this should force a reload of the cache, if the map is empty and the data export was down
             synchronized (SYNC_LOCK) {
                getDictionary()
+
             }
         }
         final DictionaryElement dictionaryElement = dictionaryElementMap.get(dictionaryId)

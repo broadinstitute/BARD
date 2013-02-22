@@ -18,7 +18,9 @@ class CompoundUnitSpec extends Specification {
            "iupac_name": "5-methyl-N-[4-(trifluoromethyl)phenyl]-1,2-oxazole-4-carboxamide",
            "preferred_term": "Leflunomide",
            "compound_class": "Drug",
-           "highlight": null
+           "highlight": null,
+           "bardProjectId" : 1,
+           "capProjectId" : 1
        }
        '''
 
@@ -49,6 +51,8 @@ class CompoundUnitSpec extends Specification {
         assert !compound.getAnno_val()
         assert compound.isDrug()
         assert !compound.isProbe()
+        assert compound.bardProjectId == 1
+        assert compound.capProjectId == 1
     }
 
 

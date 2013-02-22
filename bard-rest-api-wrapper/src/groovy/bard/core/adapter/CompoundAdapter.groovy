@@ -178,7 +178,10 @@ public class CompoundAdapter implements CompoundAdapterInterface {
     public String resourcePath() {
         return compound.resourcePath
     }
-    public String getBardProjectId(){
-        return compound.getBardProjectid()
+    public Long getBardProjectId(){
+        return compound.getBardProjectId()
+    }
+    public Long getCapProjectId(){
+        return compound.getCapProjectId()
     }
 }

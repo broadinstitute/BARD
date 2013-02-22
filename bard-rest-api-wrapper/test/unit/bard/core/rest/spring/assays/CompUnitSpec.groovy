@@ -62,6 +62,7 @@ class CompUnitSpec extends Specification {
         'one context-item'    | [comp1]               | [[comp1]]
         'two context-items'   | [comp1, comp2]        | [[comp1], [comp2]]
         'three context-items' | [comp1, comp2, comp3] | [[comp1, comp2], [comp3]]
+        'zero context-items'  | []                    | []
     }
 }
 

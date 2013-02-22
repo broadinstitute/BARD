@@ -21,6 +21,7 @@ class AssayUnitSpec extends Specification {
            "assays": 0,
            "classification": 0,
            "name": "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)",
+           "title": "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)",
            "source": "NCGC",
            "grantNo": null,
            "deposited": null,
@@ -62,6 +63,7 @@ class AssayUnitSpec extends Specification {
         assert assay.getBardAssayId() == 17
         assert assay.getCapAssayId() == 4406
         assert assay.getName() == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
+        assert assay.getTitle() == "Confirmation qHTS Assay for Inhibitors of 12-hLO (12-human lipoxygenase)"
         assert assay.getType() == 0
         assert assay.getCategory() == 1
         assert assay.getSummary() == 0
@@ -77,6 +79,16 @@ class AssayUnitSpec extends Specification {
         assert assay.getAssayId() == 0
         assert assay.getResourcePath() == "/assays/17"
     }
+
+    void "test set assay Id"() {
+        when:
+        final Assay assay = new Assay()
+        assay.setAssayId(2L)
+        then:
+        assert assay.getId() == 2
+
+    }
+
 
 
 }

@@ -88,9 +88,10 @@ class ConcentrationResponsePointUnitSpec extends Specification {
         then:
         assert display.trim() == expectedDisplay
         where:
-        label                      | responseValue | expectedDisplay
-        "With Response Value"      | "2.0"         | "2"
-        "With Null Response Value" | null          | ""
+        label                               | responseValue | expectedDisplay
+        "With Response Value"               | "2.0"         | "2"
+        "With Response Value, not a number" | "No Number"   | ""
+        "With Null Response Value"          | null          | ""
 
     }
 

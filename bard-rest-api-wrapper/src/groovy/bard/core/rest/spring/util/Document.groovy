@@ -20,7 +20,7 @@ public class Document extends JsonUtil {
     @JsonProperty("abs")
     private String abs;
     @JsonProperty("pubmedId")
-    private long pubmedId;
+    private Long pubmedId;
     @JsonProperty("resourcePath")
     private String resourcePath;
 
@@ -55,12 +55,12 @@ public class Document extends JsonUtil {
     }
 
     @JsonProperty("pubmedId")
-    public long getPubmedId() {
+    public Long getPubmedId() {
         return pubmedId;
     }
 
     @JsonProperty("pubmedId")
-    public void setPubmedId(long pubmedId) {
+    public void setPubmedId(Long pubmedId) {
         this.pubmedId = pubmedId;
     }
 

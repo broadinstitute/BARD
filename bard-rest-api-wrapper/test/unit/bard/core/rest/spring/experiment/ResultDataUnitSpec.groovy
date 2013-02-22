@@ -495,7 +495,8 @@ class ResultDataUnitSpec extends Specification {
         final List<PriorityElement> priorityElements = resultData.priorityElements
         assert resultData.isMapped() == isMapped
         assert resultData.getOutcome() == outcome
-        assert resultData.hasConcentrationResponseSeries() == hasConcRespSer
+        assert resultData.hasConcentrationResponseSeries() == hasPlot
+        assert resultData.hasPlot() == hasPlot
         assert resultData.responseClassEnum == respClassEnum
         validateRootElements(rootElements)
         if (label != 'UNCLASS') {
@@ -508,7 +509,7 @@ class ResultDataUnitSpec extends Specification {
         }
 
         where:
-        label                   | respClassEnum               | hasConcRespSer | responseClass | currentJSON                                                                 | hasChildElements | isMapped | outcome
+        label                   | respClassEnum               | hasPlot | responseClass | currentJSON                                                                 | hasChildElements | isMapped | outcome
         "CR_NO_SER"             | ResponseClassEnum.CR_NO_SER | false          | "CR_NO_SER"   | CR_NO_SER_bid_573_aid_2802_no_P_C_mapping_JSON                              | false            | false    | active
         "CR_SER"                | ResponseClassEnum.CR_SER    | true           | "CR_SER"      | CR_SER_bid_1998_aid_998_good_structure_5_hill_params_JSON                   | false            | true     | active
         "CR_SER_WITH_QUALIFIER" | ResponseClassEnum.CR_SER    | true           | "CR_SER"      | CR_SER_bid_27_aid_2173_good_CR_with_qualifier_JSON                          | false            | true     | active

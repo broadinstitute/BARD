@@ -23,6 +23,7 @@ import java.util.concurrent.FutureTask
 import bard.core.rest.spring.compounds.*
 import bard.core.rest.spring.util.DictionaryElement
 import bard.core.rest.spring.util.CapDictionary
+import spock.lang.IgnoreRest
 
 @Unroll
 @TestFor(DataExportRestService)
@@ -43,7 +44,8 @@ class DataExportRestServiceUnitSpec extends Specification {
         service.dataExportDictionaryURL = dataExportDictionaryURL
         service.baseUrl = "http://ncgc"
     }
-    void cleanup(){
+
+    void cleanup() {
         //Clean up the metaClass mocking we added.
         def remove = GroovySystem.metaClassRegistry.&removeMetaClass
     }
@@ -57,6 +59,44 @@ class DataExportRestServiceUnitSpec extends Specification {
         assert !capDictionary.elements
 
 
+    }
+
+
+    void "getLoadDictionary #label"() {
+        when:
+        service.loadDictionary(capDictionary)
+
+        then:
+        assert service.dictionaryElementMap.isEmpty() == isDictionaryElementMapEmpty
+        where:
+        label                             | capDictionary                                                                                                                               | isDictionaryElementMapEmpty
+        "Cap Dictionary With Elements"    | new CapDictionary(elements: [new DictionaryElement(elementId: 11, label: "label", elementStatus: "Published", description: "description")]) | false
+        "Cap Dictionary with no elements" | new CapDictionary()                                                                                                                         | true
+    }
+
+    void "findDictionaryElementById with loaded Dictionary Map"() {
+        given:
+        Long keyVal = new Long(11)
+        final DictionaryElement element = new DictionaryElement(elementId: new Long(11), label: "label", elementStatus: "Published", description: "description")
+        service.dictionaryElementMap.put(keyVal,element)
+
+        when:
+        DictionaryElement dictionaryElement = service.findDictionaryElementById(keyVal)
+
+        then:
+        assert dictionaryElement
+    }
+
+    void "findDictionaryElementById with empty Dictionary Map"() {
+        given:
+        service.dictionaryElementMap = [:]
+        service.metaClass.getDictionary = {new CapDictionary(elements: [new DictionaryElement(elementId: 11, label: "label", elementStatus: "Published", description: "description")])}
+
+        when:
+        DictionaryElement dictionaryElement = service.findDictionaryElementById(11)
+
+        then:
+        assert !dictionaryElement
     }
 
     void "getResourceContext"() {
