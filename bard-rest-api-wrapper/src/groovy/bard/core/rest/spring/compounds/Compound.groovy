@@ -12,10 +12,12 @@ public class Compound extends JsonUtil {
     private String etag;
 
     private CompoundAnnotations compoundAnnotations
-    @JsonProperty("bardProjectid")
-    private String bardProjectid
+    @JsonProperty("bardProjectId")
+    private Long bardProjectId
+    @JsonProperty("capProjectId")
+    private Long capProjectId
     @JsonProperty("cid")
-    private Integer cid;
+    private Long cid;
     @JsonProperty("probeId")
     private String probeId;
     @JsonProperty("url")
@@ -89,12 +91,12 @@ public class Compound extends JsonUtil {
     }
 
     @JsonProperty("cid")
-    public Integer getCid() {
+    public Long getCid() {
         return cid;
     }
 
     @JsonProperty("cid")
-    public void setCid(Integer cid) {
+    public void setCid(Long cid) {
         this.cid = cid;
     }
 
@@ -328,13 +330,26 @@ public class Compound extends JsonUtil {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
-    @JsonProperty("bardProjectid")
-    public String getBardProjectid(){
-        return this.bardProjectid
+    /**
+     * Properties set by Probes
+     * @return
+     */
+    @JsonProperty("bardProjectId")
+    public Long getBardProjectId(){
+        return this.bardProjectId
     }
-    @JsonProperty("bardProjectid")
-    public void setBardProjectid(String bardProjectId){
-        this.bardProjectid=bardProjectId
+    @JsonProperty("bardProjectId")
+    public void setBardProjectId(Long bardProjectId){
+        this.bardProjectId=bardProjectId
+    }
+
+    @JsonProperty("capProjectId")
+    public Long getCapProjectId(){
+        return this.capProjectId
+    }
+    @JsonProperty("capProjectId")
+    public void setCapProjectId(Long capProjectId){
+        this.capProjectId=capProjectId
     }
     public String getEtag() {
         return etag
@@ -344,7 +359,7 @@ public class Compound extends JsonUtil {
         this.etag = etag
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.cid;
     }
 

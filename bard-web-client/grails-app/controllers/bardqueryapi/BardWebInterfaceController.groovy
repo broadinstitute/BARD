@@ -82,14 +82,14 @@ class BardWebInterfaceController {
             Map<String, Integer> searchParams = handleSearchParams()
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
             final List<FilterTypes> filters = []
-            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS){
+            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
             }
 
             final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
             webQueryTableModel.additionalProperties.put("searchString", params.searchString)
-            webQueryTableModel.additionalProperties.put("normalizeYAxis",normalizeAxis.toString())
+            webQueryTableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
 
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
                 render(template: 'experimentResultData', model: [webQueryTableModel: webQueryTableModel])
@@ -118,10 +118,10 @@ class BardWebInterfaceController {
         }
         try {
             CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
-            if (compoundAdapter && compoundAdapter.bardProjectId != '-1') {
+            if (compoundAdapter && compoundAdapter.bardProjectId != -1) {
                 render(template: 'probes', model: [projectId: compoundAdapter.bardProjectId])
             } else {
-                render text: "", contentType: 'text/plain'
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request

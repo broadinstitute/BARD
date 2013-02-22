@@ -4,12 +4,12 @@ import bard.core.interfaces.AssayCategory
 import bard.core.interfaces.AssayRole
 import bard.core.interfaces.AssayType
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.ExpandedAssay
 import bard.core.rest.spring.util.NameDescription
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.assays.ExpandedAssay
 
 @Unroll
 class AssayAdapterUnitSpec extends Specification {
@@ -22,6 +22,7 @@ class AssayAdapterUnitSpec extends Specification {
        "bardAssayId":600,
        "capAssayId":4098,
        "category":1,
+       "title":"title",
        "type":0,
        "summary":0,
        "assays":0,
@@ -39,6 +40,12 @@ class AssayAdapterUnitSpec extends Specification {
              "pubmedId":9393848,
              "resourcePath":"/documents/9393848"
           },
+           {
+             "title":"Cytochrome c: can't live with it--can't live without it.",
+             "doi":"null",
+             "abs":"null",
+             "resourcePath":"/documents/9393848"
+          },
           {
              "title":"Small-molecule antagonists of apoptosis suppressor XIAP exhibit broad antitumor activity.",
              "doi":"null",
@@ -50,6 +57,14 @@ class AssayAdapterUnitSpec extends Specification {
        "targets":[
           {
              "acc":"P98170",
+             "name":"E3 ubiquitin-protein ligase XIAP",
+             "description":null,
+             "status":"Reviewed",
+             "geneId":331,
+             "taxId":9606,
+             "resourcePath":"/targets/accession/P98170"
+          },
+           {
              "name":"E3 ubiquitin-protein ligase XIAP",
              "description":null,
              "status":"Reviewed",
@@ -169,6 +184,7 @@ class AssayAdapterUnitSpec extends Specification {
         assert !assayAdapter.documents
         assert !assayAdapter.targets
     }
+
     void "test getters With Expanded Assay"() {
 
         given:
@@ -202,6 +218,23 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.targetIds
         assert assayAdapter.documents
         assert assayAdapter.targets
+        assert assayAdapter.title
+    }
+
+
+    void testGetDocumentIdsWithNulls() {
+        given:
+        final ExpandedAssay assay = objectMapper.readValue(EXPANDED_ASSAY, ExpandedAssay.class)
+
+        Double score = 2
+        NameDescription nameDescription = new NameDescription(description: "description", name: "name")
+        when:
+        AssayAdapter assayAdapter = new AssayAdapter(assay, score, nameDescription)
+        then:
+        assayAdapter.getDocumentIds().size() == 2
+        assayAdapter.getTargetIds().size() == 1
+
+
     }
 
 

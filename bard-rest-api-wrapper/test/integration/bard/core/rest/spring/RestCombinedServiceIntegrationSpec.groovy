@@ -14,6 +14,7 @@ import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import bard.core.rest.spring.project.ProjectExpanded
 import spock.lang.Shared
+import spock.lang.IgnoreRest
 
 /**
  * Tests for RESTAssayService in JDO
@@ -78,19 +79,6 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                           | adid
         "Search with a single assay id" | TEST_ADID
-    }
-    /**
-     *
-     */
-    void "test findAssaysByCID"() {
-        given:
-        Long cid = TEST_CID
-        when:
-        final AssayResult assayResult = this.compoundRestService.findAssaysByCID(cid)
-        then:
-        assert assayResult
-        assert assayResult.assays
-
     }
 
     void "test findProjectsByCID #label"() {
@@ -306,6 +294,21 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         assert projectResult.projects
     }
 
+    /**
+     *
+     */
+
+    void "test findAssaysByCID"() {
+        given:
+        Long cid = TEST_CID
+        when:
+        final AssayResult assayResult = this.compoundRestService.findAssaysByCID(cid)
+        then:
+        assert assayResult
+        assert assayResult.assays
+
+    }
+
     void "test findExperimentsByCID"() {
         given:
         Long cid = TEST_CID
@@ -315,4 +318,6 @@ class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
         assert experimentResult
         assert experimentResult.experiments
     }
+
+
 }

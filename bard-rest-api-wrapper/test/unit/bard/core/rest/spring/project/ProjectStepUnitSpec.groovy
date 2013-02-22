@@ -97,10 +97,14 @@ class ProjectStepUnitSpec extends Specification {
 
         assert nextBardExpt
         assert prevBardExpt
+        assert !nextBardExpt.description
+        assert !nextBardExpt.getDeposited()
+        assert nextBardExpt.getUpdated()=="2013-01-26"
         assert 1703 == projectStep.bardProjId
         assert 3803 == projectStep.stepId
         assert "Linked by Compound set (Swamidass)" == projectStep.edgeName
         assert 1 == projectStep.annotations.size()
+        assert !projectStep.getResourcePath()
     }
 
 }

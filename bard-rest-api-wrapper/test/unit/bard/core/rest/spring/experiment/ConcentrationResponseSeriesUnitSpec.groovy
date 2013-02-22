@@ -150,7 +150,22 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         assert activities.get(0) < activities.get(1)
 
     }
+    void "test sortedActivities with various params"() {
+        given:
+        ConcentrationResponsePoint concentrationResponsePoint = new ConcentrationResponsePoint(value: responseValue)
+        ConcentrationResponseSeries concentrationResponseSeries =
+            new ConcentrationResponseSeries(concentrationResponsePoints:[concentrationResponsePoint])
+        when:
+        final List<Double> activities = concentrationResponseSeries.sorterdActivities()
+        then:
+        assert activities.size() == expectedSize
+        where:
+        label                               | responseValue | expectedSize
+        "With Response Value"               | "2.0"         | 1
+        "With Response Value, not a number" | "No Number"   | 0
+        "With Null Response Value"          | null          | 0
 
+    }
     void toDoseResponsePoints() {
         given:
         ConcentrationResponseSeries concentrationResponseSeries =
@@ -158,6 +173,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
                     [
                             new ConcentrationResponsePoint(value: null, testConcentration: 2.0),
                             new ConcentrationResponsePoint(value: "3", testConcentration: 3.0),
+                            new ConcentrationResponsePoint(value: "3", testConcentration: null),
                             new ConcentrationResponsePoint(value: "2", testConcentration: 2.0)
                     ])
 

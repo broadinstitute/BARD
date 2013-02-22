@@ -66,6 +66,19 @@ class CompoundRestServiceUnitSpec extends Specification {
 
     }
 
+    void "findProbes #label"() {
+        when:
+        Compound probe = service.findProbe(mlNumber)
+        then:
+        restTemplate.getForObject(_, _) >> {compounds}
+        assert (probe != null) == expected
+        where:
+        label             | mlNumber | compounds        | expected
+        "Existing Probe"  | "ML1001" | [new Compound()] | true
+        "Not Found Probe" | "ML2002" | []               | false
+
+    }
+
     void "searchCompoundsByCids(final List<Long> capIds, final SearchParams searchParams) #label"() {
         when:
         CompoundResult compoundResult = service.searchCompoundsByCids(cids, searchParams)

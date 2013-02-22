@@ -66,6 +66,7 @@ class ExperimentShowUnitSpec extends Specification {
        "classification": 2,
        "substances": 272,
        "compounds": 272,
+       "activeCompounds": 272,
        "name": "Dose Response Assay for Formylpeptide Receptor",
        "description": "University of New Mexico Assay Overview",
        "source": "NCGC",
@@ -123,6 +124,7 @@ class ExperimentShowUnitSpec extends Specification {
         assert experimentShow.description == "University of New Mexico Assay Overview"
         assert experimentShow.name == "Dose Response Assay for Formylpeptide Receptor"
         assert experimentShow.compounds == 272
+        assert experimentShow.activeCompounds == 272
         assert experimentShow.substances == 272
         assert experimentShow.pubchemAid == 519
         assert experimentShow.category == 1

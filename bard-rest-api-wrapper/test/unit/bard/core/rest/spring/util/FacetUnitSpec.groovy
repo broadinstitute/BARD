@@ -46,7 +46,7 @@ class FacetUnitSpec extends Specification {
     void "test toValue Additional Params has no Value"() {
         when:
         Facet facet = new Facet()
-        facet.setCounts(new Counts(additionalProperties: ["key":null]))
+        facet.setCounts(new Counts(additionalProperties: ["key":null, "key1":"notANumber"]))
         then:
         facet.toValue() == null
     }
