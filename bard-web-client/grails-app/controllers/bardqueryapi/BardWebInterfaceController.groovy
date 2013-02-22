@@ -84,11 +84,14 @@ class BardWebInterfaceController {
 
             //TODO: Use a command Object to bind this, most of the code below should be gone
             final List<FilterTypes> filters = []
+
             NormalizeAxis normalizeAxis =  NormalizeAxis.Y_NORM_AXIS
             if (normalizeYAxis){
                 normalizeAxis= normalizeYAxis as NormalizeAxis
             }
             ActivityOutcome activityOutcome1 = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
+
+
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
             }
@@ -103,7 +106,6 @@ class BardWebInterfaceController {
             webQueryTableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
             webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
             webQueryTableModel.additionalProperties.put("id", id.toString())
-
 
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
                 render(template: 'experimentResultData', model: [webQueryTableModel: webQueryTableModel])
@@ -132,10 +134,10 @@ class BardWebInterfaceController {
         }
         try {
             CompoundAdapter compoundAdapter = queryService.findProbe(probeId)
-            if (compoundAdapter && compoundAdapter.bardProjectId != '-1') {
+            if (compoundAdapter && compoundAdapter.bardProjectId != -1) {
                 render(template: 'probes', model: [projectId: compoundAdapter.bardProjectId])
             } else {
-                render text: "", contentType: 'text/plain'
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request

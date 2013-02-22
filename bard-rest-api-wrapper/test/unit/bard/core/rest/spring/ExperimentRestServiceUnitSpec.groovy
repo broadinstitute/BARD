@@ -1,15 +1,15 @@
 package bard.core.rest.spring
 
 import bard.core.SearchParams
+import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
+import bard.core.util.FilterTypes
 import grails.test.mixin.TestFor
 import org.springframework.http.HttpHeaders
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
-import bard.core.helper.LoggerService
-import bard.core.util.FilterTypes
 
 @Unroll
 @TestFor(ExperimentRestService)
@@ -26,22 +26,65 @@ class ExperimentRestServiceUnitSpec extends Specification {
         service.loggerService = this.loggerService
     }
 
-    void "activitiesByEIDs"() {
+
+    void "activitiesByEIDs #label"() {
 
         when:
-        final ExperimentData eids = service.activitiesByEIDs([], new SearchParams())
-
-        and:
-        final ExperimentData adids = service.activitiesByADIDs([], new SearchParams())
-        and:
-        final ExperimentData cids = service.activitiesByCIDs([], new SearchParams())
-        and:
-        final ExperimentData sids = service.activitiesBySIDs([], new SearchParams())
+        final ExperimentData experimentData = service.activitiesByEIDs(eids, new SearchParams())
         then:
-        assert !eids
-        assert !adids
-        assert !cids
-        assert !sids
+        service.postForObject(_, _, _) >> {activities}
+        assert expectResults == (experimentData != null)
+        where:
+        label            | eids  | expectResults | activities
+        "Empty EID list" | []    | false         | []
+        "Single EID"     | [123] | true          | [new Activity()]
+    }
+
+    void "activitiesByADIDs #label"() {
+        when:
+        final ExperimentData experimentData = service.activitiesByADIDs(adids, new SearchParams())
+        then:
+        service.postForObject(_, _, _) >> {activities}
+        assert expectResults == (experimentData != null)
+        where:
+        label            | adids | expectResults | activities
+        "Empty EID list" | []    | false         | []
+        "Single EID"     | [123] | true          | [new Activity()]
+    }
+
+    void "activitiesByCIDs #label"() {
+        when:
+        final ExperimentData experimentData = service.activitiesByCIDs(cids, new SearchParams())
+        then:
+        service.postForObject(_, _, _) >> {activities}
+        assert expectResults == (experimentData != null)
+        where:
+        label            | cids  | expectResults | activities
+        "Empty EID list" | []    | false         | []
+        "Single EID"     | [123] | true          | [new Activity()]
+    }
+
+    void "activitiesBySIDs #label"() {
+        when:
+        final ExperimentData experimentData = service.activitiesBySIDs(sids, new SearchParams())
+        then:
+        service.postForObject(_, _, _) >> {activities}
+        assert expectResults == (experimentData != null)
+        where:
+        label            | sids  | expectResults | activities
+        "Empty EID list" | []    | false         | []
+        "Single EID"     | [123] | true          | [new Activity()]
+    }
+
+    void "buildURLToExperimentData #label"() {
+        when:
+        final String url = service.buildURLToExperimentData(searchParams)
+        then:
+        assert expectedURL == url
+        where:
+        label                      | searchParams                       | expectedURL
+        "With search Params"       | new SearchParams(top: 10, skip: 0) | "http://ncgc/exptdata?skip=0&top=10"
+        "With Empty Search Params" | new SearchParams()                 | "http://ncgc/exptdata"
     }
 
     void "activities with no ETag"() {
@@ -110,12 +153,12 @@ class ExperimentRestServiceUnitSpec extends Specification {
         when:
         final ExperimentSearchResult experimentSearchResult = service.searchExperimentsByIds(eids)
         then:
-        0 * restTemplate.postExchange(_, _, _, _)
+        expectedNumberOfInvocations * restTemplate.postExchange(_, _, _)
         assert experimentSearchResult == null
         where:
-        label                        | eids
-        "With null eids"             | null
-        "With an empty list of eids" | []
+        label                        | eids       | expectedNumberOfInvocations
+        "With null eids"             | null       | 0
+        "With an empty list of eids" | []         | 0
     }
 
     void "activities with experimentId and etag"() {
@@ -181,6 +224,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
         where:
         label                  | experimentId | skip | top | etag   | filters              | expectedURL
         "With ETag"            | 2            | 0    | 10  | "etag" | [FilterTypes.TESTED] | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&expand=true"
+        "With ETag and active" | 2            | 0    | 10  | "etag" | []                   | "http://ncgc/experiments/2/etag/etag/exptdata?skip=0&top=10&filter=active&expand=true"
         "No ETag"              | 2            | 0    | 10  | null   | [FilterTypes.TESTED] | "http://ncgc/experiments/2/exptdata?skip=0&top=10&expand=true"
         "No ETag, Top is zero" | 2            | 0    | 0   | null   | [FilterTypes.TESTED] | "http://ncgc/experiments/2/exptdata?expand=true"
     }

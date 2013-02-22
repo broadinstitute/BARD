@@ -49,11 +49,10 @@ public class Facet extends JsonUtil {
         final Map<String, Object> additionalProperties = counts.getAdditionalProperties()
         boolean hasAtleastOneValue = false//We will ignore empty facets
         for (String key : additionalProperties.keySet()) {
-            final Object object = additionalProperties.get(key)
-            if (object != null) {
-                int facetCount = (Integer) object
-                if (facetCount) {
-                    new IntValue(facet, key, facetCount);
+            final Object facetCount = additionalProperties.get(key)
+            if (facetCount) {
+                if (facetCount.toString().isInteger()) {
+                    new IntValue(facet, key, (Integer) facetCount);
                     hasAtleastOneValue = true
                 }
             }

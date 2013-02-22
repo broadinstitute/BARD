@@ -17,18 +17,10 @@ class TargetUnitSpec extends Specification {
        "status": "Reviewed",
        "geneId": 5429,
        "taxId": 9606,
+       "url":"url",
        "resourcePath": "/targets/accession/Q9Y253"
     }
    '''
-
-
-    void setup() {
-
-    }
-
-    void tearDown() {
-        // Tear down logic here
-    }
 
     void "test serialize json to Target"() {
         when:
@@ -42,6 +34,7 @@ class TargetUnitSpec extends Specification {
         assert target.geneId==5429
         assert target.taxId==9606
         assert target.resourcePath=="/targets/accession/Q9Y253"
+        assert target.url == "url"
     }
 
 }

@@ -8,14 +8,14 @@ import bard.core.interfaces.*
 import bard.core.rest.spring.assays.*
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
-public class AssayAdapter implements AssayAdapterInterface{
+public class AssayAdapter implements AssayAdapterInterface {
     final AbstractAssay assay
     final Double score
     final NameDescription matchingField
     final List<BardAnnotation> annotations;
 
 
-    public AssayAdapter(final AbstractAssay assay, final Double score=0, final NameDescription nameDescription=null, final List<BardAnnotation> annotations = [] ) {
+    public AssayAdapter(final AbstractAssay assay, final Double score = 0, final NameDescription nameDescription = null, final List<BardAnnotation> annotations = []) {
         this.assay = assay
         this.score = score
         this.matchingField = nameDescription
@@ -25,7 +25,7 @@ public class AssayAdapter implements AssayAdapterInterface{
     @Override
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()
-        if(matchFieldName){
+        if (matchFieldName) {
             matchFieldName = MatchedTermsToHumanReadableLabelsMapper.matchTermsToHumanReadableLabels(matchFieldName)
             //TODO: Talk to Steve about formatting
             return "Matched Field: " + matchFieldName
@@ -33,6 +33,7 @@ public class AssayAdapter implements AssayAdapterInterface{
         return ""
 
     }
+
     Double getScore() {
         return this.score
     }
@@ -44,9 +45,11 @@ public class AssayAdapter implements AssayAdapterInterface{
     public String getName() {
         return assay.name
     }
-    public String getTitle(){
+
+    public String getTitle() {
         return assay.title
     }
+
     public Long getCapAssayId() {
         return assay.getCapAssayId()
     }
@@ -113,41 +116,53 @@ public class AssayAdapter implements AssayAdapterInterface{
         annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, assay.getKegg_disease_names())
         return annos;
     }
-    public List<Document> getDocuments(){
-        if(assay instanceof ExpandedAssay){
-            ExpandedAssay expandedAssay = (ExpandedAssay)assay
+
+    public List<Document> getDocuments() {
+        if (assay instanceof ExpandedAssay) {
+            ExpandedAssay expandedAssay = (ExpandedAssay) assay
             return expandedAssay.getDocuments()
         }
-       return []
+        return []
     }
-    public List<Target> getTargets(){
-        if(assay instanceof ExpandedAssay){
-            ExpandedAssay expandedAssay = (ExpandedAssay)assay
+
+    public List<Target> getTargets() {
+        if (assay instanceof ExpandedAssay) {
+            ExpandedAssay expandedAssay = (ExpandedAssay) assay
             return expandedAssay.getTargets()
         }
         return []
     }
-    public List<String> getTargetIds(){
+
+    public List<String> getTargetIds() {
         List<String> targetIds = []
-        if(assay instanceof ExpandedAssay){
-            ExpandedAssay expandedAssay = (ExpandedAssay)assay
-            targetIds << expandedAssay.targets*.acc
+        if (assay instanceof ExpandedAssay) {
+            ExpandedAssay expandedAssay = (ExpandedAssay) assay
+            expandedAssay.targets.collect { Target target ->
+                if (target.acc) {
+                  targetIds.add(target.acc)
+                }
+            }
         }
-        if(assay instanceof Assay) {
-            Assay assay1 = (Assay)assay
-            targetIds << assay1.targetIds
+        if (assay instanceof Assay) {
+            Assay assay1 = (Assay) assay
+            targetIds.addAll(assay1.targetIds)
         }
         return targetIds
     }
-    public List<String> getDocumentIds(){
+
+    public List<String> getDocumentIds() {
         List<String> documentIds = []
-        if(assay instanceof ExpandedAssay){
-            ExpandedAssay expandedAssay = (ExpandedAssay)assay
-            documentIds << expandedAssay.documents*.pubmedId
+        if (assay instanceof ExpandedAssay) {
+            ExpandedAssay expandedAssay = (ExpandedAssay) assay
+            expandedAssay.documents.collect { Document document ->
+                if (document.pubmedId) {
+                    documentIds.add(document.pubmedId)
+                }
+            }
         }
-        if(assay instanceof Assay) {
-            Assay assay1 = (Assay)assay
-            documentIds << assay1.documentIds
+        if (assay instanceof Assay) {
+            Assay assay1 = (Assay) assay
+            documentIds.addAll(assay1.documentIds)
         }
         return documentIds
     }

@@ -1076,7 +1076,8 @@ class MockProjectAdapter implements ProjectAdapterInterface {
 
     @Override
     List<Probe> getProbes() {
-        return [new Probe("2", "ML18", "http://bard.org", "CCC", ""), new Probe("28", "ML20", "http://bard.org", "CCCC", "")]  //To change body of implemented methods use File | Settings | File Templates.
+        return [new Probe(2, "ML18", "http://bard.org", "CCC", 1, 2),
+                new Probe(28, "ML20", "http://bard.org", "CCCC", 2,2)]  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

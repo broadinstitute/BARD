@@ -33,7 +33,10 @@ class CompoundAdapterUnitSpec extends Specification {
        "numAssay": 500,
        "numActiveAssay": 60,
        "highlight": null,
-       "resourcePath": "/compounds/2722"
+       "resourcePath": "/compounds/2722",
+       "bardProjectId":2,
+       "capProjectId":1
+
    }
 '''
     static final String COMPOUND_ANNOTATIONS = '''
@@ -165,6 +168,8 @@ class CompoundAdapterUnitSpec extends Specification {
         assert !compoundAdapter.getTherapeuticIndication()
         assert !compoundAdapter.getPrescriptionDrugLabel()
         assert !compoundAdapter.getOtherAnnotationValue("key")
+        assert compoundAdapter.getBardProjectId()
+        assert compoundAdapter.getCapProjectId()
 
     }
 
