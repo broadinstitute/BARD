@@ -15,16 +15,16 @@
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="update">
-            <g:hiddenField name="id" value="${document?.id}"/>
-
+            <g:hiddenField name="documentId" value="${document?.documentId}"/>
+            <g:hiddenField name="assayId" value="${document?.assayId}"/>
             <g:hiddenField name="version" value="${document?.version}"/>
 
             <g:render template="editProperties" model="${[document: document]}"/>
 
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="assayDefinition" action="edit" id="${document?.assay?.id}"
-                            fragment="document-${document?.id}" class="btn">Cancel</g:link>
+                    <g:link controller="assayDefinition" action="show" id="${document?.assayId}"
+                            fragment="document-${document?.documentId}" class="btn">Cancel</g:link>
                     <g:actionSubmit value="Update" action="Update" class="btn btn-primary"/>
                 </div>
             </div>

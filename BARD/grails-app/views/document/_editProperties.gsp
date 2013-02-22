@@ -37,7 +37,7 @@
     <label class="control-label" for="modifiedBy"><g:message code="default.modifiedBy.label"/></label>
 
     <div class="controls">
-        <g:textField class="span4" disabled="disabled" id="modifiedBy" rows="20" name="modifiedBy"
+        <g:textField class="span4" readonly="readonly" id="modifiedBy" rows="20" name="modifiedBy"
                      value="${document?.modifiedBy}"/>
     </div>
 </div>
@@ -46,8 +46,8 @@
     <label class="control-label" for="dateCreated"><g:message code="default.dateCreated.label"/></label>
 
     <div class="controls">
-        <g:textField class="span4" disabled="disabled" id="dateCreated" rows="20" name="dateCreated"
-                     value="${formatDate(date: document?.dateCreated)}"/>
+        <g:textField class="span4" readonly="readonly" id="dateCreated" rows="20" name="dateCreated"
+                     value="${document?.dateCreated}"/>
     </div>
 </div>
 
@@ -55,7 +55,7 @@
     <label class="control-label" for="lastUpdated"><g:message code="default.lastUpdated.label"/></label>
 
     <div class="controls">
-        <g:textField class="span4" disabled="disabled" id="lastUpdated" rows="20" name="lastUpdated"
+        <g:textField class="span4"  readonly="readonly" id="lastUpdated" rows="20" name="lastUpdated"
                              value="${formatDate(date: document?.lastUpdated)}"/>
 
     </div>
