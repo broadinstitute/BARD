@@ -16,7 +16,7 @@ abstract class AbstractDocument implements IDocumentType {
     String documentName
     String documentType
     String documentContent
-    Date dateCreated
+    Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
 
