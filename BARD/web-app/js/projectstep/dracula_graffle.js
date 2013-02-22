@@ -112,18 +112,16 @@ Raphael.fn.connection = function Connection(obj1, obj2, style) {
           .click(function(){
               var params = {fromNode:obj1.data.link, toNode:obj2.data.link}
               $('#edge-selection-details').html(template1(params))
-
-             // alert(obj1.id+ " clicked edge " + obj2.id)
           }));
 
       edge.bg && edge.bg[move]({path:path})
           || style && style.fill && (edge.bg = style.fill.split
               && selfRef.path(path)
               .attr({ stroke: style.fill.split("|")[0], fill: "none",
-                "stroke-width": style.fill.split("|")[1] || 3 }).toBack().click(function(){
+                "stroke-width": style.fill.split("|")[1] || 3 }).toBack().
+          click(function(){
               var params = {fromNode:obj1.data.link, toNode:obj2.data.link}
               $('#edge-selection-details').html(template1(params))
-             // alert(obj1.id+ " clicked edge " + obj2.id)
           }));
       /* setting label */
       style && style.label

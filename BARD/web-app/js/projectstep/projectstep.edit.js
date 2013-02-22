@@ -196,8 +196,10 @@ function handleSuccess(data){
         $("#serviceResponse").text(data)
     }
     else {
-        $("#serviceResponse").css("color","#FF00FF")
-        $("#serviceResponse").text("Success! Reload the page to view changes.")
+       // $("#serviceResponse").css("color","#FF00FF")
+       // $("#serviceResponse").text("Success! Reload the page to view changes.")
+        $("#showstep").html(data);
+        initFunction();
     }
     $("#serviceResponse").show()
 }

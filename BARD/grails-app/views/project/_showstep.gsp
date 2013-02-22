@@ -1,4 +1,4 @@
-<div>
+<div id="showstep">
     <input type="hidden" id="projectIdForStep" name="projectIdForStep" value="${instanceId}"/>
 
     <div id="stepGraph" style="display: none">${pegraph}</div>
@@ -10,12 +10,13 @@
 
     <div id="serviceResponse" style="display: none"></div>
 
-    <div id="canvas" style="height: 500px; width: 800px;"></div>
-    <div id="canvasIsolated" style="height: 150px; width: 800px;"></div>
-    <button id="redraw" onclick="redraw();">redraw</button>
+    <div id="canvas"></div>
+    <div id="canvasIsolated"></div>
+
+    Looks ugly? <button id="redraw" onclick="redraw();">redraw</button>. Click, drag, drop to arrange.
 
     <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
-        <g:render template='/project/editstep'/>
+
 
         <div id="node-selection-details">
             Click on an experiment to see the details here.
@@ -31,7 +32,7 @@
                 <tbody>
                 <tr>
                     <td><a href='/BARD/experiment/show/{{selected.data.link}}'>{{selected.data.link}}</a></td>
-                    <td><a href="#" onclick="deleteItem({{selected.id}}, ${instanceId});return false;"
+                    <td><a href="#" onclick="deleteItem({{selected.data.link}}, ${instanceId});return false;"
                            style="font-family:arial;color:red;font-size:10px;"><i
                                 class="icon-trash"></i>Remove from Project</a></td>
                 </tr>
