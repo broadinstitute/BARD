@@ -79,7 +79,7 @@ class ResultsService {
             if (item.type == AttributeType.List) {
                 return parseListValue(column, value, item.contextItems)
             } else if (item.type == AttributeType.Free) {
-                return parseNumberOrRange(column, value)
+                return parseAnything(column, value)
             } else if (item.type == AttributeType.Range) {
                 Double rangeMin = item.contextItems[0].valueMin
                 Double rangeMax = item.contextItems[0].valueMax
@@ -150,6 +150,18 @@ class ResultsService {
         return "Expected a range, but got \"${value}\""
     }
 
+    static def parseAnything(Column column, String value) {
+        if (RANGE_PATTERN.matcher(value).matches()) {
+            return parseRange(column, value)
+        } else if(QUALIFIED_NUMBER_PATTERN.matcher(value)) {
+            return parseQualifiedNumber(column, value)
+        } else {
+            // assume it's free text and we take it literally
+            Cell cell = new Cell(valueDisplay:value, column: column)
+            return cell
+        }
+    }
+
     static def parseNumberOrRange(Column column, String value) {
         if (RANGE_PATTERN.matcher(value).matches()) {
             return parseRange(column, value)
@@ -213,6 +225,30 @@ class ResultsService {
 
         public Element getAttributeElement() {
             return column.item.attributeElement;
+        }
+
+        String getValueDisplay() {
+            if (valueDisplay != null) {
+                return valueDisplay;
+            }
+
+            if (value != null) {
+                if (qualifier == "= ") {
+                    return value.toString()
+                } else {
+                    return "${qualifier.trim()}${value}"
+                }
+            }
+
+            if (minValue != null) {
+                return "${minValue}-${maxValue}";
+            }
+
+            if (element != null) {
+                return element.label
+            }
+
+            return null;
         }
     }
 
@@ -585,7 +621,14 @@ class ResultsService {
 
             boolean linked = isLinked(column.measure, cell.column.item)
             if (linked) {
-                ResultContextItem item = new ResultContextItem(result: result, attributeElement: cell.column.item.attributeElement, valueNum: cell.value, qualifier: cell.qualifier, valueMin: cell.minValue, valueMax: cell.maxValue, valueElement: cell.element)
+                ResultContextItem item = new ResultContextItem(result: result,
+                        attributeElement: cell.column.item.attributeElement,
+                        valueNum: cell.value,
+                        qualifier: cell.qualifier,
+                        valueMin: cell.minValue,
+                        valueMax: cell.maxValue,
+                        valueElement: cell.element,
+                        valueDisplay: cell.valueDisplay)
                 result.resultContextItems.add(item)
             }
         }
@@ -631,7 +674,17 @@ class ResultsService {
             for(cell in row.cells) {
                 if (cell.column.measure != null) {
                     String qualifier = cell.qualifier.length() == 1 ? cell.qualifier +" " : cell.qualifier;
-                    def result = new Result(qualifier: qualifier, valueNum: cell.value, statsModifier: cell.column.measure.statsModifier, resultType: cell.column.measure.resultType, replicateNumber: row.replicate, substance: substance, dateCreated: new Date(), resultStatus: "Pending")
+                    def result = new Result(qualifier: qualifier,
+                            valueDisplay: cell.valueDisplay,
+                            valueNum: cell.value,
+                            valueMin: cell.minValue,
+                            valueMax: cell.maxValue,
+                            statsModifier: cell.column.measure.statsModifier,
+                            resultType: cell.column.measure.resultType,
+                            replicateNumber: row.replicate,
+                            substance: substance,
+                            dateCreated: new Date(),
+                            resultStatus: "Pending")
                     results << result
                     resultByCell[cell] = result
                     cellByResult[result] = cell

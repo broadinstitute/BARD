@@ -396,14 +396,16 @@ class ResultsServiceSpec extends spock.lang.Specification {
         cell.maxValue == maxVal
         cell.minValue == minVal
         cell.qualifier == expectedQualifier
+        cell.valueDisplay == valueDisplay
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal | valueDisplay
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null   | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null   | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null   | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null   | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0    | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null   | "free"
     }
 
     void 'test parse context item from element list'() {
@@ -433,7 +435,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         !(column.parseValue("pony") instanceof ResultsService.Cell)
     }
 
-    void 'test parse context item from value list'() {
+    void 'test parse context item from numeric value list'() {
         when:
         def attribute = Element.build()
         def context = AssayContext.build()
@@ -470,5 +472,26 @@ class ResultsServiceSpec extends spock.lang.Specification {
         !(column.parseValue("pony") instanceof ResultsService.Cell)
     }
 
+    void 'test parse context item from free text list'() {
+        when:
+        def attribute = Element.build()
+        def context = AssayContext.build()
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet")
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba")
+        ItemService itemService = new ItemService()
+        def item = itemService.getLogicalItems([trumpetItem, tubaItem])[0]
+        ResultsService.Column column = new ResultsService.Column("x", item)
 
+        ResultsService.Cell c0 = column.parseValue("trumpet")
+
+        then:
+        c0.valueDisplay == "trumpet"
+
+        when:
+        ResultsService.Cell c1 = column.parseValue("tuba")
+
+        then:
+        c1.valueDisplay == "tuba"
+        !(column.parseValue("pony") instanceof ResultsService.Cell)
+    }
 }
