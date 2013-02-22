@@ -6,7 +6,12 @@
 <af:page>
 	<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
 	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
-    <g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnits }" />
+	<g:if test="${fixedValue.isNumericValue}">
+    	<g:set var="valueText" value="${ fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
+	</g:if>
+	<g:else>
+    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
+	</g:else>    
     <g:render template="common/itemWizardSelectionsTable"
               model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': valueText]"/>
 

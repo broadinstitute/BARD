@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.*;
+import bard.db.registration.additemwizard.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -80,22 +81,62 @@ class AssayContextService {
             return true;
         }
     }
+	
+	public saveItem(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, FixedValueCommand fixedValCmd){
+		def isSaved = false
+		String FixedAttributeType = AttributeType.Fixed
+		println "AttributeType.Fixed:  " + AttributeType.Fixed
+		if(valTypeCmd.valueTypeOption.equals(FixedAttributeType)){
+			println "Saving item with AttributeType = Fixed ..."
+			
+			if(fixedValCmd.isNumericValue){
+				AssayContextItem newAssayContextItem = new AssayContextItem()
+				newAssayContextItem.setAttributeType(AttributeType.Fixed);
+			}
+			else{
+				Element attributeElement = Element.get(attributeCmd.attributeId)
+				Element valueElement = Element.get(fixedValCmd.valueId)
+				
+				AssayContextItem newAssayContextItem = new AssayContextItem()
+				newAssayContextItem.setAttributeType(AttributeType.Fixed);
+				newAssayContextItem.attributeElement = attributeElement
+				newAssayContextItem.valueElement = valueElement
+				newAssayContextItem.valueDisplay = valueElement.label
+				assayContext.addToAssayContextItems(newAssayContextItem)
+				assayContext.save()
+				isSaved = true
+			}
+			println "Done saving item."
+			
+		}
+		else{
+			
+		}
+		return isSaved;
+	}
 
-	public saveItemInCard(AssayContext assayContext, Element attributeElement, String valueType, Element valueElement){
+	public saveItemInCard(AssayContext assayContext, Element attributeElement, String valueType, boolean isNumericValue, Element valueElement){
 		def isSaved = false
 		String FixedAttributeType = AttributeType.Fixed
 		println "AttributeType.Fixed:  " + AttributeType.Fixed
 		if(valueType.equals(FixedAttributeType)){
 			println "Saving item with AttributeType = Fixed ..."
-			AssayContextItem newAssayContextItem = new AssayContextItem()
-			newAssayContextItem.setAttributeType(AttributeType.Fixed);
-			newAssayContextItem.attributeElement = attributeElement
-			newAssayContextItem.valueElement = valueElement
-			newAssayContextItem.valueDisplay = valueElement.label
-			assayContext.addToAssayContextItems(newAssayContextItem)
-			assayContext.save()
+			
+			if(isNumericValue){
+				
+			}
+			else{
+				AssayContextItem newAssayContextItem = new AssayContextItem()
+				newAssayContextItem.setAttributeType(AttributeType.Fixed);
+				newAssayContextItem.attributeElement = attributeElement
+				newAssayContextItem.valueElement = valueElement
+				newAssayContextItem.valueDisplay = valueElement.label
+				assayContext.addToAssayContextItems(newAssayContextItem)
+				assayContext.save()
+				isSaved = true
+			}			
 			println "Done saving item."
-			isSaved = true
+			
 		}
 		return isSaved;
 	}

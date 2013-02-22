@@ -53,7 +53,7 @@ class OntologyJSonController {
 	def getValueDescriptors(){
 		if(params?.term && params?.section && params?.attributeId){
             List<Element> elements = ontologyDataAccessService.getElementsForValues(params.attributeId.toLong(), params.term)
-            List attributes = new ArrayList();
+            List attributes = new ArrayList()
             for (Element element in elements) {
                 def unit = element?.unit?.abbreviation
                 unit = unit ?: (element?.unit?.label ?: "")
@@ -67,6 +67,20 @@ class OntologyJSonController {
             }
             render attributes as JSON
 		}
+	}
+	
+	def getAllUnits(){
+		List<UnitTree> units = UnitTree.findAll(sort:"parent")
+		List allUnits = new ArrayList()
+		for (UnitTree unit in units) {			
+			def item = [				
+				"value" : unit.element.id,
+				"label" : unit.label,
+				"elementLabel" : unit?.element?.label
+			]
+			allUnits.add(item)
+		}
+		render allUnits as JSON
 	}
 
 	def getBaseUnits(){

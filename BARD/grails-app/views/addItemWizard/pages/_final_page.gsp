@@ -15,7 +15,7 @@
 	
 	<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
 	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
-    <g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnits }" />
+    <g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
     <g:render template="common/itemWizardSelectionsTable"
               model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': valueText]"/>
 

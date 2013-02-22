@@ -50,6 +50,7 @@
             $("#attributeId").select2({
                 minimumInputLength: 2,
                 width: "70%",
+                allowClear: true,
                 placeholder: "Search for attribute name",
                 query: function(query) {
                     $.getJSON(
@@ -82,7 +83,8 @@
             $("#valueId").select2({
                 minimumInputLength: 1,
                 width: "70%",
-                placeholder: "Search for attribute name",
+                allowClear: true,
+                placeholder: "Search for value name",
                 query: function(query) {
                     var elementId = $("#attributeElementId").val();
                     outputToConsole('cardAssaySection var = ' + cardAssaySection);
@@ -103,7 +105,33 @@
                     );
                 }
             })
-
+            
+            /*
+            var data=[{id:0,tag:'enhancement'},{id:1,tag:'bug'},{id:2,tag:'duplicate'},{id:3,tag:'invalid'},{id:4,tag:'wontfix'}];
+            
+            $("#valueUnits").select2({
+            	placeholder: "Select a Unit",
+                width: "70%",
+		        data: data
+            })
+            */
+            
+            $.getJSON(
+            	"/BARD/ontologyJSon/getAllUnits",
+                function(data, textStatus, jqXHR) {
+                	var unitsData = {results:[]}
+                    $.each(data, function(index, val) {
+                    	unitsData.results.push({id: val.value, text: val.label})
+                   	})
+                   	$("#valueUnitId").select2({
+                   		placeholder: "Select a Unit",
+                   		width: "70%",
+		                data: unitsData
+            		})
+                }
+            );          
+	
+			
 /*
                 select: function( event, ui ) {
                     $( "#currentChoice" ).val( ui.item.value );

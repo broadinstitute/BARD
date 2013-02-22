@@ -8,15 +8,15 @@
 %>
 <af:page>
 
+<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
+<g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeLabel, 'valueType': 'Not define yet', 'value': 'Not define yet']"/>
+
 <g:hasErrors bean="${valueType}">
 	<div class="alert alert-error">
 		<button type="button" class="close" data-dismiss="alert">×</button>
 		<g:renderErrors bean="${valueType}"/>
 	</div>
 </g:hasErrors>
-
-<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
-<g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeLabel, 'valueType': 'Not define yet', 'value': 'Not define yet']"/>
 
 <h1>Value type defines the restriction that is placed on the values associated with the chosen attribute:</h1>
 

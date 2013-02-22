@@ -4,6 +4,10 @@ import bard.db.registration.AssayContextService;
 import bard.db.dictionary.*;
 import bard.db.registration.*;
 
+import org.apache.commons.lang.StringUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * ajaxflow Controller
  *
@@ -36,13 +40,56 @@ class ValueTypeCommand implements Serializable {
 class FixedValueCommand implements Serializable {
 	
 	Long valueId
+	String valueLabel
+	String attributeElementId
+	String valueQualifier
+	Long valueUnitId
+	String valueUnitLabel
+	String numericValue
+	boolean isNumericValue
+	
+	boolean validateValue(){
+		// delegate to validations performed by constraints
+		validate()
+		
+		if(StringUtils.isBlank(valueId) && StringUtils.isBlank(numericValue)){
+			errors.reject("fixedValue.missing.value", "Either numeric value or string value must be provided")
+		}
+		else if(StringUtils.isNotBlank(valueId)){
+			isNumericValue = false;
+		}
+		else if(StringUtils.isNotBlank(numericValue)){
+			// Handles Numeric values: negatives, and comma formatted values. Also handles a single decimal point
+			Pattern pattern = Pattern.compile("^(\\d|-)?(\\d|,)*\\.?\\d*\$")
+			Matcher matcher = pattern.matcher(numericValue)
+			if(matcher.matches())
+				isNumericValue = true;
+			else
+				errors.reject("fixedValue.nomatch.numericValue", "Your entry does not match a numeric value")
+		}
+		return !hasErrors();
+	}
+}
+
+class CopyFixedValueCommand implements Serializable {
+	
+	Long valueId
+	String valueLabel
 	String attributeElementId
 	String valueQualifier
 	String valueUnits
-	String valueLabel
+	String numericValue
+	
+	
 	
 	static constraints = {
 		valueId(nullable: false, blank: false)
+		numericValue(matches: "[0-9]+")
+//		valueId(validator: {val, obj->
+//			if(obj.valueId){
+//				val ? true : ['fixedValueCommand.valueId.null']
+//			}
+//		})
 	}
 }
 
@@ -144,15 +191,7 @@ class AddItemWizardController {
 				flow.page = 2
 				sessionFactory.currentSession.clear()
 				success()
-				
-//                def attributeElement = Element.get(params.attributeId)
-//                flow.attributeName = attribute.label
-//                flow.attributeId = params.attributeId
-//                flow.page = 2
-//
-//                sessionFactory.currentSession.clear()
-//
-//                success()
+
             }.to "pageTwo"
 
             on("toPageTwo").to "pageTwo"
@@ -183,9 +222,6 @@ class AddItemWizardController {
 					
 					success()	
                 
-//				flow.valueTypeOption = params.valueTypeOption
-//                flow.page = 3
-//                success()
             }.to "pageThree"
             on("previous").to "pageOne"
             on("toPageOne").to "pageOne"
@@ -209,26 +245,27 @@ class AddItemWizardController {
 			on("cancel").to "closeWizard"
 			on("close").to "closeWizard"
             on("next") {FixedValueCommand cmd ->
-				if(cmd.hasErrors()){
+				if(!cmd.validateValue()){
 					flow.fixedValue = cmd
 					return error()
-				}
+				}				
 				flow.fixedValue = cmd
-				def valueElement = Element.get(flow.fixedValue.valueId)
-				flow.fixedValue.valueLabel = valueElement.label
+				println "calling closure for {FixedValueCommand ${cmd.dump()}"
+				println "isNumericValue = " + cmd.isNumericValue
+				if(!cmd.isNumericValue){
+					def valueElement = Element.get(flow.fixedValue.valueId)
+					flow.fixedValue.valueLabel = valueElement.label
+				}
+				else{
+					def valueUnit = UnitTree.get(flow.fixedValue.valueUnitId)
+					flow.fixedValue.valueUnitLabel = valueUnit.label
+					println "UnitTree.id = " + valueUnit.id
+					println "flow.fixedValue.valueUnitLabel = " + flow.fixedValue.valueUnitLabel
+				}			
 				flow.page = 4
 				sessionFactory.currentSession.clear()
 				success()
                 
-//				flow.valueId = params.valueId
-//                flow.valueName = Element.get(params.valueId).label
-//                flow.valueQualifier = params.valueQualifier
-//                flow.valueUnits = params.valueUnits
-//                flow.page = 4
-//
-//                sessionFactory.currentSession.clear()
-//
-//                success()
             }.to "pageFour"
             on("previous").to "pageTwo"
             on("toPageOne").to "pageOne"
@@ -263,6 +300,20 @@ class AddItemWizardController {
                 flow.page = 5
             }.to "save"
         }
+		
+		// last wizard page
+		finalPage {
+			render(view: "_final_page")
+			onRender {
+				// Grom a development message
+				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_final_page.gsp".grom()
+
+				success()
+			}
+			on("cancel").to "closeWizard"
+			on("close").to "closeWizard"
+			on("addAnotherItem").to "addAnotherItem"
+		}
 
         // save action
         save {
@@ -276,22 +327,29 @@ class AddItemWizardController {
 
                     // put your bussiness logic in here
                     println "Preparing to start saving"
-                    Element attributeElement = Element.get(flow.attribute.attributeId)
-                    Element valueElement = Element.get(flow.fixedValue.valueId)
-                    AssayContext assayContext = AssayContext.get(flow.assayContextId)
-					println "flow.assayContextId: " + flow.assayContextId
-					println "AssayContext assayContext: = " + assayContext
+					def isSaved = false;
+					Element attributeElement = Element.get(flow.attribute.attributeId)
+					AssayContext assayContext = AssayContext.get(flow.assayContextId)
+					
+					if(flow.fixedValue.isNumericValue){
+						
+					}
+					else{						
+						Element valueElement = Element.get(flow.fixedValue.valueId)						
+						println "flow.assayContextId: " + flow.assayContextId
+						println "AssayContext assayContext: = " + assayContext
+						isSaved = assayContextService.saveItemInCard(assayContext, attributeElement, flow.valueType.valueTypeOption, flow.fixedValue.isNumericValue, valueElement)
+					}
+					
+                    
 
 //                    def isSaved = assayContextService.saveItemInCard(assayContext, attribute, flow.valueType.valueTypeOption, value)
-					def isSaved = assayContextService.saveItemInCard(assayContext, attributeElement, flow.valueType.valueTypeOption, valueElement)
+					
                     sessionFactory.currentSession.flush()
                     sessionFactory.currentSession.clear()
                     if (isSaved) {
                         println "New item was successfully added to the card"
                         flow.itemSaved = true;
-//						AssayContext assayContext = AssayContext.get(flow.attribute.assayContextIdValue)
-//						Assay assay = assayContext.assay
-//						println "Assay ID: " + assay.id + "  Name: " + assay.assayName
                         success()
                     } else {
                         println "ERROR - unable to add item to the card"
@@ -310,8 +368,9 @@ class AddItemWizardController {
             }
             on("error").to "error"
             on(Exception).to "error"
-            on("success").to "finalPage"
+            on("success").to "pageFour"
         }
+		
 
         // render errors
         error {
@@ -334,20 +393,6 @@ class AddItemWizardController {
             on("toPageFour").to "pageFour"
             on("toPageFive").to "save"
 
-        }
-
-        // last wizard page
-        finalPage {
-            render(view: "_final_page")
-            onRender {
-                // Grom a development message
-                if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_final_page.gsp".grom()
-
-                success()
-            }
-			on("cancel").to "closeWizard"
-			on("close").to "closeWizard"
-			on("addAnotherItem").to "addAnotherItem"
         }
 		
 		// calls the view with code to close the wizard window
