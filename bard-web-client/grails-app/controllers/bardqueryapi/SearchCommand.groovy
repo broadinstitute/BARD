@@ -42,5 +42,6 @@ class SearchCommand {
 enum FacetFormType {
     AssayFacetForm,
     CompoundFacetForm,
-    ProjectFacetForm
+    ProjectFacetForm,
+    ExperimentFacetForm
 }

@@ -7,6 +7,7 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.core.util.FilterTypes
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-import bard.core.util.FilterTypes
 
 /**
  *
@@ -71,8 +71,7 @@ class BardWebInterfaceController {
     }
 
     //TODO: Use Command Object here. Bind the filters instead. Use the FilterTypes
-    def showExperiment(Long id, String normalizeYAxis, String activityOutcome) {
-
+    def showExperiment(Long id, SearchCommand searchCommand) {
 
         if (isHTTPBadRequest(id, 'Experiment ID is a required Field', bardUtilitiesService.username)) {
             return
@@ -84,15 +83,16 @@ class BardWebInterfaceController {
 
             //TODO: Use a command Object to bind this, most of the code below should be gone
             final List<FilterTypes> filters = []
-            NormalizeAxis normalizeAxis =  NormalizeAxis.Y_NORM_AXIS
-            if (normalizeYAxis){
-                normalizeAxis= normalizeYAxis as NormalizeAxis
-            }
-            ActivityOutcome activityOutcome1 = activityOutcome ? activityOutcome as ActivityOutcome : ActivityOutcome.ALL
+
+            Boolean normalizeYAxisFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis'}?.filterValue
+            NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
             }
-            if (activityOutcome1 != ActivityOutcome.ACTIVE) {
+
+            Boolean activityOutcomeFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome'}?.filterValue
+            ActivityOutcome activityOutcome = activityOutcomeFilter ? ActivityOutcome.ACTIVE : ActivityOutcome.ALL
+            if (activityOutcome != ActivityOutcome.ACTIVE) {
                 filters.add(FilterTypes.TESTED)
             }
 
@@ -104,13 +104,21 @@ class BardWebInterfaceController {
             webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
             webQueryTableModel.additionalProperties.put("id", id.toString())
 
+            List facetValues = [new Value(id: 'plot_axis', children: [new Value(id: 'Normalize Y-Axis')]),
+                    new Value(id: 'activity_outcome', children: [new Value(id: 'Active')])]
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+
 
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
                 render(template: 'experimentResultData', model: [webQueryTableModel: webQueryTableModel])
                 return
             }
             //this should do a full page reload
-            render(view: 'showExperiment', model: [webQueryTableModel: webQueryTableModel])
+            render(view: 'showExperiment',
+                    model: [webQueryTableModel: webQueryTableModel,
+                            facets: facetValues,
+                            appliedFilters: getAppliedFilters(searchFilters, facetValues)])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
             String message = "Experiment with ID ${id} does not exists"

@@ -47,6 +47,12 @@ $(document).ready(function () {
         handleFilteredQuery(searchString, 'CompoundFacetForm', 'CompoundFacetForm', 'compoundsTab', "totalCompounds", 'compounds', 'Compounds ');
         return false; //do not submit form the normal way, use Ajax instead
     });
+    $(document).on("submit", "#ExperimentFacetForm", function (event) {
+        //replace the action with a redirect to the same page
+        var formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value')
+        $(this).attr('action', formUrl)
+        return true; //submit tue form the normal way
+    });
 
 
     //bind buttons to reset filters
