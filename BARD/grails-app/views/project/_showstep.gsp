@@ -1,4 +1,4 @@
-<div>
+<div id="showstep">
     <input type="hidden" id="projectIdForStep" name="projectIdForStep" value="${instanceId}"/>
 
     <div id="stepGraph" style="display: none">${pegraph}</div>
@@ -9,16 +9,22 @@
     </div>
 
     <div id="serviceResponse" style="display: none"></div>
+    <div id="ajaxProgress" style="color:#5bb75b"> Please wait ... </div>
 
-    <div>
-        <canvas id="viewport" width="800" height="600"></canvas>
-    </div>
+    <div id="canvas"></div>
+    <div id="canvasIsolated"></div>
+
+    Ugly? <button id="redraw" onclick="redraw();">redraw</button> Still Ugly? Drag, Drop Nodes to Rearrange. But Sorry, You Can NOT Save It. We Can ADD save function if you really need it.
 
     <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
-        <g:render template='/project/editstep'/>
+
 
         <div id="node-selection-details">
             Click on an experiment to see the details here.
+        </div>
+
+        <div id="edge-selection-details">
+            Click on an edge to see the details here.
         </div>
 
         <script id="node-selection-template" type="text/x-handlebars-template">
@@ -26,51 +32,40 @@
             <table>
                 <tbody>
                 <tr>
-                    <td><a href='/BARD/experiment/show/{{selected.node.data.link}}'>{{selected.node.data.link}}</a></td>
-                    <td><a href="#" onclick="deleteItem({{selected.node.data.link}}, ${instanceId});return false;"
+                    <td><a href='/BARD/experiment/show/{{selected.data.link}}'>{{selected.data.link}}</a></td>
+                    <td><a href="#" onclick="deleteItem({{selected.data.link}}, ${instanceId});return false;"
                            style="font-family:arial;color:red;font-size:10px;"><i
                                 class="icon-trash"></i>Remove from Project</a></td>
                 </tr>
                 </tbody>
             </table>
-
-            <h5>Edges:</h5>
-            <table>
-                <tbody>
-                {{#each fromSelectedNode}}
-                <tr>
-                    <td>{{../selected.node.data.link}}</td>
-                    <td></td>
-                    <td>{{target.data.link}}</td>
-                    <td>
-                        <a href="#" onclick="deleteEdge({{../selected.node.data.link}},{{target.data.link}},{{../projectId}});return false;"
-                           style="font-family:arial;color:red;font-size:10px;">
-                            <i class="icon-trash"></i>
-                            Remove from Project
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
-
-                {{#each toSelectedNode}}
-                <tr>
-                    <td>{{source.data.link}}</td>
-                    <td></td>
-                    <td>{{../selected.node.data.link}}</td>
-                    <td>
-                        <a href="#" onclick="deleteEdge({{source.data.link}},{{../selected.node.data.link}},{{../projectId}});return false;"
-                           style="font-family:arial;color:red;font-size:10px;"><i class="icon-trash"></i>Remove from Project
-                        </a>
-                    </td>
-                </tr>
-                {{/each}}
-                </tbody>
-            </table>
             <h5>Experiment Name:</h5>
 
-            <p>{{selected.node.data.ename}}</p>
-            <h5>Assay Id:</h5><a href="/BARD/assayDefinition/show/{{selected.node.data.assay}}" id="assaylink" target="_blank">{{selected.node.data.assay}}</a>
+            <p>{{selected.data.ename}}</p>
+            <h5>Assay Id:</h5><a href="/BARD/assayDefinition/show/{{selected.data.assay}}" id="assaylink" target="_blank">{{selected.data.assay}}</a>
         </script>
+
+        <script id="edge-selection-template" type="text/x-handlebars-template">
+
+            <h5>Selected Edge</h5>
+            <table>
+            <tbody>
+
+            <tr>
+            <td>{{fromNode}}</td>
+            <td></td>
+            <td>{{toNode}}</td>
+            <td>
+            <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
+            style="font-family:arial;color:red;font-size:10px;">
+            <i class="icon-trash"></i>
+            Remove from Project
+            </a>
+            </td>
+            </tr>
+            </tbody>
+            </table>
+         </script>
 
     </div>
 </div>

@@ -45,9 +45,32 @@ class ProjectExperimentRenderService {
                 edges.addAll(constructEdges(pe, queue))   // construct edge
             }
         }
+        countInOutEdges(edges, nodes)
         def result = ["connectedNodes": nodes, "edges": edges, "isolatedNodes": isolatedNodes]
         //print new JSON(result)
         return new JSON(result)
+    }
+
+    /**
+     * Count incoming edges and outgoing edges. This information will be used to position nodes on the display screen
+     * @param edges
+     * @param nodes
+     */
+    void countInOutEdges(Set<Edge> edges, List<Node> nodes) {
+        def nodeInCount = [:]
+        def nodeOutCount = [:]
+        nodes.each{
+            nodeInCount[it.id] = 0
+            nodeOutCount[it.id] = 0
+        }
+        edges.each{Edge edge ->
+            nodeInCount[edge.to]++
+            nodeOutCount[edge.from]++
+        }
+        nodes.each{
+            it.keyValues.incount = nodeInCount.get(it.id).toString()
+            it.keyValues.outcount = nodeOutCount.get(it.id).toString()
+        }
     }
 
     /**
@@ -68,7 +91,9 @@ class ProjectExperimentRenderService {
         def peAttributes = ['eid': pe?.experiment?.id,
                             'stage': pe?.stage?.label,
                             'assay': pe?.experiment?.assay?.id,
-                            'ename': pe?.experiment?.experimentName
+                            'ename': pe?.experiment?.experimentName,
+                            'incount': 0,
+                            'outcount': 0
                             ]
         return new Node(id: pe?.id, keyValues: peAttributes)
     }
