@@ -1,3 +1,11 @@
+BEGIN
+p_pbs_context.set_username('schatwin');
+END;
+/
+
+
+
+
 UPDATE assay_context_item aci
 SET display_order =
     (SELECT Count(*)
@@ -102,12 +110,14 @@ SET display_order =
     (SELECT Count(*)
      FROM assay_context aci2
      WHERE aci2.assay_id = aci.assay_id
-       AND aci2.assay_context_id < aci.assay_context_id)
+       AND rpad(aci2.context_group, 256) || rpad(aci2.context_name, 128) || lpad( aci2.assay_context_id, 19)
+          < rpad(aci.context_group, 256) || rpad(aci.context_name, 128) || lpad( aci.assay_context_id, 19) )
 WHERE display_order !=
       (SELECT Count(*)
      FROM assay_context aci2
      WHERE aci2.assay_id = aci.assay_id
-       AND aci2.assay_context_id < aci.assay_context_id);
+       AND rpad(aci2.context_group, 256) || rpad(aci2.context_name, 128) || lpad( aci2.assay_context_id, 19)
+          < rpad(aci.context_group, 256) || rpad(aci.context_name, 128) || lpad( aci.assay_context_id, 19) );
 
 UPDATE exprmt_context aci
 SET display_order =

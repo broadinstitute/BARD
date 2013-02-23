@@ -3,15 +3,32 @@ CREATE OR REPLACE PROCEDURE update_context_name
   (an_assay_id IN NUMBER DEFAULT NULL)
 
 AS
+-------------------------------------------------------------------------------------------------------------
+--   update context name
+--     parameter:  Assay_ID.  if no assay_id is given then all assays in the DB are updated
+--
+--     This uses a set of arbitrary rules that appear to make sense for most cases
+--     1. if there's only 1 item, name the context for the item
+--     2. for components, name for the role or the type in that order
+--     3. for biology (secondary to components) use the cell, protein or other type of macromolcule
+--     4. for experiment contexts, use the most common attribute name (usually the one with the longest list)
+--
+--    schatwin    intial version    12-15-2012
+--    schatwin    exclude Annotation ones   1-21-2013
+--    schatwin    rename Annotation nes with commonest attribute name
+--
+--
+-------------------------------------------------------------------------------------------------------------
      CURSOR cur_assay_context (cn_assay_id IN NUMBER)
      IS
      SELECT grp_attr.assay_id,
       grp_attr.assay_context_id,
       Sum(grp_attr.aci_count) aci_count,
-      LISTAGG(grp_attr.ATTRIBUTE, ';') WITHIN GROUP (ORDER BY grp_attr.ATTRIBUTE) attributes
+      LISTAGG(grp_attr.ATTRIBUTE || '$# ' || grp_attr.ATTRIBUTE_TYPE, ';') WITHIN GROUP (ORDER BY grp_attr.aci_count desc) attributes
      FROM (SELECT ac.assay_id,
             ac.assay_context_id,
             e.label attribute,
+            aci.attribute_type,
             Count(*) aci_count
             FROM assay_context ac,
                 assay_context_item aci,
@@ -19,10 +36,11 @@ AS
             WHERE aci.assay_context_id = ac.assay_context_id
               AND e.element_id = aci.attribute_id
               AND ac.assay_id = Nvl(cn_assay_id, ac.assay_id)
-              AND (ac.context_name NOT LIKE 'Annotation%' OR ac.context_name IS NULL)
+              --AND (ac.context_name NOT LIKE 'Annotation%' OR ac.context_name IS NULL)
             GROUP BY ac.assay_id,
                   ac.assay_context_id,
-                  e.label) grp_attr
+                  e.label,
+                  aci.attribute_type) grp_attr
      GROUP BY grp_attr.assay_id,
             grp_attr.assay_context_id;
 
@@ -93,6 +111,18 @@ BEGIN
 
              lv_context_group := 'assay protocol> assay readout>';
 
+         ELSIF lr_assay_context.attributes LIKE '%List%'
+            OR lr_assay_context.attributes LIKE '%Free%'
+            OR lr_assay_context.attributes LIKE '%Range%'
+         THEN
+--    if group contains items that are set in the Experiment
+--    then set name to the plural of the the most common attribute
+--    the query makes this the first attribute listed
+              lv_context_name := SubStr(lr_assay_context.attributes, 1, InStr(lr_assay_context.attributes, '$# ' ) - 1) || 's';
+
+              lv_context_group := 'project management> experiment>';
+
+
          ELSIF lr_assay_context.attributes LIKE '%readout%'
          THEN
 --    if group contains 'assay readout'
@@ -126,8 +156,10 @@ BEGIN
              lv_context_group := 'biology>';
 
          ELSIF lr_assay_context.attributes LIKE '%protein%'
+            OR lr_assay_context.attributes LIKE '%gene%'
+            OR lr_assay_context.attributes LIKE '%cell%'
          THEN
---    if group contains 'biology/ical'
+--    if group contains 'protein'
 --    then set name = value
              lv_context_name := 'biological component';
              lv_context_group := 'biology>';
