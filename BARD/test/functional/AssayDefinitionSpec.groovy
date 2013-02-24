@@ -1,4 +1,7 @@
+import bard.db.registration.Assay
 import pages.AssayDefinitionPage
+import pages.HomePage
+import pages.LoginPage
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,8 +12,15 @@ import pages.AssayDefinitionPage
  */
 class AssayDefinitionSpec  extends BardFunctionalSpec {
     def 'test assay definition page' () {
+        setup:
+        to LoginPage
+        at LoginPage
+        logIn("integrationTestUser", "integrationTestUser")
+
         when:
-        to AssayDefinitionPage, "4250"
+        def assayId = build(Assay)
+        to AssayDefinitionPage, assayId
+        Thread.sleep(10*1000)
 
         then:
         at AssayDefinitionPage

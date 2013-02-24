@@ -4,6 +4,8 @@ import spock.lang.Shared
 import pages.HomePage
 import pages.LoginPage
 
+import java.lang.reflect.Method
+
 /**
  * Created by IntelliJ IDEA.
  * User: jlev
@@ -13,6 +15,38 @@ import pages.LoginPage
  */
 abstract class BardFunctionalSpec extends GebReportingSpec {
     @Shared protected Map<String, Map> usernameUserPropsMap = [:]
+
+    Serializable build(Class clazz, properties=[:]) {
+        XRemoteControl remote = new XRemoteControl()
+        def newId = remote {
+            Method method = null;
+
+            Class z = ctx.scaffoldService.class
+            while(z!= null) {
+                if (method == null) {
+                    method = z.getMethods().find {it.getName() == "testMethod"}
+                }
+                println("class ${z.getName()} ${method}")
+                println("methods ${z.methods}")
+                z = z.getSuperclass()
+            }
+
+            println("methods=${method}")
+            method.invoke(ctx.scaffoldService)
+
+            ctx.scaffoldService.testMethod();
+
+            String name = clazz.getName();
+            Map p = new HashMap()
+            def obj = ctx.scaffoldService.build(name);
+            if (obj.id == null) {
+                throw new RuntimeException("Object had no id")
+            }
+            return obj.id
+        }
+
+        return newId;
+    }
 
     void setupSpec() {
         XRemoteControl remote = new XRemoteControl()

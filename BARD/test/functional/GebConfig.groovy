@@ -6,12 +6,14 @@
 */
 
 
+import org.openqa.selenium.Capabilities
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxProfile
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.remote.RemoteWebDriver
 
 // Use htmlunit as the default
 // See: http://code.google.com/p/selenium/wiki/HtmlUnitDriver
@@ -44,6 +46,13 @@ environments {
 
         FirefoxProfile profile = new FirefoxProfile(profileDir)
         driver = { new FirefoxDriver(profile) }
+    }
+
+    remote {
+        driver = {
+            RemoteWebDriver webDriver = new RemoteWebDriver(new URL("http://127.0.0.1:4444/wd/hub"), DesiredCapabilities.firefox());
+            webDriver.getSessionId()
+        }
     }
 
 }
