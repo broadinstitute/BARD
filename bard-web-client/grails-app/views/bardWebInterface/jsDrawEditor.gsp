@@ -30,7 +30,7 @@
                     </label>
                 </g:radioGroup>
 
-                <g:textField name="cutoff" value="90" size="4" id="cutoff"/>
+                <span><g:textField name="cutoff" value="90" id="cutoff" style="width: 30px;" disabled="disabled"/>[%]</span>
             </div>
             <br/>
 

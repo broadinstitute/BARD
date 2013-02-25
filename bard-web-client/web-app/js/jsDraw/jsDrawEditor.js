@@ -33,3 +33,13 @@ function adjustJSDrawEditorWindow() {
         jsDrawEditor.setSize(width, height)
     }
 }
+
+//Disable the cutoff text-field unless the Similarity option is checked.
+$(document).on('change', 'input:radio[name="structureSearchType"]', function () {
+    if (($(this).attr('value') == "Similarity") && $(this).attr('checked')) {
+        $('#cutoff').removeAttr("disabled");
+    }
+    else {
+        $('#cutoff').attr("disabled", "disabled");
+    }
+});
