@@ -49,7 +49,9 @@ $(document).ready(function () {
     });
     $(document).on("submit", "#ExperimentFacetForm", function (event) {
         //replace the action with a redirect to the same page
-        var formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value')
+        var skip = $('#skip').attr('value');
+        var top = $('#top').attr('value');
+        var formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value') + '?offset=' + skip + '&max=' + top;
         $(this).attr('action', formUrl)
         return true; //submit tue form the normal way
     });
@@ -438,7 +440,7 @@ function findSearchType(searchString) {
 
         return "STRUCTURE"
     }
-    if ($.trim(searchString).toUpperCase()=='ML_PROBES') {
+    if ($.trim(searchString).toUpperCase() == 'ML_PROBES') {
 
         return "PROBES"
     }
