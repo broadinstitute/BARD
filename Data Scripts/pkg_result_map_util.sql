@@ -50,11 +50,13 @@ AS
           STATS_MODIFIER  southern.result_map.stats_modifier%type,
           relationship    southern.result_map.relationship%TYPE,
           TID             southern.result_map.tid%type,
+          --entry_unit      southern.result_map.concentrationunit%TYPE,
+          entry_unit      VARCHAR2(10),
           SERIES_NOS      varchar2(4000),
           PARENT_TIDS     varchar2(4000)
           );
 
-    TYPE t_result_Maps IS TABLE OF southern.result_map%rowtype;
+    --TYPE t_result_Maps IS TABLE OF southern.result_map%rowtype;
 
     TYPE t_string IS varray (1) OF VARCHAR2(40);
 
@@ -239,10 +241,28 @@ as
         -- if not insert a new measure row
         IF ln_measure_id IS NULL
         THEN
-            SELECT unit_id
-            INTO ln_entry_unit_id
-            FROM element
-            WHERE element_id = ari_measure.result_type_id;
+            -- find the appropriate entry unit
+            IF ari_measure.entry_unit IS NOT NULL
+            THEN
+                BEGIN
+                    -- use unit_tree 'cos this handles abreviations like Result_map does
+                    SELECT unit_id
+                    INTO ln_entry_unit_id
+                    FROM unit_tree
+                    WHERE unit = ari_measure.entry_unit;
+                EXCEPTION
+                WHEN OTHERS THEN
+                    ln_entry_unit_id := NULL;
+                END;
+            END IF;
+            -- if we can't use or find the specified one, try the default for the result type
+            IF ln_entry_unit_id IS NULL
+            THEN
+                SELECT unit_id
+                INTO ln_entry_unit_id
+                FROM element
+                WHERE element_id = ari_measure.result_type_id;
+            END IF;
 
             ln_measure_id := get_new_id ('measure_id_seq');
 
@@ -268,6 +288,11 @@ as
                  sysdate,
                  null,
                  pv_modified_by);
+--        ELSE
+--            UPDATE measure
+--            SET entry_unit_id = ln_entry_unit_id
+--            WHERE measure_id = ln_measure_id
+--            AND Nvl(entry_unit_id, -100) != Nvl(ln_entry_unit_id, -100);
 
         END IF;
 
@@ -305,9 +330,10 @@ as
               rm.stats_modifier,
               rm.relationship,
               rm.tid,
+              rm.entry_unit,
               rm.series_nos,
               rm.parent_tids
-        FROM (SELECT aid, resulttype, stats_modifier, relationship, tid,
+        FROM (SELECT aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit) entry_unit,
             --listagg(relationship, ',') within GROUP (ORDER BY tid) relationship,
             listagg(seriesno, ',') within GROUP (ORDER BY tid) series_nos,
             listagg(parenttid, ',') within GROUP (ORDER BY tid) parent_tids
@@ -317,7 +343,7 @@ as
               --AND modified_by != 'southalln'
               AND parenttid IS null
               --AND InStr(',' || parentTID || ',', ',6,') > 0
-            GROuP BY aid, resulttype, stats_modifier, relationship, tid) rm,
+            GROuP BY aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit)) rm,
             external_reference er,
             experiment e,
             result_type_element el,
@@ -1070,9 +1096,10 @@ as
               rm.stats_modifier,
               rm.relationship,
               rm.tid,
+              rm.entry_unit,
               rm.series_nos,
               rm.parent_tids
-        FROM (SELECT aid, resulttype, stats_modifier, relationship, tid,
+        FROM (SELECT aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit) entry_unit,
             --listagg(relationship, ',') within GROUP (ORDER BY tid) relationship,
             listagg(seriesno, ',') within GROUP (ORDER BY tid) series_nos,
             listagg(parenttid, ',') within GROUP (ORDER BY tid) parent_tids
@@ -1081,7 +1108,7 @@ as
               AND resulttype IS NOT NULL
               --AND parenttid IS null
               AND InStr(',' || parentTID || ',', ',' || cv_parentTID|| ',') > 0
-            GROuP BY aid, resulttype, stats_modifier, relationship, tid) rm,
+            GROuP BY aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit)) rm,
             external_reference er,
             experiment e,
             element el,
