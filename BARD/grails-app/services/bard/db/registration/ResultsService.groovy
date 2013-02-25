@@ -153,7 +153,7 @@ class ResultsService {
     static def parseAnything(Column column, String value) {
         if (RANGE_PATTERN.matcher(value).matches()) {
             return parseRange(column, value)
-        } else if(QUALIFIED_NUMBER_PATTERN.matcher(value)) {
+        } else if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
             return parseQualifiedNumber(column, value)
         } else {
             // assume it's free text and we take it literally
@@ -620,7 +620,7 @@ class ResultsService {
                 Result childResult = childResults.get(i)
                 Result parentResult = parentMeasures.get(j)
 
-                ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: relationship, result: childResult, parentResult: parentResult)
+                ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: relationship, result: childResult, parentResult: parentResult, dateCreated: new Date())
                 childResult.resultHierarchiesForParentResult.add(resultHierarchy)
                 parentResult.resultHierarchiesForResult.add(resultHierarchy)
             }
@@ -791,7 +791,7 @@ class ResultsService {
             }
         }
 
-        ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: hierarchyType, result: childResult, parentResult: parentResult)
+        ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: hierarchyType, result: childResult, parentResult: parentResult, dateCreated: new Date())
         childResult.resultHierarchiesForResult.add(resultHierarchy)
         parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
     }
@@ -935,8 +935,24 @@ class ResultsService {
     private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts) {
         deleteExperimentResults(experiment)
 
+//        def relationships = [] as Set
+
         results.each {
+            // get an id assigned before adding to set
+            def t0 = new ArrayList(it.resultHierarchiesForParentResult)
+            def t1 = new ArrayList(it.resultHierarchiesForResult)
+
+//            it.resultHierarchiesForParentResult = [] as Set
+//            it.resultHierarchiesForResult = [] as Set
+            it.save(validate: false)
+//            it.resultHierarchiesForParentResult = new LinkedHashSet(t0)
+//            it.resultHierarchiesForResult = new LinkedHashSet(t1)
+//            relationships.addAll(t0)
+//            relationships.addAll(t1)
+
+            assert it.id != null
             it.experiment = experiment
+            experiment.addToResults(it)
 
             String label = it.displayLabel
             Integer count = errors.resultsPerLabel.get(label)
@@ -949,8 +965,15 @@ class ResultsService {
 
             if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
                 errors.resultsWithRelationships ++;
+
             errors.resultAnnotations += it.resultContextItems.size()
         }
+
+        // have to do this because relationships were removed above before save was called, so were unable to cascade
+//        relationships.each {
+//            it.save(validate: false)
+//            assert it.id != null
+//        }
 
         contexts.each {
             it.experiment = experiment
