@@ -6,12 +6,10 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.interfaces.ExperimentRole
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.compounds.PromiscuityScaffold
-import bard.core.rest.spring.experiment.ExperimentShow
 import bard.core.rest.spring.project.Project
 import bardwebquery.CompoundOptionsTagLib
 import com.metasieve.shoppingcart.ShoppingCartService
@@ -20,7 +18,6 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import molspreadsheet.MolecularSpreadSheetService
-import molspreadsheet.SpreadSheetActivity
 import org.apache.http.HttpException
 import org.json.JSONArray
 import org.springframework.http.HttpStatus
@@ -32,7 +29,6 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
-import spock.lang.IgnoreRest
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -158,16 +154,19 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test showExperiment #label"() {
         when:
-        controller.showExperiment(eid, normalizeAxis, ActivityOutcome.ALL.toString())
+        SearchCommand searchCommand = new SearchCommand()
+        searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: normalizeAxis)
+
+        controller.showExperiment(eid, searchCommand)
         then:
         _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
         assert response.status == statusCode
 
         where:
         label                              | eid  | statusCode                         | webQueryTableModel       | normalizeAxis
-        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null                     | NormalizeAxis.Y_NORM_AXIS.toString()
-        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | NormalizeAxis.Y_NORM_AXIS.toString()
-        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | NormalizeAxis.Y_DENORM_AXIS.toString()
+        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null                     | 'Normalize Y-Axis'
+        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | null
 
     }
 
@@ -206,7 +205,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         Long id = 234
         when:
-        controller.showExperiment(id, NormalizeAxis.Y_NORM_AXIS.toString(), ActivityOutcome.ALL.toString())
+        controller.showExperiment(id, new SearchCommand())
         then:
         _ * experimentDataFactoryService.createTableModel(_, _, _, _) >> {throw exceptionType}
         assert response.status == statusCode
