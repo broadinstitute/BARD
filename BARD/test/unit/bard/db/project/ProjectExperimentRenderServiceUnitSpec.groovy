@@ -106,6 +106,30 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
 
     }
 
+    void "test count incoming and outgoing edges for nodes"(){
+        given: "an"
+        Set<Edge> edges = new HashSet<Edge>()
+        edges.add(new Edge(from: "1", to: "2"))
+        edges.add(new Edge(from: "1", to: "3"))
+        edges.add(new Edge(from: "1", to: "4"))
+
+        def nodes = []
+        nodes.add(new Node(id: "1", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "2", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "3", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "4", keyValues: [incount:0, outcount:0]))
+        when:
+        renderService.countInOutEdges(edges, nodes)
+        then:
+        nodes.each{Node node->
+            if (node.id == "1") {assert node.keyValues.incount == '0'; assert node.keyValues.outcount == '3'}
+            if (node.id == "2") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+            if (node.id == "3") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+            if (node.id == "4") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+        }
+
+    }
+
     // TODO more tests here
 
     def createProjectSteps(int i) {
