@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
@@ -81,6 +82,11 @@ class BardWebInterfaceController {
             Map<String, Integer> searchParams = handleSearchParams()
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
 
+            //If this is the first time we are loading the page, we want the 'Normalize Y-Axis' filter to be checked-off by default so we would normalize the Y-axis as a default
+            if (!searchCommand.filters) {
+                searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
+            }
+
             //TODO: Use a command Object to bind this, most of the code below should be gone
             final List<FilterTypes> filters = []
             Boolean normalizeYAxisFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis'}?.filterValue
@@ -103,8 +109,12 @@ class BardWebInterfaceController {
             webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
             webQueryTableModel.additionalProperties.put("id", id.toString())
 
-            List facetValues = [new Value(id: 'plot_axis', children: [new Value(id: 'Normalize Y-Axis')]),
-                    new Value(id: 'activity_outcome', children: [new Value(id: 'Active')])]
+            //Create fake facets to generate the two filters we want: normalize Y-axis and filter for active compounds only.
+            Integer numOfActiveCmpds = webQueryTableModel.data.count {List row -> row[3].value == 'Active'}
+            Integer totalNumOfCmpds = webQueryTableModel?.additionalProperties?.total ?: 0
+            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: totalNumOfCmpds)]),
+                    new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active', value: numOfActiveCmpds)])]
+
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 

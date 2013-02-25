@@ -65,6 +65,9 @@ $(document).ready(function () {
     $(document).on("click", "#CompoundFacetForm_ResetButton", function () {
         resetAllFilters('CompoundFacetForm');
     });
+    $(document).on("click", "#ExperimentFacetForm_ResetButton", function () {
+        resetAllFilters('ExperimentFacetForm');
+    });
 
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
