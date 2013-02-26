@@ -8,8 +8,14 @@ dojo.addOnLoad(function () {
 });
 
 //On clicking the Submit button, update the hidden field with search-type + smiles and cache the structure in local storage.
-$(document).on('click', '#searchButton', function () {
+$(document).on('click', '#searchButton', function (event) {
     var smiles = jsDrawEditor.getSmiles();
+    if (!smiles) {
+        //If the user didn't draw any structure, cancel the search
+        event.preventDefault();
+        window.location.href = '/bardwebclient/bardWebInterface/search';
+        return false;
+    }
     var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
     var constructedSearch = structureSearchTypeSelected + ":" + smiles;
     if (structureSearchTypeSelected == $('#similaritySearchTypeValue').attr('value')) {
