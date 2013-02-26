@@ -71,6 +71,23 @@ class PugServiceSpec  extends spock.lang.Specification {
 </PCT-Data>
 """
 
+    static String pugPayload = """<?xml version="1.0"?>
+<PC-Substances
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov ftp://ftp.ncbi.nlm.nih.gov/pubchem/specifications/pubchem.xsd"
+>
+  <PC-Substance>
+    <PC-Substance_sid>
+      <PC-ID>
+        <PC-ID_id>1</PC-ID_id>
+        <PC-ID_version>1</PC-ID_version>
+      </PC-ID>
+    </PC-Substance_sid>
+  </PC-Substance>
+</PC-Substances>
+"""
+
     def compressedStream(String content) {
         def compressedStream = new ByteArrayOutputStream()
         def out = new GZIPOutputStream(compressedStream)
@@ -98,7 +115,7 @@ class PugServiceSpec  extends spock.lang.Specification {
         pugService.timeBetweenRequests = 0
 
         when:
-        def missing = pugService.validateSubstanceIds(["1","2"])
+        def missing = pugService.validateSubstanceIds([1L,2L])
 
         then:
         // one id not found
@@ -110,7 +127,7 @@ class PugServiceSpec  extends spock.lang.Specification {
 
         then:
         // send a response with id 1 present, 2 absent
-        1 * ftpClient.retrieveFileStream(_) >> compressedStream("1\tCC\n2\n")
+        1 * ftpClient.retrieveFileStream(_) >> compressedStream(pugPayload)
 
         missing == ["2"]
 
