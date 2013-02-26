@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
@@ -31,8 +32,6 @@ class ResultsService {
 
     // pattern matching a range of numbers.  Doesn't actually check that the two parts are numbers
     static Pattern RANGE_PATTERN = Pattern.compile("([^-]+)-(.*)")
-
-    static String DELIMITER = ","
 
     static String EXPERIMENT_ID_LABEL = "Experiment ID"
     static String EXPERIMENT_NAME_LABEL = "Experiment Name"
@@ -189,7 +188,7 @@ class ResultsService {
         public Column(String name, Measure measure) {
             this.name = name
             this.measure = measure
-            this.parser = { Column column, String value -> parseNumberOrRange(column, value) }
+            this.parser = { Column column, String value -> parseAnything(column, value) }
         }
 
         public Column(String name, ItemService.Item item) {
@@ -389,24 +388,27 @@ class ResultsService {
     }
 
     static class LineReader {
-        BufferedReader reader;
+        CSVReader reader;
         int lineNumber = 0;
 
         List<List<String>> topLines = []
 
-        String readLine() {
+        String [] readLine() {
             lineNumber ++;
-            String line = reader.readLine();
+            String [] line = reader.readNext()
 
             if (line != null && topLines.size() < LINES_TO_SHOW_USER)
-                topLines.add(line.split(","))
+                topLines.add(line)
 
             return line;
         }
+
+        public LineReader(BufferedReader reader) {
+            this.reader = new CSVReader(reader);
+        }
     }
 
-    boolean allEmptyColumns(String line) {
-        String[] columns = line.split(DELIMITER);
+    boolean allEmptyColumns(String[] columns) {
         for(column in columns) {
             if (!column.isEmpty())
                 return false
@@ -424,18 +426,19 @@ class ResultsService {
         experimentItemDefs.each {nameToColumn[it.name] = it}
 
         while(true) {
-            String line = reader.readLine();
-            if (line == null)
+            String[] values = reader.readLine();
+            if (values == null)
                 break;
 
             // initial header stops on first empty line
-            if (allEmptyColumns(line)) {
+            if (allEmptyColumns(values)) {
                 break;
             }
 
-            String [] values = line.split(DELIMITER)
-            if (values.length != 3) {
-                errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but got ${values.length} columns")
+            for(int i=3;i<values.length;i++) {
+                if (!values[i].isEmpty()) {
+                    errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but found value in column ${values[i]}")
+                }
                 continue
             }
 
@@ -514,11 +517,9 @@ class ResultsService {
         int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
 
         while(true) {
-            String line = reader.readLine();
-            if (line == null)
+            List<String> values = reader.readLine();
+            if (values == null)
                 break;
-
-            List<String> values = line.split(DELIMITER)
 
             // verify and reshape columns
             while(values.size() < expectedColumnCount) {
@@ -573,8 +574,7 @@ class ResultsService {
     }
 
     List<Column> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
-        String header = reader.readLine()
-        def columnNames = header.split(DELIMITER)
+        List<String> columnNames = reader.readLine()
 
         // validate the fixed columns are where they should be
         for(int i = 0;i<FIXED_COLUMNS.size();i++) {
@@ -591,7 +591,7 @@ class ResultsService {
         template.columns.each { byName[it.name] = it }
 
         def columns = []
-        for(int i=FIXED_COLUMNS.size();i<columnNames.length;i++) {
+        for(int i=FIXED_COLUMNS.size();i<columnNames.size();i++) {
             def name = columnNames[i]
 
             if (seenColumns.contains(name))
@@ -674,8 +674,8 @@ class ResultsService {
         }
 
         def resultsByRowNumber = [:]
-        def resultByCell = [:]
-        def cellByResult = [:]
+        def resultByCell = new IdentityHashMap()
+        def cellByResult = new IdentityHashMap()
 
         // construct all the Result objects (one per cell belonging to a measure)
         for(row in parse.rows) {
@@ -688,8 +688,7 @@ class ResultsService {
             def results = []
             for(cell in row.cells) {
                 if (cell.column.measure != null) {
-                    String qualifier = cell.qualifier.length() == 1 ? cell.qualifier +" " : cell.qualifier;
-                    def result = new Result(qualifier: qualifier,
+                    def result = new Result(qualifier: cell.qualifier,
                             valueDisplay: cell.valueDisplay,
                             valueNum: cell.value,
                             valueMin: cell.minValue,
@@ -765,8 +764,16 @@ class ResultsService {
                             Cell parentCell = parentCells.first();
                             Result parentResult = resultByCell[parentCell];
 
+                            if (parentResult == null) {
+                                throw new RuntimeException("Could not find result that came from parent ${parentCell}")
+                            }
+
                             for (childCell in childCells) {
                                 Result childResult = resultByCell[childCell];
+
+                                if (childResult == null) {
+                                    throw new RuntimeException("Could not find result that came from ${childCell}")
+                                }
 
                                 linkResults(experimentMeasure.parentChildRelationship, errors, row.lineNumber, childResult, parentResult)
                             }
@@ -797,7 +804,7 @@ class ResultsService {
     }
 
     InitialParse initialParse(Reader input, ImportSummary errors, Template template) {
-        LineReader reader = new LineReader(reader: new BufferedReader(input))
+        LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
         List potentialExperimentColumns = []

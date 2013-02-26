@@ -161,7 +161,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [column])
 
         then:
         initialParse.contexts.size() == 1
@@ -202,7 +202,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [column])
 
         then:
         initialParse.contexts.size() == 1
@@ -296,12 +296,13 @@ class ResultsServiceSpec extends spock.lang.Specification {
         cell.qualifier == expectedQualifier
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal  | displayValue
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null    | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null    | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null    | "free"
     }
 
     void 'test creating measure result'() {
