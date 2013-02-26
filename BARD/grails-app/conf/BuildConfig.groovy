@@ -41,6 +41,7 @@ grails.project.dependency.resolution = {
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         runtime 'commons-net:commons-net:3.2'
+        runtime 'net.sf.opencsv:opencsv:2.3'
 
         // this dependency seems a little ridiculous but some page renders seem to fail and adding this
         // was advised in http://stackoverflow.com/questions/12627147/grails-rendering-plugin-gives-java-lang-classnotfoundexception-when-deployed
