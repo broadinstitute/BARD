@@ -23,18 +23,6 @@
                 <div class="tab-pane fade in active" id="assays" data-target="#assays">
                     <g:render template="assays"/>
                 </div>
-                <r:script>
-                    //Overrides the Twitter Bootstraps' Dropdown behavior that hides the menu when a menu item was clicked
-                    $(document).on('click', '#cutoff', function () {
-                        $(this).parent().parent().parent().find('[data-toggle="dropdown"]').dropdown('toggle');
-                        $(this).select();
-                        $(this).keypress(function (event) {
-                            if (event.keyCode == 13) {//enter
-                                $(this).parent().find('a').click();
-                            }
-                        });
-                    });
-                </r:script>
                 <div class="tab-pane fade" id="compounds" data-target="#compounds">
                     <g:render template="compounds"/>
                 </div>
