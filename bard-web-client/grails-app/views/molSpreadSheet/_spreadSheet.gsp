@@ -144,7 +144,7 @@
                             <th class="molSpreadSheetHeadData">
                                 ${colHeader}
 
-                                <g:if test="${columnDictionaryLookup[column]}">
+                                <g:if test="${(columnDictionaryLookup[column]!=null) && ("0"!=columnDictionaryLookup[column])}">
                                     <a href="/bardwebclient/dictionaryTerms/#${columnDictionaryLookup[column]}"
                                        class="desc_tip mssheader" data-placement="top"
                                        target="datadictionary">
