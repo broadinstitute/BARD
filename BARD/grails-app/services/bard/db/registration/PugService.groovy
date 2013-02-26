@@ -158,7 +158,7 @@ class PugService {
             def parsedResponse = executeQuery(substanceQuery(sids))
 
             def status = find(parsedResponse, "PCT-Status")?."@value"
-            if (status != "success") {
+            if (status != "success" && status != "running") {
                 throw new RuntimeException("Querying substances from pubchem failed: "+parsedResponse);
             }
 

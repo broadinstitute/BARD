@@ -55,7 +55,7 @@ class PugServiceSpec  extends spock.lang.Specification {
       <PCT-OutputData_status>
         <PCT-Status-Message>
           <PCT-Status-Message_status>
-            <PCT-Status value="success"/>
+            <PCT-Status value="running"/>
           </PCT-Status-Message_status>
         </PCT-Status-Message>
       </PCT-OutputData_status>
