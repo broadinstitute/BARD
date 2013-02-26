@@ -196,6 +196,10 @@ class ResultsService {
             this.name = name;
             this.parser = makeItemParser(item)
         }
+
+        public String toString() {
+            return "${name}"
+        }
     }
 
     static class Row {
@@ -495,24 +499,6 @@ class ResultsService {
         return result
     }
 
-    void foo() {
-        template.constantItems.each {nameToColumn[it.name] = it}
-        template.columns.each { if(it.item != null) { nameToColumn[it.name] = it } }
-        constants.entrySet().each { Map.Entry entry ->
-            if (entry.key == EXPERIMENT_ID_LABEL) {
-
-            } else if (entry.key == EXPERIMENT_NAME_LABEL) {
-
-            } else {
-                Column column = nameToColumn[entry.key]
-                if (column == null) {
-                    errors.addError(0, 0, "Did not know how to handle \"${entry.key}\" in the experiment level items")
-                } else {
-                }
-            }
-        }
-    }
-
     void forEachDataRow(LineReader reader, List<Column> columns, ImportSummary errors, Closure fn) {
         int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
 
@@ -610,21 +596,6 @@ class ResultsService {
         }
 
         return columns
-    }
-
-    def addHierachyRelationships(List<Result> childResults, List<Measure> childMeasures, List<Result> parentResults, List<Measure> parentMeasures, def getMeasureRelationship) {
-        for(int i=0;i<childMeasures.size();i++){
-            for(int j=0;j<parentMeasures.size();j++) {
-                HierarchyType relationship = getMeasureRelationship(parentMeasures.get(j), childMeasures.get(i))
-
-                Result childResult = childResults.get(i)
-                Result parentResult = parentMeasures.get(j)
-
-                ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: relationship, result: childResult, parentResult: parentResult, dateCreated: new Date())
-                childResult.resultHierarchiesForParentResult.add(resultHierarchy)
-                parentResult.resultHierarchiesForResult.add(resultHierarchy)
-            }
-        }
     }
 
     void associateItemToResults(List<Result> results, List<Column> columns, Cell cell, Closure isLinked) {
@@ -736,7 +707,7 @@ class ResultsService {
         return resultByCell.values()
     }
 
-    private void createResultHierarchy(InitialParse parse, LinkedHashMap rowByNumber, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, LinkedHashMap resultByCell) {
+    private void createResultHierarchy(InitialParse parse, Map rowByNumber, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map resultByCell) {
         Map<Number, Collection<Number>> parentToChildRows = constructChildMap(parse.rows)
         for (row in parse.rows) {
             // find all the cells which might have a parent-child relationship either due to being on the same
@@ -926,13 +897,16 @@ class ResultsService {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
             }
 
-            def results = createResults(parsed, errors, measuresPerItem, experiment.experimentMeasures)
+            if (!errors.hasErrors())
+            {
+                def results = createResults(parsed, errors, measuresPerItem, experiment.experimentMeasures)
 
-            if (!errors.hasErrors()) {
-                // and persist these results to the DB
-                Collection<ExperimentContext>contexts = parsed.contexts;
+                if (!errors.hasErrors()) {
+                    // and persist these results to the DB
+                    Collection<ExperimentContext>contexts = parsed.contexts;
 
-                persist(experiment, results, errors, contexts)
+                    persist(experiment, results, errors, contexts)
+                }
             }
         }
 
