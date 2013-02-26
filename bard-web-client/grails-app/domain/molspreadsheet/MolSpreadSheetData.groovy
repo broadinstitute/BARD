@@ -28,6 +28,9 @@ class MolSpreadSheetData {
         mapColumnsToAssayName indexColumn: [name: "colsToAssayName_idx", type: Integer],
                 joinTable: [name: 'mcolsassayname', column: "colsToAssayName"]
 
+        mapColumnsNormalization indexColumn: [name: "colsToNorm_idx", type: Integer],
+                joinTable: [name: 'mcolnorm', column: "colsToNorm"]
+
 
     }
 
