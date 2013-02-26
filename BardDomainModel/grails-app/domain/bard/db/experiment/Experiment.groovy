@@ -60,7 +60,7 @@ class Experiment extends AbstractContextOwner {
         holdUntilDate(nullable: true)
 
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
-        confidenceLevel(nullable: false)
+        confidenceLevel(nullable: true)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
