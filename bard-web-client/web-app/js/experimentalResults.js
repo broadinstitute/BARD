@@ -20,7 +20,7 @@ $(document).ready(function () {
         event.preventDefault();	// prevent the default action behaviour to happen
         var max = $('#top').val()
         var offset = $('#skip').val()
-        var url = $(this).attr('action') + "?" + $(this).serialize() +'&max='+max+'&offset='+offset;
+        var url = $(this).attr('action') + "?" + $(this).serialize() + '&max=' + max + '&offset=' + offset;
 
         pushStateHandler(url)
         populatePage(url);
@@ -68,5 +68,23 @@ function populatePage(url) {
     });
 }
 
+//Adding event handlers to the facets form submission
+$(document).on("submit", "#ExperimentFacetForm", function (event) {
+    //replace the action with a redirect to the same page
+    var skip = $('#skip').attr('value');
+    var top = $('#top').attr('value');
+    var formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value') + '?offset=' + skip + '&max=' + top;
+    $(this).attr('action', formUrl)
+    return true; //submit tue form the normal way
+});
 
+$(document).on("click", "#ExperimentFacetForm_ResetButton", function () {
+    resetAllFilters('ExperimentFacetForm');
+});
 
+function resetAllFilters(facetForm) {
+    //Uncheck all filters for the current form
+    $('#' + facetForm + ' input[type="checkbox"]').attr('checked', false);
+    //Resubmit the form
+    $('#' + facetForm).submit();
+}
