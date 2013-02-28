@@ -8,16 +8,12 @@ import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
+import bard.db.experiment.ResultsService
 import bard.db.experiment.Substance
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Unroll
-
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

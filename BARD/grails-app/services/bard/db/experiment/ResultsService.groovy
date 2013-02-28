@@ -1,4 +1,4 @@
-package bard.db.registration
+package bard.db.experiment
 
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
@@ -11,6 +11,13 @@ import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
 import bard.db.experiment.ResultHierarchy
 import bard.db.experiment.Substance
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AttributeType
+import bard.db.registration.ItemService
+import bard.db.registration.Measure
+import bard.db.registration.PugService
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -40,6 +47,7 @@ class ResultsService {
 
     ItemService itemService
     PugService pugService
+    ResultsExportService resultsExportService
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
@@ -233,25 +241,37 @@ class ResultsService {
         String getValueDisplay() {
             if (valueDisplay != null) {
                 return valueDisplay;
-            }
+            } else {
+                String valueString = null;
 
-            if (value != null) {
-                if (qualifier == "= ") {
-                    return value.toString()
-                } else {
-                    return "${qualifier.trim()}${value}"
+                if (value != null) {
+                    if (qualifier == "= " ) {
+                        valueString = value.toString()
+                    } else {
+                        valueString = "${qualifier.trim()}${value}"
+                    }
                 }
-            }
 
-            if (minValue != null) {
-                return "${minValue}-${maxValue}";
-            }
+                if (minValue != null) {
+                    valueString = "${minValue}-${maxValue}";
+                }
 
-            if (element != null) {
-                return element.label
-            }
+                if (element != null) {
+                    valueString element.label
+                }
 
-            return null;
+                // now try to find the units
+                String unit = null;
+                if (column.item != null) {
+                    unit = column.item.attributeElement.unit?.abbreviation
+                } else if (column.measure != null) {
+                    unit = column.measure.resultType?.unit?.abbreviation;
+                }
+                if (unit != null) {
+                    valueString += " ${unit}"
+                }
+                return valueString;
+            }
         }
 
         String toString() {
@@ -607,17 +627,25 @@ class ResultsService {
 
             boolean linked = isLinked(column.measure, cell.column.item)
             if (linked) {
-                ResultContextItem item = new ResultContextItem(result: result,
-                        attributeElement: cell.column.item.attributeElement,
-                        valueNum: cell.value,
-                        qualifier: cell.qualifier,
-                        valueMin: cell.minValue,
-                        valueMax: cell.maxValue,
-                        valueElement: cell.element,
-                        valueDisplay: cell.valueDisplay)
+                ResultContextItem item = constructContextItem(result, cell)
                 result.resultContextItems.add(item)
             }
         }
+    }
+
+    private ResultContextItem constructContextItem(Result result, Cell cell) {
+        ResultContextItem item = new ResultContextItem()
+
+        item.result = result
+        item.attributeElement = cell.column.item.attributeElement
+        item.valueNum= cell.value
+        item.qualifier= cell.qualifier?.trim()
+        item.valueMin= cell.minValue
+        item.valueMax= cell.maxValue
+        item.valueElement= cell.element
+        item.valueDisplay= cell.valueDisplay
+
+        return item
     }
 
     Map<Number, Collection<Number>> constructChildMap(Collection<Row> rows) {
@@ -652,24 +680,14 @@ class ResultsService {
         for(row in parse.rows) {
             def substance = Substance.get(row.sid)
             if(substance == null) {
-                errors.addError(row.lineNumber, 0, "Could not find substance with id ${row.sid}")
+                errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
                 continue
             }
 
             def results = []
             for(cell in row.cells) {
                 if (cell.column.measure != null) {
-                    def result = new Result(qualifier: cell.qualifier,
-                            valueDisplay: cell.valueDisplay,
-                            valueNum: cell.value,
-                            valueMin: cell.minValue,
-                            valueMax: cell.maxValue,
-                            statsModifier: cell.column.measure.statsModifier,
-                            resultType: cell.column.measure.resultType,
-                            replicateNumber: row.replicate,
-                            substance: substance,
-                            dateCreated: new Date(),
-                            resultStatus: "Pending")
+                    def result = createResult(cell, row, substance)
                     results << result
                     resultByCell[cell] = result
                     cellByResult[result] = cell
@@ -705,6 +723,35 @@ class ResultsService {
         }
 
         return resultByCell.values()
+    }
+
+    private Result createResult(Cell cell, Row row, Substance substance) {
+//        new Result(qualifier: cell.qualifier,
+//                valueDisplay: cell.valueDisplay,
+//                valueNum: cell.value,
+//                valueMin: cell.minValue,
+//                valueMax: cell.maxValue,
+//                statsModifier: cell.column.measure.statsModifier,
+//                resultType: cell.column.measure.resultType,
+//                replicateNumber: row.replicate,
+//                substance: substance,
+//                dateCreated: new Date(),
+//                resultStatus: "Pending")
+
+        Result result = new Result()
+        result.qualifier = cell.qualifier
+        result.valueDisplay = cell.valueDisplay
+        result.valueNum = cell.value
+        result.valueMin = cell.minValue
+        result.valueMax = cell.maxValue
+        result.statsModifier = cell.column.measure.statsModifier
+        result.resultType = cell.column.measure.resultType
+        result.replicateNumber = row.replicate
+        result.substance = substance
+        result.dateCreated = new Date()
+        result.resultStatus = "Pending"
+
+        return result;
     }
 
     private void createResultHierarchy(InitialParse parse, Map rowByNumber, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map resultByCell) {
@@ -769,7 +816,11 @@ class ResultsService {
             }
         }
 
-        ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: hierarchyType, result: childResult, parentResult: parentResult, dateCreated: new Date())
+        ResultHierarchy resultHierarchy = new ResultHierarchy()
+        resultHierarchy.hierarchyType = hierarchyType
+        resultHierarchy.result = childResult
+        resultHierarchy.parentResult = parentResult
+        resultHierarchy.dateCreated = new Date()
         childResult.resultHierarchiesForResult.add(resultHierarchy)
         parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
     }
@@ -914,26 +965,16 @@ class ResultsService {
     }
 
     private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts) {
-        deleteExperimentResults(experiment)
+//        deleteExperimentResults(experiment)
 
 //        def relationships = [] as Set
 
         results.each {
-            // get an id assigned before adding to set
-            def t0 = new ArrayList(it.resultHierarchiesForParentResult)
-            def t1 = new ArrayList(it.resultHierarchiesForResult)
-
-//            it.resultHierarchiesForParentResult = [] as Set
-//            it.resultHierarchiesForResult = [] as Set
-            it.save(validate: false)
-//            it.resultHierarchiesForParentResult = new LinkedHashSet(t0)
-//            it.resultHierarchiesForResult = new LinkedHashSet(t1)
-//            relationships.addAll(t0)
-//            relationships.addAll(t1)
-
-            assert it.id != null
-            it.experiment = experiment
-            experiment.addToResults(it)
+//            it.save(validate: false)
+//
+//            assert it.id != null
+//            it.experiment = experiment
+//            experiment.addToResults(it)
 
             String label = it.displayLabel
             Integer count = errors.resultsPerLabel.get(label)
@@ -950,12 +991,6 @@ class ResultsService {
             errors.resultAnnotations += it.resultContextItems.size()
         }
 
-        // have to do this because relationships were removed above before save was called, so were unable to cascade
-//        relationships.each {
-//            it.save(validate: false)
-//            assert it.id != null
-//        }
-
         contexts.each {
             it.experiment = experiment
             experiment.addToExperimentContexts(it)
@@ -964,6 +999,8 @@ class ResultsService {
         }
 
         errors.resultsCreated = results.size()
+
+        resultsExportService.dumpFromList("sample.json.gs", results)
     }
 
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
@@ -980,12 +1017,12 @@ class ResultsService {
             context.delete()
         }
 
-        new ArrayList(experiment.results).each { result ->
-            new ArrayList(result.resultContextItems).each { item ->
-                result.removeFromResultContextItems(item)
-                item.delete()
-            }
-            experiment.removeFromResults(result)
-        }
+//        new ArrayList(experiment.results).each { result ->
+//            new ArrayList(result.resultContextItems).each { item ->
+//                result.removeFromResultContextItems(item)
+//                item.delete()
+//            }
+//            experiment.removeFromResults(result)
+//        }
     }
 }

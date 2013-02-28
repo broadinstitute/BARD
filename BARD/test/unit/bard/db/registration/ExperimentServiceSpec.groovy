@@ -2,17 +2,12 @@ package bard.db.registration
 
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
-import bard.db.experiment.Substance
+import bard.db.experiment.ExperimentService
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
