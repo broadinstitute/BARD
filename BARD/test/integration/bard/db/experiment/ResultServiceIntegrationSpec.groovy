@@ -1,17 +1,13 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
-import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AssayDocument
 import bard.db.registration.AttributeType
-import bard.db.registration.DocumentController
 import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
-import bard.db.registration.ResultsService
 import grails.plugin.spock.IntegrationSpec
 import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils

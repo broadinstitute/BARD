@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentService
 import bard.db.project.ExperimentController
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor

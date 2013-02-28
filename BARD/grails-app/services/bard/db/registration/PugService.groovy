@@ -68,7 +68,7 @@ class PugService {
                                     }
                                 }
                             }
-                            'PCT-Download_format'(value:"smiles")
+                            'PCT-Download_format'(value:"xml")
                             'PCT-Download_compression'(value:"gzip")
                         }
                     }
@@ -89,11 +89,11 @@ class PugService {
         ftpClient.login(pubChemAnonFtpUser, pubChemAnonFtpPassword);
         InputStream input = ftpClient.retrieveFileStream(parsedUrl.getFile())
 
-        FileOutputStream out = new FileOutputStream("lastpubchem_query.txt");
-        IOUtils.copy(input, out);
-        input.close();
-        out.close();
-        input = new FileInputStream("lastpubchem_query.txt")
+//        FileOutputStream out = new FileOutputStream("lastpubchem_query.txt");
+//        IOUtils.copy(input, out);
+//        input.close();
+//        out.close();
+//        input = new FileInputStream("lastpubchem_query.txt")
 
         callback(input)
         input.close();
@@ -104,6 +104,8 @@ class PugService {
     /** Call a callback once per sid, smiles tuple.  If the sid could not be found smiles == null */
     void parseSmilesTable(InputStream input, Closure callback) {
         def body = IOUtils.toString(new GZIPInputStream(input))
+//        new File("dumpped_result.txt").write(body)
+//        println("body=${body}");
         Node xml = new XmlParser().parseText(body)
         input.close()
 
@@ -132,7 +134,7 @@ class PugService {
         // find the subset that are not in the database
         def missingSids = sids.findAll { Substance.get(it) == null }
 
-        Set missingFromPubchem = new HashSet(sids)
+        Set<Long> missingFromPubchem = new HashSet(missingSids)
 
         getSubstancesFromPubchem(missingSids) { sid ->
             Long substanceId = Long.parseLong(sid)
