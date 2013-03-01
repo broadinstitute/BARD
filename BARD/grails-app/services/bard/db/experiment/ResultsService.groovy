@@ -18,9 +18,14 @@ import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
+import org.apache.commons.io.IOUtils
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
+import java.text.SimpleDateFormat
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 class ResultsService {
 
@@ -48,6 +53,7 @@ class ResultsService {
     ItemService itemService
     PugService pugService
     ResultsExportService resultsExportService
+    ArchivePathService archivePathService
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
@@ -726,17 +732,6 @@ class ResultsService {
     }
 
     private Result createResult(Cell cell, Row row, Substance substance) {
-//        new Result(qualifier: cell.qualifier,
-//                valueDisplay: cell.valueDisplay,
-//                valueNum: cell.value,
-//                valueMin: cell.minValue,
-//                valueMax: cell.maxValue,
-//                statsModifier: cell.column.measure.statsModifier,
-//                resultType: cell.column.measure.resultType,
-//                replicateNumber: row.replicate,
-//                substance: substance,
-//                dateCreated: new Date(),
-//                resultStatus: "Pending")
 
         Result result = new Result()
         result.qualifier = cell.qualifier
@@ -930,6 +925,24 @@ class ResultsService {
     }
 
     ImportSummary importResults(Experiment experiment, InputStream input) {
+        String originalFilename = archivePathService.constructUploadResultPath(experiment)
+        String exportFilename = archivePathService.constructExportResultPath(experiment)
+        File archivedFile = archivePathService.prepareForWriting(originalFilename)
+
+        OutputStream output = new GZIPOutputStream(new FileOutputStream(archivedFile));
+        IOUtils.copy(input, output);
+        input.close()
+        output.close()
+
+        ImportSummary summary = importResultsWithoutSavingOriginal(experiment, new GZIPInputStream(new FileInputStream(archivedFile)), originalFilename, exportFilename);
+        if (summary.hasErrors()) {
+            archivedFile.delete()
+        }
+
+        return summary;
+    }
+
+    ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename) {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
@@ -956,7 +969,7 @@ class ResultsService {
                     // and persist these results to the DB
                     Collection<ExperimentContext>contexts = parsed.contexts;
 
-                    persist(experiment, results, errors, contexts)
+                    persist(experiment, results, errors, contexts, originalFilename, exportFilename)
                 }
             }
         }
@@ -964,18 +977,10 @@ class ResultsService {
         return errors
     }
 
-    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts) {
-//        deleteExperimentResults(experiment)
-
-//        def relationships = [] as Set
+    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename) {
+        deleteExperimentResults(experiment)
 
         results.each {
-//            it.save(validate: false)
-//
-//            assert it.id != null
-//            it.experiment = experiment
-//            experiment.addToResults(it)
-
             String label = it.displayLabel
             Integer count = errors.resultsPerLabel.get(label)
             if (count == null) {
@@ -1000,7 +1005,15 @@ class ResultsService {
 
         errors.resultsCreated = results.size()
 
-        resultsExportService.dumpFromList("sample.json.gs", results)
+        resultsExportService.dumpFromList(exportFilename, results)
+
+        addExperimentFileToDb(experiment, originalFilename, exportFilename)
+    }
+
+    private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename) {
+        ExperimentFile file = new ExperimentFile(experiment: experiment, originalFile: originalFilename, exportFile: exportFilename, dateCreated: new Date(), submissionVersion: experiment.experimentFiles.size())
+        file.save(failOnError:true)
+        experiment.experimentFiles.add(file)
     }
 
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
@@ -1016,13 +1029,5 @@ class ResultsService {
             experiment.removeFromExperimentContexts(context)
             context.delete()
         }
-
-//        new ArrayList(experiment.results).each { result ->
-//            new ArrayList(result.resultContextItems).each { item ->
-//                result.removeFromResultContextItems(item)
-//                item.delete()
-//            }
-//            experiment.removeFromResults(result)
-//        }
     }
 }

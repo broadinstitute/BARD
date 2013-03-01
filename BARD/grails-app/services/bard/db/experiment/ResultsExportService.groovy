@@ -8,11 +8,15 @@ import org.hibernate.Session
 import java.util.zip.GZIPOutputStream
 
 class ResultsExportService {
+
+    ArchivePathService archivePathService
+
     ObjectMapper mapper = new ObjectMapper()
 
     JsonResultContextItem contextItemAsJson(ResultContextItem item) {
         return new JsonResultContextItem(itemId: item.id,
             attribute: item.attributeElement.label,
+            attributeId: item.attributeElementId,
             qualifier: item.qualifier?.trim(),
             valueNum: item.valueNum,
             valueMin: item.valueMin,
@@ -61,35 +65,32 @@ class ResultsExportService {
     }
 
     void dumpFromList(String filename, Collection<Result> results) {
-        Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(filename)));
+        File file = archivePathService.prepareForWriting(filename)
+
+        Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(file)));
         Map<Long, List<Result>> resultsBySid = results.groupBy { it.substanceId }
-        int count = 0;
         for (sid in resultsBySid.keySet()) {
             writeResultsForSubstance(writer, sid, resultsBySid[sid])
-//            count++;
-//            if ((count % 100) == 0) {
-//                println("dumpFromList progress: ${count}/${resultsBySid.size()}")
-//            }
         }
         writer.close()
     }
 
-    void dumpFromDb(Long experimentId) {
-        List sids = []
-        Result.withSession { Session session ->
-            sids.addAll(session.createSQLQuery("select distinct r.substance_id from RESULT r where r.experiment_id = ?").setCacheable(false).setParameter(0, experimentId).list());
-        }
-
-        println("${sids.size()} Substance IDs for experiment ${experimentId}")
-
-        Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream("exp-${experimentId}.json.gz")));
-
-        int counter = 0;
-        for (sid in sids) {
-            Result.withSession { Session session ->
-                List<Result> results = session.createQuery("select r from ${Result.getName()} r where experiment.id = ? and substance.id = ?").setParameter(0, experimentId).setParameter(1, sid.toLong()).list();
-
-                writeResultsForSubstance(writer, sid, results)
+//    void dumpFromDb(Long experimentId) {
+//        List sids = []
+//        Result.withSession { Session session ->
+//            sids.addAll(session.createSQLQuery("select distinct r.substance_id from RESULT r where r.experiment_id = ?").setCacheable(false).setParameter(0, experimentId).list());
+//        }
+//
+//        println("${sids.size()} Substance IDs for experiment ${experimentId}")
+//
+//        Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream("exp-${experimentId}.json.gz")));
+//
+//        int counter = 0;
+//        for (sid in sids) {
+//            Result.withSession { Session session ->
+//                List<Result> results = session.createQuery("select r from ${Result.getName()} r where experiment.id = ? and substance.id = ?").setParameter(0, experimentId).setParameter(1, sid.toLong()).list();
+//
+//                writeResultsForSubstance(writer, sid, results)
 //
 //                if ((counter % 50) == 0) {
 //                    session.clear();
@@ -97,9 +98,8 @@ class ResultsExportService {
 //                }
 //
 //                counter++
-            }
-        }
-        writer.close()
-
-    }
+//            }
+//        }
+//        writer.close()
+//    }
 }

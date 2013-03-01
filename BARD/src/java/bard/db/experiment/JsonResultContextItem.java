@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class JsonResultContextItem {
     Long itemId;
     String attribute;
+    Long attributeId;
     String qualifier;
     Float valueNum;
     Float valueMin;
@@ -82,5 +83,13 @@ public class JsonResultContextItem {
 
     public void setValueElementId(Long valueElementId) {
         this.valueElementId = valueElementId;
+    }
+
+    public Long getAttributeId() {
+        return attributeId;
+    }
+
+    public void setAttributeId(Long attributeId) {
+        this.attributeId = attributeId;
     }
 }

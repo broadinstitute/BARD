@@ -42,6 +42,7 @@ class JsonResultUnitSpec extends Specification {
     "contextItems" : [ {
       "itemId" : 100,
       "attribute" : "attribute",
+      "attributeId": 53,
       "qualifier" : "<",
       "valueNum" : 102.0,
       "valueMin" : -200.0,
@@ -54,7 +55,7 @@ class JsonResultUnitSpec extends Specification {
 """
     def 'test serialization'() {
         when:
-        def contextItem = new JsonResultContextItem(qualifier: "<", valueMax: 200, valueMin: -200, valueNum: 102, valueDisplay: "value", itemId: 100, attribute: "attribute", valueElementId: 100);
+        def contextItem = new JsonResultContextItem(qualifier: "<", valueMax: 200, valueMin: -200, valueNum: 102, valueDisplay: "value", itemId: 100, attribute: "attribute", attributeId: 53, valueElementId: 100);
         def child = new JsonResult(qualifier: "=", replicateNumber: 1, resultId: 100, resultTypeId: 101, resultType: "AC50", valueDisplay: "valueDisplay", valueMax: 1000, valueMin: 0, valueNum: 10, relationship: "Derives", statsModifierId: 15)
         def parent = new JsonResult(qualifier: "=", replicateNumber: 1, resultId: 100, resultTypeId: 101, resultType: "AC50", valueDisplay: "valueDisplay", valueMax: 1000, valueMin: 0, valueNum: 10, related: [child], contextItems: [contextItem], statsModifierId: 15)
         def substanceResults = new JsonSubstanceResults(sid: 100, rootElem: [parent])
