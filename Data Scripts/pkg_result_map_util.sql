@@ -66,30 +66,6 @@ AS
                                          ani_parent_measure_id IN NUMBER,
                                          ari_resulttype IN r_resulttype);
 
---    function save_measure (ani_parent_measure_id IN NUMBER,
---                          ari_measure IN r_resulttype)
---        RETURN NUMBER;
-
---    FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
---        RETURN NUMBER;
-
---    PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
---                               ani_measure_id IN number);
-
---    PROCEDURE save_exprmt_measure (ani_experiment_id IN number,
---                                ani_measure_id IN number,
---                                ani_parent_measure_id IN NUMBER,
---                                avi_relationship IN varchar2);
-
---    PROCEDURE delete_measure (ani_assay_id IN NUMBER,
---                             ani_experiment_id IN number,
---                             avi_owner IN varchar2);
-
---    procedure log_error (an_errnum   in  number,
---                  av_errmsg  in varchar2,
---                  av_location    in varchar2,
---                  av_comment in varchar2 default null);
-
 END Result_map_util;
 /
 
@@ -300,6 +276,308 @@ as
 
     END save_measure;
 
+    procedure log_error (an_errnum    in  number,
+                        av_errmsg     in varchar2,
+                        av_location   in varchar2,
+                        av_comment    in varchar2 default null)
+    as
+    begin
+        insert into error_log
+           ( ERROR_LOG_ID,
+             ERROR_DATE,
+             procedure_name,
+             ERR_NUM,
+             ERR_MSG,
+             ERR_COMMENT
+           ) values (
+             ERROR_LOG_ID_SEQ.NEXTVAL,
+             sysdate,
+             av_location,
+             an_errnum,
+             av_errmsg,
+             av_comment
+           );
+
+
+    exception
+        when others
+        then
+            null;
+    end log_error;
+
+    PROCEDURE separate_value_unit (avi_value_string IN  varchar2,
+                                    avio_value_num IN OUT number,
+                                    avio_unit IN OUT varchar2)
+    AS
+        ln_pos_space  BINARY_INTEGER;
+        lv_first_word VARCHAR2(500);
+        lv_last_word  VARCHAR2(500);
+        ln_number     NUMBER;
+
+    BEGIN
+        -- get the number from the first part (if it's not in the first part it's probably not a real number)
+        --Dbms_Output.put_line ('separate value_unit. value1 = ' || avi_value_string);
+        ln_pos_space := InStr(avi_value_string, ' ');
+        IF ln_pos_space > 0
+        THEN
+            ln_pos_space := ln_pos_space - 1;
+        ELSE
+            ln_pos_space := Length(avi_value_string);
+        END IF;
+        lv_first_word := SubStr(avi_value_string, 1, InStr(avi_value_string, ' ') -1 );
+        -- test for a number
+        begin
+            ln_number := To_Number(lv_first_word);
+        EXCEPTION
+            WHEN OTHERS THEN
+                ln_number := NULL;
+        END;
+
+        IF ln_number IS NOT NULL
+        THEN
+            --get the units from the end
+            ln_pos_space := InStr(avi_value_string, ' ', -1);
+            lv_last_word := SubStr(avi_value_string, ln_pos_space);
+            avio_value_num := Nvl(avio_value_num, ln_number);
+            avio_unit := Nvl(avio_unit, lv_last_word);
+        END IF;
+
+    END separate_value_unit;
+
+    PROCEDURE save_exprmt_context_item_set (ari_resultType  IN  r_resultType)
+
+    AS
+        CURSOR cur_matching_context
+        IS
+        SELECT aci.assay_context_id
+        FROM temp_context_item tci,
+            assay_context_item aci,
+            assay_context ac
+        WHERE ac.assay_context_id = aci.assay_context_id
+          AND ac.assay_id = tci.assay_id
+          AND aci.attribute_id = tci.attribute_id
+          AND Nvl(aci.value_id, -100) = Nvl(tci.value_id, -100)
+          --AND Nvl(aci.value_num, -99999.999) = Nvl(tci.value_num, -99999.999)
+          and Decode(aci.value_id, NULL, Nvl(aci.value_display, '######'),'$$$$$$')
+                  = Decode(tci.value_id, NULL, Nvl(tci.value1, '######'),'$$$$$$')
+        GROUP BY aci.assay_context_id
+        HAVING Count(*) = (SELECT Count(*) FRoM temp_context_item)
+          AND Count(*) = (SELECT Count(*) FroM assay_context_item aci2
+                                          WHERE aci2.assay_context_id = aci.assay_context_id);
+
+        CURSOR cur_temp_context_item
+        IS
+        SELECT assay_id,
+              attribute_id,
+              display_order,
+              value_num,
+              unit,
+              value_id,
+              ext_value_id,
+              value_min,
+              value_max,
+              aid,
+              resultType,
+              statsmodifier,
+              contextItem,
+              value1,
+             Decode ((SELECT Count(*)
+                     FROM temp_context_item tci2
+                     WHERE tci2.contextItem = tci.contextItem),
+                     0,'Free',
+                     1,Decode(value1, NULL, 'Free', 'Fixed'),
+                     'List') attribute_type
+        FROM temp_context_item tci
+        ORDER BY display_order;
+
+        ln_assay_context_id NUMBER := null;
+        ln_assay_context_item_id NUMBER ;
+
+    BEGIN
+
+        -- clean out the temp table
+        DELETE FROM temp_context_item;
+        -- get the context_item set from the result_map table
+        -- AND save IN a TEMPORARY table
+        -- need special care to find a set of 'List' type items
+            -- look for the attribute without the value
+            -- insert items with values with a check to prevent inserting duplicates
+            -- note use of assay_ID argument to prevent doubling of item rows
+        -- save the items in a temp table
+--          Dbms_Output.put_line ('iinsert into temp_context_item '
+--        || ', exprt_id=' || ari_resulttype.experiment_id
+--        || ', assay_id=' || ari_resulttype.assay_id
+--        || ', rt_id=' || ari_resulttype.result_type_id
+--        || ', sm_id=' || ari_resulttype.stats_modifier_id
+--        || ', aid=' || ari_resulttype.aid
+--        || ', resulttype=' || ari_resulttype.resulttype
+--        || ', modifier=' || ari_resulttype.stats_modifier
+--        || ', relationship=' || ari_resulttype.relationship
+--        || ', tid=' || ari_resulttype.tid
+--        || ', expseries_no=' || ari_resulttype.series_nos
+--        || ', parentTIds=' || ari_resulttype.parent_tids);
+
+        INSERT INTO temp_context_item
+            (display_order,
+              assay_id,
+              attribute_id,
+              value_id,
+              aid,
+              resultType,
+              statsmodifier,
+              contextItem,
+              value1,
+              value_num,
+              unit)
+        SELECT ROWNUM - 1 display_order,
+              ci.*
+        FROM (SELECT e.assay_id,
+                el_ci.element_id attribute_id,
+                el_val.element_id value_id,
+                rm.aid,
+                rm.resultType,
+                rm.stats_modifier,
+                rm.contextItem,
+                Nvl(rm.value1, Decode(rm.value_num, NULL, NULL, rm.value_num || ' ' || rm.unit)) value1,
+                rm.value_num,
+                rm.unit
+            FROM (SELECT rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.contextItem, NULL value1, rm_ci.concentration value_num, rm_ci.concentrationunit unit
+                  FROM southern.result_map rm_ci
+                  WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_ci.tid
+                    AND rm_ci.contextItem IS NOT null
+                    AND rm_ci.resultType IS null
+                    AND rm_ci.aid = ari_resulttype.aid
+                  GROUP BY rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit
+                  UNION all
+                  SELECT rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.attribute1, rm_ci.value1, null value_num, NULL unit
+                  FROM southern.result_map rm_ci
+                  WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_ci.tid
+                    AND rm_ci.attribute1 IS NOT null
+                    AND rm_ci.resultType IS null
+                    AND rm_ci.aid = ari_resulttype.aid
+                  GROUP BY rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.attribute1, rm_ci.value1
+                  UNION all
+                  SELECT rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.attribute2, rm_ci.value2, null value_num, NULL unit
+                  FROM southern.result_map rm_ci
+                  WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_ci.tid
+                    AND rm_ci.attribute2 IS NOT null
+                    AND rm_ci.resultType IS null
+                    AND rm_ci.aid = ari_resulttype.aid
+                  GROUP BY rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.attribute2, rm_ci.value2
+                    ) rm,
+                element el_ci,
+                element el_val,
+                external_reference er,
+                experiment e
+            WHERE er.ext_assay_ref = 'aid=' || rm.aid
+              AND e.experiment_id = er.experiment_id
+              AND e.assay_id = ari_resulttype.assay_id
+              AND el_ci.label (+) = rm.contextItem
+              AND el_val.label (+) = rm.value1
+              ORDER BY rm.aid, rm.contextItem, rm.value_num, rm.value1) ci;
+
+--         Dbms_Output.put_line ('inserted '
+--              || 'SQL%rowcount=' || SQL%rowcount);
+
+        IF SQL%ROWCOUNT = 0
+        THEN
+           return;
+            -- nothing got inserted, so we can make a quick exit
+        END IF;
+
+        -- query to find an existing matching set
+        OPEN cur_matching_context;
+--        Dbms_Output.put_line (' opened the matching cursor');
+        FETCH cur_matching_context INTO ln_assay_context_id;
+--        Dbms_Output.put_line (' fetched the matching cursor');
+        CLOSE cur_matching_context;
+
+        IF ln_assay_context_id IS NULL
+        THEN
+            -- not found create an assay_context
+           ln_assay_context_id := get_new_id ('assay_context_id_seq');
+--          Dbms_Output.put_line (' got assay_context_id=' || ln_assay_context_id);
+
+            INSERT INTO assay_context
+                (assay_context_id,
+                 assay_id,
+                 context_name,
+                 context_group,
+                 display_order,
+                 modified_by)
+            VALUES
+                (ln_assay_context_id,
+                 ari_resultType.assay_id,
+                 'annotations for ' || ari_resultType.resultType,
+                 'project management> experiment>',
+                 0,
+                 pv_modified_by);
+            -- cycle thru the items saving each as you go
+            FOR lr_context_item IN  cur_temp_context_item
+            LOOP
+                -- check the inputs
+                IF lr_context_item.attribute_id IS NULL
+                    OR
+                    lr_context_item.assay_id is NULL
+                THEN
+                    -- log the error;
+                    log_error (-90002, 'Attribute not in Element', 'save_context_item_set',
+                            'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
+                            || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
+                            || ', contextItem/attribute1=' || lr_context_item.contextItem
+                            || ', Assay=' || To_Char(lr_context_item.assay_id)
+                            || ', AID='|| To_Char(lr_context_item.aid));
+                    CONTINUE;
+                END IF;
+                IF lr_context_item.value_id IS NULL
+                    and lr_context_item.value_num is NULL
+                    and lr_context_item.attribute_type != 'Free'
+                THEN
+                    -- log the error;
+                    log_error (-90003, 'WARNING: no value specified', 'save_context_item_set',
+                            'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
+                            || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
+                            || ', attribute=' || lr_context_item.contextItem
+                            || ', value_display=' || lr_context_item.value1
+                            || ', Assay=' || To_Char(lr_context_item.assay_id)
+                            || ', AID='|| To_Char(lr_context_item.aid));
+                END IF;
+                -- convert the value1 into a number/unit pair if possible
+--                Dbms_Output.put_line (' splitting value1=' || lr_context_item.value1);
+                IF lr_context_item.value1 IS NOT NULL
+                then
+                    separate_value_unit (lr_context_item.value1, lr_context_item.value_num, lr_context_item.unit);
+                END IF;
+
+                ln_assay_context_item_id := get_new_id ('assay_context_item_id_seq');
+                INSERT INTO assay_context_item
+                    (assay_context_item_id,
+                    assay_context_id,
+                    display_order,
+                    attribute_type,
+                    attribute_id,
+                    value_id,
+                    value_display,
+                    value_num,
+                    modified_by)
+                VALUES(
+                    ln_assay_context_item_id,
+                    ln_assay_context_id,
+                    lr_context_item.display_order,
+                    lr_context_item.attribute_type,
+                    lr_context_item.attribute_id,
+                    lr_context_item.value_id,
+                    Nvl(lr_context_item.value1, Decode(lr_context_item.value_num, NULL, NULL, To_Char(lr_context_item.value_num) || ' ' || lr_context_item.unit)),
+                    lr_context_item.value_num,
+                    pv_modified_by);
+
+            END LOOP;
+        END IF;
+
+        --RETURN ln_assay_context_id;
+
+    END save_exprmt_context_item_set;
+
     PROCEDURE transfer_result_map (avi_AID IN VARCHAR2 DEFAULT NULL)
     AS
         CURSOR cur_assay_experiment (cn_AID NUMBER)
@@ -383,7 +661,12 @@ as
 --                      || ', parentTIds=' || lr_rm_measure.parent_tids);
                 save_measure_and_children ( 0, To_Number(NULL), lr_rm_measure);  --lr_rm_resultType);
 
+                -- to get the all the experiment, AID, assay information outside the loop
+                lr_rm_resulttype := lr_rm_measure;
+
             END LOOP;
+            -- now save the contextitems that are not associated with specific result types
+            save_exprmt_context_item_set(lr_rm_resulttype);
 
             -- clean up the display_orders for this assay
             UPDATE assay_context_item aci
@@ -415,79 +698,12 @@ as
                   AND aci2.assay_context_id < aci.assay_context_id)
               AND aci.assay_id = lr_assay_experiment.assay_id;
 
+            update_context_name(lr_rm_resulttype.assay_id);
 
         END LOOP;
 
 
     END transfer_result_map;
-
-    procedure log_error (an_errnum    in  number,
-                        av_errmsg     in varchar2,
-                        av_location   in varchar2,
-                        av_comment    in varchar2 default null)
-    as
-    begin
-        insert into error_log
-           ( ERROR_LOG_ID,
-             ERROR_DATE,
-             procedure_name,
-             ERR_NUM,
-             ERR_MSG,
-             ERR_COMMENT
-           ) values (
-             ERROR_LOG_ID_SEQ.NEXTVAL,
-             sysdate,
-             av_location,
-             an_errnum,
-             av_errmsg,
-             av_comment
-           );
-
-
-    exception
-        when others
-        then
-            null;
-    end log_error;
-
-    PROCEDURE separate_value_unit (avi_value_string IN  varchar2,
-                                    avio_value_num IN OUT number,
-                                    avio_unit IN OUT varchar2)
-    AS
-        ln_pos_space  BINARY_INTEGER;
-        lv_first_word VARCHAR2(500);
-        lv_last_word  VARCHAR2(500);
-        ln_number     NUMBER;
-
-    BEGIN
-        -- get the number from the first part (if it's not in the first part it's probably not a real number)
-        --Dbms_Output.put_line ('separate value_unit. value1 = ' || avi_value_string);
-        ln_pos_space := InStr(avi_value_string, ' ');
-        IF ln_pos_space > 0
-        THEN
-            ln_pos_space := ln_pos_space - 1;
-        ELSE
-            ln_pos_space := Length(avi_value_string);
-        END IF;
-        lv_first_word := SubStr(avi_value_string, 1, InStr(avi_value_string, ' ') -1 );
-        -- test for a number
-        begin
-            ln_number := To_Number(lv_first_word);
-        EXCEPTION
-            WHEN OTHERS THEN
-                ln_number := NULL;
-        END;
-
-        IF ln_number IS NOT NULL
-        THEN
-            --get the units from the end
-            ln_pos_space := InStr(avi_value_string, ' ', -1);
-            lv_last_word := SubStr(avi_value_string, ln_pos_space);
-            avio_value_num := Nvl(avio_value_num, ln_number);
-            avio_unit := Nvl(avio_unit, lv_last_word);
-        END IF;
-
-    END separate_value_unit;
 
 
     FUNCTION save_context_item_set (ari_resultType  IN  r_resultType)
@@ -732,249 +948,6 @@ as
         RETURN ln_assay_context_id;
 
     END save_context_item_set;
-
-    FUNCTION save_exprmt_context_item_set (ari_resultType  IN  r_resultType)
-        RETURN NUMBER
-    AS
-        CURSOR cur_matching_context
-        IS
-        SELECT aci.assay_context_id
-        FROM temp_context_item tci,
-            assay_context_item aci,
-            assay_context ac
-        WHERE ac.assay_context_id = aci.assay_context_id
-          AND ac.assay_id = tci.assay_id
-          AND aci.attribute_id = tci.attribute_id
-          AND Nvl(aci.value_id, -100) = Nvl(tci.value_id, -100)
-          --AND Nvl(aci.value_num, -99999.999) = Nvl(tci.value_num, -99999.999)
-          and Decode(aci.value_id, NULL, Nvl(aci.value_display, '######'),'$$$$$$')
-                  = Decode(tci.value_id, NULL, Nvl(tci.value1, '######'),'$$$$$$')
-        GROUP BY aci.assay_context_id
-        HAVING Count(*) = (SELECT Count(*) FRoM temp_context_item)
-          AND Count(*) = (SELECT Count(*) FroM assay_context_item aci2
-                                          WHERE aci2.assay_context_id = aci.assay_context_id);
-
-        CURSOR cur_temp_context_item
-        IS
-        SELECT assay_id,
-              attribute_id,
-              display_order,
-              value_num,
-              unit,
-              value_id,
-              ext_value_id,
-              value_min,
-              value_max,
-              aid,
-              resultType,
-              statsmodifier,
-              contextItem,
-              value1,
-             Decode ((SELECT Count(*)
-                     FROM temp_context_item tci2
-                     WHERE tci2.contextItem = tci.contextItem),
-                     0,'Free',
-                     1,Decode(value1, NULL, 'Free', 'Fixed'),
-                     'List') attribute_type
-        FROM temp_context_item tci
-        ORDER BY display_order;
-
-        ln_assay_context_id NUMBER := null;
-        ln_assay_context_item_id NUMBER ;
-
-    BEGIN
-
-        -- clean out the temp table
-        DELETE FROM temp_context_item;
-        -- get the context_item set from the result_map table
-        -- AND save IN a TEMPORARY table
-        -- need special care to find a set of 'List' type items
-            -- look for the attribute without the value
-            -- insert items with values with a check to prevent inserting duplicates
-            -- note use of assay_ID argument to prevent doubling of item rows
-        -- save the items in a temp table
---          Dbms_Output.put_line ('iinsert into temp_context_item '
---        || ', exprt_id=' || ari_resulttype.experiment_id
---        || ', assay_id=' || ari_resulttype.assay_id
---        || ', rt_id=' || ari_resulttype.result_type_id
---        || ', sm_id=' || ari_resulttype.stats_modifier_id
---        || ', aid=' || ari_resulttype.aid
---        || ', resulttype=' || ari_resulttype.resulttype
---        || ', modifier=' || ari_resulttype.stats_modifier
---        || ', relationship=' || ari_resulttype.relationship
---        || ', tid=' || ari_resulttype.tid
---        || ', expseries_no=' || ari_resulttype.series_nos
---        || ', parentTIds=' || ari_resulttype.parent_tids);
-
-        INSERT INTO temp_context_item
-            (display_order,
-              assay_id,
-              attribute_id,
-              value_id,
-              aid,
-              resultType,
-              statsmodifier,
-              contextItem,
-              value1,
-              value_num,
-              unit)
-        SELECT ROWNUM - 1 display_order,
-               ci.*
-        FROM (SELECT e.assay_id,
-                  el_ci.element_id attribute_id,
-                  el_val.element_id value_id,
-                  rm.aid,
-                  rm.resultType,
-                  rm.stats_modifier,
-                  rm.contextItem,
-                  Nvl(rm.value1, Decode(rm.value_num, NULL, NULL, rm.value_num || ' ' || rm.unit)) value1,
-                  rm.value_num,
-                  rm.unit
-              FROM (SELECT rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.contextItem, NULL value1, rm_ci.concentration value_num, rm_ci.concentrationunit unit
-                    FROM southern.result_map rm_rt,
-                        southern.result_map rm_ci
-                    WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_rt.tid
-                      AND rm_ci.aid = rm_rt.aid
-                      AND rm_ci.contextItem IS NOT null
-                      AND rm_rt.resultType = ari_resultType.resultType
-                      --AND rm_rt.resultType IS NOT null
-                      AND Nvl(rm_rt.stats_modifier, '#####') = Nvl(ari_resultType.stats_modifier, '#####')
-                      AND rm_rt.aid = ari_resultType.aid
-                    GROUP BY rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit
-                    UNION all
-                    SELECT rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.attribute1, rm_ci.value1, null value_num, NULL unit
-                    FROM southern.result_map rm_rt,
-                        southern.result_map rm_ci
-                    WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_rt.tid
-                      AND rm_ci.aid = rm_rt.aid
-                      AND rm_ci.attribute1 IS NOT null
-                      AND rm_rt.resultType = ari_resultType.resultType
-                      --AND rm_rt.resultType IS NOT null
-                      AND Nvl(rm_rt.stats_modifier, '#####') = Nvl(ari_resultType.stats_modifier, '#####')
-                      AND rm_rt.aid = ari_resultType.aid
-                    GROUP BY rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.attribute1, rm_ci.value1
-                    UNION all
-                    SELECT rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.attribute2, rm_ci.value2, null value_num, NULL unit
-                    FROM southern.result_map rm_rt,
-                        southern.result_map rm_ci
-                    WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_rt.tid
-                      AND rm_ci.aid = rm_rt.aid
-                      AND rm_ci.attribute2 IS NOT null
-                      AND rm_rt.resultType = ari_resultType.resultType
-                      --AND rm_rt.resultType IS NOT null
-                      AND Nvl(rm_rt.stats_modifier, '#####') = Nvl(ari_resultType.stats_modifier, '#####')  --
-                      AND rm_rt.aid = ari_resultType.aid
-                    GROUP BY rm_rt.aid, rm_rt.resultType, rm_rt.stats_modifier, rm_ci.attribute2, rm_ci.value2) rm,
-                  element el_ci,
-                  element el_val,
-                  external_reference er,
-                  experiment e
-              WHERE er.ext_assay_ref = 'aid=' || rm.aid
-                AND e.experiment_id = er.experiment_id
-                AND e.assay_id = ari_resultType.assay_id
-                AND el_ci.label (+) = rm.contextItem
-                AND el_val.label (+) = rm.value1
-                ORDER BY rm.aid, rm.contextItem, rm.value_num, rm.value1) ci;
---         Dbms_Output.put_line ('inserted '
---              || 'SQL%rowcount=' || SQL%rowcount);
-
-        IF SQL%ROWCOUNT = 0
-        THEN return NULL;
-            -- nothing got inserted, so we can make a quick exit
-        END IF;
-
-        -- query to find an existing matching set
-        OPEN cur_matching_context;
---        Dbms_Output.put_line (' opened the matching cursor');
-        FETCH cur_matching_context INTO ln_assay_context_id;
---        Dbms_Output.put_line (' fetched the matching cursor');
-        CLOSE cur_matching_context;
-
-        IF ln_assay_context_id IS NULL
-        THEN
-            -- not found create an assay_context
-           ln_assay_context_id := get_new_id ('assay_context_id_seq');
---          Dbms_Output.put_line (' got assay_context_id=' || ln_assay_context_id);
-
-            INSERT INTO assay_context
-                (assay_context_id,
-                 assay_id,
-                 context_name,
-                 context_group,
-                 display_order,
-                 modified_by)
-            VALUES
-                (ln_assay_context_id,
-                 ari_resultType.assay_id,
-                 'Annotations for ' || ari_resultType.resultType,
-                 'Project management> experiment>',
-                 0,
-                 pv_modified_by);
-            -- cycle thru the items saving each as you go
-            FOR lr_context_item IN  cur_temp_context_item
-            LOOP
-                -- check the inputs
-                IF lr_context_item.attribute_id IS NULL
-                    OR
-                    lr_context_item.assay_id is NULL
-                THEN
-                    -- log the error;
-                    log_error (-90002, 'Attribute not in Element', 'save_context_item_set',
-                            'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
-                            || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
-                            || ', contextItem/attribute1=' || lr_context_item.contextItem
-                            || ', Assay=' || To_Char(lr_context_item.assay_id)
-                            || ', AID='|| To_Char(lr_context_item.aid));
-                    CONTINUE;
-                END IF;
-                IF lr_context_item.value_id IS NULL
-                    and lr_context_item.value_num is NULL
-                    and lr_context_item.attribute_type != 'Free'
-                THEN
-                    -- log the error;
-                    log_error (-90003, 'WARNING: no value specified', 'save_context_item_set',
-                            'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
-                            || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
-                            || ', attribute=' || lr_context_item.contextItem
-                            || ', value_display=' || lr_context_item.value1
-                            || ', Assay=' || To_Char(lr_context_item.assay_id)
-                            || ', AID='|| To_Char(lr_context_item.aid));
-                END IF;
-                -- convert the value1 into a number/unit pair if possible
---                Dbms_Output.put_line (' splitting value1=' || lr_context_item.value1);
-                IF lr_context_item.value1 IS NOT NULL
-                then
-                    separate_value_unit (lr_context_item.value1, lr_context_item.value_num, lr_context_item.unit);
-                END IF;
-
-                ln_assay_context_item_id := get_new_id ('assay_context_item_id_seq');
-                INSERT INTO assay_context_item
-                    (assay_context_item_id,
-                    assay_context_id,
-                    display_order,
-                    attribute_type,
-                    attribute_id,
-                    value_id,
-                    value_display,
-                    value_num,
-                    modified_by)
-                VALUES(
-                    ln_assay_context_item_id,
-                    ln_assay_context_id,
-                    lr_context_item.display_order,
-                    lr_context_item.attribute_type,
-                    lr_context_item.attribute_id,
-                    lr_context_item.value_id,
-                    Nvl(lr_context_item.value1, Decode(lr_context_item.value_num, NULL, NULL, To_Char(lr_context_item.value_num) || ' ' || lr_context_item.unit)),
-                    lr_context_item.value_num,
-                    pv_modified_by);
-
-            END LOOP;
-        END IF;
-
-        RETURN ln_assay_context_id;
-
-    END save_exprmt_context_item_set;
 
     PROCEDURE save_assay_context_measure (ani_assay_context_id IN number,
                                ani_measure_id IN number)

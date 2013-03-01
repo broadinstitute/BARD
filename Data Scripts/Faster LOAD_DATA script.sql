@@ -84,7 +84,7 @@ COMMIT;
 --'INSERTINTO'||TABLE_NAME||'('||COLUMNS||')SELECT'||COLUMNS||'FROMDATA_MIG.'||TABLE_NAME||';'
 INSERT INTO PROJECT (PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select PROJECT_ID, PROJECT_NAME, GROUP_TYPE, DESCRIPTION, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.PROJECT;
 INSERT INTO ASSAY (ASSAY_ID, ASSAY_STATUS, ASSAY_SHORT_NAME, ASSAY_NAME, ASSAY_VERSION, ASSAY_TYPE, DESIGNED_BY, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select ASSAY_ID, ASSAY_STATUS, ASSAY_SHORT_NAME, ASSAY_NAME, ASSAY_VERSION, ASSAY_TYPE, DESIGNED_BY, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.ASSAY;
-INSERT INTO EXPERIMENT (EXPERIMENT_ID, EXPERIMENT_NAME, EXPERIMENT_STATUS, READY_FOR_EXTRACTION, ASSAY_ID, RUN_DATE_FROM, RUN_DATE_TO, HOLD_UNTIL_DATE, DESCRIPTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select EXPERIMENT_ID, EXPERIMENT_NAME, EXPERIMENT_STATUS, READY_FOR_EXTRACTION, ASSAY_ID, RUN_DATE_FROM, RUN_DATE_TO, HOLD_UNTIL_DATE, DESCRIPTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.EXPERIMENT;
+INSERT INTO EXPERIMENT (EXPERIMENT_ID, EXPERIMENT_NAME, EXPERIMENT_STATUS, READY_FOR_EXTRACTION, ASSAY_ID, CONFIDENCE_LEVEL, RUN_DATE_FROM, RUN_DATE_TO, HOLD_UNTIL_DATE, DESCRIPTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select EXPERIMENT_ID, EXPERIMENT_NAME, EXPERIMENT_STATUS, READY_FOR_EXTRACTION, ASSAY_ID, CONFIDENCE_LEVEL, RUN_DATE_FROM, RUN_DATE_TO, HOLD_UNTIL_DATE, DESCRIPTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.EXPERIMENT;
 INSERT INTO ELEMENT (ELEMENT_ID, ELEMENT_STATUS, LABEL, UNIT_ID, ABBREVIATION, BARD_URI, DESCRIPTION, SYNONYMS, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select ELEMENT_ID, ELEMENT_STATUS, LABEL, UNIT_ID, ABBREVIATION, BARD_URI, DESCRIPTION, SYNONYMS, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.ELEMENT;
 INSERT INTO SUBSTANCE (SUBSTANCE_ID, COMPOUND_ID, SMILES, MOLECULAR_WEIGHT, SUBSTANCE_TYPE, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select SUBSTANCE_ID, COMPOUND_ID, SMILES, MOLECULAR_WEIGHT, SUBSTANCE_TYPE, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.SUBSTANCE;
 --INSERT INTO RESULT (RESULT_ID, RESULT_STATUS, READY_FOR_EXTRACTION, EXPERIMENT_ID, RESULT_TYPE_ID, SUBSTANCE_ID, STATS_MODIFIER_ID, REPLICATE_NO, QUALIFIER, VALUE_NUM, VALUE_MIN, VALUE_MAX, VALUE_DISPLAY, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select RESULT_ID, RESULT_STATUS, READY_FOR_EXTRACTION, EXPERIMENT_ID, RESULT_TYPE_ID, SUBSTANCE_ID, STATS_MODIFIER_ID, REPLICATE_NO, QUALIFIER, VALUE_NUM, VALUE_MIN, VALUE_MAX, VALUE_DISPLAY, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.RESULT;
@@ -144,67 +144,8 @@ END;
 --INSERT INTO RSLT_CONTEXT_ITEM (RSLT_CONTEXT_ITEM_ID, RESULT_ID, ATTRIBUTE_ID, VALUE_ID, DISPLAY_ORDER, EXT_VALUE_ID, QUALIFIER, VALUE_NUM, VALUE_MIN, VALUE_MAX, VALUE_DISPLAY, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) select RSLT_CONTEXT_ITEM_ID, RESULT_ID, ATTRIBUTE_ID, VALUE_ID, DISPLAY_ORDER, EXT_VALUE_ID, QUALIFIER, VALUE_NUM, VALUE_MIN, VALUE_MAX, VALUE_DISPLAY, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY from data_mig.RSLT_CONTEXT_ITEM;
 --COMMIT;
 
-DECLARE
-    cursor cur_sequence
-    is
-    select sequence_name
-    from user_sequences
-    WHERE sequence_name LIKE '%_ID_SEQ';
-
-    lv_max_sql  varchar2(1000);
-    lv_drop_sql varchar2(1000);
-    lv_create_sql   varchar2(1000);
-    lv_grant_sql    varchar2(1000);
-    lv_table_name   varchar2(50);
-    lv_primary_key  varchar2(50);
-    ln_max_id   number;
-
 begin
-    for rec_sequence in cur_sequence
-    loop
-        lv_table_name := replace(rec_sequence.sequence_name, '_ID_SEQ', null);
-        lv_primary_key := replace(rec_sequence.sequence_name, '_SEQ', null);
-
-        lv_max_sql := 'select nvl(max(' || lv_primary_key || '), 0) from ' || lv_table_name;
-        begin
-            --dbms_output.put_line(lv_max_sql);
-            EXECUTE IMMEDIATE lv_max_sql INTO ln_max_ID;
-
-            lv_drop_sql := 'drop sequence ' || rec_sequence.sequence_name;
-            --dbms_output.put_line(lv_drop_sql);
-            EXECUTE IMMEDIATE lv_drop_sql;
-
-            lv_create_sql := 'create sequence ' || rec_sequence.sequence_name
-                    || ' start with ' || to_char(ln_max_id + 1)
-                    || ' increment by 1 nominvalue maxvalue 2147483648 nocycle ';
-            IF rec_sequence.sequence_name = 'RESULT_ID_SEQ'
-            THEN
-                lv_create_sql := lv_create_sql || 'cache 10000 noorder';
-            ELSE
-                lv_create_sql := lv_create_sql || 'cache 20 noorder';
-            END IF;
-            --dbms_output.put_line(lv_create_sql);
-
-            lv_grant_sql := 'grant select on ' || rec_sequence.sequence_name
-                    || ' to schatwin';
-            --dbms_output.put_line(lv_grant_sql);
-            EXECUTE IMMEDIATE lv_create_sql;
-            EXECUTE IMMEDIATE lv_grant_sql;
-
-        exception
-            when others
-            then
-                null;   --dbms_output.put_line (to_char(sqlcode) || ', ' || sqlerrm);
-
-        end;
-
-    end loop;
-
-    if cur_sequence%isopen
-    then
-        close cur_sequence;
-    end if;
-
+RESET_SEQUENCES;
 END;
 /
 
