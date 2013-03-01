@@ -308,6 +308,20 @@ class QueryService implements IQueryService {
         return experimentBuilder.buildModel(m)
 
     }
+
+
+    WebQueryTableModel showCompoundBioActivitySummaryData(Long compoundId,
+                                                          GroupByTypes groupTypes,
+                                                          List<FilterTypes> filterTypes,
+                                                          SearchParams searchParams) {
+        Integer top = searchParams.top
+        Integer skip = searchParams.skip
+        CompoundSummary compoundSummary = getSummaryForCompound(compoundId)
+//        Map m = findExperimentDataById(experimentId, top, skip, filterTypes)
+        ExperimentBuilder experimentBuilder = new ExperimentBuilder()
+        return experimentBuilder.buildModel(m)
+
+    }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service
      * @param experimentId

@@ -593,7 +593,56 @@ class BardWebInterfaceController {
 
     }
 
+    /**
+     * JSDraw Editor page. Most functionality is implemented in JavaScript (jsDrawEditor.js)
+     */
     def jsDrawEditor() {}
+
+    /**
+     * Builds a TableModel for the CBAS and renders its content
+     * @param id Compound ID
+     * @param searchCommand
+     * @return
+     */
+    def showCompoundBioActivitySummary(Long id, SearchCommand searchCommand) {
+
+        if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
+            return
+        }
+        try {
+
+            Map<String, Integer> searchParams = handleSearchParams() //top, skip, nhits
+            SpreadSheetInput spreadSheetInput = new SpreadSheetInput(cids: [id])
+
+            final List<FilterTypes> filters = []
+            filters.add(FilterTypes.TESTED)
+            NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
+            ActivityOutcome activityOutcome = ActivityOutcome.ALL
+
+            final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+                    GroupByTypes.PROJECT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
+
+            webQueryTableModel.additionalProperties.put("searchString", params.searchString)
+            webQueryTableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
+            webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
+            webQueryTableModel.additionalProperties.put("id", id.toString())
+
+            render(view: 'showCompoundBioActivitySummary',
+                    model: [webQueryTableModel: webQueryTableModel])
+        }
+        catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
+            String message = "Compound with ID ${id} does not exists"
+            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
+        }
+        catch (Exception ee) {
+
+            String message = "Problem finding Compoud ${id}"
+            log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
+
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    "${message}")
+        }
+    }
 }
 /**
  * We would use this helper class as Mixin for
