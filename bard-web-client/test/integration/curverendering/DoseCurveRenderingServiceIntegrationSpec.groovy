@@ -84,7 +84,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         final PriorityElement priorityElement = resultData.priorityElements.get(0)
         final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
-        final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final ActivityConcentrationMap map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
         final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
         JFreeChart jFreeChart =
             this.doseCurveRenderingService.
@@ -128,7 +128,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the createDoseCurve method with the spreadSheetActivity.hillCurveValue value and the other parameters"
         final PriorityElement priorityElement = resultData.priorityElements.get(0)
         final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
-        final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        ActivityConcentrationMap map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
         final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
         JFreeChart jFreeChart =
             this.doseCurveRenderingService.
@@ -177,7 +177,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
             final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
 
-            final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+            final ActivityConcentrationMap map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
             Curve curve = new Curve(
                     concentrations: map.concentrations,
                     activities: map.activities,
@@ -223,7 +223,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         when: "We call the findDrcData method with the spreadSheetActivity.hillCurveValue value"
         final PriorityElement priorityElement = resultData.priorityElements.get(0)
         final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
-        final Map<String, List<Double>> map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final ActivityConcentrationMap map = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
         final CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
 
         final Drc drc =

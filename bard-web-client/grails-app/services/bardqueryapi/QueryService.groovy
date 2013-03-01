@@ -317,7 +317,9 @@ class QueryService implements IQueryService {
      */
     Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes = [FilterTypes.TESTED]) {
         List<Activity> activities = []
-        final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
+        final ExperimentShow experimentShow =
+            experimentRestService.getExperimentById(experimentId)
+
         NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
         if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
             normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
@@ -337,9 +339,11 @@ class QueryService implements IQueryService {
         }
 
         return [
-                total: totalNumberOfRecords, actives: numberOfActiveCompounds,
+                total: totalNumberOfRecords,
+                actives: numberOfActiveCompounds,
                 activities: activities,
-                experiment: experimentShow, hasPlot: experimentDetails.hasPlot,
+                experiment: experimentShow,
+                hasPlot: experimentDetails.hasPlot,
                 priorityDisplay: experimentDetails.priorityDisplay,
                 dictionaryId: experimentDetails.dictionaryId,
                 hasChildElements: experimentDetails.hasChildElements,

@@ -145,7 +145,7 @@ public class ConcentrationResponseSeries extends JsonUtil {
         return activities.sort()
     }
 
-    public static Map toDoseResponsePoints(List<ConcentrationResponsePoint> concentrationResponsePoints) {
+    public static ActivityConcentrationMap toDoseResponsePoints(List<ConcentrationResponsePoint> concentrationResponsePoints) {
         List<Double> concentrations = []
         List<Double> activities = []
 
@@ -161,7 +161,13 @@ public class ConcentrationResponseSeries extends JsonUtil {
                 log.warn("Concentration point/value can not be empty: '${concentrationResponsePoint.testConcentration}/${concentrationResponsePoint.value}'")
             }
         }
-        return [activities: activities, concentrations: concentrations]
 
+        ActivityConcentrationMap activityConcentrationMap = new ActivityConcentrationMap(activities: activities, concentrations: concentrations)
+        //return [activities: activities, concentrations: concentrations]
+        return activityConcentrationMap
     }
+}
+public class ActivityConcentrationMap {
+    List<Double> activities
+    List<Double> concentrations
 }

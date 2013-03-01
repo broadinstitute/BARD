@@ -93,7 +93,6 @@ environments {
 }
 
 // log4j configuration
-
 CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
