@@ -1,7 +1,9 @@
 package bard.validation.ext;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.collections.Transformer;
 import org.dom4j.Document;
@@ -16,16 +18,34 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	private String database;
 	private EUtilsWeb eutils;
 	private Transformer transformer;
+	private static Set<String> databases = new HashSet();
+
+	static {
+		try {
+			EUtilsWeb web = new EUtilsWeb("BARD-CAP", "anonymous@bard.nih.gov");
+			databases.addAll(web.getDatabases());
+		}
+		catch(EUtilsException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 
 	/**
 	 * 
-	 * @param database - valid string for NCBI Entrez database e.g. protein, gene. See: http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi
-	 * @param tool - unique string to identify code calling the entrez web service
-	 * @param email - email address of user for whom the code is run.
+	 * @param database
+	 *            - valid string for NCBI Entrez database e.g. protein, gene.
+	 *            See: http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi
+	 * @param tool
+	 *            - unique string to identify code calling the entrez web
+	 *            service
+	 * @param email
+	 *            - email address of user for whom the code is run.
 	 * @throws ExternalOntologyException
 	 */
 	public ExternalOntologyNCBI(String database, String tool, String email) throws ExternalOntologyException {
 		this.database = database;
+		if( ! databases.contains(database) )
+			throw new ExternalOntologyException("Unknown NCBI database " + database);
 		this.transformer = EntrezTransformerFactory.getTransformer(database);
 		if (transformer == null)
 			throw new ExternalOntologyException("Cannot find Transformer for NCBI database " + database);
@@ -49,7 +69,8 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	}
 
 	/**
-	 * finds id and display name for provided search term. Throws an ExternalOntologyException if the name is not a unique term.
+	 * finds id and display name for provided search term. Throws an
+	 * ExternalOntologyException if the name is not a unique term.
 	 */
 	@Override
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
@@ -65,7 +86,8 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	}
 
 	/**
-	 * finds id and display name pairs for given search term. Term can be any valid NCBI Entrez query.
+	 * finds id and display name pairs for given search term. Term can be any
+	 * valid NCBI Entrez query.
 	 */
 	@Override
 	public List<ExternalItem> findMatching(String term) throws ExternalOntologyException {

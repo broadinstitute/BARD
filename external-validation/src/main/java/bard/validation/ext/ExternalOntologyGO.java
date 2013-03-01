@@ -17,6 +17,7 @@ import com.jolbox.bonecp.BoneCPConfig;
  * @author southern
  *
  */
+@Deprecated
 public class ExternalOntologyGO extends ExternalOntologyAPI {
 
 	private BoneCP connectionPool;
