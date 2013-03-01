@@ -11,7 +11,7 @@ import edu.scripps.fl.entrez.EUtilsException;
 import edu.scripps.fl.entrez.EUtilsWeb;
 import edu.scripps.fl.entrez.transformer.EntrezTransformerFactory;
 
-public class ExternalOntologyNCBI implements ExternalOntologyAPI {
+public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 
 	private String database;
 	private EUtilsWeb eutils;
@@ -83,8 +83,8 @@ public class ExternalOntologyNCBI implements ExternalOntologyAPI {
 	 * URL of specific NCBI Entrez Database
 	 */
 	@Override
-	public String getExternalURL() {
-		return "http://www.ncbi.nlm.nih.gov/" + database;
+	public String getExternalURL(String id) {
+		return String.format("http://www.ncbi.nlm.nih.gov/%s/%s", database, id);
 	}
 
 	protected List<ExternalItem> processSummaries(Document doc) {
