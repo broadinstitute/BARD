@@ -22,4 +22,4 @@ tocTab[tocTab.length] = new Array("0.4:21", "", "Use Cases and Actors", "EARoot/
 tocTab[tocTab.length] = new Array("0.4:22", "", "User Interfaces", "EARoot/EA4/EA852.htm", "99.png", "511", "0", "", "UMLDiagram0","{38F5D142-9DD8-4f4d-988A-DC8C250AEAA9}");
 tocTab[tocTab.length] = new Array("0.4:23", "", "User Workflows", "EARoot/EA4/EA854.htm", "99.png", "354", "0", "", "UMLDiagram0","{D9D1C794-880A-4461-B7D7-654BB37D666A}");
 tocTab[tocTab.length] = new Array("0.4:24", "", "Warehouse", "EARoot/EA4/EA855.htm", "99.png", "314", "0", "", "UMLDiagram0","{FE09767D-11EA-4430-90E0-E5EAE18BBAA4}");
-tocTab[tocTab.length] = new Array("0.4.1", "1", "Domain Objects", "EARoot/EA4/EA837.htm", "4.png", "", "", "{DD9F9FEC-8233-42e2-8D1B-032EE6EB43EF}", "Package");
+tocTab[tocTab.length] = new Array("0.4.1", "1", "Domain Objects", "EARoot/EA4/EA838.htm", "4.png", "", "", "{DD9F9FEC-8233-42e2-8D1B-032EE6EB43EF}", "Package");

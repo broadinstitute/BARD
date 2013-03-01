@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Query processing middleware</title>
+<title>Data Query Engine</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Query processing middleware", " : "))</script>  : Public   Component</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Data Query Engine", " : "))</script>  : Public   Component</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">5/10/2012 7:36:26 PM</td>
+			<td width="85%" class="ObjectDetailsValue">9/9/2011 9:30:53 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">5/10/2012 7:36:40 PM</td>
+			<td class="ObjectDetailsValue">9/27/2011 11:54:48 PM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -51,7 +51,7 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="proj00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
-			<td class="ObjectDetailsValue">Simon</td>
+			<td class="ObjectDetailsValue">Owner</td>
 		</tr>
 		<tr id="proj01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
@@ -87,123 +87,19 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{49AF1458-14D9-402d-B93F-594B6EE55B28}</td>
+			<td class="ObjectDetailsValue">{BECD9790-6573-427f-85A7-5ADF07326EBF}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA1142.htm">BARD overview</a>, <a href="EA1140.htm">BARD migration</a>, <a href="EA1134.htm">BARD Data Consumers</a>, <a href="EA1148.htm">get data for a SAR table</a></td>
+			<td class="ObjectDetailsValue"><a href="EA1164.htm">BARD overview</a>, <a href="EA1156.htm">BARD Data Consumers</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('MessagesTo');" id="MessagesToTitle">Messages To</li>
-			<li onClick="parent.toggleItem('MessagesFrom');" id="MessagesFromTitle">Messages From</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="MessagesToTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Message</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1202.htm">«Interface» Query API</a></td>
-					<td width="50%" class="TableRow" valign="top">PUT(compound)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1527" onclick="parent.toggleDiv('detailsDIVMessage1527', 'DetailsImageMessage1527')" />Details:
-							<div id="detailsDIVMessage1527" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1202.htm">«Interface» Query API</a></td>
-					<td width="50%" class="TableRow" valign="top">PUT(assay)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1528" onclick="parent.toggleDiv('detailsDIVMessage1528', 'DetailsImageMessage1528')" />Details:
-							<div id="detailsDIVMessage1528" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1202.htm">«Interface» Query API</a></td>
-					<td width="50%" class="TableRow" valign="top">PUT(result_type)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1529" onclick="parent.toggleDiv('detailsDIVMessage1529', 'DetailsImageMessage1529')" />Details:
-							<div id="detailsDIVMessage1529" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1202.htm">«Interface» Query API</a></td>
-					<td width="50%" class="TableRow" valign="top">GET(string,  token,  token,  token)</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1530" onclick="parent.toggleDiv('detailsDIVMessage1530', 'DetailsImageMessage1530')" />Details:
-							<div id="detailsDIVMessage1530" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1203.htm">Query processing middleware</a></td>
-					<td width="50%" class="TableRow" valign="top">formatPage</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1531" onclick="parent.toggleDiv('detailsDIVMessage1531', 'DetailsImageMessage1531')" />Details:
-							<div id="detailsDIVMessage1531" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-
-			</table>
-		</div>
-		<div class="ItemBody" id="MessagesFromTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Message</td>
-				</tr>
-				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1203.htm">Query processing middleware</a></td>
-					<td width="50%" class="TableRow" valign="top">formatPage</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1532" onclick="parent.toggleDiv('detailsDIVMessage1532', 'DetailsImageMessage1532')" />Details:
-							<div id="detailsDIVMessage1532" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
-					</td>
-				</tr>
-
-			</table>
-		</div>
 		<div class="ItemBody" id="CustomPropertiesTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
@@ -226,19 +122,43 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1202.htm">«Interface» Query API</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1242.htm">«Dim DB» Public DM</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1165.htm">«Web» Basic Query UI</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1183.htm">Analysis Core</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1202.htm">«Interface» Query API</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1240.htm">«Dim DB» Collab DM 1</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1241.htm">«Dim DB» Collab DM 2</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1224.htm">«Interface» Query API</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1224.htm">«Interface» Query API</a></td>
+					<td width="15%" class="TableRow" valign="top">Component</td>
+					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1183.htm">Analysis Core</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Information Flow</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>

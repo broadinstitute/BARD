@@ -1,2 +1,2 @@
-tocTab[tocTab.length] = new Array("0.5.1:1", "", "Assay Short Names", "EARoot/EA5/EA1/EA980.htm", "181.png", "118", "0", "", "Activity diagram0","{7FB97776-59B4-4e67-8EB6-947ED3DCC43B}");
-tocTab[tocTab.length] = new Array("0.5.1:2", "", "«stored procedure» Update_assay_short_name", "EARoot/EA5/EA1/EA982.htm", "5.png", "1194", "0", "", "Class0","{568FAD08-44B1-4250-920F-92FA634A76A9}");
+tocTab[tocTab.length] = new Array("0.5.1:1", "", "Assay Short Names", "EARoot/EA5/EA1/EA981.htm", "181.png", "118", "0", "", "Activity diagram0","{7FB97776-59B4-4e67-8EB6-947ED3DCC43B}");
+tocTab[tocTab.length] = new Array("0.5.1:2", "", "«stored procedure» Update_assay_short_name", "EARoot/EA5/EA1/EA983.htm", "5.png", "1194", "0", "", "Class0","{568FAD08-44B1-4250-920F-92FA634A76A9}");

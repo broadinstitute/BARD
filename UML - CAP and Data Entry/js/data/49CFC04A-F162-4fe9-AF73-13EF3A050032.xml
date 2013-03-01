@@ -1,3 +1,3 @@
-tocTab[tocTab.length] = new Array("0.6.3:1", "", "Values and units", "EARoot/EA6/EA3/EA1107.htm", "175.png", "102", "0", "", "Logical diagram0","{EE9C61F6-815E-410c-A44A-90AFAD3F9ACF}");
-tocTab[tocTab.length] = new Array("0.6.3:2", "", "BARD_Value", "EARoot/EA6/EA3/EA1109.htm", "5.png", "1022", "0", "", "Class0","{B1EC1180-4972-42b9-B2B8-FECEC3613630}");
-tocTab[tocTab.length] = new Array("0.6.3:3", "", "sigFigformat", "EARoot/EA6/EA3/EA1110.htm", "5.png", "1023", "0", "", "Class0","{B8606BAA-67AF-4904-978F-9CE4ED41C602}");
+tocTab[tocTab.length] = new Array("0.6.3:1", "", "Values and units", "EARoot/EA6/EA3/EA1129.htm", "175.png", "102", "0", "", "Logical diagram0","{EE9C61F6-815E-410c-A44A-90AFAD3F9ACF}");
+tocTab[tocTab.length] = new Array("0.6.3:2", "", "BARD_Value", "EARoot/EA6/EA3/EA1131.htm", "5.png", "1022", "0", "", "Class0","{B1EC1180-4972-42b9-B2B8-FECEC3613630}");
+tocTab[tocTab.length] = new Array("0.6.3:3", "", "sigFigformat", "EARoot/EA6/EA3/EA1132.htm", "5.png", "1023", "0", "", "Class0","{B8606BAA-67AF-4904-978F-9CE4ED41C602}");
