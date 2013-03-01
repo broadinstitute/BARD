@@ -7,12 +7,12 @@ package bardqueryapi
  * Time: 8:02 PM
  * To change this template use File | Settings | File Templates.
  */
-class WebQueryValueModel {
+class ValueModel {
     private final WebQueryValue value;
     private final Class type;
 
 
-    public WebQueryValueModel(WebQueryValue value) {
+    public ValueModel(WebQueryValue value) {
         this.value = value
         this.type = value.getClass()
     }

@@ -179,7 +179,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
 
 
         when:
-        final Map<String, List<Double>> points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final ActivityConcentrationMap points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
         then:
         assert points.activities.size() == 2
         assert points.concentrations.size() == 2

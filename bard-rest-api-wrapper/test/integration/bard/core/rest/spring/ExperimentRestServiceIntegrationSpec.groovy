@@ -178,7 +178,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         assert concentrationResponseSeries
         assert concentrationResponseSeries.getDictionaryDescription()
         assert concentrationResponseSeries.getDictionaryLabel()
-        final Map<String, List<Double>> points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
+        final ActivityConcentrationMap points = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponseSeries.concentrationResponsePoints)
         assert points
         where:
         label                                        | experimentId

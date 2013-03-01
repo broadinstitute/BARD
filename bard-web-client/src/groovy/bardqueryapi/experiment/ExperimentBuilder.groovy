@@ -1,13 +1,14 @@
 package bardqueryapi.experiment
 
+import bard.core.adapter.CompoundAdapter
 import bard.core.util.ExperimentalValueUtil
-import bardqueryapi.NormalizeAxis
-import bardqueryapi.WebQueryTableModel
-import bardqueryapi.WebQueryValueModel
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
+
+import java.lang.StringValue
+
 import bard.core.rest.spring.experiment.*
-import bard.core.adapter.CompoundAdapter
+import bardqueryapi.*
 
 class ExperimentBuilder {
 
@@ -39,27 +40,38 @@ class ExperimentBuilder {
         List<WebQueryValueModel> rowData = new ArrayList<WebQueryValueModel>()
 
         Long sid = activity.sid
-        WebQueryValueModel valueModel = new WebQueryValueModel(sid)
+        WebQueryValueModel valueModel = new WebQueryValueModel(new SidValue(value: sid.toString()))
         rowData.add(valueModel)
 
 
         Long cid = activity.cid
-        valueModel = new WebQueryValueModel(cid)
+        valueModel = new WebQueryValueModel(new CidValue(value: cid.toString()))
         rowData.add(valueModel)
-
         final CompoundAdapter compoundAdapter = compoundAdapterMap.get(cid)
+        StructureValue structureValue =
+            new StructureValue(
+                    cid: cid.toString(),
+                    sid: sid.toString(),
+                    smiles: compoundAdapter.structureSMILES,
+                    name: compoundAdapter.name,
+                    numActive: compoundAdapter.numberOfActiveAssays,
+                    numAssays: compoundAdapter.numberOfAssays
+            )
+
         Map<String, String> structure = [sid: sid.toString(), cid: cid.toString(),
                 smiles: compoundAdapter?.structureSMILES, cname: compoundAdapter?.name,
                 numberOfActiveAssays: compoundAdapter?.numberOfActiveAssays, numberOfAssays: compoundAdapter?.numberOfAssays]
 
-        valueModel = new WebQueryValueModel(structure)
+        valueModel = new WebQueryValueModel(structureValue)
         rowData.add(valueModel)
 
 
         ResultData resultData = activity?.resultData
         String outcome = resultData.outcome
-        valueModel = new WebQueryValueModel(outcome)
+        valueModel = new WebQueryValueModel(new ResultTypeValue(value: outcome))
         rowData.add(valueModel)
+
+
 
         PriorityElement priorityElement = null
         String display = ""
@@ -70,28 +82,28 @@ class ExperimentBuilder {
         valueModel = new WebQueryValueModel(display)
         rowData.add(valueModel)
 
-        List<String> displayElements = []
+        List<StringValue> displayElements = []
         if (!resultData.isMapped()) {
-            displayElements.add("TIDs not yet mapped to a result hierarchy")
+            displayElements.add(new StringValue(value:"TIDs not yet mapped to a result hierarchy"))
         }
         for (RootElement rootElement : resultData.rootElements) {
             if (rootElement.toDisplay()) {
-                displayElements.add(rootElement.toDisplay())
+                displayElements.add(new StringValue(value:rootElement.toDisplay()))
             }
         }
-        valueModel = new WebQueryValueModel(displayElements)
+        valueModel = new WebQueryValueModel(new ListStringValue(values:displayElements))
         rowData.add(valueModel)
 
         //if display elements add
-        List<String> childElements = []
+        List<StringValue> childElements = []
         if (priorityElement?.hasChildElements()
         ) {
             for (ActivityData activityData : priorityElement.childElements) {
                 if (activityData.toDisplay()) {
-                    childElements.add(activityData.toDisplay())
+                    childElements.add(new StringValue(value:activityData.toDisplay()))
                 }
             }
-            valueModel = new WebQueryValueModel(childElements)
+            valueModel = new WebQueryValueModel(new ListStringValue(values: childElements))
             rowData.add(valueModel)
         }
         if (resultData.hasPlot()) {
@@ -182,7 +194,7 @@ class ExperimentBuilder {
                                          final String priorityDisplay) {
 
         List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
-        Map doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
+        ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
         CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
         Map valueMap = [:]
 
