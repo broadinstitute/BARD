@@ -36,6 +36,6 @@ class ArchivePathService {
         List<ExperimentFile> files = new ArrayList(experiment.experimentFiles)
         files.sort {it.submissionVersion}
         ExperimentFile lastVersion = files.last()
-        new lastVersion.exportFile
+//        new lastVersion.exportFile
     }
 }
