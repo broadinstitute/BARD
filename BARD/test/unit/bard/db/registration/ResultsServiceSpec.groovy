@@ -315,7 +315,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def resultType = Element.build()
         def measure = Measure.build(resultType: resultType)
         def column = new ResultsService.Column("a", measure)
-        def cell = new ResultsService.Cell(column: column, qualifier: "=", value: 5)
+        def cell = new ResultsService.Cell(column: column, qualifier: "= ", value: 5)
         def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [cell], replicate: 1)
         def parse = new ResultsService.InitialParse(rows: [row])
 
@@ -351,8 +351,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def itemColumn = new ResultsService.Column("b", item)
 
         // construct a row of two cells: a measurement and an associated context
-        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "=", value: 5)
-        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "<", value: 15)
+        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "= ", value: 5)
+        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "< ", value: 15)
         def row = new ResultsService.Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
         def parse = new ResultsService.InitialParse(rows: [row])
 

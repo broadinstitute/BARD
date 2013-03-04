@@ -52,12 +52,16 @@ class ResultsExportService {
             contextItems: contextItems)
     }
 
-    void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
+    JsonSubstanceResults transformToJson(Long sid, List<Result> results) {
         List<Result> roots = results.findAll { it.resultHierarchiesForResult.size() == 0 }
 
         List resultsAsJson = roots.collect { convertToJson(it) }
 
         JsonSubstanceResults substanceResults = new JsonSubstanceResults(sid: sid, rootElem: resultsAsJson)
+    }
+
+    void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
+        JsonSubstanceResults substanceResults = transformToJson(sid, results)
 
         writer.write(mapper.writeValueAsString(substanceResults));
 
