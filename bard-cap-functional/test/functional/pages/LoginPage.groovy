@@ -10,8 +10,7 @@ import grails.plugin.remotecontrol.RemoteControl
  * To change this template use File | Settings | File Templates.
  */
 class LoginPage extends ScaffoldPage {
-    //static appUrl = getAppUrl()
-	static url = getAppUrl()+"login/auth"
+    static url = getAppUrl()+"login/auth"
 	
     static at = { $("button#submit") }
 
@@ -43,8 +42,6 @@ class LoginPage extends ScaffoldPage {
 	
 	static String getAppUrl() {
 		RemoteControl remotec = new RemoteControl()
-		//println ctx.grailsApplication.config.appUrl
 		return remotec {ctx.grailsApplication.config.grails.serverURL}
-		 
 	 }
 }

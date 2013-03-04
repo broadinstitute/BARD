@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>bard-cap-v1</name>
+	<name>bard-cap-functional</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -26,7 +26,7 @@
 		<link>
 			<name>.link_to_grails_plugins</name>
 			<type>2</type>
-			<locationURI>GRAILS_ROOT/2.1.1/projects/bard-cap-v1/plugins</locationURI>
+			<locationURI>GRAILS_ROOT/2.1.1/projects/bard-cap-functional/plugins</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
