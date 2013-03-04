@@ -10,6 +10,7 @@ import bard.db.registration.Measure
 import bard.db.registration.PugService
 import grails.plugin.spock.IntegrationSpec
 import org.apache.commons.io.IOUtils
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 
@@ -77,6 +78,9 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
     @Before
     void setup() {
+        GrailsApplication grailsApplication = Mock(GrailsApplication)
+        grailsApplication.config >> [bard: [services: [resultService: [archivePath: "out/ResultServiceIntegrationSpec"]]]]
+
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         resultsService = new ResultsService()
         resultsService.setItemService(new ItemService())
@@ -84,6 +88,14 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         resultsService.setPugService(pugService)
         experiment = Experiment.build()
         substance = Substance.build()
+
+        ArchivePathService archivePathService = new ArchivePathService()
+        archivePathService.grailsApplication = grailsApplication
+        resultsService.archivePathService = archivePathService
+
+        ResultsExportService resultsExportService = new ResultsExportService()
+        resultsService.resultsExportService = resultsExportService
+        resultsExportService.archivePathService = archivePathService
 
         def ec50 = createMeasure("EC50")
         def percentEffect = createMeasure("percent effect")
@@ -129,10 +141,11 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         summary.resultsCreated == 11
         summary.resultAnnotations == 31
 
-        when:
-        List<Result> results = Result.findAllByExperiment(experiment)
-
-        then:
-        results.size() == 11
+// disabled writing to DB
+//        when:
+//        List<Result> results = Result.findAllByExperiment(experiment)
+//
+//        then:
+//        results.size() == 11
     }
 }
