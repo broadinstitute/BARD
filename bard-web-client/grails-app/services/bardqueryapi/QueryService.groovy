@@ -317,6 +317,34 @@ class QueryService implements IQueryService {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
         CompoundSummary compoundSummary = getSummaryForCompound(compoundId)
+        List<Activity> experimentalData
+
+        if (filterTypes.contains(FilterTypes.TESTED)) {
+            //Get all tested assays and exptData
+            experimentalData = compoundSummary.testedExptdata
+        }
+        else {
+            //Get only the hits
+            experimentalData = compoundSummary.hitExptdata
+        }
+
+        Map<Long, Activity> groupedByExperimentalData
+        switch (groupTypes) {
+            case GroupByTypes.ASSAY:
+                experimentalData.each {Activity exptData ->
+                    exptData.capAssayId.each {Long id ->
+                        if (groupedByExperimentalData.containsKey(id)) {
+                            groupedByExperimentalData[id] << exptData
+                        } else {
+                            groupedByExperimentalData.put(id, exptData)
+                        }
+                    }
+                }
+                break;
+            default:
+                throw RuntimeException("Group-by ${groupTypes} is not supported")
+        }
+
 //        Map m = findExperimentDataById(experimentId, top, skip, filterTypes)
         ExperimentBuilder experimentBuilder = new ExperimentBuilder()
         return experimentBuilder.buildModel(m)
