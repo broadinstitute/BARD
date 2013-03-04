@@ -207,7 +207,7 @@ class ResultExportServiceUnitSpec extends Specification {
         when:
         resultExportService.generateResultHierarchy(this.staxBuilder, resultHierarchy)
         then:
-        XmlTestAssertions.assertResults("<resultHierarchy parentResultId=\"null\" hierarchyType=\"Derives\"></resultHierarchy>", this.writer.toString())
+        XmlTestAssertions.assertResults("<resultHierarchy parentResultId=\"122\" hierarchyType=\"Derives\"></resultHierarchy>", this.writer.toString())
     }
 
     void "test generate hierarchies"() {
@@ -218,7 +218,7 @@ class ResultExportServiceUnitSpec extends Specification {
         when:
         resultExportService.generateResultHierarchies(this.staxBuilder, resultHierarchies)
         then:
-        XmlTestAssertions.assertResults("<resultHierarchies><resultHierarchy parentResultId=\"null\" hierarchyType=\"Derives\"></resultHierarchy><resultHierarchy parentResultId=\"null\" hierarchyType=\"Child\"></resultHierarchy></resultHierarchies>", this.writer.toString())
+        XmlTestAssertions.assertResults("<resultHierarchies><resultHierarchy parentResultId=\"122\" hierarchyType=\"Derives\"></resultHierarchy><resultHierarchy parentResultId=\"1228\" hierarchyType=\"Child\"></resultHierarchy></resultHierarchies>", this.writer.toString())
     }
 
 }

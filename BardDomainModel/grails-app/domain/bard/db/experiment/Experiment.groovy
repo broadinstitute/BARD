@@ -27,6 +27,7 @@ class Experiment extends AbstractContextOwner {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
+    Long id;
 
     Integer confidenceLevel = 1
 
@@ -36,12 +37,14 @@ class Experiment extends AbstractContextOwner {
     Set<ExternalReference> externalReferences = [] as Set
     Set<ExperimentMeasure> experimentMeasures = [] as Set
     Set<Result> results = [] as Set
+    Set<ExperimentFile> experimentFiles = [] as Set
 
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
             externalReferences: ExternalReference,
             projectExperiments: ProjectExperiment,
-            results: Result]
+            results: Result,
+            experimentFiles: ExperimentFile]
 
     static mapping = {
         id(column: "EXPERIMENT_ID", generator: "sequence", params: [sequence: 'EXPERIMENT_ID_SEQ'])

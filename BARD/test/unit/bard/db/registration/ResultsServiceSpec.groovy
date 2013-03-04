@@ -8,16 +8,12 @@ import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
+import bard.db.experiment.ResultsService
 import bard.db.experiment.Substance
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Unroll
-
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -161,7 +157,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [column])
 
         then:
         initialParse.contexts.size() == 1
@@ -202,7 +198,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [column])
 
         then:
         initialParse.contexts.size() == 1
@@ -296,12 +292,13 @@ class ResultsServiceSpec extends spock.lang.Specification {
         cell.qualifier == expectedQualifier
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal  | displayValue
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null    | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null    | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null    | "free"
     }
 
     void 'test creating measure result'() {
@@ -318,7 +315,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def resultType = Element.build()
         def measure = Measure.build(resultType: resultType)
         def column = new ResultsService.Column("a", measure)
-        def cell = new ResultsService.Cell(column: column, qualifier: "=", value: 5)
+        def cell = new ResultsService.Cell(column: column, qualifier: "= ", value: 5)
         def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [cell], replicate: 1)
         def parse = new ResultsService.InitialParse(rows: [row])
 
@@ -354,8 +351,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def itemColumn = new ResultsService.Column("b", item)
 
         // construct a row of two cells: a measurement and an associated context
-        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "=", value: 5)
-        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "<", value: 15)
+        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "= ", value: 5)
+        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "< ", value: 15)
         def row = new ResultsService.Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
         def parse = new ResultsService.InitialParse(rows: [row])
 

@@ -1,7 +1,9 @@
-package bard.db.registration
+package bard.db.experiment
 
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
+import bard.db.registration.Assay
+import bard.db.registration.Measure
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
