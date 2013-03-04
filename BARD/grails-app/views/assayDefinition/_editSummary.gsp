@@ -22,5 +22,5 @@
         <dt><g:message code="default.dateCreated.label"/>:</dt>
         <dd><g:formatDate date="${assay.dateCreated}" format="yyyy-mm-dd"/></dd>
     </dl>
-        </form>
+    </form>
 </div>

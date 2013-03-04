@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'measures-dynatree.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-    <title>Assay Definition</title>
+    <title>View Assay Definition</title>
 </head>
 
 <body>

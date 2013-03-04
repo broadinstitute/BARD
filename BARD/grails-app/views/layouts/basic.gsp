@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <g:layoutHead/>
     <r:layoutResources/>
-    <title>BARD: Catalog of Assay Protocols</title>
+    <title><g:layoutTitle default="BARD: Catalog of Assay Protocols"/></title>
     <r:external uri="/css/layout.css"/>
     <r:external uri="/css/table.css"/>
 </head>
