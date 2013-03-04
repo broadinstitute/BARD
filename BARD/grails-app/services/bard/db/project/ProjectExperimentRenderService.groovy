@@ -17,6 +17,11 @@ class ProjectExperimentRenderService {
      * @return nodes and edges in JSON format
      */
     JSON contructGraph(Project project) {
+        def result = processProject(project)
+        return new JSON(result)
+    }
+
+    def processProject(Project project) {
         List<Long> visitedNodes = []        // as name said
         List<Long> queue = []              // processing queue
 
@@ -47,8 +52,7 @@ class ProjectExperimentRenderService {
         }
         countInOutEdges(edges, nodes)
         def result = ["connectedNodes": nodes, "edges": edges, "isolatedNodes": isolatedNodes]
-        //print new JSON(result)
-        return new JSON(result)
+        return result
     }
 
     /**
@@ -152,7 +156,7 @@ class Edge implements Serializable {
 
     @Override
     String toString() {
-        return label
+        return from + " " + to + " " + label
     }
 
     @Override

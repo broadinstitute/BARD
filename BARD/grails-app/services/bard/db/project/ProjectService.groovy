@@ -116,6 +116,9 @@ class ProjectService {
      * @param project
      */
     void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Project project){
+        if (!fromExperiment || !toExperiment) {
+            throw new UserFixableException("Either or both experiment you were trying to link does not exist in the system.")
+        }
         if (fromExperiment.id == toExperiment.id) {
             throw new UserFixableException("Link between same experiments is not allowed.")
         }
