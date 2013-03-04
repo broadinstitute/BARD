@@ -25,12 +25,25 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     Substance substance;
     Experiment experiment;
     ResultsService resultsService;
+    Map<String, Element> byName = [:]
+
+    Element findElementByName(String label) {
+        Element element = byName[label]
+        if (element == null) {
+//            element = Element.findByLabel(label);
+ //           if(element == null) {
+                element = Element.build(label: label)
+  //          }
+            byName[label] = element
+        }
+        return element
+    }
 
     ExperimentMeasure createMeasure(String label, String statistic = null) {
-        Element resultType = Element.findByLabel(label);
+        Element resultType = findElementByName(label)
         Element statsModifier = null;
         if (statistic != null) {
-            statsModifier = Element.findByLabel(statistic);
+            statsModifier = findElementByName(statistic);
         }
 
         Measure measure = Measure.build(assay: experiment.assay, resultType: resultType, statsModifier: statsModifier)
@@ -43,7 +56,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     AssayContext createListItem(String label, List values) {
-        Element attribute = Element.findByLabel(label);
+        Element attribute = findElementByName(label);
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         values.each {
@@ -55,7 +68,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     AssayContext createFreeItem(String label) {
-        Element attribute = Element.findByLabel(label);
+        Element attribute = findElementByName(label);
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free)
@@ -97,12 +110,12 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         resultsService.resultsExportService = resultsExportService
         resultsExportService.archivePathService = archivePathService
 
-        def ec50 = createMeasure("EC50")
-        def percentEffect = createMeasure("percent effect")
-        def meanPercentEffect = createMeasure("percent effect", "mean")
-        def assayConcentration = createListItem("assay component concentration", [0.394,1])
-        def screeningConcentration = createFreeItem("screening concentration")
-        def readoutName = createFreeItem("assay readout name")
+        def ec50 = createMeasure("xEC50")
+        def percentEffect = createMeasure("xpercent effect")
+        def meanPercentEffect = createMeasure("xpercent effect", "xmean")
+        def assayConcentration = createListItem("xassay component concentration", [0.394,1])
+        def screeningConcentration = createFreeItem("xscreening concentration")
+        def readoutName = createFreeItem("xassay readout name")
 
         associateContext(ec50, readoutName)
         associateContext(meanPercentEffect, readoutName)
