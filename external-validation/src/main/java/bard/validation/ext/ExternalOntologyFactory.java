@@ -60,7 +60,8 @@ public class ExternalOntologyFactory {
 		} else if (host.endsWith("uniprot.org")) {
 			return new ExternalOntologyUniprot();
 		}
-		throw new ExternalOntologyException("Cannot determine External Ontology API from: " + uri);
+		return null;
+//		throw new ExternalOntologyException("Cannot determine External Ontology API from: " + uri);
 	}
 
 }

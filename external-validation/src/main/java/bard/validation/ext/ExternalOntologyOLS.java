@@ -55,9 +55,16 @@ public class ExternalOntologyOLS extends ExternalOntologyAPI {
 		}
 		return items;
 	}
+	
+	public String idGenerator(String id) {
+		if( id.matches("^\\d+$"))
+			id = "GO:" + id;
+		return id;
+	}
 
 	public ExternalItem findById(String id) throws ExternalOntologyException {
 		try {
+			id = idGenerator(id);
 			Query qs = getLocator().getOntologyQuery();
 			String term = qs.getTermById(id, ontology);
 			if( term.equals(id) ) // couldn't find it

@@ -28,7 +28,9 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 		int resultSize = entryIterator.getResultSize();
 		if (resultSize != 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique Uniprot identifier", id));
-		return getExternalItems(entryIterator).get(0);
+		ExternalItem item = getExternalItems(entryIterator).get(0);
+		item.setId(id); // should always be the id the user submitted.
+		return item;
 	}
 
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
