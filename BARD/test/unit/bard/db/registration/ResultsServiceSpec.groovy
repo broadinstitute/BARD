@@ -5,18 +5,15 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
+import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
+import bard.db.experiment.ResultsService
 import bard.db.experiment.Substance
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Unroll
-
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -27,6 +24,72 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {
         // Setup logic here
+    }
+
+    @Unroll
+    void 'test create parent child measure with relationship expressed by #desc'() {
+        when:
+        def substance = Substance.build()
+        substance.save()
+
+        then:
+        substance.id != null
+
+        when:
+        ResultsService service = new ResultsService();
+
+        def parentResultType = Element.build()
+        def parentMeasure = Measure.build(resultType: parentResultType)
+        def parentColumn = new ResultsService.Column("parent", parentMeasure)
+        def parentCell = new ResultsService.Cell(column: parentColumn, qualifier: "=", value: 1)
+
+        def childResultType = Element.build()
+        def childMeasure = Measure.build(resultType: childResultType)
+        def childColumn = new ResultsService.Column("child", childMeasure)
+        def childCell = new ResultsService.Cell(column: childColumn, qualifier: "=", value: 1)
+
+        def experimentMeasure = ExperimentMeasure.build(parent: ExperimentMeasure.build(measure: parentMeasure), measure: childMeasure, parentChildRelationship: "Derived from")
+
+        ResultsService.InitialParse parsed
+        if (onSameLine) {
+            def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [parentCell, childCell], replicate: 1)
+            parsed = new ResultsService.InitialParse(rows: [row])
+        } else {
+            def row0 = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [parentCell], replicate: 1)
+            def row1 = new ResultsService.Row(rowNumber: 2, parentRowNumber: 1, sid: substance.id, cells: [childCell], replicate: 1)
+            parsed = new ResultsService.InitialParse(rows: [row0, row1])
+        }
+
+        def errors = new ResultsService.ImportSummary()
+
+        def results = service.createResults(parsed, errors, [:], [experimentMeasure])
+
+        then:
+        !errors.hasErrors()
+        results.size() == 2
+
+        // we got a parent and child element
+        def parentResult = results.find { it.resultType == parentResultType }
+        parentResult != null
+        def childResult = results.find { it.resultType == childResultType }
+        childResult != null
+
+        // we have one relationship which is used by both elements
+        parentResult.resultHierarchiesForResult.size() == 0
+        parentResult.resultHierarchiesForParentResult.size() == 1
+        childResult.resultHierarchiesForResult.size() == 1
+        childResult.resultHierarchiesForParentResult.size() == 0
+
+        // contain the same element
+        childResult.resultHierarchiesForResult == parentResult.resultHierarchiesForParentResult
+
+        def relationship = childResult.resultHierarchiesForResult.first()
+        relationship.hierarchyType == HierarchyType.Derives
+
+        where:
+        desc              |  onSameLine
+        "on same row"     |  true
+        "using parent id" |  false
     }
 
     void 'test create template from assay'() {
@@ -94,7 +157,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [column])
 
         then:
         initialParse.contexts.size() == 1
@@ -109,9 +172,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         where:
         desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "="               | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "="               | null   | null
-        "including qualifier" | "<10"      | 10.0          | "<"               | null   | null
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
         "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0
     }
@@ -123,9 +186,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def tubaElement = Element.build(label: "tuba")
         def attribute = Element.build()
         def context = AssayContext.build()
-        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, assayContext: context)
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
-        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, assayContext: context)
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
         ResultsService.Column column = new ResultsService.Column("column", item)
@@ -135,7 +198,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [column])
 
         then:
         initialParse.contexts.size() == 1
@@ -229,12 +292,13 @@ class ResultsServiceSpec extends spock.lang.Specification {
         cell.qualifier == expectedQualifier
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "="               | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "="               | null   | null
-        "including qualifier" | "<10"      | 10.0          | "<"               | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal  | displayValue
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null    | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null    | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null    | "free"
     }
 
     void 'test creating measure result'() {
@@ -251,16 +315,13 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def resultType = Element.build()
         def measure = Measure.build(resultType: resultType)
         def column = new ResultsService.Column("a", measure)
-        def cell = new ResultsService.Cell(column: column, qualifier: "=", value: 5)
+        def cell = new ResultsService.Cell(column: column, qualifier: "= ", value: 5)
         def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [cell], replicate: 1)
         def parse = new ResultsService.InitialParse(rows: [row])
 
         def errors = new ResultsService.ImportSummary()
 
-        def measuresForItem = [:]
-        measuresForItem.put(AssayContextItem.build(), [measure])
-
-        def results = service.createResults(parse, errors, [:])
+        def results = service.createResults(parse, errors, [:], [])
 
         then:
         !errors.hasErrors()
@@ -272,6 +333,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         result.resultType == resultType
         result.substance == substance
     }
+
 
     void 'test creating measure and item result'() {
         when:
@@ -289,8 +351,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def itemColumn = new ResultsService.Column("b", item)
 
         // construct a row of two cells: a measurement and an associated context
-        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "=", value: 5)
-        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "<", value: 15)
+        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "= ", value: 5)
+        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "< ", value: 15)
         def row = new ResultsService.Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
         def parse = new ResultsService.InitialParse(rows: [row])
 
@@ -299,7 +361,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def measuresForItem = [:]
         measuresForItem.put(item, [measure])
 
-        def results = service.createResults(parse, errors, measuresForItem)
+        def results = service.createResults(parse, errors, measuresForItem, [])
 
         then:
         !errors.hasErrors()
@@ -331,14 +393,16 @@ class ResultsServiceSpec extends spock.lang.Specification {
         cell.maxValue == maxVal
         cell.minValue == minVal
         cell.qualifier == expectedQualifier
+        cell.valueDisplay == valueDisplay
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "="               | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "="               | null   | null
-        "including qualifier" | "<10"      | 10.0          | "<"               | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal | valueDisplay
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null   | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null   | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null   | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null   | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0    | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null   | "free"
     }
 
     void 'test parse context item from element list'() {
@@ -346,9 +410,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def tubaElement = Element.build(label: "tuba")
         def attribute = Element.build()
         def context = AssayContext.build()
-        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, assayContext: context)
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
-        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, assayContext: context)
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
         ResultsService.Column column = new ResultsService.Column("x", item)
@@ -368,7 +432,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         !(column.parseValue("pony") instanceof ResultsService.Cell)
     }
 
-    void 'test parse context item from value list'() {
+    void 'test parse context item from numeric value list'() {
         when:
         def attribute = Element.build()
         def context = AssayContext.build()
@@ -405,5 +469,26 @@ class ResultsServiceSpec extends spock.lang.Specification {
         !(column.parseValue("pony") instanceof ResultsService.Cell)
     }
 
+    void 'test parse context item from free text list'() {
+        when:
+        def attribute = Element.build()
+        def context = AssayContext.build()
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet")
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba")
+        ItemService itemService = new ItemService()
+        def item = itemService.getLogicalItems([trumpetItem, tubaItem])[0]
+        ResultsService.Column column = new ResultsService.Column("x", item)
 
+        ResultsService.Cell c0 = column.parseValue("trumpet")
+
+        then:
+        c0.valueDisplay == "trumpet"
+
+        when:
+        ResultsService.Cell c1 = column.parseValue("tuba")
+
+        then:
+        c1.valueDisplay == "tuba"
+        !(column.parseValue("pony") instanceof ResultsService.Cell)
+    }
 }

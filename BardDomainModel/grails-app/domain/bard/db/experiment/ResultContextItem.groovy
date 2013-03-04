@@ -12,6 +12,7 @@ import bard.db.model.AbstractContextItem
 class ResultContextItem extends AbstractContextItem {
 
     Result result
+    Long id;
 
     static belongsTo = [result: Result]
 

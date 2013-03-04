@@ -103,8 +103,10 @@ grails.plugin.reveng.packageName = 'bard.db.model'
 grails.plugin.reveng.jdbcDriverJarDep = 'mysql:mysql-connector-java:5.1.16'
 //grails.plugin.reveng.includeTables = ['Test_Measure_Context_Item']
 
-bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
 bard.home.page = 'http://localhost:8080/bardwebclient'
+bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
+// this should get overwritten by
+bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 
 //grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
 

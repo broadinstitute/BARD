@@ -1,19 +1,36 @@
-package bard.db.registration
+package bard.db.experiment
 
+import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
 import bard.db.experiment.ResultHierarchy
 import bard.db.experiment.Substance
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AttributeType
+import bard.db.registration.ItemService
+import bard.db.registration.Measure
+import bard.db.registration.PugService
+import org.apache.commons.io.IOUtils
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
+import java.text.SimpleDateFormat
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import java.util.zip.GZIPInputStream
+import java.util.zip.GZIPOutputStream
 
 class ResultsService {
+
+    // the number of lines to show the user after upload completes
+    static int LINES_TO_SHOW_USER = 10;
 
     static String NUMBER_PATTERN_STRING = "[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?"
 
@@ -28,8 +45,6 @@ class ResultsService {
     // pattern matching a range of numbers.  Doesn't actually check that the two parts are numbers
     static Pattern RANGE_PATTERN = Pattern.compile("([^-]+)-(.*)")
 
-    static String DELIMITER = ","
-
     static String EXPERIMENT_ID_LABEL = "Experiment ID"
     static String EXPERIMENT_NAME_LABEL = "Experiment Name"
     static List FIXED_COLUMNS = ["Row #", "Substance", "Replicate #", "Parent Row #"]
@@ -37,6 +52,8 @@ class ResultsService {
 
     ItemService itemService
     PugService pugService
+    ResultsExportService resultsExportService
+    ArchivePathService archivePathService
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
@@ -55,18 +72,18 @@ class ResultsService {
                     closestValue = it.valueNum
                 }
             }
-            return new Cell(value: closestValue, qualifier: "=", column: column)
+            return new Cell(value: closestValue, qualifier: "= ", column: column)
         } else {
             def labelMap = [:]
             contextItems.each {
-                if(it.valueElement != null)
-                    labelMap[it.valueElement.label] = it.valueElement
+                if(it.valueDisplay != null)
+                    labelMap[it.valueDisplay.trim()] = it
             }
-            Element element = labelMap[value]
-            if (element == null) {
+            AssayContextItem selectedItem = labelMap[value.trim()]
+            if (selectedItem == null) {
                 return "Could not find \"${value}\" among values in list: ${labelMap.keySet()}"
             }
-            return new Cell(element: element, column: column)
+            return new Cell(element: selectedItem.valueElement, valueDisplay: selectedItem.valueDisplay, column: column)
         }
     }
 
@@ -75,7 +92,7 @@ class ResultsService {
             if (item.type == AttributeType.List) {
                 return parseListValue(column, value, item.contextItems)
             } else if (item.type == AttributeType.Free) {
-                return parseNumberOrRange(column, value)
+                return parseAnything(column, value)
             } else if (item.type == AttributeType.Range) {
                 Double rangeMin = item.contextItems[0].valueMin
                 Double rangeMax = item.contextItems[0].valueMax
@@ -100,7 +117,11 @@ class ResultsService {
         if (matcher.matches()) {
             String foundQualifier = matcher.group(1)
             if (foundQualifier == null) {
-                foundQualifier = "="
+                foundQualifier = "= "
+            }
+
+            if (foundQualifier.length() < 2) {
+                foundQualifier += " "
             }
 
             float a
@@ -142,6 +163,18 @@ class ResultsService {
         return "Expected a range, but got \"${value}\""
     }
 
+    static def parseAnything(Column column, String value) {
+        if (RANGE_PATTERN.matcher(value).matches()) {
+            return parseRange(column, value)
+        } else if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
+            return parseQualifiedNumber(column, value)
+        } else {
+            // assume it's free text and we take it literally
+            Cell cell = new Cell(valueDisplay:value, column: column)
+            return cell
+        }
+    }
+
     static def parseNumberOrRange(Column column, String value) {
         if (RANGE_PATTERN.matcher(value).matches()) {
             return parseRange(column, value)
@@ -169,13 +202,17 @@ class ResultsService {
         public Column(String name, Measure measure) {
             this.name = name
             this.measure = measure
-            this.parser = { Column column, String value -> parseNumberOrRange(column, value) }
+            this.parser = { Column column, String value -> parseAnything(column, value) }
         }
 
         public Column(String name, ItemService.Item item) {
             this.item = item;
             this.name = name;
             this.parser = makeItemParser(item)
+        }
+
+        public String toString() {
+            return "${name}"
         }
     }
 
@@ -201,14 +238,71 @@ class ResultsService {
 
         Element element;
 
+        String valueDisplay;
+
         public Element getAttributeElement() {
             return column.item.attributeElement;
+        }
+
+        String getValueDisplay() {
+            if (valueDisplay != null) {
+                return valueDisplay;
+            } else {
+                String valueString = null;
+
+                if (value != null) {
+                    if (qualifier == "= " ) {
+                        valueString = value.toString()
+                    } else {
+                        valueString = "${qualifier.trim()}${value}"
+                    }
+                }
+
+                if (minValue != null) {
+                    valueString = "${minValue}-${maxValue}";
+                }
+
+                if (element != null) {
+                    valueString element.label
+                }
+
+                // now try to find the units
+                String unit = null;
+                if (column.item != null) {
+                    unit = column.item.attributeElement.unit?.abbreviation
+                } else if (column.measure != null) {
+                    unit = column.measure.resultType?.unit?.abbreviation;
+                }
+                if (unit != null) {
+                    valueString += " ${unit}"
+                }
+                return valueString;
+            }
+        }
+
+        String toString() {
+            "Cell(${column})"
         }
     }
 
     static class ImportSummary {
-        def resultsCreated;
         def errors = []
+
+        // these are just collected for purposes of reporting the import summary at the end
+        int linesParsed = 0;
+        int resultsCreated = 0;
+        int experimentAnnotationsCreated = 0;
+        Map<String, Integer> resultsPerLabel = [:]
+        Set<Long> substanceIds = [] as Set
+
+        int resultsWithRelationships = 0;
+        int resultAnnotations = 0;
+
+        List<List> topLines = []
+
+        public int getSubstanceCount() {
+            return substanceIds.size()
+        }
 
         void addError(int line, int column, String message) {
             if (!tooMany()) {
@@ -228,7 +322,6 @@ class ResultsService {
             return errors.size() > MAX_ERROR_COUNT;
         }
     }
-
 
     static class Template {
         Experiment experiment;
@@ -319,22 +412,33 @@ class ResultsService {
         String experimentName;
         Long experimentId;
         List<ExperimentContext> contexts
-
+        int linesParsed;
         List<Row> rows;
+        List<List<String>> topLines;
     }
 
     static class LineReader {
-        BufferedReader reader;
+        CSVReader reader;
         int lineNumber = 0;
 
-        String readLine() {
+        List<List<String>> topLines = []
+
+        String [] readLine() {
             lineNumber ++;
-            return reader.readLine();
+            String [] line = reader.readNext()
+
+            if (line != null && topLines.size() < LINES_TO_SHOW_USER)
+                topLines.add(line)
+
+            return line;
+        }
+
+        public LineReader(BufferedReader reader) {
+            this.reader = new CSVReader(reader);
         }
     }
 
-    boolean allEmptyColumns(String line) {
-        String[] columns = line.split(DELIMITER);
+    boolean allEmptyColumns(String[] columns) {
         for(column in columns) {
             if (!column.isEmpty())
                 return false
@@ -342,7 +446,7 @@ class ResultsService {
         return true
     }
 
-    InitialParse parseConstantRegion(LineReader reader,  ImportSummary errors, List<Column> experimentItemDefs) {
+    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, List<Column> experimentItemDefs) {
         Map<String,Column> nameToColumn = [:]
         Map<AssayContext,Collection<Cell>> groupedByContext = [:]
         Map header = [:]
@@ -352,18 +456,19 @@ class ResultsService {
         experimentItemDefs.each {nameToColumn[it.name] = it}
 
         while(true) {
-            String line = reader.readLine();
-            if (line == null)
+            String[] values = reader.readLine();
+            if (values == null)
                 break;
 
             // initial header stops on first empty line
-            if (allEmptyColumns(line)) {
+            if (allEmptyColumns(values)) {
                 break;
             }
 
-            String [] values = line.split(DELIMITER)
-            if (values.length != 3) {
-                errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but got ${values.length} columns")
+            for(int i=3;i<values.length;i++) {
+                if (!values[i].isEmpty()) {
+                    errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but found value in column ${values[i]}")
+                }
                 continue
             }
 
@@ -420,39 +525,20 @@ class ResultsService {
         return result
     }
 
-    void foo() {
-        template.constantItems.each {nameToColumn[it.name] = it}
-        template.columns.each { if(it.item != null) { nameToColumn[it.name] = it } }
-        constants.entrySet().each { Map.Entry entry ->
-            if (entry.key == EXPERIMENT_ID_LABEL) {
-
-            } else if (entry.key == EXPERIMENT_NAME_LABEL) {
-
-            } else {
-                Column column = nameToColumn[entry.key]
-                if (column == null) {
-                    errors.addError(0, 0, "Did not know how to handle \"${entry.key}\" in the experiment level items")
-                } else {
-                }
-            }
-        }
-    }
-
     void forEachDataRow(LineReader reader, List<Column> columns, ImportSummary errors, Closure fn) {
         int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
 
         while(true) {
-            String line = reader.readLine();
-            if (line == null)
+            List<String> values = reader.readLine();
+            if (values == null)
                 break;
-
-            List values = line.split(DELIMITER)
 
             // verify and reshape columns
             while(values.size() < expectedColumnCount) {
                 values.add("")
             }
 
+            // verify there aren't too many columns
             while(values.size() > expectedColumnCount) {
                 String value = values.remove(values.size()-1)
                 if (value.trim().length() != 0) {
@@ -460,8 +546,18 @@ class ResultsService {
                 }
             }
 
-            // now that values is guaranteed to be the right length, pass to the callback
-            fn(reader.lineNumber, values)
+            // now that values is guaranteed to be the right length, make the entire row isn't empty
+            boolean allEmpty = true;
+            for(cell in values) {
+                if (!cell.isEmpty()) {
+                    allEmpty = false;
+                    break;
+                }
+            }
+
+            // pass to the callback
+            if (!allEmpty)
+                fn(reader.lineNumber, values)
 
             if (errors.tooMany())
                 break
@@ -478,7 +574,7 @@ class ResultsService {
             } catch(Exception ex) {
                 errors.addError(lineNumber, i, "Could not parse \"${values[i]}\"")
                 hadFailure = true
-                ex.printStackTrace()
+//                ex.printStackTrace()
             }
         }
 
@@ -490,8 +586,7 @@ class ResultsService {
     }
 
     List<Column> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
-        String header = reader.readLine()
-        def columnNames = header.split(DELIMITER)
+        List<String> columnNames = reader.readLine()
 
         // validate the fixed columns are where they should be
         for(int i = 0;i<FIXED_COLUMNS.size();i++) {
@@ -508,7 +603,7 @@ class ResultsService {
         template.columns.each { byName[it.name] = it }
 
         def columns = []
-        for(int i=FIXED_COLUMNS.size();i<columnNames.length;i++) {
+        for(int i=FIXED_COLUMNS.size();i<columnNames.size();i++) {
             def name = columnNames[i]
 
             if (seenColumns.contains(name))
@@ -529,25 +624,6 @@ class ResultsService {
         return columns
     }
 
-    def addHierachyRelationships(List<Result> childResults, List<Measure> childMeasures, List<Result> parentResults, List<Measure> parentMeasures, def getMeasureRelationship) {
-        for(int i=0;i<childMeasures.size();i++){
-            for(int j=0;j<parentMeasures.size();j++) {
-                HierarchyType relationship = getMeasureRelationship(parentMeasures.get(j), childMeasures.get(i))
-
-                Result childResult = childResults.get(i)
-                Result parentResult = parentMeasures.get(j)
-
-                ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: relationship, result: childResult, parentResult: parentResult)
-                childResult.resultHierarchiesForParentResult.add(resultHierarchy)
-                parentResult.resultHierarchiesForResult.add(resultHierarchy)
-            }
-        }
-    }
-
-    boolean isLinked(Column measureColumn, Column itemColumn) {
-        def key = new Tuple(measureColumn.measure, itemColumn.contextItem)
-    }
-
     void associateItemToResults(List<Result> results, List<Column> columns, Cell cell, Closure isLinked) {
         assert columns.size() == results.size()
 
@@ -555,36 +631,69 @@ class ResultsService {
             Column column = columns.get(i)
             Result result = results.get(i)
 
-            if (isLinked(column.measure, cell.column.item)) {
-                ResultContextItem item = new ResultContextItem(result: result, attributeElement: cell.column.item.attributeElement, valueNum: cell.value, qualifier: cell.qualifier, valueMin: cell.minValue, valueMax: cell.maxValue, valueElement: cell.element)
+            boolean linked = isLinked(column.measure, cell.column.item)
+            if (linked) {
+                ResultContextItem item = constructContextItem(result, cell)
                 result.resultContextItems.add(item)
             }
         }
     }
 
-    Collection<Result> createResults(InitialParse parse, ImportSummary errors, Map<AssayContextItem, Collection<Measure>> measuresPerContextItem) {
+    private ResultContextItem constructContextItem(Result result, Cell cell) {
+        ResultContextItem item = new ResultContextItem()
+
+        item.result = result
+        item.attributeElement = cell.column.item.attributeElement
+        item.valueNum= cell.value
+        item.qualifier= cell.qualifier?.trim()
+        item.valueMin= cell.minValue
+        item.valueMax= cell.maxValue
+        item.valueElement= cell.element
+        item.valueDisplay= cell.valueDisplay
+
+        return item
+    }
+
+    Map<Number, Collection<Number>> constructChildMap(Collection<Row> rows) {
+        Map map = [:]
+        for(row in rows) {
+            if (row.parentRowNumber != null) {
+                List<Number> childrenIds = map[row.parentRowNumber]
+
+                if (childrenIds == null) {
+                    childrenIds = new ArrayList();
+                    map[row.parentRowNumber] = childrenIds
+                }
+                childrenIds.add(row.rowNumber)
+            }
+        }
+
+        return map
+    }
+
+
+    Collection<Result> createResults(InitialParse parse, ImportSummary errors, Map<ItemService.Item, Collection<Measure>> measuresPerItem, Collection<ExperimentMeasure> experimentMeasures) {
         def rowByNumber = [:]
         parse.rows.each {
             rowByNumber[it.rowNumber] = it
         }
 
         def resultsByRowNumber = [:]
-        def resultByCell = [:]
-        def cellByResult = [:]
+        def resultByCell = new IdentityHashMap()
+        def cellByResult = new IdentityHashMap()
 
         // construct all the Result objects (one per cell belonging to a measure)
         for(row in parse.rows) {
             def substance = Substance.get(row.sid)
             if(substance == null) {
-                errors.addError(row.lineNumber, 0, "Could not find substance with id ${row.sid}")
+                errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
                 continue
             }
 
             def results = []
             for(cell in row.cells) {
                 if (cell.column.measure != null) {
-                    String qualifier = cell.qualifier.length() == 1 ? cell.qualifier +" " : cell.qualifier;
-                    def result = new Result(qualifier: qualifier, valueNum: cell.value, statsModifier: cell.column.measure.statsModifier, resultType: cell.column.measure.resultType, replicateNumber: row.replicate, substance: substance, dateCreated: new Date(), resultStatus: "Pending")
+                    def result = createResult(cell, row, substance)
                     results << result
                     resultByCell[cell] = result
                     cellByResult[result] = cell
@@ -593,26 +702,22 @@ class ResultsService {
             resultsByRowNumber[row.rowNumber] = results
         }
 
-        // create the parent/child links between measures
+        // validate all parent rows exist
         for(row in parse.rows) {
-            if (row.parentRowNumber == null)
-                continue
-
-            def results = []
-            ResultsService.Row parentRow = rowByNumber[row.parentRowNumber]
-            if (parentRow == null) {
+            if (row.parentRowNumber != null && !resultsByRowNumber.containsKey(row.parentRowNumber)) {
                 errors.addError(row.lineNumber, 0, "Could not find row ${row.parentRowNumber} but this row ${row.rowNumber} is a child")
-            } else {
-                // project cells to results and link the two rows
-                addHierachyRelationships(row.cells.collect {resultByCell[it]}, parentRow.cells.collect {resultByCell[it]})
             }
         }
 
+        // create the parent/child links between measures
+        createResultHierarchy(parse, rowByNumber, experimentMeasures, errors, resultByCell)
+
         // and finally create the context items
-        def isLinked = { measure, contextItem ->
-            if(measuresPerContextItem.containsKey(contextItem)) {
-                return measuresPerContextItem[contextItem].contains(measure)
+        def isLinked = { measure, item ->
+            if(measuresPerItem.containsKey(item)) {
+                return measuresPerItem[item].contains(measure)
             }
+            return false;
         }
         for(row in parse.rows) {
             def results = resultsByRowNumber.get(row.rowNumber)
@@ -626,8 +731,97 @@ class ResultsService {
         return resultByCell.values()
     }
 
+    private Result createResult(Cell cell, Row row, Substance substance) {
+
+        Result result = new Result()
+        result.qualifier = cell.qualifier
+        result.valueDisplay = cell.valueDisplay
+        result.valueNum = cell.value
+        result.valueMin = cell.minValue
+        result.valueMax = cell.maxValue
+        result.statsModifier = cell.column.measure.statsModifier
+        result.resultType = cell.column.measure.resultType
+        result.replicateNumber = row.replicate
+        result.substance = substance
+        result.dateCreated = new Date()
+        result.resultStatus = "Pending"
+
+        return result;
+    }
+
+    private void createResultHierarchy(InitialParse parse, Map rowByNumber, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map resultByCell) {
+        Map<Number, Collection<Number>> parentToChildRows = constructChildMap(parse.rows)
+        for (row in parse.rows) {
+            // find all the cells which might have a parent-child relationship either due to being on the same
+            // row, or due to the rows being linked by parent id
+            List<Cell> possiblyRelatedCells = new ArrayList(row.cells)
+            Collection<Number> childIds = parentToChildRows[row.rowNumber]
+            if (childIds != null) {
+                for (childId in childIds) {
+                    possiblyRelatedCells.addAll(rowByNumber[childId].cells)
+                }
+            }
+
+            // group the cells by measure
+            Map<Measure, Collection<Cell>> cellsByMeasure = possiblyRelatedCells.groupBy { it.column.measure }
+
+            for (experimentMeasure in experimentMeasures) {
+                if (experimentMeasure.parent != null) {
+                    Collection<Cell> parentCells = cellsByMeasure[experimentMeasure.parent.measure];
+                    Collection<Cell> childCells = cellsByMeasure[experimentMeasure.measure];
+
+                    if (parentCells != null && childCells != null) {
+                        if (parentCells.size() > 1) {
+                            errors.addError(row.lineNumber, 0, "Parent child relationship between ${parentCells} and ${childCells} is ambiguous.  There are multiple possible ways to assign relationships between these cells")
+                        } else if (parentCells.size() == 1) {
+                            Cell parentCell = parentCells.first();
+                            Result parentResult = resultByCell[parentCell];
+
+                            if (parentResult == null) {
+                                throw new RuntimeException("Could not find result that came from parent ${parentCell}")
+                            }
+
+                            for (childCell in childCells) {
+                                Result childResult = resultByCell[childCell];
+
+                                if (childResult == null) {
+                                    throw new RuntimeException("Could not find result that came from ${childCell}")
+                                }
+
+                                linkResults(experimentMeasure.parentChildRelationship, errors, row.lineNumber, childResult, parentResult)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void linkResults(relationship, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
+        HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
+        if (hierarchyType == null) {
+            // hack until values are consistent in database
+            if (relationship == "has Child") {
+                hierarchyType = HierarchyType.Child;
+            } else if (relationship == "Derived from") {
+                hierarchyType = HierarchyType.Derives;
+            } else {
+                errors.addError(lineNumber, 0, "Experiment measures had the relationship ${relationship} which was unrecognized");
+                return;
+            }
+        }
+
+        ResultHierarchy resultHierarchy = new ResultHierarchy()
+        resultHierarchy.hierarchyType = hierarchyType
+        resultHierarchy.result = childResult
+        resultHierarchy.parentResult = parentResult
+        resultHierarchy.dateCreated = new Date()
+        childResult.resultHierarchiesForResult.add(resultHierarchy)
+        parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
+    }
+
     InitialParse initialParse(Reader input, ImportSummary errors, Template template) {
-        LineReader reader = new LineReader(reader: new BufferedReader(input))
+        LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
         List potentialExperimentColumns = []
@@ -662,6 +856,11 @@ class ResultsService {
             Integer replicate = parsed[2]
             Integer parentRowNumber = parsed[3]
 
+            if (sid <= 0) {
+                errors.addError(lineNumber, 0, "Invalid substance id ${sid}")
+                return
+            }
+
             if (usedRowNumbers.contains(rowNumber)) {
                 errors.addError(lineNumber, 0, "Row number ${rowNumber} was duplicated")
                 return
@@ -689,6 +888,8 @@ class ResultsService {
         }
 
         result.rows = rows
+        result.linesParsed = reader.lineNumber
+        result.topLines = reader.topLines
 
         return result
     }
@@ -712,10 +913,10 @@ class ResultsService {
         return result
     }
 
-    Map<AssayContextItem, Collection<Measure>> findRelationships(Experiment experiment) {
+    Map<ItemService.Item, Collection<Measure>> findRelationships(Experiment experiment) {
         def map = [:]
 
-        experiment.assay.assayContextItems.each {
+        itemService.getLogicalItems(experiment.assay.assayContextItems).each {
             def measures = it.assayContext.assayContextMeasures.collect { it.measure }
             map[it] = measures
         }
@@ -724,36 +925,109 @@ class ResultsService {
     }
 
     ImportSummary importResults(Experiment experiment, InputStream input) {
+        String originalFilename = archivePathService.constructUploadResultPath(experiment)
+        String exportFilename = archivePathService.constructExportResultPath(experiment)
+        File archivedFile = archivePathService.prepareForWriting(originalFilename)
+
+        OutputStream output = new GZIPOutputStream(new FileOutputStream(archivedFile));
+        IOUtils.copy(input, output);
+        input.close()
+        output.close()
+
+        ImportSummary summary = importResultsWithoutSavingOriginal(experiment, new GZIPInputStream(new FileInputStream(archivedFile)), originalFilename, exportFilename);
+        if (summary.hasErrors()) {
+            archivedFile.delete()
+        }
+
+        return summary;
+    }
+
+    ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename) {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
-        def measuresPerContextItem = findRelationships(experiment)
+        def measuresPerItem = findRelationships(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template)
-        if (parsed != null) {
+        if (parsed != null && !errors.hasErrors()) {
+            errors.linesParsed = parsed.linesParsed
+
+            // populate the top few lines in the summary.
+            errors.topLines = parsed.topLines
+
             def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
-            missingSids.each { errors.addError(0,0, "Could not find substance with id ${it}")}
 
-            def results = createResults(parsed, errors, measuresPerContextItem)
-
-            // and persist these results to the DB
-            results.each {
-                it.experiment = experiment
-                if(!it.save()) {
-                    throw new RuntimeException(it.errors.toString())
-                }
+            missingSids.each {
+                errors.addError(0, 0, "Could not find substance with id ${it}")
             }
 
-            parsed.contexts.each {
-                it.experiment = experiment
-                if(!it.save()) {
-                    throw new RuntimeException(it.errors.toString())
+            if (!errors.hasErrors())
+            {
+                def results = createResults(parsed, errors, measuresPerItem, experiment.experimentMeasures)
+
+                if (!errors.hasErrors()) {
+                    // and persist these results to the DB
+                    Collection<ExperimentContext>contexts = parsed.contexts;
+
+                    persist(experiment, results, errors, contexts, originalFilename, exportFilename)
                 }
             }
-
-            errors.resultsCreated = results.size()
         }
 
         return errors
+    }
+
+    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename) {
+        deleteExperimentResults(experiment)
+
+        results.each {
+            String label = it.displayLabel
+            Integer count = errors.resultsPerLabel.get(label)
+            if (count == null) {
+                count = 0
+            }
+            errors.resultsPerLabel.put(label, count + 1)
+
+            errors.substanceIds.add(it.substance.id)
+
+            if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
+                errors.resultsWithRelationships ++;
+
+            errors.resultAnnotations += it.resultContextItems.size()
+        }
+
+        contexts.each {
+            it.experiment = experiment
+            experiment.addToExperimentContexts(it)
+
+            errors.experimentAnnotationsCreated += it.contextItems.size()
+        }
+
+        errors.resultsCreated = results.size()
+
+        resultsExportService.dumpFromList(exportFilename, results)
+
+        addExperimentFileToDb(experiment, originalFilename, exportFilename)
+    }
+
+    private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename) {
+        ExperimentFile file = new ExperimentFile(experiment: experiment, originalFile: originalFilename, exportFile: exportFilename, dateCreated: new Date(), submissionVersion: experiment.experimentFiles.size())
+        file.save(failOnError:true)
+        experiment.experimentFiles.add(file)
+    }
+
+    /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
+    public void deleteExperimentResults(Experiment experiment) {
+        // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
+        // walk the tree and delete all the objects.
+
+        new ArrayList(experiment.experimentContexts).each { context ->
+            new ArrayList(context.experimentContextItems).each { item ->
+                context.removeFromExperimentContextItems(item)
+                item.delete()
+            }
+            experiment.removeFromExperimentContexts(context)
+            context.delete()
+        }
     }
 }

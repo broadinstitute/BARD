@@ -14,7 +14,7 @@ import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
 
-public class ExternalOntologyUniprot implements ExternalOntologyAPI {
+public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	
 	private UniProtQueryService uniProtQueryService;
 	
@@ -76,8 +76,8 @@ public class ExternalOntologyUniprot implements ExternalOntologyAPI {
 		return items;
 	}
 
-	public String getExternalURL() {
-		return "http://www.uniprot.org/";
+	public String getExternalURL(String id) {
+		return String.format("http://www.uniprot.org/uniprot/%s", id);
 	}
 
 	public String queryGenerator(String term) {

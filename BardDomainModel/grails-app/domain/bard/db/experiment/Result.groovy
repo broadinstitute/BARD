@@ -5,7 +5,6 @@ import bard.db.enums.ReadyForExtraction
 import org.codehaus.groovy.grails.orm.hibernate.cfg.IdentityEnumType
 
 class Result {
-
     private static final int VALUE_DISPLAY_MAX_SIZE = 256
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int RESULT_STATUS_MAX_SIZE = 20
@@ -29,6 +28,7 @@ class Result {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
+    Long id;
 
     Set<ResultContextItem> resultContextItems = [] as Set<ResultContextItem>
     Set<ResultHierarchy> resultHierarchiesForResult = [] as Set<ResultHierarchy>
@@ -71,5 +71,13 @@ class Result {
         dateCreated(nullable: false)
         lastUpdated(nullable: true,)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+
+    public String getDisplayLabel() {
+        String label = resultType.label
+        if(statsModifier != null) {
+            label += " (${statsModifier.label})"
+        }
+        return label
     }
 }

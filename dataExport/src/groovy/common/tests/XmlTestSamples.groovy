@@ -98,7 +98,7 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_MINIMAL = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -107,7 +107,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_OPTIONAL_PROPERTIES = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <description>description</description>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
@@ -117,7 +117,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_EXT_REF = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -127,7 +127,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_EXT_REF = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
@@ -138,7 +138,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_CONTEXT = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -152,7 +152,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_CONTEXT = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -169,7 +169,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <contexts>
                 <context id='1' displayOrder='0'>
@@ -187,7 +187,7 @@ class XmlTestSamples {
     '''
 
     static final String EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <experimentMeasures>
                 <experimentMeasure experimentMeasureId='1' measureRef='1'/>
@@ -199,7 +199,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1'>
             <experimentName>experimentName</experimentName>
             <experimentMeasures>
                 <experimentMeasure experimentMeasureId='1' measureRef='1'/>
