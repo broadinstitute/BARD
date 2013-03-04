@@ -10,30 +10,38 @@ $(document).ready(function () {
         height: 400,
         width: 500,
         modal: true,
-        buttons: {
-            "Update Summary": function() {
-                var instanceId = $("#assayId").text();
-                var assayStatus = $("#assayStatus option:selected").text()
-                var assayName = $("#assayName").val();
-                var designedBy = $("#designedBy").val();
-                if (!validateRequiredField(assayName, "assayNameValidation")) return false;
-                var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy};
-                $.ajax
-                    ({
-                        url:"../editSummary",
-                        data:inputdata,
-                        cache:false,
-                        success:function(responseText, statusText, xhr, jqForm){
-                                $("#summaryDetailSection").html(responseText);
-                        }
-                    });
-                $( this ).dialog( "close" );
+        buttons: [
+            {
+                text : "Update Summary",
+                id: "submitEditSummary",
+                click: function() {
+                    var instanceId = $("#assayId").text();
+                    var assayStatus = $("#assayStatus option:selected").text()
+                    var assayName = $("#assayName").val();
+                    var designedBy = $("#designedBy").val();
+                    if (!validateRequiredField(assayName, "assayNameValidation")) return false;
+                    var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy};
+                    $.ajax
+                        ({
+                            url:"../editSummary",
+                            data:inputdata,
+                            cache:false,
+                            success:function(responseText, statusText, xhr, jqForm){
+                                    $("#summaryDetailSection").html(responseText);
+                            }
+                        });
+                    $( this ).dialog( "close" );
+                }
             },
-            Cancel: function() {
-                resetAfterCloseOrCancel();
-                $( this ).dialog( "close" );
+            {
+                text: "Cancel",
+                id: "cancelEditSummary",
+                click: function() {
+                    resetAfterCloseOrCancel();
+                    $( this ).dialog( "close" );
+                }
             }
-        },
+        ],
         close: function() {
             resetAfterCloseOrCancel();
         }

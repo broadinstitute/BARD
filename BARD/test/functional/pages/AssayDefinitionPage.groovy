@@ -15,6 +15,19 @@ class AssayDefinitionPage extends ScaffoldPage {
     }
 
     static content = {
+        editSummaryButton { $("#editSummaryButton") }
+        editSummaryForm { $("#editSummaryForm") }
+        submitEditSummary { $("#submitEditSummary") }
+    }
 
+    void editSummary(String name, String designedBy) {
+//        assert ! editSummaryForm.isDisplayed()
+        editSummaryButton.click()
+        assert editSummaryForm.isDisplayed()
+
+        editSummaryForm.assayName = name
+        editSummaryForm.designedBy = designedBy
+        submitEditSummary.click()
     }
 }
+

@@ -20,10 +20,16 @@ class AssayDefinitionSpec  extends BardFunctionalSpec {
         when:
         def assayId = build(Assay)
         to AssayDefinitionPage, assayId
-        Thread.sleep(10*1000)
 
         then:
         at AssayDefinitionPage
-    }
 
+        // problem: need hook into ajax somehow
+//        when:
+//        editSummary("new name", "editor")
+//
+//        then:
+//        Assay assay = Assay.get(assayId)
+//        assay.assayName == "new name"
+    }
 }

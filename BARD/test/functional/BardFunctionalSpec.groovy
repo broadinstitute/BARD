@@ -1,5 +1,6 @@
 import geb.spock.GebReportingSpec
 import grails.plugin.remotecontrol.RemoteControl
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Shared
 import pages.HomePage
 import pages.LoginPage
@@ -19,30 +20,16 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
     Serializable build(Class clazz, properties=[:]) {
         XRemoteControl remote = new XRemoteControl()
         def newId = remote {
-            Method method = null;
-
-            Class z = ctx.scaffoldService.class
-            while(z!= null) {
-                if (method == null) {
-                    method = z.getMethods().find {it.getName() == "testMethod"}
+            def id;
+            clazz.withTransaction { status ->
+                SpringSecurityUtils.reauthenticate('integrationTestUser', null)
+                def obj = clazz.build(properties);
+                if (obj.id == null) {
+                    throw new RuntimeException("Object had no id")
                 }
-                println("class ${z.getName()} ${method}")
-                println("methods ${z.methods}")
-                z = z.getSuperclass()
+                id = obj.id
             }
-
-            println("methods=${method}")
-            method.invoke(ctx.scaffoldService)
-
-            ctx.scaffoldService.testMethod();
-
-            String name = clazz.getName();
-            Map p = new HashMap()
-            def obj = ctx.scaffoldService.build(name);
-            if (obj.id == null) {
-                throw new RuntimeException("Object had no id")
-            }
-            return obj.id
+            return id
         }
 
         return newId;
