@@ -52,7 +52,7 @@ class ItemService {
             def item = AssayContextItem.get(id.substring(1))
             if (item == null)
                 return null
-            return new Item(id: id, type: item.attributeType, contextItems: [item])
+            return new Item(id: id, type: item.attributeType, contextItems: [item], attributeElement: item.attributeElement, assayContext: item.assayContext)
         } else if (id.startsWith("L")) {
             int index = id.indexOf(":")
             String contextId = id.substring(1,index)
@@ -62,7 +62,7 @@ class ItemService {
             AssayContext context = AssayContext.get(contextId)
 
             def items = AssayContextItem.findAllByAttributeElementAndAssayContext(attribute, context)
-            return new Item(id: id, type: AttributeType.List, contextItems: items, attributeElement: items[0].attributeElement)
+            return new Item(id: id, type: AttributeType.List, contextItems: items, attributeElement: items[0].attributeElement, assayContext: items[0].assayContext)
         }  else {
             throw new RuntimeException("invalid id ${id}")
         }
