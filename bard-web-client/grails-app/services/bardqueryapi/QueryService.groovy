@@ -315,14 +315,15 @@ class QueryService implements IQueryService {
      * @param skip
      * @return Map of data to use to display an experiment
      */
-    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes=[FilterTypes.TESTED]) {
+    Map findExperimentDataById(Long experimentId, Integer top, Integer skip, List<FilterTypes> filterTypes = [FilterTypes.TESTED]) {
         List<Activity> activities = []
         final ExperimentShow experimentShow = experimentRestService.getExperimentById(experimentId)
         NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
         if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
             normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
         }
-        long totalNumberOfRecords = filterTypes.contains(FilterTypes.TESTED) ? experimentShow?.getCompounds() ?:0 : experimentShow?.getActiveCompounds() ?:0
+        long totalNumberOfRecords = filterTypes.contains(FilterTypes.TESTED) ? experimentShow?.getCompounds() ?: 0 : experimentShow?.getActiveCompounds() ?: 0
+        long numberOfActiveCompounds = experimentShow?.getActiveCompounds() ?: 0
         Map experimentDetails = [:]
         Map<Long, CompoundAdapter> compoundAdaptersMap = [:]
         if (experimentShow) {
@@ -336,7 +337,8 @@ class QueryService implements IQueryService {
         }
 
         return [
-                total: totalNumberOfRecords, activities: activities,
+                total: totalNumberOfRecords, actives: numberOfActiveCompounds,
+                activities: activities,
                 experiment: experimentShow, hasPlot: experimentDetails.hasPlot,
                 priorityDisplay: experimentDetails.priorityDisplay,
                 dictionaryId: experimentDetails.dictionaryId,

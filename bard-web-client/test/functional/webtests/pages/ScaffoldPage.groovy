@@ -37,7 +37,7 @@ class ScaffoldPage extends Page {
         return false
     }
     void waitForPageToLoad() {
-      waitFor(5, 0.5) { title.contains("BioAssay Research Database") }
+      waitFor(10, 0.5) { title.contains("BioAssay Research Database") }
     }
 
 }

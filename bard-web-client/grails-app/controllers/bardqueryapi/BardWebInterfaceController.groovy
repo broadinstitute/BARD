@@ -110,10 +110,10 @@ class BardWebInterfaceController {
             webQueryTableModel.additionalProperties.put("id", id.toString())
 
             //Create fake facets to generate the two filters we want: normalize Y-axis and filter for active compounds only.
-            Integer numOfActiveCmpds = webQueryTableModel.data.count {List row -> row[3].value == 'Active'}
+            Integer numOfActiveCmpds = webQueryTableModel?.additionalProperties?.actives ?: 0
             Integer totalNumOfCmpds = webQueryTableModel?.additionalProperties?.total ?: 0
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: totalNumOfCmpds)]),
-                    new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active', value: numOfActiveCmpds)])]
+                    new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])]
 
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
@@ -126,7 +126,8 @@ class BardWebInterfaceController {
             render(view: 'showExperiment',
                     model: [webQueryTableModel: webQueryTableModel,
                             facets: facetValues,
-                            appliedFilters: getAppliedFilters(searchFilters, facetValues)])
+                            appliedFilters: getAppliedFilters(searchFilters, facetValues),
+                            sidebarTitle: 'Options'])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
             String message = "Experiment with ID ${id} does not exists"
