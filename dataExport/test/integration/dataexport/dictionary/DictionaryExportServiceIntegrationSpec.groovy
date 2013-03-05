@@ -46,7 +46,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Element"
         when: "We call the dictionary service to update this element"
-        this.dictionaryExportService.update(new Long(100000), 0, "Complete")
+        this.dictionaryExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE)
 
         then: "An exception is thrown, indicating that the element does not exist"
         thrown(NotFoundException)
