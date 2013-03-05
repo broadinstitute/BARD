@@ -77,8 +77,8 @@ class MolecularSpreadSheetService {
         for (int rowCnt in 0..(molSpreadSheetData.getRowCount() - 1)) {
             LinkedHashMap<String, String> mapForThisRow = []
             addFixedColumnData(mapForThisRow, molSpreadSheetData, rowCnt)
-            if (molSpreadSheetData.getColumnCount() > 4) {
-                for (int colCnt in (4..molSpreadSheetData.getColumnCount() - 1)) {
+            if (molSpreadSheetData.getColumnCount() > START_DYNAMIC_COLUMNS) {
+                for (int colCnt in (START_DYNAMIC_COLUMNS..molSpreadSheetData.getColumnCount() - 1)) {
                     final SpreadSheetActivityStorage spreadSheetActivityStorage = molSpreadSheetData.findSpreadSheetActivity(rowCnt, colCnt)
                     addActivitiesForCurrentRow(mapForThisRow, spreadSheetActivityStorage, colCnt)
                 }
@@ -208,35 +208,119 @@ class MolecularSpreadSheetService {
      * @param molSpreadSheetData
      * @param dataMap
      */
-    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String, MolSpreadSheetCell> dataMap) {
+    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String, List<MolSpreadSheetCell>> dataMap) {
         for (int row in 0..(molSpreadSheetData.rowCount - 1)) {
-            int exptNumberColTracker = 0
+            int exptNumberColTracker = START_DYNAMIC_COLUMNS
             for (int col in 0..(molSpreadSheetData.superColumnCount - 1)) {
                 String key = "${row}_${col}"
-                MolSpreadSheetCell molSpreadSheetCell = null
+                List<MolSpreadSheetCell> molSpreadSheetCellList = null
                 SpreadSheetActivityStorage spreadSheetActivityStorage = null
                 if (dataMap.containsKey(key)) {
-                    molSpreadSheetCell = dataMap[key]
-                    spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
+                    molSpreadSheetCellList = dataMap[key]
                 }
-                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()>0){
-                        for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size() - 1) {
-                        String finalKey = "${row}_${(exptNumberColTracker++)}"
-                        if (spreadSheetActivityStorage == null) {
-                            if (molSpreadSheetCell != null) {
-                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
-                            } else {
-                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
-                            }
+                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size() > 0) {
+                    if (molSpreadSheetCellList != null) {
+                        if (col < START_DYNAMIC_COLUMNS) {
+                            molSpreadSheetData.mssData["${row}_${col}"] = molSpreadSheetCellList[0]
                         } else {
-                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell, experimentNum)
+                            int countingColumns = 0
+                            int columnsToFill = molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()
+                            for (int experimentNum in 0..columnsToFill - 1) {   // outer loop -- each run advances counter
+                                MolSpreadSheetCell bestMolSpreadSheetCell = null
+                                if (molSpreadSheetCellList.size() > 1) { // more than one result type. Pick the best one(s)
+                                    List<MolSpreadSheetCell> molSpreadSheetCells = molSpreadSheetCellList.findAll { MolSpreadSheetCell molSpreadSheetCell ->
+                                        ((molSpreadSheetCell.spreadSheetActivityStorage != null) &&
+                                                (molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel == molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList[experimentNum].columnTitle))
+                                    }
+                                    int numberOfValuesGoingIntoArithmeticMean = 0
+                                    countingColumns++
+                                    if (molSpreadSheetCellList.size()==0) {
+                                        bestMolSpreadSheetCell = new MolSpreadSheetCell()
+                                    } else if ((molSpreadSheetCells == null) || (molSpreadSheetCells.size() == 0)) {
+                                        bestMolSpreadSheetCell = new MolSpreadSheetCell()  // this shouldn't happen(?). We have no data
+                                    } else if (molSpreadSheetCells.size() == 1) {   // we have exactly one match. That's easy enough
+                                        bestMolSpreadSheetCell = molSpreadSheetCells[0]
+                                    } else { // we have more than one option.  Send all of the spreadsheet activities forward. Average out a value for display
+                                        double valueToDisplay = Double.NaN
+                                        MolSpreadSheetCell firstNonNullMolSpreadSheetCell = null
+
+
+                                        for (MolSpreadSheetCell molSpreadSheetCell in molSpreadSheetCells) {              // this is the inner loop.  Collect data, don't advance counter
+                                            for (HillCurveValueHolder hillCurveValueHolder in molSpreadSheetCell.spreadSheetActivityStorage?.hillCurveValueHolderList) {
+                                                if ((hillCurveValueHolder.slope) && (hillCurveValueHolder.slope != Double.NaN)) {
+                                                    numberOfValuesGoingIntoArithmeticMean++
+                                                    if (valueToDisplay == Double.NaN) {
+                                                        firstNonNullMolSpreadSheetCell = molSpreadSheetCell
+                                                        valueToDisplay = hillCurveValueHolder.slope
+                                                    } else {
+                                                        valueToDisplay += hillCurveValueHolder.slope
+                                                        // in addition to taking the display value, duplicate the hillCurveValueHolders, and then will do something useful with them on the display side
+                                                        firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                        if ((firstNonNullMolSpreadSheetCell != null) &&      // we had at least one value that wasn't null – proceed to assign the arithmetic average to the display case
+                                                (valueToDisplay != Double.NaN) &&                 // maybe we had one or more values but they were all assignments NaN? seems unlikely, but possible
+                                                (numberOfValuesGoingIntoArithmeticMean > 0)) {  // I think this last check is strictly superfluous, but maybe something will change in the future code release?
+                                            // if we wanted to assign the mean value to the first element then we could do it here.
+                                            //firstNonNullMolSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].slope = (valueToDisplay / numberOfValuesGoingIntoArithmeticMean)
+                                            bestMolSpreadSheetCell = firstNonNullMolSpreadSheetCell // we like this one.  Remember it.
+                                        } else {
+                                            bestMolSpreadSheetCell = new MolSpreadSheetCell()// we had no values that were not null. Send this null marker as an indication that we have nothing to report
+                                        }
+                                        // finally, make sure that the first one is real
+                                        if (bestMolSpreadSheetCell != molSpreadSheetCells[0])
+                                            molSpreadSheetCells[0] = bestMolSpreadSheetCell
+                                    }
+
+                                } else {
+                                    bestMolSpreadSheetCell = molSpreadSheetCellList[0]
+                                }
+                                molSpreadSheetData.mssData["${row}_${exptNumberColTracker++}"] = bestMolSpreadSheetCell
+                            }
+
                         }
+
+                    } else {
+                        //  This condition typically arises ONLY when we have multiple compounds crossing multiple assays
+                        // and some compounds are not tested in some of those assays
+                        molSpreadSheetData.mssData["${row}_${(exptNumberColTracker++)}"] = new MolSpreadSheetCell()
                     }
                 }
             }
-
         }
     }
+//    protected void fillInTheMissingCellsAndConvertToExpandedMatrix(MolSpreadSheetData molSpreadSheetData, Map<String, MolSpreadSheetCell> dataMap) {
+//        for (int row in 0..(molSpreadSheetData.rowCount - 1)) {
+//            int exptNumberColTracker = 0
+//            for (int col in 0..(molSpreadSheetData.superColumnCount - 1)) {
+//                String key = "${row}_${col}"
+//                MolSpreadSheetCell molSpreadSheetCell = null
+//                SpreadSheetActivityStorage spreadSheetActivityStorage = null
+//                if (dataMap.containsKey(key)) {
+//                    molSpreadSheetCell = dataMap[key]
+//                    spreadSheetActivityStorage = molSpreadSheetCell.spreadSheetActivityStorage
+//                }
+//                if (molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size()>0){
+//                    for (int experimentNum in 0..molSpreadSheetData.mssHeaders[col].molSpreadSheetColSubHeaderList.size() - 1) {
+//                        String finalKey = "${row}_${(exptNumberColTracker++)}"
+//                        if (spreadSheetActivityStorage == null) {
+//                            if (molSpreadSheetCell != null) {
+//                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell)
+//                            } else {
+//                                molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell()
+//                            }
+//                        } else {
+//                            molSpreadSheetData.mssData[finalKey] = new MolSpreadSheetCell(molSpreadSheetCell, experimentNum)
+//                        }
+//                    }
+//                }
+//            }
+//
+//        }
+//    }
 
 
 
@@ -259,7 +343,7 @@ class MolecularSpreadSheetService {
     protected void populateMolSpreadSheetData(final MolSpreadSheetData molSpreadSheetData,
                                               final List<ExperimentSearch> experimentList,
                                               final List<SpreadSheetActivity> spreadSheetActivityList,
-                                              final Map<String, MolSpreadSheetCell> dataMap) {
+                                              final Map<String, List <MolSpreadSheetCell>> dataMap) {
         // now step through the data and place into molSpreadSheetData
         int columnPointer = 0
         // we need to handle each experiment separately ( until NCGC can do this in the background )
@@ -271,18 +355,19 @@ class MolecularSpreadSheetService {
                 int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                 int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                 String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
-                MolSpreadSheetCell molSpreadSheetCell = new MolSpreadSheetCell(spreadSheetActivity)
+//                List <MolSpreadSheetCell> molSpreadSheetCellList = new MolSpreadSheetCell(spreadSheetActivity)
+                List <MolSpreadSheetCell> molSpreadSheetCellList = MolSpreadSheetCell.molSpreadSheetCellListFactory (spreadSheetActivity)
                 if (dataMap.containsKey(arrayKey)) {
                     // we have multiple values for cell = ${arrayKey}.  If our existing value is null then use the non-null version
                     if ((dataMap[arrayKey].spreadSheetActivityStorage == null) ||
                             (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList == null) ||
                             (dataMap[arrayKey].spreadSheetActivityStorage.hillCurveValueHolderList.size() < 0)) {
-                        dataMap[arrayKey] = molSpreadSheetCell
+                        dataMap[arrayKey] = molSpreadSheetCellList
                         // TODO for now we will take the non-null value over the null value. Eventually of course
                         //  the null values should be exiled from the database, but at least for now I see them sometimes
                     }
                 } else {
-                    dataMap[arrayKey] = molSpreadSheetCell
+                    dataMap[arrayKey] = molSpreadSheetCellList
                 }
             } else {
                 println "did not expect cid = ${spreadSheetActivity.cid}"
@@ -297,7 +382,7 @@ class MolecularSpreadSheetService {
      * @param compoundAdapters
      * @param dataMap
      */
-    protected void populateMolSpreadSheetRowMetadataFromCompoundAdapters(final MolSpreadSheetData molSpreadSheetData, final List<CompoundAdapter> compoundAdapters, Map<String, MolSpreadSheetCell> dataMap) {
+    protected void populateMolSpreadSheetRowMetadataFromCompoundAdapters(final MolSpreadSheetData molSpreadSheetData, final List<CompoundAdapter> compoundAdapters, Map<String, List<MolSpreadSheetCell>> dataMap) {
 
         // add specific values for the cid column
         int rowCount = 0
@@ -319,7 +404,7 @@ class MolecularSpreadSheetService {
      * @param compoundAdapterMap
      * @return
      */
-    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String, MolSpreadSheetCell> dataMap) {
+    protected void populateMolSpreadSheetRowMetadata(final MolSpreadSheetData molSpreadSheetData, final Map compoundAdapterMap, Map<String, List<MolSpreadSheetCell>> dataMap) {
 
         // Add every compound we can find in the compound adapters map
         List<CompoundAdapter> compoundAdaptersList = compoundAdapterMap.compoundAdapters
@@ -347,7 +432,7 @@ class MolecularSpreadSheetService {
     protected MolSpreadSheetData updateMolSpreadSheetDataToReferenceCompound(MolSpreadSheetData molSpreadSheetData,
                                                                              int rowCount, Long compoundId,
                                                                              String compoundName,
-                                                                             String compoundSmiles, Map<String, MolSpreadSheetCell> dataMap,
+                                                                             String compoundSmiles, Map<String, List<MolSpreadSheetCell>> dataMap,
                                                                              int numAssayActive,
                                                                              int numAssayTested) {
         // need to be able to map from CID to row location
@@ -355,12 +440,12 @@ class MolecularSpreadSheetService {
 
         //TODO find a generic way to do this. It seems there are too many places to add new constant columns
         // add values for the cid column
-        dataMap.put("${rowCount}_0".toString(), new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image))
-        dataMap.put("${rowCount}_1".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        dataMap.put("${rowCount}_0".toString(), [new MolSpreadSheetCell(compoundName, compoundSmiles, MolSpreadSheetCellType.image)])
+        dataMap.put("${rowCount}_1".toString(), [new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier)])
         //we will use this to get the promiscuity score
-        dataMap.put("${rowCount}_2".toString(), new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier))
+        dataMap.put("${rowCount}_2".toString(), [new MolSpreadSheetCell(compoundId.toString(), MolSpreadSheetCellType.identifier)])
         //we will use this to get the 'active vrs tested' column
-        dataMap.put("${rowCount}_3".toString(), new MolSpreadSheetCell("${numAssayActive} / ${numAssayTested}", MolSpreadSheetCellType.string))
+        dataMap.put("${rowCount}_3".toString(), [new MolSpreadSheetCell("${numAssayActive} / ${numAssayTested}", MolSpreadSheetCellType.string)])
 
         return molSpreadSheetData
 
@@ -535,9 +620,10 @@ class MolecularSpreadSheetService {
             if (columnIndex < START_DYNAMIC_COLUMNS) {
                 molSpreadSheetData.mapColumnsToAssay[columnIndex++] = ""
             } else {
+                int subColumnStepper = 0
                 for (MolSpreadSheetColSubHeader molSpreadSheetColSubHeader in molSpreadSheetColumnHeader.molSpreadSheetColSubHeaderList){
                     for (int rowCnt in 0..molSpreadSheetData.rowCount)  {
-                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData.findSpreadSheetActivity(rowCnt, columnIndex)
+                        SpreadSheetActivityStorage spreadSheetActivityStorage =  molSpreadSheetData.findSpreadSheetActivity(rowCnt, columnIndex+subColumnStepper)
                         if (spreadSheetActivityStorage)  {
                             // figure out if the column units are consistent
                             if (molSpreadSheetColSubHeader.unitsInColumn == null) {
@@ -583,6 +669,7 @@ class MolecularSpreadSheetService {
                             }
                         }
                     }
+                    subColumnStepper++
                 }
                 for (String columnSubheadings in listOfColumnSubheadings) {
                     molSpreadSheetData.mapColumnsToAssayName[columnIndex] = molSpreadSheetData.experimentFullNameList[assayIndex].toString()

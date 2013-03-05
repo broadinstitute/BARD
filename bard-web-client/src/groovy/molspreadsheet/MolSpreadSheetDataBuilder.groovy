@@ -18,7 +18,7 @@ class MolSpreadSheetDataBuilder {
     protected MolecularSpreadSheetService molecularSpreadSheetService
     MolSpreadSheetData molSpreadSheetData
     Object etag
-    Map<String, MolSpreadSheetCell> dataMap = [:]
+    Map<String, List<MolSpreadSheetCell>> dataMap = [:]
     Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
     List<SpreadSheetActivity> spreadSheetActivityList = []
 
