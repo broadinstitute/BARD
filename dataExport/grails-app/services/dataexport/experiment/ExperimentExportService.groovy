@@ -45,9 +45,9 @@ class ExperimentExportService extends ExportAbstractService {
      * @param version
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
+    public BardHttpResponse update(final Long id, final Long clientVersion, final ReadyForExtraction latestStatus) {
         final Experiment experiment = Experiment.findById(id)
-        return utilityService.update(experiment, id, clientVersion, latestStatus as ReadyForExtraction, "Experiment")
+        return utilityService.update(experiment, id, clientVersion, latestStatus, "Experiment")
     }
     /**
      *  offset is used for paging, it tells us where we are in the paging process

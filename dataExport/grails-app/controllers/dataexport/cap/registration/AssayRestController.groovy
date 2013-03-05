@@ -8,6 +8,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
+import bard.db.enums.ReadyForExtraction
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -130,7 +131,6 @@ class AssayRestController {
  * the RestController
  */
 class UpdateStatusHelper {
-    final List<String> statusList = ["Pending", "Ready", "Started", "Complete"]
     public BardHttpResponse updateDomainObject(final def service, final Long id) {
 
         try {
@@ -138,13 +138,14 @@ class UpdateStatusHelper {
             if(!requestBody){
                 response.status = HttpServletResponse.SC_BAD_REQUEST
             }
-            else if(!statusList.contains(requestBody))  {
+            else if(!ReadyForExtraction.byId(requestBody))  {
                 response.status = HttpServletResponse.SC_BAD_REQUEST
             }
             else{
                 final String ifMatchHeader = request.getHeader(HttpHeaders.IF_MATCH)
                 if (ifMatchHeader && id) {
-                    final BardHttpResponse bardHttpResponse = service.update(new Long(id), new Long(ifMatchHeader), requestBody)
+                    final BardHttpResponse bardHttpResponse = service.update(new Long(id), new Long(ifMatchHeader),
+                            ReadyForExtraction.byId(requestBody))
                     response.status = bardHttpResponse.httpResponseCode
                     response.addHeader(HttpHeaders.ETAG, bardHttpResponse.ETag.toString())
                     render ""

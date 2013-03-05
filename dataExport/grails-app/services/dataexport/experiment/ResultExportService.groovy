@@ -42,9 +42,9 @@ class ResultExportService {
      * @param version
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
+    public BardHttpResponse update(final Long id, final Long clientVersion, final ReadyForExtraction latestStatus) {
         final Result result = Result.findById(id)
-        return utilityService.update(result,id,clientVersion,ReadyForExtraction.byId(latestStatus),"Result")
+        return utilityService.update(result,id,clientVersion,latestStatus,"Result")
     }
     /**
      * Generate the results for a given experiment
