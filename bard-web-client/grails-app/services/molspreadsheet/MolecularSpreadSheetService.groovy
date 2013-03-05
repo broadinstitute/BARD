@@ -355,7 +355,6 @@ class MolecularSpreadSheetService {
                 int innerRowPointer = molSpreadSheetData.rowPointer[spreadSheetActivity.cid]
                 int innerColumnCount = molSpreadSheetData.columnPointer[spreadSheetActivity.eid]
                 String arrayKey = "${innerRowPointer}_${innerColumnCount + START_DYNAMIC_COLUMNS}"
-//                List <MolSpreadSheetCell> molSpreadSheetCellList = new MolSpreadSheetCell(spreadSheetActivity)
                 List <MolSpreadSheetCell> molSpreadSheetCellList = MolSpreadSheetCell.molSpreadSheetCellListFactory (spreadSheetActivity)
                 if (dataMap.containsKey(arrayKey)) {
                     // we have multiple values for cell = ${arrayKey}.  If our existing value is null then use the non-null version
