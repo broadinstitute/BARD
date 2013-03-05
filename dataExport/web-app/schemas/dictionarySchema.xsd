@@ -25,7 +25,7 @@ will give you this element
                                 <xs:complexType>
                                     <xs:attribute name="name" type="xs:string" use="required"/>
                                     <xs:attribute name="abbreviation" type="xs:string"/>
-                                    <xs:attribute name="url" type="xs:string"/>
+                                    <xs:attribute name="sourceUrl" type="xs:string"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>

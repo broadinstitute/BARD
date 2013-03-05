@@ -103,6 +103,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
@@ -113,6 +114,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
@@ -122,6 +124,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
         </experiment>
@@ -132,6 +135,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
             <link rel='item' href='null' type='application/vnd.bard.cap+xml;type=externalReference' />
@@ -148,6 +152,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
@@ -165,6 +170,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
@@ -182,6 +188,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
@@ -195,6 +202,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
@@ -208,6 +216,7 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
             <link rel='up' href='null' type='application/vnd.bard.cap+xml;type=experiments' />
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=result' />
+             <link rel='related' href='null' type='application/json;type=results' />
             <link rel='edit' href='null' type='application/vnd.bard.cap+xml;type=experiment' />
         </experiment>
     '''
