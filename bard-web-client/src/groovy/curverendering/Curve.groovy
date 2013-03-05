@@ -9,7 +9,7 @@ package curverendering;
 * Time: 12:29 PM
 * To change this template use File | Settings | File Templates.
 */
-public class Curve {
+public class Curve implements Serializable {
 
     List<Double> concentrations
     List<Double> activities
@@ -17,4 +17,9 @@ public class Curve {
     Double hillSlope
     Double s0
     Double sinf
+
+    public Curve(){
+
+    }
+
 }

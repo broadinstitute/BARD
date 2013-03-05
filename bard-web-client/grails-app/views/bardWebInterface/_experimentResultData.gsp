@@ -131,17 +131,18 @@
                         </td>
                         <td>
                             <img alt="${currentRow.getValue().title}" title="${currentRow.getValue().title}"
-                                 src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurve',
-                                         params: [sinf: currentRow.getValue().plot.sinf,
-                                                 s0: currentRow.getValue().plot.s0,
-                                                 slope: currentRow.getValue().plot.slope,
-                                                 hillSlope: currentRow.getValue().plot.hillSlope,
-                                                 concentrations: currentRow.getValue().plot.concentrations,
-                                                 activities: currentRow.getValue().plot.activities,
-                                                 yAxisLabel: currentRow.getValue().plot.yAxisLabel,
-                                                 xAxisLabel: currentRow.getValue().plot.xAxisLabel,
-                                                 yNormMin: currentRow.getValue().plot.yNormMin,
-                                                 yNormMax: currentRow.getValue().plot.yNormMax
+                                 src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurves',
+                                         params: [
+                                                 'curves[0].sinf': currentRow.getValue().plot.sinf,
+                                                 'curves[0].s0': currentRow.getValue().plot.s0,
+                                                 'curves[0].slope': currentRow.getValue().plot.slope,
+                                                 'curves[0].hillSlope': currentRow.getValue().plot.hillSlope,
+                                                 'curves[0].concentrations': currentRow.getValue().plot.concentrations,
+                                                 'curves[0].activities': currentRow.getValue().plot.activities,
+                                                 'curves[0].yAxisLabel': currentRow.getValue().plot.yAxisLabel,
+                                                 'curves[0].xAxisLabel': currentRow.getValue().plot.xAxisLabel,
+                                                 'curves[0].yNormMin': currentRow.getValue().plot.yNormMin,
+                                                 'curves[0].yNormMax': currentRow.getValue().plot.yNormMax
                                          ])}"/>
                             <br/>
                             <g:if test="${currentRow.getValue().curveFitParams}">
