@@ -10,6 +10,7 @@ import bard.db.registration.Measure
 import bard.db.registration.PugService
 import grails.plugin.spock.IntegrationSpec
 import org.apache.commons.io.IOUtils
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 
@@ -24,12 +25,25 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     Substance substance;
     Experiment experiment;
     ResultsService resultsService;
+    Map<String, Element> byName = [:]
+
+    Element findElementByName(String label) {
+        Element element = byName[label]
+        if (element == null) {
+//            element = Element.findByLabel(label);
+ //           if(element == null) {
+                element = Element.build(label: label)
+  //          }
+            byName[label] = element
+        }
+        return element
+    }
 
     ExperimentMeasure createMeasure(String label, String statistic = null) {
-        Element resultType = Element.findByLabel(label);
+        Element resultType = findElementByName(label)
         Element statsModifier = null;
         if (statistic != null) {
-            statsModifier = Element.findByLabel(statistic);
+            statsModifier = findElementByName(statistic);
         }
 
         Measure measure = Measure.build(assay: experiment.assay, resultType: resultType, statsModifier: statsModifier)
@@ -42,7 +56,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     AssayContext createListItem(String label, List values) {
-        Element attribute = Element.findByLabel(label);
+        Element attribute = findElementByName(label);
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         values.each {
@@ -54,7 +68,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     AssayContext createFreeItem(String label) {
-        Element attribute = Element.findByLabel(label);
+        Element attribute = findElementByName(label);
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free)
@@ -77,6 +91,9 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
     @Before
     void setup() {
+        GrailsApplication grailsApplication = Mock(GrailsApplication)
+        grailsApplication.config >> [bard: [services: [resultService: [archivePath: "out/ResultServiceIntegrationSpec"]]]]
+
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         resultsService = new ResultsService()
         resultsService.setItemService(new ItemService())
@@ -85,12 +102,20 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         experiment = Experiment.build()
         substance = Substance.build()
 
-        def ec50 = createMeasure("EC50")
-        def percentEffect = createMeasure("percent effect")
-        def meanPercentEffect = createMeasure("percent effect", "mean")
-        def assayConcentration = createListItem("assay component concentration", [0.394,1])
-        def screeningConcentration = createFreeItem("screening concentration")
-        def readoutName = createFreeItem("assay readout name")
+        ArchivePathService archivePathService = new ArchivePathService()
+        archivePathService.grailsApplication = grailsApplication
+        resultsService.archivePathService = archivePathService
+
+        ResultsExportService resultsExportService = new ResultsExportService()
+        resultsService.resultsExportService = resultsExportService
+        resultsExportService.archivePathService = archivePathService
+
+        def ec50 = createMeasure("xEC50")
+        def percentEffect = createMeasure("xpercent effect")
+        def meanPercentEffect = createMeasure("xpercent effect", "xmean")
+        def assayConcentration = createListItem("xassay component concentration", [0.394,1])
+        def screeningConcentration = createFreeItem("xscreening concentration")
+        def readoutName = createFreeItem("xassay readout name")
 
         associateContext(ec50, readoutName)
         associateContext(meanPercentEffect, readoutName)
@@ -129,10 +154,11 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         summary.resultsCreated == 11
         summary.resultAnnotations == 31
 
-        when:
-        List<Result> results = Result.findAllByExperiment(experiment)
-
-        then:
-        results.size() == 11
+// disabled writing to DB
+//        when:
+//        List<Result> results = Result.findAllByExperiment(experiment)
+//
+//        then:
+//        results.size() == 11
     }
 }

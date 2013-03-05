@@ -27,6 +27,7 @@ class Experiment extends AbstractContextOwner {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
+    Long id;
 
     Integer confidenceLevel = 1
 

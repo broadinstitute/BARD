@@ -3,7 +3,36 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bard</groupId>
 	<artifactId>external-validation</artifactId>
-	<version>20130201</version>
+	<version>20130301.1</version>
+	<distributionManagement>
+		<repository>
+			<id>bard-repo.broadinstitute.org</id>
+			<name>bard-repo.broadinstitute.org-releases</name>
+			<url>http://bard-repo.broadinstitute.org:8081/artifactory/libs-release-local</url>
+		</repository>
+	</distributionManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.0.2</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	<repositories>
+		<repository>
+			<id>ebi-repo</id>
+			<name>ebi-repo</name>
+			<url>http://www.ebi.ac.uk/~maven/m2repo</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -15,31 +44,44 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.5.6</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.9</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.5.6</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>edu.scripps</groupId>
 			<artifactId>eutils-java</artifactId>
-			<version>20130204</version>
+			<version>20130215</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.17</version>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<version>0.8.0-rc1</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi.uniprot.kraken</groupId>
+			<artifactId>uniprotjapi</artifactId>
+			<version>2013.01</version>
+		</dependency>
+		<dependency>
+			<groupId>uk.ac.ebi.ols</groupId>
+			<artifactId>ols-client</artifactId>
+			<version>1.18</version>
 		</dependency>
 	</dependencies>
 </project>

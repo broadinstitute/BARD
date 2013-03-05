@@ -8,7 +8,7 @@ import uk.ac.ebi.ols.soap.Query;
 import uk.ac.ebi.ols.soap.QueryService;
 import uk.ac.ebi.ols.soap.QueryServiceLocator;
 
-public class ExternalOntologyOLS implements ExternalOntologyAPI {
+public class ExternalOntologyOLS extends ExternalOntologyAPI {
 	
 	private static QueryService locator;
 	private static Map<String,String> ontologyNames;
@@ -90,8 +90,11 @@ public class ExternalOntologyOLS implements ExternalOntologyAPI {
 		}
 	}
 
-	public String getExternalURL() {
-		return "http://www.ebi.ac.uk/ontology-lookup/";
+	public String getExternalURL(String id) {
+		if( "GO".equals( ontology ) )
+			return String.format("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=%s", id);
+		else 
+			return String.format("http://www.ebi.ac.uk/ontology-lookup/?termId=",id);
 	}
 
 	public String queryGenerator(String term) {

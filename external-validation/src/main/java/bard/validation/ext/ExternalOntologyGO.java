@@ -17,7 +17,8 @@ import com.jolbox.bonecp.BoneCPConfig;
  * @author southern
  *
  */
-public class ExternalOntologyGO implements ExternalOntologyAPI {
+@Deprecated
+public class ExternalOntologyGO extends ExternalOntologyAPI {
 
 	private BoneCP connectionPool;
 
@@ -86,8 +87,8 @@ public class ExternalOntologyGO implements ExternalOntologyAPI {
 	 * Gene Ontology URL
 	 */
 	@Override
-	public String getExternalURL() {
-		return "http://www.geneontology.org/";
+	public String getExternalURL(String id) {
+		return String.format("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=%s", id);
 	}
 
 	protected List<ExternalItem> processResultSet(ResultSet rs) throws SQLException {

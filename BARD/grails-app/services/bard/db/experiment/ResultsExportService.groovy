@@ -16,13 +16,13 @@ class ResultsExportService {
     JsonResultContextItem contextItemAsJson(ResultContextItem item) {
         return new JsonResultContextItem(itemId: item.id,
             attribute: item.attributeElement.label,
-            attributeId: item.attributeElementId,
+            attributeId: item.attributeElement.id,
             qualifier: item.qualifier?.trim(),
             valueNum: item.valueNum,
             valueMin: item.valueMin,
             valueMax: item.valueMax,
             valueDisplay: item.valueDisplay,
-            valueElementId: item.valueElementId)
+            valueElementId: item.valueElement?.id)
     }
 
     JsonResult convertToJson(Result result) {
@@ -39,8 +39,8 @@ class ResultsExportService {
         }
 
         return new JsonResult(resultId: result.id,
-            resultTypeId: result.resultTypeId,
-            statsModifierId: result.statsModifierId,
+            resultTypeId: result.resultType?.id,
+            statsModifierId: result.statsModifier?.id,
             resultType: result.displayLabel,
             valueNum: result.valueNum,
             valueMin: result.valueMin,
@@ -52,12 +52,16 @@ class ResultsExportService {
             contextItems: contextItems)
     }
 
-    void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
+    JsonSubstanceResults transformToJson(Long sid, List<Result> results) {
         List<Result> roots = results.findAll { it.resultHierarchiesForResult.size() == 0 }
 
         List resultsAsJson = roots.collect { convertToJson(it) }
 
         JsonSubstanceResults substanceResults = new JsonSubstanceResults(sid: sid, rootElem: resultsAsJson)
+    }
+
+    void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
+        JsonSubstanceResults substanceResults = transformToJson(sid, results)
 
         writer.write(mapper.writeValueAsString(substanceResults));
 
@@ -66,20 +70,25 @@ class ResultsExportService {
 
     void dumpFromList(String filename, Collection<Result> results) {
         File file = archivePathService.prepareForWriting(filename)
+        dumpFromListToAbsPath(file, results);
+    }
 
+    void dumpFromListToAbsPath(File file, Collection<Result> results) {
         Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(file)));
-        Map<Long, List<Result>> resultsBySid = results.groupBy { it.substanceId }
+        Map<Long, List<Result>> resultsBySid = results.groupBy { it.substance.id }
         for (sid in resultsBySid.keySet()) {
             writeResultsForSubstance(writer, sid, resultsBySid[sid])
         }
         writer.close()
     }
 
+
 //    void dumpFromDb(Long experimentId) {
 //        List sids = []
 //        Result.withSession { Session session ->
 //            sids.addAll(session.createSQLQuery("select distinct r.substance_id from RESULT r where r.experiment_id = ?").setCacheable(false).setParameter(0, experimentId).list());
 //        }
+//        sids = sids.collect { it.longValue() }
 //
 //        println("${sids.size()} Substance IDs for experiment ${experimentId}")
 //
