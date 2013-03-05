@@ -549,7 +549,7 @@ class ResultsService {
         }
     }
 
-    List<Column> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
+    List<String> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
         List<String> columnNames = reader.readLine()
 
         // validate the fixed columns are where they should be
@@ -562,9 +562,7 @@ class ResultsService {
         if (errors.hasErrors())
             return null
 
-        def byName = [:]
         def seenColumns = [] as Set
-        template.columns.each { byName[it.name] = it }
 
         def columns = []
         for(int i=FIXED_COLUMNS.size();i<columnNames.size();i++) {
@@ -573,16 +571,19 @@ class ResultsService {
             if (seenColumns.contains(name))
             {
                 errors.addError(reader.lineNumber, i, "Duplicated column name \"${name}\"")
+                columns.add("")
                 continue
             }
+
             seenColumns.add(name)
 
-            def column = byName.get(name)
-            if (column == null) {
+            if (!template.columns.contains(name)) {
                 errors.addError(reader.lineNumber, i, "Invalid column name \"${name}\"")
-            } else {
-                columns.add(column)
+                columns.add("")
+                continue;
             }
+
+            columns.add(name)
         }
 
         return columns
@@ -609,7 +610,7 @@ class ResultsService {
         // that they've also been mapped into a tree
 
         // start with the rows with no parents because these must contain the root measures
-        List<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
+        Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
         for(measure in rootMeasures) {
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
@@ -663,11 +664,13 @@ class ResultsService {
                 // likewise create each of the context items associated with this measure
                 for(item in itemsByMeasure[measure.measure]) {
                     RawCell itemCell = valueByColumn[item.displayLabel]
-                    ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
+                    if (itemCell != null) {
+                        ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
 
-                    if (resultItem != null) {
-                        resultItem.result = result
-                        result.resultContextItems.add(resultItem)
+                        if (resultItem != null) {
+                            resultItem.result = result
+                            result.resultContextItems.add(resultItem)
+                        }
                     }
                 }
 
@@ -806,9 +809,12 @@ class ResultsService {
         LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
-        List potentialExperimentColumns = []
-        potentialExperimentColumns.addAll(template.constantItems)
-        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
+        List potentialExperimentColumns = itemService.getLogicalItems(template.experiment.assay.assayContexts.collectMany {AssayContext context ->
+            context.assayContextItems.findAll {it.attributeType != AttributeType.Fixed}
+        })
+//        potentialExperimentColumns.addAll()
+//        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
+
         InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
         if (errors.hasErrors())
             return
@@ -890,12 +896,11 @@ class ResultsService {
     }
 
     Map<Measure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
-        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collect { ExperimentMeasure em ->
-            em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
-                acm.assayContext.assayContextItems.collectMany { AssayContext context ->
-                    itemService.getLogicalItems(context.contextItems)
-                }
-            }
+        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
+            [em.measure,
+                em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
+                    itemService.getLogicalItems(acm.assayContext.contextItems)
+                } ]
         }
 
         return itemsByMeasure

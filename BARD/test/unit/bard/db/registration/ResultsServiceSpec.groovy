@@ -131,9 +131,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         Measure inhibitionMeasure = Measure.build()
         Measure ec50Measure = Measure.build()
 
-        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
+//        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
         def constantItems = []
-        ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: columns, constantItems: constantItems)
+        ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: ["Inhibition","EC50"], constantItems: constantItems)
 
         String sample = ",Experiment ID,123\n" +
                 "\n" +
