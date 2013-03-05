@@ -75,7 +75,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         numResults.times {Result.build(readyForExtraction: READY, experiment: experiment)}
 
         when: "We call the experiment service to update this experiment"
-        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'COMPLETE')
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, ReadyForExtraction.COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
@@ -96,7 +96,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         given: "Given a non-existing Experiment"
 
         when: "We call the experiment service to update this experiment"
-        this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE.toString())
+        this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE)
 
         then: "An exception is thrown, indicating that the experiment does not exist"
         thrown(NotFoundException)

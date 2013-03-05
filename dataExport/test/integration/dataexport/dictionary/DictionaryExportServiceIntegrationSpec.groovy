@@ -57,7 +57,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         Element e = Element.build(readyForExtraction: initialReadyForExtraction)
 
         when: "We call the dictionary service to update this project"
-        final BardHttpResponse bardHttpResponse = this.dictionaryExportService.update(elementId, version, 'Complete')
+        final BardHttpResponse bardHttpResponse = this.dictionaryExportService.update(elementId, version, ReadyForExtraction.COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse

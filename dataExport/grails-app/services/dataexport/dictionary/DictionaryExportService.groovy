@@ -36,9 +36,9 @@ class DictionaryExportService {
      * @param version
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
+    public BardHttpResponse update(final Long id, final Long clientVersion, final ReadyForExtraction latestStatus) {
         final Element element = Element.findById(id)
-        return utilityService.update(element, id, clientVersion, ReadyForExtraction.byId(latestStatus), "Element")
+        return utilityService.update(element, id, clientVersion, latestStatus, "Element")
     }
     /**
      *  Generate a stage element given a stageId

@@ -32,9 +32,9 @@ class ProjectExportService extends ExportAbstractService {
      * @param version
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
+    public BardHttpResponse update(Long id, Long clientVersion, ReadyForExtraction latestStatus) {
         final Project project = Project.findById(id)
-        return utilityService.update(project, id, clientVersion, ReadyForExtraction.byId(latestStatus), "Project")
+        return utilityService.update(project, id, clientVersion, latestStatus, "Project")
     }
     /**
      * Generate projectStep
