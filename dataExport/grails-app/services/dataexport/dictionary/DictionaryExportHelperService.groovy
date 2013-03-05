@@ -19,7 +19,7 @@ class DictionaryExportHelperService {
     DataSource dataSource
 
 
-    String getElementMediaType(){
+    String getElementMediaType() {
         this.mediaTypesDTO.elementMediaType
     }
     /**
@@ -274,6 +274,9 @@ class DictionaryExportHelperService {
             if (element.externalURL) {
                 externalUrl(element.externalURL)
             }
+            if (element.ontologyItems) {
+                generateOntologyItems(xml, element.ontologyItems)
+            }
             //now generate links for editing the element
             //clients can use this link to indicate that they have consumed the element
             final String ELEMENT_MEDIA_TYPE = this.getElementMediaType()
@@ -285,6 +288,31 @@ class DictionaryExportHelperService {
             }
 
         }
+    }
+
+    public void generateOntologyItems(final MarkupBuilder xml, Set<OntologyItem> ontologyItems) {
+        xml.ontologies() {
+            for (OntologyItem ontologyItem : ontologyItems) {
+                generateOntologyItem(xml, ontologyItem)
+            }
+        }
+    }
+
+    public void generateOntologyItem(final MarkupBuilder xml, OntologyItem ontologyItem) {
+        final Ontology ontology = ontologyItem.getOntology()
+        final Map<String, String> attributes = [:]
+
+
+        attributes.put('name', ontology.ontologyName)
+        if (ontology.abbreviation) {
+            attributes.put('abbreviation', ontology.abbreviation)
+        }
+        if (ontology.systemUrl) {
+            attributes.put('sourceUrl', ontology.systemUrl)
+        }
+        xml.ontology(attributes) {}
+
+
     }
 /**
  *

@@ -1199,7 +1199,31 @@ class XmlTestSamples {
 </resultType>
 '''
 
+  static String ONTOLOGY_FULL='''
+<ontology name='name' abbreviation='BAO' sourceUrl='http://bao.org' />
+'''
+  static final String ONTOLOGY_MISSING_ATTRIBUTES ="<ontology name='name' />"
+    static String ONTOLOGIES_FULL='''<ontologies>
+    <ontology name='name1' abbreviation='BAO' sourceUrl='http://bao.org' />
+    <ontology name='name2' />
+    </ontologies>'''
 
+    static final String ONTOLOGIES_MISSING_ATTRIBUTES ='''
+   <ontologies>
+  <ontology name='name' />
+</ontologies>
+'''
+  static final String ELEMENT_WITH_ONTOLOGY=  '''
+<element elementId='' readyForExtraction='Ready' elementStatus='Pending'>
+  <label>label</label>
+  <externalUrl>http://www.broad.org</externalUrl>
+  <ontologies>
+    <ontology name='name' />
+  </ontologies>
+  <link rel='edit' href='null' type='xml' />
+  <link rel='related' href='null' type='xml' />
+</element>
+'''
     static String ELEMENT_FULL = '''
 <element elementId='' readyForExtraction='Ready' elementStatus='Pending' abbreviation='abb'>
   <label>label</label>
