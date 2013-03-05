@@ -60,8 +60,8 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         values.each {
-            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free, valueNum: it)
-            context.addToAssayContextItems(contextItem)
+            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it)
+//            context.addToAssayContextItems(contextItem)
         }
 
         return context
@@ -72,15 +72,15 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free)
-        context.addToAssayContextItems(contextItem)
+//        context.addToAssayContextItems(contextItem)
 
         return context
     }
 
     def associateContext(ExperimentMeasure experimentMeasure, AssayContext context) {
-        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure:  experimentMeasure.measure)
-        experimentMeasure.measure.addToAssayContextMeasures(assayContextMeasure)
-        context.addToAssayContextMeasures(assayContextMeasure)
+        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: experimentMeasure.measure)
+//        experimentMeasure.measure.addToAssayContextMeasures(assayContextMeasure)
+//        context.addToAssayContextMeasures(assayContextMeasure)
     }
 
     def addChild(ExperimentMeasure parent, ExperimentMeasure child) {

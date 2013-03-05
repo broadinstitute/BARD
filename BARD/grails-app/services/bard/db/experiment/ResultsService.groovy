@@ -14,6 +14,7 @@ import bard.db.experiment.Substance
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
+import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.Measure
@@ -59,7 +60,7 @@ class ResultsService {
         return NUMBER_PATTERN.matcher(value).matches()
     }
 
-    static def parseListValue(Column column, String value, List<AssayContextItem> contextItems) {
+    static def parseListValue(String value, List<AssayContextItem> contextItems) {
         if (isNumber(value)) {
             float v = Float.parseFloat(value)
             float smallestDelta = Float.MAX_VALUE
@@ -72,7 +73,7 @@ class ResultsService {
                     closestValue = it.valueNum
                 }
             }
-            return new Cell(value: closestValue, qualifier: "= ", column: column)
+            return new Cell(value: closestValue, qualifier: "= ", valueDisplay: closestValue.toString())
         } else {
             def labelMap = [:]
             contextItems.each {
@@ -83,35 +84,11 @@ class ResultsService {
             if (selectedItem == null) {
                 return "Could not find \"${value}\" among values in list: ${labelMap.keySet()}"
             }
-            return new Cell(element: selectedItem.valueElement, valueDisplay: selectedItem.valueDisplay, column: column)
+            return new Cell(element: selectedItem.valueElement, valueDisplay: selectedItem.valueDisplay)
         }
     }
 
-    static def makeItemParser(ItemService.Item item) {
-        return { Column column, String value ->
-            if (item.type == AttributeType.List) {
-                return parseListValue(column, value, item.contextItems)
-            } else if (item.type == AttributeType.Free) {
-                return parseAnything(column, value)
-            } else if (item.type == AttributeType.Range) {
-                Double rangeMin = item.contextItems[0].valueMin
-                Double rangeMax = item.contextItems[0].valueMax
-                Double rangeName = item.attributeElement.label
-
-                float floatValue = Float.parseFloat(value)
-
-                if (floatValue < rangeMin || floatValue > rangeMax) {
-                    return "The value \"${floatValue}\" outside of allowed range (${rangeMin} - ${rangeMax}) for ${rangeName}"
-                }
-
-                return new Cell(value: floatValue, column: column)
-            } else {
-                throw new RuntimeException("Did not know how to handle attribute type "+item.type)
-            }
-        }
-    }
-
-    static def parseQualifiedNumber(Column column, String value) {
+    static def parseQualifiedNumber(String value) {
         Matcher matcher = QUALIFIED_NUMBER_PATTERN.matcher(value)
 
         if (matcher.matches()) {
@@ -134,7 +111,12 @@ class ResultsService {
                 return "Could not parse \"${matcher.group(2)}\" as a number"
             }
 
-            Cell cell = new Cell(value: a, qualifier: foundQualifier, column: column)
+            String valueDisplay = a.toString()
+            if (foundQualifier != "= ") {
+                valueDisplay = foundQualifier.trim()+valueDisplay
+            }
+
+            Cell cell = new Cell(value: a, qualifier: foundQualifier, valueDisplay: valueDisplay )
 
             return cell
         } else {
@@ -142,7 +124,7 @@ class ResultsService {
         }
     }
 
-    static def parseRange(Column column, String value) {
+    static def parseRange(String value) {
         def rangeMatch = RANGE_PATTERN.matcher(value)
         if (rangeMatch.matches()) {
             float minValue, maxValue
@@ -156,33 +138,33 @@ class ResultsService {
                 return "Could not parse \"${value}\" as a range"
             }
 
-            Cell cell = new Cell(minValue: minValue, maxValue: maxValue, column: column)
+            Cell cell = new Cell(minValue: minValue, maxValue: maxValue, valueDisplay: "${minValue}-${maxValue}")
             return cell
         }
 
         return "Expected a range, but got \"${value}\""
     }
 
-    static def parseAnything(Column column, String value) {
+    static def parseAnything(String value) {
         if (RANGE_PATTERN.matcher(value).matches()) {
-            return parseRange(column, value)
+            return parseRange(value)
         } else if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
-            return parseQualifiedNumber(column, value)
+            return parseQualifiedNumber(value)
         } else {
             // assume it's free text and we take it literally
-            Cell cell = new Cell(valueDisplay:value, column: column)
-            return cell
+            return new Cell(valueDisplay:value)
         }
     }
 
-    static def parseNumberOrRange(Column column, String value) {
+    static def parseNumberOrRange(String value) {
         if (RANGE_PATTERN.matcher(value).matches()) {
-            return parseRange(column, value)
+            return parseRange(value)
         } else {
-            return parseQualifiedNumber(column, value)
+            return parseQualifiedNumber(value)
         }
     }
 
+    /*
     static class Column {
         String name;
 
@@ -215,6 +197,7 @@ class ResultsService {
             return "${name}"
         }
     }
+    */
 
     static class Row {
         int lineNumber;
@@ -224,12 +207,10 @@ class ResultsService {
         Integer parentRowNumber;
         Long sid;
 
-        List<Cell> cells = [];
+        List<RawCell> cells = [];
     }
 
     static class Cell {
-        Column column;
-
         String qualifier;
         Float value;
 
@@ -240,10 +221,7 @@ class ResultsService {
 
         String valueDisplay;
 
-        public Element getAttributeElement() {
-            return column.item.attributeElement;
-        }
-
+        /*
         String getValueDisplay() {
             if (valueDisplay != null) {
                 return valueDisplay;
@@ -283,6 +261,12 @@ class ResultsService {
         String toString() {
             "Cell(${column})"
         }
+        */
+    }
+
+    static class RawCell {
+        String columnName;
+        String value;
     }
 
     static class ImportSummary {
@@ -325,8 +309,8 @@ class ResultsService {
 
     static class Template {
         Experiment experiment;
-        List<Column> constantItems;
-        List<Column> columns;
+        List<String> constantItems;
+        List<String> columns;
 
         List asTable() {
             def lines = []
@@ -335,23 +319,17 @@ class ResultsService {
             lines.add(["",EXPERIMENT_NAME_LABEL, experiment.experimentName])
 
             // add the fields for values that are constant across entire experiment
-            constantItems.each { lines.add(["",it.name]) }
+            constantItems.each { lines.add(["",it]) }
             lines.add([])
 
             // add the first line of the header
             def row = []
             row.addAll(FIXED_COLUMNS)
-            columns.each {row.add(it.name)}
+            columns.each {row.add(it)}
             lines.add(row)
             lines.add(["1"])
 
             return lines
-        }
-
-        List<Column> select(List<String> names) {
-            def byName = [:]
-            columns.each { byName[it.name] = it}
-            return names.collect {byName.get(it)}
         }
     }
 
@@ -374,44 +352,34 @@ class ResultsService {
      * Construct list of columns that a result upload could possibly contain
      */
     Template generateSchema(Experiment experiment, List<ItemService.Item> constantItems, List<Measure> measures, List<ItemService.Item> measureItems) {
-        List<Column> constants = []
-        List<Column> columns = []
-        Set<String> usedNames = [] as Set
+        Set<String> constants = [] as Set
+        Set<String> columns = [] as Set
 
         // add all the non-fixed context items
         for(item in constantItems) {
             String name = item.attributeElement.label
-            usedNames.add(name)
-
-            Column column = new Column(name, item)
-            constants.add(column)
+            constants.add(name)
         }
 
         // add all of the measurements
         for(measure in measures) {
             String name = measure.displayLabel
-            usedNames.add(name)
-
-            Column column = new Column(name, measure)
-            columns.add(column)
+            columns.add(name)
         }
 
         // add all the measure context items
         for(item in measureItems) {
             String name = item.attributeElement.label
-            usedNames.add(name)
-
-            Column column = new Column(name, item)
-            columns.add(column)
+            columns.add(name)
         }
 
-        return new Template(experiment: experiment, constantItems: constants, columns: columns)
+        return new Template(experiment: experiment, constantItems: constants as List, columns: columns as List)
     }
 
     public static class InitialParse {
         String experimentName;
         Long experimentId;
-        List<ExperimentContext> contexts
+        List<ExperimentContext> contexts = []
         int linesParsed;
         List<Row> rows;
         List<List<String>> topLines;
@@ -446,14 +414,10 @@ class ResultsService {
         return true
     }
 
-    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, List<Column> experimentItemDefs) {
-        Map<String,Column> nameToColumn = [:]
-        Map<AssayContext,Collection<Cell>> groupedByContext = [:]
-        Map header = [:]
-        InitialParse result = new InitialParse()
 
-        // populate map so we can look up columns by name
-        experimentItemDefs.each {nameToColumn[it.name] = it}
+    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems) {
+        InitialParse result = new InitialParse()
+        Map experimentAnnotations = [:]
 
         while(true) {
             String[] values = reader.readLine();
@@ -477,55 +441,55 @@ class ResultsService {
                 continue
             }
 
-            String key = values[1]
-            if (key == EXPERIMENT_ID_LABEL) {
-                result.experimentId = Long.parseLong(values[2])
-            } else if (key == EXPERIMENT_NAME_LABEL) {
-                result.experimentName = values[2]
-            } else if (nameToColumn.get(key)) {
-                Column column = nameToColumn.get(key)
-
-                def parsed = column.parseValue(values[2])
-                if (parsed instanceof Cell) {
-                    List group = groupedByContext[column.item.assayContext]
-                    if (group == null) {
-                        group = []
-                        groupedByContext[column.item.assayContext] = group
-                    }
-                    group.add(parsed)
-                } else {
-                    errors.addError(0, 0, parsed)
-                }
-            } else {
-                errors.addError(reader.lineNumber, 1, "Unknown name \"${key}\" in constant section")
+            if (values.length == 2 || values[2].isEmpty()) {
+                // we have no value for the given key
                 continue
             }
 
             String value = values[2]
-            header.put(key, value)
+            String key = values[1]
+            if (key == EXPERIMENT_ID_LABEL) {
+                result.experimentId = Long.parseLong(value)
+            } else if (key == EXPERIMENT_NAME_LABEL) {
+                result.experimentName = value
+            } else {
+                experimentAnnotations.put(key, value)
+            }
         }
 
-        // translate cells into grouped context items
-        result.contexts = []
-        groupedByContext.values().each { Collection<Cell> cells ->
+        Set<String> unusedKeyNames = new HashSet(experimentAnnotations.keySet())
+
+        // walk through all the context items on the assay
+        List<ExperimentContext> experimentContexts = []
+        for(values in (constantItems.groupBy {it.assayContext}).values()) {
             ExperimentContext context = new ExperimentContext()
-            for(cell in cells) {
-                ExperimentContextItem item = new ExperimentContextItem(attributeElement: cell.attributeElement,
-                        experimentContext: context,
-                        valueElement: cell.element,
-                        valueNum: cell.value,
-                        valueMin: cell.minValue,
-                        valueMax: cell.maxValue,
-                        qualifier: cell.qualifier)
-                context.experimentContextItems.add(item)
+            for(item in values) {
+                String label = item.displayLabel;
+
+                unusedKeyNames.remove(label);
+                String stringValue = experimentAnnotations.get(label)
+                if (stringValue == null || stringValue.isEmpty())
+                    continue;
+
+                ExperimentContextItem experimentContextItem = createExperimentContextItem(item, stringValue, errors)
+                if (experimentContextItem != null) {
+                    context.contextItems.add(experimentContextItem)
+                    experimentContextItem.experimentContext = context
+                }
             }
-            result.contexts.add(context)
+
+            if (context.experimentContextItems.size() > 0)
+                result.contexts.add(context)
+        }
+
+        for(unusedKey in unusedKeyNames) {
+            errors.addError(0, 0, "Unknown field \"${unusedKey}\" in header")
         }
 
         return result
     }
 
-    void forEachDataRow(LineReader reader, List<Column> columns, ImportSummary errors, Closure fn) {
+    void forEachDataRow(LineReader reader, List<String> columns, ImportSummary errors, Closure fn) {
         int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
 
         while(true) {
@@ -585,7 +549,7 @@ class ResultsService {
         }
     }
 
-    List<Column> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
+    List<String> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
         List<String> columnNames = reader.readLine()
 
         // validate the fixed columns are where they should be
@@ -598,9 +562,7 @@ class ResultsService {
         if (errors.hasErrors())
             return null
 
-        def byName = [:]
         def seenColumns = [] as Set
-        template.columns.each { byName[it.name] = it }
 
         def columns = []
         for(int i=FIXED_COLUMNS.size();i<columnNames.size();i++) {
@@ -609,195 +571,218 @@ class ResultsService {
             if (seenColumns.contains(name))
             {
                 errors.addError(reader.lineNumber, i, "Duplicated column name \"${name}\"")
+                columns.add("")
                 continue
             }
+
             seenColumns.add(name)
 
-            def column = byName.get(name)
-            if (column == null) {
+            if (!template.columns.contains(name)) {
                 errors.addError(reader.lineNumber, i, "Invalid column name \"${name}\"")
-            } else {
-                columns.add(column)
+                columns.add("")
+                continue;
             }
+
+            columns.add(name)
         }
 
         return columns
     }
 
-    void associateItemToResults(List<Result> results, List<Column> columns, Cell cell, Closure isLinked) {
-        assert columns.size() == results.size()
+    Collection<Result> createResults(List<Row> rows, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map<Measure, Collection<ItemService.Item>> itemsByMeasure) {
+        validateParentRowsExist(rows, errors);
+        if (errors.hasErrors())
+            return []
 
-        for(int i=0;i<results.size();i++) {
-            Column column = columns.get(i)
-            Result result = results.get(i)
+        Map<Integer, Collection<Row>> byParent = rows.groupBy { it.parentRowNumber }
 
-            boolean linked = isLinked(column.measure, cell.column.item)
-            if (linked) {
-                ResultContextItem item = constructContextItem(result, cell)
-                result.resultContextItems.add(item)
-            }
-        }
-    }
-
-    private ResultContextItem constructContextItem(Result result, Cell cell) {
-        ResultContextItem item = new ResultContextItem()
-
-        item.result = result
-        item.attributeElement = cell.column.item.attributeElement
-        item.valueNum= cell.value
-        item.qualifier= cell.qualifier?.trim()
-        item.valueMin= cell.minValue
-        item.valueMax= cell.maxValue
-        item.valueElement= cell.element
-        item.valueDisplay= cell.valueDisplay
-
-        return item
-    }
-
-    Map<Number, Collection<Number>> constructChildMap(Collection<Row> rows) {
-        Map map = [:]
+        // create a set which we'll use to track which cells were used at least once.  Since we're driven by
+        // walking the measure tree, it's possible that some cells might not get consumed.  Those should be
+        // errors.
+        IdentityHashMap<RawCell, Row> unused = new IdentityHashMap();
         for(row in rows) {
-            if (row.parentRowNumber != null) {
-                List<Number> childrenIds = map[row.parentRowNumber]
-
-                if (childrenIds == null) {
-                    childrenIds = new ArrayList();
-                    map[row.parentRowNumber] = childrenIds
-                }
-                childrenIds.add(row.rowNumber)
+            for(cell in row.cells) {
+                unused.put(cell, row)
             }
         }
 
-        return map
-    }
+        // we're going to walk through the measure tree, taking items from the results now
+        // that they've also been mapped into a tree
 
-
-    Collection<Result> createResults(InitialParse parse, ImportSummary errors, Map<ItemService.Item, Collection<Measure>> measuresPerItem, Collection<ExperimentMeasure> experimentMeasures) {
-        def rowByNumber = [:]
-        parse.rows.each {
-            rowByNumber[it.rowNumber] = it
+        // start with the rows with no parents because these must contain the root measures
+        Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
+        List<Result> results = []
+        for(measure in rootMeasures) {
+            results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
-        def resultsByRowNumber = [:]
-        def resultByCell = new IdentityHashMap()
-        def cellByResult = new IdentityHashMap()
+        return results
+    }
 
-        // construct all the Result objects (one per cell belonging to a measure)
-        for(row in parse.rows) {
-            def substance = Substance.get(row.sid)
+    Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
+        List<Result> results = []
+
+        for(row in rows) {
+            Substance substance = Substance.get(row.sid)
             if(substance == null) {
                 errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
                 continue
             }
 
-            def results = []
-            for(cell in row.cells) {
-                if (cell.column.measure != null) {
-                    def result = createResult(cell, row, substance)
-                    results << result
-                    resultByCell[cell] = result
-                    cellByResult[result] = cell
+            Map<String, RawCell> valueByColumn = row.cells.collectEntries { [it.columnName, it] }
+
+            String label = measure.measure.displayLabel
+            RawCell cell = valueByColumn.get(label)
+
+            if(cell != null) {
+                // mark this cell as having been consumed
+                unused.remove(cell)
+
+                Result result = createResult(row.replicate, measure.measure, cell.value, substance, errors)
+                if (result == null)
+                    continue;
+
+                // children can be on the same row or any row that has this row as its parent
+                // so combine those two collections
+                List<Row> possibleChildRows = [row]
+                Collection<Row> childRows = byParent[row.rowNumber]
+                if (childRows != null) {
+                    possibleChildRows.addAll(childRows)
                 }
-            }
-            resultsByRowNumber[row.rowNumber] = results
-        }
 
-        // validate all parent rows exist
-        for(row in parse.rows) {
-            if (row.parentRowNumber != null && !resultsByRowNumber.containsKey(row.parentRowNumber)) {
-                errors.addError(row.lineNumber, 0, "Could not find row ${row.parentRowNumber} but this row ${row.rowNumber} is a child")
-            }
-        }
+                // for each child measure, create a result per row in each of the child rows
+                for(child in measure.childMeasures) {
+                    Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
 
-        // create the parent/child links between measures
-        createResultHierarchy(parse, rowByNumber, experimentMeasures, errors, resultByCell)
+                    for(childResult in resultChildren) {
+                        linkResults(child.parentChildRelationship, errors, 0, childResult, result);
+                    }
 
-        // and finally create the context items
-        def isLinked = { measure, item ->
-            if(measuresPerItem.containsKey(item)) {
-                return measuresPerItem[item].contains(measure)
-            }
-            return false;
-        }
-        for(row in parse.rows) {
-            def results = resultsByRowNumber.get(row.rowNumber)
-            for(cell in row.cells) {
-                if (cell.column.item != null) {
-                    associateItemToResults(results, results.collect {cellByResult[it].column},  cell, isLinked);
+                    results.addAll(resultChildren)
                 }
-            }
-        }
 
-        return resultByCell.values()
-    }
+                // likewise create each of the context items associated with this measure
+                for(item in itemsByMeasure[measure.measure]) {
+                    RawCell itemCell = valueByColumn[item.displayLabel]
+                    if (itemCell != null) {
+                        ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
 
-    private Result createResult(Cell cell, Row row, Substance substance) {
-
-        Result result = new Result()
-        result.qualifier = cell.qualifier
-        result.valueDisplay = cell.valueDisplay
-        result.valueNum = cell.value
-        result.valueMin = cell.minValue
-        result.valueMax = cell.maxValue
-        result.statsModifier = cell.column.measure.statsModifier
-        result.resultType = cell.column.measure.resultType
-        result.replicateNumber = row.replicate
-        result.substance = substance
-        result.dateCreated = new Date()
-        result.resultStatus = "Pending"
-
-        return result;
-    }
-
-    private void createResultHierarchy(InitialParse parse, Map rowByNumber, Collection<ExperimentMeasure> experimentMeasures, ImportSummary errors, Map resultByCell) {
-        Map<Number, Collection<Number>> parentToChildRows = constructChildMap(parse.rows)
-        for (row in parse.rows) {
-            // find all the cells which might have a parent-child relationship either due to being on the same
-            // row, or due to the rows being linked by parent id
-            List<Cell> possiblyRelatedCells = new ArrayList(row.cells)
-            Collection<Number> childIds = parentToChildRows[row.rowNumber]
-            if (childIds != null) {
-                for (childId in childIds) {
-                    possiblyRelatedCells.addAll(rowByNumber[childId].cells)
-                }
-            }
-
-            // group the cells by measure
-            Map<Measure, Collection<Cell>> cellsByMeasure = possiblyRelatedCells.groupBy { it.column.measure }
-
-            for (experimentMeasure in experimentMeasures) {
-                if (experimentMeasure.parent != null) {
-                    Collection<Cell> parentCells = cellsByMeasure[experimentMeasure.parent.measure];
-                    Collection<Cell> childCells = cellsByMeasure[experimentMeasure.measure];
-
-                    if (parentCells != null && childCells != null) {
-                        if (parentCells.size() > 1) {
-                            errors.addError(row.lineNumber, 0, "Parent child relationship between ${parentCells} and ${childCells} is ambiguous.  There are multiple possible ways to assign relationships between these cells")
-                        } else if (parentCells.size() == 1) {
-                            Cell parentCell = parentCells.first();
-                            Result parentResult = resultByCell[parentCell];
-
-                            if (parentResult == null) {
-                                throw new RuntimeException("Could not find result that came from parent ${parentCell}")
-                            }
-
-                            for (childCell in childCells) {
-                                Result childResult = resultByCell[childCell];
-
-                                if (childResult == null) {
-                                    throw new RuntimeException("Could not find result that came from ${childCell}")
-                                }
-
-                                linkResults(experimentMeasure.parentChildRelationship, errors, row.lineNumber, childResult, parentResult)
-                            }
+                        if (resultItem != null) {
+                            resultItem.result = result
+                            result.resultContextItems.add(resultItem)
                         }
                     }
                 }
+
+                results.add(result)
+            }
+        }
+
+        return results;
+    }
+
+    void validateParentRowsExist(Collection<Row> rows, ImportSummary errors) {
+        def rowByNumber = [:]
+        for(row in rows) {
+            rowByNumber[row.rowNumber] = row
+        }
+
+        for(row in rows) {
+            if (row.parentRowNumber != null && !rowByNumber.containsKey(row.parentRowNumber)) {
+                errors.addError(row.lineNumber, 0, "Could not find row ${row.parentRowNumber} but this row ${row.rowNumber} is a child")
             }
         }
     }
 
-    private void linkResults(relationship, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
+    def parseContextItem(String stringValue, ItemService.Item item) {
+        if (item.type == AttributeType.List) {
+            return parseListValue(stringValue, item.contextItems)
+        } else if (item.type == AttributeType.Free) {
+            return parseAnything(stringValue)
+        } else if (item.type == AttributeType.Range) {
+            Double rangeMin = item.contextItems[0].valueMin
+            Double rangeMax = item.contextItems[0].valueMax
+            Double rangeName = item.attributeElement.label
+
+            float floatValue = Float.parseFloat(stringValue)
+
+            if (floatValue < rangeMin || floatValue > rangeMax) {
+                return "The value \"${floatValue}\" outside of allowed range (${rangeMin} - ${rangeMax}) for ${rangeName}"
+            }
+
+            return new Cell(value: floatValue)
+        } else {
+            throw new RuntimeException("Did not know how to handle attribute type "+item.type)
+        }
+    }
+
+    ResultContextItem createResultItem(String stringValue, ItemService.Item assayItem, ImportSummary errors) {
+        def parsed = parseContextItem(stringValue, assayItem)
+
+        if (parsed instanceof Cell) {
+            Element unit = assayItem.attributeElement.unit;
+            Cell cell = parsed
+            ResultContextItem item = new ResultContextItem()
+
+            item.attributeElement = assayItem.attributeElement
+            item.valueNum= cell.value
+            item.qualifier= cell.qualifier
+            item.valueMin= cell.minValue
+            item.valueMax= cell.maxValue
+            item.valueElement = cell.element
+            item.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+
+            return item
+        } else {
+            errors.addError(0, 0, parsed)
+            return null
+        }
+    }
+
+    Result createResult(Integer replicate, Measure measure, String valueString, Substance substance, ImportSummary errors) {
+        def parsed = parseAnything(valueString)
+
+        if (parsed instanceof Cell) {
+            Cell cell = parsed
+            Element unit = measure.resultType.unit;
+
+            Result result = new Result()
+            result.qualifier = cell.qualifier
+            result.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+            result.valueNum = cell.value
+            result.valueMin = cell.minValue
+            result.valueMax = cell.maxValue
+            result.statsModifier = measure.statsModifier
+            result.resultType = measure.resultType
+            result.replicateNumber = replicate
+            result.substance = substance
+            result.dateCreated = new Date()
+            result.resultStatus = "Pending"
+            return result;
+        } else {
+            errors.addError(0, 0, parsed)
+            return null;
+        }
+    }
+
+    private ExperimentContextItem createExperimentContextItem(ItemService.Item assayItem, String stringValue, ImportSummary errors) {
+        def parsed = parseContextItem(stringValue, assayItem)
+
+        if (parsed instanceof Cell) {
+            Cell cell = parsed
+            ExperimentContextItem item = new ExperimentContextItem(attributeElement: assayItem.attributeElement,
+                    valueElement: cell.element,
+                    valueNum: cell.value,
+                    valueMin: cell.minValue,
+                    valueMax: cell.maxValue,
+                    qualifier: cell.qualifier)
+        } else {
+            errors.addError(0, 0, parsed)
+            return null;
+        }
+    }
+
+    private void linkResults(String relationship, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
         HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
         if (hierarchyType == null) {
             // hack until values are consistent in database
@@ -824,15 +809,18 @@ class ResultsService {
         LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
-        List potentialExperimentColumns = []
-        potentialExperimentColumns.addAll(template.constantItems)
-        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
+        List potentialExperimentColumns = itemService.getLogicalItems(template.experiment.assay.assayContexts.collectMany {AssayContext context ->
+            context.assayContextItems.findAll {it.attributeType != AttributeType.Fixed}
+        })
+//        potentialExperimentColumns.addAll()
+//        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
+
         InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
         if (errors.hasErrors())
             return
 
         // main header
-        List<Column> columns = parseTableHeader(reader, template, errors)
+        List<String> columns = parseTableHeader(reader, template, errors)
         if (errors.hasErrors())
             return
 
@@ -875,13 +863,8 @@ class ResultsService {
                 if (cellString.isEmpty())
                     continue
 
-                Column column = columns.get(i);
-                def parseResult = column.parseValue(cellString);
-                if (!(parseResult instanceof Cell)) {
-                    errors.addError(lineNumber, i+FIXED_COLUMNS.size(), parseResult);
-                } else {
-                    row.cells.add(parseResult)
-                }
+                String column = columns.get(i);
+                row.cells.add(new RawCell(columnName: column, value: cellString));
             }
 
             rows.add(row)
@@ -892,36 +875,6 @@ class ResultsService {
         result.topLines = reader.topLines
 
         return result
-    }
-
-    Map<AssayContextItem, Collection<Measure>> getItemsForMeasures(Assay assay) {
-        Map result = [:]
-
-        assay.assayContextItems.each {
-            def collection
-            if(result.containsKey(it)){
-                collection = result[it]
-            } else {
-                collection = [] as Set
-                result[it] = collection
-            }
-            it.assayContext.assayContextMeasures.each {
-                collection.add(it.measure)
-            }
-        }
-
-        return result
-    }
-
-    Map<ItemService.Item, Collection<Measure>> findRelationships(Experiment experiment) {
-        def map = [:]
-
-        itemService.getLogicalItems(experiment.assay.assayContextItems).each {
-            def measures = it.assayContext.assayContextMeasures.collect { it.measure }
-            map[it] = measures
-        }
-
-        return map
     }
 
     ImportSummary importResults(Experiment experiment, InputStream input) {
@@ -942,11 +895,22 @@ class ResultsService {
         return summary;
     }
 
+    Map<Measure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
+        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
+            [em.measure,
+                em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
+                    itemService.getLogicalItems(acm.assayContext.contextItems)
+                } ]
+        }
+
+        return itemsByMeasure
+    }
+
     ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename) {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
-        def measuresPerItem = findRelationships(experiment)
+        Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
         def parsed = initialParse(new InputStreamReader(input), errors, template)
         if (parsed != null && !errors.hasErrors()) {
@@ -963,7 +927,7 @@ class ResultsService {
 
             if (!errors.hasErrors())
             {
-                def results = createResults(parsed, errors, measuresPerItem, experiment.experimentMeasures)
+                def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
 
                 if (!errors.hasErrors()) {
                     // and persist these results to the DB
