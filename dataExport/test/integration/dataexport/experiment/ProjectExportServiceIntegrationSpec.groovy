@@ -66,7 +66,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         assert bardHttpResponse
         assert bardHttpResponse.ETag == expectedETag
         assert bardHttpResponse.httpResponseCode == expectedStatusCode
-        assert Project.get(projectId).readyForExtraction.toString() == expectedReadyForExtraction
+        assert Project.get(projectId).readyForExtraction == expectedReadyForExtraction
 
         where:
         label                                             | expectedStatusCode     | expectedETag | projectId | version | initialReadyForExtraction | expectedReadyForExtraction
