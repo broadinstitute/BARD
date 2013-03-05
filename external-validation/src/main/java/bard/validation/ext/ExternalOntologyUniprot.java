@@ -28,7 +28,7 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 		int resultSize = entryIterator.getResultSize();
 		if (resultSize != 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique Uniprot identifier", id));
-		ExternalItem item = getExternalItems(entryIterator).get(0);
+		ExternalItem item = getExternalItems(entryIterator, 1).get(0);
 		item.setId(id); // should always be the id the user submitted.
 		return item;
 	}
@@ -38,13 +38,13 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
 		if (entryIterator.getResultSize() != 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique Uniprot protein name", name));
-		return getExternalItems(entryIterator).get(0);
+		return getExternalItems(entryIterator, 1).get(0);
 	}
 
-	public List<ExternalItem> findMatching(String term) throws ExternalOntologyException {
+	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		Query query = UniProtQueryBuilder.buildFullTextSearch(term);
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
-		return getExternalItems(entryIterator);
+		return getExternalItems(entryIterator, limit);
 	}
 
 	
@@ -67,13 +67,16 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 		return null;
 	}
 	
-	protected List<ExternalItem> getExternalItems(EntryIterator<UniProtEntry> entryIterator) {
-		List<ExternalItem> items = new ArrayList();
+	protected List<ExternalItem> getExternalItems(EntryIterator<UniProtEntry> entryIterator, int limit) {
+		int capacity = limit > 0 ? limit : entryIterator.getResultSize();
+		List<ExternalItem> items = new ArrayList(capacity);
 		for (UniProtEntry entry : entryIterator) {
 			String id = entry.getPrimaryUniProtAccession().getValue();
 			String display = getDisplay(entry);
 			ExternalItem item = new ExternalItem(id, display);
 			items.add(item);
+			if( limit > 0 && items.size() >= limit )
+				break;
 		}
 		return items;
 	}

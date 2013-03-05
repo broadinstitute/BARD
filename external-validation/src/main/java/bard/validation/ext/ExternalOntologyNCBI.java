@@ -19,6 +19,7 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	private EUtilsWeb eutils;
 	private Transformer transformer;
 	private static Set<String> databases = new HashSet();
+	private int chunkSize = 100_000;
 
 	static {
 		try {
@@ -75,7 +76,7 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
 		try {
-			List<Long> ids = eutils.getIds(name, database);
+			List<Long> ids = (List<Long>) eutils.getIds(name, database, new ArrayList<Long>(), 2, 2);
 			if (ids.size() > 1)
 				throw new ExternalOntologyException(String.format("Name '%s' is not unique for NCBI %s database", name, database));
 			Document doc = eutils.getSummary(ids.get(0), database);
@@ -90,9 +91,10 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	 * valid NCBI Entrez query.
 	 */
 	@Override
-	public List<ExternalItem> findMatching(String term) throws ExternalOntologyException {
+	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		try {
-			List<Long> ids = eutils.getIds(queryGenerator(term), database);
+			int chunk = limit > 0 & chunkSize > limit ? limit : chunkSize;
+			List<Long> ids = (List<Long>) eutils.getIds(queryGenerator(term), database, new ArrayList<Long>(), chunk, limit);
 			Document doc = eutils.getSummariesAsDocument(ids, database);
 			return processSummaries(doc);
 

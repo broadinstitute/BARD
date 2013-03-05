@@ -47,11 +47,14 @@ public class ExternalOntologyOLS extends ExternalOntologyAPI {
 		return locator;
 	}
 	
-	protected List<ExternalItem> getExternalItems(Map<String, String> map) {
+	protected List<ExternalItem> getExternalItems(Map<String, String> map, int limit) {
 		List<ExternalItem> items = new ArrayList(map.size());
+		int count = 0;
 		for (Map.Entry<String, String> entry: map.entrySet()) {
 			ExternalItem item = new ExternalItem(entry.getKey(), entry.getValue());
 			items.add(item);
+			if( limit > 0 && ++count >= limit )
+				break;
 		}
 		return items;
 	}
@@ -81,17 +84,17 @@ public class ExternalOntologyOLS extends ExternalOntologyAPI {
 			Map<String, String> map = qs.getTermsByExactName(name, ontology);
 			if( map.size() == 0 )
 				return null;
-			return getExternalItems(map).get(0);
+			return getExternalItems(map, 1).get(0);
 		} catch (Exception ex) {
 			throw new ExternalOntologyException(ex);
 		}
 	}
 
-	public List<ExternalItem> findMatching(String term) throws ExternalOntologyException {
+	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		try {
 			Query qs = getLocator().getOntologyQuery();
 			Map<String, String> map = qs.getTermsByName(queryGenerator(term), ontology, false);
-			return getExternalItems(map);
+			return getExternalItems(map, limit);
 		} catch (Exception ex) {
 			throw new ExternalOntologyException(ex);
 		}

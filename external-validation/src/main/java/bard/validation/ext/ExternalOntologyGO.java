@@ -83,7 +83,7 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	 * searches TERM table for names and accessions for non-obsolete biological processes. Uses a SQL LIKE.
 	 */
 	@Override
-	public List<ExternalItem> findMatching(String name) throws ExternalOntologyException {
+	public List<ExternalItem> findMatching(String name, int limit) throws ExternalOntologyException {
 		List<ExternalItem> items = runQuery(
 				"SELECT acc, name FROM term WHERE name like lower(?) and term_type = 'biological_process' and is_obsolete = 0",
 				queryGenerator(name));

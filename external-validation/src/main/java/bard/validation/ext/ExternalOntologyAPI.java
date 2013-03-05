@@ -23,7 +23,11 @@ public abstract class ExternalOntologyAPI {
 	 * given term is searched against the underlying external ontology system
 	 * the term is first run through the <b>queryGenerator</b> method so it is suitable for the given system 
 	 */
-	public abstract List<ExternalItem> findMatching(String term) throws ExternalOntologyException;
+	public List<ExternalItem> findMatching(String term) throws ExternalOntologyException {
+		return findMatching(term, -1);
+	}
+	
+	public abstract List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException;
 	
 	/**
 	 * formats a query term. E.g. adds % for SQL LIKE, trims the term etc. 
