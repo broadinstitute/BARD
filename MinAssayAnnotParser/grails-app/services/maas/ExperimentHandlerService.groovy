@@ -21,6 +21,7 @@ class ExperimentHandlerService {
         def contextGroups = ContextGroupsBuilder.buildExperimentContextGroup()
         inputFiles.each{File file ->
             def dtos = ExcelHandler.buildDto(file, START_ROW, contextGroups, MAX_ROWS)
+            AttributesContentsCleaner.cleanDtos(dtos)
             try{
                 dtos.each{
                     loadExperimentContext(loadedBy, it)
