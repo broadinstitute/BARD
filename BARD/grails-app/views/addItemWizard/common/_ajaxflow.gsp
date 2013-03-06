@@ -23,6 +23,7 @@
 <input type="hidden" id="cardAssayContextId" value="${ assayContextId }"/>
 <input type="hidden" id="cardAssayId" value="${ assayId }"/>
 <input type="hidden" id="attributeElementId"/>
+<input type="hidden" id="attributeElementUnitId"/>
 
 <g:render template="common/on_page"/>
 <g:render template="common/please_wait"/>

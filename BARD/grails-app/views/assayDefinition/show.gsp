@@ -103,7 +103,7 @@
                 <div id="target-measures-info" class="accordion-body in collapse">
                     <div class="accordion-inner">
                         <g:render template="measuresView"
-                                  model="['measures': assayInstance.measures, 'rootMeasuresSorted': assayInstance.rootMeasuresSorted]"/>
+                                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>
                     </div>
                 </div>
             </div>

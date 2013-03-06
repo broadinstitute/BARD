@@ -9,6 +9,7 @@ import org.junit.Before
 import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
 import bard.db.enums.AssayStatus
+import spock.lang.Unroll
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -29,9 +30,13 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     }
 
     void 'test show'() {
+        setup:
+        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
+        measureTreeService.createMeasureTree(_, _) >> []
 
         when:
         params.id = assay.id
+        controller.measureTreeService = measureTreeService
         def model = controller.show()
 
         then:
@@ -58,6 +63,11 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 	}
 
     void 'test editMeasure'() {
+        setup:
+        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
+        measureTreeService.createMeasureTree(_, _) >> []
+        controller.measureTreeService = measureTreeService
+
         when:
             params.id = assay.id
             def model = controller.show()
@@ -100,13 +110,17 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         notThrown(Exception.class)
     }
 
-    void 'test delete measure'() {
+    @Unroll
+    void 'test delete measure with #desc'() {
         when:
         mockDomain(Measure)
         def measure = Measure.build(assay: assay)
+        if (hasChild) {
+            Measure.build(assay: assay, parentMeasure: measure)
+        }
 
         then:
-        Measure.count == 1
+        Measure.count == beforeExpectedCount
 
         when:
         params.id = assay.id
@@ -115,7 +129,12 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
         then:
         response.redirectedUrl == '/assayDefinition/editMeasure/'+assay.id
-        Measure.count == 0
+        Measure.count == afterExpectedCount
+
+        where:
+        desc       | hasChild | beforeExpectedCount | afterExpectedCount
+        "a child"  | true     | 2                   | 2
+        "no child" | false    | 1                   | 0
     }
 
     void 'test associate context'() {

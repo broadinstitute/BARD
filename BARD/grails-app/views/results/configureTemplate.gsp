@@ -24,45 +24,29 @@
 
 <g:if test="${experiment?.id}">
     <div class="row-fluid">
-        <g:form class="form-horizontal" action="generatePreview">
+        <h4>Download Template</h4>
+
+        <g:form action="generatePreview">
             <g:hiddenField name="experimentId" value="${experiment.id}"/>
+            <g:if test="${items.size() > 0}">
+                <p>For each of the following annotations, check the ones for which you will load only a single value for the entire experiment</p>
 
-            <g:if test="${assayItems.size() > 0}">
-                <h4>Select the context items you wish to include</h4>
-
-                <g:each in="${assayItems}" var="item" status="index">
+                <g:each in="${experimentItems}" var="item">
                     <div class="control-group">
                         <div class="controls">
                             <label class="checkbox">
-                                <input type="checkbox" name="contextItemIds[${index}]" value="${item.id}"> ${item.attributeElement.label}
+                                <input type="checkbox" disabled checked> ${item.displayLabel}
                             </label>
                         </div>
                     </div>
                 </g:each>
-            </g:if>
 
-            <g:if test="${experiment.assay.measures.size() > 0}">
-                <h4>Select the measures to include</h4>
-
-                <g:each in="${experiment.assay.measures}" var="measure" status="index">
+                <g:each in="${items}" var="item" status="index">
                     <div class="control-group">
                         <div class="controls">
                             <label class="checkbox">
-                                <input type="checkbox" name="measureIds[${index}]" value="${measure.id}"> ${measure.displayLabel}
-                            </label>
-                        </div>
-                    </div>
-                </g:each>
-            </g:if>
-
-            <g:if test="${measureItems.size() > 0}">
-                <h4>Select the context items that are associated with measures to include</h4>
-
-                <g:each in="${measureItems}" var="item" status="index">
-                    <div class="control-group">
-                        <div class="controls">
-                            <label class="checkbox">
-                                <input type="checkbox" name="measureItemIds[${index}]" value="${item.id}"> ${item.attributeElement.label}
+                                <input type="checkbox" name="contextItemIds[${index}]"
+                                       value="${item.id}"> ${item.displayLabel}
                             </label>
                         </div>
                     </div>
@@ -71,7 +55,7 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn">Generate preview</button>
+                    <button type="submit" class="btn">Download template</button>
                 </div>
             </div>
         </g:form>

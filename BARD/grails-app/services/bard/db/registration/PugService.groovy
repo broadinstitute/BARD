@@ -127,7 +127,7 @@ class PugService {
      First the DB is checked, an if not found there, pubchem is queried.  If found in pubchem a Substance with that id
     is populated in the DB.   After this call, any sid not returned can be assumed to exist in the DB.
      */
-    Collection<String> validateSubstanceIds(sids) {
+    Collection<String> validateSubstanceIds(Collection<Long> sids) {
         // find the subset that are not in the database
         def missingSids = sids.findAll { Substance.get(it) == null }
 
@@ -154,29 +154,30 @@ class PugService {
     }
 
     def getSubstancesFromPubchem(sids, callback) {
-        def parsedResponse = executeQuery(substanceQuery(sids))
+        if (sids.size() > 0) {
+            def parsedResponse = executeQuery(substanceQuery(sids))
 
-        def status = find(parsedResponse, "PCT-Status")?."@value"
-        assert status == "success"
-
-        def reqId = find(parsedResponse, "PCT-Waiting_reqid")?.text()
-        if (reqId != null) {
-            while(true) {
-                Thread.sleep(timeBetweenRequests)
-                parsedResponse = executeQuery(requestStatus(reqId))
-                if (find(parsedResponse, "PCT-Download-URL_url") != null)
-                    break
+            def status = find(parsedResponse, "PCT-Status")?."@value"
+            if (status != "success") {
+                throw new RuntimeException("Querying substances from pubchem failed: "+parsedResponse);
             }
-        }
 
-        def url = find(parsedResponse, "PCT-Download-URL_url")?.text()
-        assert url != null
+            def reqId = find(parsedResponse, "PCT-Waiting_reqid")?.text()
+            if (reqId != null) {
+                while(true) {
+                    Thread.sleep(timeBetweenRequests)
+                    parsedResponse = executeQuery(requestStatus(reqId))
+                    if (find(parsedResponse, "PCT-Download-URL_url") != null)
+                        break
+                }
+            }
 
-        //def reqId = getText(parsedResponse, "PCT-Waiting_reqid")
-        //def url = getText(parsedResponse, "PCT-Download-URL_url")
+            def url = find(parsedResponse, "PCT-Download-URL_url")?.text()
+            assert url != null
 
-        readFtpResource(url) { input ->
-            parseSmilesTable(input, callback)
+            readFtpResource(url) { input ->
+                parseSmilesTable(input, callback)
+            }
         }
     }
 }

@@ -52,7 +52,17 @@ class ExperimentMeasureConstraintIntegrationSpec extends IntegrationSpec {
         desc           | valueUnderTest              | valid | errorCode
         'null valid'   | {null}                      | true  | null
         'valid parent' | {ExperimentMeasure.build()} | true  | null
+    }
 
+    void "test parent child link"() {
+        when:
+        ExperimentMeasure child = ExperimentMeasure.build(parent: domainInstance)
+
+        then:
+        child.id != null
+        child.childMeasures.size() == 0
+        domainInstance.childMeasures.size() == 1
+        domainInstance.childMeasures.first() == child
     }
 
     void "test parentChildRelationship constraints #desc parentChildRelationship: '#valueUnderTest'"() {

@@ -58,7 +58,8 @@
                     <h3 id="saveModalLabel">Add a new measure</h3>
                 </div>
                 <div class="modal-body">
-                    <g:form class="form-horizontal" id="${assayInstance.id}" name="add-measure-form" action="addMeasure">
+                    <g:form class="form-horizontal" name="add-measure-form" action="addMeasure">
+                        <input type="hidden" name="id" value="${assayInstance.id}" />
                         <p>In the fields below, search for terms by typing and suggestions will be presented.  To make a selection, choose from the popup list that appears. </p>
                         <input type="hidden" id="add-parent-id" value="" name="parentMeasureId"/>
                         <div class="control-group">
@@ -95,7 +96,45 @@
             <p>To change the location of a measure in the tree, select the name and drag it to the new location.</p>
             <h3>Measures</h3>
             <r:require module="dynatree"/>
-            <g:dynaTree id="measure-tree" measures="${assayInstance.rootMeasures}" dropCallback="measureNodeDropped"/>
+            <div id="measure-tree"></div>
+            <r:script>
+            function measureNodeDropped(node, sourceNode, hitMode, ui, draggable) {
+                var parentMeasureId = node.data.key
+                if(hitMode == "before" || hitMode == "after") {
+                    // only allowed for root nodes, so assume it's a root
+                    parentMeasureId = null
+                }
+                $.getJSON("/BARD/assayDefinition/moveMeasureNode",
+                    {
+                        measureId: sourceNode.data.key,
+                        parentMeasureId: parentMeasureId
+                    },
+                    function(data, textStatus) {
+                        sourceNode.move(node, hitMode);
+                    }
+                )
+            }
+
+            $("#measure-tree").dynatree({
+                onActivate: function(node) {
+                    $(".measure-detail-card").hide();
+                    $("#measure-details-"+node.data.key).show();
+                },
+                dnd: {
+                    preventVoidMoves: true,
+                    onDragStart: function(node) { return true; },
+                    onDragEnter: function(node, sourceNode) {
+                        if(node.getParent() == null || node.getParent().getParent() == null) {
+                            return ["over","after"];
+                        } else {
+                            return ["over"]
+                        }
+                    },
+                    onDrop: measureNodeDropped
+                    },
+                children: ${measuresTreeAsJson}
+             });
+            </r:script>
         </div>
 
         <div class="span6">

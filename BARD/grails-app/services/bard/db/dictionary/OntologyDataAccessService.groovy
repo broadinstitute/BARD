@@ -145,20 +145,37 @@ class OntologyDataAccessService {
         }
         return results
     }
+	
+	public List<Element> getAllUnits(){
+		List<Element> results = []
+		Element.withSession { Session session ->
+			Query query = session.createSQLQuery("""
+                select e.* 
+				from unit_tree ut, element e 
+				where ut.unit_id = e.element_id
+				order by lower(ut.parent_node_id)
+            """)
+			query.addEntity(Element)
+			query.setReadOnly(true)
+			results = query.list()
+		}
+		return results
+	}
 
-    public Map<Long, String> getBaseUnits(Long elementId, Long toUnitId) {
+    public List<UnitTree> getBaseUnits(Long elementId, Long toUnitId) {
         List<Long> resultsOne = UnitConversion.executeQuery("select uc.fromUnit.id from UnitConversion uc where toUnit.id = ?", toUnitId)
         List<Long> resultsTwo = Element.executeQuery("select e.id from Element e where id = ?", elementId)
         resultsOne.addAll(resultsTwo)
         List<Long> unionAll = resultsOne
         String parametizedString = getInParametizedQueryString(unionAll);
         List<UnitTree> unitResults = UnitTree.executeQuery("from UnitTree ut where ut.element.id in (" + parametizedString + ")", unionAll)
-        println "# of Unit Results: " + unitResults.size()
-        Map<Long, String> unitsMap = [:];
-        for (UnitTree u in unitResults) {
-            unitsMap.put(u.id, u.label)
-        }
-        return unitsMap
+		return unitResults
+//        println "# of Unit Results: " + unitResults.size()
+//        Map<Long, String> unitsMap = [:];
+//        for (UnitTree u in unitResults) {
+//            unitsMap.put(u.id, u.label)
+//        }
+//        return unitsMap
     }
 
     private String getInParametizedQueryString(List theList) {

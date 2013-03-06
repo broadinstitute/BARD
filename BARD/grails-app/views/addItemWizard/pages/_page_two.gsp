@@ -26,7 +26,7 @@
   <strong>Fixed</strong> - Every experiment always has the same value for the attribute "cell line equals HeLa"
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="list">
+  <input type="radio" name="valueTypeOption" value="List">
   <strong>List</strong> - Every experiment has one of the entries in the list for the attribute "cell line one of HeLa, CHO, MM"
 </label>
 <label class="radio">
@@ -38,6 +38,7 @@
   <strong>Free</strong> - Every experiment must provide a value for the attribute, but there is no restriction on that value "cell density specified by experiment"
 </label>
 
+<input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
 
 %{-- 
 <p>

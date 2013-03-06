@@ -42,6 +42,10 @@ grails.project.dependency.resolution = {
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         runtime 'commons-net:commons-net:3.2'
 
+        // this dependency seems a little ridiculous but some page renders seem to fail and adding this
+        // was advised in http://stackoverflow.com/questions/12627147/grails-rendering-plugin-gives-java-lang-classnotfoundexception-when-deployed
+        runtime 'org.springframework:spring-test:3.1.2.RELEASE'
+
         // test scope
         test "org.spockframework:spock-core:0.6-groovy-1.8"
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor

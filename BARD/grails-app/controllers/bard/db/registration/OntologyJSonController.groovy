@@ -43,6 +43,7 @@ class OntologyJSonController {
 						"label" : element.label,
 						"value" : element.label,
 						"elementId" : element.id,
+						"unitId" : element.unit?.id
 					]
 					attributes.add(item)
 				}
@@ -70,36 +71,43 @@ class OntologyJSonController {
 	}
 	
 	def getAllUnits(){
-		List<UnitTree> units = UnitTree.findAll(sort:"parent")
-		List allUnits = new ArrayList()
-		for (UnitTree unit in units) {			
-			def item = [				
-				"value" : unit.element.id,
-				"label" : unit.label,
-				"elementLabel" : unit?.element?.label
+		List<Element> elements = ontologyDataAccessService.getAllUnits()
+		List attributes = new ArrayList()
+		for (Element element in elements) {
+			def item = [
+				"value" : element.id,
+				"label" : element.abbreviation ?: element.label ,
 			]
-			allUnits.add(item)
+			attributes.add(item)
 		}
-		render allUnits as JSON
+		render attributes as JSON
+		
+//		List<UnitTree> units = UnitTree.findAll(sort:"parent")
+//		List allUnits = new ArrayList()
+//		for (UnitTree unit in units) {			
+//			def item = [				
+//				"value" : unit.element.id,
+//				"label" : unit.label
+//			]
+//			allUnits.add(item)
+//		}
+//		render allUnits as JSON
 	}
 
 	def getBaseUnits(){
-//		if(params?.elementId && params?.toUnitId){
-//			List<UnitTree> units = ontologyDataAccessService.getBaseUnits(params.elementId.toLong(), params.toUnitId.toLong())
-//			if(units){
-//				render(contentType: "text/json") {
-//					for (u in units) {
-//						element u.label
-//					}
-//				}
-//			}
-//			else{
-//				println "Units is null."
-//				render(contentType: "text/json") {
-//					element "null"
-//				}
-//			}
-//		}
+		if(params?.elementId && params?.toUnitId){
+			List<UnitTree> units = ontologyDataAccessService.getBaseUnits(params.elementId.toLong(), params.toUnitId.toLong())
+			List baseUnits = new ArrayList()
+			for (UnitTree unit in units) {
+				def item = [				
+				"value" : unit.element.id,
+				"label" : unit.label
+				]
+				baseUnits.add(item)
+			}
+			render baseUnits as JSON
+
+		}
 	}
 
 }

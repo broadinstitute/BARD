@@ -26,15 +26,6 @@
     <%-- This hidden field is needed for passing state needed for the ontology query --%>
     <input type="hidden" id="attributeElementId" value="${attribute.attributeId}">
 	
-	<%--
-	<g:if test="${valueType?.valueTypeOption == AttributeType.Range.toString() }">
-		<strong>Value Type: Range</strong>
-	</g:if>
-	<g:if test="${valueType?.valueTypeOption == AttributeType.Fixed.toString() }">
-		<strong>Value Type: Fixed</strong>
-	</g:if>
-	--%>
-	
 	<label class="control-label" for="valueQualifier"><g:message code="assay.qualifier.label" default="Qualifier" /></label>
     <div  class="controls">
 	    <g:select name="valueQualifier" from="${AssayContextItem.constraints.qualifier.inList}" noSelection="['': '']"  value="${ fixedValue?.valueQualifier }"/>
@@ -42,9 +33,12 @@
 	
 	<%-- This hidden control becomes the units selection box --%>
     <input type="hidden" id="valueUnitId" name="valueUnitId">
+    <input type="hidden" id="valueUnitLabel" name="valueUnitLabel">
 	<%--
     <label class="control-label" >Units:</label>
-    <input class="input-xlarge" type="text" id="valueUnits" name='valueUnits'  value="${ fixedValue?.valueUnits }">
+    <input class="input-xlarge" type="text" id="valueUnits" name='valueUnitId'  value="${ fixedValue?.valueUnits }">
     --%>
-
+	
+	<input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
+	<input type="hidden" id="valueType" name="valueType" value="${ valueType?.valueTypeOption }"/>
 </af:page>

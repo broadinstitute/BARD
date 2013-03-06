@@ -128,6 +128,7 @@ class ExperimentExportService extends ExportAbstractService {
         attributes.put("experimentId", experiment.id?.toString())
         attributes.put('status', experiment.experimentStatus.toString())
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
+        attributes.put('confidenceLevel', experiment.confidenceLevel?.toString())
 
         if (experiment.holdUntilDate) {   //convert date to XML date
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();

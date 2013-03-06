@@ -1,4 +1,4 @@
-<experiment experimentId='1211' status='Pending' readyForExtraction='Ready' holdUntilDate='2011-09-01T00:00:00.000-04:00'>
+<experiment experimentId='1211' status='Pending' readyForExtraction='Ready' holdUntilDate='2011-09-01T00:00:00.000-04:00' confidenceLevel='1'>
   <experimentName>Late stage assay provider results from the probe development effort to identify inhibitors of LYPLA1 and LYPLA2: Gel-based Activity-Based Protein Profiling (ABPP) IC50 for off-target ABHD11</experimentName>
   <contexts>
     <context id='3' displayOrder='0'>

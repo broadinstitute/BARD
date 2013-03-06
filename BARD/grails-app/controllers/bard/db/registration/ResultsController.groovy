@@ -10,8 +10,6 @@ class FieldListCommand {
     def itemService
 
     List contextItemIds
-    List measureIds
-    List measureItemIds
 
     List queryList(def clazz, List ids) {
         def items = []
@@ -22,16 +20,8 @@ class FieldListCommand {
         return items
     }
 
-    List<AssayContextItem> getContextItems() {
+    List<AssayContextItem> getExperimentContextItems() {
         return queryList(itemService, contextItemIds)
-    }
-
-    List<Measure> getMeasures() {
-        return queryList(Measure, measureIds)
-    }
-
-    List<AssayContextItem> getMeasureItems() {
-        return queryList(itemService, measureItemIds)
     }
 }
 
@@ -44,20 +34,27 @@ class ResultsController {
     def configureTemplate(String experimentId) {
         Experiment experiment = Experiment.get(experimentId)
 
-        def assay = experiment.assay
-        def assayItems = assay.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
-        def items = itemService.getLogicalItems(assayItems)
+        def (experimentItems, measures, measureItems) = resultsService.generateMaxSchemaComponents(experiment)
 
-        def measureItems = items.findAll { it.assayContext.assayContextMeasures.size() > 0 }
-        items.removeAll(measureItems)
-
-        [experiment: experiment, assayItems: items, measureItems: measureItems]
+        [experiment: experiment, experimentItems: experimentItems, items: measureItems]
     }
 
     def generatePreview (String experimentId, FieldListCommand fieldList) {
         Experiment experiment = Experiment.get(experimentId)
 
-        def schema = resultsService.generateSchema(experiment, fieldList.contextItems, fieldList.measures, fieldList.measureItems)
+        def (experimentContextItems, measures, measureItems) = resultsService.generateMaxSchemaComponents(experiment)
+
+        Set experimentContextItemsSet = new HashSet(experimentContextItems)
+        Set measureItemsSet = new HashSet(measureItems)
+
+        def userSelectedItems = fieldList.experimentContextItems
+        experimentContextItemsSet.addAll(userSelectedItems)
+        measureItemsSet.removeAll(userSelectedItems)
+
+        println("userSelectedItems=${userSelectedItems}")
+        println("experimentContextItemsSet=${experimentContextItemsSet}")
+
+        def schema = resultsService.generateSchema(experiment, experimentContextItemsSet as List, measures, measureItemsSet as List)
 
         StringBuilder csv = new StringBuilder()
         for (row in schema.asTable()) {
@@ -79,6 +76,6 @@ class ResultsController {
 
         ResultsService.ImportSummary summary = resultsService.importResults(experiment, f.inputStream)
 
-        [summary: summary]
+        [summary: summary, experiment: experiment]
     }
 }

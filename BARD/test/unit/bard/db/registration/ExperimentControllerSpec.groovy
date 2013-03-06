@@ -20,35 +20,44 @@ import spock.lang.Specification
 @Build([Assay, Experiment])
 class ExperimentControllerSpec extends Specification {
     def 'test create'() {
+        setup:
+        controller.measureTreeService = Mock(MeasureTreeService)
+        controller.measureTreeService.createMeasureTree(_,_) >> []
+
         when:
         Assay assay = Assay.build()
         params.assayId = assay.id
-        def m = controller.create()
+        controller.create()
 
         then:
-        m.assay == assay
-        m.experiment.id == null
+        response.status == 200
     }
 
     def 'test save'() {
         setup:
         Assay assay = Assay.build()
-        Experiment experiment = Experiment.build(assay: assay)
         ExperimentService experimentService = Mock(ExperimentService)
+        controller.experimentService = experimentService
 
         when:
-        controller.experimentService = experimentService
         params.assayId = assay.id
         params.experimentName = "name"
         params.description = "desc"
+        params.experimentTree = "[]"
         controller.save()
 
         then:
-        1 * experimentService.createNewExperiment(assay, "name", "desc") >> experiment
-        assert response.redirectedUrl == '/experiment/show/' + experiment.id
+        1*experimentService.updateMeasures(_,_)
+        Experiment.getAll().size() == 1
+        def experiment = Experiment.getAll().first()
+        assert response.redirectedUrl == "/experiment/show/${experiment.id}"
     }
 
     def 'test show'() {
+        setup:
+        controller.measureTreeService = Mock(MeasureTreeService)
+        controller.measureTreeService.createMeasureTree(_,_) >> []
+
         when:
         Experiment exp = Experiment.build()
         params.id = exp.id

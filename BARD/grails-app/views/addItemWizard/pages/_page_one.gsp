@@ -25,5 +25,7 @@
     <%-- this hidden field is turned into a select box --%>
     <input type="hidden" id="attributeId" name="attributeId"/><br><br><br><br>
     <input type="hidden" id="attributeLabel" name="attributeLabel"/>
-
+    
+    
+	<input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
 </af:page>

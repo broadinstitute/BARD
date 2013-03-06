@@ -56,8 +56,9 @@ public abstract class AbstractEnumUserType<E extends IEnumUserType> implements U
 
     @Override
     public Object nullSafeGet(final ResultSet resultSet, final String[] names, final Object owner) throws HibernateException, SQLException {
-        if (!resultSet.wasNull()) {
-            return convert(resultSet.getString(names[0]));
+        String value = resultSet.getString(names[0]);
+        if(StringUtils.isNotBlank(value)){
+            return convert(value);
         }
         return null;
     }

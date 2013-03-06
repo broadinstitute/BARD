@@ -1,6 +1,5 @@
 package bard.db.registration.additemwizard
 
-import bard.db.registration.AssayContextService;
 import bard.db.dictionary.*;
 import bard.db.registration.*;
 
@@ -52,10 +51,10 @@ class FixedValueCommand implements Serializable {
 		// delegate to validations performed by constraints
 		validate()
 		
-		if(StringUtils.isBlank(valueId) && StringUtils.isBlank(numericValue)){
+		if(!valueId && StringUtils.isBlank(numericValue)){
 			errors.reject("fixedValue.missing.value", "Either numeric value or string value must be provided")
 		}
-		else if(StringUtils.isNotBlank(valueId)){
+		else if(valueId){
 			isNumericValue = false;
 		}
 		else if(StringUtils.isNotBlank(numericValue)){
@@ -70,6 +69,49 @@ class FixedValueCommand implements Serializable {
 		return !hasErrors();
 	}
 }
+
+class ListValueCommand implements Serializable {
+	
+	Long valueId
+	String valueLabel
+	String attributeElementId
+	String valueQualifier
+	Long valueUnitId
+	String valueUnitLabel
+	String numericValue
+	boolean isNumericValue
+	
+	boolean validateList(List<ListValueCommand> listOfValues){
+		if(listOfValues.empty){
+			println "List is empty"
+			errors.reject("listValue.missing.value", "At least one numeric value or one string value must be added to the list to proceed")
+		}
+		return !hasErrors();
+	}
+	
+	boolean validateValue(){
+		// delegate to validations performed by constraints
+		validate()		
+				
+		if(!valueId && StringUtils.isBlank(numericValue)){
+			errors.reject("listValue.missing.value", "Either numeric value or string value must be provided")
+		}
+		else if(valueId){
+			isNumericValue = false;
+		}
+		else if(StringUtils.isNotBlank(numericValue)){
+			// Handles Numeric values: negatives, and comma formatted values. Also handles a single decimal point
+			Pattern pattern = Pattern.compile("^(\\d|-)?(\\d|,)*\\.?\\d*\$")
+			Matcher matcher = pattern.matcher(numericValue)
+			if(matcher.matches())
+				isNumericValue = true;
+			else
+				errors.reject("listValue.nomatch.numericValue", "Your entry does not match a numeric value")
+		}
+		return !hasErrors();
+	}
+}
+
 
 class CopyFixedValueCommand implements Serializable {
 	
@@ -142,25 +184,27 @@ class AddItemWizardController {
             // wizard tabs. Also see common/_tabs.gsp for more information
             flow.page = 0
             flow.pages = [
-                    [title: 'Attribute', description: 'Define attribute'],
-                    [title: 'Value Type', description: 'Value type'],
-                    [title: 'Define Value', description: 'Define value'],
-                    [title: 'Review & Confirm', description: 'Review and save your entries'],
-                    [title: 'Done', description: 'Suggestions for Next']
+                    [title: 'Attribute', description: 'Define attribute', pageNumber: 1],
+                    [title: 'Value Type', description: 'Value type', pageNumber: 2],
+                    [title: 'Define Value', description: 'Define value', pageNumber: 3],
+                    [title: 'Review & Confirm', description: 'Review and save your entries', pageNumber: 4],
+                    [title: 'Done', description: 'Suggestions for Next', pageNumber: 5]
             ]
             flow.cancel = true;
             flow.quickSave = true;
 			
-			flow.assayContextId = params.assayContextId;
-			println "params.assayContextId = " + params.assayContextId;
+			flow.assayContextId = params.assayContextId
+			println "params.assayContextId = " + params.assayContextId
 			
-            flow.attribute = null;
-            flow.valueType = null;
-            flow.fixedValue = null;
+            flow.attribute = null
+            flow.valueType = null
+            flow.fixedValue = null
+			flow.listValue = null
+			flow.listOfValues = new ArrayList<ListValueCommand>()
 			
-            flow.itemSaved = false;
+            flow.itemSaved = false
 
-            println ("flow: "+flow)
+            println ("flow: "+ flow)
 			
             success()
         }
@@ -171,8 +215,8 @@ class AddItemWizardController {
             onRender {
                 // Grom a development message
                 if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial: pages/_page_one.gsp".grom()
-
                 flow.page = 1
+				println "Wizard page: " + flow.page
                 success()
             }
 			on("cancel").to "closeWizard"
@@ -187,13 +231,12 @@ class AddItemWizardController {
 				println "(pageOne - next) flow.attribute.attributeId: " + flow.attribute.attributeId
 				def attributeElement = Element.get(flow.attribute.attributeId)	
 				println "attributeElement object: ${attributeElement.dump()}"
-				flow.attribute.attributeLabel = attributeElement.label
-				flow.page = 2
+				flow.attribute.attributeLabel = attributeElement.label				
 				sessionFactory.currentSession.clear()
+				flow.page = 2
 				success()
 
             }.to "pageTwo"
-
             on("toPageTwo").to "pageTwo"
             on("toPageThree").to "pageThree"
             on("toPageFour").to "pageFour"
@@ -206,8 +249,8 @@ class AddItemWizardController {
             onRender {
                 // Grom a development message
                 if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial: pages/_page_two.gsp".grom()
-
                 flow.page = 2
+				println "Wizard page: " + flow.page
                 success()
             }
 			on("cancel").to "closeWizard"
@@ -218,28 +261,31 @@ class AddItemWizardController {
 						return error()
 					}
 					flow.valueType = cmd
-					flow.page = 3
-					
-					success()	
+					println "calling closure for ValueTypeCommand ${cmd.dump()}"
+					println "Page 2 Next - flow.valueType.valueTypeOption = " + flow.valueType?.valueTypeOption													
                 
-            }.to "pageThree"
-            on("previous").to "pageOne"
+            }.to "valueTypeRedirect"
+            on("previous"){
+				flow.page = 1
+				success()
+			}.to "pageOne"
             on("toPageOne").to "pageOne"
             on("toPageThree").to "pageThree"
+			on("toPageThreeList").to "pageThreeList"
             on("toPageFour").to "pageFour"
             on("toPageFive") {
                 flow.page = 5
             }.to "save"
         }
 
-        // Third wizard page: Asking for value
+        // Third wizard page (For assay type - Fixed): Asking for value
         pageThree {
             render(view: "_page_three")
             onRender {
                 // Grom a development message
                 if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three.gsp".grom()
-
                 flow.page = 3
+				println "Wizard page: " + flow.page
                 success()
             }
 			on("cancel").to "closeWizard"
@@ -257,17 +303,25 @@ class AddItemWizardController {
 					flow.fixedValue.valueLabel = valueElement.label
 				}
 				else{
-					def valueUnit = UnitTree.get(flow.fixedValue.valueUnitId)
-					flow.fixedValue.valueUnitLabel = valueUnit.label
-					println "UnitTree.id = " + valueUnit.id
-					println "flow.fixedValue.valueUnitLabel = " + flow.fixedValue.valueUnitLabel
+					println "flow.fixedValue.valueUnitId = " + flow.fixedValue?.valueUnitId
+					if(flow.fixedValue.valueUnitId){
+						def query =UnitTree.where { element.id == flow.fixedValue.valueUnitId }
+						def valueUnit = query.find()
+						println "valueUnit = " + valueUnit?.dump()
+						flow.fixedValue.valueUnitLabel = valueUnit.label
+						println "UnitTree.id = " + valueUnit.id
+						println "flow.fixedValue.valueUnitLabel = " + flow.fixedValue.valueUnitLabel
+					}					
 				}			
-				flow.page = 4
 				sessionFactory.currentSession.clear()
+				flow.page = 4
 				success()
                 
             }.to "pageFour"
-            on("previous").to "pageTwo"
+            on("previous"){
+				flow.page = 2
+				success()
+			}.to "pageTwo"
             on("toPageOne").to "pageOne"
             on("toPageTwo").to "pageTwo"
             on("toPageFour").to "pageFour"
@@ -275,6 +329,100 @@ class AddItemWizardController {
                 flow.page = 5
             }.to "save"
         }
+		
+		// Third wizard page (For assay type - List): Asking for a list of values
+		pageThreeList {
+			render(view: "_page_three_list")
+			onRender {
+				// Grom a development message
+				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_list.gsp".grom()
+				flow.page = 3
+				println "Wizard page: " + flow.page
+				success()
+			}
+			on("cancel").to "closeWizard"
+			on("close").to "closeWizard"
+			on("next") {ListValueCommand cmd ->
+				if(!cmd.validateList(flow.listOfValues)){
+					flow.listValue = cmd
+					return error()
+				}				
+				flow.listValue = cmd
+				println "calling closure for {ListValueCommand ${cmd.dump()}"
+				println "isNumericValue = " + cmd.isNumericValue
+				flow.page = 4
+				success()
+				
+			}.to "pageFour"
+			on("previous"){
+				flow.page = 2
+				success()
+			}.to "pageTwo"
+			on("addValueToList"){ListValueCommand cmd ->
+				if(!cmd.validateValue()){
+					flow.listValue = cmd
+					return error()
+				}				
+				flow.listValue = cmd
+				
+			}.to "addValueToList"
+			on("toPageOne").to "pageOne"
+			on("toPageTwo").to "pageTwo"
+			on("toPageFour").to "pageFour"
+			on("toPageFive") {
+				flow.page = 5
+			}.to "save"
+		}
+		
+		// Third wizard page (For assay type - Range): Asking for value
+		pageThreeRange {
+			render(view: "_page_three_range")
+			onRender {
+				// Grom a development message
+				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_range.gsp".grom()
+
+				flow.page = 3
+				success()
+			}
+			on("cancel").to "closeWizard"
+			on("close").to "closeWizard"
+			on("next") {
+				success()
+				
+			}.to "pageFour"
+			on("previous").to "pageTwo"
+			on("toPageOne").to "pageOne"
+			on("toPageTwo").to "pageTwo"
+			on("toPageFour").to "pageFour"
+			on("toPageFive") {
+				flow.page = 5
+			}.to "save"
+		}
+		
+		// Third wizard page (For assay type - Free): Asking for value
+		pageThreeFree {
+			render(view: "_page_three_free")
+			onRender {
+				// Grom a development message
+				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_free.gsp".grom()
+
+				flow.page = 3
+				success()
+			}
+			on("cancel").to "closeWizard"
+			on("close").to "closeWizard"
+			on("next") {
+				success()
+				
+			}.to "pageFour"
+			on("previous").to "pageTwo"
+			on("toPageOne").to "pageOne"
+			on("toPageTwo").to "pageTwo"
+			on("toPageFour").to "pageFour"
+			on("toPageFive") {
+				flow.page = 5
+			}.to "save"
+		}
 
         // four wizard page: Confirmation page. Allows saving attribute / Value pair
         pageFour {
@@ -282,8 +430,8 @@ class AddItemWizardController {
             onRender {
                 // Grom a development message
                 if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_four.gsp".grom()
-
                 flow.page = 4
+				println "Wizard page: " + flow.page
                 success()
             }
 			on("cancel").to "closeWizard"
@@ -292,7 +440,9 @@ class AddItemWizardController {
                 // put some logic in here
                 flow.page = 5
             }.to "save"
-            on("previous").to "pageThree"
+            on("previous"){
+				flow.page = 2
+			}.to "valueTypeRedirect"
             on("toPageOne").to "pageOne"
             on("toPageTwo").to "pageTwo"
             on("toPageThree").to "pageThree"
@@ -307,12 +457,76 @@ class AddItemWizardController {
 			onRender {
 				// Grom a development message
 				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_final_page.gsp".grom()
-
+				flow.page = 5
+				println "Wizard page: " + flow.page
 				success()
 			}
 			on("cancel").to "closeWizard"
 			on("close").to "closeWizard"
 			on("addAnotherItem").to "addAnotherItem"
+		}
+		
+		valueTypeRedirect {
+			action {
+				try {
+					// Grom a development message
+					if (pluginManager.getGrailsPlugin('grom')) ".persisting instances to the database...".grom()
+					
+					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){
+						flow.page = 3
+						toPageThree()						
+					}
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){
+						flow.page = 3
+						toPageThreeList()
+					}
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.Range.toString())){
+						flow.page = 3
+						toPageThreeRange()
+					}
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.Free.toString())){
+						flow.page = 3
+						toPageThreeFree()
+					}
+				}
+				catch (Exception e) {
+                    // put your error handling logic in
+                    // here
+                    sessionFactory.currentSession.clear()
+                    println "Exception -> " + e
+                    flow.page = 2
+                    error()
+                }
+			}
+			on("error").to "error"
+			on(Exception).to "error"
+			on("toPageThree").to "pageThree"
+			on("toPageThreeList").to "pageThreeList"
+			on("toPageThreeRange").to "pageThreeRange"
+			on("toPageThreeFree").to "pageThreeFree"
+		}
+		
+		// action to add a value to the list for an attribute
+		addValueToList {
+			action {
+				try{
+					println "On action: addValueToList"
+					flow.listOfValues.add(flow.listValue)
+//					AssayContextItem item = assayContextService.createItem(flow.attribute, flow.valueType, flow.fixedValue, flow.listValue)
+					println "# of Items in list: ${flow.listOfValues.size()}"
+					flow.page = 2
+					toPageThreeList()
+				}catch (Exception e) {
+                    println "Exception caught -> " + e.getMessage()
+                    sessionFactory.currentSession.clear()
+//                    flow.page = 2
+                    error()
+                }				
+			}
+			on("error").to "error"
+			on(Exception).to "error"
+			on("success").to "pageThreeList"
+			on("toPageThreeList").to "pageThreeList"
 		}
 
         // save action
@@ -324,38 +538,29 @@ class AddItemWizardController {
                 try {
                     // Grom a development message
                     if (pluginManager.getGrailsPlugin('grom')) ".persisting instances to the database...".grom()
-
-                    // put your bussiness logic in here
-                    println "Preparing to start saving"
-					def isSaved = false;
-					Element attributeElement = Element.get(flow.attribute.attributeId)
-					AssayContext assayContext = AssayContext.get(flow.assayContextId)
-					
-					if(flow.fixedValue.isNumericValue){
-						
-					}
-					else{						
-						Element valueElement = Element.get(flow.fixedValue.valueId)						
-						println "flow.assayContextId: " + flow.assayContextId
-						println "AssayContext assayContext: = " + assayContext
-						isSaved = assayContextService.saveItemInCard(assayContext, attributeElement, flow.valueType.valueTypeOption, flow.fixedValue.isNumericValue, valueElement)
-					}
-					
                     
-
-//                    def isSaved = assayContextService.saveItemInCard(assayContext, attribute, flow.valueType.valueTypeOption, value)
+					AssayContext assayContext = AssayContext.get(flow.assayContextId)
+					def isSaved = false;
+					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){						
+						println "Saving item ..."
+						isSaved = assayContextService.saveItem(assayContext, flow.attribute, flow.valueType, flow.fixedValue)												
+					}
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){						
+						println "Saving list of items ..."
+						isSaved = assayContextService.saveItems(assayContext, flow.attribute, flow.valueType, flow.listOfValues)
+					}
 					
-                    sessionFactory.currentSession.flush()
-                    sessionFactory.currentSession.clear()
-                    if (isSaved) {
-                        println "New item was successfully added to the card"
-                        flow.itemSaved = true;
-                        success()
-                    } else {
-                        println "ERROR - unable to add item to the card"
-                        flow.page = 4
-                        error()
-                    }
+					sessionFactory.currentSession.flush()
+					sessionFactory.currentSession.clear()
+					if (isSaved) {
+						println "New item was successfully added to the card"
+						flow.itemSaved = true;
+						success()
+					} else {
+						println "ERROR - unable to add item to the card"
+						flow.page = 4
+						error()
+					}
 
                 } catch (Exception e) {
                     // put your error handling logic in
@@ -368,7 +573,7 @@ class AddItemWizardController {
             }
             on("error").to "error"
             on(Exception).to "error"
-            on("success").to "pageFour"
+            on("success").to "finalPage"
         }
 		
 
@@ -381,7 +586,7 @@ class AddItemWizardController {
 
                 // set page to 4 so that the navigation
                 // works (it is disabled on the final page)
-                flow.page = 4
+//                flow.page = 4
             }
 			on("cancel").to "closeWizard"
 			on("close").to "closeWizard"
