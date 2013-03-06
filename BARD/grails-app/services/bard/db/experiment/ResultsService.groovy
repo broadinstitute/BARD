@@ -199,6 +199,129 @@ class ResultsService {
     }
     */
 
+    // used to identify duplicates
+    static class LogicalKey {
+        Integer replicateNumber;
+        Substance substance
+
+        Element resultType
+        Element statsModifier
+        Float valueNum
+        String qualifier;
+        Float valueMin
+        Float valueMax
+        Element valueElement
+        String valueDisplay
+
+        Set<LogicalKeyItem> items = [] as Set
+
+        boolean equals(o) {
+            if (this.is(o)) return true
+            if (getClass() != o.class) return false
+
+            LogicalKey that = (LogicalKey) o
+
+            if (items != that.items) return false
+            if (qualifier != that.qualifier) return false
+            if (replicateNumber != that.replicateNumber) return false
+            if (resultType != that.resultType) return false
+            if (statsModifier != that.statsModifier) return false
+            if (substance != that.substance) return false
+            if (valueDisplay != that.valueDisplay) return false
+            if (valueElement != that.valueElement) return false
+            if (valueMax != that.valueMax) return false
+            if (valueMin != that.valueMin) return false
+            if (valueNum != that.valueNum) return false
+
+            return true
+        }
+
+        int hashCode() {
+            int result
+            result = (replicateNumber != null ? replicateNumber.hashCode() : 0)
+            result = 31 * result + substance.hashCode()
+            result = 31 * result + resultType.hashCode()
+            result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0)
+            result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
+            result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0)
+            result = 31 * result + (valueMin != null ? valueMin.hashCode() : 0)
+            result = 31 * result + (valueMax != null ? valueMax.hashCode() : 0)
+            result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
+            result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
+            result = 31 * result + items.hashCode()
+            return result
+        }
+
+        @Override
+        public String toString() {
+            return "LogicalKey{" +
+                    "replicateNumber=" + replicateNumber +
+                    ", substance=" + substance +
+                    ", resultType=" + resultType +
+                    ", statsModifier=" + statsModifier +
+                    ", valueNum=" + valueNum +
+                    ", qualifier='" + qualifier + '\'' +
+                    ", valueMin=" + valueMin +
+                    ", valueMax=" + valueMax +
+                    ", valueElement=" + valueElement +
+                    ", valueDisplay='" + valueDisplay + '\'' +
+                    ", items=" + items +
+                    '}';
+        }
+    }
+
+    static class LogicalKeyItem {
+        Element attributeElement
+        Float valueNum
+        String qualifier;
+        Float valueMin
+        Float valueMax
+        Element valueElement
+        String valueDisplay
+
+        boolean equals(o) {
+            if (this.is(o)) return true
+            if (getClass() != o.class) return false
+
+            LogicalKeyItem that = (LogicalKeyItem) o
+
+            if (attributeElement != that.attributeElement) return false
+            if (qualifier != that.qualifier) return false
+            if (valueDisplay != that.valueDisplay) return false
+            if (valueElement != that.valueElement) return false
+            if (valueMax != that.valueMax) return false
+            if (valueMin != that.valueMin) return false
+            if (valueNum != that.valueNum) return false
+
+            return true
+        }
+
+        int hashCode() {
+            int result
+            result = attributeElement.hashCode()
+            result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
+            result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0)
+            result = 31 * result + (valueMin != null ? valueMin.hashCode() : 0)
+            result = 31 * result + (valueMax != null ? valueMax.hashCode() : 0)
+            result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
+            result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
+            return result
+        }
+
+        @Override
+        public String toString() {
+            return "LogicalKeyItem{" +
+                    "attributeElement=" + attributeElement +
+                    ", valueNum=" + valueNum +
+                    ", qualifier='" + qualifier + '\'' +
+                    ", valueMin=" + valueMin +
+                    ", valueMax=" + valueMax +
+                    ", valueElement=" + valueElement +
+                    ", valueDisplay='" + valueDisplay + '\'' +
+                    '}';
+        }
+    }
+
     static class Row {
         int lineNumber;
 
@@ -213,55 +336,11 @@ class ResultsService {
     static class Cell {
         String qualifier;
         Float value;
-
         Float minValue;
         Float maxValue;
-
         Element element;
 
         String valueDisplay;
-
-        /*
-        String getValueDisplay() {
-            if (valueDisplay != null) {
-                return valueDisplay;
-            } else {
-                String valueString = null;
-
-                if (value != null) {
-                    if (qualifier == "= " ) {
-                        valueString = value.toString()
-                    } else {
-                        valueString = "${qualifier.trim()}${value}"
-                    }
-                }
-
-                if (minValue != null) {
-                    valueString = "${minValue}-${maxValue}";
-                }
-
-                if (element != null) {
-                    valueString element.label
-                }
-
-                // now try to find the units
-                String unit = null;
-                if (column.item != null) {
-                    unit = column.item.attributeElement.unit?.abbreviation
-                } else if (column.measure != null) {
-                    unit = column.measure.resultType?.unit?.abbreviation;
-                }
-                if (unit != null) {
-                    valueString += " ${unit}"
-                }
-                return valueString;
-            }
-        }
-
-        String toString() {
-            "Cell(${column})"
-        }
-        */
     }
 
     static class RawCell {
@@ -930,6 +1009,10 @@ class ResultsService {
                 def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
 
                 if (!errors.hasErrors()) {
+                    checkForDuplicates(errors, results)
+                }
+
+                if (!errors.hasErrors()) {
                     // and persist these results to the DB
                     Collection<ExperimentContext>contexts = parsed.contexts;
 
@@ -940,6 +1023,49 @@ class ResultsService {
 
         return errors
     }
+
+    private LogicalKey constructKey(Result result) {
+        LogicalKey key = new LogicalKey()
+
+        key.replicateNumber = result.replicateNumber
+        key.substance = result.substance
+
+        key.resultType = result.resultType
+        key.statsModifier = result.statsModifier
+        key.valueNum = result.valueNum
+        key.qualifier = result.qualifier
+        key.valueMin = result.valueMin
+        key.valueMax = result.valueMax
+        key.valueDisplay = result.valueDisplay
+
+        key.items = result.resultContextItems.collect(new HashSet(), {
+            LogicalKeyItem item = new LogicalKeyItem()
+            item.attributeElement = it.attributeElement
+            item.valueNum = it.valueNum
+            item.qualifier = it.qualifier
+            item.valueMin = it.valueMin
+            item.valueMax = it.valueMax
+            item.valueElement = it.valueElement
+            item.valueDisplay = it.valueDisplay
+
+            return item
+        })
+
+        return key
+    }
+
+    private void checkForDuplicates(ImportSummary errors, Collection<Result> results) {
+        Set<LogicalKey> seen = new HashSet()
+
+        for(result in results) {
+            LogicalKey key = constructKey(result)
+            boolean added = seen.add(key)
+            if (!added) {
+                errors.addError(0,0,"Found duplicate: ${key}")
+            }
+        }
+    }
+
 
     private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename) {
         deleteExperimentResults(experiment)

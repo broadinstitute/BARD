@@ -20,7 +20,7 @@ import grails.test.mixin.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
+@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
 class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {
@@ -522,5 +522,32 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         then:
         errors.hasErrors()
+    }
+
+    void 'test duplicate check'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
+        Result result1 = Result.build()
+        ResultContextItem item1 = ResultContextItem.build(result: result1, valueNum: 2.0)
+
+        Result result2 = Result.build()
+        ResultContextItem item2 = ResultContextItem.build(result: result2, valueNum: 3.0)
+
+        List<Result> results = [result1, result2]
+
+        when:
+        service.checkForDuplicates(errors, results)
+
+        then:
+        !errors.hasErrors()
+
+        when:
+        results.add(result1)
+        service.checkForDuplicates(errors, results)
+
+        then:
+        errors.errors.size() == 1
     }
 }
