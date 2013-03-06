@@ -3,7 +3,6 @@ import pages.FindProjectByIdPage
 import pages.ViewProjectDefinitionPage
 import pages.ScaffoldPage
 import spock.lang.Stepwise
-import pages.CAPFunctionalUtil
 import pages.EditProjectPage
 
 @Stepwise
@@ -40,14 +39,14 @@ class EditProjectSpec extends BardFunctionalSpec {
 		
 		associateExpriment.experimentBy.addExperimentBy(EXPERIMENTNAMEFLD)
 		associateExpriment.experimentBy.addExperimentByValue(EXPERIMENTNAMEFLD) << exprimentName 
-		waitFor { associateExpriment.popupList.itemsList }
-		associateExpriment.popupList.requiredItem(0).click()
+		waitFor { associateExpriment.popupList }
+		associateExpriment.popupList[0].click()
 		String exprimentName = associateExpriment.availableExperiments.exprimentsList[0].text()
-		associateExpriment.availableExperiments.exprimentsList[0].value(exprimentName).click()
+		associateExpriment.availableExperiments.exprimentsList.value(exprimentName).click()
 		def experimentId = exprimentName.takeWhile { it != '-' }
 		associateExpriment.stageSelect.stageLink.click()
 		associateExpriment.stageSelect.stageField << stageValue
-		waitFor { associateExpriment.stageSelect.resultPopup }
+		waitFor(15, 5) { associateExpriment.stageSelect.resultPopup }
 		associateExpriment.stageSelect.resultPopup.click()
 		assert associateExpriment.addExprimentBtn
 		associateExpriment.addExprimentBtn.click()
@@ -80,13 +79,13 @@ class EditProjectSpec extends BardFunctionalSpec {
 		associateExpriment.experimentBy.addExperimentByValue(EXPERIMENTIDFLD) << exprimentIdInput
 		assert associateExpriment.availableExperiments.exprimentsList[0]
 		associateExpriment.availableExperiments.exprimentsList[0].click()
-		waitFor(15, 5) { associateExpriment.availableExperiments.exprimentsList.size() != "Empty"  }
+		waitFor(15, 5) { associateExpriment.availableExperiments.exprimentsList[0]  }
 		def exprimentName = associateExpriment.availableExperiments.exprimentsList[0].text()
-		associateExpriment.availableExperiments.exprimentsList[0].value(associateExpriment.availableExperiments.exprimentsList[0].text()).click()
+		associateExpriment.availableExperiments.exprimentsList.value(exprimentName).click()
 		def experimentId = exprimentName.takeWhile { it != '-' }
 		associateExpriment.stageSelect.stageLink.click()
 		associateExpriment.stageSelect.stageField << stageValue
-		waitFor { associateExpriment.stageSelect.resultPopup }
+		waitFor(15, 5) { associateExpriment.stageSelect.resultPopup }
 		associateExpriment.stageSelect.resultPopup.click()
 		assert associateExpriment.addExprimentBtn
 		associateExpriment.addExprimentBtn.click()

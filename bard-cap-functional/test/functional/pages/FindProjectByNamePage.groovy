@@ -5,9 +5,11 @@ import com.google.common.cache.LoadingCache;
 import geb.Page
 import pages.HomePage
 import geb.Module
+import pages.CAPUtilPage
 import geb.navigator.Navigator;
 
 class FindProjectByNamePage extends Page {
+	def FIND_PROJECT_FIELD = "projectName"
 	static url = "project/findByName/"
 	static at = {
 		$("div.hero-unit-v1").find("h4").text() ==~ "Search Project by name"
@@ -19,14 +21,12 @@ class FindProjectByNamePage extends Page {
 		
 		projectResults { index -> moduleList SearchResultTable, $("table.gridtable tr").tail(), index }
 		
-		projectSearchBtns { name -> module SearchFieldsModule, searchBtns: name }
+		projectSearchBtns { module SearchFieldsModule, searchBtns: FIND_PROJECT_FIELD }
 		projectAutocompleteItems { moduleList AutocompleteResult, $("li.ui-menu-item") }
 		
 		capHeaders { module BardCapHeaderModule }
-		
-	//	autocompleteItems { moduleList AutocompleteResult, $("li.ui-menu-item") }
 	}
-
+	
 	boolean isAutocompleteListOk(element, condition){
 		if(element){
 			element.each { elementValue ->
@@ -36,5 +36,4 @@ class FindProjectByNamePage extends Page {
 			}
 		}
 	}
-
 }

@@ -4,12 +4,9 @@ import pages.ViewProjectDefinitionPage
 import pages.ScaffoldPage
 import spock.lang.Stepwise
 import pages.FindProjectByNamePage
-import pages.CAPFunctionalUtil
 
 @Stepwise
 class SearchProjectSpec extends BardFunctionalSpec {
-	final static IDINPUTFIELD = "projectId"
-	final static NAMEINPUTFIELD = "projectName"
 	final static ISEMPTY = "Empty"
 	final static PROJECTRESULTACCORDIAN = "Project"
 	
@@ -34,13 +31,12 @@ class SearchProjectSpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some project"
 		at FindProjectByIdPage
-		projectSearchBtns(IDINPUTFIELD).inputBtns << projectId
+		projectSearchBtns.inputBtns << projectId
 		projectSearchBtns.searchBtn.click()
 
 		then: "User is navigated to View Project Definition page"
 		at ViewProjectDefinitionPage
 		assert viewProjectDefinition.contains(testData.projectId)
-		//assaySummay.assayDefinitionId.next().text() ==~ projectId
 		
 		when:"Navigating to Home Page"
 		at ViewProjectDefinitionPage
@@ -62,10 +58,10 @@ class SearchProjectSpec extends BardFunctionalSpec {
 
 		when: "User is trying to search Project"
 		at FindProjectByNamePage
-		projectSearchBtns(NAMEINPUTFIELD).inputBtns << projectString
+		projectSearchBtns.inputBtns << projectString
 		
-		waitFor(15, 5) { projectAutocompleteItems.itemsList }
-		assert isAutocompleteListOk(projectAutocompleteItems.itemsList, projectString)
+		waitFor(15, 5) { projectAutocompleteItems }
+		assert isAutocompleteListOk(projectAutocompleteItems, projectString)
 		
 		projectSearchBtns.searchBtn.click()
 
@@ -92,7 +88,7 @@ class SearchProjectSpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Project with Name"
 		at FindProjectByNamePage
-		projectSearchBtns(NAMEINPUTFIELD).inputBtns << projectExactName
+		projectSearchBtns.inputBtns << projectExactName
 		projectSearchBtns.searchBtn.click()
 
 		then: "User is navigated to view Project definition page"
@@ -119,7 +115,7 @@ class SearchProjectSpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Project with Name"
 		at FindProjectByNamePage
-		projectSearchBtns(NAMEINPUTFIELD).inputBtns << projectName
+		projectSearchBtns.inputBtns << projectName
 		projectSearchBtns.searchBtn.click()
 
 		then: "wait for result to populate in project result accordian"
@@ -145,7 +141,7 @@ class SearchProjectSpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Project with Name"
 		at FindProjectByNamePage
-		projectSearchBtns(NAMEINPUTFIELD).inputBtns << projectName
+		projectSearchBtns.inputBtns << projectName
 		projectSearchBtns.searchBtn.click()
 
 		then: "wait for result to populate in Project result accordian"

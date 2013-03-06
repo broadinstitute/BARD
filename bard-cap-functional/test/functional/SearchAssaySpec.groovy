@@ -7,8 +7,6 @@ import pages.FindAssayByNamePage
 
 @Stepwise
 class SearchAssaySpec extends BardFunctionalSpec {
-	final static IDINPUTFIELD = "assayId"
-	final static NAMEINPUTFIELD = "assayName"
 	final static ISEMPTY = "Empty"
 	final static ASSAYRESULTACCORDIAN = "Assays"
 	
@@ -33,7 +31,7 @@ class SearchAssaySpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Assays"
 		at FindAssayByIdPage
-		assaySearchBtns(IDINPUTFIELD).inputBtns << assayId
+		assaySearchBtns.inputBtns << assayId
 		assaySearchBtns.searchBtn.click()
 
 		then: "User is navigated to View Assay Definition page"
@@ -61,10 +59,10 @@ class SearchAssaySpec extends BardFunctionalSpec {
 
 		when: "User is trying to search Assays"
 		at FindAssayByNamePage
-		assaySearchBtns(NAMEINPUTFIELD).inputBtns << assayString
+		assaySearchBtns.inputBtns << assayString
 		
-		waitFor(15, 5) { autocompleteItems.itemsList }
-		assert isAssayAutocomplete(autocompleteItems.itemsList, assayString)
+		waitFor(15, 5) { autocompleteItems }
+		assert isAutocompleteListOk(autocompleteItems, assayString)
 		
 		assaySearchBtns.searchBtn.click()
 
@@ -91,7 +89,7 @@ class SearchAssaySpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Assays with Name"
 		at FindAssayByNamePage
-		assaySearchBtns(NAMEINPUTFIELD).inputBtns << assayExactName
+		assaySearchBtns.inputBtns << assayExactName
 		assaySearchBtns.searchBtn.click()
 
 		then: "User is navigated to view assay definition page"
@@ -118,7 +116,7 @@ class SearchAssaySpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Assays with Name"
 		at FindAssayByNamePage
-		assaySearchBtns(NAMEINPUTFIELD).inputBtns << assayName
+		assaySearchBtns.inputBtns << assayName
 		assaySearchBtns.searchBtn.click()
 		
 		then: "wait for result to populate in assay result accordian"
@@ -144,7 +142,7 @@ class SearchAssaySpec extends BardFunctionalSpec {
 
 		when: "User is trying to search some Assays with Name"
 		at FindAssayByNamePage
-		assaySearchBtns(NAMEINPUTFIELD).inputBtns << assayName
+		assaySearchBtns.inputBtns << assayName
 		assaySearchBtns.searchBtn.click()
 
 		then: "wait for result to populate in assay result accordian"

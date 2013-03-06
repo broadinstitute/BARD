@@ -5,11 +5,7 @@ import geb.Page
 
 class ViewAssayDefinitionPage extends Page{
 	static url=""
-	static at = {  waitFor(10, 0.5){
-			//$("div", class:"pull-left").find("h4").text().contains("View Assay Definition")
-			//$("div#target-summary-info").find("dd", text:"666").text() ==~ "666"
-			$("h4").text().contains("View Assay Definition")}
-	}
+	static at = {  waitFor(10, 0.5){$("h4").text().contains("View Assay Definition")}}
 
 	static content = {
 		viewAssayDefinition {$("div", class:"pull-left").find("h4").text()}

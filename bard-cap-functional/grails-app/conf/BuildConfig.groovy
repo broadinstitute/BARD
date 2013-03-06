@@ -17,6 +17,7 @@ grails.project.dependency.resolution = {
 
 	def gebVersion = "0.7.2"
 	def seleniumVersion = "2.27.0"
+	def spockVersion = "0.6"
 	
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
@@ -70,8 +71,8 @@ grails.project.dependency.resolution = {
 
         compile ':cache:1.0.0'
 		
-		test ":geb:0.7.2"
-		test ":spock:0.6"
+		test ":geb:$gebVersion"
+		test ":spock:$spockVersion"
 		test ":remote-control:1.4"
     }
 }

@@ -17,27 +17,6 @@ class EditProjectPage extends Page{
 		exprimentCanvas { module ExprimentCanvasModule, $("div#canvasIsolated") }
 		linkExpriment { module LinkExperimentModule }
 	}
-	
-	def addNewExperiment(exprimentName){
-		assert associateExpriment.titleBar
-		associateExpriment.experimentBy.addExperimentBy("ExperimentName")
-		associateExpriment.experimentBy.addExperimentByValue("ExperimentName") << exprimentName 
-		waitFor { associateExpriment.popupList.itemsList }
-		associateExpriment.popupList.requiredItem(0).click()
-		String expName = associateExpriment.availableExperiments.exprimentsList[0].text()
-		associateExpriment.availableExperiments.exprimentsList[0].value(expName).click()
-		def experimentId = expName.takeWhile { it != '-' }
-		associateExpriment.stageSelect.stageLink.click()
-		associateExpriment.stageSelect.stageField << stageValue
-		waitFor { associateExpriment.stageSelect.resultPopup }
-		associateExpriment.stageSelect.resultPopup.click()
-		assert associateExpriment.addExprimentBtn
-		associateExpriment.addExprimentBtn.click()
-		waitFor(20, 5){	exprimentCanvas.addedExperiment(experimentId) }
-		def ci = exprimentCanvas.addedExperiment(experimentId)
-		assert ci
-		ci.parent().click()
-	}
 }
 
 class AssociateExperimentModule extends Module {
@@ -47,8 +26,8 @@ class AssociateExperimentModule extends Module {
 		cancelBtn { $("div#dialog_add_experiment_step").parent().find("button", type:"button", text:"Cancel") }
 
 		experimentBy { module ExperimentFormModule, $("form#addExperimentForm") }
-		popupList { module AutoPopupList }
-		availableExperiments { moduleList AvailableExpriments, $("form#addExperimentForm") }
+		popupList { moduleList AutocompleteResult, $("li.ui-menu-item") }
+		availableExperiments { module AvailableExpriments, $("form#addExperimentForm") }
 		stageSelect { module StageModule }
 	}
 }
@@ -63,13 +42,6 @@ class ExperimentFormModule extends Module {
 	}
 }
 
-class AutoPopupList extends Module {
-	static content = {
-		itemsList { $("li.ui-menu-item") }
-		requiredItem {index -> itemsList[index].find("a") }
-	}
-}
-
 class AvailableExpriments extends Module {
 	static content = {
 		availableExp { $("div#availableExperiment")}
@@ -79,9 +51,9 @@ class AvailableExpriments extends Module {
 
 class StageModule extends Module {
 	static content = {
-		stageLink { $("div#s2id_stageId").find("a") }
-		stageField { $("input.select2-input") }
-		resultPopup { $("li.select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted") }
+		stageLink(wait: true) { $("div#s2id_stageId").find("a") }
+		stageField(wait: true) { $("input.select2-input") }
+		resultPopup(wait: true) { $("li.select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted") }
 	}
 }
 
@@ -91,18 +63,6 @@ class ExprimentCanvasModule extends Module {
 		expCanvasChildren { $("svg").children() }
 		addedExperiment { expId -> $("svg").find("tspan", text:expId) }
 
-	}
-
-	def getExpId(expCanvasList, exp){
-		def getExpId
-		expCanvasList.each {item ->
-			println item.text()
-			if(item.text()==exp){
-				getExpId { item }
-			}
-
-		}
-		return getExpId
 	}
 }
 

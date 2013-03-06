@@ -2,6 +2,7 @@ package pages
 
 import geb.Page
 import geb.Module
+import geb.navigator.Navigator
 
 class CAPUtilPage extends Page {
 	static url = ""
@@ -20,10 +21,10 @@ class SearchFieldsModule extends Module {
 }
 
 class AutocompleteResult extends Module {
+	
 	static content = {
-		items { $("a", it) }
-		itemsList { items(0) }
-		itemsListSize { itemsList.size() }
+		autoList { $("a", it) }
+		listItem { index -> autoList[index] }
 	}
 }
 

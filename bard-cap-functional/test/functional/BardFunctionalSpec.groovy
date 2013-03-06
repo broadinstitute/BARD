@@ -73,7 +73,7 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 
 	ViewAssayDefinitionPage searchAsssay(assayId){
 		at FindAssayByIdPage
-		assaySearchBtns("assayId").inputBtns << assayId
+		assaySearchBtns.inputBtns << assayId
 		assaySearchBtns.searchBtn.click()
 		return new ViewAssayDefinitionPage()
 	}
@@ -100,7 +100,7 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 	
 	ViewProjectDefinitionPage searchProject(pId){
 		at FindProjectByIdPage
-		projectSearchBtns("projectId").inputBtns << pId
+		projectSearchBtns.inputBtns << pId
 		projectSearchBtns.searchBtn.click()
 		return new ViewProjectDefinitionPage()
 	}

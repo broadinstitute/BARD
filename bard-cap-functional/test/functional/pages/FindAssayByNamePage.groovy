@@ -5,6 +5,7 @@ import pages.HomePage
 import geb.Module
 
 class FindAssayByNamePage extends Page {
+	def FIND_ASSAY_FIELD = "assayName"
 	static url = "assayDefinition/findByName/"
 	static at = {
 		$("div.hero-unit-v1").find("h4").text() ==~ "Search assay by name"
@@ -17,13 +18,13 @@ class FindAssayByNamePage extends Page {
 		
 		assaysResults { index -> moduleList SearchResultTable, $("table.gridtable tr").tail(), index }
 		
-		assaySearchBtns {name -> module SearchFieldsModule, searchBtns: name }
+		assaySearchBtns { module SearchFieldsModule, searchBtns: FIND_ASSAY_FIELD }
 		capHeaders { module BardCapHeaderModule }
 		
-		autocompleteItems { moduleList AutocompleteResult, $("li.ui-menu-item") }
+		autocompleteItems { moduleList AutocompleteResult,  $("li.ui-menu-item")}
 	}
-
-	boolean isAssayAutocomplete(element, condition){
+	
+	boolean isAutocompleteListOk(element, condition){
 		if(element){
 			element.each { elementValue ->
 				if(elementValue.text()){
@@ -32,29 +33,4 @@ class FindAssayByNamePage extends Page {
 			}
 		}
 	}
-
 }
-
-
-/*
-class AutocompleteResult extends Module {
-	static content = {
-		items { $("a", it) }
-		itemsList { items(0) }
-		itemsListSize { itemsList.size() }
-		
-		loading { $("div#spinner") }
-		itemsLoaded { !Loading.displayed }
-	}
-}
-
-class AssayResultTable extends Module {
-	static content = {
-		cell { $("td", it) }
-		assayId { cell(0).find("a") }
-		shortName { cell(1).text() }
-		assayName { cell(2).text() }
-		designedBy { cell(3).text() }
-	}
-}
-*/
