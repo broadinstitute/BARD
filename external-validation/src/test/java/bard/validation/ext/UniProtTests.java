@@ -46,6 +46,18 @@ public class UniProtTests {
 		System.out.println(String.format("%s items returned for query " + query, items.size()));
 		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
 	}
+	
+	@Test
+	public void testFindMatchingLimitThree() throws ExternalOntologyException {
+		long start = System.currentTimeMillis();
+		String query = "PPAR";
+		List<ExternalItem> items = eo.findMatching(query, 3);
+		for (ExternalItem item : items)
+			System.out.println(String.format("%s\t%s", item.getId(), item.getDisplay()));
+		assertEquals(query + " in the gene database should return items", items.size() == 3, true);
+		System.out.println(String.format("%s items returned for query " + query, items.size()));
+		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
+	}
 
 	@Test
 	public void testGetByName() throws ExternalOntologyException {

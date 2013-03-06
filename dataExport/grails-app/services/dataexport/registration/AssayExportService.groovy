@@ -41,8 +41,8 @@ class AssayExportService {
      * @param lkatestStatus - should be one of ["Ready", "Started", "Complete"]
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(final Long assayId, final Long clientVersion, final String latestStatus) {
-       return utilityService.update(Assay.get(assayId),assayId,clientVersion,ReadyForExtraction.byId(latestStatus),"Assay")
+    public BardHttpResponse update(final Long assayId, final Long clientVersion, final ReadyForExtraction latestStatus) {
+       return utilityService.update(Assay.get(assayId),assayId,clientVersion,latestStatus,"Assay")
     }
     /**
      * Stub for generating assays with status of Ready

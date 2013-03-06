@@ -33,7 +33,7 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Result"
         when: "We call the result service to update this result"
-        this.resultExportService.update(new Long(100000), 0, "Complete")
+        this.resultExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE)
 
         then: "An exception is thrown, indicating that the result does not exist"
         thrown(NotFoundException)
@@ -67,7 +67,7 @@ class ResultExportServiceIntegrationSpec extends IntegrationSpec {
         Result result = Result.build(readyForExtraction: initialReadyForExtraction)
 
         when: "We call the result service to update this result"
-        final BardHttpResponse bardHttpResponse = this.resultExportService.update(result.id, version, "Complete")
+        final BardHttpResponse bardHttpResponse = this.resultExportService.update(result.id, version, ReadyForExtraction.COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse

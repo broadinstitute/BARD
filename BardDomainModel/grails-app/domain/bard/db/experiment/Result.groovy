@@ -5,7 +5,6 @@ import bard.db.enums.ReadyForExtraction
 import org.codehaus.groovy.grails.orm.hibernate.cfg.IdentityEnumType
 
 class Result {
-
     private static final int VALUE_DISPLAY_MAX_SIZE = 256
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int RESULT_STATUS_MAX_SIZE = 20
@@ -29,6 +28,7 @@ class Result {
     Date dateCreated
     Date lastUpdated
     String modifiedBy
+    Long id;
 
     Set<ResultContextItem> resultContextItems = [] as Set<ResultContextItem>
     Set<ResultHierarchy> resultHierarchiesForResult = [] as Set<ResultHierarchy>

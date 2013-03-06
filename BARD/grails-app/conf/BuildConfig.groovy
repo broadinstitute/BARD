@@ -41,9 +41,15 @@ grails.project.dependency.resolution = {
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         runtime 'commons-net:commons-net:3.2'
+        runtime 'net.sf.opencsv:opencsv:2.3'
+        runtime 'com.fasterxml.jackson.core:jackson-annotations:2.1.2'
+        runtime 'com.fasterxml.jackson.core:jackson-core:2.1.2'
+        runtime 'com.fasterxml.jackson.core:jackson-databind:2.1.2'
+        runtime 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.1.2'
+        runtime 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.1.2'
 
         // this dependency seems a little ridiculous but some page renders seem to fail and adding this
-        // was advised in http://stackoverflow.com/questions/12627147/grails-rendering-plugin-gives-java-lang-classnotfoundexception-when-deployed
+        // was advised in http://stackoverflow.com/questions/12627147/grails-rendering-plugin-gives-`java-lang-classnotfoundexception-when-deployed
         runtime 'org.springframework:spring-test:3.1.2.RELEASE'
 
         // test scope

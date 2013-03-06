@@ -33,7 +33,8 @@ class ResultHierarchy implements Serializable {
     static belongsTo = [Result]
 
     static mapping = {
-        id composite: ["result", "parentResult"]
+        id(column: "result_hierarchy_id", generator: "sequence", params: [sequence: 'result_hierarchy_id_seq'])
+//        id composite: ["result", "parentResult"]
     }
 
     static constraints = {

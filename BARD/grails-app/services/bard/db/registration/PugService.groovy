@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.experiment.Substance
 import bard.util.NetClientService
 import groovy.xml.MarkupBuilder
+import org.apache.commons.io.IOUtils
 import org.apache.commons.net.ftp.FTPClient
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
@@ -67,7 +68,7 @@ class PugService {
                                     }
                                 }
                             }
-                            'PCT-Download_format'(value:"smiles")
+                            'PCT-Download_format'(value:"xml")
                             'PCT-Download_compression'(value:"gzip")
                         }
                     }
@@ -88,27 +89,29 @@ class PugService {
         ftpClient.login(pubChemAnonFtpUser, pubChemAnonFtpPassword);
         InputStream input = ftpClient.retrieveFileStream(parsedUrl.getFile())
 
+//        FileOutputStream out = new FileOutputStream("lastpubchem_query.txt");
+//        IOUtils.copy(input, out);
+//        input.close();
+//        out.close();
+//        input = new FileInputStream("lastpubchem_query.txt")
+
         callback(input)
+        input.close();
 
         ftpClient.disconnect()
     }
 
     /** Call a callback once per sid, smiles tuple.  If the sid could not be found smiles == null */
     void parseSmilesTable(InputStream input, Closure callback) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new GZIPInputStream(input)))
-        while(true) {
-            String line = reader.readLine()
-            if (line == null)
-                break
-            def fields = line.split("\t")
-            def id = fields[0]
-            def smiles = null
-            if (fields.length == 2)
-                smiles = fields[1]
+        def body = IOUtils.toString(new GZIPInputStream(input))
+//        new File("dumpped_result.txt").write(body)
+//        println("body=${body}");
+        Node xml = new XmlParser().parseText(body)
+        input.close()
 
-            callback(id, smiles)
-        }
-        reader.close()
+        Collection<String> sids = (xml.depthFirst().findAll {it.name().localPart == "PC-ID_id"}).collect {it.text()}
+
+        sids.each {callback(it)}
     }
 
     /** submit the given query to PUG and return a parsed version of the response */
@@ -131,21 +134,18 @@ class PugService {
         // find the subset that are not in the database
         def missingSids = sids.findAll { Substance.get(it) == null }
 
-        List missingFromPubchem = []
+        Set<Long> missingFromPubchem = new HashSet(missingSids)
 
-        getSubstancesFromPubchem(missingSids) { sid, smiles ->
+        getSubstancesFromPubchem(missingSids) { sid ->
             Long substanceId = Long.parseLong(sid)
-            if(smiles == null) {
-                missingFromPubchem << sid
-            } else {
-                Substance substance = new Substance(id: substanceId, smiles: smiles, dateCreated: new Date())
-                // the id doesn't get set in the line above.  Why?
-                substance.id = substanceId
-                assert substance.save()
-            }
+            Substance substance = new Substance(id: substanceId, dateCreated: new Date())
+            // the id doesn't get set in the line above.  Why?
+            substance.id = substanceId
+            assert substance.save()
+            missingFromPubchem.remove(substanceId)
         }
 
-        return missingFromPubchem
+        return missingFromPubchem.collect { it.toString() }
     }
 
     Node find(Node xml, String tagName) {
@@ -155,10 +155,14 @@ class PugService {
 
     def getSubstancesFromPubchem(sids, callback) {
         if (sids.size() > 0) {
-            def parsedResponse = executeQuery(substanceQuery(sids))
+            String query = substanceQuery(sids)
+//            FileWriter w = new FileWriter("query.txt")
+//            w.write(query)
+//            w.close()
+            def parsedResponse = executeQuery(query)
 
             def status = find(parsedResponse, "PCT-Status")?."@value"
-            if (status != "success") {
+            if (status != "success" && status != "running") {
                 throw new RuntimeException("Querying substances from pubchem failed: "+parsedResponse);
             }
 

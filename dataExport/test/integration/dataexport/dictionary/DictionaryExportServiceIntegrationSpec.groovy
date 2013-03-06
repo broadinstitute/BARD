@@ -46,7 +46,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Element"
         when: "We call the dictionary service to update this element"
-        this.dictionaryExportService.update(new Long(100000), 0, "Complete")
+        this.dictionaryExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE)
 
         then: "An exception is thrown, indicating that the element does not exist"
         thrown(NotFoundException)
@@ -57,7 +57,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
         Element e = Element.build(readyForExtraction: initialReadyForExtraction)
 
         when: "We call the dictionary service to update this project"
-        final BardHttpResponse bardHttpResponse = this.dictionaryExportService.update(elementId, version, 'Complete')
+        final BardHttpResponse bardHttpResponse = this.dictionaryExportService.update(elementId, version, ReadyForExtraction.COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse

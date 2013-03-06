@@ -45,14 +45,9 @@ class ExperimentExportService extends ExportAbstractService {
      * @param version
      * Returns the HTTPStatus Code
      */
-    public BardHttpResponse update(final Long id, final Long clientVersion, final String latestStatus) {
+    public BardHttpResponse update(final Long id, final Long clientVersion, final ReadyForExtraction latestStatus) {
         final Experiment experiment = Experiment.findById(id)
-        //make sure there are no children with a status other than 'Complete'
-        final int outStandingResults = Result.countByExperimentAndReadyForExtractionNotEqual(experiment, ReadyForExtraction.COMPLETE)
-        if (outStandingResults > 0) {//this experiments has results that have not yet been consumed
-            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_NOT_ACCEPTABLE, ETag: experiment.version)
-        }
-        return utilityService.update(experiment, id, clientVersion, latestStatus as ReadyForExtraction, "Experiment")
+        return utilityService.update(experiment, id, clientVersion, latestStatus, "Experiment")
     }
     /**
      *  offset is used for paging, it tells us where we are in the paging process
@@ -229,7 +224,15 @@ class ExperimentExportService extends ExportAbstractService {
                 markupBuilder,
                 this.grailsLinkGenerator
         )
-
+        generateLink(
+                [mapping: 'results', absolute: true,
+                        rel: 'related', mediaType: "application/json;type=results",
+                        params: [id: experiment.id]
+                ]
+                ,
+                markupBuilder,
+                this.grailsLinkGenerator
+        )
         //link to edit this experiment. You can only change the ready_for_extraction status
         generateLink(
                 [mapping: 'experiment', absolute: true,

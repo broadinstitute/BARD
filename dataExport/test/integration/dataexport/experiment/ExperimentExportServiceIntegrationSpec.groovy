@@ -75,7 +75,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         numResults.times {Result.build(readyForExtraction: READY, experiment: experiment)}
 
         when: "We call the experiment service to update this experiment"
-        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, 'COMPLETE')
+        final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, ReadyForExtraction.COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
@@ -86,7 +86,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                                                | expectedStatusCode     | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
         "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | READY                     | COMPLETE
-        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | READY
+//        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | READY
         "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | READY                     | READY
         "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | READY                     | READY
         "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | COMPLETE                  | COMPLETE
@@ -96,7 +96,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         given: "Given a non-existing Experiment"
 
         when: "We call the experiment service to update this experiment"
-        this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE.toString())
+        this.experimentExportService.update(new Long(100000), 0, ReadyForExtraction.COMPLETE)
 
         then: "An exception is thrown, indicating that the experiment does not exist"
         thrown(NotFoundException)

@@ -34,6 +34,21 @@ public class NCBITests {
 		assertEquals(String.format("%s\t%s", item.getId(), item.getDisplay()), item.getId().equals("9606"), true);
 		System.out.println("testGetByName took (ms): " + (System.currentTimeMillis() - start) );
 	}
+	
+	@Test
+	public void testGetByNameFail() throws ExternalOntologyException {
+		long start = System.currentTimeMillis();
+		ExternalOntologyAPI eo = new ExternalOntologyNCBI("protein", "southern@scripps.edu", "BARD-CAP");
+		try {
+			ExternalItem item = eo.findByName("ppar");
+			String.format("%s\t%s", item.getId(), item.getDisplay());
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		assertEquals("Expected failure of generic term", 1==1, true);
+		System.out.println("testGetByNameFail took (ms): " + (System.currentTimeMillis() - start) );
+	}
 
 	@Test
 	public void testFindMatching() throws ExternalOntologyException {
@@ -47,4 +62,15 @@ public class NCBITests {
 		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
 	}
 
+	@Test
+	public void testFindMatchingLimitThree() throws ExternalOntologyException {
+		long start = System.currentTimeMillis();
+		ExternalOntologyAPI eo = new ExternalOntologyNCBI("gene", "southern@scripps.edu", "BARD-CAP");
+		List<ExternalItem> items = eo.findMatching("ppar", 3);
+		for (ExternalItem item : items)
+			System.out.println(String.format("%s\t%s", item.getId(), item.getDisplay()));
+		assertEquals("'ppar gamma' in the gene database should return items", items.size() == 3, true);
+		System.out.println(String.format("%s items returned for query 'ppar gamma'", items.size()));
+		System.out.println("testFindMatchingLimitThree took (ms): " + (System.currentTimeMillis() - start) );
+	}
 }

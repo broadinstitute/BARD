@@ -17,7 +17,8 @@ import com.jolbox.bonecp.BoneCPConfig;
  * @author southern
  *
  */
-public class ExternalOntologyGO implements ExternalOntologyAPI {
+@Deprecated
+public class ExternalOntologyGO extends ExternalOntologyAPI {
 
 	private BoneCP connectionPool;
 
@@ -46,12 +47,19 @@ public class ExternalOntologyGO implements ExternalOntologyAPI {
 		super.finalize();
 		connectionPool.shutdown();
 	}
+	
+	public String idGenerator(String id) {
+		if( id.matches("^\\d+$"))
+			id = "GO:" + id;
+		return id;
+	}
 
 	/**
 	 * searches TERM table for names and accessions for non-obsolete biological processes  
 	 */
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
+		id = idGenerator(id);
 		List<ExternalItem> items = runQuery(
 				"SELECT acc, name FROM term WHERE acc = upper(?) and term_type = 'biological_process' and is_obsolete = 0", id);
 		if (items.size() > 1)
@@ -75,7 +83,7 @@ public class ExternalOntologyGO implements ExternalOntologyAPI {
 	 * searches TERM table for names and accessions for non-obsolete biological processes. Uses a SQL LIKE.
 	 */
 	@Override
-	public List<ExternalItem> findMatching(String name) throws ExternalOntologyException {
+	public List<ExternalItem> findMatching(String name, int limit) throws ExternalOntologyException {
 		List<ExternalItem> items = runQuery(
 				"SELECT acc, name FROM term WHERE name like lower(?) and term_type = 'biological_process' and is_obsolete = 0",
 				queryGenerator(name));
@@ -86,8 +94,8 @@ public class ExternalOntologyGO implements ExternalOntologyAPI {
 	 * Gene Ontology URL
 	 */
 	@Override
-	public String getExternalURL() {
-		return "http://www.geneontology.org/";
+	public String getExternalURL(String id) {
+		return String.format("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=%s", id);
 	}
 
 	protected List<ExternalItem> processResultSet(ResultSet rs) throws SQLException {

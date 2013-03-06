@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.experiment.Experiment
+import bard.db.experiment.ResultsService
 import grails.plugins.springsecurity.Secured
 import grails.util.GrailsWebUtil
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders

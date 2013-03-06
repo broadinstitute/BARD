@@ -8,22 +8,19 @@ import bard.db.experiment.ExperimentMeasure
 import bard.db.experiment.HierarchyType
 import bard.db.experiment.Result
 import bard.db.experiment.ResultContextItem
+import bard.db.experiment.ResultsService
 import bard.db.experiment.Substance
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.services.ServiceUnitTestMixin
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
-
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
+@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
 class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {
@@ -42,31 +39,31 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         ResultsService service = new ResultsService();
 
-        def parentResultType = Element.build()
+        def parentResultType = Element.build(label: "parent")
         def parentMeasure = Measure.build(resultType: parentResultType)
-        def parentColumn = new ResultsService.Column("parent", parentMeasure)
-        def parentCell = new ResultsService.Cell(column: parentColumn, qualifier: "=", value: 1)
+        def parentCell = new ResultsService.RawCell(columnName: "parent", value: "1")
 
-        def childResultType = Element.build()
+        def childResultType = Element.build(label: "child")
         def childMeasure = Measure.build(resultType: childResultType)
-        def childColumn = new ResultsService.Column("child", childMeasure)
-        def childCell = new ResultsService.Cell(column: childColumn, qualifier: "=", value: 1)
+        def childCell = new ResultsService.RawCell(columnName: "child", value: "1")
 
-        def experimentMeasure = ExperimentMeasure.build(parent: ExperimentMeasure.build(measure: parentMeasure), measure: childMeasure, parentChildRelationship: "Derived from")
+        ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(measure: parentMeasure)
+        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: "Derived from")
+        parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
-        ResultsService.InitialParse parsed
+        List<ResultsService.Row> rows;
         if (onSameLine) {
             def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [parentCell, childCell], replicate: 1)
-            parsed = new ResultsService.InitialParse(rows: [row])
+            rows = [row]
         } else {
             def row0 = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [parentCell], replicate: 1)
             def row1 = new ResultsService.Row(rowNumber: 2, parentRowNumber: 1, sid: substance.id, cells: [childCell], replicate: 1)
-            parsed = new ResultsService.InitialParse(rows: [row0, row1])
+            rows = [row0, row1]
         }
 
         def errors = new ResultsService.ImportSummary()
 
-        def results = service.createResults(parsed, errors, [:], [experimentMeasure])
+        def results = service.createResults(rows, [parentExperimentMeasure, childExperimentMeasure], errors, [:])
 
         then:
         !errors.hasErrors()
@@ -121,11 +118,11 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         then:
         template.constantItems.size() == 1
-        template.constantItems.get(0).name == "cell line"
+        template.constantItems.get(0) == "cell line"
         template.experiment == experiment
         template.columns.size() == 2
-        template.columns.get(0).name == "ec50"
-        template.columns.get(1).name == "hill slope"
+        template.columns.get(0) == "ec50"
+        template.columns.get(1) == "hill slope"
     }
 
     def createSampleFile() {
@@ -134,9 +131,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         Measure inhibitionMeasure = Measure.build()
         Measure ec50Measure = Measure.build()
 
-        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
+//        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
         def constantItems = []
-        ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: columns, constantItems: constantItems)
+        ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: ["Inhibition","EC50"], constantItems: constantItems)
 
         String sample = ",Experiment ID,123\n" +
                 "\n" +
@@ -156,12 +153,11 @@ class ResultsServiceSpec extends spock.lang.Specification {
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
         Element attribute = Element.build(label: "column")
         def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.Free)])[0]
-        ResultsService.Column column = new ResultsService.Column("column", item)
 
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item])
 
         then:
         initialParse.contexts.size() == 1
@@ -183,28 +179,30 @@ class ResultsServiceSpec extends spock.lang.Specification {
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0
     }
 
-    void 'test parse experiement level list item'() {
+    void 'test parse experiment level list item'() {
         setup:
         ResultsService service = new ResultsService();
+        ItemService itemService = new ItemService()
 
         def tubaElement = Element.build(label: "tuba")
-        def attribute = Element.build()
+        def attribute = Element.build(label: "column")
         def context = AssayContext.build()
         def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
         def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
-        ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
-        ResultsService.Column column = new ResultsService.Column("column", item)
 
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
         when:
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader: reader), errors, [column])
+
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item])
 
         then:
+        !errors.hasErrors()
+
         initialParse.contexts.size() == 1
         ExperimentContext expContext = initialParse.contexts.first()
         expContext.contextItems.size() == 1
@@ -235,14 +233,16 @@ class ResultsServiceSpec extends spock.lang.Specification {
         then:
         row0.parentRowNumber == null
         row0.cells.size() == 1
-        row0.cells.get(0).value == 10
+        row0.cells.get(0).value == "10"
+        row0.cells.get(0).columnName == "Inhibition"
         row0.sid == 100
         row0.rowNumber == 1
         row0.replicate == null
 
         row1.parentRowNumber == 1
         row1.cells.size() == 1
-        row1.cells.get(0).value == 5
+        row1.cells.get(0).value == "5"
+        row1.cells.get(0).columnName == "EC50"
     }
 
     @Unroll("test parsing problem: #desc")
@@ -285,23 +285,26 @@ class ResultsServiceSpec extends spock.lang.Specification {
     void 'test parse measure cell'() {
         when:
         Measure measure = Measure.build()
-        ResultsService.Column column = new ResultsService.Column("x", measure)
+        Substance substance = Substance.build()
 
-        ResultsService.Cell cell = column.parseValue(cellString)
+        ResultsService service = new ResultsService();
+        Result result = service.createResult(null, measure, cellString, substance, null)
 
         then:
-        cell.value == expectedValue
-        cell.maxValue == maxVal
-        cell.minValue == minVal
-        cell.qualifier == expectedQualifier
+        result.valueNum == expectedValue
+        result.valueMax == maxVal
+        result.valueMin == minVal
+        result.qualifier == expectedQualifier
+        result.valueDisplay == displayValue
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal  | displayValue
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null    | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null    | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null    | "free"
     }
 
     void 'test creating measure result'() {
@@ -315,16 +318,14 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         ResultsService service = new ResultsService();
 
-        def resultType = Element.build()
+        def resultType = Element.build(label: "x")
         def measure = Measure.build(resultType: resultType)
-        def column = new ResultsService.Column("a", measure)
-        def cell = new ResultsService.Cell(column: column, qualifier: "=", value: 5)
-        def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [cell], replicate: 1)
-        def parse = new ResultsService.InitialParse(rows: [row])
+        def experimentMeasure = ExperimentMeasure.build(measure: measure)
+        def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [new ResultsService.RawCell(columnName: "x", value: "5")], replicate: 1)
 
         def errors = new ResultsService.ImportSummary()
 
-        def results = service.createResults(parse, errors, [:], [])
+        def results = service.createResults([row], [experimentMeasure], errors, [:])
 
         then:
         !errors.hasErrors()
@@ -337,7 +338,6 @@ class ResultsServiceSpec extends spock.lang.Specification {
         result.substance == substance
     }
 
-
     void 'test creating measure and item result'() {
         when:
         ResultsService service = new ResultsService();
@@ -346,25 +346,23 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def substance = Substance.build()
         substance.save()
 
-        def attribute = Element.build()
-        def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute)])[0]
-        def resultType = Element.build()
+        def attribute = Element.build(label: "item")
+        def item = itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute)])[0]
+        def resultType = Element.build(label: "measure")
         def measure = Measure.build(resultType: resultType)
-        def measureColumn = new ResultsService.Column("a", measure)
-        def itemColumn = new ResultsService.Column("b", item)
+        def experimentMeasure = ExperimentMeasure.build(measure: measure)
 
         // construct a row of two cells: a measurement and an associated context
-        def mCell = new ResultsService.Cell(column: measureColumn, qualifier: "=", value: 5)
-        def iCell = new ResultsService.Cell(column: itemColumn, qualifier: "<", value: 15)
+        def mCell = new ResultsService.RawCell(columnName: "measure", value: "5")
+        def iCell = new ResultsService.RawCell(columnName: "item", value: "<15")
         def row = new ResultsService.Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
-        def parse = new ResultsService.InitialParse(rows: [row])
 
         def errors = new ResultsService.ImportSummary()
 
-        def measuresForItem = [:]
-        measuresForItem.put(item, [measure])
+        def itemsByMeasure = [:]
+        itemsByMeasure.put(measure, [item])
 
-        def results = service.createResults(parse, errors, measuresForItem, [])
+        def results = service.createResults([row], [experimentMeasure], errors, itemsByMeasure)
 
         then:
         !errors.hasErrors()
@@ -377,7 +375,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         rMeasure.substance == substance
         rMeasure.resultContextItems.size() == 1
         ResultContextItem rci = rMeasure.resultContextItems.first()
-        rci.qualifier == "<"
+        rci.qualifier == "< "
         rci.valueNum == 15.0
         rci.attributeElement == attribute
     }
@@ -385,28 +383,36 @@ class ResultsServiceSpec extends spock.lang.Specification {
     @Unroll("test parsing context item containing #cellString")
     void 'test parse non-element context item cell'() {
         when:
+        ResultsService service = new ResultsService();
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free)])[0]
-        ResultsService.Column column = new ResultsService.Column("x", item)
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
-        ResultsService.Cell cell = column.parseValue(cellString)
+        ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)
 
         then:
-        cell.value == expectedValue
-        cell.maxValue == maxVal
-        cell.minValue == minVal
-        cell.qualifier == expectedQualifier
+        !errors.hasErrors()
+        resultContextItem.valueNum == expectedValue
+        resultContextItem.valueMax == maxVal
+        resultContextItem.valueMin == minVal
+        resultContextItem.qualifier == expectedQualifier
+        resultContextItem.valueDisplay == valueDisplay
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal | valueDisplay
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null   | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null   | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null   | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null   | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0    | "2.0-3.0"
+        "free text"           | "free"     | null          | null              | null   | null   | "free"
     }
 
     void 'test parse context item from element list'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
         when:
         def tubaElement = Element.build(label: "tuba")
         def attribute = Element.build()
@@ -416,24 +422,32 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([tubaItem, trumpetItem])[0]
-        ResultsService.Column column = new ResultsService.Column("x", item)
 
-        ResultsService.Cell c0 = column.parseValue("tuba")
+        ResultContextItem c0 = service.createResultItem("tuba", item, errors)
 
         then:
-        c0.element == tubaElement
+        !errors.hasErrors()
+        c0.valueElement == tubaElement
 
         when:
-        ResultsService.Cell c1 = column.parseValue("trumpet")
+        ResultContextItem c1 = service.createResultItem("trumpet", item, errors)
 
         then:
-        c1.element == trumpetElement
+        !errors.hasErrors()
+        c1.valueElement == trumpetElement
+
+        when:
+        service.createResultItem("pony", item, errors)
 
         then:
-        !(column.parseValue("pony") instanceof ResultsService.Cell)
+        errors.hasErrors()
     }
 
-    void 'test parse context item from value list'() {
+    void 'test parse context item from numeric value list'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
         when:
         def attribute = Element.build()
         def context = AssayContext.build()
@@ -441,34 +455,99 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2)
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([large, small])[0]
-        ResultsService.Column column = new ResultsService.Column("x", item)
 
-        ResultsService.Cell c0 = column.parseValue("1e2")
+        ResultContextItem c0 = service.createResultItem("1e2", item, errors)
 
         then:
-        c0.value == 1e2
+        !errors.hasErrors()
+        c0.valueNum == 1e2
 
         when:
-        ResultsService.Cell c1 = column.parseValue("100")
+        ResultContextItem c1 = service.createResultItem("100", item, errors)
 
         then:
-        c1.value == 1e2
+        !errors.hasErrors()
+        c1.valueNum == 1e2
 
         when:
-        ResultsService.Cell c2 = column.parseValue("200.0")
+        ResultContextItem c2 = service.createResultItem("200", item, errors)
 
         then:
-        c2.value == 2e2
+        !errors.hasErrors()
+        c2.valueNum == 2e2
 
         when:
-        ResultsService.Cell c3 = column.parseValue("200.1")
+        ResultContextItem c3 = service.createResultItem("200.1", item, errors)
 
         then:
-        c3.value == 2e2
+        !errors.hasErrors()
+        c3.valueNum == 2e2
+
+        when:
+        service.createResultItem("pony", item, errors)
 
         then:
-        !(column.parseValue("pony") instanceof ResultsService.Cell)
+        errors.hasErrors()
+
     }
 
+    void 'test parse context item from free text list'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
+        when:
+        def attribute = Element.build()
+        def context = AssayContext.build()
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet")
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba")
+        ItemService itemService = new ItemService()
+        def item = itemService.getLogicalItems([trumpetItem, tubaItem])[0]
+
+        ResultContextItem c0 = service.createResultItem("trumpet", item, errors)
+
+        then:
+        !errors.hasErrors()
+        c0.valueDisplay == "trumpet"
+
+        when:
+        ResultContextItem c1 = service.createResultItem("tuba", item, errors)
+
+        then:
+        !errors.hasErrors()
+        c1.valueDisplay == "tuba"
+
+        when:
+        service.createResultItem("pony", item, errors)
+
+        then:
+        errors.hasErrors()
+    }
+
+    void 'test duplicate check'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
+        Result result1 = Result.build()
+        ResultContextItem item1 = ResultContextItem.build(result: result1, valueNum: 2.0)
+
+        Result result2 = Result.build()
+        ResultContextItem item2 = ResultContextItem.build(result: result2, valueNum: 3.0)
+
+        List<Result> results = [result1, result2]
+
+        when:
+        service.checkForDuplicates(errors, results)
+
+        then:
+        !errors.hasErrors()
+
+        when:
+        results.add(result1)
+        service.checkForDuplicates(errors, results)
+
+        then:
+        errors.errors.size() == 1
+    }
 }

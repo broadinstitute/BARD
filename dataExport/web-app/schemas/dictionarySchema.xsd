@@ -18,6 +18,19 @@ will give you this element
                 <xs:element minOccurs="0" ref="description"/>
                 <xs:element minOccurs="0" name="synonyms" type="xs:string"/>
                 <xs:element minOccurs="0" name="externalUrl" type="xs:anyURI"/>
+                <xs:element minOccurs="0" name="ontologies">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="ontology">
+                                <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required"/>
+                                    <xs:attribute name="abbreviation" type="xs:string"/>
+                                    <xs:attribute name="sourceUrl" type="xs:string"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
                 <xs:element maxOccurs="unbounded" ref="link"/>
             </xs:sequence>
             <xs:attribute name="elementId" type="bardID" use="required"/>
@@ -277,7 +290,7 @@ application/vnd.bard.cap+xml;type=dictionary should give the client the entire d
             <xs:selector xpath="laboratories/laboratory"/>
             <xs:field xpath="@laboratoryElement"/>
         </xs:keyref>
-       
+
     </xs:element>
     <xs:complexType name="descriptorType">
         <xs:sequence>

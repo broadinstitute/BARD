@@ -2,10 +2,10 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
+import bard.db.enums.AssayStatus
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
-import org.json.JSONArray
-import bard.db.enums.AssayStatus
+import org.codehaus.groovy.grails.web.json.JSONArray
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {

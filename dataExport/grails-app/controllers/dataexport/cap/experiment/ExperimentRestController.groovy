@@ -77,24 +77,28 @@ class ExperimentRestController {
      */
     def results(Integer id) {
         try {
-            final String mimeType = grailsApplication.config.bard.data.export.results.xml
+            final String xmlMimeType = grailsApplication.config.bard.data.export.results.xml
+            final String jsonMimeType = grailsApplication.config.bard.data.export.results.json
             //mime types must match the expected type
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
-
-                final int offset = params.offset ? new Integer(params.offset) : 0
-
-                //we use the stax builder here
-                final XMLOutputFactory factory = XMLOutputFactory.newInstance()
-                final StringWriter markupWriter = new StringWriter()
-                final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
-                final boolean hasMoreResults = this.resultExportService.generateResults(staxBuilder, id, offset)
-                if (hasMoreResults) {
-                    //we set the header to 206
-                    response.status = HttpServletResponse.SC_PARTIAL_CONTENT
-                } else {
-                    response.status = HttpServletResponse.SC_OK
+            final String requestedMimeType = request.getHeader(HttpHeaders.ACCEPT)
+            if ((xmlMimeType == requestedMimeType || jsonMimeType == requestedMimeType) && id) {
+                if (xmlMimeType == requestedMimeType) {
+                    final int offset = params.offset ? new Integer(params.offset) : 0
+                    //we use the stax builder here
+                    final XMLOutputFactory factory = XMLOutputFactory.newInstance()
+                    final StringWriter markupWriter = new StringWriter()
+                    final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
+                    final boolean hasMoreResults = this.resultExportService.generateResults(staxBuilder, id, offset)
+                    if (hasMoreResults) {
+                        //we set the header to 206
+                        response.status = HttpServletResponse.SC_PARTIAL_CONTENT
+                    } else {
+                        response.status = HttpServletResponse.SC_OK
+                    }
+                    render(text: markupWriter.toString(), contentType: xmlMimeType, encoding: responseContentTypeEncoding)
+                }else{
+                    throw new RuntimeException("Note yet implemented")
                 }
-                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
                 //now set the writer
                 return
             }

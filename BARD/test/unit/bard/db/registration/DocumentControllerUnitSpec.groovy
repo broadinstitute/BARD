@@ -26,7 +26,7 @@ class DocumentControllerUnitSpec extends Specification {
     @Before
     void setup() {
         assay = Assay.build()
-        existingAssayDocument = AssayDocument.build(assay: assay)
+        existingAssayDocument = AssayDocument.build(assay: assay, documentType: DOCUMENT_TYPE_DESCRIPTION)
         existingAssayDocument = AssayDocument.findById(existingAssayDocument.id)
         documentCommand = mockCommandObject(DocumentCommand)
         assert flash.message == null
@@ -49,7 +49,7 @@ class DocumentControllerUnitSpec extends Specification {
         when:
         documentCommand.assayId = assay.id
         documentCommand.documentContent = "content"
-        documentCommand.documentType = IDocumentType.DOCUMENT_TYPE_PUBLICATION
+        documentCommand.documentType = IDocumentType.DOCUMENT_TYPE_DESCRIPTION
         documentCommand.documentName = "name"
         controller.save(documentCommand)
 
@@ -59,7 +59,7 @@ class DocumentControllerUnitSpec extends Specification {
         response.redirectedUrl == "/assayDefinition/show/${assay.id}#document-${assayDocument.id}"
         assayDocument.assay == assay
         assayDocument.documentName == "name"
-        assayDocument.documentType == IDocumentType.DOCUMENT_TYPE_PUBLICATION
+        assayDocument.documentType == IDocumentType.DOCUMENT_TYPE_DESCRIPTION
         assayDocument.documentContent == "content"
 
     }

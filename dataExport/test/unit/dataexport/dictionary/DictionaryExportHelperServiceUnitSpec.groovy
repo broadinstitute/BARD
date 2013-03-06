@@ -84,23 +84,6 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         "With No Parent Statge" | { StageTree.build(element: Element.build(label: "2")) }                                                              | [stageElement: "2"]
 
     }
-//    /**
-//     * DictionaryExportHelperService#generateAttributesForResultType
-//     */
-//    void "test Generate Attributes For ResultType #label"() {
-//        given:
-//        when:
-//        final Map<String, String> mapResults =
-//            this.dictionaryExportHelperService.generateAttributesForResultType(dto)
-//        then:
-//        assert mapResults == results
-//
-//        where:
-//        label                                       | dto                                                                                                                                          | results
-//        "Result Type attaributes no abbreviation"   | new ResultType(resultTypeName: "name", description: "des", synonyms: "sun", baseUnit: "uM", resultTypeStatus: "Status")                      | [baseUnit: 'uM', resultTypeStatus: 'Status']
-//        "Result Type attaributes with abbreviation" | new ResultType(resultTypeName: "name", description: "des", abbreviation: "abb", synonyms: "sun", baseUnit: "uM", resultTypeStatus: "Status") | [abbreviation: 'abb', baseUnit: 'uM', resultTypeStatus: 'Status']
-//
-//    }
 
     /**
      * DictionaryExportHelperService#generateAttributesForResultType
@@ -197,18 +180,39 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm", elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY)                                                            | XmlTestSamples.ELEMENT_NO_DESCRIPTION
     }
 
-//    void "test generate Result Type #label"() {
-//        when:
-//        this.dictionaryExportHelperService.generateResultType(this.markupBuilder, resultType)
-//        then:
-//        XmlTestAssertions.assertResults(results, this.writer.toString())
-//        where:
-//        label                   | resultType                                                                                                                                                                                                                | results
-//        "Full Result Type"      | new ResultType(parentResultTypeName: "resultTypeName", resultTypeLabel: "label", resultTypeName: "resultTypeName", description: "desc", abbreviation: "abb", synonyms: "syn", resultTypeStatus: "status", baseUnit: "cm") | XmlTestSamples.RESULT_TYPE_FULL
-//        "Result Type no parent" | new ResultType(resultTypeLabel: "label", resultTypeName: "resultTypeName", description: "desc", abbreviation: "abb", synonyms: "syn", resultTypeStatus: "status")                                                         | XmlTestSamples.RESULT_TYPE_NO_PARENT
-//
-//    }
 
+    void "test generate OntologyItem #label"() {
+        when:
+        this.dictionaryExportHelperService.generateOntologyItem(this.markupBuilder, ontologyItem)
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label                                       | ontologyItem                                                                                                     | results
+        "Full Ontology"                             | new OntologyItem(ontology: new Ontology(ontologyName: "name", systemUrl: "http://bao.org", abbreviation: "BAO")) | XmlTestSamples.ONTOLOGY_FULL
+        "Ontology with missing optional attributes" | new OntologyItem(ontology: new Ontology(ontologyName: "name"))                                                   | XmlTestSamples.ONTOLOGY_MISSING_ATTRIBUTES
+    }
+
+    void "test generate OntologyItems #label"() {
+        when:
+        this.dictionaryExportHelperService.generateOntologyItems(this.markupBuilder, ontologyItems)
+        then:
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label                                       | ontologyItems                                                                                                                                                                                             | results
+        "Full Ontology"                             | [new OntologyItem(ontology: new Ontology(ontologyName: "name1", systemUrl: "http://bao.org", abbreviation: "BAO")), new OntologyItem(ontology: new Ontology(ontologyName: "name2"))] as Set<OntologyItem> | XmlTestSamples.ONTOLOGIES_FULL
+        "Ontology with missing optional attributes" | [new OntologyItem(ontology: new Ontology(ontologyName: "name"))] as Set<OntologyItem>                                                                                                                     | XmlTestSamples.ONTOLOGIES_MISSING_ATTRIBUTES
+    }
+    void "test generate Element with Ontology #label"() {
+        when:
+        this.dictionaryExportHelperService.generateElement(this.markupBuilder, element)
+        then:
+        println this.writer.toString()
+        XmlTestAssertions.assertResults(results, this.writer.toString())
+        where:
+        label                         | element                                                                                                                                                                                                                     | results
+        "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm",
+                elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY, ontologyItems: [new OntologyItem(ontology: new Ontology(ontologyName: "name"))])                                                            | XmlTestSamples.ELEMENT_WITH_ONTOLOGY
+    }
     void "test generate Descriptor #label"() {
 
 

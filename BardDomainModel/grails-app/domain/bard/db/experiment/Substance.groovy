@@ -1,7 +1,7 @@
 package bard.db.experiment
 
 class Substance {
-
+    Long id
 	String smiles
 	Date dateCreated
 	Date lastUpdated

@@ -14,7 +14,7 @@ import uk.ac.ebi.kraken.uuw.services.remoting.UniProtJAPI;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryBuilder;
 import uk.ac.ebi.kraken.uuw.services.remoting.UniProtQueryService;
 
-public class ExternalOntologyUniprot implements ExternalOntologyAPI {
+public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	
 	private UniProtQueryService uniProtQueryService;
 	
@@ -28,7 +28,9 @@ public class ExternalOntologyUniprot implements ExternalOntologyAPI {
 		int resultSize = entryIterator.getResultSize();
 		if (resultSize != 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique Uniprot identifier", id));
-		return getExternalItems(entryIterator).get(0);
+		ExternalItem item = getExternalItems(entryIterator, 1).get(0);
+		item.setId(id); // should always be the id the user submitted.
+		return item;
 	}
 
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
@@ -36,13 +38,13 @@ public class ExternalOntologyUniprot implements ExternalOntologyAPI {
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
 		if (entryIterator.getResultSize() != 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique Uniprot protein name", name));
-		return getExternalItems(entryIterator).get(0);
+		return getExternalItems(entryIterator, 1).get(0);
 	}
 
-	public List<ExternalItem> findMatching(String term) throws ExternalOntologyException {
+	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		Query query = UniProtQueryBuilder.buildFullTextSearch(term);
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
-		return getExternalItems(entryIterator);
+		return getExternalItems(entryIterator, limit);
 	}
 
 	
@@ -65,19 +67,22 @@ public class ExternalOntologyUniprot implements ExternalOntologyAPI {
 		return null;
 	}
 	
-	protected List<ExternalItem> getExternalItems(EntryIterator<UniProtEntry> entryIterator) {
-		List<ExternalItem> items = new ArrayList();
+	protected List<ExternalItem> getExternalItems(EntryIterator<UniProtEntry> entryIterator, int limit) {
+		int capacity = limit > 0 ? limit : entryIterator.getResultSize();
+		List<ExternalItem> items = new ArrayList(capacity);
 		for (UniProtEntry entry : entryIterator) {
 			String id = entry.getPrimaryUniProtAccession().getValue();
 			String display = getDisplay(entry);
 			ExternalItem item = new ExternalItem(id, display);
 			items.add(item);
+			if( limit > 0 && items.size() >= limit )
+				break;
 		}
 		return items;
 	}
 
-	public String getExternalURL() {
-		return "http://www.uniprot.org/";
+	public String getExternalURL(String id) {
+		return String.format("http://www.uniprot.org/uniprot/%s", id);
 	}
 
 	public String queryGenerator(String term) {

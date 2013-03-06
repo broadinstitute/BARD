@@ -2,7 +2,7 @@ package bard.db.project
 
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
-import bard.db.registration.ExperimentService
+import bard.db.experiment.ExperimentService
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured

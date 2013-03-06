@@ -25,6 +25,46 @@ import bard.db.dictionary.Element
 class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()
 
+    void "test process project" () {
+        given: "an project"
+        Experiment e1 = Experiment.build(id: 1)
+        Experiment e2 = Experiment.build(id: 2)
+        Experiment e3 = Experiment.build(id: 3)
+        Experiment e4 = Experiment.build(id: 4)
+        Project p = Project.build(id: 1)
+        ProjectExperiment pe1 = ProjectExperiment.build(project: p, experiment: e1)
+        ProjectExperiment pe2 = ProjectExperiment.build(project: p, experiment: e2)
+        ProjectExperiment pe3 = ProjectExperiment.build(project: p, experiment: e3)
+        ProjectExperiment pe4 = ProjectExperiment.build(project: p, experiment: e4)
+        ProjectStep ps12 = ProjectStep.build(previousProjectExperiment: pe1, nextProjectExperiment: pe2)
+        ProjectStep ps13 = ProjectStep.build(previousProjectExperiment: pe1, nextProjectExperiment: pe3)
+
+        pe1.addToFollowingProjectSteps(ps12)
+        pe1.addToFollowingProjectSteps(ps13)
+        pe2.addToPrecedingProjectSteps(ps12)
+        pe3.addToPrecedingProjectSteps(ps13)
+
+        p.addToProjectExperiments(pe1)
+        p.addToProjectExperiments(pe2)
+        p.addToProjectExperiments(pe3)
+        p.addToProjectExperiments(pe4)
+
+        when:
+        def result = renderService.processProject(p)
+        def nodes = []
+        nodes << renderService.constructNode(pe1)
+        nodes << renderService.constructNode(pe2)
+        nodes << renderService.constructNode(pe3)
+        def isolated = []
+        isolated << renderService.constructNode(pe4)
+        def edges = []
+        edges << new Edge(from: 1, to: 2, label: ps12.edgeName)
+        edges << new Edge(from: 1, to: 3, label: ps13.edgeName)
+        def expectedResult = ["connectedNodes": nodes, "edges": edges, "isolatedNodes": isolated]
+
+        then:
+        assert result.toString() == expectedResult.toString()
+    }
 
     void "test isIsolatedNode #desc"() {
         given: "an "
@@ -106,7 +146,29 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
 
     }
 
-    // TODO more tests here
+    void "test count incoming and outgoing edges for nodes"(){
+        given: "an"
+        Set<Edge> edges = new HashSet<Edge>()
+        edges.add(new Edge(from: "1", to: "2"))
+        edges.add(new Edge(from: "1", to: "3"))
+        edges.add(new Edge(from: "1", to: "4"))
+
+        def nodes = []
+        nodes.add(new Node(id: "1", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "2", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "3", keyValues: [incount:0, outcount:0]))
+        nodes.add(new Node(id: "4", keyValues: [incount:0, outcount:0]))
+        when:
+        renderService.countInOutEdges(edges, nodes)
+        then:
+        nodes.each{Node node->
+            if (node.id == "1") {assert node.keyValues.incount == '0'; assert node.keyValues.outcount == '3'}
+            if (node.id == "2") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+            if (node.id == "3") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+            if (node.id == "4") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
+        }
+
+    }
 
     def createProjectSteps(int i) {
         def steps = []
