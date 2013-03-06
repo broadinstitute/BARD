@@ -2,12 +2,11 @@ package bard.db.project
 
 import bard.db.model.AbstractContextConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
-import bard.db.project.Project
-import bard.db.project.ProjectContext
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +16,7 @@ import bard.db.project.ProjectContext
  * To change this template use File | Settings | File Templates.
  */
 @Build([Project, ProjectContext])
+@Mock([Project, ProjectContext])
 @Unroll
 class ProjectContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 
@@ -42,9 +42,9 @@ class ProjectContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec
         }
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid project'  | {Project.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid project'  | { Project.build() } | true  | null
     }
 
 }

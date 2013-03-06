@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.model.AbstractContextConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -15,6 +16,7 @@ import static test.TestUtils.assertFieldValidationExpectations
  * To change this template use File | Settings | File Templates.
  */
 @Build([Experiment, ExperimentContext])
+@Mock([Experiment, ExperimentContext])
 @Unroll
 class ExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 
@@ -40,9 +42,9 @@ class ExperimentContextConstraintUnitSpec extends AbstractContextConstraintUnitS
         }
 
         where:
-        desc               | valueUnderTest       | valid | errorCode
-        'null not valid'   | {null}               | false | 'nullable'
-        'valid experiment' | {Experiment.build()} | true  | null
+        desc               | valueUnderTest         | valid | errorCode
+        'null not valid'   | { null }               | false | 'nullable'
+        'valid experiment' | { Experiment.build() } | true  | null
 
     }
 }

@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -20,6 +21,7 @@ import static test.TestUtils.createString
  */
 @Unroll
 @Build([Result])
+@Mock([Result])
 class ResultConstraintUnitSpec extends Specification {
 
     def domainInstance
@@ -41,9 +43,9 @@ class ResultConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest       | valid | errorCode
-        'null not valid'   | {null}               | false | 'nullable'
-        'valid experiment' | {Experiment.build()} | true  | null
+        desc               | valueUnderTest         | valid | errorCode
+        'null not valid'   | { null }               | false | 'nullable'
+        'valid experiment' | { Experiment.build() } | true  | null
 
     }
 
@@ -59,9 +61,9 @@ class ResultConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest    | valid | errorCode
-        'null not valid'   | {null}            | false | 'nullable'
-        'valid resultType' | {Element.build()} | true  | null
+        desc               | valueUnderTest      | valid | errorCode
+        'null not valid'   | { null }            | false | 'nullable'
+        'valid resultType' | { Element.build() } | true  | null
 
     }
 
@@ -77,9 +79,9 @@ class ResultConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc              | valueUnderTest      | valid | errorCode
-        'null not valid'  | {null}              | false | 'nullable'
-        'valid substance' | {Substance.build()} | true  | null
+        desc              | valueUnderTest        | valid | errorCode
+        'null not valid'  | { null }              | false | 'nullable'
+        'valid substance' | { Substance.build() } | true  | null
 
     }
 
@@ -95,9 +97,9 @@ class ResultConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                  | valueUnderTest    | valid | errorCode
-        'null valid'          | {null}            | true  | null
-        'valid statsModifier' | {Element.build()} | true  | null
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid statsModifier' | { Element.build() } | true  | null
 
     }
 

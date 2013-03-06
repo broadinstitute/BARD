@@ -1,11 +1,13 @@
 package bard.db.dictionary
 
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.dictionary.OntologyItem.*
+import static bard.db.dictionary.OntologyItem.ITEM_REFERENCE_MAX_SIZE
+import static bard.db.dictionary.OntologyItem.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -16,7 +18,8 @@ import static test.TestUtils.createString
  * Time: 1:21 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([OntologyItem,Element])
+@Build([OntologyItem, Element])
+@Mock([OntologyItem, Element])
 @Unroll
 class OntologyItemConstraintUnitSpec extends Specification {
 
@@ -39,9 +42,9 @@ class OntologyItemConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest     | valid | errorCode
-        'null not valid' | {null}             | false | 'nullable'
-        'valid ontology' | {Ontology.build()} | true  | null
+        desc             | valueUnderTest       | valid | errorCode
+        'null not valid' | { null }             | false | 'nullable'
+        'valid ontology' | { Ontology.build() } | true  | null
 
     }
 
@@ -57,9 +60,9 @@ class OntologyItemConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | true  | null
-        'valid element'  | {Element.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | true  | null
+        'valid element'  | { Element.build() } | true  | null
 
     }
 

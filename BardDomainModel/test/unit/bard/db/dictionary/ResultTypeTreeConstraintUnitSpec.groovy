@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,6 +19,7 @@ import static test.TestUtils.createString
  */
 @Unroll
 @Build([ResultTypeTree, Element])
+@Mock([ResultTypeTree, Element])
 class ResultTypeTreeConstraintUnitSpec extends Specification {
     ResultTypeTree domainInstance
 
@@ -42,9 +44,9 @@ class ResultTypeTreeConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest           | valid | errorCode
-        'null valid'  | {null}                   | true  | null
-        'valid value' | {ResultTypeTree.build()} | true  | null
+        desc          | valueUnderTest             | valid | errorCode
+        'null valid'  | { null }                   | true  | null
+        'valid value' | { ResultTypeTree.build() } | true  | null
     }
 
     void "test element constraints #desc element: '#valueUnderTest'"() {
@@ -63,9 +65,9 @@ class ResultTypeTreeConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest    | valid | errorCode
-        'null value'  | {null}            | false | 'nullable'
-        'valid value' | {Element.build()} | true  | null
+        desc          | valueUnderTest      | valid | errorCode
+        'null value'  | { null }            | false | 'nullable'
+        'valid value' | { Element.build() } | true  | null
     }
 
     void "test leaf constraints #desc leaf: '#valueUnderTest'"() {
@@ -120,9 +122,9 @@ class ResultTypeTreeConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest    | valid | errorCode
-        'null valid'  | {null}            | true  | null
-        'valid value' | {Element.build()} | true  | null
+        desc          | valueUnderTest      | valid | errorCode
+        'null valid'  | { null }            | true  | null
+        'valid value' | { Element.build() } | true  | null
     }
 
     void "test label constraints #desc label size #valueUnderTest.size()"() {

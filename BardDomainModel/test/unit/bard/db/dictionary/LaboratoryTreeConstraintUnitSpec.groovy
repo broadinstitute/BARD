@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,6 +19,7 @@ import static test.TestUtils.createString
  */
 @Unroll
 @Build([LaboratoryTree, Element])
+@Mock([LaboratoryTree, Element])
 class LaboratoryTreeConstraintUnitSpec extends Specification {
     LaboratoryTree domainInstance
 
@@ -42,9 +44,9 @@ class LaboratoryTreeConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest           | valid | errorCode
-        'null valid'  | {null}                   | true  | null
-        'valid value' | {LaboratoryTree.build()} | true  | null
+        desc          | valueUnderTest             | valid | errorCode
+        'null valid'  | { null }                   | true  | null
+        'valid value' | { LaboratoryTree.build() } | true  | null
     }
 
     void "test element constraints #desc element: '#valueUnderTest'"() {
@@ -63,9 +65,9 @@ class LaboratoryTreeConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest    | valid | errorCode
-        'null value'  | {null}            | false | 'nullable'
-        'valid value' | {Element.build()} | true  | null
+        desc          | valueUnderTest      | valid | errorCode
+        'null value'  | { null }            | false | 'nullable'
+        'valid value' | { Element.build() } | true  | null
     }
 
     void "test label constraints #desc label size #valueUnderTest.size()"() {
@@ -117,12 +119,12 @@ class LaboratoryTreeConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest                           | valid | errorCode
-        'too long'       | createString(DESCRIPTION_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
+        desc          | valueUnderTest                           | valid | errorCode
+        'too long'    | createString(DESCRIPTION_MAX_SIZE) + "a" | false | 'maxSize.exceeded'
 
-        'null valid' | null                                     | true | null
-        'valid value'    | createString(DESCRIPTION_MAX_SIZE)       | true  | null
-        'valid value'    | "foo"                                    | true  | null
+        'null valid'  | null                                     | true  | null
+        'valid value' | createString(DESCRIPTION_MAX_SIZE)       | true  | null
+        'valid value' | "foo"                                    | true  | null
     }
 
 }

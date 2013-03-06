@@ -1,7 +1,7 @@
 package bard.db.experiment
 
-import bard.db.registration.Assay
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import spock.lang.Specification
@@ -14,7 +14,8 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 @Build([Experiment, ExperimentFile])
-class ArchivePathServiceUnitSpec  extends Specification {
+@Mock([Experiment, ExperimentFile])
+class ArchivePathServiceUnitSpec extends Specification {
     def 'test getEtlExport'() {
         setup:
         GrailsApplication grailsApplication = Mock(GrailsApplication)
@@ -30,7 +31,7 @@ class ArchivePathServiceUnitSpec  extends Specification {
 
         // create file
         String filename = service.constructExportResultPath(experiment)
-        File exportFile = service.prepareForWriting( filename )
+        File exportFile = service.prepareForWriting(filename)
         exportFile.write(expectedString)
         ExperimentFile experimentFile = ExperimentFile.build(experiment: experiment, exportFile: filename, submissionVersion: 1)
         experiment.experimentFiles.add(experimentFile)
