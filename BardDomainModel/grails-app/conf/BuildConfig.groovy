@@ -24,21 +24,25 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         build 'com.oracle:ojdbc6:11.2.0.2.0'
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
         build(":tomcat:$grailsVersion") { export = false }
-        build(":codenarc:0.15") { export = false }
+        build(":codenarc:0.18.1") { export = false }
         // seems like rest client builder is required by release plugin but not getting included transitively
         // so adding explicitly here
         build(":rest-client-builder:1.0.2") { export = false }
-        build(":release:2.0.2") { export = false }
-        build(":improx:0.1") { export = false } // Interactive Mode Proxy; useful for IDE integration
+        build(":release:2.2.1") { export = false }
+        build(":improx:0.2") { export = false } // Interactive Mode Proxy; useful for IDE integration
 
-        compile(":clover:3.1.6") { export = false }
+        compile(":clover:3.1.10.1") { export = false }
         compile(":console:1.2") { export = false }
-        compile(":database-migration:1.1") { export = true }
-        compile(":spock:0.6") { export = false }
+        compile(":database-migration:1.3.2") { export = true }
+        compile(":spock:0.7") { 
+            export = false 
+            exclude("spock-grails-support")
+        }
         /**
          * including build test data for all environments except production, oracleqa, oracledev
          */
@@ -48,10 +52,10 @@ grails.project.dependency.resolution = {
             case ('oracledev'):
                 break
             default:
-                compile(":build-test-data:2.0.3") { export = true }
-                compile(":fixtures:1.1") {
+                compile(":build-test-data:2.0.4") { export = true }
+                compile(":fixtures:1.2") {
                     export = true
-                    excludes('svn')
+                    exclude('svn')
                 }
                 break
         }
