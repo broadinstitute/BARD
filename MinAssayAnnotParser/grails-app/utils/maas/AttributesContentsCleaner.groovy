@@ -1,9 +1,6 @@
 package maas
 
 import bard.db.registration.AttributeType
-import bard.dm.minimumassayannotation.AssayDto
-import bard.dm.minimumassayannotation.ContextDTO
-import bard.dm.minimumassayannotation.ContextItemDto
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -52,7 +49,7 @@ class AttributesContentsCleaner {
 
         for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
 
-            String ky = trimAndMapKey(contextItemDto.key)
+            String ky = trimAndMapKey(contextItemDto.key, attributeNameMapping)
 
             def val = contextItemDto.value
             if (contextItemDto.value instanceof String) {

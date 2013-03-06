@@ -77,7 +77,7 @@ class AttributeNameMappingBuilder {
                 'number-per-well': 'number per well',
                 'uIU/mL': 'micro interational unit per milliliter',
                 '--': '',
-                'Result type': 'result detail',
+//                'Result type': 'result detail',
                 'cell line': 'cell line',
                 'Fa2N-4': 'Fa2N-4',
                 'flow cytometry |  side scatter': 'flow cytometry | side scatter',
@@ -211,7 +211,10 @@ class AttributeNameMappingBuilder {
                 'Acumen EX3':'TTP LabTech Acumen',
                 'SDS-PAGE gel':'SDS-PAGE',
                 'sds page':'SDS-PAGE',
-                'BriteLite Plus (Perkin Elmer)':'PerkinElmer BriteLite'
+                'BriteLite Plus (Perkin Elmer)':'PerkinElmer BriteLite',
+
+                // when load experiments
+                'IC50 relative' : 'relative IC50'
         ]
 
         return attributeNameMapping

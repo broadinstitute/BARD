@@ -14,9 +14,14 @@ class ElementHandlerServiceIntegrationTest extends GroovyTestCase {
     def elementHandlerService
     public void testAddElements() {
         def elements = ["asb":"abcded", "abcd":"ttt"]
-        elementHandlerService.addMissingElement("xiaorong", elements)
+        def elementParent = ["asb":555, "abcd":555]
+        elementHandlerService.addMissingElement("xiaorong", elements, elementParent)
         Element element = Element.findByLabel("asb")
         assert element.description == "abcded"
         assert element.modifiedBy == "xiaorong"
+    }
+
+    public void testLoadElements() {
+        elementHandlerService.addMissingElement("xiaorong", ElementHandlerService.elementAndDescription, ElementHandlerService.elementParent)
     }
 }
