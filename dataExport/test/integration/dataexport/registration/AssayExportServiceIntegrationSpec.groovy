@@ -53,7 +53,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Assay"
         when: "We call the assay service to update this assay"
-        this.assayExportService.update(new Long(100000), 0, COMPLETE.getId())
+        this.assayExportService.update(new Long(100000), 0, COMPLETE)
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -64,7 +64,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         Assay.build(readyForExtraction: initialReadyForExtraction)
 
         when: "We call the assay service to update this assay"
-        final BardHttpResponse bardHttpResponse = this.assayExportService.update(assayId, version, "Complete")
+        final BardHttpResponse bardHttpResponse = this.assayExportService.update(assayId, version, COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse

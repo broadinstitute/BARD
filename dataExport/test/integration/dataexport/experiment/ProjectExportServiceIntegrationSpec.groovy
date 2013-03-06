@@ -27,7 +27,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     def grailsApplication
-    Resource schemaResource =new FileSystemResource(new File("web-app/schemas/projectSchema.xsd"))
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/projectSchema.xsd"))
 
     void setup() {
         this.writer = new StringWriter()
@@ -49,7 +49,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
     void "test update Not Found Status"() {
         given: "Given a non-existing Project"
         when: "We call the project service to update this project"
-        this.projectExportService.update(new Long(100000), 0, 'Complete')
+        this.projectExportService.update(new Long(100000), 0, READY.COMPLETE)
 
         then: "An exception is thrown, indicating that the project does not exist"
         thrown(NotFoundException)
@@ -60,7 +60,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         Project.build(readyForExtraction: initialReadyForExtraction)
 
         when: "We call the project service to update this assay"
-        final BardHttpResponse bardHttpResponse = this.projectExportService.update(projectId, version, "Complete")
+        final BardHttpResponse bardHttpResponse = this.projectExportService.update(projectId, version, READY.COMPLETE)
 
         then: "An ETag of #expectedETag is returned together with an HTTP Status of #expectedStatusCode"
         assert bardHttpResponse
