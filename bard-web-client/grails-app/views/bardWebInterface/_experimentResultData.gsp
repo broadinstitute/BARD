@@ -42,17 +42,28 @@
     <table class="table table-condensed">
         <thead>
         <tr>
-        <tr>
             <g:each in="${webQueryTableModel.columnHeaders}" var="header" status="j">
                 <th>
                     <g:if test="${header.getValue() instanceof java.util.Map}">
-                        ${header.getValue()?.priorityDisplay ?: ""}
-                        <g:if test="${header.getValue().dictionaryId}">
-                            <a href="/bardwebclient/dictionaryTerms/#${header.getValue()?.dictionaryId}"
-                               target="datadictionary">
-                                <i class="icon-question-sign"></i>
-                            </a>
+                        <%
+                            List<String> priorityDisplays = header.getValue().priorityDisplays ?: []
+                        %>
+                        <g:if test="${priorityDisplays.size() > 1}">
+                            Results
                         </g:if>
+                        <g:elseif test="${priorityDisplays.size() == 1}">
+                            ${priorityDisplays.first()}
+                        </g:elseif>
+                        <g:else></g:else>
+
+                        <g:each var="dictionaryId" in="${header.getValue().dictionaryIds}">
+                            <g:if test="${dictionaryId}">
+                                <a href="/bardwebclient/dictionaryTerms/#${dictionaryId}"
+                                   target="datadictionary">
+                                    <i class="icon-question-sign"></i>
+                                </a>
+                            </g:if>
+                        </g:each>
                     </g:if>
                     <g:else>
                         ${header.toString()}
@@ -104,68 +115,69 @@
                         </td>
                     </g:elseif>
                     <g:elseif test="${currentRow.getValue() instanceof Map}">
-                        <td>
-                            <table class="table table-striped table-condensed">
-                                <thead><tr>
-                                    <th>
-                                        ${currentRow.getValue().dictionaryLabel}
-                                        <g:if test="${currentRow.getValue()?.dictionaryDescription}">
-                                            <a href="/bardwebclient/dictionaryTerms/#${currentRow.getValue()?.dictElemId}"
-                                               target="datadictionary"><i class="icon-question-sign"></i></a>
-                                        </g:if>
-                                    </th>
-                                    <th>Concentration</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <g:each in="${currentRow.getValue().activityToConcentratonList}"
-                                        var="concentrationResponsePoint">
+                        <g:each in="${currentRow.getValue().ConcentrationResponseSeriesList}" var="concRespMap">
+                            <td>
+                                <table class="table table-striped table-condensed">
+                                    <thead>
                                     <tr>
-                                        <td>${concentrationResponsePoint.key}</td>
-                                        <td>${concentrationResponsePoint.value}</td>
+                                        <th>
+                                            ${concRespMap.dictionaryLabel}
+                                            <g:if test="${concRespMap?.dictionaryDescription}">
+                                                <a href="/bardwebclient/dictionaryTerms/#${concRespMap?.dictElemId}"
+                                                   target="datadictionary"><i class="icon-question-sign"></i></a>
+                                            </g:if>
+                                        </th>
+                                        <th>Concentration</th>
                                     </tr>
-                                </g:each>
-                                </tbody>
-                            </table>
-
-                        </td>
-                        <td>
-                            <img alt="${currentRow.getValue().title}" title="${currentRow.getValue().title}"
-                                 src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurves',
-                                         params: [
-                                                 'curves[0].sinf': currentRow.getValue().plot.sinf,
-                                                 'curves[0].s0': currentRow.getValue().plot.s0,
-                                                 'curves[0].slope': currentRow.getValue().plot.slope,
-                                                 'curves[0].hillSlope': currentRow.getValue().plot.hillSlope,
-                                                 'curves[0].concentrations': currentRow.getValue().plot.concentrations,
-                                                 'curves[0].activities': currentRow.getValue().plot.activities,
-                                                 'curves[0].yAxisLabel': currentRow.getValue().plot.yAxisLabel,
-                                                 'curves[0].xAxisLabel': currentRow.getValue().plot.xAxisLabel,
-                                                 'curves[0].yNormMin': currentRow.getValue().plot.yNormMin,
-                                                 'curves[0].yNormMax': currentRow.getValue().plot.yNormMax
-                                         ])}"/>
-                            <br/>
-                            <g:if test="${currentRow.getValue().curveFitParams}">
-                                <p>
-                                    <g:each in="${currentRow.getValue().curveFitParams}" var="curveFitParam">
-                                        ${curveFitParam.toString()}<br/>
+                                    </thead>
+                                    <tbody>
+                                    <g:each in="${concRespMap.activityToConcentratonList}"
+                                            var="concentrationResponsePoint">
+                                        <tr>
+                                            <td>${concentrationResponsePoint.key}</td>
+                                            <td>${concentrationResponsePoint.value}</td>
+                                        </tr>
                                     </g:each>
-                                </p>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <img alt="${concRespMap.title}" title="${concRespMap.title}"
+                                     src="${createLink(controller: 'doseResponseCurve', action: 'doseResponseCurves',
+                                             params: ['curves[0].sinf': concRespMap.plot.sinf,
+                                                     'curves[0].s0': concRespMap.plot.s0,
+                                                     'curves[0].slope': concRespMap.plot.slope,
+                                                     'curves[0].hillSlope': concRespMap.plot.hillSlope,
+                                                     'curves[0].concentrations': concRespMap.plot.concentrations,
+                                                     'curves[0].activities': concRespMap.plot.activities,
+                                                     'curves[0].yAxisLabel': concRespMap.plot.yAxisLabel,
+                                                     'curves[0].xAxisLabel': concRespMap.plot.xAxisLabel,
+                                                     'curves[0].yNormMin': concRespMap.plot.yNormMin,
+                                                     'curves[0].yNormMax': concRespMap.plot.yNormMax
+                                             ])}"/>
                                 <br/>
-                                <br/>
-                            </g:if>
-
-                        </td>
-                        <td>
-                            <g:each in="${currentRow.getValue().miscData}" var="miscData">
-                                <g:if test="${miscData?.dictionaryDescription}">
-                                    ${miscData.toDisplay()}<a
-                                        href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}"
-                                        target="datadictionary"><i class="icon-question-sign"></i></a>
+                                <g:if test="${concRespMap.curveFitParams}">
+                                    <p>
+                                        <g:each in="${concRespMap.curveFitParams}" var="curveFitParam">
+                                            ${curveFitParam.toString()}<br/>
+                                        </g:each>
+                                    </p>
+                                    <br/>
+                                    <br/>
                                 </g:if>
-                                <br/>
-                            </g:each>
-                        </td>
+
+                            </td>
+                            <td>
+                                <g:each in="${concRespMap.miscData}" var="miscData">
+                                    <g:if test="${miscData?.dictionaryDescription}">
+                                        ${miscData.toDisplay()}<a
+                                            href="/bardwebclient/dictionaryTerms/#${miscData?.dictElemId}"
+                                            target="datadictionary"><i class="icon-question-sign"></i></a>
+                                    </g:if>
+                                    <br/>
+                                </g:each>
+                            </td>
+                        </g:each>
                     </g:elseif>
                     <g:else>
                         <td>
