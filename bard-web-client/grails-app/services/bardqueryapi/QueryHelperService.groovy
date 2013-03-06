@@ -75,7 +75,7 @@ class QueryHelperService {
             priorityMap.put("hasChildElements", hasChildElements)
             return priorityMap
         }
-        return [priorityDisplays: [], priorityDescriptions: [], dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        return [priorityDisplays: [], priorityDescriptions: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
