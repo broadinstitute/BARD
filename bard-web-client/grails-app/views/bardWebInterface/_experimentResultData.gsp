@@ -108,12 +108,14 @@
                                     imageHeight="150"/>
                         </td>
                     </g:elseif>
+                    %{--Handles the key/value result-types--}%
                     <g:elseif test="${currentRow.getValue() instanceof List}">
                         <td><g:each in="${currentRow.getValue()}" var="d">
                             ${d}<br/>
                         </g:each>
                         </td>
                     </g:elseif>
+                    %{--Handles the curves--}%
                     <g:elseif test="${currentRow.getValue() instanceof Map}">
                         <g:each in="${currentRow.getValue().ConcentrationResponseSeriesList}" var="concRespMap">
                             <td>

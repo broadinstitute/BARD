@@ -103,24 +103,28 @@ class ExperimentBuilder {
             List<Map> listOfConcRespMap = []
             for (PriorityElement priorityElement in resultData.priorityElements) {
                 final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
-                Map concRespMap = concentrationResponseMap(concentrationResponseSeries, normalizeYAxis,
-                        cid, priorityElement.getSlope(),
-                        priorityElement.testConcentrationUnit,
-                        yNormMin, yNormMax, priorityElement.getDictionaryLabel())
+                if (concentrationResponseSeries) {
+                    Map concRespMap = concentrationResponseMap(concentrationResponseSeries, normalizeYAxis,
+                            cid, priorityElement.getSlope(),
+                            priorityElement.testConcentrationUnit,
+                            yNormMin, yNormMax, priorityElement.getDictionaryLabel())
 
-                final List<Pair> activityToConcentratonList = extractActivityToConcentratonList(concentrationResponseSeries)
-                concRespMap.put("activityToConcentratonList", activityToConcentratonList)
-                final String dictionaryLabel = concentrationResponseSeries.dictionaryLabel
-                final String dictionaryDescription = concentrationResponseSeries.dictionaryDescription
-                concRespMap.put("dictionaryLabel", dictionaryLabel)
-                concRespMap.put("dictionaryDescription", dictionaryDescription)
+                    final List<Pair> activityToConcentratonList = extractActivityToConcentratonList(concentrationResponseSeries)
+                    concRespMap.put("activityToConcentratonList", activityToConcentratonList)
+                    final String dictionaryLabel = concentrationResponseSeries.dictionaryLabel
+                    final String dictionaryDescription = concentrationResponseSeries.dictionaryDescription
+                    concRespMap.put("dictionaryLabel", dictionaryLabel)
+                    concRespMap.put("dictionaryDescription", dictionaryDescription)
 
-                final long dictElemId = concentrationResponseSeries?.dictElemId
-                concRespMap.put("dictElemId", dictElemId)
-                listOfConcRespMap << concRespMap
+                    final long dictElemId = concentrationResponseSeries?.dictElemId
+                    concRespMap.put("dictElemId", dictElemId)
+                    listOfConcRespMap << concRespMap
+                }
             }
-            valueModel = new WebQueryValueModel([ConcentrationResponseSeriesList: listOfConcRespMap] as Map)
-            rowData.add(valueModel)
+            if (listOfConcRespMap) {
+                valueModel = new WebQueryValueModel([ConcentrationResponseSeriesList: listOfConcRespMap] as Map)
+                rowData.add(valueModel)
+            }
         }
         return rowData;
     }
