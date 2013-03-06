@@ -1,3 +1,5 @@
+package iteration_007
+
 databaseChangeLog = {
     String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
     File migrationsDir = new File(bardDomainModelMigrationsDir)
