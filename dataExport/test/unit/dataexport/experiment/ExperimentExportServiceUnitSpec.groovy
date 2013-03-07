@@ -5,11 +5,13 @@ import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.ExternalReference
+import bard.db.registration.Measure
 import common.tests.XmlTestAssertions
 import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -27,9 +29,9 @@ import static common.tests.XmlTestSamples.*
  * Date: 6/19/12
  * Time: 12:52 PM
  * To change this template use File | Settings | File Templates.
- */
-@TestFor(ExperimentExportService)
-@Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference])
+ */ @TestFor(ExperimentExportService)
+@Build([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, Measure])
+@Mock([Experiment, ExperimentContext, ExperimentContextItem, ExperimentMeasure, ExternalReference, Measure])
 class ExperimentExportServiceUnitSpec extends Specification {
     Writer writer
     MarkupBuilder markupBuilder
@@ -70,7 +72,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
     void "generate ExperimentContext #label"() {
         given:
         ExperimentContext experimentContext = ExperimentContext.build(map)
-        numItems.times {ExperimentContextItem.build(experimentContext: experimentContext)}
+        numItems.times { ExperimentContextItem.build(experimentContext: experimentContext) }
 
         when:
         this.experimentExportService.generateExperimentContext(this.markupBuilder, experimentContext)
@@ -102,18 +104,18 @@ class ExperimentExportServiceUnitSpec extends Specification {
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
-        label                             | results                                             | mapClosure                                                                     | numAssayContextMeasureRefs
-        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | {[:]}                                                                          | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | {[parent: ExperimentMeasure.build()]}                                          | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | {[parent: ExperimentMeasure.build(), parentChildRelationship: 'Derived from']} | 0
+        label                             | results                                             | mapClosure                                                                       | numAssayContextMeasureRefs
+        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                          | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                          | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: 'Derived from'] } | 0
     }
 
     void "test generate Experiment #label"() {
         given: "An Experiment"
         Experiment experiment = Experiment.build(map)
-        numExtRef.times {ExternalReference.build(experiment: experiment)}
-        numExpCtx.times {ExperimentContext.build(experiment: experiment)}
-        numExpMsr.times {ExperimentMeasure.build(experiment: experiment)}
+        numExtRef.times { ExternalReference.build(experiment: experiment) }
+        numExpCtx.times { ExperimentContext.build(experiment: experiment) }
+        numExpMsr.times { ExperimentMeasure.build(experiment: experiment) }
 
         when: "We attempt to generate an experiment XML document"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)

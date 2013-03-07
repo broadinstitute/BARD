@@ -9,6 +9,7 @@ import dataexport.registration.MediaTypesDTO
 import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
@@ -27,6 +28,8 @@ import static common.tests.XmlTestSamples.*
  * To change this template use File | Settings | File Templates.
  */
 @Build([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument,
+ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
+@Mock([ExternalReference, Project, ProjectContext, ProjectContextItem, ProjectDocument,
 ProjectExperiment, ProjectExperimentContext, ProjectExperimentContextItem, StepContext, StepContextItem])
 @Unroll
 class ProjectExportServiceUnitSpec extends Specification {

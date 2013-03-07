@@ -1,16 +1,17 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.db.registration.*
 
 import static common.tests.XmlTestSamples.*
 
@@ -22,6 +23,7 @@ import static common.tests.XmlTestSamples.*
  * To change this template use File | Settings | File Templates.
  */
 @Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, AssayDocument, Element, Measure])
 @Unroll
 class AssayExportHelperServiceUnitSpec extends Specification {
     Writer writer
@@ -50,8 +52,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     void "test generate AssayContext #label"() {
         given:
         AssayContext assayContext = AssayContext.build(map)
-        numItems.times {AssayContextItem.build(assayContext: assayContext)}
-        numMeasureRefs.times {AssayContextMeasure.build(assayContext: assayContext)}
+        numItems.times { AssayContextItem.build(assayContext: assayContext) }
+        numMeasureRefs.times { AssayContextMeasure.build(assayContext: assayContext) }
 
         when: "We attempt to generate a measure context in xml"
         this.assayExportHelperService.generateAssayContext(this.markupBuilder, assayContext)
@@ -133,7 +135,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
     void "test generate Measure #label"() {
         given:
         Measure measure = Measure.build(mapClosure.call())
-        numAssayContextMeasureRefs.times { AssayContextMeasure.build(measure: measure)}
+        numAssayContextMeasureRefs.times { AssayContextMeasure.build(measure: measure) }
 
         when: "We attempt to generate a measure in xml"
         this.assayExportHelperService.generateMeasure(this.markupBuilder, measure)
@@ -141,13 +143,13 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         XmlTestAssertions.assertResults(results, this.writer.toString())
 
         where:
-        label                   | results                            | mapClosure                                               | numAssayContextMeasureRefs
-        "minimal"               | MEASURE_MINIMAL                    | {[:]}                                                    | 0
-        "with parentMeasureRef" | MEASURE_WITH_PARENT_MEASURE_REF    | {[parentMeasure: Measure.build()]}                       | 0
-        "with statsModifierRef" | MEASURE_WITH_STATS_MODIFIER_REF    | {[statsModifier: Element.build(label: "statsModifier")]} | 0
-        "with entryUnitRef"     | MEASURE_WITH_ENTRY_UNIT_REF        | {[entryUnit: Element.build(label: "entryUnit")]}         | 0
-        "with assayContextRefs" | MEASURE_WITH_ONE_ASSAY_CONTEXT_REF | { [:] }                                                  | 1
-        "with assayContextRefs" | MEASURE_WITH_TWO_ASSAY_CONTEXT_REF | { [:] }                                                  | 2
+        label                   | results                            | mapClosure                                                 | numAssayContextMeasureRefs
+        "minimal"               | MEASURE_MINIMAL                    | { [:] }                                                    | 0
+        "with parentMeasureRef" | MEASURE_WITH_PARENT_MEASURE_REF    | { [parentMeasure: Measure.build()] }                       | 0
+        "with statsModifierRef" | MEASURE_WITH_STATS_MODIFIER_REF    | { [statsModifier: Element.build(label: "statsModifier")] } | 0
+        "with entryUnitRef"     | MEASURE_WITH_ENTRY_UNIT_REF        | { [entryUnit: Element.build(label: "entryUnit")] }         | 0
+        "with assayContextRefs" | MEASURE_WITH_ONE_ASSAY_CONTEXT_REF | { [:] }                                                    | 1
+        "with assayContextRefs" | MEASURE_WITH_TWO_ASSAY_CONTEXT_REF | { [:] }                                                    | 2
     }
 
     void "test generate AssayDocument #label"() {
