@@ -19,5 +19,4 @@ class StructureValue implements WebQueryValue {
     String name
     int numActive
     int numAssays
-    <p class="css">
 }

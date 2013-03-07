@@ -43,5 +43,6 @@ enum FacetFormType {
     AssayFacetForm,
     CompoundFacetForm,
     ProjectFacetForm,
-    ExperimentFacetForm
+    ExperimentFacetForm,
+    CompoundBioActivitySummaryForm
 }

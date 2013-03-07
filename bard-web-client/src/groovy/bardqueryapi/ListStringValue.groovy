@@ -12,5 +12,6 @@ class ListStringValue implements WebQueryValue {
     public String toString(){
         return this.values
     }
-    List<StringValue> values
+
+    List<StringValue> values = []
 }

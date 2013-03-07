@@ -22,6 +22,7 @@ import bard.core.rest.spring.project.ProjectStep
 
 import bardqueryapi.experiment.ExperimentBuilder
 import bard.core.util.FilterTypes
+import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 
 
 class QueryService implements IQueryService {
@@ -310,10 +311,10 @@ class QueryService implements IQueryService {
     }
 
 
-    WebQueryTableModel showCompoundBioActivitySummaryData(Long compoundId,
-                                                          GroupByTypes groupTypes,
-                                                          List<FilterTypes> filterTypes,
-                                                          SearchParams searchParams) {
+    List<TableModel> createCompoundBioActivitySummaryDataTable(Long compoundId,
+                                                         GroupByTypes groupTypes,
+                                                         List<FilterTypes> filterTypes,
+                                                         SearchParams searchParams) {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
         CompoundSummary compoundSummary = getSummaryForCompound(compoundId)
@@ -328,27 +329,36 @@ class QueryService implements IQueryService {
             experimentalData = compoundSummary.hitExptdata
         }
 
-        Map<Long, Activity> groupedByExperimentalData
+        Map<Long, List<Activity>> groupedByExperimentalData = [:]
         switch (groupTypes) {
             case GroupByTypes.ASSAY:
                 experimentalData.each {Activity exptData ->
-                    exptData.capAssayId.each {Long id ->
+                    exptData.bardAssayId.each {Long id ->
                         if (groupedByExperimentalData.containsKey(id)) {
                             groupedByExperimentalData[id] << exptData
                         } else {
-                            groupedByExperimentalData.put(id, exptData)
+                            groupedByExperimentalData.put(id, [exptData])
+                        }
+                    }
+                }
+                break;
+            case GroupByTypes.PROJECT:
+                experimentalData.each {Activity exptData ->
+                    exptData.bardProjId.each {Long id ->
+                        if (groupedByExperimentalData.containsKey(id)) {
+                            groupedByExperimentalData[id] << exptData
+                        } else {
+                            groupedByExperimentalData.put(id, [exptData])
                         }
                     }
                 }
                 break;
             default:
-                throw RuntimeException("Group-by ${groupTypes} is not supported")
+                throw new RuntimeException("Group-by ${groupTypes} is not supported")
         }
 
-//        Map m = findExperimentDataById(experimentId, top, skip, filterTypes)
-        ExperimentBuilder experimentBuilder = new ExperimentBuilder()
-        return experimentBuilder.buildModel(m)
-
+        CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
+        return compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData)
     }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service

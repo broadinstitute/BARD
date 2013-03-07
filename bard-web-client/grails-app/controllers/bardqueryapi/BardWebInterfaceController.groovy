@@ -619,27 +619,30 @@ class BardWebInterfaceController {
             NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
             ActivityOutcome activityOutcome = ActivityOutcome.ALL
 
-            final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+            List<TableModel> tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     GroupByTypes.ASSAY,
                     filters,
                     new SearchParams(top: searchParams.top, skip: searchParams.skip)
             )
 
-            webQueryTableModel.additionalProperties.put("searchString", params.searchString)
-            webQueryTableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
-            webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
-            webQueryTableModel.additionalProperties.put("id", id.toString())
+            tableModel.additionalProperties.put("searchString", params.searchString)
+            tableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
+            tableModel.additionalProperties.put("activityOutcome", activityOutcome)
+            tableModel.additionalProperties.put("id", id.toString())
 
             render(view: 'showCompoundBioActivitySummary',
-                    model: [webQueryTableModel: webQueryTableModel])
+                    model: [webQueryTableModel: tableModel,
+                            facets: [],
+                            appliedFilters: [],
+                            sidebarTitle: 'Options'])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
-            String message = "Compound with ID ${id} does not exists"
+            String message = "Error building Compound Bio Activity Summary TableModel for CID ${id}"
             handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
         }
         catch (Exception ee) {
 
-            String message = "Problem finding Compoud ${id}"
+            String message = "Error building Compound Bio Activity Summary TableModel for CID ${id}"
             log.error(message + getUserIpAddress(bardUtilitiesService.username), ee)
 
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,

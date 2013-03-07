@@ -8,7 +8,7 @@ class ExperimentDataFactoryService {
     QueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
 
-    WebQueryTableModel createTableModel(
+    def createTableModel(
             SpreadSheetInput spreadSheetInput,
             GroupByTypes groupTypes,
             List<FilterTypes> filterTypes,
@@ -21,7 +21,7 @@ class ExperimentDataFactoryService {
         }
         else if (spreadSheetInput.cids) {
             Long compoundId = spreadSheetInput.cids.get(0)
-            return queryService.showCompoundBioActivitySummaryData(compoundId, groupTypes, filterTypes, searchParams)
+            return queryService.createCompoundBioActivitySummaryDataTable(compoundId, groupTypes, filterTypes, searchParams)
         }
         return null
     }
