@@ -1,10 +1,16 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.ReadyForExtraction
+import org.hibernate.Session
+import org.hibernate.jdbc.Work
 
+import javax.sql.DataSource
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
+import java.sql.SQLException
+import java.sql.Statement
 import java.sql.Types
 
 /**
@@ -15,6 +21,61 @@ import java.sql.Types
  * To change this template use File | Settings | File Templates.
  */
 class BulkResultService {
+
+    void insertResults(String username, Experiment experiment, Collection<Result> results) {
+        Experiment.withSession {
+            Session session ->
+
+            session.doWork(new Work() {
+                @Override
+                void execute(Connection connection) throws SQLException {
+                    assignIdsToResults(connection, results)
+                    insertResults(connection, experiment, results, username)
+
+                    // flatten all items and do a bulk insert
+                    List items = results.collectMany([], {Result result -> result.resultContextItems})
+                    insertItems(connection, items, username)
+
+                    // flatten and sort all hierarchies
+                    List relationships = results.collectMany([], {Result result -> result.resultHierarchiesForParentResult})
+                    insertHierarchies(connection, relationships, username)
+                }
+            })
+        }
+    }
+
+    void deleteResults(Experiment experiment) {
+        Experiment.withSession {
+            Session session ->
+
+                session.doWork(new Work() {
+                    @Override
+                    void execute(Connection connection) throws SQLException {
+            executeUpdateWithArgs(connection, "DELETE FROM RSLT_CONTEXT_ITEM rci WHERE EXISTS (SELECT 1 FROM RESULT r WHERE r.RESULT_ID = rci.RESULT_ID AND r.EXPERIMENT_ID = ?)", [experiment.id])
+            executeUpdateWithArgs(connection, "DELETE FROM RESULT_HIERARCHY rh WHERE EXISTS (SELECT 1 FROM RESULT r WHERE r.RESULT_ID = rh.RESULT_ID AND r.EXPERIMENT_ID = ?)", [experiment.id])
+            executeUpdateWithArgs(connection, "DELETE FROM RESULT r WHERE r.EXPERIMENT_ID = ?", [experiment.id])
+                    }
+                }
+                )
+        }
+    }
+
+    List<Result> findResults(Experiment experiment) {
+        List<Result> results
+
+        Experiment.withSession {
+            Session session ->
+
+                session.doWork(new Work() {
+                    @Override
+                    void execute(Connection connection) throws SQLException {
+                        results = loadResults(connection, experiment)
+                    }
+                })
+        }
+
+        return results
+    }
 
     private List<Long> allocateIds(Connection connection, String sequence, int count) {
         List<Long> ids = new ArrayList(count)
@@ -44,9 +105,10 @@ class BulkResultService {
 
 
     private void insertHierarchies(Connection connection, Collection<ResultHierarchy> relationships, String username) {
-        String query = "INSERT INTO RESULT_HIERARCHY (RESULT_HIERARCHY_ID," +
+        String query = "INSERT INTO RESULT_HIERARCHY (RESULT_HIERARCHY_ID, " +
                 "RESULT_ID, PARENT_RESULT_ID, HIERARCHY_TYPE," +
-                "VERSION,DATE_CREATED,LAST_UPDATED,MODIFIED_BY) VALUES (RESULT_HIERARCHY_ID_SEQ.NEXTVAL, ?,?,?, 1,sysdate,sysdate,?";
+                "VERSION, DATE_CREATED, LAST_UPDATED, " +
+                "MODIFIED_BY) VALUES (RESULT_HIERARCHY_ID_SEQ.NEXTVAL, ?,?,?, 1,sysdate,sysdate, ?)";
 
         PreparedStatement statement = connection.prepareStatement(query)
         try {
@@ -56,7 +118,9 @@ class BulkResultService {
                 statement.setString(3, relationship.hierarchyType.value)
 
                 statement.setString(4, username)
+                statement.addBatch()
             }
+            statement.executeBatch()
         } finally {
             statement.close()
         }
@@ -74,11 +138,13 @@ class BulkResultService {
         PreparedStatement statement = connection.prepareStatement(query)
         try {
             for (item in items) {
+                int displayOrder = 0 // Not defined because owning collection is a set
+
                 statement.setLong(1, item.result.id)
                 statement.setLong(2, item.attributeElement.id)
                 statement.setObject(3, item.valueElement?.id, Types.BIGINT)
 
-                statement.setNull(4, Types.INTEGER)
+                statement.setInt(4, displayOrder)
                 statement.setNull(5, Types.INTEGER)
                 statement.setString(6, item.qualifier)
 
@@ -110,7 +176,7 @@ class BulkResultService {
         try {
             for (result in results) {
                 statement.setString(1, result.resultStatus)
-                statement.setString(2, result.readyForExtraction.name())
+                statement.setString(2, result.readyForExtraction.id)
                 statement.setObject(3, experiment.id)
 
                 statement.setLong(4, result.resultType.id)
@@ -138,33 +204,26 @@ class BulkResultService {
     }
 
     private void assignIdsToResults(Connection connection, List<Result> results) {
-        List<Long> ids = allocateIds(connection, results.size())
+        List<Long> ids = allocateIds(connection, "RESULT_ID_SEQ", results.size())
         for(int i=0;i<results.size();i++) {
             results.get(i).id = ids.get(i)
         }
     }
 
-    void insert(Experiment experiment, Collection<Result> results) {
-        String username;
-        Connection connection;
 
-        assignIdsToResults(connection, results)
-        insertResults(connection, experiment, results, username)
-
-        // flatten all items and do a bulk insert
-        List items = results.collectMany([], {Result result -> result.resultContextItems})
-        insertItems(connection, items, username)
-
-        // flatten and sort all hierarchies
-        List relationships = results.collectMany([], {Result result -> result.resultHierarchiesForParentResult})
-        insertHierarchies(connection, relationships, username)
+    private void executeUpdateWithArgs(Connection connection, String sql, List args) {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        try {
+            for(int i=0;i<args.size();i++) {
+                statement.setObject(i+1, args[i])
+            }
+            statement.executeUpdate()
+        } finally {
+            statement.close()
+        }
     }
 
-    void deleteResults(Experiment experiment) {
-
-    }
-
-    void find(Experiment experiment, Long sid) {
+    private List<Result> loadResults(Connection connection, Experiment experiment) {
         String query = "SELECT "+
                 "RESULT_STATUS, READY_FOR_EXTRACTION, EXPERIMENT_ID," +
                 "RESULT_TYPE_ID, SUBSTANCE_ID, STATS_MODIFIER_ID," +
@@ -173,7 +232,12 @@ class BulkResultService {
                 "RESULT_ID "+
                 "FROM RESULT WHERE EXPERIMENT_ID = ?"
 
-        List<List> columns = queryColumns(URLConnection, query, [experiment.id])
+        List<List> columns = queryColumns(connection, query, [experiment.id], [
+                Types.VARCHAR, Types.VARCHAR, Types.BIGINT,
+                Types.BIGINT, Types.BIGINT, Types.BIGINT,
+                Types.INTEGER, Types.VARCHAR, Types.FLOAT,
+                Types.FLOAT, Types.FLOAT, Types.VARCHAR,
+                Types.BIGINT])
         int rowCount = columns.get(0).size()
 
         List<String> resultStatuses = columns.get(0)
@@ -181,23 +245,24 @@ class BulkResultService {
         List<Experiment> experiments = columns.get(2).collect { Long id -> Experiment.get(id)}
 
         List<Element> resultTypes = columns.get(3).collect { Long id -> Element.get(id) }
-        List<Substance> substances = columns.get(4).collect { Long id -> Element.get(id) }
-        List<Element> statsModifiers = columns.get(4).collect { Long id -> Element.get(id) }
+        List<Substance> substances = columns.get(4).collect { Long id -> Substance.get(id) }
+        List<Element> statsModifiers = columns.get(5).collect { Long id -> Element.get(id) }
 
-        List<Integer> replicateNos = columns.get(5)
-        List<String> qualifiers = columns.get(6)
-        List<Float> valueNums = columns.get(7)
+        List<Integer> replicateNos = columns.get(6)
+        List<String> qualifiers = columns.get(7)
+        List<Float> valueNums = columns.get(8)
 
-        List<Float> valueMins = columns.get(8)
-        List<Float> valueMaxs = columns.get(9)
-        List<Float> valueDisplays = columns.get(10)
+        List<Float> valueMins = columns.get(9)
+        List<Float> valueMaxs = columns.get(10)
+        List<Float> valueDisplays = columns.get(11)
 
-        List<Long> resultIds = columns.get(11)
+        List<Long> resultIds = columns.get(12)
 
+        List<Result> results = new ArrayList(rowCount)
         for(int i=0;i<rowCount;i++) {
             Result r = new Result()
             r.resultStatus = resultStatuses.get(i)
-            r.readyForExtraction = readyForExtracts.get(i)
+            r.readyForExtraction = ReadyForExtraction.byId(readyForExtracts.get(i))
             r.experiment = experiments.get(i)
             r.resultType = resultTypes.get(i)
             r.substance = substances.get(i)
@@ -209,34 +274,43 @@ class BulkResultService {
             r.valueMax = valueMaxs.get(i)
             r.valueDisplay = valueDisplays.get(i)
             r.id = resultIds.get(i)
+
+            results.add(r)
         }
 
-        Map resultById = resultStatuses.collectEntries { [it.id, it] }
+        Map resultById = results.collectEntries { [it.id, it] }
 
         populateHierarchy(connection, experiment, resultById)
         populateContextItems(connection, experiment, resultById)
+
+        return results
     }
 
     private void populateContextItems(Connection connection, Experiment experiment, Map<Long, Result> resultById) {
         String query = "SELECT RESULT_ID, ATTRIBUTE_ID, VALUE_ID," +
                 "DISPLAY_ORDER, EXT_VALUE_ID, QUALIFIER," +
                 "VALUE_NUM, VALUE_MIN, VALUE_MAX, " +
-                "VALUE_DISPLAY FROM RSLT_CONTEXT_ITEM WHERE ..."
+                "VALUE_DISPLAY FROM RSLT_CONTEXT_ITEM rci " +
+                "WHERE EXISTS (SELECT 1 FROM RESULT r where rci.RESULT_ID = r.RESULT_ID AND r.EXPERIMENT_ID = ?)"
 
-        List<List> columns = queryColumns(connection, query, [experiment.id])
+        List<List> columns = queryColumns(connection, query, [experiment.id],
+            [Types.BIGINT, Types.BIGINT, Types.BIGINT,
+            Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
+            Types.FLOAT, Types.FLOAT, Types.FLOAT,
+            Types.VARCHAR])
         int rowCount = columns.get(0).size()
 
         List<Result> results = columns.get(0).collect { Long id -> resultById[id] }
         List<Element> attributes = columns.get(1).collect { Long id -> Element.get(id) }
         List<Element> values = columns.get(2).collect { Long id -> Element.get(id) }
 
-        List<String> qualifiers = columns.get(4)
+        List<String> qualifiers = columns.get(5)
 
-        List<Float> valueNum = columns.get(5)
-        List<Float> valueMin = columns.get(6)
-        List<Float> valueMax = columns.get(7)
+        List<Float> valueNum = columns.get(6)
+        List<Float> valueMin = columns.get(7)
+        List<Float> valueMax = columns.get(8)
 
-        List<String> valueDisplay = columns.get(8)
+        List<String> valueDisplay = columns.get(9)
 
         for(int i=0;i<rowCount;i++) {
             ResultContextItem item = new ResultContextItem();
@@ -254,12 +328,14 @@ class BulkResultService {
     }
 
     private void populateHierarchy(Connection connection, Experiment experiment, Map<Long, Result> resultById) {
-        List<List> columns = queryColumns(connection, "SELECT RESULT_ID, PARENT_RESULT_ID, HIERARCHY_TYPE FROM RESULT_HIERARCHY WHERE ...", [experiment.id])
+        List<List> columns = queryColumns(connection,
+                "SELECT RESULT_ID, PARENT_RESULT_ID, HIERARCHY_TYPE FROM RESULT_HIERARCHY rh WHERE EXISTS (SELECT 1 FROM RESULT r where rh.RESULT_ID = r.RESULT_ID AND r.EXPERIMENT_ID = ?)", [experiment.id],
+            [Types.BIGINT, Types.BIGINT, Types.VARCHAR])
         int rowCount = columns.get(0).size()
 
         List<Result> results = columns.get(0).collect { Long id -> resultById[id] }
         List<Result> parentResults = columns.get(1).collect { Long id -> resultById[id] }
-        String resultHierarchies = columns.get(2)
+        List<String> resultHierarchies = columns.get(2)
 
         for(int i=0;i<rowCount;i++) {
             ResultHierarchy rh = new ResultHierarchy()
@@ -274,9 +350,13 @@ class BulkResultService {
         }
     }
 
-    private List<List> queryColumns(Connection connection, String query, List args) {
+    private List<List> queryColumns(Connection connection, String query, List args, List<Types> types) {
         Map internedStrings = [:]
         PreparedStatement statement = connection.prepareStatement(query)
+        for(int i=0;i<args.size();i++) {
+            statement.setObject(i+1, args[i])
+        }
+
         try {
             ResultSet resultSet = statement.executeQuery()
             int columnCount = resultSet.getMetaData().getColumnCount()
@@ -287,16 +367,34 @@ class BulkResultService {
             try {
                 while(resultSet.next()) {
                     for(int i=0;i<columnCount;i++) {
-                        Object record = resultSet.getObject(columnCount+1)
-                        if (record instanceof String) {
+                        int t = types[i]
+                        def v
+                        if (t == Types.BIGINT) {
+                            v = resultSet.getLong(i+1)
+                            if (resultSet.wasNull())
+                                v = null;
+                        } else if (t == Types.INTEGER) {
+                            v = resultSet.getInt(i+1)
+                            if (resultSet.wasNull())
+                                v = null;
+                        } else if (t == Types.FLOAT) {
+                            v = resultSet.getFloat(i+1)
+                            if (resultSet.wasNull())
+                                v = null;
+                        } else if (t == Types.VARCHAR) {
+                            String record = resultSet.getString(i+1)
                             // collapse strings to point to a single instance (just to save memory)
                             if (internedStrings.containsKey(record)) {
                                 record = internedStrings.get(record)
                             } else {
                                 internedStrings.put(record, record)
                             }
+                            v = record
+
+                        } else {
+                            throw new RuntimeException("Unknown type ${t} in column ${i}")
                         }
-                        result.get(i).add(record)
+                        result.get(i).add(v)
                     }
                 }
                 return result

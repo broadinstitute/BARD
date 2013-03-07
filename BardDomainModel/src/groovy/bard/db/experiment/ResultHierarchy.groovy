@@ -25,8 +25,8 @@ class ResultHierarchy implements Serializable {
     boolean equals(other) {
         if (other == null) return false
         def builder = new EqualsBuilder()
-        builder.append result, other.resultId
-        builder.append parentResult, other.parentResultId
+        builder.append result, other.result.id
+        builder.append parentResult, other.parentResult.id
         builder.isEquals()
     }
 
