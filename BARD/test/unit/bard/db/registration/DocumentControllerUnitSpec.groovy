@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.model.IDocumentType
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.junit.Before
 import spock.lang.Shared
@@ -17,6 +18,7 @@ import static test.TestUtils.assertFieldValidationExpectations
 
 @TestFor(DocumentController)
 @Build([AssayDocument, Assay])
+@Mock([AssayDocument, Assay])
 @Unroll
 class DocumentControllerUnitSpec extends Specification {
     @Shared Assay assay;

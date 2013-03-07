@@ -1,7 +1,9 @@
 package bard.db.experiment
 
+import bard.db.registration.Assay
 import bard.db.registration.Measure
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,7 +20,8 @@ import static test.TestUtils.createString
  * Time: 12:35 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([ExperimentMeasure])
+@Build([Assay, Experiment, ExperimentMeasure, Measure])
+@Mock([Assay, Experiment, ExperimentMeasure, Measure])
 @Unroll
 class ExperimentMeasureConstraintUnitSpec extends Specification {
 
@@ -41,9 +44,9 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc           | valueUnderTest              | valid | errorCode
-        'null valid'   | {null}                      | true  | null
-        'valid parent' | {ExperimentMeasure.build()} | true  | null
+        desc           | valueUnderTest                | valid | errorCode
+        'null valid'   | { null }                      | true  | null
+        'valid parent' | { ExperimentMeasure.build() } | true  | null
 
     }
 
@@ -89,9 +92,9 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest       | valid | errorCode
-        'null not valid'   | {null}               | false | 'nullable'
-        'valid experiment' | {Experiment.build()} | true  | null
+        desc               | valueUnderTest         | valid | errorCode
+        'null not valid'   | { null }               | false | 'nullable'
+        'valid experiment' | { Experiment.build() } | true  | null
 
     }
 
@@ -107,9 +110,9 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid measure'  | {Measure.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid measure'  | { Measure.build() } | true  | null
 
     }
 

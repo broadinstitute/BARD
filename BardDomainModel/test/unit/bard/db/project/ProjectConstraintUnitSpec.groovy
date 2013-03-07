@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,6 +19,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Build(Project)
+@Mock(Project)
 @Unroll
 class ProjectConstraintUnitSpec extends Specification {
 

@@ -3,6 +3,7 @@ package bard.db.experiment
 import bard.db.enums.ReadyForExtraction
 import bard.db.registration.Assay
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Shared
 import spock.lang.Specification
@@ -20,6 +21,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Build([Assay, Experiment])
+@Mock([Assay, Experiment])
 @Unroll
 class ExperimentConstraintUnitSpec extends Specification {
 

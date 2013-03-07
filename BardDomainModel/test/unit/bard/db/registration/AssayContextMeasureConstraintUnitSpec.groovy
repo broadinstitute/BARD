@@ -1,14 +1,15 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static bard.db.registration.ExternalReference.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import spock.lang.Unroll
-import bard.db.dictionary.Element
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +18,8 @@ import bard.db.dictionary.Element
  * Time: 4:07 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build(AssayContextMeasure)
+@Build([Assay, AssayContext, AssayContextMeasure, Measure])
+@Mock([Assay, AssayContext, AssayContextMeasure, Measure])
 @Unroll
 class AssayContextMeasureConstraintUnitSpec extends Specification {
 
@@ -43,9 +45,9 @@ class AssayContextMeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                 | valueUnderTest         | valid | errorCode
-        'null not valid'     | {null}                 | false | 'nullable'
-        'valid assayContext' | {AssayContext.build()} | true  | null
+        desc                 | valueUnderTest           | valid | errorCode
+        'null not valid'     | { null }                 | false | 'nullable'
+        'valid assayContext' | { AssayContext.build() } | true  | null
 
     }
 
@@ -61,9 +63,9 @@ class AssayContextMeasureConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid measure'  | {Measure.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid measure'  | { Measure.build() } | true  | null
 
     }
 

@@ -8,6 +8,7 @@ import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import exceptions.NotFoundException
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -23,6 +24,7 @@ import spock.lang.Unroll
  */
 @TestFor(ExternalReferenceExportService)
 @Build([Experiment, ExternalReference, ExternalSystem, Project, Experiment])
+@Mock([Experiment, ExternalReference, ExternalSystem, Project, Experiment])
 @Unroll
 class ExternalReferenceExportServiceUnitSpec extends Specification {
     Writer writer
@@ -46,7 +48,7 @@ class ExternalReferenceExportServiceUnitSpec extends Specification {
     }
 
     void "test generate ExternalReference with a non-existing Id"() {
-        ExternalReference.metaClass.static.get = {id -> null }
+        ExternalReference.metaClass.static.get = { id -> null }
         when: "We attempt to generate an External Reference"
         this.externalReferenceExportService.generateExternalReference(this.markupBuilder, new Long("2"))
         then: "An exception should be thrown"
@@ -54,7 +56,7 @@ class ExternalReferenceExportServiceUnitSpec extends Specification {
     }
 
     void "test generate ExternalSystem with a non-existing Id"() {
-        ExternalSystem.metaClass.static.get = {id -> null }
+        ExternalSystem.metaClass.static.get = { id -> null }
         when: "We attempt to generate an External System"
         this.externalReferenceExportService.generateExternalSystem(this.markupBuilder, new Long("2"))
         then: "An exception should be thrown"

@@ -12,10 +12,11 @@ import grails.test.mixin.support.*
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@Build([Assay, Element, Measure, AssayContext, AssayContextMeasure])
 @TestFor(MeasureTreeService)
-@Unroll
+@Build([Assay, Element, Measure, AssayContext, AssayContextMeasure])
+@Mock([Assay, Element, Measure, AssayContext, AssayContextMeasure])
 @TestMixin(GrailsUnitTestMixin)
+@Unroll
 class MeasureTreeServiceSpec extends Specification {
 
     void 'test rendering json measurements'() {

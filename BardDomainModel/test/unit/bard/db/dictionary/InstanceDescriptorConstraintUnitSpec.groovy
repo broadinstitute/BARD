@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -11,7 +12,8 @@ import spock.lang.Unroll
  * Time: 4:37 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([InstanceDescriptor,Element])
+@Build([InstanceDescriptor, Element])
+@Mock([InstanceDescriptor, Element])
 @Unroll
 class InstanceDescriptorConstraintUnitSpec extends AbstractDescriptorConstraintUnitSpec {
 
