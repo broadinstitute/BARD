@@ -17,8 +17,8 @@ import spock.lang.Unroll
 
 
 @TestFor(AssayDefinitionController)
-@TestMixin(DomainClassUnitTestMixin)
 @Build([Assay,Element,AssayContext, AssayContextMeasure])
+@Mock([Assay,Element,AssayContext, AssayContextMeasure])
 class AssayDefinitionControllerUnitSpec extends Specification {
 
     Assay assay

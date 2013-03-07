@@ -21,6 +21,7 @@ import bard.db.dictionary.Element
  */
 @TestFor(ProjectExperimentRenderService)
 @Build([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element])
+@Mock([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element])
 @Unroll
 class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()

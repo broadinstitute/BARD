@@ -2,8 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
-import grails.test.mixin.TestMixin
-import grails.test.mixin.domain.DomainClassUnitTestMixin
+import grails.test.mixin.Mock
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -15,8 +14,8 @@ import spock.lang.Unroll
  * Time: 11:30 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([AssayContext, AssayContextItem, Measure])
-@TestMixin(DomainClassUnitTestMixin.class)
+@Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @Unroll
 class AssayContextServiceUnitSpec extends Specification {
 
