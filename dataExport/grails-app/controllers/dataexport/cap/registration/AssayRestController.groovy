@@ -141,6 +141,9 @@ class UpdateStatusHelper {
             else if(!ReadyForExtraction.byId(requestBody))  {
                 response.status = HttpServletResponse.SC_BAD_REQUEST
             }
+            else if(!ReadyForExtraction.isAllowed(ReadyForExtraction.byId(requestBody))) {
+                response.status = HttpServletResponse.SC_BAD_REQUEST
+            }
             else{
                 final String ifMatchHeader = request.getHeader(HttpHeaders.IF_MATCH)
                 if (ifMatchHeader && id) {
