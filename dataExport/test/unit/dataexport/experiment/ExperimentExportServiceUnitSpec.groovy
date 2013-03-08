@@ -59,11 +59,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         this.experimentExportService.mediaTypeDTO = mediaTypesDTO
         this.experimentExportService.numberRecordsPerPage = maxNumberOfExperimentsPerPage
-        this.experimentExportService.resultExportService = Mock(ResultExportService.class)
         this.experimentExportService.grailsLinkGenerator = grailsLinkGenerator
-        this.experimentExportService.resultExportService.grailsLinkGenerator = grailsLinkGenerator
-        this.experimentExportService.resultExportService.mediaTypes = mediaTypesDTO
-        this.experimentExportService.resultExportService.maxResultsRecordsPerPage = maxNumberOfExperimentsPerPage
         this.writer = new StringWriter()
         this.markupBuilder = new MarkupBuilder(writer)
         TestDataConfigurationHolder.reset()

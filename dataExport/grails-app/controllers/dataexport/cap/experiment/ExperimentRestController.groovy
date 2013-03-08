@@ -20,7 +20,6 @@ import javax.xml.stream.XMLOutputFactory
 @Mixin(UpdateStatusHelper)
 class ExperimentRestController {
     ExperimentExportService experimentExportService
-    ResultExportService resultExportService
     GrailsApplication grailsApplication
     static allowedMethods = [
             experiment: "GET",
@@ -77,30 +76,11 @@ class ExperimentRestController {
      */
     def results(Integer id) {
         try {
-            final String xmlMimeType = grailsApplication.config.bard.data.export.results.xml
             final String jsonMimeType = grailsApplication.config.bard.data.export.results.json
             //mime types must match the expected type
             final String requestedMimeType = request.getHeader(HttpHeaders.ACCEPT)
-            if ((xmlMimeType == requestedMimeType || jsonMimeType == requestedMimeType) && id) {
-                if (xmlMimeType == requestedMimeType) {
-                    final int offset = params.offset ? new Integer(params.offset) : 0
-                    //we use the stax builder here
-                    final XMLOutputFactory factory = XMLOutputFactory.newInstance()
-                    final StringWriter markupWriter = new StringWriter()
-                    final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
-                    final boolean hasMoreResults = this.resultExportService.generateResults(staxBuilder, id, offset)
-                    if (hasMoreResults) {
-                        //we set the header to 206
-                        response.status = HttpServletResponse.SC_PARTIAL_CONTENT
-                    } else {
-                        response.status = HttpServletResponse.SC_OK
-                    }
-                    render(text: markupWriter.toString(), contentType: xmlMimeType, encoding: responseContentTypeEncoding)
-                }else{
-                    throw new RuntimeException("Note yet implemented")
-                }
-                //now set the writer
-                return
+            if (jsonMimeType == requestedMimeType && id) {
+                throw new RuntimeException("Note yet implemented")
             }
             response.status = HttpServletResponse.SC_BAD_REQUEST
             render ""
@@ -139,35 +119,6 @@ class ExperimentRestController {
 
     }
 
-    def result(Integer id) {
-        try {
-            final String mimeType = grailsApplication.config.bard.data.export.result.xml
-            //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
-                final StringWriter markupWriter = new StringWriter()
-                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
-                final Long eTag = this.resultExportService.generateResult(markupBuilder, id)
-                response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
-                return
-            }
-            response.status = HttpServletResponse.SC_BAD_REQUEST
-            render ""
-        } catch (NotFoundException notFoundException) {
-            log.error(notFoundException)
-            response.status = HttpServletResponse.SC_NOT_FOUND
-            render ""
-        }
-        catch (Exception ee) {
-            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message)
-            render ""
-        }
-    }
-
-    def updateResult(Long id) {
-        updateDomainObject(this.resultExportService, id)
-    }
     /**
      * We lock it so that no operation can update results and the current experiment
      * Means NCGC is processing the experiment at the current time

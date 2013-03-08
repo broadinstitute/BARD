@@ -23,7 +23,6 @@ class ExperimentRestControllerUnitSpec extends Specification {
     void setup() {
         controller.metaClass.mixin(UpdateStatusHelper)
         controller.experimentExportService = Mock(ExperimentExportService.class)
-        controller.resultExportService = Mock(ResultExportService.class)
     }
 
     void tearDown() {
