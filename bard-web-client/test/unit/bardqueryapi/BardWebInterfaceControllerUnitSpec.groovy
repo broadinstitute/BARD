@@ -366,7 +366,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.turnoffMobileExperience()
         then:
         assert response.status == HttpServletResponse.SC_MOVED_TEMPORARILY
-        assert response.redirectedUrl == '/bardWebInterface/index'
+        assert response.redirectedUrl == 'http://localhost:80/bardWebInterface/index'
     }
 
     void "test handle Assay Searches #label"() {

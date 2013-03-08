@@ -576,7 +576,10 @@ class BardWebInterfaceController {
 
     def turnoffMobileExperience() {
         session.putValue('mobileExperienceDisabled', true)
-        redirect(action: 'index')
+        String server = request.requestURL - request.requestURI
+        String contextPath = request.contextPath
+        String base = "${server}${contextPath}" //e.g., 'http://localhost:8080/bardwebclient'
+        redirect(base: base, action: 'index')
     }
 
     def showProbeList() {

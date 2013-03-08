@@ -82,6 +82,9 @@ class MolSpreadSheetController {
 
     def list = {
         // eventually we will perform a sort here and then return something useful, but for now we redirect
-        redirect(action: 'index')
+        String server = request.requestURL - request.requestURI
+        String contextPath = request.contextPath
+        String base = "${server}${contextPath}" //e.g., 'http://localhost:8080/bardwebclient'
+        redirect(base: base, action: 'index')
     }
 }
