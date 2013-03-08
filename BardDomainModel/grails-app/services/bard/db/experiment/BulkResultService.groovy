@@ -245,7 +245,7 @@ class BulkResultService {
         List<Experiment> experiments = columns.get(2).collect { Long id -> Experiment.get(id)}
 
         List<Element> resultTypes = columns.get(3).collect { Long id -> Element.get(id) }
-        List<Substance> substances = columns.get(4).collect { Long id -> Substance.get(id) }
+        List<Long> substanceIds = columns.get(4)
         List<Element> statsModifiers = columns.get(5).collect { Long id -> Element.get(id) }
 
         List<Integer> replicateNos = columns.get(6)
@@ -265,7 +265,7 @@ class BulkResultService {
             r.readyForExtraction = ReadyForExtraction.byId(readyForExtracts.get(i))
             r.experiment = experiments.get(i)
             r.resultType = resultTypes.get(i)
-            r.substance = substances.get(i)
+            r.substanceId = substanceIds.get(i)
             r.statsModifier = statsModifiers.get(i)
             r.replicateNumber = replicateNos.get(i)
             r.qualifier = qualifiers.get(i)

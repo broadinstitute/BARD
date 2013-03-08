@@ -638,7 +638,7 @@ class ResultsService {
                 // mark this cell as having been consumed
                 unused.remove(cell)
 
-                Result result = createResult(row.replicate, measure.measure, cell.value, substance, errors)
+                Result result = createResult(row.replicate, measure.measure, cell.value, row.sid, errors)
                 if (result == null)
                     continue;
 
@@ -739,7 +739,7 @@ class ResultsService {
         }
     }
 
-    Result createResult(Integer replicate, Measure measure, String valueString, Substance substance, ImportSummary errors) {
+    Result createResult(Integer replicate, Measure measure, String valueString, Long substanceId, ImportSummary errors) {
         def parsed = parseAnything(valueString)
 
         if (parsed instanceof Cell) {
@@ -755,7 +755,7 @@ class ResultsService {
             result.statsModifier = measure.statsModifier
             result.resultType = measure.resultType
             result.replicateNumber = replicate
-            result.substance = substance
+            result.substanceId = substanceId
             result.dateCreated = new Date()
             result.resultStatus = "Pending"
             return result;
@@ -786,7 +786,9 @@ class ResultsService {
         HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
         if (hierarchyType == null) {
             // hack until values are consistent in database
-            if (relationship == "has Child") {
+            if (relationship == null) {
+                hierarchyType = HierarchyType.Child;
+            } else if (relationship == "has Child") {
                 hierarchyType = HierarchyType.Child;
             } else if (relationship == "Derived from") {
                 hierarchyType = HierarchyType.Derives;
@@ -812,8 +814,6 @@ class ResultsService {
         List potentialExperimentColumns = itemService.getLogicalItems(template.experiment.assay.assayContexts.collectMany {AssayContext context ->
             context.assayContextItems.findAll {it.attributeType != AttributeType.Fixed}
         })
-//        potentialExperimentColumns.addAll()
-//        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
 
         InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
         if (errors.hasErrors())
@@ -952,7 +952,7 @@ class ResultsService {
             }
             errors.resultsPerLabel.put(label, count + 1)
 
-            errors.substanceIds.add(it.substance.id)
+            errors.substanceIds.add(it.substanceId)
 
             if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
                 errors.resultsWithRelationships ++;
