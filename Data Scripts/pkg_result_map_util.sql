@@ -1038,7 +1038,7 @@ as
                                       'derives', 'Derived from',
                                       'child', 'has Child',
                                       'sibling', 'has Sibling',
-                                      NULL),
+                                      'has Child'),
                 ani_experiment_id,
                 ani_measure_id,
                 pv_modified_by);
@@ -1080,6 +1080,7 @@ as
             WHERE aid = cn_aid
               AND resulttype IS NOT NULL
               --AND parenttid IS null
+              AND relationship IS NOT null
               AND InStr(',' || parentTID || ',', ',' || cv_parentTID|| ',') > 0
             GROuP BY aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit)) rm,
             external_reference er,

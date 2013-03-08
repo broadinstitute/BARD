@@ -142,7 +142,7 @@ SELECT user,
     cols.COLUMN_NAME,
     Decode(ac.constraint_name, NULL, ''N'', ''Y'') IS_PK,
     ''N'' AUDIT_INSERT,
-    Decode(ac.constraint_name, NULL, Decode (DATA_TYPE, ''CLOB'', ''N'', Decode(cols.COLUMN_NAME, ''DATE_CREATED'', ''N'', ''VERSION'', ''N'', ''Y'')),''N'') AUDIT_UPDATE,
+    Decode(ac.constraint_name, NULL, Decode (DATA_TYPE, ''CLOB'', ''N'', Decode(cols.COLUMN_NAME, ''VERSION'', ''N'', ''Y'')),''N'') AUDIT_UPDATE,
     Decode(ac.constraint_name, NULL, Decode (DATA_TYPE, ''CLOB'', ''N'', ''Y''), ''N'') AUDIT_DELETE
 FROM cols
 left OUTER JOIN (user_constraints ac
@@ -156,6 +156,7 @@ WHERE table_name in (select table_name from tabs)
   AND TABLE_NAME NOT LIKE ''AUDIT%''
   AND TABLE_NAME NOT LIKE ''%0%''
   AND TABLE_NAME NOT LIKE ''TEMP%''
+  AND TABLE_NAME NOT LIKE ''DATA%''
   AND TABLE_NAME NOT LIKE ''%LOG''';
       IF avi_table_name IS NOT NULL
       THEN
