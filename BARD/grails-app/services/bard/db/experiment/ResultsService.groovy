@@ -202,7 +202,7 @@ class ResultsService {
     // used to identify duplicates
     static class LogicalKey {
         Integer replicateNumber;
-        Substance substance
+        Long substanceId
 
         Element resultType
         Element statsModifier
@@ -226,7 +226,7 @@ class ResultsService {
             if (replicateNumber != that.replicateNumber) return false
             if (resultType != that.resultType) return false
             if (statsModifier != that.statsModifier) return false
-            if (substance != that.substance) return false
+            if (substanceId != that.substanceId) return false
             if (valueDisplay != that.valueDisplay) return false
             if (valueElement != that.valueElement) return false
             if (valueMax != that.valueMax) return false
@@ -239,7 +239,7 @@ class ResultsService {
         int hashCode() {
             int result
             result = (replicateNumber != null ? replicateNumber.hashCode() : 0)
-            result = 31 * result + substance.hashCode()
+            result = 31 * result + substanceId.hashCode()
             result = 31 * result + resultType.hashCode()
             result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0)
             result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
@@ -256,7 +256,7 @@ class ResultsService {
         public String toString() {
             return "LogicalKey{" +
                     "replicateNumber=" + replicateNumber +
-                    ", substance=" + substance +
+                    ", substance=" + substanceId +
                     ", resultType=" + resultType +
                     ", statsModifier=" + statsModifier +
                     ", valueNum=" + valueNum +
@@ -1028,7 +1028,7 @@ class ResultsService {
         LogicalKey key = new LogicalKey()
 
         key.replicateNumber = result.replicateNumber
-        key.substance = result.substance
+        key.substanceId = result.substanceId
 
         key.resultType = result.resultType
         key.statsModifier = result.statsModifier

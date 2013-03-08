@@ -20,8 +20,8 @@ import grails.test.mixin.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
-@Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
+@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure ])
+@Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
 class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {
@@ -525,16 +525,24 @@ class ResultsServiceSpec extends spock.lang.Specification {
         errors.hasErrors()
     }
 
+    Result createResult() {
+        return new Result()
+    }
+
+    ResultContextItem createContextItem(params) {
+        return new ResultContextItem(params)
+    }
+
     void 'test duplicate check'() {
         setup:
         ResultsService service = new ResultsService();
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
-        Result result1 = Result.build()
-        ResultContextItem item1 = ResultContextItem.build(result: result1, valueNum: 2.0)
+        Result result1 = createResult()
+        ResultContextItem item1 = createContextItem(result: result1, valueNum: 2.0)
 
-        Result result2 = Result.build()
-        ResultContextItem item2 = ResultContextItem.build(result: result2, valueNum: 3.0)
+        Result result2 = createResult()
+        ResultContextItem item2 = createContextItem(result: result2, valueNum: 3.0)
 
         List<Result> results = [result1, result2]
 
