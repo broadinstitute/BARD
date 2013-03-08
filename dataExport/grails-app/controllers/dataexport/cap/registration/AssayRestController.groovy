@@ -1,5 +1,7 @@
 package dataexport.cap.registration
 
+import bard.db.enums.EnumNotFoundException
+import bard.db.enums.ReadyForExtraction
 import dataexport.registration.AssayExportService
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
@@ -8,7 +10,6 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
 import javax.servlet.http.HttpServletResponse
-import bard.db.enums.ReadyForExtraction
 
 /**
  * Please note that the DataExportFilters is applied to all incoming request.
@@ -135,16 +136,10 @@ class UpdateStatusHelper {
 
         try {
             final String requestBody = request?.reader?.text?.trim()
-            if(!requestBody){
+            final ReadyForExtraction readyForExtraction = ReadyForExtraction.byId(requestBody)
+            if (!ReadyForExtraction.isAllowed(readyForExtraction)) {
                 response.status = HttpServletResponse.SC_BAD_REQUEST
-            }
-            else if(!ReadyForExtraction.byId(requestBody))  {
-                response.status = HttpServletResponse.SC_BAD_REQUEST
-            }
-            else if(!ReadyForExtraction.isAllowed(ReadyForExtraction.byId(requestBody))) {
-                response.status = HttpServletResponse.SC_BAD_REQUEST
-            }
-            else{
+            } else {
                 final String ifMatchHeader = request.getHeader(HttpHeaders.IF_MATCH)
                 if (ifMatchHeader && id) {
                     final BardHttpResponse bardHttpResponse = service.update(new Long(id), new Long(ifMatchHeader),
@@ -155,9 +150,12 @@ class UpdateStatusHelper {
                     return
                 }
             }
-           response.status = HttpServletResponse.SC_BAD_REQUEST
+            response.status = HttpServletResponse.SC_BAD_REQUEST
 
-        } catch (NotFoundException notFoundException) {
+        } catch (EnumNotFoundException enumNotFoundException) {
+            response.status = HttpServletResponse.SC_BAD_REQUEST
+        }
+        catch (NotFoundException notFoundException) {
             log.error(notFoundException.message)
             response.status = HttpServletResponse.SC_NOT_FOUND
         } catch (Exception ee) {
