@@ -286,10 +286,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
     void 'test parse measure cell'() {
         when:
         Measure measure = Measure.build()
-        Substance substance = Substance.build()
 
         ResultsService service = new ResultsService();
-        Result result = service.createResult(null, measure, cellString, substance, null)
+        Result result = service.createResult(null, measure, cellString, 1, null)
 
         then:
         result.valueNum == expectedValue
@@ -336,7 +335,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         result.qualifier == "= "
         result.valueNum == 5.0
         result.resultType == resultType
-        result.substance == substance
+        result.substanceId == substance.id
     }
 
     void 'test creating measure and item result'() {
@@ -373,7 +372,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         rMeasure.qualifier == "= "
         rMeasure.valueNum == 5.0
         rMeasure.resultType == resultType
-        rMeasure.substance == substance
+        rMeasure.substanceId == substance.id
         rMeasure.resultContextItems.size() == 1
         ResultContextItem rci = rMeasure.resultContextItems.first()
         rci.qualifier == "< "
@@ -526,7 +525,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
     }
 
     Result createResult() {
-        return new Result()
+        return new Result(substanceId: 100, resultType: new Element())
     }
 
     ResultContextItem createContextItem(params) {

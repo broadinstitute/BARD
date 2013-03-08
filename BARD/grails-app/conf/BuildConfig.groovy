@@ -73,9 +73,12 @@ grails.project.dependency.resolution = {
         // provided  scope
     }
 
+
     plugins {
         // build scope
-        build ":codenarc:0.18.1"
+        build(":codenarc:0.18.1") {
+            excludes "groovy-all"
+        }
         compile ":hibernate:$grailsVersion"
         build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"

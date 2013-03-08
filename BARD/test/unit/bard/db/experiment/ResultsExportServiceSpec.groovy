@@ -102,8 +102,8 @@ class ResultsExportServiceSpec extends Specification {
 
         ResultsExportService service = new ResultsExportService()
         service.archivePathService = archivePathService
-        List results = [new Result(substanceId: substance1.id),
-            new Result(substanceId: substance2.id)]
+        List results = [new Result(resultType: new Element(label: "ac50"), substanceId: substance1.id),
+            new Result(resultType: new Element(label: "bingo"),substanceId: substance2.id)]
 
         when:
         service.dumpFromList("path", results)
