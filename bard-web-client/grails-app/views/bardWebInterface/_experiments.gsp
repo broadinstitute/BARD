@@ -2,7 +2,7 @@
 <div>
     <g:each var="experiment" in="${experiments}" status="i">
         <div>
-            <div class="accordion span12" id="accordionDescription">
+            <div class="accordion" id="accordionDescription">
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <h4>
