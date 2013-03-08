@@ -23,7 +23,8 @@ class QueryItem extends Shoppable {
         this.queryItemType = queryItemType
     }
 
-    /**
+
+   /**
      * Catch the beforeValidate event and apply pre-processing to the fields
      */
     void beforeValidate() {
