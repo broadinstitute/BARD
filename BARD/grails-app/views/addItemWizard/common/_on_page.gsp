@@ -176,7 +176,7 @@
 
             $("#valueUnitId").select2({
            		placeholder: "Loading units..",
-           		width: "70%",
+           		width: "45%",
                 data: unitsData
     		})
     		
@@ -185,6 +185,7 @@
         function initializePageThreeList(){
             outputToConsole('calling initializePageThreeList()');
 
+            var valueLabelCache = {}
             $("#valueId").select2({
                 minimumInputLength: 1,
                 width: "70%",
@@ -206,11 +207,14 @@
                                 var selectData = {results:[]}
                                 $.each(data, function(index, val) {
                                     selectData.results.push({id: val.elementId, text: val.label})
+                                    valueLabelCache[val.elementId] = val.label;
                                 })
                                 query.callback(selectData)
                             }
                     );
                 }
+            }).on("change", function(e) {
+                $("#valueLabel").val(valueLabelCache[e.val])                               
             })
 
             var attributeElementId = $("#attributeElementId").val();
@@ -218,7 +222,7 @@
             var unitsData = {results:[]};
             $("#valueUnitId").select2({
            		placeholder: "Loading units..",
-           		width: "70%",
+           		width: "45%",
                 data: unitsData
     		})
             
@@ -260,7 +264,7 @@
                            	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
                            	$("#valueUnitId").select2({
                            		placeholder: "Select a Unit",
-                           		width: "70%",
+                           		width: "45%",
         		                data: unitsData
                     		}).on("change", function(e) {
                                 $("#valueUnitLabel").val(unitLabelCache[e.val])                               

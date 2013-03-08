@@ -470,6 +470,22 @@ function editCardItem() {
 
 }
 
+function removeItemFromList(listIndex) {
+	alert('Remove icon has been clicked! List Index: ' + listIndex);
+	var data = {'listIndex': listIndex };
+    $.ajax({
+        type: 'POST',
+        url: '../../addItemWizard/pages/removeItemFromList',
+        data: data,
+        success: function (data) {
+        	$("div#itemsInListTable").html(data);
+        },
+	    error: function (jqXHR, textStatus, errorThrown) {
+	        alert("Error: " + textStatus + " -> " + errorThrown);
+	    }
+    });
+}
+
 function launchAddItemWizard(assayId, assayContextId, cardSection) {
 
     var data = {'assayId': assayId, 'assayContextId': assayContextId, 'cardSection': cardSection};

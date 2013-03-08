@@ -9,7 +9,7 @@
 	
 	<g:if test="${'Fixed'.equals(valueType?.valueTypeOption)}">
 		<g:if test="${fixedValue.isNumericValue}">
-	    	<g:set var="valueText" value="${ fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
+	    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
 		</g:if>
 		<g:else>
 	    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
@@ -17,21 +17,19 @@
 	</g:if>
 	<g:elseif test="${'List'.equals(valueType?.valueTypeOption)}">
 		<g:set var="valueText" value="${ listOfValues.size() } values set" />
-	</g:elseif>
-	
-	<%--
-	<g:if test="${fixedValue.isNumericValue}">
-    	<g:set var="valueText" value="${ fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
-	</g:if>
-	<g:else>
-    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
-	</g:else> 
-	--%>
-	
-	
+	</g:elseif>	
 	  
     <g:render template="common/itemWizardSelectionsTable"
               model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': valueText]"/>
+    <br>
+    
+    <%-- Render list of values table if value type is List  --%>
+    <g:if test="${'List'.equals(valueType?.valueTypeOption)}">
+	    <g:set var="list" value="${listOfValues}" />
+		<g:set var="enableEdit" value="${false}" />
+		<g:render template="common/itemsInListTable" model="['listOfValues': list, 'enableEdit': enableEdit]"/>
+		<br>
+	</g:if>
 
     <h1>Please review the information for this item above.</h1>
 	<p>
