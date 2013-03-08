@@ -10,6 +10,7 @@ import java.util.zip.GZIPOutputStream
 class ResultsExportService {
 
     ArchivePathService archivePathService
+    BulkResultService bulkResultService
 
     ObjectMapper mapper = new ObjectMapper()
 
@@ -75,40 +76,20 @@ class ResultsExportService {
 
     void dumpFromListToAbsPath(File file, Collection<Result> results) {
         Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(file)));
-        Map<Long, List<Result>> resultsBySid = results.groupBy { it.substance.id }
+        Map<Long, List<Result>> resultsBySid = results.groupBy { it.substanceId }
         for (sid in resultsBySid.keySet()) {
             writeResultsForSubstance(writer, sid, resultsBySid[sid])
         }
         writer.close()
     }
 
+    void dumpFromDb(Long experimentId) {
+        Experiment experiment = Experiment.get(experimentId)
+        assert experiment != null
+        List<Result> results = bulkResultService.findResults(experiment)
 
-//    void dumpFromDb(Long experimentId) {
-//        List sids = []
-//        Result.withSession { Session session ->
-//            sids.addAll(session.createSQLQuery("select distinct r.substance_id from RESULT r where r.experiment_id = ?").setCacheable(false).setParameter(0, experimentId).list());
-//        }
-//        sids = sids.collect { it.longValue() }
-//
-//        println("${sids.size()} Substance IDs for experiment ${experimentId}")
-//
-//        Writer writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream("exp-${experimentId}.json.gz")));
-//
-//        int counter = 0;
-//        for (sid in sids) {
-//            Result.withSession { Session session ->
-//                List<Result> results = session.createQuery("select r from ${Result.getName()} r where experiment.id = ? and substance.id = ?").setParameter(0, experimentId).setParameter(1, sid.toLong()).list();
-//
-//                writeResultsForSubstance(writer, sid, results)
-//
-//                if ((counter % 50) == 0) {
-//                    session.clear();
-//                    println("${ (int) (100 * counter / sids.size()) } %")
-//                }
-//
-//                counter++
-//            }
-//        }
-//        writer.close()
-//    }
+        println("writing ${results.size()} results")
+
+        dumpFromListToAbsPath(new File("exp-${experimentId}.json.gz"), results)
+    }
 }
