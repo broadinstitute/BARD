@@ -36,7 +36,7 @@
                            style="color: white; text-decoration: underline">
                             ${projectAdapter.getNumberOfExperiments()}
                         </a>
-                </span></dd>
+                    </span></dd>
             </g:if>
         </dl>
     </div>
@@ -84,8 +84,9 @@
                     <li><a href="#annotations-info-misc"><i
                             class="icon-chevron-right"></i>Annotations - Miscellaneous</a></li>
                 </g:if>
-                <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
-
+                <g:if test="${projectAdapter.description}">
+                    <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
+                </g:if>
                 <g:if test="${projectAdapter.targets}">
                     <li><a href="#target-info"><i
                             class="icon-chevron-right"></i>Targets (${projectAdapter.targets.size()})</a></li>
@@ -94,9 +95,12 @@
                     <li><a href="#publication-info"><i
                             class="icon-chevron-right"></i>Publications (${projectAdapter.documents.size()})</a></li>
                 </g:if>
-                <li><a href="#experiments-info"><i
-                        class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})</a>
-                </li>
+                <g:if test="${experiments}">
+                    <li><a href="#experiments-info"><i
+                            class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})
+                    </a>
+                    </li>
+                </g:if>
                 <li><a href="#assays-info"><i class="icon-chevron-right"></i> Assays (${assays?.size()})</a></li>
             </ul>
         </div>
@@ -125,31 +129,34 @@
 
                 </section>
             </g:if>
-            <section id="description-info">
-                <div class="page-header">
-                    <h3>Description</h3>
-                </div>
+            <g:if test="${projectAdapter.description}">
+                <section id="description-info">
+                    <div class="page-header">
+                        <h3>Description</h3>
+                    </div>
 
-                <div>
-                    <g:textBlock>${projectAdapter?.description}</g:textBlock>
-                </div>
-            </section>
-
+                    <div>
+                        <g:textBlock>${projectAdapter?.description}</g:textBlock>
+                    </div>
+                </section>
+            </g:if>
             <g:if test="${projectAdapter.targets}">
                 <g:render template="targets" model="['targets': projectAdapter.targets]"/>
             </g:if>
             <g:if test="${projectAdapter.documents}">
                 <g:render template="publications" model="['documents': projectAdapter.documents]"/>
             </g:if>
-            <section id="experiments-info">
-                <div class="page-header">
-                    <h3>Experiments</h3>
-                </div>
+            <g:if test="${experiments}">
+                <section id="experiments-info">
+                    <div class="page-header">
+                        <h3>Experiments</h3>
+                    </div>
 
-                <div>
-                    <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false]"/>
-                </div>
-            </section>
+                    <div>
+                        <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false]"/>
+                    </div>
+                </section>
+            </g:if>
             <section id="assays-info">
                 <div class="page-header">
                     <h3>Assays</h3>
@@ -164,7 +171,8 @@
                                             params='[searchString: "${searchString}"]'>${assay.title}</g:link>
                                 </g:if>
                                 <g:else>
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.title}</g:link>
+                                    <g:link controller="bardWebInterface" action="showAssay"
+                                            id="${assay.id}">${assay.title}</g:link>
                                 </g:else>
                             </p>
                         </div>
