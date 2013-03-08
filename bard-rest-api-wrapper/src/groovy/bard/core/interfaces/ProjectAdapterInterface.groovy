@@ -21,4 +21,6 @@ public interface ProjectAdapterInterface {
 
     public List<BardAnnotation> getAnnotations();
 
+    public String getExperimentType(Long experimentId);
+    public Map<Long, String> getExperimentTypes();
 }

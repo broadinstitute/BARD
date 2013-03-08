@@ -19,6 +19,9 @@ public class CompoundAdapter implements CompoundAdapterInterface {
         this.score = score
         this.matchingField = matchingField
     }
+    public List<String> getProbeAnnotations(){
+        return compound.getProbeAnnotations();
+    }
     public List<String> getSynonyms(){
         return this.compound.getCompoundAnnotations()?.getSynonyms() ?: []
     }

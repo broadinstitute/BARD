@@ -12,6 +12,10 @@ public class Compound extends JsonUtil {
     private String etag;
 
     private CompoundAnnotations compoundAnnotations
+
+
+    @JsonProperty("probeAnnotations")
+    private List<String> probeAnnotations;
     @JsonProperty("bardProjectId")
     private Long bardProjectId
     @JsonProperty("capProjectId")
@@ -70,6 +74,15 @@ public class Compound extends JsonUtil {
     void setCompoundAnnotations(CompoundAnnotations compoundAnnotations) {
         this.compoundAnnotations = compoundAnnotations
     }
+    @JsonProperty("probeAnnotations")
+    public List<String> getProbeAnnotations() {
+        return this.probeAnnotations
+    }
+    @JsonProperty("probeAnnotations")
+    public void setProbeAnnotations(List<String> probeAnnotations) {
+        this.probeAnnotations = probeAnnotations
+    }
+
     @JsonProperty("anno_key")
     public List<String> getAnno_key() {
         return anno_key;

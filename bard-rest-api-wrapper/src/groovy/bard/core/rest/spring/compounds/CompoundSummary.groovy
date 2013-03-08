@@ -8,6 +8,7 @@ import bard.core.rest.spring.assays.Assay
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CompoundSummary extends JsonUtil {
+
     @JsonProperty("ntest")
     private int ntest;
 

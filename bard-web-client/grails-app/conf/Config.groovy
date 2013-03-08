@@ -4,7 +4,7 @@ import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 //TODO: Override in dev, qa and prod to point to the current stable release
-ncgc.server.root.url = "http://bard.nih.gov/api/v14"
+ncgc.server.root.url = "http://bard.nih.gov/api/v15"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
 server.port = System.properties.getProperty('server.port') ?: 8080

@@ -166,6 +166,7 @@ class ExperimentBuilder {
         webQueryTableModel.additionalProperties.put("capAssayId", experimentDetails?.experiment?.capAssayId)
         webQueryTableModel.additionalProperties.put("total", experimentDetails?.total)
         webQueryTableModel.additionalProperties.put("actives", experimentDetails?.actives)
+        webQueryTableModel.additionalProperties.put("confidenceLevel",experimentDetails?.experiment?.confidenceLevel)
 
         Map<Long, CompoundAdapter> compoundAdapterMap = experimentDetails?.compoundAdaptersMap
         final boolean hasPlot = experimentDetails.hasPlot

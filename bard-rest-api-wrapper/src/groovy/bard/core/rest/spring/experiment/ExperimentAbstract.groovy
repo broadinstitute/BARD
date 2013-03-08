@@ -42,6 +42,10 @@ public abstract class ExperimentAbstract extends JsonUtil {
 
     @JsonProperty("activeCompounds")
     private long activeCompounds;
+
+
+    @JsonProperty("confidenceLevel")
+    private long confidenceLevel
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")
@@ -61,6 +65,14 @@ public abstract class ExperimentAbstract extends JsonUtil {
     @JsonProperty("resourcePath")
     private String resourcePath;
 
+    @JsonProperty("confidenceLevel")
+    public long getConfidenceLevel() {
+        return this.confidenceLevel
+    }
+    @JsonProperty("confidenceLevel")
+    public void setConfidenceLevel(long confidenceLevel) {
+        this.confidenceLevel = confidenceLevel
+    }
     @JsonProperty("activeCompounds")
     public long getActiveCompounds() {
         return activeCompounds

@@ -21,7 +21,18 @@ public class AssayAdapter implements AssayAdapterInterface {
         this.matchingField = nameDescription
         this.annotations = annotations
     }
-
+    @Override
+    String getAssayStatus(){
+        return this.assay.getAssayStatus();
+    }
+    @Override
+    String getDesignedBy(){
+        return this.assay.getDesignedBy();
+    }
+    @Override
+    String getAssayTypeString(){
+        return this.assay.getAssayType();
+    }
     @Override
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()

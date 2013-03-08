@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjectAbstract extends JsonUtil {
+    @JsonProperty("experimentTypes")
+    private Map<Long, String> experimentTypes;
 
     @JsonProperty("bardProjectId")
     private long bardProjectId;
@@ -340,7 +342,15 @@ public class ProjectAbstract extends JsonUtil {
     public void setExperimentCount(long experimentCount) {
         this.experimentCount = experimentCount;
     }
+    @JsonProperty("experimentTypes")
+    public Map<Long, String> getExperimentTypes() {
+        return experimentTypes;
+    }
 
+    @JsonProperty("experimentTypes")
+    public void setExperimentTypes(Map<Long, String> experimentTypes) {
+        this.experimentTypes = experimentTypes;
+    }
     public boolean hasProbes() {
         if (this.probes) {
             return true

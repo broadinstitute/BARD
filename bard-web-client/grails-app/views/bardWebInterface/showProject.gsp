@@ -147,7 +147,7 @@
                 </div>
 
                 <div>
-                    <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false]"/>
+                    <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false, experimentTypes:projectAdapter.experimentTypes]"/>
                 </div>
             </section>
             <section id="assays-info">
@@ -161,10 +161,12 @@
                             <p>
                                 <g:if test="${searchString}">
                                     <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}"
-                                            params='[searchString: "${searchString}"]'>${assay.title}</g:link>
+                                            params='[searchString: "${searchString}"]'>${assay.title} </g:link>
+                                    Assay Status: ${assay.assayStatus}
                                 </g:if>
                                 <g:else>
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.title}</g:link>
+                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}">${assay.title} </g:link>
+                                    Assay Status: ${assay.assayStatus}
                                 </g:else>
                             </p>
                         </div>

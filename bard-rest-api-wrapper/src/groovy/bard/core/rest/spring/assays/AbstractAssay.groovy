@@ -6,6 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AbstractAssay extends JsonUtil {
+    @JsonProperty("designedBy")
+    private String designedBy
+    @JsonProperty("assayType")
+    private String assayType
+    @JsonProperty("assayStatus")
+    private String assayStatus
     @JsonProperty("comments")
     private String comments;
     @JsonProperty("aid")
@@ -271,4 +277,29 @@ public class AbstractAssay extends JsonUtil {
         this.title = title
     }
 
+
+    @JsonProperty("designedBy")
+    public String getDesignedBy() {
+        return designedBy
+    }
+    @JsonProperty("designedBy")
+    public void setDesignedBy(String designedBy) {
+        this.designedBy = designedBy
+    }
+    @JsonProperty("assayType")
+    public String getAssayType() {
+        return assayType
+    }
+    @JsonProperty("assayType")
+    public void setAssayType(String assayType) {
+        this.assayType = assayType
+    }
+    @JsonProperty("assayStatus")
+    public String getAssayStatus() {
+        return assayStatus
+    }
+    @JsonProperty("assayStatus")
+    public void setAssayStatus(String assayStatus) {
+        this.assayStatus = assayStatus
+    }
 }

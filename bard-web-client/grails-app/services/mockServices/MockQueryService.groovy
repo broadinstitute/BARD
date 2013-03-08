@@ -1028,7 +1028,23 @@ class MockAssayAdapter implements AssayAdapterInterface {
     String getSource() {
         return this.source ?: "Source"  //To change body of implemented methods use File | Settings | File Templates.
     }
+    @Override
+    String getAssayStatus() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getDesignedBy() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getAssayTypeString() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
+
+
 class MockProjectAdapter implements ProjectAdapterInterface {
     Long id
     String name
@@ -1096,6 +1112,16 @@ class MockProjectAdapter implements ProjectAdapterInterface {
 //            }
         }
         return annotations//To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    String getExperimentType(Long experimentId) {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    Map<Long, String> getExperimentTypes() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
@@ -1205,6 +1231,11 @@ class MockCompoundAdapter implements CompoundAdapterInterface {
     @Override
     boolean isDrug() {
         return getCompoundClass() == "Drug"  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    List<String> getProbeAnnotations() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

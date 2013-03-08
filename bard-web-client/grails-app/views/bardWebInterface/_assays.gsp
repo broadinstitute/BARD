@@ -23,14 +23,31 @@
                 <h3>
                     <g:if test="${searchString}">
                         <g:link action="showAssay" id="${assayAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                params='[searchString: "${searchString}"]'>${assayAdapter.title}  <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
                     </g:if>
                     <g:else>
                         <g:link action="showAssay"
-                                id="${assayAdapter.id}">${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                id="${assayAdapter.id}">
+                            ${assayAdapter.title}
+                            <small>(ADID: ${assayAdapter.capAssayId})</small>
+                        </g:link>
                     </g:else>
 
                 </h3>
+                <dl class="dl-horizontal">
+                    <g:if test="${assayAdapter.assayStatus}">
+                        <dt>Assay Status:</dt>
+                        <dd>${assayAdapter.assayStatus}</dd>
+                    </g:if>
+                    <g:if test="${assayAdapter.assayTypeString}">
+                        <dt>Assay Type:</dt>
+                        <dd>${assayAdapter.assayTypeString}</dd>
+                    </g:if>
+                    <g:if test="${assayAdapter.designedBy}">
+                        <dt>Designed By:</dt>
+                        <dd>${assayAdapter.designedBy}</dd>
+                    </g:if>
+                </dl>
                 <g:saveToCartButton id="${assayAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>

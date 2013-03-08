@@ -12,6 +12,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Shared
 import spock.lang.Unroll
+import spock.lang.IgnoreRest
 
 /**
  * Tests for ProjectRestService

@@ -4,7 +4,7 @@ package bard.core.interfaces;
 public interface CompoundAdapterInterface {
     public String getHighlight();
     public boolean isDrug();
-
+    public List<String> getProbeAnnotations();
     public String getProbeId();
 
     public boolean isProbe();
