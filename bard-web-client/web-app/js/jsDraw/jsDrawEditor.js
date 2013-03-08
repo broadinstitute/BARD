@@ -20,6 +20,12 @@ $(document).on('click', '#searchButton', function (event) {
     var constructedSearch = structureSearchTypeSelected + ":" + smiles;
     if (structureSearchTypeSelected == $('#similaritySearchTypeValue').attr('value')) {
         var cutoff = $("#cutoff").val();
+        if (!isSimilarityThresholdValueValid(cutoff)) {
+            //prevent the value keyed in.
+            $('#cutoff').addClass('error')
+            event.preventDefault();
+            return false;
+        }
         constructedSearch += ' threshold:' + cutoff;
     }
     $('#searchString').attr('value', constructedSearch);
@@ -49,3 +55,9 @@ $(document).on('change', 'input:radio[name="structureSearchType"]', function () 
         $('#cutoff').attr("disabled", "disabled");
     }
 });
+
+//Allow only numeric values in the similarity threshold field
+function isSimilarityThresholdValueValid(cutoff) {
+    var intRegex = /^\d+(\.\d+)?$/;
+    return (intRegex.test(cutoff.trim()) && cutoff <= 100 && cutoff >= 0)
+}
