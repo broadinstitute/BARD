@@ -6,7 +6,7 @@ dataSource {
     // defaulting to using validate unless we specify something different on command line
     // you can't always use the validation option for database migration dbm- commmands
     // say bootstrapping a fresh schema, in this case you can turn off validation
-    dbCreate = System.getProperty('dataSource.dbCreate') ?: "validate"
+    dbCreate = System.getProperty('dataSource.dbCreate') ?: "no-validate"
     properties {
         maxActive = 50
         maxIdle = 25
