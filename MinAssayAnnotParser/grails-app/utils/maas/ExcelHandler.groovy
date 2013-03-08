@@ -43,7 +43,7 @@ class ExcelHandler {
                 //Get the current AID
                 String aidFromCell = getCellContentByRowAndColumnIds(row, 'A')
                 aidFromCell = getTrimStringOrNullFromDef(aidFromCell)
-                foundFinishedMark = aidFromCell.equalsIgnoreCase(finishedMark)
+                foundFinishedMark = finishedMark.equalsIgnoreCase(aidFromCell)
                 if (foundFinishedMark)
                     break
                 //if we encountered a new AID, update the current-aid with the new one. Else, leave the existing one.
@@ -67,7 +67,8 @@ class ExcelHandler {
 
             return dtoList
         } catch (Exception e) {
-            throw new CouldNotReadExcelFileException(e.message, e)
+            println("File Exception: " + inputFile.absolutePath + " " + e.message)
+           // throw new CouldNotReadExcelFileException(inputFile.absolutePath + " " + e.message, e)
         }
     }
 

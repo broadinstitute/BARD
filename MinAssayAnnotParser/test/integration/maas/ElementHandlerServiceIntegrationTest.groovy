@@ -22,6 +22,19 @@ class ElementHandlerServiceIntegrationTest extends GroovyTestCase {
     }
 
     public void testLoadElements() {
-        elementHandlerService.addMissingElement("xiaorong", ElementHandlerService.elementAndDescription, ElementHandlerService.elementParent)
+        Map elementAndDescription = [
+                'science officer' : ''
+        ]
+
+// element parent
+        Map elementParent = [
+                'science officer' : 555  // id = 555   'project information'
+        ]
+        elementHandlerService.addMissingElement("xiaorong", elementAndDescription, elementParent)
+    }
+
+    public void testAddMissingName() {
+        String fileWithUniqueName = 'test/exampleData/maas/missingNameUniq.txt'
+        elementHandlerService.addMissingName(fileWithUniqueName)
     }
 }

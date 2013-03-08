@@ -214,7 +214,7 @@ class AttributeNameMappingBuilder {
                 'BriteLite Plus (Perkin Elmer)':'PerkinElmer BriteLite',
 
                 // when load experiments
-                'IC50 relative' : 'relative IC50'
+                'IC50 relative' : 'relative IC50',
         ]
 
         return attributeNameMapping

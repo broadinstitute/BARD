@@ -12,8 +12,8 @@ import bard.db.project.ProjectContextItem
 class ContextHandlerService {
     AbstractContextItem updateContextItem(ContextItemDto contextItemDto, String loadedBy, List<String> errorMessages, String contextType) {
         Element attributeElement = Element.findByLabelIlike(contextItemDto.key)
-        if (! attributeElement) {
-            final String message = "Element not exist: (${contextItemDto.key})"
+        if (!attributeElement) {
+            final String message = "Attribute element not exist: (${contextItemDto.key})"
             errorMessages << message
         }
         AbstractContextItem contextItem = null
@@ -26,6 +26,12 @@ class ContextHandlerService {
         String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
         //populate attribute-value type and value
         Element valueElement = contextItemDto.value ? Element.findByLabelIlike(contextItemDto.value) : null
+
+        /* NOTE: Special handling: check if it has been created, for the first round there is no name for these two fields, we add them */
+        if (!valueElement && contextItemDto.value &&
+                (contextItemDto.key == 'project lead name' || contextItemDto.key == 'science officer' || contextItemDto.key == 'assay provider name')) {
+            errorMessages("value element missing for names: " + contextItemDto.value)
+        }
 
         //if the value string could be matched against an element then add it to the valueElement
         if (valueElement) {

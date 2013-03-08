@@ -10,18 +10,17 @@ import bard.dm.cars.domainspreadsheetmapping.ProjectStepMapperBuilder
 import bard.dm.cars.domainspreadsheetmapping.ProjectStepAnnotater
 import org.springframework.transaction.support.DefaultTransactionStatus
 import bard.db.project.Project
+import cars.RemoverService
 
 Log.initializeLogger("test/exampleData/logsAndOutput/parseCarsSpreadsheet.log")
 println("Start script")
 
 //constants
-final String inputFileRelativePath = "test/exampleData/Project data from CARS.csv"
+final String inputFileRelativePath = "test/exampleData/project_data_from_CARS.csv"
 final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappings.config"
 //TODO rename this file, it is more general now
 final String elementFieldMappingRelativePath = "grails-app/conf/resources/ElementFieldMapping.config"
-final String username = "dlahr"
-
-
+final String username = "xiaorong" + "-maas-" + inputFileRelativePath
 
 final Date startDate = new Date()
 

@@ -173,7 +173,9 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             return rebuildAssayContextItem(assayContextItem, 'PubChem CID', contextDTO)
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprot\W*:/)) {//'Uniprot:Q03164'
             return rebuildAssayContextItem(assayContextItem, 'UniProt', contextDTO)
-        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
+        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprotkb\W*:/)) {// 'UnitProtKB:UniProtKB:Q9QUQ5'
+            return rebuildAssayContextItem(assayContextItem, 'UniProt', contextDTO)
+        }else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
             return rebuildAssayContextItem(assayContextItem, 'protein', contextDTO)
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().indexOf("go:") >= 0) {//'go:
             return rebuildAssayContextItem(assayContextItem, goElementLabel, contextDTO)
@@ -197,7 +199,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         if (!element) {
             super.loadResultsWriter.write(contextDTO, assayContextItem.assayContext.assay.id,
                     ContextLoadResultsWriter.LoadResultType.fail, null, 0,
-                    "element not found in database ${findByLabelIlike}")
+                    "element ${assayContextItem.valueDisplay} not found in database ${findByLabelIlike}")
             return false
         }
 

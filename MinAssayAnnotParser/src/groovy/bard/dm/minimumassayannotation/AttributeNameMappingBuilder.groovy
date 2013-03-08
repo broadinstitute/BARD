@@ -77,7 +77,7 @@ class AttributeNameMappingBuilder {
                 'number-per-well': 'number per well',
                 'uIU/mL': 'micro interational unit per milliliter',
                 '--': '',
-                'Result type': 'result detail',
+                //'Result type': 'result detail',
                 'cell line': 'cell line',
                 'Fa2N-4': 'Fa2N-4',
                 'flow cytometry |  side scatter': 'flow cytometry | side scatter',
@@ -211,7 +211,24 @@ class AttributeNameMappingBuilder {
                 'Acumen EX3':'TTP LabTech Acumen',
                 'SDS-PAGE gel':'SDS-PAGE',
                 'sds page':'SDS-PAGE',
-                'BriteLite Plus (Perkin Elmer)':'PerkinElmer BriteLite'
+                'BriteLite Plus (Perkin Elmer)':'PerkinElmer BriteLite',
+                '?':'fluorometer',
+                'Typhoon laser scanner':'GE Typhoon laser scanner',
+                'FlexStation III microplate reader':'FlexStation II microplate reader',
+                'Thermofluor':'ThermoFluor 384 System',
+                'Roche LightCycler 480':'Roche LightCycler480Ž',
+                'Varian Cary Eclipse fluorescence spectrophotometer':'Agilent Cary Eclipse Fluorescence Spectrophotometer',
+                'nU/ul':'ng/uL',
+                'MolecularDevices M5 reader':'SpectraMax M5 Multi-Mode Microplate Reader',
+                'Molecular Devices M5 Plate Reader':'SpectraMax M5 Multi-Mode Microplate Reader',
+                'Acumen eX3 Explorer':'TTP LabTech Acumen',
+                'Perkin Elmer EnvisionÂ':'PerkinElmer EnVision',
+
+                // 3-1-2013
+                'Threshold units':'unit',
+                '# concentration points':'concentration-point number',
+                '# replicates':'number of replicates',
+                'Project Lead':'project lead name'
         ]
 
         return attributeNameMapping

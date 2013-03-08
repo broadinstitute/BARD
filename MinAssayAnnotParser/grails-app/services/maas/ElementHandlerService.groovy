@@ -2,18 +2,9 @@ package maas
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
+import org.apache.commons.lang.StringUtils
 
 class ElementHandlerService {
-
-    public static Map elementAndDescription = [
-            'science officer' : ''
-    ]
-
-    // element parent
-    public static Map elementParent = [
-            'science officer' : 555  // id = 555   'project information'
-    ]
-
     /**
      * Add missing elements and relationship
      * @param modifiedBy
@@ -22,7 +13,7 @@ class ElementHandlerService {
      */
     def addMissingElement(String modifiedBy, Map elementAndDescription, Map elementAndParent) {
         elementAndDescription.each() {key, value->
-            def element = Element.findAllByLabel(key)
+            def element = Element.findByLabelIlike(key)
             if (!element) {
                 element = new Element(label: key, modifiedBy: modifiedBy, description: value)
                 element.save(flush: true)
@@ -47,6 +38,22 @@ class ElementHandlerService {
                 def elementHierarchy = new ElementHierarchy(parentElement: parent, childElement: element, modifiedBy: modifiedBy)
                 elementHierarchy.save(flush: true)
             }
+        }
+    }
+
+    def addElement(String modifiedBy, String elementLabel) {
+        def element = Element.findByLabelIlike(elementLabel)
+        if (!element) {
+            element = new Element(label: elementLabel, modifiedBy: modifiedBy)
+            element.save(flush: true)
+        }
+        return element
+    }
+
+    def addMissingName(String fileName) {
+        new File(fileName).each{String line ->
+            String[] elements = line.split(":")
+            addElement("xiaorong-maas", StringUtils.trim(elements[1]))
         }
     }
 }

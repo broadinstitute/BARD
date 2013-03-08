@@ -16,4 +16,10 @@ class ExperimentHandlerServiceIntegrationTest extends GroovyTestCase {
         experimentHandlerService.loadExperimentsContext("xiaorong", inputFiles)
     }
 
+    void testLoadProjectsContextFrom(){
+        final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
+        def dirs = ['test/exampleData/maas/what_we_should_load']
+        experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
+    }
+
 }
