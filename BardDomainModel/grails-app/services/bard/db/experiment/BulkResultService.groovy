@@ -30,7 +30,7 @@ class BulkResultService {
                 @Override
                 void execute(Connection connection) throws SQLException {
                     assignIdsToResults(connection, results)
-                    insertResults(connection, experiment, results, username)
+                    insertOnlyResults(connection, experiment, results, username)
 
                     // flatten all items and do a bulk insert
                     List items = results.collectMany([], {Result result -> result.resultContextItems})
@@ -163,7 +163,7 @@ class BulkResultService {
         }
     }
 
-    private void insertResults(Connection connection, Experiment experiment, Collection<Result> results, String username) {
+    private void insertOnlyResults(Connection connection, Experiment experiment, Collection<Result> results, String username) {
         String query = "INSERT INTO RESULT (" +
                 "RESULT_STATUS, READY_FOR_EXTRACTION, EXPERIMENT_ID," +
                 "RESULT_TYPE_ID, SUBSTANCE_ID, STATS_MODIFIER_ID," +
