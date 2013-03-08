@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -16,6 +17,7 @@ import static test.TestUtils.createString
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @Build([Assay, Element, Measure])
+@Mock([Assay, Element, Measure])
 @Unroll
 class AssayConstraintUnitSpec extends Specification {
     Assay domainInstance

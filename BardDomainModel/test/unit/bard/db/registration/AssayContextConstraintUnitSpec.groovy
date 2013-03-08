@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -15,6 +16,7 @@ import bard.db.model.AbstractContextConstraintUnitSpec
  * To change this template use File | Settings | File Templates.
  */
 @Build([Assay, AssayContext])
+@Mock([Assay, AssayContext])
 @Unroll
 class AssayContextConstraintUnitSpec extends AbstractContextConstraintUnitSpec {
 

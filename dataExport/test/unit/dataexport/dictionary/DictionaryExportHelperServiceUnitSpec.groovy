@@ -1,21 +1,23 @@
 package dataexport.dictionary
 
+import bard.db.dictionary.*
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.MediaTypesDTO
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.db.dictionary.*
 
 /**
  *
  */
 @Unroll
 @Build([UnitTree, Element, UnitConversion, StageTree])
+@Mock([UnitTree, Element, UnitConversion, StageTree])
 class DictionaryExportHelperServiceUnitSpec extends Specification {
     DictionaryExportHelperService dictionaryExportHelperService = new DictionaryExportHelperService()
     LinkGenerator grailsLinkGenerator
@@ -202,6 +204,7 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         "Full Ontology"                             | [new OntologyItem(ontology: new Ontology(ontologyName: "name1", systemUrl: "http://bao.org", abbreviation: "BAO")), new OntologyItem(ontology: new Ontology(ontologyName: "name2"))] as Set<OntologyItem> | XmlTestSamples.ONTOLOGIES_FULL
         "Ontology with missing optional attributes" | [new OntologyItem(ontology: new Ontology(ontologyName: "name"))] as Set<OntologyItem>                                                                                                                     | XmlTestSamples.ONTOLOGIES_MISSING_ATTRIBUTES
     }
+
     void "test generate Element with Ontology #label"() {
         when:
         this.dictionaryExportHelperService.generateElement(this.markupBuilder, element)
@@ -209,10 +212,11 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         println this.writer.toString()
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                         | element                                                                                                                                                                                                                     | results
+        label                         | element                                                                                                                                      | results
         "Full Element no description" | new Element(label: "label", externalURL: "http://www.broad.org", unit: "cm",
-                elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY, ontologyItems: [new OntologyItem(ontology: new Ontology(ontologyName: "name"))])                                                            | XmlTestSamples.ELEMENT_WITH_ONTOLOGY
+                elementStatus: ElementStatus.Pending, readyForExtraction: ReadyForExtraction.READY, ontologyItems: [new OntologyItem(ontology: new Ontology(ontologyName: "name"))]) | XmlTestSamples.ELEMENT_WITH_ONTOLOGY
     }
+
     void "test generate Descriptor #label"() {
 
 

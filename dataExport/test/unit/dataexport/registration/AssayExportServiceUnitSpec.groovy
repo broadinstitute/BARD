@@ -6,6 +6,7 @@ import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import exceptions.NotFoundException
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -23,6 +24,7 @@ import spock.lang.Unroll
  */
 @TestFor(AssayExportService)
 @Build([Assay, AssayDocument])
+@Mock([Assay, AssayDocument])
 @Unroll
 class AssayExportServiceUnitSpec extends Specification {
     Writer writer

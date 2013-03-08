@@ -1,9 +1,8 @@
 package bard.db.registration
 
-import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import grails.buildtestdata.mixin.Build
-import org.junit.Before
+import grails.test.mixin.Mock
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -15,12 +14,13 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @Build([Assay, Measure])
+@Mock([Assay, Measure])
 @Unroll
-class AssayUnitSpec extends Specification{
+class AssayUnitSpec extends Specification {
     def 'test allowsNewExperiments when #desc'() {
         when:
         Set measures = new HashSet()
-        for(int i=0;i<measureCount;i++) {
+        for (int i = 0; i < measureCount; i++) {
             measures.add(Measure.build())
         }
         Assay assay = Assay.build(assayType: assayType, assayStatus: assayStatus, measures: measures)

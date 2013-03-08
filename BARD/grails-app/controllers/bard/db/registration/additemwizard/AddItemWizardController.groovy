@@ -15,29 +15,29 @@ import java.util.regex.Pattern;
  */
 
 class AttributeCommand implements Serializable {
-	
+
 	Long elementId
 	String path
 	String assayContextIdValue
 	String attributeId
 	String attributeLabel
-	
+
 	static constraints = {
 		attributeId(nullable: false, blank: false)
 	}
 }
-	
+
 class ValueTypeCommand implements Serializable {
-	
+
 	String valueTypeOption
-	
+
 	static constraints = {
 		valueTypeOption(nullable: false, blank: false)
 	}
 }
-	
+
 class FixedValueCommand implements Serializable {
-	
+
 	Long valueId
 	String valueLabel
 	String attributeElementId
@@ -46,11 +46,11 @@ class FixedValueCommand implements Serializable {
 	String valueUnitLabel
 	String numericValue
 	boolean isNumericValue
-	
+
 	boolean validateValue(){
 		// delegate to validations performed by constraints
 		validate()
-		
+
 		if(!valueId && StringUtils.isBlank(numericValue)){
 			errors.reject("fixedValue.missing.value", "Either numeric value or string value must be provided")
 		}
@@ -71,7 +71,7 @@ class FixedValueCommand implements Serializable {
 }
 
 class ListValueCommand implements Serializable {
-	
+
 	Long valueId
 	String valueLabel
 	String attributeElementId
@@ -80,7 +80,7 @@ class ListValueCommand implements Serializable {
 	String valueUnitLabel
 	String numericValue
 	boolean isNumericValue
-	
+
 	boolean validateList(List<ListValueCommand> listOfValues){
 		if(listOfValues.empty){
 			println "List is empty"
@@ -88,11 +88,11 @@ class ListValueCommand implements Serializable {
 		}
 		return !hasErrors();
 	}
-	
+
 	boolean validateValue(){
 		// delegate to validations performed by constraints
-		validate()		
-				
+		validate()
+
 		if(!valueId && StringUtils.isBlank(numericValue)){
 			errors.reject("listValue.missing.value", "Either numeric value or string value must be provided")
 		}
@@ -169,21 +169,21 @@ class AddItemWizardController {
             ]
             flow.cancel = true;
             flow.quickSave = true;
-			
+
 			flow.assayContextId = params.assayContextId
 			println "params.assayContextId = " + params.assayContextId
-			
+
             flow.attribute = null
             flow.valueType = null
             flow.fixedValue = null
 			flow.listValue = null
 			flow.listOfValues = new ArrayList<ListValueCommand>()
 			flow.listIndex = null
-			
+
             flow.itemSaved = false
 
             println ("flow: "+ flow)
-			
+
             success()
         }
 
@@ -207,9 +207,9 @@ class AddItemWizardController {
 				flow.attribute = cmd
 				println "calling closure for AttributeCommand ${cmd.dump()}"
 				println "(pageOne - next) flow.attribute.attributeId: " + flow.attribute.attributeId
-				def attributeElement = Element.get(flow.attribute.attributeId)	
+				def attributeElement = Element.get(flow.attribute.attributeId)
 				println "attributeElement object: ${attributeElement.dump()}"
-				flow.attribute.attributeLabel = attributeElement.label				
+				flow.attribute.attributeLabel = attributeElement.label
 				sessionFactory.currentSession.clear()
 				flow.page = 2
 				success()
@@ -240,8 +240,8 @@ class AddItemWizardController {
 					}
 					flow.valueType = cmd
 					println "calling closure for ValueTypeCommand ${cmd.dump()}"
-					println "Page 2 Next - flow.valueType.valueTypeOption = " + flow.valueType?.valueTypeOption													
-                
+					println "Page 2 Next - flow.valueType.valueTypeOption = " + flow.valueType?.valueTypeOption
+
             }.to "valueTypeRedirect"
             on("previous"){
 				flow.page = 1
@@ -272,7 +272,7 @@ class AddItemWizardController {
 				if(!cmd.validateValue()){
 					flow.fixedValue = cmd
 					return error()
-				}				
+				}
 				flow.fixedValue = cmd
 				println "calling closure for {FixedValueCommand ${cmd.dump()}"
 				println "isNumericValue = " + cmd.isNumericValue
@@ -289,12 +289,12 @@ class AddItemWizardController {
 						flow.fixedValue.valueUnitLabel = valueUnit.label
 						println "UnitTree.id = " + valueUnit.id
 						println "flow.fixedValue.valueUnitLabel = " + flow.fixedValue.valueUnitLabel
-					}					
-				}			
+					}
+				}
 				sessionFactory.currentSession.clear()
 				flow.page = 4
 				success()
-                
+
             }.to "pageFour"
             on("previous"){
 				flow.page = 2
@@ -307,7 +307,7 @@ class AddItemWizardController {
                 flow.page = 5
             }.to "save"
         }
-		
+
 		// Third wizard page (For assay type - List): Asking for a list of values
 		pageThreeList {
 			render(view: "_page_three_list")
@@ -324,13 +324,13 @@ class AddItemWizardController {
 				if(!cmd.validateList(flow.listOfValues)){
 					flow.listValue = cmd
 					return error()
-				}				
+				}
 				flow.listValue = cmd
 				println "calling closure for {ListValueCommand ${cmd.dump()}"
 				println "isNumericValue = " + cmd.isNumericValue
 				flow.page = 4
 				success()
-				
+
 			}.to "pageFour"
 			on("previous"){
 				flow.page = 2
@@ -340,9 +340,9 @@ class AddItemWizardController {
 				if(!cmd.validateValue()){
 					flow.listValue = cmd
 					return error()
-				}				
+				}
 				flow.listValue = cmd
-				
+
 			}.to "addValueToList"
 			on("removeItemFromList"){
 				println "removeItemFromList -> Flow.listIndex: " + flow.listIndex
@@ -360,7 +360,7 @@ class AddItemWizardController {
 				flow.page = 5
 			}.to "save"
 		}
-		
+
 		// Third wizard page (For assay type - Range): Asking for value
 		pageThreeRange {
 			render(view: "_page_three_range")
@@ -375,7 +375,7 @@ class AddItemWizardController {
 			on("close").to "closeWizard"
 			on("next") {
 				success()
-				
+
 			}.to "pageFour"
 			on("previous").to "pageTwo"
 			on("toPageOne").to "pageOne"
@@ -385,7 +385,7 @@ class AddItemWizardController {
 				flow.page = 5
 			}.to "save"
 		}
-		
+
 		// Third wizard page (For assay type - Free): Asking for value
 		pageThreeFree {
 			render(view: "_page_three_free")
@@ -400,7 +400,7 @@ class AddItemWizardController {
 			on("close").to "closeWizard"
 			on("next") {
 				success()
-				
+
 			}.to "pageFour"
 			on("previous").to "pageTwo"
 			on("toPageOne").to "pageOne"
@@ -437,7 +437,7 @@ class AddItemWizardController {
                 flow.page = 5
             }.to "save"
         }
-		
+
 		// last wizard page
 		finalPage {
 			render(view: "_final_page")
@@ -452,16 +452,16 @@ class AddItemWizardController {
 			on("close").to "closeWizard"
 			on("addAnotherItem").to "addAnotherItem"
 		}
-		
+
 		valueTypeRedirect {
 			action {
 				try {
 					// Grom a development message
 					if (pluginManager.getGrailsPlugin('grom')) ".persisting instances to the database...".grom()
-					
+
 					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){
 						flow.page = 3
-						toPageThree()						
+						toPageThree()
 					}
 					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){
 						flow.page = 3
@@ -492,7 +492,7 @@ class AddItemWizardController {
 			on("toPageThreeRange").to "pageThreeRange"
 			on("toPageThreeFree").to "pageThreeFree"
 		}
-		
+
 		// action to add a value to the list for an attribute
 		addValueToList {
 			action {
@@ -508,7 +508,7 @@ class AddItemWizardController {
                     sessionFactory.currentSession.clear()
 //                    flow.page = 2
                     error()
-                }				
+                }
 			}
 			on("error").to "error"
 			on(Exception).to "error"
@@ -537,18 +537,18 @@ class AddItemWizardController {
                 try {
                     // Grom a development message
                     if (pluginManager.getGrailsPlugin('grom')) ".persisting instances to the database...".grom()
-                    
+
 					AssayContext assayContext = AssayContext.get(flow.assayContextId)
 					def isSaved = false;
-					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){						
+					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){
 						println "Saving item ..."
-						isSaved = assayContextService.saveItem(assayContext, flow.attribute, flow.valueType, flow.fixedValue)												
+						isSaved = assayContextService.saveItem(assayContext, flow.attribute, flow.valueType, flow.fixedValue)
 					}
-					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){						
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){
 						println "Saving list of items ..."
 						isSaved = assayContextService.saveItems(assayContext, flow.attribute, flow.valueType, flow.listOfValues)
 					}
-					
+
 					sessionFactory.currentSession.flush()
 					sessionFactory.currentSession.clear()
 					if (isSaved) {
@@ -574,7 +574,7 @@ class AddItemWizardController {
             on(Exception).to "error"
             on("success").to "finalPage"
         }
-		
+
 
         // render errors
         error {
@@ -598,7 +598,7 @@ class AddItemWizardController {
             on("toPageFive").to "save"
 
         }
-		
+
 		// calls the view with code to close the wizard window
 		closeWizard {
 			render(view: "_close_wizard")
@@ -609,7 +609,7 @@ class AddItemWizardController {
 				success()
 			}
 		}
-		
+
 		// calls the view to restartthe wizard an add another item
 		addAnotherItem {
 			render(view: "_add_another_item")

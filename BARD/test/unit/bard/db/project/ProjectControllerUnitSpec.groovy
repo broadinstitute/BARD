@@ -1,5 +1,8 @@
 package bard.db.project
 
+import grails.test.mixin.Mock
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import grails.test.mixin.TestFor
 import grails.buildtestdata.mixin.Build
@@ -19,6 +22,8 @@ import bard.db.registration.Assay
  */
 @TestFor(ProjectController)
 @Build([Project, ProjectExperiment, Experiment, ProjectStep, Element])
+@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element])
+@TestMixin(GrailsUnitTestMixin)
 class ProjectControllerUnitSpec extends Specification {
     @Shared Project project
     @Shared ProjectExperiment projectExperimentFrom
@@ -39,7 +44,7 @@ class ProjectControllerUnitSpec extends Specification {
         defineBeans {
             projectExperimentRenderService(ProjectExperimentRenderService)
         }
-        projectService = Mock(ProjectService)
+        projectService = Mock()
     }
 
     void 'test show'() {
@@ -55,17 +60,17 @@ class ProjectControllerUnitSpec extends Specification {
     void 'test remove experiment from project success'() {
         given:
 
-        projectService.removeExperimentFromProject(_, _)
+
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
         params.experimentId = experimentId
         params.projectid = project.id
         controller.projectService = projectService
-
         def model = controller.removeExperimentFromProject(params.experimentId, params.projectid)
 
         then:
+        1 * projectService.removeExperimentFromProject(_,_)
         assert response.text == responsetext
 
         where:

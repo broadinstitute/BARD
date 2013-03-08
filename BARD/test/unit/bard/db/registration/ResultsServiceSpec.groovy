@@ -21,6 +21,7 @@ import grails.test.mixin.*
  */
 @TestMixin(ServiceUnitTestMixin)
 @Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
+@Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
 class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {

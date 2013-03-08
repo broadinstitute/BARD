@@ -3,7 +3,7 @@ package bard.db.registration
 import bard.db.experiment.Experiment
 import bard.db.project.Project
 import grails.buildtestdata.mixin.Build
-import org.junit.After
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -21,6 +21,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Build([ExternalReference, ExternalSystem, Experiment, Project])
+@Mock([ExternalReference, ExternalSystem, Experiment, Project])
 @Unroll
 class ExternalReferenceConstraintUnitSpec extends Specification {
 
@@ -43,9 +44,9 @@ class ExternalReferenceConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                   | valueUnderTest           | valid | errorCode
-        'null not valid'       | {null}                   | false | 'nullable'
-        'valid externalSystem' | {ExternalSystem.build()} | true  | null
+        desc                   | valueUnderTest             | valid | errorCode
+        'null not valid'       | { null }                   | false | 'nullable'
+        'valid externalSystem' | { ExternalSystem.build() } | true  | null
     }
 
     void "test experiment OR project constraint #desc project: #valueUnderTest"() {
@@ -63,12 +64,12 @@ class ExternalReferenceConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, 'project', valid, errorCode)
 
         where:
-        desc                      | experiment           | project           | valid | errorCode
-        'both null, not valid'    | {null}               | {null}            | false | 'validator.invalid'
-        'both non-null not valid' | {Experiment.build()} | {Project.build()} | false | 'validator.invalid'
+        desc                      | experiment             | project             | valid | errorCode
+        'both null, not valid'    | { null }               | { null }            | false | 'validator.invalid'
+        'both non-null not valid' | { Experiment.build() } | { Project.build() } | false | 'validator.invalid'
 
-        'only experiment, valid'  | {Experiment.build()} | {null}            | true  | null
-        'only project, valid'     | {null}               | {Project.build()} | true  | null
+        'only experiment, valid'  | { Experiment.build() } | { null }            | true  | null
+        'only project, valid'     | { null }               | { Project.build() } | true  | null
     }
 
     void "test extAssayRef constraints #desc extAssayRef: #valueUnderTest"() {

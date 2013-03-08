@@ -1,6 +1,7 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
+import bard.db.experiment.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.registration.MediaTypesDTO
@@ -17,8 +18,6 @@ import spock.lang.Unroll
 
 import javax.sql.DataSource
 import javax.xml.stream.XMLOutputFactory
-
-import bard.db.experiment.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -118,7 +117,7 @@ class ResultExportServiceUnitSpec extends Specification {
 
     void "test Generate Results Not Found Exception"() {
         given:
-        Result.metaClass.static.Result.findAllByExperimentAndReadyForExtraction = {exp, ready -> [] }
+        Result.metaClass.static.Result.findAllByExperimentAndReadyForExtraction = { exp, ready -> [] }
         when: "We attempt to generate results"
         this.resultExportService.generateResults(this.staxBuilder, new Long("2"), 0)
         then: "An exception should be thrown"
@@ -129,7 +128,7 @@ class ResultExportServiceUnitSpec extends Specification {
         given:
         Writer writer1 = new StringWriter()
         MarkupBuilder markupBuilder = new MarkupBuilder(writer1)
-        Result.metaClass.static.get = {id -> null }
+        Result.metaClass.static.get = { id -> null }
         when: "We attempt to generate results"
         this.resultExportService.generateResult(markupBuilder, new Long("2"))
         then: "An exception should be thrown"
@@ -161,21 +160,21 @@ class ResultExportServiceUnitSpec extends Specification {
         given: "A Result Context Item"
         when: "We call the service method to generate Attributes"
         final Map<String, String> resultContextItemAttributes =
-            this.resultExportService.generateAttributesForContextItem(resultContextItem,"resultContextItemId")
+            this.resultExportService.generateAttributesForContextItem(resultContextItem, "resultContextItemId")
         then: "The generated map is equal to the expected map"
         resultContextItemAttributes == results
         where:
-        label                                      | resultContextItem  | results
+        label                                      | resultContextItem | results
         "Full Document"                            | new ResultContextItem(
                 attributeElement: new Element(label: "attrribute"),
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
                 valueMax: 3.0,
-                valueElement: new Element(label: "valueControlled")) | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
+                valueElement: new Element(label: "valueControlled"))   | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
         "No Experiment/attribute/valueControlled " | new ResultContextItem(
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0)                                          | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
+                valueMax: 3.0)                                         | [resultContextItemId: null, qualifier: '%', valueDisplay: '20 %', valueNum: '2.0', valueMin: '1.0', valueMax: '3.0']
 
     }
 
@@ -186,23 +185,25 @@ class ResultExportServiceUnitSpec extends Specification {
         then: "The generated XML is the similar to the expected XML"
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                      | resultContextItem  | results
+        label                                      | resultContextItem | results
         "Full Document"                            | new ResultContextItem(
                 attributeElement: new Element(label: "attrribute"),
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
                 valueMax: 3.0,
-                valueElement: new Element(label: "valueControlled")) | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT
+                valueElement: new Element(label: "valueControlled"))   | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT
         "No Experiment/attribute/valueControlled " | new ResultContextItem(
                 qualifier: "%", valueDisplay: "20 %",
                 valueNum: 2.0, valueMin: 1.0,
-                valueMax: 3.0)                                          | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS
+                valueMax: 3.0)                                         | XmlTestSamples.RESULT_CONTEXT_ITEM_UNIT_NO_CHILD_ELEMENTS
 
     }
 
     void "test generate hierarchy"() {
         given: "A ResultHierarchy object, Serialize it to XML"
-        ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: HierarchyType.Derives, parentResult: new Result(id: 122))
+        Result parentResult122 = new Result()
+        parentResult122.@id = 122
+        ResultHierarchy resultHierarchy = new ResultHierarchy(hierarchyType: HierarchyType.Derives, parentResult: parentResult122)
 
         when:
         resultExportService.generateResultHierarchy(this.staxBuilder, resultHierarchy)
@@ -212,9 +213,12 @@ class ResultExportServiceUnitSpec extends Specification {
 
     void "test generate hierarchies"() {
         given: "A ResultHierarchy object, Serialize it to XML"
+        final Result parentResult122 = new Result(); parentResult122.@id = 122;
+        final Result parentResult1228 = new Result(); parentResult1228.@id = 1228;
+
         final Set<ResultHierarchy> resultHierarchies =
-            [new ResultHierarchy(hierarchyType: HierarchyType.Derives, parentResult: new Result(id: 122)),
-                    new ResultHierarchy(hierarchyType: HierarchyType.Child, parentResult: new Result(id: 1228))] as Set<ResultHierarchy>
+            [new ResultHierarchy(hierarchyType: HierarchyType.Derives, parentResult:parentResult122),
+                    new ResultHierarchy(hierarchyType: HierarchyType.Child, parentResult: parentResult1228)] as Set<ResultHierarchy>
         when:
         resultExportService.generateResultHierarchies(this.staxBuilder, resultHierarchies)
         then:

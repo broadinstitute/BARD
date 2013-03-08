@@ -13,7 +13,8 @@ import grails.test.mixin.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @Build([Assay, Measure, Experiment,ExperimentMeasure])
-@TestMixin([ServiceUnitTestMixin,DomainClassUnitTestMixin])
+@Mock([Assay, Measure, Experiment,ExperimentMeasure])
+@TestMixin(ServiceUnitTestMixin)
 class ExperimentServiceSpec  extends spock.lang.Specification {
     void 'test create experiment'() {
         setup:

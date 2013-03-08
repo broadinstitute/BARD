@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -18,6 +19,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Build([Assay, Element, Measure])
+@Mock([Assay, Element, Measure])
 @Unroll
 class MeasureConstraintUnitSpec extends Specification {
 

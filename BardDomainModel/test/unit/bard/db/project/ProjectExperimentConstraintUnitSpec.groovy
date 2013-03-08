@@ -3,6 +3,7 @@ package bard.db.project
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -19,6 +20,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Build([ProjectExperiment, Project, Experiment, Element])
+@Mock([ProjectExperiment, Project, Experiment, Element])
 @Unroll
 class ProjectExperimentConstraintUnitSpec extends Specification {
 
@@ -41,9 +43,9 @@ class ProjectExperimentConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest       | valid | errorCode
-        'null not valid'   | {null}               | false | 'nullable'
-        'valid experiment' | {Experiment.build()} | true  | null
+        desc               | valueUnderTest         | valid | errorCode
+        'null not valid'   | { null }               | false | 'nullable'
+        'valid experiment' | { Experiment.build() } | true  | null
 
     }
 
@@ -59,9 +61,9 @@ class ProjectExperimentConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid project'  | {Project.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid project'  | { Project.build() } | true  | null
 
     }
 
@@ -77,9 +79,9 @@ class ProjectExperimentConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc            | valueUnderTest    | valid | errorCode
-        'null is valid' | {null}            | true  | null
-        'valid stage'   | {Element.build()} | true  | null
+        desc            | valueUnderTest      | valid | errorCode
+        'null is valid' | { null }            | true  | null
+        'valid stage'   | { Element.build() } | true  | null
 
     }
 

@@ -37,6 +37,7 @@ grails.project.dependency.resolution = {
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
+        compile "bard:external-validation:20130305.2"
 
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
@@ -53,8 +54,8 @@ grails.project.dependency.resolution = {
         runtime 'org.springframework:spring-test:3.1.2.RELEASE'
 
         // test scope
-        test "org.spockframework:spock-core:0.6-groovy-1.8"
-        test "org.objenesis:objenesis:1.2" // used by spock for Mocking object that lack no args constructor
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+        test "org.objenesis:objenesis:1.3" // used by spock for Mocking object that lack no args constructor
         test "org.codehaus.geb:geb-spock:$gebVersion"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis"
@@ -74,17 +75,19 @@ grails.project.dependency.resolution = {
 
     plugins {
         // build scope
-        build ":codenarc:0.15"
+        build ":codenarc:0.18.1"
         compile ":hibernate:$grailsVersion"
-        build ":improx:0.1" // Interactive Mode Proxy; useful for IDE integration
+        build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"
 
         // compile scope
         compile ":ajaxflow:0.2.4"
-        compile ":cbipcrowdauthentication:0.3.0"
+        compile(":cbipcrowdauthentication:0.3.0") {
+            excludes('spock', 'release')
+        }
         compile ":clover:3.1.6"
         compile ":console:1.2"
-        compile ":jquery-validation-ui:1.4"
+        compile ":jquery-validation-ui:1.4.2"
         compile ":twitter-bootstrap:2.2.2"
         compile(':webflow:2.0.0') {
             exclude 'grails-webflow'
@@ -97,8 +100,10 @@ grails.project.dependency.resolution = {
 
         // test scope
         test ":geb:$gebVersion"
-        test ":remote-control:1.2"
-        test ":spock:0.6"
+        test ":remote-control:1.4"
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
         // provided  scope
     }
 }

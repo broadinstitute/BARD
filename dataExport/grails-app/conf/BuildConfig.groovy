@@ -32,29 +32,32 @@ grails.project.dependency.resolution = {
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
     dependencies {
-        compile 'com.oracle:ojdbc6:11.2.0.2.0'
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        test "org.spockframework:spock-core:0.6-groovy-1.8"
-        test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
-            exclude "groovy"
-        }
-        test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
-        // runtime 'mysql:mysql-connector-java:5.1.16'
-        test 'xmlunit:xmlunit:1.3'
         compile('cbip:cbip_encoding:0.1') {
             excludes "junit"
         }
+        compile 'com.oracle:ojdbc6:11.2.0.2.0'
+        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+
+        // used by spock for Mocking objects that have no args constructor
+        //test "org.objenesis:objenesis:1.3" 
+
+        test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
+            exclude "groovy"
+        }
+        test 'xmlunit:xmlunit:1.3'
     }
 
     plugins {
         build ":tomcat:$grailsVersion"
-        build ":codenarc:0.15"
-        build ":improx:0.1" // Interactive Mode Proxy; useful for IDE integration
+        build ":codenarc:0.18.1"
+        build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
 
-        compile ":functional-spock:0.6"
         compile ":clover:3.1.6"
-        compile ":spock:0.6"
-        compile ":remote-control:1.2"
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
+        compile ":remote-control:1.4"
 
         runtime ":hibernate:$grailsVersion"
         runtime ":resources:1.1.6"
