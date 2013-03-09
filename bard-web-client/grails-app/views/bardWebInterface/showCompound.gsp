@@ -54,13 +54,29 @@
                 <div id="probe"
                      href="${createLink(controller: 'bardWebInterface', action: 'probe', params: [probeId: compound.probeId])}">
                 </div>
+                <g:if test="${compound?.getProbeAnnotations()}">
 
+                    <div class="caption">
+                        <ul>
+                            <g:if test="${compound?.getProbe()}">
+                                <li><a href="${compound.getProbe().getUrl()}">Download probe report from Molecular Library BookShelf</a>
+                                </li>
+                            </g:if>
+                            <g:if test="${compound?.getProbeCid()}">
+                                <li><a href="${compound.getProbeCid().getUrl()}"
+                                       target="_blank">View Probe by CID (${compound.pubChemCID}) in PubChem</a></li>
+
+                            </g:if>
+                            <g:if test="${compound?.getProbeSid()}">
+                                <li><a href="${compound.getProbeSid().getUrl()}"
+                                       target="_blank">View Probe by SID (${compound.getProbeSid().getDisplay()}) in PubChem</a></li>
+
+                            </g:if>
+                        </ul>
+                    </div>
+                </g:if>
             </g:if>
-            <g:if test="${compound?.getProbeAnnotations()}">
-                <g:each in="${compound?.getProbeAnnotations()?.collect {it}}" var="probeAnnotation">
-                    <li>${probeAnnotation}</li>
-                </g:each>
-             </g:if>
+
             <g:if test="${compound?.getSynonyms()}">
                 <dt>Synonyms:</dt>
                 <dd>${compound?.getSynonyms()?.collect {it}?.join(', ')}</dd>

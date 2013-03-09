@@ -5,20 +5,20 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.compounds.CompoundSummary
+import bard.core.rest.spring.compounds.ProbeAnnotation
+import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.experiment.ExperimentSearch
+import bard.core.rest.spring.project.ProjectStep
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.core.util.FilterTypes
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
-import bard.core.interfaces.*
-import bard.core.rest.spring.compounds.CompoundSummary
-import spock.lang.Shared
 import com.fasterxml.jackson.databind.ObjectMapper
-import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.rest.spring.compounds.Promiscuity
-
-import bard.core.rest.spring.project.ProjectStep
-import bard.core.util.FilterTypes
+import spock.lang.Shared
+import bard.core.interfaces.*
 
 class MockQueryService implements IQueryService {
     QueryHelperService queryHelperService
@@ -1168,7 +1168,10 @@ class MockCompoundAdapter implements CompoundAdapterInterface {
     public Double mwt() { return this.mwt ?: new Double(214.048) }
 
     public Double exactMass() { return this.exactMass ?: new Double(212.975) }
-
+    @Override
+    public boolean hasProbeAnnotations(){
+        return false
+    }
     @Override
     Integer hbondDonor() {
         return this.hbondDonor ?: 2  //To change body of implemented methods use File | Settings | File Templates.
@@ -1234,7 +1237,22 @@ class MockCompoundAdapter implements CompoundAdapterInterface {
     }
 
     @Override
-    List<String> getProbeAnnotations() {
+    List<ProbeAnnotation> getProbeAnnotations() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    ProbeAnnotation getProbeCid() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    ProbeAnnotation getProbe() {
+        return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    ProbeAnnotation getProbeSid() {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 

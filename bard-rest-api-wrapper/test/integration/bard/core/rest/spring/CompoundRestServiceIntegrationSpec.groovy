@@ -14,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
 import spock.lang.Shared
+import spock.lang.IgnoreRest
 
 /**
  * Tests for CompoundRestService in JDO
@@ -68,24 +69,24 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundSummary.testedExptdata.resultData
     }
 
-    void "test retrieving assays from a compound #label"() {
-
-        when: "The get method is called with the given CID: #cid"
-        List<Assay> allAssaysForThisCompound = this.compoundRestService.getTestedAssays(cid, false)
-        for (Assay assay : allAssaysForThisCompound) {
-            assert assay
-        }
-        and:
-        Collection<Assay> activeAssaysForThisCompound = this.compoundRestService.getTestedAssays(cid, true)
-        for (Assay assay : activeAssaysForThisCompound) {
-            assert assay
-        }
-        then:
-        assert allAssaysForThisCompound.size() > activeAssaysForThisCompound.size()   // might not hold for all compounds, but it holds for these
-        where:
-        label                     | cid
-        "Find a compound 9660191" | new Long(9660191)
-    }
+//    void "test retrieving assays from a compound #label"() {
+//
+//        when: "The get method is called with the given CID: #cid"
+//        List<Assay> allAssaysForThisCompound = this.compoundRestService.getTestedAssays(cid, false)
+//        for (Assay assay : allAssaysForThisCompound) {
+//            assert assay
+//        }
+//        and:
+//        Collection<Assay> activeAssaysForThisCompound = this.compoundRestService.getTestedAssays(cid, true)
+//        for (Assay assay : activeAssaysForThisCompound) {
+//            assert assay
+//        }
+//        then:
+//        assert allAssaysForThisCompound.size() > activeAssaysForThisCompound.size()   // might not hold for all compounds, but it holds for these
+//        where:
+//        label                     | cid
+//        "Find a compound 9660191" | new Long(9660191)
+//    }
 
     void "getTested Assays"() {
         when:
@@ -148,7 +149,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         String uriWithFilters = compoundRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(mwt:%5B100+TO+200%5D),&skip=0&top=10&expand=true"
         URI uri = new URI(uriWithFilters)
         when:
-        CompoundResult compoundResult = (CompoundResult)this.compoundRestService.getForObject(uri, CompoundResult)
+        CompoundResult compoundResult = (CompoundResult) this.compoundRestService.getForObject(uri, CompoundResult)
         then:
         assert compoundResult
         final List<Compound> compounds = compoundResult.compounds
@@ -465,6 +466,29 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         "An existing Drug"    | 2722    | true   | false
         "An existing Probe"   | 9795907 | false  | true
         "Not a Drug or Probe" | 666     | false  | false
+    }
+    /**
+     *
+     */
+    void "test Compound With Probe Annotations #label"() {
+
+        when:
+        final Compound foundCompound = this.compoundRestService.getCompoundById(cid)
+        then:
+        assert foundCompound
+        assert foundCompound.cid == cid
+        assert foundCompound.isProbe()
+        final List<ProbeAnnotation> probeAnnotations = foundCompound.getProbeAnnotations()
+        assert !probeAnnotations.isEmpty()
+        final ProbeAnnotation probe = foundCompound.getProbe()
+        assert probe
+        assert foundCompound.getProbeCid()
+        assert foundCompound.getProbeSid()
+
+
+        where:
+        label               | cid
+        "An existing Probe" | 9795907
     }
 
     void "getSynonyms #label"() {

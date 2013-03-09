@@ -1,10 +1,15 @@
-package bard.core.interfaces;
+package bard.core.interfaces
 
+import bard.core.rest.spring.compounds.ProbeAnnotation
 
 public interface CompoundAdapterInterface {
     public String getHighlight();
     public boolean isDrug();
-    public List<String> getProbeAnnotations();
+    public List<ProbeAnnotation> getProbeAnnotations();
+    ProbeAnnotation getProbeCid();
+    ProbeAnnotation getProbe();
+    ProbeAnnotation getProbeSid();
+    public boolean hasProbeAnnotations();
     public String getProbeId();
 
     public boolean isProbe();

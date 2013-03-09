@@ -3,10 +3,11 @@ package bard.core.adapter;
 
 import bard.core.interfaces.CompoundAdapterInterface
 import bard.core.rest.spring.compounds.Compound
-import org.apache.commons.lang3.StringUtils
-import bard.core.rest.spring.util.NameDescription
 import bard.core.rest.spring.compounds.CompoundAnnotations
+import bard.core.rest.spring.compounds.ProbeAnnotation
+import bard.core.rest.spring.util.NameDescription
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
+import org.apache.commons.lang3.StringUtils
 
 public class CompoundAdapter implements CompoundAdapterInterface {
     final Compound compound
@@ -19,8 +20,28 @@ public class CompoundAdapter implements CompoundAdapterInterface {
         this.score = score
         this.matchingField = matchingField
     }
-    public List<String> getProbeAnnotations(){
+    public List<ProbeAnnotation> getProbeAnnotations(){
         return compound.getProbeAnnotations();
+    }
+
+    @Override
+    ProbeAnnotation getProbeCid() {
+        return compound.getProbeCid()
+    }
+
+    @Override
+    ProbeAnnotation getProbe() {
+        return compound.getProbe()
+    }
+
+    @Override
+    ProbeAnnotation getProbeSid() {
+        return compound.getProbeSid()
+    }
+
+    @Override
+    public boolean hasProbeAnnotations(){
+        return !compound.getProbeAnnotations().isEmpty()
     }
     public List<String> getSynonyms(){
         return this.compound.getCompoundAnnotations()?.getSynonyms() ?: []
