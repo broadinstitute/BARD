@@ -12,9 +12,6 @@ beans = {
 
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
-    final String exportApiKey = grailsApplication.config.dataexport.apikey
-    final String exportAcceptType = grailsApplication.config.dataexport.dictionary.accept.type
-    final String exportDictionaryURL = grailsApplication.config.dataexport.dictionary.url
 
 
 
@@ -51,6 +48,11 @@ beans = {
     }
 
     dataExportRestService(DataExportRestService) {
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    eTagRestService(ETagRestService){
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')

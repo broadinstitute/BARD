@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse
 import bardqueryapi.InetAddressUtil
 import grails.plugins.springsecurity.SpringSecurityService
 import bardqueryapi.BardUtilitiesService
+import bardqueryapi.ETagsService
 
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(QueryCartController)
@@ -23,6 +24,7 @@ class QueryCartControllerUnitSpec extends Specification {
     QueryCartService queryCartService
     CartAssay cartAssay
     BardUtilitiesService bardUtilitiesService
+    ETagsService eTagsService
 
     static final Long ID_IN_CART = 1
     static final QueryItemType TYPE_IN_CART = QueryItemType.AssayDefinition
@@ -33,7 +35,8 @@ class QueryCartControllerUnitSpec extends Specification {
         controller.metaClass.mixin(InetAddressUtil)
         bardUtilitiesService = Mock(BardUtilitiesService)
         controller.bardUtilitiesService = bardUtilitiesService
-
+        this.eTagsService = Mock(ETagsService)
+        this.controller.eTagsService = this.eTagsService
         this.shoppingCartService = Mock(ShoppingCartService)
         controller.shoppingCartService = this.shoppingCartService
         this.queryCartService = Mock(QueryCartService)
@@ -48,7 +51,6 @@ class QueryCartControllerUnitSpec extends Specification {
     void tearDown() {
         // Tear down logic here
     }
-
 
     void "test successful addItem for #label"() {
         given:
@@ -168,6 +170,28 @@ class QueryCartControllerUnitSpec extends Specification {
         then:
         assert response.status == HttpServletResponse.SC_OK
         assert response.text == MOCK_SUMMARY_CONTENT
+    }
+
+    void "test createCompositeETag #label"() {
+        when:
+        controller.createCompositeETag()
+        then:
+        queryCartService.retrieveCartCompoundIdsFromShoppingCart() >> {cids}
+        queryCartService.retrieveCartAssayIdsFromShoppingCart() >> {adids}
+        queryCartService.retrieveCartProjectIdsFromShoppingCart() >> {pids}
+        numberOFTimesExecuted * eTagsService.createCompositeETags(_, _, _) >> {expectedResponse}
+
+        assert expectedResponse == response.text
+        assert HttpServletResponse.SC_OK == response.status
+        where:
+        label          | cids   | adids  | pids   | numberOFTimesExecuted | expectedResponse
+        "Only CID"     | [1, 2] | []     | []     | 1                     | "ee"
+        "Only PID"     | []     | []     | [1, 2] | 1                     | "ee"
+        "Only ADID"    | []     | [1, 2] | []     | 1                     | "ee"
+        "Only All Ids" | [1, 2] | [2, 3] | [4, 5] | 1                     | "ee"
+        "No Ids"       | []     | []     | []     | 0                     | ""
+
+
     }
 
     void "test updateDetails"() {

@@ -5,6 +5,7 @@ import bardqueryapi.InetAddressUtil
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import bardqueryapi.ETagsService
 
 @Secured(['isFullyAuthenticated()'])
 @Mixin(InetAddressUtil)
@@ -12,6 +13,18 @@ class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
     BardUtilitiesService bardUtilitiesService
+    ETagsService eTagsService
+
+    def createCompositeETag() {
+        String compositeETag = ""
+        final List<Long> cids = queryCartService.retrieveCartCompoundIdsFromShoppingCart()
+        final List<Long> pids = queryCartService.retrieveCartProjectIdsFromShoppingCart()
+        final List<Long> adids = queryCartService.retrieveCartAssayIdsFromShoppingCart()
+        if (cids || pids || adids) {
+            compositeETag = eTagsService.createCompositeETags(cids, pids, adids)
+        }
+        render text: compositeETag, contentType: 'text/plain'
+    }
 
     def refreshSummaryView() {
         render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)

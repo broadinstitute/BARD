@@ -9,6 +9,8 @@ import org.springframework.web.client.RestTemplate
 import java.util.concurrent.Executors
 import bard.core.rest.spring.SubstanceRestService
 import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.ETagRestService
+import bardqueryapi.ETagsService
 
 /**
  * Spring Configuration of resources
@@ -51,6 +53,17 @@ beans = {
         baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
+    }
+    eTagRestService(ETagRestService){
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    eTagsService(ETagsService){
+        compoundRestService = ref('compoundRestService')
+        projectRestService = ref('projectRestService')
+        assayRestService = ref('assayRestService')
+        eTagRestService=ref('eTagRestService');
     }
     switch (GrailsUtil.environment) {
         case "offline":

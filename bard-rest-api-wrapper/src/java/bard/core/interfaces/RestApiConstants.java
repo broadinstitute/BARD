@@ -40,6 +40,7 @@ public interface RestApiConstants {
     final String FACETS = "facets";
     final String SEARCH = "search";
     final String NAME = "name";
+    final String ETAGS_RESOURCE="/etags";
     final String ETAG = "etag";
     final String E_TAG = "ETag";
     final String COMMA = ",";
