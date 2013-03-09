@@ -25,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-            <g:each in="${capDictionary?.elements}" var="dictionaryElement">
+            <g:each in="${capDictionary?.nodes}" var="dictionaryElement">
                 <g:if test="${dictionaryElement.description}">
                     <tr>
                         <td>

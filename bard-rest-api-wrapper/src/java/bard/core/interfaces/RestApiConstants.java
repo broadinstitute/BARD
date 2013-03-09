@@ -26,6 +26,9 @@ public interface RestApiConstants {
     final String EXPERIMENTS_RESOURCE = "/experiments";
     //relative path to the assays resource
     final String ASSAYS_RESOURCE = "/assays";
+
+    //relative path to the assays resource
+    final String DICTIONARY_RESOURCE = "/cap/dictionary";
     //relative path to the projects resource
     final String PROJECTS_RESOURCE = "/projects";
     //relative path to the compounds resource

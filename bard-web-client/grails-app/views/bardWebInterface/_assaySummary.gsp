@@ -1,8 +1,4 @@
 <dl class="dl-horizontal dl-horizontal-wide">
-    <g:if test="${assayAdapter.assayStatus}">
-        <dt>Assay Status:</dt>
-        <dd>${assayAdapter.assayStatus}</dd>
-    </g:if>
     <g:if test="${assayAdapter.assayTypeString}">
         <dt>Assay Type:</dt>
         <dd>${assayAdapter.assayTypeString}</dd>

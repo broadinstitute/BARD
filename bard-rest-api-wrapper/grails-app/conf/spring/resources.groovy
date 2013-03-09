@@ -51,9 +51,7 @@ beans = {
     }
 
     dataExportRestService(DataExportRestService) {
-        dataExportApiKey = exportApiKey
-        dictionaryAcceptType = exportAcceptType
-        dataExportDictionaryURL = exportDictionaryURL
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }

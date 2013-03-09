@@ -56,6 +56,11 @@
                 </div>
 
             </g:if>
+            <g:if test="${compound?.getProbeAnnotations()}">
+                <g:each in="${compound?.getProbeAnnotations()?.collect {it}}" var="probeAnnotation">
+                    <li>${probeAnnotation}</li>
+                </g:each>
+             </g:if>
             <g:if test="${compound?.getSynonyms()}">
                 <dt>Synonyms:</dt>
                 <dd>${compound?.getSynonyms()?.collect {it}?.join(', ')}</dd>

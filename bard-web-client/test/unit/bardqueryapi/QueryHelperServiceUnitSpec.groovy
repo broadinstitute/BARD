@@ -15,7 +15,7 @@ import bard.core.rest.spring.experiment.PriorityElement
 import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
-import bard.core.rest.spring.util.DictionaryElement
+import bard.core.rest.spring.util.Node
 import bard.rest.api.wrapper.Dummy
 import grails.test.mixin.TestFor
 import spock.lang.Shared
@@ -69,7 +69,7 @@ class QueryHelperServiceUnitSpec extends Specification {
 
     void "test extractExperimentDetails with activities #label"() {
         given:
-        final DictionaryElement dictionaryElement = new DictionaryElement(elementId: dictElemId, label: display, description: description)
+        final Node dictionaryElement = new Node(elementId: dictElemId, label: display, description: description)
         DataExportRestService dataExportRestService = Mock(DataExportRestService)
         Dummy d = new Dummy()
         d.dataExportRestService = dataExportRestService
@@ -120,7 +120,7 @@ class QueryHelperServiceUnitSpec extends Specification {
         assert map.dictionaryIds == expectedDictionaryIds
         where:
         label                      | expectedPriorityDisplay | expectedPriorityDescriptions | dictId     | expectedDictionaryIds | dictionaryElement
-        "Map with dictionaryID"    | display                 | [description]                | dictElemId | [dictElemId]          | new DictionaryElement(elementId: dictElemId, label: display, description: description)
+        "Map with dictionaryID"    | display                 | [description]                | dictElemId | [dictElemId]          | new Node(elementId: dictElemId, label: display, description: description)
         "Map without dictionaryID" | display                 | [null]                       | 0          | [0]                   | null
 
     }

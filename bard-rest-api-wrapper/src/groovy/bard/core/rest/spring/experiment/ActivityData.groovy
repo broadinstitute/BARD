@@ -1,11 +1,11 @@
 package bard.core.rest.spring.experiment
 
-import bard.core.rest.spring.util.DictionaryElement
 import bard.core.rest.spring.util.JsonUtil
 import bard.rest.api.wrapper.Dummy
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import bard.core.rest.spring.util.Node
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityData extends JsonUtil {
@@ -28,7 +28,7 @@ public class ActivityData extends JsonUtil {
 
     public String getDictionaryLabel() {
         if (dictElemId) {
-            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            final Node dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
             if (dictionaryElement) {
                 return dictionaryElement.label
             }
@@ -39,7 +39,7 @@ public class ActivityData extends JsonUtil {
 
     public String getDictionaryDescription() {
         if (dictElemId) {
-            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            final Node dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
             if (dictionaryElement) {
                 return dictionaryElement.description
             }

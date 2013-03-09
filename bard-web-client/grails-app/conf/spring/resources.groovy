@@ -16,9 +16,6 @@ import bard.core.rest.spring.DataExportRestService
 beans = {
     final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
-    final String exportApiKey = grailsApplication.config.dataexport.apikey
-    final String exportAcceptType = grailsApplication.config.dataexport.dictionary.accept.type
-    final String exportDictionaryURL = grailsApplication.config.dataexport.dictionary.url
 
     restTemplate(RestTemplate)
 
@@ -51,9 +48,7 @@ beans = {
         loggerService = ref('loggerService')
     }
     dataExportRestService(DataExportRestService) {
-        dataExportApiKey = exportApiKey
-        dictionaryAcceptType = exportAcceptType
-        dataExportDictionaryURL = exportDictionaryURL
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }

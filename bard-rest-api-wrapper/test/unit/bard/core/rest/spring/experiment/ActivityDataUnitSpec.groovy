@@ -1,7 +1,7 @@
 package bard.core.rest.spring.experiment
 
 import bard.core.rest.spring.DataExportRestService
-import bard.core.rest.spring.util.DictionaryElement
+import bard.core.rest.spring.util.Node
 import bard.rest.api.wrapper.Dummy
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
@@ -103,7 +103,7 @@ class ActivityDataUnitSpec extends Specification {
         assert expectedDescription == foundDescription
         where:
         label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
-        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(description: "label") | "label"             | 1
+        "Has a DictElemId and in dictionary"      | 222        | new Node(description: "label") | "label"             | 1
         "Has a DictElemId, but not in dictionary" | 221        | null                                        | null                | 1
         "Has no DictElemId"                       | 0          | null                                        | null                | 0
 
@@ -123,7 +123,7 @@ class ActivityDataUnitSpec extends Specification {
         assert expectedLabel == foundLabel
         where:
         label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions
-        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(label: "label") | "label"       | 1
+        "Has a DictElemId and in dictionary"      | 222        | new Node(label: "label") | "label"       | 1
         "Has a DictElemId, but not in dictionary" | 221        | null                                  | "pubChem"     | 1
         "Has no DictElemId"                       | 0          | null                                  | "pubChem"     | 0
 

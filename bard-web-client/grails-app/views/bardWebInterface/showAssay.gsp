@@ -11,7 +11,20 @@
 <div class="row-fluid">
     <div class="span12 page-header">
         <h1>Assay Definition: ${assayAdapter?.title}
-            <small>(ADID: ${assayAdapter?.capAssayId})</small>
+            <small>(ADID: ${assayAdapter?.capAssayId})
+            <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
+                <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                     alt="Witnessed" title="Witnessed"/>
+            </g:if>
+            <g:if test="${assayAdapter.assayStatus == 'Measures Done' || assayAdapter.assayStatus == 'Annotations Done'}">
+                <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
+                     alt="Measures or Annotations Done" title="Measures or Annotations Done"/>
+            </g:if>
+            <g:if test="${assayAdapter.assayStatus == 'Draft' || assayAdapter.assayStatus == 'Retired'}">
+                <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                     alt="Draft or Retired" title="Draft or Retired"/>
+            </g:if>
+        </small>
         </h1>
 
         <g:saveToCartButton id="${assayAdapter.id}"

@@ -23,7 +23,20 @@
                 <h3>
                     <g:if test="${searchString}">
                         <g:link action="showAssay" id="${assayAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${assayAdapter.title}  <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                params='[searchString: "${searchString}"]'>${assayAdapter.title}  <small>(ADID: ${assayAdapter.capAssayId})</small>
+                            <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
+                               <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                    alt="Witnessed" title="Witnessed"/>
+                           </g:if>
+                            <g:if test="${assayAdapter.assayStatus == 'Measures Done' || assayAdapter.assayStatus == 'Annotations Done'}">
+                                <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
+                                     alt="Measures or Annotations Done" title="Measures or Annotations Done"/>
+                            </g:if>
+                            <g:if test="${assayAdapter.assayStatus == 'Draft' || assayAdapter.assayStatus == 'Retired'}">
+                                <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                                     alt="Draft or Retired" title="Draft or Retired"/>
+                            </g:if>
+                        </g:link>
                     </g:if>
                     <g:else>
                         <g:link action="showAssay"
@@ -34,20 +47,6 @@
                     </g:else>
 
                 </h3>
-                <dl class="dl-horizontal">
-                    <g:if test="${assayAdapter.assayStatus}">
-                        <dt>Assay Status:</dt>
-                        <dd>${assayAdapter.assayStatus}</dd>
-                    </g:if>
-                    <g:if test="${assayAdapter.assayTypeString}">
-                        <dt>Assay Type:</dt>
-                        <dd>${assayAdapter.assayTypeString}</dd>
-                    </g:if>
-                    <g:if test="${assayAdapter.designedBy}">
-                        <dt>Designed By:</dt>
-                        <dd>${assayAdapter.designedBy}</dd>
-                    </g:if>
-                </dl>
                 <g:saveToCartButton id="${assayAdapter.id}"
                                     name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>

@@ -168,6 +168,8 @@ class ExperimentBuilder {
         webQueryTableModel.additionalProperties.put("actives", experimentDetails?.actives)
         webQueryTableModel.additionalProperties.put("confidenceLevel",experimentDetails?.experiment?.confidenceLevel)
 
+
+
         Map<Long, CompoundAdapter> compoundAdapterMap = experimentDetails?.compoundAdaptersMap
         final boolean hasPlot = experimentDetails.hasPlot
         List<String> priorityDisplays = experimentDetails.priorityDisplays
