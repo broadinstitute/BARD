@@ -9,6 +9,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
+import bard.core.rest.spring.etags.ETags
 
 class ETagRestService extends AbstractRestService {
 
@@ -33,10 +34,23 @@ class ETagRestService extends AbstractRestService {
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();
     }
-//    public ETag getCompositeETag(String compositeETag){
-//
-//        getForObject()
-//    }
+    /**
+     *  Get the URL to get a Compound. This is  url template so replace {id} with the
+     *  real ID
+     * @return the url
+     */
+    @Override
+    public String buildEntityURL() {
+        return new StringBuilder(getResource()).
+                append("{etag}").
+                toString();
+    }
+    public ETags getComponentETags(final String compositeETag){
+        final String url = buildEntityURL()
+        final Map map = [etag: compositeETag]
+        ETags etags = (ETags) getForObject(url, ETags.class, map)
+        return etags;
+    }
     public String newCompositeETag(final String name, final List<String> compositeETags) {
         final String url = this.buildURLToCreateETag()
         try {

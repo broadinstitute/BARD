@@ -14,21 +14,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 class ETag extends JsonUtil {
-
     @JsonProperty("etag")
     private String etag;
     @JsonProperty("type")
     private String type;
-    private List<ETag> linkedETags = new ArrayList<ETag>();
-
-
-    public List<ETag> getLinkedETags() {
-        return linkedETags;
-    }
-
-    public void setLinkedETags(List<ETag> linkedETags) {
-        this.linkedETags = linkedETags;
-    }
 
     @JsonProperty("etag")
     public String getEtag() {
@@ -49,4 +38,6 @@ class ETag extends JsonUtil {
     public void setType(String type) {
         this.type = type;
     }
+
+
 }
