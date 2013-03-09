@@ -15,25 +15,62 @@
 	</g:hasErrors>
 
 	<p>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field.  If relevant, choose the relevant units that describe the number entered.</p>
-	<span><b><i style="color: blue"># Of Items In List: </i>${ listOfValues.size() }</b></span><br>
 	
-    <%-- This hidden control becomes the value selection box --%>
-    <input type="hidden" id="valueId" name="valueId">
+	<g:set var="list" value="${listOfValues}" />
+	<g:set var="enableEdit" value="${true}" />
+	<div id="itemsInListTable">
+		<g:render template="common/itemsInListTable" model="['listOfValues': list, 'enableEdit': enableEdit]"/>
+		<br>
+	</div>
+	
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="row-fluid">
+    			<div class="span12">
+    				<%-- This hidden control becomes the value selection box --%>
+    				<input type="hidden" id="valueId" name="valueId">
+    			</div>
+    		</div>
+		</div>
+	</div>
+    <br> 
+    <div class="row-fluid">
+    	<div class="span12">
+    		
+
+    		<div class="row-fluid">
+    			<div class="span2">
+    				<label class="control-label" >Qualifier:</label>
+    			</div>
+    			<div class="span10">
+    				<div  class="controls">
+	    				<g:select name="valueQualifier" from="${AssayContextItem.constraints.qualifier.inList}" noSelection="['': '']"  value="${ listValue?.valueQualifier }"/>
+    				</div>
+    			</div>
+    		</div>
+
+    		<div class="row-fluid">
+    			<div class="span2">
+    				<label class="control-label" >Numeric Value:</label>
+	    		</div>
+	    		<div class="span4">
+	    			<div class="controls"><input class="input-large" type="text" size='10' id="numericValue" name='numericValue'  value="${ fixedValue?.numericValue }"></div>
+	    		</div>
+	    		<div class="span6">
+	    			<%-- This hidden control becomes the units selection box --%>
+    				<div class="controls"><input type="hidden" id="valueUnitId" name="valueUnitId"></div>
+	    		</div>
+    		</div>
+    	</div>
+	</div>
+    
+    <%-- This hidden field is needed to get access to the value label (name) --%>
     <input type="hidden" id="valueLabel" name="valueLabel">
     
-    <label class="control-label" >Numeric Value:</label>
-    <input class="input-xlarge" type="text" id="numericValue" name='numericValue'  value="${ fixedValue?.numericValue }">
-
     <%-- This hidden field is needed for passing state needed for the ontology query --%>
     <input type="hidden" id="attributeElementId" value="${attribute.attributeId}">
-	
-	<label class="control-label" for="valueQualifier"><g:message code="assay.qualifier.label" default="Qualifier" /></label>
-    <div  class="controls">
-	    <g:select name="valueQualifier" from="${AssayContextItem.constraints.qualifier.inList}" noSelection="['': '']"  value="${ listValue?.valueQualifier }"/>
-    </div>
-	
-	<%-- This hidden control becomes the units selection box --%>
-    <input type="hidden" id="valueUnitId" name="valueUnitId">
+    
+    <%-- This hidden field is needed to get access to the unit label --%>
     <input type="hidden" id="valueUnitLabel" name="valueUnitLabel">
     
     <input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>

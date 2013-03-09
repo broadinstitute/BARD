@@ -112,7 +112,6 @@ class ListValueCommand implements Serializable {
 	}
 }
 
-
 class AddItemWizardController {
     // the pluginManager is used to check if the Grom
     // plugin is available so we can 'Grom' development
@@ -179,6 +178,7 @@ class AddItemWizardController {
             flow.fixedValue = null
 			flow.listValue = null
 			flow.listOfValues = new ArrayList<ListValueCommand>()
+			flow.listIndex = null
 
             flow.itemSaved = false
 
@@ -344,6 +344,15 @@ class AddItemWizardController {
 				flow.listValue = cmd
 
 			}.to "addValueToList"
+			on("removeItemFromList"){
+				println "removeItemFromList -> Flow.listIndex: " + flow.listIndex
+				def listIndex = params.id
+				if("".equals(listIndex))
+					flow.listIndex = 0
+				else				
+					flow.listIndex = Integer.parseInt(listIndex)
+				println "removeItemFromList -> List index: " + listIndex
+			}.to "removeItemFromList"
 			on("toPageOne").to "pageOne"
 			on("toPageTwo").to "pageTwo"
 			on("toPageFour").to "pageFour"
@@ -506,6 +515,18 @@ class AddItemWizardController {
 			on("success").to "pageThreeList"
 			on("toPageThreeList").to "pageThreeList"
 		}
+		
+		removeItemFromList {
+			action {				
+				println "removeItemFromList -> flow.listIndex: " + flow.listIndex
+				flow.listOfValues.remove(flow.listIndex)
+				toPageThreeList()
+			}
+			on("error").to "error"
+			on(Exception).to "error"
+			on("success").to "pageThreeList"
+			on("toPageThreeList").to "pageThreeList"
+		}
 
         // save action
         save {
@@ -599,5 +620,6 @@ class AddItemWizardController {
 				success()
 			}
 		}
+		
     }
 }

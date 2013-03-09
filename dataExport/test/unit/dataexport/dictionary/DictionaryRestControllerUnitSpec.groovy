@@ -37,7 +37,7 @@ class DictionaryRestControllerUnitSpec extends Specification {
         given: "An Element with an id of 1, a version of 0 and a status of Complete"
         request.method = 'PUT'
         controller.request.addHeader(HttpHeaders.IF_MATCH, "0")
-  //      controller.params.id = "1"
+        //      controller.params.id = "1"
         controller.request.content = "Complete"
         controller.dictionaryExportService.update(_, _, _) >> {
             new BardHttpResponse(ETag: 1, httpResponseCode: 200)
@@ -117,7 +117,7 @@ class DictionaryRestControllerUnitSpec extends Specification {
         controller.updateElement(new Long(1))
 
         then: "We expect  HTTP response code of 400"
-        response.status == 500
+        response.status == 400
     }
 
     void "test update element, 400 Status"() {

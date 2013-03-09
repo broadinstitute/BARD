@@ -30,11 +30,11 @@
   <strong>List</strong> - Every experiment has one of the entries in the list for the attribute "cell line one of HeLa, CHO, MM"
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="Range">
+  <input type="radio" name="valueTypeOption" value="Range" disabled>
   <strong>Range</strong> - Every experiment has a value within the provided range for the attribute "cell density between 10 and 100 cells / well"
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="Free">
+  <input type="radio" name="valueTypeOption" value="Free" disabled>
   <strong>Free</strong> - Every experiment must provide a value for the attribute, but there is no restriction on that value "cell density specified by experiment"
 </label>
 

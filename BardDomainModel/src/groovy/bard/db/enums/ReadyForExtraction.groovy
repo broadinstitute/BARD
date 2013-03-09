@@ -1,8 +1,5 @@
 package bard.db.enums
 
-import groovy.transform.InheritConstructors
-import groovy.transform.ToString;
-
 public enum ReadyForExtraction implements IEnumUserType {
     NOT_READY("Not Ready"),
     READY("Ready"),
@@ -26,15 +23,21 @@ public enum ReadyForExtraction implements IEnumUserType {
      * @return
      */
     static boolean isAllowed(ReadyForExtraction readyForExtraction) {
-
-        if (readyForExtraction == READY || readyForExtraction == STARTED || READY == COMPLETE) {
-            return true;
+        boolean isAllowed = false
+        switch (readyForExtraction) {
+            case READY:
+            case STARTED:
+            case COMPLETE:
+                isAllowed = true
+            default:
+                // no op
+            break
         }
-        return false
+        isAllowed
     }
 
     static ReadyForExtraction byId(String id) {
-        ReadyForExtraction readyForExtraction = values().find { it.id == id}
+        ReadyForExtraction readyForExtraction = values().find { it.id == id }
         if (readyForExtraction) {
             return readyForExtraction
         }

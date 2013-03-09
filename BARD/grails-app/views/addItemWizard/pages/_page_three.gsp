@@ -3,42 +3,70 @@
 
 <af:page>
 
-<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
-<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
-<g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': 'Not define yet']"/>
+	<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
+	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
+	<g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': 'Not define yet']"/>
+	
+	<g:hasErrors bean="${fixedValue}">
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			<g:renderErrors bean="${fixedValue}"/>
+		</div>
+	</g:hasErrors>
+	
+	<p>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field.  If relevant, choose the relevant units that describe the number entered.</p>
 
-<g:hasErrors bean="${fixedValue}">
-	<div class="alert alert-error">
-		<button type="button" class="close" data-dismiss="alert">×</button>
-		<g:renderErrors bean="${fixedValue}"/>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="row-fluid">
+    			<div class="span12">
+    				<%-- This hidden control becomes the value selection box --%>
+    				<input type="hidden" id="valueId" name="valueId">
+    			</div>
+    		</div>
+		</div>
 	</div>
-</g:hasErrors>
+    <br> 
+    <div class="row-fluid">
+    	<div class="span12">
+    		
 
-<p>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field.  If relevant, choose the relevant units that describe the number entered.</p>
+    		<div class="row-fluid">
+    			<div class="span2">
+    				<label class="control-label" >Qualifier:</label>
+    			</div>
+    			<div class="span10">
+    				<div  class="controls">
+	    				<g:select name="valueQualifier" from="${AssayContextItem.constraints.qualifier.inList}" noSelection="['': '']"  value="${ listValue?.valueQualifier }"/>
+    				</div>
+    			</div>
+    		</div>
 
-    <%-- This hidden control becomes the value selection box --%>
-    <input type="hidden" id="valueId" name="valueId">
+    		<div class="row-fluid">
+    			<div class="span2">
+    				<label class="control-label" >Numeric Value:</label>
+	    		</div>
+	    		<div class="span4">
+	    			<div class="controls"><input class="input-large" type="text" size='10' id="numericValue" name='numericValue'  value="${ fixedValue?.numericValue }"></div>
+	    		</div>
+	    		<div class="span6">
+	    			<%-- This hidden control becomes the units selection box --%>
+    				<div class="controls"><input type="hidden" id="valueUnitId" name="valueUnitId"></div>
+	    		</div>
+    		</div>
+    	</div>
+	</div>
+    
+    <%-- This hidden field is needed to get access to the value label (name) --%>
     <input type="hidden" id="valueLabel" name="valueLabel">
     
-    <label class="control-label" >Numeric Value:</label>
-    <input class="input-xlarge" type="text" id="numericValue" name='numericValue'  value="${ fixedValue?.numericValue }">
-
     <%-- This hidden field is needed for passing state needed for the ontology query --%>
     <input type="hidden" id="attributeElementId" value="${attribute.attributeId}">
-	
-	<label class="control-label" for="valueQualifier"><g:message code="assay.qualifier.label" default="Qualifier" /></label>
-    <div  class="controls">
-	    <g:select name="valueQualifier" from="${AssayContextItem.constraints.qualifier.inList}" noSelection="['': '']"  value="${ fixedValue?.valueQualifier }"/>
-    </div>
-	
-	<%-- This hidden control becomes the units selection box --%>
-    <input type="hidden" id="valueUnitId" name="valueUnitId">
+    
+    <%-- This hidden field is needed to get access to the unit label --%>
     <input type="hidden" id="valueUnitLabel" name="valueUnitLabel">
-	<%--
-    <label class="control-label" >Units:</label>
-    <input class="input-xlarge" type="text" id="valueUnits" name='valueUnitId'  value="${ fixedValue?.valueUnits }">
-    --%>
-	
-	<input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
-	<input type="hidden" id="valueType" name="valueType" value="${ valueType?.valueTypeOption }"/>
+    
+    <input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
+    <input type="hidden" id="valueType" name="valueType" value="${ valueType?.valueTypeOption }"/>
+   
 </af:page>
