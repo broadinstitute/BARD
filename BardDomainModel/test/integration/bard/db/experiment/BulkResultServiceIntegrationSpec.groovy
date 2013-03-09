@@ -36,7 +36,7 @@ class BulkResultServiceIntegrationSpec extends IntegrationSpec {
         parent.resultStatus = "Pending"
         parent.resultType = resultType
         parent.statsModifier = statsModifier
-        parent.substance = substance
+        parent.substanceId = substance.id
         parent.valueDisplay = "parent"
         parent.valueMin = 1
         parent.valueMax = 100
@@ -61,7 +61,7 @@ class BulkResultServiceIntegrationSpec extends IntegrationSpec {
         child.resultStatus = "Pending"
         child.resultType = resultType
         child.statsModifier = statsModifier
-        child.substance = substance
+        child.substanceId = substance.id
         child.valueDisplay = "child"
 
         ResultHierarchy hierarchy = new ResultHierarchy()

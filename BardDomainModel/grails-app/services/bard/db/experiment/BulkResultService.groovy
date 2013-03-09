@@ -180,7 +180,7 @@ class BulkResultService {
                 statement.setObject(3, experiment.id)
 
                 statement.setLong(4, result.resultType.id)
-                statement.setLong(5, result.substance.id)
+                statement.setLong(5, result.substanceId)
                 statement.setObject(6, result.statsModifier?.id, Types.BIGINT)
 
                 statement.setObject(7, result.replicateNumber, Types.INTEGER)

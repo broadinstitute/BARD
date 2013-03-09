@@ -2,7 +2,6 @@ package dataexport.cap.experiment
 
 import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.experiment.ExperimentExportService
-import dataexport.experiment.ResultExportService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import groovy.xml.StaxBuilder
