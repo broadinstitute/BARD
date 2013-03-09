@@ -16,14 +16,17 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 
     void setupSpec() {
         RemoteControl remote = new RemoteControl()
-        //  String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
-        def mockUsers = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers }
-        //Map userProps =[:]
-        mockUsers.each {user ->
-            Map userProps = user.value
-            usernameUserPropsMap.put(userProps.username, userProps)
+        usernameUserPropsMap = remote {
+            def usernameUserPropsMap = [:]
+            def mockUsers = ctx.grailsApplication.config.CbipCrowd.mockUsers
+            mockUsers.each {user ->
+                Map userProps = user.value
+                usernameUserPropsMap.put(userProps.username, [password: userProps.password, username: userProps.username, roles: userProps.roles])
+            }
+            return usernameUserPropsMap
         }
+        //Map userProps =[:]
 
         driver.manage().window().maximize()
     }
