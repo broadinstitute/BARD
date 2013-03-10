@@ -261,7 +261,28 @@ abstract class AbstractRestService {
         }
         return f.toString();
     }
-
+    /**
+     * @param params
+     * @return String
+     * For example : http://bard.nih.gov/api/v15/experiments/11795/exptdata?expand=true&filter=active
+     */
+    protected String buildFiltersForEntitySearch(SearchParams params) {
+        final StringBuilder f = new StringBuilder("");
+        if (params.getFilters()) {
+            f.append(RestApiConstants.AMPERSAND_FILTER);
+            String sep = "";
+            for (String[] entry : params.getFilters()) {
+                f.append(sep).
+                        append(RestApiConstants.FQ).append(RestApiConstants.LEFT_PAREN).
+                        append(URLEncoder.encode(entry[0], RestApiConstants.UTF_8)).
+                        append(RestApiConstants.COLON)
+                        .append(URLEncoder.encode(entry[1], RestApiConstants.UTF_8))
+                        .append(RestApiConstants.RIGHT_PAREN);
+                sep = RestApiConstants.COMMA;
+            }
+        }
+        return f.toString();
+    }
     public Map<String, List<String>> suggest(SuggestParams params) {
         final String resource = buildSuggestQuery(params)
         final URL url = new URL(resource)

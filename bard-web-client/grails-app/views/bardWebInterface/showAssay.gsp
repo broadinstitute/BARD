@@ -72,10 +72,10 @@
                 <g:if test="${BardAnnotation.areAnnotationsEmpty(assayAdapter.annotations)}">
                     <li><a href="#assay-bio-info"><i class="icon-chevron-right"></i>Assay and Biology Details</a></li>
                 </g:if>
-                <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(assayAdapter.annotations)}">
-                    <li><a href="#assay-bio-info-misc"><i
-                            class="icon-chevron-right"></i>Assay and Biology Details - Miscellaneous</a></li>
-                </g:if>
+                %{--<g:if test="${BardAnnotation.areOtherAnnotationsEmpty(assayAdapter.annotations)}">--}%
+                    %{--<li><a href="#assay-bio-info-misc"><i--}%
+                            %{--class="icon-chevron-right"></i>Assay and Biology Details - Miscellaneous</a></li>--}%
+                %{--</g:if>--}%
                 <g:if test="${assayAdapter.targets}">
                     <li><a href="#target-info"><i
                             class="icon-chevron-right"></i>Targets (${assayAdapter.targets.size()})</a></li>
@@ -103,18 +103,18 @@
 
                 </section>
             </g:if>
-            <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(assayAdapter.annotations)}">
-                <section id="assay-bio-info-misc">
-                    <div class="page-header">
-                        <h3>Assay and Biology Details - Miscellaneous</h3>
-                    </div>
+            %{--<g:if test="${BardAnnotation.areOtherAnnotationsEmpty(assayAdapter.annotations)}">--}%
+                %{--<section id="assay-bio-info-misc">--}%
+                    %{--<div class="page-header">--}%
+                        %{--<h3>Assay and Biology Details - Miscellaneous</h3>--}%
+                    %{--</div>--}%
 
-                    <div id="cardViewMisc" class="cardView" class="row-fluid">
-                        <g:render template="listMiscellaneous" model="[annotations: assayAdapter.annotations]"/>
-                    </div>
+                    %{--<div id="cardViewMisc" class="cardView" class="row-fluid">--}%
+                        %{--<g:render template="listMiscellaneous" model="[annotations: assayAdapter.annotations]"/>--}%
+                    %{--</div>--}%
 
-                </section>
-            </g:if>
+                %{--</section>--}%
+            %{--</g:if>--}%
             <g:if test="${assayAdapter.targets}">
                 <g:render template="targets" model="['targets': assayAdapter.targets]"/>
             </g:if>

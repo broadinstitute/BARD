@@ -22,6 +22,13 @@ public interface RestApiConstants {
     final int MAXIMUM_NUMBER_OF_EXPERIMENTS = 1000;
     final String ANNOTATIONS = "/annotations";
     final String SUBSTANCES_RESOURCE = "/substances";
+    //for targets resource
+    final String TARGETS_RESOURCE ="/targets";
+
+    final String ACCESSION ="/accession";
+
+    final String CLASSIFICATION ="/classification";
+
     //relative path to the experiment resource
     final String EXPERIMENTS_RESOURCE = "/experiments";
     //relative path to the assays resource

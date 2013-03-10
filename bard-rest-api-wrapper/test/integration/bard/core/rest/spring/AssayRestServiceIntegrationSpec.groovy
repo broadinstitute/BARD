@@ -11,6 +11,9 @@ import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
+import spock.lang.IgnoreRest
+import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.util.TargetClassification
 
 /**
  * Tests for RESTAssayService in JDO
@@ -24,6 +27,8 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     @Shared
     List<Long> CAP_ADIDS = [2934, 2945, 2946]
+
+
 
     void "searchAssaysByCapIds #label"() {
         when:
@@ -309,6 +314,35 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         where:
         label      | adid
         "Assay ID" | ADIDS_FOR_TESTS.get(0)
+    }
+
+    void "test assay #label"() {
+        when: "The get method is called with the given ADID: #adid"
+        final ExpandedAssay assay = this.assayRestService.getAssayById(adid)
+        then: "An Assay is returned with the expected information"
+        assert assay
+        final List<Target> targets = assay.getTargets()
+        assert targets
+        int counter = 0  //to count the number of classifications
+        for (Target target : targets) {
+            assert target.acc
+            if (target.getTargetClassifications()) {
+                final List<TargetClassification> classifications = target.getTargetClassifications()
+                assert classifications
+                for (TargetClassification targetClassification : classifications) {
+                    assert targetClassification.id
+                    assert targetClassification.source
+                    assert targetClassification.description
+                    assert targetClassification.levelIdentifier
+                    assert targetClassification.name
+                    ++counter
+                }
+            }
+        }
+        assert counter > 0
+        where:
+        label         | adid
+        "with Target" | 6807
     }
 
     void "test  getETags(long top, long skip)"() {

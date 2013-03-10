@@ -57,4 +57,9 @@ beans = {
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
+    targetRestService(TargetRestService){
+        baseUrl = ncgcBaseURL
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
 }
