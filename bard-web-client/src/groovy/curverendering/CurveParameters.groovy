@@ -34,4 +34,17 @@ public class CurveParameters {
         this.lower95CL = lower95CL;
         this.upper95CL = upper95CL;
     }
+
+
+//    public CurveParameters( CurveParameters curveParameters ) {
+//        this.slope = curveParameters.slope;
+//        this.resultTime = curveParameters.resultTime;
+//        this.HILL_SLOPE = curveParameters.HILL_SLOPE;
+//        this.S0 = curveParameters.S0;
+//        this.SINF = curveParameters.SINF;
+//        this.lower95CL = lower95CL;
+//        this.upper95CL = upper95CL;
+//    }
+
+
 }

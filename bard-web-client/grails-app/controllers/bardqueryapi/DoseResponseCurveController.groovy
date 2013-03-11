@@ -23,7 +23,12 @@ class DoseResponseCurveController {
             if (drcCurveCommand) {
                 drcCurveCommand.width = width
                 drcCurveCommand.height = height
-                byte[] bytes = this.doseCurveRenderingService.createDoseCurve(drcCurveCommand)
+                byte[] bytes
+                if (drcCurveCommand.curves?.size()>0){
+                    bytes = this.doseCurveRenderingService.createDoseCurves(drcCurveCommand)
+                } else {
+                    bytes = this.doseCurveRenderingService.createDoseCurve(drcCurveCommand)
+                }
                 response.contentType = 'image/png'
                 response.outputStream.setBytes(bytes)
             } else {

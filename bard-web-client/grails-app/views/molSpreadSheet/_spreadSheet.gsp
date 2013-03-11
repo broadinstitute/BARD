@@ -5,15 +5,18 @@
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "num-html-pre":function (a) {
             // First remove HTML tags and any text
-            var tagfreestr = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
-            var stringlen= tagfreestr.length
-            var textFormOfFloat
+            //var tagfreestr = a.replace(/<.*?>/g, "").replace(/[^\d.-]/g,"");
+            var tagfree =  a.replace(/<.*?>/g, "");
+            var firstvalue = tagfree.split(" ") ;
+            var getnumbers=firstvalue[0].replace(/[^\d.-]/g,"");
+            var stringlen= getnumbers.length;
+            var textFormOfFloat;
             // Insert a zero in front of the number ( otherwise a number starting with a decimal is treated as text )
             //  Special case: if the number is negative then the zero has to go behind the negative sign
-            if (tagfreestr.substring(0,1)=='-') {
-                textFormOfFloat = '-0'+tagfreestr.substring(1, stringlen);
+            if (getnumbers.substring(0,1)=='-') {
+                textFormOfFloat = '-0'+getnumbers.substring(1, stringlen);
             } else {
-                textFormOfFloat = '0'+tagfreestr;
+                textFormOfFloat = '0'+getnumbers;
             }
             // Finally we have an acceptable floating-point number. Convert it.
             return parseFloat(textFormOfFloat);

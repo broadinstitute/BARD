@@ -37,8 +37,8 @@ class DoseCurveRenderingService {
                     drcCurveCommand.yAxisLabel,
                     null,
                     null,
-                    null,
-                    null)
+                    drcCurveCommand.yNormMin,
+                    drcCurveCommand.yNormMax)
         // write the image byte array to the binding
         return EncoderUtil.encode(chart.createBufferedImage(drcCurveCommand.width.intValue(),
                 drcCurveCommand.height.intValue()), ImageFormat.PNG)

@@ -88,12 +88,14 @@ class SpreadsheetElementsTagLib {
                 }
             }
 
-            HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
+//            HillCurveValueHolder hillCurveValueHolder = spreadSheetActivityStorage.getHillCurveValueHolderList()[0]
             out << """<td class="molSpreadSheet" property="var${currentCol}">
                       <p>"""
             Boolean weHaveACurveToDisplay = ""
-            if (hillCurveValueHolder?.conc?.size() > 1) {
-                weHaveACurveToDisplay = true
+            for (HillCurveValueHolder hillCurveValueHolder in spreadSheetActivityStorage.getHillCurveValueHolderList()) {
+                if (hillCurveValueHolder?.conc?.size() > 1) {
+                    weHaveACurveToDisplay = true
+                }
             }
             String childElements = ""
             if (spreadSheetActivityStorage.childElements?.size() > 0) {
@@ -106,7 +108,8 @@ class SpreadsheetElementsTagLib {
                 childElements = stringBuilder.toString()
             }
             MolSpreadSheetCellActivityOutcome molSpreadSheetCellActivityOutcome = MolSpreadSheetCellActivityOutcome.newMolSpreadSheetCellActivityOutcome(spreadSheetActivityStorage.activityOutcome)
-            if (hillCurveValueHolder?.identifier) {
+            for (HillCurveValueHolder hillCurveValueHolder in spreadSheetActivityStorage.getHillCurveValueHolderList()) {
+                if (hillCurveValueHolder?.identifier) {
                 String  resultValueHolder =  hillCurveValueHolder.toString()
                 out << """<div data-detail-id="drc_${spreadSheetActivityStorage.sid}_${currentCol}" """
                 if (weHaveACurveToDisplay)  {
@@ -131,8 +134,9 @@ class SpreadsheetElementsTagLib {
                 }
                 out << """</div>"""
              }
+            }
             out << """</p>"""
-            if (hillCurveValueHolder?.conc?.size() > 1) {
+            if (weHaveACurveToDisplay)  {
                 out << """<div class='popover-content-wrapper'
                               id="drc_${spreadSheetActivityStorage.sid}_${currentCol}"
                               style="display: none;">
@@ -140,51 +144,60 @@ class SpreadsheetElementsTagLib {
                                    <img alt="${spreadSheetActivityStorage.sid}"
                                         title="Substance Id : ${spreadSheetActivityStorage.sid}"
                                         src="""
-                if ((yMinimum != Double.NaN) &&
-                    (yMaximum !=  Double.NaN)  &&
-                    (normalizeColumn) ) {
-                    out << """ "${
-                        this.createLink(
-                                controller: 'doseResponseCurve',
-                                action: 'doseResponseCurve',
-                                params: [
-                                        sinf: hillCurveValueHolder.sInf,
-                                        s0: hillCurveValueHolder.s0,
-                                        slope: hillCurveValueHolder.slope,
-                                        hillSlope: hillCurveValueHolder.coef,
-                                        concentrations: hillCurveValueHolder.conc,
-                                        activities: hillCurveValueHolder.response,
-                                        xAxisLabel: hillCurveValueHolder.xAxisLabel,
-                                        yAxisLabel: hillCurveValueHolder.yAxisLabel,
-                                        yNormMin:  yMinimum,
-                                        yNormMax:  yMaximum
-                                ]
-                        )
-                    }"
-                """
-                } else {
-                    out << """ "${
-                        this.createLink(
-                                controller: 'doseResponseCurve',
-                                action: 'doseResponseCurve',
-                                params: [
-                                        sinf: hillCurveValueHolder.sInf,
-                                        s0: hillCurveValueHolder.s0,
-                                        slope: hillCurveValueHolder.slope,
-                                        hillSlope: hillCurveValueHolder.coef,
-                                        concentrations: hillCurveValueHolder.conc,
-                                        activities: hillCurveValueHolder.response,
-                                        xAxisLabel: hillCurveValueHolder.xAxisLabel,
-                                        yAxisLabel: hillCurveValueHolder.yAxisLabel
-                                ]
-                        )
-                    }"
-                """
+                int curveNumber = 0
+                Map combinedParameters = [:]
+                Boolean  xAxisLabelSpecified = false
+                Boolean  yAxisLabelSpecified = false
+                Boolean  xMinimumSpecified = false
+                Boolean  xMaximumSpecified = false
+                Boolean  yNormMinimumSpecified = false
+                Boolean  yNormMaximumSpecified = false
+                for (HillCurveValueHolder hillCurveValueHolder in spreadSheetActivityStorage.getHillCurveValueHolderList()) {
+                    if ((yMinimum != Double.NaN) &&
+                        (yMaximum !=  Double.NaN) ){
+                        combinedParameters['curves['+curveNumber+'].sinf']= hillCurveValueHolder.sInf
+                        combinedParameters['curves['+curveNumber+'].s0']= hillCurveValueHolder.s0
+                        combinedParameters['curves['+curveNumber+'].slope']= hillCurveValueHolder.slope
+                        combinedParameters['curves['+curveNumber+'].hillSlope']= hillCurveValueHolder.coef
+                        combinedParameters['curves['+curveNumber+'].concentrations']= hillCurveValueHolder.conc
+                        combinedParameters['curves['+curveNumber+'].activities']= hillCurveValueHolder.response
+                        if ((!xAxisLabelSpecified) && (hillCurveValueHolder.xAxisLabel)){
+                            combinedParameters['xAxisLabel']= hillCurveValueHolder.xAxisLabel
+                            xAxisLabelSpecified = true
+                        }
+                        if ((!yAxisLabelSpecified) && (hillCurveValueHolder.yAxisLabel)) {
+                            combinedParameters['yAxisLabel']= hillCurveValueHolder.yAxisLabel
+                            yAxisLabelSpecified = true
+                        }
+
+                        if (normalizeColumn){
+                            if ((!yNormMinimumSpecified) && (yMinimum)) {
+                                combinedParameters['yNormMin']= yMinimum
+                                yNormMinimumSpecified = true
+                            }
+                            if ((!yNormMaximumSpecified) && (yMaximum)) {
+                                combinedParameters['yNormMax']= yMaximum
+                                yNormMaximumSpecified = true
+                            }
+
+                        }
+                        curveNumber++
+                    }
                 }
+                out << """ "${
+                    this.createLink(
+                            controller: 'doseResponseCurve',
+                            action: 'doseResponseCurve',
+                            params: combinedParameters
+                    )
+                }"
+                        """
+
                 out << """/>
                                </div>
                            </div>
                         """
+
             }
         } else {
             out << """<td class="molSpreadSheet" property="var${currentCol}">
