@@ -1,7 +1,7 @@
 var jsDrawEditor = null;
 
 dojo.addOnLoad(function () {
-    jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false});
+    jsDrawEditor = new JSDraw2.Editor("jsDrawEditorDiv", {popup:false, rxn: false, biology: false});
     adjustJSDrawEditorWindow()
     //Read cached structure
     jsDrawEditor.readCookie();
