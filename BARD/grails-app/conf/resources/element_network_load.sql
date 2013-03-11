@@ -1,1 +1,0 @@
-../../../../Data Scripts/Element load script - network.sql
