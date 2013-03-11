@@ -5,6 +5,10 @@ databaseChangeLog = {
     String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
     File migrationsDir = new File(bardDomainModelMigrationsDir)
 
+    changeSet(author: 'ddurkin', id: 'rename-changelog-filenames.sql', dbms: 'oracle', context: 'rename-changelog') {
+        sqlFile(path: "${migrationsDir}/sql/rename-changelog-filenames.sql", stripComments: true)
+    }
+
     changeSet(author: 'ddurkin', id: 'baseline-structure-ddl.sql', dbms: 'oracle', context: 'standard') {
         sqlFile(path: "${migrationsDir}/sql/baseline-structure-ddl.sql", stripComments: true)
     }
