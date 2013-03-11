@@ -6,15 +6,12 @@ import bard.dm.minimumassayannotation.ParseAndBuildAttributeGroups
 import bard.dm.minimumassayannotation.AttributesContentsCleaner
 import bard.dm.minimumassayannotation.validateCreatePersist.AttributeContentAgainstElementTableValidator
 import bard.dm.minimumassayannotation.validateCreatePersist.AssayContextsValidatorCreatorAndPersistor
-import bard.dm.minimumassayannotation.validateCreatePersist.MeasureContextsValidatorCreatorAndPersistor
 import bard.dm.Log
 import org.apache.log4j.Level
 import bard.dm.minimumassayannotation.ContextLoadResultsWriter
 import bard.dm.minimumassayannotation.CouldNotReadExcelFileException
-import bard.dm.minimumassayannotation.ContextItemDto
 import bard.dm.minimumassayannotation.AssayDto
 import bard.dm.minimumassayannotation.AssayLoadResultsWriter
-import bard.db.dictionary.Element
 import maas.MustLoadAid
 import maas.ExcelHandler
 import maas.FileHashMap
@@ -40,8 +37,6 @@ Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathAr
 
 println("build mapping of columns to attributes and values")
 List<ContextGroup> spreadsheetAssayContextGroups = (new AssayContextGroupsBuilder()).build()
-//List<ContextItemDto> resultType = [new ContextItemDto('2/Y', '$/Y', AttributeType.Fixed)]
-//List<ContextGroup> spreadsheetResultTypeContextGroups = [new ContextGroup(name: 'resultType', contextItemDtoList: resultType)]
 
 final String contextLoadResultFilePath = "${baseOutputPath}minAssayAnnotParseResults.csv"
 final ContextLoadResultsWriter loadResultsWriter = new ContextLoadResultsWriter(contextLoadResultFilePath)
@@ -53,9 +48,6 @@ final Map attributeNameMapping = (new AttributeNameMappingBuilder()).build()
 final AttributesContentsCleaner attributesContentsCleaner = new AttributesContentsCleaner(attributeNameMapping)
 final AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator = new AttributeContentAgainstElementTableValidator(loadResultsWriter)
 final AssayContextsValidatorCreatorAndPersistor assayContextsValidatorCreatorAndPersistor = new AssayContextsValidatorCreatorAndPersistor(baseModifiedBy, loadResultsWriter, false)
-//
-//final MeasureContextsValidatorCreatorAndPersistor measureContextsValidatorCreatorAndPersistor =
-//    new MeasureContextsValidatorCreatorAndPersistor(baseModifiedBy, loadResultsWriter, false)
 
 def mustLoadedAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
 
@@ -67,43 +59,32 @@ try {
         println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
 
         try {
-            List<AssayDto> assayDtoList = parseAndBuildAttributeGroups.build(inputFile, START_ROW,
-                    [spreadsheetAssayContextGroups])
+            List<AssayDto> assayDtoList = parseAndBuildAttributeGroups.build(inputFile, START_ROW, [spreadsheetAssayContextGroups])
 
             println("Clean loaded attributes")
             attributesContentsCleaner.clean(assayDtoList)
 
-            println("validate loaded attributes")
-
             for (AssayDto assayDto : assayDtoList) {
                 if (assayDto.aid && mustLoadedAids.contains(assayDto.aid)) {
+                    println("validate loaded attributes")
                     attributeContentAgainstElementTableValidator.removeInvalid(assayDto.assayContextDTOList, attributeNameMapping)
-                   // attributeContentAgainstElementTableValidator.removeInvalid(assayDto.measureContextDTOList, attributeNameMapping)
 
-                    if (assayDto.assayContextDTOList.size() > 0){
-                            //|| assayDto.measureContextDTOList.size() >0) {
+                    if (assayDto.assayContextDTOList.size() > 0) {
                         final String currentModifiedBy = "${baseModifiedBy}_FH$fileHash"
                         assayContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
                         if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
                             assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success,
-                                    "loaded assay context for ${assayDto.aid} in file ${assayDto.sourceFile.absolutePath}")
-//                            measureContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
-//                            if (measureContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.measureContextDTOList)) {
-//                                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success, null)
-//                            } else {
-//                                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.assayContextSuccessOnly,
-//                                        "assay contexts loaded but failed to load measure contexts - for details see $contextLoadResultFilePath")
-//                            }
+                                    "successfully loaded assay context")
                         } else {
                             assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                                    "failed to load assay contexts (and did not try measure contexts  - for details see $contextLoadResultFilePath")
+                                    "failed to load assay contexts loaded assay context")
                         }
                     } else {
                         assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.nothingToLoad, null)
                     }
                 } else {
                     assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                            "aid found in cell not a number")
+                            "aid found in cell not a number or not in must load list")
                 }
             }
         } catch (CouldNotReadExcelFileException e) {
