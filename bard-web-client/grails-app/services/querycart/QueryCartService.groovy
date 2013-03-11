@@ -5,6 +5,7 @@ import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 
 class QueryCartService {
+
     ShoppingCartService shoppingCartService
     static final String cartAssay = "CartAssay"
     static final String cartCompound = "CartCompound"

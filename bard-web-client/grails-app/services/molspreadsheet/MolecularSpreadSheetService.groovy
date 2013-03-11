@@ -22,6 +22,7 @@ import bard.core.rest.spring.project.ProjectExpanded
 
 class MolecularSpreadSheetService {
     final static int START_DYNAMIC_COLUMNS = 4 //Where to start the dynamic columns
+
     IQueryService queryService
     ExperimentRestService experimentRestService
     AssayRestService assayRestService

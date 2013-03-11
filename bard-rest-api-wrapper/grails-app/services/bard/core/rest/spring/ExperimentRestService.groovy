@@ -13,7 +13,7 @@ import bard.core.SearchParams
 import bard.core.util.FilterTypes
 
 class ExperimentRestService extends AbstractRestService {
-
+    def transactional=false
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
@@ -76,7 +76,7 @@ class ExperimentRestService extends AbstractRestService {
 
     String buildURLToExperimentData(final SearchParams searchParams) {
         final StringBuilder resource =
-            new StringBuilder(this.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
+            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
 
         if (searchParams.getTop()) {
             resource.append(RestApiConstants.QUESTION_MARK)
@@ -204,7 +204,7 @@ class ExperimentRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         final String resourceName = getResourceContext()
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -216,7 +216,7 @@ class ExperimentRestService extends AbstractRestService {
     @Override
     public String getResource() {
         final String resourceName = getResourceContext()
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

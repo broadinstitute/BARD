@@ -33,9 +33,8 @@ grails.project.dependency.resolution = {
         }
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
-        test("org.spockframework:spock-core:0.6-groovy-1.8") {
-            exclude "groovy-all"
-        }
+        compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
 
         runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
@@ -71,13 +70,16 @@ grails.project.dependency.resolution = {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         compile ":jquery-ui:1.8.15"
-        //  compile ":export:1.5"
-        runtime ":resources:1.1.6"
-        compile ":functional-spock:0.6"
-        compile ":twitter-bootstrap:2.1.0"
+        compile ":export:1.5"
+        // runtime ":resources:1.1.6"
+        compile ":resources:1.2.RC2"
+        // compile ":functional-spock:0.6"
+        compile ":twitter-bootstrap:2.3.0"
         compile ":cbipcrowdauthentication:0.3.0"
         build ":tomcat:$grailsVersion"
-        test ":spock:0.6"
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
         test ":codenarc:0.15"
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
@@ -92,7 +94,7 @@ grails.project.dependency.resolution = {
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
-grails.plugin.location.'shopping-cart:0.8.2'="../shopping-cart-0.8.2"
+grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {

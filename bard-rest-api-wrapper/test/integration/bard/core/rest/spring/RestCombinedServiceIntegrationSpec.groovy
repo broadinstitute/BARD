@@ -9,12 +9,11 @@ import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.experiment.ExperimentShow
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import grails.plugin.spock.IntegrationSpec
-import spock.lang.Unroll
-import bard.core.rest.spring.project.ProjectExpanded
 import spock.lang.Shared
-import spock.lang.IgnoreRest
+import spock.lang.Unroll
 
 /**
  * Tests for RESTAssayService in JDO

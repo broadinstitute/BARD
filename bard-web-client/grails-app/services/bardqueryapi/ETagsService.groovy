@@ -39,30 +39,27 @@ class ETagsService {
     public String createCompositeETags(final List<Long> cids, final List<Long> pids, final List<Long> adids) {
 
         final List<String> etags = []
-        if(cids){
-            final String compoundETag = createETag(EntityType.COMPOUND,cids,etags)
-            if(compoundETag){
+        if (cids) {
+            final String compoundETag = createETag(EntityType.COMPOUND, cids, etags)
+            if (compoundETag) {
                 etags.add(compoundETag)
             }
         }
-        if(pids){
-            final String projectETag = createETag(EntityType.PROJECT,pids,etags)
-            if(projectETag){
+        if (pids) {
+            final String projectETag = createETag(EntityType.PROJECT, pids, etags)
+            if (projectETag) {
                 etags.add(projectETag);
             }
         }
-        if(adids){
-            final String assayETag = createETag(EntityType.ASSAY,adids,etags)
-            if(assayETag){
+        if (adids) {
+            final String assayETag = createETag(EntityType.ASSAY, adids, etags)
+            if (assayETag) {
                 etags.add(assayETag)
             }
         }
-        if(etags){
-            return createETag(EntityType.COMPOSITE,[],etags)
+        if (etags) {
+            return createETag(EntityType.COMPOSITE, [], etags)
         }
         return null
     }
-}
-enum EntityType {
-    COMPOUND, ASSAY, PROJECT, COMPOSITE
 }

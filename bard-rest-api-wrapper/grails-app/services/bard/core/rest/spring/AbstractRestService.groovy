@@ -19,13 +19,13 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.HttpClientErrorException
 import bard.core.util.FilterTypes
+import bard.core.util.ExternalUrlDTO
 
 abstract class AbstractRestService {
-    String baseUrl
-    String promiscuityUrl
     RestTemplate restTemplate
     final static int multiplier = 5
     LoggerService loggerService
+    ExternalUrlDTO externalUrlDTO
 
     /**
      * @param params
@@ -33,7 +33,7 @@ abstract class AbstractRestService {
      * @throws UnsupportedEncodingException
      */
     protected String buildSuggestQuery(SuggestParams params) throws UnsupportedEncodingException {
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(getResourceContext()).

@@ -191,13 +191,9 @@ class RESTTestHelper {
     void assertProject(final Project project, boolean isStringSearch = false) {
         assert project.id != null
         assert project.name
-        assert project.description
+       // assert project.description
         assert project.eids
         assert project.aids
         assert project.experimentCount
-//        if (isStringSearch) {
-//            assert project.getAk_dict_label()
-//            assert project.getAv_dict_label()
-//        }
     }
 }

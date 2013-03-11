@@ -22,7 +22,6 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class QueryHelperService {
-
     /**
      * TODO: Put in properties file
      *  These are the terms that we would use for autosuggest

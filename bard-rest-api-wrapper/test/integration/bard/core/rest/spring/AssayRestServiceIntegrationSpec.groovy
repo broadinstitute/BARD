@@ -5,15 +5,14 @@ import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
+import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.util.TargetClassification
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
 import bard.core.rest.spring.assays.*
 
 import static org.junit.Assert.assertTrue
-import spock.lang.IgnoreRest
-import bard.core.rest.spring.util.Target
-import bard.core.rest.spring.util.TargetClassification
 
 /**
  * Tests for RESTAssayService in JDO

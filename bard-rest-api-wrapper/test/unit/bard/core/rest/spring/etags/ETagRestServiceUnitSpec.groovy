@@ -1,20 +1,17 @@
 package bard.core.rest.spring.etags
 
-import bard.core.SearchParams
-import bard.core.SuggestParams
+import bard.core.exceptions.RestApiException
 import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
-import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.ETagRestService
+import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
+import org.springframework.http.HttpStatus
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.assays.*
-import bard.core.rest.spring.ETagRestService
-import org.springframework.web.client.HttpClientErrorException
-import org.springframework.http.HttpStatus
-import org.springframework.web.client.RestClientException
-import bard.core.exceptions.RestApiException
 
 @Unroll
 @TestFor(ETagRestService)
@@ -25,7 +22,9 @@ class ETagRestServiceUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        service.baseUrl = "http://ncgc"
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
+
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

@@ -6,7 +6,6 @@ import org.codehaus.groovy.grails.web.context.ServletContextHolder
 import javax.servlet.http.HttpServletRequest
 
 class MobileService {
-
     SpringSecurityService springSecurityService
     def grailsApplication
 

@@ -3,8 +3,6 @@ package bardqueryapi
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 
-import java.awt.image.BufferedImage
-
 @Unroll
 class ETagsServiceIntegrationSpec extends IntegrationSpec {
 

@@ -5,7 +5,7 @@ import bard.core.rest.spring.util.Target
 import bard.core.rest.spring.util.TargetClassification
 
 class TargetRestService extends AbstractRestService {
-
+    def transactional=false
     public String getResourceContext() {
         return RestApiConstants.TARGETS_RESOURCE
     }
@@ -22,7 +22,7 @@ class TargetRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.TARGETS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

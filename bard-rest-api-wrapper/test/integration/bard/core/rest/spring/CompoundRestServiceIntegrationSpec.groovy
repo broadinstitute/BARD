@@ -11,10 +11,9 @@ import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
+import spock.lang.Shared
 import spock.lang.Unroll
 import bard.core.rest.spring.compounds.*
-import spock.lang.Shared
-import spock.lang.IgnoreRest
 
 /**
  * Tests for CompoundRestService in JDO

@@ -58,8 +58,7 @@ class QueryCartControllerUnitSpec extends Specification {
         params.id = id as String
         params.name = name
         params.smiles = smiles
-        // params.numActive = "1"
-        //params.numAssays = "3"
+
 
         when:
         1 * queryCartService.addToShoppingCart(_ as QueryItem)
@@ -107,11 +106,12 @@ class QueryCartControllerUnitSpec extends Specification {
         params.smiles = 'ccc'
 
         when:
-        queryCartService.addToShoppingCart(99)
 
         controller.addItem()
 
         then:
+        queryCartService.addToShoppingCart(_) >> {null}
+
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
 
     }

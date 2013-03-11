@@ -9,11 +9,7 @@ import bard.core.rest.spring.util.Node
 
 public class DataExportRestService extends AbstractRestService {
 
-
-
-    public DataExportRestService() {
-
-    }
+    def transactional=false
 
     @Cacheable(value = 'dictionaryElements')
     public CapDictionary getDictionary() {
@@ -48,14 +44,10 @@ public class DataExportRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = getResourceContext()
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 toString();
     }
 
 
-}
-enum ReloadCache {
-    YES,
-    NO
 }

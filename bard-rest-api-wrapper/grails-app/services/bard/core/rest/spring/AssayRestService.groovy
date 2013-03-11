@@ -18,7 +18,7 @@ import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.assays.Assay
 
 class AssayRestService extends AbstractRestService {
-
+    def transactional=false
     /**
      *
      * @param searchParams
@@ -141,7 +141,7 @@ class AssayRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.ASSAYS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -153,7 +153,7 @@ class AssayRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.ASSAYS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

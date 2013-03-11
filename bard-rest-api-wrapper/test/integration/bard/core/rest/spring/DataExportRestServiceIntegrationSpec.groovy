@@ -1,10 +1,9 @@
 package bard.core.rest.spring
 
+import bard.core.rest.spring.util.CapDictionary
 import bard.core.rest.spring.util.Node
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
-import spock.lang.IgnoreRest
-import bard.core.rest.spring.util.CapDictionary
 
 @Unroll
 class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
