@@ -116,18 +116,17 @@ class ExternalOntologyIntegrationSpec extends Specification {
 
         where:
         externalUrl | term
-//        "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
-//        "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"
-//        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"
-//        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"
-//        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"
-//        "http://www.ncbi.nlm.nih.gov/omim/"                              | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
-//        "http://www.ncbi.nlm.nih.gov/pubmed/"                            | "Distinct 3-O-Sulfated Heparan Sulfate"
-//        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "Cellana capensis"
-//        "http://www.uniprot.org/uniprot/"                                | "Q9Y6Q9"
-//
-//        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"
-//        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"
+        "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
+        "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"
+        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"
+        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"
+        "http://www.ncbi.nlm.nih.gov/omim/"                              | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
+        "http://www.ncbi.nlm.nih.gov/pubmed/"                            | "Distinct 3-O-Sulfated Heparan Sulfate"
+        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "Cellana capensis"
+        "http://www.uniprot.org/uniprot/"                                | "Q9Y6Q9"
+        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"
+        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "apoptotic process"
 
     }
