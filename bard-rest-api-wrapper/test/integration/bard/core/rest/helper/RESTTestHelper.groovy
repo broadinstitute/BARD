@@ -195,5 +195,9 @@ class RESTTestHelper {
         assert project.eids
         assert project.aids
         assert project.experimentCount
+//        if (isStringSearch) {
+//            assert project.getAk_dict_label()
+//            assert project.getAv_dict_label()
+//        }
     }
 }

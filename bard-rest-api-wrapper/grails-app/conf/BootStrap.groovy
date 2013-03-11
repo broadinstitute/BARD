@@ -3,10 +3,10 @@ import bard.core.rest.spring.DataExportRestService
 import bard.core.rest.spring.ReloadCache
 
 class BootStrap {
-  //  DataExportRestService dataExportRestService
+    DataExportRestService dataExportRestService
     def init = { servletContext ->
         //load dictionary if the data export api is available
-  //      dataExportRestService.getDictionary()
+        dataExportRestService.getDictionary()
     }
     def destroy = {
     }

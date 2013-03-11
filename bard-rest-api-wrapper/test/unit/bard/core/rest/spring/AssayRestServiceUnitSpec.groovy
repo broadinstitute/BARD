@@ -15,7 +15,6 @@ import bard.core.helper.LoggerService
 
 import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.assays.Assay
-import bard.core.util.ExternalUrlDTO
 
 @Unroll
 @TestFor(AssayRestService)
@@ -26,8 +25,8 @@ class AssayRestServiceUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
-        service.externalUrlDTO = externalUrlDTO
+        service.promiscuityUrl = "badapple"
+        service.baseUrl = "http://ncgc"
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

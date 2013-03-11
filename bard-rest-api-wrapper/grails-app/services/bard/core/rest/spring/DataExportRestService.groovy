@@ -1,18 +1,23 @@
 package bard.core.rest.spring
 
-import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.util.CapDictionary
-import bard.core.rest.spring.util.Node
+
 import org.springframework.cache.annotation.Cacheable
 
-public class DataExportRestService extends RestService {
-   def transactional=false
+import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.util.Node
+
+public class DataExportRestService extends AbstractRestService {
 
 
+
+    public DataExportRestService() {
+
+    }
 
     @Cacheable(value = 'dictionaryElements')
     public CapDictionary getDictionary() {
-        final URL url = new URL(getResource())
+        final URL url = new URL(resource.toString())
         final CapDictionary capDictionary = (CapDictionary) getForObject(url.toURI(), CapDictionary.class)
         capDictionary.loadElements()
         return capDictionary
@@ -43,11 +48,14 @@ public class DataExportRestService extends RestService {
     @Override
     public String getResource() {
         String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(baseUrl).
                 append(resourceName).
                 toString();
     }
 
 
 }
-
+enum ReloadCache {
+    YES,
+    NO
+}

@@ -11,8 +11,7 @@ import bard.core.rest.spring.util.SubstanceSearchType
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
-class SubstanceRestService extends RestService {
-    def transactional=false
+class SubstanceRestService extends AbstractRestService {
 
     public String getResourceContext() {
         return RestApiConstants.SUBSTANCES_RESOURCE
@@ -40,7 +39,7 @@ class SubstanceRestService extends RestService {
 
     String buildExperimentQuery() {
         final StringBuilder resource =
-            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
+            new StringBuilder(this.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
         return resource.toString();
     }
     /**
@@ -72,7 +71,7 @@ class SubstanceRestService extends RestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.SUBSTANCES_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

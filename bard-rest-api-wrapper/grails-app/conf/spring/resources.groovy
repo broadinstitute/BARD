@@ -4,64 +4,61 @@ import java.util.concurrent.Executors
 
 import bard.core.rest.spring.*
 import bard.core.helper.LoggerService
-import bard.core.util.ExternalUrlDTO
 
 /**
  * Spring Configuration of resources
  */
 beans = {
 
-    String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
-    String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
+    final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
+    final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
 
-    externalUrlDTO(ExternalUrlDTO){
-        baseUrl = ncgcBaseURL
-        promiscuityUrl = badApplePromiscuityUrl
-    }
+
 
     restTemplate(RestTemplate)
     loggerService(LoggerService)
 
     compoundRestService(CompoundRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
+        promiscuityUrl = badApplePromiscuityUrl
         restTemplate = ref('restTemplate')
         executorService = Executors.newCachedThreadPool()
         loggerService = ref('loggerService')
     }
 
     experimentRestService(ExperimentRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     projectRestService(ProjectRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     assayRestService(AssayRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     substanceRestService(SubstanceRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
 
     dataExportRestService(DataExportRestService) {
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     eTagRestService(ETagRestService){
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     targetRestService(TargetRestService){
-        externalUrlDTO = ref('externalUrlDTO')
+        baseUrl = ncgcBaseURL
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }

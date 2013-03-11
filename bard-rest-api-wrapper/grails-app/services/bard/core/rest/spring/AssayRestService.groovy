@@ -2,17 +2,23 @@ package bard.core.rest.spring
 
 import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
+
+import bard.core.rest.spring.assays.ExpandedAssay
+import bard.core.rest.spring.assays.ExpandedAssayResult
+import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import bard.core.rest.spring.assays.*
+import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.assays.Assay
 
-class AssayRestService extends RestService {
-    def transactional=false
+class AssayRestService extends AbstractRestService {
+
     /**
      *
      * @param searchParams
@@ -135,7 +141,7 @@ class AssayRestService extends RestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.ASSAYS_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -147,7 +153,7 @@ class AssayRestService extends RestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.ASSAYS_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

@@ -176,7 +176,6 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     /**
      * Get the list of projects
      */
-    @IgnoreRest
     void "test REST Project Service #label #searchString question"() {
         given: "A search string, #searchString, and asking to retrieve the first #top search results"
         final SearchParams params = new SearchParams(searchString)

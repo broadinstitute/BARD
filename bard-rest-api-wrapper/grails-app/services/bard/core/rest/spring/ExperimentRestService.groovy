@@ -1,19 +1,19 @@
 package bard.core.rest.spring
 
-import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
-import bard.core.util.FilterTypes
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import bard.core.rest.spring.experiment.*
+import bard.core.SearchParams
+import bard.core.util.FilterTypes
 
-class ExperimentRestService extends RestService {
-    def transactional=false
+class ExperimentRestService extends AbstractRestService {
+
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
@@ -76,7 +76,7 @@ class ExperimentRestService extends RestService {
 
     String buildURLToExperimentData(final SearchParams searchParams) {
         final StringBuilder resource =
-            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
+            new StringBuilder(this.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
 
         if (searchParams.getTop()) {
             resource.append(RestApiConstants.QUESTION_MARK)
@@ -204,7 +204,7 @@ class ExperimentRestService extends RestService {
     @Override
     public String getSearchResource() {
         final String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -216,7 +216,7 @@ class ExperimentRestService extends RestService {
     @Override
     public String getResource() {
         final String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

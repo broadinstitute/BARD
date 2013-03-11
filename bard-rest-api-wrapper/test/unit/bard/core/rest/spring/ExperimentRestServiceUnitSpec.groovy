@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
-import bard.core.util.ExternalUrlDTO
 
 @Unroll
 @TestFor(ExperimentRestService)
@@ -21,9 +20,8 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
-        service.externalUrlDTO = externalUrlDTO
-
+        service.promiscuityUrl = "badapple"
+        service.baseUrl = "http://ncgc"
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }
@@ -284,7 +282,7 @@ class ExperimentRestServiceUnitSpec extends Specification {
 
     void "getParentETag #label"() {
         when:
-        String minVal = RestService.getParentETag(map)
+        String minVal = AbstractRestService.getParentETag(map)
         then:
         assert minVal == expectedMinVal
         where:

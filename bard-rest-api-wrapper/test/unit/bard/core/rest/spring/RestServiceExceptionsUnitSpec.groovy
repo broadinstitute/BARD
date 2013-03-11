@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
 import org.springframework.http.HttpEntity
-import bard.core.util.ExternalUrlDTO
 
 @Unroll
 @TestFor(SubstanceRestService)
@@ -21,9 +20,8 @@ class RestServiceExceptionsUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
-        service.externalUrlDTO = externalUrlDTO
-
+        service.promiscuityUrl = "badapple"
+        service.baseUrl = "http://ncgc"
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

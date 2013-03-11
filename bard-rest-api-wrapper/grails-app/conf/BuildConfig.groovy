@@ -33,9 +33,10 @@ grails.project.dependency.resolution = {
         compile 'org.codehaus.woodstox:woodstox-core-asl:4.1.2'
 
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
-
-       test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
+        test("org.spockframework:spock-core:0.6-groovy-1.8") {
+            exclude "groovy-all"
+        }
+        test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
     }
 
     plugins {
@@ -44,9 +45,7 @@ grails.project.dependency.resolution = {
                 ":rest-client-builder:1.0.2") {
             export = false
         }
-        test(":spock:0.7") {
-            exclude "spock-grails-support"
-        }
+        test ":spock:0.6"
         test ":codenarc:0.15"
         compile ":clover:3.1.6"
         compile ":cache:1.0.1"
