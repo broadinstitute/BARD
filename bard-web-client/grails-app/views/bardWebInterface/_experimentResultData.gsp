@@ -48,12 +48,9 @@
                         <%
                             List<String> priorityDisplays = header.getValue().priorityDisplays ?: []
                         %>
-                        <g:if test="${priorityDisplays.size() > 1}">
+                        <g:if test="${priorityDisplays}">
                             Results
                         </g:if>
-                        <g:elseif test="${priorityDisplays.size() == 1}">
-                            ${priorityDisplays.first()}
-                        </g:elseif>
                         <g:else></g:else>
 
                         <g:each var="dictionaryId" in="${header.getValue().dictionaryIds}">
@@ -108,14 +105,14 @@
                                     imageHeight="150"/>
                         </td>
                     </g:elseif>
-                    %{--Handles the key/value result-types--}%
+                %{--Handles the key/value result-types--}%
                     <g:elseif test="${currentRow.getValue() instanceof List}">
                         <td><g:each in="${currentRow.getValue()}" var="d">
                             ${d}<br/>
                         </g:each>
                         </td>
                     </g:elseif>
-                    %{--Handles the curves--}%
+                %{--Handles the curves--}%
                     <g:elseif test="${currentRow.getValue() instanceof Map}">
                         <g:each in="${currentRow.getValue().ConcentrationResponseSeriesList}" var="concRespMap">
                             <td>
