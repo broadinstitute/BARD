@@ -1,10 +1,13 @@
 package dataexport.cap.experiment
 
+import bard.db.experiment.ArchivePathService
+import bard.db.experiment.Experiment
 import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.experiment.ExperimentExportService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import groovy.xml.StaxBuilder
+import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
@@ -18,8 +21,14 @@ import javax.xml.stream.XMLOutputFactory
  */
 @Mixin(UpdateStatusHelper)
 class ExperimentRestController {
+    final static String EXPERIMENTS_ACCEPT_STRING = 'application/vnd.bard.cap+xml;type=experiments'
+
+    ArchivePathService archivePathService;
     ExperimentExportService experimentExportService
     GrailsApplication grailsApplication
+
+    static final String MIMETYPE_JSON_APPLICATION = "application/json"
+
     static allowedMethods = [
             experiment: "GET",
             updateExperiment: "PUT",
@@ -35,10 +44,11 @@ class ExperimentRestController {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
 
+
     def experiments() {
 
         try {
-            final String mimeType = grailsApplication.config.bard.data.export.experiments.xml
+            final String mimeType = EXPERIMENTS_ACCEPT_STRING
             response.contentType = mimeType
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
@@ -66,6 +76,7 @@ class ExperimentRestController {
             render ""
         }
     }
+
     /**
      * Render XML for each result object of the given Experiment
      * If the number of experiments > than the max per page
@@ -79,10 +90,20 @@ class ExperimentRestController {
             //mime types must match the expected type
             final String requestedMimeType = request.getHeader(HttpHeaders.ACCEPT)
             if (jsonMimeType == requestedMimeType && id) {
-                throw new RuntimeException("Note yet implemented")
+                Experiment experiment = Experiment.get(id)
+                InputStream inputStream = archivePathService.getEtlExport(experiment)
+                if (inputStream != null) {
+                    response.contentType = MIMETYPE_JSON_APPLICATION
+                    IOUtils.copy(inputStream, response.outputStream)
+                    response.outputStream.flush()
+                } else {
+                    response.status = HttpServletResponse.SC_NOT_FOUND
+                    render ""
+                }
+            } else {
+                response.status = HttpServletResponse.SC_BAD_REQUEST
+                render ""
             }
-            response.status = HttpServletResponse.SC_BAD_REQUEST
-            render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
             log.error(ee)
