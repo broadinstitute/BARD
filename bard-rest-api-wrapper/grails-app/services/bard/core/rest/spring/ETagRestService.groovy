@@ -2,6 +2,7 @@ package bard.core.rest.spring
 
 import bard.core.exceptions.RestApiException
 import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.etags.ETags
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -9,10 +10,10 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
-import bard.core.rest.spring.etags.ETags
 
-class ETagRestService extends AbstractRestService {
+class ETagRestService extends RestService {
 
+    def transactional=false
 
     public String getResourceContext() {
         return RestApiConstants.ETAGS_RESOURCE;
@@ -29,7 +30,7 @@ class ETagRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = getResourceContext()
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

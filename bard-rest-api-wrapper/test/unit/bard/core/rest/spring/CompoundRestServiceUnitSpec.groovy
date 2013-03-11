@@ -21,6 +21,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.FutureTask
 
 import bard.core.rest.spring.compounds.*
+import bard.core.util.ExternalUrlDTO
 
 @Unroll
 @TestFor(CompoundRestService)
@@ -34,8 +35,8 @@ class CompoundRestServiceUnitSpec extends Specification {
         this.executorService = Mock(ExecutorService)
         service.executorService = this.executorService
         service.restTemplate = this.restTemplate
-        service.promiscuityUrl = "badapple"
-        service.baseUrl = "http://ncgc"
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

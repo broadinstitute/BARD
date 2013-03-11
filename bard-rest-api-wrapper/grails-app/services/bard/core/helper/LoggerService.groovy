@@ -2,8 +2,10 @@ package bard.core.helper
 
 import org.apache.commons.lang3.time.StopWatch
 
-class LoggerService {
 
+
+class LoggerService {
+    def transactional=false
     /**
      * Start the stop-watch that measures network traffic time for any of NCGC API.
      * @return StopWatch

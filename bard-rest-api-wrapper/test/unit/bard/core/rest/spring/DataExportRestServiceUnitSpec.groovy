@@ -11,6 +11,7 @@ import bard.core.rest.spring.util.CapDictionary
 import bard.core.rest.spring.util.Node
 import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
+import bard.core.util.ExternalUrlDTO
 
 @Unroll
 @TestFor(DataExportRestService)
@@ -25,7 +26,9 @@ class DataExportRestServiceUnitSpec extends Specification {
         this.loggerService = Mock(LoggerService)
         service.restTemplate = this.restTemplate
         service.loggerService = loggerService
-        service.baseUrl = baseUrl
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
+
     }
 
     void cleanup() {

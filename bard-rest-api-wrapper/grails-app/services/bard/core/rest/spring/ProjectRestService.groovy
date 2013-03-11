@@ -3,20 +3,20 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.experiment.ExperimentSearch
 import bard.core.rest.spring.project.Project
+import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.project.ProjectStep
 import bard.core.rest.spring.util.MetaData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import bard.core.rest.spring.project.ProjectExpanded
 
-import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.rest.spring.project.ProjectStep
-
-class ProjectRestService extends AbstractRestService {
+class ProjectRestService extends RestService {
+    def transactional=false
 
     public String getResourceContext() {
         return RestApiConstants.PROJECTS_RESOURCE
@@ -137,7 +137,7 @@ class ProjectRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.PROJECTS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -149,7 +149,7 @@ class ProjectRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.PROJECTS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

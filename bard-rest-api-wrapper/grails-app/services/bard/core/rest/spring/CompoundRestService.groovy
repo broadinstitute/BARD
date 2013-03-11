@@ -21,7 +21,8 @@ import java.util.concurrent.TimeUnit
 
 import bard.core.rest.spring.compounds.*
 
-class CompoundRestService extends AbstractRestService {
+class CompoundRestService extends RestService {
+    def transactional=false
     ExecutorService executorService
 
     public String getResourceContext() {
@@ -100,7 +101,7 @@ class CompoundRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.COMPOUNDS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -112,7 +113,7 @@ class CompoundRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.COMPOUNDS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();
@@ -124,7 +125,7 @@ class CompoundRestService extends AbstractRestService {
      * @return the relative url to the promiscuity plugin
      */
     public String buildPromiscuityScoreURL() {
-        return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}&repr={mediaType}").toString();
+        return new StringBuilder(this.externalUrlDTO.promiscuityUrl).append("{cid}").append("?expand={expand}&repr={mediaType}").toString();
     }
     /**
      * something like 'plugins/badapple/prom/cid/'
@@ -133,7 +134,7 @@ class CompoundRestService extends AbstractRestService {
      * @return the relative url to the promiscuity plugin
      */
     public String buildPromiscuityURL() {
-        return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}").toString();
+        return new StringBuilder(this.externalUrlDTO.promiscuityUrl).append("{cid}").append("?expand={expand}").toString();
     }
 
     protected String buildQueryForTestedAssays(final Long cid,
