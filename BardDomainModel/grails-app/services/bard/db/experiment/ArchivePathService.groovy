@@ -32,12 +32,19 @@ class ArchivePathService {
         return grailsApplication.config.bard.services.resultService.archivePath
     }
 
+    /**
+     * @return an InputStream for the etl results for the given experiment, or null if this experiment has no results stored.
+     */
     InputStream getEtlExport(Experiment experiment) {
         List<ExperimentFile> files = new ArrayList(experiment.experimentFiles)
-        files.sort {it.submissionVersion}
-        ExperimentFile lastVersion = files.last()
-        File fullPath = new File(prefix + File.separator + lastVersion.exportFile)
+        if (files.size() > 0) {
+            files.sort {it.submissionVersion}
+            ExperimentFile lastVersion = files.last()
+            File fullPath = new File(prefix + File.separator + lastVersion.exportFile)
 
-        return new FileInputStream(fullPath)
+            return new FileInputStream(fullPath)
+        } else {
+            return null;
+        }
     }
 }
