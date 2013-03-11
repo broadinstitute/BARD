@@ -115,8 +115,10 @@ class BardWebInterfaceController {
             //Create fake facets to generate the two filters we want: normalize Y-axis and filter for active compounds only.
             Integer numOfActiveCmpds = webQueryTableModel?.additionalProperties?.actives ?: 0
             Integer totalNumOfCmpds = webQueryTableModel?.additionalProperties?.total ?: 0
-            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: totalNumOfCmpds)]),
-                    new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])]
+            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: totalNumOfCmpds)])]
+            if (numOfActiveCmpds > 0) {
+                facetValues << new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])
+            }
 
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
