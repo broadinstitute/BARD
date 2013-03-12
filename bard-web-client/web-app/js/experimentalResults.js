@@ -71,14 +71,12 @@ function populatePage(url) {
 //Adding event handlers to the facets form submission
 $(document).on("submit", "#ExperimentFacetForm", function (event) {
     //replace the action with a redirect to the same page
-    var skip = $('#skip').attr('value');
-    var top = $('#top').attr('value');
     var paginationUrl = $('#paginationUrl').attr('value')
     var formUrl
     if (paginationUrl) {
         formUrl = paginationUrl;
     } else {
-        formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value') + '?offset=' + skip + '&max=' + top;
+        formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value');
     }
     $(this).attr('action', formUrl)
     return true; //submit tue form the normal way

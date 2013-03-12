@@ -32,8 +32,6 @@
 </p>
 
 <div class="row-fluid">
-    <g:hiddenField name="skip" id="skip" value="${params?.offset ?: 0}"/>
-    <g:hiddenField name="top" id="top" value="${params?.max ?: 10}"/>
     <g:hiddenField name="paginationUrl"
                    id="paginationUrl"/> %{--Used to hold the pagination url, if a paging link has been clicked--}%
     <div class="pagination offset3">
