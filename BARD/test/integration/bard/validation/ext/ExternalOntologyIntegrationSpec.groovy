@@ -3,6 +3,7 @@ package bard.validation.ext
 import edu.scripps.fl.entrez.EUtilsWeb
 import spock.lang.Specification
 import spock.lang.Unroll
+import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
 
 import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
 import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
@@ -96,6 +97,30 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "GO:1901112"
     }
 
+    void "test exception externalOntologyAPI.findById for url: #externalUrl externalValueId: '#externalValueId'"() {
+        when:
+        println("url: $externalUrl externalValueId: $externalValueId")
+        Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
+        ExternalOntologyAPI extOntology = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        ExternalItem externalItem = extOntology.findById(externalValueId)
+
+        then:
+        def e = thrown(expectedException)
+        println(e.message)
+
+        where:
+        externalUrl                                                      | externalValueId | expectedException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | null            | ExternalOntologyException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | " "             | IndexOutOfBoundsException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | ""              | ExternalOntologyException
+        "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | null            | ExternalOntologyException
+        "http://www.uniprot.org/uniprot/"                                | null            | ExternalOntologyException
+        "http://www.uniprot.org/uniprot/"                                | " "             | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/"                                | ""              | RemoteDataAccessException
+    }
+
+
+
     void "test successful externalOntologyAPI.findMatching for url: #externalUrl term: #term"() {
         when:
         println("url: $externalUrl term: $term")
@@ -115,7 +140,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         externalItems
 
         where:
-        externalUrl | term
+        externalUrl                                                      | term
         "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
         "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"
         "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"
@@ -129,6 +154,28 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "apoptotic process"
 
+    }
+
+    void "test exception externalOntologyAPI.findMatching for url: #externalUrl term: '#term'"() {
+        when:
+        println("url: $externalUrl term: $term")
+        Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
+        ExternalOntologyAPI extOntology = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        List<ExternalItem> externalItems = extOntology.findMatching(term)
+
+        then:
+        def e = thrown(expectedException)
+        println(e.message)
+
+        where:
+        externalUrl                                                      | term | expectedException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | null | NullPointerException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | " "  | ExternalOntologyException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | ""   | ExternalOntologyException
+        "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | null | ExternalOntologyException
+        "http://www.uniprot.org/uniprot/"                                | null | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/"                                | " "  | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/"                                | ""   | RemoteDataAccessException
     }
 
     void "test show NCBI Databases"() {
