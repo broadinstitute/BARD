@@ -71,9 +71,13 @@ function populatePage(url) {
 //Adding event handlers to the facets form submission
 $(document).on("submit", "#ExperimentFacetForm", function (event) {
     //replace the action with a redirect to the same page
-    var skip = $('#skip').attr('value');
-    var top = $('#top').attr('value');
-    var formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value') + '?offset=' + skip + '&max=' + top;
+    var paginationUrl = $('#paginationUrl').attr('value')
+    var formUrl
+    if (paginationUrl) {
+        formUrl = paginationUrl;
+    } else {
+        formUrl = '/bardwebclient/bardWebInterface/showExperiment/' + $('input#experimentId').attr('value');
+    }
     $(this).attr('action', formUrl)
     return true; //submit tue form the normal way
 });
@@ -88,3 +92,11 @@ function resetAllFilters(facetForm) {
     //Resubmit the form
     $('#' + facetForm).submit();
 }
+
+//=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
+$('#showExperimentDiv').on("click", "a.step,a.nextLink,a.prevLink", function (event) {
+    event.preventDefault();	// prevent the default action behaviour to happen
+    var url = $(this).attr('href');
+    $('#paginationUrl').attr('value', url); //save the pagination url for submission
+    $('#ExperimentFacetForm').submit(); //submit, and let the event handler handle the redirect.
+});

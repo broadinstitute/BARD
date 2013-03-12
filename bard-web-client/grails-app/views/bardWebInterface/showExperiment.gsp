@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<div class="row-fluid">
+<div class="row-fluid" id="showExperimentDiv">
     <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm]"/>
     <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
 
