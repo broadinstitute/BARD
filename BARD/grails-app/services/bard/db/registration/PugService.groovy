@@ -1,7 +1,12 @@
 package bard.db.registration
 
+import bard.db.experiment.BulkResultService
+import bard.db.experiment.BulkSubstanceService
 import bard.db.experiment.Substance
+import bard.hibernate.AuthenticatedUserRequired
 import bard.util.NetClientService
+import com.google.common.collect.Lists
+import grails.plugins.springsecurity.SpringSecurityService
 import groovy.xml.MarkupBuilder
 import org.apache.commons.io.IOUtils
 import org.apache.commons.net.ftp.FTPClient
@@ -23,7 +28,10 @@ import java.util.zip.GZIPInputStream
 class PugService {
     static String PUG_URL = "http://pubchem.ncbi.nlm.nih.gov/pug/pug.cgi"
 
+    SpringSecurityService springSecurityService
     NetClientService netClientService
+    BulkSubstanceService bulkSubstanceService
+
     long timeBetweenRequests = 30 * 1000; // retry every 30 seconds
 
     /** generates a query for asking about a previous request */
@@ -104,8 +112,6 @@ class PugService {
     /** Call a callback once per sid, smiles tuple.  If the sid could not be found smiles == null */
     void parseSmilesTable(InputStream input, Closure callback) {
         def body = IOUtils.toString(new GZIPInputStream(input))
-//        new File("dumpped_result.txt").write(body)
-//        println("body=${body}");
         Node xml = new XmlParser().parseText(body)
         input.close()
 
@@ -124,6 +130,14 @@ class PugService {
         return new XmlParser().parseText(response)
     }
 
+    private String getUsername() {
+        String username = springSecurityService.getPrincipal()?.username
+        if (!username) {
+            throw new AuthenticatedUserRequired('An authenticated user was expected this point');
+        }
+        return username
+    }
+
     /**
     Returns the set of substance ids that are not valid.
 
@@ -132,52 +146,74 @@ class PugService {
      */
     Collection<String> validateSubstanceIds(Collection<Long> sids) {
         // find the subset that are not in the database
-        def missingSids = sids.findAll { Substance.get(it) == null }
+        Collection<Long> missingSids = bulkSubstanceService.findMissingSubstances(sids)
 
         Set<Long> missingFromPubchem = new HashSet(missingSids)
+        List<Long> substancesFromPubchem = new ArrayList()
 
-        getSubstancesFromPubchem(missingSids) { sid ->
-            Long substanceId = Long.parseLong(sid)
-            Substance substance = new Substance(id: substanceId, dateCreated: new Date())
-            // the id doesn't get set in the line above.  Why?
-            substance.id = substanceId
-            assert substance.save()
-            missingFromPubchem.remove(substanceId)
+        // may turn this on for bulk loads of converted data
+        boolean bypassPubchemQuery = false
+        if (!bypassPubchemQuery) {
+            getSubstancesFromPubchem(missingSids) { sid ->
+                Long substanceId = Long.parseLong(sid)
+                substancesFromPubchem.add(substanceId)
+                missingFromPubchem.remove(substanceId)
+            }
+        } else {
+            substancesFromPubchem.addAll(missingFromPubchem)
+            missingFromPubchem.clear()
         }
+
+        bulkSubstanceService.insertSubstances(substancesFromPubchem, getUsername())
 
         return missingFromPubchem.collect { it.toString() }
     }
 
     Node find(Node xml, String tagName) {
         // there's probably a better way
-        return (xml.depthFirst().find {it.name() == tagName})
+        return (xml.depthFirst().find {it.respondsTo("name") && it.name() == tagName})
     }
 
-    def getSubstancesFromPubchem(sids, callback) {
+    def getSubstancesFromPubchem(List sids, Closure callback) {
+        for(batch in Lists.partition(sids, 100000)) {
+            getBatchedSubstancesFromPubchem(batch, callback)
+        }
+    }
+
+    def getBatchedSubstancesFromPubchem(sids, callback) {
         if (sids.size() > 0) {
             String query = substanceQuery(sids)
-//            FileWriter w = new FileWriter("query.txt")
-//            w.write(query)
-//            w.close()
-            def parsedResponse = executeQuery(query)
 
-            def status = find(parsedResponse, "PCT-Status")?."@value"
-            if (status != "success" && status != "running") {
-                throw new RuntimeException("Querying substances from pubchem failed: "+parsedResponse);
-            }
+            def parsedResponse = null
+            def url;
+            try {
+                parsedResponse = executeQuery(query)
 
-            def reqId = find(parsedResponse, "PCT-Waiting_reqid")?.text()
-            if (reqId != null) {
-                while(true) {
-                    Thread.sleep(timeBetweenRequests)
-                    parsedResponse = executeQuery(requestStatus(reqId))
-                    if (find(parsedResponse, "PCT-Download-URL_url") != null)
-                        break
+                def status = find(parsedResponse, "PCT-Status")?."@value"
+                if (status != "success" && status != "running") {
+                    throw new RuntimeException("Querying substances from pubchem failed: "+parsedResponse);
                 }
-            }
 
-            def url = find(parsedResponse, "PCT-Download-URL_url")?.text()
-            assert url != null
+                def reqId = find(parsedResponse, "PCT-Waiting_reqid")?.text()
+                if (reqId != null) {
+                    while(true) {
+                        Thread.sleep(timeBetweenRequests)
+                        parsedResponse = executeQuery(requestStatus(reqId))
+                        if (find(parsedResponse, "PCT-Download-URL_url") != null)
+                            break
+                    }
+                }
+
+                url = find(parsedResponse, "PCT-Download-URL_url")?.text()
+                assert url != null
+            } catch(Exception ex) {
+                println("Query failed so writing query and last response to files")
+
+                new File("last_query.txt").write(query)
+                new File("last_response.txt").write(parsedResponse == null ? "": parsedResponse.toString())
+
+                throw ex;
+            }
 
             readFtpResource(url) { input ->
                 parseSmilesTable(input, callback)
