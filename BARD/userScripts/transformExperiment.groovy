@@ -1,16 +1,6 @@
 import bard.db.experiment.Experiment
-import bard.db.experiment.Result
-import bard.db.experiment.ResultContextItem
-import bard.db.experiment.ResultsExportService
 import bard.db.experiment.ResultsService
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
-import org.hibernate.Session
-
-import java.util.zip.GZIPOutputStream
-
-List sids = []
 
 String experimentIdStr = System.getProperty("expId")
 String experimentFile = System.getProperty("expFile")
