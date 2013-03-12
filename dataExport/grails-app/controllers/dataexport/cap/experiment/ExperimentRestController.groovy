@@ -72,7 +72,7 @@ class ExperimentRestController {
             render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee)
+            log.error("Caught exception",ee)
             render ""
         }
     }
@@ -94,6 +94,7 @@ class ExperimentRestController {
                 InputStream inputStream = archivePathService.getEtlExport(experiment)
                 if (inputStream != null) {
                     response.contentType = MIMETYPE_JSON_APPLICATION
+                    response.addHeader("Content-encoding", "gzip")
                     IOUtils.copy(inputStream, response.outputStream)
                     response.outputStream.flush()
                 } else {
@@ -106,7 +107,7 @@ class ExperimentRestController {
             }
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee)
+            log.error("Caught exception", ee)
             render ""
         }
     }
@@ -133,7 +134,7 @@ class ExperimentRestController {
         }
         catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message)
+            log.error("Caught exception",ee.message)
             render ""
         }
 
