@@ -2,8 +2,7 @@
 <div class="span3">
     <g:if test="${facets}">
         <div class="facets">
-            <g:form name="${formName.toString()}" controller="bardWebInterface" id="${formName.toString()}"
-                    action="applyFilters">
+            <g:form name="${formName.toString()}" id="${formName.toString()}">
                 <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"
                                 class="btn btn-small"/>
                 <input type="button" class="btn btn-small" id="${formName}_ResetButton" value="Clear All Filters"
