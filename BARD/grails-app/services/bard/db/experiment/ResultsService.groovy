@@ -164,41 +164,6 @@ class ResultsService {
         }
     }
 
-    /*
-    static class Column {
-        String name;
-
-        // if this column represents a measurement
-        Measure measure;
-
-        // if this column represents a context item
-        ItemService.Item item;
-
-        Closure parser;
-
-        // return a string if error.  Otherwise returns a Cell
-        def parseValue(String value) {
-            return parser(this, value)
-        }
-
-        public Column(String name, Measure measure) {
-            this.name = name
-            this.measure = measure
-            this.parser = { Column column, String value -> parseAnything(column, value) }
-        }
-
-        public Column(String name, ItemService.Item item) {
-            this.item = item;
-            this.name = name;
-            this.parser = makeItemParser(item)
-        }
-
-        public String toString() {
-            return "${name}"
-        }
-    }
-    */
-
     // used to identify duplicates
     static class LogicalKey {
         Integer replicateNumber;
@@ -737,7 +702,7 @@ class ResultsService {
                         linkResults(child.parentChildRelationship, errors, 0, childResult, result);
                     }
 
-                    results.addAll(resultChildren)
+//                    results.addAll(resultChildren)
                 }
 
                 // likewise create each of the context items associated with this measure
