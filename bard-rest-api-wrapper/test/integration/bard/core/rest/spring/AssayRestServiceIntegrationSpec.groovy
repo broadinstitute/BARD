@@ -5,6 +5,8 @@ import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.util.ETag
 import bard.core.rest.spring.util.Facet
+import bard.core.rest.spring.util.Target
+import bard.core.rest.spring.util.TargetClassification
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -24,6 +26,8 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     @Shared
     List<Long> CAP_ADIDS = [2934, 2945, 2946]
+
+
 
     void "searchAssaysByCapIds #label"() {
         when:
@@ -309,6 +313,35 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         where:
         label      | adid
         "Assay ID" | ADIDS_FOR_TESTS.get(0)
+    }
+
+    void "test assay #label"() {
+        when: "The get method is called with the given ADID: #adid"
+        final ExpandedAssay assay = this.assayRestService.getAssayById(adid)
+        then: "An Assay is returned with the expected information"
+        assert assay
+        final List<Target> targets = assay.getTargets()
+        assert targets
+        int counter = 0  //to count the number of classifications
+        for (Target target : targets) {
+            assert target.acc
+            if (target.getTargetClassifications()) {
+                final List<TargetClassification> classifications = target.getTargetClassifications()
+                assert classifications
+                for (TargetClassification targetClassification : classifications) {
+                    assert targetClassification.id
+                    assert targetClassification.source
+                    assert targetClassification.description
+                    assert targetClassification.levelIdentifier
+                    assert targetClassification.name
+                    ++counter
+                }
+            }
+        }
+        assert counter > 0
+        where:
+        label         | adid
+        "with Target" | 6807
     }
 
     void "test  getETags(long top, long skip)"() {

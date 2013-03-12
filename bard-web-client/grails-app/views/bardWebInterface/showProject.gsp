@@ -151,9 +151,9 @@
                     <div class="page-header">
                         <h3>Experiments</h3>
                     </div>
-
                     <div>
-                        <g:render template="experiments" model="['experiments': experiments, showAssaySummary: false]"/>
+                        <g:render template="experiments"
+                                  model="['experiments': experiments, showAssaySummary: false, experimentTypes: projectAdapter.experimentTypes]"/>
                     </div>
                 </section>
             </g:if>
@@ -168,11 +168,39 @@
                             <p>
                                 <g:if test="${searchString}">
                                     <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}"
-                                            params='[searchString: "${searchString}"]'>${assay.title}</g:link>
+                                            params='[searchString: "${searchString}"]'>${assay.title}
+                                        <g:if test="${assay.assayStatus == 'Witnessed'}">
+                                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                                 alt="Witnessed" title="Witnessed"/>
+                                        </g:if>
+                                        <g:if test="${assay.assayStatus == 'Measures Done' || assay.assayStatus == 'Annotations Done'}">
+                                            <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
+                                                 alt="Measures or Annotations Done"
+                                                 title="Measures or Annotations Done"/>
+                                        </g:if>
+                                        <g:if test="${assay.assayStatus == 'Draft' || assay.assayStatus == 'Retired'}">
+                                            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                                                 alt="Draft or Retired" title="Draft or Retired"/>
+                                        </g:if>
+                                    </g:link>
                                 </g:if>
                                 <g:else>
                                     <g:link controller="bardWebInterface" action="showAssay"
-                                            id="${assay.id}">${assay.title}</g:link>
+                                            id="${assay.id}">${assay.title}
+                                        <g:if test="${assay.assayStatus == 'Witnessed'}">
+                                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                                 alt="Witnessed" title="Witnessed"/>
+                                        </g:if>
+                                        <g:if test="${assay.assayStatus == 'Measures Done' || assay.assayStatus == 'Annotations Done'}">
+                                            <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
+                                                 alt="Measures or Annotations Done"
+                                                 title="Measures or Annotations Done"/>
+                                        </g:if>
+                                        <g:if test="${assay.assayStatus == 'Draft' || assay.assayStatus == 'Retired'}">
+                                            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                                                 alt="Draft or Retired" title="Draft or Retired"/>
+                                        </g:if>
+                                    </g:link>
                                 </g:else>
                             </p>
                         </div>

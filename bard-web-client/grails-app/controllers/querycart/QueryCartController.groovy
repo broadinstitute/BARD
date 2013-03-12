@@ -5,6 +5,8 @@ import bardqueryapi.InetAddressUtil
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import bardqueryapi.ETagsService
+import org.codehaus.groovy.grails.commons.GrailsApplication
 
 @Secured(['isFullyAuthenticated()'])
 @Mixin(InetAddressUtil)
@@ -12,7 +14,35 @@ class QueryCartController {
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
     BardUtilitiesService bardUtilitiesService
+    ETagsService eTagsService
+    GrailsApplication grailsApplication  //inject GrailsApplication
 
+    def createCompositeETag() {
+        String compositeETag = ""
+        final List<Long> cids = queryCartService.retrieveCartCompoundIdsFromShoppingCart()
+        final List<Long> pids = queryCartService.retrieveCartProjectIdsFromShoppingCart()
+        final List<Long> adids = queryCartService.retrieveCartAssayIdsFromShoppingCart()
+        if (cids || pids || adids) {
+            compositeETag = eTagsService.createCompositeETags(cids, pids, adids)
+        }
+        render text: compositeETag, contentType: 'text/plain'
+    }
+    def toDesktopClient() {
+        String thickClientURL = grailsApplication.config.ncgc.thickclient.compounds.url
+
+        String compositeETag = ""
+        final List<Long> cids = queryCartService.retrieveCartCompoundIdsFromShoppingCart()
+        final List<Long> pids = queryCartService.retrieveCartProjectIdsFromShoppingCart()
+        final List<Long> adids = queryCartService.retrieveCartAssayIdsFromShoppingCart()
+        if (cids || pids || adids) {
+            compositeETag = eTagsService.createCompositeETags(cids, pids, adids)
+        }
+        if (compositeETag){
+            redirect(url: thickClientURL + compositeETag)
+            return
+        }
+        redirect(url: thickClientURL)
+    }
     def refreshSummaryView() {
         render(template: '/bardWebInterface/queryCartIndicator', model: modelForSummary)
     }

@@ -14,7 +14,7 @@ grails.cache.config = {
         maxElementsOnDisk 10000000
     }
 }
-ncgc.server.root.url = "http://bard.nih.gov/api/v14"
+ncgc.server.root.url = "http://bard.nih.gov/api/v15"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 
 log4j = {

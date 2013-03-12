@@ -12,6 +12,10 @@ public class Compound extends JsonUtil {
     private String etag;
 
     private CompoundAnnotations compoundAnnotations
+
+
+    @JsonProperty("probeAnnotations")
+    private List<ProbeAnnotation> probeAnnotations = new ArrayList<ProbeAnnotation>();
     @JsonProperty("bardProjectId")
     private Long bardProjectId
     @JsonProperty("capProjectId")
@@ -70,6 +74,15 @@ public class Compound extends JsonUtil {
     void setCompoundAnnotations(CompoundAnnotations compoundAnnotations) {
         this.compoundAnnotations = compoundAnnotations
     }
+    @JsonProperty("probeAnnotations")
+    public List<ProbeAnnotation> getProbeAnnotations() {
+        return this.probeAnnotations
+    }
+    @JsonProperty("probeAnnotations")
+    public void setProbeAnnotations(List<ProbeAnnotation> probeAnnotations) {
+        this.probeAnnotations = probeAnnotations
+    }
+
     @JsonProperty("anno_key")
     public List<String> getAnno_key() {
         return anno_key;
@@ -361,6 +374,27 @@ public class Compound extends JsonUtil {
 
     public Long getId() {
         return this.cid;
+    }
+    ProbeAnnotation getProbeCid(){
+        for(ProbeAnnotation probeAnnotation: getProbeAnnotations()){
+            if(probeAnnotation.isPubChemCIDLink()){
+                return probeAnnotation
+            }
+        }
+    }
+    ProbeAnnotation getProbe(){
+        for(ProbeAnnotation probeAnnotation: getProbeAnnotations()){
+            if(probeAnnotation.isProbeLink()){
+                return probeAnnotation
+            }
+        }
+    }
+    ProbeAnnotation getProbeSid(){
+        for(ProbeAnnotation probeAnnotation: getProbeAnnotations()){
+            if(probeAnnotation.isPubChemSIDLink()){
+                return probeAnnotation
+            }
+        }
     }
 
 }

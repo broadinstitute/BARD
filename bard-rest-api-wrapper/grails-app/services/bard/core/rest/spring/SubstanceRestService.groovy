@@ -12,7 +12,7 @@ import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
 class SubstanceRestService extends AbstractRestService {
-
+    def transactional=false
     public String getResourceContext() {
         return RestApiConstants.SUBSTANCES_RESOURCE
     }
@@ -39,7 +39,7 @@ class SubstanceRestService extends AbstractRestService {
 
     String buildExperimentQuery() {
         final StringBuilder resource =
-            new StringBuilder(this.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
+            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
         return resource.toString();
     }
     /**
@@ -71,7 +71,7 @@ class SubstanceRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.SUBSTANCES_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

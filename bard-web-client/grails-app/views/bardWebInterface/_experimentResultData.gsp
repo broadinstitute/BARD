@@ -26,9 +26,11 @@
         <g:link controller="bardWebInterface" action="showAssay"
                 id="${webQueryTableModel?.additionalProperties.bardAssayId}">
             ${webQueryTableModel?.additionalProperties.capAssayId}
+
         </g:link>
     </g:else>
     </b>
+    <b>Confidence Level: ${webQueryTableModel?.additionalProperties.confidenceLevel}</b>
 </p>
 
 <div class="row-fluid">

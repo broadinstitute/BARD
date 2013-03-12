@@ -2,14 +2,15 @@ package bard.core.rest.spring
 
 import bard.core.exceptions.RestApiException
 import bard.core.helper.LoggerService
+import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
+import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import org.springframework.http.HttpEntity
 
 @Unroll
 @TestFor(SubstanceRestService)
@@ -20,8 +21,9 @@ class RestServiceExceptionsUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        service.promiscuityUrl = "badapple"
-        service.baseUrl = "http://ncgc"
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
+
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

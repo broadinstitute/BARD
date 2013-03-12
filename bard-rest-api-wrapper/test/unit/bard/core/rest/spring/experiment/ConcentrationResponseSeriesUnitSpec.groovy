@@ -6,7 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import bard.rest.api.wrapper.Dummy
 import bard.core.rest.spring.DataExportRestService
-import bard.core.rest.spring.util.DictionaryElement
+import bard.core.rest.spring.util.Node
 
 @Unroll
 class ConcentrationResponseSeriesUnitSpec extends Specification {
@@ -106,7 +106,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         assert expectedDescription == foundDescription
         where:
         label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
-        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(description: "label") | "label"             | 1
+        "Has a DictElemId and in dictionary"      | 222        | new Node(description: "label") | "label"             | 1
         "Has a DictElemId, but not in dictionary" | 221        | null                                        | ""                  | 1
         "Has no DictElemId"                       | 0          | null                                        | ""                  | 0
 
@@ -126,7 +126,7 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         assert expectedLabel == foundLabel
         where:
         label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions
-        "Has a DictElemId and in dictionary"      | 222        | new DictionaryElement(label: "label") | "label"       | 1
+        "Has a DictElemId and in dictionary"      | 222        | new Node(label: "label") | "label"       | 1
         "Has a DictElemId, but not in dictionary" | 221        | null                                  | ""            | 1
         "Has no DictElemId"                       | 0          | null                                  | ""            | 0
 

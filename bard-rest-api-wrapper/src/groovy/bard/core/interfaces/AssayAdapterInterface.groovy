@@ -4,6 +4,12 @@ package bard.core.interfaces;
 import bard.core.rest.spring.assays.BardAnnotation
 
 public interface AssayAdapterInterface {
+
+
+    String getAssayStatus() ;
+    String getDesignedBy();
+    String getAssayTypeString();
+
     public String getName()
     public String getHighlight();
 

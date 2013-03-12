@@ -17,15 +17,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Target extends JsonUtil{
-    @JsonProperty("url")
-    public String getUrl() {
-        return url
-    }
-    @JsonProperty("url")
-    public void setUrl(String url) {
-        this.url = url
-    }
 
+    @JsonProperty("classes")
+    private List<TargetClassification> targetClassifications = new ArrayList<TargetClassification>();
     @JsonProperty("url")
     private String url;
     @JsonProperty("acc")
@@ -33,7 +27,7 @@ public class Target extends JsonUtil{
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")
-    private Object description;
+    private String description;
     @JsonProperty("status")
     private String status;
     @JsonProperty("geneId")
@@ -43,6 +37,23 @@ public class Target extends JsonUtil{
     @JsonProperty("resourcePath")
     private String resourcePath;
 
+
+    @JsonProperty("classes")
+    public List<TargetClassification> getTargetClassifications() {
+        return targetClassifications
+    }
+    @JsonProperty("classes")
+    public void setTargetClassifications(List<TargetClassification> targetClassifications) {
+        this.targetClassifications = targetClassifications
+    }
+    @JsonProperty("url")
+    public String getUrl() {
+        return url
+    }
+    @JsonProperty("url")
+    public void setUrl(String url) {
+        this.url = url
+    }
     @JsonProperty("acc")
     public String getAcc() {
         return acc;

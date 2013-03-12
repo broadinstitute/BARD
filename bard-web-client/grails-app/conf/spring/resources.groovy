@@ -1,59 +1,66 @@
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.CompoundRestService
-import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.ProjectRestService
+import bard.core.helper.LoggerService
+import bard.core.util.ExternalUrlDTO
 import bardqueryapi.QueryService
 import grails.util.GrailsUtil
 import mockServices.MockQueryService
 import org.springframework.web.client.RestTemplate
-import java.util.concurrent.Executors
-import bard.core.rest.spring.SubstanceRestService
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.*
+import bardqueryapi.ETagsService
 
 /**
  * Spring Configuration of resources
  */
 beans = {
-    final String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
-    final String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
-    final String exportApiKey = grailsApplication.config.dataexport.apikey
-    final String exportAcceptType = grailsApplication.config.dataexport.dictionary.accept.type
-    final String exportDictionaryURL = grailsApplication.config.dataexport.dictionary.url
+    String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
+    String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
 
-    restTemplate(RestTemplate)
-
-    compoundRestService(CompoundRestService) {
+    externalUrlDTO(ExternalUrlDTO){
         baseUrl = ncgcBaseURL
         promiscuityUrl = badApplePromiscuityUrl
+    }
+
+    restTemplate(RestTemplate)
+    loggerService(LoggerService)
+
+    compoundRestService(CompoundRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
-        executorService = Executors.newCachedThreadPool()
         loggerService = ref('loggerService')
     }
 
     experimentRestService(ExperimentRestService) {
-        baseUrl = ncgcBaseURL
+        externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     projectRestService(ProjectRestService) {
-        baseUrl = ncgcBaseURL
+        externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     assayRestService(AssayRestService) {
-        baseUrl = ncgcBaseURL
+        externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
     substanceRestService(SubstanceRestService) {
-        baseUrl = ncgcBaseURL
+        externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
+
     dataExportRestService(DataExportRestService) {
-        dataExportApiKey = exportApiKey
-        dictionaryAcceptType = exportAcceptType
-        dataExportDictionaryURL = exportDictionaryURL
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    eTagRestService(ETagRestService){
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    targetRestService(TargetRestService){
+        externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
@@ -71,6 +78,13 @@ beans = {
                 assayRestService = ref('assayRestService')
                 substanceRestService=ref('substanceRestService')
                 experimentRestService=ref('experimentRestService')
+            }
+            eTagsService(ETagsService){
+                compoundRestService = ref('compoundRestService')
+                projectRestService = ref('projectRestService')
+                assayRestService = ref('assayRestService')
+                eTagRestService=ref('eTagRestService')
+
             }
     }
     crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here

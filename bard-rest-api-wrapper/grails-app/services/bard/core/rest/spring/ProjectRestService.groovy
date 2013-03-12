@@ -17,7 +17,7 @@ import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.project.ProjectStep
 
 class ProjectRestService extends AbstractRestService {
-
+    def transactional=false
     public String getResourceContext() {
         return RestApiConstants.PROJECTS_RESOURCE
     }
@@ -137,7 +137,7 @@ class ProjectRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.PROJECTS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -149,7 +149,7 @@ class ProjectRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.PROJECTS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

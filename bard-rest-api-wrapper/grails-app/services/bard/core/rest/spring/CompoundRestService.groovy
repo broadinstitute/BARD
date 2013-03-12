@@ -20,9 +20,11 @@ import java.util.concurrent.FutureTask
 import java.util.concurrent.TimeUnit
 
 import bard.core.rest.spring.compounds.*
+import java.util.concurrent.Executors
 
 class CompoundRestService extends AbstractRestService {
-    ExecutorService executorService
+    def transactional=false
+    ExecutorService executorService = Executors.newCachedThreadPool()
 
     public String getResourceContext() {
         return RestApiConstants.COMPOUNDS_RESOURCE;
@@ -45,15 +47,6 @@ class CompoundRestService extends AbstractRestService {
         return []
     }
 
-//    Cannot cast object '''{cid=44552613, probeId=ML118, url=null, smiles=OC(=O)C(F)(F)F.CN1C(=O)C=C(OCCCC(=O)NC2=NC=CC(C)=C2)C3=CC=CC=C13,
-//name=4-(1-methyl-2-oxoquinolin-4-yl)oxy-N-(4-methylpyridin-2-yl)butanamide;2,2,2-trifluoroacetic acid,
-//iupacName=4-(1-methyl-2-oxoquinolin-4-yl)oxy-N-(4-methylpyridin-2-yl)butanamide;2,2,2-trifluoroacetic acid,
-// mwt=465.422, tpsa=109.0, exactMass=465.151, xlogp=null, complexity=632, rotatable=6, hbondAcceptor=9,
-// hbondDonor=2, compoundClass=Unassigned, numAssay=null, numActiveAssay=null, highlight=null,
-// resourcePath=/compounds/44552613, bardProjectid=-1}''' with class 'java.util.LinkedHashMap'
-//    to class 'bard.core.rest.spring.compounds.Compound' due to: org.codehaus.groovy.runtime.metaclass.MissingPropertyExceptionNoStack:
-//    No such property: bardProjectid for class: bard.core.rest.spring.compounds.Compound
-//    Possible solutions: bardProjectId
     public Compound findProbe(String mlNumber) {
         String urlToCompounds = getResource() + RestApiConstants.PROBEID + RestApiConstants.FORWARD_SLASH + mlNumber
         final URL url = new URL(urlToCompounds)
@@ -100,7 +93,7 @@ class CompoundRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.COMPOUNDS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -112,7 +105,7 @@ class CompoundRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.COMPOUNDS_RESOURCE
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();
@@ -124,7 +117,7 @@ class CompoundRestService extends AbstractRestService {
      * @return the relative url to the promiscuity plugin
      */
     public String buildPromiscuityScoreURL() {
-        return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}&repr={mediaType}").toString();
+        return new StringBuilder(this.externalUrlDTO.promiscuityUrl).append("{cid}").append("?expand={expand}&repr={mediaType}").toString();
     }
     /**
      * something like 'plugins/badapple/prom/cid/'
@@ -133,7 +126,7 @@ class CompoundRestService extends AbstractRestService {
      * @return the relative url to the promiscuity plugin
      */
     public String buildPromiscuityURL() {
-        return new StringBuilder(this.promiscuityUrl).append("{cid}").append("?expand={expand}").toString();
+        return new StringBuilder(this.externalUrlDTO.promiscuityUrl).append("{cid}").append("?expand={expand}").toString();
     }
 
     protected String buildQueryForTestedAssays(final Long cid,
