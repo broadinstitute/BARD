@@ -660,7 +660,20 @@ class ResultsService {
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
-        return results
+        // flatten results to include the top level elements as well as all reachable children
+        Set<Result> allResults = new HashSet()
+        addAllResults(allResults, results)
+
+        return allResults
+    }
+
+    private addAllResults(Collection<Result> all, Collection<Result> toAdd) {
+        for(result in toAdd) {
+            if (!all.contains(result)) {
+                all.add(result)
+                addAllResults(all, result.resultHierarchiesForParentResult.collect { it.result } )
+            }
+        }
     }
 
     Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
@@ -701,8 +714,6 @@ class ResultsService {
                     for(childResult in resultChildren) {
                         linkResults(child.parentChildRelationship, errors, 0, childResult, result);
                     }
-
-//                    results.addAll(resultChildren)
                 }
 
                 // likewise create each of the context items associated with this measure
