@@ -153,36 +153,35 @@ class SpreadsheetElementsTagLib {
                 Boolean  yNormMinimumSpecified = false
                 Boolean  yNormMaximumSpecified = false
                 for (HillCurveValueHolder hillCurveValueHolder in spreadSheetActivityStorage.getHillCurveValueHolderList()) {
+                    combinedParameters['curves[' + curveNumber + '].sinf'] = hillCurveValueHolder.sInf
+                    combinedParameters['curves[' + curveNumber + '].s0'] = hillCurveValueHolder.s0
+                    combinedParameters['curves[' + curveNumber + '].slope'] = hillCurveValueHolder.slope
+                    combinedParameters['curves[' + curveNumber + '].hillSlope'] = hillCurveValueHolder.coef
+                    combinedParameters['curves[' + curveNumber + '].concentrations'] = hillCurveValueHolder.conc
+                    combinedParameters['curves[' + curveNumber + '].activities'] = hillCurveValueHolder.response
+                    if ((!xAxisLabelSpecified) && (hillCurveValueHolder.xAxisLabel)) {
+                        combinedParameters['xAxisLabel'] = hillCurveValueHolder.xAxisLabel
+                        xAxisLabelSpecified = true
+                    }
+                    if ((!yAxisLabelSpecified) && (hillCurveValueHolder.yAxisLabel)) {
+                        combinedParameters['yAxisLabel'] = hillCurveValueHolder.yAxisLabel
+                        yAxisLabelSpecified = true
+                    }
                     if ((yMinimum != Double.NaN) &&
-                        (yMaximum !=  Double.NaN) ){
-                        combinedParameters['curves['+curveNumber+'].sinf']= hillCurveValueHolder.sInf
-                        combinedParameters['curves['+curveNumber+'].s0']= hillCurveValueHolder.s0
-                        combinedParameters['curves['+curveNumber+'].slope']= hillCurveValueHolder.slope
-                        combinedParameters['curves['+curveNumber+'].hillSlope']= hillCurveValueHolder.coef
-                        combinedParameters['curves['+curveNumber+'].concentrations']= hillCurveValueHolder.conc
-                        combinedParameters['curves['+curveNumber+'].activities']= hillCurveValueHolder.response
-                        if ((!xAxisLabelSpecified) && (hillCurveValueHolder.xAxisLabel)){
-                            combinedParameters['xAxisLabel']= hillCurveValueHolder.xAxisLabel
-                            xAxisLabelSpecified = true
-                        }
-                        if ((!yAxisLabelSpecified) && (hillCurveValueHolder.yAxisLabel)) {
-                            combinedParameters['yAxisLabel']= hillCurveValueHolder.yAxisLabel
-                            yAxisLabelSpecified = true
-                        }
-
-                        if (normalizeColumn){
-                            if ((!yNormMinimumSpecified) && (yMinimum)) {
-                                combinedParameters['yNormMin']= yMinimum
+                            (yMaximum != Double.NaN)) {
+                        if (normalizeColumn) {
+                            if ((!yNormMinimumSpecified) && (yMinimum!=null)) {
+                                combinedParameters['yNormMin'] = yMinimum
                                 yNormMinimumSpecified = true
                             }
-                            if ((!yNormMaximumSpecified) && (yMaximum)) {
-                                combinedParameters['yNormMax']= yMaximum
+                            if ((!yNormMaximumSpecified) && (yMaximum!=null)) {
+                                combinedParameters['yNormMax'] = yMaximum
                                 yNormMaximumSpecified = true
                             }
 
                         }
-                        curveNumber++
                     }
+                    curveNumber++
                 }
                 out << """ "${
                     this.createLink(

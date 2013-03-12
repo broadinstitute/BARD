@@ -285,9 +285,9 @@ class DoseCurveImageUnitSpec extends Specification {
         final Bounds bounds = DoseCurveImage.findBounds([], 1, 2, 1, 2)
         then: "We expect a null curve back"
         assert bounds
-        assert bounds.xMax == 100
+        assert bounds.xMax == 2
         assert bounds.yMax == 2
-        assert bounds.xMin == 10
+        assert bounds.xMin == 1
         assert bounds.yMin == 1
     }
 }
