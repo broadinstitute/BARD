@@ -3,7 +3,6 @@ package pages
 import geb.Module;
 import geb.Page
 import pages.ViewProjectDefinitionPage
-import pages.CAPUtilPage
 
 class EditProjectPage extends Page{
 	static url=""

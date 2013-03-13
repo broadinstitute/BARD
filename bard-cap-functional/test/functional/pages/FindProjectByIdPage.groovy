@@ -1,7 +1,6 @@
 package pages
 
 import geb.Page
-import pages.CAPUtilPage
 
 class FindProjectByIdPage extends Page {
 	def FIND_FIELD_ID = "projectId"
