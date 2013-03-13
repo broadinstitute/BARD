@@ -83,7 +83,7 @@ grails.project.dependency.resolution = {
         test ":codenarc:0.15"
         test ":geb:$gebVersion"
         test ":remote-control:1.2"
-        compile ":clover:3.1.6"
+        compile ":clover:3.1.10.1"
         compile ":spring-mobile:0.4"
         compile ":google-analytics:2.0"
         compile ":mail:1.0.1"
