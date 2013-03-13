@@ -1,23 +1,15 @@
 package bardqueryapi.compoundBioActivitySummary
 
-import bardqueryapi.WebQueryValue
-import bardqueryapi.TableModel
-import bard.core.rest.spring.experiment.Activity
-
-import bardqueryapi.GroupByTypes
-
-import bardqueryapi.IQueryService
-
 import bard.core.adapter.AssayAdapter
-
-import org.apache.log4j.Logger
-import bard.core.rest.spring.assays.Assay
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.project.Project
-import bardqueryapi.AssayValue
-import bardqueryapi.ProjectValue
+import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentShow
-import bardqueryapi.ExperimentValue
+import org.apache.log4j.Logger
+import bardqueryapi.*
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResponseClassEnum
+import org.apache.commons.lang3.tuple.Pair
+import org.apache.commons.lang3.tuple.ImmutablePair
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,33 +27,44 @@ class CompoundBioActivitySummaryBuilder {
     }
 
     public List<TableModel> buildModel(GroupByTypes groupByType, Map groupedByExperimentalData) {// Map<ADID/PID, List<Activity>>
-        List<TableModel> tableModels = []
+        TableModel tableModel = new TableModel()
 
-        //Create a list of single-row TableModel tables, each table represents a collection of experiments grouped by assay or project
+        //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
         for (Long resourceId in groupedByExperimentalData.keySet()) {
             List<WebQueryValue> singleRowData = []
 
-            List<Activity> exptDataList = groupedByExperimentalData[resourceId]
             //The first cell (column) is the resource (assay or a project)
             WebQueryValue resource = findResourceByTypeAndId(groupByType, resourceId)
             singleRowData << resource
-            //For each grouped-by resource item (assay/project), add all the grouped-by experimental data,
-            // converting result types into the appropriate value-types.
-            //Use Map<exptDataId, List<WebQueryValue> to store the sections of each exptData (curve, single-point, etc.). For example: ["14359.26749233", [StructureValue, ConcentrationResponsePlotValue].
-            Map<String, WebQueryValue> exptDataValues = [:]
+
+            List<Activity> exptDataList = groupedByExperimentalData[resourceId]
+            //For each grouped-by resource item (assay/project), add all the grouped-by experimental data, converting result types into the appropriate value-types.
+            //Use:
+            // 1. A list of 'box' maps to collect all the experiments data, grouped by experiment (experiment being the key)
+            // 2. A map for each experiment-level data, where the experiment is the key and the results are in a list
+            // 3. A list of result type values (curves, single-points, etc.)
             for (Activity exptData in exptDataList) {
                 String key = exptData.exptDataId //e.g., "14359.26749233"
-                //Add the experiment itself (for an experiment's description)
+                //Represents an experiment box in the Compound Bio Activity Summary panel. Each 'box' includes
+                // an experiment summary title and then a list of WebQueryValue result types (curves, single-points, etc.)
+                Map<WebQueryValue, List<WebQueryValue>> experimentBox = [:]
+                //Add the experiment itself (for an experiment's description title)
                 ExperimentShow experimentShow = this.queryService.experimentRestService.getExperimentById(exptData.bardExptId)
                 WebQueryValue experiment = new ExperimentValue(value: experimentShow)
-                singleRowData << experiment
-                //TODO - add all result types
-            }
 
-            TableModel tableModel = new TableModel(data: [singleRowData])
-            tableModels << tableModel
+                List<WebQueryValue> results = convertExperimentResultsToValues(exptData)
+
+                experimentBox.put(experiment, results)
+                //Cast the experimentBox to a MapValue type
+                MapValue experimentBoxValue = new MapValue(value: experimentBox)
+                //Add the experimnet box to the row's list of value
+                singleRowData << experimentBoxValue
+            }
+            //Cast the single-row list into a ListValue and store in the table
+            ListValue rowValue = new ListValue(value: singleRowData)
+            tableModel.data << rowValue
         }
-        return tableModels
+        return tableModel
     }
 
 
@@ -94,4 +97,29 @@ class CompoundBioActivitySummaryBuilder {
         return resource
     }
 
+    /**
+     * Map an experiment (exptData) into a list of table-model 'Values'.
+     * The main result data is in the experiment's priority elements.
+     * @param exptData
+     * @return
+     */
+    List<WebQueryValue> convertExperimentResultsToValues(Activity exptData) {
+        List<WebQueryValue> values = []
+        ResponseClassEnum responseClass = ResponseClassEnum.toEnum(exptData.resultData.responseClass)
+
+        for (PriorityElement priorityElement in exptData.resultData.priorityElements) {
+            switch (responseClass) {
+                case ResponseClassEnum.SP:
+                    //The result-type is a single-point, key/value pair.
+                    Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.pubChemDisplayName, priorityElement.value)
+                    PairValue pairValue = new PairValue(value: pair)
+                    values << pair
+                    break;
+                case ResponseClassEnum.CR_SER:
+                    break;
+                default:
+                    throw new RuntimeException("Response-class not supported: ${responseClass}")
+            }
+        }
+    }
 }

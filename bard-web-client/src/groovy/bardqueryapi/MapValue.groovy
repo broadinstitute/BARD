@@ -1,7 +1,5 @@
 package bardqueryapi
 
-import bard.core.rest.spring.experiment.ActivityConcentrationMap
-
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu
@@ -9,4 +7,11 @@ import bard.core.rest.spring.experiment.ActivityConcentrationMap
  * Time: 8:02 PM
  * To change this template use File | Settings | File Templates.
  */
-class ConcentrationResponsePlotValue extends ConcentrationResponseSeriesValue {}
+class MapValue implements WebQueryValue {
+
+    public String toString(){
+        return this.value
+    }
+
+    Map<WebQueryValue, Object> value
+}
