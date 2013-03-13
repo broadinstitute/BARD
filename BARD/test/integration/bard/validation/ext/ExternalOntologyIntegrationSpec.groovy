@@ -5,8 +5,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
 
-import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
-import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
+import static BardExternalOntologyFactory.NCBI_EMAIL
+import static BardExternalOntologyFactory.NCBI_TOOL
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,11 +18,11 @@ import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
 @Unroll
 class ExternalOntologyIntegrationSpec extends Specification {
 
-    void "test valid urls ExternalOntologyFactory.getExternalOntologyAPI for #externalUrl"() {
+    void "test valid urls new ConfigurableExternalOntologyFactory().getExternalOntologyAPI for #externalUrl"() {
         when:
         println("url: $externalUrl")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI externalOntologyAPI = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI externalOntologyAPI = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
 
         then:
         (externalOntologyAPI != null) == notNull
@@ -55,11 +55,11 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://someUnknown.com"                                                                       | false
     }
 
-    void "test invalid urls ExternalOntologyFactory.getExternalOntologyAPI for #externalUrl"() {
+    void "test invalid urls new ConfigurableExternalOntologyFactory().getExternalOntologyAPI for #externalUrl"() {
         when:
         println("url: $externalUrl")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
 
         then:
         ExternalOntologyException e = thrown()
@@ -74,7 +74,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl externalValueId: $externalValueId")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
         ExternalItem externalItem = extOntology.findById(externalValueId)
 
         then:
@@ -101,7 +101,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl externalValueId: $externalValueId")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
         ExternalItem externalItem = extOntology.findById(externalValueId)
 
         then:
@@ -125,7 +125,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl term: $term")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
         List<ExternalItem> externalItems = extOntology.findMatching(term)
 
         then:
@@ -160,7 +160,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl term: $term")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = ExternalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
         List<ExternalItem> externalItems = extOntology.findMatching(term)
 
         then:
