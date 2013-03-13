@@ -22,9 +22,7 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		at EditAssayMeasurePage
 		then: "Adding New Top Measure"
 		addTopMeasureBtn.click()
-
 		newMeasure("$resultTypeTopMeasure", "$resultValueTopMeasure")
-	
 		report "AddTopMeasure"
 		when:
 		at EditAssayMeasurePage
@@ -40,8 +38,7 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 
 		then: "Adding New Child Measure"
 		measuresHolder.find("a", text:"$resultTypeTopMeasure ($resultValueTopMeasure)").click() //highlighting the Top Measure
-		//assert measureDetailModule.addChildMeasureBtn
-		measureDetailModule.addChildMeasureBtn("$resultTypeTopMeasure") //click to open add child measure window
+		measureDetailModule("$resultTypeTopMeasure").addChildMeasureBtn("$resultTypeTopMeasure").click() //click to open add child measure window
 		newMeasure("$resultTypeChildMeasure", "$resultValueChildMeasure")
 		report "AddChildMeasure"
 		when:
@@ -56,27 +53,25 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
 		then: "Adding Context Card 2 for Item Move"
-		addEditAssayCards.addNewCardBtn.click()
-		waitFor{ addEditAssayCards.titleBar }
-		addNewContextCard("$contextCard")
 		
+		addNewContextCard("$contextCard")
+
 		when:
 		at EditAssayContextPage
 		finishEditingBtn.click()
 		then:
 		at ViewAssayDefinitionPage
-		
+
 		editMeasureNavigate()
 		when: "User is at Edit Assay Measure Page"
 		at EditAssayMeasurePage
 
 		then: "Associating Child Measure with Context"
-		//navigate to child measure
 		navigateToChildMeasure(resultTypeTopMeasure, resultValueTopMeasure, resultTypeChildMeasure, resultValueChildMeasure)
 
-		waitFor(10, 5) { measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form.form-horizontal") }
-		measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form.form-horizontal").find("#assayContextId").value("$contextCard")  //select context to assiciate measure with
-		measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form.form-horizontal").find("button").click()  //click assiciate button
+		waitFor(10, 5) { measureDetailModule("$resultTypeChildMeasure").measureForm }
+		measureDetailModule("$resultTypeChildMeasure").assayContext.value("$contextCard")  //select context to assiciate measure with
+		measureDetailModule("$resultTypeChildMeasure").associateBtn.click()  //click assiciate button
 
 		report "AssociateChildMeasureWithContext"
 		when:
@@ -85,10 +80,6 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		then:
 		at ViewAssayDefinitionPage
 
-		//assert that measure is associated with context
-//		wiatFor(10, 5) { cardsHold.cardcap("$contextCard") }
-	
-//		assert cardsHolder.cardcap("$contextCard").next().find("a", text:"$resultTypeChildMeasure ($resultValueChildMeasure)")
 	}
 
 	def "Test Disassociate Measure from Context"(){
@@ -97,13 +88,9 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		when: "User is at Edit Assay Measure Page"
 		at EditAssayMeasurePage
 		then: "Disassociate Child Measure from Context"
-		//navigate to child measure
 		navigateToChildMeasure(resultTypeTopMeasure, resultValueTopMeasure, resultTypeChildMeasure, resultValueChildMeasure)
-		//		measuresHolder.find("a", text:"$resultTypeTopMeasure ($resultValueTopMeasure)").parent().find("span")[0].click()
-		//		measuresHolder.find("ul").find("a", text:"$resultTypeTopMeasure ($resultValueTopMeasure)").click()
-
-		assert measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form.form-horizontal")
-		measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form.form-horizontal").find("button", text:"Disassociate context from $resultTypeChildMeasure").click()
+		assert measureDetailModule("$resultTypeChildMeasure").measureForm
+		measureDetailModule("$resultTypeChildMeasure").disasiciateBtn("$resultTypeChildMeasure").click()
 
 		report "DiisassociateChildMeasureFromContext"
 		when:
@@ -119,11 +106,9 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		when:"User is at Edit Assay Measure Page"
 		at EditAssayMeasurePage
 		then:"Deleting Child Measure"
-		//navigate to child measure window
 		navigateToChildMeasure(resultTypeTopMeasure, resultValueTopMeasure, resultTypeChildMeasure, resultValueChildMeasure)
-		
-		assert measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form")[1].find("button", text:"Click to delete $resultTypeChildMeasure"+" entirely")
-		measureDetailModule.measuresDetails("$resultTypeChildMeasure").find("form")[1].find("button", text:"Click to delete $resultTypeChildMeasure"+" entirely").click()
+		assert measureDetailModule("$resultTypeChildMeasure").deleteMeasure("$resultTypeChildMeasure")
+		measureDetailModule("$resultTypeChildMeasure").deleteMeasure("$resultTypeChildMeasure").click()
 
 		report "DeleteChildMeasure"
 		when:
@@ -140,9 +125,8 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		at EditAssayMeasurePage
 		then: "Deleting Top Measure"
 		measuresHolder.find("a", text:"$resultTypeTopMeasure ($resultValueTopMeasure)").click()
-		assert measureDetailModule.measuresDetails("$resultTypeTopMeasure").find("form")[1].find("button", text:"Click to delete $resultTypeTopMeasure"+" entirely")
-
-		measureDetailModule.measuresDetails("$resultTypeTopMeasure").find("form")[1].find("button", text:"Click to delete $resultTypeTopMeasure"+" entirely").click()
+		assert measureDetailModule("$resultTypeTopMeasure").deleteMeasure("$resultTypeTopMeasure")
+		measureDetailModule("$resultTypeTopMeasure").deleteMeasure("$resultTypeTopMeasure").click()
 
 		report "DeleteTopMeasure"
 		when:
@@ -151,14 +135,15 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		then:
 		at ViewAssayDefinitionPage
 	}
-	
+
 	def "Test Delete Assay Cards"() {
 		editAssayContext()
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
-	
+
 		then: "Deleting the previously added card"
 		deletAssayCard("$contextCard")
-	
+		report "DeleteAssayCard"
 	}
+
 }

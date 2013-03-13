@@ -2,7 +2,7 @@ import java.awt.TextArea;
 
 import geb.Page
 import geb.Module
-import geb.textmatching.TextMatcher;
+import geb.navigator.Navigator
 
 class EditAssayMeasurePage extends Page{
 	static url=""
@@ -14,69 +14,59 @@ class EditAssayMeasurePage extends Page{
 		addTopMeasureBtn { $("a#add-measure-at-top") } // add Top Measure button
 
 		measuresHolder(wait: true) { $("ul.dynatree-container").find("li") }
-		
-		addMeasureModule {  module AddNewMeasureModule }
-		measureDetailModule {  module MeasureDetailsModule }
-
+		addMeasureForm { $("form#add-measure-form") }
+		selectResultTye { module SelectToContainer, $("div#s2id_resultTypeId") }
+		selectStatistics { module SelectToContainer, $("div#s2id_statisticId") }
+		measureDetailModule { measureName -> module MeasureDetailsModule, $("div.measure-detail-card").find("h1", text:"Measure: $measureName").parent() }
+		enterInput { module SelectInputModule }
+		resultPopulated { module SelectResultPopListModule, $("div.select2-drop.select2-drop-active") }
+		footerBtns { $("div.modal-footer").find("button") }
 	}
 
 	def newMeasure(resultType, resultVal){
-		waitFor(10, 5){ addMeasureModule.selectResultType }
-		assert addMeasureModule.selectResultType
-	//	assert addMeasureModule.enterResult
-		
-		addMeasureModule.selectResultType.click()
-		addMeasureModule.enterResult.value("$resultType")
-		waitFor(10, 5){ addMeasureModule.resultPopup }
-		addMeasureModule.resultPopup.click()
-
-		addMeasureModule.selectStatistics.click()
-		addMeasureModule.enterResult.value("$resultVal")
-		waitFor(10, 5){ addMeasureModule.resultPopup }
-		addMeasureModule.resultPopup.click()
-
-		addMeasureModule.footerBtns[1].click()
+		Thread.sleep(2000)
+		waitFor(10, 2){ selectResultTye.selectLink }
+		assert selectResultTye.selectLink
+		selectResultTye.selectLink.click()
+		waitFor { enterInput.enterResult }
+		enterInput.enterResult.value("$resultType")
+		Thread.sleep(3000)
+		waitFor{ resultPopulated.resultPopup }
+		resultPopulated.resultPopup.click()
+		assert selectStatistics.selectLink
+		selectStatistics.selectLink.click()
+		waitFor { enterInput.enterResult }
+		enterInput.enterResult.value("$resultVal")
+		Thread.sleep(2000)
+		waitFor{ resultPopulated.resultPopup }
+		resultPopulated.resultPopup.click()
+		footerBtns[1].click()
 		waitFor(10, 3) { measuresHolder }
 	}
 
 	def isMeasureAdded(resultType, resultVal){
 		waitFor(){ measuresHolder }
-		println $("a.dynatree-title", text:"$resultType ($resultVal)")
 		assert $("a.dynatree-title", text:"$resultType ($resultVal)")
 	}
-	
+
 	def navigateToChildMeasure(topMeasureType, topMeasureVal, childMeasureType, childMeasureVal){
-		measuresHolder.find("a", text:"$topMeasureType ($topMeasureVal)").parent().find("span")[0].click()
-		measuresHolder.find("ul").find("a", text:"$childMeasureType ($childMeasureVal)").click()
-		
-	//	waitFor{ measureDetailModule.measuresDetails("$childMeasureType").find("form.form-horizontal") }
-	}
-}
-
-class AddNewMeasureModule extends Module {
-
-	static content = {
-		addNewMeasureTitle(wait:true) { $("h3#saveModalLabel").text() ==~"Add a new measure" }
-
-		selectResultType(wait: true) { $("div#s2id_resultTypeId").find("a.select2-choice.select2-default")}
-		selectStatistics(wait: true) { $("div#s2id_statisticId").find("a.select2-choice.select2-default")}
-
-		enterResult(wait:true) { $("div.select2-drop.select2-drop-active").find("input") }
-		resultPopup { $("li.select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted") }
-
-		footerBtns { $("div.modal-footer").find("button") }
-		//	cancelBtn { $("button.btn.btn-primary", text:"Save").next() }
+		def treeNaviSpan = measuresHolder.find("a", text:"$topMeasureType ($topMeasureVal)").parent()
+		if(treeNaviSpan.next().isDisplayed()){
+			measuresHolder.find("ul").find("a", text:"$childMeasureType ($childMeasureVal)").click()
+		}else{
+			treeNaviSpan.find("span.dynatree-expander").click()
+			measuresHolder.find("ul").find("a", text:"$childMeasureType ($childMeasureVal)").click()
+		}
 	}
 }
 
 class MeasureDetailsModule extends Module {
-
 	static content = {
-		measuresDetails { value -> $("div.measure-detail-card").find("h1", text:"Measure: $value").parent() }
-		addChildMeasureBtn { val -> $("a.btn", text:"Click to add new measure under $val").click() }
-	
-//		addAssociation { value -> $("#assayContextId").value("$value") }
-//		associateBtn { $("button.btn", text:"Associate") }
-	
+		measureForm { $("form") }
+		assayContext { measureForm.find("#assayContextId") }
+		associateBtn { measureForm.find("button", text:"Associate") }
+		addChildMeasureBtn { BtnText -> $("a.btn", text:"Click to add new measure under $BtnText") }
+		disasiciateBtn { BtnText -> measureForm.find("button", text:"Disassociate context from $BtnText") }
+		deleteMeasure { BtnText -> $("button", text:"Click to delete $BtnText"+" entirely")}
 	}
 }

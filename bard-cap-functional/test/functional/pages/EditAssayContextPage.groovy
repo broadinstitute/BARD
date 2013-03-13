@@ -3,9 +3,7 @@ package pages
 import geb.Page
 import geb.Module
 import geb.navigator.Navigator
-import geb.report.Reporter;
-
-
+import geb.report.Reporter
 
 class EditAssayContextPage extends Page{
 	static url=""
@@ -14,63 +12,141 @@ class EditAssayContextPage extends Page{
 
 	static content = {
 		editAssayDefinition {$("div", class:"pull-left").find("h4").text()}
-		finishEditingBtn { $("a.btn.btn-small.btn-primary")}  // Finish Editing asssay context btn
+		finishEditingBtn(wait: true) { $("a.btn.btn-small.btn-primary") }
 
 		addEditAssayCards { module AddEditAssayCardModule }
 		editAssayCards { module EditAssayCardModule }
 		deleteAssayCards { module DeleteAssayCardModule }
-
-		assayCardsHolder { module AssayCardsHolder }
-
+		cardHolders { module CardsHolderModule, $("div.roundedBorder.card-group.assay-protocol--assay-component-") }
 		moveAssayCardItem { module MoveCardItemsModule }
-
-		itemWizard { module AddItemWizardModule }
-		//cardHolder {$("table.table.table-hover").find("caption")}
-		loadingSpinner(wait:true) { $("div#spinner") } //loading message appear after action
-
-		cardItemsMenu {$("table.table.table-hover").find("caption", text:"target").next().find("a")} // Context card items menu in each card caption tbody
+		itemWizard { module AddItemWizardModule, $("form#AddItemWizard") }
+		selectToSearch { module SelectInputModule}
+		selectResult { module SelectResultPopListModule }
 	}
 
 	def addNewContextCard(def cardName){
+		if(isCardPresent(cardName)){
+			deletAssayCard(cardName)
+		}
+		
+		addEditAssayCards.addNewCardBtn.click()
+		waitFor{ addEditAssayCards.titleBar }
 		assert addEditAssayCards.titleBar.text() ==~ "Create new card"
 		assert addEditAssayCards.enterCardName
 		assert addEditAssayCards.saveBtn
 		assert addEditAssayCards.cancelBtn
 		addEditAssayCards.enterCardName << "$cardName"
 		addEditAssayCards.saveBtn.click()
-		//waitFor(20, 0.5) { loadingSpinner }
-		waitFor(20, 7){ assayCardsHolder.cardCaption("$cardName")}
-		//assert assayCardsHolder.cardCaption("$cardName")
+		waitFor(20, 7){ cardHolders.cardName("$cardName") }
 	}
 
 	def verifyEmptyCardsMenu(def cardName){
-		//assert assayCardsHolder.cardCaption("$cardName")
-		assayCardsHolder.cardMenu("$cardName") //click to open context card menu drop down
-		assert assayCardsHolder.cardMenuDD[1] // edit card name button
-		assert assayCardsHolder.cardMenuDD[2] // add item wizard button
-		assert assayCardsHolder.cardMenuDD[3] // delete card button
-		assayCardsHolder.cardMenuDD[0].click()
-	}
-
-	def isCardEmpty(def cardName){
-		cardItemsLabel("$cardName")
-		cardItemsvalue("$cardName")
-
+		assert cardHolders.cardName("$cardName")
+		cardHolders.cardMenu("$cardName").click()
+		assert cardHolders.cardDDMenu[1] // edit card name button
+		assert cardHolders.cardDDMenu[2] // add item wizard button
+		assert cardHolders.cardDDMenu[3] // delete card button
+		cardHolders.cardDDMenu[0].click()
 	}
 
 	def deletAssayCard(def cardName){
-		assayCardsHolder.cardMenu("$cardName")
-		assayCardsHolder.cardMenuDD[3].click()
+		assert isCardPresent(cardName)
+		cardHolders.cardMenu(cardName).click()
+		cardHolders.cardDDMenu[3].click()
 		waitFor { deleteAssayCards.deleteBtn }
 		deleteAssayCards.deleteBtn.click()
+	}
+
+	boolean isCardPresent(def cardName){
+		boolean found = false
+		if(cardHolders.cardTable){
+			cardHolders.cardTable.find("caption").each{ cards ->
+				if(cards.text().contains(cardName)){
+					found = true
+				}
+			}
+		}
+		return found
+	}
+
+	def defineAttributes(searchAttribValue){
+		Thread.sleep(3000)
+		waitFor(15, 3){ itemWizard.selectAttrib.selectLink }
+		assert itemWizard.selectAttrib.selectLink
+		assert itemWizard.nextBtn
+		assert itemWizard.cancelBtn
+		itemWizard.selectAttrib.selectLink.click()
+		selectToSearch.enterResult.value("$searchAttribValue")
+		Thread.sleep(2000)
+		waitFor(15, 3){ selectResult.resultPopup }
+		selectResult.resultPopup.click()
+		itemWizard.nextBtn.click()
+	}
+
+	def defineValueType(val){
+		Thread.sleep(2000)
+		waitFor(15, 3){ itemWizard.valueType("$val") }
+		assert itemWizard.valueType("$val")
+		assert itemWizard.nextBtn
+		assert itemWizard.previousBtn
+		itemWizard.valueType("$val").click()
+		itemWizard.nextBtn.click()
+	}
+
+	def defineValue(searchAttribValue, qualifier, unitVal, selectUnit){
+		Thread.sleep(2000)
+		waitFor(15, 3){ itemWizard.selectValue.selectLink }
+		assert itemWizard.selectValue.selectLink
+		assert itemWizard.nextBtn
+		assert itemWizard.cancelBtn
+		assert itemWizard.previousBtn
+		itemWizard.selectValue.selectLink.click()
+		selectToSearch.enterResult.value("$searchAttribValue")
+		Thread.sleep(2000)
+		waitFor(15, 5){ selectResult.resultPopup }
+		selectResult.resultPopup.click()
+		itemWizard.valueQualifier.value("$qualifier")
+		itemWizard.numericVal.value("$unitVal")
+		itemWizard.selectValueUnit.selectLink.click()
+		selectToSearch.enterResult.value("")
+		Thread.sleep(2000)
+		waitFor(15, 3){ selectResult.resultPopup }
+		selectResult.resultPopup.click()
+		itemWizard.nextBtn.click()
+	}
+
+	def reviewAndSave(){
+		Thread.sleep(2000)
+		waitFor(15, 3){ itemWizard.reviewContents.text() ==~ "Please review the information for this item above." }
+		assert itemWizard.saveBtn
+		assert itemWizard.cancelBtn
+		assert itemWizard.previousBtn
+		itemWizard.saveBtn.click()
+		Thread.sleep(2000)
+		waitFor(15, 3){ itemWizard.successAlert }
+		assert itemWizard.closeBtn
+		assert itemWizard.addAnotherBtn
+		itemWizard.closeBtn.click()
+		waitFor { finishEditingBtn}
+	}
+}
+
+class CardsHolderModule extends Module {
+	static content = {
+		cardTable { $("table.table.table-hover") }
+		cardName { captionText -> cardTable.find("caption", text:"$captionText") }
+		cardMenu { captionText -> cardTable.find("caption", text:"$captionText").find("a")[0] }
+		dropupBtns { $("div.btn-group.dropup.open") }
+		cardDDMenu(wait: true) { dropupBtns.find("a") }
+		cardItemMenu {cardValue -> cardTable.find("caption", text:"$cardValue").next().find("a")[0]}
+		cardItemMenuDD(wait: true) { dropupBtns.find("a")}
+		cardItems { captionText -> cardTable.find("caption", text:"$captionText").next().find("tr.context_item_row.ui-droppable") }
 	}
 }
 
 class AddEditAssayCardModule extends Module {
-
 	static content = {
 		addNewCardBtn {$("button#addNewBtn-assay-protocol--assay-component-")}
-
 		titleBar(wait: true) {$("span#ui-dialog-title-dialog_new_card")}
 		enterCardName { $("input#new_card_name") }
 		saveBtn { $("button.btn.btn-primary", text:"Save") }
@@ -98,118 +174,32 @@ class DeleteAssayCardModule extends Module {
 }
 
 class MoveCardItemsModule extends Module {
-	//	static base = { $("div#summaryView") }
-
 	static content = {
-		//titleBar {$("span#ui-dialog-title-dialog_confirm_delete_item").text()}
 		titleBar { $("span#ui-dialog-title-dialog_move_item") }
 		selectCardId(wait: true) {$("#cardId")}
 		newCardHolder {cardName -> $("#cardId").value("$cardName")}
 		moveBtn (wait: true) { $("button.btn.btn-primary", text:"Move") }
 		cancelBtn (wait: true) { $("button.btn.btn-primary").next() }
-
-		//deleteBtn { $("button.btn.btn-danger")}
 	}
 }
-
-class AssayCardsHolder extends Module {
-	//	static base = { $("div#summaryView") }
-
-	static content = {
-		assayProtocolComponentHolders { $("div.roundedBorder.card-group.assay-protocol--assay-component-").find("table") }
-		cardCaption(wait: true) {cardValue -> $("div.roundedBorder.card-group.assay-protocol--assay-component-").find("table.table.table-hover").find("caption").find("div.cardTitle", text:"$cardValue")}
-		cardMenu {cardValue -> $("div.roundedBorder.card-group.assay-protocol--assay-component-").find("table.table.table-hover").find("caption", text:"$cardValue").find("a")[0].click()}
-		cardMenuDD(wait: true) { $("div.btn-group.dropup.open").find("a")} //card menu drop down
-		//Cards Items
-		cardItemsLabel { cardValue -> $("table.table.table-hover").find("caption", text:"$cardValue").next().find("tr.context_item_row.ui-droppable") }
-		//cardItemsvalue { cardValue -> $("table.table.table-hover").find("caption", text:"$cardValue").next().find("td.valuedLabel").text() != "Empty"}
-		cardItemMenu {cardValue -> $("table.table.table-hover").find("caption", text:"$cardValue").next().find("a")[0].click()}
-		cardItemMenuDD(wait: true) { $("div.btn-group.dropup.open").find("a")}
-	}
-}
-
 
 class AddItemWizardModule extends Module {
 	static content = {
-		titleBar {$("span#ui-dialog-title-dialog_add_item_wizard")}
-		closeBtn { $("div.ui-dialog-buttonset").find("button.btn", text:"Close") }
-		cancelBtn { $("div.ui-dialog-buttonset").find("button", text:"Cancel") }
-		addAnOtherAttrib { $("button.btn.btn-primary", text:"Add another item") }
-
-		//Wizard Step 1
-		searchFor { $("div#s2id_attributeTextField").find("a").find("span")}
-		searchForAttrib(wait: true) { $("input.select2-input") }
-
-		attribChoicePopup(wait: true) { $("li.select2-results-dept-0.select2-result.select2-result-selectable.select2-highlighted") }
-
-		nextBtn { $("input", name:"next") }
-
-		//Wizard Step 2
+		selectAttrib { module SelectToContainer, $("div#s2id_attributeId") }
+		selectValue { module SelectToContainer, $("div#s2id_valueId") }
+		selectValueUnit { module SelectToContainer, $("div#s2id_valueUnitId") }
+		naviBtns { $("div.navigation")}
+		nextBtn { naviBtns.find("input", name:"next") }
+		cancelBtn { naviBtns.find("input", name:"cancel") }
+		previousBtn { naviBtns.find("input", name:"previous") }
+		saveBtn { naviBtns.find("input", name:"save") }
+		closeBtn { naviBtns.find("input", name:"close") }
+		addAnotherBtn { naviBtns.find("input", name:"addAnotherItem") }
 		valueType {value -> $("input", name:"valueTypeOption", value:"$value")}
-		previousBtn { $("input", name:"previous") }
-
-		//Wizard Step 3
-		searchForVal { $("input#valueTextField") }
-		valueQualifier { value -> $("#valueQualifier").value("$value") }
-		valueUnit { $("input#valueUnits") }
-		currentChoice { $("input#currentChoice") }
-
-		//Wizard Step 4
-		saveBtn { $("input", name:"save") }
-
-		//Wizard Step 5
-		successMsg { $("div.alert.alert-success").find("strong")}
+		valueQualifier { $("#valueQualifier") }
+		numericVal { $("input#numericValue") }
+		seleValueId { module SelectToValueId, $("div#s2id_valueId") }
+		reviewContents { $("div.content").find("h1") }
+		successAlert { $("div.alert.alert-success") }
 	}
-
-
-	def defineAttributes(searchAttribValue){
-		waitFor(20, 1){ searchForAttrib }
-		assert searchForAttrib
-		assert nextBtn
-		searchFor.text() ==~ "Search for attribute name"
-		searchForAttrib.value("$searchAttribValue")
-		waitFor(20, 5){ attribChoicePopup }
-		//attribChoicePopup.mouseover()
-		attribChoicePopup[0].click()
-		nextBtn.click()
-		waitFor(15, 1){ previousBtn }
-
-	}
-
-	def defineValueType(value){
-		waitFor { previousBtn }
-		assert nextBtn
-		assert previousBtn
-		valueType("$value").click()
-
-		nextBtn.click()
-		waitFor(15, 1){ searchForAttrib }
-
-	}
-
-	def defineValue(searchAttribValue, qualifier, unitVal){
-		waitFor{ previousBtn }
-		assert nextBtn
-		assert previousBtn
-		assert searchForAttrib
-		searchForAttrib << "$searchAttribValue"
-		waitFor(20, 5){ attribChoicePopup }
-		//assert attribChoicePopup.findAll() != "Empty"
-		attribChoicePopup[0].click()
-		valueQualifier("$qualifier")
-		valueUnit << "$unitVal"
-
-		nextBtn.click()
-		waitFor(15, 1){ saveBtn }
-
-	}
-
-	def reviewnSave(){
-		waitFor { previousBtn }
-		assert saveBtn
-		assert previousBtn
-		saveBtn.click()
-		waitFor(15, 1){ successMsg }
-	}
-
 }

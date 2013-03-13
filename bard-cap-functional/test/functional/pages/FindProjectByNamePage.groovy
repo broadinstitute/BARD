@@ -5,10 +5,9 @@ import com.google.common.cache.LoadingCache;
 import geb.Page
 import pages.HomePage
 import geb.Module
-import pages.CAPUtilPage
 import geb.navigator.Navigator;
 
-class FindProjectByNamePage extends Page {
+class FindProjectByNamePage extends CapFunctionalPage {
 	def FIND_PROJECT_FIELD = "projectName"
 	static url = "project/findByName/"
 	static at = {
@@ -25,15 +24,5 @@ class FindProjectByNamePage extends Page {
 		projectAutocompleteItems { moduleList AutocompleteResult, $("li.ui-menu-item") }
 		
 		capHeaders { module BardCapHeaderModule }
-	}
-	
-	boolean isAutocompleteListOk(element, condition){
-		if(element){
-			element.each { elementValue ->
-				if(elementValue.text()){
-					assert elementValue.text().toUpperCase().contains(condition.toUpperCase())
-				}
-			}
-		}
 	}
 }

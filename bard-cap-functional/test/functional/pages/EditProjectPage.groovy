@@ -3,6 +3,7 @@ package pages
 import geb.Module;
 import geb.Page
 import pages.ViewProjectDefinitionPage
+import pages.CAPUtilPage
 
 class EditProjectPage extends Page{
 	static url=""
@@ -12,12 +13,27 @@ class EditProjectPage extends Page{
 		viewProjectDefinition {$("div", class:"pull-left").find("h4").text()}
 
 		capHeaders { module BardCapHeaderModule }
-
 		associateExpriment { module AssociateExperimentModule }
 		exprimentCanvas { module ExprimentCanvasModule, $("div#canvasIsolated") }
 		linkExpriment { module LinkExperimentModule }
+		editProjectSummary { module EditSummaryModule }
+		projectSummary { module SummaryModule, $("div#summaryDetailSection") }
 	}
 }
+
+class EditSummaryModule extends Module {
+	static content = {
+		
+		titleBar { $("span#ui-dialog-title-dialog_edit_project_summary") }
+		editSummaryForm { $("form#editSummaryForm") }
+		projNameField { editSummaryForm.find("input#projectName") }
+		projDescField { editSummaryForm.find("input#description") }
+		formCon { $("div#dialog_edit_project_summary") }
+		updateBtn { formCon.parent().find("button", type:"button", text:"Update Summary") }
+		cancelBtn { formCon.parent().find("button", type:"button", text:"Cancel") }
+	}
+}
+
 
 class AssociateExperimentModule extends Module {
 	static content = {

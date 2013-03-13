@@ -10,6 +10,8 @@ class EditProjectSpec extends BardFunctionalSpec {
 	String exprimentName = testData.exprimentName
 	String exprimentIdInput = testData.exprimentId
 	String stageValue = testData.stageValue
+	String projName = testData.editProjName
+	String projDesc = testData.editProjDesc
 	
 	final static String fromExp = "5477"
 	final static String toExp = "75"
@@ -24,6 +26,40 @@ class EditProjectSpec extends BardFunctionalSpec {
 		logInSomeUser()
 	}
 
+	def "Test Edit Project Summary Information"() {
+		given:
+		navigateToSearchProjectById()
+		searchProject(testData.projectId)
+		when:"User is navigated to view project detail page"
+		at ViewProjectDefinitionPage
+		assert editSummaryBtn
+		editSummaryBtn.click()
+		then: "User is at Edit summary form"
+		at EditProjectPage
+		
+		waitFor { editProjectSummary.projNameField }
+		assert editProjectSummary.projNameField
+		assert editProjectSummary.projDescField
+		assert editProjectSummary.updateBtn
+		assert editProjectSummary.cancelBtn
+		editProjectSummary.projNameField.value("")
+		editProjectSummary.projNameField <<projName
+		editProjectSummary.projDescField.value("")
+		editProjectSummary.projDescField <<projDesc
+		editProjectSummary.updateBtn.click()
+
+		waitFor(15, 5) { projectSummary.value[1].text() ==~ projName }
+		assert projectSummary.value[1].text() ==~ projName
+		assert projectSummary.value[2].text() ==~ projDesc
+		
+		when:"Navigating to Home Page"
+		at ViewProjectDefinitionPage
+		capHeaders.bardLogo.click()
+		
+		then:"User is at Home page"
+		at HomePage
+	}
+	
 	def "Test Add Experiment By Experiment Name into Project"() {
 		given:
 		navigateToSearchProjectById()
@@ -79,7 +115,7 @@ class EditProjectSpec extends BardFunctionalSpec {
 		associateExpriment.experimentBy.addExperimentByValue(EXPERIMENTIDFLD) << exprimentIdInput
 		assert associateExpriment.availableExperiments.exprimentsList[0]
 		associateExpriment.availableExperiments.exprimentsList[0].click()
-		waitFor(15, 5) { associateExpriment.availableExperiments.exprimentsList[0]  }
+		waitFor(15, 5) { associateExpriment.availableExperiments.exprimentsList[0].text() != "Empty"  }
 		def exprimentName = associateExpriment.availableExperiments.exprimentsList[0].text()
 		associateExpriment.availableExperiments.exprimentsList.value(exprimentName).click()
 		def experimentId = exprimentName.takeWhile { it != '-' }
@@ -129,4 +165,5 @@ class EditProjectSpec extends BardFunctionalSpec {
 		then:"User is at Home page"
 		at HomePage
 	}
+	
 }

@@ -4,7 +4,7 @@ import geb.Page
 import pages.HomePage
 import geb.Module
 
-class FindAssayByNamePage extends Page {
+class FindAssayByNamePage extends CapFunctionalPage {
 	def FIND_ASSAY_FIELD = "assayName"
 	static url = "assayDefinition/findByName/"
 	static at = {
@@ -24,13 +24,5 @@ class FindAssayByNamePage extends Page {
 		autocompleteItems { moduleList AutocompleteResult,  $("li.ui-menu-item")}
 	}
 	
-	boolean isAutocompleteListOk(element, condition){
-		if(element){
-			element.each { elementValue ->
-				if(elementValue.text()){
-					assert elementValue.text().toUpperCase().contains(condition.toUpperCase())
-				}
-			}
-		}
-	}
+
 }

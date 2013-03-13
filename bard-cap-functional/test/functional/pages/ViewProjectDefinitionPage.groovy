@@ -9,7 +9,7 @@ class ViewProjectDefinitionPage extends Page{
 
 	static content = {
 		viewProjectDefinition {$("div", class:"pull-left").find("h4").text()}
-		
+		editSummaryBtn { $("button#editProjectSummaryButton") }
 		capHeaders { module BardCapHeaderModule }
 		projectSummary { module ProjectSummaryModule }
 		experimentBtns { module ExperimentBtnsModule }
