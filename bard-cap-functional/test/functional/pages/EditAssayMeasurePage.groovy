@@ -24,20 +24,20 @@ class EditAssayMeasurePage extends Page{
 	}
 
 	def newMeasure(resultType, resultVal){
-		Thread.sleep(2000)
-		waitFor(10, 2){ selectResultTye.selectLink }
+		//Thread.sleep(2000)
+		waitFor(15, 2){ selectResultTye.selectLink }
 		assert selectResultTye.selectLink
 		selectResultTye.selectLink.click()
 		waitFor { enterInput.enterResult }
 		enterInput.enterResult.value("$resultType")
-		Thread.sleep(3000)
+		//Thread.sleep(3000)
 		waitFor{ resultPopulated.resultPopup }
 		resultPopulated.resultPopup.click()
 		assert selectStatistics.selectLink
 		selectStatistics.selectLink.click()
 		waitFor { enterInput.enterResult }
 		enterInput.enterResult.value("$resultVal")
-		Thread.sleep(2000)
+		//Thread.sleep(2000)
 		waitFor{ resultPopulated.resultPopup }
 		resultPopulated.resultPopup.click()
 		footerBtns[1].click()
