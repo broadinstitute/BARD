@@ -2,14 +2,11 @@ package bardqueryapi.compoundBioActivitySummary
 
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ExperimentShow
-import org.apache.log4j.Logger
-import bardqueryapi.*
-import bard.core.rest.spring.experiment.PriorityElement
-import bard.core.rest.spring.experiment.ResponseClassEnum
-import org.apache.commons.lang3.tuple.Pair
 import org.apache.commons.lang3.tuple.ImmutablePair
+import org.apache.commons.lang3.tuple.Pair
+import org.apache.log4j.Logger
+import bard.core.rest.spring.experiment.*
+import bardqueryapi.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +32,10 @@ class CompoundBioActivitySummaryBuilder {
 
             //The first cell (column) is the resource (assay or a project)
             WebQueryValue resource = findResourceByTypeAndId(groupByType, resourceId)
+            if (!resource) {
+                log.error("Could not map resource ${groupByType}: ${resourceId}")
+                continue
+            }
             singleRowData << resource
 
             List<Activity> exptDataList = groupedByExperimentalData[resourceId]
@@ -49,7 +50,13 @@ class CompoundBioActivitySummaryBuilder {
                 // an experiment summary title and then a list of WebQueryValue result types (curves, single-points, etc.)
                 Map<WebQueryValue, List<WebQueryValue>> experimentBox = [:]
                 //Add the experiment itself (for an experiment's description title)
-                ExperimentShow experimentShow = this.queryService.experimentRestService.getExperimentById(exptData.bardExptId)
+                ExperimentShow experimentShow
+                try {
+                    experimentShow = this.queryService.experimentRestService.getExperimentById(exptData.bardExptId)
+                }
+                catch (Exception exp) {
+                    log.error("Could not find BARD experiment ID: ${exptData.bardExptId}")
+                }
                 WebQueryValue experiment = new ExperimentValue(value: experimentShow)
 
                 List<WebQueryValue> results = convertExperimentResultsToValues(exptData)
@@ -73,7 +80,14 @@ class CompoundBioActivitySummaryBuilder {
 
         switch (groupByType) {
             case GroupByTypes.ASSAY:
-                List<AssayAdapter> assayAdapters = queryService.findAssaysByADIDs([resourceId]).assayAdapters
+                List<AssayAdapter> assayAdapters
+                try {
+                    assayAdapters = queryService.findAssaysByADIDs([resourceId]).assayAdapters
+                }
+                catch (Exception exp) {
+                    log.error("Could not find Assay: ${resourceId}")
+                    return  resource
+                }
                 if (assayAdapters.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())
                 } else {
@@ -82,7 +96,14 @@ class CompoundBioActivitySummaryBuilder {
                 }
                 break;
             case GroupByTypes.PROJECT:
-                List<ProjectAdapter> projectAdapters = queryService.findProjectsByPIDs([resourceId]).projectAdapters
+                List<ProjectAdapter> projectAdapters
+                try {
+                    projectAdapters = queryService.findProjectsByPIDs([resourceId]).projectAdapters
+                }
+                catch (Exception exp) {
+                    Log.error("Could not find Project: ${resourceId}")
+                    return  resource
+                }
                 if (projectAdapters.size() == 1) {
                     resource = new ProjectValue(value: projectAdapters.first())
                 } else {
@@ -113,13 +134,25 @@ class CompoundBioActivitySummaryBuilder {
                     //The result-type is a single-point, key/value pair.
                     Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.pubChemDisplayName, priorityElement.value)
                     PairValue pairValue = new PairValue(value: pair)
-                    values << pair
+                    values << pairValue
                     break;
                 case ResponseClassEnum.CR_SER:
+                    //the result type is a curve.
+                    if (priorityElement.concentrationResponseSeries) {
+                        //Add the concentration/value series
+                        ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
+                        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
+                        ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
+                        CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+                        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap, title: priorityElement.pubChemDisplayName)
+                        values << concentrationResponseSeriesValue
+                    }
                     break;
                 default:
-                    throw new RuntimeException("Response-class not supported: ${responseClass}")
+                    log.info("Response-class not supported: ${responseClass}")
             }
         }
+
+        return values
     }
 }

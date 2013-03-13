@@ -26,7 +26,7 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         compile "com.oracle:ojdbc6:11.2.0.2.0"
-
+        compile 'org.apache.commons:commons-lang3:3.1'
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         compile('cbip:cbip_encoding:0.1') {
             excludes "junit"
@@ -57,7 +57,6 @@ grails.project.dependency.resolution = {
         provided('net.sourceforge.nekohtml:nekohtml:1.9.15') {
             exclude "xml-api"
         }
-        compile 'org.apache.commons:commons-lang3:3.1'
         provided 'org.apache.httpcomponents:httpcomponents-core:4.1.3'
         compile('org.apache.httpcomponents:httpclient:4.1.2') {
             excludes "commons-codec", "commons-logging"

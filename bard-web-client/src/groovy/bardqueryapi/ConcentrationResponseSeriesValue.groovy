@@ -1,6 +1,5 @@
 package bardqueryapi
 
-import bardqueryapi.WebQueryValue
 import bard.core.rest.spring.experiment.ActivityConcentrationMap
 
 /**
@@ -16,6 +15,6 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
         return this.getClass().getName()
     }
 
+    ActivityConcentrationMap value
     String title
-    List<ActivityConcentrationMap> value
 }
