@@ -21,13 +21,10 @@ import javax.xml.stream.XMLOutputFactory
  */
 @Mixin(UpdateStatusHelper)
 class ExperimentRestController {
-    final static String EXPERIMENTS_ACCEPT_STRING = 'application/vnd.bard.cap+xml;type=experiments'
 
     ArchivePathService archivePathService;
     ExperimentExportService experimentExportService
     GrailsApplication grailsApplication
-
-    static final String MIMETYPE_JSON_APPLICATION = "application/json"
 
     static allowedMethods = [
             experiment: "GET",
@@ -48,7 +45,7 @@ class ExperimentRestController {
     def experiments() {
 
         try {
-            final String mimeType = EXPERIMENTS_ACCEPT_STRING
+            final String mimeType = grailsApplication.config.bard.data.export.experiments.xml
             response.contentType = mimeType
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
@@ -93,7 +90,7 @@ class ExperimentRestController {
                 Experiment experiment = Experiment.get(id)
                 InputStream inputStream = archivePathService.getEtlExport(experiment)
                 if (inputStream != null) {
-                    response.contentType = MIMETYPE_JSON_APPLICATION
+                    response.contentType = jsonMimeType
                     response.addHeader("Content-encoding", "gzip")
                     IOUtils.copy(inputStream, response.outputStream)
                     response.outputStream.flush()

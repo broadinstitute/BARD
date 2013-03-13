@@ -1,3 +1,4 @@
+import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import au.com.bytecode.opencsv.CSVReader
@@ -15,6 +16,7 @@ import java.sql.SQLException
 class ResultMapRecord {
     Integer series
     String tid;
+    String tidName;
     String parentTid;
 
     // if value0Tid is null, then use value0
@@ -31,7 +33,7 @@ class ResultMapRecord {
     String resultType
     String statsModifier
 
-    String qualifier
+    String qualifierTid
 
 }
 
@@ -50,16 +52,24 @@ class ResultMap {
         return resultType
     }
 
-    // TODO: Add support for qualifier
     List<Map<String,String>> getValues(Map<String,String> pubchemRow, String resultType, String statsModifier, String parentTid) {
         List rows = []
         String label = makeLabel(resultType, statsModifier)
         Collection<ResultMapRecord> records = records.get(label).findAll { it.parentTid == parentTid }
         for(record in records) {
             Map kvs = ["Replicate #": record.series, "TID": record.tid]
-            kvs[label] = pubchemRow[record.tid]
-            addContextValues(pubchemRow, record, kvs)
-            rows.add(kvs)
+
+            String measureValue = pubchemRow[record.tid]
+            if (measureValue != null && measureValue.length() > 0)
+            {
+                if (record.qualifierTid != null) {
+                    measureValue = pubchemRow[record.qualifierTid]+measureValue
+                }
+                kvs[label] = measureValue
+
+                addContextValues(pubchemRow, record, kvs)
+                rows.add(kvs)
+            }
         }
         return rows
     }
@@ -135,7 +145,7 @@ void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<St
             int rowNumber = writer.addRow(substanceId, parentRow, row["Replicate #"], row)
 
             // write out the children
-            println("${rowNumber}: ${row}")
+//            println("${rowNumber}: ${row}")
             convertRow(expMeasure.childMeasures, substanceId, pubchemRow, map, writer, rowNumber, row["TID"])
         }
     }
@@ -158,15 +168,30 @@ List constructCapColumns(Experiment experiment) {
     return new ArrayList(colNames)
 }
 
-// TODO check units
+//TODO: fix concentration unit check
 public ResultMap loadMap(Connection connection, Long aid) {
     ResultMap map = new ResultMap()
     Sql sql = new Sql(connection)
-    List records = []
-    sql.eachRow("SELECT TID, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO FROM southern.result_map WHERE AID = ?", [aid]) {
+    List<ResultMapRecord> records = []
+    sql.eachRow("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO FROM southern.result_map WHERE AID = ?", [aid]) {
+        // check the units provided match what the dictionary is expecting
+//        if (it.CONCENTRATIONUNIT != null) {
+//            assert it.CONCENTRATION != null
+//            if (it.CONTEXTITEM != null) {
+//                Element element = Element.findByLabel(it.CONTEXTITEM)
+//                assert element != null, "could not find ${it.CONTEXTITEM}"
+//                assert element.unit.abbreviation == it.CONCENTRATIONUNIT
+//            } else {
+//                Element element = Element.findByLabel(it.RESULTTYPE)
+//                assert element != null, "could not find ${it.RESULTTYPE}"
+//                assert element.unit.abbreviation == it.CONCENTRATIONUNIT
+//            }
+//        }
+
         assert it.PANELNO == null
         def rec = new ResultMapRecord(
                 tid: it.TID,
+                tidName: it.TIDNAME,
                 series : it.SERIESNO,
                 attribute0 : it.CONTEXTITEM,
                 value0Tid : it.TID == it.CONTEXTTID ? null : it.CONTEXTTID,
@@ -178,17 +203,26 @@ public ResultMap loadMap(Connection connection, Long aid) {
                 resultType: it.RESULTTYPE,
                 statsModifier: it.STATS_MODIFIER,
                 parentTid: it.PARENTTID?.toString())
+
         records.add(rec)
+    }
+
+    // make a pass to associate qualifierTid
+    for(int i=0;i<records.size();i++) {
+        ResultMapRecord record = records[i]
+        if (record.resultType == null && record.tidName.toLowerCase() == "qualifier") {
+            records[i+1].qualifierTid = record.tid
+        }
     }
 
     map.records = records.groupBy { makeLabel(it.resultType, it.statsModifier) }
     return map
 }
 
-public void convert(Experiment experiment, String pubchemFilename, ResultMap map) {
+public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
     List dynamicColumns = constructCapColumns(experiment)
 
-    CapCsvWriter writer = new CapCsvWriter(experiment.id, dynamicColumns, new FileWriter("exp-${experiment.id}.csv"))
+    CapCsvWriter writer = new CapCsvWriter(experiment.id, dynamicColumns, new FileWriter(outputFilename))
     CSVReader reader = new CSVReader(new FileReader(pubchemFilename))
     List<String> header = reader.readNext()
     Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
@@ -214,17 +248,24 @@ public void convert(Experiment experiment, String pubchemFilename, ResultMap map
     writer.close()
 }
 
-Long expId = 2949
-String pubchemFilename = "/Users/pmontgom/data/pubchem-conversion/0000001_0001000/721.csv"
-ResultMap map;
-Experiment experiment = Experiment.get(expId)
-ExternalReference ref = experiment.getExternalReferences().find {it.externalSystem.systemName == "PubChem"}
-Long aid = Long.parseLong(ref.extAssayRef.replace("aid=", ""));
-Experiment.withSession { Session session ->
-    session.doWork(new Work() {
-        void execute(Connection connection) throws SQLException {
-             map = loadMap(connection, aid);
-        }
-    })
+void convert(Long expId, String pubchemFilename, String outputFilename)  {
+    ResultMap map;
+    Experiment experiment = Experiment.get(expId)
+    ExternalReference ref = experiment.getExternalReferences().find {it.externalSystem.systemName == "PubChem"}
+    Long aid = Long.parseLong(ref.extAssayRef.replace("aid=", ""));
+    Experiment.withSession { Session session ->
+        session.doWork(new Work() {
+            void execute(Connection connection) throws SQLException {
+                map = loadMap(connection, aid);
+            }
+        })
+    }
+    convert(experiment, pubchemFilename, outputFilename, map)
 }
-convert(experiment, pubchemFilename, map)
+
+for (aid in [488896, 493194, 540246, 540326]) {
+    ExternalReference ref = ExternalReference.findByExtAssayRef("aid=${aid}")
+    assert ref != null
+    println("converting ${aid} -> exp-${ref.experiment.id}")
+    convert(ref.experiment.id, "/Users/pmontgom/data/pubchem-conversion/CARS-603/${aid}.csv", "/Users/pmontgom/data/pubchem-conversion/CARS-603-converted/exp-${ref.experiment.id}.csv")
+}
