@@ -23,8 +23,10 @@ class CompoundBioActivitySummaryBuilder {
         this.queryService = queryService
     }
 
-    public List<TableModel> buildModel(GroupByTypes groupByType, Map groupedByExperimentalData) {// Map<ADID/PID, List<Activity>>
+    public TableModel buildModel(GroupByTypes groupByType, Map groupedByExperimentalData) {// Map<ADID/PID, List<Activity>>
         TableModel tableModel = new TableModel()
+        //Setup the headers
+        tableModel.columnHeaders = [new StringValue(value: "${groupByType.name()}"), new StringValue(value: 'Experiments')]
 
         //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
         for (Long resourceId in groupedByExperimentalData.keySet()) {
@@ -67,9 +69,8 @@ class CompoundBioActivitySummaryBuilder {
                 //Add the experimnet box to the row's list of value
                 singleRowData << experimentBoxValue
             }
-            //Cast the single-row list into a ListValue and store in the table
-            ListValue rowValue = new ListValue(value: singleRowData)
-            tableModel.data << rowValue
+
+            tableModel.data << singleRowData
         }
         return tableModel
     }
@@ -86,7 +87,7 @@ class CompoundBioActivitySummaryBuilder {
                 }
                 catch (Exception exp) {
                     log.error("Could not find Assay: ${resourceId}")
-                    return  resource
+                    return resource
                 }
                 if (assayAdapters.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())
@@ -102,7 +103,7 @@ class CompoundBioActivitySummaryBuilder {
                 }
                 catch (Exception exp) {
                     Log.error("Could not find Project: ${resourceId}")
-                    return  resource
+                    return resource
                 }
                 if (projectAdapters.size() == 1) {
                     resource = new ProjectValue(value: projectAdapters.first())

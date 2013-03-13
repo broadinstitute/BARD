@@ -619,8 +619,9 @@ class BardWebInterfaceController {
             NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
             ActivityOutcome activityOutcome = ActivityOutcome.ALL
 
-            List<TableModel> tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
-                    GroupByTypes.ASSAY,
+            GroupByTypes resourceType = GroupByTypes.ASSAY
+            TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+                    resourceType,
                     filters,
                     new SearchParams(top: searchParams.top, skip: searchParams.skip)
             )
@@ -629,9 +630,10 @@ class BardWebInterfaceController {
             tableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
             tableModel.additionalProperties.put("activityOutcome", activityOutcome)
             tableModel.additionalProperties.put("id", id.toString())
+            tableModel.additionalProperties.put("resourceType", resourceType.name())
 
             render(view: 'showCompoundBioActivitySummary',
-                    model: [webQueryTableModel: tableModel,
+                    model: [tableModel: tableModel,
                             facets: [],
                             appliedFilters: [],
                             sidebarTitle: 'Options'])

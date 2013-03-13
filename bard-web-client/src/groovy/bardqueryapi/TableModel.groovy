@@ -14,7 +14,7 @@ class TableModel implements Serializable {
 
     private Map<String, Object> additionalProperties = [:]
 
-    //data
+    //data (list of rows)
     private List<List<WebQueryValue>> data = []
 
     /**

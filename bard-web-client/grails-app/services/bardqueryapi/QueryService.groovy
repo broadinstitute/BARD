@@ -311,7 +311,7 @@ class QueryService implements IQueryService {
     }
 
 
-    List<TableModel> createCompoundBioActivitySummaryDataTable(Long compoundId,
+    TableModel createCompoundBioActivitySummaryDataTable(Long compoundId,
                                                          GroupByTypes groupTypes,
                                                          List<FilterTypes> filterTypes,
                                                          SearchParams searchParams) {
