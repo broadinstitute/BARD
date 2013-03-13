@@ -2,16 +2,6 @@ package bard.db.experiment
 
 import au.com.bytecode.opencsv.CSVReader
 import bard.db.dictionary.Element
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContext
-import bard.db.experiment.ExperimentContextItem
-import bard.db.experiment.ExperimentMeasure
-import bard.db.experiment.HierarchyType
-import bard.db.experiment.Result
-import bard.db.experiment.ResultContextItem
-import bard.db.experiment.ResultHierarchy
-import bard.db.experiment.Substance
-import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AssayContextMeasure
@@ -20,9 +10,7 @@ import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
 import org.apache.commons.io.IOUtils
-import org.codehaus.groovy.grails.commons.GrailsApplication
 
-import java.text.SimpleDateFormat
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
