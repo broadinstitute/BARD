@@ -619,7 +619,7 @@ class BardWebInterfaceController {
             NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
             ActivityOutcome activityOutcome = ActivityOutcome.ALL
 
-            GroupByTypes resourceType = GroupByTypes.ASSAY
+            GroupByTypes resourceType = params.groupByType ? params.groupByType as GroupByTypes : GroupByTypes.ASSAY
             TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     resourceType,
                     filters,
@@ -634,6 +634,7 @@ class BardWebInterfaceController {
 
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,
+                            resourceType: resourceType,
                             facets: [],
                             appliedFilters: [],
                             sidebarTitle: 'Options'])

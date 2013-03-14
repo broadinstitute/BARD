@@ -1,6 +1,7 @@
 package bardqueryapi
 
 import bard.core.rest.spring.experiment.ActivityConcentrationMap
+import bard.core.rest.spring.experiment.CurveFitParameters
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,4 +18,6 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
 
     ActivityConcentrationMap value
     String title
+    CurveFitParameters curveFitParameters
+    Double slope
 }

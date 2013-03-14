@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.FacetFormType" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bardqueryapi.GroupByTypes; bardqueryapi.FacetFormType" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,15 +10,28 @@
 <body>
 <div class="row-fluid">
     <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
-    <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
 
     <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small></h2>
+
+    <g:form action="showCompoundBioActivitySummary" id="${params.id}">
+        <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
+        <div style="text-align: left; vertical-align: middle;">
+            <label for="groupByTypeSelect" style="display: inline; vertical-align: middle;">Group-by:</label>
+            <g:select id="groupByTypeSelect" name="groupByType"
+                      from="${[GroupByTypes.ASSAY, GroupByTypes.PROJECT]}" value="${resourceType}"
+                      style="display: inline; vertical-align: middle;"/>
+            <g:submitButton class="btn btn-primary" name="groupByTypeButton" value="Group"
+                            style="display: inline; vertical-align: middle;"/>
+        </div>
+
+    </g:form>
+
 
     <table class="table table-condensed">
         <thead>
         <tr>
-            <g:each in="${tableModel.columnHeaders}" var="header">
-                <th>
+            <g:each in="${tableModel.columnHeaders}" var="header" status="i">
+                <th style="width: ${!i ? '200px;' : 'auto;'}">
                     ${header.value}
                 </th>
             </g:each>
@@ -28,11 +41,11 @@
 
     <g:each in="${tableModel.data}" var="row" status="i">
     %{--Each row is a separate table--}%
-        <table border="1" style="padding: 2px; margin-top: 2px;">
+        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px">
             <tbody>
             <tr>
                 %{--First cell in the row is always the resource: an assay or a project--}%
-                <th>
+                <th style="width: 200px;">
                     <g:if test="${tableModel.additionalProperties.resourceType == bardqueryapi.GroupByTypes.ASSAY}">
                         <g:assayDescription name="${row[0].value.name}"/>
                     </g:if>
@@ -45,13 +58,68 @@
                 <g:each in="${row}" var="experimentBox" status="j">
                     <g:if test="${j}">%{--we already handled cell #0--}%
                         <th>
-                            <table border="1" style="margin: 3px; padding: 3px;">
+                            <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;">
+                                %{--An experiment-box is a box with one experiment key and a list of result types (curves, single-points, etc.)--}%
+                                <g:set var="experimentValue" value="${experimentBox.value.keySet().first()}"/>
+                                <g:set var="experiment" value="${experimentValue.value}"/>
+                                <g:set var="results" value="${experimentBox.value[experimentValue]}"/>
+                                <g:set var="resultSize" value="${results?.size()}"/>
                                 <thead>
-                                <th>
-                                    %{--An experiment-box is a box with one experiment key and a list of result types (curves, single-points, etc.)--}%
-                                    <g:experimentDescription name="${experimentBox.value.keySet().first().value.name}"/>
-                                </th>
+                                <tr>
+                                    <th colspan="${resultSize}">
+                                        <g:experimentDescription name="${experiment.name}"/>
+                                    </th>
+                                </tr>
                                 </thead>
+                                <tbody>
+                                <tr>
+                                    <g:if test="${!resultSize}">
+                                        <td>
+                                            <p class="text-error">N/A</p>
+                                        </td>
+                                    </g:if>
+                                    <g:else>
+                                        <g:each in="${results}" var="result">
+                                            <td>
+                                                <g:if test="${result instanceof bardqueryapi.ConcentrationResponseSeriesValue}">
+                                                    <g:set var="concentrationSeries"
+                                                           value="${result.value.concentrations}"/>
+                                                    <g:set var="activitySeries" value="${result.value.activities}"/>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <g:curvePlot
+                                                                        concentrationSeries="${concentrationSeries}"
+                                                                        activitySeries="${activitySeries}"
+                                                                        curveFitParameters="${result.curveFitParameters}"
+                                                                        slope="${result.slope}"/>
+                                                            </td>
+                                                            <td>
+                                                                <g:curveValues
+                                                                        title="${result.title}"
+                                                                        concentrationSeries="${concentrationSeries}"
+                                                                        activitySeries="${activitySeries}"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </g:if>
+                                                <g:elseif test="${result instanceof bardqueryapi.PairValue}">
+                                                    <g:set var="pair" value="${result.value}"/>
+                                                    <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;">
+                                                        <tr>
+                                                            <td>
+                                                                <b>${pair.left}</b>
+
+                                                                <p>${pair.right}</p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </g:elseif>
+                                            </td>
+                                        </g:each>
+                                    </g:else>
+                                </tr>
+                                </tbody>
                             </table>
                         </th>
                     </g:if>

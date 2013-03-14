@@ -127,9 +127,10 @@ class CompoundBioActivitySummaryBuilder {
      */
     List<WebQueryValue> convertExperimentResultsToValues(Activity exptData) {
         List<WebQueryValue> values = []
-        ResponseClassEnum responseClass = ResponseClassEnum.toEnum(exptData.resultData.responseClass)
+        String respClss = exptData?.resultData?.responseClass
+        ResponseClassEnum responseClass = respClss ? ResponseClassEnum.toEnum(respClss) : null
 
-        for (PriorityElement priorityElement in exptData.resultData.priorityElements) {
+        for (PriorityElement priorityElement in exptData?.resultData?.priorityElements) {
             switch (responseClass) {
                 case ResponseClassEnum.SP:
                     //The result-type is a single-point, key/value pair.
@@ -145,7 +146,7 @@ class CompoundBioActivitySummaryBuilder {
                         List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
                         ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                         CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-                        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap, title: priorityElement.pubChemDisplayName)
+                        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap, title: priorityElement.pubChemDisplayName, curveFitParameters: curveFitParameters, slope: priorityElement.getSlope())
                         values << concentrationResponseSeriesValue
                     }
                     break;
