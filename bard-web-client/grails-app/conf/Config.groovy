@@ -4,7 +4,7 @@ import org.apache.log4j.net.SMTPAppender
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler
 
 ncgc.thickclient.compounds.url="http://bard.nih.gov/bard/compounds/"
-ncgc.thickclient.etags.url=="http://bard.nih.gov/bard/etags/"
+ncgc.thickclient.etags.url="http://bard.nih.gov/bard/etag/"
 
 ncgc.server.root.url = "http://bard.nih.gov/api/v15"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"

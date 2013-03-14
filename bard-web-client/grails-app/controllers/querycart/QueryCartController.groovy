@@ -11,6 +11,8 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 @Secured(['isFullyAuthenticated()'])
 @Mixin(InetAddressUtil)
 class QueryCartController {
+
+    static final String VIEW_LIST="?view=List"
     ShoppingCartService shoppingCartService
     QueryCartService queryCartService
     BardUtilitiesService bardUtilitiesService
@@ -28,7 +30,7 @@ class QueryCartController {
         render text: compositeETag, contentType: 'text/plain'
     }
     def toDesktopClient() {
-        String thickClientURL = grailsApplication.config.ncgc.thickclient.compounds.url
+        final String thickClientURL = grailsApplication.config.ncgc.thickclient.etags.url
 
         String compositeETag = ""
         final List<Long> cids = queryCartService.retrieveCartCompoundIdsFromShoppingCart()
@@ -38,7 +40,7 @@ class QueryCartController {
             compositeETag = eTagsService.createCompositeETags(cids, pids, adids)
         }
         if (compositeETag){
-            redirect(url: thickClientURL + compositeETag)
+            redirect(url: thickClientURL + compositeETag + VIEW_LIST)
             return
         }
         redirect(url: thickClientURL)

@@ -6,8 +6,11 @@ grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
-def gebVersion = "0.7.2"
+
+def gebVersion = "0.9.0-RC-1"
 def seleniumVersion = "2.31.0"
+
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -40,7 +43,8 @@ grails.project.dependency.resolution = {
         runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy", "httpclient", "httpcore", "nekohtml"
         }
-        test "org.codehaus.geb:geb-spock:$gebVersion"
+        test "org.grails.plugins:geb:$gebVersion"
+        test "org.gebish:geb-spock:$gebVersion"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
         }
@@ -75,14 +79,16 @@ grails.project.dependency.resolution = {
         compile ":resources:1.2.RC2"
         // compile ":functional-spock:0.6"
         compile ":twitter-bootstrap:2.3.0"
-        compile ":cbipcrowdauthentication:0.3.0"
+        compile(":cbipcrowdauthentication:0.3.0"){
+            excludes('spock', 'release')
+        }
         build ":tomcat:$grailsVersion"
         test(":spock:0.7") {
             exclude "spock-grails-support"
         }
         test ":codenarc:0.18.1"
         test ":geb:$gebVersion"
-        test ":remote-control:1.2"
+        test ":remote-control:1.4"
         compile ":clover:3.1.10.1"
         compile ":spring-mobile:0.4"
         compile ":google-analytics:2.0"
@@ -93,8 +99,11 @@ grails.project.dependency.resolution = {
 }
 
 // making the domain plugin an in-place plugin
-grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
+
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
+
+grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
+//grails.plugin.location.'functional-spock'="../functional-spock"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
