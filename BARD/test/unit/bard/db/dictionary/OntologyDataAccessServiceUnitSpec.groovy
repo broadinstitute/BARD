@@ -5,7 +5,7 @@ import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
 import grails.test.mixin.TestFor
-import groovy.transform.TypeChecked
+import org.apache.commons.logging.Log
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -23,11 +23,15 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
     OntologyDataAccessService ontologyDataAccessService = new OntologyDataAccessService()
     BardExternalOntologyFactory externalOntologyFactory
     ExternalOntologyAPI externalOntologyAPI
+    Log log
 
     void setup() {
         externalOntologyFactory = Mock(BardExternalOntologyFactory)
         externalOntologyAPI = Mock(ExternalOntologyAPI)
+        log = Mock(Log)
         ontologyDataAccessService.externalOntologyFactory = externalOntologyFactory
+        ontologyDataAccessService.log = log
+
     }
 
     void "test findExternalItemById for #expectedException when #desc"(String desc, String externalUrl, String id, String expectedMessage) {
@@ -77,15 +81,16 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
     }
 
     void "test findExternalItemById with externalOntologyFactory throwing an exception"() {
-        given:
+        given: 'valid params'
         final String externalUrl = 'http://foo.com'
         final String id = '1'
 
-        when:
+        when: 'an exception is thrown'
         ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
 
-        then:
+        then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
+        1 * log.error(_,_)
         thrown(ExternalOntologyException)
     }
 
@@ -137,15 +142,16 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
     }
 
     void "test findExternalItemsByTerm with externalOntologyFactory throwing an exception"() {
-        given:
+        given: 'valid params'
         final String externalUrl = 'http://foo.com'
         final String term = '1'
 
-        when:
+        when: 'an exception is thrown'
         List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
 
-        then:
+        then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
+        1 * log.error(_,_)
         thrown(ExternalOntologyException)
     }
 

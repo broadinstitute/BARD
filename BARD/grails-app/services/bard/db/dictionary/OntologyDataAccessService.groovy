@@ -4,6 +4,7 @@ import bard.validation.ext.BardExternalOntologyFactory
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
+import groovy.transform.TypeChecked
 import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.util.Assert
@@ -170,6 +171,7 @@ class OntologyDataAccessService {
      * @param term cannot be blank
      * @return a List<ExternalItem> empty if no matches
      */
+    @TypeChecked
     List<ExternalItem> findExternalItemsByTerm(String externalUrl, String term) {
         findExternalItemsByTerm(externalUrl, term, DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE)
     }
@@ -184,13 +186,19 @@ class OntologyDataAccessService {
      * @return a List<ExternalItem> empty if no matches
      * @throws ExternalOntologyException
      */
+    @TypeChecked
     List<ExternalItem> findExternalItemsByTerm(String externalUrl, String term, int limit) throws ExternalOntologyException {
         Assert.hasText(externalUrl, "externalUrl cannot be blank")
         Assert.hasText(term, "term cannot be blank")
         final List<ExternalItem> externalItems = []
-        ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
-        if (externalOntology) {
-            externalItems.addAll(externalOntology.findMatching(term, limit))
+        try {
+            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
+            if (externalOntology) {
+                externalItems.addAll(externalOntology.findMatching(term, limit))
+            }
+        } catch (ExternalOntologyException e) {
+            log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $term", e)
+            throw e
         }
         externalItems
     }
@@ -203,16 +211,21 @@ class OntologyDataAccessService {
      * @return an ExternalItem or null if no match is found
      * @throws ExternalOntologyException
      */
+    @TypeChecked
     ExternalItem findExternalItemById(String externalUrl, String id) throws ExternalOntologyException {
         Assert.hasText(externalUrl, "externalUrl cannot be blank")
         Assert.hasText(id, "id cannot be blank")
         ExternalItem externalItem
 
-        ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
-        if (externalOntology) {
-            externalItem = externalOntology.findById(id)
+        try {
+            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
+            if (externalOntology) {
+                externalItem = externalOntology.findById(id)
+            }
+        } catch (ExternalOntologyException e) {
+            log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $id", e)
+            throw e
         }
-
         externalItem
     }
 
