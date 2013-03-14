@@ -21,11 +21,11 @@ class ContextLoadResultsWriter {
 
     public void write(ContextDTO contextDTO, Long adid, LoadResultType resultType, Integer numExistingContextsInDb,
                       int numContextsLoaded, String message) {
-        write(contextDTO?.aid, adid, contextDTO?.name, resultType, contextDTO?.contextItemDtoList?.size(), numExistingContextsInDb,
+        write_without_context(contextDTO?.aid, adid, contextDTO?.name, resultType, contextDTO?.contextItemDtoList?.size(), numExistingContextsInDb,
                 numContextsLoaded, message)
     }
 
-    private void write(def aid, Long adid, String name, LoadResultType resultType, Integer numPotentialContextsToLoad,
+    private void write_without_context(def aid, Long adid, String name, LoadResultType resultType, Integer numPotentialContextsToLoad,
                        Integer numExistingContextsInDb, int numContextsLoaded, String message) {
 
         def lineData = [aid, adid, name, resultType, numPotentialContextsToLoad, numExistingContextsInDb,
