@@ -35,13 +35,13 @@ class ArchivePathServiceSpec extends Specification {
         String exportPath = service.constructExportResultPath(experiment)
 
         then:
-        exportPath ==~ /exported-results\/2\/2\/\d+-\d+.json.gz/
+        exportPath ==~ /exported-results\/2\/2\/exp-2-\d+-\d+.json.gz/
 
         when:
         String uploadPath = service.constructUploadResultPath(experiment)
 
         then:
-        uploadPath ==~ /uploaded-results\/2\/2\/\d+-\d+.txt.gz/
+        uploadPath ==~ /uploaded-results\/2\/2\/exp-2-\d+-\d+.txt.gz/
 
         when:
         File fullPath = service.prepareForWriting("testArchivePathServiceSpec.txt")

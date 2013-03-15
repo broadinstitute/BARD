@@ -15,7 +15,7 @@ class Result {
 
     Experiment experiment
     Element resultType
-    Substance substance
+    Long substanceId
     Element statsModifier
     Integer replicateNumber
 
@@ -58,7 +58,7 @@ class Result {
 
         experiment()
         resultType()
-        substance()
+        substanceId(nullable: false)
         statsModifier(nullable: true)
         replicateNumber(nullable: true)
 

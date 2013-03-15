@@ -4,9 +4,11 @@ import bard.db.registration.ExternalSystem
 
 import bard.dm.Log
 import bard.db.project.Project
-import bard.db.project.ProjectStep
+
 import bard.db.registration.ExternalReference
 import bard.dm.cars.spreadsheet.CarsProject
+import bard.dm.cars.spreadsheet.exceptions.ExternalReferenceMissingProjectException
+import bard.dm.cars.spreadsheet.exceptions.MultipleProjectsForProjectUidException
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +22,6 @@ class ProjectMapperBuilder {
     private static final String projectExternalAssayReferencePrefix = "project_UID="
 
     private static final String projectGroupType = "Project"
-    private static final String projectReadyForExtraction = "Pending"
 
     private String username
 
@@ -30,7 +31,8 @@ class ProjectMapperBuilder {
      * @param username for use when creating domain objects - goes in "modified by" field
      * @return
      */
-    List<ProjectPair> buildProjectPairs(Collection<CarsProject> carsProjectColl, String username) {
+    List<ProjectPair> buildProjectPairs(Collection<CarsProject> carsProjectColl, String username)
+    throws MultipleProjectsForProjectUidException, ExternalReferenceMissingProjectException {
         this.username = username
 
         Log.logger.info("mapping domain to spreadsheet for projects")
@@ -42,46 +44,34 @@ class ProjectMapperBuilder {
         return projectPairList
     }
 
-    private void findOrBuildDomainProjects(List<ProjectPair> projectPairList) {
+    private void findOrBuildDomainProjects(List<ProjectPair> projectPairList)
+    throws MultipleProjectsForProjectUidException, ExternalReferenceMissingProjectException {
         Log.logger.info("finding domain projects")
 
-        Iterator<ProjectPair> projectPairIterator = projectPairList.iterator()
 
-        while (projectPairIterator.hasNext()) {
-            ProjectPair projectPair = projectPairIterator.next()
+        for (ProjectPair projectPair : projectPairList) {
+            String externalAssayReference = "$projectExternalAssayReferencePrefix${projectPair.carsProject.projectUid}"
 
-            Log.logger.info("\tproject uid: " + projectPair.carsProject.projectUid)
+            List<ExternalReference> externalReferenceList = ExternalReference.findAllByExtAssayRef(externalAssayReference)
 
-            if (projectPair.experimentPairList.size() > 0) {
+            if (externalReferenceList.size() > 0) {
                 Set<Project> projectSet = new HashSet<Project>()
-
-                projectPair.experimentPairList.each {ExperimentPair experimentPair ->
-                    experimentPair.experiment?.projectSteps?.each {ProjectStep projectStep ->
-                        if (projectStep.project) {
-                            projectSet.add(projectStep.project)
-                        }
-                    }
-
-                    if (experimentPair.externalReference?.project) {
-                        projectSet.add(experimentPair.externalReference.project)
+                for (ExternalReference externalReference : externalReferenceList) {
+                    if (externalReference.project) {
+                        projectSet.add(externalReference.project)
                     }
                 }
 
-                projectPair.unmatchedExternalReferences.each {ExternalReference extRef ->
-                    if (extRef.project) {
-                        projectSet.add(extRef.project)
-                    }
-                }
-
-                if (projectSet.size() > 1) {
-                    Log.logger.warn("\t\tmultiple domain projects found for aids of cars project - will not process project UID: " + projectPair.carsProject.projectUid)
-                    projectPairIterator.remove()
-                } else if (projectSet.size() == 1) {
+                if (projectSet.size() == 1) {
                     projectPair.project = projectSet.iterator().next()
-                    Log.logger.info("\t\tdomain project to cars project mapping found - project UID: " + projectPair.carsProject.projectUid + " project ID: " + projectPair.project.id)
+                } else if (projectSet.size() > 1) {
+                    String message = "found multiple projects via multiple external references that match ${externalAssayReference}"
+                    Log.logger.error("ProjectMapperBuilder findOrBuildDomainProjects $message")
+                    throw new MultipleProjectsForProjectUidException(message)
                 } else {
-                    Log.logger.info("\t\tno domain project found for aids of cars project - building domain project project UID: " + projectPair.carsProject.projectUid)
-                    createNewProject(projectPair)
+                    String message = "found external_reference entry that matches ${externalAssayReference} but there is no project assigned"
+                    Log.logger.error("ProjectMapperBuilder findOrBuildDomainProjects $message")
+                    throw new ExternalReferenceMissingProjectException(message)
                 }
             } else {
                 createNewProject(projectPair)
@@ -92,8 +82,8 @@ class ProjectMapperBuilder {
     private void createNewProject(ProjectPair projectPair) {
         String projectName = projectPair.carsProject.grantTitle ? projectPair.carsProject.grantTitle : projectPair.carsProject.carsExperimentList.iterator().next().assayName
 
-        projectPair.project = new Project(projectName: projectName, dateCreated: (new Date()),
-                readyForExtraction: projectReadyForExtraction, groupType: projectGroupType, modifiedBy: username)
+        projectPair.project = new Project(name: projectName, dateCreated: (new Date()),
+                groupType: projectGroupType, modifiedBy: username)
         assert projectPair.project.save()
 
         ExternalReference extRef = new ExternalReference(dateCreated: (new Date()), modifiedBy: username)
@@ -112,7 +102,8 @@ class ProjectMapperBuilder {
 
         final ExperimentMapper experimentMapper = new ExperimentMapper()
 
-        carsProjectColl.eachWithIndex {CarsProject carsProject, int i ->
+        int i = 0
+        for (CarsProject carsProject : carsProjectColl) {
             Log.logger.info("mapping db to spreadsheet for project " + carsProject.projectUid)
 
             ProjectPair projectPair = new ProjectPair()
@@ -122,6 +113,7 @@ class ProjectMapperBuilder {
 
             result.add(projectPair)
 
+            i++
             if ((i%20) == 0) {
                 println("mapped experiments for " + i)
             }

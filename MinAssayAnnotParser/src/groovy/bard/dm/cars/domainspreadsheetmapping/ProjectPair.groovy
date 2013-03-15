@@ -22,5 +22,5 @@ class ProjectPair {
     Set<CarsExperiment> unmatchedCarsExperiments = new HashSet<CarsExperiment>()
     Set<ExternalReference> unmatchedExternalReferences = new HashSet<ExternalReference>()
 
-    Set<ProjectStepPair> projectStepPairSet = new HashSet<ProjectStepPair>()
+    Set<ProjectExperimentPair> projectExperimentPairSet = new HashSet<ProjectExperimentPair>()
 }

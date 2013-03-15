@@ -9,12 +9,12 @@ class ArchivePathService {
 
     String constructUploadResultPath(Experiment experiment) {
         String timestamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
-        return "uploaded-results/${experiment.id%100}/${experiment.id}/${timestamp}.txt.gz"
+        return "uploaded-results/${experiment.id%100}/${experiment.id}/exp-${experiment.id}-${timestamp}.txt.gz"
     }
 
     String constructExportResultPath(Experiment experiment) {
         String timestamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
-        return "exported-results/${experiment.id%100}/${experiment.id}/${timestamp}.json.gz"
+        return "exported-results/${experiment.id%100}/${experiment.id}/exp-${experiment.id}-${timestamp}.json.gz"
     }
 
     File prepareForWriting(String filename) {
@@ -32,12 +32,19 @@ class ArchivePathService {
         return grailsApplication.config.bard.services.resultService.archivePath
     }
 
+    /**
+     * @return an InputStream for the etl results for the given experiment, or null if this experiment has no results stored.
+     */
     InputStream getEtlExport(Experiment experiment) {
         List<ExperimentFile> files = new ArrayList(experiment.experimentFiles)
-        files.sort {it.submissionVersion}
-        ExperimentFile lastVersion = files.last()
-        File fullPath = new File(prefix + File.separator + lastVersion.exportFile)
+        if (files.size() > 0) {
+            files.sort {it.submissionVersion}
+            ExperimentFile lastVersion = files.last()
+            File fullPath = new File(prefix + File.separator + lastVersion.exportFile)
 
-        return new FileInputStream(fullPath)
+            return new FileInputStream(fullPath)
+        } else {
+            return null;
+        }
     }
 }

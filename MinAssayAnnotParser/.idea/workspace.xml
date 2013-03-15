@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="859896cc-9815-4eea-b811-695a0ad1bfe5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" afterPath="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" afterPath="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy" />
     </list>
     <ignored path="DnaRepairSpreadsheetParser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -118,19 +117,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AssayContextAndItemDuplicateFinder.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy">
+      <file leaf-file-name="ParseCarsSpreadsheet.groovy" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="66" column="166" selection-start="3044" selection-end="3044" vertical-scroll-proportion="0.2450658">
+            <state line="64" column="34" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.44353518">
+              <folding>
+                <element signature="e#0#53#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CarsSpreadsheetReader.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="54" column="100" selection-start="2251" selection-end="2251" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AssayDeDuplicationScript.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy">
+      <file leaf-file-name="ProjectIdsToLoad.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectIdsToLoad.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="10" selection-start="1311" selection-end="1311" vertical-scroll-proportion="0.0">
+            <state line="21" column="70" selection-start="594" selection-end="594" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -149,22 +159,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/LimitedAssayContext.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/LimitedAssayContextCompare.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayCleanup.groovy" />
-        <option value="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanup.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextCompare.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContextItemMatchTripleBuilder.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/LimitedAssayContext.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleanup.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy" />
-        <option value="$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy" />
-        <option value="$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ExperimentMapper.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/CarsBardMapping.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectStepAnnotater.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsProject.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentPair.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectPair.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentMapperBuilder.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentAnnotater.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectsToLoadSet.groovy" />
+        <option value="$PROJECT_DIR$/test/exampleData/dataset_1_project_ids.txt" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectIdsToLoadSet.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectIdsToLoad.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy" />
+        <option value="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" />
       </list>
     </option>
   </component>
@@ -176,6 +186,31 @@
     <option name="y" value="-184" />
     <option name="width" value="1928" />
     <option name="height" value="1088" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>Android</id>
+          </State>
+          <State>
+            <id>CorrectnessLintAndroid</id>
+          </State>
+          <State>
+            <id>LintAndroid</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Abstraction issues</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -253,6 +288,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="exampleData" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -301,7 +368,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="assaycompare" />
+              <option name="myItemId" value="cars" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spreadsheet" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -327,11 +398,75 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="assaycompare" />
+              <option name="myItemId" value="cars" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="assaycleanup" />
+              <option name="myItemId" value="domainspreadsheetmapping" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="loadCars" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="grails-app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="grails-app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="conf" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -341,17 +476,21 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="Groovy compiler" />
+    <property name="options.lastSelected" value="Errors" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -561,7 +700,7 @@
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
     <option name="FORCE_UPDATE" value="false" />
     <option name="IGNORE_EXTERNALS" value="false" />
-    <configuration useDefault="false">C:\Users\gwalzer\AppData\Roaming\Subversion</configuration>
+    <configuration useDefault="true">C:\Users\dlahr\AppData\Roaming\Subversion</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
   <component name="TaskManager">
@@ -586,7 +725,7 @@
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32775453" sideWeight="0.49806702" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32731137" sideWeight="0.4974227" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32412326" sideWeight="0.82339954" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.67224544" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -594,7 +733,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2289221" sideWeight="0.6726886" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22091782" sideWeight="0.67587674" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -695,106 +834,130 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/unit/AssayContextItemCompareTest.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="4" selection-start="1731" selection-end="1731" vertical-scroll-proportion="0.49774775" />
+        <state line="33" column="22" selection-start="1026" selection-end="1026" vertical-scroll-proportion="-0.71512485">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/TestAssayCleanup.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentPair.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="0" selection-start="3797" selection-end="3797" vertical-scroll-proportion="0.9256017" />
+        <state line="14" column="17" selection-start="371" selection-end="371" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/assayCompare/assaycleanup/TestAssayCleanupScript.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentMapperBuilder.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="29" selection-start="48" selection-end="48" vertical-scroll-proportion="0.037199125" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="161" column="28" selection-start="9645" selection-end="9645" vertical-scroll-proportion="0.3445946" />
+        <state line="71" column="9" selection-start="2931" selection-end="2931" vertical-scroll-proportion="0.4992636">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="1" selection-start="4378" selection-end="4378" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/registration/Assay.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="19" selection-start="993" selection-end="993" vertical-scroll-proportion="-6.72093" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/registration/AssayContextItem.groovy">
-      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="6" selection-start="78" selection-end="78" vertical-scroll-proportion="-1.5813954" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/migrations/execute-load-data.groovy">
-      <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayMatch.groovy">
+    <entry file="file://$PROJECT_DIR$/grails-app/conf/Config.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="93" selection-start="955" selection-end="955" vertical-scroll-proportion="0.88840264" />
+        <state line="110" column="74" selection-start="4633" selection-end="4633" vertical-scroll-proportion="0.11111111" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayDuplicateFinder.groovy">
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/Project.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="52" selection-start="6153" selection-end="6153" vertical-scroll-proportion="0.8886463">
+        <state line="62" column="57" selection-start="2531" selection-end="2531" vertical-scroll-proportion="-4.1617646">
           <folding />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayCleaner.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="16" selection-start="319" selection-end="319" vertical-scroll-proportion="0.22270742">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/registration/AssayContext.groovy">
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectStep.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="6" selection-start="154" selection-end="154" vertical-scroll-proportion="-0.39534885">
+        <state line="12" column="6" selection-start="296" selection-end="296" vertical-scroll-proportion="0.31875">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectExperiment.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="18" selection-start="676" selection-end="676" vertical-scroll-proportion="0.215625">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectExperimentContext.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="53" selection-start="426" selection-end="426" vertical-scroll-proportion="0.425">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectExperimentContextItem.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="25" selection-start="314" selection-end="314" vertical-scroll-proportion="0.31875">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="72" selection-start="505" selection-end="505" vertical-scroll-proportion="0.39824304">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/Log.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentAnnotater.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="6" selection-start="311" selection-end="311" vertical-scroll-proportion="0.30756578">
+        <state line="26" column="58" selection-start="749" selection-end="749" vertical-scroll-proportion="0.1830161">
+          <folding>
+            <element signature="e#47#80#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/exampleData/dataset_1_project_ids.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="3" selection-start="15" selection-end="15" vertical-scroll-proportion="0.018558951">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/DuplicateWriter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectIdsToLoad.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="101" selection-start="663" selection-end="663" vertical-scroll-proportion="0.19572368">
+        <state line="21" column="70" selection-start="594" selection-end="594" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/assayCompare/AssayDeDuplicationScript.groovy">
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="10" selection-start="1311" selection-end="1311" vertical-scroll-proportion="0.0">
+        <state line="54" column="100" selection-start="2251" selection-end="2251" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/assaycleanup/AssayContextAndItemDuplicateFinder.groovy">
+    <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="66" column="166" selection-start="3044" selection-end="3044" vertical-scroll-proportion="0.2450658">
-          <folding />
+        <state line="64" column="34" selection-start="3214" selection-end="3214" vertical-scroll-proportion="0.44353518">
+          <folding>
+            <element signature="e#0#53#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -831,7 +994,7 @@
         <entry key="bardDomainspreadsheetmappingModel-inplacePlugin">
           <value>
             <GrailsSettings>
-              <option name="buildConfigCrc" value="607491684" />
+              <option name="buildConfigCrc" value="1011589416" />
               <option name="pluginDependenciesCrc" value="-1662287417" />
               <option name="properties">
                 <map>
@@ -846,6 +1009,93 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Hibernate</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>grails-1.3.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>MinAssayAnnotParser</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.6</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
 

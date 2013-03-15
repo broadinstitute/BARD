@@ -7,8 +7,6 @@ class Substance {
 	Date lastUpdated
 	String modifiedBy
 
-	static hasMany = [results: Result]
-
 	static mapping = {
 		id( column: 'SUBSTANCE_ID', generator: 'assigned' )
 	}

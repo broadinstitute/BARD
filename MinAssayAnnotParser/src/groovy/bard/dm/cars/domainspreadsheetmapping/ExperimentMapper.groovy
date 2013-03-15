@@ -21,7 +21,7 @@ class ExperimentMapper {
 
         Map<Integer, Set<CarsExperiment>> aidCarsExperimentMap = buildAidCarsExperimentMap(carsExperimentColl)
 
-        aidCarsExperimentMap.keySet().each {Integer aid ->
+        for (Integer aid : aidCarsExperimentMap.keySet()) {
             List<ExternalReference> extRefList = ExternalReference.findAllByExtAssayRef(aidExternalAssayReferencePrefix + aid)
 
             Set<CarsExperiment> carsExperimentSet = aidCarsExperimentMap.get(aid)
@@ -29,7 +29,7 @@ class ExperimentMapper {
 
             if (extRefList.size() == 1) {
                 Log.logger.info("\t\t\tone external reference matches one or more cars experiments - pairing each cars experiment with that external reference")
-                carsExperimentSet.each {CarsExperiment carsExperiment ->
+                for (CarsExperiment carsExperiment : carsExperimentSet) {
                     projectPair.experimentPairList.add(buildSingleExperimentPair(carsExperiment, extRefList.get(0)))
                 }
             } else if (extRefList.size() > 0) {
@@ -56,14 +56,14 @@ class ExperimentMapper {
                 //at this point there are either excess cars experiments or excess external references
                 if (extRefList.size() > 0) {
                     StringBuilder builder = new StringBuilder()
-                    extRefList.each {ExternalReference extRef ->
+                    for (ExternalReference extRef : extRefList) {
                         builder.append(extRef.id).append(" ")
                         projectPair.unmatchedExternalReferences.add(extRef)
                     }
                     Log.logger.info("\t\t\tFound more external references than there were cars experiments aid: " + aid + " external references ids: " + builder.toString())
                 } else if (carsExperimentSet.size() > 0) {
                     StringBuilder builder = new StringBuilder()
-                    carsExperimentSet.each {CarsExperiment carsExperiment ->
+                    for (CarsExperiment carsExperiment : carsExperimentSet) {
                         builder.append(carsExperiment.spreadsheetLineNumber).append(" ")
                         projectPair.unmatchedCarsExperiments.add(carsExperiment)
                     }
@@ -131,7 +131,7 @@ class ExperimentMapper {
     private Map<Integer, Set<CarsExperiment>> buildAidCarsExperimentMap(Collection<CarsExperiment> carsExperimentColl) {
         Map<Integer, Set<CarsExperiment>> result = new HashMap<Integer, Set<CarsExperiment>>()
 
-        carsExperimentColl.each {CarsExperiment carsExperiment ->
+        for (CarsExperiment carsExperiment : carsExperimentColl) {
             Set<CarsExperiment> carsExperimentSet = result.get(carsExperiment.aid)
             if (null == carsExperimentSet) {
                 carsExperimentSet = new HashSet<CarsExperiment>()

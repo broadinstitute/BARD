@@ -1,10 +1,12 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.experiment.BulkSubstanceService
 import bard.db.experiment.Experiment
 import bard.db.experiment.Substance
 import bard.util.NetClientService
 import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
 import org.apache.commons.io.IOUtils
@@ -102,6 +104,10 @@ class PugServiceSpec  extends spock.lang.Specification {
         setup:
 
         NetClientService netClientService = Mock(NetClientService)
+        BulkSubstanceService bulkSubstanceService = Mock(BulkSubstanceService)
+        SpringSecurityService springSecurityService = Mock(SpringSecurityService)
+
+        springSecurityService.getPrincipal() >> ["username": "test"]
 
         HttpClient httpClient = Mock(HttpClient)
         FTPClient ftpClient = Mock(FTPClient)
@@ -112,12 +118,15 @@ class PugServiceSpec  extends spock.lang.Specification {
 
         PugService pugService = new PugService()
         pugService.netClientService = netClientService
+        pugService.bulkSubstanceService = bulkSubstanceService
+        pugService.springSecurityService = springSecurityService
         pugService.timeBetweenRequests = 0
 
         when:
         def missing = pugService.validateSubstanceIds([1L,2L])
 
         then:
+        bulkSubstanceService.findMissingSubstances([1L, 2L]) >> [1L, 2L]
         // one id not found
         // we get in progress message twice and then the file
         interaction {
@@ -125,13 +134,13 @@ class PugServiceSpec  extends spock.lang.Specification {
             httpClient.execute(_, _) >> { [pugProcessingResponse, pugProcessingResponse, pugResultReadyReponse][index++] }
         }
 
-        then:
-        // send a response with id 1 present, 2 absent
+        // make a request to ftp server and get a response with id 1 present, 2 absent
         1 * ftpClient.retrieveFileStream(_) >> compressedStream(pugPayload)
+
+        // saved one new substance
+        1 * bulkSubstanceService.insertSubstances([1L], "test")
 
         missing == ["2"]
 
-        // one id freshly inserted
-        Substance.get(1) != null
     }
 }

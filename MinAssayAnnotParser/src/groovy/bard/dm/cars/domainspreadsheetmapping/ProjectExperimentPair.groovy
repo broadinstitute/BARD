@@ -2,6 +2,7 @@ package bard.dm.cars.domainspreadsheetmapping
 
 import bard.db.project.ProjectStep
 import bard.dm.cars.spreadsheet.CarsExperiment
+import bard.db.project.ProjectExperiment
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,7 +11,7 @@ import bard.dm.cars.spreadsheet.CarsExperiment
  * Time: 12:22 PM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectStepPair {
-    ProjectStep projectStep
+class ProjectExperimentPair {
+    ProjectExperiment projectExperiment
     ExperimentPair experimentPair
 }

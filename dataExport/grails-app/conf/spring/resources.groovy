@@ -43,19 +43,10 @@ beans = {
         externalSystemMediaType = '${bard.data.export.externalsystem.xml}'
         externalSystemsMediaType = '${bard.data.export.externalsystems.xml}'
     }
-    resultExportService(dataexport.experiment.ResultExportService) {
-        maxResultsRecordsPerPage = '${bard.results.max.per.page}'
-        mediaTypes = ref('mediaTypesDTO')
-        grailsLinkGenerator = ref('grailsLinkGenerator')
-        sessionFactory = ref('sessionFactory')
-        dataSource = ref('dataSource')
-        utilityService = ref('utilityService')
-    }
     experimentExportService(dataexport.experiment.ExperimentExportService) {
         numberRecordsPerPage = '${bard.experiments.max.per.page}'
         mediaTypeDTO = ref('mediaTypesDTO')
         grailsLinkGenerator = ref('grailsLinkGenerator')
-        resultExportService = ref('resultExportService')
         utilityService = ref('utilityService')
     }
 }

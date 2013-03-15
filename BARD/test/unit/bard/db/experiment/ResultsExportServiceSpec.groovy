@@ -4,7 +4,6 @@ import bard.db.dictionary.Element
 import bard.db.registration.Assay
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectReader
-import grails.buildtestdata.mixin.Build
 import spock.lang.Specification
 
 import java.util.zip.GZIPInputStream
@@ -19,7 +18,6 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
-@Build(Result)
 class ResultsExportServiceSpec extends Specification {
 
     static File destination = new File("out/resultExportServiceTest.txt.gz")
@@ -38,8 +36,8 @@ class ResultsExportServiceSpec extends Specification {
         Element concentration = new Element(label: "concentration")
         concentration.id = 22
 
-        Result parent = new Result(substance: substance, resultType: ac50, replicateNumber: 1, qualifier: "= ", valueDisplay: "200 uM", valueNum: 200)
-        Result child = new Result(substance: substance, resultType: ac50, statsModifier: mean, qualifier: "< ", valueDisplay: "10-20", valueMin: 10, valueMax: 20)
+        Result parent = new Result(substanceId: substance.id, resultType: ac50, replicateNumber: 1, qualifier: "= ", valueDisplay: "200 uM", valueNum: 200)
+        Result child = new Result(substanceId: substance.id, resultType: ac50, statsModifier: mean, qualifier: "< ", valueDisplay: "10-20", valueMin: 10, valueMax: 20)
         ResultContextItem contextItem = new ResultContextItem(valueNum: 1.0, valueDisplay: "1 uM", qualifier: "> ", attributeElement: concentration, result: child)
         child.resultContextItems.add(contextItem)
 
@@ -104,8 +102,8 @@ class ResultsExportServiceSpec extends Specification {
 
         ResultsExportService service = new ResultsExportService()
         service.archivePathService = archivePathService
-        List results = [Result.build(substance: substance1),
-            Result.build(substance: substance2)]
+        List results = [new Result(resultType: new Element(label: "ac50"), substanceId: substance1.id),
+            new Result(resultType: new Element(label: "bingo"),substanceId: substance2.id)]
 
         when:
         service.dumpFromList("path", results)

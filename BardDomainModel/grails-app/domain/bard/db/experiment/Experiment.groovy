@@ -31,19 +31,16 @@ class Experiment extends AbstractContextOwner {
 
     Integer confidenceLevel = 1
 
-    // TODO results can apparently be very large 10 million rows
     List<ExperimentContext> experimentContexts = []
     Set<ProjectExperiment> projectExperiments = [] as Set
     Set<ExternalReference> externalReferences = [] as Set
     Set<ExperimentMeasure> experimentMeasures = [] as Set
-    Set<Result> results = [] as Set
     Set<ExperimentFile> experimentFiles = [] as Set
 
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
             externalReferences: ExternalReference,
             projectExperiments: ProjectExperiment,
-            results: Result,
             experimentFiles: ExperimentFile]
 
     static mapping = {

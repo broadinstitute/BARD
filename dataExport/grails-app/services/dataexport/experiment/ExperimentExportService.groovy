@@ -26,7 +26,6 @@ import bard.db.experiment.*
  */
 class ExperimentExportService extends ExportAbstractService {
 
-    ResultExportService resultExportService
     UtilityService utilityService
     LinkGenerator grailsLinkGenerator
     MediaTypesDTO mediaTypeDTO

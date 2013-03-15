@@ -50,7 +50,9 @@ grails.project.dependency.resolution = {
 
     plugins {
         build ":tomcat:$grailsVersion"
-        build ":codenarc:0.18.1"
+        build ":codenarc:0.18.1" {
+            exclude "groovy-all"
+        }
         build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
 
         compile ":clover:3.1.6"

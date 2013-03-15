@@ -1,11 +1,13 @@
 package dataexport.cap.experiment
 
+import bard.db.experiment.ArchivePathService
+import bard.db.experiment.Experiment
 import dataexport.cap.registration.UpdateStatusHelper
 import dataexport.experiment.ExperimentExportService
-import dataexport.experiment.ResultExportService
 import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import groovy.xml.StaxBuilder
+import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 
@@ -19,9 +21,14 @@ import javax.xml.stream.XMLOutputFactory
  */
 @Mixin(UpdateStatusHelper)
 class ExperimentRestController {
+    final static String EXPERIMENTS_ACCEPT_STRING = 'application/vnd.bard.cap+xml;type=experiments'
+
+    ArchivePathService archivePathService;
     ExperimentExportService experimentExportService
-    ResultExportService resultExportService
     GrailsApplication grailsApplication
+
+    static final String MIMETYPE_JSON_APPLICATION = "application/json"
+
     static allowedMethods = [
             experiment: "GET",
             updateExperiment: "PUT",
@@ -37,10 +44,11 @@ class ExperimentRestController {
         return response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED)
     }
 
+
     def experiments() {
 
         try {
-            final String mimeType = grailsApplication.config.bard.data.export.experiments.xml
+            final String mimeType = EXPERIMENTS_ACCEPT_STRING
             response.contentType = mimeType
             //mime types must match the expected type
             if (mimeType == request.getHeader(HttpHeaders.ACCEPT)) {
@@ -64,10 +72,11 @@ class ExperimentRestController {
             render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee)
+            log.error("Caught exception",ee)
             render ""
         }
     }
+
     /**
      * Render XML for each result object of the given Experiment
      * If the number of experiments > than the max per page
@@ -77,36 +86,28 @@ class ExperimentRestController {
      */
     def results(Integer id) {
         try {
-            final String xmlMimeType = grailsApplication.config.bard.data.export.results.xml
             final String jsonMimeType = grailsApplication.config.bard.data.export.results.json
             //mime types must match the expected type
             final String requestedMimeType = request.getHeader(HttpHeaders.ACCEPT)
-            if ((xmlMimeType == requestedMimeType || jsonMimeType == requestedMimeType) && id) {
-                if (xmlMimeType == requestedMimeType) {
-                    final int offset = params.offset ? new Integer(params.offset) : 0
-                    //we use the stax builder here
-                    final XMLOutputFactory factory = XMLOutputFactory.newInstance()
-                    final StringWriter markupWriter = new StringWriter()
-                    final StaxBuilder staxBuilder = new StaxBuilder(factory.createXMLStreamWriter(markupWriter))
-                    final boolean hasMoreResults = this.resultExportService.generateResults(staxBuilder, id, offset)
-                    if (hasMoreResults) {
-                        //we set the header to 206
-                        response.status = HttpServletResponse.SC_PARTIAL_CONTENT
-                    } else {
-                        response.status = HttpServletResponse.SC_OK
-                    }
-                    render(text: markupWriter.toString(), contentType: xmlMimeType, encoding: responseContentTypeEncoding)
-                }else{
-                    throw new RuntimeException("Note yet implemented")
+            if (jsonMimeType == requestedMimeType && id) {
+                Experiment experiment = Experiment.get(id)
+                InputStream inputStream = archivePathService.getEtlExport(experiment)
+                if (inputStream != null) {
+                    response.contentType = MIMETYPE_JSON_APPLICATION
+                    response.addHeader("Content-encoding", "gzip")
+                    IOUtils.copy(inputStream, response.outputStream)
+                    response.outputStream.flush()
+                } else {
+                    response.status = HttpServletResponse.SC_NOT_FOUND
+                    render ""
                 }
-                //now set the writer
-                return
+            } else {
+                response.status = HttpServletResponse.SC_BAD_REQUEST
+                render ""
             }
-            response.status = HttpServletResponse.SC_BAD_REQUEST
-            render ""
         } catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee)
+            log.error("Caught exception", ee)
             render ""
         }
     }
@@ -133,41 +134,12 @@ class ExperimentRestController {
         }
         catch (Exception ee) {
             response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message)
+            log.error("Caught exception",ee.message)
             render ""
         }
 
     }
 
-    def result(Integer id) {
-        try {
-            final String mimeType = grailsApplication.config.bard.data.export.result.xml
-            //do validations
-            if (mimeType == request.getHeader(HttpHeaders.ACCEPT) && id) {
-                final StringWriter markupWriter = new StringWriter()
-                final MarkupBuilder markupBuilder = new MarkupBuilder(markupWriter)
-                final Long eTag = this.resultExportService.generateResult(markupBuilder, id)
-                response.addHeader(HttpHeaders.ETAG, eTag.toString())
-                render(text: markupWriter.toString(), contentType: mimeType, encoding: responseContentTypeEncoding)
-                return
-            }
-            response.status = HttpServletResponse.SC_BAD_REQUEST
-            render ""
-        } catch (NotFoundException notFoundException) {
-            log.error(notFoundException)
-            response.status = HttpServletResponse.SC_NOT_FOUND
-            render ""
-        }
-        catch (Exception ee) {
-            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-            log.error(ee.message)
-            render ""
-        }
-    }
-
-    def updateResult(Long id) {
-        updateDomainObject(this.resultExportService, id)
-    }
     /**
      * We lock it so that no operation can update results and the current experiment
      * Means NCGC is processing the experiment at the current time

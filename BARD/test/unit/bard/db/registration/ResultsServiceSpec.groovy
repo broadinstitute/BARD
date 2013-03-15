@@ -20,8 +20,8 @@ import grails.test.mixin.*
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
-@Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure, Result, ResultContextItem])
+@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure ])
+@Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
 class ResultsServiceSpec extends spock.lang.Specification {
 
     void setup() {
@@ -286,10 +286,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
     void 'test parse measure cell'() {
         when:
         Measure measure = Measure.build()
-        Substance substance = Substance.build()
 
         ResultsService service = new ResultsService();
-        Result result = service.createResult(null, measure, cellString, substance, null)
+        Result result = service.createResult(null, measure, cellString, 1, null)
 
         then:
         result.valueNum == expectedValue
@@ -336,7 +335,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         result.qualifier == "= "
         result.valueNum == 5.0
         result.resultType == resultType
-        result.substance == substance
+        result.substanceId == substance.id
     }
 
     void 'test creating measure and item result'() {
@@ -373,7 +372,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         rMeasure.qualifier == "= "
         rMeasure.valueNum == 5.0
         rMeasure.resultType == resultType
-        rMeasure.substance == substance
+        rMeasure.substanceId == substance.id
         rMeasure.resultContextItems.size() == 1
         ResultContextItem rci = rMeasure.resultContextItems.first()
         rci.qualifier == "< "
@@ -525,16 +524,24 @@ class ResultsServiceSpec extends spock.lang.Specification {
         errors.hasErrors()
     }
 
+    Result createResult() {
+        return new Result(substanceId: 100, resultType: new Element())
+    }
+
+    ResultContextItem createContextItem(params) {
+        return new ResultContextItem(params)
+    }
+
     void 'test duplicate check'() {
         setup:
         ResultsService service = new ResultsService();
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
-        Result result1 = Result.build()
-        ResultContextItem item1 = ResultContextItem.build(result: result1, valueNum: 2.0)
+        Result result1 = createResult()
+        ResultContextItem item1 = createContextItem(result: result1, valueNum: 2.0)
 
-        Result result2 = Result.build()
-        ResultContextItem item2 = ResultContextItem.build(result: result2, valueNum: 3.0)
+        Result result2 = createResult()
+        ResultContextItem item2 = createContextItem(result: result2, valueNum: 3.0)
 
         List<Result> results = [result1, result2]
 

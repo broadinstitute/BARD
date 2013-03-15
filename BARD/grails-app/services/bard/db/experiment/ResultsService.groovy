@@ -164,45 +164,10 @@ class ResultsService {
         }
     }
 
-    /*
-    static class Column {
-        String name;
-
-        // if this column represents a measurement
-        Measure measure;
-
-        // if this column represents a context item
-        ItemService.Item item;
-
-        Closure parser;
-
-        // return a string if error.  Otherwise returns a Cell
-        def parseValue(String value) {
-            return parser(this, value)
-        }
-
-        public Column(String name, Measure measure) {
-            this.name = name
-            this.measure = measure
-            this.parser = { Column column, String value -> parseAnything(column, value) }
-        }
-
-        public Column(String name, ItemService.Item item) {
-            this.item = item;
-            this.name = name;
-            this.parser = makeItemParser(item)
-        }
-
-        public String toString() {
-            return "${name}"
-        }
-    }
-    */
-
     // used to identify duplicates
     static class LogicalKey {
         Integer replicateNumber;
-        Substance substance
+        Long substanceId
 
         Element resultType
         Element statsModifier
@@ -226,7 +191,7 @@ class ResultsService {
             if (replicateNumber != that.replicateNumber) return false
             if (resultType != that.resultType) return false
             if (statsModifier != that.statsModifier) return false
-            if (substance != that.substance) return false
+            if (substanceId != that.substanceId) return false
             if (valueDisplay != that.valueDisplay) return false
             if (valueElement != that.valueElement) return false
             if (valueMax != that.valueMax) return false
@@ -239,7 +204,7 @@ class ResultsService {
         int hashCode() {
             int result
             result = (replicateNumber != null ? replicateNumber.hashCode() : 0)
-            result = 31 * result + substance.hashCode()
+            result = 31 * result + substanceId.hashCode()
             result = 31 * result + resultType.hashCode()
             result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0)
             result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
@@ -256,7 +221,7 @@ class ResultsService {
         public String toString() {
             return "LogicalKey{" +
                     "replicateNumber=" + replicateNumber +
-                    ", substance=" + substance +
+                    ", substance=" + substanceId +
                     ", resultType=" + resultType +
                     ", statsModifier=" + statsModifier +
                     ", valueNum=" + valueNum +
@@ -695,7 +660,20 @@ class ResultsService {
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
-        return results
+        // flatten results to include the top level elements as well as all reachable children
+        Set<Result> allResults = new HashSet()
+        addAllResults(allResults, results)
+
+        return allResults
+    }
+
+    private addAllResults(Collection<Result> all, Collection<Result> toAdd) {
+        for(result in toAdd) {
+            if (!all.contains(result)) {
+                all.add(result)
+                addAllResults(all, result.resultHierarchiesForParentResult.collect { it.result } )
+            }
+        }
     }
 
     Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
@@ -717,7 +695,7 @@ class ResultsService {
                 // mark this cell as having been consumed
                 unused.remove(cell)
 
-                Result result = createResult(row.replicate, measure.measure, cell.value, substance, errors)
+                Result result = createResult(row.replicate, measure.measure, cell.value, row.sid, errors)
                 if (result == null)
                     continue;
 
@@ -736,8 +714,6 @@ class ResultsService {
                     for(childResult in resultChildren) {
                         linkResults(child.parentChildRelationship, errors, 0, childResult, result);
                     }
-
-                    results.addAll(resultChildren)
                 }
 
                 // likewise create each of the context items associated with this measure
@@ -818,7 +794,7 @@ class ResultsService {
         }
     }
 
-    Result createResult(Integer replicate, Measure measure, String valueString, Substance substance, ImportSummary errors) {
+    Result createResult(Integer replicate, Measure measure, String valueString, Long substanceId, ImportSummary errors) {
         def parsed = parseAnything(valueString)
 
         if (parsed instanceof Cell) {
@@ -834,7 +810,7 @@ class ResultsService {
             result.statsModifier = measure.statsModifier
             result.resultType = measure.resultType
             result.replicateNumber = replicate
-            result.substance = substance
+            result.substanceId = substanceId
             result.dateCreated = new Date()
             result.resultStatus = "Pending"
             return result;
@@ -865,7 +841,9 @@ class ResultsService {
         HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
         if (hierarchyType == null) {
             // hack until values are consistent in database
-            if (relationship == "has Child") {
+            if (relationship == null) {
+                hierarchyType = HierarchyType.Child;
+            } else if (relationship == "has Child") {
                 hierarchyType = HierarchyType.Child;
             } else if (relationship == "Derived from") {
                 hierarchyType = HierarchyType.Derives;
@@ -891,8 +869,6 @@ class ResultsService {
         List potentialExperimentColumns = itemService.getLogicalItems(template.experiment.assay.assayContexts.collectMany {AssayContext context ->
             context.assayContextItems.findAll {it.attributeType != AttributeType.Fixed}
         })
-//        potentialExperimentColumns.addAll()
-//        template.columns.each { if(it.item != null) { potentialExperimentColumns.add(it) } }
 
         InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
         if (errors.hasErrors())
@@ -1028,7 +1004,7 @@ class ResultsService {
         LogicalKey key = new LogicalKey()
 
         key.replicateNumber = result.replicateNumber
-        key.substance = result.substance
+        key.substanceId = result.substanceId
 
         key.resultType = result.resultType
         key.statsModifier = result.statsModifier
@@ -1078,7 +1054,7 @@ class ResultsService {
             }
             errors.resultsPerLabel.put(label, count + 1)
 
-            errors.substanceIds.add(it.substance.id)
+            errors.substanceIds.add(it.substanceId)
 
             if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
                 errors.resultsWithRelationships ++;

@@ -8,7 +8,7 @@ grails.project.source.level = 1.6
 grails.server.port.http = 8081
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-def gebVersion = "0.7.2"
+def gebVersion = "0.9.0-RC-1"
 def seleniumVersion = "2.25.0"
 
 grails.project.dependency.resolution = {
@@ -56,7 +56,8 @@ grails.project.dependency.resolution = {
         // test scope
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         test "org.objenesis:objenesis:1.3" // used by spock for Mocking object that lack no args constructor
-        test "org.codehaus.geb:geb-spock:$gebVersion"
+        test "org.grails.plugins:geb:$gebVersion"
+        test "org.gebish:geb-spock:$gebVersion"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis"
         }
@@ -73,9 +74,12 @@ grails.project.dependency.resolution = {
         // provided  scope
     }
 
+
     plugins {
         // build scope
-        build ":codenarc:0.18.1"
+        build(":codenarc:0.18.1") {
+            excludes "groovy-all"
+        }
         compile ":hibernate:$grailsVersion"
         build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
         build ":tomcat:$grailsVersion"
