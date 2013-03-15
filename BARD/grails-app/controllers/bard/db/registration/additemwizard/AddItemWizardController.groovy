@@ -112,6 +112,38 @@ class ListValueCommand implements Serializable {
 	}
 }
 
+class RangeValueCommand implements Serializable {
+	
+		String attributeElementId
+		Long valueUnitId
+		String valueUnitLabel
+		String minValue
+		String maxValue
+		
+		static constraints = {
+			minValue(nullable: false, blank: false)
+			maxValue(nullable: false, blank: false)
+		}
+	
+		boolean validateValue(){
+			// delegate to validations performed by constraints
+			validate()
+	
+			// Handles Numeric values: negatives, and comma formatted values. Also handles a single decimal point
+			Pattern pattern = Pattern.compile("^(\\d|-)?(\\d|,)*\\.?\\d*\$")
+			Matcher matcher = pattern.matcher(minValue)
+			if(!matcher.matches())				
+				errors.reject("rangeValue.nomatch.minValue", "Your entry for Min Value does not match a numeric value")
+			
+			matcher = pattern.matcher(maxValue)
+			if(!matcher.matches())
+				errors.reject("rangeValue.nomatch.minValue", "Your entry for Max Value does not match a numeric value")
+				
+			return !hasErrors();
+		}
+}
+
+
 class AddItemWizardController {
     // the pluginManager is used to check if the Grom
     // plugin is available so we can 'Grom' development
@@ -179,6 +211,9 @@ class AddItemWizardController {
 			flow.listValue = null
 			flow.listOfValues = new ArrayList<ListValueCommand>()
 			flow.listIndex = null
+			flow.rangeValue = null
+			flow.freeValue = null
+			flow.fixedValueAddNewItem = false
 
             flow.itemSaved = false
 
@@ -373,7 +408,16 @@ class AddItemWizardController {
 			}
 			on("cancel").to "closeWizard"
 			on("close").to "closeWizard"
-			on("next") {
+			on("next") {RangeValueCommand cmd ->
+				if(!cmd.validateValue()){
+					flow.rangeValue = cmd
+					return error()
+				}
+				flow.rangeValue = cmd
+				println "calling closure for {RangeValueCommand ${cmd.dump()}"
+				
+				sessionFactory.currentSession.clear()
+				flow.page = 4
 				success()
 
 			}.to "pageFour"
@@ -386,7 +430,7 @@ class AddItemWizardController {
 			}.to "save"
 		}
 
-		// Third wizard page (For assay type - Free): Asking for value
+		// Third wizard page (For assay type - Free): No value
 		pageThreeFree {
 			render(view: "_page_three_free")
 			onRender {
@@ -398,11 +442,38 @@ class AddItemWizardController {
 			}
 			on("cancel").to "closeWizard"
 			on("close").to "closeWizard"
-			on("next") {
+			on("next") { 				
+				flow.page = 4
 				success()
-
-			}.to "pageFour"
+			}.to "pageFour"			
 			on("previous").to "pageTwo"
+			on("toPageOne").to "pageOne"
+			on("toPageTwo").to "pageTwo"
+			on("toPageFour").to "pageFour"
+			on("toPageFive") {
+				flow.page = 5
+			}.to "save"
+		}
+		
+		// Third wizard page (For assay type - Fixed): Asking for new value item
+		pageThreeFixedNewItem {
+			render(view: "_page_three_fixed_new_item")
+			onRender {
+				// Grom a development message
+				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_fixed_new_item.gsp".grom()
+
+				flow.page = 3
+				success()
+			}
+			on("cancel").to "closeWizard"
+			on("close").to "closeWizard"
+			on("next") {
+				flow.page = 4
+				success()
+			}.to "pageFour"
+			on("previous"){
+				flow.fixedValueAddNewItem = false
+			}.to "pageThreeFree"
 			on("toPageOne").to "pageOne"
 			on("toPageTwo").to "pageTwo"
 			on("toPageFour").to "pageFour"
@@ -547,6 +618,14 @@ class AddItemWizardController {
 					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){
 						println "Saving list of items ..."
 						isSaved = assayContextService.saveItems(assayContext, flow.attribute, flow.valueType, flow.listOfValues)
+					}
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.Range.toString())){
+						println "Saving range items ..."
+						isSaved = assayContextService.saveRangeItem(assayContext, flow.attribute, flow.valueType, flow.rangeValue)
+					}
+					else if(flow.valueType.valueTypeOption.equals(AttributeType.Free.toString())){
+						println "Saving free item ..."
+						isSaved = assayContextService.saveFreeItem(assayContext, flow.attribute, flow.valueType)
 					}
 
 					sessionFactory.currentSession.flush()

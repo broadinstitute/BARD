@@ -27,6 +27,9 @@
 	<g:elseif test="${'List'.equals(valueType?.valueTypeOption)}">
 		<g:set var="valueText" value="${ listOfValues.size() } values set" />
 	</g:elseif>
+	<g:elseif test="${'Range'.equals(valueType?.valueTypeOption)}">
+		<g:set var="valueText" value="${rangeValue.minValue} - ${rangeValue.maxValue} ${rangeValue.valueUnitLabel}" />
+	</g:elseif>	
 	
     <g:render template="common/itemWizardSelectionsTable"
               model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': valueText]"/>

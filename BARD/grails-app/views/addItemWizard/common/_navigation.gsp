@@ -11,6 +11,7 @@
 <g:set var="showNext" value="${page<pages.size && page != 4}"/>
 <g:set var="showSave" value="${page == 4}"/>
 <g:set var="showAddValueToList" value="${page == 3 && 'List' == valueType?.valueTypeOption}"/>
+<%-- <g:set var="showAddNewItem" value="${page == 3 && 'Fixed' == valueType?.valueTypeOption && !freeValueAddNewItem}"/> --%>
 <g:set var="showCancel" value="${page != 5}"/>
 <g:set var="showClose" value="${page == 5}"/>
 <g:set var="showAddAnotherItem" value="${page == 5}"/>
