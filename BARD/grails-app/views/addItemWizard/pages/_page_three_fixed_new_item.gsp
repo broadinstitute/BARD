@@ -7,20 +7,42 @@
 	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
 	<g:render template="common/itemWizardSelectionsTable" model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': 'Not define yet']"/>
 	
-	<g:hasErrors bean="${fixedValue}">
+	<g:hasErrors bean="${freeValue}">
 		<div class="alert alert-error">
 			<button type="button" class="close" data-dismiss="alert">×</button>
-			<g:renderErrors bean="${fixedValue}"/>
+			<g:renderErrors bean="${freeValue}"/>
 		</div>
 	</g:hasErrors>
 	
-	<h1>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If relevant, choose the relevant units that describe the number entered.</h1>
-
+	<div class="row-fluid">
+		<div class="span12">
+			<h1>Is this item in the dictionary?</h1>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="row-fluid">
+    			<div class="span2">
+    				<label class="radio">
+					  <input type="radio" name="dictionaryItem" value="yes">
+					  <strong>Yes</strong>
+					</label>
+    			</div>
+    			<div class="span2">
+    				<label class="radio">
+					  <input type="radio" name="dictionaryItem" value="no">
+					  <strong>No</strong>
+					</label>
+    			</div>
+    		</div>
+		</div>
+	</div>
+	
+	<%--
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="row-fluid">
     			<div class="span12">
-    				<%-- This hidden control becomes the value selection box --%>
     				<input type="hidden" id="valueId" name="valueId">
     			</div>
     		</div>
@@ -48,23 +70,17 @@
 	    			<div class="controls"><input class="input-large" type="text" size='10' id="numericValue" name='numericValue'  value="${ fixedValue?.numericValue }"></div>
 	    		</div>
 	    		<div class="span6">
-	    			<%-- This hidden control becomes the units selection box --%>
     				<div class="controls"><input type="hidden" id="valueUnitId" name="valueUnitId"></div>
 	    		</div>
     		</div>
     	</div>
 	</div>
-    
-    <%-- This hidden field is needed to get access to the value label (name) --%>
-    <input type="hidden" id="valueLabel" name="valueLabel">
-    
-    <%-- This hidden field is needed for passing state needed for the ontology query --%>
-    <input type="hidden" id="attributeElementId" value="${attribute.attributeId}">
-    
-    <%-- This hidden field is needed to get access to the unit label --%>
-    <input type="hidden" id="valueUnitLabel" name="valueUnitLabel">
-    
-    <input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
-    <input type="hidden" id="valueType" name="valueType" value="${ valueType?.valueTypeOption }"/>
-   
+	--%>
+	
+	<%-- This hidden field is needed for passing state needed for the ontology query --%>
+	<input type="hidden" id="attributeElementId" value="${attribute.attributeId}">
+	
+	<input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
+	<input type="hidden" id="valueType" name="valueType" value="${ valueType?.valueTypeOption }"/>
+
 </af:page>

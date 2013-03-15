@@ -17,8 +17,9 @@
 						<td>${value ? value.valueUnitLabel : ""}</td>
 						<g:if test="${enableEdit}">
 							<td style="width: 20px">
-								<af:ajaxButton name="removeItemFromList" value="Remove" id="${listIndex}" afterSuccess="afterSuccess();" class="btn btn-mini" />							
-								%{-- <a href="#" onclick="removeItemFromList(${listIndex}); return false;" title="Remove item from the list"><i class="icon-trash"></i></a> --}%
+								<af:ajaxButton name="removeItemFromList" value="" id="${listIndex}" afterSuccess="afterSuccess();" class="icon-trash" />
+								%{-- <af:ajaxButton name="removeItemFromList" value="Remove" id="${listIndex}" afterSuccess="afterSuccess();" class="btn btn-mini" />							
+								<a href="#" onclick="removeItemFromList(${listIndex}); return false;" title="Remove item from the list"><i class="icon-trash"></i></a> --}%
 							</td>
 						</g:if>
 					</tr>
