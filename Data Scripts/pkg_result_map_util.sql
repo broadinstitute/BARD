@@ -444,7 +444,7 @@ as
             FROM (SELECT rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.contextItem, NULL value1, rm_ci.concentration value_num, rm_ci.concentrationunit unit
                   FROM southern.result_map rm_ci
                   WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_ci.tid
-                    AND rm_ci.contextItem IS NOT null
+                    AND rm_ci.contextItem != 'do not import'
                     AND rm_ci.resultType IS null
                     AND rm_ci.aid = ari_resulttype.aid
                   GROUP BY rm_ci.aid, rm_ci.resultType, rm_ci.stats_modifier, rm_ci.contextItem, rm_ci.concentration, rm_ci.concentrationunit
@@ -808,7 +808,7 @@ as
                         southern.result_map rm_ci
                     WHERE Nvl(rm_ci.contextTID, rm_ci.tid) = rm_rt.tid
                       AND rm_ci.aid = rm_rt.aid
-                      AND rm_ci.contextItem IS NOT null
+                      AND rm_ci.contextItem != 'do not import'
                       AND rm_rt.resultType = ari_resultType.resultType
                       --AND rm_rt.resultType IS NOT null
                       AND Nvl(rm_rt.stats_modifier, '#####') = Nvl(ari_resultType.stats_modifier, '#####')
