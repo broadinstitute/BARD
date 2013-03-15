@@ -53,6 +53,21 @@ class CarsSpreadsheetReader {
                             projectAidSet.clear()
                         }
 
+                        String summaryAidString = reader.get(headerNames.summaryAid)
+                        if (summaryAidString) {
+                            try {
+                                Integer summaryAid = Integer.valueOf(summaryAidString.trim())
+
+                                if (null == project.summaryAid) {
+                                    project.summaryAid = summaryAid
+                                } else if (summaryAid != project.summaryAid) {
+                                    Log.logger.warn("CarsSpreadsheetReader readProjectFromFile multiple summary AID's found for project_UID ${project.projectUid}")
+                                }
+                            } catch (NumberFormatException e) {
+                                println("unable to parse summary AID on line " + reader.getCurrentRecord())
+                            }
+                        }
+
                         Integer aid = Integer.valueOf(reader.get(headerNames.aidNumber).trim())
                         if (projectAidSet.add(aid)) {
                             CarsExperiment experiment = new CarsExperiment()

@@ -18,12 +18,24 @@ import bard.dm.cars.spreadsheet.exceptions.MultipleProjectsForProjectUidExceptio
  * To change this template use File | Settings | File Templates.
  */
 class ProjectMapperBuilder {
-    private static final ExternalSystem carsExternalSystem = ExternalSystem.findById(2)
-    private static final String projectExternalAssayReferencePrefix = "project_UID="
+    private  final ExternalSystem carsExternalSystem
+    private  final ExternalSystem pubChemExternalSystem
+
+    private static final int carsExternalSystemId = 2
+    private static final String carsExternalAssayReferencePrefix = "project_UID="
+
+    private static final int pubChemExternalSystemId = 1
+    private  static final String pubChemExternalAssayReferencePrefix = "aid="
 
     private static final String projectGroupType = "Project"
 
     private String username
+
+    ProjectMapperBuilder(String username) {
+        this.username = username
+        carsExternalSystem = ExternalSystem.findById(carsExternalSystemId)
+        pubChemExternalSystem = ExternalSystem.findById(pubChemExternalSystemId)
+    }
 
     /**
      *
@@ -31,10 +43,8 @@ class ProjectMapperBuilder {
      * @param username for use when creating domain objects - goes in "modified by" field
      * @return
      */
-    List<ProjectPair> buildProjectPairs(Collection<CarsProject> carsProjectColl, String username)
+    List<ProjectPair> buildProjectPairs(Collection<CarsProject> carsProjectColl)
     throws MultipleProjectsForProjectUidException, ExternalReferenceMissingProjectException {
-        this.username = username
-
         Log.logger.info("mapping domain to spreadsheet for projects")
 
         List<ProjectPair> projectPairList = initialBuildAndMapExperiments(carsProjectColl)
@@ -50,7 +60,7 @@ class ProjectMapperBuilder {
 
 
         for (ProjectPair projectPair : projectPairList) {
-            String externalAssayReference = "$projectExternalAssayReferencePrefix${projectPair.carsProject.projectUid}"
+            String externalAssayReference = "$carsExternalAssayReferencePrefix${projectPair.carsProject.projectUid}"
 
             List<ExternalReference> externalReferenceList = ExternalReference.findAllByExtAssayRef(externalAssayReference)
 
@@ -86,13 +96,22 @@ class ProjectMapperBuilder {
                 groupType: projectGroupType, modifiedBy: username)
         assert projectPair.project.save()
 
-        ExternalReference extRef = new ExternalReference(dateCreated: (new Date()), modifiedBy: username)
-        extRef.externalSystem = carsExternalSystem
-        extRef.extAssayRef = projectExternalAssayReferencePrefix + projectPair.carsProject.projectUid
-        extRef.project = projectPair.project
-        assert extRef.save()
+        ExternalReference carsExtRef = new ExternalReference(dateCreated: (new Date()), modifiedBy: username)
+        carsExtRef.externalSystem = carsExternalSystem
+        carsExtRef.extAssayRef = carsExternalAssayReferencePrefix + projectPair.carsProject.projectUid
+        carsExtRef.project = projectPair.project
+        assert carsExtRef.save()
 
-        projectPair.project.externalReferences.add(extRef)
+        println("projectPair.carsProject.summaryAid ${projectPair.carsProject.summaryAid}")
+        if (projectPair.carsProject.summaryAid) {
+            ExternalReference pubChemExtRef = new ExternalReference(dateCreated: (new Date()), modifiedBy: username)
+            pubChemExtRef.externalSystem = pubChemExternalSystem
+            pubChemExtRef.extAssayRef = pubChemExternalAssayReferencePrefix + projectPair.carsProject.summaryAid
+            pubChemExtRef.project = projectPair.project
+            assert pubChemExtRef.save()
+        }
+
+        projectPair.project.externalReferences.add(carsExtRef)
     }
 
     private List<ProjectPair> initialBuildAndMapExperiments(Collection<CarsProject> carsProjectColl) {

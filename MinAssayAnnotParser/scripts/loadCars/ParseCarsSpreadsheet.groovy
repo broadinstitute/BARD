@@ -40,7 +40,7 @@ try {
     (new CarsSpreadsheetValidator()).validateProjects(carsProjectList)
 
     Project.withTransaction { DefaultTransactionStatus status ->
-        List<ProjectPair> projectPairList = (new ProjectMapperBuilder()).buildProjectPairs(carsProjectList, username)
+        List<ProjectPair> projectPairList = (new ProjectMapperBuilder(username)).buildProjectPairs(carsProjectList)
 
         (new ProjectExperimentMapperBuilder(carsBardMapping, username)).mapOrBuildProjectExperiments(projectPairList)
 

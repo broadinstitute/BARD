@@ -14,6 +14,7 @@ class CarsProject {
     String grantNumber
     String grantTitle
     String assayCenter
+    Integer summaryAid
 
     @Override
     String toString() {
