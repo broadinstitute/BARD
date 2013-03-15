@@ -6,20 +6,23 @@ import bard.dm.cars.domainspreadsheetmapping.ProjectMapperBuilder
 import bard.dm.cars.domainspreadsheetmapping.CarsBardMapping
 import bard.dm.cars.domainspreadsheetmapping.ProjectAnnotater
 import bard.dm.cars.spreadsheet.CarsProject
-import bard.dm.cars.domainspreadsheetmapping.ProjectStepMapperBuilder
-import bard.dm.cars.domainspreadsheetmapping.ProjectStepAnnotater
+import bard.dm.cars.domainspreadsheetmapping.ProjectExperimentMapperBuilder
+import bard.dm.cars.domainspreadsheetmapping.ProjectExperimentAnnotater
 import org.springframework.transaction.support.DefaultTransactionStatus
 import bard.db.project.Project
+import bard.dm.cars.spreadsheet.exceptions.CouldNotReadHeadersException
+import bard.dm.cars.spreadsheet.exceptions.MultipleProjectsForProjectUidException
+import bard.dm.cars.spreadsheet.exceptions.ExternalReferenceMissingProjectException
 
 Log.initializeLogger("test/exampleData/logsAndOutput/parseCarsSpreadsheet.log")
 println("Start script")
 
 //constants
-final String inputFileRelativePath = "test/exampleData/Project data from CARS.csv"
+final String inputFileRelativePath = "test/exampleData/project_data_from_CARS.csv"
 final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappings.config"
 //TODO rename this file, it is more general now
 final String elementFieldMappingRelativePath = "grails-app/conf/resources/ElementFieldMapping.config"
-final String username = "dlahr"
+final String username = "dlahr_CARS"
 
 
 
@@ -30,18 +33,16 @@ try {
 
     List<CarsProject> carsProjectList = (new CarsSpreadsheetReader()).readProjectsFromFile(inputFileRelativePath, headerMappingRelativePath)
 
-//    carsProjectList = carsProjectList.subList(0, 10)
-
     (new CarsSpreadsheetValidator()).validateProjects(carsProjectList)
 
     Project.withTransaction { DefaultTransactionStatus status ->
         List<ProjectPair> projectPairList = (new ProjectMapperBuilder()).buildProjectPairs(carsProjectList, username)
 
-        (new ProjectStepMapperBuilder(carsBardMapping, username)).mapOrBuildProjectSteps(projectPairList)
+        (new ProjectExperimentMapperBuilder(carsBardMapping, username)).mapOrBuildProjectExperiments(projectPairList)
 
         (new ProjectAnnotater(carsBardMapping, username)).addAnnotations(projectPairList)
 
-        (new ProjectStepAnnotater(carsBardMapping, username)).addAnnotations(projectPairList)
+        (new ProjectExperimentAnnotater(carsBardMapping, username)).addAnnotations(projectPairList)
 
         //run some checks on projects
         projectPairList.each {ProjectPair projectPair ->
@@ -56,11 +57,20 @@ try {
         }
 
         //comment out to commit
-//        status.setRollbackOnly()
+        status.setRollbackOnly()
     }
 } catch (Exception e) {
     e.printStackTrace()
-} finally {
+} catch (FileNotFoundException e) {
+    e.printStackTrace()
+} catch (CouldNotReadHeadersException e) {
+    e.printStackTrace()
+} catch (MultipleProjectsForProjectUidException e) {
+    e.printStackTrace()
+} catch (ExternalReferenceMissingProjectException e) {
+    e.printStackTrace()
+}
+finally {
     final Date endDate = new Date()
     double runningTime = ((double)(endDate.time - startDate.time)) / 60000.0
     Log.logger.info("time to run(min): " + runningTime)

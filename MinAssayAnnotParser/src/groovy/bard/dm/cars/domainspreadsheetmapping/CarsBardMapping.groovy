@@ -58,12 +58,11 @@ class CarsBardMapping {
     private static Map<Element, Map<String, Element>> buildElementValueElementMap(Map<Integer, Map<String, Integer>> elementIdValueElementIdMap) {
         Map<Element, Map<String, Element>> result = new HashMap<Element, Map<String,Element>>()
 
-        elementIdValueElementIdMap.keySet().each {Integer attributeElementId ->
-
+        for (Integer attributeElementId : elementIdValueElementIdMap.keySet()) {
             Map<String, Element> valueElementMap = new HashMap<String, Element>()
 
             Map<String, Integer> valueElementIdMap = elementIdValueElementIdMap.get(attributeElementId)
-            valueElementIdMap.keySet().each {String carsValue ->
+            for (String carsValue : valueElementIdMap.keySet()) {
                 Integer valueElementId = valueElementIdMap.get(carsValue)
 
                 Element valueElement = Element.findById(valueElementId)
@@ -93,7 +92,7 @@ class CarsBardMapping {
     private static Map<Element, String> buildAttributeProjectMap(Map<Integer, String> elementIdPropertyNameMap) {
         Map<Element, String> result = new HashMap<Element, String>()
 
-        elementIdPropertyNameMap.keySet().each {Integer elementId ->
+        for (Integer elementId : elementIdPropertyNameMap.keySet()) {
             Element element = Element.findById(elementId)
             result.put(element, elementIdPropertyNameMap.get(elementId))
         }
@@ -102,11 +101,11 @@ class CarsBardMapping {
     }
 
     void printProjectElementValueElementMap() {
-        projectElementValueElementMap.keySet().each {Element attributeElement ->
+        for (Element attributeElement : projectElementValueElementMap.keySet()) {
             println(attributeElement.label + " " + attributeElement.id)
 
             Map<String, Element> map = projectElementValueElementMap.get(attributeElement)
-            map.keySet().each {String carsValue ->
+            for (String carsValue : map.keySet()) {
                 Element valueElement = map.get(carsValue)
                 println(carsValue + " " + valueElement.id + " " + valueElement.label)
             }

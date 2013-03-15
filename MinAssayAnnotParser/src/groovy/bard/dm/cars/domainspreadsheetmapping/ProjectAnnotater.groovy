@@ -3,6 +3,7 @@ package bard.dm.cars.domainspreadsheetmapping
 import bard.dm.Log
 import bard.db.dictionary.Element
 import bard.db.project.ProjectContextItem
+import bard.db.project.ProjectContext
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +17,8 @@ class ProjectAnnotater {
 
     private String username
 
+    private static final String projectContextName = "project management"
+
     /**
      * @param carsBardMapping
      * @param username for use when creating domain objects - goes in "modified by" field
@@ -28,47 +31,55 @@ class ProjectAnnotater {
     void addAnnotations(Collection<ProjectPair> projectPairColl) {
         Log.logger.info("add annotations to projects")
 
-        projectPairColl.each {ProjectPair projectPair ->
+        for (ProjectPair projectPair : projectPairColl) {
             Log.logger.info("\tproject uid: " + projectPair.carsProject.projectUid + " project id: " + projectPair.project.id)
 
             Set<Element> carsAttributeSet = new HashSet<Element>(carsBardMapping.projectAttributePropertyNameMap.keySet())
 
-            projectPair.project.contexts.each {ProjectContextItem projectContextItem ->
-                if (carsAttributeSet.remove(projectContextItem.attributeElement)) {
-                    Log.logger.info("\t\tannotation already present for " + projectContextItem.attributeElement.id + " " + projectContextItem.attributeElement.label)
+            for (ProjectContext projectContext : projectPair.project.contexts) {
+                for (ProjectContextItem projectContextItem : projectContext.contextItems) {
+                    if (carsAttributeSet.remove(projectContextItem.attributeElement)) {
+                        Log.logger.info("\t\tannotation already present for " + projectContextItem.attributeElement.id + " " + projectContextItem.attributeElement.label)
+                    }
                 }
             }
 
-            carsAttributeSet.each {Element attribute ->
-                Log.logger.info("\t\tadding annotation for " + attribute.id + " " + attribute.label)
+            if (carsAttributeSet.size() > 0) {
+                ProjectContext projectContext = new ProjectContext(project: projectPair.project, dateCreated: new Date(),
+                        modifiedBy: username, contextName: projectContextName)
+                projectPair.project.contexts.add(projectContext)
+                assert projectContext.save()
 
-                ProjectContextItem projectContextItem = new ProjectContextItem(dateCreated: (new Date()),
-                        modifiedBy: username)
-                projectContextItem.attributeElement = attribute
-                projectContextItem.project = projectPair.project
-                assert projectContextItem.save()
+                for (Element attribute : carsAttributeSet) {
+                    Log.logger.info("\t\tadding annotation for " + attribute.id + " " + attribute.label)
 
-                projectPair.project.projectContextItems.add(projectContextItem)
+                    ProjectContextItem projectContextItem = new ProjectContextItem(context: projectContext,
+                            attributeElement: attribute, dateCreated: (new Date()), modifiedBy: username)
+                    projectContext.contextItems.add(projectContextItem)
 
-                String carsProperty = carsBardMapping.projectAttributePropertyNameMap.get(attribute)
-                String carsValue = projectPair.carsProject.getProperty(carsProperty)
 
-                Map<String, Element> valueElementMap = carsBardMapping.projectElementValueElementMap.get(attribute)
-                if (valueElementMap != null) {
-                    Log.logger.info("\t\t\tannotation is mapped")
+                    String carsProperty = carsBardMapping.projectAttributePropertyNameMap.get(attribute)
+                    String carsValue = projectPair.carsProject.getProperty(carsProperty)
 
-                    Element valueElement = valueElementMap.get(carsValue.toLowerCase())
+                    Map<String, Element> valueElementMap = carsBardMapping.projectElementValueElementMap.get(attribute)
+                    if (valueElementMap != null) {
+                        Log.logger.info("\t\t\tannotation is mapped")
 
-                    if (valueElement) {
-                        projectContextItem.valueElement = valueElement
-                        projectContextItem.valueDisplay = valueElement.label
+                        Element valueElement = valueElementMap.get(carsValue.toLowerCase())
+
+                        if (valueElement) {
+                            projectContextItem.valueElement = valueElement
+                            projectContextItem.valueDisplay = valueElement.label
+                        } else {
+                            Log.logger.info("\t\t\t\tcars to bard ontology mapping expected but not found - attribute: " + attribute.id + " cars value: " + carsValue)
+                        }
                     } else {
-                        Log.logger.info("\t\t\t\tcars to bard ontology mapping expected but not found - attribute: " + attribute.id + " cars value: " + carsValue)
-                    }
-                } else {
-                    Log.logger.info("\t\t\tannotation is not mapped, takes value directly")
+                        Log.logger.info("\t\t\tannotation is not mapped, takes value directly")
 
-                    projectContextItem.valueDisplay = carsValue
+                        projectContextItem.valueDisplay = carsValue
+                    }
+
+                    assert projectContextItem.save()
                 }
             }
         }

@@ -20,7 +20,7 @@ class CarsProject {
         StringBuilder builder = new StringBuilder()
         builder.append("project UID:").append(projectUid).append(" ")
 
-        carsExperimentList.each {CarsExperiment experiment ->
+        for (CarsExperiment experiment : carsExperimentList) {
             builder.append(experiment.toString()).append(" ")
         }
 
