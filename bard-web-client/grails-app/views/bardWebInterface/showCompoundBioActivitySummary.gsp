@@ -46,11 +46,11 @@
             <tr>
                 %{--First cell in the row is always the resource: an assay or a project--}%
                 <th style="width: 200px;">
-                    <g:if test="${tableModel.additionalProperties.resourceType == bardqueryapi.GroupByTypes.ASSAY}">
-                        <g:assayDescription name="${row[0].value.name}"/>
+                    <g:if test="${tableModel.additionalProperties.resourceType == bardqueryapi.GroupByTypes.ASSAY.name()}">
+                        <g:assayDescription name="${row[0].value.name}" adid="${row[0].value.capAssayId}"/>
                     </g:if>
                     <g:else>
-                        <g:projectDescription name="${row[0].value.name}"/>
+                        <g:projectDescription name="${row[0].value.name}" pid="${row[0].value.capProjectId}"/>
                     </g:else>
                 </th>
 
@@ -68,7 +68,7 @@
                                 <tr>
                                     %{--First row is the experiment description--}%
                                     <th colspan="${resultSize}" style="max-width: 500px;">
-                                        <g:experimentDescription name="${experiment.name}"/>
+                                        <g:experimentDescription name="${experiment.name}" bardExperimentId="${experiment.capExptId}"/>
                                     </th>
                                 </tr>
                                 </thead>
