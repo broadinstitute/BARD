@@ -13,6 +13,7 @@ import bard.db.project.Project
 import bard.dm.cars.spreadsheet.exceptions.CouldNotReadHeadersException
 import bard.dm.cars.spreadsheet.exceptions.MultipleProjectsForProjectUidException
 import bard.dm.cars.spreadsheet.exceptions.ExternalReferenceMissingProjectException
+import bard.dm.cars.spreadsheet.ProjectIdsToLoad
 
 Log.initializeLogger("test/exampleData/logsAndOutput/parseCarsSpreadsheet.log")
 println("Start script")
@@ -23,7 +24,7 @@ final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappin
 //TODO rename this file, it is more general now
 final String elementFieldMappingRelativePath = "grails-app/conf/resources/ElementFieldMapping.config"
 final String username = "dlahr_CARS"
-
+final String projectIdsToLoadFileRelativePath = "test/exampleData/dataset_1_project_ids.txt"
 
 
 final Date startDate = new Date()
@@ -31,7 +32,10 @@ final Date startDate = new Date()
 try {
     final CarsBardMapping carsBardMapping = new CarsBardMapping(elementFieldMappingRelativePath)
 
-    List<CarsProject> carsProjectList = (new CarsSpreadsheetReader()).readProjectsFromFile(inputFileRelativePath, headerMappingRelativePath)
+    ProjectIdsToLoad projectIdsToLoadSet = new ProjectIdsToLoad()
+    projectIdsToLoadSet.loadProjectIds(projectIdsToLoadFileRelativePath, 1)
+
+    List<CarsProject> carsProjectList = (new CarsSpreadsheetReader(projectIdsToLoadSet)).readProjectsFromFile(inputFileRelativePath, headerMappingRelativePath)
 
     (new CarsSpreadsheetValidator()).validateProjects(carsProjectList)
 
@@ -57,7 +61,7 @@ try {
         }
 
         //comment out to commit
-        status.setRollbackOnly()
+//        status.setRollbackOnly()
     }
 } catch (Exception e) {
     e.printStackTrace()
