@@ -146,11 +146,11 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
 
     void "test fillInTheMissingCellsAndConvertToExpandedMatrix"() {
         when: "we have a molecularSpreadSheetService"
-        Map<String, MolSpreadSheetCell> dataMap = [:]
-        dataMap["0_3"] = new MolSpreadSheetCell()
+        Map<String, List <MolSpreadSheetCell>> dataMap = [:]
+        dataMap["0_3"] = [new MolSpreadSheetCell()]
         MolSpreadSheetCell flawedMolSpreadSheetCell = new MolSpreadSheetCell()
         flawedMolSpreadSheetCell.spreadSheetActivityStorage = new SpreadSheetActivityStorage()
-        dataMap["0_4"] = flawedMolSpreadSheetCell
+        dataMap["0_4"] = [flawedMolSpreadSheetCell]
         molecularSpreadSheetService.fillInTheMissingCellsAndConvertToExpandedMatrix(molSpreadSheetData, dataMap)
 
         then: "we should be able to generate the core molSpreadSheetData, with valid empty data holders"
@@ -159,7 +159,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         assertNotNull molSpreadSheetData.rowPointer
         assertNotNull molSpreadSheetData.columnPointer
         assertNotNull molSpreadSheetData.mssHeaders
-        assert molSpreadSheetData.mssData.size() == 10
+        assert molSpreadSheetData.mssData.size() == 15
         assert molSpreadSheetData.rowPointer.size() == 2
         assert molSpreadSheetData.columnPointer.size() == 2
         assert molSpreadSheetData.mssHeaders.size() == 5
@@ -251,7 +251,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         List<SpreadSheetActivity> spreadSheetActivityList = [new SpreadSheetActivity (cid: 4540 as Long, eid: 47 as Long),
                                                              new SpreadSheetActivity (cid: 777 as Long, eid: 888 as Long)]
         molSpreadSheetData.rowPointer[4540 as Long] = 0
-        Map<String, MolSpreadSheetCell> dataMap = [:]
+        Map<String, List<MolSpreadSheetCell>> dataMap = [:]
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,
@@ -263,8 +263,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then: "we should be able to generate a list of spreadsheet activity elements"
         dataMap.size() != 0
         dataMap["0_4"] != null
-        dataMap["0_4"].activity.toString() == "Uninitialized"
-        dataMap["0_4"].activity.name() == "Unknown"
+        dataMap["0_4"].size() == 0
         assertNotNull molSpreadSheetData.mssData
     }
 
@@ -292,7 +291,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         molSpreadSheetData.rowPointer[4544 as Long] = 1
         molSpreadSheetData.rowPointer[4549 as Long] = 2
         molSpreadSheetData.columnPointer[3705 as Long] = 0
-        Map<String, MolSpreadSheetCell> dataMap = [:]
+        Map<String, List <MolSpreadSheetCell>> dataMap = [:]
 
         molecularSpreadSheetService.populateMolSpreadSheetData(molSpreadSheetData,
                 finalExperimentList,

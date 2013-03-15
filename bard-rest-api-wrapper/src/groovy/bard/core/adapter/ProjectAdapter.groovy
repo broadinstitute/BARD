@@ -24,7 +24,14 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         this.matchingField = nameDescription
         this.annotations = annotations
     }
-
+    @Override
+    public String getExperimentType(Long experimentId){
+        return this.getExperimentTypes()?.get(experimentId)
+    }
+    @Override
+    public Map<Long, String> getExperimentTypes() {
+        return this.project?.getExperimentTypes();
+    }
     @Override
     String getHighlight() {
         String matchFieldName = getMatchingField()?.getName()

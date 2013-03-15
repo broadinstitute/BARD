@@ -67,6 +67,7 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
         when: "User attempts to login with an invalid username"
         at LoginPage
         logInNoValidation(validUserName, validPassword)
+        waitForPageToLoad()
 
         then: "The system should display a message stating that the user is logged in"
         at HomePage
@@ -77,6 +78,7 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
         given: "User is logged in to the system"
         to LoginPage
         logInNoValidation(validUserName, validPassword)
+        waitForPageToLoad()
         assert isLoggedInAsUser(validUserName)
 
         when: "User clicks the 'Log Out' link"

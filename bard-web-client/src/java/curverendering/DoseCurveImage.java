@@ -56,8 +56,11 @@ public class DoseCurveImage {
             List<Double> x = drc.getConcentrations();
             List<Double> y = drc.getActivities();
             List<Boolean> isValid = drc.getIsValid();
+            if ((x!=null)&&(y!=null))  {
+                drc.getCurveParameters();
+                addCurve(name, dataset, renderer, plot, x, y, isValid, drc.getCurveParameters(), drc.getColor());
+            }
 
-            addCurve(name, dataset, renderer, plot, x, y, isValid, drc.getCurveParameters(), drc.getColor());
         }
     }
 
@@ -396,11 +399,78 @@ public class DoseCurveImage {
                 curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
                 ++colorIndex;
             }
-            Bounds bounds = findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
+            Bounds bounds = derivedDefaultBounds( drcs,  xNormMin,  xNormMax, yNormMin, yNormMax);
             return DoseCurveImage.createChart(curves, bounds, Color.BLACK, xAxisLabel, yAxisLabel);
         }
         return null;
     }
+
+    /***
+     * We need to derive bounds, but also allow for curves that contain no elements.  Hopefully all the curves we get back from the backend
+     * will at one point contain real data but as of now they don't, which was leading our old pathway through the code to crash.
+     *
+     * Another special case: if we are given both a maximum and a minimum then don't regenerate those numbers ( we're assuming the caller
+     * had a reason to set those numbers explicitly).  If instead the numbers are both null then we'll need to step through and find the bounds
+     * across all the curves we've been given.
+     *
+     * @param drcs
+     * @param xNormMin
+     * @param xNormMax
+     * @param yNormMin
+     * @param yNormMax
+     * @return
+     */
+    public static Bounds derivedDefaultBounds(List<Drc> drcs, Double xNormMin, Double xNormMax, Double yNormMin, Double yNormMax) {
+        if (!drcs.isEmpty()) {  // if we don't have curve data then there's nothing else we can do
+            if ((xNormMin == null) || (xNormMax == null)) {  // at least one of the x bounds was null.  Let's calculate some real x bounds.
+                for (Drc drc : drcs) {
+                    if (drc.getConcentrations() != null) {
+                        for (double concentration : drc.getConcentrations()) {
+                            if (xNormMin == null)
+                                xNormMin = new Double(concentration);
+                            if (xNormMax == null)
+                                xNormMax = new Double(concentration);
+                            if (concentration < xNormMin.doubleValue()) {
+                                xNormMin = new Double(concentration);
+                            }
+                            if (concentration > xNormMax.doubleValue()) {
+                                xNormMax = new Double(concentration);
+                            }
+                        }
+                    }
+
+                }
+            }
+            if ((yNormMin == null) || (xNormMax == null)) {  // at least one of the y bounds was null.  Let's calculate some real bounds.
+                for (Drc drc : drcs) {
+                    if (drc.getActivities() != null) {
+                        for (double activity : drc.getActivities()) {
+                            if ((yNormMin == null))
+                                yNormMin = new Double(activity);
+                            if ((yNormMax == null))
+                                yNormMax = new Double(activity);
+                            if (activity < yNormMin.doubleValue()) {
+                                yNormMin = new Double(activity);
+                            }
+                            if (activity > yNormMax.doubleValue()) {
+                                yNormMax = new Double(activity);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+        }
+        if ((xNormMin != null) && (xNormMax != null) &&(yNormMin != null) && (yNormMax != null)){
+            return (findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax)); // this routine doesn't do too well with null values
+        } else {
+            return new Bounds(-1d,1d,-1d,1d);// This is our emergency exit.  This way we won't thrown exception, but we have no data so there's no curve we can possibly display either.
+        }
+
+    }
+
 
     /**
      * @param drcs     - Dose response points
@@ -412,9 +482,7 @@ public class DoseCurveImage {
      */
     static Bounds findBounds(final List<Drc> drcs, final Double xNormMin, final Double xNormMax, final Double yNormMin, final Double yNormMax) {
         if (xNormMin != null && xNormMax != null && yNormMin != null && yNormMax != null) {
-            final double powerXMin = Math.pow(10, xNormMin);
-            final double powerXMax = Math.pow(10, xNormMax);
-            return new Bounds(powerXMin, powerXMax, yNormMin, yNormMax);
+            return new Bounds(xNormMin, xNormMax, yNormMin, yNormMax);
         }
         return adjustBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
 

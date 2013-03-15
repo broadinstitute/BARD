@@ -9,6 +9,10 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.compounds.CompoundResult
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ConcentrationResponseSeries
+import bard.core.rest.spring.experiment.PriorityElement
+import bard.core.rest.spring.experiment.ResultData
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
@@ -16,14 +20,8 @@ import bard.core.rest.spring.util.NameDescription
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import bard.core.rest.spring.experiment.PriorityElement
-import bard.core.rest.spring.experiment.ResponseClassEnum
-import bard.core.rest.spring.experiment.ResultData
-import bard.core.rest.spring.experiment.Activity
-import bard.core.rest.spring.experiment.ConcentrationResponseSeries
 
 class QueryHelperService {
-
     /**
      * TODO: Put in properties file
      *  These are the terms that we would use for autosuggest
@@ -47,21 +45,22 @@ class QueryHelperService {
     Map extractMapFromResultData(ResultData resultData, NormalizeAxis normalizeAxis) {
         if (resultData.hasPriorityElements()) {
             boolean hasPlot = false
-            final PriorityElement priorityElement = resultData.priorityElements.get(0)
+            final List<PriorityElement> priorityElements = resultData.priorityElements
 
-            final boolean hasChildElements = priorityElement.hasChildElements()
-            final Map priorityMap = this.extractPriorityDisplayDescription(priorityElement)
+            final boolean hasChildElements = priorityElements.find {PriorityElement priorityElement -> priorityElement.hasChildElements()}
+            final Map priorityMap = this.extractPriorityDisplayDescription(priorityElements)
             if (resultData.hasPlot()) {
                 hasPlot = true
             }
             if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {
                 if (resultData.hasConcentrationResponseSeries()) {
-                    final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.getConcentrationResponseSeries()
-                    if (concentrationResponseSeries) {
-                        final List<Double> sorterdActivities = concentrationResponseSeries.sorterdActivities()
-                        if (sorterdActivities) {
-                            priorityMap.put("yNormMin", sorterdActivities.get(0))
-                            priorityMap.put("yNormMax", sorterdActivities.last())
+                    List<ConcentrationResponseSeries> concentrationResponseSeriesList = priorityElements*.getConcentrationResponseSeries()
+                    if (concentrationResponseSeriesList) {
+                        Double yNormMin = (concentrationResponseSeriesList*.sorterdActivities()).flatten().min()
+                        Double yNormMax = (concentrationResponseSeriesList*.sorterdActivities()).flatten().max()
+                        if (yNormMax && yNormMin) {
+                            priorityMap.put("yNormMin", yNormMin)
+                            priorityMap.put("yNormMax", yNormMax)
                         }
                     }
 
@@ -75,7 +74,7 @@ class QueryHelperService {
             priorityMap.put("hasChildElements", hasChildElements)
             return priorityMap
         }
-        return [priorityDisplay: '', priorityDescription: '', dictionaryId: null, hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        return [priorityDisplays: [], priorityDescriptions: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
@@ -86,8 +85,8 @@ class QueryHelperService {
         boolean firstMaxValue = false
         boolean hasPlot = false
         boolean hasChildElements = false
-        String priorityDisplay = ''
-        String dictionaryId
+        List<String> priorityDisplays = []
+        List<String> dictionaryIds = []
         for (Activity activity : activities) {
 
             final ResultData resultData = activity.resultData
@@ -123,28 +122,28 @@ class QueryHelperService {
                 if (priorityMap.hasChildElements) {
                     hasChildElements = true
                 }
-                if (priorityMap.dictionaryId) {
-                    dictionaryId = priorityMap.dictionaryId
+                if (priorityMap.dictionaryIds) {
+                    dictionaryIds = priorityMap.dictionaryIds
                 }
-                if (priorityMap.priorityDisplay) {
-                    priorityDisplay = priorityMap.priorityDisplay
+                if (priorityMap.priorityDisplays) {
+                    priorityDisplays = priorityMap.priorityDisplays
                 }
 
             }
         }
-        return [priorityDisplay: priorityDisplay, dictionaryId: dictionaryId,
+        return [priorityDisplays: priorityDisplays, dictionaryIds: dictionaryIds,
                 hasPlot: hasPlot, hasChildElements: hasChildElements,
                 yNormMin: yNormMin, yNormMax: yNormMax]
     }
 
-    Map extractPriorityDisplayDescription(PriorityElement priorityElement) {
-        String priorityDisplay = priorityElement.getDictionaryLabel()
-        String priorityDescription = priorityElement.getDictionaryDescription()
-        Long dictionaryId = null
-        if (priorityDescription) {
-            dictionaryId = priorityElement.getDictElemId()
+    Map extractPriorityDisplayDescription(List<PriorityElement> priorityElements) {
+        List<String> priorityDisplays = priorityElements*.getDictionaryLabel()
+        List<String> priorityDescriptions = priorityElements*.getDictionaryDescription()
+        List<Long> dictionaryIds = []
+        if (priorityDescriptions) {
+            dictionaryIds = priorityElements*.getDictElemId()
         }
-        return [priorityDisplay: priorityDisplay, priorityDescription: priorityDescription, dictionaryId: dictionaryId]
+        return [priorityDisplays: priorityDisplays, priorityDescriptions: priorityDescriptions, dictionaryIds: dictionaryIds]
     }
 
     //filters that starts with a number or '[' to denote ranges

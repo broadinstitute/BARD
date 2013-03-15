@@ -131,6 +131,39 @@ class DoseResponseCurveControllerUnitSpec extends Specification {
 
     }
 
+
+    void "test doseResponseCurves action with two curves"() {
+
+        given:
+        List<Curve> curves =
+            [
+                    new Curve(
+                            activities: [new Double(1), new Double(2)],
+                            concentrations: [new Double(1), new Double(2)],
+                            s0: 0.2, sinf: 2.2, slope: 2.1, hillSlope: 2.0
+                    ),
+                    new Curve(
+                            activities: [new Double(3), new Double(4)],
+                            concentrations: [new Double(3), new Double(4)],
+                            s0: 0.2, sinf: 3.2, slope: 3.1, hillSlope: 2.0
+                    )
+            ]
+        def byteArray = [0, 0, 0, 0, 0] as byte[]
+
+        mockCommandObject(DrcCurveCommand)
+        Map paramMap = [curves: curves, xAxisLabel: 'X', yAxisLabel: 'Y']
+
+        controller.metaClass.getParams {-> paramMap}
+        DrcCurveCommand drcCurveCommand = new DrcCurveCommand(paramMap)
+
+        when:
+        controller.doseResponseCurves(drcCurveCommand)
+        then:
+        doseCurveRenderingService.createDoseCurves(_) >> {byteArray}
+        assert response.status == 200
+
+    }
+
     void "test doseResponseCurves action null Command Object"() {
         given:
         byte[] array = null

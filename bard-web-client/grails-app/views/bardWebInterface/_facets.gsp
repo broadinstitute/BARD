@@ -2,8 +2,7 @@
 <div class="span3">
     <g:if test="${facets}">
         <div class="facets">
-            <g:form name="${formName.toString()}" controller="bardWebInterface" id="${formName.toString()}"
-                    action="applyFilters">
+            <g:form name="${formName.toString()}" id="${formName.toString()}">
                 <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"
                                 class="btn btn-small"/>
                 <input type="button" class="btn btn-small" id="${formName}_ResetButton" value="Clear All Filters"
@@ -44,7 +43,7 @@
                                     <g:set var="checked"
                                            value="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id)))}}"/>
                                     <g:checkBox name="filters[${childIndex}].filterValue" value="${childFacet.id}"
-                                                checked="${checked}" class="${formName}_Chk"/> ${childFacet.id}${childFacet.value ? " (${childFacet.value})" : ""}
+                                                checked="${checked}" class="${formName}_Chk"/> ${childFacet.id}${childFacet.value != null ? " (${childFacet.value})" : ""}
                                 </label>
                                 <g:hiddenField name="filters[${childIndex}].filterName" value="${parentFacet.id}"/>
                                 <g:set var="childIndex" value="${childIndex + 1}"/>

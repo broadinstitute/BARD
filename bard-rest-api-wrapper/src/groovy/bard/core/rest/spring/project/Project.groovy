@@ -10,7 +10,7 @@ import bard.core.rest.spring.util.Document
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Project extends ProjectAbstract {
 
-    @JsonProperty("eids")
+     @JsonProperty("eids")
     private List<Long> eids = new ArrayList<Long>();
     @JsonProperty("aids")
     private List<Long> aids = new ArrayList<Long>();

@@ -1,4 +1,12 @@
 <dl class="dl-horizontal dl-horizontal-wide">
+    <g:if test="${assayAdapter.assayTypeString}">
+        <dt>Assay Type:</dt>
+        <dd>${assayAdapter.assayTypeString}</dd>
+    </g:if>
+    <g:if test="${assayAdapter.designedBy}">
+        <dt>Designed By:</dt>
+        <dd>${assayAdapter.designedBy}</dd>
+    </g:if>
     <g:each in="${assayAdapter?.annotations[0]?.contexts?.collectMany { it.comps }?.unique{ it.key + it.display }?.sort{it.key}}" var="annotation">
         <g:if test="${annotation.key == 'assay type'}">
             <dt>Assay Type:</dt>

@@ -24,4 +24,19 @@ public class Drc {
         this.color = color;
     }
 
+    CurveParameters getCurveParameters(){
+        if ((curveParameters?.S0==0D) &&
+            (curveParameters?.SINF==0D)  &&
+            (curveParameters?.HILL_SLOPE==0D))
+                return new CurveParameters( curveParameters?.slope,
+                                            curveParameters?.resultTime,
+                                            null,
+                                            null,
+                                            null,
+                                            curveParameters?.lower95CL,
+                                            curveParameters?.upper95CL ) ;
+        else
+            return  curveParameters;
+    }
+
 }

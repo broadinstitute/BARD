@@ -3,6 +3,7 @@ package bard.core.rest.spring
 import bard.core.SearchParams
 import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
+import bard.core.util.ExternalUrlDTO
 import bard.core.util.FilterTypes
 import grails.test.mixin.TestFor
 import org.springframework.http.HttpHeaders
@@ -20,8 +21,9 @@ class ExperimentRestServiceUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        service.promiscuityUrl = "badapple"
-        service.baseUrl = "http://ncgc"
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
+
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

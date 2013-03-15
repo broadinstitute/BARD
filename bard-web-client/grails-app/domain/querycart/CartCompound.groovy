@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils
 
 class CartCompound extends QueryItem {
 
-    static final int MAXIMUM_SMILES_FIELD_LENGTH = 1024
+    static final int MAXIMUM_SMILES_FIELD_LENGTH = 255
 
     String smiles
     int numAssayActive
@@ -30,6 +30,13 @@ class CartCompound extends QueryItem {
         super.beforeValidate()
         this.smiles = StringUtils.abbreviate(smiles?.trim(), MAXIMUM_SMILES_FIELD_LENGTH)
     }
+
+
+    void setSmiles(String smilesString) {
+        this.smiles = StringUtils.abbreviate(smilesString?.trim(), MAXIMUM_SMILES_FIELD_LENGTH)
+    }
+
+
 
     static constraints = {
         smiles(nullable: false, maxSize: MAXIMUM_SMILES_FIELD_LENGTH)

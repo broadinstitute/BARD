@@ -9,6 +9,7 @@ import bard.core.rest.spring.experiment.ExperimentSearchResult
 import bard.core.rest.spring.substances.Substance
 import bard.core.rest.spring.substances.SubstanceResult
 import bard.core.rest.spring.util.SubstanceSearchType
+import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
@@ -23,8 +24,9 @@ class SubstanceRestServiceUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        service.promiscuityUrl = "badapple"
-        service.baseUrl = "http://ncgc"
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
+
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

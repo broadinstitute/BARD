@@ -13,7 +13,10 @@ import bard.core.rest.spring.experiment.ExperimentShow
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
+import bard.core.rest.spring.project.ProjectStep
 import bard.core.rest.spring.util.StructureSearchParams
+import bard.core.util.FilterTypes
+import bardqueryapi.experiment.ExperimentBuilder
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
@@ -396,8 +399,8 @@ class QueryService implements IQueryService {
                 activities: activities,
                 experiment: experimentShow,
                 hasPlot: experimentDetails.hasPlot,
-                priorityDisplay: experimentDetails.priorityDisplay,
-                dictionaryId: experimentDetails.dictionaryId,
+                priorityDisplays: experimentDetails.priorityDisplays,
+                dictionaryIds: experimentDetails.dictionaryIds,
                 hasChildElements: experimentDetails.hasChildElements,
                 yNormMin: experimentDetails.yNormMin,
                 yNormMax: experimentDetails.yNormMax,

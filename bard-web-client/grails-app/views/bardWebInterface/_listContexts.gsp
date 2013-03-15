@@ -1,5 +1,5 @@
 <%@ page import="bard.core.rest.spring.assays.Context" %>
-<div id="cardHolder" class="span12">
+<div id="cardHolder" >
     <g:each in="${annotations}" var="annotationSet">
         <div class="roundedBorder card-group">
             <div class="row-fluid">

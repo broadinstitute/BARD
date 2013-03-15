@@ -322,7 +322,7 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         final List<SpreadSheetActivity> spreadSheetActivityList = []
         spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L)
         spreadSheetActivityList << new SpreadSheetActivity(cid: 54687454L,eid: 3997L)
-        Map<String, MolSpreadSheetCell> dataMap = [:]
+        Map<String, List<MolSpreadSheetCell>> dataMap = [:]
         dataMap["0_4"]  = new  MolSpreadSheetCell ()
         MolSpreadSheetData molSpreadSheetData = new   MolSpreadSheetData ()
         molSpreadSheetData.rowPointer[54687454L] = 0
@@ -333,8 +333,8 @@ class MolecularSpreadSheetServiceUnitSpec extends Specification {
         service.populateMolSpreadSheetData(molSpreadSheetData,experimentList,spreadSheetActivityList,dataMap)
 
         then:
-        assert dataMap["0_4"]
-
+        assert dataMap["0_4"]!=null
+        assert dataMap["0_4"].size()==0
     }
 
 

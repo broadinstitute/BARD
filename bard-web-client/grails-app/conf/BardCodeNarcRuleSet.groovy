@@ -71,7 +71,7 @@ ruleset {
     GStringAsMapKey
     GroovyLangImmutable
     HardCodedWindowsFileSeparator
-    HardcodedWindowsRootDirectory
+    HardCodedWindowsRootDirectory
     IntegerGetInteger
     //InvertedIfElse
     RandomDoubleCoercedToZero

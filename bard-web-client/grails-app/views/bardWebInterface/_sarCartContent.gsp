@@ -86,7 +86,9 @@
                     </a>
                     <ul class="dropdown-menu pull-left"  role="menu">
                         <li><g:link controller="molSpreadSheet">Molecular Spreadsheet</g:link></li>
-                        <li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>
+                       <li><a href="${createLink(controller: 'queryCart', action: 'toDesktopClient')}" target="_blank">Desktop Client</a></li>
+
+                        %{--<li><a href="http://bard.nih.gov/bard/compounds/44552613?view=Record" target="_blank">Desktop Client</a></li>--}%
                     </ul>
                 </div>
             </div>

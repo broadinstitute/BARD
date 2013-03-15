@@ -5,6 +5,7 @@ import com.metasieve.shoppingcart.Shoppable
 import com.metasieve.shoppingcart.ShoppingCartService
 
 class QueryCartService {
+
     ShoppingCartService shoppingCartService
     static final String cartAssay = "CartAssay"
     static final String cartCompound = "CartCompound"
@@ -134,6 +135,7 @@ class QueryCartService {
     def addToShoppingCart(ShoppingCartService shoppingCartSrvc = shoppingCartService, IShoppable product) {
         boolean foundIt = false
         def returnValue = null
+        //TODO: Do we need this loop?
         if (shoppingCartSrvc?.items) {
             shoppingCartSrvc.items.each { shoppingItemElement ->
                 def convertedShoppingItem = Shoppable.findByShoppingItem(shoppingItemElement)

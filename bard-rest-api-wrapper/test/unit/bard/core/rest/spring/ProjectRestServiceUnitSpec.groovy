@@ -8,11 +8,11 @@ import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.project.ProjectStep
+import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-import spock.lang.IgnoreRest
 
 @Unroll
 @TestFor(ProjectRestService)
@@ -23,8 +23,9 @@ class ProjectRestServiceUnitSpec extends Specification {
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        service.promiscuityUrl = "badapple"
-        service.baseUrl = "http://ncgc"
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        service.externalUrlDTO = externalUrlDTO
+
         this.loggerService = Mock(LoggerService)
         service.loggerService = this.loggerService
     }

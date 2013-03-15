@@ -23,11 +23,27 @@
                 <h3>
                     <g:if test="${searchString}">
                         <g:link action="showAssay" id="${assayAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                params='[searchString: "${searchString}"]'>${assayAdapter.title}  <small>(ADID: ${assayAdapter.capAssayId})</small>
+                            <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
+                               <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                    alt="Witnessed" title="Witnessed"/>
+                           </g:if>
+                            <g:if test="${assayAdapter.assayStatus == 'Measures Done' || assayAdapter.assayStatus == 'Annotations Done'}">
+                                <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
+                                     alt="Measures or Annotations Done" title="Measures or Annotations Done"/>
+                            </g:if>
+                            <g:if test="${assayAdapter.assayStatus == 'Draft' || assayAdapter.assayStatus == 'Retired'}">
+                                <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                                     alt="Draft or Retired" title="Draft or Retired"/>
+                            </g:if>
+                        </g:link>
                     </g:if>
                     <g:else>
                         <g:link action="showAssay"
-                                id="${assayAdapter.id}">${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                                id="${assayAdapter.id}">
+                            ${assayAdapter.title}
+                            <small>(ADID: ${assayAdapter.capAssayId})</small>
+                        </g:link>
                     </g:else>
 
                 </h3>

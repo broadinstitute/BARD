@@ -22,10 +22,20 @@ public interface RestApiConstants {
     final int MAXIMUM_NUMBER_OF_EXPERIMENTS = 1000;
     final String ANNOTATIONS = "/annotations";
     final String SUBSTANCES_RESOURCE = "/substances";
+    //for targets resource
+    final String TARGETS_RESOURCE ="/targets";
+
+    final String ACCESSION ="/accession";
+
+    final String CLASSIFICATION ="/classification";
+
     //relative path to the experiment resource
     final String EXPERIMENTS_RESOURCE = "/experiments";
     //relative path to the assays resource
     final String ASSAYS_RESOURCE = "/assays";
+
+    //relative path to the assays resource
+    final String DICTIONARY_RESOURCE = "/cap/dictionary";
     //relative path to the projects resource
     final String PROJECTS_RESOURCE = "/projects";
     //relative path to the compounds resource
@@ -37,6 +47,7 @@ public interface RestApiConstants {
     final String FACETS = "facets";
     final String SEARCH = "search";
     final String NAME = "name";
+    final String ETAGS_RESOURCE="/etags";
     final String ETAG = "etag";
     final String E_TAG = "ETag";
     final String COMMA = ",";

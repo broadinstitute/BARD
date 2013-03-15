@@ -6,8 +6,11 @@ grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
-def gebVersion = "0.7.2"
-def seleniumVersion = "2.25.0"
+
+def gebVersion = "0.9.0-RC-1"
+def seleniumVersion = "2.31.0"
+
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -33,15 +36,15 @@ grails.project.dependency.resolution = {
         }
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
-        test("org.spockframework:spock-core:0.6-groovy-1.8") {
-            exclude "groovy-all"
-        }
+        compile "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+
         test "org.objenesis:objenesis:1.2" // used by spock for Mocking objects that have no args constructor
 
         runtime('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             excludes "commons-logging", "xml-apis", "groovy", "httpclient", "httpcore", "nekohtml"
         }
-        test "org.codehaus.geb:geb-spock:$gebVersion"
+        test "org.grails.plugins:geb:$gebVersion"
+        test "org.gebish:geb-spock:$gebVersion"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis", "commons-io"
         }
@@ -70,17 +73,22 @@ grails.project.dependency.resolution = {
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
         compile ":jquery-ui:1.8.15"
-        //  compile ":export:1.5"
-        runtime ":resources:1.1.6"
-        compile ":functional-spock:0.6"
-        compile ":twitter-bootstrap:2.1.0"
-        compile ":cbipcrowdauthentication:0.3.0"
+        compile ":export:1.5"
+        // runtime ":resources:1.1.6"
+        compile ":resources:1.2.RC2"
+        // compile ":functional-spock:0.6"
+        compile ":twitter-bootstrap:2.3.0"
+        compile(":cbipcrowdauthentication:0.3.0"){
+            excludes('spock', 'release')
+        }
         build ":tomcat:$grailsVersion"
-        test ":spock:0.6"
-        test ":codenarc:0.15"
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
+        }
+        test ":codenarc:0.18.1"
         test ":geb:$gebVersion"
-        test ":remote-control:1.2"
-        compile ":clover:3.1.6"
+        test ":remote-control:1.4"
+        compile ":clover:3.1.10.1"
         compile ":spring-mobile:0.4"
         compile ":google-analytics:2.0"
         compile ":mail:1.0.1"
@@ -90,8 +98,11 @@ grails.project.dependency.resolution = {
 }
 
 // making the domain plugin an in-place plugin
+
+grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
+
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
-grails.plugin.location.'shopping-cart:0.8.2'="../shopping-cart-0.8.2"
+//grails.plugin.location.'functional-spock'="../functional-spock"
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {

@@ -19,13 +19,13 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.HttpClientErrorException
 import bard.core.util.FilterTypes
+import bard.core.util.ExternalUrlDTO
 
 abstract class AbstractRestService {
-    String baseUrl
-    String promiscuityUrl
     RestTemplate restTemplate
     final static int multiplier = 5
     LoggerService loggerService
+    ExternalUrlDTO externalUrlDTO
 
     /**
      * @param params
@@ -33,7 +33,7 @@ abstract class AbstractRestService {
      * @throws UnsupportedEncodingException
      */
     protected String buildSuggestQuery(SuggestParams params) throws UnsupportedEncodingException {
-        return new StringBuilder(baseUrl).
+        return new StringBuilder(externalUrlDTO.baseUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(getResourceContext()).
@@ -261,7 +261,28 @@ abstract class AbstractRestService {
         }
         return f.toString();
     }
-
+    /**
+     * @param params
+     * @return String
+     * For example : http://bard.nih.gov/api/v15/experiments/11795/exptdata?expand=true&filter=active
+     */
+    protected String buildFiltersForEntitySearch(SearchParams params) {
+        final StringBuilder f = new StringBuilder("");
+        if (params.getFilters()) {
+            f.append(RestApiConstants.AMPERSAND_FILTER);
+            String sep = "";
+            for (String[] entry : params.getFilters()) {
+                f.append(sep).
+                        append(RestApiConstants.FQ).append(RestApiConstants.LEFT_PAREN).
+                        append(URLEncoder.encode(entry[0], RestApiConstants.UTF_8)).
+                        append(RestApiConstants.COLON)
+                        .append(URLEncoder.encode(entry[1], RestApiConstants.UTF_8))
+                        .append(RestApiConstants.RIGHT_PAREN);
+                sep = RestApiConstants.COMMA;
+            }
+        }
+        return f.toString();
+    }
     public Map<String, List<String>> suggest(SuggestParams params) {
         final String resource = buildSuggestQuery(params)
         final URL url = new URL(resource)

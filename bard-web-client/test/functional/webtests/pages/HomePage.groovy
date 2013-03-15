@@ -7,7 +7,7 @@ class HomePage extends ScaffoldPage {
     static url = ""
 
     static at = {
-        title ==~ /BioAssay Research Database/
+        title.contains("BioAssay Research Database")
     }
 
     static content = {

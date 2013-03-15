@@ -92,7 +92,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.redirectedUrl == expectedView
         where:
         label            | searchString    | isMobile | expectedStatusCode | expectedView
-        "Regular search" | "Search String" | false    | 302                | '/bardWebInterface/searchResults'
+        "Regular search" | "Search String" | false    | 302                | 'http://localhost:80/bardWebInterface/searchResults'
         "Mobile Search"  | "Search String" | true     | 200                | null
     }
 
@@ -366,7 +366,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.turnoffMobileExperience()
         then:
         assert response.status == HttpServletResponse.SC_MOVED_TEMPORARILY
-        assert response.redirectedUrl == '/bardWebInterface/index'
+        assert response.redirectedUrl == 'http://localhost:80/bardWebInterface/index'
     }
 
     void "test handle Assay Searches #label"() {

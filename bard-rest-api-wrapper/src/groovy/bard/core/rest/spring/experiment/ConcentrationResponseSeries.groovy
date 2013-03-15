@@ -4,12 +4,11 @@ import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-import org.codehaus.groovy.grails.web.context.ServletContextHolder
-import org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes
-import bard.core.rest.spring.util.DictionaryElement
+
 import bard.rest.api.wrapper.Dummy
 import org.apache.log4j.Logger
 import org.apache.log4j.Level
+import bard.core.rest.spring.util.Node
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ConcentrationResponseSeries extends JsonUtil {
@@ -49,7 +48,7 @@ public class ConcentrationResponseSeries extends JsonUtil {
     public String getDictionaryLabel() {
         if (dictElemId) {
 
-            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            final Node dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
             if (dictionaryElement) {
                 return dictionaryElement.label
             }
@@ -59,7 +58,7 @@ public class ConcentrationResponseSeries extends JsonUtil {
 
     public String getDictionaryDescription() {
         if (dictElemId) {
-            final DictionaryElement dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            final Node dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
             if (dictionaryElement) {
                 return dictionaryElement.description
             }
