@@ -19,7 +19,8 @@
                 </g:if>
                 <li><a href="#" data-detail-id="sid_${sid}" class="analogs"
                        data-structure-search-params="Similarity:${cid}">Search For Analogs</a>
-                    &nbsp; &nbsp;Threshold (0-100%) : <input type="number" min="0" max="100" step="1" name="cutoff" value="90" size="4" id="cutoff"/>
+                    &nbsp; &nbsp;Threshold (0-100%) : <input type="number" min="0" max="100" step="1" name="cutoff"
+                                                             value="90" size="4" id="cutoff"/>
                 </li>
                 <li>
                     <g:link controller="molSpreadSheet" action="showExperimentDetails"
@@ -36,6 +37,9 @@
                            data-cart-numAssays="${numAssays}">Save to Cart For Analysis</a>
                     </li>
                 </g:if>
+                <li>
+                    <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${cid}">Bio-activity Summary</g:link>
+                </li>
             </ul>
         </span>
     </div>

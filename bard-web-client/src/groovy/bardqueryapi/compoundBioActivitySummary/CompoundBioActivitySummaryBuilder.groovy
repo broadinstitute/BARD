@@ -146,7 +146,12 @@ class CompoundBioActivitySummaryBuilder {
                         List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
                         ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                         CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-                        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap, title: priorityElement.pubChemDisplayName, curveFitParameters: curveFitParameters, slope: priorityElement.getSlope())
+                        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
+                                title: priorityElement.pubChemDisplayName,
+                                curveFitParameters: curveFitParameters,
+                                slope: priorityElement.getSlope(),
+                                responseUnit: concentrationResponseSeries.responseUnit,
+                                testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit)
                         values << concentrationResponseSeriesValue
                     }
                     break;

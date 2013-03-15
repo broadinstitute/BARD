@@ -41,7 +41,7 @@
 
     <g:each in="${tableModel.data}" var="row" status="i">
     %{--Each row is a separate table--}%
-        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px">
+        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px; word-wrap: break-word;">
             <tbody>
             <tr>
                 %{--First cell in the row is always the resource: an assay or a project--}%
@@ -66,7 +66,8 @@
                                 <g:set var="resultSize" value="${results?.size()}"/>
                                 <thead>
                                 <tr>
-                                    <th colspan="${resultSize}">
+                                    %{--First row is the experiment description--}%
+                                    <th colspan="${resultSize}" style="max-width: 500px;">
                                         <g:experimentDescription name="${experiment.name}"/>
                                     </th>
                                 </tr>
@@ -79,38 +80,45 @@
                                         </td>
                                     </g:if>
                                     <g:else>
+                                        %{--Experiment's result-set--}%
                                         <g:each in="${results}" var="result">
-                                            <td>
+                                            <td align="center" nowrap="wrap">
+                                                %{--A curve--}%
                                                 <g:if test="${result instanceof bardqueryapi.ConcentrationResponseSeriesValue}">
                                                     <g:set var="concentrationSeries"
                                                            value="${result.value.concentrations}"/>
                                                     <g:set var="activitySeries" value="${result.value.activities}"/>
                                                     <table>
                                                         <tr>
-                                                            <td>
+                                                            <td align="center">
                                                                 <g:curvePlot
                                                                         concentrationSeries="${concentrationSeries}"
                                                                         activitySeries="${activitySeries}"
                                                                         curveFitParameters="${result.curveFitParameters}"
-                                                                        slope="${result.slope}"/>
+                                                                        slope="${result.slope}"
+                                                                        responseUnit="${result.responseUnit}"
+                                                                        testConcentrationUnit="${result.testConcentrationUnit}"/>
                                                             </td>
-                                                            <td>
+                                                            <td align="center">
                                                                 <g:curveValues
                                                                         title="${result.title}"
                                                                         concentrationSeries="${concentrationSeries}"
-                                                                        activitySeries="${activitySeries}"/>
+                                                                        activitySeries="${activitySeries}"
+                                                                        responseUnit="${result.responseUnit}"
+                                                                        testConcentrationUnit="${result.testConcentrationUnit}"/>
                                                             </td>
                                                         </tr>
                                                     </table>
                                                 </g:if>
+                                                %{--A key/value pair result--}%
                                                 <g:elseif test="${result instanceof bardqueryapi.PairValue}">
                                                     <g:set var="pair" value="${result.value}"/>
                                                     <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;">
                                                         <tr>
-                                                            <td>
-                                                                <b>${pair.left}</b>
+                                                            <td align="center">
+                                                                <b><small>${pair.left}</small></b>
 
-                                                                <p>${pair.right}</p>
+                                                                <p><small>${pair.right}</small></p>
                                                             </td>
                                                         </tr>
                                                     </table>

@@ -20,4 +20,6 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
     String title
     CurveFitParameters curveFitParameters
     Double slope
+    String responseUnit
+    String testConcentrationUnit
 }

@@ -30,8 +30,8 @@ class CompoundBioActivitySummaryTagLib {
                             hillSlope: attrs?.curveFitParameters?.hillCoef,
                             concentrations: attrs.concentrationSeries,
                             activities: attrs.activitySeries,
-//                            xAxisLabel: hillCurveValueHolder.xAxisLabel,
-//                            yAxisLabel: hillCurveValueHolder.yAxisLabel,
+                            xAxisLabel: attrs.testConcentrationUnit,
+                            yAxisLabel: attrs.responseUnit,
 //                            yNormMin: yMinimum,
 //                            yNormMax: yMaximum
                     ]
@@ -42,11 +42,11 @@ class CompoundBioActivitySummaryTagLib {
 
     def curveValues = { attrs, body ->
 
-        out << "<h3>${attrs.title}</h3>"
+        out << "<h5>${attrs.title}</h5>"
 
         int i = 0
         while (i < attrs.concentrationSeries.size()) {
-            out << "<p>${attrs.activitySeries[i]} @ ${attrs.concentrationSeries[i]} uM</p>"
+            out << "<p><small>${attrs.activitySeries[i]} ${attrs.responseUnit ? '[' + attrs.responseUnit + ']' : ''} @ ${attrs.concentrationSeries[i]} ${attrs.testConcentrationUnit}</small></p>"
             i++
         }
     }
