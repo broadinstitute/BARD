@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="859896cc-9815-4eea-b811-695a0ad1bfe5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/resources/HeaderMappings.config" afterPath="$PROJECT_DIR$/grails-app/conf/resources/HeaderMappings.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" afterPath="$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsProject.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsProject.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNames.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNames.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNamesReader.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNamesReader.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/exampleData/project_data_from_CARS.csv" afterPath="$PROJECT_DIR$/test/exampleData/project_data_from_CARS.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="DnaRepairSpreadsheetParser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -125,43 +118,7 @@
       <file leaf-file-name="ParseCarsSpreadsheet.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="189" selection-start="110" selection-end="110" vertical-scroll-proportion="0.027823241">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProjectMapperBuilder.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="101" column="61" selection-start="4452" selection-end="4452" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CarsSpreadsheetReader.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="55" column="84" selection-start="2336" selection-end="2336" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CarsProject.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsProject.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="40" selection-start="354" selection-end="354" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProjectIdsToLoad.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectIdsToLoad.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="70" selection-start="594" selection-end="594" vertical-scroll-proportion="0.0">
+            <state line="10" column="44" selection-start="612" selection-end="612" vertical-scroll-proportion="0.2782324">
               <folding />
             </state>
           </provider>
@@ -755,7 +712,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1596" y="-184" width="1928" height="1088" extended-state="7" />
+    <frame x="1596" y="-184" width="1928" height="1088" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -979,13 +936,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="61" selection-start="4452" selection-end="4452" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -993,9 +943,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="104" column="53" selection-start="4523" selection-end="4523" vertical-scroll-proportion="0.3878887">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="189" selection-start="110" selection-end="110" vertical-scroll-proportion="0.027823241">
+        <state line="10" column="44" selection-start="612" selection-end="612" vertical-scroll-proportion="0.2782324">
           <folding />
         </state>
       </provider>
