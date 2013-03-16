@@ -9,12 +9,12 @@ class ArchivePathService {
 
     String constructUploadResultPath(Experiment experiment) {
         String timestamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
-        return "uploaded-results/${experiment.id%100}/${experiment.id}/exp-${experiment.id}-${timestamp}.txt.gz"
+        return "uploaded-results/${(long)(experiment.id/1000)}/${experiment.id}/exp-${experiment.id}-${timestamp}.txt.gz"
     }
 
     String constructExportResultPath(Experiment experiment) {
         String timestamp = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date())
-        return "exported-results/${experiment.id%100}/${experiment.id}/exp-${experiment.id}-${timestamp}.json.gz"
+        return "exported-results/${(long)(experiment.id/1000)}/${experiment.id}/exp-${experiment.id}-${timestamp}.json.gz"
     }
 
     File prepareForWriting(String filename) {

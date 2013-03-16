@@ -240,7 +240,7 @@ class PubchemReformatService {
     public ResultMap loadMap(Connection connection, Long aid) {
         ResultMap map = new ResultMap()
         Sql sql = new Sql(connection)
-        List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM southern.result_map WHERE AID = ?", [aid])
+        List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM result_map WHERE AID = ?", [aid])
 //            rows.add(it)
 //            // check the units provided match what the dictionary is expecting
 ////        if (it.CONCENTRATIONUNIT != null) {
