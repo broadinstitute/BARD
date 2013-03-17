@@ -11,7 +11,7 @@ databaseChangeLog = {
     File migrationsDir = new File(bardDomainModelMigrationsDir)
 
     changeSet(author: "xiaorong", id: "iteration-021/01-add-person.sql", dbms: 'oracle', context: 'standard') {
-        sqlFile(path:  "${migrationsDir}/iteration-021/01-add-person.sql", stripComments: true)
+        sqlFile(path:  "${migrationsDir}/iteration_021/01-add-person.sql", stripComments: true)
     }
 }
 
