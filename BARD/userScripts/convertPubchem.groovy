@@ -1,18 +1,5 @@
-import bard.db.dictionary.Element
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentMeasure
-import au.com.bytecode.opencsv.CSVReader
-import au.com.bytecode.opencsv.CSVWriter
 import bard.db.experiment.PubchemReformatService
-import bard.db.registration.AttributeType
 import bard.db.registration.ExternalReference
-import groovy.sql.Sql
-import org.hibernate.classic.Session
-import org.hibernate.jdbc.Work
-
-import javax.sql.DataSource
-import java.sql.Connection
-import java.sql.SQLException
 
 PubchemReformatService pubchemReformatService = ctx.pubchemReformatService
 
