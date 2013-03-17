@@ -18,19 +18,18 @@ import maas.FileHashMap
 
 
 final String baseModifiedBy = "xiaorong"
-final String baseOutputPath = "test/exampleData/logsAndOutput/"
+final String baseOutputPath = "data/maas/maasDataset1/output/"
 Log.initializeLogger("${baseOutputPath}${baseModifiedBy}.log")
 Log.logger.setLevel(Level.INFO)
 
 final Date startDate = new Date()
 Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
-
 final Integer START_ROW = 2 //0-based
 
 List<File> inputFileList = new LinkedList<File>()
 
-List<String> inputDirPathArray = ["test/exampleData/maas/what_we_should_load"]
+List<String> inputDirPathArray = ["data/maas/maasDataset1"]
 ExcelHandler.constructInputFileList(inputDirPathArray, inputFileList)
 
 Log.logger.info("loading ${inputFileList.size()} files found in ${inputDirPathArray.size()} directories")
@@ -49,14 +48,12 @@ final AttributesContentsCleaner attributesContentsCleaner = new AttributesConten
 final AttributeContentAgainstElementTableValidator attributeContentAgainstElementTableValidator = new AttributeContentAgainstElementTableValidator(loadResultsWriter)
 final AssayContextsValidatorCreatorAndPersistor assayContextsValidatorCreatorAndPersistor = new AssayContextsValidatorCreatorAndPersistor(baseModifiedBy, loadResultsWriter, false)
 
-def mustLoadedAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
+def mustLoadedAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset1/aids_dataset_1.csv')
 
 try {
     for (File inputFile : inputFileList) {
         final int fileHash = fileHashMap.addFile(inputFile)
         Log.logger.info("${new Date()} processing file ${inputFile.absolutePath} hashCode: $fileHash")
-
-        println("Build assay and measure-context (groups) and populate their attribute from the spreadsheet cell contents.")
 
         try {
             List<AssayDto> assayDtoList = parseAndBuildAttributeGroups.build(inputFile, START_ROW, [spreadsheetAssayContextGroups])
@@ -70,7 +67,11 @@ try {
                     attributeContentAgainstElementTableValidator.removeInvalid(assayDto.assayContextDTOList, attributeNameMapping)
 
                     if (assayDto.assayContextDTOList.size() > 0) {
-                        final String currentModifiedBy = "${baseModifiedBy}_FH$fileHash"
+                       // final String currentModifiedBy = "${baseModifiedBy}_FH$fileHash"
+                        final String currentModifiedBy = "${baseModifiedBy}_${inputFile.name}"
+                        if (currentModifiedBy.length() >= 40){
+                            currentModifiedBy = currentModifiedBy.substring(0,40)
+                        }
                         assayContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
                         if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
                             assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success,
@@ -105,4 +106,32 @@ try {
     final double durationMin = (endDate.time - startDate.time) / 60000.0
     Log.logger.info("finished at ${endDate}   duration[min]: ${durationMin}")
     Log.close()
+}
+
+class FileHashMap {
+    private final Map<File, Integer> fileHashCodeMap
+
+    private final BufferedWriter writer
+
+    FileHashMap(String outputFilename) {
+        fileHashCodeMap = new HashMap<File, Integer>()
+
+        writer = new BufferedWriter(new FileWriter(outputFilename))
+        writer.writeLine("hash_code,file_path")
+    }
+
+    int addFile(File file) {
+        final int hashCode = file.absolutePath.hashCode()
+
+        if (!fileHashCodeMap.containsKey(file)) {
+            fileHashCodeMap.put(file, hashCode)
+            writer.writeLine("$hashCode,${file.absolutePath}")
+        }
+
+        return hashCode
+    }
+
+    void close() {
+        writer.close()
+    }
 }

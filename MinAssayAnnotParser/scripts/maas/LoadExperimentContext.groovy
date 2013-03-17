@@ -11,8 +11,6 @@ import bard.db.experiment.Experiment
  */
 
 ExperimentHandlerService experimentHandlerService = new ExperimentHandlerService()
-final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
-def dirs = ['test/exampleData/maas/what_we_should_load']
-Experiment.withTransaction{DefaultTransactionStatus status ->
-    experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
-}
+final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset2/aids_dataset_2.csv')
+def dirs = ['data/maas/maasDataset2']
+experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)

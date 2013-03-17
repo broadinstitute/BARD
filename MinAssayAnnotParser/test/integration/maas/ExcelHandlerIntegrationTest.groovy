@@ -1,5 +1,7 @@
 package maas
 
+import org.junit.Ignore
+
 /**
  * Created with IntelliJ IDEA.
  * User: xiaorong
@@ -16,8 +18,9 @@ class ExcelHandlerIntegrationTest extends GroovyTestCase {
         assert inputFileList.size() > 1
     }
 
+    @Ignore
     void testBuildDto() {
-        File inputFile = new File("test/exampleData/minAssayAnnotationSpreadsheets/BARD_Broad_Raj.xlsx")
+        File inputFile = new File("test/exampleData/minAssayAnnotationSpreadsheets/BARD_Broad_Raj.xlsx.done")
         def contextGroups = ContextGroupsBuilder.buildExperimentContextGroup()
         def dtos = ExcelHandler.buildDto(inputFile, 2, contextGroups, 80)
         assert dtos.size() > 1

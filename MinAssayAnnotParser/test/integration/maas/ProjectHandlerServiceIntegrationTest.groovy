@@ -1,6 +1,7 @@
 package maas
 
 import bard.db.project.Project
+import org.junit.Ignore
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,19 +15,15 @@ class ProjectHandlerServiceIntegrationTest extends GroovyTestCase {
 
     void testLoadProjectsContext() {
         final List<String> mustLoadAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
-        File file = new File("test/exampleData/minAssayAnnotationSpreadsheets/BARD_Broad_Raj.xlsx")
+        File file = new File("test/exampleData/minAssayAnnotationSpreadsheets/BARD_Broad_Raj.xlsx.done")
         def inputFiles = [file]
         projectHandlerService.loadProjectsContext("xiaorong", inputFiles, mustLoadAids)
     }
 
+    @Ignore
     void testLoadProjectsContextFrom(){
         final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
         def dirs = ['test/exampleData/maas/what_we_should_load']
         projectHandlerService.handle('xiaorong', dirs, mustLoadAids)
-    }
-
-    void testDeleteContext() {
-        Project project = Project.findById(87)
-        projectHandlerService.deleteExistingContext(project)
     }
 }

@@ -21,7 +21,7 @@ class AttributesContentsCleaner {
      */
 
    static void cleanDtos(List<Dto> dtos) {
-       Map attributeNameMapping = AttributeNameMappingBuilder.build()
+       Map attributeNameMapping = AttributeNameMapping.build()
         dtos.each{Dto dto->
             List<ContextDTO> cleanedContextDTOs = []
             dto.contextDTOs.each{ContextDTO contextDTO ->
@@ -50,7 +50,6 @@ class AttributesContentsCleaner {
         for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
 
             String ky = trimAndMapKey(contextItemDto.key, attributeNameMapping)
-
             def val = contextItemDto.value
             if (contextItemDto.value instanceof String) {
                 //remove '| | |' prefix
@@ -89,8 +88,8 @@ class AttributesContentsCleaner {
     }
 
     static private String trimAndMapKey(String key, Map attributeNameMapping) {
-        String trimmedKey = StringUtils?.split(key, '|')?.toList()?.last()?.trim()
 
+        String trimmedKey = StringUtils?.split(key, '|')?.toList()?.last()?.trim()
         String matchedKey = attributeNameMapping.keySet().find { String keyInMap -> return StringUtils.equalsIgnoreCase(keyInMap, trimmedKey)}
         trimmedKey = matchedKey ? attributeNameMapping.get(matchedKey) : trimmedKey
         return trimmedKey

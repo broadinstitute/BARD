@@ -3,6 +3,7 @@ package maas
 import bard.db.dictionary.Element
 import bard.db.dictionary.ElementHierarchy
 import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 class ElementHandlerService {
     /**
@@ -54,6 +55,30 @@ class ElementHandlerService {
         new File(fileName).each{String line ->
             String[] elements = line.split(":")
             addElement("xiaorong-maas", StringUtils.trim(elements[1]))
+        }
+    }
+
+
+    // Build map to
+    private static final String MAPPING_FILE_NAME = "data/maas/missingElements.txt"
+
+    static void build(String fileName, Map elementDescription, Map elementParent) {
+        if (StringUtils.isBlank(fileName)) {
+            fileName = MAPPING_FILE_NAME
+        }
+
+        new File(fileName).eachLine {String line, int cnt ->
+            if (StringUtils.isNotBlank(line) && !StringUtils.startsWith(StringUtils.trim(line), "//")) {     // skip comment field
+                String[] elements = line.split("\t")
+                if (elements.length >= 2)
+                    elementDescription.put(StringUtils.trim(elements[0]), StringUtils.trim(elements[1]))
+                else
+                   elementDescription.put(StringUtils.trim(elements[0]), "")
+                if (elements.length >= 3
+                        && StringUtils.isNotBlank(elements[2])
+                        && StringUtils.isNumeric(StringUtils.trim(elements[2])))
+                    elementParent.put(StringUtils.trim(elements[0]), StringUtils.trim(elements[2]))
+            }
         }
     }
 }

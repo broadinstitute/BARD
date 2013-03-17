@@ -1,6 +1,7 @@
 package maas
 
 import bard.db.dictionary.Element
+import org.junit.Ignore
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,8 +34,17 @@ class ElementHandlerServiceIntegrationTest extends GroovyTestCase {
         elementHandlerService.addMissingElement("xiaorong", elementAndDescription, elementParent)
     }
 
+    @Ignore
     public void testAddMissingName() {
         String fileWithUniqueName = 'test/exampleData/maas/missingNameUniq.txt'
         elementHandlerService.addMissingName(fileWithUniqueName)
+    }
+
+    public void testBuild() {
+       def elementDescription = [:]
+        def elementParent = [:]
+       ElementHandlerService.build(null, elementDescription, elementParent)
+        println(elementDescription)
+        println(elementParent)
     }
 }

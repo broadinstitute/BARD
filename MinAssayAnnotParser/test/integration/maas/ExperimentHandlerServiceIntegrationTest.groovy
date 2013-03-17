@@ -1,5 +1,9 @@
 package maas
 
+import bard.db.experiment.Experiment
+import org.springframework.transaction.support.DefaultTransactionStatus
+import org.junit.Ignore
+
 /**
  * Created with IntelliJ IDEA.
  * User: xiaorong
@@ -10,16 +14,25 @@ package maas
 class ExperimentHandlerServiceIntegrationTest extends GroovyTestCase {
     def experimentHandlerService
 
+    @Ignore
     void testLoadExperimentsContext() {
-        File file = new File("test/exampleData/minAssayAnnotationSpreadsheets/BARD_Broad_Raj.xlsx")
+        File file = new File("data/maas/maasDataset1")
         def inputFiles = [file]
         experimentHandlerService.loadExperimentsContext("xiaorong", inputFiles)
     }
 
+    @Ignore
     void testLoadProjectsContextFrom(){
         final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('test/exampleData/maas/most_recent_probe_aids.csv')
         def dirs = ['test/exampleData/maas/what_we_should_load']
         experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
+    }
+
+    @Ignore
+    void testLoad() {
+        final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset1/aids_dataset_1.csv')
+        def dirs = ['data/maas/maasDataset1']
+            experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
     }
 
 }

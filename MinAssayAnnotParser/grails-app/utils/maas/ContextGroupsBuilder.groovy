@@ -24,12 +24,13 @@ class ContextGroupsBuilder {
                 new ContextItemDto(key:'2/Y', value:'$/Y',  attributeType:AttributeType.Fixed, assignedName: "result type"),
 //                new ContextItemDto(key:'2/Z', value:'$/Z', attributeType:AttributeType.Fixed, assignedName: "activity qualifier"),
 //                new ContextItemDto(key:'2/AA', value:'$/AA', attributeType:AttributeType.Free, typeIn: true, assignedName: "activity threshold"),
-                new ContextItemDto(key:'2/AA', value:'$/AA', attributeType:AttributeType.Fixed, typeIn: false, qualifier: '$/Z', assignedName:"activity threshold"),
+                new ContextItemDto(key:'2/AA', value:'$/AA', attributeType:AttributeType.Free, typeIn: false, qualifier: '$/Z', assignedName:"activity threshold"),
                 new ContextItemDto(key:'2/AB', value:'$/AB', attributeType:AttributeType.Fixed, assignedName: "unit")
         ]
 
-        List<ContextItemDto> projectLead = [
-                new ContextItemDto(key:'2/AD', value:'$/AD', attributeType:AttributeType.Fixed, assignedName: "project lead name")
+        List<ContextItemDto> projectLead = [             //  treat it as free, it should be an external url to Person domain, fix all of these by running another script
+                new ContextItemDto(key:'2/AD', value:'$/AD', attributeType:AttributeType.Free, assignedName: "project lead name")
+               // new ContextItemDto(key:'2/AD', value:'$/AD', attributeType:AttributeType.Fixed, assignedName: "project lead name")
         ]
 
         List<ContextGroup> contextGroups = [
@@ -50,15 +51,30 @@ class ContextGroupsBuilder {
                 new ContextItemDto(key: '2/AF', value: '$/AF', attributeType: AttributeType.Fixed, assignedName: "intended mode-of-action")
         ]
 
-        List<ContextItemDto> projectManagement = [
-                new ContextItemDto(key: '2/AW', value: '$/AW', attributeType: AttributeType.Fixed, assignedName: "assay provider name"),
-                new ContextItemDto(key: '2/AX', value: '$/AX', attributeType: AttributeType.Fixed, assignedName: "science officer")
+        List<ContextItemDto> projectManagement = [  //  treat it as free, it should be an external url to Person domain, fix all of these by running another script
+                new ContextItemDto(key: '2/AW', value: '$/AW', attributeType: AttributeType.Free, assignedName: "assay provider name"),
+                new ContextItemDto(key: '2/AX', value: '$/AX', attributeType: AttributeType.Free, assignedName: "science officer")
+//                new ContextItemDto(key: '2/AW', value: '$/AW', attributeType: AttributeType.Fixed, assignedName: "assay provider name"),
+//               new ContextItemDto(key: '2/AX', value: '$/AX', attributeType: AttributeType.Fixed, assignedName: "science officer")
+
         ]
 
         List<ContextGroup> contextGroups = [
                 new ContextGroup(name: 'biology', contextItemDtoList: biology),
                 new ContextGroup(name: 'intended mode-of-action', contextItemDtoList: intendedModeOfAction),
                 new ContextGroup(name: 'project management', contextItemDtoList: projectManagement)
+        ]
+        return contextGroups
+    }
+
+    // although stage is not a context item, just use this to parse spreadsheet
+    static List<ContextGroup> buildProjectExperimentStage() {
+        List<ContextItemDto> stage = [
+                new ContextItemDto(key: '2/AG', value: '$/AG', attributeType: AttributeType.Free, typeIn: true, assignedName: "biology")
+        ]
+
+        List<ContextGroup> contextGroups = [
+                new ContextGroup(name: 'dummy', contextItemDtoList: stage),
         ]
         return contextGroups
     }

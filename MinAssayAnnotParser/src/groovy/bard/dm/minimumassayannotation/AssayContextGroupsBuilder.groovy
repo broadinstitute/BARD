@@ -22,7 +22,7 @@ class AssayContextGroupsBuilder {
     List<ContextGroup> build() {
         List<ContextItemDto> biology = [
                 new ContextItemDto('2/C', '$/C', AttributeType.Fixed, true, null, null),
-                new ContextItemDto('$/C', '$/D', AttributeType.Fixed, true, null, null)
+                new ContextItemDto('$/C', '$/D', AttributeType.Fixed, true, null, null)  //  biology value
         ]
 
         List<ContextItemDto> assayFormat = [
@@ -31,12 +31,12 @@ class AssayContextGroupsBuilder {
 
         List<ContextItemDto> assayComponent = [
                 new ContextItemDto('2/G', '$/G', AttributeType.Fixed),
-                new ContextItemDto('2/H', '$/H', AttributeType.Fixed),
+                new ContextItemDto('2/H', '$/H', AttributeType.Fixed),        // CID can be here , assay component type
                 new ContextItemDto('2/I', '$/I', AttributeType.Fixed, true, null, null),
                 new ContextItemDto('2/J', '$/J', AttributeType.Fixed, true, null, '$/K'), //concentration + units
 //                new Attribute('2/K', '$/K', AttributeType.Fixed),
                 new ContextItemDto('2/L', '$/L', AttributeType.Fixed, true, null, null),
-                new ContextItemDto('2/M', '$/M', AttributeType.Fixed)
+                new ContextItemDto('2/M', '$/M', AttributeType.Fixed, true, null, null)      // Species
         ]
 
         List<ContextItemDto> detectionMethod = [

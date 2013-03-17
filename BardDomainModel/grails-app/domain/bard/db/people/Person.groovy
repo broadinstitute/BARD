@@ -7,16 +7,16 @@ class Person {
     String userName
     String emailAddress
     String fullName
-    Boolean accountExpired
-    Boolean accountLocked
-    Boolean accountEnabled
-    Date dateCreated
+    boolean accountExpired
+    boolean accountLocked
+    boolean accountEnabled
+    Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
 
     static mapping = {
         table('PERSON')
-        id(column: 'PERSON_ID', generator: 'assigned')
+        id(column: 'PERSON_ID', generator: "sequence", params: [sequence: 'PERSON_ID_SEQ'])
         version(false)
         userName(column: 'USERNAME')
     }

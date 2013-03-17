@@ -5,10 +5,10 @@ import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 
 class ProjectHandlerService {
-    def contextHandlerService
+    def contextHandlerService = new ContextHandlerService()
 
     final int START_ROW = 2 //0-based
-    final int MAX_ROWS = 131
+    final int MAX_ROWS = 1000
 
     def handle(String loadedBy, List<String> dirs, List<Long> mustLoadedAids) {
         List<File> inputFiles = []
@@ -20,14 +20,17 @@ class ProjectHandlerService {
         def contextGroups = ContextGroupsBuilder.buildProjectContextGroup()
         inputFiles.each{File file ->
             def dtos = ExcelHandler.buildDto(file, START_ROW, contextGroups, MAX_ROWS)
+            String currentModifiedBy = "${loadedBy}_${file.name}"
+            if (currentModifiedBy.length() >= 40){
+                currentModifiedBy = currentModifiedBy.substring(0,40)
+            }
             AttributesContentsCleaner.cleanDtos(dtos)
             try{
                 dtos.each{
-                        loadProjectContext(loadedBy+"-maas-", it, mustLoadedAids)
+                        loadProjectContext(currentModifiedBy, it, mustLoadedAids)
                 }
             } catch(Exception e){
-                println("During loading " + file.absolutePath + " " + e.message)
-                e.printStackTrace()
+                println("Exception Happened during loading " + file.absolutePath + " " + e.message)
             }
         }
     }
@@ -39,51 +42,59 @@ class ProjectHandlerService {
             return
         Project project = contextHandlerService.getProjectFromAid(dto.aid)
         if (!project){
-            println("Found none or more than one project associated with aid: " + dto.aid)
+            println("No project associated with aid: " + dto.aid)
             return
         }
-        println("loading " + dto.aid + " " + dto.sourceFile.absolutePath)
-        deleteExistingContext(project)
+
         List<String> errorMessages = []
+
+        int newContextCnt = 0
+        int newItemsCnt = 0
+        int dupItemCnt = 0
         dto.contextDTOs.each{ContextDTO contextDTO ->
             ProjectContext projectContext = updateContextInProject(project, contextDTO, loadedBy)
             contextDTO.contextItemDtoList.each{ContextItemDto contextItemDto ->
                 ProjectContextItem item = contextHandlerService.updateContextItem(contextItemDto, loadedBy, errorMessages, "Project")
-                item.context = projectContext
-                projectContext.addToContextItems(item)
+                if (!contextHandlerService.isContextItemExist(projectContext, item))  { // only add item if there is no one same with existing one
+                    item.context = projectContext
+                    projectContext.addToContextItems(item)
+                    newItemsCnt++
+                } else {
+                    dupItemCnt++
+                }
             }
-            projectContext.project = project
-            project.addToContexts(projectContext)
+            if (projectContext.contextItems.size() > 0 && !projectContext.id) { // only add context if it is not associated with the project
+                projectContext.project = project
+                project.addToContexts(projectContext)
+                newContextCnt++
+            }
         }
-        errorMessages.each{
-            println(dto.aid + " " + dto.sourceFile.absolutePath + " " + it)
+
+        if (errorMessages.size() == 0) {
+            if (!project.save(flush: true)) {
+                println("Error Save project ${project.id} with aid ${dto.aid}: ${project.errors.toString()}")
+            }
+            else {
+                println("Success Saved project ${project.id} with aid ${dto.aid}, # new contexts ${newContextCnt}, # new ContextItem ${newItemsCnt}, # duplicate ContextItem ${dupItemCnt}")
+            }
+            project = Project.findById(project.id)
         }
-        try{
-        if (errorMessages.size() == 0) { // no error
-            project.save(flush: true)
+        else {
+            println("Error Parse ${dto.aid} : ${errorMessages.size()} errors for aid: ${dto.aid}")
+            errorMessages.each {
+                println("Error details: ${dto.aid}, ${dto.rowNum}, ${dto.sourceFile.name}, ${it}")
+            }
         }
-        }catch(Exception e) {
-            println("in save: " + dto.aid + " " + dto.sourceFile.absolutePath + " " + e.message)
-            throw e
-        }
-        println("finishing " + dto.aid + " " + dto.sourceFile.absolutePath)
     }
 
     /**
      * If there is a context exist, return it, otherwise, create new one
      */
     ProjectContext updateContextInProject(Project project, ContextDTO contextDTO, String loadedBy) {
-        project.contexts.each{
-            if (it.contextName == contextDTO.name) {
-                return it
-            }
+        def newProject = project.contexts.find {it?.contextName == contextDTO.name}
+        if (!newProject) {
+            newProject = new ProjectContext(project: project, contextName: contextDTO.name, modifiedBy: loadedBy)
         }
-        return new ProjectContext(Project: project, contextName: contextDTO.name, modifiedBy: loadedBy)
-    }
-
-    void deleteExistingContext(Project project) {
-        project.contexts.each{ProjectContext context->
-            project.removeFromContexts(context)
-        }
+        return newProject
     }
 }
