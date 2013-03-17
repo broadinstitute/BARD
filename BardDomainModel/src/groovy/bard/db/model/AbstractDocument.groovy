@@ -4,7 +4,7 @@ import org.apache.commons.lang.BooleanUtils
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.validator.UrlValidator
 import org.springframework.validation.Errors
-
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,0 +1,9 @@
+dna damage response, signal transduction by p53 class mediator	0030330
+histone serine kinase activity	0035174
+cell proliferation	0008283
+drug metabolic process	0017144
+drug transport	0015893
+cell death	0008219
+Mus musculus	10090
+Homo sapiens	9606
+Cricetulus griseus	10029
