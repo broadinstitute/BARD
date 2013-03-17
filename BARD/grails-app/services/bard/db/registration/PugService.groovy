@@ -152,7 +152,7 @@ class PugService {
         List<Long> substancesFromPubchem = new ArrayList()
 
         // may turn this on for bulk loads of converted data
-        boolean bypassPubchemQuery = false
+        boolean bypassPubchemQuery = true;
         if (!bypassPubchemQuery) {
             getSubstancesFromPubchem(missingSids) { sid ->
                 Long substanceId = Long.parseLong(sid)

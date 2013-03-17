@@ -645,6 +645,7 @@ class ResultsService {
         Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
         for(measure in rootMeasures) {
+            println("creating results for ${measure}")
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
@@ -668,11 +669,11 @@ class ResultsService {
         List<Result> results = []
 
         for(row in rows) {
-            Substance substance = Substance.get(row.sid)
-            if(substance == null) {
-                errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
-                continue
-            }
+//            Substance substance = Substance.get(row.sid)
+//            if(substance == null) {
+//                errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
+//                continue
+//            }
 
             Map<String, RawCell> valueByColumn = row.cells.collectEntries { [it.columnName, it] }
 
@@ -962,7 +963,9 @@ class ResultsService {
             // populate the top few lines in the summary.
             errors.topLines = parsed.topLines
 
-            def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
+            def missingSids = []
+            if (!System.hasProperty("skipSubstanceValidation"))
+                missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
 
             missingSids.each {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
@@ -1075,13 +1078,13 @@ class ResultsService {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        new ArrayList(experiment.experimentContexts).each { context ->
-            new ArrayList(context.experimentContextItems).each { item ->
-                context.removeFromExperimentContextItems(item)
-                item.delete()
-            }
-            experiment.removeFromExperimentContexts(context)
-            context.delete()
-        }
+//        new ArrayList(experiment.experimentContexts).each { context ->
+//            new ArrayList(context.experimentContextItems).each { item ->
+//                context.removeFromExperimentContextItems(item)
+//                item.delete()
+//            }
+//            experiment.removeFromExperimentContexts(context)
+//            context.delete()
+//        }
     }
 }
