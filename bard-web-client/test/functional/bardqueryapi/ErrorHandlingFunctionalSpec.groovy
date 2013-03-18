@@ -1,15 +1,11 @@
 package bardqueryapi
 
-import bard.core.rest.spring.util.StructureSearchParams
-import grails.converters.JSON
 import grails.plugin.remotecontrol.RemoteControl
 import groovyx.net.http.HttpResponseDecorator
-import groovyx.net.http.HttpResponseException
+
 import groovyx.net.http.RESTClient
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import javax.servlet.http.HttpServletResponse
 
 import static groovyx.net.http.ContentType.URLENC
 

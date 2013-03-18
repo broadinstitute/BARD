@@ -68,6 +68,9 @@ grails.project.dependency.resolution = {
         compile 'ChemAxon:ChemAxonJChemBase:5.10'
         compile 'jfree:jfreechart:1.0.13'
         compile 'com.thoughtworks.xstream:xstream:1.4.2'
+        compile "org.codehaus.groovy.modules.remote:remote-transport-http:0.5", {
+            excludes "servlet-api"
+        }
     }
 
     plugins {
@@ -88,7 +91,9 @@ grails.project.dependency.resolution = {
         }
         test ":codenarc:0.18.1"
         test ":geb:$gebVersion"
-        test ":remote-control:1.4"
+//        test (":remote-control:1.4"){
+//            exclude "spock"
+//        }
         compile ":clover:3.1.10.1"
         compile ":spring-mobile:0.4"
         compile ":google-analytics:2.0"
@@ -103,7 +108,9 @@ grails.project.dependency.resolution = {
 grails.plugin.location.'shopping-cart:0.8.2' = "../shopping-cart-0.8.2"
 
 grails.plugin.location.'bard-rest-api-wrapper' = "../bard-rest-api-wrapper"
-//grails.plugin.location.'functional-spock'="../functional-spock"
+grails.plugin.location.'functional-spock'="../functional-spock"
+grails.plugin.location.'remote-control-1.4'="../remote-control-1.4"
+
 
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
