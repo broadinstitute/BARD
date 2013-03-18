@@ -9,6 +9,8 @@ import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
+import bard.hibernate.AuthenticatedUserRequired
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
 
 import java.util.regex.Matcher
@@ -43,6 +45,8 @@ class ResultsService {
     PugService pugService
     ResultsExportService resultsExportService
     ArchivePathService archivePathService
+    BulkResultService bulkResultService
+    SpringSecurityService springSecurityService;
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
@@ -1059,6 +1063,8 @@ class ResultsService {
 
         errors.resultsCreated = results.size()
 
+        bulkResultService.insertResults(getUsername(), experiment, results)
+
         resultsExportService.dumpFromList(exportFilename, results)
 
         addExperimentFileToDb(experiment, originalFilename, exportFilename)
@@ -1070,12 +1076,20 @@ class ResultsService {
         experiment.experimentFiles.add(file)
     }
 
+    private String getUsername() {
+        String username = springSecurityService.getPrincipal()?.username
+        if (!username) {
+            throw new AuthenticatedUserRequired('An authenticated user was expected this point');
+        }
+        return username
+    }
+
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
     public void deleteExperimentResults(Experiment experiment) {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        new ArrayList(experiment.experimentContexts).each { context ->
+        new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
             new ArrayList(context.experimentContextItems).each { item ->
                 context.removeFromExperimentContextItems(item)
                 item.delete()
@@ -1083,5 +1097,7 @@ class ResultsService {
             experiment.removeFromExperimentContexts(context)
             context.delete()
         }
+
+        bulkResultService.deleteResults(experiment)
     }
 }
