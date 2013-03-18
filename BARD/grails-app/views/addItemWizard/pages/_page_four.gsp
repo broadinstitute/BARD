@@ -6,14 +6,14 @@
 <af:page>
 	<g:set var="attributeLabel" value="${ attribute?.attributeLabel }" />
 	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
-	
+
 	<g:if test="${'Fixed'.equals(valueType?.valueTypeOption)}">
 		<g:if test="${fixedValue.isNumericValue}">
-	    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
+	    	<g:set var="valueText" value="${ [fixedValue?.valueQualifier, fixedValue?.numericValue , fixedValue?.valueUnitLabel].findAll().join(" ") }" />
 		</g:if>
 		<g:else>
-	    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
-		</g:else> 
+	    	<g:set var="valueText" value="${ [fixedValue?.valueQualifier, fixedValue?.valueLabel, fixedValue?.valueUnitLabel].findAll().join(" ") }" />
+		</g:else>
 	</g:if>
 	<g:elseif test="${'List'.equals(valueType?.valueTypeOption)}">
 		<g:set var="valueText" value="${ listOfValues.size() } values set" />
@@ -24,11 +24,11 @@
 	<g:elseif test="${'Free'.equals(valueType?.valueTypeOption)}">
 		<g:set var="valueText" value="No value" />
 	</g:elseif>
-	  
+
     <g:render template="common/itemWizardSelectionsTable"
               model="['attribute': attributeLabel, 'valueType': valueTypeOption, 'value': valueText]"/>
     <br>
-    
+
     <%-- Render list of values table if value type is List  --%>
     <g:if test="${'List'.equals(valueType?.valueTypeOption)}">
 	    <g:set var="list" value="${listOfValues}" />
@@ -47,6 +47,6 @@
 	<p>
 		Click <strong>"Previous"</strong> to return to the previous page in the wizard
 	</p>
-	
+
 	<input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
 </af:page>

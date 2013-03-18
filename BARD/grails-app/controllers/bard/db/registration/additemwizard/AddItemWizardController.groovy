@@ -1,8 +1,8 @@
 package bard.db.registration.additemwizard
 
 import bard.db.dictionary.*;
-import bard.db.registration.*;
-
+import bard.db.registration.*
+import bard.validation.ext.BardExternalOntologyFactory;
 import org.apache.commons.lang.StringUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +41,7 @@ class FixedValueCommand implements Serializable {
 	Long valueId
 	String valueLabel
 	String attributeElementId
+    String extValueId
 	String valueQualifier
 	Long valueUnitId
 	String valueUnitLabel
@@ -151,7 +152,8 @@ class AddItemWizardController {
     // (see http://www.grails.org/plugin/grom)
     def pluginManager
 
-    def assayContextService
+    AssayContextService assayContextService
+    OntologyDataAccessService ontologyDataAccessService
 
     // need to clear the session factory because grails includes the hibernate session in the flow.  I think this is
     // a terrible idea, and I don't fully know why grails does it.  It'd be nice if we could at least disable it.
@@ -206,6 +208,8 @@ class AddItemWizardController {
 			println "params.assayContextId = " + params.assayContextId
 
             flow.attribute = null
+            flow.attributeExternalUrl = null
+            flow.supportsExternalOntologyLookup = false
             flow.valueType = null
             flow.fixedValue = null
 			flow.listValue = null
@@ -240,11 +244,19 @@ class AddItemWizardController {
 					return error()
 				}
 				flow.attribute = cmd
+
 				println "calling closure for AttributeCommand ${cmd.dump()}"
 				println "(pageOne - next) flow.attribute.attributeId: " + flow.attribute.attributeId
-				def attributeElement = Element.get(flow.attribute.attributeId)
+				Element attributeElement = Element.get(flow.attribute.attributeId)
 				println "attributeElement object: ${attributeElement.dump()}"
 				flow.attribute.attributeLabel = attributeElement.label
+                flow.attributeExternalUrl = attributeElement.externalURL
+                if(StringUtils.isNotBlank(attributeElement.externalURL)){
+                    if(ontologyDataAccessService.externalOntologyHasIntegratedSearch(attributeElement.externalURL)){
+                        flow.supportsExternalOntologyLookup = true
+                    }
+                }
+
 				sessionFactory.currentSession.clear()
 				flow.page = 2
 				success()
@@ -343,6 +355,7 @@ class AddItemWizardController {
             }.to "save"
         }
 
+
 		// Third wizard page (For assay type - List): Asking for a list of values
 		pageThreeList {
 			render(view: "_page_three_list")
@@ -384,7 +397,7 @@ class AddItemWizardController {
 				def listIndex = params.id
 				if("".equals(listIndex))
 					flow.listIndex = 0
-				else				
+				else
 					flow.listIndex = Integer.parseInt(listIndex)
 				println "removeItemFromList -> List index: " + listIndex
 			}.to "removeItemFromList"
@@ -396,6 +409,30 @@ class AddItemWizardController {
 			}.to "save"
 		}
 
+        pageThreeExt {
+            render(view: "_page_three_ext_ont_fixed")
+            onRender {
+                // Grom a development message
+                if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_range.gsp".grom()
+
+                flow.page = 3
+                success()
+            }
+            on("cancel").to "closeWizard"
+            on("close").to "closeWizard"
+            on("next") {FixedValueCommand cmd ->
+                flow.fixedValue = cmd
+                println(params)
+                success()
+            }.to "pageFour"
+            on("previous").to "pageTwo"
+            on("toPageOne").to "pageOne"
+            on("toPageTwo").to "pageTwo"
+            on("toPageFour").to "pageFour"
+            on("toPageFive") {
+                flow.page = 5
+            }.to "save"
+        }
 		// Third wizard page (For assay type - Range): Asking for value
 		pageThreeRange {
 			render(view: "_page_three_range")
@@ -532,7 +569,12 @@ class AddItemWizardController {
 
 					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){
 						flow.page = 3
-						toPageThree()
+                        if(flow.attributeExternalUrl){
+                            toPageThreeExt()
+                        }
+                        else{
+                            toPageThree()
+                        }
 					}
 					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){
 						flow.page = 3
@@ -560,6 +602,7 @@ class AddItemWizardController {
 			on(Exception).to "error"
 			on("toPageThree").to "pageThree"
 			on("toPageThreeList").to "pageThreeList"
+            on("toPageThreeExt").to "pageThreeExt"
 			on("toPageThreeRange").to "pageThreeRange"
 			on("toPageThreeFree").to "pageThreeFree"
 		}
@@ -586,9 +629,9 @@ class AddItemWizardController {
 			on("success").to "pageThreeList"
 			on("toPageThreeList").to "pageThreeList"
 		}
-		
+
 		removeItemFromList {
-			action {				
+			action {
 				println "removeItemFromList -> flow.listIndex: " + flow.listIndex
 				flow.listOfValues.remove(flow.listIndex)
 				toPageThreeList()
@@ -699,6 +742,6 @@ class AddItemWizardController {
 				success()
 			}
 		}
-		
+
     }
 }
