@@ -10,10 +10,7 @@ import static groovyx.net.http.ContentType.URLENC
 
 @Unroll
 class DoseResponseCurveFunctionalSpec extends Specification {
-   // RemoteControl remote = new RemoteControl()
-//    String baseUrl = "http://localhost:8080/bardwebclient"
-//    String userName = "user"
-//    String password = "user"
+    RemoteControl remote = new RemoteControl()
     String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
     String userName = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.username}
     String password = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.user.password}
