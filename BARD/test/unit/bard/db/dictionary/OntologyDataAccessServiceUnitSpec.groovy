@@ -6,6 +6,7 @@ import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
 import grails.test.mixin.TestFor
 import org.apache.commons.logging.Log
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,7 +23,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
 
     OntologyDataAccessService ontologyDataAccessService = new OntologyDataAccessService()
     BardExternalOntologyFactory externalOntologyFactory
-    ExternalOntologyAPI externalOntologyAPI
+    @Shared ExternalOntologyAPI externalOntologyAPI
     Log log
 
     void setup() {
@@ -90,7 +91,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
-        1 * log.error(_,_)
+        1 * log.error(_, _)
         thrown(ExternalOntologyException)
     }
 
@@ -126,19 +127,32 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         externalItems.isEmpty()
     }
 
-    void "test findExternalItemsByTerm with exerternalOntologyApi implementation returning item"() {
+    void "test findExternalItemsByTerm with exerternalOntologyApi implementation #desc"() {
         given:
         final String externalUrl = 'http://foo.com'
-        final String term = '1'
-        final List<ExternalItem> returnedExternalItems = [new ExternalItem(term, 'someDisplay')]
+        final String term = 'term'
+        final List<ExternalItem> returnedExternalItems = []
+        for (itemData in externalItemsData) {
+            returnedExternalItems.add(new ExternalItem(itemData[0], itemData[1]))
+        }
 
         when:
         List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
+        final List<ExternalItem> actualItemsData = externalItems.collect { ExternalItem item -> [item.id, item.display] }
 
         then:
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> externalOntologyAPI
         1 * externalOntologyAPI.findMatching(term, OntologyDataAccessService.DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE) >> returnedExternalItems
-        externalItems == returnedExternalItems
+//        actualItemsData == expectedItemsData
+        actualItemsData.toString() == expectedItemsData.toString()
+
+        where:
+        desc                                          | externalItemsData                              | expectedItemsData
+        'no items returned'                           | []                                             | []
+        '1 items returned'                            | [['1', 'someDisplay']]                         | [['1', 'someDisplay']]
+        '2 items returned'                            | [['1', 'someDisplay'], ['2', 'someDisplay 2']] | [['1', 'someDisplay'], ['2', 'someDisplay 2']]
+        '3 items case insensitive sorting on display' | [['1', 'c'], ['2', 'a'], ['3', 'B']]           | [['2', 'a'], ['3', 'B'], [1, 'c']]
+
     }
 
     void "test findExternalItemsByTerm with externalOntologyFactory throwing an exception"() {
@@ -151,8 +165,35 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
-        1 * log.error(_,_)
+        1 * log.error(_, _)
         thrown(ExternalOntologyException)
     }
 
+    void "test externalOntologyHasIntegratedSearch() with exception"() {
+        given: 'valid params'
+        final String externalUrl = 'http://foo.com'
+
+        when: 'an exception is thrown'
+        boolean hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(externalUrl)
+
+        then: 'logging should happen at the error level and an exception should be thrown'
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
+        1 * log.error(_, _)
+        hasIntegratedSearch == false
+    }
+
+    void "test externalOntologyHasIntegratedSearch() #desc"() {
+
+        when: 'an exception is thrown'
+        boolean hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(externalUrl)
+
+        then: 'logging should happen at the error level and an exception should be thrown'
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { returnedExternalOntologyAPI }
+        hasIntegratedSearch == expectIntegratedSearch
+
+        where:
+        desc                           | externalUrl                   | expectIntegratedSearch | returnedExternalOntologyAPI
+        'no externalOntologyAPI found' | 'http://someUrl.com'          | false                  | null
+        'externalOntologyAPI found'    | 'http://someSupportedUrl.com' | true                   | externalOntologyAPI
+    }
 }

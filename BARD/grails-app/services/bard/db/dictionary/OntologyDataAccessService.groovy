@@ -15,6 +15,7 @@ import static BardExternalOntologyFactory.NCBI_TOOL
 class OntologyDataAccessService {
 
     private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 20
+
     BardExternalOntologyFactory externalOntologyFactory
 
     private static final Properties externalOntologyProperites = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
@@ -160,6 +161,25 @@ class OntologyDataAccessService {
         }
         return results
     }
+    /**
+     * Not all external ontologies have a supported search functionality. This allows checking given an externalUrl.
+     *
+     * @param externalUrl
+     * @return true if an ExternalOntologyAPI implementation is found for the given externalUrl
+     */
+    @TypeChecked
+    boolean externalOntologyHasIntegratedSearch(String externalUrl) {
+        boolean hasSupport = false
+        try {
+            if (externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)) {
+                hasSupport = true
+            }
+        }
+        catch (ExternalOntologyException e) {
+            log.error("Exception when calling getExternalOntologyAPI with externalUrl: $externalUrl", e)
+        }
+        hasSupport
+    }
 
     /**
      * Given a externalUrl utilize the ExternalOntologyFactory and the underlying externalOntologyAPI implementations
@@ -169,7 +189,7 @@ class OntologyDataAccessService {
      *
      * @param externalUrl cannot be blank
      * @param term cannot be blank
-     * @return a List<ExternalItem> empty if no matches
+     * @return a List<ExternalItem> empty if no matches, items are sorted case-insensitive by display
      */
     @TypeChecked
     List<ExternalItem> findExternalItemsByTerm(String externalUrl, String term) {
@@ -183,7 +203,7 @@ class OntologyDataAccessService {
      * @param externalUrl cannot be blank
      * @param term cannot be blank
      * @param limit
-     * @return a List<ExternalItem> empty if no matches
+     * @return a List<ExternalItem> empty if no matches, items are sorted case-insensitive by display
      * @throws ExternalOntologyException
      */
     @TypeChecked
@@ -200,7 +220,7 @@ class OntologyDataAccessService {
             log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $term", e)
             throw e
         }
-        externalItems
+        externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase() <=> b.display?.toLowerCase() }
     }
 
     /**
