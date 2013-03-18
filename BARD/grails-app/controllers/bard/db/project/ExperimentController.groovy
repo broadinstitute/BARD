@@ -41,7 +41,7 @@ class ExperimentController {
 
     def update() {
         def experiment = Experiment.get(params.id)
-        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo"] = params
+        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo","experimentStatus"] = params
         experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
         if (!experiment.save(flush: true)) {
             renderEdit(experiment, experiment.assay)
@@ -55,7 +55,7 @@ class ExperimentController {
 
         Experiment experiment = new Experiment()
         experiment.assay = assay
-        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo"] = params
+        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo","experimentStatus"] = params
         experiment.dateCreated = new Date()
         if (!experiment.save(flush: true)) {
             println("errors:"+experiment.errors)

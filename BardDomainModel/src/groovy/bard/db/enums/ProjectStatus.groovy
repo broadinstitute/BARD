@@ -2,19 +2,19 @@ package bard.db.enums
 
 /**
  * Created with IntelliJ IDEA.
- * User: ddurkin
- * Date: 2/6/13
- * Time: 2:36 AM
+ * User: pmontgom
+ * Date: 3/18/13
+ * Time: 4:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public enum AssayStatus implements IEnumUserType {
+enum ProjectStatus implements IEnumUserType{
     DRAFT("Draft"),
     APPROVED("Approved"),
     RETIRED("Retired")
 
     final String id;
 
-    private AssayStatus(String id) {
+    private ProjectStatus(String id) {
         this.id = id
     }
 
@@ -22,10 +22,10 @@ public enum AssayStatus implements IEnumUserType {
         return id
     }
 
-    static AssayStatus byId(String id) {
-        AssayStatus assayStatus = values().find { it.id == id }
-        if (assayStatus) {
-            return assayStatus
+    static ProjectStatus byId(String id) {
+        ProjectStatus status = values().find { it.id == id }
+        if (status) {
+            return status
         }
         throw new EnumNotFoundException("No enum found for id: $id")
     }

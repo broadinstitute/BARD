@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.ExperimentStatus
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
