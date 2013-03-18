@@ -1,0 +1,57 @@
+//element name	description	parentId
+// before 3-2013
+percent parasitemia	percent content or parasites in the blood	 
+hematocrit	 volume percentage of red blood cells. aka packed cell volume or erythrocyte volume fraction	 
+PerkinElmer AlphaScreen reagent	 
+green coffee bean	 unroasted coffee bean	 
+ABI Prism 7900HT	 sequence detection system instrument designed for automated, high-throughput detection of fluorescent PCR-related chemistries	 
+Tecan Spectra Mini Reader	 
+PerkinElmer AlphaScreen SureFire ERK reagent	 
+Bacillus anthracis	 
+Bacillus subtilis	 
+Biorad ChemiDoc Plus Imager	 
+Giardia lamblia	 
+Cercopithecus aethiops	 
+Microcal VP-ITC	 
+Packard Cobra Gamma Counter	 
+Methanococcus maripaludis	 
+Accuri C6 flow cytometer	 
+Marburg marburgvirus	 
+Lassa virus	 
+Avian infectious bronchitis virus	 
+Cricetulus griseus	 Chinese Hamster	 
+Tecan Freedom Evo 150	 
+Streptococcus pyogenes	 spherical gram-positive bacteria	 
+BMG Pherastar	 
+Alpco insulin ELISA assay kit	 
+//jasonR starts here
+SpectraMax M5 Multi-Mode Microplate Reader	 
+Perkin Elmer LabChip EZReader	 
+HT1080	 
+cytometer	 
+SDS-PAGE	 
+CCD fluorometer	 Charge-coupled device fluorometric camera	 
+BD Accuri C6 Flow Cytometer	 
+GE Typhoon laser scanner	 
+Sybr Green PCR Reagent Kit	 
+AB 7500 rtPCR System	 Applied Biosystems model 7500 real time PCR system	 
+LC-MS/MS	 Liquid Chromatography, tandem-mass spectrometry	 
+mass spectrometer	 
+Thermo Scientific Orbitrap Velos	 
+MDA-MB-435	 
+Tecan Spectrafluor Plus	 Tecan Spectrafluor Plus plate reader	 
+PerkinElmer AlphaScreen Bead Kit	 AlphaScreen protein-protein interaction assay	 
+Thermo Scientific LTQ-Orbitrap	 
+Biotek Synergy 2 plate reader	 Bio-Tek Synergy 2 Multi-Mode Microplate Reader	 
+ThermoFluor 384 System	 
+Roche LightCycler480Ž	 Roche Applied Science: LightCycler 480 System	 
+LJL Analyst	 Molecular Devices LJL Analyst HT Microplate Reader	 
+Agilent Cary Eclipse Fluorescence Spectrophotometer	 
+Streptomyces avidinii	 
+ABI PRISM 7700 sequence detector	 
+Beckman LS 6000SC counter	 
+Huh7	 Huh7 cell line	 
+CytoTox-ONE Homogenous Membrane Integrity Assay	 
+// 3-2013
+science officer	 	555
+uCi/mL	 	1170	

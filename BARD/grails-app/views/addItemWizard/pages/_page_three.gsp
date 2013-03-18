@@ -14,7 +14,7 @@
 		</div>
 	</g:hasErrors>
 	
-	<p>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field.  If relevant, choose the relevant units that describe the number entered.</p>
+	<h1>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If relevant, choose the relevant units that describe the number entered.</h1>
 
 	<div class="row-fluid">
 		<div class="span12">
@@ -29,8 +29,6 @@
     <br> 
     <div class="row-fluid">
     	<div class="span12">
-    		
-
     		<div class="row-fluid">
     			<div class="span2">
     				<label class="control-label" >Qualifier:</label>

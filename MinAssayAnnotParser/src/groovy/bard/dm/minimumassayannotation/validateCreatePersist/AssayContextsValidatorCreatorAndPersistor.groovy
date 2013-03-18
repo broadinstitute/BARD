@@ -15,6 +15,7 @@ import bard.dm.Log
 
 import bard.dm.minimumassayannotation.ContextItemDto
 import bard.dm.minimumassayannotation.ContextLoadResultsWriter
+import maas.ExternalTermMapping
 
 /**
  * Creates and persists AssayContexts and AssayContextItems from the group of attributes we created earlier.
@@ -29,22 +30,15 @@ import bard.dm.minimumassayannotation.ContextLoadResultsWriter
  * 4. If the attribute is a qualifier, update the qualifier field
  */
 class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersistor {
-    private static final String goElementLabel = "GO process term"
-
-    private Map<String, String> goLookupMap
+    private static final String goElementLabel = "GO biological process term"
+    private static final String speciesElementLabel = "species name"
+    static final Map<String, String> externalTermMap = ExternalTermMapping.build()
 
     private AssayContextCompare assayContextCompare
 
     AssayContextsValidatorCreatorAndPersistor(String modifiedBy, ContextLoadResultsWriter loadResultsWriter,
                                               boolean flushSetting) {
         super(modifiedBy, loadResultsWriter, flushSetting)
-
-        goLookupMap = ["dna damage response, signal transduction by p53 class mediator": "0030330",
-                "histone serine kinase activity": "0035174",
-                "cell proliferation": "0008283",
-                "drug metabolic process": "0017144",
-                "drug transport": "0015893",
-                "cell death": "0008219"]
 
         assayContextCompare = new AssayContextCompare()
     }
@@ -144,6 +138,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         assayContextItem.valueDisplay = "${contextItemDto.qualifier}${assayContextItem.valueDisplay}"
                     }
 
+
                     if (! postProcessAssayContextItem(assayContextItem, contextDTO)) {
                         status.setRollbackOnly()
                         return false
@@ -172,11 +167,15 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
             return rebuildAssayContextItem(assayContextItem, 'PubChem CID', contextDTO)
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprot\W*:/)) {//'Uniprot:Q03164'
-            return rebuildAssayContextItem(assayContextItem, 'UniProt', contextDTO)
-        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
+            return rebuildAssayContextItem(assayContextItem, 'UniProt accession number', contextDTO)
+        } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprotkb\W*:/)) {// 'UnitProtKB:UniProtKB:Q9QUQ5'
+            return rebuildAssayContextItem(assayContextItem, 'UniProt accession number', contextDTO)
+        }else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
             return rebuildAssayContextItem(assayContextItem, 'protein', contextDTO)
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().indexOf("go:") >= 0) {//'go:
             return rebuildAssayContextItem(assayContextItem, goElementLabel, contextDTO)
+        }else if (assayContextItem.valueDisplay && assayContextItem.attributeElement.label.equals(speciesElementLabel)) {//'go:
+            return rebuildAssayContextItem(assayContextItem, speciesElementLabel, contextDTO)
         }
 
         return true
@@ -184,12 +183,11 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
     private boolean rebuildAssayContextItem(AssayContextItem assayContextItem, String findByLabelIlike, ContextDTO contextDTO) {
         String extValueId = StringUtils.split(assayContextItem.valueDisplay, ':').toList().last().trim()
-
-        if (findByLabelIlike.equals(goElementLabel)) {
-            if (goLookupMap.containsKey(extValueId.toLowerCase())) {
-                extValueId = goLookupMap.get(extValueId.toLowerCase())
-            } else if (!extValueId.isNumber()) {
-                Log.logger.info("possible GO term that is not mapped: ${extValueId}")
+        if (findByLabelIlike.equals(goElementLabel) || findByLabelIlike.equals(speciesElementLabel)) {
+            if (externalTermMap.containsKey(extValueId.toLowerCase())) {
+                extValueId = externalTermMap.get(extValueId.toLowerCase())
+            } else if (!StringUtils.isNumeric(extValueId)) {
+                Log.logger.info("possible GO term or species name that is not mapped: ${extValueId}")
             }
         }
 
@@ -197,7 +195,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         if (!element) {
             super.loadResultsWriter.write(contextDTO, assayContextItem.assayContext.assay.id,
                     ContextLoadResultsWriter.LoadResultType.fail, null, 0,
-                    "element not found in database ${findByLabelIlike}")
+                    "element ${assayContextItem.valueDisplay} not found in database ${findByLabelIlike}")
             return false
         }
 
