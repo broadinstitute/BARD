@@ -120,8 +120,8 @@ class OntologyJSonController {
         Map responseMap = ['externalItems':externalItems]
         if (term && externalUrl){
             try{
-                List<ExternalItem> foundItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
-                externalItems.addAll(foundItems.collect { ['value': it.id, 'label': it.display]})
+                final List<ExternalItem> foundItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
+                externalItems.addAll(foundItems.collect { ExternalItem item -> ['id': item.id, 'text': "(id:${item.id}) ${item.display}", 'display': item.display]})
             }
             catch (ExternalOntologyException e){
                 responseMap.error = e.message

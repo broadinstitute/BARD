@@ -42,17 +42,18 @@ class OntologyJsonControllerUnitSpec extends Specification {
         final String resultJson = controller.response.contentAsString
 
         then: 'we serialize items as JSON'
-        1 * ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term) >> {serviceReturnValue.call()}
+        1 * ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term) >> { serviceReturnValue.call() }
         resultJson
         println(resultJson)
         Map resultMap = new JsonSlurper().parseText(resultJson)
+        println(resultMap)
         resultMap == expectedMap
 
         where:
         desc               | serviceReturnValue                                                     | expectedMap
         'no items found'   | { [] }                                                                 | [externalItems: []]
-        '1 item found'     | { [new ExternalItem('1', 'item 1')] }                                  | [externalItems: [[value: '1', label: 'item 1']]]
-        '2 items found'    | { [new ExternalItem('1', 'item 1'), new ExternalItem('2', 'item 2')] } | [externalItems: [[value: '1', label: 'item 1'], [value: '2', label: 'item 2']]]
-        'exception thrown' | { throw new ExternalOntologyException("some Exception") }              | [error: 'some Exception',externalItems: []]
+        '1 item found'     | { [new ExternalItem('1', 'item 1')] }                                  | [externalItems: [[id: '1', text: '(id:1) item 1', display: 'item 1']]]
+        '2 items found'    | { [new ExternalItem('1', 'item 1'), new ExternalItem('2', 'item 2')] } | [externalItems: [[id: '1', text: '(id:1) item 1', display: 'item 1'], [id: '2', text: '(id:2) item 2', display: 'item 2']]]
+        'exception thrown' | { throw new ExternalOntologyException("some Exception") }              | [error: 'some Exception', externalItems: []]
     }
 }
