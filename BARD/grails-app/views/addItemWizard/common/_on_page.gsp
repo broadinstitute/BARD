@@ -47,9 +47,11 @@
                 }
                	else if(valueType && valueType == 'List'){
                    initializePageThreeList();
-               	else if(valueType && valueType == 'Range')
+                }
+               	else if(valueType && valueType == 'Range'){
                    	initializePageThreeRange();
-               	else if(valueType && valueType == 'Free')
+                }
+               	else if(valueType && valueType == 'Free'){
                		outputToConsole('initialize Page Three Free');
                 }
                 $(".select2-container").select2("open");
@@ -61,8 +63,6 @@
             	initializeFinalPage();
                 $(':input[name="addAnotherItem"]').focus();
             }
-
-
         }
 
         function outputToConsole(message){
@@ -318,7 +318,7 @@
                             })
                         }
                 );
-            }	
+            }
         }
 
         function initializePageThreeRange(){
@@ -333,7 +333,7 @@
                 data: unitsData
     		})
 
-            
+
             if(attributeElementUnitId){
             	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
             	var unitLabelCache = {}
@@ -343,7 +343,7 @@
                             elementId: attributeElementId,
                             toUnitId: attributeElementUnitId
                         },
-                        function(data, textStatus, jqXHR) {                    	
+                        function(data, textStatus, jqXHR) {
                             $.each(data, function(index, val) {
                             	unitsData.results.push({id: val.value, text: val.label})
                             	unitLabelCache[val.value] = val.label;
@@ -353,10 +353,10 @@
                            		width: "70%",
                                 data: unitsData
                     		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                $("#valueUnitLabel").val(unitLabelCache[e.val])
                             })
                         }
-                );      
+                );
             }
             else{
             	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
@@ -375,11 +375,11 @@
                            		width: "45%",
         		                data: unitsData
                     		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                $("#valueUnitLabel").val(unitLabelCache[e.val])
                             })
                         }
-                );     
-            }	
+                );
+            }
         }
 
         function initializeFinalPage(){
