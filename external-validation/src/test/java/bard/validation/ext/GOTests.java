@@ -11,20 +11,20 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class GOTests {
-	
-	private ExternalOntologyAPI eo;
-	
+
+	private static ExternalOntologyAPI eo;
+
 	public GOTests() {
 		BasicConfigurator.configure();
 		Logger logger = Logger.getRootLogger().getLoggerRepository().getLogger("org.apache.http");
 		logger.setLevel(Level.INFO);
 	}
-	
+
 	@BeforeClass
-	public void initialize() throws ExternalOntologyException {
+	public static void initialize() throws ExternalOntologyException {
 		eo = new ExternalOntologyGO();
 	}
-	
+
 	@Test
 	public void testFindById() throws ExternalOntologyException {
 		long start = System.currentTimeMillis();
@@ -33,7 +33,7 @@ public class GOTests {
 		assertEquals(String.format("%s\t%s", item.getId(), item.getDisplay()), item.getId().equals("GO:0009987"), true);
 		System.out.println("testGetById took (ms): " + (System.currentTimeMillis() - start) );
 	}
-	
+
 	@Test
 	public void testGetByName() throws ExternalOntologyException {
 		long start = System.currentTimeMillis();
