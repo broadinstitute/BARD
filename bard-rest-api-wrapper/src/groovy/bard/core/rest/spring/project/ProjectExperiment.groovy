@@ -11,42 +11,49 @@ import com.fasterxml.jackson.annotation.JsonProperty
  * To change this template use File | Settings | File Templates.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BardExpt {
+public class ProjectExperiment {
+    private final List<ProjectStep> precedingProjectSteps = new ArrayList<ProjectStep>();
+    private final List<ProjectStep> followingProjectSteps = new ArrayList<ProjectStep>();
+
 
     @JsonProperty("bardExptId")
-    private Long bardExptId;
+    private long bardExptId;
     @JsonProperty("capExptId")
-    private Long capExptId;
+    private long capExptId;
     @JsonProperty("bardAssayId")
-    private Long bardAssayId;
+    private long bardAssayId;
     @JsonProperty("capAssayId")
-    private Long capAssayId;
+    private long capAssayId;
     @JsonProperty("pubchemAid")
-    private Long pubchemAid;
+    private long pubchemAid;
     @JsonProperty("category")
-    private Long category;
+    private long category;
     @JsonProperty("type")
-    private Long type;
+    private long type;
     @JsonProperty("summary")
-    private Long summary;
+    private long summary;
     @JsonProperty("assays")
-    private Long assays;
+    private long assays;
     @JsonProperty("classification")
-    private Long classification;
+    private long classification;
     @JsonProperty("substances")
-    private Long substances;
+    private long substances;
     @JsonProperty("compounds")
-    private Long compounds;
+    private long compounds;
+    @JsonProperty("activeCompounds")
+    private long activeCompounds;
+    @JsonProperty("confidenceLevel")
+    private long confidenceLevel;
     @JsonProperty("name")
     private String name;
     @JsonProperty("description")
-    private String description;
+    private Object description;
     @JsonProperty("source")
-    private String source;
+    private Object source;
     @JsonProperty("grantNo")
-    private String grantNo;
+    private Object grantNo;
     @JsonProperty("deposited")
-    private String deposited;
+    private Object deposited;
     @JsonProperty("updated")
     private String updated;
     @JsonProperty("hasProbe")
@@ -57,123 +64,143 @@ public class BardExpt {
     private String resourcePath;
 
     @JsonProperty("bardExptId")
-    public Long getBardExptId() {
+    public long getBardExptId() {
         return bardExptId;
     }
 
     @JsonProperty("bardExptId")
-    public void setBardExptId(Long bardExptId) {
+    public void setBardExptId(long bardExptId) {
         this.bardExptId = bardExptId;
     }
 
     @JsonProperty("capExptId")
-    public Long getCapExptId() {
+    public long getCapExptId() {
         return capExptId;
     }
 
     @JsonProperty("capExptId")
-    public void setCapExptId(Long capExptId) {
+    public void setCapExptId(long capExptId) {
         this.capExptId = capExptId;
     }
 
     @JsonProperty("bardAssayId")
-    public Long getBardAssayId() {
+    public long getBardAssayId() {
         return bardAssayId;
     }
 
     @JsonProperty("bardAssayId")
-    public void setBardAssayId(Long bardAssayId) {
+    public void setBardAssayId(long bardAssayId) {
         this.bardAssayId = bardAssayId;
     }
 
     @JsonProperty("capAssayId")
-    public Long getCapAssayId() {
+    public long getCapAssayId() {
         return capAssayId;
     }
 
     @JsonProperty("capAssayId")
-    public void setCapAssayId(Long capAssayId) {
+    public void setCapAssayId(long capAssayId) {
         this.capAssayId = capAssayId;
     }
 
     @JsonProperty("pubchemAid")
-    public Long getPubchemAid() {
+    public long getPubchemAid() {
         return pubchemAid;
     }
 
     @JsonProperty("pubchemAid")
-    public void setPubchemAid(Long pubchemAid) {
+    public void setPubchemAid(long pubchemAid) {
         this.pubchemAid = pubchemAid;
     }
 
     @JsonProperty("category")
-    public Long getCategory() {
+    public long getCategory() {
         return category;
     }
 
     @JsonProperty("category")
-    public void setCategory(Long category) {
+    public void setCategory(long category) {
         this.category = category;
     }
 
     @JsonProperty("type")
-    public Long getType() {
+    public long getType() {
         return type;
     }
 
     @JsonProperty("type")
-    public void setType(Long type) {
+    public void setType(long type) {
         this.type = type;
     }
 
     @JsonProperty("summary")
-    public Long getSummary() {
+    public long getSummary() {
         return summary;
     }
 
     @JsonProperty("summary")
-    public void setSummary(Long summary) {
+    public void setSummary(long summary) {
         this.summary = summary;
     }
 
     @JsonProperty("assays")
-    public Long getAssays() {
+    public long getAssays() {
         return assays;
     }
 
     @JsonProperty("assays")
-    public void setAssays(Long assays) {
+    public void setAssays(long assays) {
         this.assays = assays;
     }
 
     @JsonProperty("classification")
-    public Long getClassification() {
+    public long getClassification() {
         return classification;
     }
 
     @JsonProperty("classification")
-    public void setClassification(Long classification) {
+    public void setClassification(long classification) {
         this.classification = classification;
     }
 
     @JsonProperty("substances")
-    public Long getSubstances() {
+    public long getSubstances() {
         return substances;
     }
 
     @JsonProperty("substances")
-    public void setSubstances(Long substances) {
+    public void setSubstances(long substances) {
         this.substances = substances;
     }
 
     @JsonProperty("compounds")
-    public Long getCompounds() {
+    public long getCompounds() {
         return compounds;
     }
 
     @JsonProperty("compounds")
-    public void setCompounds(Long compounds) {
+    public void setCompounds(long compounds) {
         this.compounds = compounds;
+    }
+
+    @JsonProperty("activeCompounds")
+    public long getActiveCompounds() {
+        return activeCompounds;
+    }
+
+    @JsonProperty("activeCompounds")
+    public void setActiveCompounds(long activeCompounds) {
+        this.activeCompounds = activeCompounds;
+    }
+
+    @JsonProperty("confidenceLevel")
+    public long getConfidenceLevel() {
+        return confidenceLevel;
+    }
+
+    @JsonProperty("confidenceLevel")
+    public void setConfidenceLevel(long confidenceLevel) {
+        this.confidenceLevel = confidenceLevel;
     }
 
     @JsonProperty("name")
@@ -187,42 +214,42 @@ public class BardExpt {
     }
 
     @JsonProperty("description")
-    public String getDescription() {
+    public Object getDescription() {
         return description;
     }
 
     @JsonProperty("description")
-    public void setDescription(String description) {
+    public void setDescription(Object description) {
         this.description = description;
     }
 
     @JsonProperty("source")
-    public String getSource() {
+    public Object getSource() {
         return source;
     }
 
     @JsonProperty("source")
-    public void setSource(String source) {
+    public void setSource(Object source) {
         this.source = source;
     }
 
     @JsonProperty("grantNo")
-    public String getGrantNo() {
+    public Object getGrantNo() {
         return grantNo;
     }
 
     @JsonProperty("grantNo")
-    public void setGrantNo(String grantNo) {
+    public void setGrantNo(Object grantNo) {
         this.grantNo = grantNo;
     }
 
     @JsonProperty("deposited")
-    public String getDeposited() {
+    public Object getDeposited() {
         return deposited;
     }
 
     @JsonProperty("deposited")
-    public void setDeposited(String deposited) {
+    public void setDeposited(Object deposited) {
         this.deposited = deposited;
     }
 
@@ -237,12 +264,12 @@ public class BardExpt {
     }
 
     @JsonProperty("hasProbe")
-    public boolean hasProbe() {
+    public boolean isHasProbe() {
         return hasProbe;
     }
 
     @JsonProperty("hasProbe")
-    public void hasProbe(boolean hasProbe) {
+    public void setHasProbe(boolean hasProbe) {
         this.hasProbe = hasProbe;
     }
 
@@ -265,4 +292,18 @@ public class BardExpt {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
+
+    public void addPrecedingProjectStep(ProjectStep projectStep){
+        this.precedingProjectSteps.add(projectStep)
+    }
+    public void addFollowingProjectStep(ProjectStep projectStep){
+        this.followingProjectSteps.add(projectStep)
+    }
+    public List<ProjectStep> getPrecedingProjectSteps(){
+        return this.precedingProjectSteps;
+    }
+    public List<ProjectStep> getFollowingProjectSteps(){
+        return this.followingProjectSteps;
+    }
+
 }

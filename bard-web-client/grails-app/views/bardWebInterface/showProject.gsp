@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Project : ID ${projectAdapter?.capProjectId}</title>
-    <r:require modules="showProjectAssay,compoundOptions,twitterBootstrapAffix"/>
+    <r:require modules="showProjectAssay,compoundOptions,twitterBootstrapAffix,projectstep"/>
 </head>
 
 <body>
@@ -76,13 +76,10 @@
     <div class="row-fluid">
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar" data-spy="affix">
+
                 <g:if test="${BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
                     <li><a href="#annotations-info"><i
                             class="icon-chevron-right"></i>Annotations</a></li>
-                </g:if>
-                <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(projectAdapter.annotations)}">
-                    <li><a href="#annotations-info-misc"><i
-                            class="icon-chevron-right"></i>Annotations - Miscellaneous</a></li>
                 </g:if>
                 <g:if test="${projectAdapter.description}">
                     <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
@@ -96,6 +93,8 @@
                             class="icon-chevron-right"></i>Publications (${projectAdapter.documents.size()})</a></li>
                 </g:if>
                 <g:if test="${experiments}">
+                    <li><a href="#projectSteps-info"><i
+                            class="icon-chevron-right"></i>Project Steps</a></li>
                     <li><a href="#experiments-info"><i
                             class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})
                     </a>
@@ -106,6 +105,7 @@
         </div>
 
         <div class="span9">
+
             <g:if test="${BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
                 <section id="annotations-info">
                     <div class="page-header">
@@ -115,18 +115,6 @@
                     <div id="cardView" class="cardView" class="row-fluid">
                         <g:render template="listContexts" model="[annotations: projectAdapter.annotations]"/>
                     </div>
-                </section>
-            </g:if>
-            <g:if test="${BardAnnotation.areOtherAnnotationsEmpty(projectAdapter.annotations)}">
-                <section id="annotations-info-misc">
-                    <div class="page-header">
-                        <h3>Annotations - Miscellaneous</h3>
-                    </div>
-
-                    <div id="cardViewMisc" class="cardView" class="row-fluid">
-                        <g:render template="listMiscellaneous" model="[annotations: projectAdapter.annotations]"/>
-                    </div>
-
                 </section>
             </g:if>
             <g:if test="${projectAdapter.description}">
@@ -146,11 +134,23 @@
             <g:if test="${projectAdapter.documents}">
                 <g:render template="publications" model="['documents': projectAdapter.documents]"/>
             </g:if>
+
             <g:if test="${experiments}">
+                <section id="projectSteps-info">
+                    <div class="page-header">
+                        <h3>Project Steps</h3>
+                    </div>
+
+                    <div class="row-fluid">
+                        <g:render template="/projects/showstep"
+                                  model="['pegraph': pegraph, 'projectId': projectAdapter.capProjectId]"/>
+                    </div>
+                </section>
                 <section id="experiments-info">
                     <div class="page-header">
                         <h3>Experiments</h3>
                     </div>
+
                     <div>
                         <g:render template="experiments"
                                   model="['experiments': experiments, showAssaySummary: false, experimentTypes: projectAdapter.experimentTypes]"/>

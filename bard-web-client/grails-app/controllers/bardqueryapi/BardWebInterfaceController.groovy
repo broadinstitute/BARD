@@ -16,8 +16,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
+import grails.converters.JSON
 
 /**
+ *
+ * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
+ *
+ *
  *
  * Created with IntelliJ IDEA.
  * User: gwalzer
@@ -35,6 +40,7 @@ class BardWebInterfaceController {
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
     ExperimentDataFactoryService experimentDataFactoryService
+    ProjectExperimentRenderService projectExperimentRenderService
     List<SearchFilter> filters = []
 
     //An AfterInterceptor to handle mobile-view routing.
@@ -510,10 +516,18 @@ class BardWebInterfaceController {
         try {
 
             Map projectMap = this.queryService.showProject(projId)
+
             if (projectMap) {
                 ProjectAdapter projectAdapter = projectMap.projectAdapter
+                final Map projectExperimentMap = this.projectExperimentRenderService.constructGraph(projId,projectAdapter.experimentTypes)
+                def projectExperimentJSON = null
+                if(projectExperimentMap){
+                   projectExperimentJSON = new JSON(projectExperimentMap)
+                }
+
+
                 render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays,
-                        searchString: params.searchString])
+                        searchString: params.searchString, pegraph:projectExperimentJSON])
             }
             else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Project Id ${projId}")

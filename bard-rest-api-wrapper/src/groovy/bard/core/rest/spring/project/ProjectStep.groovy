@@ -15,13 +15,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 public class ProjectStep {
 
     @JsonProperty("prevBardExpt")
-    private BardExpt prevBardExpt;
+    private ProjectExperiment prevBardExpt;
     @JsonProperty("nextBardExpt")
-    private BardExpt nextBardExpt;
+    private ProjectExperiment nextBardExpt;
     @JsonProperty("bardProjId")
-    private Long bardProjId;
+    private long bardProjId;
     @JsonProperty("stepId")
-    private Long stepId;
+    private long stepId;
     @JsonProperty("edgeName")
     private String edgeName;
     @JsonProperty("annotations")
@@ -30,42 +30,42 @@ public class ProjectStep {
     private String resourcePath;
 
     @JsonProperty("prevBardExpt")
-    public BardExpt getPrevBardExpt() {
+    public ProjectExperiment getPrevBardExpt() {
         return prevBardExpt;
     }
 
     @JsonProperty("prevBardExpt")
-    public void setPrevBardExpt(BardExpt prevBardExpt) {
+    public void setPrevBardExpt(ProjectExperiment prevBardExpt) {
         this.prevBardExpt = prevBardExpt;
     }
 
     @JsonProperty("nextBardExpt")
-    public BardExpt getNextBardExpt() {
+    public ProjectExperiment getNextBardExpt() {
         return nextBardExpt;
     }
 
     @JsonProperty("nextBardExpt")
-    public void setNextBardExpt(BardExpt nextBardExpt) {
+    public void setNextBardExpt(ProjectExperiment nextBardExpt) {
         this.nextBardExpt = nextBardExpt;
     }
 
     @JsonProperty("bardProjId")
-    public Long getBardProjId() {
+    public long getBardProjId() {
         return bardProjId;
     }
 
     @JsonProperty("bardProjId")
-    public void setBardProjId(Long bardProjId) {
+    public void setBardProjId(long bardProjId) {
         this.bardProjId = bardProjId;
     }
 
     @JsonProperty("stepId")
-    public Long getStepId() {
+    public long getStepId() {
         return stepId;
     }
 
     @JsonProperty("stepId")
-    public void setStepId(Long stepId) {
+    public void setStepId(long stepId) {
         this.stepId = stepId;
     }
 
@@ -98,7 +98,6 @@ public class ProjectStep {
     public void setResourcePath(String resourcePath) {
         this.resourcePath = resourcePath;
     }
-
 
 }
 

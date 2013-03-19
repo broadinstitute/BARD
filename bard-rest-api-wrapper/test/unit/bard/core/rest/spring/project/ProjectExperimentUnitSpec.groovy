@@ -1,13 +1,12 @@
 package bard.core.rest.spring.project
 
-import bard.core.rest.spring.compounds.Compound
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-class BardExptUnitSpec extends Specification {
+class ProjectExperimentUnitSpec extends Specification {
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
 
@@ -43,7 +42,7 @@ class BardExptUnitSpec extends Specification {
 
     void "test serialization to BardExpt"() {
         when:
-        final BardExpt bardExpt = objectMapper.readValue(BARD_EXPT, BardExpt.class)
+        final ProjectExperiment bardExpt = objectMapper.readValue(BARD_EXPT, ProjectExperiment.class)
         then:
         assert 12666 ==bardExpt.bardExptId
         assert 2617== bardExpt.capExptId
@@ -60,8 +59,10 @@ class BardExptUnitSpec extends Specification {
         assert "Confirmation qHTS Assay for Inhibitors of the Human Apurinic/apyrimidinic Endonuclease 1 (APE1)"==bardExpt.name
         assert !bardExpt.source
         assert !bardExpt.grantNo
-        assert !bardExpt.hasProbe()
+        assert !bardExpt.isHasProbe()
         assert [1703] == bardExpt.projectIdList
+        assert !bardExpt.precedingProjectSteps
+        assert !bardExpt.followingProjectSteps
         assert  "/experiments/12666"==bardExpt.resourcePath
      }
 
