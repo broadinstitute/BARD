@@ -81,7 +81,7 @@ class AssayContextService {
             return true;
         }
     }
-	
+
 	// Save an AssayContextItem with value type Fixed
 	public saveItem(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, FixedValueCommand fixedValCmd){
 		def isSaved = false
@@ -90,11 +90,11 @@ class AssayContextService {
 			assayContext.addToAssayContextItems(newAssayContextItem)
 			assayContext.save()
 			isSaved = true
-			println "Done saving item."		
+			println "Done saving item."
 		}
 		return isSaved;
 	}
-	
+
 	// Save an AssayContextItem with value type Range
 	public saveRangeItem(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, RangeValueCommand rangeValCmd){
 		def isSaved = false
@@ -109,19 +109,19 @@ class AssayContextService {
 			assayContext.addToAssayContextItems(newAssayContextItem)
 			assayContext.save()
 			isSaved = true
-			println "Done saving range item."			
+			println "Done saving range item."
 		}
 		return isSaved;
 	}
-	
+
 	public saveFreeItem(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd){
 		def isSaved = false
 		if(valTypeCmd.valueTypeOption.equals(AttributeType.Free.toString())){
-			
+
 			AssayContextItem newAssayContextItem = new AssayContextItem()
 			newAssayContextItem.setAttributeType(AttributeType.Free);
 			Element attributeElement = Element.get(attributeCmd.attributeId)
-			newAssayContextItem.attributeElement = attributeElement			
+			newAssayContextItem.attributeElement = attributeElement
 			assayContext.addToAssayContextItems(newAssayContextItem)
 			assayContext.save()
 			isSaved = true
@@ -129,7 +129,7 @@ class AssayContextService {
 		}
 		return isSaved;
 	}
-	
+
 	// Save an AssayContextItem with value type List
 	public saveItems(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, List<ListValueCommand> listOfValues){
 		def isSaved = false
@@ -139,30 +139,34 @@ class AssayContextService {
 				assayContext.addToAssayContextItems(newAssayContextItem)
 			}
 			assayContext.save()
-			isSaved = true			
+			isSaved = true
 			println "Done saving list of items"
 			return isSaved;
 		}
 	}
-	
+
 	public createItem(AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, FixedValueCommand fixedValCmd, ListValueCommand listValCmd){
-		
-		AssayContextItem newAssayContextItem = new AssayContextItem()		
+
+		AssayContextItem newAssayContextItem = new AssayContextItem()
 		Element attributeElement = Element.get(attributeCmd.attributeId)
 		newAssayContextItem.attributeElement = attributeElement
-		
+
 		if(valTypeCmd.valueTypeOption.equals(AttributeType.Fixed.toString())){
 			newAssayContextItem.setAttributeType(AttributeType.Fixed);
 			if(fixedValCmd.valueQualifier){
 				newAssayContextItem.qualifier = fixedValCmd.valueQualifier
 			}
-			
+
 			if(fixedValCmd.isNumericValue){
 				newAssayContextItem.valueNum = fixedValCmd.numericValue.toFloat().floatValue()
 				if(fixedValCmd.valueUnitId){
 					newAssayContextItem.valueDisplay = newAssayContextItem.valueNum + " " + fixedValCmd.valueUnitLabel
 				}
 			}
+            else if (fixedValCmd.extValueId){
+                newAssayContextItem.extValueId = fixedValCmd.extValueId
+                newAssayContextItem.valueDisplay = fixedValCmd.valueLabel
+            }
 			else{
 				Element valueElement = Element.get(fixedValCmd.valueId)
 				newAssayContextItem.valueElement = valueElement
@@ -174,7 +178,7 @@ class AssayContextService {
 			if(listValCmd.valueQualifier){
 				newAssayContextItem.qualifier = listValCmd.valueQualifier
 			}
-			
+
 			if(listValCmd.isNumericValue){
 				newAssayContextItem.valueNum = listValCmd.numericValue.toFloat().floatValue()
 				if(listValCmd.valueUnitId){
@@ -188,7 +192,7 @@ class AssayContextService {
 			}
 		}
 		return newAssayContextItem
-		
+
 	}
 
     public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit) {
