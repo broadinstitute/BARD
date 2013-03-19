@@ -112,38 +112,7 @@
 
         function initializePageThreeFixed(){
             outputToConsole('calling initializePageThreeFixed()');
-            $("#extValueIdSearch").select2({
-                minimumInputLength: 2,
-                width: "70%",
-                allowClear: true,
-                placeholder: "Search external ontology for id or text",
-                query: function(query) {
-                    var attributeElementId = $("#attributeElementId").val();
-                    $.getJSON(
-                            "/BARD/ontologyJSon/findExternalItemsByTerm",
-                            {
-                                term: query.term,
-                                elementId: attributeElementId
-                            },
-                            function(data, textStatus, jqXHR) {
-                                var selectData = {results:[]}
-                                if(data.error){
-                                    alert(data.error);
-                                }
-                                $.each(data.externalItems, function(index, item) {
-                                    selectData.results.push({id: item.id, text: item.text, display: item.display})
-                                })
-                                query.callback(selectData)
-                            }
-                    );
-                }
-            });
-            $("#extValueIdSearch").on("change",function(e){
-                $("#extValueId").val($("#extValueIdSearch").select2("data").id);
-                $("#valueLabel").val($("#extValueIdSearch").select2("data").display);
-                $(':input[name="next"]').focus();
-            });
-            $("#extValueId").select2("open");
+            initializeExtValueIdSelect2("Fixed");
 
             $("#valueId").select2({
                 minimumInputLength: 1,
@@ -231,7 +200,7 @@
 
         function initializePageThreeList(){
             outputToConsole('calling initializePageThreeList()');
-
+            initializeExtValueIdSelect2("List");
             var valueLabelCache = {}
             $("#valueId").select2({
                 minimumInputLength: 1,
@@ -401,6 +370,41 @@
                 }
             });
 
+        }
+
+        function initializeExtValueIdSelect2(type) {
+            $("#extValueIdSearch").select2({
+                minimumInputLength: 2,
+                width: "70%",
+                allowClear: true,
+                placeholder: "Search external ontology for id or text",
+                query: function (query) {
+                    var attributeElementId = $("#attributeElementId").val();
+                    $.getJSON(
+                            "/BARD/ontologyJSon/findExternalItemsByTerm",
+                            {
+                                term: query.term,
+                                elementId: attributeElementId
+                            },
+                            function (data, textStatus, jqXHR) {
+                                var selectData = {results: []}
+                                selectData.results = data.externalItems
+                                query.callback(selectData)
+                            }
+                    );
+                }
+            });
+            $("#extValueIdSearch").on("change", function (e) {
+                $("#extValueId").val($("#extValueIdSearch").select2("data").id);
+                $("#valueLabel").val($("#extValueIdSearch").select2("data").display);
+                if(type==="List"){
+                    $(':input[name="addValueToList"]').focus();
+                }
+                else{
+                    $(':input[name="next"]').focus();
+                }
+            });
+            $("#extValueId").select2("open");
         }
 </script>
 

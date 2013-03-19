@@ -80,6 +80,7 @@ class ListValueCommand implements Serializable {
     Long valueId
     String valueLabel
     String attributeElementId
+    String extValueId
     String valueQualifier
     Long valueUnitId
     String valueUnitLabel
@@ -97,8 +98,9 @@ class ListValueCommand implements Serializable {
     boolean validateValue() {
         // delegate to validations performed by constraints
         validate()
-
-        if (!valueId && StringUtils.isBlank(numericValue)) {
+        if (extValueId) {
+            // a value for extValueId is valid
+        } else if (!valueId && StringUtils.isBlank(numericValue)) {
             errors.reject("listValue.missing.value", "Either numeric value or string value must be provided")
         } else if (valueId) {
             isNumericValue = false;
