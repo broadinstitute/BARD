@@ -69,10 +69,9 @@ class ExperimentConstraintIntegrationSpec extends IntegrationSpec {
         desc          | valueUnderTest            | valid | errorCode
         'null'        | null                      | false | 'nullable'
 
-        'valid value' | ExperimentStatus.Pending  | true  | null
-        'valid value' | ExperimentStatus.Approved | true  | null
-        'valid value' | ExperimentStatus.Rejected | true  | null
-        'valid value' | ExperimentStatus.Revised  | true  | null
+        'valid value' | ExperimentStatus.DRAFT    | true  | null
+        'valid value' | ExperimentStatus.APPROVED | true  | null
+        'valid value' | ExperimentStatus.RETIRED  | true  | null
     }
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {

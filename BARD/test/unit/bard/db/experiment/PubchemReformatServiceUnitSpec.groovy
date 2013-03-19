@@ -126,7 +126,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         then:
         rows.size() == 1
         Map row = rows.first()
-        row["Replicate #"] == 5
+        row["Replicate #"] == "5"
         row["AC50"] == "92.2"
     }
 }
