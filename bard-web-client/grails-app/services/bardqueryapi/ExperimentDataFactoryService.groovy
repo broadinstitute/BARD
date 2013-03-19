@@ -8,7 +8,7 @@ class ExperimentDataFactoryService {
     QueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
 
-    def createTableModel(
+    TableModel createTableModel(
             SpreadSheetInput spreadSheetInput,
             GroupByTypes groupTypes,
             List<FilterTypes> filterTypes,

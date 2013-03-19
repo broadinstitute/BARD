@@ -301,7 +301,7 @@ class QueryService implements IQueryService {
         return [compoundAdapters: compoundAdapters, facets: facets, nHits: nhits, eTag: eTag]
     }
 
-    WebQueryTableModel showExperimentalData(Long experimentId,
+    TableModel showExperimentalData(Long experimentId,
                                             GroupByTypes groupTypes,
                                             List<FilterTypes> filterTypes,
                                             SearchParams searchParams) {

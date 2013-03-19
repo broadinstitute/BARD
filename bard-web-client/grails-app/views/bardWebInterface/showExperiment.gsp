@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
-    <title>BARD : Experiment Result : ${webQueryTableModel.additionalProperties.capExptId}</title>
+    <title>BARD : Experiment Result : ${tableModel.additionalProperties.capExptId}</title>
     <r:require modules="experimentData, bootstrap, compoundOptions"/>
 </head>
 
@@ -14,7 +14,7 @@
 
     <div class="span9">
         <div id="experimentalResults">
-            <g:render template='experimentResultData' model='[webQueryTableModel: webQueryTableModel]'/>
+            <g:render template='experimentResultData' model='[tableModel: tableModel]'/>
         </div>
     </div>
 </div>

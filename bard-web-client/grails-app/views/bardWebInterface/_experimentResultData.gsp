@@ -19,18 +19,18 @@
         <g:link controller="bardWebInterface" action="showAssay"
                 id="${webQueryTableModel?.additionalProperties.bardAssayId}"
                 params='[searchString: "${webQueryTableModel?.additionalProperties.searchString}"]'>
-            ${webQueryTableModel?.additionalProperties.capAssayId}
+            ${tableModel?.additionalProperties.capAssayId}
         </g:link>
     </g:if>
     <g:else>
         <g:link controller="bardWebInterface" action="showAssay"
-                id="${webQueryTableModel?.additionalProperties.bardAssayId}">
-            ${webQueryTableModel?.additionalProperties.capAssayId}
+                id="${tableModel?.additionalProperties.bardAssayId}">
+            ${tableModel?.additionalProperties.capAssayId}
 
         </g:link>
     </g:else>
     </b>
-    <b>Confidence Level: ${webQueryTableModel?.additionalProperties.confidenceLevel}</b>
+    <b>Confidence Level: ${tableModel?.additionalProperties.confidenceLevel}</b>
 </p>
 
 <div class="row-fluid">
@@ -38,13 +38,13 @@
                    id="paginationUrl"/> %{--Used to hold the pagination url, if a paging link has been clicked--}%
     <div class="pagination offset3">
         <g:paginate
-                total="${webQueryTableModel?.additionalProperties?.total ? webQueryTableModel?.additionalProperties?.total : 0}"
-                params='[id: "${params?.id}", normalizeYAxis: "${webQueryTableModel?.additionalProperties.normalizeYAxis}"]'/>
+                total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
+                params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
     </div>
     <table class="table table-condensed">
         <thead>
         <tr>
-            <g:each in="${webQueryTableModel.columnHeaders}" var="header" status="j">
+            <g:each in="${tableModel.columnHeaders}" var="header" status="j">
                 <th>
                     <g:if test="${header.getValue() instanceof java.util.Map}">
                         <%
@@ -72,7 +72,7 @@
             </g:each>
         </tr>
         </thead>
-        <g:each in="${webQueryTableModel.data}" var="rowData">
+        <g:each in="${tableModel.data}" var="rowData">
             <tr>
 
                 <g:each in="${rowData}" var="currentRow" status="i">
@@ -86,8 +86,8 @@
                     </g:if>
                     <g:elseif test="${i == 1}">
                         <td>
-                            <g:if test="${webQueryTableModel?.additionalProperties.searchString}">
-                                <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: currentRow.getValue(), searchString: "${webQueryTableModel?.additionalProperties.searchString}"])}">${currentRow.getValue()}</a>
+                            <g:if test="${tableModel?.additionalProperties.searchString}">
+                                <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: currentRow.getValue(), searchString: "${tableModel?.additionalProperties.searchString}"])}">${currentRow.getValue()}</a>
                             </g:if>
                             <g:else>
                                 <a href="${createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: currentRow.getValue()])}">${currentRow.getValue()}</a>
@@ -193,7 +193,7 @@
 
     <div class="pagination offset3">
         <g:paginate
-                total="${webQueryTableModel?.additionalProperties?.total ? webQueryTableModel?.additionalProperties?.total : 0}"
-                params='[id: "${params?.id}", normalizeYAxis: "${webQueryTableModel?.additionalProperties.normalizeYAxis}"]'/>
+                total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
+                params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
     </div>
 </div>

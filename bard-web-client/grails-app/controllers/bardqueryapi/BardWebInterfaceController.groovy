@@ -104,17 +104,17 @@ class BardWebInterfaceController {
                 filters.add(FilterTypes.TESTED)
             }
 
-            final WebQueryTableModel webQueryTableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+            final TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
             //TODO: these should become redundant if we use command objects. In any case these additional params should already be in the params object
-            webQueryTableModel.additionalProperties.put("searchString", params.searchString)
-            webQueryTableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
-            webQueryTableModel.additionalProperties.put("activityOutcome", activityOutcome)
-            webQueryTableModel.additionalProperties.put("id", id.toString())
+            tableModel.additionalProperties.put("searchString", params.searchString)
+            tableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
+            tableModel.additionalProperties.put("activityOutcome", activityOutcome)
+            tableModel.additionalProperties.put("id", id.toString())
 
             //Create fake facets to generate the two filters we want: normalize Y-axis and filter for active compounds only.
-            Integer numOfActiveCmpds = webQueryTableModel?.additionalProperties?.actives ?: 0
-            Integer totalNumOfCmpds = webQueryTableModel?.additionalProperties?.total ?: 0
+            Integer numOfActiveCmpds = tableModel?.additionalProperties?.actives ?: 0
+            Integer totalNumOfCmpds = tableModel?.additionalProperties?.total ?: 0
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: totalNumOfCmpds)])]
             if (numOfActiveCmpds > 0) {
                 facetValues << new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])
@@ -124,12 +124,12 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                render(template: 'experimentResultData', model: [webQueryTableModel: webQueryTableModel])
+                render(template: 'experimentResultData', model: [webQueryTableModel: tableModel])
                 return
             }
             //this should do a full page reload
             render(view: 'showExperiment',
-                    model: [webQueryTableModel: webQueryTableModel,
+                    model: [tableModel: tableModel,
                             facets: facetValues,
                             appliedFilters: getAppliedFilters(searchFilters, facetValues),
                             sidebarTitle: 'Options'])

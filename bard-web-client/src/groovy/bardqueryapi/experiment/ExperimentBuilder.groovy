@@ -4,51 +4,63 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.util.ExperimentalValueUtil
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
-
-import java.lang.StringValue
-
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
 
 class ExperimentBuilder {
 
 
-    List<WebQueryValueModel> buildHeader(List<String> priorityDisplays, List<String> dictionaryIds, final boolean hasPlot, final boolean hasChildElements) {
-        List<WebQueryValueModel> columnHeaders = []
-        columnHeaders.add(new WebQueryValueModel("SID"))
-        columnHeaders.add(new WebQueryValueModel("CID"))
-        columnHeaders.add(new WebQueryValueModel("Structure"))
-        columnHeaders.add(new WebQueryValueModel("Outcome"))
-        columnHeaders.add(new WebQueryValueModel([priorityDisplays: priorityDisplays, dictionaryIds: dictionaryIds]))
-        columnHeaders.add(new WebQueryValueModel("Experiment Descriptors"))
+    List<WebQueryValue> buildHeader(List<String> priorityDisplays, List<String> dictionaryIds, final boolean hasPlot, final boolean hasChildElements) {
+        List<WebQueryValue> columnHeaders = []
+        columnHeaders.add(new StringValue("SID"))
+        columnHeaders.add(new StringValue("CID"))
+        columnHeaders.add(new StringValue("Structure"))
+        columnHeaders.add(new StringValue("Outcome"))
+        columnHeaders.add(new MapValue([(new StringValue("priorityDisplays")): priorityDisplays,
+                (new StringValue("dictionaryIds")): dictionaryIds]))
+        columnHeaders.add(new StringValue("Experiment Descriptors"))
         if (hasChildElements) {
-            columnHeaders.add(new WebQueryValueModel("Child Elements"))
+            columnHeaders.add(new StringValue("Child Elements"))
         }
         if (hasPlot) {
-            columnHeaders.add(new WebQueryValueModel("Concentration Response Series"))
-            columnHeaders.add(new WebQueryValueModel("Concentration Response Plot"))
-            columnHeaders.add(new WebQueryValueModel("Misc Data"))
+            columnHeaders.add(new StringValue("Concentration Response Series"))
+            columnHeaders.add(new StringValue("Concentration Response Plot"))
+            columnHeaders.add(new StringValue("Misc Data"))
         }
         return columnHeaders
     }
 
-    List<WebQueryValueModel> addRow(final Activity activity,
-                                    final NormalizeAxis normalizeYAxis,
-                                    final Double yNormMin,
-                                    final Double yNormMax,
-                                    List<String> priorityDisplays,
-                                    final Map<Long, CompoundAdapter> compoundAdapterMap) {
+    /**
+     *
+     * Builds the tableModel's row based on the result set and types.
+     *
+     * @param activity
+     * @param normalizeYAxis
+     * @param yNormMin
+     * @param yNormMax
+     * @param priorityDisplays
+     * @param compoundAdapterMap
+     * @return
+     */
+    List<WebQueryValue> addRow(final Activity activity,
+                               final NormalizeAxis normalizeYAxis,
+                               final Double yNormMin,
+                               final Double yNormMax,
+                               List<String> priorityDisplays,
+                               final Map<Long, CompoundAdapter> compoundAdapterMap) {
 
-        List<WebQueryValueModel> rowData = new ArrayList<WebQueryValueModel>()
+        //A row is a list of table cells, each implements WebQueryValue.
+        ListValue rowData = new ListValue()
 
         Long sid = activity.sid
-        WebQueryValueModel valueModel = new WebQueryValueModel(new SidValue(value: sid.toString()))
-        rowData.add(valueModel)
+        StringValue sidValue = new StringValue(value: sid.toString())
+        rowData.value.add(sidValue)
 
 
         Long cid = activity.cid
-        valueModel = new WebQueryValueModel(new CidValue(value: cid.toString()))
-        rowData.add(valueModel)
+        StringValue cidValue = new StructureValue(value: cid.toString())
+        rowData.value.add(cidValue)
+
         final CompoundAdapter compoundAdapter = compoundAdapterMap.get(cid)
         StructureValue structureValue =
             new StructureValue(
@@ -60,61 +72,21 @@ class ExperimentBuilder {
                     numAssays: compoundAdapter.numberOfAssays
             )
 
-        Map<String, String> structure = [sid: sid.toString(), cid: cid.toString(),
-                smiles: compoundAdapter?.structureSMILES, cname: compoundAdapter?.name,
-                numberOfActiveAssays: compoundAdapter?.numberOfActiveAssays, numberOfAssays: compoundAdapter?.numberOfAssays]
+        rowData.value.add(structureValue)
 
-        valueModel = new WebQueryValueModel(structureValue)
-        rowData.add(valueModel)
-
-
+        //Get the result-set.
         ResultData resultData = activity?.resultData
-        String outcome = resultData.outcome
-        valueModel = new WebQueryValueModel(new ResultTypeValue(value: outcome))
-        rowData.add(valueModel)
+        String outcome = StringValue(value: resultData.outcome)
+        rowData.value.add(outcome)
 
-        List<String> displayList = []
-        if (resultData?.hasPriorityElements()) {
-            int i = 0
-            displayList = resultData.priorityElements.collect {PriorityElement priorityElement -> "${priorityDisplays[i++]}: ${priorityElement.toDisplay()}"}
-        }
-        valueModel = new WebQueryValueModel(displayList)
-        rowData.add(valueModel)
-
-        List<StringValue> displayElements = []
-        if (!resultData.isMapped()) {
-            displayElements.add(new StringValue(value:"TIDs not yet mapped to a result hierarchy"))
-        }
-        for (RootElement rootElement : resultData.rootElements) {
-            if (rootElement.toDisplay()) {
-                displayElements.add(new StringValue(value:rootElement.toDisplay()))
-            }
-        }
-        valueModel = new WebQueryValueModel(new ListStringValue(values:displayElements))
-        rowData.add(valueModel)
-
-        //if display elements add
-        List<String> childElements = []
-        for (PriorityElement priorityElement in resultData.priorityElements) {
-            if (priorityElement?.hasChildElements()) {
-                for (ActivityData activityData : priorityElement.childElements) {
-                    if (activityData.toDisplay()) {
-                        childElements.add(activityData.toDisplay())
-                    }
-                }
-            }
-        }
-        if (childElements) {
-            valueModel = new WebQueryValueModel(childElements)
-            rowData.add(valueModel)
-        }
-
+        //If the result-type is a curve, we collect all the curve values and parameters.
         if (resultData.hasPlot()) {
-            List<Map> listOfConcRespMap = []
+            ListValue listOfConcRespMap = new ListValue()
             for (PriorityElement priorityElement in resultData.priorityElements) {
                 final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
                 if (concentrationResponseSeries) {
-                    Map concRespMap = concentrationResponseMap(concentrationResponseSeries, normalizeYAxis,
+                    MapValue concRespMap = new MapValue()
+                    concRespMap.value = concentrationResponseMap(concentrationResponseSeries, normalizeYAxis,
                             cid, priorityElement.getSlope(),
                             priorityElement.testConcentrationUnit,
                             yNormMin, yNormMax, priorityElement.getDictionaryLabel())
@@ -136,6 +108,51 @@ class ExperimentBuilder {
                 rowData.add(valueModel)
             }
         }
+        else {
+            //If the result-type is not a curve, we simply display the priority elements as a list of key/value dictionary pairs.
+            ListValue resultPairList = new ListValue()
+            if (resultData?.hasPriorityElements()) {
+                resultPairList.value = resultData.priorityElements.collect {PriorityElement priorityElement ->
+                    DictionaryElementValue left = new DictionaryElementValue(value: priorityElement.pubChemDisplayName, dictionaryElementId: priorityElement.dictElemId)
+                    StringValue right = new StringValue(priorityElement.toDisplay())
+                    Pair<WebQueryValue, WebQueryValue> immutablePair = new ImmutablePair<WebQueryValue, WebQueryValue>(left, right)
+                    PairValue pairValue = new PairValue(value: immutablePair)
+                    return pairValue
+                }
+            }
+            rowData.value.add(resultPairList)
+        }
+
+
+        //Add all rootElements from the JsonResponse
+        List<StringValue> rootElements = []
+        if (!resultData.isMapped()) {
+            rootElements.add(new StringValue(value: "TIDs not yet mapped to a result hierarchy"))
+        }
+        for (RootElement rootElement : resultData.rootElements) {
+            if (rootElement.toDisplay()) {
+                rootElements.add(new StringValue(value: rootElement.toDisplay()))
+            }
+        }
+        rowData.value.add(rootElements)
+
+
+        //Add all childElements of the priorityElements, if any.
+        ListValue childElements = new ListValue()
+        for (PriorityElement priorityElement in resultData.priorityElements) {
+            if (priorityElement?.hasChildElements()) {
+                for (ActivityData activityData : priorityElement.childElements) {
+                    if (activityData.toDisplay()) {
+                        childElements.value.add(new StringValue(activityData.toDisplay()))
+                    }
+                }
+            }
+        }
+        if (childElements) {
+            rowData.value.add(childElements)
+        }
+
+
         return rowData;
     }
 
@@ -166,17 +183,17 @@ class ExperimentBuilder {
         }
     }
 
-    public WebQueryTableModel buildModel(Map experimentDetails) {
-        final WebQueryTableModel webQueryTableModel = new WebQueryTableModel()
+    public TableModel buildModel(Map experimentDetails) {
+        final TableModel tableModel = new TableModel()
 
-        webQueryTableModel.additionalProperties.put("experimentName", experimentDetails?.experiment?.name)
-        webQueryTableModel.additionalProperties.put("bardExptId", experimentDetails?.experiment?.bardExptId)
-        webQueryTableModel.additionalProperties.put("capExptId", experimentDetails?.experiment?.capExptId)
-        webQueryTableModel.additionalProperties.put("bardAssayId", experimentDetails?.experiment?.bardAssayId)
-        webQueryTableModel.additionalProperties.put("capAssayId", experimentDetails?.experiment?.capAssayId)
-        webQueryTableModel.additionalProperties.put("total", experimentDetails?.total)
-        webQueryTableModel.additionalProperties.put("actives", experimentDetails?.actives)
-        webQueryTableModel.additionalProperties.put("confidenceLevel",experimentDetails?.experiment?.confidenceLevel)
+        tableModel.additionalProperties.put("experimentName", experimentDetails?.experiment?.name)
+        tableModel.additionalProperties.put("bardExptId", experimentDetails?.experiment?.bardExptId)
+        tableModel.additionalProperties.put("capExptId", experimentDetails?.experiment?.capExptId)
+        tableModel.additionalProperties.put("bardAssayId", experimentDetails?.experiment?.bardAssayId)
+        tableModel.additionalProperties.put("capAssayId", experimentDetails?.experiment?.capAssayId)
+        tableModel.additionalProperties.put("total", experimentDetails?.total)
+        tableModel.additionalProperties.put("actives", experimentDetails?.actives)
+        tableModel.additionalProperties.put("confidenceLevel", experimentDetails?.experiment?.confidenceLevel)
 
 
 
@@ -187,7 +204,7 @@ class ExperimentBuilder {
         Double yNormMin = null
         Double yNormMax = null
         final NormalizeAxis normalizeYAxis = experimentDetails.normalizeYAxis
-        webQueryTableModel.setColumnHeaders(buildHeader(priorityDisplays, experimentDetails?.dictionaryIds, hasPlot, hasChildElements))
+        tableModel.setColumnHeaders(buildHeader(priorityDisplays, experimentDetails?.dictionaryIds, hasPlot, hasChildElements))
         final List<Activity> activities = experimentDetails.activities
         if (normalizeYAxis == NormalizeAxis.Y_NORM_AXIS) {
             yNormMin = experimentDetails.yNormMin
@@ -195,9 +212,9 @@ class ExperimentBuilder {
 
         }
 
-        addRows(activities, webQueryTableModel, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
+        addRows(activities, tableModel, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
 
-        return webQueryTableModel
+        return tableModel
     }
 
     private Map concentrationResponseMap(final ConcentrationResponseSeries concentrationResponseSeries,
