@@ -623,7 +623,7 @@ class BardWebInterfaceController {
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(cids: [id])
 
             final List<FilterTypes> filters = []
-            filters.add(FilterTypes.TESTED)
+//            filters.add(FilterTypes.TESTED)
             NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
             ActivityOutcome activityOutcome = ActivityOutcome.ALL
 

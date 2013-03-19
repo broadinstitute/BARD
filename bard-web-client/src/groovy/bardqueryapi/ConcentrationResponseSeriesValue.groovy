@@ -4,6 +4,8 @@ import bard.core.rest.spring.experiment.ActivityConcentrationMap
 import bard.core.rest.spring.experiment.CurveFitParameters
 
 /**
+ * Represents dose-response data together with supplementary information about the fitted-curve, if such exists.
+ *
  * Created with IntelliJ IDEA.
  * User: jasiedu
  * Date: 2/8/13
@@ -22,4 +24,8 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
     Double slope
     String responseUnit
     String testConcentrationUnit
+    Double yNormMin
+    Double yNormMax
+    String yAxisLabel
+    String xAxisLabel
 }

@@ -125,7 +125,7 @@ class CompoundBioActivitySummaryBuilder {
      * @param exptData
      * @return
      */
-    List<WebQueryValue> convertExperimentResultsToValues(Activity exptData) {
+    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData) {
         List<WebQueryValue> values = []
         String respClss = exptData?.resultData?.responseClass
         ResponseClassEnum responseClass = respClss ? ResponseClassEnum.toEnum(respClss) : null
@@ -134,7 +134,7 @@ class CompoundBioActivitySummaryBuilder {
             switch (responseClass) {
                 case ResponseClassEnum.SP:
                     //The result-type is a single-point, key/value pair.
-                    Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.pubChemDisplayName, priorityElement.value)
+                    Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, priorityElement.value)
                     PairValue pairValue = new PairValue(value: pair)
                     values << pairValue
                     break;
@@ -147,11 +147,13 @@ class CompoundBioActivitySummaryBuilder {
                         ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                         CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
                         ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
-                                title: priorityElement.pubChemDisplayName,
+                                title: priorityElement.toDisplay(),
                                 curveFitParameters: curveFitParameters,
                                 slope: priorityElement.getSlope(),
                                 responseUnit: concentrationResponseSeries.responseUnit,
                                 testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit)
+                        concentrationResponseSeriesValue.xAxisLabel = concentrationResponseSeriesValue.responseUnit
+                        concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.testConcentrationUnit
                         values << concentrationResponseSeriesValue
                     }
                     break;

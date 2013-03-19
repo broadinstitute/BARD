@@ -6,6 +6,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
+import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 
 class ExperimentBuilder {
 
@@ -79,50 +80,19 @@ class ExperimentBuilder {
         String outcome = StringValue(value: resultData.outcome)
         rowData.value.add(outcome)
 
-        //If the result-type is a curve, we collect all the curve values and parameters.
-        if (resultData.hasPlot()) {
-            ListValue listOfConcRespMap = new ListValue()
-            for (PriorityElement priorityElement in resultData.priorityElements) {
-                final ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
-                if (concentrationResponseSeries) {
-                    MapValue concRespMap = new MapValue()
-                    concRespMap.value = concentrationResponseMap(concentrationResponseSeries, normalizeYAxis,
-                            cid, priorityElement.getSlope(),
-                            priorityElement.testConcentrationUnit,
-                            yNormMin, yNormMax, priorityElement.getDictionaryLabel())
-
-                    final List<Pair> activityToConcentratonList = extractActivityToConcentratonList(concentrationResponseSeries)
-                    concRespMap.put("activityToConcentratonList", activityToConcentratonList)
-                    final String dictionaryLabel = concentrationResponseSeries.dictionaryLabel
-                    final String dictionaryDescription = concentrationResponseSeries.dictionaryDescription
-                    concRespMap.put("dictionaryLabel", dictionaryLabel)
-                    concRespMap.put("dictionaryDescription", dictionaryDescription)
-
-                    final long dictElemId = concentrationResponseSeries?.dictElemId
-                    concRespMap.put("dictElemId", dictElemId)
-                    listOfConcRespMap << concRespMap
-                }
-            }
-            if (listOfConcRespMap) {
-                valueModel = new WebQueryValueModel([ConcentrationResponseSeriesList: listOfConcRespMap] as Map)
-                rowData.add(valueModel)
-            }
+        //Convert the experimental data to result types (curves, key/value pairs, etc.)
+        List<WebQueryValue> experimentValues = CompoundBioActivitySummaryBuilder.convertExperimentResultsToValues(activity)
+        //if the result type is a concentration series, we want to add the normalization values to each curve.
+        experimentValues.findAll({WebQueryValue experimentResult ->
+            experimentResult instanceof ConcentrationResponseSeriesValue
+        }).each { ConcentrationResponseSeriesValue concResSer ->
+            concResSer.yNormMax = yNormMax
+            concResSer.yNormMin = yNormMin
         }
-        else {
-            //If the result-type is not a curve, we simply display the priority elements as a list of key/value dictionary pairs.
-            ListValue resultPairList = new ListValue()
-            if (resultData?.hasPriorityElements()) {
-                resultPairList.value = resultData.priorityElements.collect {PriorityElement priorityElement ->
-                    DictionaryElementValue left = new DictionaryElementValue(value: priorityElement.pubChemDisplayName, dictionaryElementId: priorityElement.dictElemId)
-                    StringValue right = new StringValue(priorityElement.toDisplay())
-                    Pair<WebQueryValue, WebQueryValue> immutablePair = new ImmutablePair<WebQueryValue, WebQueryValue>(left, right)
-                    PairValue pairValue = new PairValue(value: immutablePair)
-                    return pairValue
-                }
-            }
-            rowData.value.add(resultPairList)
+        if (experimentValues) {
+            ListValue listValue = new ListValue(value: experimentValues)
+            rowData.value.add(listValue)
         }
-
 
         //Add all rootElements from the JsonResponse
         List<StringValue> rootElements = []
@@ -135,7 +105,6 @@ class ExperimentBuilder {
             }
         }
         rowData.value.add(rootElements)
-
 
         //Add all childElements of the priorityElements, if any.
         ListValue childElements = new ListValue()
@@ -156,19 +125,19 @@ class ExperimentBuilder {
         return rowData;
     }
 
-    List<Pair> extractActivityToConcentratonList(ConcentrationResponseSeries concentrationResponseSeries) {
-        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
-
-        final String testConcentrationUnit = concentrationResponseSeries.testConcentrationUnit
-        List<Pair> activityToConcentration = []
-        for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
-            final String displayActivity = concentrationResponsePoint.displayActivity()
-            final String concentration = concentrationResponsePoint.displayConcentration(testConcentrationUnit)
-            Pair<String, String> concentrationDisplayTuple = new ImmutablePair<String, String>(displayActivity, concentration)
-            activityToConcentration.add(concentrationDisplayTuple)
-        }
-        return activityToConcentration
-    }
+//    List<Pair> extractActivityToConcentratonList(ConcentrationResponseSeries concentrationResponseSeries) {
+//        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
+//
+//        final String testConcentrationUnit = concentrationResponseSeries.testConcentrationUnit
+//        List<Pair> activityToConcentration = []
+//        for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
+//            final String displayActivity = concentrationResponsePoint.displayActivity()
+//            final String concentration = concentrationResponsePoint.displayConcentration(testConcentrationUnit)
+//            Pair<String, String> concentrationDisplayTuple = new ImmutablePair<String, String>(displayActivity, concentration)
+//            activityToConcentration.add(concentrationDisplayTuple)
+//        }
+//        return activityToConcentration
+//    }
 
     void addRows(final List<Activity> activities,
                  final WebQueryTableModel webQueryTableModel,
@@ -217,68 +186,68 @@ class ExperimentBuilder {
         return tableModel
     }
 
-    private Map concentrationResponseMap(final ConcentrationResponseSeries concentrationResponseSeries,
-                                         final NormalizeAxis normalizeAxis,
-                                         final Long cid,
-                                         final Double slope,
-                                         final String testConcentrationUnit,
-                                         final Double yNormMin,
-                                         final Double yNormMax,
-                                         final String priorityDisplay) {
-
-        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
-        ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
-        CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-        Map valueMap = [:]
-
-
-        if (!concentrationResponsePoints.isEmpty()) {
-            valueMap.put("title", "Plot for CID ${cid}")
-
-            if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {
-                Map mapParams = [
-                        sinf: curveFitParameters?.getSInf(),
-                        s0: curveFitParameters?.getS0(),
-                        slope: slope,
-                        hillSlope: curveFitParameters?.getHillCoef(),
-                        concentrations: doseResponsePointsMap.concentrations,
-                        activities: doseResponsePointsMap.activities,
-                        yAxisLabel: "${concentrationResponseSeries?.getYAxisLabel()}",
-                        xAxisLabel: "Log(Concentration) ${testConcentrationUnit}",
-                        yNormMin: "${yNormMin}",
-                        yNormMax: "${yNormMax}"
-                ]
-                valueMap.put("plot", mapParams)
-
-            }
-            else {
-                Map mapParams = [
-                        sinf: curveFitParameters?.getSInf(),
-                        s0: curveFitParameters?.getS0(),
-                        slope: slope,
-                        hillSlope: curveFitParameters?.getHillCoef(),
-                        concentrations: doseResponsePointsMap.concentrations,
-                        activities: doseResponsePointsMap.activities,
-                        yAxisLabel: "${concentrationResponseSeries?.getYAxisLabel()}",
-                        xAxisLabel: "Log(Concentration) ${testConcentrationUnit}"
-                ]
-                valueMap.put("plot", mapParams)
-
-
-            }
-            List<String> curveParams = []
-            if (priorityDisplay) {
-                curveParams.add("${priorityDisplay} : ${slope}")
-            }
-            curveParams.add("sInf: " + new ExperimentalValueUtil(curveFitParameters.sInf, false).toString())
-            curveParams.add("s0: " + new ExperimentalValueUtil(curveFitParameters.s0, false).toString())
-            curveParams.add("HillSlope: " + new ExperimentalValueUtil(curveFitParameters.hillCoef, false).toString())
-            valueMap.put("curveFitParams", curveParams)
-
-            valueMap.put("miscData", concentrationResponseSeries.miscData)
-        }
-        return valueMap
-    }
+//    private Map concentrationResponseMap(final ConcentrationResponseSeries concentrationResponseSeries,
+//                                         final NormalizeAxis normalizeAxis,
+//                                         final Long cid,
+//                                         final Double slope,
+//                                         final String testConcentrationUnit,
+//                                         final Double yNormMin,
+//                                         final Double yNormMax,
+//                                         final String priorityDisplay) {
+//
+//        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
+//        ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
+//        CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+//        Map valueMap = [:]
+//
+//
+//        if (!concentrationResponsePoints.isEmpty()) {
+//            valueMap.put("title", "Plot for CID ${cid}")
+//
+//            if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {
+//                Map mapParams = [
+//                        sinf: curveFitParameters?.getSInf(),
+//                        s0: curveFitParameters?.getS0(),
+//                        slope: slope,
+//                        hillSlope: curveFitParameters?.getHillCoef(),
+//                        concentrations: doseResponsePointsMap.concentrations,
+//                        activities: doseResponsePointsMap.activities,
+//                        yAxisLabel: "${concentrationResponseSeries?.getYAxisLabel()}",
+//                        xAxisLabel: "Log(Concentration) ${testConcentrationUnit}",
+//                        yNormMin: "${yNormMin}",
+//                        yNormMax: "${yNormMax}"
+//                ]
+//                valueMap.put("plot", mapParams)
+//
+//            }
+//            else {
+//                Map mapParams = [
+//                        sinf: curveFitParameters?.getSInf(),
+//                        s0: curveFitParameters?.getS0(),
+//                        slope: slope,
+//                        hillSlope: curveFitParameters?.getHillCoef(),
+//                        concentrations: doseResponsePointsMap.concentrations,
+//                        activities: doseResponsePointsMap.activities,
+//                        yAxisLabel: "${concentrationResponseSeries?.getYAxisLabel()}",
+//                        xAxisLabel: "Log(Concentration) ${testConcentrationUnit}"
+//                ]
+//                valueMap.put("plot", mapParams)
+//
+//
+//            }
+//            List<String> curveParams = []
+//            if (priorityDisplay) {
+//                curveParams.add("${priorityDisplay} : ${slope}")
+//            }
+//            curveParams.add("sInf: " + new ExperimentalValueUtil(curveFitParameters.sInf, false).toString())
+//            curveParams.add("s0: " + new ExperimentalValueUtil(curveFitParameters.s0, false).toString())
+//            curveParams.add("HillSlope: " + new ExperimentalValueUtil(curveFitParameters.hillCoef, false).toString())
+//            valueMap.put("curveFitParams", curveParams)
+//
+//            valueMap.put("miscData", concentrationResponseSeries.miscData)
+//        }
+//        return valueMap
+//    }
 
 }
 
