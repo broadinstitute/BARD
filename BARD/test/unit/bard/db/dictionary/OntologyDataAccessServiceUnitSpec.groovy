@@ -4,6 +4,7 @@ import bard.validation.ext.BardExternalOntologyFactory
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
+import bard.validation.ext.ExternalOntologyFactory
 import grails.test.mixin.TestFor
 import org.apache.commons.logging.Log
 import spock.lang.Shared
@@ -22,12 +23,12 @@ import spock.lang.Unroll
 class OntologyDataAccessServiceUnitSpec extends Specification {
 
     OntologyDataAccessService ontologyDataAccessService = new OntologyDataAccessService()
-    BardExternalOntologyFactory externalOntologyFactory
+    ExternalOntologyFactory externalOntologyFactory
     @Shared ExternalOntologyAPI externalOntologyAPI
     Log log
 
     void setup() {
-        externalOntologyFactory = Mock(BardExternalOntologyFactory)
+        externalOntologyFactory = Mock(ExternalOntologyFactory)
         externalOntologyAPI = Mock(ExternalOntologyAPI)
         log = Mock(Log)
         ontologyDataAccessService.externalOntologyFactory = externalOntologyFactory

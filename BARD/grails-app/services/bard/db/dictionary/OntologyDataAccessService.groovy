@@ -1,24 +1,26 @@
 package bard.db.dictionary
 
-import bard.validation.ext.BardExternalOntologyFactory
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
+import bard.validation.ext.ExternalOntologyFactory
 import groovy.transform.TypeChecked
 import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.util.Assert
 
-import static BardExternalOntologyFactory.NCBI_EMAIL
-import static BardExternalOntologyFactory.NCBI_TOOL
+import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
+import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
+
+
 
 class OntologyDataAccessService {
 
     private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 20
 
-    BardExternalOntologyFactory externalOntologyFactory
+    ExternalOntologyFactory externalOntologyFactory
 
-    private static final Properties externalOntologyProperites = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
+    private static final Properties externalOntologyProperites = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
 
 
     private static final String ASSAY_DESCRIPTOR = "assay protocol"
