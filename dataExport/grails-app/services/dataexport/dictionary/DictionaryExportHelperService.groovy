@@ -308,7 +308,10 @@ class DictionaryExportHelperService {
             attributes.put('abbreviation', ontology.abbreviation)
         }
         if (ontology.systemUrl) {
-            attributes.put('sourceUrl', ontology.systemUrl)
+            final String itemReference = ontologyItem.getItemReference()
+            final String systemUrl = ontology.getSystemUrl();
+            final String currentSourceUrl = systemUrl + itemReference
+            attributes.put('sourceUrl', currentSourceUrl)
         }
         xml.ontology(attributes) {}
 
