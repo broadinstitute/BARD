@@ -46,10 +46,7 @@ class AssayConstraintUnitSpec extends Specification {
         desc             | valueUnderTest               | valid | errorCode
         'null not valid' | null                         | false | 'nullable'
         'valid value'    | AssayStatus.DRAFT            | true  | null
-        'valid value'    | AssayStatus.WITNESSED        | true  | null
-        'valid value'    | AssayStatus.FINISHED         | true  | null
-        'valid value'    | AssayStatus.MEASURES_DONE    | true  | null
-        'valid value'    | AssayStatus.ANNOTATIONS_DONE | true  | null
+        'valid value'    | AssayStatus.APPROVED         | true  | null
         'valid value'    | AssayStatus.RETIRED          | true  | null
 
     }

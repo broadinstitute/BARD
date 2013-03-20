@@ -27,6 +27,9 @@ class UtilityService {
         if (!domainObject) { //we could not find the element
             throw new NotFoundException("Could not find ${domainObjectType} with ID: ${id}")
         }
+        if(domainObject.readyForExtraction==ReadyForExtraction.NOT_READY){
+            return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_FORBIDDEN, ETag: domainObject.version)
+        }
         if (domainObject.version > clientVersion) { //There is a conflict, supplied version is less than the current version
             return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_CONFLICT, ETag: domainObject.version)
         }

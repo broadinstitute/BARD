@@ -1,5 +1,0 @@
-
-1. Copied from data_mig to data_qa 2013-03-13
-2. ran script XXXX to delete all annotations (projects, assays, experiments), results, measures / measure hierarchies, project-experiments, project-steps
-3. ran database dump / export of data_qa (procedure? file name, storage location?)
-

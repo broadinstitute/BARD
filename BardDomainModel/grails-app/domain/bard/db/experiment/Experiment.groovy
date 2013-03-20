@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.ExperimentStatus
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContextOwner
 import bard.db.project.ProjectExperiment
@@ -14,7 +15,7 @@ class Experiment extends AbstractContextOwner {
     private static final int DESCRIPTION_MAX_SIZE = 1000
 
     String experimentName
-    ExperimentStatus experimentStatus = ExperimentStatus.Pending
+    ExperimentStatus experimentStatus = ExperimentStatus.DRAFT
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     Assay assay
 

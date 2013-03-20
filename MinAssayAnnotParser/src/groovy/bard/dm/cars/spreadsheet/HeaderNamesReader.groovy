@@ -22,6 +22,8 @@ class HeaderNamesReader {
         headerNames.assayCenter = config.carsSpreadsheetHeaders.assayCenter
         headerNames.grantTitle = config.carsSpreadsheetHeaders.grantTitle
         headerNames.assayProvider = config.carsSpreadsheetHeaders.assayProvider
+        headerNames.summaryAid = config.carsSpreadsheetHeaders.summaryAid
+
 
         return headerNames
     }

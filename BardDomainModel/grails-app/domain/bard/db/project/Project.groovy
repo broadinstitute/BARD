@@ -1,5 +1,7 @@
 package bard.db.project
 
+import bard.db.enums.ExperimentStatus
+import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContextOwner
@@ -16,6 +18,7 @@ class Project extends AbstractContextOwner {
     String groupType
     String description
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
+    ProjectStatus projectStatus = ProjectStatus.DRAFT
 
     Date dateCreated
     Date lastUpdated

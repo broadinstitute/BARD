@@ -45,6 +45,7 @@ class ExperimentControllerSpec extends Specification {
         params.experimentName = "name"
         params.description = "desc"
         params.experimentTree = "[]"
+        params.experimentStatus = 'DRAFT'
         controller.save()
 
         then:

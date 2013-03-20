@@ -20,57 +20,84 @@ class AssayContextGroupsBuilder {
     }
 
     List<ContextGroup> build() {
-        List<ContextItemDto> processOrTarget = [new ContextItemDto('2/C', '$/C', AttributeType.Fixed, true, null, null),
-                new ContextItemDto('$/C', '$/D', AttributeType.Fixed, true, null, null)]
+        List<ContextItemDto> biology = [
+                new ContextItemDto('2/C', '$/C', AttributeType.Fixed, true, null, null),
+                new ContextItemDto('$/C', '$/D', AttributeType.Fixed, true, null, null)  //  biology value
+        ]
 
-        List<ContextItemDto> assayFormat = [new ContextItemDto('1/E', '$/E', AttributeType.Fixed), new ContextItemDto('2/F', '$/F', AttributeType.Fixed)]
+        List<ContextItemDto> assayFormat = [
+                new ContextItemDto('1/E', '$/E', AttributeType.Fixed), new ContextItemDto('2/F', '$/F', AttributeType.Fixed)
+        ]
 
         List<ContextItemDto> assayComponent = [
                 new ContextItemDto('2/G', '$/G', AttributeType.Fixed),
-                new ContextItemDto('2/H', '$/H', AttributeType.Fixed),
+                new ContextItemDto('2/H', '$/H', AttributeType.Fixed),        // CID can be here , assay component type
                 new ContextItemDto('2/I', '$/I', AttributeType.Fixed, true, null, null),
                 new ContextItemDto('2/J', '$/J', AttributeType.Fixed, true, null, '$/K'), //concentration + units
 //                new Attribute('2/K', '$/K', AttributeType.Fixed),
                 new ContextItemDto('2/L', '$/L', AttributeType.Fixed, true, null, null),
-                new ContextItemDto('2/M', '$/M', AttributeType.Fixed)]
+                new ContextItemDto('2/M', '$/M', AttributeType.Fixed, true, null, null)      // Species
+        ]
 
-        List<ContextItemDto> assayDetector = [
+        List<ContextItemDto> detectionMethod = [
                 new ContextItemDto('2/O', '$/O', AttributeType.Fixed),
-                new ContextItemDto('$/O', '$/N', AttributeType.Fixed, true, null, null)]
+                new ContextItemDto('$/O', '$/N', AttributeType.Fixed, true, null, null)
+        ]
 
-        List<ContextItemDto> assayDetection = [
+        List<ContextItemDto> detectionMethodType = [
                 new ContextItemDto('2/P', '$/P', AttributeType.Fixed),
-                new ContextItemDto('2/Q', '$/Q', AttributeType.Fixed)]
+                new ContextItemDto('2/Q', '$/Q', AttributeType.Fixed)
+        ]
 
         List<ContextItemDto> assayReadout = [
                 new ContextItemDto('2/R', '$/R', AttributeType.Fixed),
                 new ContextItemDto('2/S', '$/S', AttributeType.Fixed),
-                new ContextItemDto('2/T', '$/T', AttributeType.Fixed)]
+                new ContextItemDto('2/T', '$/T', AttributeType.Fixed)
+        ]
 
-        List<ContextItemDto> assayFootprint = [new ContextItemDto('2/U', '$/U', AttributeType.Fixed)]
+        List<ContextItemDto> assayFootprint = [
+                new ContextItemDto('2/U', '$/U', AttributeType.Fixed)
+        ]
 
-        List<ContextItemDto> assayExcitation = [
+        List<ContextItemDto> measurementWavelength = [
                 new ContextItemDto('2/V', '$/V', AttributeType.Fixed, true, null,'2/BI'),//The wavelength units are fixed in cell 2/BI
-                new ContextItemDto('2/W', '$/W', AttributeType.Fixed, true, null,'2/BI')]//The wavelength units are fixed in cell 2/BI
+                new ContextItemDto('2/W', '$/W', AttributeType.Fixed, true, null,'2/BI')
+        ]//The wavelength units are fixed in cell 2/BI
 
-        List<ContextItemDto> assayAbsorbance = [new ContextItemDto('2/X', '$/X', AttributeType.Fixed)]
+        List<ContextItemDto> absorbanceWavelength = [
+                new ContextItemDto('2/X', '$/X', AttributeType.Fixed)
+        ]
 
-        List<ContextItemDto> resultActivityThreshold = [new ContextItemDto('2/AA', '$/AA', AttributeType.Fixed, false, '$/Z', null)]//the qualifier belongs to the Activity-threshold attribute
+        List<ContextItemDto> activityThreshold = [
+                new ContextItemDto('2/Y', '$/Y', AttributeType.Fixed),            //result type
+                new ContextItemDto('2/AA', '$/AA', AttributeType.Free, false, '$/Z', null), //activity threshold
+                new ContextItemDto('2/AB', '$/AB', AttributeType.Fixed)                     //unit
+        ]//the qualifier belongs to the Activity-threshold attribute
 
-        List<ContextItemDto> resultDetails = [new ContextItemDto('2/AH', '$/AH', AttributeType.Free),
-                new ContextItemDto('2/AI', '$/AI', AttributeType.Free)]
+        List<ContextItemDto> numberOfReplicates = [
+                new ContextItemDto('2/AH', '$/AH', AttributeType.Free),       //concentration-point number
+                new ContextItemDto('2/AI', '$/AI', AttributeType.Free)        //number of replicates
+        ]
 
-        List<ContextGroup> spreadsheetAssayContextGroups = [new ContextGroup(name: 'processOrTarget', contextItemDtoList: processOrTarget),
-                new ContextGroup(name: 'assayFormat', contextItemDtoList: assayFormat),
-                new ContextGroup(name: 'assayComponent', contextItemDtoList: assayComponent),
-                new ContextGroup(name: 'assayDetection', contextItemDtoList: assayDetection),
-                new ContextGroup(name: 'assayReadout', contextItemDtoList: assayReadout),
-                new ContextGroup(name: 'assayDetector', contextItemDtoList: assayDetector),
-                new ContextGroup(name: 'assayFootprint', contextItemDtoList: assayFootprint),
-                new ContextGroup(name: 'assayExcitation', contextItemDtoList: assayExcitation),
-                new ContextGroup(name: 'assayAbsorbance', contextItemDtoList: assayAbsorbance),
-                new ContextGroup(name: 'resultActivityThreshold', contextItemDtoList: resultActivityThreshold),
-                new ContextGroup(name: 'resultDetails', contextItemDtoList: resultDetails)]
+        List<ContextItemDto> projectLeadName = [                             //project lead name
+                new ContextItemDto('2/AD', '$/AD', AttributeType.Free)
+        ]
+
+        List<ContextGroup> spreadsheetAssayContextGroups = [
+                new ContextGroup(name: 'biology', contextItemDtoList: biology),
+                new ContextGroup(name: 'assay format', contextItemDtoList: assayFormat),
+                new ContextGroup(name: 'assay component', contextItemDtoList: assayComponent),
+                new ContextGroup(name: 'detection method type', contextItemDtoList: detectionMethodType),
+                new ContextGroup(name: 'assay readout', contextItemDtoList: assayReadout),
+                new ContextGroup(name: 'detection method', contextItemDtoList: detectionMethod),
+                new ContextGroup(name: 'assay footprint', contextItemDtoList: assayFootprint),
+                new ContextGroup(name: 'measurement wavelength', contextItemDtoList: measurementWavelength),
+                new ContextGroup(name: 'absorbance wavelength', contextItemDtoList: absorbanceWavelength),
+                new ContextGroup(name: 'activity threshold', contextItemDtoList: activityThreshold),
+                new ContextGroup(name: 'number of replicates', contextItemDtoList: numberOfReplicates),
+                new ContextGroup(name: 'project lead name', contextItemDtoList: projectLeadName)
+        ]
+
 
         return spreadsheetAssayContextGroups
     }

@@ -23,19 +23,19 @@
 
 <label class="radio">
   <input type="radio" name="valueTypeOption" value="Fixed" checked>
-  <strong>Fixed</strong> - Every experiment always has the same value for the attribute "cell line equals HeLa"
+  <strong>Fixed</strong> - Every experiment always has the same value for the attribute "cell line equals HeLa".  These attributes define the unique quality of the assays.
 </label>
 <label class="radio">
   <input type="radio" name="valueTypeOption" value="List">
-  <strong>List</strong> - Every experiment has one of the entries in the list for the attribute "cell line one of HeLa, CHO, MM"
+  <strong>List</strong> - Every experiment has one of the entries in the list for the attribute "cell line one of HeLa, CHO, MM" or ".001, .003 , .01, .03 uM, .1, ..." uM
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="Range" disabled>
+  <input type="radio" name="valueTypeOption" value="Range">
   <strong>Range</strong> - Every experiment has a value within the provided range for the attribute "cell density between 10 and 100 cells / well"
 </label>
 <label class="radio">
-  <input type="radio" name="valueTypeOption" value="Free" disabled>
-  <strong>Free</strong> - Every experiment must provide a value for the attribute, but there is no restriction on that value "cell density specified by experiment"
+  <input type="radio" name="valueTypeOption" value="Free">
+  <strong>Free</strong> - Every experiment must provide a value for the attribute, but there is no restriction on that value. Generally used for numbers, but sometimes for text (e.g. cell names) "cell density specified by experiment"
 </label>
 
 <input type="hidden" id="pageNumber" name="pageNumber" value="${ page }"/>
