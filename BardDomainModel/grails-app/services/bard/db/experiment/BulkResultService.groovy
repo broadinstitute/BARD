@@ -203,10 +203,11 @@ class BulkResultService {
         }
     }
 
-    private void assignIdsToResults(Connection connection, List<Result> results) {
+    private void assignIdsToResults(Connection connection, Collection<Result> results) {
         List<Long> ids = allocateIds(connection, "RESULT_ID_SEQ", results.size())
-        for(int i=0;i<results.size();i++) {
-            results.get(i).id = ids.get(i)
+        List<Result> ordered = new ArrayList(results);
+        for(int i=0;i<ordered.size();i++) {
+            ordered.get(i).id = ids.get(i)
         }
     }
 

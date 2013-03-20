@@ -17,4 +17,5 @@ class HeaderNames {
     String assayCenter
     String grantTitle
     String assayProvider
+    String summaryAid
 }

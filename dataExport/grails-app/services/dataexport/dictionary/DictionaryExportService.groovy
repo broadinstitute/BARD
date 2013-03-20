@@ -38,6 +38,7 @@ class DictionaryExportService {
      */
     public BardHttpResponse update(final Long id, final Long clientVersion, final ReadyForExtraction latestStatus) {
         final Element element = Element.findById(id)
+
         return utilityService.update(element, id, clientVersion, latestStatus, "Element")
     }
     /**

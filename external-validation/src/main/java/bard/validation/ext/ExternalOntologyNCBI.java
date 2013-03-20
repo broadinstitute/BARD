@@ -19,7 +19,7 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	private EUtilsWeb eutils;
 	private Transformer transformer;
 	private static Set<String> databases = new HashSet();
-	private int chunkSize = 100_000;
+	private int chunkSize = 100000;
 
 	static {
 		try {
@@ -32,7 +32,7 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param database
 	 *            - valid string for NCBI Entrez database e.g. protein, gene.
 	 *            See: http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi

@@ -30,6 +30,11 @@
                 <span class="error"><g:fieldError bean="${experiment}" field="description"/></span>
             </dd>
 
+                <dt><g:message code="experiment.experimentStatus.label" default="Fix i18n"/>:</dt>
+                <dd><g:select id="experimentStatus" name="experimentStatus"
+                              from="${bard.db.enums.ExperimentStatus.values()}"
+                              value="${experiment?.experimentStatus}" /></dd>
+
                 <dt>Hold until date</dt><dd>
                 <input type="text" class="input-small date-selection" name="holdUntilDate"
                        value="${fieldValue(bean: experiment, field: "holdUntilDate")}"/>

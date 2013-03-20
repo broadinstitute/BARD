@@ -8,7 +8,6 @@ grails.project.source.level = 1.6
 grails.server.port.http = 8081
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-def gebVersion = "0.9.0-RC-1"
 def seleniumVersion = "2.25.0"
 
 grails.project.dependency.resolution = {
@@ -37,7 +36,7 @@ grails.project.dependency.resolution = {
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
-        compile "bard:external-validation:20130305.2"
+        compile "bard:external-validation:20130319"
 
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
@@ -56,8 +55,8 @@ grails.project.dependency.resolution = {
         // test scope
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         test "org.objenesis:objenesis:1.3" // used by spock for Mocking object that lack no args constructor
-        test "org.grails.plugins:geb:$gebVersion"
-        test "org.gebish:geb-spock:$gebVersion"
+
+        test "org.gebish:geb-spock:0.9.0-RC-1"
         test("org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion") {
             excludes "xml-apis"
         }
@@ -103,7 +102,7 @@ grails.project.dependency.resolution = {
         runtime ":resources:1.1.6"
 
         // test scope
-        test ":geb:$gebVersion"
+        test ":geb:0.7.2"
         test ":remote-control:1.4"
         test(":spock:0.7") {
             exclude "spock-grails-support"

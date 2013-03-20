@@ -33,4 +33,6 @@ beans = {
     userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService){
         crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
     }
+
+    externalOntologyFactory(bard.validation.ext.BardExternalOntologyFactory)
 }

@@ -5,7 +5,6 @@ import org.apache.commons.lang.StringUtils
 import org.apache.commons.validator.UrlValidator
 import org.springframework.validation.Errors
 
-
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin

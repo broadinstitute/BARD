@@ -9,10 +9,7 @@ package bard.db.enums
  */
 public enum AssayStatus implements IEnumUserType {
     DRAFT("Draft"),
-    WITNESSED("Witnessed"),
-    FINISHED("Finished"),
-    MEASURES_DONE("Measures Done"),
-    ANNOTATIONS_DONE("Annotations Done"),
+    APPROVED("Approved"),
     RETIRED("Retired")
 
     final String id;

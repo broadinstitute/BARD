@@ -1,9 +1,27 @@
 package bard.db.dictionary
 
+import bard.validation.ext.ExternalItem
+import bard.validation.ext.ExternalOntologyAPI
+import bard.validation.ext.ExternalOntologyException
+import bard.validation.ext.ExternalOntologyFactory
+import groovy.transform.TypeChecked
 import org.hibernate.Query
 import org.hibernate.Session
+import org.springframework.util.Assert
+
+import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
+import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
+
+
 
 class OntologyDataAccessService {
+
+    private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 20
+
+    ExternalOntologyFactory externalOntologyFactory
+
+    private static final Properties externalOntologyProperites = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
+
 
     private static final String ASSAY_DESCRIPTOR = "assay protocol"
 
@@ -145,22 +163,109 @@ class OntologyDataAccessService {
         }
         return results
     }
-	
-	public List<Element> getAllUnits(){
-		List<Element> results = []
-		Element.withSession { Session session ->
-			Query query = session.createSQLQuery("""
-                select e.* 
-				from unit_tree ut, element e 
+    /**
+     * Not all external ontologies have a supported search functionality. This allows checking given an externalUrl.
+     *
+     * @param externalUrl
+     * @return true if an ExternalOntologyAPI implementation is found for the given externalUrl
+     */
+    @TypeChecked
+    boolean externalOntologyHasIntegratedSearch(String externalUrl) {
+        boolean hasSupport = false
+        try {
+            if (externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)) {
+                hasSupport = true
+            }
+        }
+        catch (ExternalOntologyException e) {
+            log.error("Exception when calling getExternalOntologyAPI with externalUrl: $externalUrl", e)
+        }
+        hasSupport
+    }
+
+    /**
+     * Given a externalUrl utilize the ExternalOntologyFactory and the underlying externalOntologyAPI implementations
+     * to look for ExternalItems containing that term
+     *
+     * This uses a default page size of 20 to limit the number of matches returned
+     *
+     * @param externalUrl cannot be blank
+     * @param term cannot be blank
+     * @return a List<ExternalItem> empty if no matches, items are sorted case-insensitive by display
+     */
+    @TypeChecked
+    List<ExternalItem> findExternalItemsByTerm(String externalUrl, String term) {
+        findExternalItemsByTerm(externalUrl, term, DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE)
+    }
+
+    /**
+     * Given a externalUrl utilize the ExternalOntologyFactory and the underlying externalOntologyAPI implementations
+     * to look for ExternalItems containing that term
+     *
+     * @param externalUrl cannot be blank
+     * @param term cannot be blank
+     * @param limit
+     * @return a List<ExternalItem> empty if no matches, items are sorted case-insensitive by display
+     * @throws ExternalOntologyException
+     */
+    @TypeChecked
+    List<ExternalItem> findExternalItemsByTerm(String externalUrl, String term, int limit) throws ExternalOntologyException {
+        Assert.hasText(externalUrl, "externalUrl cannot be blank")
+        Assert.hasText(term, "term cannot be blank")
+        final List<ExternalItem> externalItems = []
+        try {
+            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
+            if (externalOntology) {
+                externalItems.addAll(externalOntology.findMatching(term, limit))
+            }
+        } catch (ExternalOntologyException e) {
+            log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $term", e)
+            throw e
+        }
+        externalItems.sort(true) { ExternalItem a, ExternalItem b -> a.display?.toLowerCase() <=> b.display?.toLowerCase() }
+    }
+
+    /**
+     * Given a externalUrl utilize the ExternalOntologyFactory and the underlying externalOntologyAPI implementations
+     * to look for an ExternalItem by it's id
+     * @param externalUrl cannot be blank
+     * @param id cannot be blank
+     * @return an ExternalItem or null if no match is found
+     * @throws ExternalOntologyException
+     */
+    @TypeChecked
+    ExternalItem findExternalItemById(String externalUrl, String id) throws ExternalOntologyException {
+        Assert.hasText(externalUrl, "externalUrl cannot be blank")
+        Assert.hasText(id, "id cannot be blank")
+        ExternalItem externalItem
+
+        try {
+            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
+            if (externalOntology) {
+                externalItem = externalOntology.findById(id)
+            }
+        } catch (ExternalOntologyException e) {
+            log.error("Exception when calling externalOntology.findMatching() with externalUrl: $externalUrl term: $id", e)
+            throw e
+        }
+        externalItem
+    }
+
+    public List<Element> getAllUnits() {
+        List<Element> results = []
+        Element.withSession { Session session ->
+            Query query = session.createSQLQuery("""
+                select e.*
+				from unit_tree ut, element e
 				where ut.unit_id = e.element_id
 				order by lower(ut.parent_node_id)
             """)
-			query.addEntity(Element)
-			query.setReadOnly(true)
-			results = query.list()
-		}
-		return results
-	}
+            query.addEntity(Element)
+            query.setReadOnly(true)
+            results = query.list()
+        }
+        return results
+    }
 
     public List<UnitTree> getBaseUnits(Long elementId, Long toUnitId) {
         List<Long> resultsOne = UnitConversion.executeQuery("select uc.fromUnit.id from UnitConversion uc where toUnit.id = ?", toUnitId)
@@ -169,7 +274,7 @@ class OntologyDataAccessService {
         List<Long> unionAll = resultsOne
         String parametizedString = getInParametizedQueryString(unionAll);
         List<UnitTree> unitResults = UnitTree.executeQuery("from UnitTree ut where ut.element.id in (" + parametizedString + ")", unionAll)
-		return unitResults
+        return unitResults
 //        println "# of Unit Results: " + unitResults.size()
 //        Map<Long, String> unitsMap = [:];
 //        for (UnitTree u in unitResults) {
@@ -189,4 +294,5 @@ class OntologyDataAccessService {
         }
         return parametizedString
     }
+
 }

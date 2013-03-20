@@ -15,10 +15,12 @@ $(document).ready(function () {
                 var instanceId = $("#projectId").text();
                 var projectName = $("#projectName").val();
                 var description = $("#description").val();
+                var projectStatus = $("#projectStatus").val();
                 if (!validateRequiredField(projectName, "projectNameNameValidation")) return false;
-                var inputdata = {'instanceId':instanceId, 'projectName':projectName, 'description':description};
+                var inputdata = {'instanceId':instanceId, 'projectName':projectName, 'description':description, 'projectStatus':projectStatus};
                 $.ajax
                     ({
+                        type:"POST",
                         url:"../editSummary",
                         data:inputdata,
                         cache:false,
