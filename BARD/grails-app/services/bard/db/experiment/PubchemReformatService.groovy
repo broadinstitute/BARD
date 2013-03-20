@@ -286,11 +286,11 @@ class PubchemReformatService {
     public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
         List dynamicColumns = constructCapColumns(experiment)
 
-        Map expItems = experiment.experimentContexts.collectMany { ExperimentContext context ->
-            context.experimentContextItems.collectEntries { ExperimentContextItem item ->
+        Map expItems = (experiment.experimentContexts.findAll { ExperimentContext context -> } .collectMany { ExperimentContext context ->
+            context.experimentContextItems.collect { ExperimentContextItem item ->
                 [item.attributeElement.label, item.valueDisplay]
             }
-        }
+        }).collectEntries()
 
         CapCsvWriter writer = new CapCsvWriter(experiment.id, expItems, dynamicColumns, new FileWriter(outputFilename))
         CSVReader reader = new CSVReader(new FileReader(pubchemFilename))
