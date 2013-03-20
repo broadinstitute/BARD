@@ -1,7 +1,7 @@
 <g:if test="${supportsExternalOntologyLookup}">
     <p>An integrated search facility has been built to lookup ${attributeLabel} values, please enter an identifier or some text and select a value.
     Alternatively, you can search directly on the <a
-            href="${attributeExternalUrl}">${attributeExternalUrl}</a> site and manually enter an external value id and description.
+            href="${attributeExternalUrl}" target="external_ontology_site">${attributeExternalUrl}</a> site and manually enter an external value id and description.
     </p>
 
     <div class="row-fluid">
@@ -15,7 +15,7 @@
     <p>There is currently no integrated search for the ${attributeLabel} external ontology.</p>
 
     <p>Please search directly on the <a
-            href="${attributeExternalUrl}">${attributeExternalUrl}</a> site and manually enter an external value id and a text description below.
+            href="${attributeExternalUrl}" target="external_ontology_site">${attributeExternalUrl}</a> site and manually enter an external value id and a text description below.
     </p>
 </g:else>
 <br/>
