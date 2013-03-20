@@ -1,9 +1,7 @@
 package bardqueryapi.experiment
 
 import bard.core.adapter.CompoundAdapter
-import bard.core.util.ExperimentalValueUtil
-import org.apache.commons.lang3.tuple.ImmutablePair
-import org.apache.commons.lang3.tuple.Pair
+
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
@@ -13,20 +11,20 @@ class ExperimentBuilder {
 
     List<WebQueryValue> buildHeader(List<String> priorityDisplays, List<String> dictionaryIds, final boolean hasPlot, final boolean hasChildElements) {
         List<WebQueryValue> columnHeaders = []
-        columnHeaders.add(new StringValue("SID"))
-        columnHeaders.add(new StringValue("CID"))
-        columnHeaders.add(new StringValue("Structure"))
-        columnHeaders.add(new StringValue("Outcome"))
-        columnHeaders.add(new MapValue([(new StringValue("priorityDisplays")): priorityDisplays,
-                (new StringValue("dictionaryIds")): dictionaryIds]))
-        columnHeaders.add(new StringValue("Experiment Descriptors"))
+        columnHeaders.add(new StringValue(value: "SID"))
+        columnHeaders.add(new StringValue(value: "CID"))
+        columnHeaders.add(new StringValue(value: "Structure"))
+        columnHeaders.add(new StringValue(value: "Outcome"))
+        columnHeaders.add(new MapValue(value: [(new StringValue(value: "priorityDisplays")): priorityDisplays,
+                (new StringValue(value: "dictionaryIds")): dictionaryIds]))
+        columnHeaders.add(new StringValue(value: "Experiment Descriptors"))
         if (hasChildElements) {
-            columnHeaders.add(new StringValue("Child Elements"))
+            columnHeaders.add(new StringValue(value: "Child Elements"))
         }
         if (hasPlot) {
-            columnHeaders.add(new StringValue("Concentration Response Series"))
-            columnHeaders.add(new StringValue("Concentration Response Plot"))
-            columnHeaders.add(new StringValue("Misc Data"))
+            columnHeaders.add(new StringValue(value: "Concentration Response Series"))
+            columnHeaders.add(new StringValue(value: "Concentration Response Plot"))
+            columnHeaders.add(new StringValue(value: "Misc Data"))
         }
         return columnHeaders
     }
@@ -51,34 +49,36 @@ class ExperimentBuilder {
                                final Map<Long, CompoundAdapter> compoundAdapterMap) {
 
         //A row is a list of table cells, each implements WebQueryValue.
-        ListValue rowData = new ListValue()
+        List<WebQueryValue> rowData = []
 
+        //SID
         Long sid = activity.sid
         StringValue sidValue = new StringValue(value: sid.toString())
-        rowData.value.add(sidValue)
+        rowData.add(sidValue)
 
-
+        //CID
         Long cid = activity.cid
-        StringValue cidValue = new StructureValue(value: cid.toString())
-        rowData.value.add(cidValue)
+        StringValue cidValue = new StringValue(value: cid.toString())
+        rowData.add(cidValue)
 
+        //Structure image
         final CompoundAdapter compoundAdapter = compoundAdapterMap.get(cid)
         StructureValue structureValue =
             new StructureValue(
-                    cid: cid.toString(),
-                    sid: sid.toString(),
+                    cid: cid,
+                    sid: sid,
                     smiles: compoundAdapter.structureSMILES,
                     name: compoundAdapter.name,
                     numActive: compoundAdapter.numberOfActiveAssays,
                     numAssays: compoundAdapter.numberOfAssays
             )
 
-        rowData.value.add(structureValue)
+        rowData.add(structureValue)
 
         //Get the result-set.
         ResultData resultData = activity?.resultData
-        String outcome = StringValue(value: resultData.outcome)
-        rowData.value.add(outcome)
+            StringValue outcome = new StringValue(value: resultData.outcome)
+        rowData.add(outcome)
 
         //Convert the experimental data to result types (curves, key/value pairs, etc.)
         List<WebQueryValue> experimentValues = CompoundBioActivitySummaryBuilder.convertExperimentResultsToValues(activity)
@@ -91,7 +91,7 @@ class ExperimentBuilder {
         }
         if (experimentValues) {
             ListValue listValue = new ListValue(value: experimentValues)
-            rowData.value.add(listValue)
+            rowData.add(listValue)
         }
 
         //Add all rootElements from the JsonResponse
@@ -104,21 +104,21 @@ class ExperimentBuilder {
                 rootElements.add(new StringValue(value: rootElement.toDisplay()))
             }
         }
-        rowData.value.add(rootElements)
+        rowData.add(new ListValue(value: rootElements))
 
         //Add all childElements of the priorityElements, if any.
-        ListValue childElements = new ListValue()
+        List<WebQueryValue> childElements = []
         for (PriorityElement priorityElement in resultData.priorityElements) {
             if (priorityElement?.hasChildElements()) {
                 for (ActivityData activityData : priorityElement.childElements) {
                     if (activityData.toDisplay()) {
-                        childElements.value.add(new StringValue(activityData.toDisplay()))
+                        childElements << new StringValue(value: activityData.toDisplay())
                     }
                 }
             }
         }
         if (childElements) {
-            rowData.value.add(childElements)
+            rowData.add(new ListValue(value: childElements))
         }
 
 
@@ -140,7 +140,7 @@ class ExperimentBuilder {
 //    }
 
     void addRows(final List<Activity> activities,
-                 final WebQueryTableModel webQueryTableModel,
+                 final TableModel tableModel,
                  final NormalizeAxis normalizeYAxis,
                  final Double yNormMin,
                  final Double yNormMax,
@@ -148,7 +148,7 @@ class ExperimentBuilder {
                  final Map<Long, CompoundAdapter> compoundAdapterMap) {
         for (Activity activity : activities) {
             final List<WebQueryValueModel> rowData = addRow(activity, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
-            webQueryTableModel.addRowData(rowData)
+            tableModel.addRowData(rowData)
         }
     }
 

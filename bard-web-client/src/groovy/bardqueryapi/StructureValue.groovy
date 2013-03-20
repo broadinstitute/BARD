@@ -13,6 +13,15 @@ class StructureValue implements WebQueryValue {
         return this.getClass().getName()
     }
 
+    Map getValue() {
+        return [sid: this.sid,
+                cid: this.cid,
+                smiles: this.smiles,
+                name: this.name,
+                numberOfActiveAssays: this.numActive,
+                numberOfAssays: numAssays]
+    }
+
     Long cid
     String smiles
     Long sid

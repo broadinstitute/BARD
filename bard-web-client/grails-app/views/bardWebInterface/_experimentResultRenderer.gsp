@@ -36,7 +36,7 @@
                                     sid="${cell.getValue().sid}"
                                     cid="${cell.getValue().cid}"
                                     smiles="${cell.getValue().smiles}"
-                                    name="${bardqueryapi.JavaScriptUtility.cleanup(cell.getValue().cname)}"
+                                    name="${bardqueryapi.JavaScriptUtility.cleanup(cell.getValue().name)}"
                                     numActive="${cell.getValue().numberOfActiveAssays}"
                                     numAssays="${cell.getValue().numberOfAssays}"
                                     imageWidth="180"
@@ -52,7 +52,12 @@
                         <td>
                             <g:set var="results" value="${cell.value}"/>
                             <g:set var="resultSize" value="${results?.size()}"/>
-                            <g:render template="listValueRenderer" model="[resultSize: resultSize, results: results]"/>
+                            <table>
+                                <tbody>
+                                <g:render template="listValueRenderer"
+                                          model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout]"/>
+                                </tbody>
+                            </table>
                         </td>
                     </g:elseif>
                 %{--At the current state, the only MapValue use is for an 'experimentBox', so the map's only key is an experiment.--}%
@@ -74,8 +79,10 @@
                                     </th>
                                 </tr>
                                 </thead>
+                                <tbody>
                                 <g:render template="listValueRenderer"
                                           model="[resultSize: resultSize, results: results]"/>
+                                </tbody>
                             </table>
                         </td>
                     </g:elseif>

@@ -15,5 +15,5 @@ class ListValue implements WebQueryValue {
         return this.value
     }
 
-    List<WebQueryValue> value
+    List<WebQueryValue> value = []
 }

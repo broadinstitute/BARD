@@ -13,5 +13,5 @@ class MapValue implements WebQueryValue {
         return this.value
     }
 
-    Map<WebQueryValue, Object> value
+    Map<WebQueryValue, Object> value = [:]
 }
