@@ -1,9 +1,10 @@
 <div class="row-fluid">
-    <table class="table table-condensed">
+    <g:set var="columnWidth" value="${(100 / tableModel.columnHeaders.size()) as int}"/>
+    <table align="center" class="table table-condensed">
         <thead>
         <tr>
             <g:each in="${tableModel.columnHeaders}" var="header" status="i">
-                <th style="width: ${!i ? '200px;' : 'auto;'}">
+                <th align="center" style="width: ${columnWidth}%">
                     ${header.value}
                 </th>
             </g:each>
@@ -13,25 +14,25 @@
 
     <g:each in="${tableModel.data}" var="row" status="i">
     %{--Each row is a separate table--}%
-        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px; word-wrap: break-word;">
+        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px; word-wrap: break-word;" align="center">
             <tbody>
             <tr>
                 <g:each in="${row}" var="cell" status="j">
                 %{--Assay description--}%
                     <g:if test="${cell instanceof bardqueryapi.AssayValue}">
-                        <td style=" width: 200px;">
+                        <td align="center" style="width: ${columnWidth}%">
                             <g:assayDescription name="${cell.value.name}" adid="${cell.value.capAssayId}"/>
                         </td>
                     </g:if>
                 %{--Project description--}%
                     <g:elseif test="${cell instanceof bardqueryapi.ProjectValue}">
-                        <td>
+                        <td align="center" style="width: ${columnWidth}%">
                             <g:projectDescription name="${cell.value.name}" pid="${cell.value.capProjectId}"/>
                         </td>
                     </g:elseif>
                 %{--Structure rendering--}%
                     <g:elseif test="${cell instanceof bardqueryapi.StructureValue}">
-                        <td style="min-width: 180px;">
+                        <td align="center" style="width: ${columnWidth}%">
                             <g:compoundOptions
                                     sid="${cell.getValue().sid}"
                                     cid="${cell.getValue().cid}"
@@ -44,15 +45,15 @@
                         </td>
                     </g:elseif>
                     <g:elseif test="${cell instanceof bardqueryapi.StringValue}">
-                        <td>
+                        <td align="center" style="width: ${columnWidth}%">
                             <p>${cell.value}</p>
                         </td>
                     </g:elseif>
                     <g:elseif test="${cell instanceof bardqueryapi.ListValue}">
-                        <td>
+                        <td align="center" style="width: ${columnWidth}%">
                             <g:set var="results" value="${cell.value}"/>
                             <g:set var="resultSize" value="${results?.size()}"/>
-                            <table>
+                            <table align="center">
                                 <tbody>
                                 <g:render template="listValueRenderer"
                                           model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout]"/>
@@ -62,8 +63,8 @@
                     </g:elseif>
                 %{--At the current state, the only MapValue use is for an 'experimentBox', so the map's only key is an experiment.--}%
                     <g:elseif test="${cell instanceof bardqueryapi.MapValue}">
-                        <td>
-                            <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;">
+                        <td align="center" style="width: ${columnWidth}%">
+                            <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;" align="center">
                                 %{--An experiment-box is a box with one experiment key and a list of result types (curves, single-points, etc.)--}%
                                 `                            <g:set var="experimentValue"
                                                                     value="${cell.value.keySet().first()}"/>
@@ -73,7 +74,7 @@
                                 <thead>
                                 <tr>
                                     %{--First row is the experiment description--}%
-                                    <th colspan="${resultSize}" style="max-width: 500px;">
+                                    <th align="center" colspan="${resultSize}" style="width: ${columnWidth}%">
                                         <g:experimentDescription name="${experiment.name}"
                                                                  bardExperimentId="${experiment.capExptId}"/>
                                     </th>
@@ -81,7 +82,7 @@
                                 </thead>
                                 <tbody>
                                 <g:render template="listValueRenderer"
-                                          model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout]"/>
+                                          model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout, columnWidth: columnWidth]"/>
                                 </tbody>
                             </table>
                         </td>

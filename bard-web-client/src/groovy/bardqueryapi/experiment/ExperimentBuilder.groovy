@@ -15,17 +15,18 @@ class ExperimentBuilder {
         columnHeaders.add(new StringValue(value: "CID"))
         columnHeaders.add(new StringValue(value: "Structure"))
         columnHeaders.add(new StringValue(value: "Outcome"))
-        columnHeaders.add(new MapValue(value: [(new StringValue(value: "priorityDisplays")): priorityDisplays,
-                (new StringValue(value: "dictionaryIds")): dictionaryIds]))
+        columnHeaders.add(new StringValue(value: "Results"))
+//        columnHeaders.add(new MapValue(value: [(new StringValue(value: "priorityDisplays")): priorityDisplays,
+//                (new StringValue(value: "dictionaryIds")): dictionaryIds]))
         columnHeaders.add(new StringValue(value: "Experiment Descriptors"))
         if (hasChildElements) {
             columnHeaders.add(new StringValue(value: "Child Elements"))
         }
-        if (hasPlot) {
-            columnHeaders.add(new StringValue(value: "Concentration Response Series"))
-            columnHeaders.add(new StringValue(value: "Concentration Response Plot"))
-            columnHeaders.add(new StringValue(value: "Misc Data"))
-        }
+//        if (hasPlot) {
+//            columnHeaders.add(new StringValue(value: "Concentration Response Series"))
+//            columnHeaders.add(new StringValue(value: "Concentration Response Plot"))
+//            columnHeaders.add(new StringValue(value: "Misc Data"))
+//        }
         return columnHeaders
     }
 
@@ -75,7 +76,7 @@ class ExperimentBuilder {
 
         rowData.add(structureValue)
 
-        //Get the result-set.
+        //Outcome
         ResultData resultData = activity?.resultData
             StringValue outcome = new StringValue(value: resultData.outcome)
         rowData.add(outcome)
