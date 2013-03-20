@@ -60,18 +60,21 @@ class PubchemReformatService {
         int columnCount;
         Map<String, Integer> nameToIndex = [:];
 
-        CapCsvWriter(Long experimentId, List<String> dynamicColumns, Writer writer) {
-            this.writer = new CSVWriter(writer)
+        CapCsvWriter(Long experimentId, Map<String,String> experimentContextItems, List<String> dynamicColumns, Writer rawWriter) {
+            writer = new CSVWriter(rawWriter)
             columnCount = dynamicColumns.size()
             for(int i=0;i<columnCount;i++) {
                 nameToIndex.put(dynamicColumns[i], i)
             }
 
-            this.writer.writeNext(["","Experiment ID",experimentId.toString()].toArray(new String[0]))
-            this.writer.writeNext([].toArray(new String[0]))
+            writer.writeNext(["","Experiment ID",experimentId.toString()].toArray(new String[0]))
+            experimentContextItems.each { k, v ->
+                writer.writeNext(["",k,v].toArray(new String[0]))
+            }
+            writer.writeNext([].toArray(new String[0]))
             List header = ["Row #","Substance","Replicate #","Parent Row #"]
             header.addAll(dynamicColumns)
-            this.writer.writeNext(header.toArray(new String[0]))
+            writer.writeNext(header.toArray(new String[0]))
         }
 
         int addRow(Long substanceId, Integer parentRow, String replicate, Map<String,String> row) {
@@ -283,7 +286,13 @@ class PubchemReformatService {
     public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
         List dynamicColumns = constructCapColumns(experiment)
 
-        CapCsvWriter writer = new CapCsvWriter(experiment.id, dynamicColumns, new FileWriter(outputFilename))
+        Map expItems = experiment.experimentContexts.collectMany { ExperimentContext context ->
+            context.experimentContextItems.collectEntries { ExperimentContextItem item ->
+                [item.attributeElement.label, item.valueDisplay]
+            }
+        }
+
+        CapCsvWriter writer = new CapCsvWriter(experiment.id, expItems, dynamicColumns, new FileWriter(outputFilename))
         CSVReader reader = new CSVReader(new FileReader(pubchemFilename))
         List<String> header = reader.readNext()
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
