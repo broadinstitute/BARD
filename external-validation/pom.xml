@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bard</groupId>
 	<artifactId>external-validation</artifactId>
-	<version>20130319</version>
+	<version>20130320</version>
 	<distributionManagement>
 		<repository>
 			<id>bard-repo.broadinstitute.org</id>
