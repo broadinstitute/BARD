@@ -19,7 +19,6 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
     }
 
     ActivityConcentrationMap value
-    String title
     CurveFitParameters curveFitParameters
     Double slope
     String responseUnit
@@ -28,4 +27,5 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
     Double yNormMax
     String yAxisLabel
     String xAxisLabel
+    PairValue title
 }

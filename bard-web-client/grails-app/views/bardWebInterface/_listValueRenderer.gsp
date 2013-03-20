@@ -32,7 +32,12 @@
                                     curveFitParameters="${result.curveFitParameters}"
                                     slope="${result.slope}"
                                     responseUnit="${result.responseUnit}"
-                                    testConcentrationUnit="${result.testConcentrationUnit}"/>
+                                    testConcentrationUnit="${result.testConcentrationUnit}"
+                                    yNormMin="${result.yNormMin}"
+                                    yNormMax="${result.yNormMax}"
+                                    yAxisLabel="${result.yAxisLabel}"
+                                    xAxisLabel="${result.xAxisLabel}"
+                                    title="${result.title}"/>
                         </td>
                         <td align="center">
                             <g:curveValues

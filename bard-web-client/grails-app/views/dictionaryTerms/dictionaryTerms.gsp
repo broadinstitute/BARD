@@ -20,6 +20,7 @@
             <caption>Dictionary Terms and Description</caption>
             <thead>
             <tr>
+                <th>ID</th>
                 <th>Term</th>
                 <th class="sorter-false">Description</th>
             </tr>
@@ -28,6 +29,9 @@
             <g:each in="${capDictionary?.nodes}" var="dictionaryElement">
                 <g:if test="${dictionaryElement.description}">
                     <tr>
+                        <td>
+                            ${dictionaryElement.elementId}
+                        </td>
                         <td>
                             <a name="${dictionaryElement.elementId}"></a>
                             ${dictionaryElement.label}

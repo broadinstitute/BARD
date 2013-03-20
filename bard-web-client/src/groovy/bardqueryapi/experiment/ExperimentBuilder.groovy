@@ -81,7 +81,7 @@ class ExperimentBuilder {
         rowData.add(outcome)
 
         //Convert the experimental data to result types (curves, key/value pairs, etc.)
-        List<WebQueryValue> experimentValues = CompoundBioActivitySummaryBuilder.convertExperimentResultsToValues(activity)
+        List<WebQueryValue> experimentValues = CompoundBioActivitySummaryBuilder.convertExperimentResultsToValues(activity, yNormMin, yNormMax)
         //if the result type is a concentration series, we want to add the normalization values to each curve.
         experimentValues.findAll({WebQueryValue experimentResult ->
             experimentResult instanceof ConcentrationResponseSeriesValue

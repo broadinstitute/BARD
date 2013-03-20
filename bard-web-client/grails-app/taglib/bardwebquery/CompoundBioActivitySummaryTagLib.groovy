@@ -30,19 +30,25 @@ class CompoundBioActivitySummaryTagLib {
                             hillSlope: attrs?.curveFitParameters?.hillCoef,
                             concentrations: attrs.concentrationSeries,
                             activities: attrs.activitySeries,
-                            xAxisLabel: attrs.testConcentrationUnit,
-                            yAxisLabel: attrs.responseUnit,
-//                            yNormMin: yMinimum,
-//                            yNormMax: yMaximum
+                            xAxisLabel: attrs.xAxisLabel,
+                            yAxisLabel: attrs.yAxisLabel,
+                            yNormMin: attrs?.yMinimum,
+                            yNormMax: attrs?.yMaximum
                     ]
             )
         }"/>
         """
+
+        out << "<p><b>${attrs?.title?.value?.left?.value ?: ''}: ${attrs?.title?.value?.right?.value ?: ''}</b></p>"
+        out << "<p>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
+        out << "<p>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
+        out << "<p>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
+        out << "<p>slope: ${attrs?.attrs?.slope ?: ''}</p>"
     }
 
     def curveValues = { attrs, body ->
 
-        out << "<h5>${attrs.title}</h5>"
+        out << "<h5>${attrs.title.value.left.value}</h5>"
 
         int i = 0
         while (i < attrs.concentrationSeries.size()) {
