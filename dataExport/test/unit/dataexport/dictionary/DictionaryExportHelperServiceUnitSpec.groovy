@@ -189,9 +189,9 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                       | ontologyItem                                                                                                     | results
-        "Full Ontology"                             | new OntologyItem(ontology: new Ontology(ontologyName: "name", systemUrl: "http://bao.org", abbreviation: "BAO")) | XmlTestSamples.ONTOLOGY_FULL
-        "Ontology with missing optional attributes" | new OntologyItem(ontology: new Ontology(ontologyName: "name"))                                                   | XmlTestSamples.ONTOLOGY_MISSING_ATTRIBUTES
+        label                                       | ontologyItem                                                                                                                                               | results
+        "Full Ontology"                             | new OntologyItem(ontology: new Ontology(ontologyName: "name", systemUrl: "http://purl.org/obo/owl/UO", abbreviation: "BAO"), itemReference: "#UO_0000244") | XmlTestSamples.ONTOLOGY_FULL
+        "Ontology with missing optional attributes" | new OntologyItem(ontology: new Ontology(ontologyName: "name"))                                                                                             | XmlTestSamples.ONTOLOGY_MISSING_ATTRIBUTES
     }
 
     void "test generate OntologyItems #label"() {
@@ -200,9 +200,9 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         then:
         XmlTestAssertions.assertResults(results, this.writer.toString())
         where:
-        label                                       | ontologyItems                                                                                                                                                                                             | results
-        "Full Ontology"                             | [new OntologyItem(ontology: new Ontology(ontologyName: "name1", systemUrl: "http://bao.org", abbreviation: "BAO")), new OntologyItem(ontology: new Ontology(ontologyName: "name2"))] as Set<OntologyItem> | XmlTestSamples.ONTOLOGIES_FULL
-        "Ontology with missing optional attributes" | [new OntologyItem(ontology: new Ontology(ontologyName: "name"))] as Set<OntologyItem>                                                                                                                     | XmlTestSamples.ONTOLOGIES_MISSING_ATTRIBUTES
+        label                                       | ontologyItems                                                                                                                                                                                                                                       | results
+        "Full Ontology"                             | [new OntologyItem(ontology: new Ontology(ontologyName: "name1", systemUrl: "http://purl.org/obo/owl/UO", abbreviation: "BAO"), itemReference: "#UO_0000244"), new OntologyItem(ontology: new Ontology(ontologyName: "name2"))] as Set<OntologyItem> | XmlTestSamples.ONTOLOGIES_FULL
+        "Ontology with missing optional attributes" | [new OntologyItem(ontology: new Ontology(ontologyName: "name"))] as Set<OntologyItem>                                                                                                                                                               | XmlTestSamples.ONTOLOGIES_MISSING_ATTRIBUTES
     }
 
     void "test generate Element with Ontology #label"() {

@@ -1209,11 +1209,11 @@ class XmlTestSamples {
 '''
 
   static String ONTOLOGY_FULL='''
-<ontology name='name' abbreviation='BAO' sourceUrl='http://bao.org' />
+<ontology name='name' abbreviation='BAO' sourceUrl='http://purl.org/obo/owl/UO#UO_0000244' />
 '''
   static final String ONTOLOGY_MISSING_ATTRIBUTES ="<ontology name='name' />"
     static String ONTOLOGIES_FULL='''<ontologies>
-    <ontology name='name1' abbreviation='BAO' sourceUrl='http://bao.org' />
+    <ontology name='name1' abbreviation='BAO' sourceUrl='http://purl.org/obo/owl/UO#UO_0000244' />
     <ontology name='name2' />
     </ontologies>'''
 
