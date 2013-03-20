@@ -159,7 +159,7 @@ AS
                   || '    lv_action VARCHAR2(30) := ''' || avi_type || ''';' || cr
                   || '    i BINARY_INTEGER := 0;' || cr || CR
                   || 'BEGIN' || cr
-                  || '    lv_username := p_pbs_context.get_username;' || cr
+                  || '    lv_username := bard_context.get_username;' || cr
                   || '    IF lv_username IS NULL' || cr
                   || '    THEN' || cr
                   || '        Raise_Application_Error(-20900, ''' || avi_table_name || ' ' || lower(avi_type) || ' refused.  Username not specified. '');' || cr
