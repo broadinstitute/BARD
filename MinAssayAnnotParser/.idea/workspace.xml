@@ -3,6 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="859896cc-9815-4eea-b811-695a0ad1bfe5" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application.properties" afterPath="$PROJECT_DIR$/application.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-app/WEB-INF/applicationContext.xml" afterPath="$PROJECT_DIR$/web-app/WEB-INF/applicationContext.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-app/WEB-INF/sitemesh.xml" afterPath="$PROJECT_DIR$/web-app/WEB-INF/sitemesh.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-app/WEB-INF/tld/c.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/c.tld" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-app/WEB-INF/tld/fmt.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/fmt.tld" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-app/WEB-INF/tld/grails.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/grails.tld" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web-app/WEB-INF/tld/spring.tld" afterPath="$PROJECT_DIR$/web-app/WEB-INF/tld/spring.tld" />
     </list>
     <ignored path="DnaRepairSpreadsheetParser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -114,17 +121,7 @@
     <favorites_list name="DnaRepairSpreadsheetParser" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="ParseCarsSpreadsheet.groovy" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="44" selection-start="612" selection-end="612" vertical-scroll-proportion="0.2782324">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -160,10 +157,10 @@
     <option name="jreName" value="1.6" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1596" />
-    <option name="y" value="-184" />
-    <option name="width" value="1928" />
-    <option name="height" value="1088" />
+    <option name="x" value="-4" />
+    <option name="y" value="-4" />
+    <option name="width" value="1608" />
+    <option name="height" value="864" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -218,26 +215,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -408,24 +385,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="loadCars" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MinAssayAnnotParser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="grails-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -472,6 +431,26 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -489,8 +468,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -501,13 +480,10 @@
     </key>
   </component>
   <component name="RunManager" selected="Grails.Grails:MinAssayAnnotParser">
-    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
-      <setting name="path" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workDir" value="C:\Local\code_and_repos\BARD\MinAssayAnnotParser" />
-      <setting name="debug" value="false" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+      <option name="PROGRAM_PARAMETERS" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -530,10 +506,13 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
-      <option name="PROGRAM_PARAMETERS" />
+      <setting name="path" value="" />
+      <setting name="vmparams" value="" />
+      <setting name="params" value="" />
+      <setting name="workDir" value="C:\Local\code_and_repos\BARD\MinAssayAnnotParser" />
+      <setting name="debug" value="false" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -550,24 +529,6 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -597,6 +558,24 @@
       <envs />
       <properties />
       <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -712,21 +691,20 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1596" y="-184" width="1928" height="1088" extended-state="6" />
-    <editor active="true" />
+    <frame x="-4" y="-4" width="1608" height="864" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32731137" sideWeight="0.49484536" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32775453" sideWeight="0.49806702" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32412326" sideWeight="0.82339954" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32357043" sideWeight="0.82339954" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Grails View" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.67224544" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -734,13 +712,14 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22091782" sideWeight="0.67587674" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22007722" sideWeight="0.67642957" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cloverage" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Test Runs" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32731137" sideWeight="0.49484536" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -835,126 +814,82 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectExperiment.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="18" selection-start="676" selection-end="676" vertical-scroll-proportion="0.215625">
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="18" selection-start="676" selection-end="676" vertical-scroll-proportion="0.215625" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectExperimentContext.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="53" selection-start="426" selection-end="426" vertical-scroll-proportion="0.425">
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="53" selection-start="426" selection-end="426" vertical-scroll-proportion="0.425" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../BardDomainModel/grails-app/domain/bard/db/project/ProjectExperimentContextItem.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="25" selection-start="314" selection-end="314" vertical-scroll-proportion="0.31875">
-          <folding />
-        </state>
-      </provider>
       <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
         <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="25" selection-start="314" selection-end="314" vertical-scroll-proportion="0.31875" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectAnnotater.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="72" selection-start="505" selection-end="505" vertical-scroll-proportion="0.39824304">
-          <folding />
-        </state>
+        <state line="19" column="72" selection-start="505" selection-end="505" vertical-scroll-proportion="0.39824304" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectExperimentAnnotater.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="58" selection-start="749" selection-end="749" vertical-scroll-proportion="0.1830161">
-          <folding>
-            <element signature="e#47#80#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/exampleData/dataset_1_project_ids.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="3" selection-start="15" selection-end="15" vertical-scroll-proportion="0.018558951">
-          <folding />
-        </state>
+        <state line="26" column="58" selection-start="749" selection-end="749" vertical-scroll-proportion="0.1830161" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/ProjectIdsToLoad.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="70" selection-start="594" selection-end="594" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="21" column="70" selection-start="594" selection-end="594" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetValidator.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="9" selection-start="248" selection-end="248" vertical-scroll-proportion="0.33387887">
-          <folding />
-        </state>
+        <state line="12" column="9" selection-start="248" selection-end="248" vertical-scroll-proportion="0.33387887" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNames.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="21" selection-start="431" selection-end="431" vertical-scroll-proportion="0.53125">
-          <folding />
-        </state>
+        <state line="19" column="21" selection-start="431" selection-end="431" vertical-scroll-proportion="0.53125" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/resources/HeaderMappings.config">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="30" selection-start="345" selection-end="345" vertical-scroll-proportion="0.53125">
-          <folding />
-        </state>
+        <state line="19" column="30" selection-start="345" selection-end="345" vertical-scroll-proportion="0.53125" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/HeaderNamesReader.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="73" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.67105263">
-          <folding />
-        </state>
+        <state line="24" column="73" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.67105263" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsProject.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="40" selection-start="354" selection-end="354" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="14" column="40" selection-start="354" selection-end="354" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/spreadsheet/CarsSpreadsheetReader.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="55" column="84" selection-start="2336" selection-end="2336" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="55" column="84" selection-start="2336" selection-end="2336" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/DataSource.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/cars/domainspreadsheetmapping/ProjectMapperBuilder.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="53" selection-start="4523" selection-end="4523" vertical-scroll-proportion="0.3878887">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/loadCars/ParseCarsSpreadsheet.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="44" selection-start="612" selection-end="612" vertical-scroll-proportion="0.2782324">
-          <folding />
-        </state>
+        <state line="104" column="53" selection-start="4523" selection-end="4523" vertical-scroll-proportion="0.3878887" />
       </provider>
     </entry>
   </component>
@@ -964,14 +899,14 @@
         <entry key="MinAssayAnnotParser">
           <value>
             <GrailsSettings>
-              <option name="buildConfigCrc" value="1978751758" />
-              <option name="pluginDependenciesCrc" value="1128168359" />
+              <option name="buildConfigCrc" value="864006509" />
+              <option name="pluginDependenciesCrc" value="-82820920" />
               <option name="properties">
                 <map>
-                  <entry key="grails.global.plugins.dir" value="C:\Users\dlahr\.grails\2.1.1\global-plugins" />
-                  <entry key="grails.project.plugins.dir" value="C:\Users\dlahr\.grails\2.1.1\projects\DnaRepairSpreadsheetParser\plugins" />
-                  <entry key="grails.project.work.dir" value="C:\Users\dlahr\.grails\2.1.1\projects\DnaRepairSpreadsheetParser" />
-                  <entry key="grails.work.dir" value="C:\Users\dlahr\.grails\2.1.1" />
+                  <entry key="grails.global.plugins.dir" value="C:\Users\dlahr\.grails\2.2.1\global-plugins" />
+                  <entry key="grails.project.plugins.dir" value="C:\Users\dlahr\.grails\2.2.1\projects\MinAssayAnnotParser\plugins" />
+                  <entry key="grails.project.work.dir" value="C:\Users\dlahr\.grails\2.2.1\projects\MinAssayAnnotParser" />
+                  <entry key="grails.work.dir" value="C:\Users\dlahr\.grails\2.2.1" />
                 </map>
               </option>
               <option name="customPluginLocations">
@@ -990,14 +925,14 @@
         <entry key="bardDomainspreadsheetmappingModel-inplacePlugin">
           <value>
             <GrailsSettings>
-              <option name="buildConfigCrc" value="1011589416" />
+              <option name="buildConfigCrc" value="65503475" />
               <option name="pluginDependenciesCrc" value="-1662287417" />
               <option name="properties">
                 <map>
-                  <entry key="grails.global.plugins.dir" value="C:\Users\dlahr\.grails\2.1.1\global-plugins" />
+                  <entry key="grails.global.plugins.dir" value="C:\Users\dlahr\.grails\2.2.1\global-plugins" />
                   <entry key="grails.project.plugins.dir" value="target\plugins" />
                   <entry key="grails.project.work.dir" value="target" />
-                  <entry key="grails.work.dir" value="C:\Users\dlahr\.grails\2.1.1" />
+                  <entry key="grails.work.dir" value="C:\Users\dlahr\.grails\2.2.1" />
                 </map>
               </option>
             </GrailsSettings>
