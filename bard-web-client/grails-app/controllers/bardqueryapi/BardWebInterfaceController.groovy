@@ -639,7 +639,7 @@ class BardWebInterfaceController {
             final List<FilterTypes> filters = []
 //            filters.add(FilterTypes.TESTED)
             NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
-            ActivityOutcome activityOutcome = ActivityOutcome.ALL
+            ActivityOutcome activityOutcome = ActivityOutcome.ACTIVE
 
             GroupByTypes resourceType = params.groupByType ? params.groupByType as GroupByTypes : GroupByTypes.ASSAY
             TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,

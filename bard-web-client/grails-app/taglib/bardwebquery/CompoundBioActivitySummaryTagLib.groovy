@@ -62,7 +62,9 @@ class CompoundBioActivitySummaryTagLib {
 
         int i = 0
         while (i < attrs.concentrationSeries.size()) {
-            out << "<p><small>${attrs.activitySeries[i]} ${attrs.responseUnit ? '[' + attrs.responseUnit + ']' : ''} @ ${attrs.concentrationSeries[i]} ${attrs.testConcentrationUnit}</small></p>"
+            String responseUnit = attrs.responseUnit
+            responseUnit = responseUnit?.trim()?.equalsIgnoreCase('percent') ? '%' : responseUnit //replace 'percent' with '%'
+            out << "<p><small>${attrs.activitySeries[i]} ${attrs.responseUnit ? '[' + responseUnit + ']' : ''} @ ${attrs.concentrationSeries[i]} ${attrs.testConcentrationUnit}</small></p>"
             i++
         }
     }

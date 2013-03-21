@@ -7,6 +7,8 @@ import org.apache.commons.lang3.tuple.Pair
 import org.apache.log4j.Logger
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
+import bard.core.rest.spring.assays.Assay
+import bard.core.util.FilterTypes
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,7 +25,12 @@ class CompoundBioActivitySummaryBuilder {
         this.queryService = queryService
     }
 
-    public TableModel buildModel(GroupByTypes groupByType, Map groupedByExperimentalData) {// Map<ADID/PID, List<Activity>>
+    public TableModel buildModel(GroupByTypes groupByType,
+                                 Map groupedByExperimentalData, // Map<ADID/PID, List<Activity>>
+                                 List<Assay> testedAssays,
+                                 List<Assay> hitAssays,
+                                 List<FilterTypes> filterTypes) {
+
         TableModel tableModel = new TableModel()
         //Setup the headers
         tableModel.columnHeaders = [new StringValue(value: "${groupByType.name()}"), new StringValue(value: 'Experiments')]
@@ -33,7 +40,7 @@ class CompoundBioActivitySummaryBuilder {
             List<WebQueryValue> singleRowData = []
 
             //The first cell (column) is the resource (assay or a project)
-            WebQueryValue resource = findResourceByTypeAndId(groupByType, resourceId)
+            WebQueryValue resource = findResourceByTypeAndId(groupByType, resourceId, testedAssays, hitAssays, filterTypes)
             if (!resource) {
                 log.error("Could not map resource ${groupByType}: ${resourceId}")
                 continue
@@ -76,23 +83,25 @@ class CompoundBioActivitySummaryBuilder {
     }
 
 
-    WebQueryValue findResourceByTypeAndId(GroupByTypes groupByType, Long resourceId) {
+    WebQueryValue findResourceByTypeAndId(GroupByTypes groupByType,
+                                          Long resourceId,
+                                          List<Assay> testedAssays,
+                                          List<Assay> hitAssays,
+                                          List<FilterTypes> filterTypes) {
+
         WebQueryValue resource
 
         switch (groupByType) {
             case GroupByTypes.ASSAY:
                 List<AssayAdapter> assayAdapters
-                try {
-                    assayAdapters = queryService.findAssaysByADIDs([resourceId]).assayAdapters
-                }
-                catch (Exception exp) {
-                    log.error("Could not find Assay: ${resourceId}")
-                    return resource
-                }
+                //For assays, we can use the testedAssays/hitAssays properties in the compoundSummary resource.
+                List<Assay> assays = filterTypes.contains(FilterTypes.TESTED) ? testedAssays : hitAssays
+                assayAdapters = assays.findAll {Assay assay -> assay.id == resourceId}.collect {Assay assay -> return new AssayAdapter(assay)}
+
                 if (assayAdapters.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())
                 } else {
-                    Log.error("Could not find Assay with ADID=${resourceId}")
+                    log.error("Could not find Assay with ADID=${resourceId}")
                     resource = new AssayValue()
                 }
                 break;

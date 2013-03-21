@@ -317,6 +317,9 @@ class QueryService implements IQueryService {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
         CompoundSummary compoundSummary = getSummaryForCompound(compoundId)
+        List<Assay> testedAssays = compoundSummary.testedAssays
+        List<Assay> hitAssays = compoundSummary.hitAssays
+
         List<Activity> experimentalData
 
         if (filterTypes.contains(FilterTypes.TESTED)) {
@@ -357,7 +360,7 @@ class QueryService implements IQueryService {
         }
 
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
-        return compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData)
+        return compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes)
     }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service
