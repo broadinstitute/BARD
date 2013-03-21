@@ -139,15 +139,15 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     void "test showExperiment with Ajax"() {
         given:
-        WebQueryTableModel webQueryTableModel = new WebQueryTableModel()
-        webQueryTableModel.additionalProperties.put("experimentName", "experimentName")
+        TableModel tableModel = new TableModel()
+        tableModel.additionalProperties.put("experimentName", "experimentName")
 
         params.id = "222"
         request.addHeader("X-Requested-With", "XMLHttpRequest")
         when:
         controller.showExperiment()
         then:
-        this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
+        this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {tableModel}
         assert response.status == 200
         assert response.text.contains("Title: experimentName")
     }
@@ -163,10 +163,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert response.status == statusCode
 
         where:
-        label                              | eid  | statusCode                         | webQueryTableModel       | normalizeAxis
-        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null                     | 'Normalize Y-Axis'
-        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | 'Normalize Y-Axis'
-        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new WebQueryTableModel() | null
+        label                              | eid  | statusCode                         | webQueryTableModel | normalizeAxis
+        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
+        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new TableModel()   | null
 
     }
 

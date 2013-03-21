@@ -124,7 +124,7 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
 
             if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
-                render(template: 'experimentResultData', model: [webQueryTableModel: tableModel])
+                render(template: 'experimentResultData', model: [tableModel: tableModel])
                 return
             }
             //this should do a full page reload

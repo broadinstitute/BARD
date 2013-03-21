@@ -14,19 +14,19 @@ import spock.lang.Unroll
 class WebQueryTableModelUnitSpec extends Specification {
     void "test default getters"() {
         when:
-        WebQueryTableModel webQueryTableModel = new WebQueryTableModel()
+        TableModel tableModel = new TableModel()
         then:
-        assert "" == webQueryTableModel.getColumnName(0)
-        assert 0 == webQueryTableModel.getColumnCount()
-        assert !webQueryTableModel.getData()
-        assert 0 == webQueryTableModel.getRowCount()
+        assert "" == tableModel.getColumnName(0)
+        assert 0 == tableModel.getColumnCount()
+        assert !tableModel.getData()
+        assert 0 == tableModel.getRowCount()
     }
 
     void "test getValueAt with exceptions #label"() {
         given:
-        WebQueryTableModel webQueryTableModel = new WebQueryTableModel(headers, rows)
+        TableModel tableModel = new TableModel(headers, rows)
         when:
-        webQueryTableModel.getValueAt(row, column)
+        tableModel.getValueAt(row, column)
         then:
         def e = thrown(IllegalArgumentException)
         expectedMessage == e.message
@@ -36,16 +36,16 @@ class WebQueryTableModelUnitSpec extends Specification {
         "row < 1"                      | "Column and Row numbers must be >=0"                | -1  | 0      | []      | []
         "column < 1"                   | "Column and Row numbers must be >=0"                | 0   | -1     | []      | []
         "row >= data.size"             | "Row number must not be greater than the data size" | 0   | 1      | []      | []
-        "column >= columnHeaders.size" | "Column must not be greater than the column size"   | 0   | 1      | []      | [[new WebQueryValueModel("")]]
+        "column >= columnHeaders.size" | "Column must not be greater than the column size"   | 0   | 1      | []      | [[new StringValue(value: "")]]
 
     }
 
 
     void "test setValueAt with exceptions #label"() {
         given:
-        WebQueryTableModel webQueryTableModel = new WebQueryTableModel(headers, rows)
+        TableModel tableModel = new TableModel(headers, rows)
         when:
-        webQueryTableModel.setValueAt(new WebQueryValueModel(""), row, column)
+        tableModel.setValueAt(new StringValue(value: ""), row, column)
         then:
         def e = thrown(IllegalArgumentException)
         expectedMessage == e.message
@@ -55,41 +55,41 @@ class WebQueryTableModelUnitSpec extends Specification {
         "row < 1"                      | "Column and Row numbers must be >=0"                | -1  | 0      | []      | []
         "column < 1"                   | "Column and Row numbers must be >=0"                | 0   | -1     | []      | []
         "row >= data.size"             | "Row number must not be greater than the data size" | 0   | 1      | []      | []
-        "column >= columnHeaders.size" | "Column must not be greater than the column size"   | 0   | 1      | []      | [[new WebQueryValueModel("")]]
+        "column >= columnHeaders.size" | "Column must not be greater than the column size"   | 0   | 1      | []      | [[new StringValue(value: "")]]
 
     }
 
 
     void "test addColumn #label"() {
         given:
-        WebQueryTableModel webQueryTableModel = new WebQueryTableModel()
+        TableModel tableModel = new TableModel()
         when:
-        webQueryTableModel.addColumn(columnHeader, columnData)
+        tableModel.addColumn(columnHeader, columnData)
         then:
-        assert !webQueryTableModel.getColumnHeaders() == expectedAnswer
-        assert !webQueryTableModel.data == expectedAnswer
-        assert webQueryTableModel.getColumnName(0) == expectedColumnName
+        assert !tableModel.getColumnHeaders() == expectedAnswer
+        assert !tableModel.data == expectedAnswer
+        assert tableModel.getColumnName(0) == expectedColumnName
         where:
         label                        | columnHeader               | columnData                   | expectedAnswer | expectedColumnName
-        "With header and data"       | new WebQueryValueModel("") | [new WebQueryValueModel("")] | false          | ""
-        "With header and no data"    | new WebQueryValueModel("") | []                           | true           | ""
-        "With data, no header"       | null                       | [new WebQueryValueModel("")] | true           | ""
+        "With header and data"       | new StringValue(value: "") | [new StringValue(value: "")] | false          | ""
+        "With header and no data"    | new StringValue(value: "") | []                           | true           | ""
+        "With data, no header"       | null                       | [new StringValue(value: "")] | true           | ""
         "With no header and no data" | null                       | []                           | true           | ""
     }
 
 
     void "test addRowData #label"() {
         given:
-        WebQueryTableModel webQueryTableModel = new WebQueryTableModel()
+        TableModel tableModel = new TableModel()
         when:
-        webQueryTableModel.addRowData(rowData)
+        tableModel.addRowData(rowData)
         then:
-        assert expectedRowCount == webQueryTableModel.rowCount
-        assert expectedColCount == webQueryTableModel.columnCount
+        assert expectedRowCount == tableModel.rowCount
+        assert expectedColCount == tableModel.columnCount
         where:
         label          | rowData                      | expectedRowCount | expectedColCount
         "With no data" | []                           | 0                | 0
-        "With data"    | [new WebQueryValueModel("")] | 1                | 0
+        "With data"    | [new StringValue(value: "")] | 1                | 0
 
     }
 

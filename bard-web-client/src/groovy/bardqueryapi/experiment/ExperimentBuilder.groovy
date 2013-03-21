@@ -154,7 +154,7 @@ class ExperimentBuilder {
                  List<String> priorityDisplays,
                  final Map<Long, CompoundAdapter> compoundAdapterMap) {
         for (Activity activity : activities) {
-            final List<WebQueryValueModel> rowData = addRow(activity, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
+            final List<WebQueryValue> rowData = addRow(activity, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
             tableModel.addRowData(rowData)
         }
     }

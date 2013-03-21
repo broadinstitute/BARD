@@ -1,5 +1,6 @@
 <div class="row-fluid">
-    <g:set var="columnWidth" value="${(100 / tableModel.columnHeaders.size()) as int}"/>
+    <g:set var="columnHeaderSize" value="${tableModel?.columnHeaders?.size()}"/>
+    <g:set var="columnWidth" value="${columnHeaderSize ? (100 / tableModel.columnHeaders.size()) as int : 'auto;'}"/>
     <table align="center" class="table table-condensed">
         <thead>
         <tr>

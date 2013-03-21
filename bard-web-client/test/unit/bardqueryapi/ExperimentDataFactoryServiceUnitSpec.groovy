@@ -20,7 +20,7 @@ class ExperimentDataFactoryServiceUnitSpec extends Specification {
         List<FilterTypes> filterTypes = []
         SearchParams searchParams = new SearchParams()
         when:
-        WebQueryTableModel tableModel = service.createTableModel(spreadSheetInput, groupTypes, filterTypes, searchParams)
+        TableModel tableModel = service.createTableModel(spreadSheetInput, groupTypes, filterTypes, searchParams)
         then:
         assert !tableModel
 

@@ -1,6 +1,6 @@
 <g:if test="${!resultSize}">
     <tr>
-        <td>
+        <td align="center" nowrap="wrap" style="width: ${columnWidth}%">
             <p class="text-error">N/A</p>
         </td>
     </tr>

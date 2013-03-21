@@ -142,7 +142,7 @@ class TableModel implements Serializable {
  * @param row the row index.
  * @param column the column index.
  *
- * @returns The value (<code>WebQueryValueModel</code>, possibly <code>null</code>) at
+ * @returns The value (<code>WebQueryValue</code>, possibly <code>null</code>) at
  *          the specified cell in the table.
  */
     public WebQueryValue getValueAt(int row, int column) {
@@ -161,7 +161,7 @@ class TableModel implements Serializable {
 /**
  * Sets the value for the specified cell in the table and sends a
  *
- * @param value the value (<code>WebQueryValueModel</code>, <code>null</code> permitted).
+ * @param value the value (<code>WebQueryValue</code>, <code>null</code> permitted).
  * @param row the row index. - 0 based index
  * @param column the column index.  - o based index
  */
