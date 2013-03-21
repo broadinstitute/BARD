@@ -1,3 +1,5 @@
+package bard.dm.assaycompare
+
 import grails.test.mixin.TestFor
 import bard.dm.assaycompare.AssayContextItemCompare
 
