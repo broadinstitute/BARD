@@ -14,7 +14,8 @@
 
     <g:each in="${tableModel.data}" var="row" status="i">
     %{--Each row is a separate table--}%
-        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px; word-wrap: break-word;" align="center">
+        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px; word-wrap: break-word;"
+               align="center">
             <tbody>
             <tr>
                 <g:each in="${row}" var="cell" status="j">
@@ -44,6 +45,18 @@
                                     imageHeight="150"/>
                         </td>
                     </g:elseif>
+                %{--A URL Link--}%
+                    <g:elseif test="${cell instanceof bardqueryapi.LinkValue}">
+                        <td align="center" style="width: ${columnWidth}%">
+                            <a href="${cell.value}">
+                                <g:if test="${cell.imgFile}">
+                                    <g:img dir="images" file="${cell.imgFile}" alt="${cell.imgAlt}"/>
+                                </g:if>
+                                ${cell.text}
+                            </a>
+                        </td>
+                    </g:elseif>
+                %{--String--}%
                     <g:elseif test="${cell instanceof bardqueryapi.StringValue}">
                         <td align="center" style="width: ${columnWidth}%">
                             <p>${cell.value}</p>
@@ -64,7 +77,8 @@
                 %{--At the current state, the only MapValue use is for an 'experimentBox', so the map's only key is an experiment.--}%
                     <g:elseif test="${cell instanceof bardqueryapi.MapValue}">
                         <td align="center" style="width: ${columnWidth}%">
-                            <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;" align="center">
+                            <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;"
+                                   align="center">
                                 %{--An experiment-box is a box with one experiment key and a list of result types (curves, single-points, etc.)--}%
                                 `                            <g:set var="experimentValue"
                                                                     value="${cell.value.keySet().first()}"/>

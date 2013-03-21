@@ -5,9 +5,9 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
+import org.codehaus.groovy.grails.commons.ApplicationHolder
 
 class ExperimentBuilder {
-
 
     List<WebQueryValue> buildHeader(List<String> priorityDisplays, List<String> dictionaryIds, final boolean hasPlot, final boolean hasChildElements) {
         List<WebQueryValue> columnHeaders = []
@@ -54,12 +54,18 @@ class ExperimentBuilder {
 
         //SID
         Long sid = activity.sid
-        StringValue sidValue = new StringValue(value: sid.toString())
+        LinkValue sidValue = new LinkValue(value: "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=${sid.toString()}",
+                text: sid.toString(),
+                imgFile: 'pubchem.png',
+                imgAlt: 'PubChem')
         rowData.add(sidValue)
 
         //CID
         Long cid = activity.cid
-        StringValue cidValue = new StringValue(value: cid.toString())
+        def grailsApplicationTagLib = ApplicationHolder.application.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        String linkValue = grailsApplicationTagLib.createLink(controller: 'bardWebInterface', action: 'showCompound', params: [cid: cid.toString()])
+        LinkValue cidValue = new LinkValue(value: linkValue, text: cid.toString())
+
         rowData.add(cidValue)
 
         //Structure image
@@ -78,7 +84,7 @@ class ExperimentBuilder {
 
         //Outcome
         ResultData resultData = activity?.resultData
-            StringValue outcome = new StringValue(value: resultData.outcome)
+        StringValue outcome = new StringValue(value: resultData.outcome)
         rowData.add(outcome)
 
         //Convert the experimental data to result types (curves, key/value pairs, etc.)

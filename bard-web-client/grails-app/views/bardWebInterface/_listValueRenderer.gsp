@@ -56,7 +56,13 @@
                 <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;" align="center">
                     <tr>
                         <td align="center">
-                            <b><small>${pair.left}</small></b>
+                            <b><small>${pair.left}</small>
+                                <g:if test="${result.dictionaryElement}">
+                                    <a href="${result.dictionaryElement.value}" target="datadictionary">
+                                        <i class="icon-question-sign"></i>
+                                    </a>
+                                </g:if>
+                            </b>
 
                             <p><small>${pair.right}</small></p>
                         </td>

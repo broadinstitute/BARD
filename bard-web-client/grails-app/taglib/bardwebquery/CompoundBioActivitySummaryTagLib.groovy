@@ -39,7 +39,12 @@ class CompoundBioActivitySummaryTagLib {
         }"/>
         """
 
-        out << "<p><b>${attrs?.title?.value?.left?.value ?: ''}: ${attrs?.title?.value?.right?.value ?: ''}</b></p>"
+        out << "<p><b>${attrs?.title?.value?.left?.value ?: ''}"
+        if (attrs?.title?.dictionaryElement) {
+            out << "<a href=\"${attrs?.title?.dictionaryElement.value}\" target=\"datadictionary\">"
+            out << "<i class=\"icon-question-sign\"></i></a>"
+        }
+        out << ": ${attrs?.title?.value?.right?.value ?: ''}</b></p>"
         out << "<p>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
         out << "<p>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
         out << "<p>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
@@ -48,7 +53,12 @@ class CompoundBioActivitySummaryTagLib {
 
     def curveValues = { attrs, body ->
 
-        out << "<h5>${attrs.title.value.left.value}</h5>"
+        out << "<h5>${attrs.title.value.left.value}"
+        if (attrs?.title?.dictionaryElement) {
+            out << "<a href=\"${attrs?.title?.dictionaryElement.value}\" target=\"datadictionary\">"
+            out << "<i class=\"icon-question-sign\"></i></a>"
+        }
+        out << "</h5>"
 
         int i = 0
         while (i < attrs.concentrationSeries.size()) {

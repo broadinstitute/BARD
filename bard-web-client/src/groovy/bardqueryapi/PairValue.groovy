@@ -15,4 +15,5 @@ class PairValue implements WebQueryValue {
         return this.value
     }
     Pair<WebQueryValue, WebQueryValue> value
+    LinkValue dictionaryElement
 }

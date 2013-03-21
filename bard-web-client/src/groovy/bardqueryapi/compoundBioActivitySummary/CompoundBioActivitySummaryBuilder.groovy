@@ -135,7 +135,11 @@ class CompoundBioActivitySummaryBuilder {
                 case ResponseClassEnum.SP:
                     //The result-type is a single-point, key/value pair.
                     Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, priorityElement.value)
-                    PairValue pairValue = new PairValue(value: pair)
+                    LinkValue dictionaryElement
+                    if (priorityElement.dictElemId) {
+                        dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
+                    }
+                    PairValue pairValue = new PairValue(value: pair, dictionaryElement: dictionaryElement)
                     values << pairValue
                     break;
                 case ResponseClassEnum.CR_SER:
@@ -147,8 +151,12 @@ class CompoundBioActivitySummaryBuilder {
                         ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                         CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
                         Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: priorityElement.value))
+                        LinkValue dictionaryElement
+                        if (priorityElement.dictElemId) {
+                            dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
+                        }
                         ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
-                                title: new PairValue(value: title),
+                                title: new PairValue(value: title, dictionaryElement: dictionaryElement),
                                 curveFitParameters: curveFitParameters,
                                 slope: priorityElement.getSlope(),
                                 responseUnit: concentrationResponseSeries.responseUnit,
