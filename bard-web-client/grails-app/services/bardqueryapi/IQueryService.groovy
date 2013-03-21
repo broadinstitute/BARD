@@ -7,7 +7,7 @@ import bard.core.util.FilterTypes
 
 public interface IQueryService {
 
-    Map getProjectSteps(final Long pid);
+
     /**
      *
      * @param cid

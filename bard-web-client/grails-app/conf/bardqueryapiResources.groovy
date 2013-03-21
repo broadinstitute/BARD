@@ -28,6 +28,17 @@ modules = {
         // Stylesheet for context card view
         resource url: "css/card.css"
     }
+    handlebars {
+        resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
+    }
+    projectstep {
+        dependsOn "handlebars"
+        resource url: '/js/projectstep/raphael.js'
+        resource url: '/js/projectstep/dracula_graffle.js'
+        resource url: '/js/projectstep/dracula_graph.js'
+        resource url: '/js/projectstep/dracula_algorithms.js'
+        resource url: '/js/projectstep/projectstep.show.js'
+    }
     //Adding version allows clients to not cache javascript
     search {
         resource url: "js/search.js"

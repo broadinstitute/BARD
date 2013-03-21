@@ -18,15 +18,17 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
 
     void setupSpec() {
         RemoteControl remote = new RemoteControl()
-      //  String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
 
-        def mockUsers = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers }
-        //Map userProps =[:]
-        mockUsers.each {user ->
-            Map userProps = user.value
-            usernameUserPropsMap.put(userProps.username, userProps)
+        usernameUserPropsMap = remote {
+            def usernameUserPropsMap = [:]
+            def mockUsers = ctx.grailsApplication.config.CbipCrowd.mockUsers
+            mockUsers.each {user ->
+                Map userProps = user.value
+                usernameUserPropsMap.put(userProps.username, [password: userProps.password, username: userProps.username, roles: userProps.roles])
+            }
+            return usernameUserPropsMap
         }
-     }
+    }
 
     HomePage logInWithRole(String role) {
         Map.Entry<String, Map> userInfoMap = usernameUserPropsMap.find { k, v ->
@@ -47,6 +49,6 @@ abstract class BardFunctionalSpec extends GebReportingSpec {
     }
 
     Map<String, String> getCredentialsForTest() {
-        return usernameUserPropsMap.find{it}.value    // returns the first entry
+        return usernameUserPropsMap.find {it}.value    // returns the first entry
     }
 }

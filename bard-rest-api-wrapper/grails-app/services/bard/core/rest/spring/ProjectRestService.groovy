@@ -181,10 +181,16 @@ class ProjectRestService extends AbstractRestService {
     }
 
     public List<ProjectStep> findProjectSteps(final Long pid) {
-        final String resource = getResource(pid.toString() + RestApiConstants.STEPS)
-        final URL url = new URL(resource)
+        final StringBuilder resource =
+            new StringBuilder(
+                    this.getResource(pid.toString())).
+                    append(RestApiConstants.STEPS).
+                    append(RestApiConstants.QUESTION_MARK).
+                    append(RestApiConstants.EXPAND_TRUE)
 
-        final List<ProjectStep> projectSteps = getForObject(url.toURI(), ProjectStep[].class) as List<ProjectStep>
+        final URL url = new URL(resource.toString())
+
+        final List<ProjectStep> projectSteps = getForObject(url.toURI(), List.class)
         return projectSteps;
     }
 }

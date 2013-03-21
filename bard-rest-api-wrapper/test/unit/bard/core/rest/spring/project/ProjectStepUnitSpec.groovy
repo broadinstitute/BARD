@@ -13,99 +13,269 @@ class ProjectStepUnitSpec extends Specification {
 
     public static final String PROJECT_STEP = '''
     {
-        "prevBardExpt": {
-            "bardExptId": 12666,
-            "capExptId": 2617,
-            "bardAssayId": 7540,
-            "capAssayId": 2622,
-            "pubchemAid": 2572,
+        "prevBardExpt":
+        {
+            "bardExptId": 14084,
+            "capExptId": 3360,
+            "bardAssayId": 8959,
+            "capAssayId": 3365,
+            "pubchemAid": 1503,
             "category": -1,
             "type": -1,
             "summary": 0,
             "assays": 0,
             "classification": -1,
-            "substances": 748,
-            "compounds": 745,
-            "name": "Confirmation qHTS Assay for Inhibitors of the Human Apurinic/apyrimidinic Endonuclease 1 (APE1)",
+            "substances": 8,
+            "compounds": 8,
+            "activeCompounds": 2,
+            "confidenceLevel": 1,
+            "name": "Minimal Inhibitory Concentration assay in E. Coli for small molecule DnaK Modulators targeting the b-domain.",
             "description": null,
             "source": null,
             "grantNo": null,
             "deposited": null,
-            "updated": "2013-01-26",
+            "updated": "2013-03-01",
             "hasProbe": false,
             "projectIdList": [
-                1703
+                1944
             ],
-            "resourcePath": "/experiments/12666"
+            "resourcePath": "/experiments/14084"
         },
-        "nextBardExpt": {
-            "bardExptId": 12661,
-            "capExptId": 2610,
-            "bardAssayId": 7535,
-            "capAssayId": 2615,
-            "pubchemAid": 2565,
+        "nextBardExpt":
+        {
+            "bardExptId": 14103,
+            "capExptId": 3807,
+            "bardAssayId": 8978,
+            "capAssayId": 3812,
+            "pubchemAid": 1505,
             "category": -1,
             "type": -1,
             "summary": 0,
             "assays": 0,
             "classification": -1,
-            "substances": 564,
-            "compounds": 561,
-            "name": "Counterscreen for APE1 Inhibitors: qHTS Assay for Inhibitors of Endonuclease IV",
+            "substances": 2,
+            "compounds": 2,
+            "activeCompounds": 1,
+            "confidenceLevel": 1,
+            "name": "Minimal Inhibitory Concentration assay in Y. pseudotuberculosis for small molecule DnaK Modulators targeting the beta-domain",
             "description": null,
             "source": null,
             "grantNo": null,
             "deposited": null,
-            "updated": "2013-01-26",
+            "updated": "2013-03-01",
             "hasProbe": false,
             "projectIdList": [
-                1703
+                1944
             ],
-            "resourcePath": "/experiments/12661"
+            "resourcePath": "/experiments/14103"
         },
-        "bardProjId": 1703,
-        "stepId": 3803,
+        "bardProjId": 1944,
+        "stepId": 5148,
         "edgeName": "Linked by Compound set (Swamidass)",
         "annotations": [
             {
-                "entityId": 3803,
+                "entityId": 5148,
                 "entity": "project-step",
                 "source": "cap-context",
-                "id": 4056,
-                "display": "561",
+                "id": 5398,
+                "display": "2",
                 "contextRef": "Compound Overlap",
                 "key": "1242",
                 "value": null,
                 "extValueId": null,
                 "url": null,
                 "displayOrder": 0,
-                "related": "1703"
+                "related": "1944"
             }
         ],
         "resourcePath": ""
     }
     '''
-
+    public static final String PROJECT_STEPS = '''
+    [
+        {
+            "prevBardExpt":
+            {
+                "bardExptId": 14084,
+                "capExptId": 3360,
+                "bardAssayId": 8959,
+                "capAssayId": 3365,
+                "pubchemAid": 1503,
+                "category": -1,
+                "type": -1,
+                "summary": 0,
+                "assays": 0,
+                "classification": -1,
+                "substances": 8,
+                "compounds": 8,
+                "activeCompounds": 2,
+                "confidenceLevel": 1,
+                "name": "Minimal Inhibitory Concentration assay in E. Coli for small molecule DnaK Modulators targeting the b-domain.",
+                "description": null,
+                "source": null,
+                "grantNo": null,
+                "deposited": null,
+                "updated": "2013-03-01",
+                "hasProbe": false,
+                "projectIdList": [
+                    1944
+                ],
+                "resourcePath": "/experiments/14084"
+            },
+            "nextBardExpt":
+            {
+                "bardExptId": 14103,
+                "capExptId": 3807,
+                "bardAssayId": 8978,
+                "capAssayId": 3812,
+                "pubchemAid": 1505,
+                "category": -1,
+                "type": -1,
+                "summary": 0,
+                "assays": 0,
+                "classification": -1,
+                "substances": 2,
+                "compounds": 2,
+                "activeCompounds": 1,
+                "confidenceLevel": 1,
+                "name": "Minimal Inhibitory Concentration assay in Y. pseudotuberculosis for small molecule DnaK Modulators targeting the beta-domain",
+                "description": null,
+                "source": null,
+                "grantNo": null,
+                "deposited": null,
+                "updated": "2013-03-01",
+                "hasProbe": false,
+                "projectIdList": [
+                    1944
+                ],
+                "resourcePath": "/experiments/14103"
+            },
+            "bardProjId": 1944,
+            "stepId": 5148,
+            "edgeName": "Linked by Compound set (Swamidass)",
+            "annotations": [
+                {
+                    "entityId": 5148,
+                    "entity": "project-step",
+                    "source": "cap-context",
+                    "id": 5398,
+                    "display": "2",
+                    "contextRef": "Compound Overlap",
+                    "key": "1242",
+                    "value": null,
+                    "extValueId": null,
+                    "url": null,
+                    "displayOrder": 0,
+                    "related": "1944"
+                }
+            ],
+            "resourcePath": ""
+        },
+        {
+            "prevBardExpt": {
+                "bardExptId": 14076,
+                "capExptId": 3351,
+                "bardAssayId": 8951,
+                "capAssayId": 3356,
+                "pubchemAid": 1494,
+                "category": -1,
+                "type": -1,
+                "summary": 0,
+                "assays": 0,
+                "classification": -1,
+                "substances": 11,
+                "compounds": 11,
+                "activeCompounds": 2,
+                "confidenceLevel": 1,
+                "name": "ATPase - based assay for small molecule DnaK Modulators targeting the beta-domain",
+                "description": null,
+                "source": null,
+                "grantNo": null,
+                "deposited": null,
+                "updated": "2013-03-01",
+                "hasProbe": false,
+                "projectIdList": [
+                    1944
+                ],
+                "resourcePath": "/experiments/14076"
+            },
+            "nextBardExpt": {
+                "bardExptId": 14084,
+                "capExptId": 3360,
+                "bardAssayId": 8959,
+                "capAssayId": 3365,
+                "pubchemAid": 1503,
+                "category": -1,
+                "type": -1,
+                "summary": 0,
+                "assays": 0,
+                "classification": -1,
+                "substances": 8,
+                "compounds": 8,
+                "activeCompounds": 2,
+                "confidenceLevel": 1,
+                "name": "Minimal Inhibitory Concentration assay in E. Coli for small molecule DnaK Modulators targeting the b-domain.",
+                "description": null,
+                "source": null,
+                "grantNo": null,
+                "deposited": null,
+                "updated": "2013-03-01",
+                "hasProbe": false,
+                "projectIdList": [
+                    1944
+                ],
+                "resourcePath": "/experiments/14084"
+            },
+            "bardProjId": 1944,
+            "stepId": 5150,
+            "edgeName": "Linked by Compound set (Swamidass)",
+            "annotations": [
+                {
+                    "entityId": 5150,
+                    "entity": "project-step",
+                    "source": "cap-context",
+                    "id": 5400,
+                    "display": "8",
+                    "contextRef": "Compound Overlap",
+                    "key": "1242",
+                    "value": null,
+                    "extValueId": null,
+                    "url": null,
+                    "displayOrder": 0,
+                    "related": "1944"
+                }
+            ],
+            "resourcePath": ""
+         }
+    ]
+    '''
 
 
     void "test serialization to ProjectStep"() {
         when:
         final ProjectStep projectStep = objectMapper.readValue(PROJECT_STEP, ProjectStep.class)
         then:
-        BardExpt nextBardExpt = projectStep.nextBardExpt
-        BardExpt prevBardExpt = projectStep.prevBardExpt
+        ProjectExperiment nextBardExpt = projectStep.nextBardExpt
+        ProjectExperiment prevBardExpt = projectStep.prevBardExpt
 
         assert nextBardExpt
         assert prevBardExpt
         assert !nextBardExpt.description
         assert !nextBardExpt.getDeposited()
-        assert nextBardExpt.getUpdated()=="2013-01-26"
-        assert 1703 == projectStep.bardProjId
-        assert 3803 == projectStep.stepId
+        assert "2013-03-01" == nextBardExpt.getUpdated()
+        assert 1944 == projectStep.bardProjId
+        assert 5148 == projectStep.stepId
         assert "Linked by Compound set (Swamidass)" == projectStep.edgeName
         assert 1 == projectStep.annotations.size()
         assert !projectStep.getResourcePath()
     }
 
+    void "test serialization to ProjectSteps"() {
+        when:
+        final List<ProjectStep> projectSteps = objectMapper.readValue(PROJECT_STEPS, List.class)
+        then:
+        assert projectSteps
+        assert 2 == projectSteps.size()
+    }
 }
 

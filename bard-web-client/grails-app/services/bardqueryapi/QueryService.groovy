@@ -41,11 +41,7 @@ class QueryService implements IQueryService {
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
 
-    Map getProjectSteps(Long pid) {
-        final List<ProjectStep> projectSteps = projectRestService.findProjectSteps(pid)
-        //convert to a form that you can use with JPlumb
-        return [:]
-    }
+
     //========================================================== Free Text Searches ================================
 
     Map searchCompoundsByCids(final List<Long> cids, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
@@ -510,8 +506,8 @@ class QueryService implements IQueryService {
     Map showProject(final Long projectId) {
         if (projectId) {
             final ProjectExpanded project = projectRestService.getProjectById(projectId)
-            final List<BardAnnotation> annotations = [projectRestService.findAnnotations(projectId)]
             if (project) {
+                final List<BardAnnotation> annotations = [projectRestService.findAnnotations(projectId)]
                 final List<ExperimentSearch> experiments = project.experiments
                 if (experiments) {
                     experiments.sort {
