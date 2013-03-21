@@ -2,6 +2,7 @@ package pages
 
 import geb.Module;
 import geb.Page
+import modules.SummaryModule
 
 class ViewProjectDefinitionPage extends Page{
 	static url=""

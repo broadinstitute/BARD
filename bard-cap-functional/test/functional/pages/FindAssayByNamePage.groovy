@@ -1,6 +1,9 @@
 package pages
 
 import geb.Page
+import modules.SearchResultTableModule
+import modules.SearchFieldsModule
+import modules.AutocompleteResultModule
 import pages.HomePage
 import geb.Module
 
@@ -16,12 +19,10 @@ class FindAssayByNamePage extends CapFunctionalPage {
 		assayResultAccordian { $("div#results_accordion").find("h3") }
 		resultHolderTable { $("table.gridtable").find("tr") }
 		
-		assaysResults { index -> moduleList SearchResultTable, $("table.gridtable tr").tail(), index }
-		
+		assaysResults { index -> moduleList SearchResultTableModule, $("table.gridtable tr").tail(), index }
 		assaySearchBtns { module SearchFieldsModule, searchBtns: FIND_ASSAY_FIELD }
 		capHeaders { module BardCapHeaderModule }
-		
-		autocompleteItems { moduleList AutocompleteResult,  $("li.ui-menu-item")}
+		autocompleteItems { moduleList AutocompleteResultModule,  $("li.ui-menu-item")}
 	}
 	
 

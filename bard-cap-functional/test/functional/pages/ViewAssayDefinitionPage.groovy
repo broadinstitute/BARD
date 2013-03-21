@@ -2,6 +2,7 @@ package pages
 
 import geb.Module;
 import geb.Page
+import modules.SummaryModule
 
 class ViewAssayDefinitionPage extends Page{
 	static url=""
@@ -16,21 +17,12 @@ class ViewAssayDefinitionPage extends Page{
 
 		cardsHold { module AssayCardsHolding }
 		capHeaders { module BardCapHeaderModule }
-		
-		assaySummay { module AssaySummaryModule }
+		assaySummary { module SummaryModule, $("div#summaryDetailSection") }
 	}
 }
 
 class AssayCardsHolding extends Module {
 	static content = {
 		cardcap{cardValue -> $("div.roundedBorder.card-group.assay-protocol--assay-component-").find("table.table.table-hover").find("caption").find("p", text:"$cardValue") }
-	}
-}
-
-class AssaySummaryModule extends Module {
-	static content = {
-		summaryDetailsSection { $("div#summaryDetailSection") }
-		assayName { summaryDetailsSection.find("dt", text:"Assay Name:") }
-		assayDefinitionId { summaryDetailsSection.find("dt", text:"ID:") }
 	}
 }

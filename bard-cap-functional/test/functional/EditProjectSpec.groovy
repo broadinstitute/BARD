@@ -2,10 +2,12 @@ import pages.HomePage
 import pages.FindProjectByIdPage
 import pages.ViewProjectDefinitionPage
 import pages.ScaffoldPage
+import spock.lang.Ignore;
 import spock.lang.Stepwise
 import pages.EditProjectPage
 
 @Stepwise
+@Ignore
 class EditProjectSpec extends BardFunctionalSpec {
 	String exprimentName = testData.exprimentName
 	String exprimentIdInput = testData.exprimentId

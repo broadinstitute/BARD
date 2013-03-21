@@ -1,6 +1,7 @@
 package pages
 
 import geb.Page
+import modules.SearchFieldsModule
 
 class FindProjectByIdPage extends Page {
 	def FIND_FIELD_ID = "projectId"

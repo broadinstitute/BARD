@@ -3,6 +3,9 @@ package pages
 import com.google.common.cache.LoadingCache;
 
 import geb.Page
+import modules.SearchFieldsModule
+import modules.AutocompleteResultModule
+import modules.SearchResultTableModule
 import pages.HomePage
 import geb.Module
 import geb.navigator.Navigator;
@@ -18,10 +21,10 @@ class FindProjectByNamePage extends CapFunctionalPage {
 		projectResultAccordian { $("div#results_accordion").find("h3") }
 		resultHolderTable { $("table.gridtable").find("tr") }
 		
-		projectResults { index -> moduleList SearchResultTable, $("table.gridtable tr").tail(), index }
+		projectResults { index -> moduleList SearchResultTableModule, $("table.gridtable tr").tail(), index }
 		
 		projectSearchBtns { module SearchFieldsModule, searchBtns: FIND_PROJECT_FIELD }
-		projectAutocompleteItems { moduleList AutocompleteResult, $("li.ui-menu-item") }
+		projectAutocompleteItems { moduleList AutocompleteResultModule, $("li.ui-menu-item") }
 		
 		capHeaders { module BardCapHeaderModule }
 	}

@@ -14,9 +14,11 @@ class SearchAssaySpec extends BardFunctionalSpec {
 	String assayId = testData.assayId
 	String assayString = testData.assaySearchString
 	String assayExactName = testData.assayExactName
+	
 	void setupSpec() {
 		// pre-condition of each test: user is logged in
 		logInSomeUser()
+		
 	}
 
 	def "Test Find Assay By Assay Definition Id"() {
@@ -37,7 +39,7 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		then: "User is navigated to View Assay Definition page"
 		at ViewAssayDefinitionPage
 		assert viewAssayDefinition.contains(testData.assayId)
-		assaySummay.assayDefinitionId.next().text() ==~ assayId
+		assert assaySummary.value[0].text() ==~ assayId
 		
 		when:"Navigating to Home Page"
 		at ViewAssayDefinitionPage
@@ -48,36 +50,6 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		
 	}
 	
-	def "Test Find Assay via Autocomplete"() {
-		when: "User is navigating to Find Assay page"
-		at HomePage
-		capHeaders.assayTab.click()
-		capHeaders.assayChildTabs[1].click()
-
-		then: "User is at Find Assay page"
-		at FindAssayByNamePage
-
-		when: "User is trying to search Assays"
-		at FindAssayByNamePage
-		assaySearchBtns.inputBtns << assayString
-		
-		waitFor(15, 5) { autocompleteItems }
-		assert isAutocompleteListOk(autocompleteItems, assayString)
-		
-		assaySearchBtns.searchBtn.click()
-
-		then: "wait for result to populate in assay result accordian"
-		waitFor(10, 2) { assayResultAccordian.text().contains(ASSAYRESULTACCORDIAN) }
-		assert resultHolderTable.size()-1 != ISEMPTY
-		
-		when:"Navigating to Home Page"
-		at FindAssayByNamePage
-		capHeaders.bardLogo.click()
-		
-		then:"User is at Home page"
-		at HomePage
-	}
-
 	def "Test Find Assay By Exact Name"() {
 		when: "User is navigating to Find Assay page"
 		at HomePage
@@ -94,8 +66,7 @@ class SearchAssaySpec extends BardFunctionalSpec {
 
 		then: "User is navigated to view assay definition page"
 		at ViewAssayDefinitionPage
-		assert assaySummay.assayName
-		assaySummay.assayName.next().text() ==~ assayExactName
+		assert assaySummary.value[3].text() ==~ assayExactName
 		
 		when:"User is at View assay definition page"
 		at ViewAssayDefinitionPage
@@ -163,5 +134,34 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		at HomePage
 	}
 	
+	def "Test Find Assay via Autocomplete"() {
+		when: "User is navigating to Find Assay page"
+		at HomePage
+		capHeaders.assayTab.click()
+		capHeaders.assayChildTabs[1].click()
+
+		then: "User is at Find Assay page"
+		at FindAssayByNamePage
+
+		when: "User is trying to search Assays"
+		at FindAssayByNamePage
+		assaySearchBtns.inputBtns << assayString
+		
+		waitFor(15, 5) { autocompleteItems }
+		assert isAutocompleteListOk(autocompleteItems, assayString)
+		
+		assaySearchBtns.searchBtn.click()
+
+		then: "wait for result to populate in assay result accordian"
+		waitFor(10, 2) { assayResultAccordian.text().contains(ASSAYRESULTACCORDIAN) }
+		assert resultHolderTable.size()-1 != ISEMPTY
+		
+		when:"Navigating to Home Page"
+		at FindAssayByNamePage
+		capHeaders.bardLogo.click()
+		
+		then:"User is at Home page"
+		at HomePage
+	}
 
 }

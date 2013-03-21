@@ -1,6 +1,10 @@
 package pages
 
 import geb.Page
+import modules.SelectToContainerModule
+import modules.SelectInputModule
+import modules.SelectResultPopListModule
+
 import geb.Module
 import geb.navigator.Navigator
 import geb.report.Reporter
@@ -27,6 +31,7 @@ class EditAssayContextPage extends Page{
 	def addNewContextCard(def cardName){
 		if(isCardPresent(cardName)){
 			deletAssayCard(cardName)
+			Thread.sleep(3000)
 		}
 		
 		addEditAssayCards.addNewCardBtn.click()
@@ -185,9 +190,9 @@ class MoveCardItemsModule extends Module {
 
 class AddItemWizardModule extends Module {
 	static content = {
-		selectAttrib { module SelectToContainer, $("div#s2id_attributeId") }
-		selectValue { module SelectToContainer, $("div#s2id_valueId") }
-		selectValueUnit { module SelectToContainer, $("div#s2id_valueUnitId") }
+		selectAttrib { module SelectToContainerModule, $("div#s2id_attributeId") }
+		selectValue { module SelectToContainerModule, $("div#s2id_valueId") }
+		selectValueUnit { module SelectToContainerModule, $("div#s2id_valueUnitId") }
 		naviBtns { $("div.navigation")}
 		nextBtn { naviBtns.find("input", name:"next") }
 		cancelBtn { naviBtns.find("input", name:"cancel") }
@@ -198,7 +203,7 @@ class AddItemWizardModule extends Module {
 		valueType {value -> $("input", name:"valueTypeOption", value:"$value")}
 		valueQualifier { $("#valueQualifier") }
 		numericVal { $("input#numericValue") }
-		seleValueId { module SelectToValueId, $("div#s2id_valueId") }
+		//seleValueId { module SelectToValueIdModule, $("div#s2id_valueId") }
 		reviewContents { $("div.content").find("h1") }
 		successAlert { $("div.alert.alert-success") }
 	}

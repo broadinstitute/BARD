@@ -38,7 +38,7 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 
 		then: "Adding New Child Measure"
 		measuresHolder.find("a", text:"$resultTypeTopMeasure ($resultValueTopMeasure)").click() //highlighting the Top Measure
-		measureDetailModule("$resultTypeTopMeasure").addChildMeasureBtn("$resultTypeTopMeasure").click() //click to open add child measure window
+		measureDetail.addChildMeasureBtn(resultTypeTopMeasure).click() //click to open add child measure window
 		newMeasure("$resultTypeChildMeasure", "$resultValueChildMeasure")
 		report "AddChildMeasure"
 		when:
@@ -69,9 +69,9 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		then: "Associating Child Measure with Context"
 		navigateToChildMeasure(resultTypeTopMeasure, resultValueTopMeasure, resultTypeChildMeasure, resultValueChildMeasure)
 
-		waitFor(10, 5) { measureDetailModule("$resultTypeChildMeasure").measureForm }
-		measureDetailModule("$resultTypeChildMeasure").assayContext.value("$contextCard")  //select context to assiciate measure with
-		measureDetailModule("$resultTypeChildMeasure").associateBtn.click()  //click assiciate button
+		waitFor(10, 5) { measureDetail.associateBtn(resultTypeChildMeasure) }
+		measureDetail.assayContext(resultTypeChildMeasure).value(contextCard)  //select context to assiciate measure with
+		measureDetail.associateBtn(resultTypeChildMeasure).click()  //click assiciate button
 
 		report "AssociateChildMeasureWithContext"
 		when:
@@ -89,8 +89,8 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		at EditAssayMeasurePage
 		then: "Disassociate Child Measure from Context"
 		navigateToChildMeasure(resultTypeTopMeasure, resultValueTopMeasure, resultTypeChildMeasure, resultValueChildMeasure)
-		assert measureDetailModule("$resultTypeChildMeasure").measureForm
-		measureDetailModule("$resultTypeChildMeasure").disasiciateBtn("$resultTypeChildMeasure").click()
+		waitFor(15, 3) { measureDetail.disasiciateBtn(resultTypeChildMeasure)}
+		measureDetail.disasiciateBtn("$resultTypeChildMeasure").click()
 
 		report "DiisassociateChildMeasureFromContext"
 		when:
@@ -107,8 +107,8 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		at EditAssayMeasurePage
 		then:"Deleting Child Measure"
 		navigateToChildMeasure(resultTypeTopMeasure, resultValueTopMeasure, resultTypeChildMeasure, resultValueChildMeasure)
-		assert measureDetailModule("$resultTypeChildMeasure").deleteMeasure("$resultTypeChildMeasure")
-		measureDetailModule("$resultTypeChildMeasure").deleteMeasure("$resultTypeChildMeasure").click()
+		waitFor(15, 3) {measureDetail.deleteMeasure(resultTypeChildMeasure)}
+		measureDetail.deleteMeasure("$resultTypeChildMeasure").click()
 
 		report "DeleteChildMeasure"
 		when:
@@ -125,8 +125,8 @@ class EditAssayMeasureSpec extends BardFunctionalSpec {
 		at EditAssayMeasurePage
 		then: "Deleting Top Measure"
 		measuresHolder.find("a", text:"$resultTypeTopMeasure ($resultValueTopMeasure)").click()
-		assert measureDetailModule("$resultTypeTopMeasure").deleteMeasure("$resultTypeTopMeasure")
-		measureDetailModule("$resultTypeTopMeasure").deleteMeasure("$resultTypeTopMeasure").click()
+		waitFor(15, 3) {measureDetail.deleteMeasure(resultTypeTopMeasure)}
+		measureDetail.deleteMeasure("$resultTypeTopMeasure").click()
 
 		report "DeleteTopMeasure"
 		when:
