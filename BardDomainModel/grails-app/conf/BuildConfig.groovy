@@ -39,9 +39,10 @@ grails.project.dependency.resolution = {
 
         compile(":clover:3.1.10.1") { export = false }
         compile(":console:1.2") { export = false }
+        compile(":spring-security-core:1.2.7.3")
         compile(":database-migration:1.3.2") { export = true }
-        compile(":spock:0.7") { 
-            export = false 
+        compile(":spock:0.7") {
+            export = false
             exclude("spock-grails-support")
         }
         /**

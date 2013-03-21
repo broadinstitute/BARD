@@ -1,3 +1,4 @@
+import bard.springframework.jdbc.datasource.BardContextTransactionAwareDataSourceProxy
 import grails.plugin.databasemigration.MigrationUtils
 import liquibase.resource.FileSystemResourceAccessor
 import org.codehaus.groovy.grails.plugins.GrailsPluginUtils
@@ -15,7 +16,7 @@ class BardDomainModelGrailsPlugin {
 
     // since we want to override the migrationResourceAccessor configured by the database-migraiton plugin
     // asked to be loaded after that plugin
-    def loadAfter = ['datbase-migration']
+    def loadAfter = ['dataSource', 'datbase-migration', 'springSecurityCore']
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp",
@@ -68,6 +69,7 @@ Provide domain objects for any objects wishing to directly access the Bard datab
             //println(changelogLocationPath)
             migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
         }
+        dataSource(BardContextTransactionAwareDataSourceProxy, ref('dataSourceUnproxied'), ref('springSecurityService'))
     }
 
     def doWithDynamicMethods = { ctx ->

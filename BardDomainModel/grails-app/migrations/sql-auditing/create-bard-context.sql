@@ -17,6 +17,10 @@ procedure set_username(i_username varchar2);
 -- Removes the username from the context.
 --
 procedure clear_username;
+--
+-- Removes the username from the context.
+--
+function clear_username return varchar2;
 
 --
 -- Returns the username set in the context, always in lowercase. Or null if not set.
@@ -33,7 +37,6 @@ CREATE OR REPLACE package body bard_context is
 --
 
 v_username         varchar2(100) := null;
-v_cbip_sample_vpd  boolean := false;
 
 --
 -- Forward declarations
@@ -59,6 +62,15 @@ begin
 
 	v_username := null;
 
+end;
+
+function clear_username return varchar2 is
+  old_username varchar2(100);
+
+begin
+  old_username := v_username;
+	clear_username();
+  return concat(lower(old_username), ' was cleared from the context');
 end;
 
 function get_username return varchar2 is
