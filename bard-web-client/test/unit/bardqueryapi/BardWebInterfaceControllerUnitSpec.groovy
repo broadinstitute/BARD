@@ -1230,6 +1230,25 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+    void "test showCompoundBioActivitySummary #label"() {
+        when:
+        SearchCommand searchCommand = new SearchCommand()
+        searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: normalizeAxis)
+
+        controller.showExperiment(eid, searchCommand)
+        then:
+        _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
+        assert response.status == statusCode
+
+        where:
+        label                              | eid  | statusCode                         | webQueryTableModel | normalizeAxis
+        "Empty Null EID - Bad Request"     | null | HttpServletResponse.SC_BAD_REQUEST | null               | 'Normalize Y-Axis'
+        "Good request with normalization"  | 234  | HttpServletResponse.SC_OK          | new TableModel()   | 'Normalize Y-Axis'
+        "Good request with denormaliztion" | 234  | HttpServletResponse.SC_OK          | new TableModel()   | null
+
+    }
+
+
     CompoundAdapter buildCompoundAdapter(final Long cid) {
         final Compound compound = new Compound()
         compound.setCid(cid.intValue())
