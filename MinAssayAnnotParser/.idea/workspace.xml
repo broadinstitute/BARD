@@ -6,7 +6,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy" afterPath="$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" afterPath="$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" />
     </list>
     <ignored path="MinAssayAnnotParser.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -347,6 +346,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="validateCreatePersist" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MinAssayAnnotParser" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dm" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assaycompare" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -866,13 +891,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="77" selection-start="1029" selection-end="1029" vertical-scroll-proportion="0.44078946">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="222" column="101" selection-start="13084" selection-end="13084" vertical-scroll-proportion="0.5011287">
@@ -888,6 +906,13 @@
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="92" column="86" selection-start="4050" selection-end="4050" vertical-scroll-proportion="0.5899123">
+          <folding />
         </state>
       </provider>
     </entry>
