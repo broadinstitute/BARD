@@ -666,7 +666,8 @@ END reset_sequence;
                     VERSION,
                     DATE_CREATED,
                     LAST_UPDATED,
-                    MODIFIED_BY
+                    MODIFIED_BY,
+                    PROJECT_STATUS
                 from data_mig.project dp
                 where project_id in
                     (select project_id from data_mig.project_experiment

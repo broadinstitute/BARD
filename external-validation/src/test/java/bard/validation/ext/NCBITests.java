@@ -61,6 +61,15 @@ public class NCBITests {
 		System.out.println(String.format("%s items returned for query 'ppar gamma'", items.size()));
 		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
 	}
+	
+	@Test
+	public void testFindMatchingChembl() throws ExternalOntologyException {
+		ExternalOntologyAPI eo = new ExternalOntologyNCBI("pcassay", "southern@scripps.edu", "BARD-CAP");
+		List<ExternalItem> items = eo.findMatching("chembl[sourcename]");
+//		for (ExternalItem item : items)
+//			System.out.println(String.format("%s\t%s", item.getId(), item.getDisplay()));
+		assertEquals("'chembl' returns: " + items.size(), items.size() > 600000, true);
+	}
 
 	@Test
 	public void testFindMatchingLimitThree() throws ExternalOntologyException {

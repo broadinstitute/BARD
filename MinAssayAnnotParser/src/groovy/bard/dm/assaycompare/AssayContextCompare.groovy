@@ -3,6 +3,7 @@ package bard.dm.assaycompare
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import bard.dm.Log
+import org.apache.log4j.Logger
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +15,9 @@ import bard.dm.Log
 class AssayContextCompare {
     private CompareUsingMatches<AssayContextItem, ContextItemComparisonResultEnum> compareUsingMatches
 
-    public AssayContextCompare() {
-        compareUsingMatches = new CompareUsingMatches<AssayContextItem, ContextItemComparisonResultEnum>(new AssayContextItemMatchTripleBuilder())
+    public AssayContextCompare(Logger logger = Log.logger) {
+        compareUsingMatches =
+            new CompareUsingMatches<AssayContextItem, ContextItemComparisonResultEnum>(new AssayContextItemMatchTripleBuilder(logger))
     }
 
     /**

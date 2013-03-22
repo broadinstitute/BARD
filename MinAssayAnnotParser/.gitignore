@@ -1,3 +1,4 @@
 out/
 test/exampleData/logsAndOutput/*
 test/exampleData/temp
+test/unit/bard/dm/assaycompare/data/maasDataset1/output/
