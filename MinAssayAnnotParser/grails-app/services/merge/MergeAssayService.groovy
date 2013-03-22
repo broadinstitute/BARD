@@ -1,0 +1,364 @@
+package merge
+
+import bard.db.registration.Assay
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AttributeType
+import org.apache.commons.lang3.StringUtils
+import bard.db.registration.AssayDocument
+import bard.db.registration.Measure
+import bard.db.experiment.Experiment
+import bard.db.registration.AssayContext
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
+import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextItem
+import groovy.sql.Sql
+import bard.db.experiment.ExperimentMeasure
+import bard.db.registration.AssayContextMeasure
+
+class MergeAssayService {
+
+    /**
+     * This is the assay we want to keep
+     * @param assays
+     * @return the assay we want to keep
+     */
+    private Assay keepAssay(List<Assay> assays) {
+        Assay assay = assays.max {  // keep assay that having the largest number of contextItems
+            it.assayContextItems.size()
+        }
+        println("Assay ${assay.id} has max # of contextItem ${assay.assayContextItems.size()}, keep it")
+        return assay
+    }
+
+    private List<Assay> assaysNeedToRemove(List<Assay> assays, Assay assayWillKeep) {
+        List<Assay> removingAssays = []
+        assays.each {
+            if (it.id != assayWillKeep.id)
+                removingAssays.add(it)
+        }
+        return removingAssays
+    }
+
+    // assay context items:  identify assay_context_items that do not occur in all the removingAssays
+    // 1.  if the assay_context_item does not occur in the single kept assay, add it but change it to AttributeType "list"
+    // 2.  if there is an assay_context_item in the single kept assay that has the same attribute, but a different value,
+    //     change it to a AttributeType to list and add the value from the duplicate assay to the List
+    // 3.  for an experiment associated with an assay that has an assay_context_item that is part of one of these new lists,
+    //     add an experiment_context_item that corresponds the attribute with a value as specified in the original assay
+
+    def mergeAssayContextItem(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
+        List<AssayContextItem> candidateContextItems = []
+        removingAssays.each {
+            candidateContextItems.addAll(it.assayContextItems)
+        }
+
+        // there are maybe new contexts not in assayWillKeep, make sure we added context first
+        List<AssayContext> candidateContexts = []
+        removingAssays.each {
+            candidateContexts.addAll(it.assayContexts)
+        }
+
+        // Add missing context item
+        int assayContextItemInKeep = 0  // count number of assaycontextitem in kept assay
+        int assayContextItemInKeepWithDifferentValue = 0 // count number of assaycontextitem in kept assay with same attribute,
+        // but different value
+        int assayContextItemNotInKeep = 0 // count number of assaycontextitem not in kept assay
+        for (AssayContextItem item : candidateContextItems) {
+            if (isAssayContextItemIn(assayWillKeep.assayContextItems, item)) {
+                assayContextItemInKeep++
+                continue
+            }
+            AssayContextItem second = assayWillKeep.assayContextItems.find {it.attributeElement == item.attributeElement && it.valueElement != item.valueElement}
+            if (second && item.attributeType == AttributeType.Fixed) {
+                assayContextItemInKeepWithDifferentValue++
+                createExperimentContextAndItem(item.assayContext, modifiedBy)
+                createExperimentContextAndItem(second.assayContext, modifiedBy)
+                // add value
+                item.modifiedBy = modifiedBy + "-movedFromA-${item.assayContext.assay.id}"
+                item.assayContext.removeFromAssayContextItems(item)
+                item.assayContext = second.assayContext
+                second.assayContext.addToAssayContextItems(item)
+                item.attributeType = AttributeType.List
+                second.attributeType = AttributeType.List
+                // now need to create experiment context and experiment contextitem
+
+            }
+            else {
+                assayContextItemNotInKeep++
+                // At the point we should be able to find a corresponding context
+                AssayContext context = assayWillKeep.assayContexts.find {
+                    item.assayContext.contextName == it.contextName && item.assayContext.contextGroup == it.contextGroup
+                }
+                if (!context) {
+                    // Add assay context to assay that will be kept if there is no one exist
+                    int assayContextNotInKeep = 0 // count number of assayContext not seeing in kept assay
+                    context = candidateContexts.find {
+                        item.assayContext.contextName == it.contextName && item.assayContext.contextGroup == it.contextGroup
+                    }
+
+                    if (context) {
+                        assayContextNotInKeep++
+                        context.assay.removeFromAssayContexts(context)
+                        context.assay = assayWillKeep
+                        assayWillKeep.addToAssayContexts(context)
+                        context.modifiedBy = modifiedBy + "-addedFromA-${context.assay.id}"
+                    }
+
+                }
+
+
+                if (context) {
+                    item.modifiedBy = modifiedBy + "-movedFromA-${item.assayContext.assay.id}"
+                    item.assayContext.removeFromAssayContextItems(item)
+                    context.addToAssayContextItems(item)
+                    item.assayContext = context
+                }
+            }
+        }
+        assayWillKeep.save()
+        // Assay.findById(assayWillKeep.id)
+    }
+
+    private void createExperimentContextAndItem(AssayContext assayContext, String modifiedBy) {
+        for (Experiment experiment : assayContext.assay.experiments) {
+            def foundExperimentContext = experiment.experimentContexts.find {it?.contextName == assayContext.contextName && it?.contextGroup == assayContext.contextGroup}
+            if (!foundExperimentContext) {
+                foundExperimentContext = new ExperimentContext(contextName: assayContext?.contextName, contextGroup: assayContext?.contextGroup, experiment: experiment)
+                experiment.addToExperimentContexts(foundExperimentContext)
+                foundExperimentContext.experiment = experiment
+                foundExperimentContext.modifiedBy = modifiedBy + "-addedFromACI-${assayContext.id}"
+                if (!foundExperimentContext.save()) {
+                    println(foundExperimentContext.errors)
+                }
+            }
+
+            for (AssayContextItem assayContextItem : assayContext.assayContextItems) {
+                if (!isContextItemExist(foundExperimentContext, assayContextItem) && assayContextItem.attributeType == AttributeType.Fixed) {  // create an explicit experiment context for fixed
+                    ExperimentContextItem newExperimentContextItem = createExperimentContextItem(assayContextItem)
+                    foundExperimentContext.addToExperimentContextItems(newExperimentContextItem)
+                    newExperimentContextItem.experimentContext = foundExperimentContext
+                    newExperimentContextItem.modifiedBy = modifiedBy + "-addedFromACI-${assayContextItem.id}"
+                    newExperimentContextItem.save()
+                }
+            }
+        }
+    }
+
+    private ExperimentContextItem createExperimentContextItem(AssayContextItem assayContextItem) {
+        def newExperimentContextItem = new ExperimentContextItem(attributeElement: assayContextItem.attributeElement,
+                valueElement: assayContextItem.valueElement,
+                extValueId: assayContextItem.extValueId,
+                qualifier: assayContextItem.qualifier,
+                valueNum: assayContextItem.valueNum,
+                valueMin: assayContextItem.valueMin,
+                valueMax: assayContextItem.valueMax,
+                valueDisplay: assayContextItem.valueDisplay
+        )
+        return newExperimentContextItem
+    }
+
+    //experiments:  change the experiments associated with all the removingAssays in the duplicate set so that they point to the single kept  assay
+    def handleExperiments(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
+
+        List<Experiment> experiments = []
+        removingAssays.each {Assay assay ->
+            experiments.addAll(assay.experiments)
+        }
+        int addExperimentToKept = 0 // count number of experiments added to kept assays
+        experiments.each {Experiment experiment ->
+            Experiment found = assayWillKeep.experiments.find {it.id == experiment.id}
+            if (!found) {
+                addExperimentToKept++
+                experiment.modifiedBy = modifiedBy + "-movedFromA-${experiment?.assay?.id}"
+                experiment.assay.removeFromExperiments(experiment)
+
+                experiment.assay = assayWillKeep
+                assayWillKeep.addToExperiments(experiment)
+            }
+        }
+        println("Total candidate experiments: ${experiments.size()}, added ${addExperimentToKept}")
+        assayWillKeep.save()
+        // Assay.findById(assayWillKeep.id)
+    }
+
+    //assay documents:  check for exact string matches, copy over everything that does not match
+    def handleDocuments(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
+        Set<AssayDocument> docs = new HashSet<AssayDocument>()
+        removingAssays.each {Assay assay ->
+            docs.addAll(assay.documents)
+        }
+        int addDocsToKeep = 0 // count number of documents added to kept assay
+        docs.each {AssayDocument doc ->
+            if (!assayWillKeep.assayDocuments.contains(doc)) {
+                addDocsToKeep++
+                doc.modifiedBy = modifiedBy + "-movedFromA-${doc.assay.id}"
+                doc.assay.removeFromAssayDocuments(doc)
+
+                assayWillKeep.addToAssayDocuments(doc)
+                doc.assay = assayWillKeep
+            }
+        }
+        println("Total candidate documents: ${docs.size()}, added ${addDocsToKeep}")
+        // assayWillKeep.save()
+        Assay.findById(assayWillKeep.id)
+    }
+
+    // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
+    // delete the measures that are duplicates (and the assay-measures)
+    def handleMeasure(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
+        assayWillKeep = Assay.findById(assayWillKeep.id)
+        List<Measure> measures = []
+        removingAssays.each {Assay assay ->
+            measures.addAll(assay.measures)
+        }
+        int addMeasureToKeep = 0 // count number of measures added to assay
+        int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
+        int deletedMeasure = 0 // count number of measures deleted
+        def deleteMeasures = []
+        for (Measure measure : measures) {
+            Measure found = assayWillKeep.measures.find{it.id == measure.id}
+            if (found)
+                continue
+            found = assayWillKeep.measures.find {
+                (it.resultType == measure.resultType) &&
+                         (it.statsModifier == measure.statsModifier )// &&
+                         //(it.parentMeasure == measure.parentMeasure )
+            }
+
+            if (!found) {
+                measure.modifiedBy = modifiedBy + "-movedFromA-${measure.assay.id}"
+                addMeasureToKeep++
+                measure.assay.removeFromMeasures(measure)
+                assayWillKeep.addToMeasures(measure)
+                measure.assay = assayWillKeep
+                measure.assayContextMeasures.each {it.assayContext.assay = assayWillKeep}
+
+            } else if (measure.assayContextMeasures.size() != 0) {
+                measure.assayContextMeasures.each {
+                    it.assayContext.assay = assayWillKeep
+                    found.addToAssayContextMeasures(it)
+                    //it.assayContext.removeFromAssayContextMeasures(it)
+                }
+               // deleteMeasures.add(measure)
+            } else {
+               // deleteMeasures.add(measure)
+            }
+        }
+
+        for (Measure measure : deleteMeasures) {
+            for (ExperimentMeasure experimentMeasure : measure.experimentMeasures) {
+                measure.removeFromExperimentMeasures(experimentMeasure)
+                experimentMeasure.measure = null
+            }
+            measure.assay.removeFromMeasures(measure)
+            measure.assay = null
+            measure.delete()
+        }
+
+
+        for (Experiment experiment : assayWillKeep.experiments) {
+            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+                if (!experimentMeasure.measure) continue
+                if (!experimentMeasure.measure?.assay || experimentMeasure.measure?.assay != assayWillKeep) {
+                    experimentMeasure.measure.assay = assayWillKeep
+                }
+            }
+        }
+
+
+        println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, delete ${deletedMeasure}, add to experiment ${addMeasureToExperimentInKeep}")
+        assayWillKeep.save()
+        // Assay.findById(assayWillKeep.id)
+    }
+
+    // resultype, stateModifier, parentMeasure can be null for example:31397,31424
+    def Measure isMeasureInAssay(Measure measure, Assay assay) {
+
+    }
+
+    def ExperimentMeasure isMeasureInExperiments(Measure measure, Collection<Experiment> experiments) {
+        for (Experiment experiment : experiments) {
+            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
+                if (experimentMeasure.measure == measure) {
+                    return experimentMeasure
+                }
+            }
+        }
+        return null
+    }
+
+    def delete(List<Long> removingAssays, Sql sql) {
+        assert sql
+        for (Long assayid : removingAssays) {
+            def updateSql = "delete from assay_document where assay_id=${assayid}"
+            sql.execute(updateSql)
+            updateSql = "delete from assay_context where assay_id=${assayid}"
+            sql.execute(updateSql)
+            updateSql = "delete from assay_context_item where assay_context_id in (select assay_context_id from assay_context where assay_id=${assayid}"
+            sql.execute(updateSql)
+            updateSql = "delete from assay_document where assay_id=${assayid}"
+            sql.execute(updateSql)
+            updateSql = "delete from experiment where assay_id = ${assayid}"
+            sql.execute(updateSql)
+
+        }
+    }
+
+    def boolean isAssayContextItemIn(List<AssayContextItem> items, AssayContextItem item) {
+        for (AssayContextItem assayContextItem : items) {
+            if (isAssayContextItemEquals(assayContextItem, item))
+                return true
+        }
+    }
+
+    def boolean isAssayContextItemEquals(AssayContextItem a, AssayContextItem b) {
+        if (a.is(b))
+            return true
+        if (b.id == a.id)
+            return true
+        if (a.attributeElement != b.attributeElement)
+            return false
+        if (a.attributeType == AttributeType.Free && b.attributeType == AttributeType.Free)
+            return true
+        if (a.valueElement && b.valueElement && a.valueElement == b.valueElement)
+            return true
+        if (a.extValueId && b.extValueId && a.extValueId == b.extValueId)
+            return true
+        if (a.valueNum && b.valueNum && StringUtils.equals(a.qualifier, b.qualifier) && Float.compare(a.valueNum, b.valueNum) == 0)
+            return true
+        if (a.valueMax && b.valueMax && a.valueMin && b.valueMin && compareFloat(a.valueMax, b.valueMax) && compareFloat(a.valueMin, b.valueMin))
+            return true
+        return false
+    }
+
+    boolean compareFloat(Float a, Float b) {
+        if (a && b)
+            return Float.compare(a, b)
+        return false
+    }
+
+    /**
+     * Loop over the whole context to see if a particular item exist or not
+     *
+     * @param context
+     * @param item
+     * @return
+     */
+    boolean isContextItemExist(AbstractContext context, AbstractContextItem item) {
+        boolean isSame = false
+        context.contextItems.each { AbstractContextItem it ->
+            if (item.attributeElement.label == it.attributeElement.label &&
+                    item.valueElement?.label == it.valueElement?.label &&
+                    StringUtils.equals(item.extValueId, it.extValueId) &&
+                    StringUtils.equals(item.qualifier, it.qualifier) &&
+//                    Float.compare(item.valueNum, it.valueNum) &&
+//                    Float.compare(item.valueMin, it.valueMin) &&
+//                    Float.compare(item.valueMax, it.valueMax) &&
+                    StringUtils.equals(item.valueDisplay, it.valueDisplay)
+            )
+                isSame = true
+        }
+        return isSame
+    }
+}
