@@ -183,7 +183,6 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         }else if (assayContextItem.valueDisplay && assayContextItem.attributeElement.label.equals(speciesElementLabel)) {//'go:
             return rebuildAssayContextItem(assayContextItem, speciesElementLabel, contextDTO)
         }
-
         return true
     }
 
@@ -209,7 +208,6 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         assayContextItem.attributeElement = element
         assayContextItem.extValueId = extValueId
         assayContextItem.valueDisplay = newValueDisplay
-
         return true
     }
 
@@ -219,6 +217,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         Set<AssayContext> assayContextOrigSet = new HashSet<AssayContext>(assayContext.assay.assayContexts)
 
         for (AssayContext assayContextOrig : assayContextOrigSet) {
+            if (!assayContextOrig)
+                continue
             if (!assayContextOrig.equals(assayContext)) {
                 ComparisonResult<ContextItemComparisonResultEnum> compResult = assayContextCompare.compareContext(assayContextOrig, assayContext)
 
