@@ -5,8 +5,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
 
-import static bard.validation.ext.BardExternalOntologyFactory.NCBI_EMAIL
-import static bard.validation.ext.BardExternalOntologyFactory.NCBI_TOOL
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,6 +16,9 @@ import static bard.validation.ext.BardExternalOntologyFactory.NCBI_TOOL
  */
 @Unroll
 class ExternalOntologyIntegrationSpec extends Specification {
+
+    String NCBI_EMAIL = BardExternalOntologyFactory.NCBI_EMAIL
+    String NCBI_TOOL = BardExternalOntologyFactory.NCBI_TOOL
 
     void "test valid urls new ConfigurableExternalOntologyFactory().getExternalOntologyAPI for #externalUrl"() {
         when:
