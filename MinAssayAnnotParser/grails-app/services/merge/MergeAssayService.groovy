@@ -218,13 +218,14 @@ class MergeAssayService {
         int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
         int deletedMeasure = 0 // count number of measures deleted
         def deleteMeasures = []
+        def measureMap = [:]     // map to keep id and found measure
         for (Measure measure : measures) {
             Measure found = assayWillKeep.measures.find{it.id == measure.id}
             if (found)
                 continue
             found = assayWillKeep.measures.find {
                 (it.resultType == measure.resultType) &&
-                         (it.statsModifier == measure.statsModifier )// &&
+                         (it.statsModifier == measure.statsModifier ) //&&
                          //(it.parentMeasure == measure.parentMeasure )
             }
 
@@ -240,11 +241,13 @@ class MergeAssayService {
                 measure.assayContextMeasures.each {
                     it.assayContext.assay = assayWillKeep
                     found.addToAssayContextMeasures(it)
-                    //it.assayContext.removeFromAssayContextMeasures(it)
+                    it.assayContext.removeFromAssayContextMeasures(it)
                 }
+                measureMap.put(measure.id, found)
                // deleteMeasures.add(measure)
             } else {
                // deleteMeasures.add(measure)
+                measureMap.put(measure.id, found)
             }
         }
 
@@ -262,8 +265,8 @@ class MergeAssayService {
         for (Experiment experiment : assayWillKeep.experiments) {
             for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
                 if (!experimentMeasure.measure) continue
-                if (!experimentMeasure.measure?.assay || experimentMeasure.measure?.assay != assayWillKeep) {
-                    experimentMeasure.measure.assay = assayWillKeep
+                if (measureMap.containsKey(experimentMeasure.measure.id)) {
+                    experimentMeasure.measure = measureMap.get(experimentMeasure.measure.id)
                 }
             }
         }
@@ -272,11 +275,6 @@ class MergeAssayService {
         println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, delete ${deletedMeasure}, add to experiment ${addMeasureToExperimentInKeep}")
         assayWillKeep.save()
         // Assay.findById(assayWillKeep.id)
-    }
-
-    // resultype, stateModifier, parentMeasure can be null for example:31397,31424
-    def Measure isMeasureInAssay(Measure measure, Assay assay) {
-
     }
 
     def ExperimentMeasure isMeasureInExperiments(Measure measure, Collection<Experiment> experiments) {
@@ -305,6 +303,16 @@ class MergeAssayService {
             sql.execute(updateSql)
 
         }
+    }
+
+    def deleteAssay(Assay assay) {
+        assay.experiments.removeAll(assay.experiments)
+        assay.documents.removeAll(assay.documents)
+        assay.measures {Measure measure->
+
+
+        }
+        assay.contexts.removeAll(assay.contexts)
     }
 
     def boolean isAssayContextItemIn(List<AssayContextItem> items, AssayContextItem item) {
