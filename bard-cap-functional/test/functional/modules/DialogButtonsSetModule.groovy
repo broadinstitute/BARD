@@ -4,9 +4,8 @@ import geb.Page
 import geb.Module
 import geb.navigator.Navigator
 
-class SummaryModule extends Module {
+class DialogButtonsSetModule extends Module {
 	static content = {
-		dtLabel { $("dt") }
-		ddValue { $("dd") }
+		button { $("button") }
 	}
 }

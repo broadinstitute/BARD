@@ -2,13 +2,14 @@ package pages
 
 import geb.Page
 import geb.Module
+import modules.CardsHolderModule
 import geb.navigator.Navigator
 
-class CapFunctionalPage extends Page {
+public class CapFunctionalPage extends Page {
 	static url = ""
 	static at = {}
 	static content = {
-		
+	
 	}
 	
 	boolean isAutocompleteListOk(element, condition){
@@ -20,4 +21,14 @@ class CapFunctionalPage extends Page {
 			}
 		}
 	}
+	
+/*	def UIContexts(def cardHolders){
+		def uiContexts = []
+		if(cardHolders.cardTable.find("caption")){
+			cardHolders.cardTable.find("caption").each{ contextName ->
+				uiContexts.add(contextName.text())
+			}
+		}
+		return uiContexts
+	}*/
 }

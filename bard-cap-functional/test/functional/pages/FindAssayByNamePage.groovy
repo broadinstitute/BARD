@@ -17,8 +17,7 @@ class FindAssayByNamePage extends CapFunctionalPage {
 
 	static content = {
 		assayResultAccordian { $("div#results_accordion").find("h3") }
-		resultHolderTable { $("table.gridtable").find("tr") }
-		
+		resultHolderTable { moduleList SearchResultTableModule, $("table.gridtable tr").tail() }
 		assaysResults { index -> moduleList SearchResultTableModule, $("table.gridtable tr").tail(), index }
 		assaySearchBtns { module SearchFieldsModule, searchBtns: FIND_ASSAY_FIELD }
 		capHeaders { module BardCapHeaderModule }

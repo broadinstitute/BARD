@@ -4,7 +4,7 @@ import geb.Page
 import modules.SelectToContainerModule
 import modules.SelectInputModule
 import modules.SelectResultPopListModule
-
+import modules.CardsHolderModule
 import geb.Module
 import geb.navigator.Navigator
 import geb.report.Reporter
@@ -30,10 +30,36 @@ class EditAssayContextPage extends Page{
 
 	def addNewContextCard(def cardName){
 		if(isCardPresent(cardName)){
+			if(isContextItem(cardName)){
+				deleContextItem(cardName)
+				waitFor(20, 2) { !isContextItem(cardName) }
+			}
 			deletAssayCard(cardName)
-			Thread.sleep(3000)
+			waitFor(20, 2) { !isCardPresent(cardName) }
 		}
-		
+		addCard(cardName)
+	}
+
+	boolean isContextItem(def cardName){
+		boolean found = false
+		if(isCardPresent(cardName)){
+			if(cardHolders.cardName(cardName).next().size() != "Empty"){
+				if(cardHolders.cardName(cardName).next().find("a")){
+					found = true
+				}
+			}
+		}
+		return found
+	}
+	def deleContextItem(def cardName){
+		cardHolders.cardItemMenu(cardName).click()
+		assert cardHolders.cardItemMenuDD[1]
+		assert cardHolders.cardItemMenuDD[2]
+		cardHolders.cardItemMenuDD[2].click()
+		waitFor(10, 1){ deleteAssayCards.deleteBtn }
+		deleteAssayCards.deleteBtn.click()
+	}
+	def addCard(def cardName){
 		addEditAssayCards.addNewCardBtn.click()
 		waitFor{ addEditAssayCards.titleBar }
 		assert addEditAssayCards.titleBar.text() ==~ "Create new card"
@@ -42,15 +68,14 @@ class EditAssayContextPage extends Page{
 		assert addEditAssayCards.cancelBtn
 		addEditAssayCards.enterCardName << "$cardName"
 		addEditAssayCards.saveBtn.click()
-		waitFor(20, 7){ cardHolders.cardName("$cardName") }
+		waitFor(20, 3) { isCardPresent(cardName) }
 	}
-
 	def verifyEmptyCardsMenu(def cardName){
 		assert cardHolders.cardName("$cardName")
 		cardHolders.cardMenu("$cardName").click()
-		assert cardHolders.cardDDMenu[1] // edit card name button
-		assert cardHolders.cardDDMenu[2] // add item wizard button
-		assert cardHolders.cardDDMenu[3] // delete card button
+		assert cardHolders.cardDDMenu[1]	// edit card name button
+		assert cardHolders.cardDDMenu[2]	// add item wizard button
+		assert cardHolders.cardDDMenu[3]	// delete card button
 		cardHolders.cardDDMenu[0].click()
 	}
 
@@ -82,8 +107,8 @@ class EditAssayContextPage extends Page{
 		assert itemWizard.cancelBtn
 		itemWizard.selectAttrib.selectLink.click()
 		selectToSearch.enterResult.value("$searchAttribValue")
-		Thread.sleep(2000)
 		waitFor(15, 3){ selectResult.resultPopup }
+		Thread.sleep(2000)
 		selectResult.resultPopup.click()
 		itemWizard.nextBtn.click()
 	}
@@ -107,15 +132,15 @@ class EditAssayContextPage extends Page{
 		assert itemWizard.previousBtn
 		itemWizard.selectValue.selectLink.click()
 		selectToSearch.enterResult.value("$searchAttribValue")
-		Thread.sleep(2000)
 		waitFor(15, 5){ selectResult.resultPopup }
+		Thread.sleep(2000)
 		selectResult.resultPopup.click()
 		itemWizard.valueQualifier.value("$qualifier")
 		itemWizard.numericVal.value("$unitVal")
 		itemWizard.selectValueUnit.selectLink.click()
 		selectToSearch.enterResult.value("")
-		Thread.sleep(2000)
 		waitFor(15, 3){ selectResult.resultPopup }
+		Thread.sleep(2000)
 		selectResult.resultPopup.click()
 		itemWizard.nextBtn.click()
 	}
@@ -134,19 +159,28 @@ class EditAssayContextPage extends Page{
 		itemWizard.closeBtn.click()
 		waitFor { finishEditingBtn}
 	}
-}
 
-class CardsHolderModule extends Module {
-	static content = {
-		cardTable { $("table.table.table-hover") }
-		cardName { captionText -> cardTable.find("caption", text:"$captionText") }
-		cardMenu { captionText -> cardTable.find("caption", text:"$captionText").find("a")[0] }
-		dropupBtns { $("div.btn-group.dropup.open") }
-		cardDDMenu(wait: true) { dropupBtns.find("a") }
-		cardItemMenu {cardValue -> cardTable.find("caption", text:"$cardValue").next().find("a")[0]}
-		cardItemMenuDD(wait: true) { dropupBtns.find("a")}
-		cardItems { captionText -> cardTable.find("caption", text:"$captionText").next().find("tr.context_item_row.ui-droppable") }
+	def UIContexts(){
+		def uiContexts = []
+		if(cardHolders.cardTable.find("caption")){
+			cardHolders.cardTable.find("caption").each{ contextName ->
+				uiContexts.add(contextName.text())
+			}
+		}
+		return uiContexts
 	}
+
+	def contextCardItems(def card){
+		def resultList = []
+		def resultMap = [:]
+		if(isContextItem(card))
+			cardHolders.cardItems(card).each{
+				resultMap = ['attributeLable':it.find("td")[0].text(), 'valueDisplay':it.find("td")[1].text()]
+				resultList.add(resultMap)
+			}
+		return resultList
+	}
+
 }
 
 class AddEditAssayCardModule extends Module {
@@ -203,7 +237,6 @@ class AddItemWizardModule extends Module {
 		valueType {value -> $("input", name:"valueTypeOption", value:"$value")}
 		valueQualifier { $("#valueQualifier") }
 		numericVal { $("input#numericValue") }
-		//seleValueId { module SelectToValueIdModule, $("div#s2id_valueId") }
 		reviewContents { $("div.content").find("h1") }
 		successAlert { $("div.alert.alert-success") }
 	}
