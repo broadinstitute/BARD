@@ -1,12 +1,10 @@
 package bard.db.model
 
 import org.apache.commons.lang.BooleanUtils
-import org.apache.commons.lang.StringUtils
 import org.apache.commons.validator.UrlValidator
 import org.springframework.validation.Errors
 import org.apache.commons.lang3.StringUtils
-import org.apache.commons.lang3.builder.HashCodeBuilder
-import org.apache.commons.lang3.builder.EqualsBuilder
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,28 +49,5 @@ abstract class AbstractDocument implements IDocumentType {
                 errors.rejectValue(field, 'document.invalid.url.message', [field, self.documentType] as Object[], "Valid URL expected for ${self.documentType}")
             }
         }
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj.is(this))
-            return true
-        if (obj.getClass() != getClass())
-            return false
-        AbstractDocument b = (AbstractDocument) obj;
-        return new EqualsBuilder().append(documentName, b.documentName).append(documentType, b.documentType).append(documentContent, b.documentContent).isEquals()
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    int hashCode() {
-        return new HashCodeBuilder(17, 37).
-                append(documentName).
-                append(documentType).
-                append(documentContent).
-                toHashCode()
     }
 }

@@ -15,6 +15,8 @@ import bard.db.model.AbstractContextItem
 import groovy.sql.Sql
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.AssayContextMeasure
+import bard.db.model.AbstractDocument
+import org.apache.commons.lang3.builder.EqualsBuilder
 
 class MergeAssayService {
 
@@ -184,13 +186,13 @@ class MergeAssayService {
 
     //assay documents:  check for exact string matches, copy over everything that does not match
     def handleDocuments(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
-        Set<AssayDocument> docs = new HashSet<AssayDocument>()
+        List<AssayDocument> docs = []
         removingAssays.each {Assay assay ->
             docs.addAll(assay.documents)
         }
         int addDocsToKeep = 0 // count number of documents added to kept assay
         docs.each {AssayDocument doc ->
-            if (!assayWillKeep.assayDocuments.contains(doc)) {
+            if (!isDocumentInAssay(doc, assayWillKeep)) {
                 addDocsToKeep++
                 doc.modifiedBy = modifiedBy + "-movedFromA-${doc.assay.id}"
                 doc.assay.removeFromAssayDocuments(doc)
@@ -360,5 +362,19 @@ class MergeAssayService {
                 isSame = true
         }
         return isSame
+    }
+
+    boolean isDocumentEqual(AssayDocument a, AssayDocument b) {
+        if (a.id == b.id)
+            return true
+        new EqualsBuilder().append(a.documentName, b.documentName).append(a.documentType, b.documentType).append(a.documentContent, b.documentContent).isEquals()
+    }
+
+    boolean isDocumentInAssay(AssayDocument a, Assay assay) {
+        for (AssayDocument ad : assay.assayDocuments) {
+            if (isDocumentEqual(ad, a))
+                return true
+        }
+        return false
     }
 }
