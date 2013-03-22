@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.registration.additemwizard.*
+import org.apache.commons.lang.StringUtils
 
 /**
  * Created with IntelliJ IDEA.
@@ -165,6 +166,8 @@ class AssayContextService {
             } else if (fixedValCmd.extValueId) {
                 newAssayContextItem.extValueId = fixedValCmd.extValueId
                 newAssayContextItem.valueDisplay = fixedValCmd.valueLabel
+            } else if (!StringUtils.isBlank(fixedValCmd.textValue)) {
+                newAssayContextItem.valueDisplay = fixedValCmd.textValue
             } else {
                 Element valueElement = Element.get(fixedValCmd.valueId)
                 newAssayContextItem.valueElement = valueElement
@@ -184,13 +187,15 @@ class AssayContextService {
             } else if (listValCmd.extValueId) {
                 newAssayContextItem.extValueId = listValCmd.extValueId
                 newAssayContextItem.valueDisplay = listValCmd.valueLabel
+            } else if (!StringUtils.isBlank(fixedValCmd.textValue)) {
+                newAssayContextItem.valueDisplay = fixedValCmd.textValue
             } else {
                 Element valueElement = Element.get(listValCmd.valueId)
                 newAssayContextItem.valueElement = valueElement
                 newAssayContextItem.valueDisplay = valueElement.label
             }
         }
-            return newAssayContextItem
+        return newAssayContextItem
 
     }
 

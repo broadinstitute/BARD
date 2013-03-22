@@ -50,18 +50,21 @@ class FixedValueCommand implements Serializable {
     Long valueUnitId
     String valueUnitLabel
     String numericValue
+    String textValue
     boolean isNumericValue
 
     boolean validateValue() {
         // delegate to validations performed by constraints
         validate()
 
-        if (extValueId) {
+        isNumericValue = false;
+
+        if (!StringUtils.isBlank(textValue)) {
+            // a text value was provided
+        } else if (extValueId) {
             // a value for extValueId is valid
-        } else if (!valueId && StringUtils.isBlank(numericValue)) {
-            errors.reject("fixedValue.missing.value", "Either numeric value or string value must be provided")
         } else if (valueId) {
-            isNumericValue = false;
+            // valid value
         } else if (StringUtils.isNotBlank(numericValue)) {
             // Handles Numeric values: negatives, and comma formatted values. Also handles a single decimal point
             Pattern pattern = Pattern.compile("^(\\d|-)?(\\d|,)*\\.?\\d*\$")
@@ -70,8 +73,27 @@ class FixedValueCommand implements Serializable {
                 isNumericValue = true;
             else
                 errors.reject("fixedValue.nomatch.numericValue", "Your entry does not match a numeric value")
+        } else {
+            errors.reject("fixedValue.missing.value", "Either numeric value or string value must be provided")
         }
+
         return !hasErrors();
+    }
+
+    @Override
+    public String toString() {
+        return "FixedValueCommand{" +
+                "valueId=" + valueId +
+                ", valueLabel='" + valueLabel + '\'' +
+                ", attributeElementId='" + attributeElementId + '\'' +
+                ", extValueId='" + extValueId + '\'' +
+                ", valueQualifier='" + valueQualifier + '\'' +
+                ", valueUnitId=" + valueUnitId +
+                ", valueUnitLabel='" + valueUnitLabel + '\'' +
+                ", numericValue='" + numericValue + '\'' +
+                ", textValue='" + textValue + '\'' +
+                ", isNumericValue=" + isNumericValue +
+                '}';
     }
 }
 
@@ -98,10 +120,11 @@ class ListValueCommand implements Serializable {
     boolean validateValue() {
         // delegate to validations performed by constraints
         validate()
-        if (extValueId) {
+
+        if (StringUtils.isBlank(textValue)) {
+            // a text value was provided
+        } else if (extValueId) {
             // a value for extValueId is valid
-        } else if (!valueId && StringUtils.isBlank(numericValue)) {
-            errors.reject("listValue.missing.value", "Either numeric value or string value must be provided")
         } else if (valueId) {
             isNumericValue = false;
         } else if (StringUtils.isNotBlank(numericValue)) {
@@ -111,8 +134,11 @@ class ListValueCommand implements Serializable {
             if (matcher.matches())
                 isNumericValue = true;
             else
-                errors.reject("listValue.nomatch.numericValue", "Your entry does not match a numeric value")
+                errors.reject("fixedValue.nomatch.numericValue", "Your entry does not match a numeric value")
+        } else {
+            errors.reject("fixedValue.missing.value", "Either numeric value or string value must be provided")
         }
+
         return !hasErrors();
     }
 }
@@ -321,14 +347,20 @@ class AddItemWizardController {
             on("close").to "closeWizard"
             on("next") { FixedValueCommand cmd ->
                 if (!cmd.validateValue()) {
+                    println("validation failed")
                     flow.fixedValue = cmd
                     return error()
                 }
+
                 flow.fixedValue = cmd
                 println "calling closure for {FixedValueCommand ${cmd.dump()}"
                 println "isNumericValue = " + cmd.isNumericValue
                 if (cmd.extValueId) {
                     // valid state
+                } else if(!StringUtils.isBlank(cmd.textValue)) {
+                    // valid state
+                    flow.fixedValue.textValue = cmd.textValue
+                    flow.fixedValue.valueLabel = cmd.textValue
                 } else if (!cmd.isNumericValue) {
                     def valueElement = Element.get(flow.fixedValue.valueId)
                     flow.fixedValue.valueLabel = valueElement.label
@@ -626,7 +658,7 @@ class AddItemWizardController {
                     AssayContext assayContext = AssayContext.get(flow.assayContextId)
                     def isSaved = false;
                     if (flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())) {
-                        println "Saving item ..."
+                        println "Saving item ... ${flow.fixedValue}"
                         isSaved = assayContextService.saveItem(assayContext, flow.attribute, flow.valueType, flow.fixedValue)
                     } else if (flow.valueType.valueTypeOption.equals(AttributeType.List.toString())) {
                         println "Saving list of items ..."
@@ -655,7 +687,7 @@ class AddItemWizardController {
                     // put your error handling logic in
                     // here
                     sessionFactory.currentSession.clear()
-                    println "Exception -> " + e
+                    log.error("exception saving item", e);
                     flow.page = 4
                     error()
                 }
