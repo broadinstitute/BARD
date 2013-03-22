@@ -12,6 +12,10 @@ import org.apache.commons.lang3.StringUtils
 class ContextLoadResultsWriter {
     private BufferedWriter writer
 
+    ContextLoadResultsWriter() {
+        writer = null
+    }
+
     public ContextLoadResultsWriter(String resultFilePath) {
         writer = new BufferedWriter(new FileWriter(resultFilePath))
         writer.writeLine("aid, adid, context_name, load_result_type, num_potential_contexts_to_load, num_existing_contexts, num_contexts_loaded, message")
