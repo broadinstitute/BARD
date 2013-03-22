@@ -4,6 +4,7 @@ import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
 import bard.dm.Log
 import org.apache.commons.lang3.StringUtils
+import org.apache.log4j.Logger
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,10 +17,16 @@ class AssayContextItemCompare {
     /**
      * precision to use when comparing doubles (fraction of values)
      */
-    double eps = 1e-4
+    final double eps = 1e-4
+
+    private final Logger logger
+
+    public AssayContextItemCompare(Logger logger = Log.logger) {
+        this.logger = logger
+    }
 
     public ContextItemComparisonResultEnum compareContextItems(AssayContextItem aci1, AssayContextItem aci2) {
-        Log.logger.trace("\t\t\t\taci1 aci2 ${aci1.id} ${aci2.id}")
+        logger.trace("\t\t\t\taci1 aci2 ${aci1.id} ${aci2.id}")
 
         //first check if they have the same attribute
         if (aci1.attributeElement.equals(aci2.attributeElement)) {

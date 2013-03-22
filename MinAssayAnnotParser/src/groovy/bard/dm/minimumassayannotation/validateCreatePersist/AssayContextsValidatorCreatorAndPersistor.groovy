@@ -16,6 +16,7 @@ import bard.dm.Log
 import bard.dm.minimumassayannotation.ContextItemDto
 import bard.dm.minimumassayannotation.ContextLoadResultsWriter
 import maas.ExternalTermMapping
+import org.apache.log4j.Logger
 
 /**
  * Creates and persists AssayContexts and AssayContextItems from the group of attributes we created earlier.
@@ -36,11 +37,15 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
     private AssayContextCompare assayContextCompare
 
+    private final Logger logger
+
     AssayContextsValidatorCreatorAndPersistor(String modifiedBy, ContextLoadResultsWriter loadResultsWriter,
-                                              boolean flushSetting) {
+                                              boolean flushSetting, Logger logger = Log.logger) {
         super(modifiedBy, loadResultsWriter, flushSetting)
 
-        assayContextCompare = new AssayContextCompare()
+        assayContextCompare = new AssayContextCompare(logger)
+
+        this.logger = logger
     }
 
     /**
@@ -64,16 +69,15 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
                 //create the assay-context
                 AssayContext assayContext = new AssayContext()
-                assayContext.assay = super.getAssayFromAid(contextDTO.aid)
+                assayContext.assay = getAssayFromAid(contextDTO.aid)
 
-                assayContext.modifiedBy = super.modifiedBy
+                assayContext.modifiedBy = modifiedBy
                 //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
                 if (!assayContext.assay) {//skip this assay context
-                    super.writeMessageWhenAidNotFoundInDb(contextDTO)
+                    writeMessageWhenAidNotFoundInDb(contextDTO)
                     status.setRollbackOnly()
                     return false
                 }
-                assayContext.assay.assayContexts.add(assayContext)
 
                 assayContext.contextName = contextDTO.name
 
@@ -83,12 +87,12 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     AssayContextItem assayContextItem = new AssayContextItem()
                     assayContextItem.assayContext = assayContext
                     assayContextItem.attributeType = contextItemDto.attributeType
-                    assayContextItem.modifiedBy = super.modifiedBy
+                    assayContextItem.modifiedBy = modifiedBy
                     //populate the attribute key's element
                     Element element = Element.findByLabelIlike(contextItemDto.key)
                     if (! element) {
                         final String message = "Element in spreadsheet for the assay-context-item attribute not found in database (${contextItemDto.key})"
-                        super.loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
+                        loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
                                 null, 0, message)
                         status.setRollbackOnly()
                         return false
@@ -125,8 +129,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     }
                     else {
                         final String message = "Value of context item not recognized as element or numerical value: '${contextItemDto.key}'/'${contextItemDto.value}'"
-                        Log.logger.info(message)
-                        super.loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
+                        logger.info(message)
+                        loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
                                 null, 0, message)
                         status.setRollbackOnly()
                         return false
@@ -163,7 +167,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
      *
      *  if the value field is of the format 'Uniprot:Q03164' do same as above but for 'UniProt' in the element table
      */
-    private boolean postProcessAssayContextItem(AssayContextItem assayContextItem, ContextDTO contextDTO) {
+    boolean postProcessAssayContextItem(AssayContextItem assayContextItem, ContextDTO contextDTO) {
         if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
             return rebuildAssayContextItem(assayContextItem, 'PubChem CID', contextDTO)
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprot\W*:/)) {//'Uniprot:Q03164'
@@ -187,13 +191,13 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             if (externalTermMap.containsKey(extValueId.toLowerCase())) {
                 extValueId = externalTermMap.get(extValueId.toLowerCase())
             } else if (!StringUtils.isNumeric(extValueId)) {
-                Log.logger.info("possible GO term or species name that is not mapped: ${extValueId}")
+                logger.info("possible GO term or species name that is not mapped: ${extValueId}")
             }
         }
 
         Element element = Element.findByLabelIlike(findByLabelIlike)
         if (!element) {
-            super.loadResultsWriter.write(contextDTO, assayContextItem.assayContext.assay.id,
+            loadResultsWriter.write(contextDTO, assayContextItem.assayContext.assay.id,
                     ContextLoadResultsWriter.LoadResultType.fail, null, 0,
                     "element ${assayContextItem.valueDisplay} not found in database ${findByLabelIlike}")
             return false
@@ -207,7 +211,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         return true
     }
 
-    private boolean checkForDuplicateOrSubsetAndSave(AssayContext assayContext, ContextDTO contextDTO) {
+    boolean checkForDuplicateOrSubsetAndSave(AssayContext assayContext, ContextDTO contextDTO) {
         boolean doSave = true
 
         Set<AssayContext> assayContextOrigSet = new HashSet<AssayContext>(assayContext.assay.assayContexts)
@@ -219,25 +223,25 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                 if (compResult) {
                     if (compResult.resultEnum.equals(ComparisonResultEnum.ExactMatch)) {
                         //do not save the assayContext because there is an exact match already present for this assay in the database
-                        Log.logger.info("assay: ${assayContext.assay.id} not saving a new assay context because it is a duplicate of existing assay context in the database ${assayContextOrig.id}")
-                        super.loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.alreadyLoaded,
+                        logger.info("assay: ${assayContext.assay.id} not saving a new assay context because it is a duplicate of existing assay context in the database ${assayContextOrig.id}")
+                        loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.alreadyLoaded,
                                 assayContextOrig.assayContextItems.size(), 0, "duplicate context already exists in database $assayContextOrig.id")
                         doSave = false
                         break
                     } else if (compResult.resultEnum.equals(ComparisonResultEnum.SubsetMatch)) {
                         if (assayContext.assayContextItems.size() > assayContextOrig.assayContextItems.size()) {
-                            Log.logger.info("assay: ${assayContext.assay.id} deleting original assay context ${assayContextOrig.id} since it is a subset of the new one")
+                            logger.info("assay: ${assayContext.assay.id} deleting original assay context ${assayContextOrig.id} since it is a subset of the new one")
                             assayContext.assay.assayContextItems.removeAll(assayContextOrig.assayContextItems)
                             assayContext.assay.assayContexts.remove(assayContextOrig)
                             assayContextOrig.delete() //the original assay context from the database is a subset of the new one, so delete it
-                            super.loadResultsWriter.write(contextDTO, assayContext.assay.id,
+                            loadResultsWriter.write(contextDTO, assayContext.assay.id,
                                     ContextLoadResultsWriter.LoadResultType.deleteOriginal,
                                     assayContextOrig.assayContextItems.size(), contextDTO.contextItemDtoList.size(),
                                     "load contains more information than original, delete original $assayContextOrig.id")
                             //NOTE:  no break here b/c we want to keep looking for duplicates
                         } else {
                             //do not save the assayContext because it is a subset of one that is already in the database
-                            Log.logger.info("assay: ${assayContext.assay.id} AID: ${contextDTO.aid} not saving a new assay context because it is a subset of existing assay context in the database ${assayContextOrig.id}")
+                            logger.info("assay: ${assayContext.assay.id} AID: ${contextDTO.aid} not saving a new assay context because it is a subset of existing assay context in the database ${assayContextOrig.id}")
                             doSave = false
                             break
                         }
@@ -251,12 +255,14 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         }
 
         if (doSave) {
-            assayContext.save(flush: super.flushSetting)
+            assayContext.assay.assayContexts.add(assayContext)
+            assayContext.save(flush: flushSetting)
             final ContextLoadResultsWriter.LoadResultType loadResultType
             final String message
             final int numLoaded
             if (assayContext.hasErrors()) {
-                Log.logger.info("AssayContext errors: ${assayContext.errors.dump()}")
+                assayContext.assay.assayContexts.remove(assayContext)
+                logger.info("AssayContext errors: ${assayContext.errors.dump()}")
                 loadResultType = ContextLoadResultsWriter.LoadResultType.fail
                 message = "failed to load b/c of database errors:  ${assayContext.errors.dump()}"
                 numLoaded = 0
@@ -266,7 +272,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                 numLoaded = assayContext.assayContextItems.size()
             }
 
-            super.loadResultsWriter.write(contextDTO, assayContext.assay.id, loadResultType, null, numLoaded, message)
+            loadResultsWriter.write(contextDTO, assayContext.assay.id, loadResultType, null, numLoaded, message)
         }
 
         return doSave

@@ -2,6 +2,7 @@ package bard.dm.assaycompare
 
 import bard.db.registration.AssayContextItem
 import bard.dm.Log
+import org.apache.log4j.Logger
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,12 +14,16 @@ import bard.dm.Log
 class AssayContextItemMatchTripleBuilder implements MatchTripleBuilder<AssayContextItem, ContextItemComparisonResultEnum> {
     private final AssayContextItemCompare assayContextItemCompare
 
-    public AssayContextItemMatchTripleBuilder() {
-        assayContextItemCompare = new AssayContextItemCompare()
+    private final Logger logger
+
+    public AssayContextItemMatchTripleBuilder(Logger logger = Log.logger) {
+        assayContextItemCompare = new AssayContextItemCompare(logger)
+
+        this.logger = logger
     }
 
     MatchTriple<AssayContextItem, ContextItemComparisonResultEnum> build(AssayContextItem item1, AssayContextItem item2) {
-        Log.logger.trace("\t\t\tAssayContextCompare MatchTripleBuilder build AssayContextItem s ${item1?.id} ${item2?.id}")
+        logger.trace("\t\t\tAssayContextCompare MatchTripleBuilder build AssayContextItem s ${item1?.id} ${item2?.id}")
 
         ContextItemComparisonResultEnum resultEnum = assayContextItemCompare.compareContextItems(item1, item2)
 
