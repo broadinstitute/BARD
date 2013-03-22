@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import grails.converters.JSON
 import bard.db.registration.Assay
@@ -130,10 +131,11 @@ class ProjectController {
         render exps.collect {it.displayName} as JSON
     }
 
-    def editSummary(Long instanceId, String projectName, String description) {
+    def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
         def instance = Project.findById(instanceId)
         instance.name = projectName
         instance.description = description
+        instance.projectStatus = Enum.valueOf(ProjectStatus, projectStatus);
         instance.save(flush: true)
         instance = Project.findById(instanceId)
         render(template: "summaryDetail", model: [project: instance])

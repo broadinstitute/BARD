@@ -35,21 +35,33 @@
         	outputToConsole('I am on wizard page number: ' + pageNumber);
            	if(pageNumber == 1){
            		initializePageOne();
-            }           	
+            }
+            if(pageNumber == 2){
+                $(':input[name="next"]').focus();
+            }
            	if(pageNumber == 3){
            		var valueType = $("#valueType").val();
            		outputToConsole('valueType =' + valueType);
-               	if(valueType && valueType == 'Fixed')
-           			initializePageThreeFixed();
-               	else if(valueType && valueType == 'List')
-               		initializePageThreeList();
-               	else if(valueType && valueType == 'Range')
+               	if(valueType && valueType == 'Fixed'){
+           		   initializePageThreeFixed();
+                }
+               	else if(valueType && valueType == 'List'){
+                   initializePageThreeList();
+                }
+               	else if(valueType && valueType == 'Range'){
                    	initializePageThreeRange();
-               	else if(valueType && valueType == 'Free')
+                }
+               	else if(valueType && valueType == 'Free'){
                		outputToConsole('initialize Page Three Free');
+                }
+                $(".select2-container").select2("open");
            	}
+            if(pageNumber == 4){
+                $(':input[name="save"]').focus();
+            }
             if(pageNumber == 5){
             	initializeFinalPage();
+                $(':input[name="addAnotherItem"]').focus();
             }
         }
 
@@ -94,13 +106,22 @@
                outputToConsole('e.val = ' + e.val);
                outputToConsole('attributeElementId = ' + $("#attributeElementId").val());
                outputToConsole('attributeElementUnitId = ' + attribIdCache[e.val]);
-            })
+            });
+            $("#attributeId").select2("open");
         }
-
-
 
         function initializePageThreeFixed(){
             outputToConsole('calling initializePageThreeFixed()');
+            initializeExtValueIdSelect2("Fixed");
+
+            $("#term-select-button").on("click", function() {
+                $("#propose-term-div").hide()
+                $("#term-select-div").show()
+            });
+            $("#propose-term-button").on("click", function() {
+                $("#propose-term-div").show()
+                $("#term-select-div").hide()
+            });
 
             $("#valueId").select2({
                 minimumInputLength: 1,
@@ -128,7 +149,7 @@
                             }
                     );
                 }
-            })
+            });
 
             var attributeElementId = $("#attributeElementId").val();
             var attributeElementUnitId = $("#attributeElementUnitId").val();
@@ -146,7 +167,7 @@
                             elementId: attributeElementId,
                             toUnitId: attributeElementUnitId
                         },
-                        function(data, textStatus, jqXHR) {                    	
+                        function(data, textStatus, jqXHR) {
                             $.each(data, function(index, val) {
                             	unitsData.results.push({id: val.value, text: val.label})
                            	});
@@ -156,7 +177,7 @@
                                 data: unitsData
                     		})
                         }
-                );      
+                );
             }
             else{
             	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
@@ -174,21 +195,21 @@
         		                data: unitsData
                     		})
                         }
-                );     
+                );
             }
-            
+
 
             $("#valueUnitId").select2({
            		placeholder: "Loading units..",
            		width: "45%",
                 data: unitsData
     		})
-    		
+
         }
 
         function initializePageThreeList(){
             outputToConsole('calling initializePageThreeList()');
-
+            initializeExtValueIdSelect2("List");
             var valueLabelCache = {}
             $("#valueId").select2({
                 minimumInputLength: 1,
@@ -218,7 +239,7 @@
                     );
                 }
             }).on("change", function(e) {
-                $("#valueLabel").val(valueLabelCache[e.val])                               
+                    $("#valueLabel").val(valueLabelCache[e.val])
             })
 
             var attributeElementId = $("#attributeElementId").val();
@@ -229,7 +250,7 @@
            		width: "45%",
                 data: unitsData
     		})
-            
+
             if(attributeElementUnitId){
             	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
             	var unitLabelCache = {}
@@ -239,7 +260,7 @@
                             elementId: attributeElementId,
                             toUnitId: attributeElementUnitId
                         },
-                        function(data, textStatus, jqXHR) {                    	
+                        function(data, textStatus, jqXHR) {
                             $.each(data, function(index, val) {
                             	unitsData.results.push({id: val.value, text: val.label})
                             	unitLabelCache[val.value] = val.label;
@@ -249,10 +270,10 @@
                            		width: "70%",
                                 data: unitsData
                     		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                $("#valueUnitLabel").val(unitLabelCache[e.val])
                             })
                         }
-                );      
+                );
             }
             else{
             	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
@@ -271,11 +292,11 @@
                            		width: "45%",
         		                data: unitsData
                     		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                $("#valueUnitLabel").val(unitLabelCache[e.val])
                             })
                         }
-                );     
-            }	
+                );
+            }
         }
 
         function initializePageThreeRange(){
@@ -289,7 +310,8 @@
            		width: "45%",
                 data: unitsData
     		})
-            
+
+
             if(attributeElementUnitId){
             	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
             	var unitLabelCache = {}
@@ -299,7 +321,7 @@
                             elementId: attributeElementId,
                             toUnitId: attributeElementUnitId
                         },
-                        function(data, textStatus, jqXHR) {                    	
+                        function(data, textStatus, jqXHR) {
                             $.each(data, function(index, val) {
                             	unitsData.results.push({id: val.value, text: val.label})
                             	unitLabelCache[val.value] = val.label;
@@ -309,10 +331,10 @@
                            		width: "70%",
                                 data: unitsData
                     		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                $("#valueUnitLabel").val(unitLabelCache[e.val])
                             })
                         }
-                );      
+                );
             }
             else{
             	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
@@ -331,11 +353,11 @@
                            		width: "45%",
         		                data: unitsData
                     		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                $("#valueUnitLabel").val(unitLabelCache[e.val])
                             })
                         }
-                );     
-            }	
+                );
+            }
         }
 
         function initializeFinalPage(){
@@ -356,6 +378,42 @@
                 	alert("Error: " + textStatus);
                 }
             });
+
+        }
+
+        function initializeExtValueIdSelect2(type) {
+            $("#extValueIdSearch").select2({
+                minimumInputLength: 2,
+                width: "70%",
+                allowClear: true,
+                placeholder: "Search external ontology for id or text",
+                query: function (query) {
+                    var attributeElementId = $("#attributeElementId").val();
+                    $.getJSON(
+                            "/BARD/ontologyJSon/findExternalItemsByTerm",
+                            {
+                                term: query.term,
+                                elementId: attributeElementId
+                            },
+                            function (data, textStatus, jqXHR) {
+                                var selectData = {results: []}
+                                selectData.results = data.externalItems
+                                query.callback(selectData)
+                            }
+                    );
+                }
+            });
+            $("#extValueIdSearch").on("change", function (e) {
+                $("#extValueId").val($("#extValueIdSearch").select2("data").id);
+                $("#valueLabel").val($("#extValueIdSearch").select2("data").display);
+                if(type==="List"){
+                    $(':input[name="addValueToList"]').focus();
+                }
+                else{
+                    $(':input[name="next"]').focus();
+                }
+            });
+            $("#extValueId").select2("open");
         }
 </script>
 

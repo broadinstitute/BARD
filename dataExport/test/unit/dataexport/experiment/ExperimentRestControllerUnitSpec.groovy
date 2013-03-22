@@ -51,7 +51,7 @@ class ExperimentRestControllerUnitSpec extends Specification {
         where:
         label                                  | mimeType                                       | expectedResults
         "Status Code 400, incorrect mime type" | "application/vnd.bard.cap+xml;type=dictionary" | HttpServletResponse.SC_BAD_REQUEST
-        "Status Code 200"                      | "application/json;type=results"                | HttpServletResponse.SC_OK
+        "Status Code 200"                      | "application/vnd.bard.cap+json;type=results"   | HttpServletResponse.SC_OK
     }
     /**
      *

@@ -26,7 +26,7 @@ class CompareUsingMatches<T, V> {
     /**
      * @param coll1    first collection of items to be matched
      * @param coll2    second collection of items to be matched
-     * @return null if there were no assay context items to compare, otherwise result of attempting to compare those
+     * @return null if there were no items in one or both of the collections to compare, otherwise result of attempting to compare those
      */
     public ComparisonResult<V> compare(Collection<T> coll1, Collection<T> coll2) {
         //first check that both collections have items to be matched
@@ -90,7 +90,7 @@ class CompareUsingMatches<T, V> {
                 return result
             }
 
-        } else {
+        } else { //no items in either or both collections so no comparison can be made
             return null
         }
     }

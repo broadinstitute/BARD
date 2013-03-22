@@ -9,6 +9,9 @@
         <dt><g:message code="project.description.label" default="Fix i18n"/></dt>
         <dd><g:fieldValue bean="${project}" field="description"/></dd>
 
+        <dt><g:message code="project.projectStatus.label" default="Fix i18n"/></dt>
+        <dd><g:fieldValue bean="${project}" field="projectStatus"/></dd>
+
         <dt><g:message code="default.dateCreated.label" default="Fix i18n"/></dt>
         <dd><g:formatDate date="${project.dateCreated}" format="yyyy-MM-dd"/>&nbsp;</dd>
 
