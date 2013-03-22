@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2fc4b5fb-2900-4893-ab2a-79f1b825f97d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy" afterPath="$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/CompareUsingMatches.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
@@ -69,7 +70,7 @@
       <file leaf-file-name="AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="154" column="79" selection-start="5990" selection-end="5990" vertical-scroll-proportion="0.47807017">
+            <state line="154" column="79" selection-start="5990" selection-end="5990" vertical-scroll-proportion="0.7017544">
               <folding>
                 <element signature="e#75#106#0" expanded="true" />
                 <element signature="n#!!block;n#test to not add 2 duplicate contextDTO's#0;n#!!block;n#AssayContextsValidatorCreatorAndPersistorTestSpec#0" expanded="false" />
@@ -772,13 +773,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/unit/bard/dm/assaycompare/HelloWorldTestSpec.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="6" selection-start="326" selection-end="326" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/MeasureContextsValidatorCreatorAndPersistor.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="6" selection-start="604" selection-end="604" vertical-scroll-proportion="0.0">
@@ -888,9 +882,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="154" column="79" selection-start="5990" selection-end="5990" vertical-scroll-proportion="0.47807017">
+        <state line="154" column="79" selection-start="5990" selection-end="5990" vertical-scroll-proportion="0.7017544">
           <folding>
             <element signature="e#75#106#0" expanded="true" />
             <element signature="n#!!block;n#test to not add 2 duplicate contextDTO's#0;n#!!block;n#AssayContextsValidatorCreatorAndPersistorTestSpec#0" expanded="false" />
