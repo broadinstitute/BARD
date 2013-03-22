@@ -187,8 +187,8 @@ class AssayContextService {
             } else if (listValCmd.extValueId) {
                 newAssayContextItem.extValueId = listValCmd.extValueId
                 newAssayContextItem.valueDisplay = listValCmd.valueLabel
-            } else if (!StringUtils.isBlank(fixedValCmd.textValue)) {
-                newAssayContextItem.valueDisplay = fixedValCmd.textValue
+            } else if (!StringUtils.isBlank(listValCmd.textValue)) {
+                newAssayContextItem.valueDisplay = listValCmd.textValue
             } else {
                 Element valueElement = Element.get(listValCmd.valueId)
                 newAssayContextItem.valueElement = valueElement

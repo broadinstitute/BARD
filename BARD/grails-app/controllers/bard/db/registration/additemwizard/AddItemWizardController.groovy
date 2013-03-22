@@ -107,6 +107,7 @@ class ListValueCommand implements Serializable {
     Long valueUnitId
     String valueUnitLabel
     String numericValue
+    String textValue
     boolean isNumericValue
 
     boolean validateList(List<ListValueCommand> listOfValues) {
