@@ -1,5 +1,8 @@
 package bard.db.registration
 
+import bard.db.model.AbstractDocument
+import bard.db.project.Project
+import bard.db.project.ProjectDocument
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
@@ -52,6 +55,8 @@ class DocumentController {
 @Validateable
 class DocumentCommand {
     Long assayId
+    Long projectId
+
     Long documentId
     Long version
     String documentName
@@ -67,7 +72,9 @@ class DocumentCommand {
 
     static constraints = {
         importFrom(AssayDocument, exclude: ['dateCreated', 'lastUpdated', 'modifiedBy'])
-        assayId(nullable: false)
+        assayId(nullable: true)
+        projectId(nullable: true)
+        ownerController(nullable: false, blank: false)
         documentId(nullable: true, validator: { val, self, errors ->
             if (self.assayId == null && self.documentId == null) {
                 errors.rejectValue('documentId', 'nullable')
@@ -82,16 +89,24 @@ class DocumentCommand {
     }
 
     AssayDocument createNewAssayDocument() {
-        AssayDocument assayDocument
+        AbstractDocument documentToReturn = null
         if (validate()) {
-            assayDocument = new AssayDocument()
-            copyFromCmdToDomain(assayDocument)
-            assayDocument.assay = attemptFindById(Assay, assayId)
-            if (!attemptSave(assayDocument)) {
-                assayDocument = null
+            AbstractDocument doc
+            if (assayId) {
+                doc = new AssayDocument()
+                doc.assay = attemptFindById(Assay, assayId)
+
+            }
+            if (projectId) {
+                doc = new ProjectDocument()
+                doc.project = attemptFindById(Project, projectId)
+            }
+            copyFromCmdToDomain(doc)
+            if (attemptSave(doc)) {
+                documentToReturn = doc
             }
         }
-        assayDocument
+        documentToReturn
     }
 
     void populateWithExistingAssayDocument(final Long id) {
@@ -144,18 +159,23 @@ class DocumentCommand {
         return true
     }
 
-    void copyFromCmdToDomain(AssayDocument assayDocument) {
+    void copyFromCmdToDomain(AbstractDocument assayDocument) {
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
             assayDocument[(field)] = this[(field)]
         }
     }
 
-    DocumentCommand copyFromDomainToCmd(AssayDocument assayDocument) {
-        assert assayDocument
-        this.assayId = assayDocument.assay.id
-        this.documentId = assayDocument.id
+    DocumentCommand copyFromDomainToCmd(AbstractDocument document) {
+        assert document
+        if (document instanceof AssayDocument) {
+            this.assayId = document.assay.id
+        }
+        if (document instanceof ProjectDocument) {
+            this.projectId = document.project.id
+        }
+        this.documentId = document.id
         for (String field in PROPS_FROM_DOMAIN_TO_CMD) {
-            this[(field)] = assayDocument[(field)]
+            this[(field)] = document[(field)]
         }
         return this
     }
@@ -170,6 +190,32 @@ class DocumentCommand {
             setErrors(new ValidationErrors(this))
         }
         errors
+    }
+/**
+ * Hack to determine the id of owning to forward to given presence of assay or project ids
+ * @return
+ */
+    Long getOwnerId() {
+        if (projectId) {
+            return projectId
+        } else if (assayId) {
+            return projectId
+        } else {
+            throw new RuntimeException('need either a projectId or assayId to determine ownerId')
+        }
+    }
+    /**
+     * Hack to determine the controller to forward to given presence of assay or project ids
+     * @return
+     */
+    String getOwnerController() {
+        if (projectId) {
+            return 'project'
+        } else if (assayId) {
+            return 'assayDefinition'
+        } else {
+            throw new RuntimeException('need either a projectId or assayId to determine owner')
+        }
     }
 
 
