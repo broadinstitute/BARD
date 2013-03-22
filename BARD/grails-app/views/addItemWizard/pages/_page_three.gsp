@@ -14,14 +14,17 @@
 		</div>
 	</g:hasErrors>
 	
-	<h1>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If relevant, choose the relevant units that describe the number entered.</h1>
+	<p style="color: #006DBA">Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If relevant, choose the relevant units that describe the number entered.</p>
 
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="row-fluid">
-    			<div class="span12">
+    			<div class="span8">
     				<%-- This hidden control becomes the value selection box --%>
     				<input type="hidden" id="valueId" name="valueId">
+    			</div>
+    			<div class="span4">
+    				<af:ajaxButton name="toPageThreeFixedNewItem" value="Add free text item" afterSuccess="afterSuccess();" class="btn btn-small btn-primary" />
     			</div>
     		</div>
 		</div>

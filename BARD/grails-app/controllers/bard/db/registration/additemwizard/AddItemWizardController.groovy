@@ -143,6 +143,25 @@ class RangeValueCommand implements Serializable {
 		}
 }
 
+class NewDictionaryItemCommand implements Serializable {
+	Boolean newDictionaryItem
+	String label
+	String abbreviation
+	Long valueUnitId
+	String valueUnitLabel
+	String description
+	String synonyms
+	
+	static constraints = {
+		label(nullable: false, blank: false)
+	}
+	
+	boolean validateValue(){
+		validate()
+		!hasErrors();
+	}
+}
+
 
 class AddItemWizardController {
     // the pluginManager is used to check if the Grom
@@ -174,6 +193,16 @@ class AddItemWizardController {
         println "addItemWizard -> Assay ID: " + assayId
         render(template: "common/ajaxflow", model: [assayId: assayId, assayContextId: assayContextId, path: cardSection])
     }
+	
+	def newDictItemForm(){
+		println "AddItemWizard controller -> newDictItemForm"
+		render(template: "pages/newElementForm")
+	}
+	
+	def newValueNameForm(){
+		println "AddItemWizard controller -> newValueNameForm"
+		render(template: "pages/newValueNameForm")
+	}
 
     /**
      * WebFlow definition
@@ -213,9 +242,12 @@ class AddItemWizardController {
 			flow.listIndex = null
 			flow.rangeValue = null
 			flow.freeValue = null
-			flow.fixedValueAddNewItem = false
+			
+			flow.newDictionaryItemCmd = null
+			flow.fixedValueAddNewItem = null
+			flow.dictionaryItem = null
 
-            flow.itemSaved = false
+            flow.itemSaved = false			
 
             println ("flow: "+ flow)
 
@@ -290,7 +322,7 @@ class AddItemWizardController {
                 flow.page = 5
             }.to "save"
         }
-
+		
         // Third wizard page (For assay type - Fixed): Asking for value
         pageThree {
             render(view: "_page_three")
@@ -331,10 +363,13 @@ class AddItemWizardController {
 				success()
 
             }.to "pageFour"
-            on("previous"){
+            on("previous"){				
 				flow.page = 2
 				success()
 			}.to "pageTwo"
+			on("toPageThreeFixedNewItem"){
+				flow.fixedValueAddNewItem = true
+			}.to "pageThreeFixedNewItem"
             on("toPageOne").to "pageOne"
             on("toPageTwo").to "pageTwo"
             on("toPageFour").to "pageFour"
@@ -342,6 +377,67 @@ class AddItemWizardController {
                 flow.page = 5
             }.to "save"
         }
+		
+		// Third wizard page (For assay type - Fixed): Asking for new value item
+		pageThreeFixedNewItem {
+			render(view: "_page_three_fixed_new_item")
+			onRender {
+				// Grom a development message
+				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_fixed_new_item.gsp".grom()
+				
+				println "Wizard page (before): " + flow.page
+				flow.page = 3
+				println "Wizard page (after): " + flow.page
+				println "flow.fixedValueAddNewItem = " + flow.fixedValueAddNewItem
+				println "flow.dictionaryItem = " + flow.dictionaryItem
+				success()
+			}
+			on("cancel").to "closeWizard"		
+			on("close").to "closeWizard"
+			on("next") {NewDictionaryItemCommand cmd ->
+				println "pageThreeFixedNewItem - Next"
+				if(!cmd.validateValue()){
+					flow.newDictionaryItemCmd = cmd
+					flow.newDictionaryItemCmd.newDictionaryItem = flow.dictionaryItem
+					return error()
+				}
+				flow.newDictionaryItemCmd = cmd
+				flow.newDictionaryItemCmd.newDictionaryItem = flow.dictionaryItem
+				println "calling closure for {NewDictionaryItemCommand ${cmd.dump()}"
+				flow.page = 4
+				success()
+			}.to "pageFour"
+			on("previous"){
+				flow.fixedValueAddNewItem = false
+				flow.dictionaryItem = false
+				flow.newDictionaryItemCmd = null
+			}.to "pageThree"
+			on("toPageThreeFixedNewItem"){
+				println "pageThreeFixedNewItem - Yes or No?"				
+				//flow.newDictionaryItemCmd = cmd	
+				flow.newDictionaryItemCmd = new NewDictionaryItemCommand()
+				flow.fixedValueAddNewItem = true
+				
+				String answer = params.id
+				if("yes".equals(answer)){	
+					println "Yes was clicked!"
+					flow.dictionaryItem = true
+					flow.newDictionaryItemCmd.newDictionaryItem = true
+				}
+				else if("no".equals(answer)){
+					println "No was clicked!"
+					flow.dictionaryItem = false
+					flow.newDictionaryItemCmd.newDictionaryItem = false
+				}
+					
+			}.to "pageThreeFixedNewItem"
+			on("toPageOne").to "pageOne"
+			on("toPageTwo").to "pageTwo"
+			on("toPageFour").to "pageFour"
+			on("toPageFive") {
+				flow.page = 5
+			}.to "save"
+		}
 
 		// Third wizard page (For assay type - List): Asking for a list of values
 		pageThreeList {
@@ -447,33 +543,6 @@ class AddItemWizardController {
 				success()
 			}.to "pageFour"			
 			on("previous").to "pageTwo"
-			on("toPageOne").to "pageOne"
-			on("toPageTwo").to "pageTwo"
-			on("toPageFour").to "pageFour"
-			on("toPageFive") {
-				flow.page = 5
-			}.to "save"
-		}
-		
-		// Third wizard page (For assay type - Fixed): Asking for new value item
-		pageThreeFixedNewItem {
-			render(view: "_page_three_fixed_new_item")
-			onRender {
-				// Grom a development message
-				if (pluginManager.getGrailsPlugin('grom')) ".rendering the partial pages/_page_three_fixed_new_item.gsp".grom()
-
-				flow.page = 3
-				success()
-			}
-			on("cancel").to "closeWizard"
-			on("close").to "closeWizard"
-			on("next") {
-				flow.page = 4
-				success()
-			}.to "pageFour"
-			on("previous"){
-				flow.fixedValueAddNewItem = false
-			}.to "pageThreeFree"
 			on("toPageOne").to "pageOne"
 			on("toPageTwo").to "pageTwo"
 			on("toPageFour").to "pageFour"
@@ -613,7 +682,11 @@ class AddItemWizardController {
 					def isSaved = false;
 					if(flow.valueType.valueTypeOption.equals(AttributeType.Fixed.toString())){
 						println "Saving item ..."
-						isSaved = assayContextService.saveItem(assayContext, flow.attribute, flow.valueType, flow.fixedValue)
+						if(flow.fixedValueAddNewItem){
+							isSaved = assayContextService.saveFixedItemFreeTextValue(assayContext, flow.attribute, flow.valueType, flow.newDictionaryItemCmd)
+						}
+						else
+							isSaved = assayContextService.saveItem(assayContext, flow.attribute, flow.valueType, flow.fixedValue)
 					}
 					else if(flow.valueType.valueTypeOption.equals(AttributeType.List.toString())){
 						println "Saving list of items ..."

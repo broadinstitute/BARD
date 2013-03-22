@@ -114,6 +114,57 @@ class AssayContextService {
 		return isSaved;
 	}
 	
+	public saveFixedItemFreeTextValue(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, NewDictionaryItemCommand newDictItemCmd){
+		def isSaved = false
+		if(valTypeCmd.valueTypeOption.equals(AttributeType.Fixed.toString())){
+			
+			AssayContextItem newAssayContextItem = new AssayContextItem()
+			Element attributeElement = Element.get(attributeCmd.attributeId)
+			newAssayContextItem.attributeElement = attributeElement
+			newAssayContextItem.setAttributeType(AttributeType.Fixed)
+			
+			if(newDictItemCmd.newDictionaryItem){
+				println "Saving new Element (dictionary item)"
+				Element newElement = new Element();
+				newElement.label = newDictItemCmd.label
+				if(newDictItemCmd.valueUnitId){
+					Element unitElement = Element.get(newDictItemCmd.valueUnitId)
+					newElement.unit = unitElement
+				}
+				newElement.abbreviation = newDictItemCmd.abbreviation ?: null
+				newElement.description = newDictItemCmd.description ?: null
+				newElement.synonyms = newDictItemCmd.synonyms ?: null
+				newElement.save()
+				
+				ElementHierarchy newElementHierarchy = new ElementHierarchy();
+				newElementHierarchy.childElement = newElement
+				newElementHierarchy.parentElement = attributeElement				
+				newElementHierarchy.relationshipType = "subClassOf"
+				newElementHierarchy.dateCreated = new Date()
+				
+				if(newElementHierarchy.save()){
+					newAssayContextItem.valueElement = newElementHierarchy.childElement
+					newAssayContextItem.valueDisplay = newElementHierarchy.childElement.label
+				}
+				else{
+					newElementHierarchy.errors.each {
+						println it
+					}
+					return isSaved = false
+				}							
+			}
+			else{		
+				println "Saving new AssayContextItem with free text as value"
+				newAssayContextItem.valueDisplay = newDictItemCmd.label
+			}
+			assayContext.addToAssayContextItems(newAssayContextItem)
+			assayContext.save()
+			isSaved = true
+			println "Done saving item"
+		}
+		return isSaved;
+	}
+	
 	public saveFreeItem(AssayContext assayContext, AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd){
 		def isSaved = false
 		if(valTypeCmd.valueTypeOption.equals(AttributeType.Free.toString())){

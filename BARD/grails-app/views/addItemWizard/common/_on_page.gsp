@@ -19,343 +19,430 @@
 %>
 
 <script type="text/javascript">
-		$(document).ready(function() {
 
-		})
-        function onPage() {
-               	outputToConsole('calling onPage() which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
-               	var pageNumber = $("#pageNumber").val();
-            	outputToConsole('Form page number: ' + pageNumber);
-                initializePageOne();
-        }
+	$(document).ready(function() {
+		
+	});
+	
+	function onPage() {
+    	outputToConsole('calling onPage() which can be used to attach generic javascript handlers to DOM elements of a rendered page / partial');
+        var pageNumber = $("#pageNumber").val();
+       	outputToConsole('Form page number: ' + pageNumber);
+        initializePageOne();
+    }
 
-        function afterSuccess(){
-        	outputToConsole('calling afterSuccess()');
-        	var pageNumber = $("#pageNumber").val();
-        	outputToConsole('I am on wizard page number: ' + pageNumber);
-           	if(pageNumber == 1){
-           		initializePageOne();
-            }           	
-           	if(pageNumber == 3){
-           		var valueType = $("#valueType").val();
-           		outputToConsole('valueType =' + valueType);
-               	if(valueType && valueType == 'Fixed')
+	function afterSuccess() {
+        
+    	outputToConsole('calling afterSuccess()');
+    	var pageNumber = $("#pageNumber").val();
+    	outputToConsole('I am on wizard page number: ' + pageNumber);
+       	if(pageNumber == 1){
+       		initializePageOne();
+        }           	
+       	else if(pageNumber == 3){
+       		var valueType = $("#valueType").val();
+       		outputToConsole('valueType =' + valueType);
+       		
+           	if(valueType && valueType == 'Fixed'){
+           		var isNewValueItem = $("#newValueItem").val();
+           		outputToConsole('isNewValueItem: ' + isNewValueItem);
+           		if(isNewValueItem && isNewValueItem == 'true'){
+           			var isNewDictionaryItem = $("#dictionaryItem").val();
+           			outputToConsole('isNewDictionaryItem: ' + isNewDictionaryItem);
+           			if(isNewDictionaryItem && isNewDictionaryItem == 'true') {          			
+           				initializePageThreeFixedAddNewValueItem();
+           			}            			
+           		}
+           		else{
            			initializePageThreeFixed();
-               	else if(valueType && valueType == 'List')
-               		initializePageThreeList();
-               	else if(valueType && valueType == 'Range')
-                   	initializePageThreeRange();
-               	else if(valueType && valueType == 'Free')
-               		outputToConsole('initialize Page Three Free');
-           	}
-            if(pageNumber == 5){
-            	initializeFinalPage();
-            }
+           		}
+            }          			
+           	else if(valueType && valueType == 'List')
+           		initializePageThreeList();
+           	else if(valueType && valueType == 'Range')
+               	initializePageThreeRange();
+           	else if(valueType && valueType == 'Free')
+           		outputToConsole('initialize Page Three Free');
+       	}
+        else if(pageNumber == 5){
+        	initializeFinalPage();
         }
+    }
 
-        function outputToConsole(message){
-        	if (console) {
-                console.log(message);
-        	}
-        }
+	function outputToConsole(message){
+    	if (console) {
+            console.log(message);
+    	}
+    }  
 
-        function initializePageOne(){
+	function initializePageOne(){
 
-        	outputToConsole('calling initializePageOne()');
+    	outputToConsole('calling initializePageOne()');
 
-        	var attribIdCache = {}
-            $("#attributeId").select2({
-                minimumInputLength: 2,
-                width: "70%",
-                allowClear: true,
-                placeholder: "Search for attribute name",
-                query: function(query) {
-                	var sectionPath = $("#sectionPath").val();
-                    $.getJSON(
-                            "/BARD/ontologyJSon/getDescriptors",
-                            {
-                                term: query.term,
-                                section: sectionPath
-                            },
-                            function(data, textStatus, jqXHR) {
-                                var selectData = {results:[]}
-                                $.each(data, function(index, val) {
-                                    selectData.results.push({id: val.elementId, text: val.label})
-                                    attribIdCache[val.elementId] = val.unitId;
-                                })
-                                query.callback(selectData)
-                            }
-                    );
-                }
-            }).on("change", function(e) {
-               $("#attributeElementId").val(e.val);
-               $("#attributeLabel").val(e.text);
-               $("#attributeElementUnitId").val(attribIdCache[e.val]);
-               outputToConsole('e.val = ' + e.val);
-               outputToConsole('attributeElementId = ' + $("#attributeElementId").val());
-               outputToConsole('attributeElementUnitId = ' + attribIdCache[e.val]);
-            })
-        }
-
-
-
-        function initializePageThreeFixed(){
-            outputToConsole('calling initializePageThreeFixed()');
-
-            $("#valueId").select2({
-                minimumInputLength: 1,
-                width: "70%",
-                allowClear: true,
-                placeholder: "Search for value name",
-                query: function(query) {
-                	var cardAssaySection = $("#sectionPath").val();
-                    var elementId = $("#attributeElementId").val();
-                    //outputToConsole('cardAssaySection var = ' + cardAssaySection);
-                    outputToConsole('elementId var = ' + elementId);
-                    $.getJSON(
-                            "/BARD/ontologyJSon/getValueDescriptors",
-                            {
-                                term: query.term,
-                                section: cardAssaySection,
-                                attributeId: elementId
-                            },
-                            function(data, textStatus, jqXHR) {
-                                var selectData = {results:[]}
-                                $.each(data, function(index, val) {
-                                    selectData.results.push({id: val.elementId, text: val.label})
-                                })
-                                query.callback(selectData)
-                            }
-                    );
-                }
-            })
-
-            var attributeElementId = $("#attributeElementId").val();
-            var attributeElementUnitId = $("#attributeElementUnitId").val();
-            var unitsData = {results:[]};
-            if($("#valueUnitId")){
-            	outputToConsole('valueUnitId found');
-            }
-            else{
-            	outputToConsole('valueUnitId NOT found');
-            }
-            if(attributeElementUnitId){
-            	$.getJSON(
-                    	"/BARD/ontologyJSon/getBaseUnits",
+    	var attribIdCache = {}
+        $("#attributeId").select2({
+            minimumInputLength: 2,
+            width: "70%",
+            allowClear: true,
+            placeholder: "Search for attribute name",
+            query: function(query) {
+            	var sectionPath = $("#sectionPath").val();
+                $.getJSON(
+                        "/BARD/ontologyJSon/getDescriptors",
                         {
-                            elementId: attributeElementId,
-                            toUnitId: attributeElementUnitId
+                            term: query.term,
+                            section: sectionPath
                         },
-                        function(data, textStatus, jqXHR) {                    	
-                            $.each(data, function(index, val) {
-                            	unitsData.results.push({id: val.value, text: val.label})
-                           	});
-                            $("#valueUnitId").select2({
-                            	placeholder: "Select a Unit",
-                           		width: "70%",
-                                data: unitsData
-                    		})
-                        }
-                );      
-            }
-            else{
-            	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
-            	$.getJSON(
-                    	"/BARD/ontologyJSon/getAllUnits",
                         function(data, textStatus, jqXHR) {
-                    		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                            var selectData = {results:[]}
                             $.each(data, function(index, val) {
-                            	unitsData.results.push({id: val.value, text: val.label})
-                           	})
-                           	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
-                           	$("#valueUnitId").select2({
-                           		placeholder: "Select a Unit",
-                           		width: "70%",
-        		                data: unitsData
-                    		})
+                                selectData.results.push({id: val.elementId, text: val.label})
+                                attribIdCache[val.elementId] = val.unitId;
+                            })
+                            query.callback(selectData)
                         }
-                );     
+                );
             }
-            
+        }).on("change", function(e) {
+           $("#attributeElementId").val(e.val);
+           $("#attributeLabel").val(e.text);
+           $("#attributeElementUnitId").val(attribIdCache[e.val]);
+           outputToConsole('e.val = ' + e.val);
+           outputToConsole('attributeElementId = ' + $("#attributeElementId").val());
+           outputToConsole('attributeElementUnitId = ' + attribIdCache[e.val]);
+        })
+    }
 
-            $("#valueUnitId").select2({
-           		placeholder: "Loading units..",
-           		width: "45%",
-                data: unitsData
-    		})
-    		
-        }
+	function initializePageThreeFixed(){
+        outputToConsole('calling initializePageThreeFixed()');
 
-        function initializePageThreeList(){
-            outputToConsole('calling initializePageThreeList()');
-
-            var valueLabelCache = {}
-            $("#valueId").select2({
-                minimumInputLength: 1,
-                width: "70%",
-                allowClear: true,
-                placeholder: "Search for value name",
-                query: function(query) {
-                	var cardAssaySection = $("#sectionPath").val();
-                    var elementId = $("#attributeElementId").val();
-                    //outputToConsole('cardAssaySection var = ' + cardAssaySection);
-                    outputToConsole('elementId var = ' + elementId);
-                    $.getJSON(
-                            "/BARD/ontologyJSon/getValueDescriptors",
-                            {
-                                term: query.term,
-                                section: cardAssaySection,
-                                attributeId: elementId
-                            },
-                            function(data, textStatus, jqXHR) {
-                                var selectData = {results:[]}
-                                $.each(data, function(index, val) {
-                                    selectData.results.push({id: val.elementId, text: val.label})
-                                    valueLabelCache[val.elementId] = val.label;
-                                })
-                                query.callback(selectData)
-                            }
-                    );
-                }
-            }).on("change", function(e) {
-                $("#valueLabel").val(valueLabelCache[e.val])                               
-            })
-
-            var attributeElementId = $("#attributeElementId").val();
-            var attributeElementUnitId = $("#attributeElementUnitId").val();
-            var unitsData = {results:[]};
-            $("#valueUnitId").select2({
-           		placeholder: "Loading units..",
-           		width: "45%",
-                data: unitsData
-    		})
-            
-            if(attributeElementUnitId){
-            	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
-            	var unitLabelCache = {}
-            	$.getJSON(
-                    	"/BARD/ontologyJSon/getBaseUnits",
+        $("#valueId").select2({
+            minimumInputLength: 1,
+            width: "70%",
+            allowClear: true,
+            placeholder: "Search for value name",
+            query: function(query) {
+            	var cardAssaySection = $("#sectionPath").val();
+                var elementId = $("#attributeElementId").val();
+                //outputToConsole('cardAssaySection var = ' + cardAssaySection);
+                outputToConsole('elementId var = ' + elementId);
+                $.getJSON(
+                        "/BARD/ontologyJSon/getValueDescriptors",
                         {
-                            elementId: attributeElementId,
-                            toUnitId: attributeElementUnitId
+                            term: query.term,
+                            section: cardAssaySection,
+                            attributeId: elementId
                         },
-                        function(data, textStatus, jqXHR) {                    	
-                            $.each(data, function(index, val) {
-                            	unitsData.results.push({id: val.value, text: val.label})
-                            	unitLabelCache[val.value] = val.label;
-                           	});
-                            $("#valueUnitId").select2({
-                            	placeholder: "Select a Unit",
-                           		width: "70%",
-                                data: unitsData
-                    		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
-                            })
-                        }
-                );      
-            }
-            else{
-            	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
-            	var unitLabelCache = {}
-            	$.getJSON(
-                    	"/BARD/ontologyJSon/getAllUnits",
                         function(data, textStatus, jqXHR) {
-                    		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                            var selectData = {results:[]}
                             $.each(data, function(index, val) {
-                            	unitsData.results.push({id: val.value, text: val.label})
-                            	unitLabelCache[val.value] = val.label;
-                           	})
-                           	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
-                           	$("#valueUnitId").select2({
-                           		placeholder: "Select a Unit",
-                           		width: "45%",
-        		                data: unitsData
-                    		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                selectData.results.push({id: val.elementId, text: val.label})
                             })
+                            query.callback(selectData)
                         }
-                );     
-            }	
+                );
+            }
+        })
+
+        var attributeElementId = $("#attributeElementId").val();
+        var attributeElementUnitId = $("#attributeElementUnitId").val();
+        var unitsData = {results:[]};
+        if($("#valueUnitId")){
+        	outputToConsole('valueUnitId found');
         }
+        else{
+        	outputToConsole('valueUnitId NOT found');
+        }
+        if(attributeElementUnitId){
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getBaseUnits",
+                    {
+                        elementId: attributeElementId,
+                        toUnitId: attributeElementUnitId
+                    },
+                    function(data, textStatus, jqXHR) {                    	
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                       	});
+                        $("#valueUnitId").select2({
+                        	placeholder: "Select a Unit",
+                       		width: "70%",
+                            data: unitsData
+                		})
+                    }
+            );      
+        }
+        else{
+        	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getAllUnits",
+                    function(data, textStatus, jqXHR) {
+                		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                       	})
+                       	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
+                       	$("#valueUnitId").select2({
+                       		placeholder: "Select a Unit",
+                       		width: "70%",
+    		                data: unitsData
+                		})
+                    }
+            );     
+        }
+        
 
-        function initializePageThreeRange(){
-        	outputToConsole('calling initializePageThreeRange()');
+        $("#valueUnitId").select2({
+       		placeholder: "Loading units..",
+       		width: "45%",
+            data: unitsData
+		})
+		
+    }
 
-        	var attributeElementId = $("#attributeElementId").val();
-            var attributeElementUnitId = $("#attributeElementUnitId").val();
-            var unitsData = {results:[]};
-            $("#valueUnitId").select2({
-           		placeholder: "Loading units..",
-           		width: "45%",
-                data: unitsData
-    		})
-            
-            if(attributeElementUnitId){
-            	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
-            	var unitLabelCache = {}
-            	$.getJSON(
-                    	"/BARD/ontologyJSon/getBaseUnits",
+    function initializePageThreeFixedAddNewValueItem(){
+    	outputToConsole('calling initializePageThreeFixedAddNewValueItem()');
+    	setupUnitsList();
+    }
+
+    function getTemplate(url, data, elementName){
+    	$.ajax({
+	        type: 'POST',
+	        url: url,
+	        data: data,
+	        success: function (data) {
+	            $("#" + elementName).html(data);
+	            return true;	            
+	        },
+	        error: function (jqXHR, textStatus, errorThrown) {
+	            alert("Error: " + textStatus);
+	            return false;
+	        }
+	    });	   
+    }
+
+    function setupUnitsList(){
+    	outputToConsole('calling setupUnitsList()');
+    	
+    	var unitsData = {results:[]};
+    	$("#valueUnitId").select2({
+       		placeholder: "Loading units..",
+       		width: "45%",
+            data: unitsData
+		});
+    	
+    	var attributeElementId = $("#attributeElementId").val();
+    	var attributeElementUnitId = $("#attributeElementUnitId").val();
+        if(attributeElementUnitId){
+        	outputToConsole('sending ajax request to /BARD/ontologyJSon/getAllUnits');
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getBaseUnits",
+                    {
+                        elementId: attributeElementId,
+                        toUnitId: attributeElementUnitId
+                    },
+                    function(data, textStatus, jqXHR) {                    	
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                       	});
+                        $("#valueUnitId").select2({
+                        	placeholder: "Select a Unit",
+                       		width: "70%",
+                            data: unitsData
+                		})
+                    }
+            );      
+        }
+        else{
+        	outputToConsole('sending ajax request to /BARD/ontologyJSon/getAllUnits');
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getAllUnits",
+                    function(data, textStatus, jqXHR) {
+                		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                       	})
+                       	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
+                       	$("#valueUnitId").select2({
+                       		placeholder: "Select a Unit",
+                       		width: "70%",
+    		                data: unitsData
+                		})
+                    }
+            );     
+        }       
+    }
+    
+    function initializePageThreeList(){
+        outputToConsole('calling initializePageThreeList()');   
+           
+        var valueLabelCache = {}
+        $("#valueId").select2({
+            minimumInputLength: 1,
+            width: "70%",
+            allowClear: true,
+            placeholder: "Search for value name",
+            query: function(query) {
+            	var cardAssaySection = $("#sectionPath").val();
+                var elementId = $("#attributeElementId").val();
+                //outputToConsole('cardAssaySection var = ' + cardAssaySection);
+                outputToConsole('elementId var = ' + elementId);
+                $.getJSON(
+                        "/BARD/ontologyJSon/getValueDescriptors",
                         {
-                            elementId: attributeElementId,
-                            toUnitId: attributeElementUnitId
+                            term: query.term,
+                            section: cardAssaySection,
+                            attributeId: elementId
                         },
-                        function(data, textStatus, jqXHR) {                    	
-                            $.each(data, function(index, val) {
-                            	unitsData.results.push({id: val.value, text: val.label})
-                            	unitLabelCache[val.value] = val.label;
-                           	});
-                            $("#valueUnitId").select2({
-                            	placeholder: "Select a Unit",
-                           		width: "70%",
-                                data: unitsData
-                    		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
-                            })
-                        }
-                );      
-            }
-            else{
-            	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
-            	var unitLabelCache = {}
-            	$.getJSON(
-                    	"/BARD/ontologyJSon/getAllUnits",
                         function(data, textStatus, jqXHR) {
-                    		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                            var selectData = {results:[]}
                             $.each(data, function(index, val) {
-                            	unitsData.results.push({id: val.value, text: val.label})
-                            	unitLabelCache[val.value] = val.label;
-                           	})
-                           	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
-                           	$("#valueUnitId").select2({
-                           		placeholder: "Select a Unit",
-                           		width: "45%",
-        		                data: unitsData
-                    		}).on("change", function(e) {
-                                $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                                selectData.results.push({id: val.elementId, text: val.label})
+                                valueLabelCache[val.elementId] = val.label;
                             })
+                            query.callback(selectData)
                         }
-                );     
-            }	
+                );
+            }
+        }).on("change", function(e) {
+            $("#valueLabel").val(valueLabelCache[e.val])                               
+        })
+
+        var attributeElementId = $("#attributeElementId").val();
+        var attributeElementUnitId = $("#attributeElementUnitId").val();
+        var unitsData = {results:[]};
+        $("#valueUnitId").select2({
+       		placeholder: "Loading units..",
+       		width: "45%",
+            data: unitsData
+		})
+        
+        if(attributeElementUnitId){
+        	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
+        	var unitLabelCache = {}
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getBaseUnits",
+                    {
+                        elementId: attributeElementId,
+                        toUnitId: attributeElementUnitId
+                    },
+                    function(data, textStatus, jqXHR) {                    	
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                        	unitLabelCache[val.value] = val.label;
+                       	});
+                        $("#valueUnitId").select2({
+                        	placeholder: "Select a Unit",
+                       		width: "70%",
+                            data: unitsData
+                		}).on("change", function(e) {
+                            $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                        })
+                    }
+            );      
         }
+        else{
+        	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
+        	var unitLabelCache = {}
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getAllUnits",
+                    function(data, textStatus, jqXHR) {
+                		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                        	unitLabelCache[val.value] = val.label;
+                       	})
+                       	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
+                       	$("#valueUnitId").select2({
+                       		placeholder: "Select a Unit",
+                       		width: "45%",
+    		                data: unitsData
+                		}).on("change", function(e) {
+                            $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                        })
+                    }
+            );     
+        }	
+    }
 
-        function initializeFinalPage(){
-        	outputToConsole('calling initializeFinalPage()');
+    function initializePageThreeRange(){
+    	outputToConsole('calling initializePageThreeRange()');
 
-        	var assayId = $("#cardAssayId").val();
-
-        	var data = {'assayId':assayId};
-        	$.ajax({
-            	type:'POST',
-                url:'../reloadCardHolder',
-                data:data,
-                success:function (data) {
-                	$("div#cardHolder").html(data);
-     	    	   	initDnd();
-                },
-                error:function (jqXHR, textStatus, errorThrown){
-                	alert("Error: " + textStatus);
-                }
-            });
+    	var attributeElementId = $("#attributeElementId").val();
+        var attributeElementUnitId = $("#attributeElementUnitId").val();
+        var unitsData = {results:[]};
+        $("#valueUnitId").select2({
+       		placeholder: "Loading units..",
+       		width: "45%",
+            data: unitsData
+		})
+        
+        if(attributeElementUnitId){
+        	outputToConsole('/BARD/ontologyJSon/getBaseUnits request sent');
+        	var unitLabelCache = {}
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getBaseUnits",
+                    {
+                        elementId: attributeElementId,
+                        toUnitId: attributeElementUnitId
+                    },
+                    function(data, textStatus, jqXHR) {                    	
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                        	unitLabelCache[val.value] = val.label;
+                       	});
+                        $("#valueUnitId").select2({
+                        	placeholder: "Select a Unit",
+                       		width: "70%",
+                            data: unitsData
+                		}).on("change", function(e) {
+                            $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                        })
+                    }
+            );      
         }
+        else{
+        	outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
+        	var unitLabelCache = {}
+        	$.getJSON(
+                	"/BARD/ontologyJSon/getAllUnits",
+                    function(data, textStatus, jqXHR) {
+                		outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                        $.each(data, function(index, val) {
+                        	unitsData.results.push({id: val.value, text: val.label})
+                        	unitLabelCache[val.value] = val.label;
+                       	})
+                       	outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
+                       	$("#valueUnitId").select2({
+                       		placeholder: "Select a Unit",
+                       		width: "45%",
+    		                data: unitsData
+                		}).on("change", function(e) {
+                            $("#valueUnitLabel").val(unitLabelCache[e.val])                               
+                        })
+                    }
+            );     
+        }	
+    }
+
+	function initializeFinalPage(){
+    	outputToConsole('calling initializeFinalPage()');
+
+    	var assayId = $("#cardAssayId").val();
+
+    	var data = {'assayId':assayId};
+    	$.ajax({
+        	type:'POST',
+            url:'../reloadCardHolder',
+            data:data,
+            success:function (data) {
+            	$("div#cardHolder").html(data);
+ 	    	   	initDnd();
+            },
+            error:function (jqXHR, textStatus, errorThrown){
+            	alert("Error: " + textStatus);
+            }
+        });
+    }
+    
 </script>
-

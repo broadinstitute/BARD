@@ -8,12 +8,22 @@
 	<g:set var="valueTypeOption" value="${ valueType?.valueTypeOption }" />
 	
 	<g:if test="${'Fixed'.equals(valueType?.valueTypeOption)}">
-		<g:if test="${fixedValue.isNumericValue}">
-	    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
+		<g:if test="${fixedValueAddNewItem}">
+			<g:if test="${dictionaryItem}">
+				<g:set var="valueText" value="New dictionary item: ${ newDictionaryItemCmd.label }" />
+			</g:if>
+			<g:else>
+				<g:set var="valueText" value=" ${ newDictionaryItemCmd.label }" />
+			</g:else>
 		</g:if>
 		<g:else>
-	    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
-		</g:else> 
+			<g:if test="${fixedValue?.isNumericValue}">
+		    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.numericValue + " " + fixedValue?.valueUnitLabel }" />
+			</g:if>
+			<g:else>
+		    	<g:set var="valueText" value="${ fixedValue?.valueQualifier + " " + fixedValue?.valueLabel + " " + fixedValue?.valueUnitLabel }" />
+			</g:else> 
+		</g:else>		
 	</g:if>
 	<g:elseif test="${'List'.equals(valueType?.valueTypeOption)}">
 		<g:set var="valueText" value="${ listOfValues.size() } values set" />
