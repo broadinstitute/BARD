@@ -1,5 +1,6 @@
 package bard.springframework.jdbc.datasource
 
+import bard.db.audit.BardContextUtils
 import clover.org.apache.log4j.Logger
 import grails.plugins.springsecurity.SpringSecurityService
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
@@ -33,10 +34,19 @@ class BardContextTransactionAwareDataSourceProxy extends TransactionAwareDataSou
         throw new OperationNotSupportedException("use constructor with DataSource and SpringSecurity args")
     }
 
+    /**
+     * Without a SpringSecurityService the username will always be set to null for all connections
+     * @param targetDataSource
+     */
     BardContextTransactionAwareDataSourceProxy(DataSource targetDataSource) {
-        throw new OperationNotSupportedException("use constructor with DataSource and SpringSecurity args")
+        super(targetDataSource)
     }
 
+    /**
+     *
+     * @param targetDataSource
+     * @param springSecurityService
+     */
     BardContextTransactionAwareDataSourceProxy(DataSource targetDataSource, SpringSecurityService springSecurityService) {
         super(targetDataSource)
         this.springSecurityService = springSecurityService
@@ -44,31 +54,28 @@ class BardContextTransactionAwareDataSourceProxy extends TransactionAwareDataSou
 
     @Override
     Connection getConnection(String username, String password) throws SQLException {
-        return super.getConnection(username, password)    //To change body of overridden methods use File | Settings | File Templates.
+        return setOrClearUsername(super.getConnection(username, password))
     }
 
     @Override
     Connection getConnection() throws SQLException {
-        final Connection connection = super.getConnection()
-        UserDetails userDetails = (UserDetails) springSecurityService?.getPrincipal();
-        String username = userDetails?.getUsername() ?: 'testuser'
-        if (username) {
-            CallableStatement callableStatement
-            try {
-                ResultSet rs = connection.prepareStatement("select bard_context.get_username() from dual").executeQuery()
-                while(rs.next()){
-                    println(rs.getString(1))
-                }
-                callableStatement = connection.prepareCall("{call bard_context.set_username(?)}");
-                callableStatement.setString(1, username);
-                callableStatement.executeUpdate()
-            } catch (SQLException e) {
-                LOG.error("exception when trying to call bard_context.set_username", e);
-            }
-            finally {
-                callableStatement?.close()
-            }
-        }
-        connection
+        setOrClearUsername(super.getConnection())
     }
+
+    /**
+     * Tries to get the user form the springSecurityService
+     *
+     * if either the springSecurityService or  there isn't anyone authenticated, then the username is set to null
+     * and null is set as the username in the bard_context
+     *
+     * @param connection
+     * @return returns the connection passed in so it can be chained
+     */
+    private Connection setOrClearUsername(Connection connection) {
+        UserDetails userDetails = (UserDetails) springSecurityService?.getPrincipal();
+        String username = userDetails?.getUsername()
+        BardContextUtils.setBardContextUsername(connection, username)
+    }
+
+
 }
