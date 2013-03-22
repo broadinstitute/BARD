@@ -1,6 +1,8 @@
 package bard.db.registration
 
+import bard.db.audit.BardContextUtils
 import bard.db.model.AbstractContextItemIntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -16,8 +18,11 @@ import static test.TestUtils.assertFieldValidationExpectations
 @Unroll
 class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
 
+    SessionFactory sessionFactory
+
     @Before
     void doSetup() {
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         domainInstance = AssayContextItem.buildWithoutSave()
         domainInstance.attributeElement.save()
     }

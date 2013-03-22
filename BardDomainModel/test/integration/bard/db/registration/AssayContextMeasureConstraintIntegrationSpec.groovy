@@ -1,7 +1,9 @@
 package bard.db.registration
 
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -22,7 +24,7 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
 
     AssayContextMeasure domainInstance
 
-    def fixtureLoader
+    SessionFactory sessionFactory
 
     @Before
     void doSetup() {
@@ -31,6 +33,7 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         AssayContext assayContext = AssayContext.build(assay: assay)
         Measure measure = Measure.build(assay: assay, resultType: Element.build())
         domainInstance = AssayContextMeasure.buildWithoutSave(assayContext: assayContext, measure: measure)
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
     }
 
     @After
