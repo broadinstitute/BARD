@@ -12,43 +12,62 @@ import groovy.transform.InheritConstructors
 class DocumentController {
     static allowedMethods = [save: "POST", update: "POST"]
 
+    Map<String, Class> nameToDomain = ["Assay": AssayDocument, "Project": ProjectDocument]
+
     def create(DocumentCommand documentCommand) {
         documentCommand.clearErrors()
         [document: documentCommand]
     }
 
+    def redirectToOwner(document) {
+        if (document.getOwner() instanceof Assay) {
+            Assay assay = document.getOwner()
+            redirect(controller: "assayDefinition", action: "show", id: assay.id, fragment: "document-${document.id}")
+        } else if (document.getOwner() instanceof Project){
+            Project project = document.getOwner()
+            redirect(controller: "project", action: "show", id: project.id, fragment: "document-${document.id}")
+        } else {
+            throw new RuntimeException("document owner ${document.getOwner} is neither an assay nor project")
+        }
+    }
+
     def save(DocumentCommand documentCommand) {
-        AssayDocument document = documentCommand.createNewAssayDocument()
+        Object document = documentCommand.createNewDocument()
         if (document) {
-            redirect(controller: "assayDefinition", action: "show", id: document.assay.id, fragment: "document-${document.id}")
+            redirectToOwner(document)
         } else {
             render(view: "create", model: [document: documentCommand])
         }
     }
 
-    def edit(Long id) {
+    def edit(String type, Long id) {
         DocumentCommand dc = new DocumentCommand()
-        dc.populateWithExistingAssayDocument(id)
+        Class domainClass = nameToDomain[type]
+        if (domainClass == null) {
+            throw new RuntimeException("Not a valid value ${domainClass}")
+        }
+        dc.populateWithExistingDocument(domainClass, id)
         [document: dc]
     }
 
     def update(DocumentCommand documentCommand) {
-        AssayDocument assayDocument = documentCommand.updateExistingAssayDocument()
-        if (assayDocument) {
-            redirect(controller: "assayDefinition", action: "show", id: assayDocument.assay.id, fragment: "document-${documentCommand.documentId}")
+        Object document = documentCommand.updateExistingDocument()
+        if (document) {
+            redirectToOwner(document)
         } else {
             render(view: "edit", model: [document: documentCommand])
         }
     }
 
-    def delete(Long id) {
-        def document = AssayDocument.get(id)
+    def delete(String type, Long id) {
+        Class domainClass = nameToDomain[type]
+        def document = domainClass.get(id)
         if (!document) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
             return
         }
         document.delete()
-        redirect(controller: "assayDefinition", action: "show", id: document.assay.id, fragment: 'documents-header')
+        redirectToOwner(document)
     }
 }
 @InheritConstructors
@@ -66,7 +85,6 @@ class DocumentCommand {
     Date lastUpdated
     String modifiedBy
 
-
     public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['version', 'documentName', 'documentType', 'documentContent'].asImmutable()
     public static final List<String> PROPS_FROM_DOMAIN_TO_CMD = [PROPS_FROM_CMD_TO_DOMAIN, 'dateCreated', 'lastUpdated', 'modifiedBy'].flatten().asImmutable()
 
@@ -76,7 +94,7 @@ class DocumentCommand {
         projectId(nullable: true)
         ownerController(nullable: false, blank: false)
         documentId(nullable: true, validator: { val, self, errors ->
-            if (self.assayId == null && self.documentId == null) {
+            if (self.assayId == null && self.documentId == null && self.projectId == null) {
                 errors.rejectValue('documentId', 'nullable')
                 return false
             }
@@ -88,7 +106,7 @@ class DocumentCommand {
         copyFromDomainToCmd(assayDocument)
     }
 
-    AssayDocument createNewAssayDocument() {
+    AbstractDocument createNewDocument() {
         AbstractDocument documentToReturn = null
         if (validate()) {
             AbstractDocument doc
@@ -109,31 +127,38 @@ class DocumentCommand {
         documentToReturn
     }
 
-    void populateWithExistingAssayDocument(final Long id) {
-        AssayDocument assayDocument = attemptFindById(AssayDocument, id)
-        if (assayDocument) {
-            copyFromDomainToCmd(assayDocument)
+    void populateWithExistingDocument(final Class domainClass, final Long id) {
+        AbstractDocument document = attemptFindById(domainClass, id)
+        if (document) {
+            copyFromDomainToCmd(document)
         }
     }
 
-    AssayDocument updateExistingAssayDocument() {
-        AssayDocument assayDocument = null
+    AbstractDocument updateExistingDocument() {
+        AbstractDocument document = null
         if (validate()) {
-            assayDocument = attemptFindById(AssayDocument, documentId)
-            if (assayDocument) {
-                if (this.version?.longValue() != assayDocument.version.longValue()) {
-                    getErrors().reject('default.optimistic.locking.failure', [AssayDocument] as Object[], 'optimistic lock failure')
-                    copyFromDomainToCmd(assayDocument)
-                    assayDocument = null
+            if (assayId != null) {
+                document = attemptFindById(AssayDocument, documentId)
+            } else if (projectId != null) {
+                document = attemptFindById(ProjectDocument, documentId)
+            } else {
+                throw new RuntimeException("Neither assayId nor projectId was provided")
+            }
+
+            if (document) {
+                if (this.version?.longValue() != document.version.longValue()) {
+                    getErrors().reject('default.optimistic.locking.failure', [AbstractDocument] as Object[], 'optimistic lock failure')
+                    copyFromDomainToCmd(document)
+                    document = null
                 } else {
-                    copyFromCmdToDomain(assayDocument)
-                    if (!attemptSave(assayDocument)) {
-                        assayDocument = null
+                    copyFromCmdToDomain(document)
+                    if (!attemptSave(document)) {
+                        document = null
                     }
                 }
             }
         }
-        return assayDocument
+        return document
     }
 
 
@@ -217,6 +242,4 @@ class DocumentCommand {
             throw new RuntimeException('need either a projectId or assayId to determine owner')
         }
     }
-
-
 }

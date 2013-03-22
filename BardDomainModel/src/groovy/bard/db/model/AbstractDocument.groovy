@@ -49,4 +49,6 @@ abstract class AbstractDocument implements IDocumentType {
             }
         }
     }
+
+    public abstract Object getOwner();
 }
