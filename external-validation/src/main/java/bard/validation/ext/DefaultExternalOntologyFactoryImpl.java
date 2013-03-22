@@ -10,7 +10,7 @@ import org.apache.http.client.utils.URLEncodedUtils;
 
 public class DefaultExternalOntologyFactoryImpl implements ExternalOntologyFactory {
 
-    public ExternalOntologyAPI getExternalOntologyAPI(String externalSite) throws ExternalOntologyException {
+	public ExternalOntologyAPI getExternalOntologyAPI(String externalSite) throws ExternalOntologyException {
 		return getExternalOntologyAPI(externalSite, new Properties());
 	}
 
@@ -56,9 +56,13 @@ public class DefaultExternalOntologyFactoryImpl implements ExternalOntologyFacto
 			return new ExternalOntologyOLS("GO");
 		} else if (host.endsWith("uniprot.org")) {
 			return new ExternalOntologyUniprot();
+		} else if (host.endsWith("cas.org")) {
+			return new ExternalOntologyCAS();
 		}
 		return null;
-//		throw new ExternalOntologyException("Cannot determine External Ontology API from: " + uri);
+		// throw new
+		// ExternalOntologyException("Cannot determine External Ontology API from: "
+		// + uri);
 	}
 
 }
