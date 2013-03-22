@@ -250,3 +250,6 @@ log4j = {
     //Capture NCGC REST API roundtrip timing.
     info NCGCRestApiTimingAppender: ['grails.app.services.bard.core.helper.LoggerService']
 }
+
+
+grails.plugins.twitterbootstrap.fixtaglib = true
