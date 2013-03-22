@@ -118,6 +118,10 @@ class MergeAssayService {
                 }
             }
         }
+        println("""Total candidate candidateContextItems: ${candidateContextItems.size()},
+                    assaycontextitem # in keep assay ${assayContextItemInKeep},
+                    assaycontextitem # in keep assay with different value ${assayContextItemInKeepWithDifferentValue},
+                    assaycontextitem # not in keep assay  ${assayContextItemNotInKeep}""")
         assayWillKeep.save()
         // Assay.findById(assayWillKeep.id)
     }
@@ -288,31 +292,38 @@ class MergeAssayService {
         return null
     }
 
-    def delete(List<Long> removingAssays, Sql sql) {
+    //TODO:finish me
+    def delete(Long assayid, Sql sql) {
         assert sql
-        for (Long assayid : removingAssays) {
-            def updateSql = "delete from assay_document where assay_id=${assayid}"
-            sql.execute(updateSql)
-            updateSql = "delete from assay_context where assay_id=${assayid}"
-            sql.execute(updateSql)
-            updateSql = "delete from assay_context_item where assay_context_id in (select assay_context_id from assay_context where assay_id=${assayid}"
-            sql.execute(updateSql)
-            updateSql = "delete from assay_document where assay_id=${assayid}"
-            sql.execute(updateSql)
-            updateSql = "delete from experiment where assay_id = ${assayid}"
-            sql.execute(updateSql)
+        def updateSql = "delete from assay_document where assay_id=${assayid}"
+        sql.execute(updateSql)
+        updateSql = "delete from assay_context where assay_id=${assayid}"
+        sql.execute(updateSql)
+        updateSql = "delete from assay_context_item where assay_context_id in (select assay_context_id from assay_context where assay_id=${assayid}"
+        sql.execute(updateSql)
+        updateSql = "delete from exprmt_context_item where exprmt_context_id in (select exprmt_context_id from exprmt_context where experiment_id in (select experiment_id from experiment where assay_id=${assayid})"
+        sql.execute(updateSql)
+        updateSql = "delete from exprmt_context where experiment_id in (select experiment_id from experiment where assay_id=${assayid})"
+        sql.execute(updateSql)
+        updateSql = "delete from experiment where assay_id=${assayid})"
+        sql.execute(updateSql)
 
-        }
     }
 
+    //TODO:finish me
     def deleteAssay(Assay assay) {
         assay.experiments.removeAll(assay.experiments)
         assay.documents.removeAll(assay.documents)
-        assay.measures {Measure measure->
 
-
+        assay.measures.each{Measure measure->
+            measure.assayContextMeasures.removeAll(measure.assayContextMeasures)
+            measure.experimentMeasures.removeAll(measure.experimentMeasures)
         }
+        assay.measures.removeAll(assay.measures)
         assay.contexts.removeAll(assay.contexts)
+        if (!assay.delete(flush: true)) {
+            println(assay.errors)
+        }
     }
 
     def boolean isAssayContextItemIn(List<AssayContextItem> items, AssayContextItem item) {
