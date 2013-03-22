@@ -114,6 +114,15 @@
             outputToConsole('calling initializePageThreeFixed()');
             initializeExtValueIdSelect2("Fixed");
 
+            $("#term-select-button").on("click", function() {
+                $("#propose-term-div").hide()
+                $("#term-select-div").show()
+            });
+            $("#propose-term-button").on("click", function() {
+                $("#propose-term-div").show()
+                $("#term-select-div").hide()
+            });
+
             $("#valueId").select2({
                 minimumInputLength: 1,
                 width: "70%",
@@ -230,7 +239,7 @@
                     );
                 }
             }).on("change", function(e) {
-                $("#valueLabel").val(valueLabelCache[e.val])
+                    $("#valueLabel").val(valueLabelCache[e.val])
             })
 
             var attributeElementId = $("#attributeElementId").val();

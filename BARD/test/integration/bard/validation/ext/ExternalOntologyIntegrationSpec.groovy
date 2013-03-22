@@ -5,8 +5,8 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
 
-import static BardExternalOntologyFactory.NCBI_EMAIL
-import static BardExternalOntologyFactory.NCBI_TOOL
+import static bard.validation.ext.BardExternalOntologyFactory.NCBI_EMAIL
+import static bard.validation.ext.BardExternalOntologyFactory.NCBI_TOOL
 
 /**
  * Created with IntelliJ IDEA.

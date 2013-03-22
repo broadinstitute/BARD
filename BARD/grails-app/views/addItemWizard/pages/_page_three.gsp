@@ -20,9 +20,23 @@
     </g:if>
     <g:else>
 
-        <h1>Search or Browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If relevant, choose the relevant units that describe the number entered.</h1>
+        <h1>Search or browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If entering a numerical value, choose the relevant units that describe the number entered. </h1>
 
-        <div class="row-fluid">
+        <input type="radio" name="term-entry-group" id="term-select-button" checked> Enter a term from the dictionary
+        <input type="radio" name="term-entry-group" id="propose-term-button" > Propose a new term
+
+        <div id="propose-term-div" class="row-fluid" style="display: none">
+            <div class="span2">
+                <label class="control-label">Propose and use new term:</label>
+            </div>
+
+            <div class="span4">
+                <div class="controls"><input class="input-large" type="text" size='10' id="textValue"
+                                             name='textValue' value="${fixedValue?.textValue}"></div>
+            </div>
+        </div>
+
+        <div id="term-select-div" class="row-fluid">
             <div class="span12">
                 <div class="row-fluid">
                     <div class="span12">
@@ -49,7 +63,7 @@
                     </div>
                 </div>
 
-                <div class="row-fluid">
+            <div class="row-fluid">
                     <div class="span2">
                         <label class="control-label">Numeric Value:</label>
                     </div>
