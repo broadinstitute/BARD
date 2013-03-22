@@ -52,6 +52,9 @@ class BardContextUtils {
 
     public static Connection setBardContextUsername(Session session, String username) {
         try {
+            if (LOG.isDebugEnabled()) {
+                logExistingUsername(session, username)
+            }
             Query query = session.createSQLQuery("{call bard_context.set_username(:username)}");
             query.setString('username', username);
             query.executeUpdate()
