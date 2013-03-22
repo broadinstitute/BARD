@@ -78,7 +78,6 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     status.setRollbackOnly()
                     return false
                 }
-                assayContext.assay.assayContexts.add(assayContext)
 
                 assayContext.contextName = contextDTO.name
 
@@ -256,11 +255,13 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         }
 
         if (doSave) {
+            assayContext.assay.assayContexts.add(assayContext)
             assayContext.save(flush: flushSetting)
             final ContextLoadResultsWriter.LoadResultType loadResultType
             final String message
             final int numLoaded
             if (assayContext.hasErrors()) {
+                assayContext.assay.assayContexts.remove(assayContext)
                 logger.info("AssayContext errors: ${assayContext.errors.dump()}")
                 loadResultType = ContextLoadResultsWriter.LoadResultType.fail
                 message = "failed to load b/c of database errors:  ${assayContext.errors.dump()}"

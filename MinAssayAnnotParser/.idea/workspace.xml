@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2fc4b5fb-2900-4893-ab2a-79f1b825f97d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" />
-      <change type="DELETED" beforePath="C:\Local\code_and_repos\BARD\MinAssayAnnotParser\data\maas\maasDataset2\output\fileAndAssayStatsForMinAssayAnnotParse.csv" afterPath="" />
-      <change type="DELETED" beforePath="C:\Local\code_and_repos\BARD\MinAssayAnnotParser\data\maas\maasDataset2\output\minAssayAnnotParseResults.csv" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy" afterPath="$PROJECT_DIR$/scripts/maas/LoadAssayContext.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextCompare.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextCompare.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemCompare.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemCompare.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemMatchTripleBuilder.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemMatchTripleBuilder.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/ContextLoadResultsWriter.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/ContextLoadResultsWriter.groovy" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" afterPath="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
     </list>
     <ignored path="MinAssayAnnotParser.iws" />
@@ -76,10 +64,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="13" selection-start="2380" selection-end="2380" vertical-scroll-proportion="-0.45394737">
+            <state line="60" column="13" selection-start="2380" selection-end="2380" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#75#106#0" expanded="true" />
               </folding>
@@ -87,10 +75,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AssayContextsValidatorCreatorAndPersistor.groovy" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AssayContextsValidatorCreatorAndPersistor.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="72" selection-start="2113" selection-end="2113" vertical-scroll-proportion="0.0">
+            <state line="263" column="68" selection-start="15937" selection-end="15937" vertical-scroll-proportion="0.11738149">
               <folding>
                 <element signature="e#62#102#0" expanded="true" />
               </folding>
@@ -116,9 +104,9 @@
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/ContextLoadResultsWriter.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextCompare.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemCompare.groovy" />
-        <option value="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
         <option value="$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemMatchTripleBuilder.groovy" />
         <option value="$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy" />
+        <option value="$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy" />
       </list>
     </option>
   </component>
@@ -695,7 +683,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="-4" width="1608" height="864" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -717,8 +705,8 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24967825" sideWeight="0.67085075" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32914925" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24967825" sideWeight="0.67085075" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32914925" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -867,15 +855,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="72" selection-start="2113" selection-end="2113" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#62#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/assaycompare/AssayContextItemCompare.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="0" selection-start="755" selection-end="755" vertical-scroll-proportion="0.0">
@@ -903,9 +882,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/unit/bard/dm/assaycompare/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistorTestSpec.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="13" selection-start="2380" selection-end="2380" vertical-scroll-proportion="-0.45394737">
+        <state line="60" column="13" selection-start="2380" selection-end="2380" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#75#106#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/groovy/bard/dm/minimumassayannotation/validateCreatePersist/AssayContextsValidatorCreatorAndPersistor.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="263" column="68" selection-start="15937" selection-end="15937" vertical-scroll-proportion="0.11738149">
+          <folding>
+            <element signature="e#62#102#0" expanded="true" />
           </folding>
         </state>
       </provider>
