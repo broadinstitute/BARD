@@ -1,8 +1,3 @@
-import java.util.Map;
-
-import geb.waiting.Wait;
-
-import org.apache.tools.ant.taskdefs.WaitFor;
 import pages.HomePage
 import pages.ViewAssayDefinitionPage
 import pages.FindAssayByIdPage
@@ -22,6 +17,10 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 	String unitValue = testData.unitValue
 	String unitSelect = testData.unitSelect
 
+	String editAssayName = testData.editAssayName
+	String assayStatus = testData.assayStatus
+	String designedBy = testData.designedBy
+	
 	void setupSpec() {
 		//browser.config.autoClearCookies = true
 		logInSomeUser()
@@ -29,14 +28,28 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		searchAsssay(testData.assayId)
 	}
 
+	def "Test Update Assay Summary"() {
+		when: "User is at View Assay Page"
+		at ViewAssayDefinitionPage
+		then: "Adding New Context Card"
+		editSummay(editAssayName, assayStatus, designedBy)
+		waitFor { assaySummary.value[0].text() ==~ testData.assayId}
+		assert assaySummary.value[3].text() ==~ editAssayName
+		assert assaySummary.value[5].text() ==~ assayStatus
+		assert assaySummary.value[4].text() ==~ designedBy
+		report "UpdateAssaySummary"
+		then: "User is at View Assay Page"
+		at ViewAssayDefinitionPage
+	}
+	
 	def "Test Add Assay Context Card"() {
 		editAssayContext()
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
 		then: "Adding New Context Card"
-		
-		addNewContextCard("$card1")
-		
+		addNewContextCard(card1)
+		waitFor(10, 2) { isCardPresent(card1) }
+		assert isCardPresent(card1)
 		report "Card1Add"
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
@@ -63,7 +76,6 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		editAssayContext()
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
-
 		then: "Add context Item to card"
 		cardHolders.cardMenu("$card1").click()
 		cardHolders.cardDDMenu[2].click()
@@ -71,6 +83,9 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		defineValueType("$valueType")
 		defineValue("$arrtibuteSearch", "$valueTypeQualifier", "$unitValue", "$unitSelect")
 		reviewAndSave()
+		//Thread.sleep(2000)
+		waitFor(10, 2) { isCardEmpty(card1) }
+		assert isCardEmpty(card1)
 		report "AddContextItem"
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
@@ -94,6 +109,9 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		moveAssayCardItem.moveBtn.click()
 		report "MoveContextItem"
 		waitFor(20, 3) { cardHolders.cardItems("$card2") }
+		waitFor(10, 2) { !isCardEmpty(card1) }
+		assert !isCardEmpty(card1)
+		assert isCardEmpty(card2)
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
 		finishEditingBtn.click()
@@ -106,13 +124,10 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
 		then: "Deleting Assay Context Item"
-		cardHolders.cardItemMenu("$card2").click()
-		assert cardHolders.cardItemMenuDD[1]
-		assert cardHolders.cardItemMenuDD[2]
-		cardHolders.cardItemMenuDD[2].click()
-		waitFor(10, 1){ deleteAssayCards.deleteBtn }
-		deleteAssayCards.deleteBtn.click()
+		deleContextItem(card2)
 		report "DeleteContextItem"
+		waitFor(15, 3) { !isCardEmpty(card2) }
+		assert !isCardEmpty(card2)
 		waitFor(10) { at EditAssayContextPage }
 		when:"User is at Edit Assay Definition Page"
 		finishEditingBtn.click()
@@ -145,7 +160,9 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
 		then: "Deleting Assay Context Card"
-		deletAssayCard("$cardUpdated")
+		deletAssayCard(cardUpdated)
+		waitFor(10, 3) { !isCardPresent(cardUpdated) }
+		assert !isCardPresent(cardUpdated)
 		report "DeleteContextCard1"
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
@@ -159,8 +176,9 @@ class EditAssayDefinitionSpec extends BardFunctionalSpec {
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage
 		then: "Editing Assay Context Card"
-		
-		deletAssayCard("$card2")
+		deletAssayCard(card2)
+		waitFor(15, 3) { !isCardPresent(card2) }
+		assert !isCardPresent(card2)
 		report "DeleteContextCard2"
 		when: "User is at Edit Assay Definition Page"
 		at EditAssayContextPage

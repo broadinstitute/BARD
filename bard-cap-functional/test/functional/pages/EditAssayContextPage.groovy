@@ -30,10 +30,44 @@ class EditAssayContextPage extends Page{
 
 	def addNewContextCard(def cardName){
 		if(isCardPresent(cardName)){
+			
+			if(isCardEmpty(cardName)){
+				deleContextItem(cardName)
+				Thread.sleep(2000)
+			}
+//			if(cardHolders.cardName(cardName).next().size()!="Empty"){
+//				if(cardHolders.cardName(cardName).next().find("a")){
+//					deleContextItem(cardName)
+//					Thread.sleep(3000)
+//				}
+//			}
 			deletAssayCard(cardName)
 			Thread.sleep(3000)
 		}
-		
+		addCard(cardName)
+	}
+	boolean isCardEmpty(def cardName){
+		boolean found = false
+		if(isCardPresent(cardName)){
+			if(cardHolders.cardName(cardName).next().size() != "Empty"){
+				println cardHolders.cardName(cardName).next().size()
+				if(cardHolders.cardName(cardName).next().find("a")){
+					found = true
+				}
+
+			}
+		}
+		return found
+	}
+	def deleContextItem(def cardName){
+		cardHolders.cardItemMenu(cardName).click()
+		assert cardHolders.cardItemMenuDD[1]
+		assert cardHolders.cardItemMenuDD[2]
+		cardHolders.cardItemMenuDD[2].click()
+		waitFor(10, 1){ deleteAssayCards.deleteBtn }
+		deleteAssayCards.deleteBtn.click()
+	}
+	def addCard(def cardName){
 		addEditAssayCards.addNewCardBtn.click()
 		waitFor{ addEditAssayCards.titleBar }
 		assert addEditAssayCards.titleBar.text() ==~ "Create new card"
@@ -44,13 +78,12 @@ class EditAssayContextPage extends Page{
 		addEditAssayCards.saveBtn.click()
 		waitFor(20, 7){ cardHolders.cardName("$cardName") }
 	}
-
 	def verifyEmptyCardsMenu(def cardName){
 		assert cardHolders.cardName("$cardName")
 		cardHolders.cardMenu("$cardName").click()
-		assert cardHolders.cardDDMenu[1] // edit card name button
-		assert cardHolders.cardDDMenu[2] // add item wizard button
-		assert cardHolders.cardDDMenu[3] // delete card button
+		assert cardHolders.cardDDMenu[1]	// edit card name button
+		assert cardHolders.cardDDMenu[2]	// add item wizard button
+		assert cardHolders.cardDDMenu[3]	// delete card button
 		cardHolders.cardDDMenu[0].click()
 	}
 
@@ -82,8 +115,8 @@ class EditAssayContextPage extends Page{
 		assert itemWizard.cancelBtn
 		itemWizard.selectAttrib.selectLink.click()
 		selectToSearch.enterResult.value("$searchAttribValue")
-		Thread.sleep(2000)
 		waitFor(15, 3){ selectResult.resultPopup }
+		Thread.sleep(2000)
 		selectResult.resultPopup.click()
 		itemWizard.nextBtn.click()
 	}
@@ -107,15 +140,15 @@ class EditAssayContextPage extends Page{
 		assert itemWizard.previousBtn
 		itemWizard.selectValue.selectLink.click()
 		selectToSearch.enterResult.value("$searchAttribValue")
-		Thread.sleep(2000)
 		waitFor(15, 5){ selectResult.resultPopup }
+		Thread.sleep(2000)
 		selectResult.resultPopup.click()
 		itemWizard.valueQualifier.value("$qualifier")
 		itemWizard.numericVal.value("$unitVal")
 		itemWizard.selectValueUnit.selectLink.click()
 		selectToSearch.enterResult.value("")
-		Thread.sleep(2000)
 		waitFor(15, 3){ selectResult.resultPopup }
+		Thread.sleep(2000)
 		selectResult.resultPopup.click()
 		itemWizard.nextBtn.click()
 	}
@@ -203,7 +236,6 @@ class AddItemWizardModule extends Module {
 		valueType {value -> $("input", name:"valueTypeOption", value:"$value")}
 		valueQualifier { $("#valueQualifier") }
 		numericVal { $("input#numericValue") }
-		//seleValueId { module SelectToValueIdModule, $("div#s2id_valueId") }
 		reviewContents { $("div.content").find("h1") }
 		successAlert { $("div.alert.alert-success") }
 	}
