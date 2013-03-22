@@ -67,91 +67,93 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         AssayContext.withTransaction { status ->
             for (ContextDTO contextDTO : contextDtoList) {
 
-                //create the assay-context
-                AssayContext assayContext = new AssayContext()
-                assayContext.assay = getAssayFromAid(contextDTO.aid)
+                if (contextDTO.contextItemDtoList.size() > 0) {
+                    //create the assay-context
+                    AssayContext assayContext = new AssayContext()
+                    assayContext.assay = getAssayFromAid(contextDTO.aid)
 
-                assayContext.modifiedBy = modifiedBy
-                //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
-                if (!assayContext.assay) {//skip this assay context
-                    writeMessageWhenAidNotFoundInDb(contextDTO)
-                    status.setRollbackOnly()
-                    return false
+                    assayContext.modifiedBy = modifiedBy
+                    //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
+                    if (!assayContext.assay) {//skip this assay context
+                        writeMessageWhenAidNotFoundInDb(contextDTO)
+                        status.setRollbackOnly()
+                        return false
+                    }
+
+                    assayContext.contextName = contextDTO.name
+
+                    //create the assay-context-item and add them to assay-context
+                    for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
+
+                        AssayContextItem assayContextItem = new AssayContextItem()
+                        assayContextItem.assayContext = assayContext
+                        assayContextItem.attributeType = contextItemDto.attributeType
+                        assayContextItem.modifiedBy = modifiedBy
+                        //populate the attribute key's element
+                        Element element = Element.findByLabelIlike(contextItemDto.key)
+                        if (! element) {
+                            final String message = "Element in spreadsheet for the assay-context-item attribute not found in database (${contextItemDto.key})"
+                            loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
+                                    null, 0, message)
+                            status.setRollbackOnly()
+                            return false
+                        }
+
+                        assayContextItem.attributeElement = element
+                        Element concentrationUnitsElement = contextItemDto.concentrationUnits ? Element.findByLabelIlike(contextItemDto.concentrationUnits) : null
+                        String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
+                        //populate attribute-value type and value
+                        element = contextItemDto.value ? Element.findByLabelIlike(contextItemDto.value) : null
+                        //if the value string could be matched against an element then add it to the valueElement
+                        if (element) {
+                            assayContextItem.valueElement = element
+                            assayContextItem.valueDisplay = element.label
+                        }
+                        //else, if the attribute's value is a number value, store it in the valueNum field
+                        else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
+                            Float val = new Float(contextItemDto.value)
+                            assayContextItem.valueNum = val
+                            //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
+                            assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
+                        }
+                        //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
+                        else if (contextItemDto.value && (contextItemDto.value instanceof String) && contextItemDto.value.matches(/^\d+\-\d+$/)) {
+                            final String[] rangeStringArray = contextItemDto.value.split("-")
+                            assayContextItem.valueMin = new Float(rangeStringArray[0])
+                            assayContextItem.valueMax = new Float(rangeStringArray[1])
+                            assayContextItem.valueDisplay = contextItemDto.value + concentrationUnitsAbbreviation //range-units are reported separately.
+                            assayContextItem.attributeType = AttributeType.Range
+                        }
+                        //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
+                        else if (contextItemDto.typeIn || (contextItemDto.attributeType == AttributeType.Free)) {
+                            assayContextItem.valueDisplay = contextItemDto.value
+                        }
+                        else {
+                            final String message = "Value of context item not recognized as element or numerical value: '${contextItemDto.key}'/'${contextItemDto.value}'"
+                            logger.info(message)
+                            loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
+                                    null, 0, message)
+                            status.setRollbackOnly()
+                            return false
+                        }
+
+                        //populate the qualifier field, if exists, and prefix the valueDisplay with it
+                        if (contextItemDto.qualifier) {
+                            assayContextItem.qualifier = String.format('%-2s', contextItemDto.qualifier)
+                            assayContextItem.valueDisplay = "${contextItemDto.qualifier}${assayContextItem.valueDisplay}"
+                        }
+
+
+                        if (! postProcessAssayContextItem(assayContextItem, contextDTO)) {
+                            status.setRollbackOnly()
+                            return false
+                        }
+
+                        assayContext.addToAssayContextItems(assayContextItem)
+                    }
+
+                    contextDTO.wasSaved = checkForDuplicateOrSubsetAndSave(assayContext, contextDTO)
                 }
-
-                assayContext.contextName = contextDTO.name
-
-                //create the assay-context-item and add them to assay-context
-                for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
-
-                    AssayContextItem assayContextItem = new AssayContextItem()
-                    assayContextItem.assayContext = assayContext
-                    assayContextItem.attributeType = contextItemDto.attributeType
-                    assayContextItem.modifiedBy = modifiedBy
-                    //populate the attribute key's element
-                    Element element = Element.findByLabelIlike(contextItemDto.key)
-                    if (! element) {
-                        final String message = "Element in spreadsheet for the assay-context-item attribute not found in database (${contextItemDto.key})"
-                        loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
-                                null, 0, message)
-                        status.setRollbackOnly()
-                        return false
-                    }
-
-                    assayContextItem.attributeElement = element
-                    Element concentrationUnitsElement = contextItemDto.concentrationUnits ? Element.findByLabelIlike(contextItemDto.concentrationUnits) : null
-                    String concentrationUnitsAbbreviation = concentrationUnitsElement ? " ${concentrationUnitsElement.abbreviation}" : ""
-                    //populate attribute-value type and value
-                    element = contextItemDto.value ? Element.findByLabelIlike(contextItemDto.value) : null
-                    //if the value string could be matched against an element then add it to the valueElement
-                    if (element) {
-                        assayContextItem.valueElement = element
-                        assayContextItem.valueDisplay = element.label
-                    }
-                    //else, if the attribute's value is a number value, store it in the valueNum field
-                    else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
-                        Float val = new Float(contextItemDto.value)
-                        assayContextItem.valueNum = val
-                        //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
-                        assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
-                    }
-                    //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
-                    else if (contextItemDto.value && (contextItemDto.value instanceof String) && contextItemDto.value.matches(/^\d+\-\d+$/)) {
-                        final String[] rangeStringArray = contextItemDto.value.split("-")
-                        assayContextItem.valueMin = new Float(rangeStringArray[0])
-                        assayContextItem.valueMax = new Float(rangeStringArray[1])
-                        assayContextItem.valueDisplay = contextItemDto.value + concentrationUnitsAbbreviation //range-units are reported separately.
-                        assayContextItem.attributeType = AttributeType.Range
-                    }
-                    //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
-                    else if (contextItemDto.typeIn || (contextItemDto.attributeType == AttributeType.Free)) {
-                        assayContextItem.valueDisplay = contextItemDto.value
-                    }
-                    else {
-                        final String message = "Value of context item not recognized as element or numerical value: '${contextItemDto.key}'/'${contextItemDto.value}'"
-                        logger.info(message)
-                        loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
-                                null, 0, message)
-                        status.setRollbackOnly()
-                        return false
-                    }
-
-                    //populate the qualifier field, if exists, and prefix the valueDisplay with it
-                    if (contextItemDto.qualifier) {
-                        assayContextItem.qualifier = String.format('%-2s', contextItemDto.qualifier)
-                        assayContextItem.valueDisplay = "${contextItemDto.qualifier}${assayContextItem.valueDisplay}"
-                    }
-
-
-                    if (! postProcessAssayContextItem(assayContextItem, contextDTO)) {
-                        status.setRollbackOnly()
-                        return false
-                    }
-
-                    assayContext.addToAssayContextItems(assayContextItem)
-                }
-
-                contextDTO.wasSaved = checkForDuplicateOrSubsetAndSave(assayContext, contextDTO)
             }
 //            status.setRollbackOnly()
         }
