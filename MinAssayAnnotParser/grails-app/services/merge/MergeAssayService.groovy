@@ -17,6 +17,7 @@ import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.AssayContextMeasure
 import bard.db.model.AbstractDocument
 import org.apache.commons.lang3.builder.EqualsBuilder
+import org.apache.commons.math3.util.Precision
 
 class MergeAssayService {
 
@@ -101,10 +102,10 @@ class MergeAssayService {
 
                     if (context) {
                         assayContextNotInKeep++
+                        context.modifiedBy = modifiedBy + "-addedFromA-${context.assay.id}"
                         context.assay.removeFromAssayContexts(context)
                         context.assay = assayWillKeep
                         assayWillKeep.addToAssayContexts(context)
-                        context.modifiedBy = modifiedBy + "-addedFromA-${context.assay.id}"
                     }
 
                 }
@@ -245,7 +246,7 @@ class MergeAssayService {
                 measure.assayContextMeasures.each {
                     it.assayContext.assay = assayWillKeep
                     found.addToAssayContextMeasures(it)
-                    it.assayContext.removeFromAssayContextMeasures(it)
+                    //it.assayContext.removeFromAssayContextMeasures(it)
                 }
                 measureMap.put(measure.id, found)
                // deleteMeasures.add(measure)
@@ -334,29 +335,29 @@ class MergeAssayService {
     }
 
     def boolean isAssayContextItemEquals(AssayContextItem a, AssayContextItem b) {
+        float eps = 0.00001
         if (a.is(b))
             return true
         if (b.id == a.id)
             return true
         if (a.attributeElement != b.attributeElement)
             return false
-        if (a.attributeType == AttributeType.Free && b.attributeType == AttributeType.Free)
+        if (a.attributeType == AttributeType.Free && b.attributeType == AttributeType.Free)  // if they are the same, we don't care the rest
             return true
-        if (a.valueElement && b.valueElement && a.valueElement == b.valueElement)
-            return true
-        if (a.extValueId && b.extValueId && a.extValueId == b.extValueId)
-            return true
-        if (a.valueNum && b.valueNum && StringUtils.equals(a.qualifier, b.qualifier) && Float.compare(a.valueNum, b.valueNum) == 0)
-            return true
-        if (a.valueMax && b.valueMax && a.valueMin && b.valueMin && compareFloat(a.valueMax, b.valueMax) && compareFloat(a.valueMin, b.valueMin))
+        if ((a.attributeType == b.attributeType) &&
+             (a.valueElement == b.valueElement) &&
+             (a.extValueId == b.extValueId) &&
+             (Precision.equalsIncludingNaN(nullToNaN(a.valueNum), nullToNaN(b.valueNum), eps) && StringUtils.equals(a.qualifier, b.qualifier)) &&
+             (Precision.equalsIncludingNaN(nullToNaN(a.valueMin), nullToNaN(b.valueMin), eps) && Precision.equalsIncludingNaN(nullToNaN(a.valueMax), nullToNaN(b.valueMax), eps)) &&
+             (StringUtils.equals(a.valueDisplay, b.valueDisplay))
+            )
             return true
         return false
     }
 
-    boolean compareFloat(Float a, Float b) {
-        if (a && b)
-            return Float.compare(a, b)
-        return false
+    Float nullToNaN(Float a) {
+        if (!a)
+            return Float.NaN
     }
 
     /**

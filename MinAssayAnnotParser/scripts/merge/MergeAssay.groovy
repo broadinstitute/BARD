@@ -71,10 +71,4 @@ def merge(List<Assay> assays, String modifiedBy) {
 def delete(List<Assay> assays) {
     def db = grailsApplication.config.dataSource
     def sql = Sql.newInstance(db.url, db.username, db.password, db.driverClassName)
-
-    def mergeAssayService = new MergeAssayService()
-   // List<Long> assayIds = assays.collect{it.id}
-    List<Long> assayIds = []
-    assayIds << 1468
-    mergeAssayService.delete(assayIds,sql)
 }

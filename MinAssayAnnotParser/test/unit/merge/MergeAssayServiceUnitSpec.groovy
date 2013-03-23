@@ -30,10 +30,11 @@ import bard.db.registration.Assay
 import bard.db.experiment.ExperimentContext
 import bard.db.registration.AttributeType
 
-@Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure, Assay, Experiment, ExperimentMeasure])
+@Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure, Assay, Experiment, ExperimentMeasure, Element])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure, ExperimentContext, ExperimentContextItem])
 class MergeAssayServiceUnitSpec extends Specification {
 
+    MergeAssayService mergeAssayService = new MergeAssayService()
     void merge(Assay targetAssay, Assay srcAssay) {
         MergeAssayService mergeAssayService = new MergeAssayService()
         String modifiedBy = 'xx'
@@ -201,5 +202,63 @@ class MergeAssayServiceUnitSpec extends Specification {
         contextA.contextItems.first().attributeType == AttributeType.Fixed
     }
 
+    //TODO: add more tests
+    void testIsAssayContextItemEquals() {
+        setup:
+        Element e1 = Element.build(id: 1, label: "e1")
+        Element e2 = Element.build(id: 2, label: "e2")
+        Element e3 = Element.build(id: 3, label: "e3")
+        double value = 11.01
+        String extValueId = "external value id"
+        String valueDisplay = "value for display"
+
+        when:
+        AssayContextItem aci1 = AssayContextItem.build(attributeElement: e1)
+        AssayContextItem aci2 = AssayContextItem.build(attributeElement: e2)
+
+        then: "these two item are not the same because attribute element are not match"
+        assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+
+        when:
+        aci1 = AssayContextItem.build(attributeElement: e1, attributeType: AttributeType.Free)
+        aci2 = AssayContextItem.build(attributeElement: e1, attributeType: AttributeType.Free)
+        then: """these two item are the same because attribute are the same, and type are FREE"""
+        assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+
+        when:
+        aci2.attributeType = AttributeType.Range
+        then: "this two item are not the same because attribute are the same, and type are different, other fields are not the same"
+        assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+
+        when:
+         aci1 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed)
+         aci2 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed)
+        then: "this two items are the same since they have same valueElement"
+        assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+
+        when:
+        aci2.valueElement = e3
+        then: "This two are not the same since they have different valueElement"
+        assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+
+        when:
+        aci2.valueElement = null
+        then: "This two are not the same since one valueElement is null, another one is not"
+        assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+
+        when:
+        aci1 = AssayContextItem.build(attributeElement: e1, extValueId: extValueId, attributeType: AttributeType.Fixed)
+        aci2 = AssayContextItem.build(attributeElement: e1, extValueId: extValueId, attributeType: AttributeType.Fixed)
+        then: "This two are the same due to same extValueId"
+        assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+        when:
+        aci2.extValueId = extValueId + " and some more stuff"
+        then: "This two are not the same due to extValueId"
+        assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+        when:
+        aci2.extValueId = null
+        then: "This two are not the same, one extValueId is null"
+        assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
+    }
 
 }

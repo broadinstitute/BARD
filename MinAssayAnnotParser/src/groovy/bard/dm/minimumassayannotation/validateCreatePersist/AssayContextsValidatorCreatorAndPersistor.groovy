@@ -111,10 +111,12 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         }
                         //else, if the attribute's value is a number value, store it in the valueNum field
                         else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
+                            if (contextItemDto.attributeType != AttributeType.Free) {
                             Float val = new Float(contextItemDto.value)
                             assayContextItem.valueNum = val
                             //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
                             assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
+                            }
                         }
                         //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
                         else if (contextItemDto.value && (contextItemDto.value instanceof String) && contextItemDto.value.matches(/^\d+\-\d+$/)) {
