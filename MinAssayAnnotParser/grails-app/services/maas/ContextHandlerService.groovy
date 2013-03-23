@@ -138,7 +138,7 @@ class ContextHandlerService {
      */
     private boolean postProcessContextItem(AbstractContextItem contextItem, List<String> errorMessages) {
         String display = contextItem.valueDisplay
-        if (StringUtils.isNotBlank(display))
+        if (StringUtils.isBlank(display))
             return true
 
         if (display.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'
