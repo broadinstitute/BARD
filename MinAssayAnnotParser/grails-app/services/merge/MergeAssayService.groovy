@@ -73,7 +73,7 @@ class MergeAssayService {
                 continue
             }
             AssayContextItem second = assayWillKeep.assayContextItems.find {it.attributeElement == item.attributeElement && it.valueElement != item.valueElement}
-            if (second && item.attributeType == AttributeType.Fixed) {
+            if (second) {
                 assayContextItemInKeepWithDifferentValue++
                 createExperimentContextAndItem(item.assayContext, modifiedBy)
                 createExperimentContextAndItem(second.assayContext, modifiedBy)
@@ -82,10 +82,8 @@ class MergeAssayService {
                 item.assayContext.removeFromAssayContextItems(item)
                 item.assayContext = second.assayContext
                 second.assayContext.addToAssayContextItems(item)
-                item.attributeType = AttributeType.List
+                //item.attributeType = AttributeType.List
                 second.attributeType = AttributeType.List
-                // now need to create experiment context and experiment contextitem
-
             }
             else {
                 assayContextItemNotInKeep++
@@ -117,6 +115,7 @@ class MergeAssayService {
                     context.addToAssayContextItems(item)
                     item.assayContext = context
                 }
+                item.attributeType = AttributeType.List
             }
         }
         println("""Total candidate candidateContextItems: ${candidateContextItems.size()},
@@ -311,9 +310,14 @@ class MergeAssayService {
 
     }
 
-    //TODO:finish me
     def deleteAssay(Assay assay) {
+        assay.experiments.each{
+            it.delete()
+        }
         assay.experiments.removeAll(assay.experiments)
+        assay.documents.each{
+            it.delete()
+        }
         assay.documents.removeAll(assay.documents)
 
         assay.measures.each{Measure measure->
@@ -321,7 +325,16 @@ class MergeAssayService {
             measure.experimentMeasures.removeAll(measure.experimentMeasures)
         }
         assay.measures.removeAll(assay.measures)
-        assay.contexts.removeAll(assay.contexts)
+
+        assay.assayContextItems.each {
+            it.delete()
+        }
+        assay.assayContextItems.removeAll(assay.assayContextItems)
+
+        assay.assayContexts.each{
+            it.delete()
+        }
+        assay.assayContexts.removeAll(assay.assayContexts)
         if (!assay.delete(flush: true)) {
             println(assay.errors)
         }
@@ -369,19 +382,35 @@ class MergeAssayService {
      */
     boolean isContextItemExist(AbstractContext context, AbstractContextItem item) {
         boolean isSame = false
+
         context.contextItems.each { AbstractContextItem it ->
-            if (item.attributeElement.label == it.attributeElement.label &&
-                    item.valueElement?.label == it.valueElement?.label &&
-                    StringUtils.equals(item.extValueId, it.extValueId) &&
-                    StringUtils.equals(item.qualifier, it.qualifier) &&
-//                    Float.compare(item.valueNum, it.valueNum) &&
-//                    Float.compare(item.valueMin, it.valueMin) &&
-//                    Float.compare(item.valueMax, it.valueMax) &&
-                    StringUtils.equals(item.valueDisplay, it.valueDisplay)
-            )
-                isSame = true
+
+//            if (item.attributeElement.label == it.attributeElement.label &&
+//                    item.valueElement?.label == it.valueElement?.label &&
+//                    StringUtils.equals(item.extValueId, it.extValueId) &&
+//                    StringUtils.equals(item.qualifier, it.qualifier) &&
+////                    Float.compare(item.valueNum, it.valueNum) &&
+////                    Float.compare(item.valueMin, it.valueMin) &&
+////                    Float.compare(item.valueMax, it.valueMax) &&
+//                    StringUtils.equals(item.valueDisplay, it.valueDisplay)
+//            )
+//                isSame = true
+            isSame = isAbstractContextItemSame(it, item)
         }
         return isSame
+    }
+
+    boolean isAbstractContextItemSame(AbstractContextItem a, AbstractContextItem b) {
+        float eps = 0.00001
+        if (    (a.attributeElement == b.attributeElement) &&
+                (a.valueElement == b.valueElement) &&
+                (a.extValueId == b.extValueId) &&
+                (Precision.equalsIncludingNaN(nullToNaN(a.valueNum), nullToNaN(b.valueNum), eps) && StringUtils.equals(a.qualifier, b.qualifier)) &&
+                (Precision.equalsIncludingNaN(nullToNaN(a.valueMin), nullToNaN(b.valueMin), eps) && Precision.equalsIncludingNaN(nullToNaN(a.valueMax), nullToNaN(b.valueMax), eps)) &&
+                (StringUtils.equals(a.valueDisplay, b.valueDisplay))
+        )
+            return true
+       return false
     }
 
     boolean isDocumentEqual(AssayDocument a, AssayDocument b) {
