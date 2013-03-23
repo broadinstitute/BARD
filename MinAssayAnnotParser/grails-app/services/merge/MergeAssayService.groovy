@@ -381,23 +381,11 @@ class MergeAssayService {
      * @return
      */
     boolean isContextItemExist(AbstractContext context, AbstractContextItem item) {
-        boolean isSame = false
-
-        context.contextItems.each { AbstractContextItem it ->
-
-//            if (item.attributeElement.label == it.attributeElement.label &&
-//                    item.valueElement?.label == it.valueElement?.label &&
-//                    StringUtils.equals(item.extValueId, it.extValueId) &&
-//                    StringUtils.equals(item.qualifier, it.qualifier) &&
-////                    Float.compare(item.valueNum, it.valueNum) &&
-////                    Float.compare(item.valueMin, it.valueMin) &&
-////                    Float.compare(item.valueMax, it.valueMax) &&
-//                    StringUtils.equals(item.valueDisplay, it.valueDisplay)
-//            )
-//                isSame = true
-            isSame = isAbstractContextItemSame(it, item)
+        for (AbstractContextItem aci : context.contextItems) {
+            if (isAbstractContextItemSame(aci, item))
+                return true
         }
-        return isSame
+        return false
     }
 
     boolean isAbstractContextItemSame(AbstractContextItem a, AbstractContextItem b) {
