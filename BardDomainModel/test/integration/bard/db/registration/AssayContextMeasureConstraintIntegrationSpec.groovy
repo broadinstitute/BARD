@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
@@ -20,11 +21,9 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
+class AssayContextMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
     AssayContextMeasure domainInstance
-
-    SessionFactory sessionFactory
 
     @Before
     void doSetup() {
@@ -32,7 +31,6 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         AssayContext assayContext = AssayContext.build(assay: assay)
         Measure measure = Measure.build(assay: assay, resultType: Element.build())
         domainInstance = AssayContextMeasure.buildWithoutSave(assayContext: assayContext, measure: measure)
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
     }
 
     @After

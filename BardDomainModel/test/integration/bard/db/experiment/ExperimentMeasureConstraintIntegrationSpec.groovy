@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.BardIntegrationSpec
 import bard.db.registration.Measure
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -19,7 +20,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ExperimentMeasureConstraintIntegrationSpec extends IntegrationSpec {
+class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
     ExperimentMeasure domainInstance
 

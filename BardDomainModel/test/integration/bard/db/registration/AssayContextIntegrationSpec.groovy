@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.Session
@@ -13,16 +14,15 @@ import org.junit.Before
  * Time: 9:18 AM
  * To change this template use File | Settings | File Templates.
  */
-class AssayContextIntegrationSpec extends IntegrationSpec {
+class AssayContextIntegrationSpec extends BardIntegrationSpec {
 
     AssayContext assayContext
-    SessionFactory sessionFactory
+
     Session session
 
     @Before
     void doSetup() {
         session = sessionFactory.currentSession
-        BardContextUtils.setBardContextUsername(session, 'test')
         assayContext = AssayContext.buildWithoutSave()
         assert assayContext.assay.save()
     }

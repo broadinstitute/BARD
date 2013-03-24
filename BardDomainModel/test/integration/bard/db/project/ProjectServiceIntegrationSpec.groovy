@@ -1,12 +1,10 @@
 package bard.db.project
 
-import grails.plugin.spock.IntegrationSpec
-
-import spock.lang.Unroll
-import bard.db.experiment.Experiment
-import project.ProjectService
-import bard.db.project.Project
+import bard.db.BardIntegrationSpec
 import bard.db.registration.ExternalReference
+import project.ProjectService
+import spock.lang.Unroll
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
@@ -15,7 +13,7 @@ import bard.db.registration.ExternalReference
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ProjectServiceIntegrationSpec extends IntegrationSpec {
+class ProjectServiceIntegrationSpec extends BardIntegrationSpec {
 
     ProjectService projectService
     def fixtureLoader
@@ -40,9 +38,9 @@ class ProjectServiceIntegrationSpec extends IntegrationSpec {
         assert foundProjects*.name.sort() == expectedProjectNames
 
         where:
-        label                                           | aid       | expectedProjectNames
+        label                                          | aid       | expectedProjectNames
         'find an PID with two AIDs associated with it' | -2        | ['project1']
-        'find a non-exiting aid'                        | 123456789 | []
+        'find a non-exiting aid'                       | 123456789 | []
         'find an exiting aid associated with two PIDs' | -1        | ['project1', 'project2']
     }
 }

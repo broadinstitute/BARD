@@ -1,5 +1,6 @@
 package bard.db.model
 
+import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.SessionFactory
@@ -19,16 +20,9 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec {
+abstract class AbstractContextConstraintIntegrationSpec extends BardIntegrationSpec {
 
     def domainInstance
-
-    SessionFactory sessionFactory
-
-    @Before
-    void setupBardContextUsername(){
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
-    }
 
     @Before
     abstract void doSetup()

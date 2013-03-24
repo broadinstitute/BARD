@@ -18,11 +18,8 @@ import static test.TestUtils.assertFieldValidationExpectations
 @Unroll
 class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
 
-    SessionFactory sessionFactory
-
     @Before
     void doSetup() {
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         domainInstance = AssayContextItem.buildWithoutSave()
         domainInstance.attributeElement.save()
     }

@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.BardIntegrationSpec
 import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
@@ -17,7 +18,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ProjectConstraintIntegrationSpec extends IntegrationSpec {
+class ProjectConstraintIntegrationSpec extends BardIntegrationSpec {
 
     Project domainInstance
 
