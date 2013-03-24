@@ -170,14 +170,15 @@ class ResultsServiceSpec extends spock.lang.Specification {
         contextItem.valueMax == maxVal
         contextItem.valueNum == expectedValue
         contextItem.qualifier == expectedQualifier
+        contextItem.valueDisplay == expectedValueDisplay
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0
+        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal | expectedValueDisplay
+        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null   | "1.0"
+        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null   | "10000.0"
+        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null   | "<10.0"
+        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null   | ">>10.0"
+        "range"               | "2-3"      | null          | null              | 2.0    | 3.0    | "2.0-3.0"
     }
 
     void 'test parse experiment level list item'() {

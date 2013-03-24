@@ -768,7 +768,6 @@ class ResultsService {
         def parsed = parseContextItem(stringValue, assayItem)
 
         if (parsed instanceof Cell) {
-            Element unit = assayItem.attributeElement.unit;
             Cell cell = parsed
             ResultContextItem item = new ResultContextItem()
 
@@ -778,6 +777,7 @@ class ResultsService {
             item.valueMin= cell.minValue
             item.valueMax= cell.maxValue
             item.valueElement = cell.element
+            Element unit = assayItem.attributeElement.unit;
             item.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
 
             return item
@@ -818,12 +818,17 @@ class ResultsService {
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
+
+            Element unit = assayItem.attributeElement.unit;
+            String valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+
             ExperimentContextItem item = new ExperimentContextItem(attributeElement: assayItem.attributeElement,
                     valueElement: cell.element,
                     valueNum: cell.value,
                     valueMin: cell.minValue,
                     valueMax: cell.maxValue,
-                    qualifier: cell.qualifier)
+                    qualifier: cell.qualifier,
+                    valueDisplay: valueDisplay)
         } else {
             errors.addError(0, 0, parsed)
             return null;
