@@ -35,7 +35,6 @@ for (String id : ids) {
             println("Assay id ${it} not found")
     }
     merge(assays, modifiedBy)
-   // delete(assays)
 }
 
 def merge(List<Assay> assays, String modifiedBy) {
@@ -68,7 +67,14 @@ def merge(List<Assay> assays, String modifiedBy) {
 
 }
 
-def delete(List<Assay> assays) {
-    def db = grailsApplication.config.dataSource
-    def sql = Sql.newInstance(db.url, db.username, db.password, db.driverClassName)
+//def delete(List<Assay> assays) {
+//    def db = grailsApplication.config.dataSource
+//    def sql = Sql.newInstance(db.url, db.username, db.password, db.driverClassName)
+//}
+
+def deleteAssay(Long assayId) {
+    MergeAssayService mergeAssayService = new MergeAssayService()
+   Assay assay = Assay.findById(assayId)
+   if (assay)
+   mergeAssayService.deleteAssay(assay)
 }
