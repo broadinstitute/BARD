@@ -68,6 +68,8 @@ class MergeAssayService {
         // but different value
         int assayContextItemNotInKeep = 0 // count number of assaycontextitem not in kept assay
         for (AssayContextItem item : candidateContextItems) {
+            if (!item)
+                continue
             if (isAssayContextItemIn(assayWillKeep.assayContextItems, item)) {
                 assayContextItemInKeep++
                 continue
@@ -342,6 +344,8 @@ class MergeAssayService {
 
     def boolean isAssayContextItemIn(List<AssayContextItem> items, AssayContextItem item) {
         for (AssayContextItem assayContextItem : items) {
+            if (!assayContextItem)
+                continue
             if (isAssayContextItemEquals(assayContextItem, item))
                 return true
         }
@@ -371,6 +375,7 @@ class MergeAssayService {
     Float nullToNaN(Float a) {
         if (!a)
             return Float.NaN
+        return a
     }
 
     /**
