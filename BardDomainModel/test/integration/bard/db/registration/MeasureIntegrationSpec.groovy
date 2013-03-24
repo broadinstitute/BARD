@@ -1,7 +1,9 @@
 package bard.db.registration
 
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.Before
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -16,8 +18,11 @@ class MeasureIntegrationSpec extends IntegrationSpec {
 
     def domainInstance
 
+    SessionFactory sessionFactory
+
     @Before
     void doSetup() {
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         domainInstance = buildWithoutSaveMeasure()
     }
 

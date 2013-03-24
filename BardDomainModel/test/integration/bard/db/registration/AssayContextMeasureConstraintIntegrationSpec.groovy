@@ -28,7 +28,6 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
 
     @Before
     void doSetup() {
-
         Assay assay = Assay.build()
         AssayContext assayContext = AssayContext.build(assay: assay)
         Measure measure = Measure.build(assay: assay, resultType: Element.build())
@@ -55,9 +54,9 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                 | valueUnderTest           | valid | errorCode
-        'null not valid'     | { null }                 | false | 'nullable'
-        'valid assayContext' | { AssayContext.build() } | true  | null
+        desc                 | valueUnderTest                             | valid | errorCode
+        'null not valid'     | { null }                                   | false | 'nullable'
+        'valid assayContext' | { AssayContext.build().save(flush: true) } | true  | null
 
     }
 
@@ -73,9 +72,9 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest      | valid | errorCode
-        'null not valid' | { null }            | false | 'nullable'
-        'valid measure'  | { Measure.build() } | true  | null
+        desc             | valueUnderTest                        | valid | errorCode
+        'null not valid' | { null }                              | false | 'nullable'
+        'valid measure'  | { Measure.build().save(flush: true) } | true  | null
 
     }
 
