@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.GroupByTypes; bardqueryapi.FacetFormType" contentType="text/html;charset=UTF-8" %>
+<%@ page import="bardqueryapi.ActivityOutcome; bardqueryapi.GroupByTypes; bardqueryapi.FacetFormType" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,6 +27,12 @@
     </g:form>
 
     <div class="span9">
+        <div>
+            <g:if test="${tableModel.additionalProperties.activityOutcome == ActivityOutcome.ACTIVE}">
+                <p class="text-info"><i class="icon-info-sign"></i>Only showing results where the compound is active</p>
+            </g:if>
+        </div>
+
         <div id="compoundBioActivitySummaryDiv">
             <g:render template="experimentResultRenderer" model="[tableModel: tableModel, landscapeLayout: false]"/>
         </div>
