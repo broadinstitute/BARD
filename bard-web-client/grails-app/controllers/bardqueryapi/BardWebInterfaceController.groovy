@@ -91,9 +91,10 @@ class BardWebInterfaceController {
             Map<String, Integer> searchParams = handleSearchParams()
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
 
-            //If this is the first time we are loading the page, we want the 'Normalize Y-Axis' filter to be checked-off by default so we would normalize the Y-axis as a default
+            //If this is the first time we are loading the page, we want the 'Normalize Y-Axis' and 'Active filters to be checked-off by default so we would normalize the Y-axis as a default and also for actives-only.
             if (!searchCommand.filters) {
                 searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
+                searchCommand.filters << new SearchFilter(filterName: 'activity_outcome', filterValue: 'Active Compounds')
             }
 
             //TODO: Use a command Object to bind this, most of the code below should be gone

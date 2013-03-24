@@ -24,6 +24,8 @@
                             smiles="${compound.getStructureSMILES()}"
                             numActive="${compound.numberOfActiveAssays}"
                             numAssays="${compound.numberOfAssays}"/>
+        <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
+                style="float: right;">Bio-activity Summary</g:link>
     </div>
 </div>
 
@@ -69,7 +71,8 @@
                             </g:if>
                             <g:if test="${compound?.getProbeSid()}">
                                 <li><a href="${compound.getProbeSid().getUrl()}"
-                                       target="_blank">View Probe by SID (${compound.getProbeSid().getDisplay()}) in PubChem</a></li>
+                                       target="_blank">View Probe by SID (${compound.getProbeSid().getDisplay()}) in PubChem</a>
+                                </li>
 
                             </g:if>
                         </ul>
