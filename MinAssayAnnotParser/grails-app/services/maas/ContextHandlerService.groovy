@@ -15,7 +15,7 @@ import bard.db.model.AbstractContext
 import org.apache.commons.lang3.StringUtils
 
 class ContextHandlerService {
-    private static final String goElementLabel = "GO process term"
+    private static final String goElementLabel = "GO biological process term"
     private static final String speciesElementLabel = "species name"
     static final Map<String, String> externalTermMap = ExternalTermMapping.build()
 
