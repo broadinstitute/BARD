@@ -1,5 +1,6 @@
 package bard.db.dictionary
 
+import bard.db.BardIntegrationSpec
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
@@ -18,7 +19,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ElementHierarchyConstraintIntegrationSpec extends IntegrationSpec {
+class ElementHierarchyConstraintIntegrationSpec extends BardIntegrationSpec {
 
     ElementHierarchy domainInstance
 

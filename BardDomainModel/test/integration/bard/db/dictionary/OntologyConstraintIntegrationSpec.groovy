@@ -1,6 +1,6 @@
 package bard.db.dictionary
 
-import grails.plugin.spock.IntegrationSpec
+import bard.db.BardIntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -17,7 +17,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class OntologyConstraintIntegrationSpec extends IntegrationSpec {
+class OntologyConstraintIntegrationSpec extends BardIntegrationSpec {
 
     Ontology domainInstance
 

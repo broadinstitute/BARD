@@ -1,12 +1,10 @@
 package bard.springframework.jdbc.datasource
 
 import bard.db.audit.BardContextUtils
-import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.log4j.Logger
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
-import org.springframework.security.core.userdetails.UserDetails
 
-import javax.naming.OperationNotSupportedException
 import javax.sql.DataSource
 import java.sql.Connection
 import java.sql.SQLException
@@ -26,10 +24,10 @@ class BardContextTransactionAwareDataSourceProxy extends TransactionAwareDataSou
 
     private static Logger LOG = Logger.getLogger(this.getClass())
 
-    private SpringSecurityService springSecurityService
+    private GrailsApplication grailsApplication
 
     BardContextTransactionAwareDataSourceProxy() {
-        throw new OperationNotSupportedException("use constructor with DataSource and SpringSecurity args")
+        throw new UnsupportedOperationException("use constructor with DataSource and grailsApplication")
     }
 
     /**
@@ -37,17 +35,17 @@ class BardContextTransactionAwareDataSourceProxy extends TransactionAwareDataSou
      * @param targetDataSource
      */
     BardContextTransactionAwareDataSourceProxy(DataSource targetDataSource) {
-        super(targetDataSource)
+        throw new UnsupportedOperationException("use constructor with DataSource and grailsApplication")
     }
 
     /**
      *
      * @param targetDataSource
-     * @param springSecurityService
+     * @param grailsApplication
      */
-    BardContextTransactionAwareDataSourceProxy(DataSource targetDataSource, SpringSecurityService springSecurityService) {
+    BardContextTransactionAwareDataSourceProxy(DataSource targetDataSource, GrailsApplication grailsApplication) {
         super(targetDataSource)
-        this.springSecurityService = springSecurityService
+        this.grailsApplication = grailsApplication
     }
 
     @Override
@@ -66,11 +64,14 @@ class BardContextTransactionAwareDataSourceProxy extends TransactionAwareDataSou
      * if either the springSecurityService or  there isn't anyone authenticated, then the username is set to null
      * and null is set as the username in the bard_context
      *
+     * Note this doesn't require an app use or have a compile time dependency on the grails-spring-security-core plugin
+     * but will use it if it's present
+     *
      * @param connection
      * @return returns the connection passed in so it can be chained
      */
     private Connection setOrClearUsername(Connection connection) {
-        UserDetails userDetails = (UserDetails) springSecurityService?.getPrincipal();
+        def userDetails = grailsApplication?.mainContext?.springSecurityService?.getPrincipal();
         String username = userDetails?.getUsername()
         BardContextUtils.setBardContextUsername(connection, username)
     }

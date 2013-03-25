@@ -1,6 +1,6 @@
 package bard.db.dictionary
 
-import grails.plugin.spock.IntegrationSpec
+import bard.db.BardIntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -18,7 +18,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class OntologyItemConstraintIntegrationSpec extends IntegrationSpec {
+class OntologyItemConstraintIntegrationSpec extends BardIntegrationSpec {
 
     OntologyItem domainInstance
 
@@ -46,9 +46,9 @@ class OntologyItemConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest     | valid | errorCode
-        'null not valid' | {null}             | false | 'nullable'
-        'valid ontology' | {Ontology.build()} | true  | null
+        desc             | valueUnderTest       | valid | errorCode
+        'null not valid' | { null }             | false | 'nullable'
+        'valid ontology' | { Ontology.build() } | true  | null
 
     }
 
@@ -64,9 +64,9 @@ class OntologyItemConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | true  | null
-        'valid element'  | {Element.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | true  | null
+        'valid element'  | { Element.build() } | true  | null
 
     }
 

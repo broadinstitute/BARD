@@ -89,4 +89,19 @@ databaseChangeLog = {
             }
         }
     }
+
+    /**
+     *  here as a developer utility
+     */
+    changeSet(author: "ddurkin", id: "drop audit triggers audit_settings and triggers", context: 'drop-auditing-triggers', dbms: 'oracle', runAlways: 'true') {
+        grailsChange {
+            change {
+                String dropQueryTrigger = """SELECT 'drop trigger ' || trigger_name as dropSql FROM user_triggers WHERE TRIGGER_NAME LIKE 'ADT_%' """
+                sql.eachRow(dropQueryTrigger){row ->
+                    println(row.dropSql)
+                    sql.executeUpdate(row.dropSql)
+                }
+            }
+        }
+    }
 }

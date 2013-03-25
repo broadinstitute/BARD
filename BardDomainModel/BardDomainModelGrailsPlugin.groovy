@@ -19,8 +19,8 @@ class BardDomainModelGrailsPlugin {
     def loadAfter = ['dataSource', 'datbase-migration', 'springSecurityCore']
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        "grails-app/views/error.gsp",
-        "src/groovy/test/"
+            "grails-app/views/error.gsp",
+            "src/groovy/test/"
     ]
 
     // TODO Fill in these fields
@@ -40,16 +40,16 @@ Provide domain objects for any objects wishing to directly access the Bard datab
 //    def license = "APACHE"
 
     // Details of company behind the plugin (if there is one)
-    def organization = [ name: "Broad Institute", url: "http://www.broadinstitute.org/" ]
+    def organization = [name: "Broad Institute", url: "http://www.broadinstitute.org/"]
 
     // Any additional developers beyond the author specified above.
-    def developers = [ [ name: "ba" ]]
+    def developers = [[name: "ba"]]
 
     // Location of the plugin's issue tracker.
 //    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
 
     // Online location of the plugin's browseable source code.
-    def scm = [ url: "https://github.com/broadinstitute/BARD/tree/master/BardDomainModel" ]
+    def scm = [url: "https://github.com/broadinstitute/BARD/tree/master/BardDomainModel"]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
@@ -62,14 +62,15 @@ Provide domain objects for any objects wishing to directly access the Bard datab
          *
          *  based on the initialization that happens in the DatabaseMigrationGrailsPlugin.groovy
          */
-        if ( !application.warDeployed ) {
+        if (!application.warDeployed) {
             File bardDomainModelPluginDir = GrailsPluginUtils.getPluginDirForName('bard-domain-model').getFile()
             //println(bardDomainModelPluginDir.path)
             String changelogLocationPath = new File(bardDomainModelPluginDir, MigrationUtils.changelogLocation).path
             //println(changelogLocationPath)
             migrationResourceAccessor(FileSystemResourceAccessor, changelogLocationPath)
         }
-        dataSource(BardContextTransactionAwareDataSourceProxy, ref('dataSourceUnproxied'), ref('springSecurityService'))
+
+        dataSource(BardContextTransactionAwareDataSourceProxy, ref('dataSourceUnproxied'), ref('grailsApplication'))
     }
 
     def doWithDynamicMethods = { ctx ->
