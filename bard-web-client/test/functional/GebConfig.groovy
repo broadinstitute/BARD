@@ -32,6 +32,7 @@ environments {
         // see http://code.google.com/p/selenium/issues/detail?id=2681
         DesiredCapabilities capabilities = new DesiredCapabilities()
         capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
+        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
 
 		driver = { new ChromeDriver(capabilities) }
 	}
@@ -44,6 +45,8 @@ environments {
 
         FirefoxProfile profile = new FirefoxProfile(profileDir)
 		driver = { new FirefoxDriver(profile) }
+
+        driver.manage().window().maximize()
 	}
 
 }
