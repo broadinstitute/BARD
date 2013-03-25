@@ -1,6 +1,5 @@
 package dataexport.experiment
 
-import bard.db.audit.BardContextUtils
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.experiment.Result
@@ -11,7 +10,6 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
-import org.hibernate.SessionFactory
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
@@ -25,7 +23,6 @@ import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
-    SessionFactory sessionFactory
     ExperimentExportService experimentExportService
     Writer writer
     MarkupBuilder markupBuilder
@@ -41,11 +38,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         TestDataConfigurationHolder.reset()
         resetSequenceUtil = new ResetSequenceUtil(dataSource)
-        ['EXPERIMENT_ID_SEQ'
-        ].each {
-            this.resetSequenceUtil.resetSequence(it)
-        }
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
+        this.resetSequenceUtil.resetSequence('EXPERIMENT_ID_SEQ')
     }
 
     void tearDown() {

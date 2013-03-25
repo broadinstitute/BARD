@@ -1,6 +1,5 @@
 package dataexport.registration
 
-import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
@@ -10,7 +9,6 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
-import org.hibernate.SessionFactory
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
@@ -23,7 +21,6 @@ import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
-    SessionFactory sessionFactory
     AssayExportService assayExportService
     Writer writer
     MarkupBuilder markupBuilder
@@ -45,7 +42,6 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
                 'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
         }
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
     }
 
     void tearDown() {

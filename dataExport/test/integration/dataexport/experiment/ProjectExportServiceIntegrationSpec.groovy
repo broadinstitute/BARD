@@ -1,6 +1,5 @@
 package dataexport.experiment
 
-import bard.db.audit.BardContextUtils
 import bard.db.project.Project
 import common.tests.XmlTestAssertions
 import dataexport.registration.BardHttpResponse
@@ -10,7 +9,6 @@ import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.custommonkey.xmlunit.XMLAssert
-import org.hibernate.SessionFactory
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
@@ -23,7 +21,6 @@ import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
-    SessionFactory sessionFactory
     ProjectExportService projectExportService
     Writer writer
     MarkupBuilder markupBuilder
@@ -41,7 +38,6 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
         ['PROJECT_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
         }
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
     }
 
     void tearDown() {

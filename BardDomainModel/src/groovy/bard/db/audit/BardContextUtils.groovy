@@ -65,8 +65,20 @@ class BardContextUtils {
             LOG.warn(SQL_EXCEPTION_MSG, e);
             println(SQL_EXCEPTION_MSG)
         }
+    }
 
+    static def doWithContextUsername = { def sessionOrConnection, String username, Closure c ->
+        setBardContextUsername(sessionOrConnection, username)
+        try {
+            c.call()
+        }
+        finally {
+            clearBardContext(sessionOrConnection)
+        }
+    }
 
+    static void clearBardContext(def sessionOrConnection ){
+        setBardContextUsername(sessionOrConnection, null)
     }
 
     private static logExistingUsername(Connection connection, String username) {
