@@ -301,6 +301,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal  | displayValue
         "simple scalar"       | "1"        | 1.0           | "= "              | null   | null    | "1.0"
         "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null    | "10000.0"
+        "sci notation2"       | "7.58e-005"| 7.58e-5f      | "= "              | null   | null    | "7.58E-5"
         "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
         "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
