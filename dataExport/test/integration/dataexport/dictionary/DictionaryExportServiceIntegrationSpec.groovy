@@ -1,5 +1,6 @@
 package dataexport.dictionary
 
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.*
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
@@ -10,6 +11,7 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.hibernate.SessionFactory
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
@@ -20,6 +22,7 @@ import static javax.servlet.http.HttpServletResponse.*
 
 @Unroll
 class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
+    SessionFactory sessionFactory
     DictionaryExportService dictionaryExportService
 
     Writer writer
@@ -37,6 +40,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
 
         TestDataConfigurationHolder.reset()
         this.resetSequenceUtil.resetSequence('ELEMENT_ID_SEQ')
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
     }
 
     void tearDown() {

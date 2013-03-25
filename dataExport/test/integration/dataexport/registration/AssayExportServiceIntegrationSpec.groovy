@@ -1,6 +1,8 @@
 package dataexport.registration
 
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
+import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
 import dataexport.util.ResetSequenceUtil
@@ -8,26 +10,26 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.hibernate.SessionFactory
+import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
 
 import javax.sql.DataSource
 
-import bard.db.registration.*
-
 import static bard.db.enums.ReadyForExtraction.COMPLETE
 import static bard.db.enums.ReadyForExtraction.READY
 import static javax.servlet.http.HttpServletResponse.*
-import org.springframework.core.io.FileSystemResource
 
 @Unroll
 class AssayExportServiceIntegrationSpec extends IntegrationSpec {
+    SessionFactory sessionFactory
     AssayExportService assayExportService
     Writer writer
     MarkupBuilder markupBuilder
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
-    Resource schemaResource= new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
+    Resource schemaResource = new FileSystemResource(new File("web-app/schemas/assaySchema.xsd"))
 
     void setup() {
         this.writer = new StringWriter()
@@ -36,14 +38,14 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         TestDataConfigurationHolder.reset()
         resetSequenceUtil = new ResetSequenceUtil(dataSource)
         ['ASSAY_ID_SEQ',
-            'ASSAY_CONTEXT_ID_SEQ',
-            'ASSAY_CONTEXT_MEASURE_ID_SEQ',
-            'ASSAY_DOCUMENT_ID_SEQ',
-            'ELEMENT_ID_SEQ',
-            'MEASURE_ID_SEQ'].each {
+                'ASSAY_CONTEXT_ID_SEQ',
+                'ASSAY_CONTEXT_MEASURE_ID_SEQ',
+                'ASSAY_DOCUMENT_ID_SEQ',
+                'ELEMENT_ID_SEQ',
+                'MEASURE_ID_SEQ'].each {
             this.resetSequenceUtil.resetSequence(it)
         }
-
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
     }
 
     void tearDown() {

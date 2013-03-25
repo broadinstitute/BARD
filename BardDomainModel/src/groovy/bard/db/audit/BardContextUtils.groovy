@@ -50,7 +50,7 @@ class BardContextUtils {
         connection
     }
 
-    public static Connection setBardContextUsername(Session session, String username) {
+    public static void setBardContextUsername(Session session, String username) {
         try {
             if (LOG.isDebugEnabled()) {
                 logExistingUsername(session, username)
@@ -65,6 +65,7 @@ class BardContextUtils {
             LOG.warn(SQL_EXCEPTION_MSG, e);
             println(SQL_EXCEPTION_MSG)
         }
+
 
     }
 
