@@ -20,4 +20,9 @@ class ProjectDocument extends AbstractDocument {
         id(column: 'PROJECT_DOCUMENT_ID', generator: 'sequence', params: [sequence: 'PROJECT_DOCUMENT_ID_SEQ'])
         documentContent(type: "text", sqlType: 'clob')
     }
+
+    @Override
+    Object getOwner() {
+        return project;
+    }
 }

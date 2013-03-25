@@ -1,6 +1,8 @@
 package bard.db.registration
 
 import bard.db.model.IDocumentType
+import bard.db.project.Project
+import bard.db.project.ProjectDocument
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -17,17 +19,19 @@ import static test.TestUtils.assertFieldValidationExpectations
  */
 
 @TestFor(DocumentController)
-@Build([AssayDocument, Assay])
-@Mock([AssayDocument, Assay])
+@Build([AssayDocument, Assay, Project])
+@Mock([AssayDocument, Assay, ProjectDocument])
 @Unroll
 class DocumentControllerUnitSpec extends Specification {
     @Shared Assay assay;
+    @Shared Project project;
     AssayDocument existingAssayDocument
     DocumentCommand documentCommand
 
     @Before
     void setup() {
         assay = Assay.build()
+        project = Project.build()
         existingAssayDocument = AssayDocument.build(assay: assay, documentType: DOCUMENT_TYPE_DESCRIPTION)
         existingAssayDocument = AssayDocument.findById(existingAssayDocument.id)
         documentCommand = mockCommandObject(DocumentCommand)
@@ -47,7 +51,7 @@ class DocumentControllerUnitSpec extends Specification {
         model.document.assayId == assay.id
     }
 
-    void 'test valid save'() {
+    void 'test valid save assay doc'() {
         when:
         documentCommand.assayId = assay.id
         documentCommand.documentContent = "content"
@@ -64,6 +68,24 @@ class DocumentControllerUnitSpec extends Specification {
         assayDocument.documentType == IDocumentType.DOCUMENT_TYPE_DESCRIPTION
         assayDocument.documentContent == "content"
 
+    }
+
+    void 'test valid save proj doc'() {
+        when:
+        documentCommand.projectId = project.id
+        documentCommand.documentContent = "content"
+        documentCommand.documentType = IDocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentName = "name"
+        controller.save(documentCommand)
+
+        then:
+        ProjectDocument.count() == 1
+        ProjectDocument projectDocument = project.documents.last()
+        response.redirectedUrl == "/project/show/${project.id}#document-${projectDocument.id}"
+        projectDocument.project == project
+        projectDocument.documentName == "name"
+        projectDocument.documentType == IDocumentType.DOCUMENT_TYPE_DESCRIPTION
+        projectDocument.documentContent == "content"
     }
 
     void 'test save Assay Not found'() {
@@ -95,6 +117,7 @@ class DocumentControllerUnitSpec extends Specification {
 
     void 'test edit no documentId'() {
         when:
+        params.type = "Assay"
         params.documentId = null
         def model = controller.edit()
 
@@ -104,6 +127,7 @@ class DocumentControllerUnitSpec extends Specification {
 
     void 'test edit'() {
         when:
+        params.type = "Assay"
         params.id = existingAssayDocument.id
         def model = controller.edit()
 
@@ -146,6 +170,7 @@ class DocumentControllerUnitSpec extends Specification {
     void 'test delete'() {
 
         when:
+        params.type = "Assay"
         params.id = existingAssayDocument.id
         controller.delete()
 
@@ -169,7 +194,6 @@ class DocumentControllerUnitSpec extends Specification {
 
         where:
         desc                        | field             | vut                        | valid | code
-        'assayId null'              | 'assayId'         | null                       | false | 'nullable'
         'assayId not null valid'    | 'assayId'         | 3                          | true  | null
 
         'documentId null valid'     | 'documentId'      | null                       | true  | null
@@ -199,20 +223,16 @@ class DocumentControllerUnitSpec extends Specification {
 
         'documentType null'         | 'documentType'    | null                       | false | 'nullable'
         'documentContent valid'     | 'documentContent' | 'docName'                  | true  | null
-
-        //        'assayId not a number'  | 'assayId'         | 'a'                        | false | 'matches.invalid'
-//        'assayId null'          | 'assayId'         | ''                         | false | 'blank'
-//                'assayId null'          | 'assayId'         | ' '                        | false | 'blank'
     }
 
-    void 'test command object createNewAssayDocument with #desc '() {
+    void 'test command object createNewDocument with #desc '() {
         when:
         DocumentCommand documentCommand = mockCommandObject(DocumentCommand)
         documentCommand.assayId = assayId.call()
         documentCommand.documentName = documentName
         documentCommand.documentType = documentType
 
-        AssayDocument assayDocument = documentCommand.createNewAssayDocument()
+        AssayDocument assayDocument = documentCommand.createNewDocument()
 
         then:
         documentCommand?.hasErrors() == hasErrors
@@ -226,7 +246,6 @@ class DocumentControllerUnitSpec extends Specification {
         where:
 
         desc                        | assayId      | documentName   | documentType           | hasErrors | documentIdNull
-        'error due to assayId'      | { null }     | 'documentName' | DOCUMENT_TYPE_COMMENTS | true      | true
         'error due to documentType' | { assay.id } | null           | DOCUMENT_TYPE_COMMENTS | true      | true
         'error due to documentName' | { assay.id } | 'documentName' | 'bad val'              | true      | true
         'valid command object'      | { assay.id } | 'documentName' | DOCUMENT_TYPE_COMMENTS | false     | false

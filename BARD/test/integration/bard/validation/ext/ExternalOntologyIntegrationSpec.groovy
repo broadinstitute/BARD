@@ -6,7 +6,6 @@ import spock.lang.Unroll
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
 
 
-
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
