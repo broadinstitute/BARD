@@ -69,9 +69,9 @@ class AssayContextGroupsBuilder {
         ]
 
         List<ContextItemDto> activityThreshold = [
-                new ContextItemDto('2/Y', '$/Y', AttributeType.Fixed),            //result type
-                new ContextItemDto('2/AA', '$/AA', AttributeType.Free, false, '$/Z', null), //activity threshold
-                new ContextItemDto('2/AB', '$/AB', AttributeType.Fixed)                     //unit
+                new ContextItemDto('2/Y', '$/Y', AttributeType.Free),            //result type
+                new ContextItemDto('2/AA', '$/AA', AttributeType.Free),         //activity threshold, column "Z" should not be in assay context item
+                new ContextItemDto('2/AB', '$/AB', AttributeType.Free)                     //unit
         ]//the qualifier belongs to the Activity-threshold attribute
 
         List<ContextItemDto> numberOfReplicates = [

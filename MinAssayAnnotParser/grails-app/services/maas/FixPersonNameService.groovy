@@ -6,6 +6,7 @@ import bard.db.experiment.ExperimentContextItem
 import bard.db.project.ProjectContextItem
 import bard.db.model.AbstractContextItem
 import bard.db.people.Person
+import bard.db.registration.AttributeType
 
 /**
  * This service ran after populating context to fix
@@ -26,10 +27,10 @@ class FixPersonNameService {
         List<Element> elements = getElements()
         List<AbstractContextItem> items = []
         elements.each{Element element->
-            items.addAll(AssayContextItem.findAllByAttributeElement(element))
+           // items.addAll(AssayContextItem.findAllByAttributeElement(element)) // Names are free in the assaycontextitem so no need to fix
             items.addAll(ExperimentContextItem.findAllByAttributeElement(element))
             items.addAll(ProjectContextItem.findAllByAttributeElement(element))
-            println("fixing total ${items.size()} contextitems for their name")
+            println("fixing total ${items.size()} contextitems for ${element.label}")
             fixContextItems(items, modifiedBy)
         }
 
@@ -49,7 +50,7 @@ class FixPersonNameService {
     def fixEachItem(AbstractContextItem item, String modifiedBy) {
         Person person = Person.findByUserNameIlike(item.valueDisplay)
         if (!person){
-            person = new Person(userName: item.valueDisplay, modifiedBy: modifiedBy)
+            person = new Person(userName: item.valueDisplay, fullName: item.valueDisplay, modifiedBy: modifiedBy)
             if (!person.save(flush: true)) {
                 println "error in saving ${person.errors.toString()}"
             }
