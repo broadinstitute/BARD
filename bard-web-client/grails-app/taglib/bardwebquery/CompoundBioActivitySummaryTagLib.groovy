@@ -32,8 +32,8 @@ class CompoundBioActivitySummaryTagLib {
                             activities: attrs.activitySeries,
                             xAxisLabel: attrs.xAxisLabel,
                             yAxisLabel: attrs.yAxisLabel,
-                            yNormMin: attrs?.yMinimum,
-                            yNormMax: attrs?.yMaximum
+                            yNormMin: attrs?.yNormMin,
+                            yNormMax: attrs?.yNormMax
                     ]
             )
         }"/>
