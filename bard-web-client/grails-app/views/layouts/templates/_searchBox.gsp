@@ -22,7 +22,6 @@
             </g:else>
 
             <button type="submit" name="search" class="btn btn-primary" id="searchButton">Search</button>
-            %{--<g:submitButton name="search" value="Search" class="btn btn-primary" id="searchButton"/>--}%
         </div>
     </div>
 
