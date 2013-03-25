@@ -25,47 +25,12 @@ $(document).ready(function () {
         pushStateHandler(url)
         populatePage(url);
     });
-
-    //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
-    $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
-        event.preventDefault();	// prevent the default action behaviour to happen
-        var pagingurl = $(this).attr('href');
-        pushStateHandler(pagingurl)
-        populatePage(pagingurl);
-    });
-
-
 });
-function handleFilteredQuery() {
 
-}
 //Handles pushing of state on history stack
 function pushStateHandler(url) {
     history.pushState(url, null, url);
     return false;
-}
-function populatePage(url) {
-    $.ajax({
-        url:url,
-        type:'GET',
-        cache:false,
-        //timeout: 10000,
-        beforeSend:function () {
-            //use the main form page
-            $('#experimentalResults').html(bigSpinnerImage);
-        },
-        success:function (experimentalResultsData) {
-            $('#experimentalResults').html(experimentalResultsData);
-            $(".pop_smiles").popover();
-
-        },
-        error:function () {
-            $('#experimentalResults').html('No data found');
-        },
-        complete:function () {
-
-        }
-    });
 }
 
 //Adding event handlers to the facets form submission
@@ -95,8 +60,9 @@ function resetAllFilters(facetForm) {
 
 //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
 $('#showExperimentDiv').on("click", "a.step,a.nextLink,a.prevLink", function (event) {
-    event.preventDefault();	// prevent the default action behaviour to happen
+    event.preventDefault();	// prevent the default action behaviour from happening
     var url = $(this).attr('href');
     $('#paginationUrl').attr('value', url); //save the pagination url for submission
+    pushStateHandler(url);
     $('#ExperimentFacetForm').submit(); //submit, and let the event handler handle the redirect.
 });
