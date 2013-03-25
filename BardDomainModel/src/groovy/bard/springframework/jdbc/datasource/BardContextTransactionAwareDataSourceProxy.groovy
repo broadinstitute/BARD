@@ -1,16 +1,14 @@
 package bard.springframework.jdbc.datasource
 
 import bard.db.audit.BardContextUtils
-import clover.org.apache.log4j.Logger
 import grails.plugins.springsecurity.SpringSecurityService
+import org.apache.log4j.Logger
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
 import org.springframework.security.core.userdetails.UserDetails
 
 import javax.naming.OperationNotSupportedException
 import javax.sql.DataSource
-import java.sql.CallableStatement
 import java.sql.Connection
-import java.sql.ResultSet
 import java.sql.SQLException
 
 /**

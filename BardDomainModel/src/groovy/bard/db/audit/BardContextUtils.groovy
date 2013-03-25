@@ -32,15 +32,19 @@ class BardContextUtils {
      * the bard_context to null
      * @return the connection passed in to allow chaining
      */
-    public static Connection setBardContextUsername(Connection connection, String username) {
+    static Connection setBardContextUsername(Connection connection, String username) {
+        assert connection
         CallableStatement callableStatement
         try {
             if (LOG.isDebugEnabled()) {
-                logExistingUsername(connection, username)
+                getCurrentUsername(connection)
             }
             callableStatement = connection.prepareCall(SET_USERNAME_QUERY);
             callableStatement.setString(1, username);
             callableStatement.executeUpdate()
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("set bard_context username: $username")
+            }
         } catch (SQLException e) {
             LOG.error("exception when trying to call bard_context.set_username", e);
         }
@@ -50,10 +54,11 @@ class BardContextUtils {
         connection
     }
 
-    public static void setBardContextUsername(Session session, String username) {
+    static void setBardContextUsername(Session session, String username) {
+        assert session
         try {
             if (LOG.isDebugEnabled()) {
-                logExistingUsername(session, username)
+                getCurrentUsername(session)
             }
             Query query = session.createSQLQuery("{call bard_context.set_username(:username)}");
             query.setString('username', username);
@@ -77,35 +82,41 @@ class BardContextUtils {
         }
     }
 
-    static void clearBardContext(def sessionOrConnection ){
+    static void clearBardContext(def sessionOrConnection) {
         setBardContextUsername(sessionOrConnection, null)
     }
 
-    private static logExistingUsername(Connection connection, String username) {
+    static String getCurrentUsername(Connection connection) {
         ResultSet rs
+        String username
         try {
             rs = connection.prepareStatement(GET_USERNAME_QUERY).executeQuery()
             while (rs.next()) {
-                LOG.debug("bard_context.get_username() was ${rs.getString(1)} being set to ${username}")
+                username = rs.getString(1)
+                LOG.debug("bard_context.get_username() is ${username} for connection: ${connection}")
             }
         }
         catch (SQLException e) {
-            LOG.error("exception when logExistingUsername to call bard_context.get_username", e);
+            LOG.error("exception when getCurrentUsername to call bard_context.get_username", e);
         }
         finally {
             rs?.close()
         }
+        username
     }
 
-    private static logExistingUsername(Session session, String username) {
+    static String getCurrentUsername(Session session) {
+        String username
         try {
             List results = session.createSQLQuery(GET_USERNAME_QUERY).list()
             for (r in results) {
-                LOG.debug("bard_context.get_username() was ${r} being set to ${username}")
+                username = r
+                LOG.debug("bard_context.get_username() is ${username} for session: ${session}")
             }
         }
         catch (SQLException e) {
-            LOG.error("exception when logExistingUsername to call bard_context.get_username", e);
+            LOG.error("exception when getCurrentUsername to call bard_context.get_username", e);
         }
+        username
     }
 }
