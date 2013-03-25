@@ -188,7 +188,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         def tubaElement = Element.build(label: "tuba")
         def attribute = Element.build(label: "column")
-        def context = AssayContext.build()
+        def context = AssayContext.build(contextName: "instrument")
         def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
         def trumpetItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: trumpetElement, valueDisplay: trumpetElement.label, assayContext: context)
@@ -207,6 +207,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         initialParse.contexts.size() == 1
         ExperimentContext expContext = initialParse.contexts.first()
+        expContext.contextName == "instrument"
         expContext.contextItems.size() == 1
         ExperimentContextItem expItem = expContext.contextItems.first()
         expItem.attributeElement == attribute
