@@ -9,7 +9,7 @@
     </g:if>
     <g:each in="${assayAdapter?.annotations[0]?.contexts?.collectMany { it.comps }?.unique{ it.key + it.display }?.sort{it.key}}" var="annotation">
         <g:if test="${annotation.key == 'assay type'}">
-            <dt>Assay Type:</dt>
+            <dt>Assay Annotation Type:</dt>
             <dd>${annotation.display}</dd>
         </g:if>
         <g:if test="${annotation.key == 'assay format'}">
