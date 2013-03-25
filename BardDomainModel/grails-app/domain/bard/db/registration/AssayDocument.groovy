@@ -14,4 +14,7 @@ class AssayDocument extends AbstractDocument {
         documentContent(type: "text", sqlType: 'clob')
     }
 
+    public Object getOwner() {
+        return assay;
+    }
 }

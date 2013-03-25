@@ -21,6 +21,7 @@ import java.sql.Types
  * To change this template use File | Settings | File Templates.
  */
 class BulkResultService {
+    final static int BATCH_SIZE = 10000;
 
     void insertResults(String username, Experiment experiment, Collection<Result> results) {
         Experiment.withSession {
@@ -112,13 +113,20 @@ class BulkResultService {
 
         PreparedStatement statement = connection.prepareStatement(query)
         try {
+            int inBatch = 0;
             for(relationship in relationships) {
+                if (inBatch > BATCH_SIZE) {
+                    println(""+new Date()+" writing ${inBatch} hierarchy records");
+                    statement.executeBatch();
+                }
+
                 statement.setLong(1, relationship.result.id)
                 statement.setLong(2, relationship.parentResult.id)
                 statement.setString(3, relationship.hierarchyType.value)
 
                 statement.setString(4, username)
                 statement.addBatch()
+                inBatch++;
             }
             statement.executeBatch()
         } finally {
@@ -137,7 +145,13 @@ class BulkResultService {
 
         PreparedStatement statement = connection.prepareStatement(query)
         try {
+            int inBatch = 0;
             for (item in items) {
+                if (inBatch > BATCH_SIZE) {
+                    println(""+new Date()+" writing ${inBatch} items");
+                    statement.executeBatch();
+                }
+
                 int displayOrder = 0 // Not defined because owning collection is a set
 
                 statement.setLong(1, item.result.id)
@@ -156,6 +170,7 @@ class BulkResultService {
                 statement.setString(11, username)
 
                 statement.addBatch()
+                inBatch++;
             }
             statement.executeBatch()
         } finally {
@@ -174,7 +189,13 @@ class BulkResultService {
 
         PreparedStatement statement = connection.prepareStatement(query)
         try {
+            int inBatch = 0;
             for (result in results) {
+                if (inBatch > BATCH_SIZE) {
+                    println(""+new Date()+" writing ${inBatch} results");
+                    statement.executeBatch();
+                }
+
                 statement.setString(1, result.resultStatus)
                 statement.setString(2, result.readyForExtraction.id)
                 statement.setObject(3, experiment.id)
@@ -195,6 +216,7 @@ class BulkResultService {
                 statement.setLong(14, result.id)
 
                 statement.addBatch()
+                inBatch++;
             }
 
             statement.executeBatch()
@@ -210,7 +232,6 @@ class BulkResultService {
             ordered.get(i).id = ids.get(i)
         }
     }
-
 
     private void executeUpdateWithArgs(Connection connection, String sql, List args) {
         PreparedStatement statement = connection.prepareStatement(sql);
