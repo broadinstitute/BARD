@@ -5,6 +5,7 @@ import au.com.bytecode.opencsv.CSVWriter
 import bard.db.registration.AttributeType
 import bard.db.registration.ExternalReference
 import groovy.sql.Sql
+import org.apache.commons.lang3.StringUtils
 import org.hibernate.classic.Session
 import org.hibernate.jdbc.Work
 
@@ -19,6 +20,15 @@ import java.sql.SQLException
  * To change this template use File | Settings | File Templates.
  */
 class PubchemReformatService {
+
+    final static Map<String,String> pubchemOutcomeTranslation = new HashMap();
+    static {
+        pubchemOutcomeTranslation.put("1", "Inactive");
+        pubchemOutcomeTranslation.put("2", "Active");
+        pubchemOutcomeTranslation.put("3", "Inconclusive");
+        pubchemOutcomeTranslation.put("4", "Unspecified");
+        pubchemOutcomeTranslation.put("5", "Probe");
+    }
 
     static class ResultMapContextColumn {
         String attribute;
@@ -244,43 +254,28 @@ class PubchemReformatService {
         ResultMap map = new ResultMap()
         Sql sql = new Sql(connection)
         List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM result_map WHERE AID = ?", [aid])
-//            rows.add(it)
-//            // check the units provided match what the dictionary is expecting
-////        if (it.CONCENTRATIONUNIT != null) {
-////            assert it.CONCENTRATION != null
-////            if (it.CONTEXTITEM != null) {
-////                Element element = Element.findByLabel(it.CONTEXTITEM)
-////                assert element != null, "could not find ${it.CONTEXTITEM}"
-////                assert element.unit.abbreviation == it.CONCENTRATIONUNIT
-////            } else {
-////                Element element = Element.findByLabel(it.RESULTTYPE)
-////                assert element != null, "could not find ${it.RESULTTYPE}"
-////                assert element.unit.abbreviation == it.CONCENTRATIONUNIT
-////            }
-////        }
-//
-//            assert it.PANELNO == null
-////            def rec = new ResultMapRecord(
-////                    tid: it.TID,
-////                    tidName: it.TIDNAME,
-////                    series : it.SERIESNO,
-////                    attribute0 : it.CONTEXTITEM,
-////                    value0Tid : it.TID == it.CONTEXTTID ? null : it.CONTEXTTID,
-////                    value0 : it.CONCENTRATION,
-////                    attribute1: it.ATTRIBUTE1,
-////                    value1 : it.VALUE1,
-////                    attribute2 : it.ATTRIBUTE2,
-////                    value2 : it.VALUE2,
-////                    resultType: it.RESULTTYPE,
-////                    statsModifier: it.STATS_MODIFIER,
-////                    parentTid: it.PARENTTID?.toString())
-////
-////            records.add(rec)
-//        }
-
         map = convertToResultMap(rows)
         println("${map}")
         return map
+    }
+
+    public Map convertPubchemRowToMap(List<String> row, List<String> header) {
+        String outcome = row[3]
+        if (!StringUtils.isBlank(outcome)) {
+            outcome = pubchemOutcomeTranslation[row[3]];
+            if (outcome == null) {
+                throw new RuntimeException("Did not know the name of a pubchem outcome: ${row[3]}");
+            }
+        }
+        String activity = row[4]
+
+        Map pubchemRow = [:]
+        pubchemRow["-1"] = outcome
+        pubchemRow["0"] = activity
+        for(int i=0;i<header.size();i++) {
+            pubchemRow[header[i]] = row[i]
+        }
+        return pubchemRow;
     }
 
     public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
@@ -302,15 +297,7 @@ class PubchemReformatService {
                 break
 
             Long substanceId = Long.parseLong(row[0])
-            String outcome = row[3]
-            String activity = row[4]
-
-            Map pubchemRow = [:]
-            pubchemRow["-1"] = outcome
-            pubchemRow["0"] = activity
-            for(int i=0;i<header.size();i++) {
-                pubchemRow[header[i]] = row[i]
-            }
+            Map pubchemRow = convertPubchemRowToMap(row, header);
 
             convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null)
         }
