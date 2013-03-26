@@ -16,7 +16,7 @@ dataSource {
         timeBetweenEvictionRunsMillis = 60000
         maxWait = 10000
         testOnReturn = true
-        validationQuery = "select bard_context.clear_username() from dual"
+        validationQuery = "select 1 from dual"
     }
 }
 hibernate {
