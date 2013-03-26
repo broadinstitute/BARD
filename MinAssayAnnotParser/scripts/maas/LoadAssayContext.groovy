@@ -2,13 +2,12 @@ import maas.AssayHandlerService
 import maas.MustLoadAid
 
 
-final List<String> inputDirs = [
-        "data/maas/maasDataset1"
-       // "data/maas/problemExcel"
-]
-final String outputDir = "data/maas/maasDataset1/"
-final String runBy = "xiaorong"
-def mustLoadedAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset1/aids_dataset_1.csv')
+String dir = "data/maas/maasDataset2/"
+String aidsFile = "aids_dataset_2.csv"
+final String runBy = "xx"
+final List<String> inputDirs = [dir]
+final String outputDir = "${dir}/output/"
+def mustLoadedAids = MustLoadAid.mustLoadedAids("${dir}${aidsFile}")
 
 def assayHandlerService = new AssayHandlerService()
 assayHandlerService.load(inputDirs, outputDir, runBy, mustLoadedAids)

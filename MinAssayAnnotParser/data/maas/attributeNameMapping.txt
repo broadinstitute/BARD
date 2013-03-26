@@ -212,6 +212,18 @@ MolecularDevices M5 reader	SpectraMax M5 Multi-Mode Microplate Reader
 Molecular Devices M5 Plate Reader	SpectraMax M5 Multi-Mode Microplate Reader
 Acumen eX3 Explorer	TTP LabTech Acumen
 Perkin Elmer EnvisionÂ	PerkinElmer EnVision
+iCi	uCi
+600 MHz Bruker Avance III	Avance III
+Biorad Chemidocxrs Imaging System	Biorad ChemiDoc XRS imaging system
+Biotek plate reader	Bio-Tek Synergy 2 plate reader
+Fluo4-AM	Fluo-4 AM Calcium Indicator
+FluoZin2-AM	FluoZin-2
+LightCycler480	Roche LightCycler480Æ
+Zeiss Axiovert 200M	Axiovert 200M fluorescence light microscope
+m/s	meter per second
+min	minute
+maximal activation	maximum percent activation
+T1/2	half-life
 
 // 3-1-2013
 Threshold units	unit

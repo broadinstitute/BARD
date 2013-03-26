@@ -13,10 +13,15 @@ import java.sql.Connection
  * To change this template use File | Settings | File Templates.
  */
 
+
+String dir = "data/maas/maasDataset2/"
+String aidsFile = "aids_dataset_2.csv"
+final String runBy = "xx"
+final List<String> inputDirs = [dir]
+def mustLoadedAids = MustLoadAid.mustLoadedAids("${dir}${aidsFile}")
+
 ExperimentHandlerService experimentHandlerService = new ExperimentHandlerService()
-final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset1/aids_dataset_1.csv')
-def dirs = ['data/maas/maasDataset1']
-experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
+experimentHandlerService.handle(runBy, inputDirs, mustLoadedAids)
 
 // renumber the display order
 Experiment.withSession {Session session->

@@ -1,0 +1,121 @@
+//NEW TERM DESCRIPTIONS
+percent parasitemia	percent content or parasites in the blood
+hematocrit	volume percentage of red blood cells. aka packed cell volume or erythrocyte volume fraction
+PerkinElmer AlphaScreen reagent	 
+green coffee bean	unroasted coffee bean delicious AND nutritious
+ABI Prism 7900HT	sequence detection system instrument designed for automated high-throughput detection of fluorescent PCR-related chemistries
+Tecan Spectra Mini Reader	 
+PerkinElmer AlphaScreen SureFire ERK reagent	 
+Biorad ChemiDoc Plus Imager	 
+Microcal VP-ITC	 
+Packard Cobra Gamma Counter	 
+Accuri C6 flow cytometer	 
+Tecan Freedom Evo 150	 
+BMG Pherastar	 
+SpectraMax M5 Multi-Mode Microplate Reader	 
+Perkin Elmer LabChip EZReader 
+HT1080	Human Fibrosarcoma cell line
+cytometer	 
+SDS-PAGE	gel-based fluorescence detection technique
+CCD fluorometer	Charge-coupled device fluorometric camera
+GE Typhoon laser scanner	 
+Sybr Green PCR Reagent Kit	 
+AB 7500 rtPCR System	Applied Biosystems model 7500 real time PCR system
+LC-MS/MS	Liquid Chromatography tandem-mass spectrometry
+mass spectrometer	 
+Thermo Scientific Orbitrap Velos	Orbitrap Velos Pro hybrid ion trap'Orbitrap mass spectrometer
+MDA-MB-435	 
+Tecan Spectrafluor Plus	Tecan Spectrafluor Plus plate reader
+PerkinElmer AlphaScreen Bead Kit	AlphaScreen protein-protein interaction assay
+Thermo Scientific LTQ-Orbitrap	mass spectrometer
+Biotek Synergy 2 plate reader	Bio-Tek Synergy 2 Multi-Mode Microplate Reader
+ThermoFluor 384 System	Miniaturized Fluorescence Based Thermal Shift Analyzer
+Roche LightCycler480Æ	Roche Applied Science	 LightCycler 480 System
+LJL Analyst	Molecular Devices LJL Analyst HT Microplate Reader
+Agilent Cary Eclipse Fluorescence Spectrophotometer	 
+ABI PRISM 7700 sequence detector	 
+Beckman LS 6000SC counter	scintillation counter
+Huh7	Huh7 cell line
+CytoTox-ONE Homogenous Membrane Integrity Assay	 
+SW620	SW620 Human Colorectal Carcinoma cell line
+Neuro-2A	Neuro-2A murine neuroblastoma cells
+BW5147	BW5147 Murine cells
+GalScreen base kit	 
+HMLE	Human Mammary Epithelial Cells
+AB Power SYBR GreenApplied Biosystems Power SYBR Green master mix
+Millipore HDAC Assay Kit	Millipore/Upstate HDAC Assay Kit (fluormetric detection)
+H4	H4 Neuroblastoma Cells
+SK-MEL-5	SK-MEL-5 Cells
+MALME3	MALME3 Cells
+Human Herpesvirus 8	 
+Capillary electrophoresis	 
+SUM159	SUM159 cell line
+LCL	EBV-transfomed lymphoblastoid cells
+ThioGlo-1 detection reagent	ThioGlo-1 thiol detection reagent
+A375	A375 cell line
+SigmaFast protease inhibitor substrate	 
+SV40	SV40 large T antigen-transformed osteoblast cell line
+uCi/mL	microcuries per milliliter; unit of radioactivity concentration
+Tecan Safire 2	Tecan Safire 2 microplate reader
+Renilla Glo luciferase assay	 
+D54	D54 T-Cell line
+CEM21	CEM 21 T-Cell line
+BHK-21	Baby Hamster Kidney cell line
+A673	A673 cell line
+mESC	mESC Cell Line
+Alphalisa Bead kit	PerkinElmer Alphalisa fluoescent bead kit
+L-6	L-6 Rat skeletal myoblast cell line
+Betaplate liquid scintillation counter	 
+Spectramax Gemini XS	Molecular Devices Spectramax Gemini XS microplate fluorometer
+Axopatch-200B amplifier	Axopatch patch clamp
+Ionworks Quattro	Ionworks Quattro automated patch clamp
+Membrane Potential Assay Kit Blue	 
+IgMXP3	IgMXP3 cell line
+flow cytometer	 
+MOLT-4	MOLT-4 Leukemia cell line
+RPMI-8226	RPMI-8226 Leukemia cell line
+SR	SR Leukemia cell line
+EKVX	EKVX Lung Cancer cell line
+HOP-62	HOP-62 Lung Cancer cell line
+HOP-92	HOP-92 Lung Cancer cell line
+H226	H226 Lung Cancer cell line
+H322M	H322M Lung Cancer cell line
+H460	H460 Lung Cancer cell line
+H522	H522 Lung Cancer cell line
+HCC-2998	HCC=2998 Colon Cancer cell line
+HCT-15	HCT-15 Colon Cancer cell line
+KM12	KM12 Colon Cancer cell line
+SW-620	SW-620 CNS Cancer cell line
+SF-268	SF-268 CNS Cancer cell line
+SF-295	SF-295 CNS Cancer cell line
+SF-539	SF-539 CNS Cancer cell line
+SNB-19	SNB-19 CNS Cancer cell line
+SNB-75	SNB-75 CNS Cancer cell line
+U251	U251 CNS Cancer cell line
+LOX IMVI	LOX IMVI Melanoma cell line
+M14	M14 Melanoma cell line
+UACC-257	UACC-257 Melanoma cell line
+UACC-62	UACC-62 Melanoma cell line
+IGROV1	IGROV1 Ovarian Cancer cell line
+OVCAR-3	OVCAR-3 Ovarian Cancer cell line
+OVCAR-4	OVCAR-3 Ovarian Cancer cell line
+OVCAR-5	OVCAR-3 Ovarian Cancer cell line
+OVCAR-8	OVCAR-3 Ovarian Cancer cell line
+ADR-RES	ADR-RES Ovarian Cancer cell line
+SK-OV-3	SK-OV-3 Ovarian Cancer cell line
+786	786 Renal Cancer cell line
+A498	A498 Renal Cancer cell line
+RXF 393	RXF 393 Renal Cancer cell line
+TK-10	TK-10 Renal Cancer cell line
+UO-31	UO-31 Renal Cancer cell line
+PC-3	PC-3 Ovarian Cancer cell line
+DU-145	DU-145 Ovarian Cancer cell line
+MDA-MB-231	MDA-MB-231 Breast Cancer cell line
+T-47D	T-47D Breast Cancer cell line
+scintillation counter	 
+ATCC	Wild type primary dermal human fibroblasts
+IgMXP3	ABCG2 Expressing cell line
+CellTiter 96 Reagent	 
+RD	Rhabdomycosarcoma cell line
+CEM-SS	CEM-SS cell line
+autofluorescence factor	 

@@ -18,6 +18,7 @@ import bard.db.registration.AssayContextMeasure
 import bard.db.model.AbstractDocument
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.math3.util.Precision
+import bard.db.enums.AssayStatus
 
 class MergeAssayService {
 
@@ -281,6 +282,16 @@ class MergeAssayService {
         println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, delete ${deletedMeasure}, add to experiment ${addMeasureToExperimentInKeep}")
         assayWillKeep.save()
         // Assay.findById(assayWillKeep.id)
+    }
+
+    def updateStatus(List<Assay> assays, String modifiedBy) {
+        assays.each{ Assay assay->
+            assay.assayStatus = AssayStatus.RETIRED
+            assay.modifiedBy = modifiedBy
+            if (!assay.save()){
+                println("Error happened when update assay status ${assay.errors}")
+            }
+        }
     }
 
     def ExperimentMeasure isMeasureInExperiments(Measure measure, Collection<Experiment> experiments) {
