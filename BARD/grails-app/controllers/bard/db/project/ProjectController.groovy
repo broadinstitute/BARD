@@ -1,11 +1,11 @@
 package bard.db.project
 
+import bard.db.dictionary.Element
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
-import grails.converters.JSON
 import bard.db.registration.Assay
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
-import bard.db.dictionary.Element
 
 @Secured(['isFullyAuthenticated()'])
 class ProjectController {
@@ -28,8 +28,7 @@ class ProjectController {
         if (!projectInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
             return
-        }
-        else
+        } else
             flash.message = null
 
         [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
@@ -103,11 +102,11 @@ class ProjectController {
         List<Experiment> experiments = Experiment.findAllByExperimentNameIlike("%${experimentName}%")
         Project project = Project.findById(projectId)
         Set<Experiment> exps = []
-        experiments.each {Experiment experiment ->
+        experiments.each { Experiment experiment ->
             if (!projectService.isExperimentAssociatedWithProject(experiment, project))
                 exps.add(experiment)
         }
-        render exps.collect {it.displayName} as JSON
+        render exps.collect { it.displayName } as JSON
     }
 
     def ajaxFindAvailableExperimentByAssayId(Long assayId, Long projectId) {
@@ -115,11 +114,11 @@ class ProjectController {
         Project project = Project.findById(projectId)
         List<Experiment> experiments = Experiment.findAllByAssay(assay)
         Set<Experiment> exps = []
-        experiments.each {Experiment experiment ->
+        experiments.each { Experiment experiment ->
             if (!projectService.isExperimentAssociatedWithProject(experiment, project))
                 exps.add(experiment)
         }
-        render exps.collect {it.displayName} as JSON
+        render exps.collect { it.displayName } as JSON
     }
 
     def ajaxFindAvailableExperimentById(Long experimentId, Long projectId) {
@@ -128,7 +127,7 @@ class ProjectController {
         Set<Experiment> exps = []
         if (!projectService.isExperimentAssociatedWithProject(experiment, project))
             exps.add(experiment)
-        render exps.collect {it.displayName} as JSON
+        render exps.collect { it.displayName } as JSON
     }
 
     def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
@@ -139,6 +138,16 @@ class ProjectController {
         instance.save(flush: true)
         instance = Project.findById(instanceId)
         render(template: "summaryDetail", model: [project: instance])
+    }
+
+    def editContext(Long id) {
+        Project instance = Project.get(id)
+        if (!instance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), instanceId])
+            return
+        }
+        [instance: instance]
     }
 
     def showEditSummary(Long instanceId) {
@@ -165,11 +174,11 @@ class ProjectController {
                 }
                 projects.sort {
                     a, b ->
-                    if (params.order == 'desc') {
-                        b."${params.sort}" <=> a."${params.sort}"
-                    } else {
-                        a."${params.sort}" <=> b."${params.sort}"
-                    }
+                        if (params.order == 'desc') {
+                            b."${params.sort}" <=> a."${params.sort}"
+                        } else {
+                            a."${params.sort}" <=> b."${params.sort}"
+                        }
                 }
                 render(view: "findByName", params: params, model: [projects: projects])
             } else if (projects?.size() == 1)
@@ -182,7 +191,7 @@ class ProjectController {
     def getProjectNames() {
         def query = params?.term
         def projects = Project.findAllByNameIlike("%${query}%", [sort: "name", order: "asc"])
-        render projects.collect {it.name} as JSON
+        render projects.collect { it.name } as JSON
     }
 }
 

@@ -5,10 +5,10 @@
             <div class="row-fluid">
                 <h2>${entry.key}</h2>
             </div>
-
-            <g:render template="../contextItem/${subTemplate}GroupHeader"
-                 model="[contextOwner: contextOwner, cardSection: entry.key]"/>
-
+            <g:if test="${contextOwner instanceof bard.db.registration.Assay}">
+                <g:render template="../contextItem/${subTemplate}GroupHeader"
+                                 model="[contextOwner: contextOwner, cardSection: entry.key]"/>
+            </g:if>
             <p>
                 ${entry.description}
             </p>
