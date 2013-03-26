@@ -1,5 +1,6 @@
 package bard.db.dictionary
 
+import bard.db.BardIntegrationSpec
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
@@ -16,7 +17,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class LaboratoryTreeConstraintIntegrationSpec extends IntegrationSpec {
+class LaboratoryTreeConstraintIntegrationSpec extends BardIntegrationSpec {
     LaboratoryTree domainInstance
 
     @Before

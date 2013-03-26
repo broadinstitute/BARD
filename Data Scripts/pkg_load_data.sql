@@ -312,6 +312,7 @@ END reset_sequence;
                     READY_FOR_EXTRACTION,
                     REPLICATE_NO,
                     VALUE_DISPLAY,
+                    --VALUE_ID,
                     VALUE_NUM,
                     VALUE_MIN,
                     VALUE_MAX,
@@ -329,6 +330,7 @@ END reset_sequence;
                     READY_FOR_EXTRACTION,
                     REPLICATE_NO,
                     VALUE_DISPLAY,
+                    --VALUE_ID,
                     VALUE_NUM,
                     VALUE_MIN,
                     VALUE_MAX,
@@ -561,6 +563,7 @@ END reset_sequence;
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
+                    CONFIDENCE_LEVEL,
                     DESCRIPTION,
                     VERSION,
                     DATE_CREATED,
@@ -574,6 +577,7 @@ END reset_sequence;
                     RUN_DATE_FROM,
                     RUN_DATE_TO,
                     HOLD_UNTIL_DATE,
+                    CONFIDENCE_LEVEL,
                     DESCRIPTION,
                     VERSION,
                     DATE_CREATED,
@@ -823,6 +827,37 @@ END reset_sequence;
           AND eXISTS (SELECT 1
                 FROM measure ac
                 WHERE ac.measure_id = acm.measure_id);
+
+        INSERT INTO exprmt_measure
+              (exprmt_measure_id,
+              experiment_id,
+              measure_id,
+              parent_exprmt_measure_id,
+              parent_child_relationship,
+              version,
+              date_created,
+              last_updated,
+              modified_by)
+        SELECT
+              exprmt_measure_id,
+              experiment_id,
+              measure_id,
+              parent_exprmt_measure_id,
+              parent_child_relationship,
+              version,
+              date_created,
+              last_updated,
+              modified_by
+        from data_mig.exprmt_measure em
+        where NOT EXISTS (SELECT 1
+                FROM exprmt_measure acm2
+                WHERE acm2.exprmt_measure_id = em.exprmt_measure_id)
+          AND EXISTS (SELECT 1
+                FROM experiment ac
+                WHERE ac.experiment_id = em.experiment_id)
+          AND eXISTS (SELECT 1
+                FROM measure ac
+                WHERE ac.measure_id = em.measure_id);
 
 
         insert into project_document
@@ -1245,4 +1280,3 @@ END reset_sequence;
      end load_assay;
 end load_data;
 /
-

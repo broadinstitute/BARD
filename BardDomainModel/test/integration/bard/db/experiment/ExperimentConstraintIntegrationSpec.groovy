@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.BardIntegrationSpec
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.ExperimentStatus
 import grails.plugin.spock.IntegrationSpec
@@ -18,7 +19,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ExperimentConstraintIntegrationSpec extends IntegrationSpec {
+class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
     Experiment domainInstance
 
     @Before

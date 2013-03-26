@@ -1,7 +1,7 @@
 package bard.db.project
 
+import bard.db.BardIntegrationSpec
 import bard.db.registration.ExternalReference
-import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -12,7 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException
  * Time: 12:07 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectIntegrationSpec extends IntegrationSpec {
+class ProjectIntegrationSpec extends BardIntegrationSpec {
 
     Project domainInstance
     ProjectContext projectContext
@@ -144,7 +144,7 @@ class ProjectIntegrationSpec extends IntegrationSpec {
     }
 
     void flushAndClear() {
-        Project.withSession {session ->
+        Project.withSession { session ->
             session.flush()
             session.clear()
         }

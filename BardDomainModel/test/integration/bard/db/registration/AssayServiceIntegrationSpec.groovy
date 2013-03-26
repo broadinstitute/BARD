@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import bard.db.experiment.Experiment
 import grails.plugin.spock.IntegrationSpec
 import registration.AssayService
@@ -13,7 +14,7 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class AssayServiceIntegrationSpec extends IntegrationSpec {
+class AssayServiceIntegrationSpec extends BardIntegrationSpec {
 
     AssayService assayService
 

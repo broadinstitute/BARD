@@ -27,6 +27,7 @@ databaseChangeLog = {
     include file: 'manage-stored-procedures.groovy'
     include file: 'execute-load-data.groovy'
     include file: 'drop-retired-tables.groovy'
+    include file: 'manage-audit-procedures.groovy'
     include file: 'reset-sequences.groovy'
     include file: 'grant-selects.groovy'
 }

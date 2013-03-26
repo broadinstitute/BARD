@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
@@ -12,7 +13,7 @@ import spock.lang.Specification
  * Time: 5:02 PM
  * To change this template use File | Settings | File Templates.
  */
-class BulkResultServiceIntegrationSpec extends IntegrationSpec {
+class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
     BulkResultService bulkResultService
 
     Result parent;

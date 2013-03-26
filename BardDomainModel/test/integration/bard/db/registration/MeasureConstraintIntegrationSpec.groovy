@@ -1,7 +1,7 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
-import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -18,7 +18,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class MeasureConstraintIntegrationSpec extends IntegrationSpec {
+class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
     def domainInstance
 
@@ -50,9 +50,9 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest  | valid | errorCode
-        'null not valid' | {null}          | false | 'nullable'
-        'valid assay'    | {Assay.build()} | true  | null
+        desc             | valueUnderTest    | valid | errorCode
+        'null not valid' | { null }          | false | 'nullable'
+        'valid assay'    | { Assay.build() } | true  | null
 
     }
 
@@ -68,9 +68,9 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest    | valid | errorCode
-        'null not valid'   | {null}            | false | 'nullable'
-        'valid resultType' | {Element.build()} | true  | null
+        desc               | valueUnderTest      | valid | errorCode
+        'null not valid'   | { null }            | false | 'nullable'
+        'valid resultType' | { Element.build() } | true  | null
 
     }
 
@@ -86,9 +86,9 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                  | valueUnderTest    | valid | errorCode
-        'null valid'          | {null}            | true  | null
-        'valid parentMeasure' | {Measure.build()} | true  | null
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid parentMeasure' | { Measure.build() } | true  | null
 
     }
 
@@ -104,9 +104,9 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc              | valueUnderTest    | valid | errorCode
-        'null valid'      | {null}            | true  | null
-        'valid entryUnit' | {Element.build()} | true  | null
+        desc              | valueUnderTest      | valid | errorCode
+        'null valid'      | { null }            | true  | null
+        'valid entryUnit' | { Element.build() } | true  | null
 
     }
 
@@ -122,9 +122,9 @@ class MeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                         | valueUnderTest    | valid | errorCode
-        'null valid'                 | {null}            | true  | null
-        'valid statsModifier' | {Element.build()} | true  | null
+        desc                  | valueUnderTest      | valid | errorCode
+        'null valid'          | { null }            | true  | null
+        'valid statsModifier' | { Element.build() } | true  | null
 
     }
 

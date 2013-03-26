@@ -2,7 +2,7 @@
 -- ER/Studio Data Architect 9.1 SQL Code Generation
 -- Project :      CAP and Data entry.DM1
 --
--- Date Created : Friday, November 30, 2012 09:09:12
+-- Date Created : Friday, February 7th 2013 09:09:12
 -- Target DBMS : Oracle 11g
 --
 
@@ -15,6 +15,10 @@ DROP TABLE Assay_Context_Item CASCADE CONSTRAINTS
 DROP TABLE ASSAY_CONTEXT_MEASURE CASCADE CONSTRAINTS
 ;
 DROP TABLE Assay_Descriptor_Tree CASCADE CONSTRAINTS
+;
+DROP TABLE bard_Tree CASCADE CONSTRAINTS
+;
+DROP TABLE ext_ontology_Tree CASCADE CONSTRAINTS
 ;
 DROP TABLE ASSAY_DOCUMENT CASCADE CONSTRAINTS
 ;
@@ -29,6 +33,8 @@ DROP TABLE ELEMENT_HIERARCHY CASCADE CONSTRAINTS
 DROP TABLE ERROR_LOG CASCADE CONSTRAINTS
 ;
 DROP TABLE EXPERIMENT CASCADE CONSTRAINTS
+;
+DROP TABLE EXPERIMENT_FILE CASCADE CONSTRAINTS
 ;
 DROP TABLE EXPRMT_CONTEXT CASCADE CONSTRAINTS
 ;
@@ -72,6 +78,8 @@ DROP TABLE PRJCT_EXPRMT_CONTEXT CASCADE CONSTRAINTS
 ;
 DROP TABLE prjct_exprmt_cntxt_ITEM CASCADE CONSTRAINTS
 ;
+--DROP TABLE prjct_exprmt_context_ITEM CASCADE CONSTRAINTS
+--;
 DROP TABLE PROJECT CASCADE CONSTRAINTS
 ;
 DROP TABLE PROJECT_CONTEXT CASCADE CONSTRAINTS
@@ -94,8 +102,8 @@ DROP TABLE "ROLE" CASCADE CONSTRAINTS
 ;
 DROP TABLE Rslt_Context_Item CASCADE CONSTRAINTS
 ;
-DROP TABLE Run_Context_Item CASCADE CONSTRAINTS
-;
+--DROP TABLE Run_Context_Item CASCADE CONSTRAINTS
+--;
 DROP TABLE Stage_tree CASCADE CONSTRAINTS
 ;
 DROP TABLE STATEMENT_LOG CASCADE CONSTRAINTS
@@ -128,8 +136,8 @@ DROP SEQUENCE ASSAY_DOCUMENT_ID_SEQ
 ;
 DROP SEQUENCE ASSAY_ID_SEQ
 ;
-DROP SEQUENCE BARD_ONTOLOGY_SEQ
-;
+--DROP SEQUENCE BARD_ONTOLOGY_SEQ
+--;
 DROP SEQUENCE ELEMENT_HIERARCHY_ID_SEQ
 ;
 DROP SEQUENCE ELEMENT_ID_SEQ
@@ -267,11 +275,11 @@ CREATE SEQUENCE ASSAY_ID_SEQ
 --
 
 --CREATE SEQUENCE BARD_ONTOLOGY_SEQ
---    START WITH 873
+--    START WITH 1692
 --    INCREMENT BY 1
 --    NOMINVALUE
---    NOMAXVALUE
---    CACHE 200
+--    MAXVALUE 9999999
+--    noCACHE
 --    NOORDER
 --;
 
@@ -282,6 +290,20 @@ CREATE SEQUENCE ASSAY_ID_SEQ
 --
 
 CREATE SEQUENCE ELEMENT_HIERARCHY_ID_SEQ
+    START WITH 1
+    INCREMENT BY 1
+    NOMINVALUE
+    MAXVALUE 2147483648
+    NOCYCLE
+    CACHE 20
+    NOORDER
+;
+
+--
+-- SEQUENCE: EXPERIMENT_FILE_ID_SEQ
+--
+
+CREATE SEQUENCE EXPERIMENT_FILE_ID_SEQ
     START WITH 1
     INCREMENT BY 1
     NOMINVALUE
@@ -488,6 +510,20 @@ CREATE SEQUENCE PERSON_ROLE_ID_SEQ
 ;
 
 --
+-- SEQUENCE: PRJCT_EXPRMT_CONTEXT_ID_SEQ
+--
+
+CREATE SEQUENCE PRJCT_EXPRMT_CONTEXT_ID_SEQ
+    START WITH 1
+    INCREMENT BY 1
+    NOMINVALUE
+    MAXVALUE 2147483648
+    NOCYCLE
+    CACHE 20
+    NOORDER
+;
+
+--
 -- SEQUENCE: PRJCT_EXPRMT_CNTXT_ITEM_ID_SEQ
 --
 
@@ -572,20 +608,6 @@ CREATE SEQUENCE PROJECT_STEP_ID_SEQ
 ;
 
 --
--- SEQUENCE: RESULT_HIERARCHY_ID_SEQ
---
-
-CREATE SEQUENCE RESULT_HIERARCHY_ID_SEQ
-    START WITH 1
-    INCREMENT BY 1
-    NOMINVALUE
-    MAXVALUE 2147483648
-    NOCYCLE
-    CACHE 20
-    NOORDER
-;
-
---
 -- SEQUENCE: RESULT_ID_SEQ
 --
 
@@ -593,7 +615,7 @@ CREATE SEQUENCE RESULT_ID_SEQ
     START WITH 1
     INCREMENT BY 1
     NOMINVALUE
-    MAXVALUE 2147483648
+    MAXVALUE 999999999999999999
     NOCYCLE
     CACHE 1000
     NOORDER
@@ -621,9 +643,9 @@ CREATE SEQUENCE RSLT_CONTEXT_ITEM_ID_SEQ
     START WITH 1
     INCREMENT BY 1
     NOMINVALUE
-    MAXVALUE 2147483648
+    MAXVALUE 999999999999999999
     NOCYCLE
-    CACHE 20
+    CACHE 1000
     NOORDER
 ;
 
@@ -703,19 +725,19 @@ CREATE SEQUENCE UNIT_CONVERSION_ID_SEQ
 
 CREATE TABLE ASSAY(
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
-    ASSAY_STATUS            VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    ASSAY_STATUS            VARCHAR2(20)      DEFAULT 'Draft' NOT NULL,
     Assay_Short_Name        VARCHAR2(250)     DEFAULT ' ' NOT NULL,
     ASSAY_NAME              VARCHAR2(1000 CHAR) NOT NULL,
     ASSAY_VERSION           VARCHAR2(10)      DEFAULT 1 NOT NULL,
     ASSAY_TYPE              VARCHAR2(20)      DEFAULT 'Regular' NOT NULL,
     DESIGNED_BY             VARCHAR2(100),
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     DATE_CREATED            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Pending', 'Active', 'Superseded', 'Retired')),
-    CONSTRAINT CK_ASSAY_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Draft', 'Witnessed', 'Finished', 'Measures Done', 'Annotations Done', 'Retired')),
+    CONSTRAINT CK_ASSAY_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT CK_ASSAY_TYPE CHECK (Assay_Type IN ('Regular', 'Panel - Array', 'Panel - Group', 'Template')),
     CONSTRAINT PK_ASSAY PRIMARY KEY (ASSAY_ID)
 )
@@ -831,11 +853,32 @@ CREATE TABLE ASSAY_DOCUMENT(
     Date_Created         TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
     Last_Updated         TIMESTAMP(6),
     MODIFIED_BY          VARCHAR2(40),
-    CONSTRAINT CK_ASSAY_DOCUMENT_TYPE CHECK (Document_Type IN ('Description', 'Protocol', 'Comments', 'Paper', 'External URL', 'Other')),
+    CONSTRAINT CK_ASSAY_DOCUMENT_TYPE CHECK (Document_Type IN ('Description', 'Protocol', 'Comments', 'Publication', 'Paper', 'External URL', 'Other')),
     CONSTRAINT PK_ASSAY_DOCUMENT PRIMARY KEY (Assay_document_ID)
 )
 ;
 
+
+--
+-- TABLE: BARD_TREE
+--
+
+CREATE TABLE BARD_TREE(
+    NODE_ID           NUMBER(19, 0)     NOT NULL,
+    PARENT_NODE_ID    NUMBER(19, 0),
+    ELEMENT_ID        NUMBER(19, 0)     NOT NULL,
+    ELEMENT_STATUS    VARCHAR2(20)      NOT NULL,
+    LABEL             VARCHAR2(128)     NOT NULL,
+    IS_LEAF           CHAR(1)           NOT NULL,
+    FULL_PATH         VARCHAR2(3000),
+    DESCRIPTION       VARCHAR2(1000),
+    ABBREVIATION      VARCHAR2(20),
+    SYNONYMS          VARCHAR2(1000),
+    EXTERNAL_URL      VARCHAR2(1000),
+    UNIT_ID           NUMBER(19, 0),
+    CONSTRAINT PK_BARD_TREE PRIMARY KEY (NODE_ID)
+)
+;
 
 
 --
@@ -898,13 +941,13 @@ CREATE TABLE ELEMENT(
     DESCRIPTION             VARCHAR2(1000),
     SYNONYMS                VARCHAR2(1000),
     EXTERNAL_URL            VARCHAR2(1000),
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT CK_ELEMENT_STATUS CHECK (Element_Status IN ('Pending', 'Published', 'Deprecated', 'Retired')),
-    CONSTRAINT CK_ELEMENT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_ELEMENT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT PK_ELEMENT PRIMARY KEY (ELEMENT_ID)
 )
 ;
@@ -955,18 +998,19 @@ CREATE TABLE EXPERIMENT(
     EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
     EXPERIMENT_NAME         VARCHAR2(1000)    NOT NULL,
     EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
     RUN_DATE_FROM           DATE,
     RUN_DATE_TO             DATE,
     HOLD_UNTIL_DATE         DATE,
+    CONFIDENCE_LEVEL        NUMBER(3,0),
     DESCRIPTION             VARCHAR2(1000),
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
     CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Pending', 'Approved', 'Rejected', 'Revised')),
-    CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT PK_EXPERIMENT PRIMARY KEY (EXPERIMENT_ID)
 )
 ;
@@ -975,6 +1019,23 @@ CREATE TABLE EXPERIMENT(
 
 COMMENT ON COLUMN EXPERIMENT.HOLD_UNTIL_DATE IS 'can only be set a max of 1 year in the future'
 ;
+
+CREATE TABLE EXPERIMENT_FILE(
+    EXPERIMENT_FILE_ID    NUMBER(19, 0)     NOT NULL,
+    EXPERIMENT_ID         NUMBER(19, 0)     NOT NULL,
+    SUBMISSION_VERSION    NUMBER(19, 0)     NOT NULL,
+    ORIGINAL_FILE         VARCHAR2(1000 CHAR) NOT NULL,
+    EXPORT_FILE           VARCHAR2(1000 CHAR),
+    VERSION               NUMBER(38, 0)     DEFAULT 0 NOT NULL,
+    DATE_CREATED          TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
+    LAST_UPDATED          TIMESTAMP(6),
+    MODIFIED_BY           VARCHAR2(40),
+    CONSTRAINT PK_EXPERIMENT_FILE PRIMARY KEY (EXPERIMENT_FILE_ID)
+)
+;
+
+
+
 --
 -- TABLE: EXPRMT_CONTEXT
 --
@@ -1042,6 +1103,28 @@ CREATE TABLE EXPRMT_MEASURE(
     MODIFIED_BY                  VARCHAR2(40),
     CONSTRAINT CK_EXPRMT_MEASURE_RELATIONSHIP CHECK (Parent_Child_Relationship in('Derived from', 'has Child', 'has Sibling')),
     CONSTRAINT PK_EXPRMT_MEASURE PRIMARY KEY (EXPRMT_MEASURE_ID)
+)
+;
+
+
+--
+-- TABLE: EXT_ONTOLOGY_TREE
+--
+
+CREATE TABLE EXT_ONTOLOGY_TREE(
+    NODE_ID           NUMBER(19, 0)     NOT NULL,
+    PARENT_NODE_ID    NUMBER(19, 0),
+    ELEMENT_ID        NUMBER(19, 0)     NOT NULL,
+    ELEMENT_STATUS    VARCHAR2(20)      NOT NULL,
+    LABEL             VARCHAR2(128)     NOT NULL,
+    IS_LEAF           CHAR(1)           NOT NULL,
+    FULL_PATH         VARCHAR2(3000),
+    DESCRIPTION       VARCHAR2(1000),
+    ABBREVIATION      VARCHAR2(20),
+    SYNONYMS          VARCHAR2(1000),
+    EXTERNAL_URL      VARCHAR2(1000),
+    UNIT_ID           NUMBER(19, 0),
+    CONSTRAINT PK_EXT_ONTOLOGY_TREE PRIMARY KEY (NODE_ID)
 )
 ;
 
@@ -1317,11 +1400,10 @@ COMMENT ON COLUMN ONTOLOGY_ITEM.ITEM_REFERENCE IS 'Concatenate this with the Ont
 CREATE TABLE PERSON(
     PERSON_ID           NUMBER(19, 0)    NOT NULL,
     USERNAME            VARCHAR2(255),
+    email_address       VARCHAR2(255),
     ACCOUNT_EXPIRED     NUMBER(1, 0)     DEFAULT 0 NOT NULL,
     ACCOUNT_LOCKED      NUMBER(1, 0)     DEFAULT 0 NOT NULL,
     ACCOUNT_ENABLED     NUMBER(1, 0)     DEFAULT 1 NOT NULL,
-    PASSWORD            VARCHAR2(255)    NOT NULL,
-    PASSWORD_EXPIRED    NUMBER(1, 0)     DEFAULT 0 NOT NULL,
     VERSION             NUMBER(5, 0)     DEFAULT 0 NOT NULL,
     DATE_CREATED        DATE             DEFAULT sysdate,
     LAST_UPDATED        DATE,
@@ -1410,12 +1492,12 @@ CREATE TABLE PROJECT(
     PROJECT_NAME            VARCHAR2(256)     NOT NULL,
     GROUP_TYPE              VARCHAR2(20)      DEFAULT 'Project' NOT NULL,
     DESCRIPTION             VARCHAR2(1000),
-    ready_for_extraction    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    ready_for_extraction    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_PROJECT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
+    CONSTRAINT CK_PROJECT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT CK_PROJECT_TYPE CHECK (GROUP_TYPE in ('Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template')),
     CONSTRAINT PK_PROJECT PRIMARY KEY (PROJECT_ID)
 )
@@ -1488,7 +1570,7 @@ CREATE TABLE PROJECT_DOCUMENT(
     DATE_CREATED           TIMESTAMP(6)     NOT NULL,
     LAST_UPDATED           TIMESTAMP(6),
     MODIFIED_BY            VARCHAR2(40),
-    CONSTRAINT CK_PROJECT_DOCUMENT_TYPE CHECK (DOCUMENT_TYPE IN ('Description', 'Protocol', 'Comments', 'Paper', 'External URL', 'Other')),
+    CONSTRAINT CK_PROJECT_DOCUMENT_TYPE CHECK (DOCUMENT_TYPE IN ('Description', 'Protocol', 'Comments', 'Publication', 'Paper', 'External URL', 'Other')),
     CONSTRAINT PK_PROJECT_DOCUMENT PRIMARY KEY (PROJECT_DOCUMENT_ID)
 )
 ;
@@ -1539,57 +1621,42 @@ COMMENT ON TABLE Project_Step IS 'The annotations (context items) for a step sho
 -- TABLE: RESULT
 --
 
-CREATE TABLE RESULT(
-    RESULT_ID               NUMBER(19, 0)     NOT NULL,
-    RESULT_STATUS           VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
-    READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
-    EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
-    RESULT_TYPE_ID          NUMBER(19, 0)     NOT NULL,
-    STATS_MODIFIER_ID       NUMBER(19, 0),
-    SUBSTANCE_ID            NUMBER(19, 0)     NOT NULL,
-    REPLICATE_NO            NUMBER(5, 0),
-    QUALIFIER               CHAR(2),
-    VALUE_NUM               NUMBER(30, 15),
-    VALUE_MIN               NUMBER(30, 15),
-    VALUE_MAX               NUMBER(30, 15),
-    VALUE_DISPLAY           VARCHAR2(256),
-    VERSION                 NUMBER(38, 0)     DEFAULT 0 NOT NULL,
-    Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
-    Last_Updated            TIMESTAMP(6),
-    MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_RESULT_STATUS CHECK (Result_Status IN ('Pending', 'Approved', 'Rejected', 'Mark for Deletion')),
-    CONSTRAINT CK_RESULT_EXTRACTION CHECK (ready_for_extraction IN ('Pending', 'Ready', 'Started', 'Complete')),
-    CONSTRAINT CK_RESULT_QUALIFIER CHECK (Qualifier IN ('= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ ')),
-    CONSTRAINT PK_RESULT PRIMARY KEY (RESULT_ID)
+CREATE TABLE RESULT
+(
+    RESULT_ID            NUMBER(19)    NOT NULL,
+    PARENT_RESULT_ID     NUMBER(19)        NULL,
+    HIERARCHY_TYPE       VARCHAR2(20)      NULL,
+    RESULT_STATUS        VARCHAR2(20)  DEFAULT 'Pending' NOT NULL,
+    READY_FOR_EXTRACTION VARCHAR2(20)  DEFAULT 'Pending' NOT NULL,
+    EXPERIMENT_ID        NUMBER(19)    NOT NULL,
+    RESULT_TYPE_ID       NUMBER(19)    NOT NULL,
+    STATS_MODIFIER_ID    NUMBER(19)        NULL,
+    SUBSTANCE_ID         NUMBER(19)    NOT NULL,
+    REPLICATE_NO         NUMBER(5)         NULL,
+    QUALIFIER            CHAR(2)           NULL,
+    VALUE_ID             NUMBER(19)        NULL,
+    VALUE_NUM            NUMBER(30,15)     NULL,
+    VALUE_MIN            NUMBER(30,15)     NULL,
+    VALUE_MAX            NUMBER(30,15)     NULL,
+    VALUE_DISPLAY        VARCHAR2(256)     NULL,
+    VERSION              NUMBER(38)    DEFAULT 0 NOT NULL,
+    DATE_CREATED         TIMESTAMP(6)  DEFAULT sysdate NOT NULL,
+    LAST_UPDATED         TIMESTAMP(6)      NULL,
+    MODIFIED_BY          VARCHAR2(40)      NULL
 )
+;
+COMMENT ON COLUMN RESULT.HIERARCHY_TYPE IS
+'two types of hierarchy are allowed: parent/child where one result is dependant on or grouped with another; derived from where aresult is used to claculate another (e.g. PI used for IC50).  The hierarchy types are mutually exclusive.'
+;
+COMMENT ON COLUMN RESULT.SUBSTANCE_ID IS
+'Has external reference to the PubChem SID'
 ;
 
 
 
 COMMENT ON COLUMN RESULT.SUBSTANCE_ID IS 'Has external reference to the PubChem SID'
 ;
---
--- TABLE: RESULT_HIERARCHY
---
 
-CREATE TABLE RESULT_HIERARCHY(
-    RESULT_HIERARCHY_ID    NUMBER(19, 0)    NOT NULL,
-    PARENT_RESULT_ID       NUMBER(19, 0)    NOT NULL,
-    RESULT_ID              NUMBER(19, 0)    NOT NULL,
-    HIERARCHY_TYPE         VARCHAR2(20)     NOT NULL,
-    VERSION                NUMBER(38, 0)    DEFAULT 0 NOT NULL,
-    Date_Created           TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
-    Last_Updated           TIMESTAMP(6),
-    MODIFIED_BY            VARCHAR2(40),
-    CONSTRAINT CK_RESULT_HIERARCHY_TYPE CHECK (Hierarchy_Type in('Derives', 'Child', 'Sibling')),
-    CONSTRAINT PK_RESULT_HIERARCHY PRIMARY KEY (RESULT_HIERARCHY_ID)
-)
-;
-
-
-
-COMMENT ON COLUMN RESULT_HIERARCHY.HIERARCHY_TYPE IS 'two types of hierarchy are allowed: parent/child where one result is dependant on or grouped with another; derived from where aresult is used to claculate another (e.g. PI used for IC50).  The hierarchy types are mutually exclusive.'
-;
 --
 -- TABLE: Result_type_tree
 --
@@ -1773,15 +1840,15 @@ COMMENT ON COLUMN STEP_CONTEXT_ITEM.VALUE_DISPLAY IS 'This is not a general text
 
 CREATE TABLE SUBSTANCE(
     SUBSTANCE_ID        NUMBER(19, 0)     NOT NULL,
-    COMPOUND_ID         NUMBER(38, 0),
+--    COMPOUND_ID         NUMBER(38, 0),
     SMILES              VARCHAR2(4000),
-    MOLECULAR_WEIGHT    NUMBER(10, 3),
-    SUBSTANCE_TYPE      VARCHAR2(20)      NOT NULL,
+--    MOLECULAR_WEIGHT    NUMBER(10, 3),
+--    SUBSTANCE_TYPE      VARCHAR2(20)      DEFAULT 'small molecule' NOT NULL,
     VERSION             NUMBER(38, 0)     DEFAULT 0 NOT NULL,
     DATE_CREATED        TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     LAST_UPDATED        TIMESTAMP(6),
     MODIFIED_BY         VARCHAR2(40),
-    CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
+--    CONSTRAINT CK_SUBSTANCE_TYPE CHECK (Substance_Type in ('small molecule', 'protein', 'peptide', 'antibody', 'cell', 'oligonucleotide')),
     CONSTRAINT PK_SUBSTANCE PRIMARY KEY (SUBSTANCE_ID)
 )
 ;
@@ -1894,7 +1961,7 @@ CREATE TABLE Unit_tree(
 create or replace view ASSAY_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE ELEMENT_ID in (select ELEMENT_ID from Assay_Descriptor_Tree)
+WHERE ELEMENT_ID in (select adt.ELEMENT_ID from Assay_Descriptor_Tree adt)
 ;
 
 COMMENT ON TABLE ASSAY_ELEMENT IS 'This view shows the unique list of elements used to assemble the assay_descriptor_tree'
@@ -1906,7 +1973,7 @@ COMMENT ON TABLE ASSAY_ELEMENT IS 'This view shows the unique list of elements u
 create or replace view BIOLOGY_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE el.ELEMENT_ID in (select ELEMENT_ID from Biology_Descriptor_tree)
+WHERE el.ELEMENT_ID in (select bdt.ELEMENT_ID from Biology_Descriptor_tree bdt)
 ;
 
 --
@@ -1916,7 +1983,7 @@ WHERE el.ELEMENT_ID in (select ELEMENT_ID from Biology_Descriptor_tree)
 create or replace view INSTANCE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE el.ELEMENT_ID in (select ELEMENT_ID from Instance_Descriptor_tree)
+WHERE el.ELEMENT_ID in (select idt.ELEMENT_ID from Instance_Descriptor_tree idt)
 ;
 
 --
@@ -1927,7 +1994,7 @@ create or replace view LABORATORY_ELEMENT
 (ELEMENT_ID, ELEMENT_STATUS, LABEL, DESCRIPTION, ABBREVIATION, SYNONYMS, UNIT_ID, BARD_URI, EXTERNAL_URL, READY_FOR_EXTRACTION, VERSION, DATE_CREATED, LAST_UPDATED, MODIFIED_BY) AS
 SELECT El.ELEMENT_ID, El.ELEMENT_STATUS, El.LABEL, El.DESCRIPTION, El.ABBREVIATION, El.SYNONYMS, El.UNIT_ID, El.BARD_URI, El.EXTERNAL_URL, El.READY_FOR_EXTRACTION, El.VERSION, El.Date_Created, El.Last_Updated, El.MODIFIED_BY
 FROM ELEMENT El
-WHERE ELEMENT_ID in (select ELEMENT_ID from Laboratory_tree)
+WHERE ELEMENT_ID in (select laboratory_ID from Laboratory_tree)
 ;
 
 --
@@ -1947,7 +2014,7 @@ WHERE el.ELEMENT_ID in (select RESULT_TYPE_ID from Result_type_tree)
 create or replace view STAGE_ELEMENT AS
 SELECT El.ELEMENT_ID Element_ID, El.ELEMENT_STATUS Element_Status, El.LABEL Label, El.DESCRIPTION Description, El.ABBREVIATION Abbreviation, El.SYNONYMS Synonyms, El.UNIT_ID Unit_ID, El.BARD_URI BARD_URI, El.EXTERNAL_URL External_URL, El.READY_FOR_EXTRACTION ready_for_extraction, El.VERSION Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.MODIFIED_BY Modified_by
 FROM ELEMENT El
-WHERE el.ELEMENT_ID in (select ELEMENT_ID from Stage_tree)
+WHERE el.ELEMENT_ID in (select stage_ID from Stage_tree)
 ;
 
 --
@@ -2013,6 +2080,12 @@ CREATE INDEX FK_ASSAY_DESCRIPTOR_PARENT_SLF ON Assay_Descriptor_Tree(PARENT_NODE
 --
 
 CREATE INDEX FK_ASSAY_DOCUMENT_ASSAY ON ASSAY_DOCUMENT(ASSAY_ID)
+;
+--
+-- INDEX: FK_BARD_TREE_PARENT
+--
+
+CREATE INDEX FK_BARD_TREE_PARENT ON BARD_TREE(PARENT_NODE_ID)
 ;
 --
 -- INDEX: FK_BIOLOGY_DESCRIPTOR_PRNT_SLF
@@ -2093,6 +2166,12 @@ CREATE INDEX FK_EXPRMT_MEASURE_EXPRMT ON EXPRMT_MEASURE(EXPERIMENT_ID)
 CREATE INDEX FK_EXPRMT_MEASURE_MEASURE ON EXPRMT_MEASURE(MEASURE_ID)
 ;
 --
+-- INDEX: FK_EXT_ONTOLOGY_TREE_PARENT
+--
+
+CREATE INDEX FK_EXT_ONTOLOGY_TREE_PARENT ON EXT_ONTOLOGY_TREE(PARENT_NODE_ID)
+;
+--
 -- INDEX: FK_EXT_REFERENCE_EXPERIMENT
 --
 
@@ -2110,12 +2189,22 @@ CREATE INDEX FK_EXT_REFERENCE_EXT_SYSTEM ON EXTERNAL_REFERENCE(EXTERNAL_SYSTEM_I
 
 CREATE INDEX FK_EXT_REFERENCE_PROJECT ON EXTERNAL_REFERENCE(PROJECT_ID)
 ;
+
+create INDEX FK_EXPERIMENT_FILE_EXPERIMENT on experiment_file(experiment_id)
+;
+
+
 --
 -- INDEX: AK_EXT_REFERENCE
 --
 
 CREATE UNIQUE INDEX AK_EXT_REFERENCE ON EXTERNAL_REFERENCE(EXTERNAL_SYSTEM_ID, EXPERIMENT_ID, PROJECT_ID, EXT_ASSAY_REF)
 ;
+--CREATE UNIQUE INDEX ak2_external_reference
+--            ON external_reference (ext_assay_ref,
+--                                   Decode(experiment_id, NULL,0,1),
+--                                   Decode(project_id, NULL,0,1),
+--                                   external_system_id);
 --
 -- INDEX: AK_FAVORITE
 --
@@ -2290,6 +2379,8 @@ CREATE INDEX FK_ONTOLOGY_ITEM_ELEMENT ON ONTOLOGY_ITEM(ELEMENT_ID)
 
 CREATE UNIQUE INDEX AK_PERSON ON PERSON(USERNAME)
 ;
+CREATE UNIQUE INDEX AK_PERSON_email ON PERSON(email_address)
+;
 --
 -- INDEX: AK_PERSON_ROLE
 --
@@ -2405,16 +2496,10 @@ CREATE BITMAP INDEX FK_RESULT_RESULT_TYPE ON RESULT(RESULT_TYPE_ID)
 CREATE INDEX FK_RESULT_STATS_MODIFIER ON RESULT(STATS_MODIFIER_ID)
 ;
 --
--- INDEX: FK_RESULT_HIERARCHY_RSLT_PRNT
+-- INDEX: FK_RESULT_VALUE
 --
 
-CREATE INDEX FK_RESULT_HIERARCHY_RSLT_PRNT ON RESULT_HIERARCHY(RESULT_ID)
-;
---
--- INDEX: FK_RESULT_HIERARCHY_RESULT
---
-
-CREATE INDEX FK_RESULT_HIERARCHY_RESULT ON RESULT_HIERARCHY(PARENT_RESULT_ID)
+CREATE INDEX FK_RESULT_VALUE ON RESULT(VALUE_ID)
 ;
 --
 -- INDEX: FK_RESULT_TYPE_PARENT_SELF
@@ -2606,6 +2691,16 @@ ALTER TABLE ASSAY_DOCUMENT ADD CONSTRAINT FK_Assay_document_assay
 
 
 --
+-- TABLE: BARD_Tree
+--
+
+ALTER TABLE BARD_Tree ADD CONSTRAINT FK_BARD_TREE_PARENT
+    FOREIGN KEY (PARENT_NODE_ID)
+    REFERENCES BARD_Tree(NODE_ID)
+;
+
+
+--
 -- TABLE: Biology_Descriptor_tree
 --
 
@@ -2659,6 +2754,11 @@ ALTER TABLE EXPERIMENT ADD CONSTRAINT FK_EXPERIMENT_ASSAY
     REFERENCES ASSAY(ASSAY_ID)
 ;
 
+ALTER TABLE experiment_file ADD CONSTRAINT FK_EXPERIMENT_FILE_EXPERIMENT
+    FOREIGN KEY (EXPERIMENT_ID)
+    REFERENCES EXPERIMENT(EXPERIMENT_ID)
+;
+
 
 --
 -- TABLE: EXPRMT_CONTEXT
@@ -2708,6 +2808,16 @@ ALTER TABLE EXPRMT_MEASURE ADD CONSTRAINT FK_EXPRMT_MEASURE_PARENT
     FOREIGN KEY (PARENT_EXPRMT_MEASURE_ID)
     REFERENCES EXPRMT_MEASURE(EXPRMT_MEASURE_ID)  DEFERRABLE INITIALLY DEFERRED
 ;
+
+--
+-- TABLE: EXT_ONTOLOGY_Tree
+--
+
+ALTER TABLE EXT_ONTOLOGY_Tree ADD CONSTRAINT FK_EXT_ONTOLOGY_TREE_PARENT
+    FOREIGN KEY (PARENT_NODE_ID)
+    REFERENCES EXT_ONTOLOGY_Tree(NODE_ID)
+;
+
 
 
 --
@@ -2829,6 +2939,10 @@ ALTER TABLE ONTOLOGY_ITEM ADD CONSTRAINT FK_ONTOLOGY_ITEM_ONTOLOGY
 -- TABLE: PERSON_ROLE
 --
 
+ALTER TABLE PERSON ADD CONSTRAINT ck_person_email_address
+    CHECK (email_address LIKE '%@%.%')
+;
+
 ALTER TABLE PERSON_ROLE ADD CONSTRAINT FK_PERSON_ROLE_PERSON
     FOREIGN KEY (PERSON_ID)
     REFERENCES PERSON(PERSON_ID)
@@ -2838,6 +2952,7 @@ ALTER TABLE PERSON_ROLE ADD CONSTRAINT FK_PERSON_ROLE_ROLE
     FOREIGN KEY (ROLE_ID)
     REFERENCES "ROLE"(ROLE_ID)
 ;
+
 
 
 --
@@ -2959,24 +3074,14 @@ ALTER TABLE RESULT ADD CONSTRAINT FK_Result_Result_Type
     REFERENCES ELEMENT(ELEMENT_ID)
 ;
 
-ALTER TABLE RESULT ADD CONSTRAINT FK_RESULT_STATS_MODIFIER
-    FOREIGN KEY (STATS_MODIFIER_ID)
+ALTER TABLE RESULT ADD CONSTRAINT FK_Result_Value
+    FOREIGN KEY (VALUE_ID)
     REFERENCES ELEMENT(ELEMENT_ID)
 ;
 
-
---
--- TABLE: RESULT_HIERARCHY
---
-
-ALTER TABLE RESULT_HIERARCHY ADD CONSTRAINT FK_result_hierarchy_chld_rslt
-    FOREIGN KEY (RESULT_ID)
-    REFERENCES RESULT(RESULT_ID) ON DELETE CASCADE
-;
-
-ALTER TABLE RESULT_HIERARCHY ADD CONSTRAINT FK_result_hierarchy_prnt_rslt
-    FOREIGN KEY (PARENT_RESULT_ID)
-    REFERENCES RESULT(RESULT_ID) ON DELETE CASCADE
+ALTER TABLE RESULT ADD CONSTRAINT FK_RESULT_STATS_MODIFIER
+    FOREIGN KEY (STATS_MODIFIER_ID)
+    REFERENCES ELEMENT(ELEMENT_ID)
 ;
 
 
@@ -2994,7 +3099,11 @@ ALTER TABLE Result_type_tree ADD CONSTRAINT FK_Result_Type_Parent_Self
 -- TABLE: Rslt_Context_Item
 --
 
-ALTER TABLE Rslt_Context_Item ADD CONSTRAINT FK_R_CONTEXT_ITEM_ATTRIBUTE
+ALTER TABLE RESULT ADD CONSTRAINT PK_RESULT
+    PRIMARY KEY (RESULT_ID)
+;
+
+    ALTER TABLE Rslt_Context_Item ADD CONSTRAINT FK_R_CONTEXT_ITEM_ATTRIBUTE
     FOREIGN KEY (ATTRIBUTE_ID)
     REFERENCES ELEMENT(ELEMENT_ID)
 ;
@@ -3108,5 +3217,133 @@ ALTER TABLE Unit_tree ADD CONSTRAINT FK_UNIT_PARENT_SELF
     FOREIGN KEY (PARENT_NODE_ID)
     REFERENCES Unit_tree(NODE_ID)
 ;
+
+
+--------------------------------------------------------------------------------------
+-- packages and procedures
+
+-------------------------------------------
+-- set up for auditing
+CREATE OR REPLACE package p_pbs_context is
+--
+-- This package contains procedures that handle the application context.
+--
+-- Install this package in the PBS schema.
+--
+
+-- We are not using the application context more, because there are mulitple
+-- PBS schemas in the same Oracle instances.  They cannot use the same
+-- global database context.
+
+--C_CONTEXT_NAME    constant varchar2(30) := 'CTX_PBS_SECURITY';
+
+procedure set_username(i_username varchar2);
+
+--
+-- Removes the username from the context.
+--
+procedure clear_username;
+
+--
+-- Returns the username set in the context, always in lowercase. Or null if not set.
+--
+function  get_username return varchar2;
+
+--
+-- Enables Sammple VPD in CBIP and sets the context username.
+--
+-- Unlike result DB or gene data, CBIP cannot have a permanent VPD on the SAMPLE table.
+-- There are only a small number of operations that require VPD. So VPD must be turned
+-- on before the operations and off afterwards.
+--
+procedure enable_cbip_sample_vpd(i_username varchar2);
+
+--
+-- Disables Sample VPD in CBIP and clears the username.
+--
+procedure disable_cbip_sample_vpd;
+
+--
+-- Returns true if the Sample VPD is enabled in CBIP
+--
+function is_cbip_sample_vpd_enabled return boolean;
+
+end;
+/
+
+
+CREATE OR REPLACE package body p_pbs_context is
+
+--
+-- package scope variables
+--
+
+v_username         varchar2(100) := null;
+v_cbip_sample_vpd  boolean := false;
+
+--
+-- Forward declarations
+--
+
+procedure set_username(i_username varchar2) is
+
+	i	integer;
+
+begin
+
+	i := instr(i_username, '@');
+	if i = 0 then
+		v_username := i_username;
+	else
+		v_username :=  substr(i_username, 1, i-1);	-- handle email address
+	end if;
+
+end;
+
+procedure clear_username is
+begin
+
+	v_username := null;
+
+end;
+
+function get_username return varchar2 is
+begin
+
+	return lower(v_username);
+
+end;
+
+procedure enable_cbip_sample_vpd(i_username varchar2) is
+begin
+
+	set_username(i_username);
+	v_cbip_sample_vpd := true;
+
+end;
+
+--
+-- Disables Sample VPD in CBIP and clears the username.
+--
+procedure disable_cbip_sample_vpd is
+begin
+
+	clear_username;
+	v_cbip_sample_vpd := false;
+
+end;
+
+--
+-- Returns true if the Sample VPD is enabled in CBIP
+--
+function is_cbip_sample_vpd_enabled return boolean is
+begin
+
+	return v_cbip_sample_vpd;
+
+end;
+
+end;
+/
 
 

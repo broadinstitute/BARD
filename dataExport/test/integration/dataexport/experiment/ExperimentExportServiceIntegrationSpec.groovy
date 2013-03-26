@@ -38,10 +38,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
         TestDataConfigurationHolder.reset()
         resetSequenceUtil = new ResetSequenceUtil(dataSource)
-        ['EXPERIMENT_ID_SEQ'
-        ].each {
-            this.resetSequenceUtil.resetSequence(it)
-        }
+        this.resetSequenceUtil.resetSequence('EXPERIMENT_ID_SEQ')
     }
 
     void tearDown() {
@@ -63,16 +60,16 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
-        label                       | readyForExtractionList              | expectedXml
-        "no experiments"            | []                                  | EXPERIMENTS_NONE_READY
-        "one experiment ready"      | [READY]                             | EXPERIMENTS_ONE_READY
-        "only one experiment Ready" | [READY,NOT_READY, STARTED, COMPLETE] | EXPERIMENTS_ONE_READY
+        label                       | readyForExtractionList                | expectedXml
+        "no experiments"            | []                                    | EXPERIMENTS_NONE_READY
+        "one experiment ready"      | [READY]                               | EXPERIMENTS_ONE_READY
+        "only one experiment Ready" | [READY, NOT_READY, STARTED, COMPLETE] | EXPERIMENTS_ONE_READY
     }
 
     void "test update #label"() {
         given: "Given an Experiment with id #id and version #version"
         Experiment experiment = Experiment.build(readyForExtraction: initialReadyForExtraction)
-        numResults.times {Result.build(readyForExtraction: READY, experiment: experiment)}
+        numResults.times { Result.build(readyForExtraction: READY, experiment: experiment) }
 
         when: "We call the experiment service to update this experiment"
         final BardHttpResponse bardHttpResponse = this.experimentExportService.update(experiment.id, version, ReadyForExtraction.COMPLETE)
@@ -84,12 +81,12 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         assert Experiment.get(experiment.id).readyForExtraction == expectedReadyForExtraction
 
         where:
-        label                                                | expectedStatusCode     | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
-        "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | READY                     | COMPLETE
+        label                  | expectedStatusCode | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
+        "Return OK and ETag 1" | SC_OK              | 1            | 0       | 0          | READY                     | COMPLETE
 //        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | READY
-        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | READY                     | READY
-        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | READY                     | READY
-        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | COMPLETE                  | COMPLETE
+        "Return CONFLICT and ETag 0" | SC_CONFLICT | 0 | -1 | 0 | READY | READY
+        "Return PRECONDITION_FAILED and ETag 0" | SC_PRECONDITION_FAILED | 0 | 2 | 0 | READY | READY
+        "Return OK and ETag 0, Already completed Experiment" | SC_OK | 0 | 0 | 0 | COMPLETE | COMPLETE
     }
 
     void "test update Not Found Status"() {

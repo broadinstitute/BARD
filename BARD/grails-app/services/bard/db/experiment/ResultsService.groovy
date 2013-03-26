@@ -134,10 +134,10 @@ class ResultsService {
     }
 
     static def parseAnything(String value) {
-        if (RANGE_PATTERN.matcher(value).matches()) {
-            return parseRange(value)
-        } else if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
+        if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
             return parseQualifiedNumber(value)
+        } else if (RANGE_PATTERN.matcher(value).matches()) {
+            return parseRange(value)
         } else {
             // assume it's free text and we take it literally
             return new Cell(valueDisplay:value)
@@ -493,8 +493,12 @@ class ResultsService {
 
         // walk through all the context items on the assay
         List<ExperimentContext> experimentContexts = []
-        for(values in (constantItems.groupBy {it.assayContext}).values()) {
+        for(entry in (constantItems.groupBy {it.assayContext}).entrySet()) {
+            AssayContext assayContext = entry.key;
+            Collection<ItemService.Item> values = entry.value;
+
             ExperimentContext context = new ExperimentContext()
+            context.setContextName(assayContext.contextName)
             for(item in values) {
                 String label = item.displayLabel;
 

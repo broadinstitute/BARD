@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.BardIntegrationSpec
 import grails.plugin.spock.IntegrationSpec
 
 /**
@@ -9,7 +10,7 @@ import grails.plugin.spock.IntegrationSpec
  * Time: 10:50 AM
  * To change this template use File | Settings | File Templates.
  */
-class BulkSubstanceServiceIntegrationSpec extends IntegrationSpec {
+class BulkSubstanceServiceIntegrationSpec extends BardIntegrationSpec {
     BulkSubstanceService bulkSubstanceService
 
     long nonexistantId = 999999

@@ -1,6 +1,9 @@
 package bard.db.model
 
+import bard.db.BardIntegrationSpec
+import bard.db.audit.BardContextUtils
 import grails.plugin.spock.IntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -17,7 +20,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractContextConstraintIntegrationSpec extends IntegrationSpec {
+abstract class AbstractContextConstraintIntegrationSpec extends BardIntegrationSpec {
 
     def domainInstance
 

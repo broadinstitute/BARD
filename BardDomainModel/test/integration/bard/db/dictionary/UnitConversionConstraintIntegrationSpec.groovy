@@ -1,6 +1,6 @@
 package bard.db.dictionary
 
-import grails.plugin.spock.IntegrationSpec
+import bard.db.BardIntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -18,7 +18,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class UnitConversionConstraintIntegrationSpec extends IntegrationSpec {
+class UnitConversionConstraintIntegrationSpec extends BardIntegrationSpec {
 
     UnitConversion domainInstance
 
@@ -48,9 +48,9 @@ class UnitConversionConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid fromUnit' | {Element.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid fromUnit' | { Element.build() } | true  | null
 
     }
 
@@ -66,9 +66,9 @@ class UnitConversionConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid toUnit'   | {Element.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid toUnit'   | { Element.build() } | true  | null
 
     }
 

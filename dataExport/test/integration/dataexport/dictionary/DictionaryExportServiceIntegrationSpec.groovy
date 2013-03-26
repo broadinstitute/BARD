@@ -54,7 +54,7 @@ class DictionaryExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given an Element with id #id and version #version"
-        Element e = Element.build(readyForExtraction: initialReadyForExtraction)
+        Element.build(readyForExtraction: initialReadyForExtraction)
 
         when: "We call the dictionary service to update this project"
         final BardHttpResponse bardHttpResponse = this.dictionaryExportService.update(elementId, version, ReadyForExtraction.COMPLETE)
