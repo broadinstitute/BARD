@@ -1,12 +1,11 @@
 package bard.db.dictionary
 
-import grails.plugin.spock.IntegrationSpec
-
-import spock.lang.Unroll
-import spock.lang.Shared
-
+import bard.db.BardIntegrationSpec
 import bard.db.enums.ReadyForExtraction
+import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
+import spock.lang.Shared
+import spock.lang.Unroll
 
 import static bard.db.dictionary.AbstractElement.*
 import static test.TestUtils.assertFieldValidationExpectations
@@ -20,10 +19,11 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec {
+abstract class AbstractElementConstraintIntegrationSpec extends BardIntegrationSpec {
 
     def domainInstance
-    @Shared def unitElement
+    @Shared
+    def unitElement
 
     @Before
     abstract void doSetup()
@@ -48,8 +48,8 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
         'null not value' | null                     | false | 'nullable'
         'valid value'    | ElementStatus.Pending    | true  | null
         'valid value'    | ElementStatus.Published  | true  | null
-        'valid value'   | ElementStatus.Deprecated | true  | null
-        'valid value'   | ElementStatus.Retired    | true  | null
+        'valid value'    | ElementStatus.Deprecated | true  | null
+        'valid value'    | ElementStatus.Retired    | true  | null
     }
 
     void "test label constraints #desc label: '#valueUnderTest'"() {
@@ -219,30 +219,30 @@ abstract class AbstractElementConstraintIntegrationSpec extends IntegrationSpec 
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
 
-            final String field = 'readyForExtraction'
+        final String field = 'readyForExtraction'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            and: 'verify the domainspreadsheetmapping can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
-
-            where:
-            desc             | valueUnderTest               | valid | errorCode
-            'null not valid' | null                         | false | 'nullable'
-
-            'valid valud'    | ReadyForExtraction.NOT_READY | true  | null
-            'valid value'    | ReadyForExtraction.READY     | true  | null
-            'valid value'    | ReadyForExtraction.STARTED   | true  | null
-            'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
-
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
+
+        where:
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
+
+        'valid valud'    | ReadyForExtraction.NOT_READY | true  | null
+        'valid value'    | ReadyForExtraction.READY     | true  | null
+        'valid value'    | ReadyForExtraction.STARTED   | true  | null
+        'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
+
+    }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 

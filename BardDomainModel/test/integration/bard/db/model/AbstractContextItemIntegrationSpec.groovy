@@ -1,5 +1,6 @@
 package bard.db.model
 
+import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
@@ -18,7 +19,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractContextItemIntegrationSpec extends IntegrationSpec {
+abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
 
     AbstractContextItem domainInstance
 

@@ -15,6 +15,7 @@ dataSource {
         minEvictableIdleTimeMillis = 60000
         timeBetweenEvictionRunsMillis = 60000
         maxWait = 10000
+        testOnReturn = true
         validationQuery = "select 1 from dual"
     }
 }

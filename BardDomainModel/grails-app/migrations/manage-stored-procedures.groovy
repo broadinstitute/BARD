@@ -11,7 +11,7 @@ databaseChangeLog = {
      * NOTE: for this should notice changes to the store procedures and run the change when anything is updated, so
      *       just modify the create-ontology-procedures.sql file directly, this way vcs and easily see diffs over time.
      */
-    changeSet(author: 'ddurkin', id: 'create-ontology-procedures.sql', dbms: 'oracle', context:'standard',runOnChange: 'true') {
+    changeSet(author: 'ddurkin', id: 'create-ontology-procedures.sql', dbms: 'oracle', context: 'standard', runOnChange: 'true') {
 
         grailsChange {
             final List<String> sqlBlocks = []
@@ -35,7 +35,7 @@ databaseChangeLog = {
 
     }
 
-    changeSet(author: 'ddurkin', id: 'create-load-data-package.sql', dbms: 'oracle', context:'standard, load-data',runOnChange: 'true') {
+    changeSet(author: 'ddurkin', id: 'create-load-data-package.sql', dbms: 'oracle', context: 'standard, load-data', runOnChange: 'true') {
 
         grailsChange {
             final List<String> sqlBlocks = []
@@ -59,7 +59,7 @@ databaseChangeLog = {
     }
 
     // NOTE this changeset will always be run
-    changeSet(author: "ddurkin", id: "execute manage_ontology.make_trees() stored procedure", context:'standard',dbms: 'oracle', runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "execute manage_ontology.make_trees() stored procedure", context: 'standard', dbms: 'oracle', runAlways: 'true') {
         grailsChange {
             change {
                 sql.call('''

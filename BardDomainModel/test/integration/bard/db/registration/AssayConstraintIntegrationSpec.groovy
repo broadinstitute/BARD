@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import bard.db.enums.AssayStatus
 import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
@@ -15,7 +16,7 @@ import static test.TestUtils.createString
  * Integration tests for Asssay
  */
 @Unroll
-class AssayConstraintIntegrationSpec extends IntegrationSpec {
+class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
 
     Assay domainInstance
 

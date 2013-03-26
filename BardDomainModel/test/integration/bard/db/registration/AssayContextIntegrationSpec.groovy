@@ -1,5 +1,7 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
+import bard.db.audit.BardContextUtils
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -12,24 +14,25 @@ import org.junit.Before
  * Time: 9:18 AM
  * To change this template use File | Settings | File Templates.
  */
-class AssayContextIntegrationSpec extends IntegrationSpec {
+class AssayContextIntegrationSpec extends BardIntegrationSpec {
 
     AssayContext assayContext
-    SessionFactory sessionFactory
+
     Session session
 
     @Before
     void doSetup() {
+        session = sessionFactory.currentSession
         assayContext = AssayContext.buildWithoutSave()
         assert assayContext.assay.save()
-        session = sessionFactory.currentSession
     }
 
     void "test list order of assayContextItems persisted"() {
 
         given: 'an ordered list of assayContextItems'
-        List<AssayContextItem> assayContextItems = [AssayContextItem.build(valueDisplay: 'a'), AssayContextItem.build(valueDisplay: 'b')]
-        assayContext.assayContextItems = assayContextItems
+        List<AssayContextItem> assayContextItems = [AssayContextItem.build(assayContext: assayContext, valueDisplay: 'a'),
+                AssayContextItem.build(assayContext: assayContext, valueDisplay: 'b')]
+
         assert assayContext.save()
         def id = assayContext.getId()
 

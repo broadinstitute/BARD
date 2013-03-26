@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import grails.plugin.spock.IntegrationSpec
@@ -19,7 +20,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ProjectExperimentConstraintIntegrationSpec extends IntegrationSpec {
+class ProjectExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
 
     ProjectExperiment domainInstance
 

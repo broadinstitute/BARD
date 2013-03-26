@@ -134,10 +134,10 @@ class ResultsService {
     }
 
     static def parseAnything(String value) {
-        if (RANGE_PATTERN.matcher(value).matches()) {
-            return parseRange(value)
-        } else if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
+        if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
             return parseQualifiedNumber(value)
+        } else if (RANGE_PATTERN.matcher(value).matches()) {
+            return parseRange(value)
         } else {
             // assume it's free text and we take it literally
             return new Cell(valueDisplay:value)

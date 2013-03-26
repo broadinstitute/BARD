@@ -1,7 +1,10 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
 import grails.plugin.spock.IntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -18,15 +21,12 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
+class AssayContextMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
     AssayContextMeasure domainInstance
 
-    def fixtureLoader
-
     @Before
     void doSetup() {
-
         Assay assay = Assay.build()
         AssayContext assayContext = AssayContext.build(assay: assay)
         Measure measure = Measure.build(assay: assay, resultType: Element.build())
@@ -52,9 +52,9 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                 | valueUnderTest           | valid | errorCode
-        'null not valid'     | { null }                 | false | 'nullable'
-        'valid assayContext' | { AssayContext.build() } | true  | null
+        desc                 | valueUnderTest                             | valid | errorCode
+        'null not valid'     | { null }                                   | false | 'nullable'
+        'valid assayContext' | { AssayContext.build().save(flush: true) } | true  | null
 
     }
 
@@ -70,9 +70,9 @@ class AssayContextMeasureConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest      | valid | errorCode
-        'null not valid' | { null }            | false | 'nullable'
-        'valid measure'  | { Measure.build() } | true  | null
+        desc             | valueUnderTest                        | valid | errorCode
+        'null not valid' | { null }                              | false | 'nullable'
+        'valid measure'  | { Measure.build().save(flush: true) } | true  | null
 
     }
 
