@@ -78,21 +78,6 @@ class PubchemReformatServiceUnitSpec extends Specification {
                 [TID: 4, RESULTTYPE: "child", PARENTTID: 1]
         ]
 
-//        "PARENTTID",
-//        "RESULTTYPE",
-//        "STATS_MODIFIER",
-//        "CONTEXTTID",
-//        "CONTEXTITEM",
-//        "CONCENTRATION",
-//        "CONCENTRATIONUNIT",
-//        "PANELNO",
-//        "ATTRIBUTE1",
-//        "VALUE1",
-//        "ATTRIBUTE2",
-//        "VALUE2",
-//        "SERIESNO",
-//        "QUALIFIERTID"
-
         when:
         PubchemReformatService.ResultMap map = service.convertToResultMap(fillInRows(rows))
 
@@ -128,5 +113,21 @@ class PubchemReformatServiceUnitSpec extends Specification {
         Map row = rows.first()
         row["Replicate #"] == "5"
         row["AC50"] == "97.8"
+    }
+
+    def 'test converting pubchem outcomes'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+
+        when:
+        Map map = service.convertPubchemRowToMap(
+            ["85789806","","44483406","1","0","","","","-1.483","5"],
+            ["PUBCHEM_SID","PUBCHEM_EXT_DATASOURCE_REGID","PUBCHEM_CID","PUBCHEM_ACTIVITY_OUTCOME","PUBCHEM_ACTIVITY_SCORE","PUBCHEM_ACTIVITY_URL","PUBCHEM_ASSAYDATA_COMMENT","PUBCHEM_ASSAYDATA_REVOKE","1","2"])
+
+        then:
+        map["-1"] == "Inactive"
+        map["0"] == "0"
+        map["1"] == "-1.483"
+        map["2"] == "5"
     }
 }
