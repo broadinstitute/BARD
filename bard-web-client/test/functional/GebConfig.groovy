@@ -34,7 +34,7 @@ environments {
         capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
         capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
 
-		driver = { new ChromeDriver(capabilities) }
+        driver = { new ChromeDriver(capabilities) }
 	}
 	
 	// run as “grails -Dgeb.env=firefox test-app”

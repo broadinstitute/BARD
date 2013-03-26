@@ -20,10 +20,15 @@ class ProjectExperimentRenderService {
      * @param project
      * @return nodes and edges in JSON format
      */
-    Map constructGraph(final Long bardProjectId,final Map<Long, String> experimentTypes = [:]) {
-        final List<ProjectStep> projectSteps = projectRestService.findProjectSteps(bardProjectId);
-        final Collection<ProjectExperiment> projectExperiments = projectStepsToProjectExperiments(projectSteps)
-        final Map result = processProjectExperiments(projectExperiments,experimentTypes)
+    Map constructGraph(final Long bardProjectId, final Map<Long, String> experimentTypes = [:]) {
+        Map result = [:]
+        try {
+            final List<ProjectStep> projectSteps = projectRestService.findProjectSteps(bardProjectId);
+            final Collection<ProjectExperiment> projectExperiments = projectStepsToProjectExperiments(projectSteps)
+            result = processProjectExperiments(projectExperiments, experimentTypes)
+        } catch (Exception ee) {
+            log.error(ee)
+        }
         return result
     }
 
@@ -65,7 +70,7 @@ class ProjectExperimentRenderService {
         projectExperimentMap.put(projectExperiment.capExptId, projectExperiment)
     }
 
-    Map processProjectExperiments(final Collection<ProjectExperiment> projectExperiments,final Map<Long, String> experimentTypes = [:]) {
+    Map processProjectExperiments(final Collection<ProjectExperiment> projectExperiments, final Map<Long, String> experimentTypes = [:]) {
         final List<Long> visitedNodes = []        // as name said
         final List<Long> queue = []              // processing queue
 
@@ -78,14 +83,14 @@ class ProjectExperimentRenderService {
             queue.add(it.capExptId)
             projectExperimentMap.put(it.capExptId, it)
         }
-        buildNodesAndEdges(edges, queue, nodes, visitedNodes, isolatedNodes, projectExperimentMap,experimentTypes)
+        buildNodesAndEdges(edges, queue, nodes, visitedNodes, isolatedNodes, projectExperimentMap, experimentTypes)
         countInOutEdges(edges, nodes)
         final Map result = ["connectedNodes": nodes, "edges": edges, "isolatedNodes": isolatedNodes]
         return result
     }
     // BFS to construct graph
     void buildNodesAndEdges(final Set<Edge> edges, final List<Long> queue, final List<Node> nodes, final List<Long> visitedNodes, final List<Node> isolatedNodes,
-                            final Map<Long, ProjectExperiment> projectExperimentMap,final Map<Long, String> experimentTypes = [:]) {
+                            final Map<Long, ProjectExperiment> projectExperimentMap, final Map<Long, String> experimentTypes = [:]) {
         while (queue.size()) {
             final Long currentNode = queue.remove(0)         // remove the first one in the queue
             if (visitedNodes.contains(currentNode)) { // don't process one that is already processed
@@ -94,7 +99,7 @@ class ProjectExperimentRenderService {
             final ProjectExperiment projectExperiment = projectExperimentMap.get(currentNode)
             if (projectExperiment) {
                 visitedNodes.add(projectExperiment.capExptId)                 // keep visited
-                final Node node = constructNode(projectExperiment,experimentTypes)           // construct node
+                final Node node = constructNode(projectExperiment, experimentTypes)           // construct node
                 if (isIsolatedNode(projectExperiment)) {
                     isolatedNodes << node
                 }
@@ -141,7 +146,7 @@ class ProjectExperimentRenderService {
      * @param projectExperiment
      * @return node
      */
-    Node constructNode(final ProjectExperiment projectExperiment,final Map<Long, String> experimentTypes = [:]) {
+    Node constructNode(final ProjectExperiment projectExperiment, final Map<Long, String> experimentTypes = [:]) {
         final String stageLabel = experimentTypes.get(projectExperiment.bardExptId)
         Map projectExperimentAttributes = [
                 'eid': projectExperiment.capExptId,
