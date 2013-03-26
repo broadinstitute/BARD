@@ -68,3 +68,29 @@ log4j = {
 }
 grails.views.default.codec = "none" // none, html, base64
 grails.views.gsp.encoding = "UTF-8"
+
+grails {
+    plugins {
+        springsecurity {
+            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+            ipRestrictions = [
+                    '/console/**': '127.0.0.1'
+            ]
+        }
+    }
+}
+
+CbipCrowd {
+    application.url = 'https://crowd.somewhere.com/crowd/'
+    application.username = 'bard'
+    application.password = 'ChangeMe'
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE']
+    mockUsers {
+        integrationTestUser {
+            roles = ['ROLE_USER']
+            username = 'integrationTestUser'
+            password = 'integrationTestUser'
+            email = 'integrationTestUser@nowhere.com'
+        }
+    }
+}

@@ -1,11 +1,8 @@
 package bard.db.project
 
+import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
-import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import bard.db.project.ProjectStep
-import bard.db.project.StepContext
-import bard.db.project.StepContextItem
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +11,7 @@ import bard.db.project.StepContextItem
  * Time: 12:07 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectStepIntegrationSpec extends IntegrationSpec {
+class ProjectStepIntegrationSpec extends BardIntegrationSpec {
 
     ProjectStep domainInstance
     StepContext stepContext

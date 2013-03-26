@@ -10,7 +10,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1" minOccurs="0">
-                <xs:element ref="link" maxOccurs="unbounded">
+                <xs:element ref="link" maxOccurs="unbounded" minOccurs="0">
                     <xs:annotation>
                         <xs:documentation>Link to next list of experiment's
 application/vnd.bard.cap+xml;type=experiments

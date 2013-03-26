@@ -1,7 +1,7 @@
 package bard.db.experiment
 
+import bard.db.BardIntegrationSpec
 import bard.db.registration.Assay
-import grails.plugin.spock.IntegrationSpec
 import org.springframework.dao.DataIntegrityViolationException
 
 /**
@@ -11,7 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException
  * Time: 5:18 PM
  * To change this template use File | Settings | File Templates.
  */
-class ExperimentIntegrationSpec extends IntegrationSpec {
+class ExperimentIntegrationSpec extends BardIntegrationSpec {
 
     void "ensure Assay delete doesn't cascade to Experiment"() {
         given: 'a valid experiment'
@@ -20,7 +20,7 @@ class ExperimentIntegrationSpec extends IntegrationSpec {
         when:
         Assay assay = experiment.assay
         assay.delete()
-        Assay.withSession {it.flush(); it.clear();}
+        Assay.withSession { it.flush(); it.clear(); }
 
         then:
         DataIntegrityViolationException e = thrown()

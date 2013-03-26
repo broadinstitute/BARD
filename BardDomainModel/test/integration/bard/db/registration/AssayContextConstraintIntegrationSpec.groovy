@@ -1,10 +1,13 @@
 package bard.db.registration
 
+import bard.db.audit.BardContextUtils
+import bard.db.model.AbstractContextConstraintIntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
-import bard.db.model.AbstractContextConstraintIntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,13 +19,12 @@ import bard.db.model.AbstractContextConstraintIntegrationSpec
 @Unroll
 class AssayContextConstraintIntegrationSpec extends AbstractContextConstraintIntegrationSpec {
 
-
     @Before
     void doSetup() {
         domainInstance = AssayContext.buildWithoutSave()
     }
 
-    void "test assay constraints #desc assay: '#valueUnderTest'"() {
+    void "test assay constraints #desc"() {
         final String field = 'assay'
 
         when: 'a value is set for the field under test'
@@ -41,9 +43,9 @@ class AssayContextConstraintIntegrationSpec extends AbstractContextConstraintInt
          * build methods to the domains so, defering running it by nesting in a closure
          */
         where:
-        desc             | valueUnderTest  | valid | errorCode
-        'null not valid' | {null}          | false | 'nullable'
-        'valid assay'    | {Assay.build()} | true  | null
+        desc             | valueUnderTest    | valid | errorCode
+        'null not valid' | { null }          | false | 'nullable'
+        'valid assay'    | { Assay.build() } | true  | null
 
     }
 

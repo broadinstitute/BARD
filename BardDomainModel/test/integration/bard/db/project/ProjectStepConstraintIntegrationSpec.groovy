@@ -1,6 +1,7 @@
 package bard.db.project
 
-import grails.plugin.spock.IntegrationSpec
+import bard.db.BardIntegrationSpec
+import bard.db.experiment.Experiment
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -9,7 +10,6 @@ import static bard.db.project.ProjectStep.EDGE_NAME_MAX_SIZE
 import static bard.db.project.ProjectStep.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import bard.db.experiment.Experiment
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +19,7 @@ import bard.db.experiment.Experiment
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ProjectStepConstraintIntegrationSpec extends IntegrationSpec {
+class ProjectStepConstraintIntegrationSpec extends BardIntegrationSpec {
 
     ProjectStep domainInstance
     def fixtureLoader
@@ -29,9 +29,9 @@ class ProjectStepConstraintIntegrationSpec extends IntegrationSpec {
         def fixture = fixtureLoader.build {
             project(Project)
             nextExperiment(Experiment)
-            nextProjectExperiment(ProjectExperiment, project: project, experiment:nextExperiment)
+            nextProjectExperiment(ProjectExperiment, project: project, experiment: nextExperiment)
             previousExperiment(Experiment)
-            previousProjectExperiment(ProjectExperiment, project: project,experiment: previousExperiment)
+            previousProjectExperiment(ProjectExperiment, project: project, experiment: previousExperiment)
         }
         def props = [nextProjectExperiment: fixture.nextProjectExperiment, previousProjectExperiment: fixture.previousProjectExperiment]
         domainInstance = ProjectStep.buildWithoutSave(props)
@@ -57,9 +57,9 @@ class ProjectStepConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                          | valueUnderTest              | valid | errorCode
-        'null not valid'              | {null}                      | false | 'nullable'
-        'valid nextProjectExperiment' | {ProjectExperiment.build()} | true  | null
+        desc                          | valueUnderTest                | valid | errorCode
+        'null not valid'              | { null }                      | false | 'nullable'
+        'valid nextProjectExperiment' | { ProjectExperiment.build() } | true  | null
 
     }
 
@@ -75,9 +75,9 @@ class ProjectStepConstraintIntegrationSpec extends IntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                              | valueUnderTest              | valid | errorCode
-        'null not valid'                  | {null}                      | false | 'nullable'
-        'valid previousProjectExperiment' | {ProjectExperiment.build()} | true  | null
+        desc                              | valueUnderTest                | valid | errorCode
+        'null not valid'                  | { null }                      | false | 'nullable'
+        'valid previousProjectExperiment' | { ProjectExperiment.build() } | true  | null
 
     }
 

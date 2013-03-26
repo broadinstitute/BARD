@@ -1,14 +1,17 @@
 package dataexport.util
 
+import bard.db.audit.BardContextUtils
 import bard.db.enums.ReadyForExtraction
 import dataexport.registration.BardHttpResponse
 import exceptions.NotFoundException
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import org.hibernate.SessionFactory
 
 import javax.servlet.http.HttpServletResponse
 
 class UtilityService {
     LinkGenerator grailsLinkGenerator
+    SessionFactory sessionFactory
 
     /**
      * Set the ReadyForExtraction value on the domainObject to 'Complete'
@@ -40,8 +43,10 @@ class UtilityService {
         //no-op if the status is already completed
         final ReadyForExtraction currentStatus = domainObject.readyForExtraction
         if (currentStatus != latestStatus) {
-            domainObject.readyForExtraction = latestStatus
-            domainObject.save(flush: true, failOnError: true)
+            BardContextUtils.doWithContextUsername(sessionFactory.currentSession, 'dataExport') {->
+                domainObject.readyForExtraction = latestStatus
+                domainObject.save(flush: true, failOnError: true)
+            }
         }
         return new BardHttpResponse(httpResponseCode: HttpServletResponse.SC_OK, ETag: domainObject.version)
     }

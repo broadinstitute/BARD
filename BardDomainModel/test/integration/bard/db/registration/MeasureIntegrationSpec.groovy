@@ -1,7 +1,9 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
-import grails.plugin.spock.IntegrationSpec
+import org.hibernate.SessionFactory
 import org.junit.Before
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -12,7 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException
  * Time: 3:04 PM
  * To change this template use File | Settings | File Templates.
  */
-class MeasureIntegrationSpec extends IntegrationSpec {
+class MeasureIntegrationSpec extends BardIntegrationSpec {
 
     def domainInstance
 
@@ -50,7 +52,7 @@ class MeasureIntegrationSpec extends IntegrationSpec {
     }
 
     public void flushAndClear() {
-        Measure.withSession {session ->
+        Measure.withSession { session ->
             session.flush()
             session.clear()
         }

@@ -1,9 +1,11 @@
 package bard.db.dictionary
 
+import bard.db.audit.BardContextUtils
 import bard.db.dictionary.ElementStatus as ES
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
+import org.hibernate.SessionFactory
 import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
@@ -22,10 +24,12 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
     BardDescriptor grandParent
     BardDescriptor parent
     BardDictionaryDescriptor dictionaryParent
+    SessionFactory sessionFactory
 
     OntologyDataAccessService ontologyDataAccessService
 
     void setup() {
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         grandParent = BardDescriptor.build(fullPath: "grandParent", leaf: false, label: 'grandParent')
         String parentFullPath = "${grandParent.fullPath}> parent"
@@ -127,9 +131,9 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         "3 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | []                    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
         "2 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | []                    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
     }
-	
+
 	void "test getAllUnits"(){
-		
+
 	}
 
     private List<BardDescriptor> createDescendants(BardDescriptor directParent, List listOfMaps) {

@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
@@ -17,7 +18,7 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ExternalSystemConstraintIntegrationSpec extends IntegrationSpec {
+class ExternalSystemConstraintIntegrationSpec extends BardIntegrationSpec {
 
     def domainInstance
 

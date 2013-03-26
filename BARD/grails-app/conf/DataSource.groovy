@@ -19,6 +19,7 @@ dataSource {
         minEvictableIdleTimeMillis = 60000
         timeBetweenEvictionRunsMillis = 60000
         maxWait = 10000
-        validationQuery = "select 1 from dual"
+        testOnReturn = true
+        validationQuery = "select bard_context.clear_username() from dual"
     }
 }

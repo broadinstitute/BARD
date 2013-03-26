@@ -1,5 +1,6 @@
 package bard.db.people
 
+import bard.db.BardIntegrationSpec
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import org.junit.Before
@@ -18,7 +19,7 @@ import static bard.db.people.Person.NAME_MAX_SIZE
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class PersonConstraintIntegrationSpec extends IntegrationSpec {
+class PersonConstraintIntegrationSpec extends BardIntegrationSpec {
     Person domainInstance
 
     @Before

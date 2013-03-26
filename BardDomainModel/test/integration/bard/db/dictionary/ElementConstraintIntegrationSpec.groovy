@@ -17,7 +17,7 @@ class ElementConstraintIntegrationSpec extends AbstractElementConstraintIntegrat
 
     @Before
     void doSetup() {
-        domainInstance = Element.buildWithoutSave()
+        domainInstance = Element.build()
         unitElement = Element.build()
     }
 
