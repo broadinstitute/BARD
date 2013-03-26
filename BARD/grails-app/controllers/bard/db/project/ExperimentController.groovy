@@ -1,5 +1,6 @@
 package bard.db.project
 
+import java.text.SimpleDateFormat
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.experiment.ExperimentService
@@ -55,7 +56,11 @@ class ExperimentController {
 
         Experiment experiment = new Experiment()
         experiment.assay = assay
-        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo","experimentStatus"] = params
+//        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo","experimentStatus"] = params
+		experiment.properties["experimentName","description","experimentStatus"] = params
+		experiment.holdUntilDate = new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate)
+		experiment.runDateFrom = new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom)
+		experiment.runDateTo = new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo)		
         experiment.dateCreated = new Date()
         if (!experiment.save(flush: true)) {
             println("errors:"+experiment.errors)

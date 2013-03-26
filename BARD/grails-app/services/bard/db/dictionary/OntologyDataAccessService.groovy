@@ -51,8 +51,9 @@ class OntologyDataAccessService {
         addChildren = { Element element, Collection results, Set seen ->
             if (!seen.contains(element)) {
                 seen.add(element)
-                results.add(new ElementSummary(label: element.label, elementId: element.id))
+                
                 if (element.elementStatus != ElementStatus.Retired) {
+					results.add(new ElementSummary(label: element.label, elementId: element.id))
                     for (relationship in parentToChildren.get(element)) {
                         addChildren(relationship.childElement, results, seen)
                     }

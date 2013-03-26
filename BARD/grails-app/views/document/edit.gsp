@@ -25,7 +25,7 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="${document?.ownerController}" action="show" id="${document?.assayId}"
+                    <g:link controller="${document?.ownerController}" action="show" id="${document?.projectId}"
                             fragment="document-${document?.documentId}" class="btn">Cancel</g:link>
                     <g:actionSubmit value="Update" action="Update" class="btn btn-primary"/>
                 </div>
