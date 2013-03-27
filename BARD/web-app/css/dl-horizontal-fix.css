@@ -1,3 +1,11 @@
+/*
+ This is a fix to a bug in twitter bootstrap in the dl-horizontal class.
+ A non-breaking space after each dd element in a dl.dl-horiztonal css will fix the issue 
+ and it prevents the dd elements from encroaching upon one another if they have no content.
+ Fix reference: https://github.com/twitter/bootstrap/issues/2824
+ Note: This bug might have been fix in a different way in a most recent version of bootstrap
+*/
+
 .dl-horizontal dd::after {
     content: "\0000a0";
 }
