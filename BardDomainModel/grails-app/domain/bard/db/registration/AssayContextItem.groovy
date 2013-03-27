@@ -5,7 +5,6 @@ import bard.db.model.AbstractContextItem
 
 class AssayContextItem extends AbstractContextItem {
 
-
     AttributeType attributeType
     AssayContext assayContext
 
@@ -18,8 +17,15 @@ class AssayContextItem extends AbstractContextItem {
         qualifier(column: "qualifier", sqlType: "char", length: 2)
     }
 
+    static transients = ['context']
+
     @Override
     AbstractContext getContext() {
         return assayContext
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.assayContext = context
     }
 }

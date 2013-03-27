@@ -48,4 +48,6 @@ abstract class AbstractContextItem {
     }
 
     abstract AbstractContext getContext()
+
+    abstract void setContext(AbstractContext context)
 }

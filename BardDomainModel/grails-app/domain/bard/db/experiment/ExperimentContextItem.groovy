@@ -25,8 +25,15 @@ class ExperimentContextItem extends AbstractContextItem {
         qualifier(column: "QUALIFIER", sqlType: "char", length: 2)
     }
 
+    static transients = ['context']
+
     @Override
     AbstractContext getContext() {
         return experimentContext
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.experimentContext = context
     }
 }

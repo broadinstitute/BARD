@@ -24,8 +24,15 @@ class StepContextItem extends AbstractContextItem {
         qualifier(column: "qualifier", sqlType: "char", length: 2)
     }
 
+    static transients = ['context']
+
     @Override
     AbstractContext getContext() {
         return stepContext
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.context = context
     }
 }

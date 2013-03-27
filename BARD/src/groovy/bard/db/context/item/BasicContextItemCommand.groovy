@@ -8,7 +8,6 @@ import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import bard.db.project.ProjectExperimentContext
 import grails.validation.Validateable
-import groovy.transform.TypeChecked
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -20,10 +19,11 @@ import org.apache.commons.lang.StringUtils
  * as these aren't used for most types of contextItems
  */
 @Validateable
-class BasicContextItemCommand extends BardCommand{
+class BasicContextItemCommand extends BardCommand {
 
     static final List<String> CONTEXT_TYPES = [ProjectContext, ExperimentContext, ProjectExperimentContext].collect { it.simpleName }
 
+    Long contextOwnerId
     Long contextId
     String contextClass = "ProjectContext"
     Long attributeElementId
@@ -72,10 +72,10 @@ class BasicContextItemCommand extends BardCommand{
 
     AbstractContextItem createNewContextItem() {
         AbstractContextItem contextItemToReturn = null
-        if (validate()){
+        if (validate()) {
             AbstractContextItem contextItem = new ProjectContextItem()
             contextItem.attributeElement = attemptFindById(Element, attributeElementId)
-            if (valueElementId){
+            if (valueElementId) {
                 contextItem.valueElement = attemptFindById(Element, valueElementId)
             }
             contextItem.extValueId = StringUtils.trimToNull(extValueId)
@@ -84,12 +84,20 @@ class BasicContextItemCommand extends BardCommand{
             contextItem.valueNum = valueNum
             ProjectContext context = attemptFindById(ProjectContext, contextId)
             context.addToContextItems(contextItem)
-            if (attemptSave(contextItem)){
+            if (attemptSave(contextItem)) {
                 contextItemToReturn = contextItem
             }
         }
         contextItemToReturn
 
+    }
+
+    /**
+     * place holder to add logic when other contextItems are supported
+     * @return
+     */
+    String getOwnerController(){
+        'project'
     }
 
 }

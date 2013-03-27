@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 /**
@@ -20,5 +21,10 @@ class ProjectContextItem extends AbstractContextItem {
         attributeElement(column: 'ATTRIBUTE_ID')
         valueElement(column: 'VALUE_ID')
         qualifier(column: "QUALIFIER", sqlType: "char", length: 2)
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.context = context
     }
 }

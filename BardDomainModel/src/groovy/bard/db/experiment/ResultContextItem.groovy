@@ -17,9 +17,15 @@ class ResultContextItem extends AbstractContextItem {
     Result result
     Long id;
 
+    static transients = ['context']
     @Override
     AbstractContext getContext() {
-        throw UnsupportedOperationException("No context for ResultContextItem")
+        throw new UnsupportedOperationException("No context for ResultContextItem")
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        throw new UnsupportedOperationException("No context for ResultContextItem")
     }
 //    static belongsTo = [result: Result]
 //    static mapping = {

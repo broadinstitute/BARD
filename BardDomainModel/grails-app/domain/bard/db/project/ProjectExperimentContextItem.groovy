@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 /**
@@ -23,4 +24,8 @@ class ProjectExperimentContextItem extends AbstractContextItem {
         context(column: 'PRJCT_EXPRMT_CONTEXT_ID')
     }
 
+    @Override
+    void setContext(AbstractContext context) {
+        this.context = context
+    }
 }
