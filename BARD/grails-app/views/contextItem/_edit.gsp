@@ -36,7 +36,9 @@
                         <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span></a>
                         <ul class="dropdown-menu" style="z-index:3999;left:-125px;">
                             <li style="text-align:left">
-                                <g:link controller="contextItem" action="create" params="['contextId':context?.id, 'contextClass': context?.class?.simpleName]" >Add item</g:link>
+                                <g:link controller="contextItem" action="create" params="['contextId':context?.id,
+                                                                                          'contextClass': context?.class?.simpleName,
+                                                                                          'contextOwnerId': context?.owner?.id]" >Add item</g:link>
                             </li>
                         </ul>
                     </div>

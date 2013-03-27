@@ -10,7 +10,7 @@
 
 <body>
 %{--<g:render template="message"/>--}%
-%{--<g:render template="errors" model="['errors': instance?.errors?.allErrors]"/>--}%
+<g:render template="/common/errors" model="['errors': instance?.errors?.allErrors]"/>
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="save">
@@ -21,6 +21,8 @@
 
             <div class="control-group">
                 <div class="controls">
+                    <g:link controller="${instance?.ownerController}" action="editContext" id="${instance?.contextOwnerId}"
+                                                fragment="card-${instance?.contextId}" class="btn">Cancel</g:link>
                     <input type="submit" class="btn btn-primary" value="Create">
                 </div>
             </div>

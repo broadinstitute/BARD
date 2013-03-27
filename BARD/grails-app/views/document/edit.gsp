@@ -10,8 +10,8 @@
 
 
 <body>
-<g:render template="message"/>
-<g:render template="errors" model="['errors': document?.errors?.globalErrors]"/>
+<g:render template="/common/message"/>
+<g:render template="/common/errors" model="['errors': document?.errors?.globalErrors]"/>
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="update">
