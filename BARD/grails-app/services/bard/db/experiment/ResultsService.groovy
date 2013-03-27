@@ -9,6 +9,8 @@ import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
+import bard.hibernate.AuthenticatedUserRequired
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
 
 import java.util.regex.Matcher
@@ -207,11 +209,11 @@ class ResultsService {
 
         @Override
         public String toString() {
-            return "LogicalKey{" +
+            return "{" +
                     "replicateNumber=" + replicateNumber +
                     ", substance=" + substanceId +
-                    ", resultType=" + resultType +
-                    ", statsModifier=" + statsModifier +
+                    ", resultType=" + resultType?.label +
+                    ", statsModifier=" + statsModifier?.label +
                     ", valueNum=" + valueNum +
                     ", qualifier='" + qualifier + '\'' +
                     ", valueMin=" + valueMin +
@@ -649,9 +651,14 @@ class ResultsService {
         Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
         for(measure in rootMeasures) {
+            println("creating results for ${measure}")
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
+        for(cell in unused.keySet()) {
+            Row row = unused.get(cell);
+            errors.addError(row.lineNumber, 0, "Didn't know what to do with the value on line ${row.lineNumber} in column ${cell.columnName}");
+        }
         // flatten results to include the top level elements as well as all reachable children
         Set<Result> allResults = new HashSet()
         addAllResults(allResults, results)
@@ -672,60 +679,63 @@ class ResultsService {
         List<Result> results = []
 
         for(row in rows) {
-            Substance substance = Substance.get(row.sid)
-            if(substance == null) {
-                errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
-                continue
-            }
-
             Map<String, RawCell> valueByColumn = row.cells.collectEntries { [it.columnName, it] }
 
             String label = measure.measure.displayLabel
             RawCell cell = valueByColumn.get(label)
+            String cellValue = "NA";
 
             if(cell != null) {
                 // mark this cell as having been consumed
                 unused.remove(cell)
+                cellValue = cell.value
+            }
 
-                Result result = createResult(row.replicate, measure.measure, cell.value, row.sid, errors)
-                if (result == null)
-                    continue;
+            Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
+            if (result == null)
+                continue;
 
-                // children can be on the same row or any row that has this row as its parent
-                // so combine those two collections
-                List<Row> possibleChildRows = [row]
-                Collection<Row> childRows = byParent[row.rowNumber]
-                if (childRows != null) {
-                    possibleChildRows.addAll(childRows)
+            // children can be on the same row or any row that has this row as its parent
+            // so combine those two collections
+            List<Row> possibleChildRows = [row]
+            Collection<Row> childRows = byParent[row.rowNumber]
+            if (childRows != null) {
+                possibleChildRows.addAll(childRows)
+            }
+
+            // for each child measure, create a result per row in each of the child rows
+            for(child in measure.childMeasures) {
+                Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
+
+                for(childResult in resultChildren) {
+                    linkResults(child.parentChildRelationship, errors, 0, childResult, result);
                 }
+            }
 
-                // for each child measure, create a result per row in each of the child rows
-                for(child in measure.childMeasures) {
-                    Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
+            // likewise create each of the context items associated with this measure
+            for(item in itemsByMeasure[measure.measure]) {
+                RawCell itemCell = valueByColumn[item.displayLabel]
+                if (itemCell != null) {
+                    unused.remove(itemCell)
+                    ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
 
-                    for(childResult in resultChildren) {
-                        linkResults(child.parentChildRelationship, errors, 0, childResult, result);
+                    if (resultItem != null) {
+                        resultItem.result = result
+                        result.resultContextItems.add(resultItem)
                     }
                 }
+            }
 
-                // likewise create each of the context items associated with this measure
-                for(item in itemsByMeasure[measure.measure]) {
-                    RawCell itemCell = valueByColumn[item.displayLabel]
-                    if (itemCell != null) {
-                        ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
-
-                        if (resultItem != null) {
-                            resultItem.result = result
-                            result.resultContextItems.add(resultItem)
-                        }
-                    }
-                }
-
+            if (!isNullResult(result)) {
                 results.add(result)
             }
         }
 
         return results;
+    }
+
+    boolean isNullResult(Result result) {
+        return result.valueDisplay == "NA" && result.resultContextItems.size() == 0 && result.resultHierarchiesForParentResult.size() == 0
     }
 
     void validateParentRowsExist(Collection<Row> rows, ImportSummary errors) {
@@ -777,7 +787,8 @@ class ResultsService {
             item.valueMin= cell.minValue
             item.valueMax= cell.maxValue
             item.valueElement = cell.element
-            item.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+            Element unit = assayItem.attributeElement.unit;
+            item.valueDisplay= cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
 
             return item
         } else {
@@ -795,7 +806,7 @@ class ResultsService {
 
             Result result = new Result()
             result.qualifier = cell.qualifier
-            result.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+            result.valueDisplay= cell.valueDisplay + ((unit == null || cell.valueDisplay == "NA") ? "" : " ${unit.abbreviation}")
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
@@ -817,12 +828,17 @@ class ResultsService {
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
+
+            Element unit = assayItem.attributeElement.unit;
+            String valueDisplay= cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
+
             ExperimentContextItem item = new ExperimentContextItem(attributeElement: assayItem.attributeElement,
                     valueElement: cell.element,
                     valueNum: cell.value,
                     valueMin: cell.minValue,
                     valueMax: cell.maxValue,
-                    qualifier: cell.qualifier)
+                    qualifier: cell.qualifier,
+                    valueDisplay: valueDisplay)
         } else {
             errors.addError(0, 0, parsed)
             return null;
@@ -966,7 +982,9 @@ class ResultsService {
             // populate the top few lines in the summary.
             errors.topLines = parsed.topLines
 
-            def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
+            def missingSids = []
+            if (!System.hasProperty("skipSubstanceValidation"))
+                missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
 
             missingSids.each {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
@@ -1063,6 +1081,8 @@ class ResultsService {
 
         errors.resultsCreated = results.size()
 
+        bulkResultService.insertResults(getUsername(), experiment, results)
+
         resultsExportService.dumpFromList(exportFilename, results)
 
         addExperimentFileToDb(experiment, originalFilename, exportFilename)
@@ -1074,12 +1094,20 @@ class ResultsService {
         experiment.experimentFiles.add(file)
     }
 
+    private String getUsername() {
+        String username = springSecurityService.getPrincipal()?.username
+        if (!username) {
+            throw new AuthenticatedUserRequired('An authenticated user was expected this point');
+        }
+        return username
+    }
+
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
     public void deleteExperimentResults(Experiment experiment) {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        new ArrayList(experiment.experimentContexts).each { context ->
+        new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
             new ArrayList(context.experimentContextItems).each { item ->
                 context.removeFromExperimentContextItems(item)
                 item.delete()
@@ -1087,5 +1115,7 @@ class ResultsService {
             experiment.removeFromExperimentContexts(context)
             context.delete()
         }
+
+        bulkResultService.deleteResults(experiment)
     }
 }

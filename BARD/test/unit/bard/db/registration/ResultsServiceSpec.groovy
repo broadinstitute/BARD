@@ -560,4 +560,34 @@ class ResultsServiceSpec extends spock.lang.Specification {
         then:
         errors.errors.size() == 1
     }
+
+    void 'test null values'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
+        Measure parentMeasure = Measure.build(resultType: Element.build(label: "parentCol"))
+        Measure childMeasure = Measure.build(resultType: Element.build(label: "childCol"))
+        Measure child2Measure = Measure.build(resultType: Element.build(label: "child2Col"))
+        ExperimentMeasure parentExpMeasure = ExperimentMeasure.build(measure: parentMeasure)
+        ExperimentMeasure childExpMeasure = ExperimentMeasure.build(measure: childMeasure, parent: parentExpMeasure)
+        ExperimentMeasure child2ExpMeasure = ExperimentMeasure.build(measure: child2Measure, parent: childExpMeasure)
+
+        ResultsService.Row childRow = new ResultsService.Row(cells: [ new ResultsService.RawCell(columnName: "childCol", value: "1") ])
+
+        when:
+        Collection<Result> results = service.extractResultFromEachRow(parentExpMeasure, [childRow], [:], new IdentityHashMap(), errors, [:])
+
+        then:
+        results.size() == 1
+        Result parentResult = results.first()
+        parentResult.valueDisplay == "NA"
+
+        parentResult.resultHierarchiesForParentResult.size() == 1
+        Result childResult = parentResult.resultHierarchiesForParentResult.first().result;
+        childResult.valueDisplay == "1.0"
+
+        // make sure that this child has no more children
+        childResult.resultHierarchiesForParentResult.size() == 0
+    }
 }
