@@ -123,6 +123,7 @@ class PubchemReformatService {
             List<Map<String,String>> rows = []
             String label = makeLabel(resultType, statsModifier)
             Collection<ResultMapRecord> records = records.get(label).findAll { it.parentTid == parentTid }
+            // each record represents a column in the pubchem file
             for(record in records) {
                 Map<String,String> kvs = ["Replicate #": record.series?.toString(), "TID": record.tid]
 
@@ -133,10 +134,10 @@ class PubchemReformatService {
                         measureValue = pubchemRow[record.qualifierTid]+measureValue
                     }
                     kvs[label] = measureValue
-
-                    addContextValues(pubchemRow, record, kvs)
-                    rows.add(kvs)
                 }
+
+                addContextValues(pubchemRow, record, kvs)
+                rows.add(kvs)
             }
             return rows
         }
@@ -163,7 +164,6 @@ class PubchemReformatService {
         }
     }
 
-
     static String makeLabel(String resultType, String statsModifier) {
         if (statsModifier != null)
             return "${resultType} (${statsModifier})"
@@ -179,8 +179,6 @@ class PubchemReformatService {
             for(row in rows) {
                 int rowNumber = writer.addRow(substanceId, parentRow, row["Replicate #"], row)
 
-                // write out the children
-//            println("${rowNumber}: ${row}")
                 convertRow(expMeasure.childMeasures, substanceId, pubchemRow, map, writer, rowNumber, row["TID"])
             }
         }
