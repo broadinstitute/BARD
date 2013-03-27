@@ -14,15 +14,13 @@
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="save">
-            <g:hiddenField name="assayId" value="${instance?.contextId}"/>
-            <g:hiddenField name="projectId" value="${instance?.contextClass}"/>
+            <g:hiddenField name="contextId" value="${instance?.contextId}"/>
+            <g:hiddenField name="contextClass" value="${instance?.contextClass}"/>
 
             <g:render template="editProperties" />
 
             <div class="control-group">
                 <div class="controls">
-                    %{--<g:link controller="${document?.ownerController}" action="show" id="${instance?.id}"--}%
-                            %{--fragment="documents-header" class="btn">Cancel</g:link>--}%
                     <input type="submit" class="btn btn-primary" value="Create">
                 </div>
             </div>
