@@ -30,7 +30,7 @@ class AssayHandlerService {
         Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
         final Integer START_ROW = 2 //0-based
-        final int MAX_ROW = 1000 // max number of rows we would like to process
+        final int MAX_ROW = 4000 // max number of rows we would like to process
 
         List<File> inputFileList = []
 

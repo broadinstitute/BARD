@@ -24,7 +24,7 @@ final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappin
 //TODO rename this file, it is more general now
 final String elementFieldMappingRelativePath = "grails-app/conf/resources/ElementFieldMapping.config"
 final String username = "dlahr_CARS"
-final String projectIdsToLoadFileRelativePath = "test/exampleData/project_UID_dataset_1.csv"
+final String projectIdsToLoadFileRelativePath = "test/exampleData/project_UID_dataset_2.csv"
 
 
 final Date startDate = new Date()
