@@ -46,4 +46,6 @@ abstract class AbstractContextItem {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
 
     }
+
+    abstract AbstractContext getContext()
 }
