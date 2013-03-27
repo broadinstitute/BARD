@@ -19,6 +19,10 @@ modules = {
 		resource url:'/css/datatables/demo_table_jui.css'
 		resource url:'/js/application.js'
 	}
+    contextItem {
+        dependsOn('select2')
+        resource url:'/js/cap/contextItem.js'
+    }
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
 	}

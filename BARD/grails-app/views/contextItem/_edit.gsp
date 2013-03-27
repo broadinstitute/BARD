@@ -1,3 +1,4 @@
+<%@ page import="bard.db.context.item.ContextItemController" %>
 <%--
   Created by IntelliJ IDEA.
   User: xiaorong
@@ -29,6 +30,18 @@
                     </div>
                 </div>
             </g:if>
+            <g:else>
+                <div class="cardMenu">
+                    <div class="btn-group dropup">
+                        <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-cog"></span></a>
+                        <ul class="dropdown-menu" style="z-index:3999;left:-125px;">
+                            <li style="text-align:left">
+                                <g:link controller="contextItem" action="create" params="['contextId':context?.id, 'contextClass': context?.class?.simpleName]" >Add item</g:link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </g:else>
         </caption>
         <tbody>
             <g:each in="${context.contextItems}" status="i" var="contextItem">

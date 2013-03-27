@@ -21,7 +21,7 @@ class BasicContextItemCommand {
     static final List<String> CONTEXT_TYPES = [ProjectContext, ExperimentContext, ProjectExperimentContext].collect{it.simpleName}
 
     Long contextId
-    String contextType
+    String contextClass
     Long attributeElementId
 
     Long valueElementId
