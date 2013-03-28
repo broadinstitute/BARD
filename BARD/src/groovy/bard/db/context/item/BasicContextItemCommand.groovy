@@ -3,6 +3,7 @@ package bard.db.context.item
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.experiment.ExperimentContext
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -21,11 +22,14 @@ import org.apache.commons.lang.StringUtils
 @Validateable
 class BasicContextItemCommand extends BardCommand {
 
-    static final List<String> CONTEXT_TYPES = [ProjectContext, ExperimentContext, ProjectExperimentContext].collect { it.simpleName }
-
+    static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
+    static final Map<String,Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext':ProjectContext]
     Long contextOwnerId
     Long contextId
+    Long contextItemId
+    Long version
     String contextClass = "ProjectContext"
+
     Long attributeElementId
     Long valueNumUnitId
 
@@ -73,7 +77,7 @@ class BasicContextItemCommand extends BardCommand {
     AbstractContextItem createNewContextItem() {
         AbstractContextItem contextItemToReturn = null
         if (validate()) {
-            AbstractContextItem contextItem = new ProjectContextItem()
+            ProjectContextItem contextItem = new ProjectContextItem()
             contextItem.attributeElement = attemptFindById(Element, attributeElementId)
             if (valueElementId) {
                 contextItem.valueElement = attemptFindById(Element, valueElementId)
@@ -82,7 +86,8 @@ class BasicContextItemCommand extends BardCommand {
             contextItem.valueDisplay = valueDisplay
             contextItem.qualifier = StringUtils.trimToNull(qualifier)
             contextItem.valueNum = valueNum
-            ProjectContext context = attemptFindById(ProjectContext, contextId)
+
+            ProjectContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
             context.addToContextItems(contextItem)
             if (attemptSave(contextItem)) {
                 contextItemToReturn = contextItem
@@ -90,6 +95,17 @@ class BasicContextItemCommand extends BardCommand {
         }
         contextItemToReturn
 
+    }
+
+    boolean delete(){
+        AbstractContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
+        AbstractContextItem contextItem = context.contextItems.find{it.id == this.contextItemId}
+        if(contextItem){
+            context.contextItems.remove(contextItem)
+            contextItem.delete(flush:true)
+            return true
+        }
+        return false
     }
 
     /**

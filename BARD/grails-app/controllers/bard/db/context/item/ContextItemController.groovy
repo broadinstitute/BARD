@@ -21,4 +21,10 @@ class ContextItemController {
         }
     }
 
+    def delete(BasicContextItemCommand basicContextItemCommand) {
+
+        assert basicContextItemCommand.delete()
+
+        redirect(controller: basicContextItemCommand.ownerController, action: "editContext", id: basicContextItemCommand.contextOwnerId, fragment: "card-${basicContextItemCommand.contextId}")
+    }
 }
