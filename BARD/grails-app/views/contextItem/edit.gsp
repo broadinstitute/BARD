@@ -4,11 +4,11 @@
 <head>
     <r:require modules="core,bootstrap,contextItem"/>
     <meta name="layout" content="basic"/>
-    <title>Create Assay Document</title>
+    <title>Edit ContextItem</title>
 
 </head>
 
 <body>
-<g:render template="form" model="${[instance: instance, action:'Save']}" />
+<g:render template="form" model="${[instance: instance, action:'Update']}" />
 </body>
 </html>

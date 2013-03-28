@@ -73,14 +73,13 @@
                             </g:if>
                             <g:else>
 
-                                <g:form controller="contextItem"
-                                        onsubmit="return confirm('Are you sure you wish to delete this item?');">
+                                <g:form controller="contextItem">
                                     <g:hiddenField name="contextItemId" value="${contextItem.id}"/>
                                     <g:hiddenField name="contextId" value="${context?.id}"/>
                                     <g:hiddenField name="contextClass" value="${context?.class?.simpleName}"/>
                                     <g:hiddenField name="contextOwnerId" value="${context?.owner?.id}"/>
                                     <li>
-                                        <button type="submit" name="_action_delete" class="btn btn-link"><i class="icon-trash"></i>Delete</button>
+                                        <button type="submit" name="_action_delete" class="btn btn-link" onclick="return confirm('Are you sure you wish to delete this item?');"><i class="icon-trash"></i>Delete</button>
                                     </li>
                                     <li>
                                         <button type="submit" name="_action_edit" class="btn btn-link"><i class="icon-pencil"></i>Edit</button>

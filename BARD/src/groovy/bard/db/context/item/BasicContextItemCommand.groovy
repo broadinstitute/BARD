@@ -2,12 +2,10 @@ package bard.db.context.item
 
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
-import bard.db.experiment.ExperimentContext
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
-import bard.db.project.ProjectExperimentContext
 import grails.validation.Validateable
 import org.apache.commons.lang.StringUtils
 
@@ -23,13 +21,14 @@ import org.apache.commons.lang.StringUtils
 class BasicContextItemCommand extends BardCommand {
 
     static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
-    static final Map<String,Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext':ProjectContext]
+    static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
     Long contextOwnerId
     Long contextId
     Long contextItemId
     Long version
     String contextClass = "ProjectContext"
 
+    String attributeElementLabel
     Long attributeElementId
     Long valueNumUnitId
 
@@ -73,6 +72,31 @@ class BasicContextItemCommand extends BardCommand {
 //
 //        }
 //    }
+    BasicContextItemCommand() {}
+
+    BasicContextItemCommand(AbstractContextItem contextItem) {
+
+        contextOwnerId = contextItem.context.owner.id
+        contextId = contextItem.context.id
+        contextItemId = contextItem.id
+        version = version
+        contextClass = contextItem.context.class.simpleName
+        attributeElementLabel = contextItem.attributeElement.label
+        attributeElementId = contextItem.attributeElement?.id
+        valueNumUnitId
+
+        valueElementId = contextItem.valueElement?.id
+        extValueId = contextItem.extValueId
+        qualifier = contextItem.qualifier
+        valueNum = contextItem.valueNum
+        valueDisplay = contextItem.valueDisplay
+
+        dateCreated = contextItem.dateCreated
+        lastUpdated = contextItem.lastUpdated
+        modifiedBy = contextItem.modifiedBy
+    }
+
+
 
     AbstractContextItem createNewContextItem() {
         AbstractContextItem contextItemToReturn = null
@@ -97,12 +121,12 @@ class BasicContextItemCommand extends BardCommand {
 
     }
 
-    boolean delete(){
+    boolean delete() {
         AbstractContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
-        AbstractContextItem contextItem = context.contextItems.find{it.id == this.contextItemId}
-        if(contextItem){
+        AbstractContextItem contextItem = context.contextItems.find { it.id == this.contextItemId }
+        if (contextItem) {
             context.contextItems.remove(contextItem)
-            contextItem.delete(flush:true)
+            contextItem.delete(flush: true)
             return true
         }
         return false
@@ -112,7 +136,7 @@ class BasicContextItemCommand extends BardCommand {
      * place holder to add logic when other contextItems are supported
      * @return
      */
-    String getOwnerController(){
+    String getOwnerController() {
         'project'
     }
 

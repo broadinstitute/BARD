@@ -19,7 +19,12 @@ $(document).ready(function () {
             }
         }
     });
-    $("#attributeElementId").select2("open");
+    if($("#attributeElementId").val()){
+        $("#attributeElementId").select2("data", {id: $("#attributeElementId").val(), text:$("#attributeElementLabel").val()});
+    }
+    else{
+        $("#attributeElementId").select2("open");
+    }
 
     $("#valueElementId").select2({
         minimumInputLength: 1,

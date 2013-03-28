@@ -1,6 +1,8 @@
 package bard.db.context.item
 
 import bard.db.model.AbstractContextItem
+import bard.db.project.ProjectContext
+import bard.db.project.ProjectContextItem
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
@@ -18,6 +20,16 @@ class ContextItemController {
             redirect(controller: 'project', action: "editContext", id: contextItem.context.owner.id, fragment: "card-${contextItem.context.id}")
         } else {
             render(view: "create", model: [instance: contextItemCommand])
+        }
+    }
+
+    def edit(BasicContextItemCommand contextItemCommand){
+        ProjectContextItem contextItem = contextItemCommand.attemptFindById(ProjectContextItem, contextItemCommand.contextItemId)
+        if (!contextItem){
+            render(view: "edit", model: [instance: contextItemCommand])
+        }
+        else{
+            render(view: "edit", model: [instance:new BasicContextItemCommand(contextItem)])
         }
     }
 
