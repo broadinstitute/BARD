@@ -48,7 +48,6 @@ class CompoundBioActivitySummaryTagLib {
         out << "<p>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
         out << "<p>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
         out << "<p>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
-        out << "<p>slope: ${attrs?.attrs?.slope ?: ''}</p>"
     }
 
     def curveValues = { attrs, body ->
