@@ -10,5 +10,11 @@
 
 <body>
 <g:render template="form" model="${[instance: instance, action:'Update']}" />
+
+<div class="row-fluid">
+    <div class="span6">
+        <g:render template="show" model="${[context:instance.context]}" />
+    </div>
+</div>
 </body>
 </html>

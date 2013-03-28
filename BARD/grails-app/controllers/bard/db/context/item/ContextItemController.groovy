@@ -8,10 +8,15 @@ import grails.plugins.springsecurity.Secured
 @Secured(['isFullyAuthenticated()'])
 class ContextItemController {
 
+    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
     def index() {}
 
     def create(Long contextId, String contextClass, Long contextOwnerId) {
-        [instance: new BasicContextItemCommand(contextId: contextId, contextClass: contextClass, contextOwnerId: contextOwnerId)]
+
+        BasicContextItemCommand command = new BasicContextItemCommand(contextId: contextId, contextClass: contextClass, contextOwnerId: contextOwnerId)
+        command.context = command.attemptFindById(ProjectContext, contextId)
+        [instance: command]
     }
 
     def save(BasicContextItemCommand contextItemCommand) {
@@ -23,14 +28,22 @@ class ContextItemController {
         }
     }
 
-    def edit(BasicContextItemCommand contextItemCommand){
+    def edit(BasicContextItemCommand contextItemCommand) {
         ProjectContextItem contextItem = contextItemCommand.attemptFindById(ProjectContextItem, contextItemCommand.contextItemId)
-        if (!contextItem){
+        if (!contextItem) {
             render(view: "edit", model: [instance: contextItemCommand])
+        } else {
+            render(view: "edit", model: [instance: new BasicContextItemCommand(contextItem)])
         }
-        else{
-            render(view: "edit", model: [instance:new BasicContextItemCommand(contextItem)])
+    }
+
+    def update(BasicContextItemCommand contextItemCommand) {
+        if (!contextItemCommand.update()) {
+            render(view: "edit", model: [instance: contextItemCommand])
+        } else {
+            redirect(controller: contextItemCommand.ownerController, action: "editContext", id: contextItemCommand.contextOwnerId, fragment: "card-${contextItemCommand.contextId}")
         }
+
     }
 
     def delete(BasicContextItemCommand basicContextItemCommand) {

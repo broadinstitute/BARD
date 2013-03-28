@@ -2,9 +2,17 @@
 <g:render template="/common/errors" model="['errors': instance?.errors?.allErrors]"/>
 <div class="row-fluid">
     <div class="span12">
-        <g:form class="form-horizontal">
+        <h4>${action} an item for the ${instance?.contextItem?.context?.contextName} Context</h4>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        <g:form class="form-horizontal" action="edit">
+            <g:hiddenField name="contextOwnerId" value="${instance?.contextOwnerId}"/>
             <g:hiddenField name="contextId" value="${instance?.contextId}"/>
             <g:hiddenField name="contextClass" value="${instance?.contextClass}"/>
+            <g:hiddenField name="contextItemId" value="${instance?.contextItemId}"/>
+            <g:hiddenField name="version" value="${instance?.version}"/>
             <g:hiddenField name="attributeElementLabel" value="${instance?.attributeElementLabel}"/>
 
             <div class="control-group ${hasErrors(bean: instance, field: 'documentType', 'error')}">

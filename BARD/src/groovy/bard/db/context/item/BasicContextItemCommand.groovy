@@ -22,6 +22,9 @@ class BasicContextItemCommand extends BardCommand {
 
     static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
     static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
+    AbstractContext context
+    AbstractContextItem contextItem
+
     Long contextOwnerId
     Long contextId
     Long contextItemId
@@ -75,25 +78,30 @@ class BasicContextItemCommand extends BardCommand {
     BasicContextItemCommand() {}
 
     BasicContextItemCommand(AbstractContextItem contextItem) {
+        copyFromDomainToCmd(contextItem)
+    }
 
-        contextOwnerId = contextItem.context.owner.id
-        contextId = contextItem.context.id
-        contextItemId = contextItem.id
-        version = version
-        contextClass = contextItem.context.class.simpleName
-        attributeElementLabel = contextItem.attributeElement.label
-        attributeElementId = contextItem.attributeElement?.id
-        valueNumUnitId
+    private copyFromDomainToCmd(AbstractContextItem contextItem) {
+        this.context = contextItem.context
+        this.contextItem = contextItem
+        this.contextOwnerId = contextItem.context.owner.id
+        this.contextId = contextItem.context.id
+        this.contextItemId = contextItem.id
+        this.version = contextItem.version
+        this.contextClass = contextItem.context.class.simpleName
+        this.attributeElementLabel = contextItem.attributeElement.label
+        this.attributeElementId = contextItem.attributeElement?.id
+        this.valueNumUnitId
 
-        valueElementId = contextItem.valueElement?.id
-        extValueId = contextItem.extValueId
-        qualifier = contextItem.qualifier
-        valueNum = contextItem.valueNum
-        valueDisplay = contextItem.valueDisplay
+        this.valueElementId = contextItem.valueElement?.id
+        this.extValueId = contextItem.extValueId
+        this.qualifier = contextItem.qualifier
+        this.valueNum = contextItem.valueNum
+        this.valueDisplay = contextItem.valueDisplay
 
-        dateCreated = contextItem.dateCreated
-        lastUpdated = contextItem.lastUpdated
-        modifiedBy = contextItem.modifiedBy
+        this.dateCreated = contextItem.dateCreated
+        this.lastUpdated = contextItem.lastUpdated
+        this.modifiedBy = contextItem.modifiedBy
     }
 
 
@@ -102,15 +110,7 @@ class BasicContextItemCommand extends BardCommand {
         AbstractContextItem contextItemToReturn = null
         if (validate()) {
             ProjectContextItem contextItem = new ProjectContextItem()
-            contextItem.attributeElement = attemptFindById(Element, attributeElementId)
-            if (valueElementId) {
-                contextItem.valueElement = attemptFindById(Element, valueElementId)
-            }
-            contextItem.extValueId = StringUtils.trimToNull(extValueId)
-            contextItem.valueDisplay = valueDisplay
-            contextItem.qualifier = StringUtils.trimToNull(qualifier)
-            contextItem.valueNum = valueNum
-
+            copyFromCmdToDomain(contextItem)
             ProjectContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
             context.addToContextItems(contextItem)
             if (attemptSave(contextItem)) {
@@ -119,6 +119,35 @@ class BasicContextItemCommand extends BardCommand {
         }
         contextItemToReturn
 
+    }
+
+    private copyFromCmdToDomain(ProjectContextItem contextItem) {
+        contextItem.attributeElement = attemptFindById(Element, attributeElementId)
+        if (valueElementId) {
+            contextItem.valueElement = attemptFindById(Element, valueElementId)
+        }
+        contextItem.extValueId = StringUtils.trimToNull(extValueId)
+        contextItem.valueDisplay = valueDisplay
+        contextItem.qualifier = StringUtils.trimToNull(qualifier)
+        contextItem.valueNum = valueNum
+    }
+
+    boolean update() {
+        boolean updateSuccessful = false
+        if (validate()) {
+            ProjectContextItem contextItem = attemptFindById(ProjectContextItem, contextItemId)
+            if (contextItem) {
+                if (this.version?.longValue() != contextItem.version.longValue()) {
+                    getErrors().reject('default.optimistic.locking.failure', [ProjectContextItem] as Object[], 'optimistic lock failure')
+                    copyFromDomainToCmd(contextItem)
+                }
+                else{
+                    copyFromCmdToDomain(contextItem)
+                    updateSuccessful = attemptSave(contextItem)
+                }
+            }
+        }
+        updateSuccessful
     }
 
     boolean delete() {
