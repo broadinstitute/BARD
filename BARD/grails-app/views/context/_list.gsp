@@ -1,6 +1,7 @@
 <div id="cardHolder" class="span12">
     <g:each in="${contexts}" var="entry">
-        <g:if test="${entry.value.size() > 0 || subTemplate.equals("edit")}">
+        %{--hack here to limit the showing the--}%
+        <g:if test="${entry.value.size() > 0 || (subTemplate.equals("edit") && contextOwner instanceof bard.db.registration.Assay)}">
         <div id="${entry.key}" class="roundedBorder card-group ${entry.key.trim().replaceAll(/( |>)/, '-')}">
             <div class="row-fluid">
                 <h2>${entry.key}</h2>
