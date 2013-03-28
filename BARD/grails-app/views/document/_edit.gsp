@@ -1,8 +1,8 @@
 <div class="well well-small">
     <div>
-        <g:form action="delete" controller="document" params="${[type:document.owner.class.simpleName]}" id="${document.id}" onsubmit="confirm('Are you sure you wish to delete the document?')">
+        <g:form action="delete" controller="document" params="${[type:document.owner.class.simpleName]}" id="${document.id}" onsubmit="return confirm('Are you sure you wish to delete the document?');">
             <g:link  action="edit" controller="document" class="btn" params="${[type:document.owner.class.simpleName]}" id="${document.id}" elementId="document-${document.id}">Edit</g:link>
-            <input type="submit" value="Delete" class="btn">
+            <input type="submit" value="Delete" class="btn" >
         </g:form>
     </div>
 
