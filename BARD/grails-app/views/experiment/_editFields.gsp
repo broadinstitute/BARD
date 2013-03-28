@@ -1,3 +1,5 @@
+<%@ page import="java.text.SimpleDateFormat" %>
+
 <div class="row-fluid">
 <div id="accordion-foo" class="span12 accordion">
 
@@ -37,20 +39,20 @@
 
                 <dt>Hold until date</dt><dd>
                 <input type="text" class="input-small date-selection" name="holdUntilDate"
-                       value="${fieldValue(bean: experiment, field: "holdUntilDate")}"/>
+                       value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
                 (No more then 1 year from today)
                 <span class="error"><g:fieldError bean="${experiment}" field="holdUntilDate"/></span>
             </dd>
 
                 <dt>Run Date From</dt><dd>
                 <input type="text" class="input-small date-selection" name="runDateFrom"
-                       value="${fieldValue(bean: experiment, field: "runDateFrom")}"/>
+                       value="${experiment.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateFrom) : experiment.runDateFrom}"/>
                 <span class="error"><g:fieldError bean="${experiment}" field="runDateFrom"/></span>
             </dd>
 
                 <dt>Run Date To</dt><dd>
                 <input type="text" class="input-small date-selection" name="runDateTo"
-                       value="${fieldValue(bean: experiment, field: "runDateTo")}"/>
+                       value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
                 <span class="error"><g:fieldError bean="${experiment}" field="runDateTo"/></span>
             </dd>
             </dl>
