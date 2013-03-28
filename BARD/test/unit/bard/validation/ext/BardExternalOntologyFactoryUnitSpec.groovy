@@ -1,5 +1,6 @@
 package bard.validation.ext
 
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -15,7 +16,7 @@ class BardExternalOntologyFactoryUnitSpec extends Specification {
 
     BardExternalOntologyFactory externalOntologyFactory = new BardExternalOntologyFactory()
 
-
+    @Shared String exitingExternalUrl = 'http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn'
 
     void "test foo"() {
         given:
@@ -26,9 +27,9 @@ class BardExternalOntologyFactoryUnitSpec extends Specification {
         externalOntologyApi.getClass() == expectedApiImplClass
 
         where:
-        desc                               | customMap                                                                  | externalUrl                               | expectedApiImplClass
-        'empty map defaults to defaultIpl' | [:]                                                                        | 'http://www.ncbi.nlm.nih.gov/biosystems/' | ExternalOntologyNCBI.class
-        'map used over default'            | ['http://www.ncbi.nlm.nih.gov/biosystems/': new ExternalOntologyUniprot()] | 'http://www.ncbi.nlm.nih.gov/biosystems/' | ExternalOntologyUniprot.class
+        desc                               | customMap                                             | externalUrl        | expectedApiImplClass
+        'empty map defaults to defaultIpl' | [:]                                                   | exitingExternalUrl | ExternalOntologyOLS.class
+        'map used over default'            | [(exitingExternalUrl): new ExternalOntologyUniprot()] | exitingExternalUrl | ExternalOntologyUniprot.class
 
     }
 }
