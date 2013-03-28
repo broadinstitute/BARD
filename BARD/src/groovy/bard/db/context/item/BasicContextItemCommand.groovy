@@ -106,7 +106,8 @@ class BasicContextItemCommand extends BardCommand {
 
 
 
-    AbstractContextItem createNewContextItem() {
+    boolean createNewContextItem() {
+        boolean createSuccessful = false
         AbstractContextItem contextItemToReturn = null
         if (validate()) {
             ProjectContextItem contextItem = new ProjectContextItem()
@@ -114,11 +115,11 @@ class BasicContextItemCommand extends BardCommand {
             ProjectContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
             context.addToContextItems(contextItem)
             if (attemptSave(contextItem)) {
-                contextItemToReturn = contextItem
+                copyFromDomainToCmd(contextItem)
+                createSuccessful = true
             }
         }
-        contextItemToReturn
-
+        createSuccessful
     }
 
     private copyFromCmdToDomain(ProjectContextItem contextItem) {
@@ -144,6 +145,7 @@ class BasicContextItemCommand extends BardCommand {
                 else{
                     copyFromCmdToDomain(contextItem)
                     updateSuccessful = attemptSave(contextItem)
+                    copyFromDomainToCmd(contextItem)
                 }
             }
         }

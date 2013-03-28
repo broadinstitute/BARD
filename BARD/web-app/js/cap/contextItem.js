@@ -18,13 +18,16 @@ $(document).ready(function () {
                 return selectData;
             }
         }
-    });
-    if($("#attributeElementId").val()){
-        $("#attributeElementId").select2("data", {id: $("#attributeElementId").val(), text:$("#attributeElementLabel").val()});
+    }).on("change", function(e) {
+            // on change the attribute, clear all the other fields
+            $(':text').val("");
+            $("#valueElementId").select2("data", {results: []});
+            $("#extValueId").select2("data", {results: []});
+        });
+    if ($("#attributeElementId").val()) {
+        $("#attributeElementId").select2("data", {id: $("#attributeElementId").val(), text: $("#attributeElementText").val()});
     }
-    else{
-        $("#attributeElementId").select2("open");
-    }
+
 
     $("#valueElementId").select2({
         minimumInputLength: 1,
@@ -49,7 +52,12 @@ $(document).ready(function () {
         }
     }).on("change", function (e) {
             $("#valueDisplay").val($("#valueElementId").select2("data").text);
+            $('button.btn-primary').focus();
         });
+    if ($("#valueElementId").val()) {
+        $("#valueElementId").select2("data", {id: $("#valueElementId").val(), text: $("#valueElementText").val()});
+    }
+
     $("#extValueId").select2({
         minimumInputLength: 1,
         allowClear: true,
@@ -69,8 +77,34 @@ $(document).ready(function () {
         }
     }).on("change", function (e) {
             $("#valueDisplay").val($("#extValueId").select2("data").display);
+            $('button.btn-primary').focus();
         });
+    if ($("#extValueId").val()) {
+        $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
+    }
+    initialFocus();
 
+    // try and pick best focus
+    function initialFocus() {
+        if ($("#attributeElementId").is(':disabled')) {
+            $('button.btn-primary').focus();
+        }
+        else if (!$("#attributeElementId").val()) {
+            $("#attributeElementId").select2("open");
+        }
+        else if ($("#valueElementId").val()) {
+            $("#valueElementId").select2("open");
+        }
+        else if ($("#extValueId").val()) {
+            $("#extValueId").select2("open");
+        }
+        else if ($("#valueNum").val()) {
+            $("#valueNum").focus();
+        }
+        else if ($("#valueDisplay").val()) {
+            $("#valueDisplay").focus();
+        }
+    }
 
 });
 

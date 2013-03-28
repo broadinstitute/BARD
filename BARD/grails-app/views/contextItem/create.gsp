@@ -8,6 +8,11 @@
 </head>
 
 <body>
+<div class="row-fluid">
+    <div class="span12">
+        <h4>Create an item for the ${instance?.context?.contextName} Context</h4>
+    </div>
+</div>
 <g:render template="form" model="${[instance: instance, action:'Save']}" />
 
 <div class="row-fluid">

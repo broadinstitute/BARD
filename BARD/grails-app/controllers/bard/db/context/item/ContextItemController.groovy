@@ -20,9 +20,8 @@ class ContextItemController {
     }
 
     def save(BasicContextItemCommand contextItemCommand) {
-        AbstractContextItem contextItem = contextItemCommand.createNewContextItem()
-        if (contextItem) {
-            redirect(controller: 'project', action: "editContext", id: contextItem.context.owner.id, fragment: "card-${contextItem.context.id}")
+        if (contextItemCommand.createNewContextItem()) {
+            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
         } else {
             render(view: "create", model: [instance: contextItemCommand])
         }
@@ -41,7 +40,7 @@ class ContextItemController {
         if (!contextItemCommand.update()) {
             render(view: "edit", model: [instance: contextItemCommand])
         } else {
-            redirect(controller: contextItemCommand.ownerController, action: "editContext", id: contextItemCommand.contextOwnerId, fragment: "card-${contextItemCommand.contextId}")
+            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
         }
 
     }

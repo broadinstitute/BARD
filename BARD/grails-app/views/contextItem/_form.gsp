@@ -1,10 +1,6 @@
 %{--<g:render template="message"/>--}%
 <g:render template="/common/errors" model="['errors': instance?.errors?.allErrors]"/>
-<div class="row-fluid">
-    <div class="span12">
-        <h4>${action} an item for the ${instance?.contextItem?.context?.contextName} Context</h4>
-    </div>
-</div>
+<g:set var="disabledInput" value="${reviewNewItem? "true": "false"}" />
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="edit">
@@ -13,7 +9,11 @@
             <g:hiddenField name="contextClass" value="${instance?.contextClass}"/>
             <g:hiddenField name="contextItemId" value="${instance?.contextItemId}"/>
             <g:hiddenField name="version" value="${instance?.version}"/>
-            <g:hiddenField name="attributeElementLabel" value="${instance?.attributeElementLabel}"/>
+
+
+            <g:hiddenField name="attributeElementText" value="${instance?.contextItem?.attributeElement?.label}"/>
+            <g:hiddenField name="valueElementText" value="${instance?.contextItem?.valueElement?.label}"/>
+            <g:hiddenField name="extValueText" value="(${instance?.extValueId}) ${instance?.valueDisplay}"/>
 
             <div class="control-group ${hasErrors(bean: instance, field: 'documentType', 'error')}">
                 <label class="control-label" for="attributeElementId"><g:message
@@ -21,7 +21,7 @@
 
                 <div class="controls">
                     <g:hiddenField class="span8" id="attributeElementId" name="attributeElementId"
-                                   value="${instance?.attributeElementId}"/>
+                                   value="${instance?.attributeElementId}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
                 </div>
             </div>
@@ -32,8 +32,8 @@
                         code="contextItem.valueElementId.label"/>:</label>
 
                 <div class="controls">
-                    <g:hiddenField class="span8" id="valueElementId" name="valueElementId"
-                                   value="${instance?.valueElementId}"/>
+                    <g:textField class="span8" id="valueElementId" name="valueElementId"
+                                   value="${instance?.valueElementId}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
                 </div>
             </div>
@@ -42,7 +42,8 @@
                 <label class="control-label" for="extValueId"><g:message code="contextItem.extValueId.label"/>:</label>
 
                 <div class="controls">
-                    <g:textField class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}"/>
+
+                    <g:textField class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="extValueId" bean="${instance}"/></span>
                 </div>
             </div>
@@ -53,14 +54,14 @@
                 <div class="controls">
                     <g:textField class="span2" id="qualifier" name="qualifier"
                                  placeholder="${message(code: "contextItem.qualifier.label")}"
-                                 value="${instance?.qualifier}"/>
+                                 value="${instance?.qualifier}" disabled="${disabledInput}"/>
 
                     <g:textField class="span2" id="valueNum" name="valueNum"
                                  placeholder="${message(code: "contextItem.valueNum.label")}"
-                                 value="${instance?.valueNum}"/>
+                                 value="${instance?.valueNum}" disabled="${disabledInput}"/>
                     <g:textField class="span3" id="valueNumUnitId" name="valueNumUnitId"
                                  placeholder="${message(code: "contextItem.valueNumUnitId.label")}"
-                                 value="${instance?.valueNumUnitId}"/>
+                                 value="${instance?.valueNumUnitId}" disabled="${disabledInput}"/>
                     <span class="help-block">
                         <g:fieldError field="qualifier" bean="${instance}"/>
                         <g:fieldError field="valueNum" bean="${instance}"/>
@@ -74,26 +75,33 @@
                         code="contextItem.valueDisplay.label"/>:</label>
 
                 <div class="controls">
-                    <g:textField class="span8" id="valueDisplay" name="valueDisplay" value="${instance?.valueDisplay}"/>
+                    <g:textField class="span8" id="valueDisplay" name="valueDisplay" value="${instance?.valueDisplay}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="valueDisplay" bean="${instance}"/></span>
                 </div>
             </div>
 
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="${instance?.ownerController}" action="editContext"
-                            id="${instance?.contextOwnerId}"
-                            fragment="card-${instance?.contextId}" class="btn">Cancel</g:link>
-                    <button type="submit" name="_action_${action.toLowerCase()}"
-                            class="btn btn-primary">${action}</button>
+
+                    <g:if test="${reviewNewItem}">
+                        <g:link controller="${instance?.ownerController}" action="editContext"
+                                id="${instance?.contextOwnerId}"
+                                fragment="card-${instance?.contextId}" class="btn">Back to Context</g:link>
+                        <button type="submit" name="_action_edit" class="btn">Edit</button>
+                        <button type="submit" name="_action_create"
+                                class="btn btn-primary focus">Add Another Item</button>
+                    </g:if>
+                    <g:else>
+                        <g:link controller="${instance?.ownerController}" action="editContext"
+                                id="${instance?.contextOwnerId}"
+                                fragment="card-${instance?.contextId}" class="btn">Cancel</g:link>
+                        <button type="submit" name="_action_${action.toLowerCase()}"
+                                class="btn btn-primary">${action}</button>
+
+                    </g:else>
                 </div>
             </div>
 
         </g:form>
-        <r:script>
-            $(document).ready(function () {
-                $('attributeElementId').select2("data", {id:${instance?.attributeElementId}, text:${instance?.attributeElementLabel}});
-            });
-        </r:script>
     </div>
 </div>
