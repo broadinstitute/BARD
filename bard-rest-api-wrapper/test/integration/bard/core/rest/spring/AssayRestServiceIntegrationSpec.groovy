@@ -22,10 +22,10 @@ import static org.junit.Assert.assertTrue
 class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     AssayRestService assayRestService
     @Shared
-    List<Long> ADIDS_FOR_TESTS = [5155, 5158, 5157]
+    List<Long> ADIDS_FOR_TESTS = [25, 26, 27]
 
     @Shared
-    List<Long> CAP_ADIDS = [2934, 2945, 2946]
+    List<Long> CAP_ADIDS = [5168, 5981, 5982]
 
 
 
@@ -58,7 +58,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "getAssayAnnotationFromSearch"() {
         given:
-        final SearchParams searchParams = new SearchParams("dna repair")
+        final SearchParams searchParams = new SearchParams("quench")
         final AssayResult assayResult = assayRestService.findAssaysByFreeTextSearch(searchParams)
         final long adid = assayResult.assays.get(0).id
         when:

@@ -16,15 +16,15 @@ import spock.lang.Shared
 class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
     SubstanceRestService substanceRestService
     @Shared
-    List<Long> SIDS_FOR_TESTING = [136349013, 136349014, 136349015, 842899]
+    List<Long> SIDS_FOR_TESTING = [26726047, 125082031, 135378232, 85799539]
     @Shared
-    List<Long> EIDS_FOR_TESTING = [11795, 10790]
+    List<Long> EIDS_FOR_TESTING = [1, 2]
     @Shared
-    Long CID_FOR_TESTING = 2722
+    Long CID_FOR_TESTING = 2382353
 
     void "getSubstanceById sid - 6820697"() {
         given:
-        Long sid = 6820697
+        Long sid = 16953511
         Long expectedCID = 600
         when:
         final Substance substance = substanceRestService.getSubstanceById(sid)

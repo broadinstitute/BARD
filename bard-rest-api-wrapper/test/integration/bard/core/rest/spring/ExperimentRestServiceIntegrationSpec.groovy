@@ -17,15 +17,15 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     ExperimentRestService experimentRestService
     CompoundRestService compoundRestService
     @Shared
-    List<Long> TEST_CIDS = [5926293, 6197]
+    List<Long> TEST_CIDS = [6019589, 53347993]
     @Shared
-    List<Long> TEST_SIDS = [67101, 67121]
+    List<Long> TEST_SIDS = [14719086, 125082044]
     @Shared
-    List<Long> TEST_ADIDS = [5155, 5156]
+    List<Long> TEST_ADIDS = [25, 26]
     @Shared
-    List<Long> TEST_EIDS = [13902, 14980]
+    List<Long> TEST_EIDS = [1, 2]
     @Shared
-    List<Long> TEST_EID_LONG_LIST = [460, 461, 197, 198, 4171, 3278, 3274, 3277, 2362, 2637]
+    List<Long> TEST_EID_LONG_LIST = [1, 2, 3, 4, 5, 6, 7, 8]
 
 
     void "test activitiesByCIDs"() {

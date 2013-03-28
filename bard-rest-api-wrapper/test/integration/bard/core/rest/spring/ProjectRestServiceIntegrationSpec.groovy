@@ -21,9 +21,9 @@ import spock.lang.Unroll
 class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     ProjectRestService projectRestService
     @Shared
-    List<Long> PIDS = [1581, 1563, 1748]
+    List<Long> PIDS = [2]
     @Shared
-    List<Long> CAP_PIDS = [724, 246]
+    List<Long> CAP_PIDS = [3]
 
     void "searchProjectsByCapIds #label"() {
         when:

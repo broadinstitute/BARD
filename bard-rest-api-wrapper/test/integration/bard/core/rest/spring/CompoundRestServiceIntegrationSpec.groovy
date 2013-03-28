@@ -54,7 +54,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test getSummaryForCompound"() {
         given:
-        Long cid = 16760208
+        Long cid = 6019589
         when:
         CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
         then:

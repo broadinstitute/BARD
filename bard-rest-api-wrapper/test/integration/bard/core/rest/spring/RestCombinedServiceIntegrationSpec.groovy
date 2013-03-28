@@ -21,13 +21,13 @@ import spock.lang.Unroll
 @Unroll
 class RestCombinedServiceIntegrationSpec extends IntegrationSpec {
     @Shared
-    Long TEST_PID = 1963
+    Long TEST_PID = 2
     @Shared
-    Long TEST_EID = 13902
+    Long TEST_EID = 1
     @Shared
-    Long TEST_ADID = 8777
+    Long TEST_ADID = 25
     @Shared
-    Long TEST_CID = 9795907
+    Long TEST_CID = 2382353
 
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
