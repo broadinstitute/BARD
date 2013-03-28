@@ -18,6 +18,7 @@ modules = {
 		//resource url:'/css/mobile.css'
 		resource url:'/css/datatables/demo_table_jui.css'
 		resource url:'/js/application.js'
+		resource url: '/css/dl-horizontal-fix.css'
 	}
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
@@ -57,7 +58,7 @@ modules = {
     }
 
     summary{
-        resource url: '/js/cap/editSummary.js'
+        resource url: '/js/cap/editSummary.js'		
     }
 
     projectsummary{
