@@ -1,10 +1,9 @@
 package bard.db.registration
 
-import bard.db.dictionary.Descriptor
-import org.apache.commons.lang.StringUtils
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextOwner
 
-class AssayContext extends AbstractContext{
+class AssayContext extends AbstractContext {
 
     Assay assay
 
@@ -25,7 +24,12 @@ class AssayContext extends AbstractContext{
      * duck typing for context
      * @return list of assayContextItems
      */
-    List<AssayContextItem> getContextItems(){
+    List<AssayContextItem> getContextItems() {
         this.assayContextItems
+    }
+
+    @Override
+    AbstractContextOwner getOwner() {
+        return assay
     }
 }

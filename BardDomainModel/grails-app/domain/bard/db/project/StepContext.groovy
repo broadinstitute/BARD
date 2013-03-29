@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextOwner
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,5 +29,10 @@ class StepContext extends AbstractContext {
     @Override
     List<StepContextItem> getContextItems() {
         return getStepContextItems()
+    }
+
+    @Override
+    AbstractContextOwner getOwner() {
+        return projectStep
     }
 }

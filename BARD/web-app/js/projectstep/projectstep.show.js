@@ -76,7 +76,7 @@ function initFunction(){
 
     /* draw the graph using the RaphaelJS draw implementation */
     var renderer = new Graph.Renderer.Raphael('canvas', g, 800, 500);
-    var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 800, 100);
+    var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 800, 200);
 
     redraw = function () {
         layouter.layout();

@@ -24,7 +24,7 @@
         </caption>
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">
-            <tr id="${contextItem.id}" class='context_item_row'>
+            <tr id="${contextItem.id}" class="context_item_row ${highlightedItemId==contextItem.id?'warning':''}">
                 <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
                 <td class="valuedLabel">${contextItem.valueDisplay}</td>
             </tr>

@@ -20,6 +20,14 @@ modules = {
 		resource url:'/js/application.js'
 		resource url: '/css/dl-horizontal-fix.css'
 	}
+    contextItem {
+        dependsOn('select2')
+        resource url:'/js/cap/contextItem.js'
+        // adding the card and bootstrap-plus.css to get the current styling
+        // but may want to simplify the styling going forward
+        resource url:'/css/card.css'
+        resource url:'/css/bootstrap-plus.css'
+    }
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
 	}
