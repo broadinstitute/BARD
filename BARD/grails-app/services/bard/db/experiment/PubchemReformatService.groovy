@@ -117,7 +117,21 @@ class PubchemReformatService {
     }
 
     static class ResultMap {
-        Map<String, Collection<ResultMapRecord>> records = [:]
+        String aid;
+        Map<String, Collection<ResultMapRecord>> records;
+        Map<String, Collection<ResultMap>> recordsByParentTid;
+        Collection<String> tids;
+
+        public ResultMap(String aid, Collection<ResultMapRecord> rs) {
+            this.aid = aid;
+            records = rs.groupBy {it.resultType}
+            recordsByParentTid = rs.groupBy {it.parentTid}
+            tids = rs.collect {it.tid}
+        }
+
+        Collection<ResultMapRecord> getChildRecords(String tid) {
+            return recordsByParentTid.get(tid);
+        }
 
         List<Map<String,String>> getValues(Map<String,String> pubchemRow, String resultType, String statsModifier, String parentTid) {
             List<Map<String,String>> rows = []
@@ -134,9 +148,9 @@ class PubchemReformatService {
                         measureValue = pubchemRow[record.qualifierTid]+measureValue
                     }
                     kvs[label] = measureValue
+                    addContextValues(pubchemRow, record, kvs)
                 }
 
-                addContextValues(pubchemRow, record, kvs)
                 rows.add(kvs)
             }
             return rows
@@ -170,6 +184,48 @@ class PubchemReformatService {
         return resultType
     }
 
+    boolean memoizedHasNonBlankChild(Map<String,String> pubchemRow, ResultMap map, String tid, Map cache, Set seen) {
+        if (cache.containsKey(tid)) {
+            return cache[tid];
+        }
+
+        if (seen.contains(tid)) {
+            throw new RuntimeException("Found cycle in ${map.aid}")
+        }
+        seen.add(tid);
+
+        boolean found = false;
+        if (!StringUtils.isBlank(pubchemRow[tid])) {
+            found = true;
+        } else {
+            for(record in map.getChildRecords(tid)) {
+                if (memoizedHasNonBlankChild(pubchemRow, map, record.tid, cache, seen)) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        cache[tid] = found
+        return found;
+    }
+
+    void naMissingValues(Map<String,String> pubchemRow, ResultMap map) {
+        List needsNa = []
+        Map cache = [:]
+        map.getTids().each {tid ->
+            def v = pubchemRow[tid]
+            if (StringUtils.isBlank(v) && memoizedHasNonBlankChild(pubchemRow, map, tid, cache, new HashSet())) {
+                needsNa.add(tid)
+            }
+        }
+
+        for(key in needsNa) {
+            pubchemRow[key] = "NA"
+        }
+    }
+
+
     void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String,String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
         for(expMeasure in measures) {
             String resultType = expMeasure.measure.resultType.label
@@ -201,8 +257,7 @@ class PubchemReformatService {
         return new ArrayList(colNames)
     }
 
-    public ResultMap convertToResultMap(List rows) {
-        ResultMap map = new ResultMap()
+    public ResultMap convertToResultMap(String aid, List rows) {
         Map byTid = [:]
         List<ResultMapRecord>  records = [];
 
@@ -242,17 +297,15 @@ class PubchemReformatService {
             }
         }
 
-        map.records = records.groupBy {it.resultType}
-
+        ResultMap map = new ResultMap(aid, records)
         return map;
     }
 
     //TODO: fix concentration unit check
     public ResultMap loadMap(Connection connection, Long aid) {
-        ResultMap map = new ResultMap()
         Sql sql = new Sql(connection)
         List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM result_map WHERE AID = ?", [aid])
-        map = convertToResultMap(rows)
+        ResultMap map = convertToResultMap(aid.toString(), rows)
         println("${map}")
         return map
     }
@@ -297,6 +350,7 @@ class PubchemReformatService {
             Long substanceId = Long.parseLong(row[0])
             Map pubchemRow = convertPubchemRowToMap(row, header);
 
+            naMissingValues(pubchemRow, map)
             convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null)
         }
 
