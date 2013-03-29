@@ -80,9 +80,9 @@ grails.project.dependency.resolution = {
     plugins {
         //build scope
         build ":tomcat:$grailsVersion"
-        build ":codenarc:0.18.1" {
-            excludes "groovy-all"
-        }
+ //       build ":codenarc:0.18.1" {
+//            excludes "groovy-all"
+ //       }
 
         // compile scope
         compile ":jquery-ui:1.8.15"
