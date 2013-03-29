@@ -121,12 +121,15 @@ class PubchemReformatService {
         Map<String, Collection<ResultMapRecord>> records;
         Map<String, Collection<ResultMap>> recordsByParentTid;
         Collection<String> tids;
+        Collection<ResultMapRecord> allRecords;
 
         public ResultMap(String aid, Collection<ResultMapRecord> rs) {
             this.aid = aid;
             records = rs.groupBy {it.resultType}
             recordsByParentTid = rs.groupBy {it.parentTid}
             tids = rs.collect {it.tid}
+            allRecords = new ArrayList(rs);
+            allRecords.sort { Integer.parseInt(it.tid) }
         }
 
         Collection<ResultMapRecord> getChildRecords(String tid) {
@@ -306,8 +309,19 @@ class PubchemReformatService {
         Sql sql = new Sql(connection)
         List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM result_map WHERE AID = ?", [aid])
         ResultMap map = convertToResultMap(aid.toString(), rows)
-        println("${map}")
         return map
+    }
+
+    public ResultMap loadMap(Long aid) {
+        ResultMap map;
+        Experiment.withSession { Session session ->
+            session.doWork(new Work() {
+                void execute(Connection connection) throws SQLException {
+                    map = loadMap(connection, aid);
+                }
+            })
+        }
+        return map;
     }
 
     public Map convertPubchemRowToMap(List<String> row, List<String> header) {
@@ -357,18 +371,13 @@ class PubchemReformatService {
         writer.close()
     }
 
+
     void convert(Long expId, String pubchemFilename, String outputFilename)  {
         ResultMap map;
         Experiment experiment = Experiment.get(expId)
         ExternalReference ref = experiment.getExternalReferences().find {it.externalSystem.systemName == "PubChem"}
         Long aid = Long.parseLong(ref.extAssayRef.replace("aid=", ""));
-        Experiment.withSession { Session session ->
-            session.doWork(new Work() {
-                void execute(Connection connection) throws SQLException {
-                    map = loadMap(connection, aid);
-                }
-            })
-        }
+        ResultMap = loadMap(aid)
         convert(experiment, pubchemFilename, outputFilename, map)
     }
 }
