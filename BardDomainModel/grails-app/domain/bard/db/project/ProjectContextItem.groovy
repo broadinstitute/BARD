@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 /**
@@ -9,7 +10,7 @@ import bard.db.model.AbstractContextItem
  * Time: 12:02 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectContextItem extends AbstractContextItem {
+class ProjectContextItem extends AbstractContextItem<ProjectContext> {
     ProjectContext context
 
     static belongsTo = [context: ProjectContext]
@@ -21,4 +22,5 @@ class ProjectContextItem extends AbstractContextItem {
         valueElement(column: 'VALUE_ID')
         qualifier(column: "QUALIFIER", sqlType: "char", length: 2)
     }
+
 }

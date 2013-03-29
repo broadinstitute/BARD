@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 /**
@@ -9,7 +10,7 @@ import bard.db.model.AbstractContextItem
  * Time: 12:03 AM
  * To change this template use File | Settings | File Templates.
  */
-class StepContextItem extends AbstractContextItem {
+class StepContextItem extends AbstractContextItem<StepContext> {
 
     StepContext stepContext
 
@@ -21,5 +22,17 @@ class StepContextItem extends AbstractContextItem {
         valueElement(column: "value_id", fetch: 'join')
         attributeElement(column: "attribute_id", fetch: 'join')
         qualifier(column: "qualifier", sqlType: "char", length: 2)
+    }
+
+    static transients = ['context']
+
+    @Override
+    StepContext getContext() {
+        return stepContext
+    }
+
+    @Override
+    void setContext(StepContext context) {
+        this.context = context
     }
 }
