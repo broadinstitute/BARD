@@ -568,6 +568,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         ResultsService service = new ResultsService();
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
+        // three nested measures
         Measure parentMeasure = Measure.build(resultType: Element.build(label: "parentCol"))
         Measure childMeasure = Measure.build(resultType: Element.build(label: "childCol"))
         Measure child2Measure = Measure.build(resultType: Element.build(label: "child2Col"))
@@ -591,5 +592,36 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         // make sure that this child has no more children
         childResult.resultHierarchiesForParentResult.size() == 0
+    }
+
+    ResultsService.Row makeRow(Map map) {
+        List cells = map.collect { k, v -> ResultsService.RawCell(columnName: k, value: v) }
+        return new ResultsService.Row(cells: cells)
+    }
+
+    void 'test duplicate result type names'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
+        // a result type is used by two different measures
+        // there are two parents, which each have a child.  Both children have the same result type
+        Measure parent1Measure = Measure.build(resultType: Element.build(label: "parent1"))
+        Measure parent2Measure = Measure.build(resultType: Element.build(label: "parent2"))
+        Element duplicatedResultType = Element.build(label: "childCol")
+        Measure child1Measure = Measure.build(resultType: duplicatedResultType)
+        Measure child2Measure = Measure.build(resultType: duplicatedResultType)
+        ExperimentMeasure parent1ExpMeasure = ExperimentMeasure.build(measure: parent1Measure)
+        ExperimentMeasure parent2ExpMeasure = ExperimentMeasure.build(measure: parent2Measure)
+        ExperimentMeasure child1ExpMeasure = ExperimentMeasure.build(measure: child1Measure, parent: parent1ExpMeasure)
+        ExperimentMeasure child2ExpMeasure = ExperimentMeasure.build(measure: child2Measure, parent: parent2ExpMeasure)
+
+        when:
+        Collection<Result> results = service.extractResultFromEachRow(parent1ExpMeasure, [makeRow(["parent1": "1"]), makeRow([ "childCol" : "2"])], [:], new IdentityHashMap(), errors, [:])
+
+        then:
+        !errors.hasErrors()
+        results.size() == 1
+        results.first().resultHierarchiesForParentResult.size()==1
     }
 }
