@@ -48,6 +48,11 @@ class ResultsService {
     BulkResultService bulkResultService
     SpringSecurityService springSecurityService;
 
+    public static class ImportOptions {
+        boolean validateSubstances = true;
+        boolean writeResultsToDb = true;
+    }
+
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
     }
@@ -289,6 +294,19 @@ class ResultsService {
         Long sid;
 
         List<RawCell> cells = [];
+
+        RawCell find(String columnName) {
+            RawCell found = null;
+
+            for(cell in cells) {
+                if (cell.columnName == columnName) {
+                    found = cell;
+                    break;
+                }
+            }
+
+            return found;
+        }
     }
 
     static class Cell {
@@ -681,11 +699,11 @@ class ResultsService {
     Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
         List<Result> results = []
 
-        for(row in rows) {
-            Map<String, RawCell> valueByColumn = row.cells.collectEntries { [it.columnName, it] }
+        String label = measure.measure.displayLabel
 
-            String label = measure.measure.displayLabel
-            RawCell cell = valueByColumn.get(label)
+        for(row in rows) {
+            // change this to a call to find
+            RawCell cell = row.find(label)
 
             if(cell != null) {
                 // mark this cell as having been consumed
@@ -716,7 +734,7 @@ class ResultsService {
                 // likewise create each of the context items associated with this measure
                 results.add(result);
                 for(item in itemsByMeasure[measure.measure]) {
-                    RawCell itemCell = valueByColumn[item.displayLabel]
+                    RawCell itemCell = row.find(item.displayLabel)
                     if (itemCell != null) {
                         unused.remove(itemCell)
                         ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
@@ -934,7 +952,11 @@ class ResultsService {
         return result
     }
 
-    ImportSummary importResults(Experiment experiment, InputStream input) {
+    ImportSummary importResults(Experiment experiment, InputStream input, ImportOptions options = null) {
+        if (options == null) {
+            options = new ImportOptions();
+        }
+
         String originalFilename = archivePathService.constructUploadResultPath(experiment)
         String exportFilename = archivePathService.constructExportResultPath(experiment)
         File archivedFile = archivePathService.prepareForWriting(originalFilename)
@@ -944,7 +966,7 @@ class ResultsService {
         input.close()
         output.close()
 
-        ImportSummary summary = importResultsWithoutSavingOriginal(experiment, new GZIPInputStream(new FileInputStream(archivedFile)), originalFilename, exportFilename);
+        ImportSummary summary = importResultsWithoutSavingOriginal(experiment, new GZIPInputStream(new FileInputStream(archivedFile)), originalFilename, exportFilename, options);
         if (summary.hasErrors()) {
             archivedFile.delete()
         }
@@ -963,7 +985,7 @@ class ResultsService {
         return itemsByMeasure
     }
 
-    ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename) {
+    ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename, ImportOptions options) {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
@@ -977,7 +999,7 @@ class ResultsService {
             errors.topLines = parsed.topLines
 
             def missingSids = []
-            if (!System.hasProperty("skipSubstanceValidation"))
+            if (options.validateSubstances)
                 missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
 
             missingSids.each {
@@ -1000,7 +1022,7 @@ class ResultsService {
                     // and persist these results to the DB
                     Collection<ExperimentContext>contexts = parsed.contexts;
 
-                    persist(experiment, results, errors, contexts, originalFilename, exportFilename)
+                    persist(experiment, results, errors, contexts, originalFilename, exportFilename, options)
                 }
             }
         }
@@ -1051,7 +1073,7 @@ class ResultsService {
     }
 
 
-    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename) {
+    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename, ImportOptions options) {
         deleteExperimentResults(experiment)
 
         results.each {
@@ -1079,7 +1101,8 @@ class ResultsService {
 
         errors.resultsCreated = results.size()
 
-        bulkResultService.insertResults(getUsername(), experiment, results)
+        if (options.writeResultsToDb)
+            bulkResultService.insertResults(getUsername(), experiment, results)
 
         resultsExportService.dumpFromList(exportFilename, results)
 
