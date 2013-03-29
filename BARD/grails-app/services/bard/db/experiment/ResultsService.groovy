@@ -686,59 +686,51 @@ class ResultsService {
 
             String label = measure.measure.displayLabel
             RawCell cell = valueByColumn.get(label)
-            String cellValue = "NA";
 
             if(cell != null) {
                 // mark this cell as having been consumed
                 unused.remove(cell)
-                cellValue = cell.value
-            }
+                String cellValue = cell.value
 
-            Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
-            if (result == null)
-                continue;
+                Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
+                if (result == null)
+                    continue;
 
-            // children can be on the same row or any row that has this row as its parent
-            // so combine those two collections
-            List<Row> possibleChildRows = [row]
-            Collection<Row> childRows = byParent[row.rowNumber]
-            if (childRows != null) {
-                possibleChildRows.addAll(childRows)
-            }
-
-            // for each child measure, create a result per row in each of the child rows
-            for(child in measure.childMeasures) {
-                Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
-
-                for(childResult in resultChildren) {
-                    linkResults(child.parentChildRelationship, errors, 0, childResult, result);
+                // children can be on the same row or any row that has this row as its parent
+                // so combine those two collections
+                List<Row> possibleChildRows = [row]
+                Collection<Row> childRows = byParent[row.rowNumber]
+                if (childRows != null) {
+                    possibleChildRows.addAll(childRows)
                 }
-            }
 
-            // likewise create each of the context items associated with this measure
-            for(item in itemsByMeasure[measure.measure]) {
-                RawCell itemCell = valueByColumn[item.displayLabel]
-                if (itemCell != null) {
-                    unused.remove(itemCell)
-                    ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
+                // for each child measure, create a result per row in each of the child rows
+                for(child in measure.childMeasures) {
+                    Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
 
-                    if (resultItem != null) {
-                        resultItem.result = result
-                        result.resultContextItems.add(resultItem)
+                    for(childResult in resultChildren) {
+                        linkResults(child.parentChildRelationship, errors, 0, childResult, result);
                     }
                 }
-            }
 
-            if (!isNullResult(result)) {
-                results.add(result)
+                // likewise create each of the context items associated with this measure
+                results.add(result);
+                for(item in itemsByMeasure[measure.measure]) {
+                    RawCell itemCell = valueByColumn[item.displayLabel]
+                    if (itemCell != null) {
+                        unused.remove(itemCell)
+                        ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
+
+                        if (resultItem != null) {
+                            resultItem.result = result
+                            result.resultContextItems.add(resultItem)
+                        }
+                    }
+                }
             }
         }
 
         return results;
-    }
-
-    boolean isNullResult(Result result) {
-        return result.valueDisplay == "NA" && result.resultContextItems.size() == 0 && result.resultHierarchiesForParentResult.size() == 0
     }
 
     void validateParentRowsExist(Collection<Row> rows, ImportSummary errors) {
