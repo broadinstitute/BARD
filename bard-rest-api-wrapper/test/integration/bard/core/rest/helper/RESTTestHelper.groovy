@@ -27,10 +27,10 @@ class RESTTestHelper {
     SearchParams constructSearchParamsWithFilters() {
         //given the following filters
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["gobp_term", "DNA repair"] as String[])
+        filters.add(["gobp_term", "DiI"] as String[])
         filters.add(["gobp_term", "response to UV-C"] as String[])
         //construct Search Params
-        return new SearchParams("dna repair", filters);
+        return new SearchParams("DiI", filters);
 
     }
 

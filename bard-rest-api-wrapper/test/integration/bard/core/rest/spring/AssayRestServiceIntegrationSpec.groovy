@@ -162,16 +162,16 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void testApplyMultipleFiltersWithinTheSameCategoryWithAssayService() {
         given:
         //Do a search with no filters
-        final SearchParams searchParamsWithNoFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsWithNoFilters = new SearchParams("\"DiI\"");
         searchParamsWithNoFilters.setSkip(new Long(0));
         searchParamsWithNoFilters.setTop(new Long(10));
 
-        //now apply filters with detection method type=spectrophotometry method or detection method type= image-based
+        //now apply filters with detection method type=fluorescence intensity or detection method type= luminescence method
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["detection_method_type", "\"spectrophotometry method\""] as String[])
-        filters.add(["detection_method_type", "\"image-based\""] as String[])
+        filters.add(["detection_method_type", "\"fluorescence intensity\""] as String[])
+        filters.add(["detection_method_type", "\"luminescence method\""] as String[])
 
-        final SearchParams searchParamsWithFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsWithFilters = new SearchParams("\"DiI\"");
         searchParamsWithFilters.setSkip(new Long(0));
         searchParamsWithFilters.setTop(new Long(10));
         searchParamsWithFilters.setFilters(filters);
@@ -190,17 +190,17 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void testApplyFiltersWithAssayService() {
         given:
         //Do a search with no filters
-        final SearchParams searchParamsWithNoFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsWithNoFilters = new SearchParams("\"DiI\"");
         searchParamsWithNoFilters.setSkip(new Long(0));
         searchParamsWithNoFilters.setTop(new Long(10));
 
-        //now apply filters with detection method type=spectrophotometry method
-        //There are at least 7 of them
+        //now apply filters with detection method type=fluorescence intensity
+        //There are at least 4 of them
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["detection_method_type", "\"spectrophotometry method\""] as String[])
+        filters.add(["detection_method_type", "\"fluorescence intensity\""] as String[])
 
 
-        final SearchParams searchParamsWithFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsWithFilters = new SearchParams("\"DiI\"");
         searchParamsWithFilters.setSkip(new Long(0));
         searchParamsWithFilters.setTop(new Long(10));
         searchParamsWithFilters.setFilters(filters);
@@ -245,16 +245,16 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void testFiltersWithAssayServiceParenthesisInFilterValue() {
         given:
         //Do a search with no filters
-        final SearchParams searchParamsWithNoFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsWithNoFilters = new SearchParams("\"DiI\"");
         searchParamsWithNoFilters.setSkip(new Long(0));
         searchParamsWithNoFilters.setTop(new Long(10));
 
-        //now apply filters with detection method type=spectrophotometry method
-        //There are at least 7 of them
+        //now apply filters with detection method type=target cell
+        //There are at least 4 of them
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["target_name", "\"DNA (cytosine-5)-methyltransferase 1\""] as String[])
+        filters.add(["Assay component role", "\"target cell\""] as String[])
 
-        final SearchParams searchParamsWithFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsWithFilters = new SearchParams("\"DiI\"");
         searchParamsWithFilters.setSkip(new Long(0));
         searchParamsWithFilters.setTop(new Long(10));
         searchParamsWithFilters.setFilters(filters);
@@ -275,14 +275,14 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void testApplyMultipleFiltersFromDifferentCategoriesWithAssayService() {
         given:
         //Do a search with no filters
-        final SearchParams searchParamsFilters = new SearchParams("\"dna repair\"");
+        final SearchParams searchParamsFilters = new SearchParams("\"DiI\"");
         searchParamsFilters.setSkip(new Long(0));
         searchParamsFilters.setTop(new Long(10));
 
-        //now apply filters with detection_method_type="spectrophotometry method" and  detection_method_type=" image-based"
+        //now apply filters with detection_method_type="fluorescence intensity" and  Assay component role="target cell"
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["detection method type", "\"spectrophotometry method\""] as String[])
-        filters.add(["assay component role", "\"target\""] as String[])
+        filters.add(["Detection method type", "\"fluorescence intensity\""] as String[])
+        filters.add(["Assay component role", "\"target cell\""] as String[])
 
         searchParamsFilters.setFilters(filters);
         when:
