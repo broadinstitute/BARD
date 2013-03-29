@@ -307,6 +307,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
         "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
         "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
+        "nonrange"            | "non-info" | null          | null              | null   | null    | "non-info"
         "free text"           | "free"     | null          | null              | null   | null    | "free"
     }
 

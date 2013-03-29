@@ -127,7 +127,8 @@ class ResultsService {
             }
             catch(NumberFormatException e)
             {
-                return "Could not parse \"${value}\" as a range"
+                // if we fail to parse it as a range, treat it as free text
+                return new Cell(valueDisplay: value)
             }
 
             Cell cell = new Cell(minValue: minValue, maxValue: maxValue, valueDisplay: "${minValue}-${maxValue}")
