@@ -995,6 +995,10 @@ class ResultsService {
             {
                 def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
 
+                if (!errors.hasErrors() && results.size() == 0) {
+                    errors.addError(0, 0, "No results were produced")
+                }
+
                 if (!errors.hasErrors()) {
                     checkForDuplicates(errors, results)
                 }
