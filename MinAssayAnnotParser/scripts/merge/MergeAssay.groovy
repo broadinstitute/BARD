@@ -35,6 +35,8 @@ for (String id : ids) {
             println("Assay id ${it} not found")
     }
     merge(assays, modifiedBy)
+   // def aids = [2050,5644,5635,5636,5642,1947,5634,5638,5978,5645,5637,5221,5223,5414,1468,5163, 5509]   // dataset1, should update the status
+   // updateStatus(aids, modifiedBy)
 }
 
 def merge(List<Assay> assays, String modifiedBy) {
@@ -64,9 +66,23 @@ def merge(List<Assay> assays, String modifiedBy) {
         mergeAssayService.handleMeasure(removingAssays, assayWillKeep, modifiedBy)         // associate measure
     }
     println("end handleMeasure")
+    println("Update assays status to Retired")
+    Assay.withTransaction { status ->
+        mergeAssayService.updateStatus(removingAssays, modifiedBy)         // associate measure
+    }
+    println("End of marking assayStatus to retired")
 
 }
 
+def updateStatus(List<Long> aids, modifiedBy) {
+    MergeAssayService mergeAssayService = new MergeAssayService()
+    def assays = []
+    aids.each{Long aid->
+        Assay found = Assay.findById(Long.valueOf(aid))
+        assays<<found
+    }
+    mergeAssayService.updateStatus(assays, modifiedBy)
+}
 //def delete(List<Assay> assays) {
 //    def db = grailsApplication.config.dataSource
 //    def sql = Sql.newInstance(db.url, db.username, db.password, db.driverClassName)

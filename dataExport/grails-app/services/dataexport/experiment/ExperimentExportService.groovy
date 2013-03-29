@@ -16,6 +16,7 @@ import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
 
 import bard.db.experiment.*
+import clover.org.apache.commons.lang.StringUtils
 
 /**
  * Class that generates Experiments as XML
@@ -137,6 +138,15 @@ class ExperimentExportService extends ExportAbstractService {
         attributes.put('status', convertStatusToString(experiment.experimentStatus))
         attributes.put('readyForExtraction', experiment.readyForExtraction.getId())
         attributes.put('confidenceLevel', experiment.confidenceLevel?.toString())
+        if(experiment.lastUpdated){
+            final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(experiment.lastUpdated);
+            final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+           attributes.put('lastUpdated', lastUpdatedDate.toString())
+        }
+        if(StringUtils.isNotBlank(experiment.modifiedBy)){
+            attributes.put('modifiedBy', experiment.modifiedBy)
+        }
 
         if (experiment.holdUntilDate) {   //convert date to XML date
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();

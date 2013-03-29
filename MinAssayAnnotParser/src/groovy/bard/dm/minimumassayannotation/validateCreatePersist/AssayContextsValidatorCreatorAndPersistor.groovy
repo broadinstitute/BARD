@@ -204,7 +204,11 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             if (externalTermMap.containsKey(extValueId.toLowerCase())) {
                 extValueId = externalTermMap.get(extValueId.toLowerCase())
             } else if (!StringUtils.isNumeric(extValueId)) {
-                logger.info("possible GO term or species name that is not mapped: ${extValueId}")
+                //logger.info("possible GO term or species name that is not mapped: ${extValueId}")
+                loadResultsWriter.write(contextDTO, assayContextItem.assayContext.assay.id,
+                        ContextLoadResultsWriter.LoadResultType.fail, null, 0,
+                        "possible GO term or species name that is not mapped: ${extValueId} in ${findByLabelIlike}")
+                return false
             }
         }
 

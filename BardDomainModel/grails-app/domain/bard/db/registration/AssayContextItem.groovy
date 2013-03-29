@@ -1,12 +1,12 @@
 package bard.db.registration
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apache.commons.lang3.StringUtils
 
-class AssayContextItem extends AbstractContextItem {
-
+class AssayContextItem extends AbstractContextItem<AssayContext> {
 
     AttributeType attributeType
     AssayContext assayContext
@@ -18,5 +18,17 @@ class AssayContextItem extends AbstractContextItem {
         valueElement(column: "value_id", fetch: 'join')
         attributeElement(column: "attribute_id", fetch: 'join')
         qualifier(column: "qualifier", sqlType: "char", length: 2)
+    }
+
+    static transients = ['context']
+
+    @Override
+    AssayContext getContext() {
+        return assayContext
+    }
+
+    @Override
+    void setContext(AssayContext context) {
+        this.assayContext = context
     }
 }

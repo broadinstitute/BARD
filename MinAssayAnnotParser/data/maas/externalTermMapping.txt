@@ -7,3 +7,17 @@ cell death	0008219
 Mus musculus	10090
 Homo sapiens	9606
 Cricetulus griseus	10029
+Saccharomyces cerevisiae	4932
+Trypanosoma cruzi	5693
+Vibrio cholerae	666
+Plasmodium falciparum	5833
+Clostridium kluyveri	1534
+Photinus pyralis	7054
+Rattus norvegicus	10116
+Hepatitis C virus	11103
+Oryctolagus Cuniculus	9986
+Capra aegagrus hircus	9925
+cell cycle arrest	0007050
+Escherichia coli	562
+Equus caballus	9796
+Human immunodeficiency virus 1	11676

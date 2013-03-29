@@ -15,8 +15,21 @@ import bard.db.dictionary.Element
 
 Map elementAndDescription = [:]
 Map elementParent = [:]
+// data format with element, description, parentid
 ElementHandlerService.build("data/maas/missingElements.txt", elementAndDescription, elementParent)
 ElementHandlerService elementHandlerService = new ElementHandlerService()
+Element.withTransaction { DefaultTransactionStatus status ->
+    elementHandlerService.addMissingElement("xiaorong-maas", elementAndDescription, elementParent)
+}
+
+elementAndDescription = [:]
+elementParent = [:]
+// data format with element, description
+// data format with element, parentid
+ElementHandlerService.buildElementDescription("data/maas/elementDescription.txt", elementAndDescription)
+ElementHandlerService.buildElementParent("data/maas/elementParent.txt", elementParent)
+
+elementHandlerService = new ElementHandlerService()
 Element.withTransaction { DefaultTransactionStatus status ->
     elementHandlerService.addMissingElement("xiaorong-maas", elementAndDescription, elementParent)
 }

@@ -19,57 +19,61 @@
         registerAddNewCardButtons()
     </r:script>
 
-    <div id="dialog_new_card">
-        <form id="new_card_form" class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="edit_card_name">Name:</label>
+    <g:if test="${contextOwner instanceof  bard.db.registration.Assay}">
 
-                <div class="controls">
-                    <input type="text" id="new_card_name" name="cardName" placeholder="Enter Card Name">
+        <div id="dialog_new_card">
+            <form id="new_card_form" class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="edit_card_name">Name:</label>
+
+                    <div class="controls">
+                        <input type="text" id="new_card_name" name="cardName" placeholder="Enter Card Name">
+                    </div>
                 </div>
-            </div>
-            <input type="hidden" id="new_card_section" name="cardSection" value=""/>
-            <input type="hidden" name="instanceId" value="${contextOwner.id}"/>
-        </form>
-    </div>
+                <input type="hidden" id="new_card_section" name="cardSection" value=""/>
+                <input type="hidden" name="instanceId" value="${contextOwner.id}"/>
+            </form>
+        </div>
 
-    <div id="dialog_edit_card">
-        <form id="edit_card_form" class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="edit_card_name">Name:</label>
 
-                <div class="controls">
-                    <input type="text" id="edit_card_name" name="edit_card_name" placeholder="Enter Card Name">
+
+        <div id="dialog_edit_card">
+            <form id="edit_card_form" class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="edit_card_name">Name:</label>
+
+                    <div class="controls">
+                        <input type="text" id="edit_card_name" name="edit_card_name" placeholder="Enter Card Name">
+                    </div>
                 </div>
-            </div>
-            <input type="hidden" id="contextId" name="contextId" value=""/>
-            <input type="hidden" id="instanceId" name="instanceId" value="${contextOwner.id}"/>
-        </form>
-    </div>
+                <input type="hidden" id="contextId" name="contextId" value=""/>
+                <input type="hidden" id="instanceId" name="instanceId" value="${contextOwner.id}"/>
+            </form>
+        </div>
 
-    <div id="dialog_move_item"></div>
+        <div id="dialog_move_item"></div>
 
-    <div id="dialog_confirm_delete_item">
-        <p>
-            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-            This item will be permanently deleted and cannot be recovered. Are you sure?
-        </p>
-    </div>
+        <div id="dialog_confirm_delete_item">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+                This item will be permanently deleted and cannot be recovered. Are you sure?
+            </p>
+        </div>
 
-    <div id="dialog_confirm_delete_card">
-        <p>
-            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-            This card will be permanently deleted and cannot be recovered. Are you sure?
-        </p>
-    </div>
+        <div id="dialog_confirm_delete_card">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+                This card will be permanently deleted and cannot be recovered. Are you sure?
+            </p>
+        </div>
 
-    <div id="dialog_add_item_wizard"></div>
+        <div id="dialog_add_item_wizard"></div>
 
-    <div id="dialog_add_item_wizard_confirm_cancel">
-        <p>
-            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-            Are you sure you want to cancel the Add Item Wizard?
-        </p>
-    </div>
-
+        <div id="dialog_add_item_wizard_confirm_cancel">
+            <p>
+                <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+                Are you sure you want to cancel the Add Item Wizard?
+            </p>
+        </div>
+    </g:if>
 </div>

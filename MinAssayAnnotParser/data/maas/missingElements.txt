@@ -54,4 +54,8 @@ Huh7	 Huh7 cell line
 CytoTox-ONE Homogenous Membrane Integrity Assay	 
 // 3-2013
 science officer	 	555
-uCi/mL	 	1170	
+uCi/mL	 	1170
+//Label	Description	Parent ID	Parent Label
+ThermoFinnigan TSQ Quantum triple quadrupole MS		92	detection instrument name
+gel electrophoresis		177	label-free method	
+Duke Scientific 4 um bead	63	assay kit name

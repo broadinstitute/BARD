@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextOwner
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,4 +25,8 @@ class ProjectExperimentContext extends AbstractContext{
         contextItems(indexColumn: [name: 'DISPLAY_ORDER'])
     }
 
+    @Override
+    AbstractContextOwner getOwner() {
+        return projectExperiment
+    }
 }

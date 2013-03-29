@@ -24,13 +24,6 @@
             <div class="pull-left">
                 <h4>View Project (PID: ${instance?.id})</h4>
             </div>
-            %{--The edit function is broken in project, temporary hide this for ESP demo--}%
-            %{--<g:if test="${instance?.id}">--}%
-                %{--<div class="pull-right">--}%
-                    %{--<g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Edit</g:link>--}%
-                    %{--<g:link action="edit" id="${instance?.id}" class="btn btn-small btn-info">Clone</g:link>--}%
-                %{--</div>--}%
-            %{--</g:if>--}%
         </div>
     </div>
 </div>
@@ -79,7 +72,7 @@
                     <div id="target-contexts-info" class="accordion-body in collapse">
                         <div class="accordion-inner">
                             <g:render template="../context/show"
-                                      model="[contextOwner: instance, contexts: instance.groupContexts(), uneditable: true]"/>
+                                      model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
                         </div>
                     </div>
                 </div>

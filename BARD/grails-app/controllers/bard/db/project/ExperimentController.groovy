@@ -1,5 +1,6 @@
 package bard.db.project
 
+import java.text.SimpleDateFormat
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.experiment.ExperimentService
@@ -41,7 +42,7 @@ class ExperimentController {
 
     def update() {
         def experiment = Experiment.get(params.id)
-        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo","experimentStatus"] = params
+		setEditFormParams(experiment)
         experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
         if (!experiment.save(flush: true)) {
             renderEdit(experiment, experiment.assay)
@@ -55,7 +56,7 @@ class ExperimentController {
 
         Experiment experiment = new Experiment()
         experiment.assay = assay
-        experiment.properties["experimentName","description","holdUntilDate","runDateFrom","runDateTo","experimentStatus"] = params
+		setEditFormParams(experiment)
         experiment.dateCreated = new Date()
         if (!experiment.save(flush: true)) {
             println("errors:"+experiment.errors)
@@ -65,6 +66,18 @@ class ExperimentController {
             redirect(action: "show", id: experiment.id)
         }
     }
+	
+	private def setEditFormParams(Experiment experiment){
+//		experiment.properties["experimentName","description","experimentStatus"] = params
+//		experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : experiment.holdUntilDate
+//		experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : experiment.runDateFrom
+//		experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : experiment.runDateTo
+		
+		experiment.properties["experimentName","description","experimentStatus"] = params
+		experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : null
+		experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
+		experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
+	}
 
     def show() {
         def experimentInstance = Experiment.get(params.id)

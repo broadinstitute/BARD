@@ -54,7 +54,7 @@ class OntologyJSonController {
     }
 
     def getValueDescriptors() {
-        if (params?.term && params?.section && params?.attributeId) {
+        if (params?.term && params?.attributeId) {
             List<Element> elements = ontologyDataAccessService.getElementsForValues(params.attributeId.toLong(), params.term)
             List attributes = new ArrayList()
             for (Element element in elements) {
