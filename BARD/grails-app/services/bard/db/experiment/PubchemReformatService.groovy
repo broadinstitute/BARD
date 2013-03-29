@@ -373,11 +373,10 @@ class PubchemReformatService {
 
 
     void convert(Long expId, String pubchemFilename, String outputFilename)  {
-        ResultMap map;
         Experiment experiment = Experiment.get(expId)
         ExternalReference ref = experiment.getExternalReferences().find {it.externalSystem.systemName == "PubChem"}
         Long aid = Long.parseLong(ref.extAssayRef.replace("aid=", ""));
-        ResultMap = loadMap(aid)
+        ResultMap map = loadMap(aid)
         convert(experiment, pubchemFilename, outputFilename, map)
     }
 }
