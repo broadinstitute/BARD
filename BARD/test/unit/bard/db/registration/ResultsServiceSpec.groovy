@@ -16,6 +16,8 @@ import spock.lang.IgnoreRest
 import spock.lang.Unroll
 import grails.test.mixin.*
 
+import bard.db.experiment.results.*;
+
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
@@ -42,23 +44,23 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         def parentResultType = Element.build(label: "parent")
         def parentMeasure = Measure.build(resultType: parentResultType)
-        def parentCell = new ResultsService.RawCell(columnName: "parent", value: "1")
+        def parentCell = new RawCell(columnName: "parent", value: "1")
 
         def childResultType = Element.build(label: "child")
         def childMeasure = Measure.build(resultType: childResultType)
-        def childCell = new ResultsService.RawCell(columnName: "child", value: "1")
+        def childCell = new RawCell(columnName: "child", value: "1")
 
         ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(measure: parentMeasure)
         ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: "Derived from")
         parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
-        List<ResultsService.Row> rows;
+        List<Row> rows;
         if (onSameLine) {
-            def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [parentCell, childCell], replicate: 1)
+            def row = new Row(rowNumber: 1, sid: substance.id, cells: [parentCell, childCell], replicate: 1)
             rows = [row]
         } else {
-            def row0 = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [parentCell], replicate: 1)
-            def row1 = new ResultsService.Row(rowNumber: 2, parentRowNumber: 1, sid: substance.id, cells: [childCell], replicate: 1)
+            def row0 = new Row(rowNumber: 1, sid: substance.id, cells: [parentCell], replicate: 1)
+            def row1 = new Row(rowNumber: 2, parentRowNumber: 1, sid: substance.id, cells: [childCell], replicate: 1)
             rows = [row0, row1]
         }
 
@@ -230,8 +232,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
         !errors.hasErrors()
 
         when:
-        ResultsService.Row row0 = result.rows.get(0)
-        ResultsService.Row row1 = result.rows.get(1)
+        Row row0 = result.rows.get(0)
+        Row row1 = result.rows.get(1)
 
         then:
         row0.parentRowNumber == null
@@ -325,7 +327,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def resultType = Element.build(label: "x")
         def measure = Measure.build(resultType: resultType)
         def experimentMeasure = ExperimentMeasure.build(measure: measure)
-        def row = new ResultsService.Row(rowNumber: 1, sid: substance.id, cells: [new ResultsService.RawCell(columnName: "x", value: "5")], replicate: 1)
+        def row = new Row(rowNumber: 1, sid: substance.id, cells: [new RawCell(columnName: "x", value: "5")], replicate: 1)
 
         def errors = new ResultsService.ImportSummary()
 
@@ -357,9 +359,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def experimentMeasure = ExperimentMeasure.build(measure: measure)
 
         // construct a row of two cells: a measurement and an associated context
-        def mCell = new ResultsService.RawCell(columnName: "measure", value: "5")
-        def iCell = new ResultsService.RawCell(columnName: "item", value: "<15")
-        def row = new ResultsService.Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
+        def mCell = new RawCell(columnName: "measure", value: "5")
+        def iCell = new RawCell(columnName: "item", value: "<15")
+        def row = new Row(rowNumber: 1, replicate: 1, sid: substance.id, cells: [mCell, iCell])
 
         def errors = new ResultsService.ImportSummary()
 
@@ -576,7 +578,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         ExperimentMeasure childExpMeasure = ExperimentMeasure.build(measure: childMeasure, parent: parentExpMeasure)
         ExperimentMeasure child2ExpMeasure = ExperimentMeasure.build(measure: child2Measure, parent: childExpMeasure)
 
-        ResultsService.Row childRow = new ResultsService.Row(cells: [ new ResultsService.RawCell(columnName: "childCol", value: "1") ])
+        Row childRow = new Row(cells: [ new RawCell(columnName: "childCol", value: "1") ])
 
         when:
         Collection<Result> results = service.extractResultFromEachRow(parentExpMeasure, [childRow], [:], new IdentityHashMap(), errors, [:])
@@ -594,9 +596,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         childResult.resultHierarchiesForParentResult.size() == 0
     }
 */
-    ResultsService.Row makeRow(Map map) {
-        List cells = map.collect { k, v -> new ResultsService.RawCell(columnName: k, value: v) }
-        return new ResultsService.Row(cells: cells)
+    Row makeRow(Map map) {
+        List cells = map.collect { k, v -> new RawCell(columnName: k, value: v) }
+        return new Row(cells: cells)
     }
 
     void 'test duplicate result type names'() {
