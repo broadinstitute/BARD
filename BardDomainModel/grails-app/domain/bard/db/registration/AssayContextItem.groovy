@@ -3,7 +3,7 @@ package bard.db.registration
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
-class AssayContextItem extends AbstractContextItem {
+class AssayContextItem extends AbstractContextItem<AssayContext> {
 
     AttributeType attributeType
     AssayContext assayContext
@@ -20,12 +20,12 @@ class AssayContextItem extends AbstractContextItem {
     static transients = ['context']
 
     @Override
-    AbstractContext getContext() {
+    AssayContext getContext() {
         return assayContext
     }
 
     @Override
-    void setContext(AbstractContext context) {
+    void setContext(AssayContext context) {
         this.assayContext = context
     }
 }

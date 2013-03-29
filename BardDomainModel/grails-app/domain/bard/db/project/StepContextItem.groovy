@@ -10,7 +10,7 @@ import bard.db.model.AbstractContextItem
  * Time: 12:03 AM
  * To change this template use File | Settings | File Templates.
  */
-class StepContextItem extends AbstractContextItem {
+class StepContextItem extends AbstractContextItem<StepContext> {
 
     StepContext stepContext
 
@@ -27,12 +27,12 @@ class StepContextItem extends AbstractContextItem {
     static transients = ['context']
 
     @Override
-    AbstractContext getContext() {
+    StepContext getContext() {
         return stepContext
     }
 
     @Override
-    void setContext(AbstractContext context) {
+    void setContext(StepContext context) {
         this.context = context
     }
 }

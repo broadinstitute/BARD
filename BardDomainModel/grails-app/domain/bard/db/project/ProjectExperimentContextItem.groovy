@@ -10,7 +10,7 @@ import bard.db.model.AbstractContextItem
  * Time: 12:21 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectExperimentContextItem extends AbstractContextItem {
+class ProjectExperimentContextItem extends AbstractContextItem<ProjectExperimentContext> {
     ProjectExperimentContext context
 
     static belongsTo = [context: ProjectExperimentContext]
@@ -24,8 +24,4 @@ class ProjectExperimentContextItem extends AbstractContextItem {
         context(column: 'PRJCT_EXPRMT_CONTEXT_ID')
     }
 
-    @Override
-    void setContext(AbstractContext context) {
-        this.context = context
-    }
 }

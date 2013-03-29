@@ -9,7 +9,7 @@ import bard.db.dictionary.Element
  * Time: 11:02 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractContextItem {
+abstract class AbstractContextItem<T extends AbstractContext> {
     private static final int EXT_VALUE_ID_MAX_SIZE = 60
     private static final int VALUE_DISPLAY_MAX_SIZE = 500
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -47,7 +47,7 @@ abstract class AbstractContextItem {
 
     }
 
-    abstract AbstractContext getContext()
+    abstract T getContext()
 
-    abstract void setContext(AbstractContext context)
+    abstract void setContext(T context)
 }
