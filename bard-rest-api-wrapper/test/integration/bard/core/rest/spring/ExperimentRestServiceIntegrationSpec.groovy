@@ -38,7 +38,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert activitiesByCIDs
         assert activitiesByCIDs.activities
-        assert activitiesByCIDs.activities.size() == 10
+        assert activitiesByCIDs.activities.size() == 6
     }
 
     void "test activitiesBySIDs"() {
@@ -51,7 +51,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert activitiesBySIDs
         assert activitiesBySIDs.activities
-        assert activitiesBySIDs.activities.size() == 10
+        assert activitiesBySIDs.activities.size() == 6
     }
 
     void "test activitiesByADIDs"() {
@@ -139,10 +139,10 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         }
 
         where:
-        label                            | experimentid    | cids
-        "Search with a list of CIDs"     | new Long(11795) | [16452494, 16014490]
-        "Search with a single of CID"    | new Long(11795) | [16452494]
-        "Search with another set of CID" | new Long(11795) | [16453200, 16446093]
+        label                            | experimentid | cids
+        "Search with a list of CIDs"     | new Long(1)  | [2382353, 11958440]
+        "Search with a single of CID"    | new Long(1)  | [11958440]
+        "Search with another set of CID" | new Long(1)  | [11958618, 16745796]
     }
 
 
@@ -196,9 +196,9 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "testExperimentActivityWithCompounds"() {
         given: "That an etag is created from a list of compound IDs"
-        final String etag = compoundRestService.newETag("foo cids", [644794L, 645320L, 646386L]);
+        final String etag = compoundRestService.newETag("foo cids", [2382353L, 11958440L]);
         and: "That an experiment exists"
-        final Long experimentId = 14743
+        final Long experimentId = 1
         when: "Experiment with the compound etags"
         final ExperimentData experimentData = experimentRestService.activities(experimentId, etag)
         then:
@@ -209,7 +209,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         for (Activity activity : activities) {
             assert activity
         }
-        assert activities.size() == 3
+        assert activities.size() == 2
     }
     /**
      * Step through the experiment

@@ -24,8 +24,8 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "getSubstanceById sid - 6820697"() {
         given:
-        Long sid = 16953511
-        Long expectedCID = 600
+        Long sid = 26726047
+        Long expectedCID = 647652
         when:
         final Substance substance = substanceRestService.getSubstanceById(sid)
         then:
@@ -33,14 +33,14 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
         assert substance.getId() == sid
         assert substance.getSid() == substance.getId()
         assert substance.getCid() == expectedCID
-        assert substance.getDepRegId() == "6914582"
-        assert substance.getSourceName() == "ChemDB"
-        assert substance.getUrl() == "http://cdb.ics.uci.edu/CHEMDB/Web/cgibin/ChemicalDetailWeb.py?chemical_id=6914582"
+        assert substance.getDepRegId() == "MLS000889589"
+        assert substance.getSourceName() == "MLSMR"
+//        assert substance.getUrl() == "http://cdb.ics.uci.edu/CHEMDB/Web/cgibin/ChemicalDetailWeb.py?chemical_id=6914582"
         assert !substance.getPatentIds()
-        assert substance.getSmiles() == "C(C1C(C(C(C(=O)O1)O)O)O)OP(=O)(O)O"
-        assert substance.getDeposited() == "2005-09-16"
-        assert substance.getUpdated() == "2005-09-16"
-        assert substance.getResourcePath() == "/substances/6820697"
+        assert substance.getSmiles() == "C1CN(C2=C1C=C(C=C2)C3=CSC(=N3)NC(=O)CN4CCOCC4)S(=O)(=O)C5=CC=CC=C5"
+        assert substance.getDeposited() == "2007-10-11"
+        assert substance.getUpdated() == "2012-03-01"
+        assert substance.getResourcePath() == "/substances/26726047"
 
     }
 
@@ -78,7 +78,7 @@ class SubstanceRestServiceIntegrationSpec extends IntegrationSpec {
         List<Long> substances = substanceRestService.findSubstancesByCid(CID_FOR_TESTING)
         then:
         assert substances
-        assert substances.contains(new Long(70319))
+        assert substances.contains(new Long(2796946))
     }
 
     void "findExperimentDataBySid"() {
