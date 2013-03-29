@@ -79,7 +79,7 @@ function initFunction(){
     var ratio = isolatedNodes.length/(isolatedNodes.length + connectedNodes.length)
     var isolatedHeight = ratio * totalHeight
     var connectedHeight = totalHeight - isolatedHeight
-    if (ratio * totalHeight < 100) {
+    if (isolatedHeight < 100) {
         isolatedHeight = 100
         connectedHeight = totalHeight - isolatedHeight
     }
