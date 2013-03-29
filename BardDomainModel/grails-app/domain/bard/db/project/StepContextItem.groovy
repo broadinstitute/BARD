@@ -1,5 +1,6 @@
 package bard.db.project
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 /**
@@ -21,5 +22,17 @@ class StepContextItem extends AbstractContextItem {
         valueElement(column: "value_id", fetch: 'join')
         attributeElement(column: "attribute_id", fetch: 'join')
         qualifier(column: "qualifier", sqlType: "char", length: 2)
+    }
+
+    static transients = ['context']
+
+    @Override
+    AbstractContext getContext() {
+        return stepContext
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.context = context
     }
 }

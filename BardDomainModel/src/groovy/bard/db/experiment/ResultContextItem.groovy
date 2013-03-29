@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import grails.validation.Validateable
 
@@ -16,6 +17,16 @@ class ResultContextItem extends AbstractContextItem {
     Result result
     Long id;
 
+    static transients = ['context']
+    @Override
+    AbstractContext getContext() {
+        throw new UnsupportedOperationException("No context for ResultContextItem")
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        throw new UnsupportedOperationException("No context for ResultContextItem")
+    }
 //    static belongsTo = [result: Result]
 //    static mapping = {
 //        table('RSLT_CONTEXT_ITEM')

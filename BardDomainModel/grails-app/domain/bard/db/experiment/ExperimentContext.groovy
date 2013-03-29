@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Descriptor
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextOwner
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -11,7 +12,7 @@ import org.apache.commons.lang.StringUtils
  * Time: 1:58 PM
  * To change this template use File | Settings | File Templates.
  */
-class ExperimentContext extends AbstractContext{
+class ExperimentContext extends AbstractContext {
 
     Experiment experiment
     List<ExperimentContextItem> experimentContextItems = []
@@ -31,6 +32,11 @@ class ExperimentContext extends AbstractContext{
         return getExperimentContextItems()
     }
 
+    @Override
+    AbstractContextOwner getOwner() {
+        return experiment
+    }
+
     // TODO: this is a temp changes, copy & pasted from assay context.
     // Due to the incomplete information of context_group and context_name given a projectcontext, we can not use them directly to display context detail.
     //  Need to be removed if data is completed.
@@ -46,11 +52,11 @@ class ExperimentContext extends AbstractContext{
      */
     Descriptor getPreferredDescriptor() {
         Descriptor preferredDescriptor
-        List<Descriptor> preferredDescriptors = contextItems.collect {it.attributeElement.ontologyBreadcrumb.preferedDescriptor}
+        List<Descriptor> preferredDescriptors = contextItems.collect { it.attributeElement.ontologyBreadcrumb.preferedDescriptor }
         preferredDescriptors = preferredDescriptors.findAll() // hack to eliminate any nulls (Elements (971 and 1329)
         for (String keyLabel in KEY_LABELS) {
-            if (preferredDescriptors.any {it?.label?.contains(keyLabel)}) {
-                preferredDescriptor = preferredDescriptors.find { it.label.contains(keyLabel)}
+            if (preferredDescriptors.any { it?.label?.contains(keyLabel) }) {
+                preferredDescriptor = preferredDescriptors.find { it.label.contains(keyLabel) }
                 break
             }
         }
@@ -66,8 +72,7 @@ class ExperimentContext extends AbstractContext{
         String preferredName = 'undefined'
         if (StringUtils.isNotBlank(this.contextName)) {
             preferredName = this.contextName
-        }
-        else {
+        } else {
             preferredName = getPreferredDescriptor()?.label
             for (Map.Entry entry in KEY_LABEL_NAME_MAP) {
                 if (preferredName && preferredName.contains(entry.key)) {

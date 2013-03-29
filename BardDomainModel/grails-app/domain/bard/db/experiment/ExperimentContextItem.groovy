@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 /**
@@ -22,5 +23,17 @@ class ExperimentContextItem extends AbstractContextItem {
         attributeElement(column: 'ATTRIBUTE_ID')
         valueElement(column: 'VALUE_ID')
         qualifier(column: "QUALIFIER", sqlType: "char", length: 2)
+    }
+
+    static transients = ['context']
+
+    @Override
+    AbstractContext getContext() {
+        return experimentContext
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.experimentContext = context
     }
 }

@@ -1,9 +1,9 @@
 package bard.db.registration
 
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 class AssayContextItem extends AbstractContextItem {
-
 
     AttributeType attributeType
     AssayContext assayContext
@@ -15,5 +15,17 @@ class AssayContextItem extends AbstractContextItem {
         valueElement(column: "value_id", fetch: 'join')
         attributeElement(column: "attribute_id", fetch: 'join')
         qualifier(column: "qualifier", sqlType: "char", length: 2)
+    }
+
+    static transients = ['context']
+
+    @Override
+    AbstractContext getContext() {
+        return assayContext
+    }
+
+    @Override
+    void setContext(AbstractContext context) {
+        this.assayContext = context
     }
 }
