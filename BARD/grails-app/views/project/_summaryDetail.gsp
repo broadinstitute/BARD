@@ -9,7 +9,7 @@
         <dt><g:message code="project.description.label" default="Fix i18n"/></dt>
         <dd><g:fieldValue bean="${project}" field="description"/></dd>
 
-        <dt><g:message code="project.projectStatus.label" default="Fix i18n"/></dt>
+        <dt><g:message code="project.projectStatus.label" default="Status"/></dt>
         <dd><g:fieldValue bean="${project}" field="projectStatus"/></dd>
 
         <dt><g:message code="default.dateCreated.label" default="Fix i18n"/></dt>

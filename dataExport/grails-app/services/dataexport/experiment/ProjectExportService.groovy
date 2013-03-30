@@ -13,6 +13,9 @@ import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.project.*
+import org.apache.commons.lang.StringUtils
+import javax.xml.datatype.XMLGregorianCalendar
+import javax.xml.datatype.DatatypeFactory
 
 class ProjectExportService extends ExportAbstractService {
     MediaTypesDTO mediaTypesDTO
@@ -71,6 +74,16 @@ class ProjectExportService extends ExportAbstractService {
         }
         if (project.groupType) {
             attributes.put('groupType', project.groupType)
+        }
+        if(project.lastUpdated){
+            final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(project.lastUpdated);
+            final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+            attributes.put('lastUpdated', lastUpdatedDate.toString())
+
+        }
+        if(StringUtils.isNotBlank(project.modifiedBy)){
+            attributes.put('modifiedBy', project.modifiedBy)
         }
         markupBuilder.project(attributes) {
             if (project.name) {

@@ -81,4 +81,6 @@ abstract class AbstractContext {
     }
 
     abstract List getContextItems()
+
+    abstract AbstractContextOwner getOwner()
 }

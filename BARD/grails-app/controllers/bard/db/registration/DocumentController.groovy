@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.command.BardCommand
 import bard.db.model.AbstractDocument
 import bard.db.project.Project
 import bard.db.project.ProjectDocument
@@ -72,7 +73,7 @@ class DocumentController {
 }
 @InheritConstructors
 @Validateable
-class DocumentCommand {
+class DocumentCommand extends BardCommand{
     Long assayId
     Long projectId
 
@@ -101,6 +102,8 @@ class DocumentCommand {
         })
         version(nullable: true)
     }
+
+    DocumentCommand(){}
 
     DocumentCommand(AssayDocument assayDocument) {
         copyFromDomainToCmd(assayDocument)
@@ -163,26 +166,9 @@ class DocumentCommand {
 
 
 
-    def attemptFindById(Class domain, Long id) {
-        def instance
-        if (id) {
-            instance = domain.findById(id)
-        }
-        if (!instance) {
-            getErrors().reject('default.not.found.message', [domain, id] as Object[], 'not found')
-        }
-        instance
-    }
 
-    boolean attemptSave(Object domain) {
-        if (!domain?.save()) {
-            domain?.errors?.allErrors?.each { error ->
-                getErrors().reject(error.code, g.message(error: error))
-            }
-            return false
-        }
-        return true
-    }
+
+
 
     void copyFromCmdToDomain(AbstractDocument assayDocument) {
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
@@ -205,17 +191,7 @@ class DocumentCommand {
         return this
     }
 
-    /**
-     * if an errors object hasn't yet been created
-     * create one
-     * @return
-     */
-    def getErrors() {
-        if (errors == null) {
-            setErrors(new ValidationErrors(this))
-        }
-        errors
-    }
+
 /**
  * Hack to determine the id of owning to forward to given presence of assay or project ids
  * @return

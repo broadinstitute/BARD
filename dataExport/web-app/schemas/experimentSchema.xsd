@@ -81,6 +81,8 @@ Link to Project and Assay</xs:documentation>
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute ref="readyForExtraction" use="required"/>
+            <xs:attribute ref="lastUpdated"/>
+            <xs:attribute ref="modifiedBy"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="results">

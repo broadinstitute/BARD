@@ -10,8 +10,8 @@
 
 
 <body>
-<g:render template="message"/>
-<g:render template="errors" model="['errors': document?.errors?.globalErrors]"/>
+<g:render template="/common/message"/>
+<g:render template="/common/errors" model="['errors': document?.errors?.globalErrors]"/>
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="update">
@@ -25,7 +25,7 @@
 
             <div class="control-group">
                 <div class="controls">
-                    <g:link controller="${document?.ownerController}" action="show" id="${document?.assayId}"
+                    <g:link controller="${document?.ownerController}" action="show" id="${document?.ownerId}"
                             fragment="document-${document?.documentId}" class="btn">Cancel</g:link>
                     <g:actionSubmit value="Update" action="Update" class="btn btn-primary"/>
                 </div>
