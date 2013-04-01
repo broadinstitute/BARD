@@ -777,7 +777,6 @@ class ResultsService {
         def parsed = parseContextItem(stringValue, assayItem)
 
         if (parsed instanceof Cell) {
-            Element unit = assayItem.attributeElement.unit;
             Cell cell = parsed
             ResultContextItem item = new ResultContextItem()
 
