@@ -19,17 +19,17 @@ class SunburstRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test getTargetClassInfo #label"() {
         when:
-        TargetClassInfo targetClassInfo = sunburstCacheService.getTargetClassInfo(targetClassId)
+        TargetClassInfo targetClassInfo = sunburstCacheService.getTargetClassInfo(targetAccessionNumber)
 
         then:
         assert targetClassInfo
-        assert targetClassId == targetClassInfo.id
+        assert targetAccessionNumber== targetClassInfo.accessionNumber
         assert targetClassInfo.description
         assert targetClassInfo.path
         where:
-        label              | targetClassId
-        "No Caching"       | "PC00201"
-        "Should hit Cache" | "PC00201"
+        label              | targetAccessionNumber
+        "No Caching"       | "A0A4Z3"
+        "Should hit Cache" | "A0A4Z3"
 
 
     }

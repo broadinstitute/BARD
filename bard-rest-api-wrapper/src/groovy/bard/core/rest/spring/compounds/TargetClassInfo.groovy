@@ -41,7 +41,7 @@ class TargetClassInfo implements Serializable{
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder()
-        stringBuilder.append("id:${this.id}").append(" name:${this.name}").append(" path:${this.path}")
+        stringBuilder.append("id:${this.id}").append(" acc:${this.accessionNumber}").append(" name:${this.name}").append(" path:${this.path}")
         return stringBuilder.toString()
     }
     @Override
@@ -53,6 +53,7 @@ class TargetClassInfo implements Serializable{
         TargetClassInfo rhs = (TargetClassInfo) obj
 
         return new EqualsBuilder()
+                .append(this.accessionNumber, rhs.accessionNumber)
                 .append(this.id, rhs.id)
                 .append(this.name, rhs.name)
                 .append(this.path, rhs.path)
@@ -62,6 +63,7 @@ class TargetClassInfo implements Serializable{
     @Override
     public int hashCode() {
         return new HashCodeBuilder(7, 13)
+                .append(this.accessionNumber)
                 .append(this.id)
                 .append(this.name)
                 .append(this.path)

@@ -11,15 +11,16 @@ class SunburstCacheService extends AbstractRestService {
     //We would be using a persistent cache
     //@CachePut(value = 'target', key = '#targetClassInfo.id')
     void save(TargetClassInfo targetClassInfo) {
-        targets.put(targetClassInfo.id, targetClassInfo)
+        //targets.put(targetClassInfo.id, targetClassInfo)
+        targets.put(targetClassInfo.accessionNumber, targetClassInfo)
         //log.info("Saving " + targetClassInfo.getId())
     }
 
     @Cacheable(value = 'target')
-    TargetClassInfo getTargetClassInfo(String id) {
-        final TargetClassInfo targetClassInfo = this.targets.get(id)
+    TargetClassInfo getTargetClassInfo(String accessionNumber) {
+        final TargetClassInfo targetClassInfo = this.targets.get(accessionNumber)
         if (!targetClassInfo) {
-            log.error("Not yet implemented")
+            log.error("Not found ${accessionNumber}")
             //TODO: Go to NCGC then put in map
         }
         return targetClassInfo
