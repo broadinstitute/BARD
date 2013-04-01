@@ -70,18 +70,21 @@ class PubchemReformatService {
         int columnCount;
         Map<String, Integer> nameToIndex = [:];
 
-        CapCsvWriter(Long experimentId, List<String> dynamicColumns, Writer writer) {
-            this.writer = new CSVWriter(writer)
+        CapCsvWriter(Long experimentId, Map<String,String> experimentContextItems, List<String> dynamicColumns, Writer rawWriter) {
+            writer = new CSVWriter(rawWriter)
             columnCount = dynamicColumns.size()
             for(int i=0;i<columnCount;i++) {
                 nameToIndex.put(dynamicColumns[i], i)
             }
 
-            this.writer.writeNext(["","Experiment ID",experimentId.toString()].toArray(new String[0]))
-            this.writer.writeNext([].toArray(new String[0]))
+            writer.writeNext(["","Experiment ID",experimentId.toString()].toArray(new String[0]))
+            experimentContextItems.each { k, v ->
+                writer.writeNext(["",k,v].toArray(new String[0]))
+            }
+            writer.writeNext([].toArray(new String[0]))
             List header = ["Row #","Substance","Replicate #","Parent Row #"]
             header.addAll(dynamicColumns)
-            this.writer.writeNext(header.toArray(new String[0]))
+            writer.writeNext(header.toArray(new String[0]))
         }
 
         int addRow(Long substanceId, Integer parentRow, String replicate, Map<String,String> row) {
@@ -114,7 +117,24 @@ class PubchemReformatService {
     }
 
     static class ResultMap {
-        Map<String, Collection<ResultMapRecord>> records = [:]
+        String aid;
+        Map<String, Collection<ResultMapRecord>> records;
+        Map<String, Collection<ResultMap>> recordsByParentTid;
+        Collection<String> tids;
+        Collection<ResultMapRecord> allRecords;
+
+        public ResultMap(String aid, Collection<ResultMapRecord> rs) {
+            this.aid = aid;
+            records = rs.groupBy {it.resultType}
+            recordsByParentTid = rs.groupBy {it.parentTid}
+            tids = rs.collect {it.tid}
+            allRecords = new ArrayList(rs);
+            allRecords.sort { Integer.parseInt(it.tid) }
+        }
+
+        Collection<ResultMapRecord> getChildRecords(String tid) {
+            return recordsByParentTid.get(tid);
+        }
 
         List<Map<String,String>> getValues(Map<String,String> pubchemRow, String resultType, String statsModifier, String parentTid) {
             List<Map<String,String>> rows = []
@@ -131,9 +151,9 @@ class PubchemReformatService {
                         measureValue = pubchemRow[record.qualifierTid]+measureValue
                     }
                     kvs[label] = measureValue
+                    addContextValues(pubchemRow, record, kvs)
                 }
 
-                addContextValues(pubchemRow, record, kvs)
                 rows.add(kvs)
             }
             return rows
@@ -167,6 +187,48 @@ class PubchemReformatService {
         return resultType
     }
 
+    boolean memoizedHasNonBlankChild(Map<String,String> pubchemRow, ResultMap map, String tid, Map cache, Set seen) {
+        if (cache.containsKey(tid)) {
+            return cache[tid];
+        }
+
+        if (seen.contains(tid)) {
+            throw new RuntimeException("Found cycle in ${map.aid}")
+        }
+        seen.add(tid);
+
+        boolean found = false;
+        if (!StringUtils.isBlank(pubchemRow[tid])) {
+            found = true;
+        } else {
+            for(record in map.getChildRecords(tid)) {
+                if (memoizedHasNonBlankChild(pubchemRow, map, record.tid, cache, seen)) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        cache[tid] = found
+        return found;
+    }
+
+    void naMissingValues(Map<String,String> pubchemRow, ResultMap map) {
+        List needsNa = []
+        Map cache = [:]
+        map.getTids().each {tid ->
+            def v = pubchemRow[tid]
+            if (StringUtils.isBlank(v) && memoizedHasNonBlankChild(pubchemRow, map, tid, cache, new HashSet())) {
+                needsNa.add(tid)
+            }
+        }
+
+        for(key in needsNa) {
+            pubchemRow[key] = "NA"
+        }
+    }
+
+
     void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String,String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
         for(expMeasure in measures) {
             String resultType = expMeasure.measure.resultType.label
@@ -198,8 +260,7 @@ class PubchemReformatService {
         return new ArrayList(colNames)
     }
 
-    public ResultMap convertToResultMap(List rows) {
-        ResultMap map = new ResultMap()
+    public ResultMap convertToResultMap(String aid, List rows) {
         Map byTid = [:]
         List<ResultMapRecord>  records = [];
 
@@ -239,19 +300,28 @@ class PubchemReformatService {
             }
         }
 
-        map.records = records.groupBy {it.resultType}
-
+        ResultMap map = new ResultMap(aid, records)
         return map;
     }
 
     //TODO: fix concentration unit check
     public ResultMap loadMap(Connection connection, Long aid) {
-        ResultMap map = new ResultMap()
         Sql sql = new Sql(connection)
         List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM result_map WHERE AID = ?", [aid])
-        map = convertToResultMap(rows)
-        println("${map}")
+        ResultMap map = convertToResultMap(aid.toString(), rows)
         return map
+    }
+
+    public ResultMap loadMap(Long aid) {
+        ResultMap map;
+        Experiment.withSession { Session session ->
+            session.doWork(new Work() {
+                void execute(Connection connection) throws SQLException {
+                    map = loadMap(connection, aid);
+                }
+            })
+        }
+        return map;
     }
 
     public Map convertPubchemRowToMap(List<String> row, List<String> header) {
@@ -276,7 +346,13 @@ class PubchemReformatService {
     public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
         List dynamicColumns = constructCapColumns(experiment)
 
-        CapCsvWriter writer = new CapCsvWriter(experiment.id, dynamicColumns, new FileWriter(outputFilename))
+        Map expItems = (experiment.experimentContexts.collectMany { ExperimentContext context ->
+            context.experimentContextItems.collect { ExperimentContextItem item ->
+                [item.attributeElement.label, item.valueDisplay]
+            }
+        }).collectEntries()
+
+        CapCsvWriter writer = new CapCsvWriter(experiment.id, expItems, dynamicColumns, new FileWriter(outputFilename))
         CSVReader reader = new CSVReader(new FileReader(pubchemFilename))
         List<String> header = reader.readNext()
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
@@ -288,24 +364,19 @@ class PubchemReformatService {
             Long substanceId = Long.parseLong(row[0])
             Map pubchemRow = convertPubchemRowToMap(row, header);
 
+            naMissingValues(pubchemRow, map)
             convertRow(rootMeasures, substanceId, pubchemRow, map, writer, null, null)
         }
 
         writer.close()
     }
 
+
     void convert(Long expId, String pubchemFilename, String outputFilename)  {
-        ResultMap map;
         Experiment experiment = Experiment.get(expId)
         ExternalReference ref = experiment.getExternalReferences().find {it.externalSystem.systemName == "PubChem"}
         Long aid = Long.parseLong(ref.extAssayRef.replace("aid=", ""));
-        Experiment.withSession { Session session ->
-            session.doWork(new Work() {
-                void execute(Connection connection) throws SQLException {
-                    map = loadMap(connection, aid);
-                }
-            })
-        }
+        ResultMap map = loadMap(aid)
         convert(experiment, pubchemFilename, outputFilename, map)
     }
 }
