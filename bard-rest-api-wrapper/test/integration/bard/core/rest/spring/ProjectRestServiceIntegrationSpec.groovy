@@ -12,6 +12,7 @@ import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Shared
 import spock.lang.Unroll
+import spock.lang.Ignore
 
 /**
  * Tests for ProjectRestService
@@ -47,8 +48,8 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         then: "We get back the expected results"
         assert (projectResultWithETags != null) == expected
         where:
-        label           | searchParams                       | capIds   | expected
-        "With ETags"    | new SearchParams(skip: 0, top: 10) | CAP_PIDS | true
+        label        | searchParams                       | capIds   | expected
+        "With ETags" | new SearchParams(skip: 0, top: 10) | CAP_PIDS | true
     }
 
     void testProjectSuggestions() {
@@ -61,31 +62,32 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assertSuggestions(ps);
     }
 
-    void testProjectsWithPublications() {
-        given:
-        Long pid = PIDS.get(0)
-
-        when:
-        final ProjectExpanded projectExpanded = projectRestService.getProjectById(pid)
-
-        then:
-        final List<Document> publications = projectExpanded.getPublications()
-        assert publications
-        assert publications.size() >= 1
-        Document publication = publications.get(0)
-        assert publication
-
-    }
+    //For v15, the only project we have (PID=2) doesn't have documents.
+//    void testProjectsWithPublications() {
+//        given:
+//        Long pid = PIDS.get(0)
+//
+//        when:
+//        final ProjectExpanded projectExpanded = projectRestService.getProjectById(pid)
+//
+//        then:
+//        final List<Document> publications = projectExpanded.getPublications()
+//        assert publications
+//        assert publications.size() >= 1
+//        Document publication = publications.get(0)
+//        assert publication
+//
+//    }
     /**
      * Copied from RESTTestServices#testServices9
      */
     void testFiltersWithProjectService() {
         given:
         final List<String[]> filters = new ArrayList<String[]>();
-        filters.add(["target_name", "Bloom syndrome protein"] as String[])
+//        filters.add(["assay_component_role", "target cell"] as String[])
 
         //construct Search Params
-        final SearchParams searchParams = new SearchParams("dna repair", filters);
+        final SearchParams searchParams = new SearchParams("Scavenger", filters);
         when:
         ProjectResult projectSearchResult = this.projectRestService.findProjectsByFreeTextSearch(searchParams);
         then:
@@ -124,7 +126,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
 //        "Find an existing ProjectSearchResult with a Probe" | PROJECT_WITH_PROBE
 //    }
 
-
+    @Ignore
     void "use auto-suggest 'zinc ion binding as GO molecular function term' has problems bug: https://www.pivotaltracker.com/story/show/36709121"() {
         given:
         final SearchParams searchParams = new SearchParams("\"zinc ion binding\"")
@@ -157,7 +159,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assert project.experimentCount
         where:
         label                                  | pid
-        "Find an existing ProjectSearchResult" | new Integer(1581)
+        "Find an existing ProjectSearchResult" | new Integer(2)
     }
     /**
      *
@@ -190,7 +192,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assertFacets(projectSearchResult.facets)
         where:
         label    | searchString | skip | top | expectedNumberOfProjects
-        "Search" | "dna repair" | 0    | 10  | 10
+        "Search" | "Scavenger"  | 0    | 10  | 10
 
     }
     /**
@@ -199,7 +201,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test Project Service , Get Project with Id after free text search"() {
         given: "A search string, 'dna repair', and asking to retrieve the first 10 search results"
-        final SearchParams params = new SearchParams("dna repair")
+        final SearchParams params = new SearchParams("Scavenger")
         params.setSkip(0)
         params.setTop(10);
         when: "We call search method of the the RestProjectService"
@@ -222,8 +224,10 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
     /**
      *
      */
+    //we currently only have one project
+    @Ignore
     void "test REST Project Service #label #seachString with paging"() {
-        given: "A search string of 'dna repair' and two Search Params, Params 1 has skip=0 and top=10, params2 has skip=10 and top=10"
+        given: "A search string of 'Scavenger' and two Search Params, Params 1 has skip=0 and top=10, params2 has skip=10 and top=10"
         final String searchString = "dna repair"
         SearchParams params1 = new SearchParams(searchString)
         params1.setSkip(0)
@@ -249,7 +253,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
      */
     void "test REST Project Service test filters with number ranges"() {
         given:
-        String uriWithFilters = projectRestService.getSearchResource() + "q=%22dna+repair%22&filter=fq(num_expt:%5B10+TO+*%5D),&skip=0&top=10&expand=true"
+        String uriWithFilters = projectRestService.getSearchResource() + "q=%22Scavenger%22&filter=fq(num_expt:%5B10+TO+*%5D),&skip=0&top=10&expand=true"
         URI uri = new URI(uriWithFilters)
         when:
         ProjectResult projectResult = (ProjectResult) this.projectRestService.getForObject(uri, ProjectResult)

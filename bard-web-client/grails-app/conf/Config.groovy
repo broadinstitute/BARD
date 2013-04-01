@@ -96,15 +96,16 @@ environments {
 
 // log4j configuration
 CbipCrowd {
-    application.url = 'https://crowd.somewhere.com/crowd/'
-    application.username = 'bard'
-    application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_NO_ROLE', 'ROLE_MOBILE']
+    application.url = 'http://localhost:8095/crowd/'
+    application.username = 'webquery'
+    application.password = '2345'
+    applicationSpecificRoles = ['ROLE_USER','ROLE_Bard', 'ROLE_NO_ROLE', 'ROLE_MOBILE']
 }
+webquery
 grails {
     plugins {
         springsecurity {
-            roleHierarchy = '''ROLE_USER > ROLE_NO_ROLE'''
+            roleHierarchy = '''ROLE_USER > ROLE_Bard > ROLE_NO_ROLE'''
             providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
             useBasicAuth = true
             basic.realmName = 'WEBQUERY'
@@ -253,3 +254,4 @@ log4j = {
 
 
 grails.plugins.twitterbootstrap.fixtaglib = true
+grails.spring.disable.aspectj.autoweaving = true
