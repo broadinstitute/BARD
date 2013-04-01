@@ -72,11 +72,26 @@ function initFunction(){
     /* Use our layout implementation that place nodes with no incoming edges at top, and node with outgoing edges at bottom*/
     var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
     /* Use our layout implementation that place isolated nodes ordered by experiment id*/
-    var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
+    //var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
+    var layouterIsolated = new Graph.Layout.Spring(gIsolated);
 
     /* draw the graph using the RaphaelJS draw implementation */
-    var renderer = new Graph.Renderer.Raphael('canvas', g, 800, 500);
-    var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 800, 200);
+    var totalHeight = 600
+    var ratio = isolatedNodes.length/(isolatedNodes.length + connectedNodes.length)
+    var isolatedHeight = ratio * totalHeight
+    var connectedHeight = totalHeight - isolatedHeight
+    if (isolatedHeight < 100) {
+        isolatedHeight = 100
+        connectedHeight = totalHeight - isolatedHeight
+    }
+    if (connectedHeight < 300 ) {
+        connectedHeight = 300
+        isolatedHeight =  totalHeight - connectedHeight
+    }
+
+
+    var renderer = new Graph.Renderer.Raphael('canvas', g, 800, connectedHeight);
+    var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 800, isolatedHeight);
 
     redraw = function () {
         layouter.layout();

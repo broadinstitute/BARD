@@ -8,7 +8,7 @@ class ProjectHandlerService {
     def contextHandlerService = new ContextHandlerService()
 
     final int START_ROW = 2 //0-based
-    final int MAX_ROWS = 1000
+    final int MAX_ROWS = 4000
 
     def handle(String loadedBy, List<String> dirs, List<Long> mustLoadedAids) {
         List<File> inputFiles = []

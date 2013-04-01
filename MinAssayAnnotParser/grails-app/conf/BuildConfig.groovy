@@ -37,6 +37,7 @@ grails.project.dependency.resolution = {
         compile 'org.apache.poi:poi:3.8'
         compile 'org.apache.poi:poi-ooxml:3.8'
         compile 'org.apache.commons:commons-lang3:3.1'
+        compile 'org.apache.commons:commons-math3:3.1'
     }
 
     plugins {

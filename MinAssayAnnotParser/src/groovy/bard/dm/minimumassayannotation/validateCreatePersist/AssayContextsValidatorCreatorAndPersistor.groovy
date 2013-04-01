@@ -106,27 +106,37 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         element = contextItemDto.value ? Element.findByLabelIlike(contextItemDto.value) : null
                         //if the value string could be matched against an element then add it to the valueElement
                         if (element) {
+                            if (contextItemDto.attributeType != AttributeType.Free) {
                             assayContextItem.valueElement = element
                             assayContextItem.valueDisplay = element.label
+                            }
                         }
                         //else, if the attribute's value is a number value, store it in the valueNum field
                         else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
+                            if (contextItemDto.attributeType != AttributeType.Free) {
                             Float val = new Float(contextItemDto.value)
                             assayContextItem.valueNum = val
                             //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
                             assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
+                            }
                         }
                         //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
                         else if (contextItemDto.value && (contextItemDto.value instanceof String) && contextItemDto.value.matches(/^\d+\-\d+$/)) {
+                            if (contextItemDto.attributeType != AttributeType.Free) {
                             final String[] rangeStringArray = contextItemDto.value.split("-")
                             assayContextItem.valueMin = new Float(rangeStringArray[0])
                             assayContextItem.valueMax = new Float(rangeStringArray[1])
                             assayContextItem.valueDisplay = contextItemDto.value + concentrationUnitsAbbreviation //range-units are reported separately.
                             assayContextItem.attributeType = AttributeType.Range
+                            }
                         }
                         //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
-                        else if (contextItemDto.typeIn || (contextItemDto.attributeType == AttributeType.Free)) {
+                        else if (contextItemDto.typeIn  ){
+                                //|| (contextItemDto.attributeType == AttributeType.Free)) {
                             assayContextItem.valueDisplay = contextItemDto.value
+                        }
+                            else if (contextItemDto.attributeType == AttributeType.Free) {
+                            //do nothing
                         }
                         else {
                             final String message = "Value of context item not recognized as element or numerical value: '${contextItemDto.key}'/'${contextItemDto.value}'"
@@ -139,8 +149,10 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
                         //populate the qualifier field, if exists, and prefix the valueDisplay with it
                         if (contextItemDto.qualifier) {
-                            assayContextItem.qualifier = String.format('%-2s', contextItemDto.qualifier)
-                            assayContextItem.valueDisplay = "${contextItemDto.qualifier}${assayContextItem.valueDisplay}"
+                            if (contextItemDto.attributeType != AttributeType.Free){
+                                assayContextItem.qualifier = String.format('%-2s', contextItemDto.qualifier)
+                                assayContextItem.valueDisplay = "${contextItemDto.qualifier}${assayContextItem.valueDisplay}"
+                            }
                         }
 
 
@@ -183,7 +195,6 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         }else if (assayContextItem.valueDisplay && assayContextItem.attributeElement.label.equals(speciesElementLabel)) {//'go:
             return rebuildAssayContextItem(assayContextItem, speciesElementLabel, contextDTO)
         }
-
         return true
     }
 
@@ -193,7 +204,11 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
             if (externalTermMap.containsKey(extValueId.toLowerCase())) {
                 extValueId = externalTermMap.get(extValueId.toLowerCase())
             } else if (!StringUtils.isNumeric(extValueId)) {
-                logger.info("possible GO term or species name that is not mapped: ${extValueId}")
+                //logger.info("possible GO term or species name that is not mapped: ${extValueId}")
+                loadResultsWriter.write(contextDTO, assayContextItem.assayContext.assay.id,
+                        ContextLoadResultsWriter.LoadResultType.fail, null, 0,
+                        "possible GO term or species name that is not mapped: ${extValueId} in ${findByLabelIlike}")
+                return false
             }
         }
 
@@ -209,7 +224,6 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         assayContextItem.attributeElement = element
         assayContextItem.extValueId = extValueId
         assayContextItem.valueDisplay = newValueDisplay
-
         return true
     }
 
@@ -219,6 +233,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         Set<AssayContext> assayContextOrigSet = new HashSet<AssayContext>(assayContext.assay.assayContexts)
 
         for (AssayContext assayContextOrig : assayContextOrigSet) {
+            if (!assayContextOrig)
+                continue
             if (!assayContextOrig.equals(assayContext)) {
                 ComparisonResult<ContextItemComparisonResultEnum> compResult = assayContextCompare.compareContext(assayContextOrig, assayContext)
 

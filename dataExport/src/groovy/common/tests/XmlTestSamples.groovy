@@ -108,7 +108,7 @@ class XmlTestSamples {
         </experiment>
     '''
     static final String EXPERIMENT_WITH_OPTIONAL_PROPERTIES = '''
-        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
+        <experiment experimentId='1' status='Pending' readyForExtraction='Not Ready' confidenceLevel='1' lastUpdated='1969-12-31T19:00:00.000-05:00' holdUntilDate='1969-12-31T19:00:00.000-05:00' runDateFrom='1969-12-31T19:00:00.000-05:00' runDateTo='1969-12-31T19:00:00.000-05:00'>
             <experimentName>experimentName</experimentName>
             <description>description</description>
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />

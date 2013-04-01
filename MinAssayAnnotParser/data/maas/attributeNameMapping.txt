@@ -10,7 +10,7 @@ component name (type in)	 assay component name
 assay readout content	 assay readout
 assay readout type	 readout type
 biochemical	 biochemical format
-biorad chemidocxrs imaging system	 Biorad Chemidocxrs Imaging System
+biorad chemidocxrs imaging system	 Biorad ChemiDoc XRS imaging system
 cell based: lysed cell	 cell-based format
 cell-based: live cell	 cell-based format
 cells/ml	 cells per milliliter
@@ -157,7 +157,7 @@ fold of standard (X)	 FOC
 protein-expression assay	 protein expression assay
 uL/well	 well volume
 Microscopy slide	 microscope slide
-fold selectivity	 fold selectivity index
+fold selectivity	 fold-selectivity index
 Storem PhosphorImager	 Storm PhosphorImager
 signal increase corresponding to cell survival	 signal increase
 percent by volume	 volume percentage
@@ -212,6 +212,18 @@ MolecularDevices M5 reader	SpectraMax M5 Multi-Mode Microplate Reader
 Molecular Devices M5 Plate Reader	SpectraMax M5 Multi-Mode Microplate Reader
 Acumen eX3 Explorer	TTP LabTech Acumen
 Perkin Elmer EnvisionÂ	PerkinElmer EnVision
+iCi	uCi
+600 MHz Bruker Avance III	Avance III
+Biorad Chemidocxrs Imaging System	Biorad ChemiDoc XRS imaging system
+Biotek plate reader	Bio-Tek Synergy 2 plate reader
+Fluo4-AM	Fluo-4 AM Calcium Indicator
+FluoZin2-AM	FluoZin-2
+LightCycler480	Roche LightCycler480Æ
+Zeiss Axiovert 200M	Axiovert 200M fluorescence light microscope
+m/s	meter per second
+min	minute
+maximal activation	maximum percent activation
+T1/2	half-life
 
 // 3-1-2013
 Threshold units	unit
@@ -219,3 +231,17 @@ Threshold units	unit
 # replicates	number of replicates
 Project Lead	project lead name
 %	percent
+
+//Synonym	Correct Ontology Term
+LSM-510 Confocal Fluorescent Microscope	Zeiss LSM 510 Meta
+LI-COR Odyssey Imaging System	Odyssey infrared imager
+Human cytochrome c ELISA kit (R&D # SCTC0)	Human cytochrome c ELISA kit
+BioTek Synergy II plate reader	Bio-Tek Synergy 2 plate reader
+Biorad Chemidocxrs Imaging System	Biorad ChemiDoc XRS imaging system
+BD Bioscience LSR II	BD Biosciences LSR II
+RFU	relative fluorescence unit
+ratio	ratio unit
+percent subG1 arrested	percent subG1 arrested cells
+percent G1 arrested	percent G1 arrested cells
+percent S arrested	percent S-arrested cells
+endpoint	response endpoint

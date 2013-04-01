@@ -30,7 +30,7 @@ class AssayHandlerService {
         Log.logger.info("Start load of minimum assay annotation spreadsheets ${startDate}")
 
         final Integer START_ROW = 2 //0-based
-        final int MAX_ROW = 1000 // max number of rows we would like to process
+        final int MAX_ROW = 4000 // max number of rows we would like to process
 
         List<File> inputFileList = []
 
@@ -55,6 +55,10 @@ class AssayHandlerService {
         try {
             for (File inputFile : inputFileList) {
                 Log.logger.info("${new Date()} processing file ${inputFile.absolutePath} ")
+                String currentModifiedBy = "${baseModifiedBy}_${inputFile.name}"
+                if (currentModifiedBy.length() >= 40){
+                    currentModifiedBy = currentModifiedBy.substring(0,40)
+                }
 
                 try {
                     List<AssayDto> assayDtoList = parseAndBuildAttributeGroups.build(inputFile, START_ROW, [spreadsheetAssayContextGroups])
@@ -62,13 +66,10 @@ class AssayHandlerService {
 
                     for (AssayDto assayDto : assayDtoList) {
                         if (assayDto.aid && mustLoadedAids.contains(assayDto.aid)) {
+                            Log.logger.info("Processing: aid: ${assayDto.aid}, line #: ${assayDto.rowNum} in file ${inputFile.absolutePath}")
                             attributeContentAgainstElementTableValidator.removeInvalid(assayDto.assayContextDTOList, attributeNameMapping)
 
                             if (assayDto.assayContextDTOList.size() > 0) {
-                                String currentModifiedBy = "${baseModifiedBy}_${inputFile.name}"
-                                if (currentModifiedBy.length() >= 40){
-                                    currentModifiedBy = currentModifiedBy.substring(0,40)
-                                }
                                 assayContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
                                 if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
                                     assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success,
@@ -89,6 +90,9 @@ class AssayHandlerService {
                     final String message = "could not read excel file: ${inputFile.absolutePath} ${e.message}"
                     Log.logger.error(message)
                     loadResultsWriter.write(null, null, ContextLoadResultsWriter.LoadResultType.fail, null, 0, message)
+                } catch (Exception e) {
+                    e.printStackTrace()
+                    Log.logger.error("Something wrong of this file : ${inputFile.absolutePath} ${e.message}")
                 }
             }
         } catch (Exception e) {

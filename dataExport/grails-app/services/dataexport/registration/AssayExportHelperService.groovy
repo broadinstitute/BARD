@@ -7,6 +7,9 @@ import dataexport.util.ExportAbstractService
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import bard.db.registration.*
+import org.apache.commons.lang.StringUtils
+import javax.xml.datatype.XMLGregorianCalendar
+import javax.xml.datatype.DatatypeFactory
 
 /**
  * Helper Service for handling generation for XML documents for Assay definition extraction
@@ -201,7 +204,15 @@ class AssayExportHelperService extends ExportAbstractService {
         if (assay.assayStatus) {
             attributes.put('status', assay.assayStatus.getId())
         }
-
+        if(assay.lastUpdated){
+            final GregorianCalendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(assay.lastUpdated);
+            final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+            attributes.put('lastUpdated', lastUpdatedDate.toString())
+       }
+        if(StringUtils.isNotBlank(assay.modifiedBy)){
+            attributes.put('modifiedBy', assay.modifiedBy)
+        }
         markupBuilder.assay(attributes) {
             assayShortName(assay.assayShortName)
             assayName(assay.assayName)

@@ -226,4 +226,15 @@
         </xs:key>
     </xs:element>
     <xs:element name="context" type="contextType"/>
+    <xs:attribute name="lastUpdated" type="xs:dateTime"> </xs:attribute>
+    <xs:attribute name="modifiedBy">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="Not Ready"/>
+                <xs:enumeration value="Ready"/>
+                <xs:enumeration value="Started"/>
+                <xs:enumeration value="Complete"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
 </xs:schema>

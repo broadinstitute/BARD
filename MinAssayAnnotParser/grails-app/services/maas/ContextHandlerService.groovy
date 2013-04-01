@@ -15,7 +15,7 @@ import bard.db.model.AbstractContext
 import org.apache.commons.lang3.StringUtils
 
 class ContextHandlerService {
-    private static final String goElementLabel = "GO process term"
+    private static final String goElementLabel = "GO biological process term"
     private static final String speciesElementLabel = "species name"
     static final Map<String, String> externalTermMap = ExternalTermMapping.build()
 
@@ -138,7 +138,7 @@ class ContextHandlerService {
      */
     private boolean postProcessContextItem(AbstractContextItem contextItem, List<String> errorMessages) {
         String display = contextItem.valueDisplay
-        if (StringUtils.isNotBlank(display))
+        if (StringUtils.isBlank(display))
             return true
 
         if (display.toLowerCase().find(/^cid\W*:\W*\d+\W*/)) {//'cid:12345678'

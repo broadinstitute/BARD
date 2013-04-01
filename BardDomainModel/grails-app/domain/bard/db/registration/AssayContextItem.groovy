@@ -2,6 +2,9 @@ package bard.db.registration
 
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import org.apache.commons.lang3.builder.EqualsBuilder
+import org.apache.commons.lang3.builder.HashCodeBuilder
+import org.apache.commons.lang3.StringUtils
 
 class AssayContextItem extends AbstractContextItem<AssayContext> {
 

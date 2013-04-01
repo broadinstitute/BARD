@@ -493,8 +493,12 @@ class ResultsService {
 
         // walk through all the context items on the assay
         List<ExperimentContext> experimentContexts = []
-        for(values in (constantItems.groupBy {it.assayContext}).values()) {
+        for(entry in (constantItems.groupBy {it.assayContext}).entrySet()) {
+            AssayContext assayContext = entry.key;
+            Collection<ItemService.Item> values = entry.value;
+
             ExperimentContext context = new ExperimentContext()
+            context.setContextName(assayContext.contextName)
             for(item in values) {
                 String label = item.displayLabel;
 

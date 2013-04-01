@@ -6,6 +6,8 @@ import org.junit.Before
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
+import bard.db.dictionary.Element
+import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,11 +16,9 @@ import static test.TestUtils.assertFieldValidationExpectations
  * Time: 9:18 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build(AssayContextItem)
+@Build([AssayContextItem, Element])
 @Unroll
 class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
-
-
     @Before
     void doSetup() {
         domainInstance = AssayContextItem.buildWithoutSave()
@@ -50,6 +50,4 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         'AttributeType.Number' | AttributeType.Free  | true  | null
 
     }
-
-
 }

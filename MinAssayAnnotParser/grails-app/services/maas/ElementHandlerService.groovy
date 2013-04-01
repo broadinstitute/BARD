@@ -60,7 +60,9 @@ class ElementHandlerService {
 
 
     // Build map to
-    private static final String MAPPING_FILE_NAME = "data/maas/missingElements.txt"
+    private static final String MAPPING_FILE_NAME = "data/maas/missingElements.txt"    //  file with element, description, and pareentid
+    private static final String ELEMENT_DESCRIPTION = "data/maas/elementDescription.txt"  // another file format with element and description
+    private static final String ELEMENT_PARENT = "data/maas/elementParent.txt"           // another file format with element and parent
 
     static void build(String fileName, Map elementDescription, Map elementParent) {
         if (StringUtils.isBlank(fileName)) {
@@ -78,6 +80,36 @@ class ElementHandlerService {
                         && StringUtils.isNotBlank(elements[2])
                         && StringUtils.isNumeric(StringUtils.trim(elements[2])))
                     elementParent.put(StringUtils.trim(elements[0]), StringUtils.trim(elements[2]))
+            }
+        }
+    }
+
+    static void buildElementDescription(String fileName, Map elementDescription) {
+        if (StringUtils.isBlank(fileName)) {
+            fileName = ELEMENT_DESCRIPTION
+        }
+
+        new File(fileName).eachLine {String line, int cnt ->
+            if (StringUtils.isNotBlank(line) && !StringUtils.startsWith(StringUtils.trim(line), "//")) {     // skip comment field
+                String[] elements = line.split("\t")
+                if (elements.length >= 2)
+                    elementDescription.put(StringUtils.trim(elements[0]), StringUtils.trim(elements[1]))
+                else
+                    elementDescription.put(StringUtils.trim(elements[0]), "")
+            }
+        }
+    }
+
+    static void buildElementParent(String fileName, Map elementParent) {
+        if (StringUtils.isBlank(fileName)) {
+            fileName = ELEMENT_PARENT
+        }
+
+        new File(fileName).eachLine {String line, int cnt ->
+            if (StringUtils.isNotBlank(line) && !StringUtils.startsWith(StringUtils.trim(line), "//")) {     // skip comment field
+                String[] elements = line.split("\t")
+                if (elements.length >= 2 && StringUtils.isNumeric(StringUtils.trim(elements[1])))
+                    elementParent.put(StringUtils.trim(elements[0]), StringUtils.trim(elements[1]))
             }
         }
     }

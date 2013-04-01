@@ -11,8 +11,10 @@ import org.junit.Ignore
  */
 class AssayHandlerServiceIntegrationTest extends GroovyTestCase {
     def assayHandlerService
-    @Ignore
+//    @Ignore
     public testLoad() {
-        assayHandlerService.load()
+        def inputdir = ['data/maas/problemExcel']
+        def mustLoadedAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset2/aids_dataset_2.csv')
+        assayHandlerService.load(inputdir, 'data/maas/problemExcel/output', 'xiaorong',mustLoadedAids)
     }
 }
