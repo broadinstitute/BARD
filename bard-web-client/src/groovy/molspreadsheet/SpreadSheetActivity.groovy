@@ -23,7 +23,7 @@ class SpreadSheetActivity {
 
     public void activityToSpreadSheetActivity(final Activity activity, final List <MolSpreadSheetColSubHeader> resultTypeNames) {    //List <MolSpreadSheetColSubHeader>
         this.cid = activity.cid
-        this.eid = activity.eid
+        this.eid = activity.bardExptId
         this.sid = activity.sid
         this.addPotency(activity)
         this.addOutCome(activity)
