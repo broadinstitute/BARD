@@ -1,6 +1,5 @@
 package bardqueryapi
 
-import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.compounds.TargetClassInfo
 import grails.plugin.spock.IntegrationSpec
