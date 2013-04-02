@@ -12,7 +12,7 @@
 
     Ugly? <button id="redraw" onclick="redraw();">redraw</button> Still Ugly? Drag, Drop Nodes to Rearrange. Note that this will not be persisted on page refresh.
 
-    <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
+    <div id="placeholder">
 
 
         <div id="node-selection-details">

@@ -23,13 +23,13 @@
                 %{--Assay description--}%
                     <g:if test="${cell instanceof bardqueryapi.AssayValue}">
                         <td align="center" style="width: ${columnWidth}%">
-                            <g:assayDescription name="${cell?.value?.name ?: 'N/A'}" adid="${cell?.value?.capAssayId ?: 'N/A'}"/>
+                            <g:assayDescription name="${cell?.value?.name ?: ''}" adid="${cell?.value?.capAssayId ?: ''}"/>
                         </td>
                     </g:if>
                 %{--Project description--}%
                     <g:elseif test="${cell instanceof bardqueryapi.ProjectValue}">
                         <td align="center" style="width: ${columnWidth}%">
-                            <g:projectDescription name="${cell?.value?.name ?: 'N/A'}" pid="${cell?.value?.capProjectId ?: 'N/A'}"/>
+                            <g:projectDescription name="${cell?.value?.name ?: ''}" pid="${cell?.value?.capProjectId ?: ''}"/>
                         </td>
                     </g:elseif>
                 %{--Structure rendering--}%

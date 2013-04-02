@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProjectAbstract extends JsonUtil {
+    @JsonProperty("score")
+    private Double score
+
     @JsonProperty("experimentTypes")
     private Map<Long, String> experimentTypes;
 
@@ -350,6 +353,14 @@ public class ProjectAbstract extends JsonUtil {
     @JsonProperty("experimentTypes")
     public void setExperimentTypes(Map<Long, String> experimentTypes) {
         this.experimentTypes = experimentTypes;
+    }
+    @JsonProperty("score")
+    public Double getScore() {
+        return score
+    }
+    @JsonProperty("score")
+    public void setScore(Double score) {
+        this.score = score
     }
     public boolean hasProbes() {
         if (this.probes) {

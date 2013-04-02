@@ -2,12 +2,14 @@ package bardqueryapi
 
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
+import spock.lang.Ignore
 
 @Unroll
 class ProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
 
     ProjectExperimentRenderService projectExperimentRenderService
 
+    @Ignore
     void "test constructGraph"() {
 
         when:
@@ -27,6 +29,7 @@ class ProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
     /**
      * This PID should have isolated nodes, but the REST API does not yet support Isolated nodes
      */
+    @Ignore
     void "test constructGraphWithSomeIsolatedNodes"() {
 
         when:

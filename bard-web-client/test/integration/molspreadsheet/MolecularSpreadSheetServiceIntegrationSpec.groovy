@@ -29,13 +29,13 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     ShoppingCartService shoppingCartService
     RingManagerService ringManagerService
     @Shared
-    List<Long> TEST_EIDS = [13902, 14980]
+    List<Long> TEST_EIDS = [2, 3]
     @Shared
-    List<Long> TEST_ADIDS = [5155, 5156]
+    List<Long> TEST_ADIDS = [25, 26]
     @Shared
-    Long TEST_PID = 1963
+    Long TEST_PID = 2
     @Shared
-    Long TEST_CID = 9795907
+    Long TEST_CID = 2382353
 
 
 
@@ -336,7 +336,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         5.times {
             molSpreadSheetData.mssHeaders << new MolSpreadSheetColumnHeader()
         }
-        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [6603008 as Long, 6602571 as Long, 6602616 as Long])
+        String etag = this.compoundRestService.newETag((new Date()).toTimestamp().toString(), [2382353  as Long, 11958440 as Long, 46897918 as Long])
         List<SpreadSheetActivity> spreadSheetActivityList = molecularSpreadSheetService.extractMolSpreadSheetData(molSpreadSheetData,
                 experiments,
                 etag)
@@ -547,12 +547,12 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert activity
         assert activity.cid
-        assert activity.eid
+        assert activity.bardExptId
         assert activity.sid
         assert activity.resultData
         where:
-        label                                    | cids                        | experimentId
-        "An existing experiment with activities" | [644794L, 645320L, 646386L] | 14743
+        label                                    | cids                         | experimentId
+        "An existing experiment with activities" | [3793L]                      | 1
 
     }
 
