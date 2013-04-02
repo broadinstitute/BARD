@@ -13,9 +13,9 @@ import webtests.pages.ResultsPage
  * To change this template use File | Settings | File Templates.
  */
 class MolSpreadsheetFunctionalSpec extends BardFunctionalSpec {
-    @Shared String assayId = "9741"
-    @Shared String capassayId = "3575"
-    @Shared String compoundId = "647878"
+    @Shared String assayId = "44"
+    @Shared String capassayId = "5499"
+    @Shared String compoundId = "53377439"
 
     void setup() { // pre-condition of each test: user is logged in
         logInSomeUser()
