@@ -9,6 +9,7 @@ import org.jfree.chart.ChartUtilities
 import org.jfree.chart.JFreeChart
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
+import spock.lang.Ignore
 
 @Unroll
 class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
@@ -104,8 +105,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        label                                    | cids                        | experimentId
-        "An existing experiment with activities" | [72574L, 5405444L, 650462L] | 10282
+        label                                    | cids        | experimentId
+        "An existing experiment with activities" | [46897918L] | 22
 
     }
 
@@ -148,11 +149,11 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
 
         where:
-        label                                    | cids                        | experimentId
-        "An existing experiment with activities" | [72574L, 5405444L, 650462L] | 10282
+        label                                    | cids        | experimentId
+        "An existing experiment with activities" | [46897918L] | 22
 
     }
-
+    @Ignore
     void "tests plot multiple curves on same graph #label"() {
         given: "That we have created an ETag from a list of CIDs"
         final ExperimentData experimentData = this.experimentRestService.activities(experimentId);
@@ -170,7 +171,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         final List<ActivityConcentration> primaryElements = priorityElement.getPrimaryElements()
         List<Curve> curves = []
         String yaxis = ""
-        String xaxis = "Concetration " + priorityElement.testConcentrationUnit
+        String xaxis = "Concentration " + priorityElement.testConcentrationUnit
         for (ActivityConcentration primaryElement : primaryElements) {
             final ConcentrationResponseSeries concentrationResponseSeries = primaryElement.getConcentrationResponseSeries()
             yaxis = concentrationResponseSeries.getYAxisLabel()
@@ -201,7 +202,7 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         label                                    | experimentId
-        "An existing experiment with activities" | new Long(14117)
+        "An existing experiment with activities" | new Long(22)
 
     }
 
@@ -244,8 +245,8 @@ class DoseCurveRenderingServiceIntegrationSpec extends IntegrationSpec {
         //we need to assert the curve parameters
 
         where:
-        label                                    | cids                        | experimentId
-        "An existing experiment with activities" | [72574L, 5405444L, 650462L] | 10282
+        label                                    | cids        | experimentId
+        "An existing experiment with activities" | [46897918L] | 22
 
     }
 
