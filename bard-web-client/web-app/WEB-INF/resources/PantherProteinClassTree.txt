@@ -1,0 +1,10 @@
+PC00220	transferase	Enzymes transferring a group from one compound (donor) to another compound (acceptor).  Kinase is a separate category, so it is not included here.	1.20.00.00.00	panther	A0A4Z3	\transferase\
+PC00111	glycosyltransferase	An enzyme that catalyzes the transfer of a sugar (monosaccharide) unit from a sugar nucleotide derivative to a sugar or amino acid acceptor (EC2.4).	1.20.09.00.00	panther	A0A4Z3	\transferase\glycosyltransferase\
+PC00220	transferase	Enzymes transferring a group from one compound (donor) to another compound (acceptor).  Kinase is a separate category, so it is not included here.	1.20.00.00.00	panther	A0AUV4	\transferase\
+PC00137	kinase	An enzyme that catalyzes the transfer of a phosphate from ATP to a second substrate (EC2.7).	1.20.01.00.00	panther	A0AUV4	\transferase\kinase\
+PC00193	protein kinase	An enzyme that catalyzes the transfer of a phosphate from ATP to the hydroxyl side chains on proteins, causing changes in function.	1.20.01.01.00	panther	A0AUV4	\transferase\kinase\protein kinase\
+PC00167	non-receptor serine/threonine protein kinase	A soluble protein catalyzing transfer of phosphate from ATP to serine or threonine residue.	1.20.01.01.04	panther	A0AUV4	\transferase\kinase\protein kinase\non-receptor serine/threonine protein kinase\
+PC00227	transporter	A class of transmembrane proteins that allows substances to cross plasma membranes far faster than would be possible by diffusion alone.   Please note that ion channel has its own category and is not included here.	1.10.00.00.00	panther	A0AV02	\transporter\
+PC00068	cation transporter	A major class of transport proteins that expend energy through ATP hydrolysis to move cation across the plasma membrane.	1.10.02.00.00	panther	A0AV02	\transporter\cation transporter\
+PC00171	nucleic acid binding	A molecule that binds a nucleic acid.  It can be an enzyme or a binding protein.	1.09.00.00.00	panther	A0AV96	\nucleic acid binding\
+PC00031	RNA binding protein	A protein that binds RNA and is involved in RNA processing or metabolism.	1.09.02.00.00	panther	A0AV96	\nucleic acid binding\RNA binding protein\

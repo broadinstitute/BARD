@@ -30,12 +30,13 @@ class TargetClassInfo implements Serializable{
 
     static TargetClassInfo generateClassInformation(List<String> data) {
         final TargetClassInfo targetClassInfo = new TargetClassInfo()
-        targetClassInfo.id = data.get(0)
-        targetClassInfo.name = data.get(1)
-        targetClassInfo.description = data.get(2)
-        targetClassInfo.levelIdentifier = data.get(3)
-        targetClassInfo.source = data.get(4)
-        targetClassInfo.accessionNumber = data.get(5)
+        targetClassInfo.id = data.get(0).trim()
+        targetClassInfo.name = data.get(1).trim()
+        targetClassInfo.description = data.get(2).trim()
+        targetClassInfo.levelIdentifier = data.get(3).trim()
+        targetClassInfo.source = data.get(4).trim()
+        targetClassInfo.accessionNumber = data.get(5).trim()
+        targetClassInfo.path=data.get(6).trim()
         return targetClassInfo
     }
 
