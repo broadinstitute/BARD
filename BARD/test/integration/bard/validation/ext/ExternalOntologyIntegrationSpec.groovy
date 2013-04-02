@@ -31,30 +31,28 @@ class ExternalOntologyIntegrationSpec extends Specification {
 
 
         where:
-        externalUrl                                                             | notNull
-        "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn" | true
-        "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="        | true
+        externalUrl                                                                                    | notNull
+        "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn"                        | true
+        "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="                               | true
+        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid="                                     | true
+        "http://omim.org/entry/"                                                                       | true
+        "http://www.ncbi.nlm.nih.gov/biosystems/"                                                      | true
+        "http://www.ncbi.nlm.nih.gov/gene/"                                                            | true
+        "http://www.ncbi.nlm.nih.gov/mesh/"                                                            | true
+        "http://www.ncbi.nlm.nih.gov/nuccore/"                                                         | true
+        "http://www.ncbi.nlm.nih.gov/omim/"                                                            | true
+        "http://www.ncbi.nlm.nih.gov/protein/"                                                         | true
+        "http://www.ncbi.nlm.nih.gov/pubmed/"                                                          | true
+        "http://www.ncbi.nlm.nih.gov/structure/?term="                                                 | true
+        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="                                  | true
+        "http://www.uniprot.org/uniprot/"                                                              | true
+        "http://cas.org/"                                                                              | true
 
-//        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid="                                     | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://omim.org/entry/"                                                                       | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/biosystems/"                                                      | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/gene/"                                                            | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/mesh/"                                                            | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/nuccore/"                                                         | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/omim/"                                                            | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/protein/"                                                         | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/pubmed/"                                                          | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/structure/?term="                                                 | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-//        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="                                  | false // these should work but on 3/29/2013 started returning Unknow NCBI database
-
-        "http://www.uniprot.org/uniprot/" | true
-
-        "http://cas.org/" | false
         "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=" | false
-        "https://mli.nih.gov/mli/?dl_id=" | false
-        "http://regid.org/find" | false
+        "https://mli.nih.gov/mli/?dl_id="                                                              | false
+        "http://regid.org/find"                                                                        | false
 
-        "http://someUnknown.com" | false
+        "http://someUnknown.com"                                                                       | false
     }
 
     void "test invalid urls new ConfigurableExternalOntologyFactory().getExternalOntologyAPI for #externalUrl"() {
@@ -68,20 +66,8 @@ class ExternalOntologyIntegrationSpec extends Specification {
         e.message == message
 
         where:
-        externalUrl                                                   | message
-        "http://www.ncbi.nlm.nih.gov/gquery/?term="                   | 'Unknown NCBI database gquery'
-        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid="    | 'Unknown NCBI database pcsubstance'       // should hopefully get fixed soon
-        "http://omim.org/entry/"                                      | 'Unknown NCBI database omim'              // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/biosystems/"                     | 'Unknown NCBI database biosystems'        // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/gene/"                           | 'Unknown NCBI database gene'              // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/mesh/"                           | 'Unknown NCBI database mesh'              // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/nuccore/"                        | 'Unknown NCBI database nuccore'           // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/omim/"                           | 'Unknown NCBI database omim'              // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/protein/"                        | 'Unknown NCBI database protein'           // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/pubmed/"                         | 'Unknown NCBI database pubmed'            // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/structure/?term="                | 'Unknown NCBI database structure'         // should hopefully get fixed soon
-        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=" | 'Unknown NCBI database taxonomy'          // should hopefully get fixed soon
-
+        externalUrl                                 | message
+        "http://www.ncbi.nlm.nih.gov/gquery/?term=" | 'Unknown NCBI database gquery'
     }
 
     void "test successful externalOntologyAPI.findById for url: #externalUrl externalValueId: #externalValueId"() {
@@ -100,13 +86,13 @@ class ExternalOntologyIntegrationSpec extends Specification {
 
         where:
         externalUrl                                                      | externalValueId
-//        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"                // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"             // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"            // should work but currently broken
-//        "http://omim.org/entry/"                                         | "602706"              // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/omim/"                              | "602706"              // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "9986"                // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"            // should work but currently broken
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"
+        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"
+        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"
+        "http://omim.org/entry/"                                         | "602706"
+        "http://www.ncbi.nlm.nih.gov/omim/"                              | "602706"
+        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "9986"
+        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "GO:1901112"
         "http://www.uniprot.org/uniprot/"                                | "Q9Y6Q9"
     }
@@ -125,22 +111,13 @@ class ExternalOntologyIntegrationSpec extends Specification {
         where:
         externalUrl                                                      | externalValueId | expectedException
         "http://www.ncbi.nlm.nih.gov/gene/"                              | null            | ExternalOntologyException
-//        "http://www.ncbi.nlm.nih.gov/gene/"                              | " "             | IndexOutOfBoundsException // currently throwing ExternalOntologyException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | " "             | IndexOutOfBoundsException
         "http://www.ncbi.nlm.nih.gov/gene/"                              | ""              | ExternalOntologyException
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | null            | ExternalOntologyException
         "http://www.uniprot.org/uniprot/"                                | null            | ExternalOntologyException
         "http://www.uniprot.org/uniprot/"                                | " "             | RemoteDataAccessException
         "http://www.uniprot.org/uniprot/"                                | ""              | RemoteDataAccessException
-
-        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"          | ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"       | ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"      | ExternalOntologyException
-        "http://omim.org/entry/"                                         | "602706"        | ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/omim/"                              | "602706"        | ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "9986"          | ExternalOntologyException
     }
-
-
 
     void "test successful externalOntologyAPI.findMatching for url: #externalUrl term: #term"() {
         when:
@@ -161,20 +138,19 @@ class ExternalOntologyIntegrationSpec extends Specification {
         externalItems
 
         where:
-        externalUrl                                                      | term
-//        "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"            // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"                                          // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"                                          // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"                                      // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"                                       // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/omim/"                              | "PROTEASOME 26S SUBUNIT, ATPase, 1;"            // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/pubmed/"                            | "Distinct 3-O-Sulfated Heparan Sulfate"         // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "Cellana capensis"                              // should work but currently broken
-//        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"                                      // should work but currently broken
-//        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"                                       // should work but currently broken
-        "http://www.uniprot.org/uniprot/"                                | "Q9Y6Q9"
+        externalUrl | term
+        "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
+        "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"
+        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"
+        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"
+        "http://www.ncbi.nlm.nih.gov/omim/"                              | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
+        "http://www.ncbi.nlm.nih.gov/pubmed/"                            | "Distinct 3-O-Sulfated Heparan Sulfate"
+        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "Cellana capensis"
+        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"
+        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"
+        "http://www.uniprot.org/uniprot/" | "Q9Y6Q9"
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "apoptotic process"
-
     }
 
     void "test exception externalOntologyAPI.findMatching for url: #externalUrl term: '#term'"() {
@@ -189,25 +165,14 @@ class ExternalOntologyIntegrationSpec extends Specification {
         println(e.message)
 
         where:
-        externalUrl                                                      | term | expectedException
-//        "http://www.ncbi.nlm.nih.gov/gene/"                              | null | NullPointerException
-        "http://www.ncbi.nlm.nih.gov/gene/"                              | " "  | ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/gene/"                              | ""   | ExternalOntologyException
+        externalUrl | term | expectedException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | null | NullPointerException
+        "http://www.ncbi.nlm.nih.gov/gene/" | " " | ExternalOntologyException
+        "http://www.ncbi.nlm.nih.gov/gene/" | "" | ExternalOntologyException
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | null | ExternalOntologyException
-        "http://www.uniprot.org/uniprot/"                                | null | RemoteDataAccessException
-        "http://www.uniprot.org/uniprot/"                                | " "  | RemoteDataAccessException
-        "http://www.uniprot.org/uniprot/"                                | ""   | RemoteDataAccessException
-
-        "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"      |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"                                    |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"                                    |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/mesh/"                              | "68020170"                                |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/protein/"                           | "9966877"                                 |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/omim/"                              | "PROTEASOME 26S SUBUNIT, ATPase, 1;"      |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/pubmed/"                            | "Distinct 3-O-Sulfated Heparan Sulfate"   |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "Cellana capensis"                        |   ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"                                |   ExternalOntologyException
-        "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"                                 |   ExternalOntologyException
+        "http://www.uniprot.org/uniprot/" | null | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/" | " " | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/" | "" | RemoteDataAccessException
     }
 
     @Ignore
