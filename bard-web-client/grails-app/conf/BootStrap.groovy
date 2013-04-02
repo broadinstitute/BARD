@@ -8,24 +8,15 @@ import org.codehaus.groovy.grails.commons.ApplicationHolder
 import org.springframework.core.io.Resource
 
 class BootStrap {
+    def grailsApplication
     DataExportRestService dataExportRestService
     SunburstRestService sunburstRestService
-    //return (ApplicationContext) ServletContextHolder.getServletContext().getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT);
 
     def init = { servletContext ->
-        String resourceName = "resources/target.txt"
-        String rdmResourceName = "resources/PantherProteinClassTree.txt"
-
-
-        def resource1 = ApplicationHolder.application.parentContext.getResource("classpath:$resourceName")
-        def resource2 = ApplicationHolder.application.parentContext.getResource("classpath:$rdmResourceName")
-
-        File locallyGeneratedResource =resource1.getFile()
-        File  resourceFromRDM = resource2.getFile()
 
         //load dictionary if the data export api is available
         loadCapDictionary()
-        loadTargets(locallyGeneratedResource,resourceFromRDM)
+        loadTargets()
     }
     def destroy = {
     }
@@ -37,9 +28,10 @@ class BootStrap {
             log.error(ee)
         }
     }
-    void loadTargets( final File locallyGeneratedResource,final File  resourceFromRDM){
+    void loadTargets(){
         try {
-            sunburstRestService.loadTargetsFromFile(locallyGeneratedResource,resourceFromRDM)
+            final File targets = grailsApplication.parentContext.getResource("/WEB-INF/resources/PantherProteinClassTree.txt").file
+              sunburstRestService.loadTargetsFromFile(targets)
         } catch (Exception ee) {
             log.error(ee)
         }

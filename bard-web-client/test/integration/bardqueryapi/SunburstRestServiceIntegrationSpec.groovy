@@ -1,6 +1,7 @@
-package bard.core.rest.spring
+package bardqueryapi
 
 import bard.core.rest.helper.RESTTestHelper
+import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.compounds.TargetClassInfo
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
@@ -8,7 +9,6 @@ import spock.lang.Unroll
 /**
  * Tests Target service
  */
-@Mixin(RESTTestHelper)
 @Unroll
 class SunburstRestServiceIntegrationSpec extends IntegrationSpec {
     SunburstCacheService sunburstCacheService
