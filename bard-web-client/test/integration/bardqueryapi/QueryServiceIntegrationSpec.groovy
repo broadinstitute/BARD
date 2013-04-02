@@ -11,6 +11,7 @@ import bard.core.rest.spring.util.StructureSearchParams
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Shared
 import spock.lang.Unroll
+import spock.lang.IgnoreRest
 
 @Unroll
 class QueryServiceIntegrationSpec extends IntegrationSpec {
@@ -358,6 +359,6 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                               | pids
         "Single PID"                        | [PIDS.get(0)]
-        "Search with a list of project ids" | PIDS
+        //"Search with a list of project ids" | PIDS
     }
 }
