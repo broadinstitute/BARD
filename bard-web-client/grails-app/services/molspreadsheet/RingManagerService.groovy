@@ -24,4 +24,20 @@ class RingManagerService {
         stringBuilder.toString()
     }
 
+
+    LinkedHashMap<String, Integer> accumulateAccessionNumbers( List<String> listOfAllTargets ) {
+        LinkedHashMap<String, Integer> returnValue = [:]
+        for ( String oneTarget in listOfAllTargets)  {
+            if (returnValue.containsKey(oneTarget))  {
+                returnValue[oneTarget]   =  returnValue[oneTarget]+1
+            }  else {
+                returnValue[oneTarget]  = 1
+            }
+        }
+        return returnValue
+    }
+
+
+
+
 }

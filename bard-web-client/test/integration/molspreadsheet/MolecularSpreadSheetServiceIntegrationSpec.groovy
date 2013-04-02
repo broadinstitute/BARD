@@ -1,10 +1,6 @@
 package molspreadsheet
 
 import bard.core.SearchParams
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.CompoundRestService
-import bard.core.rest.spring.ExperimentRestService
-import bard.core.rest.spring.ProjectRestService
 import bard.core.rest.spring.assays.Assay
 import com.metasieve.shoppingcart.ShoppingCartService
 import grails.plugin.spock.IntegrationSpec
@@ -14,6 +10,7 @@ import querycart.CartProject
 import querycart.QueryCartService
 import spock.lang.Shared
 import spock.lang.Unroll
+import bard.core.rest.spring.*
 import bard.core.rest.spring.experiment.*
 
 import static junit.framework.Assert.assertNotNull
@@ -24,11 +21,13 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     MolecularSpreadSheetService molecularSpreadSheetService
     MolSpreadSheetData molSpreadSheetData = generateFakeData()
     CompoundRestService compoundRestService
+    SunburstCacheService sunburstCacheService
     AssayRestService assayRestService
     ExperimentRestService experimentRestService
     ProjectRestService projectRestService
     QueryCartService queryCartService
     ShoppingCartService shoppingCartService
+    RingManagerService ringManagerService
     @Shared
     List<Long> TEST_EIDS = [13902, 14980]
     @Shared
@@ -37,6 +36,23 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     Long TEST_PID = 1963
     @Shared
     Long TEST_CID = 9795907
+
+
+
+    void "test sunburst machinery"(){
+        given:
+        final List<String> targets = ["P03230","Q92698","Q3TKT4","P49615","Q9H3R0","P10520","P37840","P21399",
+                "P55789","Q99814","P27540","Q9Y6A5","Q16665","P38532","O75030","P69722","P69720","P69721","P69723","Q14145","Q16236","Q04206","Q61009"]
+        LinkedHashMap<String, Integer> accumulatedTargets = ringManagerService.accumulateAccessionNumbers( targets )
+        when:
+        List<String> accumulatedMaps = []
+        accumulatedTargets.each{k,v->
+            accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)}
+        println  accumulatedMaps.toString()
+        then:
+        assert 1==1
+     }
+
 
 
     void "test activitiesByEIDs"() {
