@@ -28,44 +28,41 @@ public class LogicalKey {
 
     java.util.Set<LogicalKeyItem> items = new HashSet();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
 
-        LogicalKey that = (LogicalKey) o;
+        LogicalKey that = (LogicalKey) o
 
-        if (items != null ? !items.equals(that.items) : that.items != null) return false;
-        if (qualifier != null ? !qualifier.equals(that.qualifier) : that.qualifier != null) return false;
-        if (replicateNumber != null ? !replicateNumber.equals(that.replicateNumber) : that.replicateNumber != null)
-            return false;
-        if (resultType != null ? !resultType.equals(that.resultType) : that.resultType != null) return false;
-        if (statsModifier != null ? !statsModifier.equals(that.statsModifier) : that.statsModifier != null)
-            return false;
-        if (substanceId != null ? !substanceId.equals(that.substanceId) : that.substanceId != null) return false;
-        if (valueDisplay != null ? !valueDisplay.equals(that.valueDisplay) : that.valueDisplay != null) return false;
-        if (valueElement != null ? !valueElement.equals(that.valueElement) : that.valueElement != null) return false;
-        if (valueMax != null ? !valueMax.equals(that.valueMax) : that.valueMax != null) return false;
-        if (valueMin != null ? !valueMin.equals(that.valueMin) : that.valueMin != null) return false;
-        if (valueNum != null ? !valueNum.equals(that.valueNum) : that.valueNum != null) return false;
+        if (items != that.items) return false
+        if (qualifier != that.qualifier) return false
+        if (replicateNumber != that.replicateNumber) return false
+        if (resultType != that.resultType) return false
+        if (statsModifier != that.statsModifier) return false
+        if (substanceId != that.substanceId) return false
+        if (valueDisplay != that.valueDisplay) return false
+        if (valueElement != that.valueElement) return false
+        if (valueMax != that.valueMax) return false
+        if (valueMin != that.valueMin) return false
+        if (valueNum != that.valueNum) return false
 
-        return true;
+        return true
     }
 
-    @Override
-    public int hashCode() {
-        int result = replicateNumber != null ? replicateNumber.hashCode() : 0;
-        result = 31 * result + (substanceId != null ? substanceId.hashCode() : 0);
-        result = 31 * result + (resultType != null ? resultType.hashCode() : 0);
-        result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0);
-        result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0);
-        result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0);
-        result = 31 * result + (valueMin != null ? valueMin.hashCode() : 0);
-        result = 31 * result + (valueMax != null ? valueMax.hashCode() : 0);
-        result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0);
-        result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0);
-        result = 31 * result + (items != null ? items.hashCode() : 0);
-        return result;
+    int hashCode() {
+        int result
+        result = (replicateNumber != null ? replicateNumber.hashCode() : 0)
+        result = 31 * result + (substanceId != null ? substanceId.hashCode() : 0)
+        result = 31 * result + (resultType != null ? resultType.hashCode() : 0)
+        result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0)
+        result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
+        result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0)
+        result = 31 * result + (valueMin != null ? valueMin.hashCode() : 0)
+        result = 31 * result + (valueMax != null ? valueMax.hashCode() : 0)
+        result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
+        result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
+        result = 31 * result + (items != null ? items.hashCode() : 0)
+        return result
     }
 
     @Override
