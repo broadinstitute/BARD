@@ -11,6 +11,26 @@ class RingNode {
     String name = ""
     int size =  0
     List <RingNode> children = []
+    //
+    String ID = ""
+    String description = ""
+    String levelIdentifier = ""
+    String source = ""
+
+
+    public RingNode(String name,
+                    String ID,
+                    String description,
+                    String levelIdentifier,
+                    String source,
+                    int size = 0) {
+        this(name, size)
+        this.ID = ID
+        this.description = description
+        this.levelIdentifier = levelIdentifier
+        this.source = source
+    }
+
 
 
     public RingNode( String name, int size = 0  ){
@@ -22,6 +42,30 @@ class RingNode {
         this.name = name
         this.size = 0
         this.children = children
+    }
+
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        RingNode ringNode = (RingNode) o
+
+        if (ID != ringNode.ID) return false
+        if (description != ringNode.description) return false
+        if (levelIdentifier != ringNode.levelIdentifier) return false
+        if (name != ringNode.name) return false
+
+        return true
+    }
+
+    int hashCode() {
+        int result
+        result = (name != null ? name.hashCode(): 0)
+        result = 31 * result + (ID != null ? ID.hashCode(): 0)
+        result = 31 * result + (description != null ? description.hashCode(): 0)
+        result = 31 * result + (levelIdentifier != null ? levelIdentifier.hashCode(): 0)
+        return result
     }
 
 
@@ -122,6 +166,36 @@ class RingNode {
 //                ]);
         stringBuilder.toString()
     }
+
+
+
+
+    public String writeHierarchyPath ( LinkedHashMap<String,RingNode> ringNodeMgr ) {
+        StringBuilder stringBuilder = new StringBuilder()
+        describeMeAndMyParent (this,ringNodeMgr, stringBuilder)
+        stringBuilder.toString()
+    }
+
+    public void describeMeAndMyParent ( RingNode me, LinkedHashMap<String,RingNode> ringNodeMgr, StringBuilder stringBuilder ) {
+        RingNode myParent = null
+        // find my parent, if I have one
+        for (RingNode oneRingNode in ringNodeMgr.values()) {
+            if (oneRingNode.children.contains(me)) {
+                myParent = oneRingNode
+                break
+            }
+        }
+        if (myParent == null) { // we are at the root
+            stringBuilder << me.name
+        } else {  // keep going up the tree
+            describeMeAndMyParent(myParent,ringNodeMgr,stringBuilder)
+            stringBuilder << "${me.name}\\".toString()
+        }
+    }
+
+
+
+
 
 
     @Override
