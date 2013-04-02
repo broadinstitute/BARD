@@ -1,13 +1,9 @@
 package bard.core.rest.spring
 
 import bard.core.rest.helper.RESTTestHelper
-
-import grails.plugin.spock.IntegrationSpec
-
-import spock.lang.Unroll
-
 import bard.core.rest.spring.compounds.TargetClassInfo
-import grails.plugin.cache.GrailsCacheManager
+import grails.plugin.spock.IntegrationSpec
+import spock.lang.Unroll
 
 /**
  * Tests Target service
