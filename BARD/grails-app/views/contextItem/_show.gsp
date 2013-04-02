@@ -26,9 +26,9 @@
         <g:each in="${context.contextItems}" status="i" var="contextItem">
             <tr id="${contextItem.id}" class="context_item_row ${highlightedItemId==contextItem.id?'warning':''}">
                 <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
-                <g:if test="${ contextItem.extValueId }">
+                <g:if test="${ contextItem.attributeElement?.externalURL }">
                 	<td class="valuedLabel">
-                		<a href="${contextItem.valueDisplay}" target="_blank">${valueDisplay}</a>
+                		<a href="${contextItem.attributeElement.externalURL + contextItem.extValueId}" target="_blank">${contextItem.valueDisplay}</a>
                 	</td>
                 </g:if>
                 <g:else>
