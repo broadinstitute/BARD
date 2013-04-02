@@ -10,7 +10,7 @@ import java.util.zip.GZIPOutputStream
 class ResultsExportService {
 
     ArchivePathService archivePathService
-    BulkResultService bulkResultService
+//    BulkResultService bulkResultService
 
     ObjectMapper mapper = new ObjectMapper()
 
@@ -83,13 +83,13 @@ class ResultsExportService {
         writer.close()
     }
 
-    void dumpFromDb(Long experimentId) {
-        Experiment experiment = Experiment.get(experimentId)
-        assert experiment != null
-        List<Result> results = bulkResultService.findResults(experiment)
-
-        println("writing ${results.size()} results")
-
-        dumpFromListToAbsPath(new File("exp-${experimentId}.json.gz"), results)
-    }
+//    void dumpFromDb(Long experimentId) {
+//        Experiment experiment = Experiment.get(experimentId)
+//        assert experiment != null
+//        List<Result> results = bulkResultService.findResults(experiment)
+//
+//        println("writing ${results.size()} results")
+//
+//        dumpFromListToAbsPath(new File("exp-${experimentId}.json.gz"), results)
+//    }
 }

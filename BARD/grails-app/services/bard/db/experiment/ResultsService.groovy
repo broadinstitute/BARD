@@ -9,12 +9,16 @@ import bard.db.registration.AttributeType
 import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
+import bard.hibernate.AuthenticatedUserRequired
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
+
+import bard.db.experiment.results.*;
 
 class ResultsService {
 
@@ -43,6 +47,13 @@ class ResultsService {
     PugService pugService
     ResultsExportService resultsExportService
     ArchivePathService archivePathService
+    BulkResultService bulkResultService
+    SpringSecurityService springSecurityService;
+
+    public static class ImportOptions {
+        boolean validateSubstances = true;
+        boolean writeResultsToDb = true;
+    }
 
     static boolean isNumber(value) {
         return NUMBER_PATTERN.matcher(value).matches()
@@ -123,7 +134,8 @@ class ResultsService {
             }
             catch(NumberFormatException e)
             {
-                return "Could not parse \"${value}\" as a range"
+                // if we fail to parse it as a range, treat it as free text
+                return new Cell(valueDisplay: value)
             }
 
             Cell cell = new Cell(minValue: minValue, maxValue: maxValue, valueDisplay: "${minValue}-${maxValue}")
@@ -150,155 +162,6 @@ class ResultsService {
         } else {
             return parseQualifiedNumber(value)
         }
-    }
-
-    // used to identify duplicates
-    static class LogicalKey {
-        Integer replicateNumber;
-        Long substanceId
-
-        Element resultType
-        Element statsModifier
-        Float valueNum
-        String qualifier;
-        Float valueMin
-        Float valueMax
-        Element valueElement
-        String valueDisplay
-
-        Set<LogicalKeyItem> items = [] as Set
-
-        boolean equals(o) {
-            if (this.is(o)) return true
-            if (getClass() != o.class) return false
-
-            LogicalKey that = (LogicalKey) o
-
-            if (items != that.items) return false
-            if (qualifier != that.qualifier) return false
-            if (replicateNumber != that.replicateNumber) return false
-            if (resultType != that.resultType) return false
-            if (statsModifier != that.statsModifier) return false
-            if (substanceId != that.substanceId) return false
-            if (valueDisplay != that.valueDisplay) return false
-            if (valueElement != that.valueElement) return false
-            if (valueMax != that.valueMax) return false
-            if (valueMin != that.valueMin) return false
-            if (valueNum != that.valueNum) return false
-
-            return true
-        }
-
-        int hashCode() {
-            int result
-            result = (replicateNumber != null ? replicateNumber.hashCode() : 0)
-            result = 31 * result + substanceId.hashCode()
-            result = 31 * result + resultType.hashCode()
-            result = 31 * result + (statsModifier != null ? statsModifier.hashCode() : 0)
-            result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
-            result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0)
-            result = 31 * result + (valueMin != null ? valueMin.hashCode() : 0)
-            result = 31 * result + (valueMax != null ? valueMax.hashCode() : 0)
-            result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
-            result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
-            result = 31 * result + items.hashCode()
-            return result
-        }
-
-        @Override
-        public String toString() {
-            return "LogicalKey{" +
-                    "replicateNumber=" + replicateNumber +
-                    ", substance=" + substanceId +
-                    ", resultType=" + resultType +
-                    ", statsModifier=" + statsModifier +
-                    ", valueNum=" + valueNum +
-                    ", qualifier='" + qualifier + '\'' +
-                    ", valueMin=" + valueMin +
-                    ", valueMax=" + valueMax +
-                    ", valueElement=" + valueElement +
-                    ", valueDisplay='" + valueDisplay + '\'' +
-                    ", items=" + items +
-                    '}';
-        }
-    }
-
-    static class LogicalKeyItem {
-        Element attributeElement
-        Float valueNum
-        String qualifier;
-        Float valueMin
-        Float valueMax
-        Element valueElement
-        String valueDisplay
-
-        boolean equals(o) {
-            if (this.is(o)) return true
-            if (getClass() != o.class) return false
-
-            LogicalKeyItem that = (LogicalKeyItem) o
-
-            if (attributeElement != that.attributeElement) return false
-            if (qualifier != that.qualifier) return false
-            if (valueDisplay != that.valueDisplay) return false
-            if (valueElement != that.valueElement) return false
-            if (valueMax != that.valueMax) return false
-            if (valueMin != that.valueMin) return false
-            if (valueNum != that.valueNum) return false
-
-            return true
-        }
-
-        int hashCode() {
-            int result
-            result = attributeElement.hashCode()
-            result = 31 * result + (valueNum != null ? valueNum.hashCode() : 0)
-            result = 31 * result + (qualifier != null ? qualifier.hashCode() : 0)
-            result = 31 * result + (valueMin != null ? valueMin.hashCode() : 0)
-            result = 31 * result + (valueMax != null ? valueMax.hashCode() : 0)
-            result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
-            result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
-            return result
-        }
-
-        @Override
-        public String toString() {
-            return "LogicalKeyItem{" +
-                    "attributeElement=" + attributeElement +
-                    ", valueNum=" + valueNum +
-                    ", qualifier='" + qualifier + '\'' +
-                    ", valueMin=" + valueMin +
-                    ", valueMax=" + valueMax +
-                    ", valueElement=" + valueElement +
-                    ", valueDisplay='" + valueDisplay + '\'' +
-                    '}';
-        }
-    }
-
-    static class Row {
-        int lineNumber;
-
-        Integer rowNumber;
-        Integer replicate;
-        Integer parentRowNumber;
-        Long sid;
-
-        List<RawCell> cells = [];
-    }
-
-    static class Cell {
-        String qualifier;
-        Float value;
-        Float minValue;
-        Float maxValue;
-        Element element;
-
-        String valueDisplay;
-    }
-
-    static class RawCell {
-        String columnName;
-        String value;
     }
 
     static class ImportSummary {
@@ -649,9 +512,14 @@ class ResultsService {
         Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
         for(measure in rootMeasures) {
+            println("creating results for ${measure}")
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
+        for(cell in unused.keySet()) {
+            Row row = unused.get(cell);
+            errors.addError(row.lineNumber, 0, "Didn't know what to do with the value on line ${row.lineNumber} in column ${cell.columnName}");
+        }
         // flatten results to include the top level elements as well as all reachable children
         Set<Result> allResults = new HashSet()
         addAllResults(allResults, results)
@@ -671,23 +539,18 @@ class ResultsService {
     Collection<Result> extractResultFromEachRow(ExperimentMeasure measure, Collection<Row> rows, Map<Integer, Collection<Row>> byParent, IdentityHashMap<RawCell, Row> unused, ImportSummary errors, Map<Measure, ItemService.Item> itemsByMeasure) {
         List<Result> results = []
 
+        String label = measure.measure.displayLabel
+
         for(row in rows) {
-            Substance substance = Substance.get(row.sid)
-            if(substance == null) {
-                errors.addError(row.lineNumber, 0, "While creating results, could not find substance with id ${row.sid}")
-                continue
-            }
-
-            Map<String, RawCell> valueByColumn = row.cells.collectEntries { [it.columnName, it] }
-
-            String label = measure.measure.displayLabel
-            RawCell cell = valueByColumn.get(label)
+            // change this to a call to find
+            RawCell cell = row.find(label)
 
             if(cell != null) {
                 // mark this cell as having been consumed
                 unused.remove(cell)
+                String cellValue = cell.value
 
-                Result result = createResult(row.replicate, measure.measure, cell.value, row.sid, errors)
+                Result result = createResult(row.replicate, measure.measure, cellValue, row.sid, errors)
                 if (result == null)
                     continue;
 
@@ -709,9 +572,11 @@ class ResultsService {
                 }
 
                 // likewise create each of the context items associated with this measure
+                results.add(result);
                 for(item in itemsByMeasure[measure.measure]) {
-                    RawCell itemCell = valueByColumn[item.displayLabel]
+                    RawCell itemCell = row.find(item.displayLabel)
                     if (itemCell != null) {
+                        unused.remove(itemCell)
                         ResultContextItem resultItem = createResultItem(itemCell.value, item, errors)
 
                         if (resultItem != null) {
@@ -720,8 +585,6 @@ class ResultsService {
                         }
                     }
                 }
-
-                results.add(result)
             }
         }
 
@@ -767,7 +630,6 @@ class ResultsService {
         def parsed = parseContextItem(stringValue, assayItem)
 
         if (parsed instanceof Cell) {
-            Element unit = assayItem.attributeElement.unit;
             Cell cell = parsed
             ResultContextItem item = new ResultContextItem()
 
@@ -777,7 +639,8 @@ class ResultsService {
             item.valueMin= cell.minValue
             item.valueMax= cell.maxValue
             item.valueElement = cell.element
-            item.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+            Element unit = assayItem.attributeElement.unit;
+            item.valueDisplay= cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
 
             return item
         } else {
@@ -795,7 +658,7 @@ class ResultsService {
 
             Result result = new Result()
             result.qualifier = cell.qualifier
-            result.valueDisplay= cell.valueDisplay + (unit == null ? "" : " ${unit.abbreviation}")
+            result.valueDisplay= cell.valueDisplay + ((unit == null || cell.valueDisplay == "NA") ? "" : " ${unit.abbreviation}")
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
@@ -817,12 +680,17 @@ class ResultsService {
 
         if (parsed instanceof Cell) {
             Cell cell = parsed
+
+            Element unit = assayItem.attributeElement.unit;
+            String valueDisplay= cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
+
             ExperimentContextItem item = new ExperimentContextItem(attributeElement: assayItem.attributeElement,
                     valueElement: cell.element,
                     valueNum: cell.value,
                     valueMin: cell.minValue,
                     valueMax: cell.maxValue,
-                    qualifier: cell.qualifier)
+                    qualifier: cell.qualifier,
+                    valueDisplay: valueDisplay)
         } else {
             errors.addError(0, 0, parsed)
             return null;
@@ -924,7 +792,11 @@ class ResultsService {
         return result
     }
 
-    ImportSummary importResults(Experiment experiment, InputStream input) {
+    ImportSummary importResults(Experiment experiment, InputStream input, ImportOptions options = null) {
+        if (options == null) {
+            options = new ImportOptions();
+        }
+
         String originalFilename = archivePathService.constructUploadResultPath(experiment)
         String exportFilename = archivePathService.constructExportResultPath(experiment)
         File archivedFile = archivePathService.prepareForWriting(originalFilename)
@@ -934,7 +806,7 @@ class ResultsService {
         input.close()
         output.close()
 
-        ImportSummary summary = importResultsWithoutSavingOriginal(experiment, new GZIPInputStream(new FileInputStream(archivedFile)), originalFilename, exportFilename);
+        ImportSummary summary = importResultsWithoutSavingOriginal(experiment, new GZIPInputStream(new FileInputStream(archivedFile)), originalFilename, exportFilename, options);
         if (summary.hasErrors()) {
             archivedFile.delete()
         }
@@ -953,7 +825,7 @@ class ResultsService {
         return itemsByMeasure
     }
 
-    ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename) {
+    ImportSummary importResultsWithoutSavingOriginal(Experiment experiment, InputStream input, String originalFilename, String exportFilename, ImportOptions options) {
         ImportSummary errors = new ImportSummary()
 
         Template template = generateMaxSchema(experiment)
@@ -966,7 +838,9 @@ class ResultsService {
             // populate the top few lines in the summary.
             errors.topLines = parsed.topLines
 
-            def missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
+            def missingSids = []
+            if (options.validateSubstances)
+                missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
 
             missingSids.each {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
@@ -976,6 +850,10 @@ class ResultsService {
             {
                 def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
 
+                if (!errors.hasErrors() && results.size() == 0) {
+                    errors.addError(0, 0, "No results were produced")
+                }
+
                 if (!errors.hasErrors()) {
                     checkForDuplicates(errors, results)
                 }
@@ -984,7 +862,7 @@ class ResultsService {
                     // and persist these results to the DB
                     Collection<ExperimentContext>contexts = parsed.contexts;
 
-                    persist(experiment, results, errors, contexts, originalFilename, exportFilename)
+                    persist(experiment, results, errors, contexts, originalFilename, exportFilename, options)
                 }
             }
         }
@@ -1035,7 +913,7 @@ class ResultsService {
     }
 
 
-    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename) {
+    private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename, ImportOptions options) {
         deleteExperimentResults(experiment)
 
         results.each {
@@ -1063,6 +941,9 @@ class ResultsService {
 
         errors.resultsCreated = results.size()
 
+        if (options.writeResultsToDb)
+            bulkResultService.insertResults(getUsername(), experiment, results)
+
         resultsExportService.dumpFromList(exportFilename, results)
 
         addExperimentFileToDb(experiment, originalFilename, exportFilename)
@@ -1074,12 +955,20 @@ class ResultsService {
         experiment.experimentFiles.add(file)
     }
 
+    private String getUsername() {
+        String username = springSecurityService.getPrincipal()?.username
+        if (!username) {
+            throw new AuthenticatedUserRequired('An authenticated user was expected this point');
+        }
+        return username
+    }
+
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
     public void deleteExperimentResults(Experiment experiment) {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        new ArrayList(experiment.experimentContexts).each { context ->
+        new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
             new ArrayList(context.experimentContextItems).each { item ->
                 context.removeFromExperimentContextItems(item)
                 item.delete()
@@ -1087,5 +976,7 @@ class ResultsService {
             experiment.removeFromExperimentContexts(context)
             context.delete()
         }
+
+        bulkResultService.deleteResults(experiment)
     }
 }

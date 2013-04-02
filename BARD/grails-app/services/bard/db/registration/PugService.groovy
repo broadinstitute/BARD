@@ -9,6 +9,7 @@ import com.google.common.collect.Lists
 import grails.plugins.springsecurity.SpringSecurityService
 import groovy.xml.MarkupBuilder
 import org.apache.commons.io.IOUtils
+import org.apache.commons.net.ftp.FTP
 import org.apache.commons.net.ftp.FTPClient
 import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpPost
@@ -95,18 +96,27 @@ class PugService {
         URL parsedUrl = new URL(url);
         ftpClient.connect(parsedUrl.getHost());
         ftpClient.login(pubChemAnonFtpUser, pubChemAnonFtpPassword);
+        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
         InputStream input = ftpClient.retrieveFileStream(parsedUrl.getFile())
 
-//        FileOutputStream out = new FileOutputStream("lastpubchem_query.txt");
-//        IOUtils.copy(input, out);
-//        input.close();
-//        out.close();
-//        input = new FileInputStream("lastpubchem_query.txt")
-
-        callback(input)
+        File tmpFile = File.createTempFile("pubchemquery", "temp");
+        FileOutputStream out = new FileOutputStream(tmpFile);
+        IOUtils.copy(input, out);
         input.close();
+        out.close();
 
         ftpClient.disconnect()
+
+        try {
+            input = new FileInputStream(tmpFile)
+            callback(input)
+            input.close();
+
+            tmpFile.delete();
+        } catch (Exception ex) {
+            throw new RuntimeException("Got exception while trying to process pubchem download: ${tmpFile.absolutePath}", ex)
+        }
     }
 
     /** Call a callback once per sid, smiles tuple.  If the sid could not be found smiles == null */
@@ -152,7 +162,7 @@ class PugService {
         List<Long> substancesFromPubchem = new ArrayList()
 
         // may turn this on for bulk loads of converted data
-        boolean bypassPubchemQuery = false
+        boolean bypassPubchemQuery = true;
         if (!bypassPubchemQuery) {
             getSubstancesFromPubchem(missingSids) { sid ->
                 Long substanceId = Long.parseLong(sid)
@@ -190,7 +200,7 @@ class PugService {
                 parsedResponse = executeQuery(query)
 
                 def status = find(parsedResponse, "PCT-Status")?."@value"
-                if (status != "success" && status != "running") {
+                if (status != "success" && status != "running" && status != "queued") {
                     throw new RuntimeException("Querying substances from pubchem failed: "+parsedResponse);
                 }
 
@@ -206,6 +216,11 @@ class PugService {
 
                 url = find(parsedResponse, "PCT-Download-URL_url")?.text()
                 assert url != null
+
+                readFtpResource(url) { input ->
+                    parseSmilesTable(input, callback)
+                }
+
             } catch(Exception ex) {
                 println("Query failed so writing query and last response to files")
 
@@ -215,9 +230,6 @@ class PugService {
                 throw ex;
             }
 
-            readFtpResource(url) { input ->
-                parseSmilesTable(input, callback)
-            }
         }
     }
 }

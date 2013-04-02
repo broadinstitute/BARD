@@ -78,21 +78,6 @@ class PubchemReformatServiceUnitSpec extends Specification {
                 [TID: 4, RESULTTYPE: "child", PARENTTID: 1]
         ]
 
-//        "PARENTTID",
-//        "RESULTTYPE",
-//        "STATS_MODIFIER",
-//        "CONTEXTTID",
-//        "CONTEXTITEM",
-//        "CONCENTRATION",
-//        "CONCENTRATIONUNIT",
-//        "PANELNO",
-//        "ATTRIBUTE1",
-//        "VALUE1",
-//        "ATTRIBUTE2",
-//        "VALUE2",
-//        "SERIESNO",
-//        "QUALIFIERTID"
-
         when:
         PubchemReformatService.ResultMap map = service.convertToResultMap(fillInRows(rows))
 
@@ -118,8 +103,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
     def 'test converting row'() {
         when:
-        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap()
-        map.records = ["AC50": [new PubchemReformatService.ResultMapRecord(series:  5, tid: "2", resultType: "AC50" )]]
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap([new PubchemReformatService.ResultMapRecord(series:  5, tid: "2", resultType: "AC50" )])
 
         List rows = map.getValues([PUBCHEM_ACTIVITY_OUTCOME: "1", PUBCHEM_ACTIVITY_SCORE: "92.2",PUBCHEM_SID: "100", "2": "97.8"], "AC50", null, null)
 
@@ -128,5 +112,41 @@ class PubchemReformatServiceUnitSpec extends Specification {
         Map row = rows.first()
         row["Replicate #"] == "5"
         row["AC50"] == "97.8"
+    }
+
+    def 'test adding NA for missing values'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+
+        when:
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap([
+                new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "x" ),
+                new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "y", parentTid: "0"),
+                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "z", parentTid: "1")
+        ])
+
+        Map pubchemRow = ["1":"100"]
+        service.naMissingValues(pubchemRow, map)
+
+        then:
+        pubchemRow["1"] == "100"
+        pubchemRow["0"] == "NA"
+        pubchemRow["2"] == null
+    }
+
+    def 'test converting pubchem outcomes'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+
+        when:
+        Map map = service.convertPubchemRowToMap(
+            ["85789806","","44483406","1","0","","","","-1.483","5"],
+            ["PUBCHEM_SID","PUBCHEM_EXT_DATASOURCE_REGID","PUBCHEM_CID","PUBCHEM_ACTIVITY_OUTCOME","PUBCHEM_ACTIVITY_SCORE","PUBCHEM_ACTIVITY_URL","PUBCHEM_ASSAYDATA_COMMENT","PUBCHEM_ASSAYDATA_REVOKE","1","2"])
+
+        then:
+        map["-1"] == "Inactive"
+        map["0"] == "0"
+        map["1"] == "-1.483"
+        map["2"] == "5"
     }
 }

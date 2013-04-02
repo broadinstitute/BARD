@@ -72,7 +72,8 @@ function initFunction(){
     /* Use our layout implementation that place nodes with no incoming edges at top, and node with outgoing edges at bottom*/
     var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
     /* Use our layout implementation that place isolated nodes ordered by experiment id*/
-    var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
+    //var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
+    var layouterIsolated = new Graph.Layout.Spring(gIsolated);
 
     /* draw the graph using the RaphaelJS draw implementation */
     var totalHeight = 600

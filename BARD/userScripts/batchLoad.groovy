@@ -6,21 +6,32 @@ import bard.db.registration.ExternalReference
 
 SpringSecurityUtils.reauthenticate('integrationTestUser', null)
 PubchemReformatService pubchemReformatService = ctx.pubchemReformatService
+assert pubchemReformatService != null
 ResultsService resultsService = ctx.resultsService
-
 
 def aids = new File("/Users/pmontgom/data/pubchem-conversion/CARS-603-aid.txt").readLines()
 
 aids.remove("488896")
 
+FileWriter logWriter = new FileWriter("/Users/pmontgom/data/pubchem-conversion/CARS-603-log.txt", true)
+
+log = {msg -> 
+   println(msg)
+   logWriter.write((new Date().toString())+" "+msg+"\n")
+   logWriter.flush()
+}
+
 try {
 for (aid in aids) {
     ExternalReference ref = ExternalReference.findByExtAssayRef("aid=${aid}")
-    
+
+/*
     if(ref.experiment.experimentFiles.size() > 0) {
-        println("Skipping ${aid} -> ${ref.experiment.id} because results exist")
+        log("Skipping ${aid} -> ${ref.experiment.id} because results exist")
         continue
     }
+*/   
+    log("Creating measures for ${aid} -> ${ref.experiment.id}")
     
     // set up experiment measures
     def resultMapEntries
@@ -36,21 +47,21 @@ for (aid in aids) {
     }
     
     if(resultMapEntries == 0) {
-        println("Skipping ${aid} -> ${ref.experiment.id} because we're missing resultmapping")
+        log("Skipping ${aid} -> ${ref.experiment.id} because we're missing resultmapping")
     }
     
     assert ref != null
-    println("converting ${aid} -> exp-${ref.experiment.id}")
+    log("converting ${aid} -> exp-${ref.experiment.id}")
     def pubchemFile = "/Users/pmontgom/data/pubchem-conversion/CARS-603/${aid}.csv"
     def capFile = "/Users/pmontgom/data/pubchem-conversion/CARS-603-converted/exp-${aid}-${ref.experiment.id}.csv"
     pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
 
     ResultsService.ImportSummary results = resultsService.importResults(ref.experiment, new FileInputStream(capFile))
-    println("errors: ${results.errors.size()}")
+    log("errors: ${results.errors.size()}")
     for(e in results.errors) {
-        println("\t${e}")
+        log("\t${e}")
     }
-    println("imported: ${results.resultsCreated}")
+    log("imported: ${results.resultsCreated}")
 }
 } catch (Exception ex) {
     ex.printStackTrace()
