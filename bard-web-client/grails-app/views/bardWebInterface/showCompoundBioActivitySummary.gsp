@@ -34,7 +34,7 @@
         </div>
 
         <div id="compoundBioActivitySummaryDiv">
-            <g:render template="experimentResultRenderer" model="[tableModel: tableModel, landscapeLayout: false]"/>
+            <g:render template="experimentResultRenderer" model="[tableModel: tableModel, landscapeLayout: false, innerBorder: true]"/>
         </div>
     </div>
 </div>

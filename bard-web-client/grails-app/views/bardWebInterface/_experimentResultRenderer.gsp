@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <g:set var="columnHeaderSize" value="${tableModel?.columnHeaders?.size()}"/>
     <g:set var="columnWidth" value="${columnHeaderSize ? (100 / tableModel.columnHeaders.size()) as int : 'auto;'}"/>
-    <table align="center" class="table table-condensed">
+    <table align="center">
         <thead>
         <tr>
             <g:each in="${tableModel.columnHeaders}" var="header" status="i">
@@ -11,25 +11,24 @@
             </g:each>
         </tr>
         </thead>
-    </table>
+        %{--</table>--}%
 
-    <g:each in="${tableModel.data}" var="row" status="i">
-    %{--Each row is a separate table--}%
-        <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 5px; margin: 10px; word-wrap: break-word;"
-               align="center">
-            <tbody>
-            <tr>
+        <tbody>
+        <g:each in="${tableModel.data}" var="row" status="i">
+            <tr class="rowBorder" align="center">
                 <g:each in="${row}" var="cell" status="j">
                 %{--Assay description--}%
                     <g:if test="${cell instanceof bardqueryapi.AssayValue}">
                         <td align="center" style="width: ${columnWidth}%">
-                            <g:assayDescription name="${cell?.value?.name ?: ''}" adid="${cell?.value?.capAssayId ?: ''}"/>
+                            <g:assayDescription name="${cell?.value?.name ?: ''}"
+                                                adid="${cell?.value?.capAssayId ?: ''}"/>
                         </td>
                     </g:if>
                 %{--Project description--}%
                     <g:elseif test="${cell instanceof bardqueryapi.ProjectValue}">
                         <td align="center" style="width: ${columnWidth}%">
-                            <g:projectDescription name="${cell?.value?.name ?: ''}" pid="${cell?.value?.capProjectId ?: ''}"/>
+                            <g:projectDescription name="${cell?.value?.name ?: ''}"
+                                                  pid="${cell?.value?.capProjectId ?: ''}"/>
                         </td>
                     </g:elseif>
                 %{--Structure rendering--}%
@@ -78,8 +77,7 @@
                 %{--At the current state, the only MapValue use is for an 'experimentBox', so the map's only key is an experiment.--}%
                     <g:elseif test="${cell instanceof bardqueryapi.MapValue}">
                         <td align="center" style="width: ${columnWidth}%">
-                            <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;"
-                                   align="center">
+                            <table class="${innerBorder ? 'innerTableBorder' : ''}" align="center">
                                 %{--An experiment-box is a box with one experiment key and a list of result types (curves, single-points, etc.)--}%
                                 `                            <g:set var="experimentValue"
                                                                     value="${cell.value.keySet().first()}"/>
@@ -104,7 +102,7 @@
                     </g:elseif>
                 </g:each>
             </tr>
-            </tbody>
-        </table>
-    </g:each>
+        </g:each>
+        </tbody>
+    </table>
 </div>
