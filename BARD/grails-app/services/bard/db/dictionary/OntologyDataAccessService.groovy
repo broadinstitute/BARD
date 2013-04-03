@@ -12,8 +12,6 @@ import org.springframework.util.Assert
 import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
 import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
 
-
-
 class OntologyDataAccessService {
 
     private static final int DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE = 20
@@ -51,9 +49,9 @@ class OntologyDataAccessService {
         addChildren = { Element element, Collection results, Set seen ->
             if (!seen.contains(element)) {
                 seen.add(element)
-                
+
                 if (element.elementStatus != ElementStatus.Retired) {
-					results.add(new ElementSummary(label: element.label, elementId: element.id))
+                    results.add(new ElementSummary(label: element.label, elementId: element.id))
                     for (relationship in parentToChildren.get(element)) {
                         addChildren(relationship.childElement, results, seen)
                     }
@@ -265,35 +263,24 @@ class OntologyDataAccessService {
             query.setReadOnly(true)
             results = query.list()
         }
+        results.sort(true, new ElementAbbreviationLabelComparator())
         return results
     }
 
-    public List<UnitTree> getBaseUnits(Long elementId, Long toUnitId) {
-        List<Long> resultsOne = UnitConversion.executeQuery("select uc.fromUnit.id from UnitConversion uc where toUnit.id = ?", toUnitId)
-        List<Long> resultsTwo = Element.executeQuery("select e.id from Element e where id = ?", elementId)
-        resultsOne.addAll(resultsTwo)
-        List<Long> unionAll = resultsOne
-        String parametizedString = getInParametizedQueryString(unionAll);
-        List<UnitTree> unitResults = UnitTree.executeQuery("from UnitTree ut where ut.element.id in (" + parametizedString + ")", unionAll)
-        return unitResults
-//        println "# of Unit Results: " + unitResults.size()
-//        Map<Long, String> unitsMap = [:];
-//        for (UnitTree u in unitResults) {
-//            unitsMap.put(u.id, u.label)
-//        }
-//        return unitsMap
-    }
-
-    private String getInParametizedQueryString(List theList) {
-        String parametizedString = "";
-        int counter = 0;
-        for (item in theList) {
-            counter++
-            parametizedString = parametizedString + "?"
-            if (counter != theList.size())
-                parametizedString = parametizedString + ", "
+    /**
+     *
+     * @param toUnitId an element Id for a unit
+     * @return a list of elements for each unit that can be converted to the unit passed in
+     */
+    public List<Element> getConvertibleUnits(Long toUnitId) {
+        final List<Element> baseUnits = []
+        final Element identity = Element.findById(toUnitId)
+        if (identity) {
+            baseUnits.add(identity)
+            baseUnits.addAll(UnitConversion.executeQuery("select uc.fromUnit from UnitConversion uc where uc.toUnit.id = ?", toUnitId))
         }
-        return parametizedString
+        baseUnits.sort(true, new ElementAbbreviationLabelComparator())
+        return baseUnits
     }
 
 }
