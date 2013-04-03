@@ -12,15 +12,15 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
-        inherits true // Whether to inherit repository definitions from plugins
+        inherit(false) // don't repositories from plugins
         grailsPlugins()
         grailsHome()
-        grailsCentral()
-        mavenCentral()
+        mavenRepo "http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo"
+        grailsRepo("http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo", "grailsCentral")
 
         // uncomment these to enable remote dependency resolution from public Maven repositories
         //mavenCentral()
@@ -38,6 +38,9 @@ grails.project.dependency.resolution = {
         compile 'org.apache.poi:poi-ooxml:3.8'
         compile 'org.apache.commons:commons-lang3:3.1'
         compile 'org.apache.commons:commons-math3:3.1'
+
+        // access external ontology
+        compile "bard:external-validation:20130328.1"
     }
 
     plugins {
