@@ -2,11 +2,9 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
-import bard.db.dictionary.UnitTree
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyException
 import grails.converters.JSON
-import groovy.transform.TypeChecked
 import org.apache.commons.lang.StringUtils
 
 class OntologyJSonController {
@@ -74,42 +72,21 @@ class OntologyJSonController {
 
     def getAllUnits() {
         List<Element> elements = ontologyDataAccessService.getAllUnits()
-        List attributes = new ArrayList()
-        for (Element element in elements) {
-            def item = [
-                    "value": element.id,
-                    "label": element.abbreviation ?: element.label,
-            ]
-            attributes.add(item)
-        }
-        render attributes as JSON
-
-//		List<UnitTree> units = UnitTree.findAll(sort:"parent")
-//		List allUnits = new ArrayList()
-//		for (UnitTree unit in units) {
-//			def item = [
-//				"value" : unit.element.id,
-//				"label" : unit.label
-//			]
-//			allUnits.add(item)
-//		}
-//		render allUnits as JSON
+        render createIdLabelList(elements) as JSON
     }
 
-    def getBaseUnits() {
+    def getConvertibleUnits() {
         if (params?.elementId && params?.toUnitId) {
-            List<UnitTree> units = ontologyDataAccessService.getBaseUnits(params.elementId.toLong(), params.toUnitId.toLong())
-            List baseUnits = new ArrayList()
-            for (UnitTree unit in units) {
-                def item = [
-                        "value": unit.element.id,
-                        "label": unit.label
-                ]
-                baseUnits.add(item)
-            }
-            render baseUnits as JSON
-
+            List<Element> units = ontologyDataAccessService.getConvertibleUnits(params.toUnitId.toLong())
+            render createIdLabelList(units) as JSON
         }
+    }
+
+    private List createIdLabelList(List<Element> units) {
+        List idLabelList = units.collect { Element unit ->
+            [value: unit.id, label: [unit.abbreviation, unit.label].findAll().join(' - ') ]
+        }
+        idLabelList
     }
 
     def findExternalItemsByTerm(Long elementId, String term) {
@@ -117,13 +94,13 @@ class OntologyJSonController {
         Element element = Element.get(elementId)
         final String externalUrl = element?.externalURL
         List externalItems = []
-        Map responseMap = ['externalItems':externalItems]
-        if (term && externalUrl){
-            try{
+        Map responseMap = ['externalItems': externalItems]
+        if (term && externalUrl) {
+            try {
                 final List<ExternalItem> foundItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
-                externalItems.addAll(foundItems.collect { ExternalItem item -> ['id': item.id, 'text': "(id:${item.id}) ${item.display}", 'display': item.display]})
+                externalItems.addAll(foundItems.collect { ExternalItem item -> ['id': item.id, 'text': "(id:${item.id}) ${item.display}", 'display': item.display] })
             }
-            catch (ExternalOntologyException e){
+            catch (ExternalOntologyException e) {
                 responseMap.error = e.message
             }
         }

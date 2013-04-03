@@ -29,7 +29,7 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
     OntologyDataAccessService ontologyDataAccessService
 
     void setup() {
-        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         grandParent = BardDescriptor.build(fullPath: "grandParent", leaf: false, label: 'grandParent')
         String parentFullPath = "${grandParent.fullPath}> parent"
@@ -104,7 +104,7 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
                 BardDictionaryDescriptor.build(element: bardDescriptor.element, parent: dictionaryParent)
             }
         }
-        BardDescriptor.withSession {Session session -> session.flush()}
+        BardDescriptor.withSession { Session session -> session.flush() }
 
         when:
         List<BardDescriptor> results = ontologyDataAccessService.getElementsForAttributes(searchTerm)
@@ -132,9 +132,27 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         "2 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | []                    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
     }
 
-	void "test getAllUnits"(){
+    void "test getConvertibleUnits #desc"() {
 
-	}
+        given:
+        Element someUnit = Element.build(label: someUnitLabel)
+        Element someConvertibleUnit = Element.build(label: someConvertibleUnitLabel)
+        UnitConversion.build(toUnit: someUnit, fromUnit: someConvertibleUnit)
+
+        when:
+        List<Element> actualResults = ontologyDataAccessService.getConvertibleUnits(Element.findByLabel(searchLabel)?.id)
+
+        then:
+        actualResults*.label == expectedResultLabels
+
+        where:
+        desc                                  | someUnitLabel | someConvertibleUnitLabel | searchLabel           | expectedResultLabels
+        'happy case'                          | 'someUnit'    | 'someConvertibleUnit'    | 'someUnit'            | ['someConvertibleUnit','someUnit']
+        'no convertible units, only identity' | 'someUnit'    | 'someConvertibleUnit'    | 'someConvertibleUnit' | ['someConvertibleUnit']
+        'no convertible units, only identity' | 'someUnit'    | 'someConvertibleUnit'    | 'non existent label'  | []
+
+
+    }
 
     private List<BardDescriptor> createDescendants(BardDescriptor directParent, List listOfMaps) {
         List<BardDescriptor> bardDescriptors = []
