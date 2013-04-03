@@ -17,12 +17,13 @@ $(document).ready(function () {
 });
 
 //Overrides the Twitter Bootstraps' Dropdown behavior that hides the menu when a menu item was clicked
-$(document).on('click', '#cutoff', function () {
-    $(this).parent().parent().parent().find('[data-toggle="dropdown"]').dropdown('toggle');
+$(document).on('click', '#cutoff', function (event) {
     $(this).select();
     $(this).keypress(function (event) {
         if (event.keyCode == 13) {//enter
             $(this).parent().find('a').click();
         }
     });
+    //prevent default event handler
+    return false;
 });
