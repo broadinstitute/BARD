@@ -167,7 +167,7 @@ $(document).ready(function () {
         width: 750,
         autoOpen: false,
         modal: true,
-        draggable: false,
+        draggable: true,
         zIndex: 3999,
         title: "Add Item Wizard"
     });
@@ -300,6 +300,7 @@ function initDnd() {
     $(document).ready(function () {
         $("tr.context_item_row").droppable({
             hoverClass: "drophover",
+            accept: ".attributeLabel",
             drop: function (event, ui) {
                 var src_assay_context_item_id = ui.draggable.closest('tr').attr('id');
                 var target_assay_context_item_id = $(this).attr('id');
@@ -320,6 +321,7 @@ function initDnd() {
     $(document).ready(function () {
         $("div.card").droppable({
             hoverClass: "drophoverCard",
+            accept: ".attributeLabel",
             drop: function (event, ui) {
                 var src_assay_context_item_id = ui.draggable.closest('tr').attr('id');
                 var target_assay_context_id = $(this).find('caption').attr('id');
@@ -487,7 +489,11 @@ function removeItemFromList(listIndex) {
 }
 
 function launchAddItemWizard(assayId, assayContextId, cardSection) {
-
+	
+	// Disable droppable cards to avoid issues while moving wizard window
+//	$( "tr.context_item_row" ).droppable( "option", "disabled", true );
+//	$( "div.card" ).droppable( "option", "disabled", true );
+	
     var data = {'assayId': assayId, 'assayContextId': assayContextId, 'cardSection': cardSection};
     $.ajax({
         type: 'POST',
