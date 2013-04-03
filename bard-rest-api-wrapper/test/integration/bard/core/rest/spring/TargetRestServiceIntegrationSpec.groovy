@@ -5,6 +5,7 @@ import bard.core.rest.spring.util.Target
 import bard.core.rest.spring.util.TargetClassification
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
+import bard.core.rest.spring.compounds.TargetClassInfo
 
 @Unroll
 class TargetRestServiceIntegrationSpec extends IntegrationSpec {
@@ -30,6 +31,16 @@ class TargetRestServiceIntegrationSpec extends IntegrationSpec {
         for (TargetClassification targetClassification : target.getTargetClassifications()) {
             assert targetClassification
         }
+    }
+    void "test construct Target information"(){
+        given:
+        String accessionNumber = "P20393"
+        final Target target = targetRestService.getTargetByAccessionNumber(accessionNumber)
+        when:
+        List<TargetClassInfo> list= Target.constructTargetInformation(target)
+        then:
+        assert list
+
     }
     /**
      *  Example http://bard.nih.gov/api/v15/targets/accession/P20393/classification/panther
