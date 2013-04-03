@@ -23,7 +23,7 @@
                 <g:set var="concentrationSeries"
                        value="${result.value.concentrations}"/>
                 <g:set var="activitySeries" value="${result.value.activities}"/>
-                <table align="center">
+                <table class="${innerBorder ? 'innerTableBorder' : ''}" align="center">
                     <tr>
                         <td align="center">
                             <g:curvePlot
@@ -53,7 +53,7 @@
         %{--A key/value pair result--}%
             <g:elseif test="${result instanceof bardqueryapi.PairValue}">
                 <g:set var="pair" value="${result.value}"/>
-                <table style="border-style:solid; border-width:1px 1px 1px 1px; border-color:#000000; padding: 3px; margin: 3px;" align="center">
+                <table class="${innerBorder ? 'innerTableBorder' : ''}" align="center">
                     <tr>
                         <td align="center">
                             <b><small>${pair.left}</small>

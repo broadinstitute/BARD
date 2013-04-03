@@ -24,7 +24,7 @@ public class RootElement extends ActivityData {
      * @return true if the display name is "Outcome"
      */
     public boolean hasOutcome(){
-        return this.pubChemDisplayName=="Outcome"
+        return this.pubChemDisplayName=="PubChem outcome"
     }
 
 }
