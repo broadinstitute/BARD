@@ -309,6 +309,7 @@
             });
             if (found) {
                 $("#valueUnitId").select2("data", found[0]);
+                $("#valueUnitLabel").val($("#valueUnitId").select2("data").text);
             }
         }
     }

@@ -122,7 +122,7 @@ class ListValueCommand implements Serializable {
         // delegate to validations performed by constraints
         validate()
 
-        if (StringUtils.isBlank(textValue)) {
+        if (StringUtils.isNotBlank(textValue)) {
             // a text value was provided
         } else if (extValueId) {
             // a value for extValueId is valid
