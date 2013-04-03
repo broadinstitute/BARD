@@ -13,20 +13,13 @@ import bard.core.rest.spring.experiment.ExperimentShow
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
-import bard.core.rest.spring.project.ProjectStep
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import bardqueryapi.experiment.ExperimentBuilder
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
-
-import bard.core.rest.spring.project.ProjectStep
-
-import bardqueryapi.experiment.ExperimentBuilder
-import bard.core.util.FilterTypes
-import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
-
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -360,7 +353,9 @@ class QueryService implements IQueryService {
         }
 
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
-        return compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes)
+        TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes)
+        tableModel.additionalProperties.put('compoundSummary',compoundSummary)
+        return tableModel
     }
     /**
      * Used for Show Experiment Page. Perhaps we should move this to the Query Service

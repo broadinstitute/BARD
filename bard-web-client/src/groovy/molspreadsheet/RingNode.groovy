@@ -15,20 +15,20 @@ class RingNode {
     String ID = ""
     String description = ""
     String levelIdentifier = ""
-    String source = ""
+    String path = ""
 
 
     public RingNode(String name,
                     String ID,
                     String description,
                     String levelIdentifier,
-                    String source,
+                    String path,
                     int size = 0) {
         this(name, size)
         this.ID = ID
         this.description = description
         this.levelIdentifier = levelIdentifier
-        this.source = source
+        this.path = path
     }
 
 
@@ -42,30 +42,6 @@ class RingNode {
         this.name = name
         this.size = 0
         this.children = children
-    }
-
-
-    boolean equals(o) {
-        if (this.is(o)) return true
-        if (getClass() != o.class) return false
-
-        RingNode ringNode = (RingNode) o
-
-        if (ID != ringNode.ID) return false
-        if (description != ringNode.description) return false
-        if (levelIdentifier != ringNode.levelIdentifier) return false
-        if (name != ringNode.name) return false
-
-        return true
-    }
-
-    int hashCode() {
-        int result
-        result = (name != null ? name.hashCode(): 0)
-        result = 31 * result + (ID != null ? ID.hashCode(): 0)
-        result = 31 * result + (description != null ? description.hashCode(): 0)
-        result = 31 * result + (levelIdentifier != null ? levelIdentifier.hashCode(): 0)
-        return result
     }
 
 
@@ -133,7 +109,14 @@ class RingNode {
 
 
 
-
+    /**
+     *
+     * @param width
+     * @param height
+     * @param namesThatGetColors
+     * @param maximumNumberOfColors
+     * @return
+     */
     public String deriveColors(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors) {
         StringBuilder stringBuilder = new StringBuilder()
         stringBuilder << """  var width = ${width},
@@ -152,30 +135,26 @@ class RingNode {
             }
         }
         stringBuilder << "   ]);"
-//        var width = 960,
-//                height = 700,
-//                radius = Math.min(width, height) / 2,
-//                color = d3.scale.category10().domain([
-//                        "A",
-//                        "FLINA",
-//                        "C",
-//                        "B",
-//                        "FLINC",
-//                        "ABC",
-//                        "AA"
-//                ]);
         stringBuilder.toString()
     }
 
-
-
-
+    /**
+     *
+     * @param ringNodeMgr
+     * @return
+     */
     public String writeHierarchyPath ( LinkedHashMap<String,RingNode> ringNodeMgr ) {
         StringBuilder stringBuilder = new StringBuilder()
         describeMeAndMyParent (this,ringNodeMgr, stringBuilder)
         stringBuilder.toString()
     }
 
+    /**
+     *
+     * @param me
+     * @param ringNodeMgr
+     * @param stringBuilder
+     */
     public void describeMeAndMyParent ( RingNode me, LinkedHashMap<String,RingNode> ringNodeMgr, StringBuilder stringBuilder ) {
         RingNode myParent = null
         // find my parent, if I have one
@@ -193,6 +172,37 @@ class RingNode {
         }
     }
 
+    /**
+     *
+     * @param o
+     * @return
+     */
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        RingNode ringNode = (RingNode) o
+
+        if (ID != ringNode.ID) return false
+        if (description != ringNode.description) return false
+        if (levelIdentifier != ringNode.levelIdentifier) return false
+        if (name != ringNode.name) return false
+
+        return true
+    }
+
+    /**
+     *
+     * @return
+     */
+     int hashCode() {
+        int result
+        result = (name != null ? name.hashCode(): 0)
+        result = 31 * result + (ID != null ? ID.hashCode(): 0)
+        result = 31 * result + (description != null ? description.hashCode(): 0)
+        result = 31 * result + (levelIdentifier != null ? levelIdentifier.hashCode(): 0)
+        return result
+    }
 
 
 

@@ -1,4 +1,5 @@
 <%@ page import="bardqueryapi.ActivityOutcome; bardqueryapi.GroupByTypes; bardqueryapi.FacetFormType" contentType="text/html;charset=UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,15 +12,15 @@
 <body>
 
 <div class="row-fluid">
-
-    <div class="span9">
-        <div id="sunburstdiv">
-            <script>
-                <g:makeSunburst />
-            </script>
-            <script type="text/javascript" src="../../js/sunburstPrep.js"></script>
-        </div>
-    </div>
+    <g:sunburstSection compoundSummary="${tableModel?.additionalProperties?.compoundSummary}" />
+    %{--<div class="span9">--}%
+        %{--<div id="sunburstdiv">--}%
+            %{--<script>--}%
+                %{--<g:makeSunburst/>--}%
+            %{--</script>--}%
+            %{--<script type="text/javascript" src="../../js/sunburstPrep.js"></script>--}%
+        %{--</div>--}%
+    %{--</div>--}%
     <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
 
     <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small></h2>
