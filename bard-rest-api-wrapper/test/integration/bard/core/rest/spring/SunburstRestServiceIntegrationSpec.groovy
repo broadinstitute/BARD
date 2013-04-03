@@ -15,10 +15,11 @@ class SunburstRestServiceIntegrationSpec extends IntegrationSpec {
 
     void "test getTargetClassInfo #label"() {
         when:
-        TargetClassInfo targetClassInfo = sunburstCacheService.getTargetClassInfo(targetAccessionNumber)
+        List<TargetClassInfo> targetClassInfos = sunburstCacheService.getTargetClassInfo(targetAccessionNumber)
 
         then:
-        assert targetClassInfo
+        assert targetClassInfos
+        TargetClassInfo targetClassInfo = targetClassInfos.get(0)
         assert targetAccessionNumber== targetClassInfo.accessionNumber
         assert targetClassInfo.description
         assert targetClassInfo.path
