@@ -20,6 +20,11 @@ class OntologyDataAccessService {
 
     private static final Properties externalOntologyProperites = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
 
+    /**
+     * for like query using single backslash as the escape char, as a literal here needs to be escaped itself
+     */
+    private static final String ORACLE_LIKE_ESCAPE = '\\'
+
 
     private static final String ASSAY_DESCRIPTOR = "assay protocol"
 
@@ -86,26 +91,7 @@ class OntologyDataAccessService {
         return elements.findAll { it.label != null && it.label.toLowerCase().contains(label.toLowerCase()) }
     }
 
-    /*
-    List<Descriptor> getLeaves(BardDescriptor start, String labelExpr) {
-        def parents = [start]
-        def leaves = []
-        while (!parents.isEmpty()) {
-            def nextParents = []
-            def query = AssayDescriptor.where { (parent in parents) && ((leaf != Boolean.TRUE) || (label ==~ labelExpr)) }
-            query.list().each {
-                if (it.leaf) {
-                    nextParents << it
-                } else {
-                    leaves << it
-                }
-            }
-            parents = nextParents
-        }
 
-        return leaves
-    }
-    */
 
     public List<Element> getElementsForAttributes(String term) {
         List<Element> results = []
@@ -121,19 +107,27 @@ class OntologyDataAccessService {
                                 select 1
                                 from  bard_tree bt
                                 where not EXISTS( select 1 from DICTIONARY_TREE dt where dt.ELEMENT_ID= bt.element_Id and dt.PARENT_NODE_ID != 0 )
-                                and lower(bt.label) like :term
+                                and (lower(bt.label) like :term escape '\\' or lower(bt.abbreviation) like :term escape '\\')
                                 and bt.element_status != :elementStatus
                                 and bt.ELEMENT_ID = element.ELEMENT_ID
                              )
                 order by lower(element.label)
             """)
             query.addEntity(Element)
-            query.setString('term', "%${term?.trim()?.toLowerCase()}%")
+            query.setString('term', "%${trimLowerCaseEscapeForLike(term)}%")
             query.setString('elementStatus', ElementStatus.Retired.name())
             query.setReadOnly(true)
             results = query.list()
         }
         return results
+    }
+
+    /**
+     * @param term
+     * @return the term trimmed, lowercase and having the chars % _ and \ escaped for oracle like search
+     */
+    private trimLowerCaseEscapeForLike(String term) {
+        term?.trim()?.toLowerCase()?.replaceAll(/(%|_|\\)/, /${ORACLE_LIKE_ESCAPE}\$1/)
     }
 
     public List<Element> getElementsForValues(Long elementId, String term) {
@@ -147,7 +141,7 @@ class OntologyDataAccessService {
                                join (select element_id, full_path
                                      from bard_tree
                                      where element_id = :ancestorElementId) ancestor on ancestor.full_path = substr(bt.full_path, 0, length(ancestor.full_path))
-                               where lower(bt.label) like :term
+                               where (lower(bt.label) like :term escape '\\' or lower(bt.abbreviation) like :term escape '\\')
                                and bt.element_status != :elementStatus
                                and bt.ELEMENT_ID = element.ELEMENT_ID
                              )
@@ -155,7 +149,7 @@ class OntologyDataAccessService {
             """)
             query.addEntity(Element)
             query.setLong("ancestorElementId", elementId)
-            query.setString('term', "%${term?.trim()?.toLowerCase()}%")
+            query.setString('term', "%${trimLowerCaseEscapeForLike(term)}%")
             query.setString('elementStatus', ElementStatus.Retired.name())
             query.setReadOnly(true)
             results = query.list()
