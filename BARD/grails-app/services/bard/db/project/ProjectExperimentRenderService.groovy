@@ -3,6 +3,8 @@ package bard.db.project
 import grails.converters.JSON
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
+import bard.db.registration.ExternalReference
+import bard.db.experiment.Experiment
 
 /**
  * This is a service that return a list of nodes and edges in JSON format to be displayed in views.
@@ -97,9 +99,26 @@ class ProjectExperimentRenderService {
                             'assay': pe?.experiment?.assay?.id,
                             'ename': pe?.experiment?.experimentName,
                             'incount': 0,
-                            'outcount': 0
+                            'outcount': 0,
+                            'aid': getAidByExperiment(pe.experiment)
                             ]
         return new Node(id: pe?.id, keyValues: peAttributes)
+    }
+
+    /**
+     *
+     * @param experiment
+     * @return Aid if there is one
+     */
+    String getAidByExperiment(Experiment experiment) {
+        String aid = ""
+        ExternalReference er = ExternalReference.findByExperiment(experiment)
+        if (er && er.extAssayRef ==~ /aid=\d+/) {
+            def matcher = (er.extAssayRef =~ /aid=(\d+)/)
+            if (matcher.matches())
+                aid = matcher[0][1]
+        }
+        return aid
     }
 
     /**

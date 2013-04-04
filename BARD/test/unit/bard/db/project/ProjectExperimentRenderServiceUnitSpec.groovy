@@ -11,6 +11,7 @@ import spock.lang.Unroll
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.dictionary.Element
+import bard.db.registration.ExternalReference
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,8 +21,8 @@ import bard.db.dictionary.Element
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectExperimentRenderService)
-@Build([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element])
-@Mock([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element])
+@Build([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
+@Mock([Project, ProjectExperiment, ProjectStep, Experiment, Assay, Element, ExternalReference])
 @Unroll
 class ProjectExperimentRenderServiceUnitSpec extends Specification {
     ProjectExperimentRenderService renderService = new ProjectExperimentRenderService()
@@ -169,6 +170,16 @@ class ProjectExperimentRenderServiceUnitSpec extends Specification {
             if (node.id == "4") {assert node.keyValues.incount == '1'; assert node.keyValues.outcount == '0'}
         }
 
+    }
+
+    void "test get aid by experiment"() {
+        given: "an"
+        Experiment experiment = Experiment.build()
+        ExternalReference externalReference = ExternalReference.build(experiment: experiment, extAssayRef: "aid=1234")
+        when:
+        String aid = renderService.getAidByExperiment(externalReference.experiment)
+        then:
+        assert aid == "1234"
     }
 
     def createProjectSteps(int i) {

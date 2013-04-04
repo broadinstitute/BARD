@@ -37,7 +37,7 @@ function initFunction(){
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
         g.addNode(connectedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
-            ename: keyValues.ename, inCount: keyValues.incount, outCount: keyValues.outcount}, render:render });
+            ename: keyValues.ename, inCount: keyValues.incount, outCount: keyValues.outcount, aid: keyValues.aid}, render:render });
     }
 
     var isolatedNodes = graphInJSON.isolatedNodes;
@@ -61,7 +61,7 @@ function initFunction(){
     for (var i = 0; i < isolatedNodes.length; i++) {
         var keyValues = isolatedNodes[i].keyValues;
         gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
-            ename: keyValues.ename}, render:renderIsolated});
+            ename: keyValues.ename, aid: keyValues.aid}, render:renderIsolated});
     }
 
     var edges = graphInJSON.edges;

@@ -43,6 +43,7 @@
 
             <p>{{selected.data.ename}}</p>
             <h5>Assay Id:</h5><a href="/BARD/assayDefinition/show/{{selected.data.assay}}" id="assaylink" target="_blank">{{selected.data.assay}}</a>
+            <h5>AID: </h5> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.data.aid}}" id="aidlink" target="_blank">{{selected.data.aid}}</a>
         </script>
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
