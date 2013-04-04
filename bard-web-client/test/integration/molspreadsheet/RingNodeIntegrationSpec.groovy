@@ -1,8 +1,10 @@
 package molspreadsheet
 
-import grails.plugin.spock.IntegrationSpec
+import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.SunburstCacheService
+import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
+import grails.plugin.spock.IntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +16,7 @@ import bard.core.rest.spring.compounds.TargetClassInfo
 class RingNodeIntegrationSpec  extends IntegrationSpec {
     SunburstCacheService sunburstCacheService
     RingManagerService ringManagerService
+    CompoundRestService compoundRestService
 
 
     void "test sunburst machinery with the target that has no Panther classes"(){
@@ -31,7 +34,8 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         }
 
     then:
-        accumulatedMaps.size() == 0
+       accumulatedMaps.size() == targets.size()
+       accumulatedMaps.flatten().size() == 0
     }
 
 
@@ -53,6 +57,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
             then:
         accumulatedMaps.size() == targets.size()
         accumulatedMaps.get(0).size() > 0
+        accumulatedMaps.flatten().size() > 0
     }
 
 
@@ -76,6 +81,109 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         root.toString()
     }
 
+    /**
+     * For now use dummy routine to pull back real data from v12 of the API
+     */
+    void "test working with Out of date compound summary information"(){
+        given:
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(0L)
+
+        when:
+        LinkedHashMap activeInactiveData = ringManagerService.retrieveActiveInactiveDataFromCompound(compoundSummary)
+
+        then:
+        activeInactiveData ["hits"].size ()   > 0
+        activeInactiveData ["misses"].size ()   > 0
+    }
+
+
+    /**
+     * For now use dummy routine to pull back real data from v12 of the API
+     */
+    void "test working with Current compound summary information"(){
+        given:
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(2382353L)
+
+        when:
+        LinkedHashMap activeInactiveData = ringManagerService.retrieveActiveInactiveDataFromCompound(compoundSummary)
+
+        then:
+        activeInactiveData ["hits"].size ()   == 0
+        activeInactiveData ["misses"].size ()   == 0
+    }
+
+
+
+    void "test class data exists for this compound where the answer is true"(){
+        given:
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(0L)
+
+        when:
+        Boolean classDataExists = ringManagerService.classDataExistsForThisCompound(compoundSummary)
+
+        then:
+        classDataExists
+    }
+
+
+    /**
+     * For now use dummy routine to pull back real data from v12 of the API
+     */
+    void "test class data exists for this compound where the answer is false"(){
+        given:
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(2382353L)
+
+        when:
+        Boolean classDataExists = ringManagerService.classDataExistsForThisCompound(compoundSummary)
+
+        then:
+        classDataExists == false
+    }
+
+
+
+
+
+
+    void "test sunburst with real (though old) classes, but with no active/inactive distinctions"(){
+        given:
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(0L)
+        LinkedHashMap activeInactiveData = ringManagerService.retrieveActiveInactiveDataFromCompound(compoundSummary)
+        final List<String> targets = []
+        activeInactiveData["hits"].each {targets <<  it }
+        activeInactiveData["misses"].each {targets <<  it }
+        LinkedHashMap<String, Integer> accumulatedTargets = ringManagerService.accumulateAccessionNumbers( targets )
+
+        when:
+        List<List<TargetClassInfo>> accumulatedMaps = []
+        accumulatedTargets.each{k,v->
+            List<String> hierarchyDescription = sunburstCacheService.getTargetClassInfo(k)
+            if (hierarchyDescription != null){
+                accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
+            }
+        }
+        RingNode ringNode = ringManagerService.ringNodeFactory(accumulatedMaps.flatten())
+
+        then:
+        ringNode.toString().size() > 0
+    }
+
+
+    void "test convertCompoundIntoSunburst"() {
+        when:
+        RingNode ringNode = ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
+
+        then:
+        ringNode.toString().size() > 0
+
+        where:
+        includeHits     |    includeNonHits
+        true            |       false
+        false           |       true
+        true            |       true
+        false           |       false
+
+    }
 
 
 

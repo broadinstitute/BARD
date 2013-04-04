@@ -220,6 +220,14 @@ class CompoundRestService extends AbstractRestService {
         return compoundSummary
     }
 
+
+    public CompoundSummary getSummaryForCompoundFROM_PREVIOUS_VERSION(final Long cid) {
+      //  final String resource = buildQueryForCompoundSummary(cid)
+        final URL url = new URL("http://bard.nih.gov/api/v12/compounds/2382353/summary?expand=true")
+        final CompoundSummary compoundSummary = (CompoundSummary) getForObject(url.toURI(), CompoundSummary.class)
+        return compoundSummary
+    }
+
     public List<Assay> getTestedAssays(Long cid, boolean activeOnly) {
         final String resource = buildQueryForTestedAssays(cid, activeOnly);
         final URL url = new URL(resource)

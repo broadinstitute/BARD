@@ -1,9 +1,15 @@
 package molspreadsheet
 
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.SunburstCacheService
+import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
+import bard.core.rest.spring.experiment.Activity
 
 class RingManagerService {
+    CompoundRestService compoundRestService
+    SunburstCacheService sunburstCacheService
 
     String writeRingTree( RingNode ringNode ) {
         StringBuilder stringBuilder = new StringBuilder("var \$data = [")
@@ -15,7 +21,65 @@ class RingManagerService {
 
 
     Boolean classDataExistsForThisCompound (CompoundSummary compoundSummary){
-        Boolean returnValue = true
+        Boolean returnValue = false
+        if (compoundSummary != null){
+            for (Assay assay in compoundSummary.testedAssays) {
+                if (assay.targetIds?.size()  > 0)  {  // At least one assay has at least one target -- better make a sunburst
+                    returnValue = true
+                    break
+                }
+            }
+        }
+        return returnValue
+    }
+
+    /**
+     * The ideas to bring back a map which contains two lists, identified by the keys "hits" and "misses".  For
+     * each one of these we will bring back a list of strings, where each string represents a target. Strings in
+     * this list are not meant to be unique necessarily.  So we might have:
+     *  "hits": "Q123", "Q123", "P456"
+     *  "misses": "R789"
+     * A particular protein target could conceivably be in both the hits and the misses category.
+     *
+     * @param compoundSummary
+     * @return
+     */
+    LinkedHashMap<String, List <String>> retrieveActiveInactiveDataFromCompound (CompoundSummary compoundSummary){
+        LinkedHashMap<String, List <String>> returnValue = [:]
+        returnValue ["hits"]  = []
+        returnValue ["misses"]  = []
+        if (compoundSummary != null){
+           for (Assay assay in compoundSummary.testedAssays) {
+               List<String>  currentExperimentIds = assay.experiments
+               List<String>  currentTargets = assay.targetIds
+               if (currentTargets != null)  {  // If the assay has no targets there is nothing for us to do
+                   for (String currentExperimentId in currentExperimentIds) {
+                       Long  experimentIdAsLong
+                       try {
+                           experimentIdAsLong = Long.parseLong(currentExperimentId)
+                       } catch (NumberFormatException nfe) {
+                           println"Unexpected error. Failure parsing currentExperimentId long"
+                       }
+                       List<Activity> testedExperimentList = compoundSummary.getTestedExptdata().findAll {Activity activity -> activity.bardExptId == experimentIdAsLong}
+                       if (testedExperimentList?.size() > 0)   {
+                           for (Activity testedExperiment in testedExperimentList)   {
+                               if (testedExperiment.outcome==2) {  // It's a hit!  Save all targets!
+                                   for (String oneTarget in currentTargets) {
+                                       returnValue ["hits"] <<  oneTarget
+                                   }
+                               }  else { // It's a miss.  Save all the targets and a different list.
+                                   for (String oneTarget in currentTargets) {
+                                       returnValue ["misses"] <<  oneTarget
+                                   }
+                               }
+                           }
+                       }
+                   }
+
+               }
+             }
+
+        }
         return returnValue
     }
 
@@ -59,7 +123,7 @@ class RingManagerService {
      * @param targetClassInfoList
      * @return
      */
-    public static  RingNode ringNodeFactory ( List<TargetClassInfo> targetClassInfoList ) {
+    public ringNodeFactory ( List<TargetClassInfo> targetClassInfoList ) {
         RingNode rootRingNode = new RingNode("/")
         if (targetClassInfoList?.size()  > 0){
             LinkedHashMap<String, RingNode> ringNodeMgr = [:]
@@ -85,6 +149,29 @@ class RingManagerService {
         return  rootRingNode
     }
 
+
+
+
+    public  RingNode convertCompoundIntoSunburst (Long cid, Boolean includeHits, Boolean includeNonHits ){
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(cid)
+        LinkedHashMap activeInactiveData = retrieveActiveInactiveDataFromCompound(compoundSummary)
+        final List<String> targets = []
+        if (includeHits) {
+            activeInactiveData["hits"].each {targets <<  it }
+        }
+        if (includeHits) {
+            activeInactiveData["misses"].each {targets <<  it }
+        }
+        LinkedHashMap<String, Integer> accumulatedTargets = accumulateAccessionNumbers( targets )
+        List<List<TargetClassInfo>> accumulatedMaps = []
+        accumulatedTargets.each{k,v->
+            List<String> hierarchyDescription = sunburstCacheService.getTargetClassInfo(k)
+            if (hierarchyDescription != null){
+                accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
+            }
+        }
+        return ringNodeFactory(accumulatedMaps.flatten())
+    }
 
 
 
