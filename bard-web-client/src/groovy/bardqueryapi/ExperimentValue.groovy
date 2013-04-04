@@ -1,6 +1,6 @@
 package bardqueryapi
 
-import bard.core.rest.spring.experiment.ExperimentShow
+import bard.core.rest.spring.experiment.ExperimentSearch
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,5 +19,5 @@ class ExperimentValue implements WebQueryValue {
         return this.value
     }
 
-    ExperimentShow value
+    ExperimentSearch value
 }
