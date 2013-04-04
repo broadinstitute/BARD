@@ -1,18 +1,18 @@
 package bard.core.rest.spring
 
 import bard.core.rest.spring.compounds.TargetClassInfo
+import bard.core.rest.spring.util.Target
 import grails.plugin.cache.Cacheable
 
 class SunburstCacheService extends AbstractRestService {
     def transactional = false
+    TargetRestService targetRestService
 
     final Map<String, List<TargetClassInfo>> targets = [:]
 
-    //We would be using a persistent cache
     //@CachePut(value = 'target', key = '#targetClassInfo.id')
     void save(TargetClassInfo targetClassInfo) {
-        //targets.put(targetClassInfo.id, targetClassInfo)
-        List<TargetClassInfo> targetClassInfos = targets.get(targetClassInfo.accessionNumber)
+         List<TargetClassInfo> targetClassInfos = targets.get(targetClassInfo.accessionNumber)
         if(targetClassInfos == null){
             targetClassInfos = new ArrayList<TargetClassInfo>()
         }
@@ -20,15 +20,16 @@ class SunburstCacheService extends AbstractRestService {
             targetClassInfos.add(targetClassInfo)
             targets.put(targetClassInfo.accessionNumber, targetClassInfos)
         }
-        //log.info("Saving " + targetClassInfo.getId())
-    }
+     }
 
     @Cacheable(value = 'target')
     List<TargetClassInfo> getTargetClassInfo(String accessionNumber) {
-        final List<TargetClassInfo> targetClassInfo = this.targets.get(accessionNumber)
+        List<TargetClassInfo> targetClassInfo = this.targets.get(accessionNumber)
         if (!targetClassInfo) {
-            log.error("Not found ${accessionNumber}")
-            //TODO: Go to NCGC then put in map
+            log.info("Not found ${accessionNumber} going to REST-API")
+            final Target target = this.targetRestService.getTargetByAccessionNumber(accessionNumber)
+            targetClassInfo = Target.constructTargetInformation(target)
+             this.targets.put(accessionNumber,targetClassInfo)
         }
         return targetClassInfo
     }

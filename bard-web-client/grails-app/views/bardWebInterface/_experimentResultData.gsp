@@ -43,7 +43,7 @@
     </div>
 
     <div id="resultData">
-    <g:render template="experimentResultRenderer" model="[tableModel: tableModel, landscapeLayout: false]"/>
+    <g:render template="experimentResultRenderer" model="[tableModel: tableModel, landscapeLayout: false, innerBorder: innerBorder]"/>
     </div>
 
     <div class="pagination offset3">

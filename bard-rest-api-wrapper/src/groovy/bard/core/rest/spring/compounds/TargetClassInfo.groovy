@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
+import bard.core.rest.spring.util.RingNode
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder
  * Time: 4:22 PM
  * To change this template use File | Settings | File Templates.
  */
-class TargetClassInfo implements Serializable{
+class TargetClassInfo implements Serializable {
 
     /**
      * For {@link Serializable}.
@@ -36,8 +37,19 @@ class TargetClassInfo implements Serializable{
         targetClassInfo.levelIdentifier = data.get(3).trim()
         targetClassInfo.source = data.get(4).trim()
         targetClassInfo.accessionNumber = data.get(5).trim()
-        targetClassInfo.path=data.get(6).trim()
+        targetClassInfo.path = data.get(6).trim()
         return targetClassInfo
+    }
+    public TargetClassInfo(){
+
+    }
+    public TargetClassInfo(final RingNode ringNode) {
+        this.id = ringNode.ID
+        this.name = ringNode.name
+        this.description = ringNode.description
+        this.levelIdentifier = ringNode.levelIdentifier
+        this.source = ringNode.source
+        this.accessionNumber = accessionNumber
     }
 
     public String toString() {
@@ -45,6 +57,7 @@ class TargetClassInfo implements Serializable{
         stringBuilder.append("id:${this.id}").append(" acc:${this.accessionNumber}").append(" name:${this.name}").append(" path:${this.path}")
         return stringBuilder.toString()
     }
+
     @Override
     boolean equals(Object obj) {
         if (obj == null) { return false }

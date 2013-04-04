@@ -13,21 +13,24 @@
     </div>
 
     <div class="modal-footer">
-        <g:form name="idSearchForm">
-            <div class="control-group">
-                <div class="controls">
-                    <g:radioGroup name="idSearchType"
-                                  values="${IDSearchType.values()}"
-                                  value="${IDSearchType.ALL}"
-                                  labels="${IDSearchType.values().label}">
-                        <label class="radio inline">
-                            ${it.radio} ${it.label}
-                        </label>
-                    </g:radioGroup>
-                </div>
+        <g:form name="idSearchForm" class="form-inline">
+            <div>
+                <g:radioGroup name="idSearchType"
+                              values="${IDSearchType.values()}"
+                              value="${IDSearchType.ALL}"
+                              labels="${IDSearchType.values().label}">
+                    <label class="radio inline">
+                        ${it.radio} ${it.label}
+                    </label>
+                </g:radioGroup>
             </div>
-            <a href="#" class="btn" data-dismiss="modal" id="closeButton2">Close</a>
-            <a href="#" id="idSearchButton" class="btn btn-primary" data-dismiss="modal">Search</a>
+
+            <br>
+
+            <div>
+                <a href="#" class="btn" data-dismiss="modal" id="closeButton2">Close</a>
+                <a href="#" id="idSearchButton" class="btn btn-primary" data-dismiss="modal">Search</a>
+            </div>
         </g:form>
     </div>
 

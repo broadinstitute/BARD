@@ -64,5 +64,11 @@ beans = {
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
+    sunburstCacheService(SunburstCacheService){
+        targetRestService = ref('targetRestService')
+    }
+    sunburstRestService(SunburstRestService){
+        sunburstCacheService = ref('sunburstCacheService')
+    }
 }
 

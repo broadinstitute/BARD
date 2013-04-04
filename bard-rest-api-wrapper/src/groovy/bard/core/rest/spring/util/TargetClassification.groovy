@@ -2,6 +2,7 @@ package bard.core.rest.spring.util
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 /**
  * Created with IntelliJ IDEA.
@@ -71,6 +72,19 @@ public class TargetClassification extends JsonUtil{
     @JsonProperty("source")
     public void setSource(String source) {
         this.source = source;
+    }
+    @JsonIgnore
+    public int numberOfLevels () {
+        int returnValue = 0
+        if (levelIdentifier != null) {
+            List <String> listOfGroups = levelIdentifier.split(/\./)
+            for ( String oneGroup in listOfGroups) {
+                if (oneGroup != "00"){
+                    returnValue++
+                }
+            }
+        }
+        return returnValue
     }
 
 }

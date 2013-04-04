@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Experiment Result : ${tableModel.additionalProperties.capExptId}</title>
-    <r:require modules="experimentData, bootstrap, compoundOptions"/>
+    <r:require modules="experimentData, bootstrap, compoundOptions, core"/>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
 
     <div class="span9">
         <div id="experimentalResults">
-            <g:render template='experimentResultData' model='[tableModel: tableModel]'/>
+            <g:render template='experimentResultData' model='[tableModel: tableModel, innerBorder: false]'/>
         </div>
     </div>
 </div>
