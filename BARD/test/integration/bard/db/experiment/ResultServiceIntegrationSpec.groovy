@@ -9,6 +9,7 @@ import bard.db.registration.ItemService
 import bard.db.registration.Measure
 import bard.db.registration.PugService
 import grails.plugin.spock.IntegrationSpec
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -26,6 +27,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     Experiment experiment;
     ResultsService resultsService;
     Map<String, Element> byName = [:]
+    SpringSecurityService springSecurityService;
 
     Element findElementByName(String label) {
         Element element = byName[label]
@@ -96,6 +98,9 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         resultsService = new ResultsService()
+        resultsService.bulkResultService = Mock(BulkResultService)
+        assert springSecurityService != null
+        resultsService.springSecurityService = springSecurityService
         resultsService.setItemService(new ItemService())
         PugService pugService = Mock(PugService)
         resultsService.setPugService(pugService)
