@@ -6,10 +6,12 @@ import bard.db.model.AbstractContextItem
 import bard.db.project.ProjectContextItem
 import bard.db.experiment.ExperimentContextItem
 import org.apache.commons.lang3.StringUtils
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import bard.db.audit.BardContextUtils
 
-FileWriter logWriter = new FileWriter("data/populateExValueDisplay.out")
+FileWriter logWriter = new FileWriter("data/populateExValueDisplay2.out")
 
-logWriter.write("ErrorType\tContextType\tContextItemId\tAttributeElementId\tURL\tExtValue\tErrorMessage\n")
+logWriter.write("ErrorType\tContextType\tContextItemId\tAttributeElementId\tURL\tExtValue\tModifiedBy\tErrorMessage\n")
 logWriter.flush()
 log = {msg ->
     //println(msg)
@@ -31,6 +33,8 @@ where aci.extValueId is not null and pe.project.id=3
 int updatedAssayContextItem = 0
 for (AssayContextItem item : acItems) {
     if (processItem(item, externalOntologyAccessService, "Assay")){
+        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "fixExternalValueDisplay")
+        println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedAssayContextItem++
     }
@@ -47,6 +51,8 @@ where eci.extValueId is not null and pe.project.id=3
 int updatedExperimentContextItem = 0
 for (ExperimentContextItem item : ecItems) {
     if (processItem(item, externalOntologyAccessService, "Experiment")){
+        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "fixExternalValueDisplay")
+        println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedExperimentContextItem++
     }
@@ -61,6 +67,8 @@ where pci.extValueId is not null and pc.project.id=3
 int updatedProjectContextItem = 0
 for (ProjectContextItem item : pcItems) {
     if (processItem(item, externalOntologyAccessService, "Project")){
+        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "fixExternalValueDisplay")
+        println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedProjectContextItem++
     }
@@ -71,11 +79,11 @@ println("Finish process project context item, total ${pcItems.size()}, updated $
 boolean processItem(AbstractContextItem item, ExternalOntologyAccessService externalOntologyAccessService, String itemType) {
     Element element = item.attributeElement
     if (!element) {
-        log("Missing attributeElement\t${itemType}ContextItem\t${item.id}\t\t\t${item.extValueId}\t\n")
+        log("Missing attributeElement\t${itemType}ContextItem\t${item.id}\t\t\t${item.extValueId}\t${item.modifiedBy}\t\n")
         return false
     }
     if (!element.externalURL) {
-        log("Missing externalURL\t${itemType}ContextItem\t${item.id}\t${element.id}\t\t${item.extValueId}\t\n")
+        log("Missing externalURL\t${itemType}ContextItem\t${item.id}\t${element.id}\t\t${item.extValueId}\t${item.modifiedBy}\t\n")
         return false
     }
 //    if (externalOntologyAccessService.externalOntologyHasIntegratedSearch(element.externalURL)){
@@ -83,19 +91,20 @@ boolean processItem(AbstractContextItem item, ExternalOntologyAccessService exte
 //        return false
 //    }
     try{
-        ExternalItem externalItem = externalOntologyAccessService.findExternalItemById(element.externalURL, item.extValueId)
+        ExternalItem externalItem = externalOntologyAccessService.findExternalItemById(element.externalURL, StringUtils.trim(item.extValueId))
         if (!externalItem) {
-            log("Not found\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t\n")
+            log("Not found\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t${item.modifiedBy}\t\n")
             return false
         }
         if (externalItem.id != item.extValueId && externalItem.id != "GO:${item.extValueId}") {   // we know these go terms can be resolved this way, maybe better to add GO: in the field?
-            log("Mismatched returnId\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t\n")
+            log("Mismatched returnId\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t${item.modifiedBy}\t\n")
             return false
         }
         item.valueDisplay = externalItem.display
+        item.modifiedBy = "fixExternalValueDisplay"
         return true
     }catch(Exception e) {
-        log("Exception\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t${e.message}\n")
+        log("Exception\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t${item.modifiedBy}\t${e.message}\n")
         return false
     }
 }

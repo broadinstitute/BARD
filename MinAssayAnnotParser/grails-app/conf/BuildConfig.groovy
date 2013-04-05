@@ -55,6 +55,9 @@ grails.project.dependency.resolution = {
 
         test ":spock:0.6"
         build ":tomcat:$grailsVersion"
+        compile(":cbipcrowdauthentication:0.3.0") {
+            excludes('spock', 'release')
+        }
     }
 }
 
