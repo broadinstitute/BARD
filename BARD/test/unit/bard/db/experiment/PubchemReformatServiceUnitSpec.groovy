@@ -55,7 +55,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         ]
 
         when:
-        PubchemReformatService.ResultMap map = service.convertToResultMap(fillInRows(rows))
+        PubchemReformatService.ResultMap map = service.convertToResultMap("100", fillInRows(rows))
 
         then:
         map.records.size() == 1
@@ -79,7 +79,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         ]
 
         when:
-        PubchemReformatService.ResultMap map = service.convertToResultMap(fillInRows(rows))
+        PubchemReformatService.ResultMap map = service.convertToResultMap("100",fillInRows(rows))
 
         then:
         map.records.size() == 2
@@ -103,7 +103,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
     def 'test converting row'() {
         when:
-        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap([new PubchemReformatService.ResultMapRecord(series:  5, tid: "2", resultType: "AC50" )])
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100",[new PubchemReformatService.ResultMapRecord(series:  5, tid: "2", resultType: "AC50" )])
 
         List rows = map.getValues([PUBCHEM_ACTIVITY_OUTCOME: "1", PUBCHEM_ACTIVITY_SCORE: "92.2",PUBCHEM_SID: "100", "2": "97.8"], "AC50", null, null)
 
@@ -119,7 +119,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService service = new PubchemReformatService()
 
         when:
-        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap([
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100",[
                 new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "x" ),
                 new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "y", parentTid: "0"),
                 new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "z", parentTid: "1")

@@ -1,17 +1,17 @@
 package bard.db.project
 
+import bard.db.dictionary.Element
+import bard.db.experiment.Experiment
+import bard.db.registration.Assay
+import bard.db.registration.ExternalReference
+import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import spock.lang.Specification
-import grails.test.mixin.TestFor
-import grails.buildtestdata.mixin.Build
 import org.junit.Before
-import bard.db.experiment.Experiment
 import spock.lang.Shared
-import bard.db.dictionary.StageElement
-import bard.db.dictionary.Element
-import bard.db.registration.Assay
+import spock.lang.Specification
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,8 +21,8 @@ import bard.db.registration.Assay
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element])
-@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element])
+@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference])
+@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference])
 @TestMixin(GrailsUnitTestMixin)
 class ProjectControllerUnitSpec extends Specification {
     @Shared Project project
@@ -30,6 +30,7 @@ class ProjectControllerUnitSpec extends Specification {
     @Shared ProjectExperiment projectExperimentTo
 
     ProjectService projectService
+
     @Before
     void setup() {
         project = Project.build()
@@ -70,7 +71,7 @@ class ProjectControllerUnitSpec extends Specification {
         def model = controller.removeExperimentFromProject(params.experimentId, params.projectid)
 
         then:
-        1 * projectService.removeExperimentFromProject(_,_)
+        1 * projectService.removeExperimentFromProject(_, _)
         assert response.text == responsetext
 
         where:
@@ -80,7 +81,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test remove experiment from project fail {#description}'() {
         given:
-        projectService.removeExperimentFromProject(_, _) >> {throw new UserFixableException()}
+        projectService.removeExperimentFromProject(_, _) >> { throw new UserFixableException() }
 
         when:
         params.experimentId = experimentId
@@ -120,7 +121,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test remove edge from project fail {#description}'() {
         given:
-        projectService.removeEdgeFromProject(_, _, _) >> {throw new UserFixableException()}
+        projectService.removeEdgeFromProject(_, _, _) >> { throw new UserFixableException() }
 
         when:
         params.fromExperimentId = fromExperimentId
@@ -136,7 +137,7 @@ class ProjectControllerUnitSpec extends Specification {
         where:
         description                              | fromExperimentId         | toExperimentId         | responsetext
         "failed due to fromExperiment not found" | -999                     | projectExperimentTo.id | 'serviceError'
-        "failed due to toExperiment not found"   | projectExperimentFrom.id    | -999                   | 'serviceError'
+        "failed due to toExperiment not found"   | projectExperimentFrom.id | -999                   | 'serviceError'
     }
 
     void 'test link experiment with project success'() {
@@ -162,7 +163,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test link experiment with project fail {#description}'() {
         given:
-        projectService.linkExperiment(_, _, _) >> {throw new UserFixableException()}
+        projectService.linkExperiment(_, _, _) >> { throw new UserFixableException() }
 
         when:
         params.fromExperimentId = fromExperimentId
@@ -178,12 +179,12 @@ class ProjectControllerUnitSpec extends Specification {
         where:
         description                              | fromExperimentId         | toExperimentId         | responsetext
         "failed due to fromExperiment not found" | -999                     | projectExperimentTo.id | 'serviceError'
-        "failed due to toExperiment not found"   | projectExperimentFrom.id    | -999                   | 'serviceError'
+        "failed due to toExperiment not found"   | projectExperimentFrom.id | -999                   | 'serviceError'
     }
 
     void 'test associate experiment with project success'() {
         given:
-        projectService.addExperimentToProject(_,_,_) >> {}
+        projectService.addExperimentToProject(_, _, _) >> {}
         views['/project/_showstep.gsp'] = 'mock contents'
 
         Element stage1 = Element.build()
@@ -202,7 +203,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test associate experiment with project fail'() {
         given:
-        projectService.addExperimentToProject(_, _, _) >> {throw new UserFixableException()}
+        projectService.addExperimentToProject(_, _, _) >> { throw new UserFixableException() }
 
         Element stage1 = Element.build()
 
@@ -220,7 +221,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test ajaxFindAvailableExperimentByName'() {
         given:
-        projectService.isExperimentAssociatedWithProject(_, _) >> {false}
+        projectService.isExperimentAssociatedWithProject(_, _) >> { false }
 
         when:
         params.experimentName = projectExperimentFrom.experiment.experimentName
@@ -235,9 +236,9 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test ajaxFindAvailableExperimentByAssayId'() {
         given:
-        projectService.isExperimentAssociatedWithProject(_, _) >> {false}
+        projectService.isExperimentAssociatedWithProject(_, _) >> { false }
         Assay assay = Assay.build()
-        Experiment ex = Experiment.build(assay:assay)
+        Experiment ex = Experiment.build(assay: assay)
         assay.addToExperiments(ex)
 
         when:
@@ -253,9 +254,9 @@ class ProjectControllerUnitSpec extends Specification {
 
     void 'test ajaxFindAvailableExperimentById'() {
         given:
-        projectService.isExperimentAssociatedWithProject(_, _) >> {false}
+        projectService.isExperimentAssociatedWithProject(_, _) >> { false }
         Assay assay = Assay.build()
-        Experiment ex = Experiment.build(assay:assay)
+        Experiment ex = Experiment.build(assay: assay)
         assay.addToExperiments(ex)
 
         when:
@@ -272,7 +273,7 @@ class ProjectControllerUnitSpec extends Specification {
     void 'test editSummary'() {
         given:
         Assay assay = Assay.build()
-        Experiment ex = Experiment.build(assay:assay)
+        Experiment ex = Experiment.build(assay: assay)
         assay.addToExperiments(ex)
         views['/project/_summaryDetail.gsp'] = 'mock contents'
 

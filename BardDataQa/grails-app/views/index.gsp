@@ -11,7 +11,6 @@
 			    <li><g:link controller="aidIssue" action="index">List AID issues</g:link></li>
                 <li><g:link controller="dataset" action="index">List datasets and calculate marginal product of work for them</g:link></li>
                 <li><g:link controller="resultMapIssue" action="index">List AID's with current known issues in the result_map table</g:link></li>
-                <li><g:link controller="tidIssue" action="index">List TID's for AID's with current known issues in the result_map table</g:link></li>
             </ul>
 		</div>
 	</body>
