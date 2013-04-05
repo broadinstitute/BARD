@@ -26,7 +26,7 @@ class ResultDataUnitSpec extends Specification {
         ],
         "rootElements":
         [
-            {"displayName":"Outcome","dictElemId":899,"value":"Active"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Active"},
             {"displayName":"Score","dictElemId":898,"value":"35"},
             {"displayName":"Mean_NC","value":"3.8"},
             {"displayName":"StdDev_NC","value":"2.7"},
@@ -62,7 +62,7 @@ class ResultDataUnitSpec extends Specification {
         ],
         "rootElements":
         [
-            {"displayName":"Outcome","dictElemId":899,"value":"Inactive"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Inactive"},
             {"displayName":"Score","dictElemId":898,"value":"100"}
         ]
     }
@@ -86,7 +86,7 @@ class ResultDataUnitSpec extends Specification {
         "rootElements":
         [
             {
-                "displayName":"Outcome",
+                "displayName":"PubChem outcome",
                 "dictElemId":899,
                 "value":"Active"
             },
@@ -197,7 +197,7 @@ class ResultDataUnitSpec extends Specification {
         ],
         "rootElements":
         [
-            {"displayName":"Outcome","dictElemId":899,"value":"Active"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Active"},
             {"displayName":"Score","dictElemId":898,"value":"40"}
         ]
     }
@@ -213,7 +213,7 @@ class ResultDataUnitSpec extends Specification {
             {"displayName":"CC50","responseUnit":"um","value":"12.99"}
         ],
         "rootElements":[
-            {"displayName":"Outcome","dictElemId":899,"value":"Active"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Active"},
             {"displayName":"Score","dictElemId":898,"value":"96"},
             {"displayName":"CC50 Modifier"},
             {"displayName":"% Cell Viability @ 50 uM","dictElemId":986,"responseUnit":"percent","testConcUnit":"um","testConc":50.0,"value":"25.07"},
@@ -285,7 +285,7 @@ class ResultDataUnitSpec extends Specification {
         ],
         "rootElements":
         [
-            {"displayName":"Outcome","dictElemId":899,"value":"Active"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Active"},
             {"displayName":"Score","dictElemId":898,"value":"97"}
         ]
     }
@@ -300,7 +300,7 @@ class ResultDataUnitSpec extends Specification {
         "priorityElements":[],
         "rootElements":
         [
-            {"displayName":"Outcome","dictElemId":899,"value":"Active"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Active"},
             {"displayName":"Score","dictElemId":898,"value":"43"},
             {"displayName":"BoundGTP_Compound_1.56nanoM","value":"229"},
             {"displayName":"BoundGTP_Compound_3.125nanoM","value":"382"},
@@ -336,7 +336,7 @@ class ResultDataUnitSpec extends Specification {
         ],
         "rootElements":
         [
-            {"displayName":"Outcome","dictElemId":899,"value":"Active"},
+            {"displayName":"PubChem outcome","dictElemId":899,"value":"Active"},
             {"displayName":"Score","dictElemId":898,"value":"100"},
             {"displayName":"Average IC90 Modifier"},
             {"displayName":"Average IC50 Modifier"},
@@ -510,14 +510,14 @@ class ResultDataUnitSpec extends Specification {
 
         where:
         label                   | respClassEnum               | hasPlot | responseClass | currentJSON                                                                 | hasChildElements | isMapped | outcome
-        "CR_NO_SER"             | ResponseClassEnum.CR_NO_SER | false          | "CR_NO_SER"   | CR_NO_SER_bid_573_aid_2802_no_P_C_mapping_JSON                              | false            | false    | active
-        "CR_SER"                | ResponseClassEnum.CR_SER    | true           | "CR_SER"      | CR_SER_bid_1998_aid_998_good_structure_5_hill_params_JSON                   | false            | true     | active
-        "CR_SER_WITH_QUALIFIER" | ResponseClassEnum.CR_SER    | true           | "CR_SER"      | CR_SER_bid_27_aid_2173_good_CR_with_qualifier_JSON                          | false            | true     | active
-        "MULTCONC_SMALL"        | ResponseClassEnum.MULTCONC  | false          | "MULTCONC"    | MULTCONC_smaller_bid_2466_aid_504674_flat_resp_JSON                         | false            | false    | active
-        "MULTCONC_BIG"          | ResponseClassEnum.MULTCONC  | false          | "MULTCONC"    | MULTCONC_bid_3992_aid_504898_flat_resp_JSON                                 | false            | false    | active
-        "UNCLASS"               | ResponseClassEnum.UNCLASS   | false          | "UNCLASS"     | UNCLASS_bid_2819_aid_2373_no_annot_JSON                                     | true             | false    | active
-        "SP"                    | ResponseClassEnum.SP        | false          | "SP"          | SP_bid_4567_aid_844255_single_point_with_no_element_nesting_available_JSON  | false            | true     | active
-        "SP_NO_NESTING"         | ResponseClassEnum.SP        | false          | "SP"          | SP_bid_4020_aid_463170_simple_fold_change_average_with_element_nesting_JSON | true             | true     | inactive
+        "CR_NO_SER"             | ResponseClassEnum.CR_NO_SER | false   | "CR_NO_SER"   | CR_NO_SER_bid_573_aid_2802_no_P_C_mapping_JSON                              | false            | false    | active
+        "CR_SER"                | ResponseClassEnum.CR_SER    | true    | "CR_SER"      | CR_SER_bid_1998_aid_998_good_structure_5_hill_params_JSON                   | false            | true     | active
+        "CR_SER_WITH_QUALIFIER" | ResponseClassEnum.CR_SER    | true    | "CR_SER"      | CR_SER_bid_27_aid_2173_good_CR_with_qualifier_JSON                          | false            | true     | active
+        "MULTCONC_SMALL"        | ResponseClassEnum.MULTCONC  | false   | "MULTCONC"    | MULTCONC_smaller_bid_2466_aid_504674_flat_resp_JSON                         | false            | false    | active
+        "MULTCONC_BIG"          | ResponseClassEnum.MULTCONC  | false   | "MULTCONC"    | MULTCONC_bid_3992_aid_504898_flat_resp_JSON                                 | false            | false    | active
+        "UNCLASS"               | ResponseClassEnum.UNCLASS   | false   | "UNCLASS"     | UNCLASS_bid_2819_aid_2373_no_annot_JSON                                     | true             | false    | active
+        "SP"                    | ResponseClassEnum.SP        | false   | "SP"          | SP_bid_4567_aid_844255_single_point_with_no_element_nesting_available_JSON  | false            | true     | active
+        "SP_NO_NESTING"         | ResponseClassEnum.SP        | false   | "SP"          | SP_bid_4020_aid_463170_simple_fold_change_average_with_element_nesting_JSON | true             | true     | inactive
     }
 }
 

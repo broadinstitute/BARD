@@ -1,14 +1,15 @@
 package bardqueryapi.compoundBioActivitySummary
 
-import bard.core.adapter.AssayAdapter
-import bard.core.adapter.ProjectAdapter
 import org.apache.commons.lang3.tuple.ImmutablePair
 import org.apache.commons.lang3.tuple.Pair
+
+import bard.core.adapter.AssayAdapter
+import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.assays.Assay
+import bard.core.util.FilterTypes
 import org.apache.log4j.Logger
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
-import bard.core.rest.spring.assays.Assay
-import bard.core.util.FilterTypes
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,6 +35,18 @@ class CompoundBioActivitySummaryBuilder {
         TableModel tableModel = new TableModel()
         //Setup the headers
         tableModel.columnHeaders = [new StringValue(value: "${groupByType.name()}"), new StringValue(value: 'Experiments')]
+        //Get a list of all experiment IDs so we can look them all up in one call to the REST API
+        List<Long> eids = groupedByExperimentalData.values().toList().flatten().unique()*.bardExptId
+        Map<Long, ExperimentSearch> experimentsMap
+        try {
+            ExperimentSearchResult experimentSearchResult = this.queryService.experimentRestService.searchExperimentsByIds(eids)
+            List<ExperimentSearch> experiments = experimentSearchResult.experiments
+            //Create a map of experiment-id to experiment; please note that values in this map are Arraylists with one element in each.
+            experimentsMap = experiments.groupBy {ExperimentSearch experiment -> experiment.bardExptId}
+        }
+        catch (Exception exp) {
+            log.error("Could not find BARD experiment IDs: ${eids}")
+        }
 
         //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
         for (Long resourceId in groupedByExperimentalData.keySet()) {
@@ -59,14 +72,8 @@ class CompoundBioActivitySummaryBuilder {
                 // an experiment summary title and then a list of WebQueryValue result types (curves, single-points, etc.)
                 Map<WebQueryValue, List<WebQueryValue>> experimentBox = [:]
                 //Add the experiment itself (for an experiment's description title)
-                ExperimentShow experimentShow
-                try {
-                    experimentShow = this.queryService.experimentRestService.getExperimentById(exptData.bardExptId)
-                }
-                catch (Exception exp) {
-                    log.error("Could not find BARD experiment ID: ${exptData.bardExptId}")
-                }
-                WebQueryValue experiment = new ExperimentValue(value: experimentShow)
+                ExperimentSearch experimentSearch = experimentsMap[exptData.bardExptId].first()
+                WebQueryValue experiment = new ExperimentValue(value: experimentSearch)
 
                 List<WebQueryValue> results = convertExperimentResultsToValues(exptData)
 
