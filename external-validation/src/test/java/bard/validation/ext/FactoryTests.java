@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class FactoryTests {
 
     private static final Properties props = new Properties();
+    private static final ExternalOntologyFactory factory = RegisteringExternalOntologyFactory.getInstance();
 
     public FactoryTests() {
         BasicConfigurator.configure();
@@ -18,21 +19,21 @@ public class FactoryTests {
 
     @BeforeClass
     public static void setupClass() {
-        props.setProperty(DefaultExternalOntologyFactoryImpl.NCBI_EMAIL, "southern@scripps.edu");
-        props.setProperty(DefaultExternalOntologyFactoryImpl.NCBI_TOOL, "BARD-CAP");
+        props.setProperty(ExternalOntologyNCBI.NCBI_EMAIL, "southern@scripps.edu");
+        props.setProperty(ExternalOntologyNCBI.NCBI_TOOL, "BARD-CAP");
     }
 
     @Test
     public void testPubChem() throws ExternalOntologyException {
-        ExternalOntologyAPI api = new DefaultExternalOntologyFactoryImpl().getExternalOntologyAPI("http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=", props);
+        ExternalOntologyAPI api = factory.getExternalOntologyAPI("http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=", props);
         assertEquals(ExternalOntologyNCBI.class,api.getClass());
     }
 
 
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
-        props.setProperty(DefaultExternalOntologyFactoryImpl.NCBI_EMAIL, "southern@scripps.edu");
-        props.setProperty(DefaultExternalOntologyFactoryImpl.NCBI_TOOL, "BARD-CAP");
+        props.setProperty(ExternalOntologyNCBI.NCBI_EMAIL, "southern@scripps.edu");
+        props.setProperty(ExternalOntologyNCBI.NCBI_TOOL, "BARD-CAP");
         args = new String[]{
                 "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn",
                 "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=",
@@ -56,8 +57,11 @@ public class FactoryTests {
         };
         for (String arg : args) {
             try {
-                ExternalOntologyAPI api = new DefaultExternalOntologyFactoryImpl().getExternalOntologyAPI(arg, props);
-                System.out.println(String.format("%s\t%s", arg, api.getClass()));
+                ExternalOntologyAPI api = factory.getExternalOntologyAPI(arg, props);
+                if( api == null )
+                	System.err.println("Could not determine api for : " + arg);
+                else
+                	System.out.println(String.format("%s\t%s", arg, api.getClass()));
             } catch (ExternalOntologyException ex) {
                 System.err.println(String.format("%s\t%s", arg, ex.getMessage()));
             }
