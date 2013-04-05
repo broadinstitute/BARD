@@ -13,11 +13,17 @@ class RingManagerService {
     CompoundRestService compoundRestService
     SunburstCacheService sunburstCacheService
 
-    String writeRingTree( RingNode ringNode ) {
+    String writeRingTree( RingNode ringNode, boolean includeText = true ) {
         StringBuilder stringBuilder = new StringBuilder("var \$data = [")
-        if (ringNode)
-            stringBuilder << ringNode.toString()
+        if (ringNode) {
+               if (includeText) {
+                   stringBuilder << ringNode.toString()
+               } else {
+                   stringBuilder << ringNode.toStringNoText()
+               }
+        }
         stringBuilder << "]"
+
         stringBuilder.toString()
     }
 
@@ -152,10 +158,7 @@ class RingManagerService {
     }
 
 
-
-
-    public  RingNode convertCompoundIntoSunburst (Long cid, Boolean includeHits, Boolean includeNonHits ){
-        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(cid)
+    public  RingNode convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
         LinkedHashMap activeInactiveData = retrieveActiveInactiveDataFromCompound(compoundSummary)
         final List<String> targets = []
         if (includeHits) {
@@ -173,6 +176,18 @@ class RingManagerService {
             }
         }
         return ringNodeFactory(accumulatedMaps.flatten())
+    }
+
+    /**
+     * Here's a wrapper routine in case someone wants to start with a CID as opposed to a fully constructed CompoundSummary
+     * @param cid
+     * @param includeHits
+     * @param includeNonHits
+     * @return
+     */
+    public  RingNode convertCompoundIntoSunburst (Long cid, Boolean includeHits, Boolean includeNonHits ){
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(cid)
+        convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
     }
 
 
