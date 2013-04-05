@@ -6,6 +6,7 @@ window.onload = function () {
 };
 
 function initFunction(){
+    // a list of most distinguishable color
     var kelly = [  "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#FF00FF",
         "#FF8080", "#808080", "#FFB300", "#803E75", "#FF6800",
         "#A6BDD7", "#C10020", "#CEA262",
@@ -17,7 +18,8 @@ function initFunction(){
     var countUsedColor=0;
 //    var boynton = [ "Blue", "Red", "Green", "Yellow", "Magenta",
 //        "Pink", "Gray", "Brown", "Orange" ];
-    //using this random color generator after we used up all colors above
+    // using this random color generator after we used up all colors above, they may not distinguishable or even identical with some of them above
+    // but I am hoping in most cases, number of distinct assays won't exceed number of colors above
     var color1 = new RColor;
 
     var existingColors = new Array();
@@ -108,7 +110,7 @@ function initFunction(){
         }
         //colorVal =calculateColor(existingColors, keyValues.assay);
        // colorVal = color1.get(true);
-        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage+"\n"+keyValues.assay+"\n"+colorVal, data: {link: keyValues.eid, assay: keyValues.assay,
+        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
             ename: keyValues.ename, aid: keyValues.aid, assignedcolor: colorVal},  render:renderIsolated});
     }
 
@@ -120,8 +122,8 @@ function initFunction(){
     /* Use our layout implementation that place nodes with no incoming edges at top, and node with outgoing edges at bottom*/
     var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
     /* Use our layout implementation that place isolated nodes ordered by experiment id*/
-    //var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
-    var layouterIsolated = new Graph.Layout.Spring(gIsolated);
+    var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
+    //var layouterIsolated = new Graph.Layout.Spring(gIsolated);
 
     /* draw the graph using the RaphaelJS draw implementation */
     var totalHeight = 600
