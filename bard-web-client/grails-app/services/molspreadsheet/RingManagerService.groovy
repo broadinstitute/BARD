@@ -6,6 +6,8 @@ import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.util.RingNode
+
 
 class RingManagerService {
     CompoundRestService compoundRestService

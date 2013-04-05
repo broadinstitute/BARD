@@ -5,6 +5,7 @@ import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import grails.plugin.spock.IntegrationSpec
+import bard.core.rest.spring.util.RingNode
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,5 +1,7 @@
 package molspreadsheet
 
+import bard.core.rest.spring.util.RingNode
+
 class SunburstHandlerTagLib {
 
     RingManagerService ringManagerService
@@ -220,7 +222,7 @@ class SunburstHandlerTagLib {
 
 
     def sunburstSection = { attrs, body ->
-  //      if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
+        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
             out << """
     <div class="span9">
         <div id="sunburstdiv">
@@ -231,7 +233,7 @@ class SunburstHandlerTagLib {
            <script type="text/javascript" src="../../js/sunburstPrep.js"></script>
         </div>
     </div>""".toString()
-    //    }
+        }
     }
 
 
