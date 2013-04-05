@@ -161,17 +161,10 @@ class PugService {
         Set<Long> missingFromPubchem = new HashSet(missingSids)
         List<Long> substancesFromPubchem = new ArrayList()
 
-        // may turn this on for bulk loads of converted data
-        boolean bypassPubchemQuery = true;
-        if (!bypassPubchemQuery) {
-            getSubstancesFromPubchem(missingSids) { sid ->
-                Long substanceId = Long.parseLong(sid)
-                substancesFromPubchem.add(substanceId)
-                missingFromPubchem.remove(substanceId)
-            }
-        } else {
-            substancesFromPubchem.addAll(missingFromPubchem)
-            missingFromPubchem.clear()
+        getSubstancesFromPubchem(missingSids) { sid ->
+            Long substanceId = Long.parseLong(sid)
+            substancesFromPubchem.add(substanceId)
+            missingFromPubchem.remove(substanceId)
         }
 
         bulkSubstanceService.insertSubstances(substancesFromPubchem, getUsername())
