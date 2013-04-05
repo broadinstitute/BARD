@@ -19,7 +19,7 @@ class AssayContextGroupsBuilder {
         biologyElement = Element.findByLabel(biologyElementLabel)
     }
 
-    List<ContextGroup> build() {     s
+    List<ContextGroup> build() {
         List<ContextItemDto> biology = [
                 new ContextItemDto('2/C', '$/C', AttributeType.Fixed, true, null, null),
                 new ContextItemDto('$/C', '$/D', AttributeType.Fixed, true, null, null)  //  biology value
