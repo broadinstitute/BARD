@@ -100,6 +100,9 @@ boolean processItem(AbstractContextItem item, ExternalOntologyAccessService exte
             log("Mismatched returnId\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t${item.modifiedBy}\t\n")
             return false
         }
+        if (externalItem.id == "GO:${item.extValueId}") {
+            item.extValueId = externalItem.id
+        }
         item.valueDisplay = externalItem.display
         item.modifiedBy = "fixExternalValueDisplay"
         return true
