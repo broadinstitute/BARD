@@ -253,6 +253,13 @@ class RingNode {
         stringBuilder.toString()
     }
 
+    /**
+     * Here's the routine does the recursive descent.  It fills up a stringBuilder
+     * object as it goes.
+     * @param me
+     * @param ringNodeMgr
+     * @param stringBuilder
+     */
     public void describeMeAndMyParent ( RingNode me, LinkedHashMap<String,RingNode> ringNodeMgr, StringBuilder stringBuilder ) {
         RingNode myParent = null
         // find my parent, if I have one
@@ -273,6 +280,12 @@ class RingNode {
 
 
 
+    /**
+     *  Important note: this toString() method is intended to write out the contents
+     *  of a tree into JavaScript for the purposes of building the sunburst  pattern
+     *  using the D3 library.  As such this routine uses a recursive descent to step
+     *  through all of the elements that are below the current node in the tree.
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder()
@@ -303,4 +316,34 @@ class RingNode {
         stringBuilder << "}"
         return stringBuilder.toString()
     }
+
+    public String toStringNoText() {
+        StringBuilder stringBuilder = new StringBuilder()
+        // start things out
+        stringBuilder << "{"
+        // start things out, and write the name
+        stringBuilder <<  "\"name\": \"\""
+        // size or children – not both
+        if ( children.size()>0 ) {
+            stringBuilder <<  ", \"children\": [\n"
+            int totalNumberOfKids =  children.size()
+            int workingOnKidNumber = 0
+            for (RingNode oneKid in children) {
+                stringBuilder << oneKid.toStringNoText()
+                workingOnKidNumber++
+                if (workingOnKidNumber < totalNumberOfKids)
+                    stringBuilder <<  ","
+                stringBuilder << "\n"
+            }
+            stringBuilder << "]"
+        }  else if (size  > 0)  {
+            stringBuilder <<  ", "
+            stringBuilder <<  "\"size\":"
+            stringBuilder << size
+        }
+        stringBuilder << "}"
+        return stringBuilder.toString()
+    }
+
+
 }
