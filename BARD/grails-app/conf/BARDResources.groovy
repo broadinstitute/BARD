@@ -64,6 +64,7 @@ modules = {
         resource url: '/js/projectstep/dracula_algorithms.js'
         resource url: '/js/projectstep/projectstep.show.js'
         resource url: '/js/projectstep/rcolor.js'
+        resource url: '/js/projectstep/viz.js'
     }
 
     summary{
