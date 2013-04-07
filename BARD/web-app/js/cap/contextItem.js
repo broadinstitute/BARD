@@ -3,6 +3,19 @@ $(document).ready(function () {
         minimumInputLength: 1,
         allowClear: true,
         placeholder: "Search for attribute name",
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            if (id !== "") {
+                $.ajax("/BARD/ontologyJSon/getElement", {
+                    data: {
+                        id: id
+                    },
+                    dataType: "json"
+                }).done(function (data) {
+                        callback(data);
+                    });
+            }
+        },
         ajax: {
             url: "/BARD/ontologyJSon/getDescriptors",
             dataType: 'json',
@@ -11,22 +24,15 @@ $(document).ready(function () {
                 return { term: term};
             },
             results: function (data) {
-                var selectData = {results: []}
-                $.each(data, function (index, val) {
-                    selectData.results.push({id: val.elementId, text: val.label})
-                });
-                return selectData;
+                return data;
             }
         }
-    }).on("change", function(e) {
+    }).on("change", function (e) {
             // on change the attribute, clear all the other fields
             $(':text').val("");
             $("#valueElementId").select2("data", {results: []});
             $("#extValueId").select2("data", {results: []});
         });
-    if ($("#attributeElementId").val()) {
-        $("#attributeElementId").select2("data", {id: $("#attributeElementId").val(), text: $("#attributeElementText").val()});
-    }
 
 
     $("#valueElementId").select2({
@@ -62,6 +68,20 @@ $(document).ready(function () {
         minimumInputLength: 1,
         allowClear: true,
         placeholder: "Search for external ontology ids or terms",
+        initSelection: function (element, callback) {
+            var id = $(element).val();
+            if (id !== "") {
+                $.ajax("/BARD/ontologyJSon/findExternalItemById", {
+                    data: {
+                        elementId: $("#attributeElementId").val(),
+                        id: id
+                    },
+                    dataType: "json"
+                }).done(function (data) {
+                        callback(data);
+                    });
+            }
+        },
         ajax: {
             url: "/BARD/ontologyJSon/findExternalItemsByTerm",
             dataType: 'json',
@@ -82,6 +102,7 @@ $(document).ready(function () {
     if ($("#extValueId").val()) {
         $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
     }
+    initializeUnits();
     initialFocus();
 
     // try and pick best focus
@@ -103,6 +124,48 @@ $(document).ready(function () {
         }
         else if ($("#valueDisplay").val()) {
             $("#valueDisplay").focus();
+        }
+    }
+
+    function initializeUnits() {
+        var unitSelector = '#valueNumUnitId'
+        $(unitSelector).select2({
+            placeholder: "Select a Unit",
+            width: "70%",
+            data: []
+        });
+        var unitsData = {results: []};
+        $.getJSON(
+            "/BARD/ontologyJSon/getUnits",
+            {
+                toUnitId: $('#attributeElementToUnitId').val()
+            },
+            function (data, textStatus, jqXHR) {
+                $.each(data, function (index, val) {
+                    unitsData.results.push({id: val.value, text: val.label})
+                });
+                populateDataValueUnitId(unitsData.results, $(unitSelector).val());
+            }
+        );
+
+
+    }
+
+    function populateDataValueUnitId(data, selectedId) {
+        var unitSelector = '#valueNumUnitId'
+        $(unitSelector).select2({
+            placeholder: "Select a Unit",
+            width: "70%",
+            data: data
+        });
+        if (selectedId) {
+            var found = $.map(data, function (val) {
+                return val.id == selectedId ? val : null;
+            });
+            if (found) {
+                $(unitSelector).select2("data", found[0]);
+                //$("#valueUnitLabel").val($(unitSelector).select2("data").text);
+            }
         }
     }
 

@@ -52,9 +52,11 @@
                 <label class="control-label" for="valueNum"><g:message code="contextItem.valueNum.label"/>:</label>
 
                 <div class="controls">
-                    <g:textField class="span2" id="qualifier" name="qualifier"
-                                 placeholder="${message(code: "contextItem.qualifier.label")}"
-                                 value="${instance?.qualifier}" disabled="${disabledInput}"/>
+                    <g:select class="span2" id="qualifier" name="qualifier"
+                                 noSelection="${['':message(code: "contextItem.qualifier.label")]}"
+                                 from="${instance?.constraints.qualifier.inList}"
+                                 value="${instance?.qualifier}"
+                                 disabled="${disabledInput}"/>
 
                     <g:textField class="span2" id="valueNum" name="valueNum"
                                  placeholder="${message(code: "contextItem.valueNum.label")}"

@@ -31,32 +31,33 @@ class BasicContextItemCommand extends BardCommand {
     Long version
     String contextClass = "ProjectContext"
 
-    String attributeElementLabel
     Long attributeElementId
-    Long valueNumUnitId
-
-    Long valueElementId
     String extValueId
+    Long valueElementId
+
     String qualifier
     Float valueNum
+    Long valueNumUnitId
+
     String valueDisplay
 
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
 
-//    static constraints = {
-//        importFrom(AbstractContextItem, exclude: ['dateCreated', 'lastUpdated', 'modifiedBy'])
-//        attributeElementId(nullable: false)
+    static constraints = {
+        qualifier(nullable: true, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
+        attributeElementId(nullable: false)
+
 //        contextId(nullable: false)
-//        contextType(nullable: false, inList: CONTEXT_TYPES)
+////        contextType(nullable: false, inList: CONTEXT_TYPES)
 //
 //        valueElementId(nullable: true)
 //        extValueId(nullable: true)
 //        qualifier(nullable: true)
 //        valueNum(nullable: true)
 //        valueDisplay(nullable: true)
-//    }
+    }
 //
 //    /**
 //     * a context item has a number of nullable fields, however, they should only ever be partially populated
@@ -89,14 +90,15 @@ class BasicContextItemCommand extends BardCommand {
         this.contextItemId = contextItem.id
         this.version = contextItem.version
         this.contextClass = contextItem.context.class.simpleName
-        this.attributeElementLabel = contextItem.attributeElement.label
-        this.attributeElementId = contextItem.attributeElement?.id
-        this.valueNumUnitId
 
+        this.attributeElementId = contextItem.attributeElement?.id
         this.valueElementId = contextItem.valueElement?.id
         this.extValueId = contextItem.extValueId
+
         this.qualifier = contextItem.qualifier
         this.valueNum = contextItem.valueNum
+        this.valueNumUnitId = contextItem.attributeElement.unit?.id
+
         this.valueDisplay = contextItem.valueDisplay
 
         this.dateCreated = contextItem.dateCreated
