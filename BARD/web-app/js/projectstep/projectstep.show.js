@@ -3,7 +3,6 @@ var redraw;
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 window.onload = function () {
     initFunction();
-    // initFunction1();
 };
 
 function initFunction() {
@@ -17,8 +16,6 @@ function initFunction() {
         "#7F180D", "#93AA00", "#593315",
         "#F13A13", "#232C16" ];
     var countUsedColor = 0;
-//    var boynton = [ "Blue", "Red", "Green", "Yellow", "Magenta",
-//        "Pink", "Gray", "Brown", "Orange" ];
     // using this random color generator after we used up all colors above, they may not distinguishable or even identical with some of them above
     // but I am hoping in most cases, number of distinct assays won't exceed number of colors above
     var color1 = new RColor;
@@ -30,9 +27,6 @@ function initFunction() {
     var g = new Graph();
     var gIsolated = new Graph();
 
-    var graphInJSON = $.parseJSON($('#stepGraph').html());
-
-    var connectedNodes = graphInJSON.connectedNodes;
     var render = function (r, n) {
         var label = r.text(0, 10, n.label);
 
@@ -52,6 +46,8 @@ function initFunction() {
         );
         return set;
     };
+    var graphInJSON = $.parseJSON($('#stepGraph').html());
+    var connectedNodes = graphInJSON.connectedNodes;
 
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
@@ -59,7 +55,6 @@ function initFunction() {
         if (keyValues.assay in aidColor)
             colorVal = aidColor[keyValues.assay];
         else {
-            // colorVal = calculateColor(existingColors, keyValues.assay);
             if (countUsedColor < kelly.length) {
                 colorVal = kelly[countUsedColor];
                 countUsedColor++;
@@ -98,7 +93,6 @@ function initFunction() {
         if (keyValues.assay in aidColor)
             colorVal = aidColor[keyValues.assay];
         else {
-            // colorVal = calculateColor(existingColors, keyValues.assay);
             if (countUsedColor < kelly.length) {
                 colorVal = kelly[countUsedColor];
                 countUsedColor++;
@@ -109,8 +103,6 @@ function initFunction() {
             existingColors.push(colorVal);
             aidColor[keyValues.assay] = colorVal;
         }
-        //colorVal =calculateColor(existingColors, keyValues.assay);
-        // colorVal = color1.get(true);
         gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{link:keyValues.eid, assay:keyValues.assay,
             ename:keyValues.ename, aid:keyValues.aid, assignedcolor:colorVal}, render:renderIsolated});
     }
@@ -122,7 +114,7 @@ function initFunction() {
 
     /* Use our layout implementation that place nodes with no incoming edges at top, and node with outgoing edges at bottom*/
     // var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
-    var layouter = new Graph.Layout.Spring(g);
+   // var layouter = new Graph.Layout.Spring(g);
     /* Use our layout implementation that place isolated nodes ordered by experiment id*/
     var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
     //var layouterIsolated = new Graph.Layout.Spring(gIsolated);
@@ -164,27 +156,6 @@ function resetAfterClick() {
     $('#assaylink').attr("href", "")
 }
 
-function calculateColor(existingColors, assayid) {
-//    for(var rval = 0; rval < 255; rval += 50){
-//    for(var gval = 0; gval < 255; gval += 50){
-//    for(var bval = 0; bval < 255; bval += 50){
-//        var colorVal = "rgb("+rval+","+gval+","+bval+")";
-//        if (!contains(existingColors, colorVal)) {
-//            return colorVal;
-//        }
-//    }}}
-//    return "";
-
-    var PHI = (1 + Math.sqrt(5)) / 2
-    var n = assayid * PHI - Math.floor(assayid * PHI)
-
-    var hue = Math.floor(n * 256)
-
-    var colorVal = "hsb(" + hue / 1000 + ",0.25,1)";
-    return colorVal;
-
-}
-
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
         if (a[i] === obj) {
@@ -193,17 +164,16 @@ function contains(a, obj) {
     }
     return false;
 }
+
 function inspect(s) {
     return "<pre>" + s.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;") + "</pre>"
 }
 
 function getsrc() {
-    var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18];node[shape=polygon,sides=4,fontsize=8];";
     var graphInJSON = $.parseJSON($('#stepGraph').html());
-
     var connectedNodes = graphInJSON.connectedNodes;
 
-
+    var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18,size = \"8,6\"];node[shape=polygon,sides=4,fontsize=8];";
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
         textgraph = textgraph + connectedNodes[i].id + "[color=salmon2,label=\"" + keyValues.eid + " " + keyValues.stage + "\"" + "];";
@@ -228,9 +198,9 @@ function generatesvg() {
 
 function initFunction1() {
     $("#canvas").append(generatesvg());
-    var template = Handlebars.compile($("#node-selection-template1").html())
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
+    var template = Handlebars.compile($("#node-selection-template1").html())
     $(".node").click(function () {
         var clickedNode = $(this).find('title').text();
 
@@ -244,22 +214,22 @@ function initFunction1() {
             }
         }
     });
-    var template1 = Handlebars.compile($("#edge-selection-template").html())
+    var template1 = Handlebars.compile($("#edge-selection-template").html());
+    var edges = graphInJSON.edges;
     $(".edge").click(function () {
         var clickedEdge = $(this).find('title').text();
-        var edges = graphInJSON.edges;
         for (var i = 0; i < edges.length; i++) {
             var found = edges[i].from + "->" + edges[i].to;
             if (clickedEdge == found) {
                 var splitstr = found.split("->");
                 var from;
                 var to;
-                for (var j = 0; i < connectedNodes.length; i++) {
-                    var keyValues = connectedNodes[i].keyValues;
-                    if (connectedNodes[i].id == splitstr[0]) {
+                for (var j = 0; j < connectedNodes.length; j++) {
+                    var keyValues = connectedNodes[j].keyValues;
+                    if (connectedNodes[j].id == splitstr[0]) {
                         from = keyValues.eid;
                     }
-                    if (connectedNodes[i].id == splitstr[1]) {
+                    if (connectedNodes[j].id == splitstr[1]) {
                         to = keyValues.eid;
                     }
                 }
