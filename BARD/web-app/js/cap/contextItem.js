@@ -13,6 +13,9 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
+                        if (data.unitId) {
+                            initializeUnits(data.unitId);
+                        }
                     });
             }
         },
@@ -32,6 +35,9 @@ $(document).ready(function () {
             $(':text').val("");
             $("#valueElementId").select2("data", {results: []});
             $("#extValueId").select2("data", {results: []});
+            $("#valueNumUnitId").select2("data", {results: []});
+            initializeUnits($("#attributeElementId").select2("data").unitId);
+
         });
 
 
@@ -79,6 +85,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
+                        initialFocus();
                     });
             }
         },
@@ -102,7 +109,6 @@ $(document).ready(function () {
     if ($("#extValueId").val()) {
         $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
     }
-    initializeUnits();
     initialFocus();
 
     // try and pick best focus
@@ -127,7 +133,7 @@ $(document).ready(function () {
         }
     }
 
-    function initializeUnits() {
+    function initializeUnits(attributeUnitId) {
         var unitSelector = '#valueNumUnitId'
         $(unitSelector).select2({
             placeholder: "Select a Unit",
@@ -138,15 +144,15 @@ $(document).ready(function () {
         $.getJSON(
             "/BARD/ontologyJSon/getUnits",
             {
-                toUnitId: $('#attributeElementToUnitId').val()
+                toUnitId: attributeUnitId
             },
             function (data, textStatus, jqXHR) {
                 $.each(data, function (index, val) {
                     unitsData.results.push({id: val.value, text: val.label})
                 });
-                populateDataValueUnitId(unitsData.results, $(unitSelector).val());
+                populateDataValueUnitId(unitsData.results, attributeUnitId);
             }
-        );
+        ).done();
 
 
     }
@@ -164,7 +170,6 @@ $(document).ready(function () {
             });
             if (found) {
                 $(unitSelector).select2("data", found[0]);
-                //$("#valueUnitLabel").val($(unitSelector).select2("data").text);
             }
         }
     }
