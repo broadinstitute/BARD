@@ -198,6 +198,7 @@ function generatesvg() {
 
 function initFunction1() {
     $("#canvas").append(generatesvg());
+    $(".graph").find('title').text("experiments relationship");
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
     var template = Handlebars.compile($("#node-selection-template1").html())
