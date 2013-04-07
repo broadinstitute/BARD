@@ -173,7 +173,7 @@ function getsrc() {
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
 
-    var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18,size = \"8,6\"];node[shape=polygon,sides=4,fontsize=8];";
+    var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18];node[shape=polygon,sides=4,fontsize=8];";
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
         textgraph = textgraph + connectedNodes[i].id + "[color=salmon2,label=\"" + keyValues.eid + " " + keyValues.stage + "\"" + "];";
