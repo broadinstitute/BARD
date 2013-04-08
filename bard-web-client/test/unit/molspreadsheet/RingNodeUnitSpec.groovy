@@ -221,12 +221,12 @@ class RingNodeUnitSpec  extends Specification{
     }
 
 
-    void "test deriveColors" (){
+    void "test placeSunburstOnPage" (){
         when:
         RingNode ringNode = RingNode.createStubRing ()
 
         then:
-        ringNode.deriveColors(10,10,["A","B"],2).trim()==
+        ringNode.placeSunburstOnPage(10,10,["A","B"],2).trim()==
                 """var width = 10,
                 height = 10,
                 radius = Math.min(width, height) / 2,
@@ -234,5 +234,23 @@ class RingNodeUnitSpec  extends Specification{
 "B"
    ]);""".toString()
     }
+
+
+    void "test deriveColors" (){
+        when:
+        RingNode ringNode = RingNode.createStubRing ()
+
+        then:
+        ringNode.deriveColors(["A","B"],2).trim()==
+                """var width = 10,
+                height = 10,
+                radius = Math.min(width, height) / 2,
+                color = d3.scale.category10().domain(["A",
+"B"
+   ]);""".toString()
+    }
+
+
+
 
 }

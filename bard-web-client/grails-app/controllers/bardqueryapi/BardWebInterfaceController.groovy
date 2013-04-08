@@ -654,6 +654,9 @@ class BardWebInterfaceController {
             tableModel.additionalProperties.put("activityOutcome", activityOutcome)
             tableModel.additionalProperties.put("id", id.toString())
             tableModel.additionalProperties.put("resourceType", resourceType.name())
+            session.'compoundSummary' =  tableModel.additionalProperties?.compoundSummary
+            session.'actives' =  true
+            session.'inactives' =  true
 
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,
@@ -675,7 +678,42 @@ class BardWebInterfaceController {
                     "${message}")
         }
     }
+
+
+
+
+    def bigSunburst(Long id, SearchCommand searchCommand) {
+        int dropDown1Choice = 0
+
+        if ((params.actives==null) || ('t' == params.actives)) {
+            dropDown1Choice += 1
+            session.'actives' = true
+        } else {
+            session.'actives' = false
+        }
+
+        if ((params.inactives==null) || ('t' == params.inactives)) {
+            dropDown1Choice += 2
+            session.'inactives' = true
+        } else {
+            session.'inactives' = false
+        }
+
+        if (!session.'compoundSummary') {
+            println 'we have no information'
+        } else {
+            render(view: 'bigSunburst',
+                    model: [compoundSummary: session.'compoundSummary',
+                            dropDown1Choice: dropDown1Choice])
+        }
+
+    }
+
+
 }
+
+
+
 /**
  * We would use this helper class as Mixin for
  * the RestController

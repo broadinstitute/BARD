@@ -213,12 +213,20 @@ class RingNode {
      * @param maximumNumberOfColors
      * @return
      */
-    public String deriveColors(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors) {
+    public String placeSunburstOnPage(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors) {
         StringBuilder stringBuilder = new StringBuilder()
         stringBuilder << """  var width = ${width},
                 height = ${height},
                 radius = Math.min(width, height) / 2,
                 color = d3.scale.category10().domain([""".toString()
+        stringBuilder << deriveColors(namesThatGetColors,  maximumNumberOfColors)
+        stringBuilder << "   ]);"
+        stringBuilder.toString()
+    }
+
+
+    public String deriveColors(List <String> namesThatGetColors, int maximumNumberOfColors) {
+        StringBuilder stringBuilder = new StringBuilder()
         int numberOfLoops = 0
         for (String name in namesThatGetColors){
             stringBuilder << "\"${name}\""
@@ -230,7 +238,6 @@ class RingNode {
                 break
             }
         }
-        stringBuilder << "   ]);"
         stringBuilder.toString()
     }
 

@@ -96,12 +96,12 @@ class RingManagerService {
         RingNode.createStubRing ()
     }
 
-    String defineColors ( RingNode ringNode ) {
+    String placeSunburstOnPage ( int width, int height, RingNode ringNode ) {
         StringBuilder stringBuilder = new StringBuilder("")
         int numberOfColors = ringNode.maximumTreeHeight()
         List <String>  everyParent = ringNode.listOfEverybodyWhoIsAParent()
         List <String>  everyUniqueParent =  everyParent.unique().sort()
-            stringBuilder << ringNode.deriveColors(685,500,everyUniqueParent,numberOfColors)
+        stringBuilder << ringNode.placeSunburstOnPage(width,height,everyUniqueParent,numberOfColors)
         stringBuilder.toString()
     }
 
@@ -164,7 +164,7 @@ class RingManagerService {
         if (includeHits) {
             activeInactiveData["hits"].each {targets <<  it }
         }
-        if (includeHits) {
+        if (includeNonHits) {
             activeInactiveData["misses"].each {targets <<  it }
         }
         LinkedHashMap<String, Integer> accumulatedTargets = accumulateAccessionNumbers( targets )
