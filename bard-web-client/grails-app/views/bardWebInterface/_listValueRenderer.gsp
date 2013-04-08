@@ -1,6 +1,6 @@
 <g:if test="${!resultSize}">
     <tr>
-        <td align="center" nowrap="wrap" style="width: ${columnWidth}%">
+        <td align="center" nowrap="wrap">
             <p class="text-error">N/A</p>
         </td>
     </tr>
@@ -17,7 +17,7 @@
             <tr>
         </g:if>
 
-        <td align="center" nowrap="wrap" style="width: ${columnWidth}%">
+        <td align="center" nowrap="wrap">
         %{--A curve--}%
             <g:if test="${result instanceof bardqueryapi.ConcentrationResponseSeriesValue}">
                 <g:set var="concentrationSeries"
