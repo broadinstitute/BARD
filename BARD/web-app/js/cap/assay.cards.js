@@ -143,6 +143,16 @@ $(document).ready(function () {
         zIndex: 4000,
         title: "Confirm"
     });
+    
+    $("#dialog_edit_card_item").dialog({
+        height: 300,
+        width: 500,
+        autoOpen: false,
+        modal: true,
+        draggable: true,
+        zIndex: 4000,
+        title: "Edit Item"
+    });
 
     $("#dialog_add_item_wizard_confirm_cancel").dialog("option", "buttons", [
         {
@@ -468,7 +478,47 @@ function editCardName(cardId, cardName) {
     $("#dialog_edit_card").dialog("open");
 }
 
-function editCardItem() {
+function editCardItem(itemId, assayContextId) {
+	var data = {'assayContextId': assayContextId, 'assayContextItemId': itemId};
+	$.ajax({
+        type: 'POST',
+        url: '../launchEditItemInCard',
+        data: data,
+        success: function (data) {
+//        	alert(data);
+        	$("#dialog_edit_card_item").dialog("option", "buttons", [
+			{
+				    text: "Save",
+				    class: "btn btn-primary",
+				    click: function () {
+				        
+				        $.ajax({
+				            type: 'POST',
+				            url: '../editItemInCard',
+				            data: data,
+				            success: function (data) {
+				                updateCardHolder(data)
+				            }
+				        });
+				        $(this).dialog("close");
+				    }
+				},
+				{
+				    text: "Cancel",
+				    class: "btn",
+				    click: function () {
+				        $(this).dialog("close");
+				    }
+				}
+			]);        	                                                 			        
+            $("#dialog_edit_card_item").html(data);
+            $("#dialog_edit_card_item").dialog("open");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error: " + textStatus + " -> " + errorThrown);
+        }
+    });
+	                                                      
 
 }
 
@@ -489,10 +539,6 @@ function removeItemFromList(listIndex) {
 }
 
 function launchAddItemWizard(assayId, assayContextId, cardSection) {
-	
-	// Disable droppable cards to avoid issues while moving wizard window
-//	$( "tr.context_item_row" ).droppable( "option", "disabled", true );
-//	$( "div.card" ).droppable( "option", "disabled", true );
 	
     var data = {'assayId': assayId, 'assayContextId': assayContextId, 'cardSection': cardSection};
     $.ajax({

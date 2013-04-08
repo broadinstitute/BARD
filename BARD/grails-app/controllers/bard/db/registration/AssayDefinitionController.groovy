@@ -241,6 +241,13 @@ class AssayDefinitionController {
         }
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
+	
+	def launchEditItemInCard(Long assayContextId, Long assayContextItemId){
+		println "launchEditItemInCard -> Params assayContextId: " + assayContextId + "  assayContextItemId:" + assayContextItemId
+		def assayContextItem = AssayContextItem.get(assayContextItemId)
+		render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
+//		render(template: "editItemForm")
+	}	
 
     def createCard(Long instanceId, String cardName, String cardSection) {
         if (instanceId == null) {

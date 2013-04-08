@@ -52,6 +52,8 @@
         </div>
 
         <div id="dialog_move_item"></div>
+        
+        <div id="dialog_edit_card_item"></div>
 
         <div id="dialog_confirm_delete_item">
             <p>

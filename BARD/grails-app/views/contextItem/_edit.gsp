@@ -70,6 +70,10 @@
                                 return false;"><i class="icon-move"></i> Move</a></li>
                                 <li><a href="#" onclick="deleteCardItem(${contextItem.id}, ${context.id});
                                 return false;"><i class="icon-trash"></i> Delete</a></li>
+                                <g:if test="${contextItem.valueNum}">
+                                	<li><a href="#" onclick="editCardItem(${contextItem.id}, ${context.id});
+                                	return false;"><i class="icon-edit"></i> Edit</a></li>
+                                </g:if>                                
                             </g:if>
                             <g:else>
 
