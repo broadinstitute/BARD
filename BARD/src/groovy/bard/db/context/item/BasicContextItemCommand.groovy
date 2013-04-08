@@ -2,6 +2,7 @@ package bard.db.context.item
 
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
+import bard.db.dictionary.UnitConversion
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.project.ProjectContext
@@ -36,7 +37,7 @@ class BasicContextItemCommand extends BardCommand {
     Long valueElementId
 
     String qualifier
-    Float valueNum
+    BigDecimal valueNum
     Long valueNumUnitId
 
     String valueDisplay
@@ -96,7 +97,7 @@ class BasicContextItemCommand extends BardCommand {
         this.extValueId = contextItem.extValueId
 
         this.qualifier = contextItem.qualifier
-        this.valueNum = contextItem.valueNum
+        this.valueNum = contextItem.valueNum?.toBigDecimal()
         this.valueNumUnitId = contextItem.attributeElement.unit?.id
 
         this.valueDisplay = contextItem.valueDisplay
@@ -130,9 +131,17 @@ class BasicContextItemCommand extends BardCommand {
             contextItem.valueElement = attemptFindById(Element, valueElementId)
         }
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
-        contextItem.valueDisplay = valueDisplay
+        contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
         contextItem.qualifier = StringUtils.trimToNull(qualifier)
-        contextItem.valueNum = valueNum
+        if (valueNumUnitId == contextItem.attributeElement.unit?.id){
+            contextItem.valueNum = valueNum
+        }
+        else {
+            Element fromUnit = attemptFindById(Element, valueNumUnitId)
+            UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit,  contextItem.attributeElement.unit)
+            contextItem.valueNum = unitConversion?.convert(valueNum)
+        }
+
     }
 
     boolean update() {

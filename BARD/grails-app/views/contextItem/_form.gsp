@@ -32,7 +32,7 @@
                         code="contextItem.valueElementId.label"/>:</label>
 
                 <div class="controls">
-                    <g:textField class="span8" id="valueElementId" name="valueElementId"
+                    <g:hiddenField class="span8" id="valueElementId" name="valueElementId"
                                    value="${instance?.valueElementId}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
                 </div>
@@ -43,7 +43,8 @@
 
                 <div class="controls">
 
-                    <g:textField class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}" disabled="${disabledInput}"/>
+                    <g:hiddenField
+                           class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="extValueId" bean="${instance}"/></span>
                 </div>
             </div>
@@ -61,7 +62,7 @@
                     <g:textField class="span2" id="valueNum" name="valueNum"
                                  placeholder="${message(code: "contextItem.valueNum.label")}"
                                  value="${instance?.valueNum}" disabled="${disabledInput}"/>
-                    <g:textField class="span3" id="valueNumUnitId" name="valueNumUnitId"
+                    <g:hiddenField class="span3" id="valueNumUnitId" name="valueNumUnitId"
                                  placeholder="${message(code: "contextItem.valueNumUnitId.label")}"
                                  value="${instance?.valueNumUnitId}" disabled="${disabledInput}"/>
                     <span class="help-block">

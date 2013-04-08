@@ -36,27 +36,31 @@ class UnitConversionUnitSpec extends Specification {
         actualValue == expectedValue
 
         where:
-        desc                              | offset  | multiplier | formula              | valToConvert | expectedValue
-        'negative offset'                 | -273.12 | null       | null                 | 10           | -263.12
-        'positive offset'                 | 273.12  | null       | null                 | 10           | 283.12
-        'positive offset with multiplier' | 1.0     | 2.0        | null                 | 10           | 22.0
+        desc                              | offset  | multiplier | formula                         | valToConvert | expectedValue
+        'negative offset'                 | -273.12 | null       | null                            | 10           | -263.12
+        'positive offset'                 | 273.12  | null       | null                            | 10           | 283.12
+        'positive offset with multiplier' | 1.0     | 2.0        | null                            | 10           | 22.0
 
-        'multiplier '                     | null    | 1          | null                 | 1            | 1
-        'multiplier '                     | null    | 0.5        | null                 | 10           | 5
-        'multiplier '                     | null    | 0.25       | null                 | 10           | 2.5
+        'multiplier '                     | null    | 1          | null                            | 1            | 1
+        'multiplier '                     | null    | 0.5        | null                            | 10           | 5
+        'multiplier '                     | null    | 0.25       | null                            | 10           | 2.5
 
-        'multiplier '                     | null    | 0.1        | null                 | 1            | 0.1
-        'multiplier '                     | null    | 0.01       | null                 | 1            | 0.01
-        'multiplier '                     | null    | 0.001      | null                 | 1            | 0.001
+        'multiplier '                     | null    | 0.1        | null                            | 1            | 0.1
+        'multiplier '                     | null    | 0.01       | null                            | 1            | 0.01
+        'multiplier '                     | null    | 0.001      | null                            | 1            | 0.001
 
-        'multiplier '                     | null    | 10         | null                 | 1            | 10
-        'multiplier '                     | null    | 100        | null                 | 1            | 100
-        'multiplier '                     | null    | 1000       | null                 | 1            | 1000
+        'multiplier '                     | null    | 10         | null                            | 1            | 10
+        'multiplier '                     | null    | 100        | null                            | 1            | 100
+        'multiplier '                     | null    | 1000       | null                            | 1            | 1000
 
-        'formula'                         | null    | null       | "value * 2"          | 1            | 2
-        'formula'                         | null    | null       | "value / 2"          | 1            | 0.5
-        'formula'                         | null    | null       | "Math.pow(value, 3)" | 2            | 8
-        'formula'                         | null    | null       | "Math.sqrt(value)"   | 25           | 5
+        'formula'                         | null    | null       | "value * 2"                     | 1            | 2
+        'formula'                         | null    | null       | "value / 2"                     | 1            | 0.5
+        'formula'                         | null    | null       | "Math.pow(value, 3)"            | 2            | 8
+        'formula'                         | null    | null       | "Math.sqrt(value)"              | 25           | 5
+
+        'formula'                         | 2       | 2          | "(value + offset) * multiplier" | 2            | 8
+        'formula'                         | -2      | 2          | "(value + offset) * multiplier" | 2            | 0
+        'formula'                         | -2      | 2          | "value + offset * multiplier"   | 2            | -2
 
     }
 

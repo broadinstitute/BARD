@@ -41,8 +41,10 @@ class UnitConversion implements Serializable {
     private evaluateFormula(BigDecimal value) {
         BigDecimal result
         try {
-            Binding binding = new Binding();
-            binding.setVariable("value", value);
+            Binding binding = new Binding()
+            binding.setVariable("value", value)
+            binding.setVariable("offset", offset?:0)
+            binding.setVariable("multiplier", multiplier?:1)
             GroovyShell shell = new GroovyShell(binding);
             result = shell.evaluate(formula)
         } catch (Exception e) {
