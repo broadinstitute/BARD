@@ -15,7 +15,13 @@
             </button>
             <ul class="dropdown-menu">
                 <g:if test="${smiles}">
-                    <li>Smiles : ${smiles}</li>
+                %{--Use tooltip to display the SMILES string in case the it is larger than 30 character.--}%
+                    <g:if test="${smiles.size() <= 30}">
+                        <li>Smiles : ${smiles}</li>
+                    </g:if>
+                    <g:else>
+                        <li title="${smiles}" rel="tooltip">Smiles : ${smiles.substring(0, 29)} ... More</li>
+                    </g:else>
                 </g:if>
                 <li><a href="#" data-detail-id="sid_${sid}" class="analogs"
                        data-structure-search-params="Similarity:${cid}">Search For Analogs</a>
@@ -38,7 +44,8 @@
                     </li>
                 </g:if>
                 <li>
-                    <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${cid}">Bio-activity Summary</g:link>
+                    <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary"
+                            id="${cid}">Bio-activity Summary</g:link>
                 </li>
             </ul>
         </span>
