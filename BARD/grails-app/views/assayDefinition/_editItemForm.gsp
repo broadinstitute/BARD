@@ -1,7 +1,10 @@
 <div class="well well-small">
 	Add new numeric value and unit:
 </div>
-<form id="edit_numeic_item_form" class="form-horizontal" >
+<form id="edit_numeric_item_form" class="form-horizontal" >
+	<input type="hidden" id="attributeElementId" name="attributeElementId" value="${assayContextItem.attributeElement?.id}"/>
+	<input type="hidden" id="attributeElementUnitId" name="attributeElementUnitId" value="${assayContextItem.attributeElement?.unit?.id}"/>
+	<input type="hidden" id="valueUnitLabel" name="valueUnitLabel" value="${assayContextId}"/>
 	<div class="control-group">
 		<label class="control-label">Numeric Value:</label>
 		<div class="controls">
