@@ -189,7 +189,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^uniprotkb\W*:/)) {// 'UnitProtKB:UniProtKB:Q9QUQ5'
             return rebuildAssayContextItem(assayContextItem, 'UniProt accession number', contextDTO)
         }else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
-            return rebuildAssayContextItem(assayContextItem, 'protein', contextDTO)
+            return rebuildAssayContextItem(assayContextItem, 'GenBank ID', contextDTO)
         } else if (assayContextItem.valueDisplay && assayContextItem.valueDisplay.toLowerCase().indexOf("go:") >= 0) {//'go:
             return rebuildAssayContextItem(assayContextItem, goElementLabel, contextDTO)
         }else if (assayContextItem.valueDisplay && assayContextItem.attributeElement.label.equals(speciesElementLabel)) {//'go:

@@ -243,6 +243,11 @@ class MergeAssayService {
                 assayWillKeep.addToMeasures(measure)
                 measure.assay = assayWillKeep
                 measure.assayContextMeasures.each {it.assayContext.assay = assayWillKeep}
+                measure.parentMeasure = null   // measure
+                measure.childMeasures.each{
+                    it.parentMeasure = null
+                }
+                measure.childMeasures.clear()
 
             } else if (measure.assayContextMeasures.size() != 0) {
                 measure.assayContextMeasures.each {

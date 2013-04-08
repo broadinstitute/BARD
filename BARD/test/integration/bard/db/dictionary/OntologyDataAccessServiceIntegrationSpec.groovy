@@ -6,7 +6,6 @@ import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
 import org.hibernate.SessionFactory
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.dictionary.ElementStatus.*
@@ -94,6 +93,32 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         "3 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
     }
 
+    void "test getValueDescriptors wildcard and escaping desc: '#desc' expectedLabels: #expectedLabels"() {
+
+        given:
+        createDescendants(parent, childProps)
+
+        when:
+        List<Element> results = ontologyDataAccessService.getElementsForValues(parent.element.id, searchTerm)
+
+        then:
+
+        expectedLabels == results*.label
+
+        where:
+        desc                                            | expectedLabels | searchTerm | childProps
+        "0 hits confirm % not treated as wildcard"      | []             | '%'        | [[elementStatus: Published, label: 'child1', abbreviation: 'ch1']]
+        "1 hits with literal % in label"                | ['%child1']    | '%'        | [[elementStatus: Published, label: '%child1', abbreviation: 'ch1']]
+        "1 hits with literal % in abbreviation"         | ['child1']     | '%'        | [[elementStatus: Published, label: 'child1', abbreviation: '%ch1']]
+
+        "0 hits confirm _ not treated as char wildcard" | []             | '_'        | [[elementStatus: Published, label: 'child1', abbreviation: 'ch1']]
+        "1 hits with literal _ in label"                | ['_child1']    | '_'        | [[elementStatus: Published, label: '_child1', abbreviation: 'ch1']]
+        "1 hits with literal _ in abbreviation"         | ['child1']     | '_'        | [[elementStatus: Published, label: 'child1', abbreviation: '_ch1']]
+
+        "1 hit \\ escaped properly in label"            | ['\\child1']   | '\\child1' | [[elementStatus: Published, label: '\\child1', abbreviation: 'ch1']]
+        "1 hit \\ escaped properly in abbreviation"     | ['child1']     | '\\ch1'    | [[elementStatus: Published, label: 'child1', abbreviation: '\\ch1']]
+    }
+
     void "test getAttributeDescriptors desc: '#desc' expectedLabels: #expectedLabels"() {
 
         given:
@@ -132,6 +157,33 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         "2 children sorted by label case insensitive"  | ['a_child', 'B_child', 'c_child'] | 'child'    | []                    | [[elementStatus: Published, label: 'c_child'], [elementStatus: Published, label: 'B_child'], [elementStatus: Published, label: 'a_child']]
     }
 
+    void "test getAttributeDescriptors wildcard and escaping desc: '#desc' expectedLabels: #expectedLabels"() {
+
+        given:
+        List<BardDescriptor> bardDescriptors = createDescendants(parent, childProps)
+        BardDescriptor.withSession { Session session -> session.flush() }
+
+        when:
+        List<BardDescriptor> results = ontologyDataAccessService.getElementsForAttributes(searchTerm)
+
+
+        then:
+        expectedLabels == results*.label
+
+        where:
+        desc                                            | expectedLabels | searchTerm | childProps
+        "0 hits confirm % not treated as wildcard"      | []             | '%'        | [[elementStatus: Published, label: 'child1', abbreviation: 'ch1']]
+        "1 hits with literal % in label"                | ['%child1']    | '%'        | [[elementStatus: Published, label: '%child1', abbreviation: 'ch1']]
+        "1 hits with literal % in abbreviation"         | ['child1']     | '%'        | [[elementStatus: Published, label: 'child1', abbreviation: '%ch1']]
+
+        "0 hits confirm _ not treated as char wildcard" | []             | '_'        | [[elementStatus: Published, label: 'child1', abbreviation: 'ch1']]
+        "1 hits with literal _ in label"                | ['_child1']    | '_'        | [[elementStatus: Published, label: '_child1', abbreviation: 'ch1']]
+        "1 hits with literal _ in abbreviation"         | ['child1']     | '_'        | [[elementStatus: Published, label: 'child1', abbreviation: '_ch1']]
+
+        "1 hit \\ escaped properly in label"            | ['\\child1']   | '\\child1' | [[elementStatus: Published, label: '\\child1', abbreviation: 'ch1']]
+        "1 hit \\ escaped properly in abbreviation"     | ['child1']     | '\\ch1'    | [[elementStatus: Published, label: 'child1', abbreviation: '\\ch1']]
+    }
+
     void "test getConvertibleUnits #desc"() {
 
         given:
@@ -147,7 +199,7 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
 
         where:
         desc                                  | someUnitLabel | someConvertibleUnitLabel | searchLabel           | expectedResultLabels
-        'happy case'                          | 'someUnit'    | 'someConvertibleUnit'    | 'someUnit'            | ['someConvertibleUnit','someUnit']
+        'happy case'                          | 'someUnit'    | 'someConvertibleUnit'    | 'someUnit'            | ['someConvertibleUnit', 'someUnit']
         'no convertible units, only identity' | 'someUnit'    | 'someConvertibleUnit'    | 'someConvertibleUnit' | ['someConvertibleUnit']
         'no convertible units, only identity' | 'someUnit'    | 'someConvertibleUnit'    | 'non existent label'  | []
 

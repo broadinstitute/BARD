@@ -27,7 +27,7 @@ class FixPersonNameService {
         List<Element> elements = getElements()
         List<AbstractContextItem> items = []
         elements.each{Element element->
-           // items.addAll(AssayContextItem.findAllByAttributeElement(element)) // Names are free in the assaycontextitem so no need to fix
+            items.addAll(AssayContextItem.findAllByAttributeElement(element)) // Names are free in the assaycontextitem so no need to fix, really, project lead name
             items.addAll(ExperimentContextItem.findAllByAttributeElement(element))
             items.addAll(ProjectContextItem.findAllByAttributeElement(element))
             println("fixing total ${items.size()} contextitems for ${element.label}")
