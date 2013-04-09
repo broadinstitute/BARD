@@ -50,7 +50,7 @@ public class ExternalOntologyCAS extends ExternalOntologyAPI {
 	}
 
 	protected ExternalItem getCas(String name) {
-		String term = queryGenerator(name);
+		String term = cleanName(name);
 		if (checkCas(term))
 			return new ExternalItem(term, term);
 		return null;
@@ -59,11 +59,5 @@ public class ExternalOntologyCAS extends ExternalOntologyAPI {
 	@Override
 	public String getExternalURL(String id) {
 		return "http://www.cas.org";
-	}
-
-	@Override
-	public String queryGenerator(String term) {
-		term = term.trim();
-		return term;
 	}
 }

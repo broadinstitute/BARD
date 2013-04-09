@@ -2,8 +2,11 @@ package bard.validation.ext;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.commons.lang.StringUtils;
 
 import uk.ac.ebi.kraken.interfaces.uniprot.ProteinDescription;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
@@ -35,6 +38,9 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	}
 
 	public ExternalItem findById(String id) throws ExternalOntologyException {
+		id = cleanId(id);
+		if( StringUtils.isBlank(id))
+			return null;
 		Query query = UniProtQueryBuilder.buildExactMatchIdentifierQuery(id);
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
 		int resultSize = entryIterator.getResultSize();
@@ -46,6 +52,9 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	}
 
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
+		name = cleanName(name);
+		if( StringUtils.isBlank(name))
+			return null;
 		Query query = UniProtQueryBuilder.buildQuery(name);
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
 		if (entryIterator.getResultSize() != 1)
@@ -54,6 +63,10 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	}
 
 	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
+		term = cleanName(term);
+		if( StringUtils.isBlank(term))
+			return Collections.EMPTY_LIST;
+		term = queryGenerator(term);
 		Query query = UniProtQueryBuilder.buildFullTextSearch(term);
 		EntryIterator<UniProtEntry> entryIterator = uniProtQueryService.getEntryIterator(query);
 		return getExternalItems(entryIterator, limit);
@@ -92,12 +105,6 @@ public class ExternalOntologyUniprot extends ExternalOntologyAPI {
 	}
 
 	public String getExternalURL(String id) {
-		return String.format("http://www.uniprot.org/uniprot/%s", id);
+		return String.format("http://www.uniprot.org/uniprot/%s", cleanId(id));
 	}
-
-	public String queryGenerator(String term) {
-		term = term.trim();
-		return term;
-	}
-
 }
