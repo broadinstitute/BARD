@@ -352,6 +352,10 @@ class QueryService implements IQueryService {
                 throw new RuntimeException("Group-by ${groupTypes} is not supported")
         }
 
+        if (!groupedByExperimentalData) {
+            return null
+        }
+
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
         TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes)
         tableModel.additionalProperties.put('compoundSummary',compoundSummary)

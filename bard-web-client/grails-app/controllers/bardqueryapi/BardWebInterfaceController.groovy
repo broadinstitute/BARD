@@ -9,6 +9,7 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import molspreadsheet.MolecularSpreadSheetService
 import org.apache.commons.lang.StringUtils
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-import grails.converters.JSON
 
 /**
  *
@@ -520,15 +520,15 @@ class BardWebInterfaceController {
 
             if (projectMap) {
                 ProjectAdapter projectAdapter = projectMap.projectAdapter
-                final Map projectExperimentMap = this.projectExperimentRenderService.constructGraph(projId,projectAdapter.experimentTypes)
+                final Map projectExperimentMap = this.projectExperimentRenderService.constructGraph(projId, projectAdapter.experimentTypes)
                 def projectExperimentJSON = null
-                if(projectExperimentMap){
-                   projectExperimentJSON = new JSON(projectExperimentMap)
+                if (projectExperimentMap) {
+                    projectExperimentJSON = new JSON(projectExperimentMap)
                 }
 
 
                 render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays,
-                        searchString: params.searchString, pegraph:projectExperimentJSON])
+                        searchString: params.searchString, pegraph: projectExperimentJSON])
             }
             else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Project Id ${projId}")
@@ -649,14 +649,17 @@ class BardWebInterfaceController {
                     new SearchParams(top: searchParams.top, skip: searchParams.skip)
             )
 
-            tableModel.additionalProperties.put("searchString", params.searchString)
-            tableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
-            tableModel.additionalProperties.put("activityOutcome", activityOutcome)
-            tableModel.additionalProperties.put("id", id.toString())
-            tableModel.additionalProperties.put("resourceType", resourceType.name())
-            session.'compoundSummary' =  tableModel.additionalProperties?.compoundSummary
-            session.'actives' =  true
-            session.'inactives' =  true
+            if (tableModel) {
+                tableModel.additionalProperties.put("searchString", params.searchString)
+                tableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
+                tableModel.additionalProperties.put("activityOutcome", activityOutcome)
+                tableModel.additionalProperties.put("id", id.toString())
+                tableModel.additionalProperties.put("resourceType", resourceType.name())
+                session.'compoundSummary' =  tableModel.additionalProperties?.compoundSummary
+                session.'actives' =  true
+                session.'inactives' =  true
+
+            }
 
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,

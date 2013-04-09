@@ -103,7 +103,7 @@ class CompoundBioActivitySummaryBuilder {
                 List<AssayAdapter> assayAdapters
                 //For assays, we can use the testedAssays/hitAssays properties in the compoundSummary resource.
                 List<Assay> assays = filterTypes.contains(FilterTypes.TESTED) ? testedAssays : hitAssays
-                assayAdapters = assays.findAll {Assay assay -> assay.id == resourceId}.collect {Assay assay -> return new AssayAdapter(assay)}
+                assayAdapters = assays.unique().findAll {Assay assay -> assay.id == resourceId}.collect {Assay assay -> return new AssayAdapter(assay)}
 
                 if (assayAdapters.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())

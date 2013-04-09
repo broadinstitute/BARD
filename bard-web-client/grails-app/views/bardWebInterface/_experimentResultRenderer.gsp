@@ -1,11 +1,13 @@
+<g:set var="widestRowColumnCount" value="${[tableModel.data*.size().max(), tableModel.columnHeaders.size()].max()}"/>
+
 <div class="row-fluid">
     <g:set var="columnHeaderSize" value="${tableModel?.columnHeaders?.size()}"/>
-    <g:set var="columnWidth" value="${columnHeaderSize ? (100 / tableModel.columnHeaders.size()) as int : 'auto;'}"/>
+    %{--<g:set var="columnWidth" value="${columnHeaderSize ? (100 / tableModel.columnHeaders.size()) as int : 'auto;'}"/>--}%
     <table align="center">
         <thead>
         <tr>
             <g:each in="${tableModel.columnHeaders}" var="header" status="i">
-                <th align="center" style="width: ${columnWidth}%">
+                <th align="center">
                     ${header.value}
                 </th>
             </g:each>
@@ -19,21 +21,21 @@
                 <g:each in="${row}" var="cell" status="j">
                 %{--Assay description--}%
                     <g:if test="${cell instanceof bardqueryapi.AssayValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <g:assayDescription name="${cell?.value?.name ?: ''}"
                                                 adid="${cell?.value?.capAssayId ?: ''}"/>
                         </td>
                     </g:if>
                 %{--Project description--}%
                     <g:elseif test="${cell instanceof bardqueryapi.ProjectValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <g:projectDescription name="${cell?.value?.name ?: ''}"
                                                   pid="${cell?.value?.capProjectId ?: ''}"/>
                         </td>
                     </g:elseif>
                 %{--Structure rendering--}%
                     <g:elseif test="${cell instanceof bardqueryapi.StructureValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <g:compoundOptions
                                     sid="${cell.getValue().sid}"
                                     cid="${cell.getValue().cid}"
@@ -47,7 +49,7 @@
                     </g:elseif>
                 %{--A URL Link--}%
                     <g:elseif test="${cell instanceof bardqueryapi.LinkValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <a href="${cell.value}">
                                 <g:if test="${cell.imgFile}">
                                     <g:img dir="images" file="${cell.imgFile}" alt="${cell.imgAlt}"/>
@@ -58,12 +60,12 @@
                     </g:elseif>
                 %{--String--}%
                     <g:elseif test="${cell instanceof bardqueryapi.StringValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <p>${cell.value}</p>
                         </td>
                     </g:elseif>
                     <g:elseif test="${cell instanceof bardqueryapi.ListValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <g:set var="results" value="${cell.value}"/>
                             <g:set var="resultSize" value="${results?.size()}"/>
                             <table align="center">
@@ -76,7 +78,7 @@
                     </g:elseif>
                 %{--At the current state, the only MapValue use is for an 'experimentBox', so the map's only key is an experiment.--}%
                     <g:elseif test="${cell instanceof bardqueryapi.MapValue}">
-                        <td align="center" style="width: ${columnWidth}%">
+                        <td align="center">
                             <table class="${innerBorder ? 'innerTableBorder' : ''}" align="center">
                                 %{--An experiment-box is a box with one experiment key and a list of result types (curves, single-points, etc.)--}%
                                 `                            <g:set var="experimentValue"
@@ -87,7 +89,7 @@
                                 <thead>
                                 <tr>
                                     %{--First row is the experiment description--}%
-                                    <th align="center" colspan="${resultSize}" style="width: ${columnWidth}%">
+                                    <th align="center" colspan="${resultSize}">
                                         <g:experimentDescription name="${experiment.name}"
                                                                  bardExperimentId="${experiment.capExptId}"/>
                                     </th>
@@ -101,6 +103,13 @@
                         </td>
                     </g:elseif>
                 </g:each>
+
+            %{--Span the remaining <td> with empty cells so that we will have an aligned table--}%
+                <g:set var="currentRowSize" value="${row.size()}"/>
+                <g:set var="columnSpan" value="${widestRowColumnCount - currentRowSize}"/>
+                <g:if test="${columnSpan}">
+                    <td colspan="${columnSpan}"></td>
+                </g:if>
             </tr>
         </g:each>
         </tbody>

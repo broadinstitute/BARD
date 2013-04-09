@@ -92,9 +92,11 @@
                     <li><a href="#publication-info"><i
                             class="icon-chevron-right"></i>Publications (${projectAdapter.documents.size()})</a></li>
                 </g:if>
-                <g:if test="${experiments}">
+                <g:if test="${pegraph}">
                     <li><a href="#projectSteps-info"><i
                             class="icon-chevron-right"></i>Project Steps</a></li>
+                </g:if>
+                <g:if test="${experiments}">
                     <li><a href="#experiments-info"><i
                             class="icon-chevron-right"></i> Experiments (${projectAdapter?.getNumberOfExperiments()})
                     </a>
@@ -134,8 +136,7 @@
             <g:if test="${projectAdapter.documents}">
                 <g:render template="publications" model="['documents': projectAdapter.documents]"/>
             </g:if>
-
-            <g:if test="${experiments}">
+            <g:if test="${pegraph}">
                 <section id="projectSteps-info">
                     <div class="page-header">
                         <h3>Project Steps</h3>
@@ -146,6 +147,8 @@
                                   model="['pegraph': pegraph, 'projectId': projectAdapter.capProjectId]"/>
                     </div>
                 </section>
+            </g:if>
+            <g:if test="${experiments}">
                 <section id="experiments-info">
                     <div class="page-header">
                         <h3>Experiments</h3>

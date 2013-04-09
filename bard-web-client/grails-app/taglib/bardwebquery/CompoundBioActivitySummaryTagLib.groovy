@@ -3,7 +3,13 @@ package bardwebquery
 class CompoundBioActivitySummaryTagLib {
     def assayDescription = { attrs, body ->
 
-        out << "<p>" << attrs.name << " (${attrs.adid})" << "</p>"
+        out << "<p>"
+        if (attrs.name)
+            out << attrs.name
+        if (attrs.adid) {
+            out << " (${attrs.adid})"
+        }
+        out << "</p>"
     }
 
     def projectDescription = { attrs, body ->

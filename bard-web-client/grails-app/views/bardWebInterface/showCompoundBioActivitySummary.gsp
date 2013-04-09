@@ -22,13 +22,15 @@
 <body>
 
 <div class="row-fluid">
-    <g:sunburstSection compoundSummary="${tableModel?.additionalProperties?.compoundSummary}" />
+    <g:if test="${tableModel?.data}">
+        <g:sunburstSection compoundSummary="${tableModel?.additionalProperties?.compoundSummary}"/>
 
-    <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
+        <g:render template="facets"
+                  model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
 
-    <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small></h2>
+        <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small></h2>
 
-    <g:if test="${tableModel.data}">
+
         <g:form action="showCompoundBioActivitySummary" id="${params.id}">
             <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
             <div style="text-align: left; vertical-align: middle;">
@@ -57,7 +59,9 @@
         </div>
     </g:if>
     <g:else>
-        <p class="text-info"><i class="icon-warning-sign"></i> No Bio-activity information found for this compound ${tableModel?.additionalProperties?.id}</p>
+        <p class="text-info"><i
+                class="icon-warning-sign"></i> No Bio-activity information found for this compound ${tableModel?.additionalProperties?.id}
+        </p>
     </g:else>
 </div>
 </body>
