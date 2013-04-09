@@ -111,14 +111,14 @@ class BasicContextItemCommand extends BardCommand {
 
     boolean createNewContextItem() {
         boolean createSuccessful = false
-        AbstractContextItem contextItemToReturn = null
+        context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
         if (validate()) {
             ProjectContextItem contextItem = new ProjectContextItem()
             copyFromCmdToDomain(contextItem)
-            ProjectContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
             context.addToContextItems(contextItem)
             if (attemptSave(contextItem)) {
                 copyFromDomainToCmd(contextItem)
+
                 createSuccessful = true
             }
         }
