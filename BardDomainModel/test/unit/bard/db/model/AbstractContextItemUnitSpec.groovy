@@ -86,20 +86,26 @@ abstract class AbstractContextItemUnitSpec<T extends AbstractContextItem> extend
 
 
         where:
-        desc                              | attributeExternalUrl | valueElementMap | unitElementMap | valueMap                                            | expectedValid | globalErrorsCodes                                     | fieldErrorCodes
-        'no value'                        | null                 | null            | null           | [:]                                                 | true          | []                                                    | [:]
+        desc                                          | attributeExternalUrl | valueElementMap | unitElementMap | valueMap                                                             | expectedValid | globalErrorsCodes                                     | fieldErrorCodes
+        'no value'                                    | null                 | null            | null           | [:]                                                                  | true          | []                                                    | [:]
 
-        'externalUrl both blank'          | 'http://someUrl.com' | null            | null           | [:]                                                 | false         | ['contextItem.attribute.externalURL.required.fields'] | [extValueId: 'contextItem.extValueId.blank', valueDisplay: 'contextItem.valueDisplay.blank']
-        'no externalUrl blank extValueId' | 'http://someUrl.com' | null            | null           | [extValueId: null, valueDisplay: 'someDisplay']     | false         | ['contextItem.attribute.externalURL.required.fields'] | [extValueId: 'contextItem.extValueId.blank']
-        'no externalUrl blank display'    | 'http://someUrl.com' | null            | null           | [extValueId: 'someId']                              | false         | ['contextItem.attribute.externalURL.required.fields'] | [valueDisplay: 'contextItem.valueDisplay.blank']
-        'valid externalUrl'               | 'http://someUrl.com' | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay'] | true          | []                                                    | [extValueId: null, valueDisplay: null]
+        'externalUrl both blank'                      | 'http://bard.org'    | null            | null           | [:]                                                                  | false         | ['contextItem.attribute.externalURL.required.fields'] | [extValueId: 'contextItem.extValueId.blank', valueDisplay: 'contextItem.valueDisplay.blank']
+        'externalUrl blank extValueId'                | 'http://bard.org'    | null            | null           | [extValueId: null, valueDisplay: 'someDisplay']                      | false         | ['contextItem.attribute.externalURL.required.fields'] | [extValueId: 'contextItem.extValueId.blank']
+        'externalUrl blank display'                   | 'http://bard.org'    | null            | null           | [extValueId: 'someId']                                               | false         | ['contextItem.attribute.externalURL.required.fields'] | [valueDisplay: 'contextItem.valueDisplay.blank']
+        'valid externalUrl'                           | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay']                  | true          | []                                                    | [extValueId: null, valueDisplay: null]
+
+        'valid externalUrl but valueElement not null' | 'http://bard.org'    | [label: 'foo']  | null           | [extValueId: 'someId', valueDisplay: 'someDisplay']                  | false         | []                                                    | [extValueId: null, valueDisplay: null, valueElement: 'contextItem.valueElement.not.null']
+        'valid externalUrl but qualifier not null'    | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay', qualifier: '= '] | false         | []                                                    | [extValueId: null, valueDisplay: null, qualifier: 'contextItem.qualifier.not.null']
+        'valid externalUrl but valueNum not null'     | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay', valueNum: 2]     | false         | []                                                    | [extValueId: null, valueDisplay: null, valueNum: 'contextItem.valueNum.not.null']
+        'valid externalUrl but valueMin not null'     | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay', valueMin: 1]     | false         | []                                                    | [extValueId: null, valueDisplay: null, valueMin: 'contextItem.valueMin.not.null']
+        'valid externalUrl but valueMax not null'     | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay', valueMax: 2]     | false         | []                                                    | [extValueId: null, valueDisplay: null, valueMax: 'contextItem.valueMax.not.null']
 
 
     }
 
 
     private Element optionallyCreateElement(Map map) {
-        if (map) {
+        if (map != null) {
             return Element.build(map)
         }
     }

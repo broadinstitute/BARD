@@ -33,9 +33,9 @@ abstract class AbstractContextItem<T extends AbstractContext> {
     static constraints = {
 
         attributeElement(nullable: false,
-                         validator: {Element field, AbstractContextItem instance, Errors errors->
-                             instance.valueValidation(errors)
-        })
+                validator: { Element field, AbstractContextItem instance, Errors errors ->
+                    instance.valueValidation(errors)
+                })
         valueElement(nullable: true)
 
         extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_ID_MAX_SIZE)
@@ -59,21 +59,37 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      * @see <a href="https://github.com/broadinstitute/BARD/wiki/Business-rules#general-business-rules-for-assay_context_item">general-business-rules-for-assay_context_item</a>
      * @param errors adding any errors via reject methods indicates the class is not valid
      */
-    void valueValidation(Errors errors){
-        if (attributeElement){
-            if (attributeElement.externalURL){
-                if (StringUtils.isBlank(extValueId)){
-                    errors.rejectValue('extValueId','contextItem.extValueId.blank')
-                }
-                if (StringUtils.isBlank(valueDisplay)){
-                    errors.rejectValue('valueDisplay','contextItem.valueDisplay.blank')
-                }
-                if (StringUtils.isBlank(extValueId) || StringUtils.isBlank(valueDisplay)){
-                    errors.reject('contextItem.attribute.externalURL.required.fields')
-                }
+    void valueValidation(Errors errors) {
+        if (attributeElement) {
+            if (attributeElement.externalURL) {
+                externalOntologyContraints(errors)
             }
         }
     }
+
+    private externalOntologyContraints(Errors errors) {
+        ensureFieldNotBlank('extValueId', errors)
+        ensureFieldNotBlank('valueDisplay', errors)
+        if (StringUtils.isBlank(extValueId) || StringUtils.isBlank(valueDisplay)) {
+            errors.reject('contextItem.attribute.externalURL.required.fields')
+        }
+        ensureFieldsNull(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+    }
+
+    void ensureFieldNotBlank(String fieldName, Errors errors) {
+        if (StringUtils.isBlank(this[(fieldName)])) {
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
+        }
+    }
+
+    void ensureFieldsNull(List<String> fieldNames, Errors errors) {
+        for (String fieldName in fieldNames) {
+            if (this[(fieldName)] != null) {
+                errors.rejectValue(fieldName, "contextItem.${fieldName}.not.null")
+            }
+        }
+    }
+
     abstract T getContext()
 
     abstract void setContext(T context)
