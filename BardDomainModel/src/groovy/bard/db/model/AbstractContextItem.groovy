@@ -85,29 +85,45 @@ abstract class AbstractContextItem<T extends AbstractContext> {
             if (attributeElement.externalURL) {
                 externalOntologyContraints(errors)
             }
-            if (valueElement) {
+            else if (attributeElement.unit) {
+                numericValueConstraints(errors)
+            }
+            else if (valueElement) {
                 dictionaryConstraints(errors)
             }
         }
     }
 
+    protected void numericValueConstraints(Errors errors) {
+        //TODO add global error
+        ensureFieldNotNull('valueNum', errors)
+        ensureFieldsNull(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)
+    }
+
     protected void dictionaryConstraints(Errors errors) {
+        //TODO add global error
         ensureFieldNotBlank('valueDisplay', errors)
         ensureFieldsNull(['extValueId', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }
 
     protected void externalOntologyContraints(Errors errors) {
-        ensureFieldNotBlank('extValueId', errors)
-        ensureFieldNotBlank('valueDisplay', errors)
         if (StringUtils.isBlank(extValueId) || StringUtils.isBlank(valueDisplay)) {
             errors.reject('contextItem.attribute.externalURL.required.fields')
         }
+        ensureFieldNotBlank('extValueId', errors)
+        ensureFieldNotBlank('valueDisplay', errors)
         ensureFieldsNull(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }
 
     protected void ensureFieldNotBlank(String fieldName, Errors errors) {
         if (StringUtils.isBlank(this[(fieldName)])) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
+        }
+    }
+
+    protected void ensureFieldNotNull(String fieldName, Errors errors) {
+        if (this[(fieldName)] == null) {
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.null")
         }
     }
 
