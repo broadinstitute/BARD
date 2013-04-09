@@ -83,7 +83,7 @@ class ExperimentBuilder {
         }
         else {
             //Add an empty cell
-            rowData.add(new StringValue(value: 'N/A'))
+            rowData.add(new StringValue(value: 'Not Available'))
         }
 
         //Outcome
