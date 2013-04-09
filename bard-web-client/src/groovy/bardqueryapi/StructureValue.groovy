@@ -26,6 +26,6 @@ class StructureValue implements WebQueryValue {
     String smiles
     Long sid
     String name
-    int numActive
-    int numAssays
+    Integer numActive
+    Integer numAssays
 }
