@@ -10,7 +10,7 @@ package bard.core.rest.spring.util
 class RingNode {
 
     String name = ""
-    int size =  0
+    int size =  1
     List <RingNode> children = []
     //
     String ID = ""
@@ -34,7 +34,7 @@ class RingNode {
                     String description,
                     String levelIdentifier,
                     String source,
-                    int size = 0) {
+                    int size = 1) {
         this(name, size)
         this.ID = ID
         this.description = description
@@ -49,7 +49,7 @@ class RingNode {
      * @param name
      * @param size
      */
-    public RingNode( String name, int size = 0  ){
+    public RingNode( String name, int size = 1  ){
         this.name = name
         this.size = size
     }
@@ -63,7 +63,7 @@ class RingNode {
      */
     public RingNode( String name, List <RingNode> children  ){
         this.name = name
-        this.size = 0
+        this.size = 1
         this.children = children
     }
 
@@ -218,6 +218,8 @@ class RingNode {
         stringBuilder << """  var width = ${width},
                 height = ${height},
                 radius = Math.min(width, height) / 2,
+                padding = 5,
+                duration = 1000,
                 color = d3.scale.category10().domain([""".toString()
         stringBuilder << deriveColors(namesThatGetColors,  maximumNumberOfColors)
         stringBuilder << "   ]);"

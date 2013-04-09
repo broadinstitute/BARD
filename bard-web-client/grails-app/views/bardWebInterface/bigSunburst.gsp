@@ -13,6 +13,20 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <style>
+    #sunburstdiv {
+        font-family:  sans-serif;
+        font-size: 12px;
+        margin: auto;
+        position: relative;
+    }
+    .toolTextAppearance {
+        font: 20px serif;
+        font-weight: bold;
+    }
+
+    </style>
+
     <script>
         window.onload = function () {
             $('#activity').change(function () {
@@ -33,8 +47,6 @@
         }
     </script>
 
-    <r:require modules="core"/>
-    <r:layoutResources/>
 </head>
 
 <body>
