@@ -1,6 +1,6 @@
 %{--<g:render template="message"/>--}%
 <g:render template="/common/errors" model="['errors': instance?.errors?.globalErrors]"/>
-<g:set var="disabledInput" value="${reviewNewItem? "true": "false"}" />
+<g:set var="disabledInput" value="${reviewNewItem ? "true" : "false"}"/>
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="edit">
@@ -44,32 +44,45 @@
                 <div class="controls">
 
                     <g:hiddenField
-                           class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}" disabled="${disabledInput}"/>
+                            class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}"
+                            disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="extValueId" bean="${instance}"/></span>
                 </div>
             </div>
 
-            <div class="control-group ${hasErrors(bean: instance, field: 'valueNum', 'error')}">
-                <label class="control-label" for="valueNum"><g:message code="contextItem.valueNum.label"/>:</label>
+            <div class="control-group ${hasErrors(bean: instance, field: 'qualifier', 'error')}">
+                <label class="control-label" for="qualifier"><g:message
+                        code="contextItem.qualifier.label"/>:</label>
 
                 <div class="controls">
                     <g:select class="span2" id="qualifier" name="qualifier"
                                  noSelection="${['':message(code: "contextItem.qualifier.label")]}"
                                  from="${instance?.constraints.qualifier.inList}"
-                                 value="${instance?.qualifier}"
-                                 disabled="${disabledInput}"/>
+                                 value="${instance?.qualifier}" />
+                    <span class="help-block"><g:fieldError field="qualifier" bean="${instance}"/></span>
+                </div>
+            </div>
 
+            <div class="control-group ${hasErrors(bean: instance, field: 'valueNum', 'error')}">
+                <label class="control-label" for="valueNum"><g:message code="contextItem.valueNum.label"/>:</label>
+                <div class="controls ">
                     <g:textField class="span2" id="valueNum" name="valueNum"
                                  placeholder="${message(code: "contextItem.valueNum.label")}"
                                  value="${instance?.valueNum}" disabled="${disabledInput}"/>
-                    <g:hiddenField class="span3" id="valueNumUnitId" name="valueNumUnitId"
-                                 placeholder="${message(code: "contextItem.valueNumUnitId.label")}"
-                                 value="${instance?.valueNumUnitId}" disabled="${disabledInput}"/>
                     <span class="help-block">
-                        <g:fieldError field="qualifier" bean="${instance}"/>
                         <g:fieldError field="valueNum" bean="${instance}"/>
-                        <g:fieldError field="valueNumUnitId" bean="${instance}"/>
                     </span>
+                </div>
+            </div>
+
+            <div class="control-group ${hasErrors(bean: instance, field: 'valueNumUnitId', 'error')}">
+                <label class="control-label" for="valueNumUnitId"><g:message
+                        code="contextItem.valueNumUnitId.label"/>:</label>
+
+                <div class="controls">
+                    <g:textField class="span8" id="valueNumUnitId" name="valueNumUnitId" value="${instance?.valueNumUnitId}"
+                                 disabled="${disabledInput}"/>
+                    <span class="help-block"><g:fieldError field="valueNumUnitId" bean="${instance}"/></span>
                 </div>
             </div>
 
@@ -78,7 +91,8 @@
                         code="contextItem.valueDisplay.label"/>:</label>
 
                 <div class="controls">
-                    <g:textField class="span8" id="valueDisplay" name="valueDisplay" value="${instance?.valueDisplay}" disabled="${disabledInput}"/>
+                    <g:textField class="span8" id="valueDisplay" name="valueDisplay" value="${instance?.valueDisplay}"
+                                 disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="valueDisplay" bean="${instance}"/></span>
                 </div>
             </div>

@@ -57,7 +57,13 @@ abstract class AbstractContextItemUnitSpec<T extends AbstractContextItem> extend
         'range'                         | '5.0 - 6.0'          | null            | null      | null     | null                   | 5.0      | 6.0
     }
 
-
+    /**
+     * Business rules for validating a contextItem are pretty complicated
+     * The value a contextItem holds can be held in 1 or more columns, but only certain combinations are valid and the
+     * value of other fields particularly the attributeElement impact what state is valid
+     * @see <a href="https://github.com/broadinstitute/BARD/wiki/Business-rules#general-business-rules-for-assay_context_item">general-business-rules-for-assay_context_item</a>
+     *
+     */
     void "test validation  #desc"() {
 
         given:
@@ -100,6 +106,14 @@ abstract class AbstractContextItemUnitSpec<T extends AbstractContextItem> extend
         'valid externalUrl but valueMin not null'     | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay', valueMin: 1]     | false         | []                                                    | [extValueId: null, valueDisplay: null, valueMin: 'contextItem.valueMin.not.null']
         'valid externalUrl but valueMax not null'     | 'http://bard.org'    | null            | null           | [extValueId: 'someId', valueDisplay: 'someDisplay', valueMax: 2]     | false         | []                                                    | [extValueId: null, valueDisplay: null, valueMax: 'contextItem.valueMax.not.null']
 
+        'valueElement valid'                          | null                 | [label: 'foo']  | null           | [valueDisplay: 'someDisplay']                                        | true          | []                                                    | [:]
+        'valueElement blank display'                  | null                 | [label: 'foo']  | null           | [:]                                                                  | false         | []                                                    | [valueDisplay: 'contextItem.valueDisplay.blank']
+
+        'valueElement but extValueId not null'        | null                 | [label: 'foo']  | null           | [valueDisplay: 'someDisplay', extValueId: 'someId']                  | false         | []                                                    | [valueDisplay: null, extValueId: 'contextItem.extValueId.not.null']
+        'valueElement but qualifier not null'         | null                 | [label: 'foo']  | null           | [valueDisplay: 'someDisplay', qualifier: '= ']                       | false         | []                                                    | [valueDisplay: null, qualifier: 'contextItem.qualifier.not.null']
+        'valueElement but valueNum not null'          | null                 | [label: 'foo']  | null           | [valueDisplay: 'someDisplay', valueNum: 2]                           | false         | []                                                    | [valueDisplay: null, valueNum: 'contextItem.valueNum.not.null']
+        'valueElement but valueMin not null'          | null                 | [label: 'foo']  | null           | [valueDisplay: 'someDisplay', valueMin: 1]                           | false         | []                                                    | [valueDisplay: null, valueMin: 'contextItem.valueMin.not.null']
+        'valueElement but valueMax not null'          | null                 | [label: 'foo']  | null           | [valueDisplay: 'someDisplay', valueMax: 2]                           | false         | []                                                    | [valueDisplay: null, valueMax: 'contextItem.valueMax.not.null']
 
     }
 
