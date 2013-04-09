@@ -1,6 +1,8 @@
 package bard.db.model
 
 import bard.db.dictionary.Element
+import org.apache.commons.lang3.StringUtils
+import org.springframework.validation.Errors
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,7 +32,10 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     static constraints = {
 
-        attributeElement(nullable: false)
+        attributeElement(nullable: false,
+                         validator: {Element field, AbstractContextItem instance, Errors errors->
+                             instance.valueValidation(errors)
+        })
         valueElement(nullable: true)
 
         extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_ID_MAX_SIZE)
@@ -47,7 +52,46 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     }
 
+    /**
+     * Business rules for validating a contextItem
+     * The value a contextItem holds can be held in 1 or more columns, but only certain combinations are valid and the
+     * value of other fields particularly the attributeElement impact what state is valid
+     * @see <a href="https://github.com/broadinstitute/BARD/wiki/Business-rules#general-business-rules-for-assay_context_item">general-business-rules-for-assay_context_item</a>
+     * @param errors adding any errors via reject methods indicates the class is not valid
+     */
+    void valueValidation(Errors errors){
+        if (attributeElement){
+            if (attributeElement.externalURL){
+                if (StringUtils.isBlank(extValueId)){
+                    errors.rejectValue('extValueId','contextItem.extValueId.blank')
+                }
+                if (StringUtils.isBlank(valueDisplay)){
+                    errors.rejectValue('valueDisplay','contextItem.valueDisplay.blank')
+                }
+                if (StringUtils.isBlank(extValueId) || StringUtils.isBlank(valueDisplay)){
+                    errors.reject('contextItem.attribute.externalURL.required.fields')
+                }
+            }
+        }
+    }
     abstract T getContext()
 
     abstract void setContext(T context)
+
+    /**
+     * Note: the thought is that this would be useful for code creating or editing contextItems so at queryTime
+     * clients will have a precomputed displayValue, this isn't meant to be a dynamic method used a queryTime
+     *
+     * @return String will try and create a reasonable displayValue based on the values populated in this item
+     */
+    String deriveDisplayValue() {
+        String result = null
+        if (valueElement) {
+            result = valueElement.label
+        } else if (valueNum) {
+            result = [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation].findAll().join(' ')
+        } else if (valueMin || valueMax) {
+            result = [valueMin, valueMax].findAll().join(' - ')
+        }
+    }
 }

@@ -132,16 +132,19 @@ class BasicContextItemCommand extends BardCommand {
         }
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
-        contextItem.qualifier = StringUtils.trimToNull(qualifier)
-        if (valueNumUnitId == contextItem.attributeElement.unit?.id){
-            contextItem.valueNum = valueNum
+        if (valueNum) {
+            if (valueNumUnitId == contextItem.attributeElement.unit?.id) {
+                contextItem.valueNum = valueNum
+                contextItem.qualifier = StringUtils.trimToNull(qualifier)
+                contextItem.valueDisplay = contextItem.deriveDisplayValue()
+            } else {
+                Element fromUnit = attemptFindById(Element, valueNumUnitId)
+                UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, contextItem.attributeElement.unit)
+                contextItem.valueNum = unitConversion?.convert(valueNum)
+                contextItem.qualifier = StringUtils.trimToNull(qualifier)
+                contextItem.valueDisplay = contextItem.deriveDisplayValue()
+            }
         }
-        else {
-            Element fromUnit = attemptFindById(Element, valueNumUnitId)
-            UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit,  contextItem.attributeElement.unit)
-            contextItem.valueNum = unitConversion?.convert(valueNum)
-        }
-
     }
 
     boolean update() {
@@ -152,8 +155,7 @@ class BasicContextItemCommand extends BardCommand {
                 if (this.version?.longValue() != contextItem.version.longValue()) {
                     getErrors().reject('default.optimistic.locking.failure', [ProjectContextItem] as Object[], 'optimistic lock failure')
                     copyFromDomainToCmd(contextItem)
-                }
-                else{
+                } else {
                     copyFromCmdToDomain(contextItem)
                     updateSuccessful = attemptSave(contextItem)
                     copyFromDomainToCmd(contextItem)

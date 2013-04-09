@@ -1,5 +1,5 @@
 %{--<g:render template="message"/>--}%
-<g:render template="/common/errors" model="['errors': instance?.errors?.allErrors]"/>
+<g:render template="/common/errors" model="['errors': instance?.errors?.globalErrors]"/>
 <g:set var="disabledInput" value="${reviewNewItem? "true": "false"}" />
 <div class="row-fluid">
     <div class="span12">
@@ -15,7 +15,7 @@
             <g:hiddenField name="valueElementText" value="${instance?.contextItem?.valueElement?.label}"/>
             <g:hiddenField name="extValueText" value="(${instance?.extValueId}) ${instance?.valueDisplay}"/>
 
-            <div class="control-group ${hasErrors(bean: instance, field: 'documentType', 'error')}">
+            <div class="control-group ${hasErrors(bean: instance, field: 'attributeElementId', 'error')}">
                 <label class="control-label" for="attributeElementId"><g:message
                         code="contextItem.attributeElementId.label"/>:</label>
 
@@ -27,7 +27,7 @@
             </div>
 
 
-            <div class="control-group ${hasErrors(bean: instance, field: 'documentType', 'error')}">
+            <div class="control-group ${hasErrors(bean: instance, field: 'valueElementId', 'error')}">
                 <label class="control-label" for="valueElementId"><g:message
                         code="contextItem.valueElementId.label"/>:</label>
 
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="control-group ${hasErrors(bean: instance, field: 'documentType', 'error')}">
+            <div class="control-group ${hasErrors(bean: instance, field: 'extValueId', 'error')}">
                 <label class="control-label" for="extValueId"><g:message code="contextItem.extValueId.label"/>:</label>
 
                 <div class="controls">
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="control-group ${hasErrors(bean: instance, field: 'documentType', 'error')}">
+            <div class="control-group ${hasErrors(bean: instance, field: 'valueDisplay', 'error')}">
                 <label class="control-label" for="valueDisplay"><g:message
                         code="contextItem.valueDisplay.label"/>:</label>
 

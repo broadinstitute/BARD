@@ -26,7 +26,10 @@ abstract class BardCommand {
 
     boolean attemptSave(Object domain) {
         if (!domain?.save()) {
-            domain?.errors?.allErrors?.each { error ->
+            domain?.errors?.fieldErrors?.each { error ->
+                getErrors().rejectValue(error.field, error.code)
+            }
+            domain?.errors?.globalErrors?.each { error ->
                 getErrors().reject(error.code)
             }
             return false
