@@ -19,6 +19,8 @@
         <th>Name</th>
         <th>Description</th>
         <th>Marginal Product</th>
+        <th>Project UID's</th>
+        <th>AID's</th>
     </tr>
     <g:each in="${datasetList}" var="dataset">
         <tr>
@@ -26,6 +28,8 @@
             <td>${dataset.name}</td>
             <td>${dataset.description}</td>
             <td><g:link controller="marginalProduct" action="show" params="[datasetId: dataset.id]">show marginal product</g:link> </td>
+            <td><g:link controller="datasetProjectUid" action="index" params="[datasetId: dataset.id]">list project UID</g:link> </td>
+            <td><g:link controller="datasetAid" action="index" params="[datasetId: dataset.id]">list AID</g:link></td>
         </tr>
     </g:each>
 </table>
