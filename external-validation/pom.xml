@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bard</groupId>
 	<artifactId>external-validation</artifactId>
-	<version>20130405</version>
+	<version>20130409</version>
 	<distributionManagement>
 		<repository>
 			<id>bard-repo.broadinstitute.org</id>
@@ -59,16 +59,32 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>4.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
 			<groupId>edu.scripps</groupId>
 			<artifactId>eutils-java</artifactId>
 			<version>20130328</version>
+			<exclusions>
+				<exclusion>  <!-- declare the exclusion here -->
+					<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.17</version>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>com.jolbox</groupId>
 			<artifactId>bonecp</artifactId>
 			<version>0.8.0-rc1</version>

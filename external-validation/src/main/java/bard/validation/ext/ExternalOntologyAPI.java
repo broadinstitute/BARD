@@ -2,6 +2,8 @@ package bard.validation.ext;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Contract for External Ontology implementations
  * 
@@ -40,11 +42,21 @@ public abstract class ExternalOntologyAPI {
 	/**
 	 * formats a query term. E.g. adds % for SQL LIKE, trims the term etc.
 	 */
-	public abstract String queryGenerator(String term);
+	public String queryGenerator(String term) {
+		return StringUtils.trimToEmpty(term);
+	}
+	
+	public String cleanId(String id) {
+		return StringUtils.trimToEmpty(id);
+	}
+	
+	public String cleanName(String name) {
+		return StringUtils.trimToEmpty(name);
+	}
 
 	public boolean validate(String name, String id) throws ExternalOntologyException {
-		ExternalItem item = findByName(name);
-		ExternalItem item2 = findById(id);
+		ExternalItem item = findByName(cleanName(name));
+		ExternalItem item2 = findById(cleanId(id));
 		return item.equals(item2);
 	}
 }

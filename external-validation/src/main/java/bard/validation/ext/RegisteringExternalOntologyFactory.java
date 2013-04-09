@@ -17,7 +17,8 @@ public class RegisteringExternalOntologyFactory implements ExternalOntologyFacto
 	static {
 		instance = new RegisteringExternalOntologyFactory();
 		instance.getCreators().add( new ExternalOntologyNCBI.NCBICreator() );
-		instance.getCreators().add( new ExternalOntologyOLS.OLSCreator() );
+//		instance.getCreators().add( new ExternalOntologyOLS.OLSCreator() );
+		instance.getCreators().add( new ExternalOntologyGO.GOCreator() );
 		instance.getCreators().add( new ExternalOntologyUniprot.UniprotCreator() );
 	}
 
