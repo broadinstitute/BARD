@@ -34,7 +34,6 @@ class QueryService implements IQueryService {
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
 
-
     //========================================================== Free Text Searches ================================
 
     Map searchCompoundsByCids(final List<Long> cids, final Integer top = 10, final Integer skip = 0, final List<SearchFilter> searchFilters = []) {
@@ -291,9 +290,9 @@ class QueryService implements IQueryService {
     }
 
     TableModel showExperimentalData(Long experimentId,
-                                            GroupByTypes groupTypes,
-                                            List<FilterTypes> filterTypes,
-                                            SearchParams searchParams) {
+                                    GroupByTypes groupTypes,
+                                    List<FilterTypes> filterTypes,
+                                    SearchParams searchParams) {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
         Map m = findExperimentDataById(experimentId, top, skip, filterTypes)
@@ -358,7 +357,7 @@ class QueryService implements IQueryService {
 
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
         TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes)
-        tableModel.additionalProperties.put('compoundSummary',compoundSummary)
+        tableModel.additionalProperties.put('compoundSummary', compoundSummary)
         return tableModel
     }
     /**
@@ -410,10 +409,12 @@ class QueryService implements IQueryService {
     Map<Long, CompoundAdapter> getCompoundsForCIDS(List<Activity> activities) {
         final Map<Long, CompoundAdapter> compoundAdapterMaps = [:]
         final List<Long> cids = activities*.cid
-        final Map ds = findCompoundsByCIDs(cids)
-        final List<CompoundAdapter> compoundAdapters = ds.compoundAdapters
-        for (CompoundAdapter compoundAdapter : compoundAdapters) {
-            compoundAdapterMaps.put(compoundAdapter.id, compoundAdapter)
+        if (cids) {
+            final Map ds = findCompoundsByCIDs(cids)
+            final List<CompoundAdapter> compoundAdapters = ds.compoundAdapters
+            for (CompoundAdapter compoundAdapter : compoundAdapters) {
+                compoundAdapterMaps.put(compoundAdapter.id, compoundAdapter)
+            }
         }
         return compoundAdapterMaps
     }

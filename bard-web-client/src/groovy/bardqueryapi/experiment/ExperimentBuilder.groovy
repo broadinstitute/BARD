@@ -1,11 +1,10 @@
 package bardqueryapi.experiment
 
 import bard.core.adapter.CompoundAdapter
-
-import bard.core.rest.spring.experiment.*
-import bardqueryapi.*
 import bardqueryapi.compoundBioActivitySummary.CompoundBioActivitySummaryBuilder
 import org.codehaus.groovy.grails.commons.ApplicationHolder
+import bard.core.rest.spring.experiment.*
+import bardqueryapi.*
 
 class ExperimentBuilder {
 
@@ -70,17 +69,22 @@ class ExperimentBuilder {
 
         //Structure image
         final CompoundAdapter compoundAdapter = compoundAdapterMap.get(cid)
-        StructureValue structureValue =
-            new StructureValue(
-                    cid: cid,
-                    sid: sid,
-                    smiles: compoundAdapter.structureSMILES,
-                    name: compoundAdapter.name,
-                    numActive: compoundAdapter.numberOfActiveAssays,
-                    numAssays: compoundAdapter.numberOfAssays
-            )
-
-        rowData.add(structureValue)
+        if (compoundAdapter) {
+            StructureValue structureValue =
+                new StructureValue(
+                        cid: cid,
+                        sid: sid,
+                        smiles: compoundAdapter?.structureSMILES,
+                        name: compoundAdapter?.name,
+                        numActive: compoundAdapter?.numberOfActiveAssays,
+                        numAssays: compoundAdapter?.numberOfAssays
+                )
+            rowData.add(structureValue)
+        }
+        else {
+            //Add an empty cell
+            rowData.add(new StringValue(value: 'Not Available'))
+        }
 
         //Outcome
         ResultData resultData = activity?.resultData
