@@ -40,13 +40,21 @@ class RingNodeUnitSpec  extends Specification{
                                            [ringNodeA,ringNodeB,ringNodeC,ringNodeD] )
 
         then:
-        assert ringNodeA.toString()== """{"name":"helicase"}""".toString()
-        assert ringNodeC.toString()== """{"name":"nucleic acid binding"}""".toString()
+        assert ringNodeA.toString()== """{"name":"helicase", "size":1}""".toString()
+        assert ringNodeA.toStringNoText()== """{"name": "", "size":1}""".toString()
+        assert ringNodeC.toString()== """{"name":"nucleic acid binding", "size":1}""".toString()
+        assert ringNodeC.toStringNoText()== """{"name": "", "size":1}""".toString()
         assert ringNodeE.toString()== """{"name":"DNA helicase", "children": [
-{"name":"helicase"},
+{"name":"helicase", "size":1},
 {"name":"helicase", "size":1500},
-{"name":"nucleic acid binding"},
+{"name":"nucleic acid binding", "size":1},
 {"name":"nucleic acid binding", "size":1500}
+]}""".toString()
+        assert ringNodeE.toStringNoText()== """{"name": "", "children": [
+{"name": "", "size":1},
+{"name": "", "size":1500},
+{"name": "", "size":1},
+{"name": "", "size":1500}
 ]}""".toString()
         assert ringNodeE.maximumTreeHeight() == 1
 
@@ -230,6 +238,8 @@ class RingNodeUnitSpec  extends Specification{
                 """var width = 10,
                 height = 10,
                 radius = Math.min(width, height) / 2,
+                padding = 5,
+                duration = 1000,
                 color = d3.scale.category10().domain(["A",
 "B"
    ]);""".toString()
@@ -241,15 +251,8 @@ class RingNodeUnitSpec  extends Specification{
         RingNode ringNode = RingNode.createStubRing ()
 
         then:
-        ringNode.deriveColors(["A","B"],2).trim()==
-                """var width = 10,
-                height = 10,
-                radius = Math.min(width, height) / 2,
-                color = d3.scale.category10().domain(["A",
-"B"
-   ]);""".toString()
+        ringNode.deriveColors(["A","B"],2).trim()=="\"A\",\n\"B\"".toString()
     }
-
 
 
 
