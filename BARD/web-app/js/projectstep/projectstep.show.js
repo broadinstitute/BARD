@@ -196,6 +196,24 @@ function generatesvg() {
     }
 }
 
+function assignFillColor(selectedNodeId, assignedColor) {
+    if (!selectedNodeId)
+        return;
+    var thisPolygon = "#"+selectedNodeId + " polygon";
+    $(thisPolygon).attr("fill", assignedColor);
+}
+
+function assignEdgeColor(selectedEdgeId, assignedColor) {
+    if (!selectedEdgeId)
+        return;
+    var thisPolygon = "#"+selectedEdgeId + " polygon";
+    $(thisPolygon).attr("fill", assignedColor);
+    $(thisPolygon).attr("stroke", assignedColor);
+    var thisPath = "#"+selectedEdgeId + " path";
+    $(thisPath).attr("fill", assignedColor);
+    $(thisPath).attr("stroke", assignedColor);
+}
+
 function initFunction1() {
     $("#canvas").append(generatesvg());
     var graphtitle = $("g title")[0];
@@ -205,13 +223,17 @@ function initFunction1() {
     var template = Handlebars.compile($("#node-selection-template1").html())
     $(".node").click(function () {
         var clickedNode = $(this).find('title').text();
+        var thisId = $(this).attr("id");
+        var prevSelectedNode = $("#selectedNodeId").text();
 
         var projectId = $('#projectIdForStep').val();
 
         for (var i = 0; i < connectedNodes.length; i++) {
             var keyValues = connectedNodes[i].keyValues;
             if (connectedNodes[i].id == clickedNode) {
-                var params = {selected:keyValues, projectId:projectId};
+                assignFillColor(prevSelectedNode, "none");
+                assignFillColor(thisId, "#00FFFF");
+                var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
                 $('#node-selection-details').html(template(params));
             }
         }
@@ -222,6 +244,8 @@ function initFunction1() {
         var clickedEdge = $(this).find('title').text();
         for (var i = 0; i < edges.length; i++) {
             var found = edges[i].from + "->" + edges[i].to;
+            var thisId = $(this).attr("id");
+            var prevSelectedEdge = $("#selectedEdgeId").text();
             if (clickedEdge == found) {
                 var splitstr = found.split("->");
                 var from;
@@ -235,7 +259,9 @@ function initFunction1() {
                         to = keyValues.eid;
                     }
                 }
-                var params = {fromNode:from, toNode:to};
+                assignEdgeColor(prevSelectedEdge, "black");
+                assignEdgeColor(thisId, "#00FFFF");
+                var params = {fromNode:from, toNode:to, selectedEdgeId:thisId};
                 $('#edge-selection-details').html(template1(params));
             }
         }
