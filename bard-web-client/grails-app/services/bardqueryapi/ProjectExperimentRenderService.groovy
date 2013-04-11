@@ -156,7 +156,8 @@ class ProjectExperimentRenderService {
                 'bardAssay': projectExperiment.bardAssayId,
                 'ename': projectExperiment.name,
                 'incount': 0,
-                'outcount': 0
+                'outcount': 0,
+                'aid': projectExperiment.pubchemAid
         ]
         return new Node(id: projectExperiment.capExptId, keyValues: projectExperimentAttributes)
     }

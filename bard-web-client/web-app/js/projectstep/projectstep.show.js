@@ -229,10 +229,10 @@ function initFunction1() {
                 for (var j = 0; j < connectedNodes.length; j++) {
                     var keyValues = connectedNodes[j].keyValues;
                     if (connectedNodes[j].id == splitstr[0]) {
-                        from = keyValues.eid;
+                        from = keyValues;
                     }
                     if (connectedNodes[j].id == splitstr[1]) {
-                        to = keyValues.eid;
+                        to = keyValues;
                     }
                 }
                 var params = {fromNode:from, toNode:to};

@@ -21,19 +21,18 @@
         </div>
 
         <script id="node-selection-template" type="text/x-handlebars-template">
-            <h5>Experiment Id:</h5>
-            <table>
-                <tbody>
-                <tr>
-                    <td><a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.data.link}}">{{selected.data.link}}</a></td>
-                </tr>
-                </tbody>
-            </table>
+            <h5>Experiment Id:
+                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.data.link}}">{{selected.data.link}}</a>
+            </h5>
+
             <h5>Experiment Name:</h5>
 
             <p>{{selected.data.ename}}</p>
-            <h5>Assay Id:</h5><a href="${createLink(controller: 'bardWebInterface', action: 'showAssay')}/{{selected.data.assay}}" id="assaylink"
-                                 target="_blank">{{selected.data.assay}}</a>
+
+            <h5>Assay Id:
+                <a href="${createLink(controller: 'bardWebInterface', action: 'showAssay')}/{{selected.data.assay}}"
+                   id="assaylink" target="_blank">{{selected.data.assay}}</a>
+            </h5>
         </script>
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
@@ -43,33 +42,36 @@
                 <tbody>
 
                 <tr>
-                    <td>{{fromNode}}</td>
+                    <td>
+                        <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{fromNode.bardExptId}}">{{fromNode.eid}}</a>
+                    </td>
                     <td></td>
-                    <td>{{toNode}}</td>
+                    <td>
+                        <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{toNode.bardExptId}}">{{toNode.eid}}</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </script>
 
         <script id="node-selection-template1" type="text/x-handlebars-template">
-            <h5>Experiment Id:</h5>
-            <table>
-                <tbody>
-                <tr>
-                    <td><a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.bardExptId}}">{{selected.eid}}</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <h5>Experiment Id:
+                <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.bardExptId}}">{{selected.eid}}</a>
+            </h5>
+
             <h5>Experiment Name:</h5>
 
             <p>{{selected.ename}}</p>
-            <h5>Assay Id:</h5><a
-                href="${createLink(controller: 'bardWebInterface', action: 'showAssay')}/{{selected.bardAssay}}"
-                id="assaylink1"
-                target="_blank">{{selected.assay}}</a>
-            <h5>AID:</h5> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}" id="aidlink1"
-                             target="_blank">{{selected.aid}}</a>
+
+            <h5>Assay Id:
+                <a href="${createLink(controller: 'bardWebInterface', action: 'showAssay')}/{{selected.bardAssay}}"
+                   id="assaylink1" target="_blank">{{selected.assay}}</a>
+            </h5>
+
+            <h5>AID:
+                <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}" id="aidlink1"
+                   target="_blank">{{selected.aid}}</a>
+            </h5>
         </script>
     </div>
 </div>
