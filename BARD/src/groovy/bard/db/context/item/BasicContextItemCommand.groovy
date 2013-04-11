@@ -127,23 +127,22 @@ class BasicContextItemCommand extends BardCommand {
 
     private copyFromCmdToDomain(ProjectContextItem contextItem) {
         contextItem.attributeElement = attemptFindById(Element, attributeElementId)
+        Element valueElement
         if (valueElementId) {
-            contextItem.valueElement = attemptFindById(Element, valueElementId)
+            valueElement = attemptFindById(Element, valueElementId)
         }
+        contextItem.valueElement = valueElement
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
-        if (valueNum) {
-            if (valueNumUnitId == contextItem.attributeElement.unit?.id) {
-                contextItem.valueNum = valueNum
-                contextItem.qualifier = StringUtils.trimToNull(qualifier)
-                contextItem.valueDisplay = contextItem.deriveDisplayValue()
-            } else {
-                Element fromUnit = attemptFindById(Element, valueNumUnitId)
-                UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, contextItem.attributeElement.unit)
-                contextItem.valueNum = unitConversion?.convert(valueNum)
-                contextItem.qualifier = StringUtils.trimToNull(qualifier)
-                contextItem.valueDisplay = contextItem.deriveDisplayValue()
-            }
+        contextItem.qualifier = qualifier
+        contextItem.valueNum = valueNum
+        if (valueNumUnitId != contextItem.attributeElement.unit?.id) {
+            Element fromUnit = attemptFindById(Element, valueNumUnitId)
+            UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, contextItem.attributeElement.unit)
+            contextItem.valueNum = unitConversion?.convert(valueNum)
+        }
+        if (valueNum){
+            contextItem.valueDisplay = contextItem.deriveDisplayValue()
         }
     }
 
