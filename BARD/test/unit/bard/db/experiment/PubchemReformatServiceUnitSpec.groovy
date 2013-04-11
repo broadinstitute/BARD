@@ -1,5 +1,15 @@
 package bard.db.experiment
 
+import bard.db.dictionary.Element
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AssayContextMeasure
+import bard.db.registration.AttributeType
+import bard.db.registration.Measure
+import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
+import org.apache.commons.io.IOUtils
 import spock.lang.Specification
 
 /**
@@ -9,6 +19,8 @@ import spock.lang.Specification
  * Time: 3:38 PM
  * To change this template use File | Settings | File Templates.
  */
+@Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure, Element, Experiment, ExperimentMeasure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure,  Element, Experiment, ExperimentMeasure ])
 class PubchemReformatServiceUnitSpec extends Specification {
     static TABLE_COLUMNS = [
             "TID",
@@ -112,6 +124,57 @@ class PubchemReformatServiceUnitSpec extends Specification {
         Map row = rows.first()
         row["Replicate #"] == "5"
         row["AC50"] == "97.8"
+    }
+
+    def 'test full handling of missing values'() {
+        setup:
+        // copy the pubchem input file to a known path
+        InputStream inputStream = ResultServiceIntegrationSpec.getClassLoader().getResourceAsStream("bard/db/experiment/pubchem-input.txt")
+        assert inputStream != null
+        FileOutputStream fos = new FileOutputStream("out/PubchemReformatServiceUnitSpec-in.txt")
+        IOUtils.copy(inputStream, fos)
+        fos.close();
+
+        // set up the service
+        PubchemReformatService service = new PubchemReformatService()
+
+        // and the result map we're using
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100",[
+                new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "parent"),
+                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "child", parentTid: "1", staticContextItems: [concentration:"100"]),
+        ])
+
+        // and finally the experiment with the two measures, and one context item
+        Assay assay = Assay.build()
+        AssayContext context = AssayContext.build(assay: assay)
+        AssayContextItem contextItem = AssayContextItem.build(assayContext : context, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration"))
+        Measure childMeasure = Measure.build(assay: assay, resultType: Element.build(label: "child"))
+        AssayContextMeasure assayContextMeasure =AssayContextMeasure.build(assayContext: context, measure: childMeasure)
+
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure parentExpMeasure = ExperimentMeasure.build(experiment: experiment, measure: Measure.build(resultType: Element.build(label: "parent")))
+        ExperimentMeasure childExpMeasure = ExperimentMeasure.build(experiment: experiment, measure: childMeasure, parent: parentExpMeasure)
+
+        when:
+        service.convert(experiment, "out/PubchemReformatServiceUnitSpec-in.txt", "out/PubchemReformatServiceUnitSpec-out.txt", map);
+
+        then:
+        assertFilesMatch("bard/db/experiment/expected-conversion-output.txt","out/PubchemReformatServiceUnitSpec-out.txt")
+    }
+
+    boolean assertFilesMatch(String expected, String pathToVerify) {
+        InputStream inputStream = ResultServiceIntegrationSpec.getClassLoader().getResourceAsStream(expected)
+        assert inputStream != null
+        Reader reader = new BufferedReader(new InputStreamReader(inputStream))
+        def expectedLines = reader.readLines()
+        reader.close()
+
+        def actual = new File(pathToVerify).readLines()
+        for(int i=0;i<Math.max(expectedLines.size(), actual.size());i++) {
+            assert expectedLines[i] == actual[i]
+        }
+
+        return true;
     }
 
     def 'test adding NA for missing values'() {
