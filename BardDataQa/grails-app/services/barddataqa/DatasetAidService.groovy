@@ -5,30 +5,52 @@ import org.hibernate.Query
 class DatasetAidService {
 
     private static final String datasetIdParam = "datasetId"
-    private static final String loadOrderParam = "loadOrder"
-    private static final String queryString = """
-select distinct aid from bard_data_qa_dashboard.vw_project_aid_join
-  where project_uid in
-    (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id = :$datasetIdParam)
-  and aid not in
-    (select aid from bard_data_qa_dashboard.vw_project_aid_join where project_uid in
-      (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id in
-        (select id from bard_data_qa_dashboard.dataset where load_order < :$loadOrderParam)))
-  order by aid"""
+
+    private static final String baseQueryString = """
+select vda.aid from bard_data_qa_dashboard.vw_dataset_aid vda
+  join bard_data_qa_dashboard.aid_info ai on ai.aid = vda.aid
+  where vda.dataset_id = :${datasetIdParam}
+    and ai.is_summary_aid
+    """
+
+    private static final String notSummaryAidClause = " = 'n' "
+    private static final String isSummaryAidClause = " = 'y' "
+    private static final String unknownSummaryAidClause = " is null "
+
+    private static final String orderByClause = "order by aid"
 
     def sessionFactory
 
     def convertObjectToTypeService
 
-    List<Integer> lookupAidForDataset(long datasetId) {
+    DatasetAids lookupAidForDataset(long datasetId) {
+        DatasetAids datasetAids = new DatasetAids()
+
         Dataset dataset = Dataset.findById(datasetId)
 
-        Query query = sessionFactory.getCurrentSession().createSQLQuery(queryString)
+        Query query = sessionFactory.getCurrentSession().createSQLQuery(baseQueryString + notSummaryAidClause + orderByClause)
         query.setLong(datasetIdParam, datasetId)
-        query.setInteger(loadOrderParam, dataset.loadOrder)
+        datasetAids.notSummaryAidList = convertObjectToTypeService.convert(query.list())
 
-        List<Integer> result = convertObjectToTypeService.convert(query.list())
+        query = sessionFactory.getCurrentSession().createSQLQuery(baseQueryString + isSummaryAidClause + orderByClause)
+        query.setLong(datasetIdParam, datasetId)
+        datasetAids.isSummaryAidList = convertObjectToTypeService.convert(query.list())
 
-        return result
+        query = sessionFactory.getCurrentSession().createSQLQuery(baseQueryString + unknownSummaryAidClause + orderByClause)
+        query.setLong(datasetIdParam, datasetId)
+        datasetAids.unknownSummaryAidList = convertObjectToTypeService.convert(query.list())
+
+        return datasetAids
+    }
+}
+
+
+class DatasetAids {
+    List<Integer> notSummaryAidList
+    List<Integer> isSummaryAidList
+    List<Integer> unknownSummaryAidList
+
+    int calculateTotalCount() {
+        return notSummaryAidList.size() + isSummaryAidList.size() + unknownSummaryAidList.size()
     }
 }
