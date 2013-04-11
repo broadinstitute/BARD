@@ -107,6 +107,12 @@ abstract class AbstractContextItem<T extends AbstractContext> {
                     rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
                 errors.reject('contextItem.range.required.fields')
             }
+            if (valueMin || valueMax){
+                if (valueMin >= valueMax){
+                    errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax')
+                    errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin')
+                }
+            }
         }
     }
 
