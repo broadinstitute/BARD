@@ -70,6 +70,8 @@ class ProjectStepUnitSpec extends Specification {
             "resourcePath": "/experiments/14103"
         },
         "bardProjId": 1944,
+        "prevStageRef": "primary assay",
+        "nextStageRef": "confirmatory assay",
         "stepId": 5148,
         "edgeName": "Linked by Compound set (Swamidass)",
         "annotations": [
@@ -151,6 +153,8 @@ class ProjectStepUnitSpec extends Specification {
                 "resourcePath": "/experiments/14103"
             },
             "bardProjId": 1944,
+            "prevStageRef": "primary assay",
+            "nextStageRef": "confirmatory assay",
             "stepId": 5148,
             "edgeName": "Linked by Compound set (Swamidass)",
             "annotations": [
@@ -227,6 +231,8 @@ class ProjectStepUnitSpec extends Specification {
                 "resourcePath": "/experiments/14084"
             },
             "bardProjId": 1944,
+            "prevStageRef": "primary assay",
+            "nextStageRef": "confirmatory assay",
             "stepId": 5150,
             "edgeName": "Linked by Compound set (Swamidass)",
             "annotations": [
@@ -263,11 +269,14 @@ class ProjectStepUnitSpec extends Specification {
         assert !nextBardExpt.description
         assert !nextBardExpt.getDeposited()
         assert "2013-03-01" == nextBardExpt.getUpdated()
+
         assert 1944 == projectStep.bardProjId
         assert 5148 == projectStep.stepId
         assert "Linked by Compound set (Swamidass)" == projectStep.edgeName
         assert 1 == projectStep.annotations.size()
         assert !projectStep.getResourcePath()
+        assert "primary assay" == projectStep.getPrevStageRef()
+        assert "confirmatory assay" == projectStep.getNextStageRef()
     }
 
     void "test serialization to ProjectSteps"() {

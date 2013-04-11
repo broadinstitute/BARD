@@ -142,7 +142,7 @@
                         <h3>Project Steps</h3>
                     </div>
 
-                    <div class="row-fluid">
+                    <div>
                         <g:render template="/projects/showstep"
                                   model="['pegraph': pegraph, 'projectId': projectAdapter.capProjectId]"/>
                     </div>
