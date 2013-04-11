@@ -11,7 +11,7 @@ import bard.db.project.ProjectContextItem
  * Time: 12:42 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+class ProjectContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<ProjectContextItem> {
 
     @Before
     @Override

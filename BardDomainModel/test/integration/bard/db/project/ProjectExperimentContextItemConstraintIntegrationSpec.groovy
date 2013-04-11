@@ -10,7 +10,7 @@ import org.junit.Before
  * Time: 12:42 AM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+class ProjectExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<ProjectExperimentContextItem> {
 
     @Before
     @Override

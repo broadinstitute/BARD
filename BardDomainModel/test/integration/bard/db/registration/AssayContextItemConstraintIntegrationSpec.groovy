@@ -16,7 +16,7 @@ import static test.TestUtils.assertFieldValidationExpectations
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<AssayContextItem> {
 
     @Before
     void doSetup() {

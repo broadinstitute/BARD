@@ -71,11 +71,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc               | valueUnderTest                          | valid | errorCode
         'too long'         | createString(EXT_VALUE_ID_MAX_SIZE + 1) | false | 'maxSize.exceeded'
@@ -96,11 +91,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc                   | valueUnderTest | valid | errorCode
@@ -133,11 +123,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc               | valueUnderTest                           | valid | errorCode
         'too long'         | createString(VALUE_DISPLAY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
@@ -159,11 +144,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc               | valueUnderTest                         | valid | errorCode
         'too long'         | createString(MODIFIED_BY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
@@ -184,11 +164,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
         where:
         desc             | valueUnderTest | valid | errorCode
         'null not valid' | null           | false | 'nullable'
@@ -204,11 +179,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
 
         where:
         desc         | valueUnderTest | valid | errorCode
@@ -320,7 +290,6 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
         'valid dictionary reference value but extValueId not null'                 | null                 | [label: 'foo']  | null                   | [valueDisplay: 'someDisplay', extValueId: 'someId']                       | false         | []                                                    | [valueDisplay: null, extValueId: 'contextItem.extValueId.not.null']
         'valid dictionary reference value but qualifier not null'                  | null                 | [label: 'foo']  | null                   | [valueDisplay: 'someDisplay', qualifier: '= ']                            | false         | []                                                    | [valueDisplay: null, qualifier: 'contextItem.qualifier.not.null']
     }
-
 
     private Element optionallyCreateElement(Map map) {
         if (map != null) {
