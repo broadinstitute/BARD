@@ -14,18 +14,19 @@ class SunburstHandlerTagLib {
         //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
         out << ringManagerService.writeRingTree(root,false)
         out << "\n"
-        out << ringManagerService.placeSunburstOnPage(274,200,root)
+        out << ringManagerService.placeSunburstOnPage(274,200,root,4)
     }
 
     def makeMacroSunburst = { attrs, body ->
         // for now we leave in test data.  Remove these when real data come along
         Boolean includeHits = session."actives"
         Boolean includeNonHits = session."inactives"
+        int typeOfColoring = session."colorOption"  ?: 3
         RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
         //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
-        out << ringManagerService.writeRingTree(root,true)
+        out << ringManagerService.writeRingTree(root,true,typeOfColoring)
         out << "\n"
-        out << ringManagerService.placeSunburstOnPage(1000,800,root)
+        out << ringManagerService.placeSunburstOnPage(1000,800,root,typeOfColoring)
     }
 
 

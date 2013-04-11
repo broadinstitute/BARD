@@ -64,7 +64,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-    void "test building a tree from a few targets"(){
+    void "test building a tree from a few targets withou actives/inactives to consider"(){
         given:
         final List<String> targets = ["Q14145","Q16236","Q61009"]
         LinkedHashMap<String, Integer> accumulatedTargets = ringManagerService.accumulateAccessionNumbers( targets )
@@ -79,8 +79,42 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         }
         RingNode root = ringManagerService.ringNodeFactory( accumulatedMaps.flatten() as List<TargetClassInfo> )
         then:
-        root.toString()
+        root.toString().contains("nucleic acid binding")
+        root.toString().find(/nucleic acid[^\n]+/).find(/size\":\d/).find(/\d/) == '2'
+        root.toString().find(/hydrolase[^\n]+/).find(/children/) == 'children'
+        root.toString().find(/receptor[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
     }
+
+
+
+
+
+
+    void "test building a tree from a few targets but with actives/inactives to consider"(){
+        given:
+        final List<String> targets = ["Q14145","Q16236","Q61009"]
+        LinkedHashMap<String, Integer> accumulatedTargets = ringManagerService.accumulateAccessionNumbers( targets )
+
+        when:
+        List<List<TargetClassInfo>> accumulatedMaps = []
+        accumulatedTargets.each{ k,v ->
+            List<String> hierarchyDescription = sunburstCacheService.getTargetClassInfo(k)
+            if (hierarchyDescription != null){
+                accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
+            }
+        }
+        RingNode root = ringManagerService.ringNodeFactory( accumulatedMaps.flatten() as List<TargetClassInfo>,
+                                                            ['hits':["Q14145","Q16236"],'misses':["Q61009"]])
+        then:
+        root.toString().contains("nucleic acid binding")
+        root.toString().find(/nucleic acid[^\n]+/).find(/size\":\d/).find(/\d/) == '2'
+        root.toString().find(/hydrolase[^\n]+/).find(/children/) == 'children'
+        root.toString().find(/receptor[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
+    }
+
+
+
+
 
     /**
      * For now use dummy routine to pull back real data from v12 of the API
@@ -167,6 +201,10 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
         then:
         ringNode.toString().size() > 0
+        ringNode.toString().contains("actin family cytoskeletal protein")
+        ringNode.toString().find(/basic helix-loop-helix transcription factor[^\n]+/).find(/size\":\d/).find(/\d/) == '5'
+        ringNode.toString().find(/microtubule family cytoskeletal protein[^\n]+/).find(/children/) == 'children'
+        ringNode.toString().find(/actin and actin related protein[^\n]+/).find(/size\":\d/).find(/\d/) == '6'
     }
 
 

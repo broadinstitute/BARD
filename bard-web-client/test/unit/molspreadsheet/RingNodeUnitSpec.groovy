@@ -40,29 +40,19 @@ class RingNodeUnitSpec  extends Specification{
                                            [ringNodeA,ringNodeB,ringNodeC,ringNodeD] )
 
         then:
-        assert ringNodeA.toString()== """{"name":"helicase", "size":1}""".toString()
-        assert ringNodeA.toStringNoText()== """{"name": "", "size":1}""".toString()
-        assert ringNodeC.toString()== """{"name":"nucleic acid binding", "size":1}""".toString()
-        assert ringNodeC.toStringNoText()== """{"name": "", "size":1}""".toString()
-        assert ringNodeE.toString()== """{"name":"DNA helicase", "children": [
-{"name":"helicase", "size":1},
-{"name":"helicase", "size":1500},
-{"name":"nucleic acid binding", "size":1},
-{"name":"nucleic acid binding", "size":1500}
-]}""".toString()
-        assert ringNodeE.toStringNoText()== """{"name": "", "children": [
-{"name": "", "size":1},
-{"name": "", "size":1500},
-{"name": "", "size":1},
-{"name": "", "size":1500}
-]}""".toString()
-        assert ringNodeE.maximumTreeHeight() == 1
+        ringNodeA.toString().contains("helicase")
+        (!ringNodeA.toStringNoText().contains("helicase"))
+        ringNodeA.toString().find(/helicase[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
+        ringNodeA.toStringNoText().find(/name[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
 
-//        where:
-//        hillCurveValueIndex     |   identifier  |   columnIndex
-//        0                       |  "a"          |   1
-//        1                       |  "b"          |   2
-//        2                       |  null         |   null
+        ringNodeC.toString().find(/nucleic acid binding[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
+        ringNodeC.toStringNoText().find(/name[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
+        (!ringNodeC.toStringNoText().contains(/nucleic acid binding/))
+
+        ringNodeE.toString().find(/nucleic acid[^\n]+/).contains(/size/)
+        ringNodeE.toString().find(/DNA helicase[^\n]+/).find(/children/) == 'children'
+        (!ringNodeE.toStringNoText().contains(/DNA helicase/))
+         assert ringNodeE.maximumTreeHeight() == 1
     }
 
 
@@ -208,24 +198,14 @@ class RingNodeUnitSpec  extends Specification{
         RingNode ringNode = RingNode.createStubRing ()
 
         then:
-        ringNode.toString()=="""{"name":"AA", "children": [
-{"name":"FLINA", "size":1500},
-{"name":"B", "children": [
-{"name":"A", "size":1500},
-{"name":"ABC", "size":500},
-{"name":"C", "size":500}
-]},
-{"name":"FLINC", "size":1500},
-{"name":"A", "children": [
-{"name":"ABC", "size":1500},
-{"name":"B", "children": [
-{"name":"A", "size":1500},
-{"name":"ABC", "size":500},
-{"name":"C", "size":500}
-]},
-{"name":"C", "size":50}
-]}
-]}""".toString()
+        ringNode.toString().contains("AA")
+        (!ringNode.toStringNoText().contains("AA"))
+        ringNode.toString().find(/FLINA[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
+        ringNode.toStringNoText().find(/FLINA[^\n]+/) == null
+        ringNode.toString().find(/FLINA[^\n]+/).find(/ac\":\"\d/).find(/\d/) == '0'
+        ringNode.toString().find(/FLINA[^\n]+/).find(/inac\":\"\d/).find(/\d/) == '0'
+
+
     }
 
 

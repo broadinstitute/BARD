@@ -13,7 +13,10 @@ class RingManagerService {
     CompoundRestService compoundRestService
     SunburstCacheService sunburstCacheService
 
-    String writeRingTree( RingNode ringNode, boolean includeText = true ) {
+    String writeRingTree( RingNode ringNode, boolean includeText, int typeOfColoring = 0 ) {
+        if (typeOfColoring  == 2) {
+            ringNode = ringNode //We will need to modify the tree
+        }
         StringBuilder stringBuilder = new StringBuilder("var \$data = [")
         if (ringNode) {
                if (includeText) {
@@ -96,12 +99,12 @@ class RingManagerService {
         RingNode.createStubRing ()
     }
 
-    String placeSunburstOnPage ( int width, int height, RingNode ringNode ) {
+    String placeSunburstOnPage ( int width, int height, RingNode ringNode, int typeOfColoring ) {
         StringBuilder stringBuilder = new StringBuilder("")
         int numberOfColors = ringNode.maximumTreeHeight()
         List <String>  everyParent = ringNode.listOfEverybodyWhoIsAParent()
         List <String>  everyUniqueParent =  everyParent.unique().sort()
-        stringBuilder << ringNode.placeSunburstOnPage(width,height,everyUniqueParent,numberOfColors)
+        stringBuilder << ringNode.placeSunburstOnPage(width,height,everyUniqueParent,numberOfColors,typeOfColoring)
         stringBuilder.toString()
     }
 
@@ -131,7 +134,7 @@ class RingManagerService {
      * @param targetClassInfoList
      * @return
      */
-    public ringNodeFactory ( List<TargetClassInfo> targetClassInfoList ) {
+    public ringNodeFactory ( List<TargetClassInfo> targetClassInfoList, LinkedHashMap activeInactiveData = [:] ) {
         RingNode rootRingNode = new RingNode("/")
         if (targetClassInfoList?.size()  > 0){
             LinkedHashMap<String, RingNode> ringNodeMgr = [:]
@@ -148,6 +151,12 @@ class RingManagerService {
                         }  else {
                             ringNodeMgr[onePathElements] = new RingNode (onePathElements)
                             currentRingNode.children << ringNodeMgr[onePathElements]
+                        }
+                        if (activeInactiveData["hits"]?.contains (targetClassInfo.accessionNumber)){
+                            ringNodeMgr[onePathElements].actives <<   targetClassInfo.accessionNumber
+                        }
+                        if (activeInactiveData["misses"]?.contains (targetClassInfo.accessionNumber)){
+                            ringNodeMgr[onePathElements].inactives <<   targetClassInfo.accessionNumber
                         }
                     }
                 }
@@ -175,7 +184,7 @@ class RingManagerService {
                 accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
             }
         }
-        return ringNodeFactory(accumulatedMaps.flatten())
+        return ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
     }
 
     /**

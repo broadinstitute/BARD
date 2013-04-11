@@ -42,7 +42,15 @@
 
             });
             $('#coloringOptions').change(function () {
-                location.href = "../bigSunburst";
+                if(this.value== "1"){
+                    location.href = "./bigSunburst?colorOption=1";
+                }
+                if(this.value== "2"){
+                    location.href =  "./bigSunburst?colorOption=2";
+                }
+                if(this.value== "3"){
+                    location.href = "./bigSunburst?colorOption=3";
+                }
             });
         }
     </script>
@@ -70,8 +78,9 @@
                 &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
 
                 <select id="coloringOptions">
-                <option value="1">Color by activity</option>
-                <option value="2">Color by class</option>
+                <option value="1" <g:if test="${dropDown2Choice==1}">selected</g:if> >Color by activity</option>
+                <option value="2" <g:if test="${dropDown2Choice==2}">selected</g:if> >Split classes by activity</option>
+                <option value="3" <g:if test="${dropDown2Choice==3}">selected</g:if> >Color by class</option>
             </select>
             </div>
         </div>

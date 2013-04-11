@@ -702,12 +702,30 @@ class BardWebInterfaceController {
             session.'inactives' = false
         }
 
+        if (params.colorOption != null) {
+            switch (params.colorOption) {
+                case '1':
+                    session.colorOption = 1;
+                    break;
+                case '2':
+                    session.colorOption = 2;
+                    break;
+                case '3':
+                    session.colorOption = 3;
+                    break;
+                default:
+                    session.colorOption = 4;
+                    break;
+            }
+        }
+
         if (!session.'compoundSummary') {
             println 'we have no information'
         } else {
             render(view: 'bigSunburst',
                     model: [compoundSummary: session.'compoundSummary',
-                            dropDown1Choice: dropDown1Choice])
+                            dropDown1Choice: dropDown1Choice,
+                            dropDown2Choice: session.colorOption])
         }
 
     }

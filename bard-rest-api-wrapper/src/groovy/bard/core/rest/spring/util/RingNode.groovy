@@ -12,6 +12,8 @@ class RingNode {
     String name = ""
     int size =  1
     List <RingNode> children = []
+    List <String> actives = []
+    List <String> inactives = []
     //
     String ID = ""
     String description = ""
@@ -213,7 +215,7 @@ class RingNode {
      * @param maximumNumberOfColors
      * @return
      */
-    public String placeSunburstOnPage(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors) {
+    public String placeSunburstOnPage(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors, int typeOfColoring ) {
         StringBuilder stringBuilder = new StringBuilder()
         stringBuilder << """  var width = ${width},
                 height = ${height},
@@ -301,9 +303,9 @@ class RingNode {
         // start things out
         stringBuilder << "{"
         // start things out, and write the name
-        stringBuilder <<  "\"name\":"
-        if (name?.size()>0)
-            stringBuilder <<  "\"${name}\""
+        stringBuilder <<  "\"name\":\"${name}\""
+        stringBuilder <<  ", \"ac\":\"${actives.size()}\""
+        stringBuilder <<  ", \"inac\":\"${inactives.size()}\""
         // size or children – not both
         if ( children.size()>0 ) {
             stringBuilder <<  ", \"children\": [\n"
