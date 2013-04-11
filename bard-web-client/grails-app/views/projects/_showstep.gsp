@@ -37,21 +37,11 @@
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
 
-            <h5>Selected Edge</h5>
-            <table>
-                <tbody>
-
-                <tr>
-                    <td>
-                        <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{fromNode.bardExptId}}">{{fromNode.eid}}</a>
-                    </td>
-                    <td></td>
-                    <td>
-                        <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{toNode.bardExptId}}">{{toNode.eid}}</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <h5>Selected Edge:
+                <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{fromNode.bardExptId}}">{{fromNode.eid}}</a>
+                ->
+                <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{toNode.bardExptId}}">{{toNode.eid}}</a>
+            </h5>
         </script>
 
         <script id="node-selection-template1" type="text/x-handlebars-template">
