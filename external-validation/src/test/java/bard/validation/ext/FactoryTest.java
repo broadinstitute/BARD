@@ -21,6 +21,7 @@ public class FactoryTest {
 	public static List<Object[]> args() {
 		Object[][] data = new Object[][] {
 //				{ "http://www.ncbi.nlm.nih.gov/gquery/?term=", false }, not a valid ncbi database
+				{ "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=", true },
 				{ "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn", false },
 				{ "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", true },
 				{ "http://cas.org/", false },
@@ -28,7 +29,6 @@ public class FactoryTest {
 				{ "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=", true },
 				{ "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid=", true },
 				{ "http://regid.org/find", false },
-				{ "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=", false },
 				{ "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=", true },
 				{ "http://www.ncbi.nlm.nih.gov/biosystems/", true },
 				{ "http://www.ncbi.nlm.nih.gov/gene/", true },
