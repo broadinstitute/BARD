@@ -83,64 +83,109 @@ abstract class AbstractContextItem<T extends AbstractContext> {
     protected void valueValidation(Errors errors) {
         if (attributeElement) {
             if (attributeElement.externalURL) {
-                externalOntologyContraints(errors)
-            } else if (attributeElement.unit) {
+                externalOntologyConstraints(errors)
+            } else if (attributeElement.unit || valueNum || valueMin || valueMax) {
                 numericValueConstraints(errors)
             } else if (valueElement) {
                 dictionaryConstraints(errors)
+            } else { // text value
+                rejectNullField('valueDisplay', errors)
             }
         }
     }
+    // valueDisplay not  null except for Type Free
 
     protected void numericValueConstraints(Errors errors) {
-        //TODO add global error
-        ensureFieldNotNull('valueNum', errors)
-        ensureFieldsNull(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)
+        if (valueNum) { //valueNum value
+            if (rejectNullField('valueNum', errors) ||
+                    rejectBlankField('qualifier', errors) ||
+                    rejectNotNullFields(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)) {
+                errors.reject('contextItem.valueNum.required.fields')
+            }
+        } else { // default to a Range valueMin || valueMax
+            if (rejectNullFields(['valueMin', 'valueMax'], errors) ||
+                    rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
+                errors.reject('contextItem.range.required.fields')
+            }
+        }
     }
 
     protected void dictionaryConstraints(Errors errors) {
         //TODO add global error
-        ensureFieldNotBlank('valueDisplay', errors)
-        ensureFieldsNull(['extValueId', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+        rejectBlankField('valueDisplay', errors)
+        rejectNotNullFields(['extValueId', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }
 
-    protected void externalOntologyContraints(Errors errors) {
-        if (StringUtils.isBlank(extValueId) || StringUtils.isBlank(valueDisplay)) {
+    protected void externalOntologyConstraints(Errors errors) {
+        if (rejectBlankFields(['extValueId', 'valueDisplay'], errors)||
+                rejectNotNullFields(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)) {
             errors.reject('contextItem.attribute.externalURL.required.fields')
         }
-        ensureFieldsNotBlank(['extValueId','valueDisplay'], errors)
-        ensureFieldsNull(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }
 
-    protected void ensureFieldsNotBlank(List<String> fieldNames, Errors errors) {
+    protected boolean rejectNonBlankFields(List<String> fieldNames, Errors errors) {
+        List rejectedFields = []
         for (String fieldName in fieldNames) {
-            ensureFieldNotBlank(fieldName, errors)
+            rejectedFields << rejectNonBlankField(fieldName, errors)
         }
+        rejectedFields.grep { it == true }
     }
 
-    protected void ensureFieldNotBlank(String fieldName, Errors errors) {
+    protected boolean rejectNonBlankField(String fieldName, Errors errors) {
+        if (StringUtils.isNotBlank(this[(fieldName)])) {
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
+            return true
+        }
+        return false
+    }
+
+    protected boolean rejectBlankFields(List<String> fieldNames, Errors errors) {
+        List rejectedFields = []
+        for (String fieldName in fieldNames) {
+            rejectedFields << rejectBlankField(fieldName, errors)
+        }
+        rejectedFields.grep { it == true }
+    }
+
+    protected boolean rejectBlankField(String fieldName, Errors errors) {
         if (StringUtils.isBlank(this[(fieldName)])) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
+            return true
         }
+        return false
     }
 
-    protected void ensureFieldsNotNull(List<String> fieldNames, Errors errors) {
+    protected boolean rejectNotNullFields(List<String> fieldNames, Errors errors) {
+        List rejectedFields = []
         for (String fieldName in fieldNames) {
-            ensureFieldNotNull(fieldName, errors)
+            rejectedFields << rejectNotNullField(fieldName, errors)
         }
+        rejectedFields.grep { it == true }
     }
 
-    private ensureFieldNotNull(String fieldName, Errors errors) {
+    private boolean rejectNotNullField(String fieldName, Errors errors) {
+        if (this[(fieldName)] != null) {
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.not.null")
+            return true
+        }
+        return false
+    }
+
+    protected boolean rejectNullFields(List<String> fieldNames, Errors errors) {
+        List rejectedFields = []
+        for (String fieldName in fieldNames) {
+            rejectedFields << rejectNullField(fieldName, errors)
+        }
+        rejectedFields.grep { it == true }
+    }
+
+    private boolean rejectNullField(String fieldName, Errors errors) {
         if (this[(fieldName)] == null) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.null")
+            return true
         }
+        return false
     }
 
-    protected void ensureFieldsNull(List<String> fieldNames, Errors errors) {
-        for (String fieldName in fieldNames) {
-            if (this[(fieldName)] != null) {
-                errors.rejectValue(fieldName, "contextItem.${fieldName}.not.null")
-            }
-        }
-    }
+
 }

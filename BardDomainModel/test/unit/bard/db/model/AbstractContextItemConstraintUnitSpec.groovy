@@ -35,9 +35,9 @@ abstract class AbstractContextItemConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                     | valueUnderTest    | valid | errorCode
-        'null is not valid'      | {null}            | false | 'nullable'
-        'valid attributeElement' | {Element.build()} | true  | null
+        desc                     | valueUnderTest      | valid | errorCode
+        'null is not valid'      | { null }            | false | 'nullable'
+        'valid attributeElement' | { Element.build() } | true  | null
 
     }
 
@@ -53,10 +53,9 @@ abstract class AbstractContextItemConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                 | valueUnderTest    | valid | errorCode
-        'null is valid'      | {null}            | true  | null
-        'valid valueElement' | {Element.build()} | true  | null
-
+        desc                           | valueUnderTest      | valid | errorCode
+        'null is valid'                | { null }            | true  | null
+        'valid valueElement'           | { Element.build() } | true  | null
     }
 
     void "test extValueId constraints #desc extValueId: '#valueUnderTest'"() {
@@ -142,9 +141,9 @@ abstract class AbstractContextItemConstraintUnitSpec extends Specification {
         'too long'         | createString(VALUE_DISPLAY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'blank valid'      | ''                                       | false | 'blank'
         'blank valid'      | '  '                                     | false | 'blank'
+        'null valid'       | null                                     | false | 'contextItem.valueDisplay.null'
 
         'exactly at limit' | createString(VALUE_DISPLAY_MAX_SIZE)     | true  | null
-        'null valid'       | null                                     | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {

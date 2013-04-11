@@ -12,15 +12,9 @@
 // */
 testDataConfig {
     sampleData {
-        'bard.db.registration.Assay' {
-        }
-        'bard.db.experiment.Experiment' {
-        }
-        'bard.db.registration.ExternalReference' {
-        }
         'bard.db.dictionary.BardDictionaryDescriptor' {
             def i = -1
-            label = {-> "label${i}"}
+            label = {-> "label${i}" }
             id = {-> i-- }
         }
         'bard.db.dictionary.BardDescriptor' {
@@ -62,6 +56,24 @@ testDataConfig {
         'bard.db.experiment.Substance' {
             def i = 1
             id = {-> i++ }
+        }
+        'bard.db.project.ProjectContextItem' {
+            valueDisplay = 'non null valueDisplay'
+        }
+        'bard.db.registration.AssayContextItem' {
+            valueDisplay = 'non null valueDisplay'
+        }
+        'bard.db.experiment.ExperimentContextItem' {
+            valueDisplay = 'non null valueDisplay'
+        }
+        'bard.db.project.ProjectExperimentContextItem' {
+            valueDisplay = 'non null valueDisplay'
+        }
+        'bard.db.project.StepContextItem' {
+            valueDisplay = 'non null valueDisplay'
+        }
+        'bard.db.project.ResultContextItem' {
+            valueDisplay = 'non null valueDisplay'
         }
 
     }

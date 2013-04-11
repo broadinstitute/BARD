@@ -1,6 +1,6 @@
 package bard.db.project
 
-import bard.db.model.AbstractContextItemConstraintUnitSpec
+import bard.db.dictionary.Element
 import bard.db.model.AbstractContextItemUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
@@ -13,9 +13,10 @@ import spock.lang.Unroll
  * Time: 4:14 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build(ProjectContextItem)
+
+@Build([Element, ProjectContextItem])
 @Unroll
-class ProjectContextItemUnitSpec extends AbstractContextItemUnitSpec{
+class ProjectContextItemUnitSpec extends AbstractContextItemUnitSpec {
 
     @Before
     @Override
