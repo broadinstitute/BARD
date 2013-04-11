@@ -27,7 +27,12 @@ abstract class BardCommand {
     boolean attemptSave(Object domain) {
         if (!domain?.save()) {
             domain?.errors?.fieldErrors?.each { error ->
-                getErrors().rejectValue(error.field, error.code)
+                if (hasProperty(error.field)){  // if the command object has a property with the same name as the field copy the fieldError
+                    getErrors().rejectValue(error.field, error.code)
+                }
+                else { // otherwise register a global error
+                    getErrors().reject(error.code)
+                }
             }
             domain?.errors?.globalErrors?.each { error ->
                 getErrors().reject(error.code)

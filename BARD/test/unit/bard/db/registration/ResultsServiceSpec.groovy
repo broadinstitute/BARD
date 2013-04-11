@@ -1,28 +1,20 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentContext
-import bard.db.experiment.ExperimentContextItem
-import bard.db.experiment.ExperimentMeasure
-import bard.db.experiment.HierarchyType
-import bard.db.experiment.Result
-import bard.db.experiment.ResultContextItem
-import bard.db.experiment.ResultsService
-import bard.db.experiment.Substance
+import bard.db.experiment.*
+import bard.db.experiment.results.RawCell
+import bard.db.experiment.results.Row
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
+import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
-import grails.test.mixin.*
-
-import bard.db.experiment.results.*;
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
-@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure ])
+@Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
 @Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
 class ResultsServiceSpec extends spock.lang.Specification {
 
@@ -91,9 +83,9 @@ class ResultsServiceSpec extends spock.lang.Specification {
         relationship.hierarchyType == HierarchyType.Derives
 
         where:
-        desc              |  onSameLine
-        "on same row"     |  true
-        "using parent id" |  false
+        desc              | onSameLine
+        "on same row"     | true
+        "using parent id" | false
     }
 
     void 'test create template from assay'() {
@@ -136,7 +128,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
 //        def columns = [new ResultsService.Column("Inhibition", inhibitionMeasure), new ResultsService.Column("EC50", ec50Measure)]
         def constantItems = []
-        ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: ["Inhibition","EC50"], constantItems: constantItems)
+        ResultsService.Template template = new ResultsService.Template(experiment: experiment, columns: ["Inhibition", "EC50"], constantItems: constantItems)
 
         String sample = ",Experiment ID,123\n" +
                 "\n" +
@@ -302,15 +294,15 @@ class ResultsServiceSpec extends spock.lang.Specification {
         result.valueDisplay == displayValue
 
         where:
-        desc                  | cellString | expectedValue | expectedQualifier | minVal | maxVal  | displayValue
-        "simple scalar"       | "1"        | 1.0           | "= "              | null   | null    | "1.0"
-        "scientific notation" | "1e4"      | 1e4           | "= "              | null   | null    | "10000.0"
-        "sci notation2"       | "7.58e-005"| 7.58e-5f      | "= "              | null   | null    | "7.58E-5"
-        "including qualifier" | "<10"      | 10.0          | "< "              | null   | null    | "<10.0"
-        "spaced qualifier"    | ">> 10"    | 10.0          | ">>"              | null   | null    | ">>10.0"
-        "range"               | "2-3"      | null          | null              | 2.0    | 3.0     | "2.0-3.0"
-        "nonrange"            | "non-info" | null          | null              | null   | null    | "non-info"
-        "free text"           | "free"     | null          | null              | null   | null    | "free"
+        desc                  | cellString  | expectedValue | expectedQualifier | minVal | maxVal | displayValue
+        "simple scalar"       | "1"         | 1.0           | "= "              | null   | null   | "1.0"
+        "scientific notation" | "1e4"       | 1e4           | "= "              | null   | null   | "10000.0"
+        "sci notation2"       | "7.58e-005" | 7.58e-5f      | "= "              | null   | null   | "7.58E-5"
+        "including qualifier" | "<10"       | 10.0          | "< "              | null   | null   | "<10.0"
+        "spaced qualifier"    | ">> 10"     | 10.0          | ">>"              | null   | null   | ">>10.0"
+        "range"               | "2-3"       | null          | null              | 2.0    | 3.0    | "2.0-3.0"
+        "nonrange"            | "non-info"  | null          | null              | null   | null   | "non-info"
+        "free text"           | "free"      | null          | null              | null   | null   | "free"
     }
 
     void 'test creating measure result'() {
@@ -457,8 +449,8 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         def attribute = Element.build()
         def context = AssayContext.build()
-        def small = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 1e2)
-        def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2)
+        def small = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 1e2, qualifier: '= ')
+        def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2, qualifier: '= ')
         ItemService itemService = new ItemService()
         def item = itemService.getLogicalItems([large, small])[0]
 
@@ -596,6 +588,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         childResult.resultHierarchiesForParentResult.size() == 0
     }
 */
+
     Row makeRow(Map map) {
         List cells = map.collect { k, v -> new RawCell(columnName: k, value: v) }
         return new Row(cells: cells)
@@ -619,11 +612,11 @@ class ResultsServiceSpec extends spock.lang.Specification {
         ExperimentMeasure child2ExpMeasure = ExperimentMeasure.build(measure: child2Measure, parent: parent2ExpMeasure)
 
         when:
-        Collection<Result> results = service.extractResultFromEachRow(parent1ExpMeasure, [makeRow(["parent1": "1", "childCol" : "2"])], [:], new IdentityHashMap(), errors, [:])
+        Collection<Result> results = service.extractResultFromEachRow(parent1ExpMeasure, [makeRow(["parent1": "1", "childCol": "2"])], [:], new IdentityHashMap(), errors, [:])
 
         then:
         !errors.hasErrors()
         results.size() == 1
-        results.first().resultHierarchiesForParentResult.size()==1
+        results.first().resultHierarchiesForParentResult.size() == 1
     }
 }

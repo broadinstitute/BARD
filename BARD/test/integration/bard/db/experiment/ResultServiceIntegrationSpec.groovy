@@ -62,7 +62,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         values.each {
-            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it)
+            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it, qualifier:'= ')
 //            context.addToAssayContextItems(contextItem)
         }
 
