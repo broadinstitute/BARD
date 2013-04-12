@@ -1,9 +1,9 @@
 package bard.db.registration
 
+import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
-import grails.buildtestdata.mixin.Build
+import org.junit.After
 import org.junit.Before
-import spock.lang.Specification
 import spock.lang.Unroll
 
 import static bard.db.registration.AttributeType.Fixed
@@ -18,14 +18,21 @@ import static test.TestUtils.assertFieldValidationExpectations
  * Time: 1:44 PM
  * To change this template use File | Settings | File Templates.
  */
-@Build([AssayContextItem, Element])
 @Unroll
-class AssayContextItemValueValidationUnitSpec extends Specification {
+class AssayContextItemValueValidationIntegrationSpec extends BardIntegrationSpec {
     AssayContextItem domainInstance
 
     @Before
     void doSetup() {
         domainInstance = AssayContextItem.buildWithoutSave()
+        domainInstance.attributeElement.save()
+    }
+
+    @After
+    void doAfter() {
+        if (domainInstance.validate()) {
+            domainInstance.save(flush: true)
+        }
     }
 
     void "test deriveDisplayValue  #desc"() {

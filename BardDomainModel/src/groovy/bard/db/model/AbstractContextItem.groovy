@@ -100,12 +100,12 @@ abstract class AbstractContextItem<T extends AbstractContext> {
             } else if (valueElement) {
                 dictionaryConstraints(errors)
             } else { // text value
-                textValue(errors)
+                textValueConstraints(errors)
             }
         }
     }
 
-    private textValue(Errors errors) {
+    private textValueConstraints(Errors errors) {
         rejectNullField('valueDisplay', errors)
         rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }

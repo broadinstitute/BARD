@@ -36,7 +36,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
         if (attributeElement) {
             switch (attributeType) {
                 case AttributeType.Free:
-                    allNullValueConstraints(errors)
+                    freeTypeConstraints(errors)
                     break;
                 case AttributeType.Range:
                     rangeConstraints(errors)
@@ -52,9 +52,9 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
         }
     }
 
-    protected allNullValueConstraints(Errors errors) {
-        if (rejectNotNullFields(['valueDisplay', 'extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'])) {
-            errors.reject('assayContextItem.attributeType.required.fields')
+    protected freeTypeConstraints(Errors errors) {
+        if (rejectNotNullFields(['valueDisplay', 'extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)) {
+            errors.reject('assayContextItem.attributeType.free.required.fields')
         }
     }
 }
