@@ -549,11 +549,20 @@ Graph.Layout.Isolated.prototype = {
             node.layoutPosY = 0;
         }
         var counter = 0;
+        var level = 1;
+        var row = 1;
         for (i in this.order) {
             var node = this.order[i];
             node.layoutPosX = counter;
-            node.layoutPosY = Math.random();
+            node.layoutPosY = level;
             counter++;
+            if ( row%8 == 0) {
+                level = level + 1;
+                counter = 0;
+            }
+            //node.layoutPosY = Math.random();
+
+            row++;
         }
     },
 

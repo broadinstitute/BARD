@@ -20,6 +20,10 @@ public class ProjectStep {
     private ProjectExperiment nextBardExpt;
     @JsonProperty("bardProjId")
     private long bardProjId;
+    @JsonProperty("prevStageRef")
+    private String prevStageRef;
+    @JsonProperty("nextStageRef")
+    private String nextStageRef;
     @JsonProperty("stepId")
     private long stepId;
     @JsonProperty("edgeName")
@@ -57,6 +61,26 @@ public class ProjectStep {
     @JsonProperty("bardProjId")
     public void setBardProjId(long bardProjId) {
         this.bardProjId = bardProjId;
+    }
+
+    @JsonProperty("prevStageRef")
+    String getPrevStageRef() {
+        return prevStageRef
+    }
+
+    @JsonProperty("prevStageRef")
+    void setPrevStageRef(String prevStageRef) {
+        this.prevStageRef = prevStageRef
+    }
+
+    @JsonProperty("nextStageRef")
+    String getNextStageRef() {
+        return nextStageRef
+    }
+
+    @JsonProperty("nextStageRef")
+    void setNextStageRef(String nextStageRef) {
+        this.nextStageRef = nextStageRef
     }
 
     @JsonProperty("stepId")
