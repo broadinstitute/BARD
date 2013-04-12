@@ -89,9 +89,14 @@ abstract class AbstractContextItem<T extends AbstractContext> {
             } else if (valueElement) {
                 dictionaryConstraints(errors)
             } else { // text value
-                rejectNullField('valueDisplay', errors)
+                textValue(errors)
             }
         }
+    }
+
+    private textValue(Errors errors) {
+        rejectNullField('valueDisplay', errors)
+        rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }
     // valueDisplay not  null except for Type Free
 
@@ -118,6 +123,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     protected void dictionaryConstraints(Errors errors) {
         //TODO add global error
+        //TODO check to ensure valueElement is a descendant of the attributeElement
         rejectBlankField('valueDisplay', errors)
         rejectNotNullFields(['extValueId', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }

@@ -87,27 +87,30 @@ abstract class AbstractContextItemConstraintUnitSpec<T extends AbstractContextIt
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
+        domainInstance.valueNum = valueNum
+        domainInstance.attributeElement.unit = unit.call()
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                   | valueUnderTest | valid | errorCode
-        'blank'                | ''             | false | 'blank'
-        'blank'                | '  '           | false | 'blank'
-        'bad val'              | 'aa'           | false | 'not.inList'
+        desc                   | valueUnderTest | valueNum | unit                | valid | errorCode
+        'blank'                | ''             | 1.0      | { Element.build() } | false | 'contextItem.qualifier.blank'
+        'blank'                | '  '           | 1.0      | { Element.build() } | false | 'contextItem.qualifier.blank'
+        'bad val'              | 'aa'           | 1.0      | { Element.build() } | false | 'not.inList'
 
-        'equals'               | '= '           | true  | null
-        'less than'            | '< '           | true  | null
-        'less than or equal'   | '<='           | true  | null
-        'greter than'          | '> '           | true  | null
-        'greter than or equal' | '>='           | true  | null
-        '<<'                   | '<<'           | true  | null
-        '>>'                   | '>>'           | true  | null
-        '~ '                   | '~ '           | true  | null
+        'equals'               | '= '           | 1.0      | { Element.build() } | true  | null
+        'less than'            | '< '           | 1.0      | { Element.build() } | true  | null
+        'less than or equal'   | '<='           | 1.0      | { Element.build() } | true  | null
+        'greter than'          | '> '           | 1.0      | { Element.build() } | true  | null
+        'greter than or equal' | '>='           | 1.0      | { Element.build() } | true  | null
+        '<<'                   | '<<'           | 1.0      | { Element.build() } | true  | null
+        '>>'                   | '>>'           | 1.0      | { Element.build() } | true  | null
+        '~ '                   | '~ '           | 1.0      | { Element.build() } | true  | null
 
-        'null'                 | null           | true  | null
+        'null'                 | null           | 1.0      | { Element.build() } | false | 'contextItem.qualifier.blank'
+        'null'                 | null           | null     | {}                  | true  | null
 
     }
 
