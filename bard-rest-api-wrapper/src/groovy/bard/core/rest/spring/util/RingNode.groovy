@@ -221,11 +221,43 @@ class RingNode {
                 height = ${height},
                 radius = Math.min(width, height) / 2,
                 padding = 5,
-                duration = 1000,
-                color = d3.scale.category10().domain([""".toString()
-        stringBuilder << deriveColors(namesThatGetColors,  maximumNumberOfColors)
-        stringBuilder << "   ]);"
+                duration = 1000;
+                """
+        stringBuilder <<  handleColors()
+                //,
+//                color = d3.scale.category10().domain([""".toString()
+//        stringBuilder << deriveColors(namesThatGetColors,  maximumNumberOfColors)
+//        stringBuilder << "   ]);"
         stringBuilder.toString()
+    }
+
+
+    public String handleColors(){
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder << """
+                    function colorArcFill( d ) {
+                        return colorByActivity(d)
+                    }
+
+                    var s = d3.scale.linear()
+                            .domain([0,1])
+                            .interpolate(d3.interpolateRgb)
+                            .range(["#ff0000", "#00ff00"])
+
+                    function colorByActivity(d){
+                        var returnValue = new String ();
+                        if (d.ac!=undefined) {
+                            var actives = parseInt(d.ac);
+                            var inactives = parseInt(d.inac);
+                            var prop = actives / (actives +inactives) ;
+                            returnValue = s(prop);
+                        } else {
+                            returnValue = "#FF00FF";
+                        }
+                        return returnValue;
+                    }""".toString()
+        stringBuilder.toString()
+
     }
 
 

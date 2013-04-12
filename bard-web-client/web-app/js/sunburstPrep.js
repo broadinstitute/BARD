@@ -23,13 +23,21 @@ var arc = d3.svg.arc()
 
 var tooltip = d3.select("body")
     .append("div")
+    .style("opacity", "0")
     .style("position", "absolute")
     .style("z-index", "10")
-    .style("visibility", "hidden")
+    .style("visibility", "visible")
     .attr("class", "toolTextAppearance");
 
 function tooltipContent(d){
-    return tooltip.style("visibility", "visible").text(d.name)
+    if (d.name!='/'){
+        tooltip.style("visibility", "visible").style("opacity", "0").transition()
+            .duration(200).style("opacity", "1")
+    }
+    if (d.children==undefined)
+        return tooltip.html(d.name+'<br/>'+'active in '+d.ac+'<br/>'+'inactive in '+d.inac) ;
+    else
+        return tooltip.html(d.name) ;
 }
 
 var path = svg.datum($data[0]).selectAll("path")
@@ -38,7 +46,8 @@ var path = svg.datum($data[0]).selectAll("path")
 //    .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
     .attr("d", arc)
     .style("stroke", "#eee")
-    .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
+    .style("fill", function(d) { return colorArcFill(d); })
+//    .style("fill", function(d) { return colorArcFill((d.children ? d : d.parent).name); })
     .style("fill-rule", "evenodd")
     .on("click", click)
     .on("mouseover", tooltipContent)

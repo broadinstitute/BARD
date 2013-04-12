@@ -23,6 +23,12 @@
     .toolTextAppearance {
         font: 20px serif;
         font-weight: bold;
+        margin: 5px;
+        padding: 10px;
+        background: #eeeeee;
+        border: 1px solid blue;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
     }
 
     </style>
