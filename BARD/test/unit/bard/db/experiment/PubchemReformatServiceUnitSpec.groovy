@@ -129,7 +129,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
     def 'test full handling of missing values'() {
         setup:
         // copy the pubchem input file to a known path
-        InputStream inputStream = ResultServiceIntegrationSpec.getClassLoader().getResourceAsStream("bard/db/experiment/pubchem-input.txt")
+        InputStream inputStream = PubchemReformatServiceUnitSpec.getClassLoader().getResourceAsStream("bard/db/experiment/pubchem-input.txt")
         assert inputStream != null
         FileOutputStream fos = new FileOutputStream("out/PubchemReformatServiceUnitSpec-in.txt")
         IOUtils.copy(inputStream, fos)
@@ -163,7 +163,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
     }
 
     boolean assertFilesMatch(String expected, String pathToVerify) {
-        InputStream inputStream = ResultServiceIntegrationSpec.getClassLoader().getResourceAsStream(expected)
+        InputStream inputStream = PubchemReformatServiceUnitSpec.getClassLoader().getResourceAsStream(expected)
         assert inputStream != null
         Reader reader = new BufferedReader(new InputStreamReader(inputStream))
         def expectedLines = reader.readLines()
