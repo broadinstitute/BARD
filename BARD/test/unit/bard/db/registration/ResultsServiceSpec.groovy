@@ -535,7 +535,10 @@ class ResultsServiceSpec extends spock.lang.Specification {
     }
 
     ResultContextItem createContextItem(params) {
-        return new ResultContextItem(params)
+        ResultContextItem item = new ResultContextItem(params)
+        Result result = params.result;
+        result.resultContextItems.add(item)
+        return item
     }
 
     void 'test duplicate check'() {
