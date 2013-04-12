@@ -1,11 +1,12 @@
 package bard.db.registration
 
 import bard.db.model.AbstractContextItem
+import groovy.transform.TypeChecked
 import org.springframework.validation.Errors
 
 class AssayContextItem extends AbstractContextItem<AssayContext> {
 
-    AttributeType attributeType
+    AttributeType attributeType = AttributeType.Fixed
     AssayContext assayContext
 
     static belongsTo = [assayContext: AssayContext]
@@ -29,26 +30,27 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
         this.assayContext = context
     }
 
-//    @Override
-//    protected void valueValidation(Errors errors) {
-//        if (attributeElement) {
-//            switch (attributeType) {
-//                case AttributeType.Free:
-//                    allNullValueConstraints(errors)
-//                    break;
-//                case AttributeType.Range:
-//                    rangeContraints(errors)
-//                    break
-//                case AttributeType.Fixed:
-//                case AttributeType.List:
-//                    super.valueValidation(errors, )
-//                    break
-//                default:
-//                    throw new RuntimeException("unknow attributeType: $attributeType")
-//                    break
-//            }
-//        }
-//    }
+    @Override
+    @TypeChecked
+    protected void valueValidation(Errors errors) {
+        if (attributeElement) {
+            switch (attributeType) {
+                case AttributeType.Free:
+                    allNullValueConstraints(errors)
+                    break;
+                case AttributeType.Range:
+                    rangeConstraints(errors)
+                    break
+                case AttributeType.Fixed:
+                case AttributeType.List:
+                    super.valueValidation(errors, false)
+                    break
+                default:
+                    throw new RuntimeException("unknow attributeType: $attributeType")
+                    break
+            }
+        }
+    }
 
     protected allNullValueConstraints(Errors errors) {
         if (rejectNotNullFields(['valueDisplay', 'extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'])) {

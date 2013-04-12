@@ -4,6 +4,7 @@ import bard.db.audit.BardContextUtils
 import bard.db.model.AbstractContextItemIntegrationSpec
 import org.hibernate.SessionFactory
 import org.junit.Before
+import spock.lang.Ignore
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
@@ -24,6 +25,7 @@ class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemInteg
         domainInstance.attributeElement.save()
     }
 
+    @Ignore
     void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
 
         final String field = 'attributeType'
