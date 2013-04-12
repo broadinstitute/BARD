@@ -59,9 +59,9 @@
                             <dt>Experiment Name</dt><dd>${instance.experimentName}&nbsp;</dd>
                             <dt>Description</dt><dd>${instance.description}&nbsp;</dd>
                             <dt>Status</dt><dd>${instance.experimentStatus}&nbsp;</dd>
-                            <dt>Hold until</dt><dd>${instance.holdUntilDate}&nbsp;</dd>
-                            <dt>Run Date from</dt><dd>${instance.runDateFrom}&nbsp;</dd>
-                            <dt>Run Date to</dt><dd>${instance.runDateTo}&nbsp;</dd>
+                            <dt>Hold until</dt><dd><g:formatDate format="MM/dd/yyyy" date="${instance.holdUntilDate}"/></dd>
+                            <dt>Run Date from</dt><dd><g:formatDate format="MM/dd/yyyy" date="${instance.runDateFrom}"/></dd>
+                            <dt>Run Date to</dt><dd><g:formatDate format="MM/dd/yyyy" date="${instance.runDateTo}"/></dd>
                         </dl>
 
                         <p>External references</p>

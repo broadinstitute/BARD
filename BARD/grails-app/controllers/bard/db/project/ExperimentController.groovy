@@ -1,5 +1,6 @@
 package bard.db.project
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
@@ -7,6 +8,11 @@ import bard.db.experiment.ExperimentService
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+
+class ExperimentCommand implements Serializable {
+	
+	
+}
 
 @Secured(['isFullyAuthenticated()'])
 class ExperimentController {
@@ -58,21 +64,49 @@ class ExperimentController {
         experiment.assay = assay
 		setEditFormParams(experiment)
         experiment.dateCreated = new Date()
-        if (!experiment.save(flush: true)) {
-            println("errors:"+experiment.errors)
-            renderCreate(assay, experiment)
-        } else {
-            experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
-            redirect(action: "show", id: experiment.id)
-        }
+		if(!validateExperiment(experiment)){
+			println("validation failed on experiment")
+			println("errors:"+experiment.errors)
+			renderCreate(assay, experiment)
+		}
+		else{
+			if (!experiment.save(flush: true)) {
+				println("errors:"+experiment.errors)
+				renderCreate(assay, experiment)
+			} else {
+				experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
+				redirect(action: "show", id: experiment.id)
+			}
+		}       
     }
 	
-	private def setEditFormParams(Experiment experiment){
-//		experiment.properties["experimentName","description","experimentStatus"] = params
-//		experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : experiment.holdUntilDate
-//		experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : experiment.runDateFrom
-//		experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : experiment.runDateTo
+	private boolean validateExperiment(Experiment experiment){
+		println "Validating Experiment dates"
 		
+		Date today = new Date();
+		Calendar cal = Calendar.getInstance()
+		cal.add(Calendar.YEAR, 1)
+		Date oneYearFromToday = cal.getTime()
+		if(experiment.holdUntilDate){
+			// Checks that the Hold Until Today is before today date
+			if(experiment.holdUntilDate.before(today)){
+				experiment.errors.reject('experiment.holdUntilDate.incorrectEarlyValue', 'Hold Until Date must be equal or after today')
+			}
+			// Checks that the Hold Until Today date is not more than 1 year from today
+			if(experiment.holdUntilDate.after(oneYearFromToday)){
+				experiment.errors.reject('experiment.holdUntilDate.incorrecMoreThan1YearFromToday', 'Hold Until Date is more than 1 year from today')
+			}
+		}
+		if(experiment.runDateFrom && experiment.runDateTo){
+			//Checks that Run Date To is not before Run From Date
+			if(experiment.runDateFrom.after(experiment.runDateTo)){
+				experiment.errors.reject('experiment.holdUntilDate.incorrecRunDateFrom', 'Run Date To cannot be before Run From Date')
+			}				
+		}
+		return !experiment.hasErrors()
+	}
+	
+	private def setEditFormParams(Experiment experiment){		
 		experiment.properties["experimentName","description","experimentStatus"] = params
 		experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : null
 		experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
