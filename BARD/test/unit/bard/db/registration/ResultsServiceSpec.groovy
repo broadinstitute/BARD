@@ -97,10 +97,10 @@ class ResultsServiceSpec extends spock.lang.Specification {
         Experiment experiment = Experiment.build(assay: assay)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContext measureContext = AssayContext.build(assay: assay)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line"))
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line"), valueDisplay: null)
         Measure measure = Measure.build(resultType: Element.build(label: "ec50"))
         AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: measureContext, measure: measure)
-        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope"))
+        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope"), valueDisplay: null)
         measureContext.assayContextMeasures = [assayContextMeasure] as Set
         assay.assayContexts = [assayContext, measureContext]
         assay.measures = [measure] as Set
@@ -147,7 +147,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
         Element attribute = Element.build(label: "column")
-        def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.Free)])[0]
+        def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.Free, valueDisplay:null)])[0]
 
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
@@ -345,7 +345,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         substance.save()
 
         def attribute = Element.build(label: "item")
-        def item = itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute)])[0]
+        def item = itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute, valueDisplay: null)])[0]
         def resultType = Element.build(label: "measure")
         def measure = Measure.build(resultType: resultType)
         def experimentMeasure = ExperimentMeasure.build(measure: measure)
@@ -383,7 +383,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         when:
         ResultsService service = new ResultsService();
         ItemService itemService = new ItemService()
-        def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free)])[0]
+        def item = itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free, valueDisplay:null)])[0]
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
         ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)

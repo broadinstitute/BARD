@@ -73,7 +73,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         Element attribute = findElementByName(label);
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
-        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free)
+        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free, valueDisplay:null)
 //        context.addToAssayContextItems(contextItem)
 
         return context
