@@ -102,21 +102,29 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     protected void numericValueConstraints(Errors errors) {
         if (valueNum) { //valueNum value
-            if (rejectNullField('valueNum', errors) ||
-                    rejectBlankField('qualifier', errors) ||
-                    rejectNotNullFields(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)) {
-                errors.reject('contextItem.valueNum.required.fields')
-            }
+            valueNumConstraints(errors)
         } else { // default to a Range valueMin || valueMax
-            if (rejectNullFields(['valueMin', 'valueMax'], errors) ||
-                    rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
-                errors.reject('contextItem.range.required.fields')
-            }
-            if (valueMin || valueMax){
-                if (valueMin >= valueMax){
-                    errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax')
-                    errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin')
-                }
+            rangeContraints(errors)
+        }
+    }
+
+    protected void valueNumConstraints(Errors errors) {
+        if (rejectNullField('valueNum', errors) ||
+                rejectBlankField('qualifier', errors) ||
+                rejectNotNullFields(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)) {
+            errors.reject('contextItem.valueNum.required.fields')
+        }
+    }
+
+    protected void rangeContraints(Errors errors) {
+        if (rejectNullFields(['valueMin', 'valueMax'], errors) ||
+                rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
+            errors.reject('contextItem.range.required.fields')
+        }
+        else if (valueMin || valueMax) {
+            if (valueMin >= valueMax) {
+                errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax')
+                errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin')
             }
         }
     }
@@ -129,7 +137,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
     }
 
     protected void externalOntologyConstraints(Errors errors) {
-        if (rejectBlankFields(['extValueId', 'valueDisplay'], errors)||
+        if (rejectBlankFields(['extValueId', 'valueDisplay'], errors) ||
                 rejectNotNullFields(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)) {
             errors.reject('contextItem.attribute.externalURL.required.fields')
         }
