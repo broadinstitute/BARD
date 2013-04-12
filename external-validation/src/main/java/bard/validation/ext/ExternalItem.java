@@ -54,5 +54,8 @@ public class ExternalItem {
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
+	public String toString() {
+		return String.format("%s[id=%s, name=%s]", getClass().getName(), getId(), getDisplay());
+	}
 }

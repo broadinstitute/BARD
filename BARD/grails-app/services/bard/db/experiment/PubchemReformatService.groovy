@@ -228,7 +228,6 @@ class PubchemReformatService {
         }
     }
 
-
     void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String,String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
         for(expMeasure in measures) {
             String resultType = expMeasure.measure.resultType.label
@@ -370,7 +369,6 @@ class PubchemReformatService {
 
         writer.close()
     }
-
 
     void convert(Long expId, String pubchemFilename, String outputFilename)  {
         Experiment experiment = Experiment.get(expId)

@@ -2,6 +2,7 @@ package bard.validation.ext;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.collections.Transformer;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.dom4j.Document;
@@ -104,6 +106,9 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
 		try {
+			id = cleanId(id);
+			if( StringUtils.isBlank(id))
+				return null;
 			Document doc = eutils.getSummary(id, database);
 			List<ExternalItem> items = processSummaries(doc);
 			if (items.size() > 1)
@@ -121,6 +126,9 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
 		try {
+			name = cleanName(name);
+			if( StringUtils.isBlank(name))
+				return null;
 			List<Long> ids = (List<Long>) eutils.getIds(name, database, new ArrayList<Long>(), 2, 2);
 			if (ids.size() > 1)
 				throw new ExternalOntologyException(String.format("Name '%s' is not unique for NCBI %s database", name, database));
@@ -138,8 +146,12 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		try {
+			term = cleanName(term);
+			if( StringUtils.isBlank(term))
+				return Collections.EMPTY_LIST;
+			term = queryGenerator(term);
 			int chunk = limit > 0 & chunkSize > limit ? limit : chunkSize;
-			List<Long> ids = (List<Long>) eutils.getIds(queryGenerator(term), database, new ArrayList<Long>(), chunk, limit);
+			List<Long> ids = (List<Long>) eutils.getIds(term, database, new ArrayList<Long>(), chunk, limit);
 			Document doc = eutils.getSummariesAsDocument(ids, database);
 			return processSummaries(doc);
 
@@ -165,14 +177,5 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 			list.add(item);
 		}
 		return list;
-	}
-
-	/**
-	 * default operation. Trims the string but nothing else
-	 */
-	@Override
-	public String queryGenerator(String term) {
-		term = term.trim();
-		return term;
 	}
 }
