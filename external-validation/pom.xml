@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bard</groupId>
 	<artifactId>external-validation</artifactId>
-	<version>20130409</version>
+	<version>20130411</version>
 	<distributionManagement>
 		<repository>
 			<id>bard-repo.broadinstitute.org</id>
@@ -98,6 +98,11 @@
 			<groupId>uk.ac.ebi.ols</groupId>
 			<artifactId>ols-client</artifactId>
 			<version>1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ccil.cowan.tagsoup</groupId>
+			<artifactId>tagsoup</artifactId>
+			<version>1.2.1</version>
 		</dependency>
 	</dependencies>
 </project>
