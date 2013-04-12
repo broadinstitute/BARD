@@ -1,10 +1,7 @@
 package bard.db.registration
 
-import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
-import org.apache.commons.lang3.builder.EqualsBuilder
-import org.apache.commons.lang3.builder.HashCodeBuilder
-import org.apache.commons.lang3.StringUtils
+import org.springframework.validation.Errors
 
 class AssayContextItem extends AbstractContextItem<AssayContext> {
 
@@ -30,5 +27,32 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     @Override
     void setContext(AssayContext context) {
         this.assayContext = context
+    }
+
+//    @Override
+//    protected void valueValidation(Errors errors) {
+//        if (attributeElement) {
+//            switch (attributeType) {
+//                case AttributeType.Free:
+//                    allNullValueConstraints(errors)
+//                    break;
+//                case AttributeType.Range:
+//                    rangeContraints(errors)
+//                    break
+//                case AttributeType.Fixed:
+//                case AttributeType.List:
+//                    super.valueValidation(errors, )
+//                    break
+//                default:
+//                    throw new RuntimeException("unknow attributeType: $attributeType")
+//                    break
+//            }
+//        }
+//    }
+
+    protected allNullValueConstraints(Errors errors) {
+        if (rejectNotNullFields(['valueDisplay', 'extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'])) {
+            errors.reject('assayContextItem.attributeType.required.fields')
+        }
     }
 }

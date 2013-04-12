@@ -81,11 +81,22 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      * @param errors adding any errors via reject methods indicates the class is not valid
      */
     protected void valueValidation(Errors errors) {
+        valueValidation(errors, true)
+    }
+
+    /**
+     *
+     * @param errors adding any errors via reject methods indicates the class is not valid
+     * @param includeRangeConstraints range constraints be excluded by passing false here, assayContextItems need to do this
+     */
+    protected void valueValidation(Errors errors, boolean includeRangeConstraints) {
         if (attributeElement) {
             if (attributeElement.externalURL) {
                 externalOntologyConstraints(errors)
-            } else if (attributeElement.unit || valueNum || valueMin || valueMax) {
-                numericValueConstraints(errors)
+            } else if (attributeElement.unit || valueNum) {
+                valueNumConstraints(errors)
+            } else if (includeRangeConstraints && (valueMin || valueMax)) {
+                rangeConstraints(errors)
             } else if (valueElement) {
                 dictionaryConstraints(errors)
             } else { // text value
@@ -98,15 +109,6 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         rejectNullField('valueDisplay', errors)
         rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
     }
-    // valueDisplay not  null except for Type Free
-
-    protected void numericValueConstraints(Errors errors) {
-        if (valueNum) { //valueNum value
-            valueNumConstraints(errors)
-        } else { // default to a Range valueMin || valueMax
-            rangeContraints(errors)
-        }
-    }
 
     protected void valueNumConstraints(Errors errors) {
         if (rejectNullField('valueNum', errors) ||
@@ -116,12 +118,11 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         }
     }
 
-    protected void rangeContraints(Errors errors) {
+    protected void rangeConstraints(Errors errors) {
         if (rejectNullFields(['valueMin', 'valueMax'], errors) ||
                 rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
             errors.reject('contextItem.range.required.fields')
-        }
-        else if (valueMin || valueMax) {
+        } else if (valueMin || valueMax) {
             if (valueMin >= valueMax) {
                 errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax')
                 errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin')
