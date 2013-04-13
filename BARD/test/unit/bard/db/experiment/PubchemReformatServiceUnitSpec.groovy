@@ -1,12 +1,7 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
-import bard.db.registration.Assay
-import bard.db.registration.AssayContext
-import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AttributeType
-import bard.db.registration.Measure
+import bard.db.registration.*
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import org.apache.commons.io.IOUtils
@@ -20,7 +15,7 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 @Mock([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure, Element, Experiment, ExperimentMeasure])
-@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure,  Element, Experiment, ExperimentMeasure ])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure, Element, Experiment, ExperimentMeasure])
 class PubchemReformatServiceUnitSpec extends Specification {
     static TABLE_COLUMNS = [
             "TID",
@@ -38,15 +33,15 @@ class PubchemReformatServiceUnitSpec extends Specification {
             "ATTRIBUTE2",
             "VALUE2",
             "SERIESNO",
-            "QUALIFIERTID"] ;
+            "QUALIFIERTID"];
 
     def fillInRows(List<Map> rows) {
-        for(row in rows) {
-            for(column in row.keySet()) {
+        for (row in rows) {
+            for (column in row.keySet()) {
                 assert TABLE_COLUMNS.contains(column)
             }
 
-            for(column in TABLE_COLUMNS) {
+            for (column in TABLE_COLUMNS) {
                 if (!row.containsKey(column)) {
                     row[column] = null;
                 }
@@ -91,7 +86,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         ]
 
         when:
-        PubchemReformatService.ResultMap map = service.convertToResultMap("100",fillInRows(rows))
+        PubchemReformatService.ResultMap map = service.convertToResultMap("100", fillInRows(rows))
 
         then:
         map.records.size() == 2
@@ -115,9 +110,9 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
     def 'test converting row'() {
         when:
-        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100",[new PubchemReformatService.ResultMapRecord(series:  5, tid: "2", resultType: "AC50" )])
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [new PubchemReformatService.ResultMapRecord(series: 5, tid: "2", resultType: "AC50")])
 
-        List rows = map.getValues([PUBCHEM_ACTIVITY_OUTCOME: "1", PUBCHEM_ACTIVITY_SCORE: "92.2",PUBCHEM_SID: "100", "2": "97.8"], "AC50", null, null)
+        List rows = map.getValues([PUBCHEM_ACTIVITY_OUTCOME: "1", PUBCHEM_ACTIVITY_SCORE: "92.2", PUBCHEM_SID: "100", "2": "97.8"], "AC50", null, null)
 
         then:
         rows.size() == 1
@@ -139,17 +134,17 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService service = new PubchemReformatService()
 
         // and the result map we're using
-        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100",[
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [
                 new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "parent"),
-                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "child", parentTid: "1", staticContextItems: [concentration:"100"]),
+                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "child", parentTid: "1", staticContextItems: [concentration: "100"]),
         ])
 
         // and finally the experiment with the two measures, and one context item
         Assay assay = Assay.build()
         AssayContext context = AssayContext.build(assay: assay)
-        AssayContextItem contextItem = AssayContextItem.build(assayContext : context, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration"))
+        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeType: AttributeType.Free, attributeElement: Element.build(label: "concentration"), valueDisplay: null)
         Measure childMeasure = Measure.build(assay: assay, resultType: Element.build(label: "child"))
-        AssayContextMeasure assayContextMeasure =AssayContextMeasure.build(assayContext: context, measure: childMeasure)
+        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: childMeasure)
 
         Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure parentExpMeasure = ExperimentMeasure.build(experiment: experiment, measure: Measure.build(resultType: Element.build(label: "parent")))
@@ -159,7 +154,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         service.convert(experiment, "out/PubchemReformatServiceUnitSpec-in.txt", "out/PubchemReformatServiceUnitSpec-out.txt", map);
 
         then:
-        assertFilesMatch("bard/db/experiment/expected-conversion-output.txt","out/PubchemReformatServiceUnitSpec-out.txt")
+        assertFilesMatch("bard/db/experiment/expected-conversion-output.txt", "out/PubchemReformatServiceUnitSpec-out.txt")
     }
 
     boolean assertFilesMatch(String expected, String pathToVerify) {
@@ -170,7 +165,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         reader.close()
 
         def actual = new File(pathToVerify).readLines()
-        for(int i=0;i<Math.max(expectedLines.size(), actual.size());i++) {
+        for (int i = 0; i < Math.max(expectedLines.size(), actual.size()); i++) {
             assert expectedLines[i] == actual[i]
         }
 
@@ -182,13 +177,13 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService service = new PubchemReformatService()
 
         when:
-        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100",[
-                new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "x" ),
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [
+                new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "x"),
                 new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "y", parentTid: "0"),
                 new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "z", parentTid: "1")
         ])
 
-        Map pubchemRow = ["1":"100"]
+        Map pubchemRow = ["1": "100"]
         service.naMissingValues(pubchemRow, map)
 
         then:
@@ -203,8 +198,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         when:
         Map map = service.convertPubchemRowToMap(
-            ["85789806","","44483406","1","0","","","","-1.483","5"],
-            ["PUBCHEM_SID","PUBCHEM_EXT_DATASOURCE_REGID","PUBCHEM_CID","PUBCHEM_ACTIVITY_OUTCOME","PUBCHEM_ACTIVITY_SCORE","PUBCHEM_ACTIVITY_URL","PUBCHEM_ASSAYDATA_COMMENT","PUBCHEM_ASSAYDATA_REVOKE","1","2"])
+                ["85789806", "", "44483406", "1", "0", "", "", "", "-1.483", "5"],
+                ["PUBCHEM_SID", "PUBCHEM_EXT_DATASOURCE_REGID", "PUBCHEM_CID", "PUBCHEM_ACTIVITY_OUTCOME", "PUBCHEM_ACTIVITY_SCORE", "PUBCHEM_ACTIVITY_URL", "PUBCHEM_ASSAYDATA_COMMENT", "PUBCHEM_ASSAYDATA_REVOKE", "1", "2"])
 
         then:
         map["-1"] == "Inactive"
