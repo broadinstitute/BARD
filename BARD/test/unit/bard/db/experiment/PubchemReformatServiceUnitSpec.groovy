@@ -126,9 +126,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
         // copy the pubchem input file to a known path
         InputStream inputStream = PubchemReformatServiceUnitSpec.getClassLoader().getResourceAsStream("bard/db/experiment/pubchem-input.txt")
         assert inputStream != null
-        File outFile = new File("out/PubchemReformatServiceUnitSpec-in.txt")
-        outFile.mkdirs()
-        outFile.withOutputStream {fos ->
+
+        new File("out/PubchemReformatServiceUnitSpec-in.txt").withOutputStream { fos ->
             IOUtils.copy(inputStream, fos)
         }
 

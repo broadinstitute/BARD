@@ -94,8 +94,6 @@ class ResultsExportServiceSpec extends Specification {
         ArchivePathService archivePathService = Mock(ArchivePathService)
         archivePathService.prepareForWriting("path") >> destination
 
-        destination.mkdirs()
-        
         Substance substance1 = new Substance()
         substance1.id = 1
 
