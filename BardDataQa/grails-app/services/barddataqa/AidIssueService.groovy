@@ -29,7 +29,7 @@ ai.notes
 from bard_data_qa_dashboard.aid_issue ai
 join bard_data_qa_dashboard.aid_issue_type ait on ait.id = ai.issue_type
 join bard_data_qa_dashboard.data_qa_process dqp on dqp.id = ai.discovered_in
-order by ai.sort_order, ai.id"""
+order by ai.status desc, ai.sort_order, ai.id"""
 
     def sessionFactory
 

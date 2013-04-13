@@ -148,7 +148,7 @@ class ContextHandlerService {
         } else if (display.toLowerCase().find(/^uniprotkb\W*:/)) {// 'UnitProtKB:UniProtKB:Q9QUQ5'
             return rebuildAssayContextItem(contextItem, 'UniProt accession number', errorMessages)
         }else if (display.toLowerCase().find(/^gi\W*:/)) {//'gi:10140845'
-            return rebuildAssayContextItem(contextItem, 'protein', errorMessages)
+            return rebuildAssayContextItem(contextItem, 'GenBank ID', errorMessages)
         } else if (display.toLowerCase().indexOf("go:") >= 0) {//'go:
             return rebuildAssayContextItem(contextItem, goElementLabel, errorMessages)
         } else if (contextItem.attributeElement.label.equals(speciesElementLabel)) {//'go:

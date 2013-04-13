@@ -241,6 +241,21 @@ class AssayDefinitionController {
         }
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
+	
+	def launchEditItemInCard(Long assayContextId, Long assayContextItemId){
+		def assayContextItem = AssayContextItem.get(assayContextItemId)
+		render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
+	}
+	
+	def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel){
+		def assayContextItem = AssayContextItem.get(assayContextItemId)
+		assayContextItem.valueNum = numericValue.toFloat().floatValue()
+		if (valueUnitLabel)
+			assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
+		assayContextItem.save()		
+		Assay assay = assayContextItem.assayContext.assay
+		render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+	}
 
     def createCard(Long instanceId, String cardName, String cardSection) {
         if (instanceId == null) {

@@ -1,11 +1,18 @@
 package bard.validation.ext;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.dom4j.Document;
 import org.dom4j.Node;
 
@@ -15,24 +22,64 @@ import edu.scripps.fl.entrez.transformer.EntrezTransformerFactory;
 
 public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 
-	private String database;
-	private EUtilsWeb eutils;
-	private Transformer transformer;
-	private static Set<String> databases = new HashSet();
-	private int chunkSize = 100000;
+	public static class NCBICreator implements ExternalOntologyCreator {
+		@Override
+		public ExternalOntologyAPI create(URI uri, Properties props) throws ExternalOntologyException {
+			String host = uri.getHost();
+			String[] path = uri.getPath().split("/");
+			if ("www.ncbi.nlm.nih.gov".equals(host)) {
+				return initNCBI(path[1].toLowerCase(), props);
+			} else if (host.endsWith("omim.org")) {
+				return initNCBI("omim", props);
+			} else if ("pubchem.ncbi.nlm.nih.gov".equals(host)) {
+				MultiValueMap params = getUriParameters(uri);
+				if (params.containsKey("cid"))
+					return initNCBI("pccompound", props);
+				if (params.containsKey("sid"))
+					return initNCBI("pcsubstance", props);
+				if (params.containsKey("aid"))
+					return initNCBI("pcassay", props);
+			}
+			return null;
+		}
 
+		private MultiValueMap getUriParameters(URI uri) {
+			MultiValueMap ret = new MultiValueMap();
+			for (NameValuePair param : URLEncodedUtils.parse(uri, "UTF-8")) {
+				ret.put(param.getName(), param.getValue());
+			}
+			return ret;
+		}
+
+		private ExternalOntologyNCBI initNCBI(String db, Properties props) throws ExternalOntologyException {
+			if (!props.containsKey(NCBI_EMAIL))
+				throw new ExternalOntologyException(String.format("%s property required for ExternalOntologyNCBI creation", NCBI_EMAIL));
+			if (!props.containsKey(NCBI_TOOL))
+				throw new ExternalOntologyException(String.format("%s property required for ExternalOntologyNCBI creation", NCBI_TOOL));
+			return new ExternalOntologyNCBI(db, props.getProperty(NCBI_TOOL), props.getProperty(NCBI_EMAIL));
+		}
+	}
+	private static Set<String> databases = new HashSet<String>();
+	public static String NCBI_EMAIL = "ncbi.email";
+	public static String NCBI_TOOL = "ncbi.tool";
 	static {
 		try {
 			EUtilsWeb web = new EUtilsWeb("BARD-CAP", "anonymous@bard.nih.gov");
 			databases.addAll(web.getDatabases());
-		}
-		catch(EUtilsException ex) {
+		} catch (EUtilsException ex) {
 			throw new RuntimeException(ex);
 		}
 	}
 
+	private int chunkSize = 100000;
+	private String database;
+
+	private EUtilsWeb eutils;
+
+	private Transformer transformer;
+
 	/**
-	 *
+	 * 
 	 * @param database
 	 *            - valid string for NCBI Entrez database e.g. protein, gene.
 	 *            See: http://eutils.ncbi.nlm.nih.gov/entrez/eutils/einfo.fcgi
@@ -45,7 +92,7 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	 */
 	public ExternalOntologyNCBI(String database, String tool, String email) throws ExternalOntologyException {
 		this.database = database;
-		if( ! databases.contains(database) )
+		if (!databases.contains(database))
 			throw new ExternalOntologyException("Unknown NCBI database " + database);
 		this.transformer = EntrezTransformerFactory.getTransformer(database);
 		if (transformer == null)
@@ -59,6 +106,9 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
 		try {
+			id = cleanId(id);
+			if( StringUtils.isBlank(id))
+				return null;
 			Document doc = eutils.getSummary(id, database);
 			List<ExternalItem> items = processSummaries(doc);
 			if (items.size() > 1)
@@ -76,6 +126,9 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public ExternalItem findByName(String name) throws ExternalOntologyException {
 		try {
+			name = cleanName(name);
+			if( StringUtils.isBlank(name))
+				return null;
 			List<Long> ids = (List<Long>) eutils.getIds(name, database, new ArrayList<Long>(), 2, 2);
 			if (ids.size() > 1)
 				throw new ExternalOntologyException(String.format("Name '%s' is not unique for NCBI %s database", name, database));
@@ -93,8 +146,12 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	@Override
 	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		try {
+			term = cleanName(term);
+			if( StringUtils.isBlank(term))
+				return Collections.EMPTY_LIST;
+			term = queryGenerator(term);
 			int chunk = limit > 0 & chunkSize > limit ? limit : chunkSize;
-			List<Long> ids = (List<Long>) eutils.getIds(queryGenerator(term), database, new ArrayList<Long>(), chunk, limit);
+			List<Long> ids = (List<Long>) eutils.getIds(term, database, new ArrayList<Long>(), chunk, limit);
 			Document doc = eutils.getSummariesAsDocument(ids, database);
 			return processSummaries(doc);
 
@@ -120,14 +177,5 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 			list.add(item);
 		}
 		return list;
-	}
-
-	/**
-	 * default operation. Trims the string but nothing else
-	 */
-	@Override
-	public String queryGenerator(String term) {
-		term = term.trim();
-		return term;
 	}
 }

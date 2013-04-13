@@ -22,6 +22,13 @@
     </div>
 </g:if>
 
+<g:hasErrors bean="${experiment}">
+  	<div class="alert alert-error">
+    	<button type="button" class="close" data-dismiss="alert">×</button>
+     	<g:renderErrors bean="${experiment}"/>
+   	</div>
+</g:hasErrors>
+
 <g:form action="save">
     <input type="hidden" name="assayId" value="${assay.id}"/>
 

@@ -94,6 +94,35 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+grails {
+    plugins {
+        springsecurity {
+            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+            controllerAnnotations.staticRules = [
+                    '/console/**': ['ROLE_CONSOLE_USER']
+            ]
+            ipRestrictions = [
+                    '/console/**': '127.0.0.1'
+            ]
+        }
+    }
+}
+
+CbipCrowd {
+    application.url = 'https://crowd.somewhere.com/crowd/'
+    application.username = 'bard'
+    application.password = 'ChangeMe'
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE']
+    mockUsers {
+        integrationTestUser {
+            roles = ['ROLE_USER']
+            username = 'integrationTestUser'
+            password = 'integrationTestUser'
+            email = 'integrationTestUser@nowhere.com'
+        }
+    }
+}
+
 
 /**
  * Loads external config files from the .grails subfolder in the user's home directory

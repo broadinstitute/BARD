@@ -12,17 +12,18 @@ import org.junit.Test;
 
 public class GOTests {
 
-	private static ExternalOntologyAPI eo;
+	private static ExternalOntologyGO eo;
 
 	public GOTests() {
 		BasicConfigurator.configure();
 		Logger logger = Logger.getRootLogger().getLoggerRepository().getLogger("org.apache.http");
 		logger.setLevel(Level.INFO);
 	}
-
+	
 	@BeforeClass
-	public static void initialize() throws ExternalOntologyException {
-		eo = new ExternalOntologyGO();
+	public static void initialize() throws Exception {
+		eo = ExternalOntologyGO.PROCESS_INSTANCE;
+		ExternalItem item = eo.findById("GO:0009987"); // force initialization of pool
 	}
 
 	@Test
@@ -46,10 +47,11 @@ public class GOTests {
 	@Test
 	public void testFindMatching() throws ExternalOntologyException {
 		long start = System.currentTimeMillis();
-		List<ExternalItem> items = eo.findMatching("cellular");
+		List<ExternalItem> items = eo.findMatching("cellular response");
 		for(ExternalItem item: items)
 			System.out.println(String.format("%s\t%s", item.getId(), item.getDisplay()));
 		assertEquals("'%cellular%' in the GO database should return multiple items", items.size() > 0, true);
 		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
+		System.out.println(String.format("returned %s items", items.size()));
 	}
 }

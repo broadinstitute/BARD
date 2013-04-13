@@ -2,6 +2,6 @@ package barddataqa
 
 class DatasetService {
     List<Dataset> findAllDatasetsOrderedByName() {
-        return Dataset.findAll([sort: "name"])
+        return Dataset.findAll([sort: "loadOrder"])
     }
 }

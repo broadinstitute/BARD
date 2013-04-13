@@ -143,6 +143,16 @@ $(document).ready(function () {
         zIndex: 4000,
         title: "Confirm"
     });
+    
+    $("#dialog_edit_card_item").dialog({
+        height: 300,
+        width: 500,
+        autoOpen: false,
+        modal: true,
+        draggable: true,
+        zIndex: 4000,
+        title: "Edit Item"
+    });
 
     $("#dialog_add_item_wizard_confirm_cancel").dialog("option", "buttons", [
         {
@@ -468,7 +478,60 @@ function editCardName(cardId, cardName) {
     $("#dialog_edit_card").dialog("open");
 }
 
-function editCardItem() {
+function editCardItem(itemId, assayContextId) {
+	var data = {'assayContextId': assayContextId, 'assayContextItemId': itemId};
+	$.ajax({
+        type: 'POST',
+        url: '../launchEditItemInCard',
+        data: data,
+        success: function (data) {
+//        	alert(data);
+        	$("#dialog_edit_card_item").dialog("option", "buttons", [
+			{
+				    text: "Save",
+				    class: "btn btn-primary",
+				    click: function () {
+				    	$("#edit_numeric_item_form").submit();				        
+				    }
+				},
+				{
+				    text: "Cancel",
+				    class: "btn",
+				    click: function () {
+				        $(this).dialog("close");
+				    }
+				}
+			]);        	                                                 			        
+            $("#dialog_edit_card_item").html(data);
+            $("#dialog_edit_card_item").dialog("open");
+            
+            initializeValueUnitId();
+            $("#edit_numeric_item_form").ajaxForm({
+                url: '../updateNumericValueInItem',
+                type: 'POST',
+                beforeSubmit: function (formData, jqForm, options) {
+                    var form = jqForm[0];
+                    var numericValue = form.numericValue.value;
+                    if (!numericValue || 0 === numericValue) {
+                        alert("Numeric value field is required and cannot be empty");
+                        return false;
+                    }
+                    else {
+                        $("#dialog_edit_card_item").dialog("close");
+                    }
+                },
+                success: function (responseText, statusText, xhr, jqForm) {
+                    $("#edit_numeric_item_form").clearForm();
+                    $("#cardSection").val('');
+                    updateCardHolder(responseText)
+                }
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Error: " + textStatus + " -> " + errorThrown);
+        }
+    });
+	                                                      
 
 }
 
@@ -489,10 +552,6 @@ function removeItemFromList(listIndex) {
 }
 
 function launchAddItemWizard(assayId, assayContextId, cardSection) {
-	
-	// Disable droppable cards to avoid issues while moving wizard window
-//	$( "tr.context_item_row" ).droppable( "option", "disabled", true );
-//	$( "div.card" ).droppable( "option", "disabled", true );
 	
     var data = {'assayId': assayId, 'assayContextId': assayContextId, 'cardSection': cardSection};
     $.ajax({
@@ -529,4 +588,72 @@ function registerAddNewCardButtons() {
                 $("#dialog_new_card").dialog("open");
             });
     });
+}
+
+function outputToConsole(message) {
+    if (console) {
+        console.log(message);
+    }
+}
+
+function initializeValueUnitId() {
+    $("#valueUnitId").select2({
+        placeholder: "Select a Unit",
+        width: "70%",
+        data: []
+    });
+    $("#valueUnitId").on("change", function (e) {
+        $("#valueUnitLabel").val($("#valueUnitId").select2("data").text);
+    });
+    var attributeElementId = $("#attributeElementId").val();
+    var attributeElementUnitId = $("#attributeElementUnitId").val();
+    var unitsData = {results: []};
+    if (attributeElementUnitId) {
+        outputToConsole('/BARD/ontologyJSon/getConvertibleUnits request sent');
+        $.getJSON(
+                "/BARD/ontologyJSon/getConvertibleUnits",
+                {
+                    elementId: attributeElementId,
+                    toUnitId: attributeElementUnitId
+                },
+                function (data, textStatus, jqXHR) {
+                    $.each(data, function (index, val) {
+                        unitsData.results.push({id: val.value, text: val.label})
+                    });
+                    populateDataValueUnitId(unitsData.results, attributeElementUnitId);
+                }
+        );
+    }
+    else {
+        outputToConsole('/BARD/ontologyJSon/getAllUnits request sent');
+        $.getJSON(
+                "/BARD/ontologyJSon/getAllUnits",
+                function (data, textStatus, jqXHR) {
+                    outputToConsole('/BARD/ontologyJSon/getAllUnits data received');
+                    $.each(data, function (index, val) {
+                        unitsData.results.push({id: val.value, text: val.label})
+                    })
+                    outputToConsole('/BARD/ontologyJSon/getAllUnits data processed');
+                    outputToConsole(unitsData.results);
+                    populateDataValueUnitId(unitsData.results);
+                }
+        );
+    }
+
+}
+function populateDataValueUnitId(data, selectedId) {
+    $("#valueUnitId").select2({
+        placeholder: "Select a Unit",
+        width: "70%",
+        data: data
+    });
+    if (selectedId) {
+        var found = $.map(data, function (val) {
+            return val.id == selectedId ? val : null;
+        });
+        if (found) {
+            $("#valueUnitId").select2("data", found[0]);
+            $("#valueUnitLabel").val($("#valueUnitId").select2("data").text);
+        }
+    }
 }
