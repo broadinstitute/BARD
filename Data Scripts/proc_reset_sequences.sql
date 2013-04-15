@@ -70,5 +70,3 @@ begin
 
 end;
 /
-
-SELECT * FROM user_sequences;

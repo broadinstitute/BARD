@@ -38,7 +38,7 @@ AS
   primary_key VARCHAR2(4000) NOT NULL,
   action VARCHAR2(20) NOT NULL,
   audit_timestamp DATE DEFAULT SYSDATE  NOT NULL,
-  username  VARCHAR2(30) NOT NULL,
+  username  VARCHAR2(40) NOT NULL,
   constraint pk_audit_row_log PRIMARY KEY (audit_id)
   )';
           EXECUTE IMMEDIATE lv_sql;
@@ -54,7 +54,7 @@ AS
     START WITH 1
     INCREMENT BY 1
     NOMINVALUE
-    MAXVALUE 2147483648
+    MAXVALUE 999999999999999999
     NOCYCLE
     CACHE 200
     NOORDER';
