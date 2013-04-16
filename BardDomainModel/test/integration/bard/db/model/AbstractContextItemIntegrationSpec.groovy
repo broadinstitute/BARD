@@ -2,7 +2,6 @@ package bard.db.model
 
 import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
-import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -19,9 +18,9 @@ import static test.TestUtils.createString
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
+abstract class AbstractContextItemIntegrationSpec<T extends AbstractContextItem> extends BardIntegrationSpec {
 
-    AbstractContextItem domainInstance
+    T domainInstance
 
     @Before
     abstract void doSetup()
@@ -44,9 +43,9 @@ abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                     | valueUnderTest    | valid | errorCode
-        'null is not valid'      | {null}            | false | 'nullable'
-        'valid attributeElement' | {Element.build()} | true  | null
+        desc                     | valueUnderTest      | valid | errorCode
+        'null is not valid'      | { null }            | false | 'nullable'
+        'valid attributeElement' | { Element.build() } | true  | null
 
     }
 
@@ -62,16 +61,17 @@ abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                 | valueUnderTest    | valid | errorCode
-        'null is valid'      | {null}            | true  | null
-        'valid valueElement' | {Element.build()} | true  | null
-
+        desc                 | valueUnderTest      | valid | errorCode
+        'null is valid'      | { null }            | true  | null
+        'valid valueElement' | { Element.build() } | true  | null
     }
 
     void "test extValueId constraints #desc extValueId: '#valueUnderTest'"() {
 
-        final String field = 'extValueId'
 
+        given:
+        final String field = 'extValueId'
+        domainInstance.attributeElement.externalURL = 'http://bard.org' // if the attribute has an eternalUrl this is an externalOntology reference
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
@@ -82,11 +82,11 @@ abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
         where:
         desc               | valueUnderTest                          | valid | errorCode
         'too long'         | createString(EXT_VALUE_ID_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid'      | ''                                      | false | 'blank'
-        'blank valid'      | '  '                                    | false | 'blank'
+        'blank valid'      | ''                                      | false | 'contextItem.extValueId.blank'
+        'blank valid'      | '  '                                    | false | 'contextItem.extValueId.blank'
+        'null valid'       | null                                    | false | 'contextItem.extValueId.blank'
 
         'exactly at limit' | createString(EXT_VALUE_ID_MAX_SIZE)     | true  | null
-        'null valid'       | null                                    | true  | null
     }
 
     void "test qualifier constraints #desc qualifier: '#valueUnderTest'"() {
@@ -95,27 +95,30 @@ abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
+        domainInstance.valueNum = valueNum
+        domainInstance.attributeElement.unit = unit.call()
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                   | valueUnderTest | valid | errorCode
-        'blank'                | ''             | false | 'blank'
-        'blank'                | '  '           | false | 'blank'
-        'bad val'              | 'aa'           | false | 'not.inList'
+        desc                   | valueUnderTest | valueNum | unit                | valid | errorCode
+        'blank'                | ''             | 1.0      | { Element.build() } | false | 'contextItem.qualifier.blank'
+        'blank'                | '  '           | 1.0      | { Element.build() } | false | 'contextItem.qualifier.blank'
+        'bad val'              | 'aa'           | 1.0      | { Element.build() } | false | 'not.inList'
 
-        'equals'               | '= '           | true  | null
-        'less than'            | '< '           | true  | null
-        'less than or equal'   | '<='           | true  | null
-        'greter than'          | '> '           | true  | null
-        'greter than or equal' | '>='           | true  | null
-        '<<'                   | '<<'           | true  | null
-        '>>'                   | '>>'           | true  | null
-        '~ '                   | '~ '           | true  | null
+        'equals'               | '= '           | 1.0      | { Element.build() } | true  | null
+        'less than'            | '< '           | 1.0      | { Element.build() } | true  | null
+        'less than or equal'   | '<='           | 1.0      | { Element.build() } | true  | null
+        'greter than'          | '> '           | 1.0      | { Element.build() } | true  | null
+        'greter than or equal' | '>='           | 1.0      | { Element.build() } | true  | null
+        '<<'                   | '<<'           | 1.0      | { Element.build() } | true  | null
+        '>>'                   | '>>'           | 1.0      | { Element.build() } | true  | null
+        '~ '                   | '~ '           | 1.0      | { Element.build() } | true  | null
 
-        'null'                 | null           | true  | null
+        'null'                 | null           | 1.0      | { Element.build() } | false | 'contextItem.qualifier.blank'
+        'null'                 | null           | null     | {}                  | true  | null
 
     }
 
@@ -136,9 +139,9 @@ abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
         'too long'         | createString(VALUE_DISPLAY_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'blank valid'      | ''                                       | false | 'blank'
         'blank valid'      | '  '                                     | false | 'blank'
+        'null valid'       | null                                     | false | 'contextItem.valueDisplay.null'
 
         'exactly at limit' | createString(VALUE_DISPLAY_MAX_SIZE)     | true  | null
-        'null valid'       | null                                     | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
@@ -193,4 +196,6 @@ abstract class AbstractContextItemIntegrationSpec extends BardIntegrationSpec {
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
+
+
 }

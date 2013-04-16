@@ -123,7 +123,7 @@ class AssayContextServiceUnitSpec extends Specification {
     private List<AssayContextItem> createAssayContextItem(int i) {
         List<AssayContextItem> items = []
         i.times {
-            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())
+            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element(), valueDisplay: 'valueDisplay')
         }
         items
     }

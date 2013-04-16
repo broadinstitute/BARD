@@ -1,24 +1,24 @@
 package bard.db.experiment
 
+import bard.db.model.StandardContextItemValueValidationUnitSpec
+import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
-import bard.db.model.AbstractContextItemIntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
  * Date: 8/21/12
- * Time: 5:14 PM
+ * Time: 5:10 PM
  * To change this template use File | Settings | File Templates.
  */
+@Build(ExperimentContextItem)
 @Unroll
-class ExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<ExperimentContextItem> {
+class ExperimentContextItemValueValidationUnitSpec extends StandardContextItemValueValidationUnitSpec<ExperimentContextItem> {
 
     @Before
     @Override
     void doSetup() {
         domainInstance = ExperimentContextItem.buildWithoutSave()
-        domainInstance.attributeElement.save()
     }
-
 }

@@ -60,7 +60,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
         def fixture = fixtureLoader.build {
             fromUnit(Element, label: 'micromolar')
             toUnit(Element, label: 'millimolar')
-            unitConversion(UnitConversion, fromUnit: fromUnit, toUnit: toUnit, multiplier: 1000, offset: 5, formula: '2*2')
+            unitConversion(UnitConversion, fromUnit: fromUnit, toUnit: toUnit, multiplier: 1000.1, offset: 5.1, formula: '2*2')
         }
 
         when:
