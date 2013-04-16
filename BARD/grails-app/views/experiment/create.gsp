@@ -22,19 +22,19 @@
     </div>
 </g:if>
 
-<g:hasErrors bean="${experiment}">
-  	<div class="alert alert-error">
-    	<button type="button" class="close" data-dismiss="alert">×</button>
-     	<g:renderErrors bean="${experiment}"/>
-   	</div>
-</g:hasErrors>
-
 <g:form action="save">
     <input type="hidden" name="assayId" value="${assay.id}"/>
 
     <p>
         <input type="submit" class="btn btn-primary" value="Create"/>
     </p>
+    
+    <g:hasErrors bean="${experiment}">
+  	<div class="alert alert-error">
+    	<button type="button" class="close" data-dismiss="alert">×</button>
+     	<g:renderErrors bean="${experiment}"/>
+   	</div>
+	</g:hasErrors>
 
     <g:render template="editFields" model="${[experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, experiment: experiment, assay: assay]}"/>
 </g:form>
