@@ -6,23 +6,32 @@ import java.text.DecimalFormat
 class CompoundBioActivitySummaryTagLib {
     def assayDescription = { attrs, body ->
 
-        out << "<p>"
         if (attrs.name)
-            out << attrs.name
+            out << generateShortNameHTML(attrs.name)
         if (attrs.adid) {
-            out << " (${attrs.adid})"
+            out << """<a href="${createLink(controller: 'bardWebInterface', action: 'showAssay', id: attrs.bardAssayId)}">(${attrs.adid})</a>"""
         }
-        out << "</p>"
     }
 
     def projectDescription = { attrs, body ->
 
-        out << "<p>" << attrs.name << " (${attrs.pid})" << "</p>"
+        out << "<p>"
+        if (attrs.name) {
+            out << generateShortNameHTML(attrs.name)
+        }
+        if (attrs.pid) {
+            out << """<a href="${createLink(controller: 'bardWebInterface', action: 'showProject', id: attrs.bardProjectId)}">(${attrs.pid})</a>"""
+        }
     }
 
     def experimentDescription = { attrs, body ->
 
-        out << "<p>" << attrs.name << " (${attrs.bardExperimentId})" << "</p>"
+        if (attrs.name) {
+            out << generateShortNameHTML(attrs.name)
+        }
+        if (attrs.eid) {
+            out << """<a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment', id: attrs.bardExptId)}">(${attrs.eid})</a>"""
+        }
     }
 
     def curvePlot = { attrs, body ->
@@ -95,5 +104,15 @@ class CompoundBioActivitySummaryTagLib {
             i++
         }
         out << "</tbody></table>"
+    }
+
+    String generateShortNameHTML(String name) {
+        String[] nameWords = name.split()
+
+        if (nameWords.size() > 7) {
+            return "<p title='${name}' data-placement='bottom' data-toggle='tooltip'>${nameWords[0..6].join(' ')} ...</P>"
+        }
+
+        return "<p>${name}</p>"
     }
 }

@@ -20,15 +20,17 @@
                 %{--Assay description--}%
                     <g:if test="${cell instanceof bardqueryapi.AssayValue}">
                         <td class="cbasOutterTableCell">
-                            <g:assayDescription name="${cell?.value?.name ?: ''}"
-                                                adid="${cell?.value?.capAssayId ?: ''}"/>
+                            <g:assayDescription name="${cell?.value?.title ?: ''}"
+                                                adid="${cell?.value?.capAssayId ?: ''}"
+                                                bardAssayId="${cell?.value?.bardAssayId ?: ''}"/>
                         </td>
                     </g:if>
                 %{--Project description--}%
                     <g:elseif test="${cell instanceof bardqueryapi.ProjectValue}">
                         <td class="cbasOutterTableCell">
                             <g:projectDescription name="${cell?.value?.name ?: ''}"
-                                                  pid="${cell?.value?.capProjectId ?: ''}"/>
+                                                  pid="${cell?.value?.capProjectId ?: ''}"
+                                                  bardProjectId="${cell?.value?.id ?: ''}"/>
                         </td>
                     </g:elseif>
                 %{--Structure rendering--}%
@@ -90,7 +92,8 @@
                                         %{--First row is the experiment description--}%
                                         <th class="cbasOutterTableCell" colspan="${resultSize}">
                                             <g:experimentDescription name="${experiment.name}"
-                                                                     bardExperimentId="${experiment.capExptId}"/>
+                                                                     eid="${experiment.capExptId}"
+                                                                     bardExptId="${experiment.bardExptId}"/>
                                         </th>
                                     </tr>
                                     </thead>
