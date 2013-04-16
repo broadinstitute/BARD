@@ -5,7 +5,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound Bio-Activity Summary: ${tableModel?.additionalProperties?.id}</title>
-    <r:require modules="core"/>
+    <r:require modules="cbas"/>
     <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
 

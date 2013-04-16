@@ -1,0 +1,31 @@
+table.cbasOutterTable {
+    font-size: small;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+tr.cbasOutterTableRow {
+    border: solid #000000 1px;
+    padding: 10px;
+}
+
+td.cbasOutterTableCell {
+    padding: 10px;
+}
+
+table.cbasInnerTable {
+    vertical-align: middle;
+    font-size: small;
+    padding: 10px;
+}
+
+table.cbasInnerTableBorder {
+    border: solid #000000 1px;
+}
+
+tr.cbasInnerTableRow {
+}
+
+td.cbasInnerTableCell td p {
+    line-height: 33%;
+}

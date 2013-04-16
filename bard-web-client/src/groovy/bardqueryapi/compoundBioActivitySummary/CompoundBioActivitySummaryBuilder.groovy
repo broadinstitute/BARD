@@ -34,7 +34,7 @@ class CompoundBioActivitySummaryBuilder {
 
         TableModel tableModel = new TableModel()
         //Setup the headers
-        tableModel.columnHeaders = [new StringValue(value: "${groupByType.name()}"), new StringValue(value: 'Experiments')]
+        tableModel.columnHeaders = [new StringValue(value: "${groupByType == GroupByTypes.ASSAY ? 'Assay Definition' : 'Project'}"), new StringValue(value: 'Experiments')]
         //Get a list of all experiment IDs so we can look them all up in one call to the REST API
         List<Long> eids = groupedByExperimentalData.values().toList().flatten().unique()*.bardExptId
         Map<Long, ExperimentSearch> experimentsMap

@@ -109,4 +109,8 @@ modules = {
     addAllItemsToCarts {
         resource url: "js/addAllItemsToCart.js"
     }
+    cbas {
+        dependsOn 'bootstrap'
+        resource url: "css/cbas.css"
+    }
 }
