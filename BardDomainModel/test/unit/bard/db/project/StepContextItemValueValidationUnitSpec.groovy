@@ -1,10 +1,9 @@
 package bard.db.project
 
+import bard.db.model.StandardContextItemValueValidationUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
-import bard.db.model.AbstractContextItemConstraintUnitSpec
-import bard.db.project.StepContextItem
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,9 +14,9 @@ import bard.db.project.StepContextItem
  */
 @Build(StepContextItem)
 @Unroll
-class StepContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<StepContextItem>{
+class StepContextItemValueValidationUnitSpec extends StandardContextItemValueValidationUnitSpec<StepContextItem> {
     @Before
-     void doSetup(){
+    void doSetup() {
         domainInstance = StepContextItem.buildWithoutSave()
     }
 }

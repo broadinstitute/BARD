@@ -23,13 +23,11 @@
                 <dd>
                     <input class="input-xxlarge" type="text" name="experimentName"
                            value="${fieldValue(bean: experiment, field: "experimentName")}"/>
-                    <span class="error"><g:fieldError bean="${experiment}" field="experimentName"/></span>
                 </dd>
 
                 <dt>Description</dt><dd>
                 <input class="input-xxlarge" type="text" name="description"
-                       value="${fieldValue(bean: experiment, field: "description")}"/>
-                <span class="error"><g:fieldError bean="${experiment}" field="description"/></span>
+                       value="${fieldValue(bean: experiment, field: "description")}"/>               
             </dd>
 
                 <dt><g:message code="experiment.experimentStatus.label" default="Fix i18n"/>:</dt>
@@ -41,19 +39,16 @@
                 <input type="text" class="input-small date-selection" name="holdUntilDate"
                        value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
                 (No more then 1 year from today)
-                <span class="error"><g:fieldError bean="${experiment}" field="holdUntilDate"/></span>
             </dd>
 
                 <dt>Run Date From</dt><dd>
                 <input type="text" class="input-small date-selection" name="runDateFrom"
                        value="${experiment.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateFrom) : experiment.runDateFrom}"/>
-                <span class="error"><g:fieldError bean="${experiment}" field="runDateFrom"/></span>
             </dd>
 
                 <dt>Run Date To</dt><dd>
                 <input type="text" class="input-small date-selection" name="runDateTo"
                        value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
-                <span class="error"><g:fieldError bean="${experiment}" field="runDateTo"/></span>
             </dd>
             </dl>
 

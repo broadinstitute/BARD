@@ -1,6 +1,6 @@
 package bard.db.project
 
-import bard.db.model.AbstractContextItemConstraintUnitSpec
+import bard.db.model.StandardContextItemValueValidationUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
 import spock.lang.Unroll
@@ -14,9 +14,9 @@ import spock.lang.Unroll
  */
 @Build(ProjectExperimentContextItem)
 @Unroll
-class ProjectExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<ProjectExperimentContextItem>{
+class ProjectExperimentContextItemValueValidationUnitSpec extends StandardContextItemValueValidationUnitSpec<ProjectExperimentContextItem> {
     @Before
-     void doSetup(){
+    void doSetup() {
         domainInstance = ProjectExperimentContextItem.buildWithoutSave()
     }
 }

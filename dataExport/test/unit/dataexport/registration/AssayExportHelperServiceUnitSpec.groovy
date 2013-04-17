@@ -87,11 +87,8 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     attributeElement: attributeElement,
                     valueElement: valueElement,
                     valueDisplay: "Display",
-                    valueMax: new Float("7.0"),
-                    valueMin: new Float("6.0"),
-                    valueNum: new Float("5.0"),
                     modifiedBy: "Bard",
-                    qualifier: "< ")
+                    )
 
 
         when: "We pass in a assay context item we get a good xml document"
@@ -110,7 +107,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "create Attributes For AssayContextItem"() {
         given:
-        final Map<String, String> results = [displayOrder: "0", attributeType: "Fixed", qualifier: "< ", valueDisplay: "Display", valueNum: "5.0", valueMin: "6.0", valueMax: "7.0"]
+        final Map<String, String> results = [displayOrder: "0", attributeType: "Fixed", valueDisplay: "Display"]
 
         Element attributeElement = new Element(label: "attributeLabel")
         Element valueElement = new Element(label: "valueLabel")
@@ -119,11 +116,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
                     attributeElement: attributeElement,
                     valueElement: valueElement,
                     valueDisplay: "Display",
-                    valueMax: new Float("7.0"),
-                    valueMin: new Float("6.0"),
-                    valueNum: new Float("5.0"),
-                    modifiedBy: "Bard",
-                    qualifier: "< ")
+                    modifiedBy: "Bard")
 
         when: "We pass in a assayContextItem we get an expected map"
         Map<String, String> attributes = this.assayExportHelperService.createAttributesForContextItem(assayContextItem, assayContextItem.attributeType.name(), assayContextItem.id, 'assayContextItem', 0)

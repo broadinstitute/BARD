@@ -1,17 +1,18 @@
 package bard.db.project
 
-import bard.db.model.AbstractContextItemIntegrationSpec
+import bard.db.model.StandardContextItemValueValidationIntegrationSpec
 import org.junit.Before
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
- * Date: 8/23/12
- * Time: 12:42 AM
+ * Date: 4/12/13
+ * Time: 2:11 PM
  * To change this template use File | Settings | File Templates.
  */
-class ProjectExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<ProjectExperimentContextItem> {
-
+@Unroll
+class ProjectExperimentContextItemValueValidationIntegrationSpec extends StandardContextItemValueValidationIntegrationSpec<ProjectExperimentContextItem> {
     @Before
     @Override
     void doSetup() {
