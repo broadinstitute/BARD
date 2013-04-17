@@ -89,9 +89,8 @@ class AssayContextService {
         if (valTypeCmd.valueTypeOption.equals(AttributeType.Fixed.toString())) {
             AssayContextItem newAssayContextItem = createItem(attributeCmd, valTypeCmd, fixedValCmd, null)
             assayContext.addToAssayContextItems(newAssayContextItem)
-            assayContext.save()
-            isSaved = true
-            println "Done saving item."
+            isSaved = assayContext.save()
+            println "Done saving item, isSaved=${isSaved}, errors=${assayContext.errors}"
         }
         return isSaved;
     }
@@ -108,9 +107,8 @@ class AssayContextService {
             newAssayContextItem.valueMax = rangeValCmd.maxValue.toFloat().floatValue()
             newAssayContextItem.valueDisplay = newAssayContextItem.valueMin + " - " + newAssayContextItem.valueMax + " " + rangeValCmd.valueUnitLabel
             assayContext.addToAssayContextItems(newAssayContextItem)
-            assayContext.save()
-            isSaved = true
-            println "Done saving range item."
+            isSaved = assayContext.save()
+            println "Done saving range item, isSaved=${isSaved}, errors=${assayContext.errors}"
         }
         return isSaved;
     }
@@ -124,9 +122,8 @@ class AssayContextService {
             Element attributeElement = Element.get(attributeCmd.attributeId)
             newAssayContextItem.attributeElement = attributeElement
             assayContext.addToAssayContextItems(newAssayContextItem)
-            assayContext.save()
-            isSaved = true
-            println "Done saving free item."
+            isSaved = assayContext.save()
+            println "Done saving free item, isSaved=${isSaved}, errors=${assayContext.errors}"
         }
         return isSaved;
     }
@@ -139,9 +136,8 @@ class AssayContextService {
                 AssayContextItem newAssayContextItem = createItem(attributeCmd, valTypeCmd, null, value)
                 assayContext.addToAssayContextItems(newAssayContextItem)
             }
-            assayContext.save()
-            isSaved = true
-            println "Done saving list of items"
+            isSaved = assayContext.save()
+            println "Done saving list of items, isSaved=${isSaved}, errors=${assayContext.errors}"
             return isSaved;
         }
     }
@@ -156,6 +152,8 @@ class AssayContextService {
             newAssayContextItem.setAttributeType(AttributeType.Fixed);
             if (fixedValCmd.valueQualifier) {
                 newAssayContextItem.qualifier = fixedValCmd.valueQualifier
+            } else if (fixedValCmd.isNumericValue){
+                newAssayContextItem.qualifier = "= "
             }
 
             if (fixedValCmd.isNumericValue) {
