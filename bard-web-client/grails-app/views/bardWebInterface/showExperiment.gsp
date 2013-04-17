@@ -4,7 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Experiment Result : ${tableModel.additionalProperties.capExptId}</title>
-    <r:require modules="experimentData, bootstrap, compoundOptions, core"/>
+    <r:require modules="experimentData, bootstrap, compoundOptions, cbas"/>
 </head>
 
 <body>
