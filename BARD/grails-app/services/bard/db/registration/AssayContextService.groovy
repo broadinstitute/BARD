@@ -175,6 +175,8 @@ class AssayContextService {
             newAssayContextItem.setAttributeType(AttributeType.List);
             if (listValCmd.valueQualifier) {
                 newAssayContextItem.qualifier = listValCmd.valueQualifier
+            } else if (listValCmd.isNumericValue){
+                newAssayContextItem.qualifier = "= "
             }
 
             if (listValCmd.isNumericValue) {

@@ -446,6 +446,22 @@ class AddItemWizardController {
                     flow.listValue = cmd
                     return error()
                 }
+
+                // convert units
+                if(cmd.isNumericValue) {
+                    Element attributeElement = Element.get(flow.attribute.attributeId)
+                    println "attributeElement = ${attributeElement}"
+
+                    if (cmd.valueUnitId != attributeElement.unit?.id) {
+                        Element fromUnit = Element.get(cmd.valueUnitId)
+                        UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, attributeElement.unit)
+                        cmd.numericValue = unitConversion?.convert(new BigDecimal(cmd.numericValue))
+                        cmd.valueUnitId = attributeElement.unit.id
+                    }
+                    cmd.valueUnitLabel = attributeElement.unit?.abbreviation
+                }
+
+                sessionFactory.currentSession.clear()
                 flow.listValue = cmd
 
             }.to "addValueToList"
@@ -762,6 +778,5 @@ class AddItemWizardController {
                 success()
             }
         }
-
     }
 }
