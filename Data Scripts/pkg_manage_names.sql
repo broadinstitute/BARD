@@ -6,7 +6,6 @@ DROP PROCEDURE update_assay_short_name;
 DROP PROCEDURE update_exprmt_context_name;
 DROP PROCEDURE update_step_context_name;
 
-
 ------------------------------------------------------------------------------------
 -- Create the package
 ------------------------------------------------------------------------------------
@@ -884,6 +883,14 @@ AS
                     -- we're guaranteed just one from the count(*) in the curosr
                     AND e.element_id = aci.attribute_id;
 
+                  SELECT SubStr(full_path, InStr(full_path, '>') +2, InStr(full_path, '>', 1,3)-InStr(full_path, '>'))
+                  INTO lv_context_group
+                  FROM bard_tree
+                  WHERE label = lv_context_name
+                  AND ROWNUM = 1;
+
+                  lv_context_group := Nvl(lv_context_group, 'unclassified>');
+
             ELSIF lr_step_context.attributes LIKE '%assay component role%'
             THEN
     --    if group contains 'assay component role'
@@ -897,6 +904,8 @@ AS
                         FROM element
                         WHERE label = 'assay component role')
                   AND ROWNUM = 1;
+
+                  lv_context_group := 'assay protocol> assay component>';
 
             ELSIF lr_step_context.attributes LIKE '%assay component type%'
             THEN
@@ -912,6 +921,8 @@ AS
                         WHERE label = 'assay component type')
                   AND ROWNUM = 1;
 
+                  lv_context_group := 'assay protocol> assay component>';
+
             ELSIF lr_step_context.attributes LIKE '%detection%'
             THEN
     --    if group contains 'detection'
@@ -924,11 +935,15 @@ AS
     --    then set name = value
                 lv_context_name := 'assay readout';
 
+                lv_context_group := 'assay protocol> assay readout>';
+
             ELSIF lr_step_context.attributes LIKE '%wavelength%'
             THEN
     --    if group contains 'fluorescence/luminescence'
     --    then set name = value
                 lv_context_name := 'fluorescence/luminescence';
+
+                lv_context_group := 'assay protocol> assay readout>';
 
             ELSIF lr_step_context.attributes LIKE '%number%'
             THEN
@@ -936,11 +951,15 @@ AS
     --    then set name = value
                 lv_context_name := 'result detail';
 
+                lv_context_group := 'assay protocol> assay readout>';
+
             ELSIF lr_step_context.attributes LIKE '%biolog%'
             THEN
     --    if group contains 'biology/ical'
     --    then set name = value
                 lv_context_name := 'biology';
+
+                lv_context_group := 'biology>';
 
             ELSIF lr_step_context.attributes LIKE '%assay format%'
                     OR
@@ -950,9 +969,11 @@ AS
     --    then set name = 'assay protocol'
                 lv_context_name := 'assay protocol';
 
+               lv_context_group := 'assay protocol> assay format>';
+
             ELSE
-                --lv_context_name := NULL;
-                lv_context_name := '<Needs a name>';
+                lv_context_name := 'Type a name here';
+                lv_context_group := 'unclassified>';
             END IF;
 
             IF lv_context_name IS NOT NULL
@@ -972,9 +993,33 @@ AS
     PROCEDURE update_step_context_group (an_project_step_id IN NUMBER DEFAULT NULL)
 
     AS
+        CURSOR cur_step (cn_step_id IN NUMBER)
+        IS
+        SELECT DISTINCT ac.project_step_id
+        FROM step_context ac
+        WHERE ac.project_step_id = cn_step_id;
+
+        lt_contexts  t_contexts;
 
     BEGIN
-    NULL;
+    --    get a list of step_contexts with a count of the items
+          FOR lr_step IN cur_step (an_project_step_id)
+          LOOP
+            lt_contexts.DELETE;
+            make_step_context_name(lr_step.project_step_id,
+                                  lt_contexts);
+
+            IF lt_contexts.last IS NOT NULL
+            THEN
+              FOR i IN lt_contexts.first .. lt_contexts.last
+              LOOP
+                  UPDATE step_context ac
+                  SET context_group = lt_contexts(i).context_group
+                  WHERE step_context_id = lt_contexts(i).context_id;
+              END LOOP;
+            END IF;
+
+          END LOOP;
     END update_step_context_group;
 
 
