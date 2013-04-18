@@ -2,6 +2,7 @@ package bard.db.registration.additemwizard
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
+import bard.db.dictionary.UnitConversion
 import bard.db.dictionary.UnitTree
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextService
@@ -28,6 +29,17 @@ class AttributeCommand implements Serializable {
 
     static constraints = {
         attributeId(nullable: false, blank: false)
+    }
+
+    @Override
+    public String toString() {
+        return "AttributeCommand{" +
+                "elementId=" + elementId +
+                ", path='" + path + '\'' +
+                ", assayContextIdValue='" + assayContextIdValue + '\'' +
+                ", attributeId='" + attributeId + '\'' +
+                ", attributeLabel='" + attributeLabel + '\'' +
+                '}';
     }
 }
 
@@ -366,15 +378,23 @@ class AddItemWizardController {
                     def valueElement = Element.get(flow.fixedValue.valueId)
                     flow.fixedValue.valueLabel = valueElement.label
                 } else {
-                    println "flow.fixedValue.valueUnitId = " + flow.fixedValue?.valueUnitId
-                    if (flow.fixedValue.valueUnitId) {
-                        def query = UnitTree.where { element.id == flow.fixedValue.valueUnitId }
-                        def valueUnit = query.find()
-                        println "valueUnit = " + valueUnit?.dump()
-                        flow.fixedValue.valueUnitLabel = valueUnit.label
-                        println "UnitTree.id = " + valueUnit.id
-                        println "flow.fixedValue.valueUnitLabel = " + flow.fixedValue.valueUnitLabel
+                    // I think this is the path executed when numeric value is provided?
+                    /*
+                    println "flow.fixedValue.numericValue = ${flow.fixedValue.numericValue}"
+                    println "flow.fixedValue.valueUnitId = ${flow.fixedValue.valueUnitId}"
+                    println "flow.fixedValue.attributeElementId = ${flow.fixedValue.attributeElementId}"
+                    println "flow = ${flow}"
+                    */
+
+                    Element attributeElement = Element.get(flow.attribute.attributeId)
+                    println "attributeElement = ${attributeElement}"
+
+                    if (flow.fixedValue.valueUnitId != attributeElement.unit?.id) {
+                        Element fromUnit = Element.get(flow.fixedValue.valueUnitId)
+                        UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, attributeElement.unit)
+                        flow.fixedValue.numericValue = unitConversion?.convert(new BigDecimal(flow.fixedValue.numericValue))
                     }
+                    flow.fixedValue.valueUnitLabel = attributeElement.unit?.abbreviation
                 }
                 sessionFactory.currentSession.clear()
                 flow.page = 4
