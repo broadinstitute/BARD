@@ -38,7 +38,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert activitiesByCIDs
         assert activitiesByCIDs.activities
-        assert activitiesByCIDs.activities.size() == 6
+        assert activitiesByCIDs.activities.size() == 10
     }
 
     void "test activitiesBySIDs"() {
@@ -51,7 +51,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert activitiesBySIDs
         assert activitiesBySIDs.activities
-        assert activitiesBySIDs.activities.size() == 6
+        assert activitiesBySIDs.activities.size() == 10
     }
 
     void "test activitiesByADIDs"() {
