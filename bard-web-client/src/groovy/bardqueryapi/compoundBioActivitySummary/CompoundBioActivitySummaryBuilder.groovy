@@ -30,26 +30,16 @@ class CompoundBioActivitySummaryBuilder {
                                  Map groupedByExperimentalData, // Map<ADID/PID, List<Activity>>
                                  List<Assay> testedAssays,
                                  List<Assay> hitAssays,
-                                 List<FilterTypes> filterTypes) {
+                                 List<FilterTypes> filterTypes,
+                                 Map<Long, List<ExperimentSearch>> experimentsMap,
+                                 List<Long> sortedKeys) {
 
         TableModel tableModel = new TableModel()
         //Setup the headers
         tableModel.columnHeaders = [new StringValue(value: "${groupByType == GroupByTypes.ASSAY ? 'Assay Definition' : 'Project'}"), new StringValue(value: 'Experiments')]
-        //Get a list of all experiment IDs so we can look them all up in one call to the REST API
-        List<Long> eids = groupedByExperimentalData.values().toList().flatten().unique()*.bardExptId
-        Map<Long, ExperimentSearch> experimentsMap
-        try {
-            ExperimentSearchResult experimentSearchResult = this.queryService.experimentRestService.searchExperimentsByIds(eids)
-            List<ExperimentSearch> experiments = experimentSearchResult.experiments
-            //Create a map of experiment-id to experiment; please note that values in this map are Arraylists with one element in each.
-            experimentsMap = experiments.groupBy {ExperimentSearch experiment -> experiment.bardExptId}
-        }
-        catch (Exception exp) {
-            log.error("Could not find BARD experiment IDs: ${eids}")
-        }
 
         //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
-        for (Long resourceId in groupedByExperimentalData.keySet()) {
+        for (Long resourceId in sortedKeys) {
             List<WebQueryValue> singleRowData = []
 
             //The first cell (column) is the resource (assay or a project)

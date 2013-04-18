@@ -20,6 +20,7 @@ import bardqueryapi.experiment.ExperimentBuilder
 import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -355,8 +356,40 @@ class QueryService implements IQueryService {
             return null
         }
 
+        //Get a list of all experiment IDs so we can look them all up in one call to the REST API
+        List<Long> eids = groupedByExperimentalData.values().toList().flatten().unique()*.bardExptId
+        //Store them in a map for an easier lookup. Note that the values are arrays of a single element (ExperimentSearch).
+        Map<Long, List<ExperimentSearch>> experimentsMap
+        try {
+            ExperimentSearchResult experimentSearchResult = this.experimentRestService.searchExperimentsByIds(eids)
+            List<ExperimentSearch> experiments = experimentSearchResult.experiments
+            //Create a map of experiment-id to experiment; please note that values in this map are Arraylists with one element in each.
+            experimentsMap = experiments.groupBy {ExperimentSearch experiment -> experiment.bardExptId}
+        }
+        catch (Exception exp) {
+            log.error("Could not find BARD experiment IDs: ${eids}")
+        }
+
+        //Sort the experiments in the map based on their confidenceLevel. This should give a higher priority, for example,
+        // for confirmatory assays (dose-curve) over primary assay (single-point).
+        //First sort all the elements (experiment's activities) in each key-set based on the experiment's confidence level
+        groupedByExperimentalData.values().each {List<Activity> exptDataList ->
+            exptDataList.sort { Activity lExptData, Activity rExptData  ->
+                Long lConfidenceLevel = experimentsMap[lExptData.bardExptId]?.first()?.confidenceLevel ?: 0
+                Long rConfidenceLevel = experimentsMap[rExptData.bardExptId]?.first()?.confidenceLevel ?: 0
+                return rConfidenceLevel <=> lConfidenceLevel
+            }
+        }
+        //Then sort the resources (assays or projects) based on the first activity they have
+        List<Long> sortedKeys = groupedByExperimentalData.keySet().sort { Long l, Long r ->
+            ExperimentSearch lExperiment = experimentsMap[groupedByExperimentalData[l]?.first()?.bardExptId].first()
+            ExperimentSearch rExperiment = experimentsMap[groupedByExperimentalData[r]?.first()?.bardExptId].first()
+            return rExperiment?.confidenceLevel <=> lExperiment?.confidenceLevel
+        }
+
+
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
-        TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes)
+        TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes, experimentsMap, sortedKeys)
         tableModel.additionalProperties.put('compoundSummary', compoundSummary)
         return tableModel
     }
