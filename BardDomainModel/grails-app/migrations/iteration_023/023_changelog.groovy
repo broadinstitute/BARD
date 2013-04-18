@@ -6,7 +6,7 @@ databaseChangeLog = {
     String BACKSLASH_ONLY_OPTIONAL_WHITESPACE = /(?m)^\s*\/\s*$/
 
     changeSet(author: "pmontgom", id: "iteration-023/01-populate-qualifier", dbms: 'oracle', context: 'standard') {
-        sqlFile(path:  "${migrationsDir}/iteration_023/01-populate-qualifier.sql", stripComments: true)
+        sqlFile(path: "${migrationsDir}/iteration_023/01-populate-qualifier.sql", stripComments: true)
     }
 
     changeSet(author: "pmontgom", id: "iteration-023/02-fix-conversions", dbms: 'oracle', context: 'standard') {
@@ -24,7 +24,10 @@ databaseChangeLog = {
             }
 
             checkSum(text)
-	}
+        }
+    }
+    changeSet(author: "jasiedu", id: "iteration-023/03-add-parent-child-relationship-to-assay", dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration_023/03-add-parent-child-relationship-to-assay.sql", stripComments: true)
     }
 
 }

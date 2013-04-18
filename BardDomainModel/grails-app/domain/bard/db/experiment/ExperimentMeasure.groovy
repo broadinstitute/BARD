@@ -14,7 +14,7 @@ import bard.db.registration.Measure
 class ExperimentMeasure {
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
-    private static final int PARENT_CHILD_RELATIONSHIP_MAX_SIZE = 20
+    public static final int PARENT_CHILD_RELATIONSHIP_MAX_SIZE = 20
 
     ExperimentMeasure parent
     String parentChildRelationship
