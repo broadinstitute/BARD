@@ -6,32 +6,17 @@ import java.text.DecimalFormat
 class CompoundBioActivitySummaryTagLib {
     def assayDescription = { attrs, body ->
 
-        if (attrs.name)
-            out << generateShortNameHTML(attrs.name)
-        if (attrs.adid) {
-            out << """<a href="${createLink(controller: 'bardWebInterface', action: 'showAssay', id: attrs.bardAssayId)}">(${attrs.adid})</a>"""
-        }
+        out << generateShortNameHTML(attrs.name, attrs.bardAssayId, attrs.adid, 'showAssay')
     }
 
     def projectDescription = { attrs, body ->
 
-        out << "<p>"
-        if (attrs.name) {
-            out << generateShortNameHTML(attrs.name)
-        }
-        if (attrs.pid) {
-            out << """<a href="${createLink(controller: 'bardWebInterface', action: 'showProject', id: attrs.bardProjectId)}">(${attrs.pid})</a>"""
-        }
+        out << generateShortNameHTML(attrs.name, attrs.bardProjectId, attrs.pid, 'showProject')
     }
 
     def experimentDescription = { attrs, body ->
 
-        if (attrs.name) {
-            out << generateShortNameHTML(attrs.name)
-        }
-        if (attrs.eid) {
-            out << """<a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment', id: attrs.bardExptId)}">(${attrs.eid})</a>"""
-        }
+        out << generateShortNameHTML(attrs.name, attrs.bardExptId, attrs.eid, 'showExperiment')
     }
 
     def curvePlot = { attrs, body ->
@@ -106,13 +91,25 @@ class CompoundBioActivitySummaryTagLib {
         out << "</tbody></table>"
     }
 
-    String generateShortNameHTML(String name) {
+    String generateShortNameHTML(String name, Long bardId, Long capId, String action) {
         String[] nameWords = name.split()
+        StringBuilder sb = new StringBuilder()
 
         if (nameWords.size() > 7) {
-            return "<p title='${name}' data-placement='bottom' data-toggle='tooltip'>${nameWords[0..6].join(' ')} ...</P>"
+            sb.append("<p title='${name}' data-placement='bottom' data-toggle='tooltip'>${nameWords[0..6].join(' ')} ...")
+        }
+        else if (name) {
+            sb.append("<p>${name}")
+        }
+        else {
+            sb.append("<p>")
         }
 
-        return "<p>${name}</p>"
+        if (bardId && capId) {
+            sb.append("""<a href="${createLink(controller: 'bardWebInterface', action: action, id: bardId)}"> (${capId})</a>""")
+        }
+
+        sb.append("</p>")
+        return sb.toString()
     }
 }
