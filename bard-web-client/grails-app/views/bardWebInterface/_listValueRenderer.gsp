@@ -65,7 +65,7 @@
                                     </g:if>
                                 </b></p>
 
-                                <p><small>${pair.right}</small></p>
+                                <p><small>${pair.right ?: 'No data available'}</small></p>
                             </td>
                         </tr>
                     </table>
