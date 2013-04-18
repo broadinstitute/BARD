@@ -31,6 +31,11 @@ log = {msg ->
 recreateMeasuresAndLoad = { aid ->
     ExternalReference ref = ExternalReference.findByExtAssayRef("aid=${aid}")
 
+    if(ref == null) {
+       log("skipping ${aid} because it was not in the database at all")
+       return
+    }
+
     if (ref.experiment == null) {
         log("Skipping ${aid} because it looks like its a summary aid")
         return
