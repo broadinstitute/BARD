@@ -997,7 +997,7 @@ CREATE TABLE ERROR_LOG(
 CREATE TABLE EXPERIMENT(
     EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
     EXPERIMENT_NAME         VARCHAR2(1000)    NOT NULL,
-    EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Draft' NOT NULL,
     READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
     RUN_DATE_FROM           DATE,
@@ -1009,7 +1009,7 @@ CREATE TABLE EXPERIMENT(
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Pending', 'Approved', 'Rejected', 'Revised')),
+    CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Draft', 'Approved', 'Rejected')),
     CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT PK_EXPERIMENT PRIMARY KEY (EXPERIMENT_ID)
 )

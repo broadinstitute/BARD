@@ -1,3 +1,5 @@
+--SELECT 'alter trigger ' || trigger_name || ' disable;' FROM all_triggers WHERE trigger_name LIKE 'ADT%' AND owner = USER ORDER BY trigger_name;
+
 truncate table ASSAY_CONTEXT_MEASURE ;
 truncate table PROJECT_DOCUMENT ;
 truncate table EXPRMT_CONTEXT_ITEM ;
@@ -78,7 +80,7 @@ COMMIT;
 --'ASSAY', 45,'PROJECT', 46, 0) DESC;
 
 
-
+ SELECT DISTINCT experiment_status FROM data_mig.experiment;
 
 
 --'INSERTINTO'||TABLE_NAME||'('||COLUMNS||')SELECT'||COLUMNS||'FROMDATA_MIG.'||TABLE_NAME||';'

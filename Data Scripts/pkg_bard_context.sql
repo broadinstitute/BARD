@@ -1,3 +1,5 @@
+-- DROP PACKAGE p_pbs_context;
+
 CREATE OR REPLACE package bard_context is
 --
 -- This package contains procedures that handle the application context.
