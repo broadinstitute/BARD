@@ -70,7 +70,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         parent.resultHierarchiesForParentResult.add(hierarchy)
         hierarchy.result = child
         child.resultHierarchiesForResult.add(hierarchy)
-        hierarchy.hierarchyType = HierarchyType.Child
+        hierarchy.hierarchyType = HierarchyType.IS_RELATED_TO
     }
 
     boolean compareMaps(Map a, Map b) {

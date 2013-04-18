@@ -1,9 +1,9 @@
 package bard.db.experiment
 
 public enum HierarchyType {
-	
-	Child("Child"),
-	Derives("Derives")
+
+    IS_RELATED_TO("is related to"),
+    IS_CALCULATED_FROM("is calculated from")
 	
 	final String value
 	
@@ -20,7 +20,7 @@ public enum HierarchyType {
 	}
 	
 	static list(){
-		[Child, Derives]
+		[IS_RELATED_TO, IS_CALCULATED_FROM]
 	}
 
     static Map<String, HierarchyType> byValue = new HashMap();
