@@ -10,6 +10,7 @@ class Measure {
     Assay assay
     Element resultType
     Measure parentMeasure
+    String parentChildRelationship
     Element entryUnit
     Element statsModifier
 
@@ -42,6 +43,8 @@ class Measure {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+        parentChildRelationship(nullable: true, blank: false, maxSize: ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE, inList: ['is calculated from', 'is related to'])
+
     }
 
     /**
