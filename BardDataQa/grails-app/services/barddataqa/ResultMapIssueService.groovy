@@ -20,7 +20,6 @@ select rm_prob.aid, vpaj.project_uid, dpu.dataset_id, ds.name from
     group by aid, resulttype, seriesno, concentration, concentrationunit,
     attribute1, value1, attribute2, value2 having count(*) > 1
     ) group by aid) x where exists (select 1 from bard_data_qa.external_reference er
-    join bard_data_qa.experiment_file ef on ef.experiment_id = er.experiment_id
     where er.ext_assay_ref = 'aid='||x.aid)) rm_prob
   join bard_data_qa_dashboard.vw_project_aid_join vpaj on vpaj.aid=rm_prob.aid
   join bard_data_qa_dashboard.dataset_project_uid dpu on dpu.project_uid=vpaj.project_uid
