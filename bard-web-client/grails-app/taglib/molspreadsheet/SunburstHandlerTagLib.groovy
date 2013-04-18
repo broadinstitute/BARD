@@ -6,7 +6,7 @@ class SunburstHandlerTagLib {
 
     RingManagerService ringManagerService
 
-    def makeMicroSunburst = { attrs, body ->
+    def prepMicroSunburst = { attrs, body ->
         // for now we leave in test data.  Remove these when real data come along
         Boolean includeHits = session."actives"
         Boolean includeNonHits = session."inactives"
@@ -14,32 +14,48 @@ class SunburstHandlerTagLib {
         //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
         out << ringManagerService.writeRingTree(root,false)
         out << "\n"
-        out << ringManagerService.placeSunburstOnPage(274,200,root,4)
+//        out << ringManagerService.placeSunburstOnPage(274,200,root,4)
+        out << ringManagerService.colorMappingOnPage ( )
     }
 
-    def makeMacroSunburst = { attrs, body ->
+
+    def makeMicroSunburst = { attrs, body ->
+        out << ringManagerService.placeSunburstOnPage(300,200)
+    }
+
+
+
+
+    def prepMacroSunburst = { attrs, body ->
         // for now we leave in test data.  Remove these when real data come along
         Boolean includeHits = session."actives"
         Boolean includeNonHits = session."inactives"
         int typeOfColoring = session."colorOption"  ?: 3
         RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
         //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
-        out << ringManagerService.writeRingTree(root,true,typeOfColoring)
+        out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]
         out << "\n"
-        out << ringManagerService.placeSunburstOnPage(1000,800,root,typeOfColoring)
+        out << ringManagerService.colorMappingOnPage ( )// js array mapping values to colors
+    }
+
+
+    def makeMacroSunburst = { attrs, body ->
+        out << ringManagerService.placeSunburstOnPage(800,800)
     }
 
 
     def sunburstSection = { attrs, body ->
 //        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
             out << """
-    <div class="span9">
+    <div>
         <div id="sunburstdiv">
            <script>""".toString()
             out <<   g.makeMicroSunburst(attrs, body)
             out << """
            </script>
-           <script type="text/javascript" src="../../js/sunburstPrep.js"></script>
+           """
+        out <<   g.makeMicroSunburst(attrs, body)
+        out << """
         </div>
         <a href="#" id="sunburstdiv_bigwin">View in big window</a>
     </div>""".toString()
@@ -48,21 +64,70 @@ class SunburstHandlerTagLib {
 
 
 
-    def bigSunburstSection = { attrs, body ->
+    def bigSunburstData = { attrs, body ->
 //        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
         out << """
-    <div class="span9">
-        <div id="sunburstdiv">
-           <script>""".toString()
-        out <<   g.makeMacroSunburst(attrs, body)
+            <script>""".toString()
+        out <<   g.prepMacroSunburst(attrs, body)
         out << """
            </script>
-           <script type="text/javascript" src="../js/sunburstPrep.js"></script>
-        </div>
-    </div>""".toString()
+           """
 //        }
     }
 
+
+    def bigSunburstSection = { attrs, body ->
+//        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
+        out << """
+        <div id="sunburstdiv">
+            """
+        out <<   g.makeMacroSunburst(attrs, body)
+        out << """
+        </div>
+""".toString()
+//        }
+    }
+
+
+
+
+    def sunburstLegend = { attrs, body ->
+//        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
+        out << """
+<div id="sunburstlegend" class="legendHolder">
+    Color assignment:<br />
+    x = active /
+    (active + inactive)
+    <hr width=100%>
+
+    <script>
+        createALegend(120, 200,100,continuousColorScale,'div#sunburstlegend');
+    </script>
+
+</div>
+    """.toString()
+//        }
+    }
+
+
+
+
+
+//    def bigSunburstSection = { attrs, body ->
+////        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
+//        out << """
+//    <div class="span9">
+//        <div id="sunburstdiv">
+//           <script>""".toString()
+//        out <<   g.prepMacroSunburst(attrs, body)
+//        out << """
+//           </script>
+//           <script type="text/javascript" src="../js/sunburstPrep.js"></script>
+//        </div>
+//    </div>""".toString()
+////        }
+//    }
+//
 
 
 

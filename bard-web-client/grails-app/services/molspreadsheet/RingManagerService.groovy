@@ -99,6 +99,19 @@ class RingManagerService {
         RingNode.createStubRing ()
     }
 
+    String colorMappingOnPage ( ) {
+        StringBuilder stringBuilder = new StringBuilder("")
+        stringBuilder << """
+        var continuousColorScale = d3.scale.linear()
+            .domain([0, 1])
+            .interpolate(d3.interpolateRgb)
+            .range(["#ff0000", "#00ff00"]);
+    """.toString()
+        stringBuilder.toString()
+    }
+
+
+
     String placeSunburstOnPage ( int width, int height, RingNode ringNode, int typeOfColoring ) {
         StringBuilder stringBuilder = new StringBuilder("")
         int numberOfColors = ringNode.maximumTreeHeight()
@@ -106,6 +119,21 @@ class RingManagerService {
         List <String>  everyUniqueParent =  everyParent.unique().sort()
         stringBuilder << ringNode.placeSunburstOnPage(width,height,everyUniqueParent,numberOfColors,typeOfColoring)
         stringBuilder.toString()
+    }
+
+
+    String placeSunburstOnPage ( int width, int height ) {
+        StringBuilder stringBuilder = new StringBuilder("")
+
+            stringBuilder << """
+        <div id="sunburstdiv">
+        <script>
+                createASunburst( ${width}, ${height},5,1000,continuousColorScale,'div#sunburstdiv');
+        </script>
+
+        </div>""".toString()
+
+            stringBuilder.toString()
     }
 
 
@@ -195,6 +223,8 @@ class RingManagerService {
      * @return
      */
     public  RingNode convertCompoundIntoSunburst (Long cid, Boolean includeHits, Boolean includeNonHits ){
+        // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
+//        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
         CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(cid)
         convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
     }

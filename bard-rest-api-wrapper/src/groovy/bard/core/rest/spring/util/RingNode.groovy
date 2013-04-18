@@ -217,13 +217,21 @@ class RingNode {
      */
     public String placeSunburstOnPage(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors, int typeOfColoring ) {
         StringBuilder stringBuilder = new StringBuilder()
-        stringBuilder << """  var width = ${width},
-                height = ${height},
-                radius = Math.min(width, height) / 2,
-                padding = 5,
-                duration = 1000;
-                """
-        stringBuilder <<  handleColors()
+//        stringBuilder << """  var width = ${width},
+//                height = ${height},
+//                radius = Math.min(width, height) / 2,
+//                padding = 5,
+//                duration = 1000;
+//                """
+        stringBuilder << """
+        <div id="sunburstdiv"  class="span7">
+        <script>
+                createASunburst( ${width}, ${height},5,1000,continuousColorScale,'div#sunburstdiv');
+        </script>
+
+        </div>"""
+
+                stringBuilder <<  handleColors()
                 //,
 //                color = d3.scale.category10().domain([""".toString()
 //        stringBuilder << deriveColors(namesThatGetColors,  maximumNumberOfColors)
@@ -235,30 +243,41 @@ class RingNode {
     public String handleColors(){
         StringBuilder stringBuilder = new StringBuilder()
         stringBuilder << """
-                    function colorArcFill( d ) {
-                        return colorByActivity(d)
-                    }
-
                     var s = d3.scale.linear()
                             .domain([0,1])
                             .interpolate(d3.interpolateRgb)
                             .range(["#ff0000", "#00ff00"])
-
-                    function colorByActivity(d){
-                        var returnValue = new String ();
-                        if (d.ac!=undefined) {
-                            var actives = parseInt(d.ac);
-                            var inactives = parseInt(d.inac);
-                            var prop = actives / (actives +inactives) ;
-                            returnValue = s(prop);
-                        } else {
-                            returnValue = "#FF00FF";
-                        }
-                        return returnValue;
-                    }""".toString()
+                        """.toString()
         stringBuilder.toString()
 
     }
+//    public String handleColors(){
+//        StringBuilder stringBuilder = new StringBuilder()
+//        stringBuilder << """
+//                    function colorArcFill( d ) {
+//                        return colorByActivity(d)
+//                    }
+//
+//                    var s = d3.scale.linear()
+//                            .domain([0,1])
+//                            .interpolate(d3.interpolateRgb)
+//                            .range(["#ff0000", "#00ff00"])
+//
+//                    function colorByActivity(d){
+//                        var returnValue = new String ();
+//                        if (d.ac!=undefined) {
+//                            var actives = parseInt(d.ac);
+//                            var inactives = parseInt(d.inac);
+//                            var prop = actives / (actives +inactives) ;
+//                            returnValue = s(prop);
+//                        } else {
+//                            returnValue = "#FF00FF";
+//                        }
+//                        return returnValue;
+//                    }""".toString()
+//        stringBuilder.toString()
+//
+//    }
 
 
     public String deriveColors(List <String> namesThatGetColors, int maximumNumberOfColors) {

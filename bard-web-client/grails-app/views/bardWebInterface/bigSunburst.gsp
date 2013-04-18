@@ -7,17 +7,21 @@
 <head>
     <title>Sunburst</title>
     <title>BARD : Compound Bio-Activity Summary</title>
+    <r:require modules="bootstrap"/>
+    <r:layoutResources/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
+    <script src="../js/sunburst/createALegend.js"></script>
+    <script src="../js/sunburst/createASunburst.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    %{--<r:require modules="sunburst"/>--}%
     <style>
     #sunburstdiv {
         font-family:  sans-serif;
         font-size: 12px;
-        margin: auto;
         position: relative;
     }
     .toolTextAppearance {
@@ -29,6 +33,18 @@
         border: 1px solid blue;
         -moz-border-radius: 15px;
         border-radius: 15px;
+    }
+    .legend {
+        font: 14px sans-serif;
+        font-weight: bold;
+    }
+    .legendHolder {
+        border: 2px solid black;
+        font: 12px  sans-serif ;
+        font-weight: bold;
+        text-align: center;
+        background: #eeeeee;
+        width: 200px;
     }
 
     </style>
@@ -66,38 +82,50 @@
 <body>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span3 offset9">
-            <div class="center-aligned">
-                <h1>Compound class summary</h1>
-            </div>
-        </div>
+        <div class="span6">
 
-        <div class="span12">
-            <div class="center-aligned">
-            <select id="activity">
+                <a href="${createLink(controller: 'BardWebInterface', action: 'index')}">
+                    <img src="${resource(dir: 'images', file: 'bard_logo_med.png')}" alt="BioAssay Research Database"/>
+                </a>
+
+        </div>
+        <div class="span6" style="text-align: center;"><h2>Panther class hierarchy</h2><br/>
+            <div class="offset3">
+            <select id="activity" >
                 <option value="1" <g:if test="${dropDown1Choice==1}">selected</g:if> >Active only</option>
                 <option value="2" <g:if test="${dropDown1Choice==2}">selected</g:if> >Inactive only</option>
                 <option value="3" <g:if test="${dropDown1Choice==3}">selected</g:if> >Active and Inactive</option>
             </select>
-
-                &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-                &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-
-                <select id="coloringOptions">
+            <select id="coloringOptions" style="visibility: hidden">
                 <option value="1" <g:if test="${dropDown2Choice==1}">selected</g:if> >Color by activity</option>
                 <option value="2" <g:if test="${dropDown2Choice==2}">selected</g:if> >Split classes by activity</option>
                 <option value="3" <g:if test="${dropDown2Choice==3}">selected</g:if> >Color by class</option>
             </select>
-            </div>
+        </div>
+
         </div>
     </div>
 
-    <hr>
+    <g:bigSunburstData compoundSummary="${compoundSummary}"/>
 
     <div class="row-fluid">
-        <div>
+    %{--<div class="container-fluid">--}%
+    %{--<div class="row-fluid">--}%
+
+    <div class="span9 pull-left">
         <g:bigSunburstSection compoundSummary="${compoundSummary}"/>
-        </div>
     </div>
+
+    <div class="span3" style="padding-top: 50px">
+        <g:sunburstLegend />
+    </div>
+
+
+</nobr>
+</span>
+
+    %{--</div>--}%
+    %{--</div>--}%
+</div>
 </body>
 </html>
