@@ -62,7 +62,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         values.each {
-            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it)
+            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it, qualifier:'= ')
 //            context.addToAssayContextItems(contextItem)
         }
 
@@ -73,7 +73,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         Element attribute = findElementByName(label);
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
-        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free)
+        AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.Free, valueDisplay:null)
 //        context.addToAssayContextItems(contextItem)
 
         return context
@@ -86,7 +86,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     def addChild(ExperimentMeasure parent, ExperimentMeasure child) {
-        child.parentChildRelationship = HierarchyType.Derives.toString();
+        child.parentChildRelationship = HierarchyType.IS_CALCULATED_FROM.toString();
         child.parent = parent
         parent.addToChildMeasures(child)
     }

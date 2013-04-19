@@ -11,7 +11,7 @@ import bard.db.project.StepContextItem
  * Time: 12:42 AM
  * To change this template use File | Settings | File Templates.
  */
-class StepContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+class StepContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<StepContextItem> {
 
     @Before
     @Override

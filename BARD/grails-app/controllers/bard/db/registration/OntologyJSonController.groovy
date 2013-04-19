@@ -34,21 +34,30 @@ class OntologyJSonController {
         render results as JSON
     }
 
+    def getElement(Long id) {
+        Element element = Element.get(id)
+
+        render asMapForSelect2(element) as JSON
+    }
+
     def getDescriptors() {
         if (params?.term) {
             List<Element> elements = ontologyDataAccessService.getElementsForAttributes(params.term)
-            List attributes = new ArrayList();
-            for (Element element in elements) {
-                def item = [
-                        "label": element.label,
-                        "value": element.label,
-                        "elementId": element.id,
-                        "unitId": element.unit?.id
-                ]
-                attributes.add(item)
+            List<Map> attributes = elements.collect { Element element ->
+                asMapForSelect2(element)
             }
-            render attributes as JSON
+            Map map = ['results': attributes]
+            render map as JSON
         }
+    }
+
+    private Map asMapForSelect2(Element element) {
+        [
+                "id": element.id,
+                "text": element.label,
+                "unitId": element.unit?.id,
+                "externalUrl": element.externalURL
+        ]
     }
 
     def getValueDescriptors() {
@@ -82,23 +91,49 @@ class OntologyJSonController {
         }
     }
 
+    def getUnits(Long toUnitId) {
+        List<Element> units = []
+        if (toUnitId) {
+            units = ontologyDataAccessService.getConvertibleUnits(params.toUnitId.toLong())
+        } else {
+            units = ontologyDataAccessService.getAllUnits()
+        }
+        render createIdLabelList(units) as JSON
+    }
+
     private List createIdLabelList(List<Element> units) {
         List idLabelList = units.collect { Element unit ->
-            [value: unit.id, label: [unit.abbreviation, unit.label].findAll().join(' - ') ]
+            [value: unit.id, label: [unit.abbreviation, unit.label].findAll().join(' - ')]
         }
         idLabelList
+    }
+
+    def findExternalItemById(Long elementId, String id) {
+        id = StringUtils.trimToNull(id)
+        Element element = Element.get(elementId)
+        final String externalUrl = element?.externalURL
+        Map responseMap = [:]
+        if (id && externalUrl) {
+            try {
+                ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
+                responseMap = toMapForSelect2(externalItem)
+            }
+            catch (ExternalOntologyException e) {
+                responseMap.error = e.message
+            }
+        }
+        render responseMap as JSON
     }
 
     def findExternalItemsByTerm(Long elementId, String term) {
         term = StringUtils.trimToNull(term)
         Element element = Element.get(elementId)
         final String externalUrl = element?.externalURL
-        List externalItems = []
-        Map responseMap = ['externalItems': externalItems]
+        Map responseMap = ['externalItems': []]
         if (term && externalUrl) {
             try {
                 final List<ExternalItem> foundItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
-                externalItems.addAll(foundItems.collect { ExternalItem item -> ['id': item.id, 'text': "(id:${item.id}) ${item.display}", 'display': item.display] })
+                responseMap.externalItems.addAll(foundItems.collect { ExternalItem item -> toMapForSelect2(item) })
             }
             catch (ExternalOntologyException e) {
                 responseMap.error = e.message
@@ -106,6 +141,10 @@ class OntologyJSonController {
         }
         println(responseMap)
         render responseMap as JSON
+    }
+
+    private Map toMapForSelect2(ExternalItem item) {
+        ['id': item.id, 'text': "(id:${item.id}) ${item.display}", 'display': item.display]
     }
 
 }

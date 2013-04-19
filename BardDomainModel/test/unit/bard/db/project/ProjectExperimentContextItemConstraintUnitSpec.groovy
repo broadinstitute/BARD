@@ -14,7 +14,7 @@ import spock.lang.Unroll
  */
 @Build(ProjectExperimentContextItem)
 @Unroll
-class ProjectExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec{
+class ProjectExperimentContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<ProjectExperimentContextItem>{
     @Before
      void doSetup(){
         domainInstance = ProjectExperimentContextItem.buildWithoutSave()

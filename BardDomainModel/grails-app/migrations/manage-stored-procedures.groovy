@@ -5,6 +5,7 @@ databaseChangeLog = {
      * the rest is lookin for lines with only a / on it , it can have whitespace on either side
      */
     String BACKSLASH_ONLY_OPTIONAL_WHITESPACE = /(?m)^\s*\/\s*$/
+
     /**
      * Had some difficulty get the stored procedures to pass thru liquid base so parsing on / and using groovy sql
      *
@@ -40,6 +41,29 @@ databaseChangeLog = {
         grailsChange {
             final List<String> sqlBlocks = []
             String text = resourceAccessor.getResourceAsStream('sql/create-load-data-package.sql').text
+            for (String sqlBlock in text.split(BACKSLASH_ONLY_OPTIONAL_WHITESPACE)) {
+                sqlBlocks.add(sqlBlock)
+            }
+
+            change {
+                for (String sqlBlock in sqlBlocks) {
+//                      println( '**************' )
+//                      println( sqlBlock )
+//                      println( '**************' )
+                    sql.call(sqlBlock)
+                }
+            }
+
+            checkSum(text)
+        }
+
+    }
+
+    changeSet(author: 'ddurkin', id: 'create-or-replace-update-context-groups.sql', dbms: 'oracle', context: 'standard', runOnChange: 'true') {
+
+        grailsChange {
+            final List<String> sqlBlocks = []
+            String text = resourceAccessor.getResourceAsStream('sql/create-or-replace-update-context-groups.sql').text
             for (String sqlBlock in text.split(BACKSLASH_ONLY_OPTIONAL_WHITESPACE)) {
                 sqlBlocks.add(sqlBlock)
             }

@@ -15,7 +15,7 @@ import bard.db.project.ProjectContextItem
  */
 @Build(ProjectContextItem)
 @Unroll
-class ProjectContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec {
+class ProjectContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<ProjectContextItem> {
 
     @Before
     @Override

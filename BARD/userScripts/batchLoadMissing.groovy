@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 
 pubchemFileDir = "/Users/pmontgom/data/pubchem-conversion/pubchem-files"
 convertedFileDir = "/Users/pmontgom/data/pubchem-conversion/converted-files"
-aidListFilename = "/Users/pmontgom/data/pubchem-conversion/topmarginal-2.txt"
+aidListFilename = "/Users/pmontgom/data/pubchem-conversion/dataset2-small.txt"
 
 boolean forceReloadResults = false;
 boolean forceRecreateMeasures = true;
@@ -30,6 +30,11 @@ log = {msg ->
 
 recreateMeasuresAndLoad = { aid ->
     ExternalReference ref = ExternalReference.findByExtAssayRef("aid=${aid}")
+
+    if(ref == null) {
+       log("skipping ${aid} because it was not in the database at all")
+       return
+    }
 
     if (ref.experiment == null) {
         log("Skipping ${aid} because it looks like its a summary aid")
@@ -55,6 +60,7 @@ recreateMeasuresAndLoad = { aid ->
 
     log("Creating measures for ${aid} -> ${ref.experiment.id}")
     recreateMeasures(aid)
+    ref = ExternalReference.findByExtAssayRef("aid=${aid}")
 
     def pubchemFile = "${pubchemFileDir}/${aid}.csv"
     def capFile = "${convertedFileDir}/exp-${aid}-${ref.experiment.id}.csv"
@@ -103,6 +109,8 @@ recreateMeasures = { aid ->
           result_map_util.transfer_result_map('${aid}');
         END;
         """).executeUpdate()
+
+	session.clear()
     }
 }
 
