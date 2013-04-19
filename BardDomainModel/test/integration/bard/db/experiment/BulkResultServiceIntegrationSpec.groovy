@@ -63,7 +63,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         child.resultType = resultType
         child.statsModifier = statsModifier
         child.substanceId = substance.id
-        child.valueDisplay = "child"
+        child.valueDisplay = HierarchyType.IS_RELATED_TO.toString()
 
         ResultHierarchy hierarchy = new ResultHierarchy()
         hierarchy.parentResult = parent
@@ -94,7 +94,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         List<Result> fromDb = bulkResultService.findResults(experiment)
 
         Result dbParent = fromDb.find { it.valueDisplay == "parent" }
-        Result dbChild = fromDb.find { it.valueDisplay == "child" }
+        Result dbChild = fromDb.find { it.valueDisplay == "is related to" }
 
         then:
         System.identityHashCode(parent) != System.identityHashCode(dbParent)
