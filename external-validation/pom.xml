@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>4.0-SNAPSHOT</version>
+			<version>3.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -72,12 +72,6 @@
 			<groupId>edu.scripps</groupId>
 			<artifactId>eutils-java</artifactId>
 			<version>20130328</version>
-			<exclusions>
-				<exclusion>  <!-- declare the exclusion here -->
-					<groupId>commons-collections</groupId>
-					<artifactId>commons-collections</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>

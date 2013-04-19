@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,10 +20,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
+import bard.util.SQLUtil;
+
 import com.jolbox.bonecp.BoneCPConfig;
 import com.jolbox.bonecp.BoneCPDataSource;
-
-import bard.util.SQLUtil;
 
 /**
  * Implementation for GO ontology via SQL. Default instantiation makes a
@@ -75,8 +76,8 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 			String path = uri.getPath();
 			if(!path.endsWith("term_details"))
 				return null;
-			MultiValueMap<String, List<String>> params = getUriParameters(uri);
-			List<String> subtree = (List<String>) params.get("subtree");
+			Map<String, List<String>> params = getUriParameters(uri);
+			List<String> subtree = params.get("subtree");
 			if (subtree == null)
 				return PROCESS_INSTANCE;
 
@@ -91,8 +92,8 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 			return null;
 		}
 
-		private MultiValueMap<String, List<String>> getUriParameters(URI uri) {
-			MultiValueMap<String, List<String>> ret = new MultiValueMap<String, List<String>>();
+		private Map<String, List<String>> getUriParameters(URI uri) {
+			MultiValueMap ret = new MultiValueMap();
 			for (NameValuePair param : URLEncodedUtils.parse(uri, "UTF-8")) {
 				ret.put(param.getName(), param.getValue());
 			}
