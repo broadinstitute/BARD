@@ -89,6 +89,65 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
+    void "test writeRingTree"(){
+        given:
+        final List<String> targets = ["Q14145","Q16236","Q61009"]
+        LinkedHashMap<String, Integer> accumulatedTargets = ringManagerService.accumulateAccessionNumbers( targets )
+
+        when:
+        List<List<TargetClassInfo>> accumulatedMaps = []
+        accumulatedTargets.each{ k,v ->
+            List<String> hierarchyDescription = sunburstCacheService.getTargetClassInfo(k)
+            if (hierarchyDescription != null){
+                accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
+            }
+        }
+        RingNode root = ringManagerService.ringNodeFactory( accumulatedMaps.flatten() as List<TargetClassInfo> )
+        String noTextTree = ringManagerService.writeRingTree(root, false)
+        String fullTextTree = ringManagerService.writeRingTree(root, true)
+
+        then:
+        fullTextTree.length() > noTextTree.length()
+
+        !(noTextTree =~ /nucleic acid binding/)
+        fullTextTree =~ /nucleic acid binding/
+
+        noTextTree =~ /children/
+        fullTextTree =~ /children/
+
+    }
+
+
+
+
+    void "test colorMapping method"(){
+        when:
+        String colorMapping = ringManagerService.colorMappingOnPage()
+
+        then:
+        colorMapping =~ /continuousColorScale/
+        colorMapping =~ /domain/
+        colorMapping =~ /interpolate/
+        colorMapping =~ /range/
+    }
+
+
+
+
+
+    void "test placeSunburstOnPage method"(){
+        when:
+        String sunburstOnPage = ringManagerService.placeSunburstOnPage(1024,768)
+
+        then:
+        sunburstOnPage =~ /sunburstdiv/
+        sunburstOnPage =~ /createASunburst/
+        sunburstOnPage =~ /1024/
+        sunburstOnPage =~ /768/
+    }
+
+
+
 
     void "test building a tree from a few targets but with actives/inactives to consider"(){
         given:

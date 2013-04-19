@@ -217,14 +217,8 @@ class RingNode {
      */
     public String placeSunburstOnPage(int width, int height, List <String> namesThatGetColors, int maximumNumberOfColors, int typeOfColoring ) {
         StringBuilder stringBuilder = new StringBuilder()
-//        stringBuilder << """  var width = ${width},
-//                height = ${height},
-//                radius = Math.min(width, height) / 2,
-//                padding = 5,
-//                duration = 1000;
-//                """
         stringBuilder << """
-        <div id="sunburstdiv"  class="span7">
+        <div id="sunburstdiv">
         <script>
                 createASunburst( ${width}, ${height},5,1000,continuousColorScale,'div#sunburstdiv');
         </script>
@@ -232,10 +226,6 @@ class RingNode {
         </div>"""
 
                 stringBuilder <<  handleColors()
-                //,
-//                color = d3.scale.category10().domain([""".toString()
-//        stringBuilder << deriveColors(namesThatGetColors,  maximumNumberOfColors)
-//        stringBuilder << "   ]);"
         stringBuilder.toString()
     }
 

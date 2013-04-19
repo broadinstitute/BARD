@@ -214,16 +214,11 @@ class RingNodeUnitSpec  extends Specification{
         RingNode ringNode = RingNode.createStubRing ()
 
         then:
-        ringNode.placeSunburstOnPage(10,10,["A","B"],2).trim()==
-                """var width = 10,
-                height = 10,
-                radius = Math.min(width, height) / 2,
-                padding = 5,
-                duration = 1000,
-                color = d3.scale.category10().domain(["A",
-"B"
-   ]);""".toString()
+        ringNode.placeSunburstOnPage(10,10,["A","B"],2,47).contains('createASunburst')
+        ringNode.placeSunburstOnPage(10,10,["A","B"],2,47).contains('continuousColorScale')
+        ringNode.placeSunburstOnPage(10,10,["A","B"],2,47).contains('sunburstdiv')
     }
+
 
 
     void "test deriveColors" (){

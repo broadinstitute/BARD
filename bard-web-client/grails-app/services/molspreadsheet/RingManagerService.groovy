@@ -95,10 +95,6 @@ class RingManagerService {
     }
 
 
-    RingNode createStub () {
-        RingNode.createStubRing ()
-    }
-
     String colorMappingOnPage ( ) {
         StringBuilder stringBuilder = new StringBuilder("")
         stringBuilder << """
@@ -110,16 +106,6 @@ class RingManagerService {
         stringBuilder.toString()
     }
 
-
-
-    String placeSunburstOnPage ( int width, int height, RingNode ringNode, int typeOfColoring ) {
-        StringBuilder stringBuilder = new StringBuilder("")
-        int numberOfColors = ringNode.maximumTreeHeight()
-        List <String>  everyParent = ringNode.listOfEverybodyWhoIsAParent()
-        List <String>  everyUniqueParent =  everyParent.unique().sort()
-        stringBuilder << ringNode.placeSunburstOnPage(width,height,everyUniqueParent,numberOfColors,typeOfColoring)
-        stringBuilder.toString()
-    }
 
 
     String placeSunburstOnPage ( int width, int height ) {
