@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +22,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.ccil.cowan.tagsoup.jaxp.SAXParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +35,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import edu.scripps.fl.entrez.internal.HttpClientBaseSingleton;
 
 public class ExternalOntologyATCC extends ExternalOntologyAPI {
-	
+
 	public static class ATCCCreator implements ExternalOntologyCreator {
 		@Override
 		public ExternalOntologyAPI create(URI uri, Properties props) throws ExternalOntologyException {
@@ -101,6 +105,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 		String display;
 		String id;
 		boolean notFound = false;
+		String productTagName = "";
 		StringBuilder productTag;
 		StringBuilder titleTag;
 
@@ -120,7 +125,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 					id = titleTag.toString();
 					titleTag = null;
 				}
-			} else if ("h1".equalsIgnoreCase(qName) && productTag != null) {
+			} else if (productTagName.equalsIgnoreCase(qName) && productTag != null) {
 				display = productTag.toString();
 				productTag = null;
 				throw new SAXException(new BreakParsingException());
@@ -139,11 +144,15 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 			return notFound;
 		}
 
-		public void startElement(String uri, String localName, String name, Attributes a) {
+		public void startElement(String uri, String localName, String name, Attributes attr) {
 			if ("title".equalsIgnoreCase(name))
 				titleTag = new StringBuilder();
-			if ("h1".equalsIgnoreCase(name) && "product_name".equalsIgnoreCase(a.getValue("class")))
+			// <h1 class="product_name">
+			String cssClass = attr.getValue("class"); 
+			if ( cssClass != null && cssClass.contains("product_name")) {
+				productTagName = name;
 				productTag = new StringBuilder();
+			}
 		}
 	}
 
@@ -159,6 +168,19 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 	private static Pattern ID_PATTERN = Pattern.compile("^.*ATCC®?\\s*([\\w\\d-]+)™?\\)?$"); // "^(ATCC\\s*)(.+)$"
 
 	private static final Logger log = LoggerFactory.getLogger(ExternalOntologyATCC.class);
+
+	private static String[] userAgent = new String[] {
+			"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11",
+			"Mozilla/5.0 (Windows; U; MSIE 7.0; Windows NT 6.0; en-US)",
+			"Mozilla/4.0 (compatible; MSIE 6.1; Windows XP)",
+			"Mozilla/5.0 (X11; U; Windows NT 5.1; en-US; rv:1.9.0.7) Gecko/2009021910 Firefox/3.0.7",
+			"Mozilla/5.0(Windows; U; Windows NT 5.2; rv:1.9.2) Gecko/20100101 Firefox/3.6",
+			"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.5) Gecko/2008120122 Firefox/3.0.5",
+			"Mozilla/5.0 (X11; U; Linux i686; pl-PL; rv:1.9.0.2) Gecko/20121223 Ubuntu/9.25 (jaunty) Firefox/3.8",
+			"Mozilla/5.0 (Windows; U; Windows NT 6.1; ru; rv:1.9.2.3) Gecko/20100401 Firefox/4.0 (.NET CLR 3.5.30729)",
+			"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.9 (KHTML, like Gecko) Chrome/6.0.400.0 Safari/533.9" };
+	
+	private Random random = new Random();
 
 	@Override
 	public String cleanId(String id) {
@@ -184,7 +206,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 			if (handler.isNotFound())
 				return null;
 			else
-				return new ExternalItem(handler.getId(), handler.getDisplay());
+				return new ExternalItem(id, handler.getDisplay());
 		} catch (Exception ex) {
 			throw new ExternalOntologyException(ex);
 		}
@@ -201,7 +223,7 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 	@Override
 	public List<ExternalItem> findMatching(String term, int limit) throws ExternalOntologyException {
 		try {
-			if(limit <= 0 || limit > 100) 
+			if (limit <= 0 || limit > 100)
 				limit = 100;
 			URL url = new URL(String.format(ATCC_SEARCH_URL_FORMAT, limit, queryGenerator(term)));
 			ATCCMultiProductHandler handler = new ATCCMultiProductHandler();
@@ -221,11 +243,16 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 		BufferedInputStream is = null;
 		try {
 			log.debug(String.format("GET %s", url));
-			HttpGet get = new HttpGet(url.toString());
-			// get allows redirects by default, post does not. USER-AGENT seems
-			// to make it run faster
-			get.setHeader("USER-AGENT",
-					"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11");
+			
+			HttpGet get = new HttpGet(url.toString()); // get allows redirects by default, post does not. 
+			// USER-AGENT seems to make it run faster
+			get.setHeader("USER-AGENT", userAgent[random.nextInt(userAgent.length-1)]);
+
+			HttpParams params = new BasicHttpParams();
+			// timeout for waiting for data in ms.
+			HttpConnectionParams.setSoTimeout(params, 10000);
+			get.setParams(params);
+
 			HttpResponse response = HttpClientBaseSingleton.getInstance().getHttpClient().execute(get);
 			is = new BufferedInputStream(response.getEntity().getContent());
 			if (DEBUGGING) {
@@ -246,10 +273,5 @@ public class ExternalOntologyATCC extends ExternalOntologyAPI {
 			IOUtils.closeQuietly(is);
 		}
 		return handler;
-	}
-
-	@Override
-	public String queryGenerator(String term) {
-		return cleanId(term);
 	}
 }

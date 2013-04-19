@@ -1,7 +1,5 @@
 package bard.db.experiment
 
-import bard.db.registration.Assay
-import bard.db.registration.AssayContextMeasure
 import bard.db.registration.Measure
 
 /**
@@ -33,7 +31,7 @@ class ExperimentMeasure {
 
     static constraints = {
         parent(nullable: true)
-        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE, inList: ['Derived from', 'has Child', 'has Sibling'])
+        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE, inList: ['is calculated from', 'is related to'])
         experiment()
         measure()
 

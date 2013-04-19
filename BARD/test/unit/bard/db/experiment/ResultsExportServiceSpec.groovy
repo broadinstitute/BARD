@@ -1,18 +1,15 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
-import bard.db.registration.Assay
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectReader
 import spock.lang.Specification
 
 import java.util.zip.GZIPInputStream
 
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
 import grails.test.mixin.support.*
-import org.junit.*
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -41,7 +38,7 @@ class ResultsExportServiceSpec extends Specification {
         ResultContextItem contextItem = new ResultContextItem(valueNum: 1.0, valueDisplay: "1 uM", qualifier: "> ", attributeElement: concentration, result: child)
         child.resultContextItems.add(contextItem)
 
-        ResultHierarchy relationship = new ResultHierarchy(parentResult: parent, result: child, hierarchyType: HierarchyType.Child)
+        ResultHierarchy relationship = new ResultHierarchy(parentResult: parent, result: child, hierarchyType: HierarchyType.IS_RELATED_TO)
         parent.getResultHierarchiesForParentResult().add(relationship)
         child.getResultHierarchiesForResult().add(relationship)
 
@@ -69,7 +66,7 @@ class ResultsExportServiceSpec extends Specification {
         tParent.related.size() == 1
 
         JsonResult tChild = tParent.related.first()
-        tChild.relationship == "Child"
+        tChild.relationship == HierarchyType.IS_RELATED_TO.toString()
         tChild.qualifier == "<"
         tChild.valueDisplay == "10-20"
         tChild.valueNum == null
