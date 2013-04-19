@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
@@ -34,7 +36,7 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	public final static String TYPE_BIOLOGICAL_PROCESS = "biological_process";
 	public final static String TYPE_CELLULAR_COMPONENT = "cellular_component";
 	public final static String TYPE_MOLECULAR_FUNCTION = "molecular_function";
-
+	
 	public static ExternalOntologyGO COMPONENT_INSTANCE, FUNCTION_INSTANCE, PROCESS_INSTANCE;
 
 	static {
@@ -101,6 +103,7 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	private DataSource dataSource;
 	private int prefetchSize = 1000;
 	private String type;
+	private Pattern goPattern = Pattern.compile("^(GO:?)?(\\d+)$");
 
 	public ExternalOntologyGO(String type) {
 		this.type = type;
@@ -120,6 +123,8 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 				prefetchSize, id, type);
 		if (items.size() > 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique GO accesion", id));
+		else if (items.size() == 0)
+			return null;
 		return items.get(0);
 	}
 
@@ -136,6 +141,8 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 				prefetchSize, name, type);
 		if (items.size() > 1)
 			throw new ExternalOntologyException(String.format("'%s' is not a unique GO term name", name));
+		else if (items.size() == 0)
+			return null;
 		return items.get(0);
 	}
 
@@ -148,7 +155,7 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 		name = cleanName(name);
 		if( StringUtils.isBlank(name))
 			return Collections.EMPTY_LIST;
-		List<ExternalItem> items = runQuery("SELECT acc, name FROM term WHERE name like lower(?) and term_type = ? and is_obsolete = 0",
+		List<ExternalItem> items = runQuery("SELECT acc, name FROM term WHERE lower(name) like lower(?) and term_type = ? and is_obsolete = 0",
 				limit, queryGenerator(name), type);
 		return items;
 	}
@@ -165,10 +172,16 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 		return String.format("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=%s", cleanId(id));
 	}
 
+	/**
+	 * Ensure Id is not null, trimmed. If it doesn
+	 */
 	public String cleanId(String id) {
 		id = super.cleanId(id);
-		if (id.matches("^\\d+$"))
-			id = "GO:" + id;
+		Matcher matcher = goPattern.matcher(id);
+		if (matcher.matches()) {
+			int ii = Integer.parseInt(matcher.group(2));
+			id = String.format("GO:%07d", ii);
+		}
 		return id;
 	}
 
