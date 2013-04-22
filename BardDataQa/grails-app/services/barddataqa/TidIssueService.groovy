@@ -27,7 +27,7 @@ class TidIssueService {
     "SERIESNO"]
 
     private final static String queryFromString = """
-from bard_data_qa.result_map orm
+from bard_data_qa.vw_data_mig_result_map orm
 join (
 select aid,
   nvl(resulttype, 'NULL') resulttype,
@@ -38,10 +38,10 @@ select aid,
   nvl(value1,'NULL') value1,
   nvl(attribute2, 'NULL') attribute2,
   nvl(value2, 'NULL') value2
-from bard_data_qa.result_map rm where
-not exists (select 1 from bard_data_qa.result_map r where r.aid = rm.aid and
+from bard_data_qa.vw_data_mig_result_map rm where
+not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
 r.qualifiertid = rm.tid)
-and not exists (select 1 from bard_data_qa.result_map r where r.aid = rm.aid and
+and not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
 r.contexttid = rm.tid and r.contexttid <> rm.tid)
 and resulttype is not null
 and resulttype not in ('standard deviation', 'confidence limit 95%')

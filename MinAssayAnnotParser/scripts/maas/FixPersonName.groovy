@@ -8,4 +8,4 @@ import maas.FixPersonNameService
  */
 
 def fixPersonNameService = new FixPersonNameService()
-fixPersonNameService.fix("xiaorong-maas")
+fixPersonNameService.fix("fixPersonName")

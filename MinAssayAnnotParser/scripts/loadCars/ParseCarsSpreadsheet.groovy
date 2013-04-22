@@ -15,16 +15,16 @@ import bard.dm.cars.spreadsheet.exceptions.MultipleProjectsForProjectUidExceptio
 import bard.dm.cars.spreadsheet.exceptions.ExternalReferenceMissingProjectException
 import bard.dm.cars.spreadsheet.ProjectIdsToLoad
 
-Log.initializeLogger("test/exampleData/logsAndOutput/parseCarsSpreadsheet.log")
+Log.initializeLogger("data/maas/cars/output/parseCarsSpreadsheet.log")
 println("Start script")
 
 //constants
-final String inputFileRelativePath = "test/exampleData/project_data_from_CARS.csv"
+final String inputFileRelativePath = "data/maas/cars/project_data_from_CARS.csv"
 final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappings.config"
 //TODO rename this file, it is more general now
 final String elementFieldMappingRelativePath = "grails-app/conf/resources/ElementFieldMapping.config"
 final String username = "dlahr_CARS"
-final String projectIdsToLoadFileRelativePath = "test/exampleData/project_UID_dataset_2.csv"
+final String projectIdsToLoadFileRelativePath = "data/maas/cars/project_UID_dataset.csv"
 
 
 final Date startDate = new Date()

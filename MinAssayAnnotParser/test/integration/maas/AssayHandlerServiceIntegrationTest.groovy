@@ -14,7 +14,7 @@ class AssayHandlerServiceIntegrationTest extends GroovyTestCase {
 //    @Ignore
     public testLoad() {
         def inputdir = ['data/maas/problemExcel']
-        def mustLoadedAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset2/aids_dataset_2.csv')
+        def mustLoadedAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset2/aids.csv')
         assayHandlerService.load(inputdir, 'data/maas/problemExcel/output', 'xiaorong',mustLoadedAids)
     }
 }
