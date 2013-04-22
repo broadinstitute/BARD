@@ -196,6 +196,7 @@ function generatesvg() {
     }
 }
 
+
 function initFunction1() {
     $("#canvas").append(generatesvg());
     var graphtitle = $("g title")[0];
@@ -205,7 +206,9 @@ function initFunction1() {
     var template = Handlebars.compile($("#node-selection-template1").html())
     $(".node").click(function () {
         var clickedNode = $(this).find('title').text();
-
+        var thisId = $(this).attr("id");
+        var thisPolygon = "#"+thisId + " polygon";
+        $(thisPolygon).attr("fill", "#00FFFF")
         var projectId = $('#projectIdForStep').val();
 
         for (var i = 0; i < connectedNodes.length; i++) {
