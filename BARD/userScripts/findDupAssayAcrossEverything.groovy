@@ -93,9 +93,11 @@ select distinct e.assay_id
 from external_reference r 
 join experiment e on r.experiment_id = e.experiment_id
 join (select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
- join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
- where vpaj.project_uid in (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=2)
-   and ai.is_summary_aid = 'n') da on 'aid='||da.aid = r.ext_assay_ref
+      join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
+      where vpaj.project_uid in (
+            select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=(
+                   select id from bard_data_qa_dashboard.dataset where name = '002'))
+      and ai.is_summary_aid = 'n') da on 'aid='||da.aid = r.ext_assay_ref
   """).setCacheable(false).list().collect {it.longValue()}
 }
 println(capIds)
