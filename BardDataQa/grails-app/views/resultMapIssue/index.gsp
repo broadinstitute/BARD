@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1>AID's with duplicate result-types in result map</h1>
-<h2>(causing problems with result loading)</h2>
+<h2>(causing problems with result loading)  count:  ${rowList.size()}</h2>
 <table border="1" cellpadding="10" cellspacing="1">
     <tr>
         <g:each in="${headers}" var="header">
