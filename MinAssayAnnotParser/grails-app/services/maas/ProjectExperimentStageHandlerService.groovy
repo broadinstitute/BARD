@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils
 class ProjectExperimentStageHandlerService {
     def contextHandlerService = new ContextHandlerService()
     final int START_ROW = 2 //0-based
-    final int MAX_ROWS = 1000
+    final int MAX_ROWS = 4000
 
     def handle(String loadedBy, List<String> dirs, List<Long> mustLoadedAids) {
         List<File> inputFiles = []
@@ -20,6 +20,7 @@ class ProjectExperimentStageHandlerService {
     def loadExperimentsContext(String loadedBy, List<File> inputFiles, List<Long> mustLoadedAids) {
         def contextGroups = ContextGroupsBuilder.buildProjectExperimentStage()
         inputFiles.each {File file ->
+            println("Processing file ${file.name}")
             def dtos = ExcelHandler.buildDto(file, START_ROW, contextGroups, MAX_ROWS)
             String currentModifiedBy = "${loadedBy}_${file.name}"
             if (currentModifiedBy.length() >= 40) {
@@ -49,7 +50,7 @@ class ProjectExperimentStageHandlerService {
         }
         // find a project using experiment project association. there may have multiple projects associated with one experiment, use the first one
 
-        ProjectExperiment pe = experiment.projectExperiments?.iterator().next()
+        ProjectExperiment pe = experiment.projectExperiments.size() == 0 ? null:experiment.projectExperiments?.iterator().next()
         if (!pe) {
             println("No project experiment associated with aid: " + dto.aid)
             return

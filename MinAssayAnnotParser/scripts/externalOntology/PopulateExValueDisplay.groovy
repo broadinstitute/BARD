@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import bard.db.audit.BardContextUtils
 
-FileWriter logWriter = new FileWriter("data/populateExValueDisplay2.out")
+FileWriter logWriter = new FileWriter("data/populateExValueDisplay.out")
 
 logWriter.write("ErrorType\tContextType\tContextItemId\tAttributeElementId\tURL\tExtValue\tModifiedBy\tErrorMessage\n")
 logWriter.flush()
@@ -19,6 +19,7 @@ log = {msg ->
     logWriter.flush()
 }
 
+String modifiedBy = "fixExternalValueDisplay"
 
 ExternalOntologyAccessService externalOntologyAccessService = ctx.externalOntologyAccessService
 //List<AssayContextItem> acItems = AssayContextItem.findAllByExtValueIdIsNotNull()
@@ -27,14 +28,13 @@ join aci.assayContext as ac
 join ac.assay as a
 join a.experiments as experiment
 join experiment.projectExperiments as pe
-where aci.extValueId is not null and pe.project.id=3
+where aci.extValueId is not null and aci.modifiedBy <> '${modifiedBy}'
 """)
 
 int updatedAssayContextItem = 0
 for (AssayContextItem item : acItems) {
-    if (processItem(item, externalOntologyAccessService, "Assay")){
-        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "fixExternalValueDisplay")
-        println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
+    if (processItem(item, externalOntologyAccessService, "Assay", modifiedBy)){
+        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
         item.save()
         updatedAssayContextItem++
     }
@@ -46,13 +46,13 @@ List<ExperimentContextItem> ecItems = ExperimentContextItem.executeQuery("""sele
 join eci.experimentContext as ec
 join ec.experiment as e
 join e.projectExperiments as pe
-where eci.extValueId is not null and pe.project.id=3
+where eci.extValueId is not null and eci.modifiedBy <> '${modifiedBy}'
 """)
 int updatedExperimentContextItem = 0
 for (ExperimentContextItem item : ecItems) {
-    if (processItem(item, externalOntologyAccessService, "Experiment")){
-        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "fixExternalValueDisplay")
-        println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
+    if (processItem(item, externalOntologyAccessService, "Experiment", modifiedBy)){
+        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
+ //       println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedExperimentContextItem++
     }
@@ -62,13 +62,13 @@ println("Finish process experiment context item, total ${ecItems.size()}, update
 //List<ProjectContextItem> pcItems = ProjectContextItem.findAllByExtValueIdIsNotNull()
 List<ProjectContextItem> pcItems =  ProjectContextItem.executeQuery("""select pci from ProjectContextItem as pci
 join pci.context as pc
-where pci.extValueId is not null and pc.project.id=3
+where pci.extValueId is not null and pci.modifiedBy <> '${modifiedBy}'
 """)
 int updatedProjectContextItem = 0
 for (ProjectContextItem item : pcItems) {
-    if (processItem(item, externalOntologyAccessService, "Project")){
-        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "fixExternalValueDisplay")
-        println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
+    if (processItem(item, externalOntologyAccessService, "Project", modifiedBy)){
+        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
+ //       println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedProjectContextItem++
     }
@@ -76,7 +76,7 @@ for (ProjectContextItem item : pcItems) {
 println("Finish process project context item, total ${pcItems.size()}, updated ${updatedProjectContextItem}")
 
 
-boolean processItem(AbstractContextItem item, ExternalOntologyAccessService externalOntologyAccessService, String itemType) {
+boolean processItem(AbstractContextItem item, ExternalOntologyAccessService externalOntologyAccessService, String itemType, String modifiedBy) {
     Element element = item.attributeElement
     if (!element) {
         log("Missing attributeElement\t${itemType}ContextItem\t${item.id}\t\t\t${item.extValueId}\t${item.modifiedBy}\t\n")
@@ -104,7 +104,7 @@ boolean processItem(AbstractContextItem item, ExternalOntologyAccessService exte
             item.extValueId = externalItem.id
         }
         item.valueDisplay = externalItem.display
-        item.modifiedBy = "fixExternalValueDisplay"
+        item.modifiedBy = modifiedBy
         return true
     }catch(Exception e) {
         log("Exception\t${itemType}ContextItem\t${item.id}\t${element.id}\t${element.externalURL}\t${item.extValueId}\t${item.modifiedBy}\t${e.message}\n")
