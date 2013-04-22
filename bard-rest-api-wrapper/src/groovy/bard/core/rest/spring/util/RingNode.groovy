@@ -189,6 +189,69 @@ class RingNode {
 
     }
 
+
+
+
+
+
+    /**
+     * Note that this number is zero based. This method is the launcher for the method  goDownOneLevel,
+     * which performs the actual recursive descent
+     * @return
+     */
+    public LinkedHashMap<String, String> determineColorMappingRange ( ) {
+        BigDecimal minimumSoFar = 1
+        BigDecimal maximumSoFar = 0
+        LinkedHashMap<String, BigDecimal> valueForPassing = [minimumSoFar:minimumSoFar, maximumSoFar:maximumSoFar]
+        goDownOneLevel ( this,  valueForPassing)
+        return [minimumValue:valueForPassing["minimumSoFar"].toString(),maximumValue:valueForPassing["maximumSoFar"].toString()]
+    }
+
+    /**
+     * Perform a recursive descent.  Were only trying to size up the tree in this routine
+     * @param root
+     * @param currentTreeLevel
+     * @param highestTreeLevelSoFar
+     * @return
+     */
+    private void goDownOneLevel (RingNode root, LinkedHashMap<String, BigDecimal> valueForPassing )   {
+        BigDecimal minimumSoFar = 1
+        BigDecimal maximumSoFar = 0
+        if ((root.children == null) || (root.children.size() == 0)) {
+            return
+        } else {
+            if ((root.actives.size()+root.inactives.size()) > 0 ) {
+                BigDecimal comparisonNumber =  root.actives.size()/((root.actives.size()+root.inactives.size()))
+                if (comparisonNumber>valueForPassing["maximumSoFar"])
+                    valueForPassing["maximumSoFar"] =  comparisonNumber
+                if (comparisonNumber < valueForPassing["minimumSoFar"])
+                    valueForPassing["minimumSoFar"] =  comparisonNumber
+            }
+            for (RingNode oneKid in root.children){
+               goDownOneLevel (oneKid, valueForPassing)
+            }
+            return
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Useful for testing
      * @return

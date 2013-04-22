@@ -76,14 +76,6 @@ modules = {
         resource url: "css/jquery-dataTables.css"
         resource url: "css/datatables_supplemental.css"
     }
-//    sunburst {
-////        resource url: "http://d3js.org/d3.v3.min.js"
-////        resource url: "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
-//
-//        resource url: "js/sunburst/createALegend.js"
-//        resource url: "js/sunburst/createASunburst.js"
-//        resource url: "css/sunburst.css"
-//    }
     experimentData {
         //Polyfill for handling History
         resource url: "js/html5historyapi/history.js"
@@ -121,4 +113,12 @@ modules = {
         dependsOn 'bootstrap'
         resource url: "css/cbas.css"
     }
+    sunburst {
+        dependsOn 'bootstrap,jquery'
+
+        resource url: "js/sunburst/createALegend.js"
+        resource url: "js/sunburst/createASunburst.js"
+        resource url: "css/sunburst.css"
+    }
+
 }

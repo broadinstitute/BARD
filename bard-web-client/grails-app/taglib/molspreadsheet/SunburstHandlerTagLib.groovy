@@ -32,10 +32,12 @@ class SunburstHandlerTagLib {
         Boolean includeNonHits = session."inactives"
         int typeOfColoring = session."colorOption"  ?: 3
         RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
-        //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
+        LinkedHashMap extremeValues = root.determineColorMappingRange()
         out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]
         out << "\n"
-        out << ringManagerService.colorMappingOnPage ( )// js array mapping values to colors
+        out << "var minimumValue=${extremeValues["minimumValue"].toString()};\n"
+        out << "var maximumValue=${extremeValues["maximumValue"].toString()};\n"
+        out << ringManagerService.colorMappingOnPage ( extremeValues["minimumValue"].toString(),extremeValues["maximumValue"].toString( ) )// js array mapping values to colors
     }
 
 
@@ -47,7 +49,7 @@ class SunburstHandlerTagLib {
     def sunburstSection = { attrs, body ->
 //        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
             out << """
-    <div>
+    <div >
         <div id="sunburstdiv">
            <script>""".toString()
             out <<   g.makeMicroSunburst(attrs, body)
@@ -57,7 +59,7 @@ class SunburstHandlerTagLib {
         out <<   g.makeMicroSunburst(attrs, body)
         out << """
         </div>
-        <a href="#" id="sunburstdiv_bigwin">View in big window</a>
+        <a  href="#" id="sunburstdiv_bigwin"  style="float: right; font-size: 80%">Sunburst visualization<br/>(sample data only)</a>
     </div>""".toString()
 //        }
     }
@@ -96,13 +98,15 @@ class SunburstHandlerTagLib {
         out << """
 <div id="sunburstlegend" class="legendHolder">
     Color assignment:<br />
-    x = active /
+    x = active / <br />
     (active + inactive)
-    <hr width=100%>
+    <hr width=100% color=black style="color: #000; height:1px;">
 
     <script>
         createALegend(120, 200,100,continuousColorScale,'div#sunburstlegend');
     </script>
+
+    <div  style="padding-top: 5px;"></div>
 
 </div>
     """.toString()

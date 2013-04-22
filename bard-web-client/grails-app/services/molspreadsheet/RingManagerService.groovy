@@ -95,11 +95,11 @@ class RingManagerService {
     }
 
 
-    String colorMappingOnPage ( ) {
+    String colorMappingOnPage (  String minimumValue, String maximumValue) {
         StringBuilder stringBuilder = new StringBuilder("")
         stringBuilder << """
         var continuousColorScale = d3.scale.linear()
-            .domain([0, 1])
+            .domain([${minimumValue}, ${maximumValue}])
             .interpolate(d3.interpolateRgb)
             .range(["#ff0000", "#00ff00"]);
     """.toString()

@@ -23,8 +23,13 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
     function colorByActivity(d) {
         var returnValue = new String();
         if (d.ac != undefined) {
+            if (d.name=="/")   { // root is special cased
+                return "#fff";
+            }
             var actives = parseInt(d.ac);
             var inactives = parseInt(d.inac);
+            if ((actives + inactives)==0) // this should never happen, but safety first!
+                return "#fff";
             var prop = actives / (actives + inactives);
             returnValue = colorScale(prop);
         } else {
@@ -52,9 +57,6 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
 
 
     var partition = d3.layout.partition()
-        .sort(function (d) {
-            return d.size;
-        })
         .value(function (d) {
             return d.size;
         });
@@ -215,6 +217,18 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         .attr("dy", "1em")
         .text(function (d) {
             return d.depth ? d.name.split(" ")[1] || "" : "";
+        });
+    textEnter.append("tspan")
+        .attr("x", 0)
+        .attr("dy", "1em")
+        .text(function (d) {
+            return d.depth ? d.name.split(" ")[2] || "" : "";
+        });
+    textEnter.append("tspan")
+        .attr("x", 0)
+        .attr("dy", "1em")
+        .text(function (d) {
+            return d.depth ? d.name.split(" ")[3] || "" : "";
         });
 
 
