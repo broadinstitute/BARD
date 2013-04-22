@@ -121,8 +121,12 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
     void "test colorMapping method"(){
+        given:
+        String minimumValue = "0.0"
+        String maximumValue = "1.0"
+
         when:
-        String colorMapping = ringManagerService.colorMappingOnPage()
+        String colorMapping = ringManagerService.colorMappingOnPage(  minimumValue,  maximumValue)
 
         then:
         colorMapping =~ /continuousColorScale/
