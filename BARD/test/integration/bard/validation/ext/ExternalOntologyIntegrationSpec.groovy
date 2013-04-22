@@ -32,7 +32,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
 
         where:
         externalUrl                                                                                    | notNull
-//        "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn"                        | true
+        "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn"                        | true
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term="                               | true
         "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?sid="                                     | true
         "http://omim.org/entry/"                                                                       | true
@@ -46,9 +46,9 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://www.ncbi.nlm.nih.gov/structure/?term="                                                 | true
         "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="                                  | true
         "http://www.uniprot.org/uniprot/"                                                              | true
-//        "http://cas.org/"                                                                              | true
+        "http://cas.org/"                                                                              | true
 
-//        "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=" | false
+        "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=" | false
         "https://mli.nih.gov/mli/?dl_id="                                                              | false
         "http://regid.org/find"                                                                        | false
 
@@ -97,7 +97,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://www.uniprot.org/uniprot/"                                | "Q9Y6Q9"
     }
 
-    void "test null externalOntologyAPI.findById for url: #externalUrl externalValueId: '#externalValueId'"() {
+    void "test exception externalOntologyAPI.findById for url: #externalUrl externalValueId: '#externalValueId'"() {
         when:
         println("url: $externalUrl externalValueId: $externalValueId")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
@@ -105,7 +105,8 @@ class ExternalOntologyIntegrationSpec extends Specification {
         ExternalItem externalItem = extOntology.findById(externalValueId)
 
         then:
-        externalItem == null
+        def e = thrown(expectedException)
+        println(e.message)
 
         where:
         externalUrl                                                      | externalValueId | expectedException
@@ -152,7 +153,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "apoptotic process"
     }
 
-    void "test bad request externalOntologyAPI.findMatching for url: #externalUrl term: '#term'"() {
+    void "test exception externalOntologyAPI.findMatching for url: #externalUrl term: '#term'"() {
         when:
         println("url: $externalUrl term: $term")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
@@ -160,7 +161,8 @@ class ExternalOntologyIntegrationSpec extends Specification {
         List<ExternalItem> externalItems = extOntology.findMatching(term)
 
         then:
-        externalItems.size() == 0
+        def e = thrown(expectedException)
+        println(e.message)
 
         where:
         externalUrl | term | expectedException

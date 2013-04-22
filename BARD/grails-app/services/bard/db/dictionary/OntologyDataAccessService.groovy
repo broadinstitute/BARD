@@ -9,8 +9,8 @@ import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.util.Assert
 
-import static bard.validation.ext.ExternalOntologyNCBI.NCBI_EMAIL
-import static bard.validation.ext.ExternalOntologyNCBI.NCBI_TOOL
+import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
+import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
 
 class OntologyDataAccessService {
 
