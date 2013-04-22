@@ -15,7 +15,7 @@
     <div id="canvasIsolated"></div>
     <div id="nicedisplay"></div>
 
-    <div id="placeholder" style="position:absolute; top:0; right:0; width:200px;">
+    <div id="placeholder">
 
 
         <div id="node-selection-details">
