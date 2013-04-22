@@ -20,6 +20,7 @@ public class RegisteringExternalOntologyFactory implements ExternalOntologyFacto
 //		instance.getCreators().add( new ExternalOntologyOLS.OLSCreator() );
 		instance.getCreators().add( new ExternalOntologyGO.GOCreator() );
 		instance.getCreators().add( new ExternalOntologyUniprot.UniprotCreator() );
+		instance.getCreators().add( new ExternalOntologyATCC.ATCCCreator() );
 	}
 
 	private List<ExternalOntologyCreator> creators = new LinkedList<ExternalOntologyCreator>();

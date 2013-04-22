@@ -12,7 +12,7 @@ import bard.db.model.AbstractContextItemIntegrationSpec
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec {
+class ExperimentContextItemConstraintIntegrationSpec extends AbstractContextItemIntegrationSpec<ExperimentContextItem> {
 
     @Before
     @Override

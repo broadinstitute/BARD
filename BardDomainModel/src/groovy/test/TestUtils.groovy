@@ -26,7 +26,6 @@ class TestUtils {
         logUnexpectedValidationErrors(domainObject, valid, errorCode, foundErrorCode)
         assert errorCode == foundErrorCode
         assert domainObject.hasErrors() == !valid
-        assert domainObject.errors.hasFieldErrors(fieldName) == !valid
     }
 
     /**

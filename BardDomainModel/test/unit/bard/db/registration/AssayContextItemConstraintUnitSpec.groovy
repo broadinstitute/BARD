@@ -1,13 +1,13 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import bard.db.model.AbstractContextItemConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
 import org.junit.Before
+import spock.lang.Ignore
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
-import bard.db.dictionary.Element
-import spock.lang.Shared
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,6 +24,7 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         domainInstance = AssayContextItem.buildWithoutSave()
     }
 
+    @Ignore
     void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
 
         final String field = 'attributeType'
@@ -41,13 +42,13 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         }
 
         where:
-        desc                   | valueUnderTest      | valid | errorCode
-        'null'                 | null                | false | 'nullable'
+        desc                  | valueUnderTest      | valid | errorCode
+        'null'                | null                | false | 'nullable'
 
-        'AttributeType.Fixed'  | AttributeType.Fixed | true  | null
-        'AttributeType.List'   | AttributeType.List  | true  | null
-        'AttributeType.Range'  | AttributeType.Range | true  | null
-        'AttributeType.Number' | AttributeType.Free  | true  | null
+        'AttributeType.Fixed' | AttributeType.Fixed | true  | null
+        'AttributeType.List'  | AttributeType.List  | true  | null
+        'AttributeType.Range' | AttributeType.Range | true  | null
+        'AttributeType.Free'  | AttributeType.Free  | true  | null
 
     }
 }

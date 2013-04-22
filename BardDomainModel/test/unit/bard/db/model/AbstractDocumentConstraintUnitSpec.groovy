@@ -20,7 +20,6 @@ abstract class AbstractDocumentConstraintUnitSpec extends Specification {
 
     def domainInstance
 
-
     abstract void doSetup()
 
     void "test documentName constraints #desc documentName: "() {

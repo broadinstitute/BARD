@@ -9,7 +9,6 @@ import bard.db.registration.ExternalReference
 
 class Project extends AbstractContextOwner {
     private static final int PROJECT_NAME_MAX_SIZE = 256
-    private static final int READY_FOR_EXTRACTION_MAX_SIZE = 20
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int GROUP_TYPE_MAX_SIZE = 20
@@ -47,7 +46,7 @@ class Project extends AbstractContextOwner {
         // TODO make enum
         groupType(maxSize: GROUP_TYPE_MAX_SIZE, nullable: false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
-        readyForExtraction(maxSize: READY_FOR_EXTRACTION_MAX_SIZE, nullable: false)
+        readyForExtraction(nullable: false)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)

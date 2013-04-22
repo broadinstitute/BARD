@@ -86,26 +86,20 @@
                 $.getJSON(
                         "/BARD/ontologyJSon/getDescriptors",
                         {
-                            term: query.term,
-                            section: sectionPath
+                            term: query.term
                         },
                         function (data, textStatus, jqXHR) {
-                            var selectData = {results: []}
-                            $.each(data, function (index, val) {
-                                selectData.results.push({id: val.elementId, text: val.label})
-                                attribIdCache[val.elementId] = val.unitId;
-                            })
-                            query.callback(selectData)
+                            query.callback(data)
                         }
                 );
             }
         }).on("change", function (e) {
                     $("#attributeElementId").val(e.val);
                     $("#attributeLabel").val(e.text);
-                    $("#attributeElementUnitId").val(attribIdCache[e.val]);
+                    $("#attributeElementUnitId").val($("#attributeId").select2("data").unitId);
                     outputToConsole('e.val = ' + e.val);
                     outputToConsole('attributeElementId = ' + $("#attributeElementId").val());
-                    outputToConsole('attributeElementUnitId = ' + attribIdCache[e.val]);
+                    outputToConsole('attributeElementUnitId = ' + $("#attributeElementUnitId").val());
                 });
         $("#attributeId").select2("open");
     }

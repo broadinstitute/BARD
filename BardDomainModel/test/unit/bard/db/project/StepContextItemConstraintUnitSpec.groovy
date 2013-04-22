@@ -15,7 +15,7 @@ import bard.db.project.StepContextItem
  */
 @Build(StepContextItem)
 @Unroll
-class StepContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec{
+class StepContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<StepContextItem>{
     @Before
      void doSetup(){
         domainInstance = StepContextItem.buildWithoutSave()

@@ -49,7 +49,7 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
 
         where:
         label                      | unitConversion                                                                                                                                     | results
-        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula", offset: 1, multiplier: 1.0) | [fromUnit: 'fromUnit', toUnit: 'toUnit', multiplier: "1.0", offset: "1.0"]
+        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula", offset: 1.0, multiplier: 1.0) | [fromUnit: 'fromUnit', toUnit: 'toUnit', multiplier: "1.0", offset: "1.0"]
         "No Multiplier, No Offset" | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula")                             | [fromUnit: 'fromUnit', toUnit: 'toUnit']
     }
     /**
@@ -244,7 +244,7 @@ class DictionaryExportHelperServiceUnitSpec extends Specification {
         where:
         label                      | unitConversion                                                                                                                                     | results
 
-        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula", offset: 1, multiplier: 1.0) | XmlTestSamples.UNIT_CONVERSION_FULL
+        "Full Unit Conversion"     | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula", offset: 1.0, multiplier: 1.0) | XmlTestSamples.UNIT_CONVERSION_FULL
         "No Multiplier, No Offset" | new UnitConversion(fromUnit: new Element(label: 'fromUnit'), toUnit: new Element(label: 'toUnit'), formula: "formula")                             | XmlTestSamples.UNIT_CONVERSION_NO_MULTIPLIER
     }
 }
