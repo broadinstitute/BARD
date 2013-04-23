@@ -11,6 +11,7 @@ import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
+import bard.db.experiment.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -93,6 +94,7 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         'valid parentMeasure' | { Measure.build() } | true  | null
 
     }
+
     void "test parentChildRelationship constraints #desc parentChildRelationship: '#valueUnderTest'"() {
 
         final String field = 'parentChildRelationship'
@@ -118,9 +120,10 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
 
         'null valid'  | null                                                 | true  | null
-        'valid value' | 'is calculated from'                                 | true  | null
-        'valid value' | 'is related to'                                      | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
     }
+
     void "test entryUnit constraints #desc entryUnit: '#valueUnderTest'"() {
 
         final String field = 'entryUnit'

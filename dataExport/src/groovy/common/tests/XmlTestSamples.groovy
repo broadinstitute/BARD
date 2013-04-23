@@ -74,7 +74,7 @@ class XmlTestSamples {
         <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1'  />
     '''
     static final String EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP = '''
-        <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1' parentChildRelationship='is related to' />
+        <experimentMeasure experimentMeasureId='2' measureRef='2'  parentExperimentMeasureRef='1' parentChildRelationship='supported by' />
     '''
     static final String EXTERNAL_REFERENCES_UNT = '''
         <externalReferences>

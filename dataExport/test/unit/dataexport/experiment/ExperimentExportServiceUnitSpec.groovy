@@ -21,6 +21,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static common.tests.XmlTestSamples.*
+import bard.db.experiment.HierarchyType
 
 @Unroll
 /**
@@ -100,10 +101,10 @@ class ExperimentExportServiceUnitSpec extends Specification {
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
-        label                             | results                                             | mapClosure                                                                        | numAssayContextMeasureRefs
-        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                           | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                           | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: 'is related to'] } | 0
+        label                             | results                                             | mapClosure                                                                                              | numAssayContextMeasureRefs
+        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                                                 | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                                                 | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY.getValue()] } | 0
     }
 
     void "test generate Experiment #label"() {

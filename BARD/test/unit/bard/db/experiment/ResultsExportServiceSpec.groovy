@@ -38,7 +38,7 @@ class ResultsExportServiceSpec extends Specification {
         ResultContextItem contextItem = new ResultContextItem(valueNum: 1.0, valueDisplay: "1 uM", qualifier: "> ", attributeElement: concentration, result: child)
         child.resultContextItems.add(contextItem)
 
-        ResultHierarchy relationship = new ResultHierarchy(parentResult: parent, result: child, hierarchyType: HierarchyType.IS_RELATED_TO)
+        ResultHierarchy relationship = new ResultHierarchy(parentResult: parent, result: child, hierarchyType: HierarchyType.SUPPORTED_BY)
         parent.getResultHierarchiesForParentResult().add(relationship)
         child.getResultHierarchiesForResult().add(relationship)
 
@@ -66,7 +66,7 @@ class ResultsExportServiceSpec extends Specification {
         tParent.related.size() == 1
 
         JsonResult tChild = tParent.related.first()
-        tChild.relationship == HierarchyType.IS_RELATED_TO.toString()
+        tChild.relationship == HierarchyType.SUPPORTED_BY.toString()
         tChild.qualifier == "<"
         tChild.valueDisplay == "10-20"
         tChild.valueNum == null

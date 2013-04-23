@@ -91,8 +91,8 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
 
         'null valid'  | null                                                 | true  | null
-        'valid value' | 'is calculated from'                                 | true  | null
-        'valid value' | 'is related to'                                      | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
     }
 
     void "test experiment constraints #desc experiment: '#valueUnderTest'"() {

@@ -699,19 +699,16 @@ class ResultsService {
 
     private void linkResults(String relationship, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
         HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
-
-       //'is calculated from', 'is related to'
-        //Philip: Derived from = "is calculated from", "has child" and "has sibling" both map is "is related to"
-        if (hierarchyType == null) {
+       if (hierarchyType == null) {
             // hack until values are consistent in database
             if (relationship == null) {
-                hierarchyType = HierarchyType.IS_RELATED_TO;
-            } else if (relationship == "is related to") {
-                hierarchyType = HierarchyType.IS_RELATED_TO;
-            } else if (relationship == "is calculated from") {
-                hierarchyType = HierarchyType.IS_CALCULATED_FROM;
+                hierarchyType = HierarchyType.SUPPORTED_BY;
+            } else if (relationship == HierarchyType.SUPPORTED_BY.getValue()) {
+                hierarchyType = HierarchyType.SUPPORTED_BY;
+            } else if (relationship == HierarchyType.CALCULATED_FROM.getValue()) {
+                hierarchyType = HierarchyType.CALCULATED_FROM;
             } else {
-                errors.addError(lineNumber, 0, "Experiment measures had the relationship ${relationship} which was unrecognized");
+                errors.addError(lineNumber, 0, "Experiment measures has the relationship ${relationship} which was unrecognized");
                 return;
             }
         }
