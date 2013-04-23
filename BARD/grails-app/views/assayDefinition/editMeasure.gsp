@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.*" %>
+<%@ page import="bard.db.experiment.HierarchyType; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -67,6 +67,16 @@
                                 <r:script>
                                     enableAutoCompleteOntology("RESULT_TYPE", "#resultTypeId");
                                 </r:script>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="relationship">Relationship to Parent</label>
+                            <div class="controls">
+                                <g:select name="relationship"
+                                          noSelection="${['null':'Select One...']}"
+                                          from="${HierarchyType.list()}"
+                                          optionValue="${{it.value}}"
+                                          optionKey="value"/>
                             </div>
                         </div>
                         <div class="control-group">
@@ -197,7 +207,17 @@
                         <input type="hidden" name="measureId" value="${measure.id}"/>
                         <button type="button" class="btn" onclick="this.form.submit()">Click to delete ${measure.resultType?.label} entirely</button>
                     </g:form>
-
+                    <h4>Change Relationship Of Child To Parent</h4>
+                    <g:form class="form-horizontal" id="${assayInstance.id}" action="changeRelationship">
+                        <input type="hidden" name="measureId" value="${measure.id}"/>
+                        <label class="control-label" for="relationship">Child to Parent: </label>
+                        <g:select name="relationship"
+                                  noSelection="${['null':'Select One...']}"
+                                  from="${HierarchyType.list()}"
+                                  optionValue="${{it.value}}"
+                                  optionKey="value"/>
+                        <button type="button" class="btn" onclick="this.form.submit()">Change</button>
+                    </g:form>
                 </div>
             </g:each>
         </div>

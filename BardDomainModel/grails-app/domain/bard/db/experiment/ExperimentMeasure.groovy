@@ -31,7 +31,8 @@ class ExperimentMeasure {
 
     static constraints = {
         parent(nullable: true)
-        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE, inList: ['is calculated from', 'is related to'])
+        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE,
+                inList: [HierarchyType.CALCULATED_FROM.getValue(),HierarchyType.SUPPORTED_BY.getValue()])
         experiment()
         measure()
 

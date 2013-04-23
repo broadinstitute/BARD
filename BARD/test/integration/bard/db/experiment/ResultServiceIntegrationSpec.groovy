@@ -86,7 +86,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
     }
 
     def addChild(ExperimentMeasure parent, ExperimentMeasure child) {
-        child.parentChildRelationship = HierarchyType.IS_CALCULATED_FROM.toString();
+        child.parentChildRelationship = HierarchyType.CALCULATED_FROM.toString();
         child.parent = parent
         parent.addToChildMeasures(child)
     }
