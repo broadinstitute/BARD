@@ -13,6 +13,7 @@ import bard.db.registration.ExternalReference
 import org.apache.commons.lang.StringUtils
 import bard.db.model.AbstractContext
 import org.apache.commons.lang3.StringUtils
+import org.apache.commons.math3.util.Precision
 
 class ContextHandlerService {
     private static final String goElementLabel = "GO biological process term"
@@ -188,21 +189,80 @@ class ContextHandlerService {
      * @param item
      * @return
      */
-    boolean isContextItemExist(AbstractContext context, AbstractContextItem item)  {
-        boolean isSame = false
-        context.contextItems.each{ AbstractContextItem it ->
-            if (item.attributeElement.label == it.attributeElement.label &&
-                    item.valueElement?.label == it.valueElement?.label &&
-                    StringUtils.equals(item.extValueId, it.extValueId) &&
-                    StringUtils.equals(item.qualifier, it.qualifier) &&
-//                    Float.compare(item.valueNum, it.valueNum) &&
-//                    Float.compare(item.valueMin, it.valueMin) &&
-//                    Float.compare(item.valueMax, it.valueMax) &&
-                    StringUtils.equals(item.valueDisplay, it.valueDisplay)
-                )
-                isSame = true
+//    boolean isContextItemExist(AbstractContext context, AbstractContextItem item)  {
+//        boolean isSame = false
+//        context.contextItems.each{ AbstractContextItem it ->
+//            if (item.attributeElement.label == it.attributeElement.label &&
+//                    item.valueElement?.label == it.valueElement?.label &&
+//                    StringUtils.equals(item.extValueId, it.extValueId) &&
+//                    StringUtils.equals(item.qualifier, it.qualifier) &&
+////                    Float.compare(item.valueNum, it.valueNum) &&
+////                    Float.compare(item.valueMin, it.valueMin) &&
+////                    Float.compare(item.valueMax, it.valueMax) &&
+//                    StringUtils.equals(item.valueDisplay, it.valueDisplay)
+//                )
+//                isSame = true
+//        }
+//        return isSame
+//    }
+
+    /**
+     * Loop over the whole context to see if a particular item exist or not
+     *
+     * @param context
+     * @param item
+     * @return
+     */
+    boolean isContextItemExist(AbstractContext context, AbstractContextItem item) {
+        for (AbstractContextItem aci : context.contextItems) {
+            if (isAbstractContextItemSame(aci, item))
+                return true
         }
-        return isSame
+        return false
     }
 
+    boolean isAbstractContextItemSame(AbstractContextItem a, AbstractContextItem b) {
+        float eps = 0.00001
+        if (    (a.attributeElement == b.attributeElement) &&
+                (a.valueElement == b.valueElement) &&
+                (a.extValueId == b.extValueId) &&
+                (Precision.equalsIncludingNaN(nullToNaN(a.valueNum), nullToNaN(b.valueNum), eps) && StringUtils.equals(a.qualifier, b.qualifier)) &&
+                (Precision.equalsIncludingNaN(nullToNaN(a.valueMin), nullToNaN(b.valueMin), eps) && Precision.equalsIncludingNaN(nullToNaN(a.valueMax), nullToNaN(b.valueMax), eps)) &&
+                (StringUtils.equals(a.valueDisplay, b.valueDisplay))
+        )
+            return true
+        return false
+    }
+    Float nullToNaN(Float a) {
+        if (!a)
+            return Float.NaN
+        return a
+    }
+
+//    boolean isContextSame(AbstractContext a, AbstractContext b) {
+//        for (AbstractContextItem aci : a.contextItems) {
+//            if (!isContextItemExist(b, aci))
+//                return false
+//        }
+//        return true
+//    }
+
+    int isContextSame(AbstractContext a, AbstractContext b) {
+        int aInB = 0
+        for (AbstractContextItem aci : a.contextItems) {
+            if (isContextItemExist(b, aci)) {
+                aInB++;
+            }
+        }
+        if (aInB == a.contextItems.size() && aInB == b.contextItems.size())  {  // the same
+            return 0
+        }
+        else if (aInB == a.contextItems.size() && aInB < b.contextItems.size()) {  // a < b
+            return -1
+        }
+        else if (aInB == b.contextItems.size() && aInB < a.contextItems.size()) { // a > b
+            return 1
+        }
+        return 999
+    }
 }

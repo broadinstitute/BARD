@@ -112,23 +112,29 @@ class BulkResultService {
                 "MODIFIED_BY) VALUES (RESULT_HIERARCHY_ID_SEQ.NEXTVAL, ?,?,?, 1,sysdate,sysdate, ?)";
 
         PreparedStatement statement = connection.prepareStatement(query)
+        def relationshipValues = [] as Set
         try {
             int inBatch = 0;
             for(relationship in relationships) {
                 if (inBatch > BATCH_SIZE) {
                     println(""+new Date()+" writing ${inBatch} hierarchy records");
                     statement.executeBatch();
+                    relationshipValues.clear()
                 }
 
                 statement.setLong(1, relationship.result.id)
                 statement.setLong(2, relationship.parentResult.id)
-                statement.setString(3, relationship.hierarchyType.value)
+                def hierarchyType = relationship.hierarchyType.value
+                statement.setString(3, hierarchyType)
+                relationshipValues.add(hierarchyType)
 
                 statement.setString(4, username)
                 statement.addBatch()
                 inBatch++;
             }
             statement.executeBatch()
+        } catch (Exception ex) {
+            throw new RuntimeException("hierarchyTypes: ${relationshipValues}", ex)
         } finally {
             statement.close()
         }
