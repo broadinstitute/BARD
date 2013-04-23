@@ -277,12 +277,12 @@ $(function () {
 
     if (!msie6) {
         var top = $('#placeholder').offset().top - parseFloat($('#placeholder').css('margin-top').replace(/auto/, 0));
+
         $(window).scroll(function (event) {
             // what the y position of the scroll is
             var y = $(this).scrollTop();
-
-            // whether that's below the form
-            if (y >= top) {
+            // if inside of the experiment box
+            if (y >= top && y <= top + $('#showstep').height()- $('#placeholder').height()) {
                 // if so, ad the fixed class
                 $('#placeholder').addClass('fixed');
             } else {
