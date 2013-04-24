@@ -90,10 +90,10 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         then:
         map.records.size() == 2
-        map.records["parent"].size() == 1
+        map.records["parent (stats)"].size() == 1
         map.records["child"].size() == 1
 
-        PubchemReformatService.ResultMapRecord parent = map.records["parent"].first()
+        PubchemReformatService.ResultMapRecord parent = map.records["parent (stats)"].first()
         PubchemReformatService.ResultMapRecord child = map.records["child"].first()
 
         parent.qualifierTid == "3"
