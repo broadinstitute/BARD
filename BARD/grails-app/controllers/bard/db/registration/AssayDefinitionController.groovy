@@ -171,7 +171,9 @@ class AssayDefinitionController {
         }
         else {
             flash.message = null
-            assayContextService.changeParentChildRelationship(measure, hierarchyType)
+            if(measure.parentMeasure){ //if this measure has no parent then do nothing
+                assayContextService.changeParentChildRelationship(measure, hierarchyType)
+            }
         }
 
         redirect(action: "editMeasure", id: params.id)
