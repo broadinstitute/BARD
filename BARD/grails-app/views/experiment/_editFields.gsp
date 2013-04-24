@@ -105,8 +105,7 @@
                           from="${HierarchyType.list()}"
                           optionValue="${{it.value}}"
                           optionKey="value"/>
-                <button type="button" id="changeParentRelationship" class="btn btn-primary">Change</button>
-            </div>
+             </div>
         </div>
         <input type="hidden" id="experimentTree" name="experimentTree">
 
@@ -207,7 +206,7 @@
                 $("#parent-selection").on("change", function(event, v) {
                     currentSelectionKey = assignParent(currentSelectionKey, event.target.value);
                 });
-                $("#changeParentRelationship").on("click", function(event, v) {
+                $("#relationship-selection").on("change", function(event, v) {
 
 
                    var node = $("#experiment-measure-tree").dynatree("getActiveNode");
