@@ -169,4 +169,48 @@ class BuildElementPathsServiceSpec extends Specification {
         }
     }
 
+
+    void "build all"() {
+        setup:
+        ElementHierarchy eh0a = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        ElementHierarchy eh1a = buildElementHierarchy(eh0a.childElement, Element.build(), service.relationshipType)
+        ElementHierarchy eh2a = buildElementHierarchy(eh1a.childElement, Element.build(), service.relationshipType)
+        List<ElementHierarchy> pathA = [eh0a, eh1a, eh2a] as List<ElementHierarchy>
+
+        ElementHierarchy eh0b = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        ElementHierarchy eh1b = buildElementHierarchy(eh0b.childElement, Element.build(), service.relationshipType)
+        ElementHierarchy eh2b = buildElementHierarchy(eh1b.childElement, Element.build(), service.relationshipType)
+        List<ElementHierarchy> pathB = [eh0b, eh1b, eh2b] as List<ElementHierarchy>
+
+        when:
+        Set<ElementAndFullPath> all = service.buildAll()
+
+        then:
+        all.size() == 8
+
+        ElementAndFullPath a = null
+        ElementAndFullPath b = null
+        for (ElementAndFullPath elementAndFullPath : all) {
+            if (elementAndFullPath.path.size() > 0) {
+                if (elementAndFullPath.path.last() == eh2a) {
+                    a = elementAndFullPath
+                } else if (elementAndFullPath.path.last() == eh2b) {
+                    b = elementAndFullPath
+                }
+            }
+        }
+        assert a
+        assert b
+
+        assert a.element == eh2a.childElement
+        assert b.element == eh2b.childElement
+
+        assert a.path.size() == pathA.size()
+        assert b.path.size() == pathB.size()
+
+        for (int i = 0; i < pathA.size(); i++) {
+            assert a.path.get(i) == pathA.get(i)
+            assert b.path.get(i) == pathB.get(i)
+        }
+    }
 }

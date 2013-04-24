@@ -10,26 +10,41 @@ class BuildElementPathsService {
         this.relationshipType = relationshipType
     }
 
+    Set<ElementAndFullPath> buildAll() {
+        Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
+
+        List<Element> elementList = Element.findAll()
+        for (Element element : elementList) {
+            result.addAll(build(element))
+        }
+
+        return result
+    }
+
     Set<ElementAndFullPath> build(Element element) {
-        Set<ElementAndFullPath> elementAndFullPathSet = new HashSet<ElementAndFullPath>()
+        Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
         Set<ElementHierarchy> elementHierarchySet = buildSetThatMatchRelationship(element.childHierarchies)
 
-        if (elementHierarchySet.size() == 0) {
-            ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: element)
-            elementAndFullPathSet.add(elementAndFullPath)
-        } else {
-            for (ElementHierarchy elementHierarchy : elementHierarchySet) {
-                ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: element)
-                elementAndFullPath.path.add(elementHierarchy)
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: element)
+        result.add(elementAndFullPath)
 
-                elementAndFullPathSet.add(elementAndFullPath)
+        if (elementHierarchySet.size() > 0) {
+            Iterator<ElementHierarchy> iterator = elementHierarchySet.iterator()
 
-                elementAndFullPathSet.addAll(recursiveBuild(elementAndFullPath))
+            for (int i = 0; i < elementHierarchySet.size() - 1; i++) {
+                ElementAndFullPath copy = elementAndFullPath.copy()
+                copy.path.add(0, iterator.next())
+
+                result.add(copy)
+                result.addAll(recursiveBuild(copy))
             }
+
+            elementAndFullPath.path.add(0, iterator.next())
+            result.addAll(recursiveBuild(elementAndFullPath))
         }
 
-        return elementAndFullPathSet
+        return result
     }
 
 
@@ -43,24 +58,18 @@ class BuildElementPathsService {
         Set<ElementHierarchy> elementHierarchySet = buildSetThatMatchRelationship(currentStartElement.childHierarchies)
 
         if (elementHierarchySet.size() > 0) {
-            Iterator<ElementHierarchy> elementHierarchyIterator = elementHierarchySet.iterator()
+            Iterator<ElementHierarchy> iterator = elementHierarchySet.iterator()
 
-            Map<ElementHierarchy,ElementAndFullPath> addToPathMap = new HashMap<ElementHierarchy, ElementAndFullPath>()
-            addToPathMap.put(elementHierarchyIterator.next(), elementAndFullPath)
-
-            while (elementHierarchyIterator.hasNext()) {
+            for (int i = 0; i < elementHierarchySet.size() - 1; i++) {
                 ElementAndFullPath copy = elementAndFullPath.copy()
-                addToPathMap.put(elementHierarchyIterator.next(), copy)
+                copy.path.add(0, iterator.next())
+
+                result.add(copy)
+                result.addAll(recursiveBuild(copy))
             }
 
-            for (ElementHierarchy elementHierarchy : addToPathMap.keySet()) {
-                ElementAndFullPath currentElementAndFullPath = addToPathMap.get(elementHierarchy)
-
-                currentElementAndFullPath.path.add(0, elementHierarchy)
-                result.add(currentElementAndFullPath)
-
-                result.addAll(recursiveBuild(currentElementAndFullPath))
-            }
+            elementAndFullPath.path.add(0, iterator.next())
+            result.addAll(recursiveBuild(elementAndFullPath))
         }
 
         return result
