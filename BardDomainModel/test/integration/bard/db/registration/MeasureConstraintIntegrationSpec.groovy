@@ -9,9 +9,9 @@ import spock.lang.Unroll
 import static bard.db.registration.Measure.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
-import bard.db.experiment.HierarchyType
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -120,8 +120,8 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
 
         'null valid'  | null                                                 | true  | null
-        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
-        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM.getId()                | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY.getId()                   | true  | null
     }
 
     void "test entryUnit constraints #desc entryUnit: '#valueUnderTest'"() {

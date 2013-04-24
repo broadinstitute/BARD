@@ -9,6 +9,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Unroll
+import bard.db.enums.HierarchyType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -43,7 +44,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def childCell = new RawCell(columnName: "child", value: "1")
 
         ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(measure: parentMeasure)
-        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: "calculated from")
+        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: HierarchyType.CALCULATED_FROM)
         parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
         List<Row> rows;

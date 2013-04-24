@@ -2,7 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.experiment.ExperimentMeasure
-import bard.db.experiment.HierarchyType
+import bard.db.enums.HierarchyType
 
 class Measure {
 
@@ -11,7 +11,7 @@ class Measure {
     Assay assay
     Element resultType
     Measure parentMeasure
-    String parentChildRelationship
+    HierarchyType parentChildRelationship
     Element entryUnit
     Element statsModifier
 
@@ -44,8 +44,7 @@ class Measure {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        parentChildRelationship(nullable: true, blank: false, maxSize: ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE,
-                inList: [HierarchyType.CALCULATED_FROM.getValue(), HierarchyType.SUPPORTED_BY.getValue()])
+        parentChildRelationship(nullable: true,  maxSize: ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE)
 
     }
 

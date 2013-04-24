@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
+import bard.db.enums.HierarchyType
 
 class MeasureTreeService {
 
@@ -63,11 +64,11 @@ class MeasureTreeService {
     public Map createTreeFromExperimentMeasure(ExperimentMeasure experimentMeasure, boolean contextsAsChildren) {
         def key = experimentMeasure.id;
         String title = experimentMeasure.measure.displayLabel
-        String relationship = experimentMeasure.parentChildRelationship
+        HierarchyType relationship = experimentMeasure.parentChildRelationship
 
 
         if (relationship) {
-            title = "(${relationship}) ${title}"
+            title = "(${relationship.id}) ${title}"
         }
 
         Long measureId = experimentMeasure.measure.id
@@ -85,15 +86,15 @@ class MeasureTreeService {
             }
         }
 
-        return [key: key, title: title, children: children, expand: true, relationship: relationship, measureId: measureId];
+        return [key: key, title: title, children: children, expand: true, relationship: relationship?.id, measureId: measureId];
     }
 
     public Map createTreeFromMeasure(Measure measure, boolean contextsAsChildren) {
         def key = measure.id;
         String title = measure.displayLabel
-        String relationship = measure.parentChildRelationship
+        HierarchyType relationship = measure.parentChildRelationship
         if (relationship) {
-            title = "(${relationship}) ${title}"
+            title = "(${relationship.id}) ${title}"
         }
         def children = []
 
@@ -107,6 +108,6 @@ class MeasureTreeService {
                 children.add([key: "context-${context.id}", title: "Context: ${context.contextName}", hideCheckbox: true, unselectable: true, icon: false])
             }
         }
-        return [key: key, title: title, children: children, expand: true, relationship: relationship];
+        return [key: key, title: title, children: children, expand: true, relationship: relationship?.id];
     }
 }

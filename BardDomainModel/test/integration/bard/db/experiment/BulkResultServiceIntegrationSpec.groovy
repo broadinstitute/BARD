@@ -5,6 +5,7 @@ import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Specification
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -94,7 +95,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         List<Result> fromDb = bulkResultService.findResults(experiment)
 
         Result dbParent = fromDb.find { it.valueDisplay == "parent" }
-        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getValue() }
+        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getId() }
 
         then:
         System.identityHashCode(parent) != System.identityHashCode(dbParent)
