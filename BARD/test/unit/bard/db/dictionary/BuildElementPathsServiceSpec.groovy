@@ -5,7 +5,6 @@ import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
-import org.grails.datastore.mapping.query.api.Criteria
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
@@ -212,5 +211,55 @@ class BuildElementPathsServiceSpec extends Specification {
             assert a.path.get(i) == pathA.get(i)
             assert b.path.get(i) == pathB.get(i)
         }
+    }
+
+
+    void "create list sorted by String"() {
+        setup:
+        ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        ElementHierarchy eh1 = buildElementHierarchy(eh0.childElement, Element.build(), service.relationshipType)
+        ElementHierarchy eh2 = buildElementHierarchy(eh1.childElement, Element.build(), service.relationshipType)
+
+        ElementHierarchy eh3 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        ElementHierarchy eh4 = buildElementHierarchy(eh3.childElement, Element.build(), service.relationshipType)
+
+        Set<ElementAndFullPath> allSet = service.buildAll()
+
+        when:
+        List<ElementAndFullPath> sortedList = service.createListSortedByString(allSet)
+
+        then:
+        sortedList.size() == 7
+
+        sortedList.get(0).path.size() == 0
+        sortedList.get(0).element == eh0.parentElement
+
+        sortedList.get(1).path.size() == 1
+        sortedList.get(1).path.get(0) == eh0
+        sortedList.get(1).element == eh0.childElement
+
+        sortedList.get(2).path.size() == 2
+        sortedList.get(2).path.get(0) == eh0
+        sortedList.get(2).path.get(1) == eh1
+        sortedList.get(2).element == eh1.childElement
+
+        sortedList.get(3).path.size() == 3
+        sortedList.get(3).path.get(0) == eh0
+        sortedList.get(3).path.get(1) == eh1
+        sortedList.get(3).path.get(2) == eh2
+        sortedList.get(3).element == eh2.childElement
+        service.maxPathLength == sortedList.get(3).toString().length()
+
+        sortedList.get(4).path.size() == 0
+        sortedList.get(4).element == eh3.parentElement
+
+        sortedList.get(5).path.size() == 1
+        sortedList.get(5).path.get(0) == eh3
+        sortedList.get(5).element == eh3.childElement
+
+        sortedList.get(6).path.size() == 2
+        sortedList.get(6).path.get(0) == eh3
+        sortedList.get(6).path.get(1) == eh4
+        sortedList.get(6).element == eh4.childElement
     }
 }

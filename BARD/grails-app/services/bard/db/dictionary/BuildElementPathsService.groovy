@@ -1,13 +1,36 @@
 package bard.db.dictionary
 
-import org.grails.datastore.mapping.query.api.Criteria
-
 class BuildElementPathsService {
 
     final String relationshipType
 
+    Integer maxPathLength
+
     public BuildElementPathsService(String relationshipType = "subClassOf") {
         this.relationshipType = relationshipType
+
+        maxPathLength = null
+    }
+
+    List<ElementAndFullPath> createListSortedByString(Collection<ElementAndFullPath> elementAndFullPathCollection) {
+        List<ElementAndFullPath> result = new ArrayList<ElementAndFullPath>(elementAndFullPathCollection)
+
+        Collections.sort(result, new ElementAndFullPathComparatorByString())
+
+        maxPathLength = 0
+        int i = 0;
+        for (ElementAndFullPath elementAndFullPath : result) {
+            elementAndFullPath.index = i
+
+            final int currentLength = elementAndFullPath.toString().length()
+            if (currentLength > maxPathLength) {
+                maxPathLength = currentLength
+            }
+
+            i++
+        }
+
+        return result
     }
 
     Set<ElementAndFullPath> buildAll() {

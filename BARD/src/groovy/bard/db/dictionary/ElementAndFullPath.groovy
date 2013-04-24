@@ -12,13 +12,15 @@ public class ElementAndFullPath {
 
     Element element
 
+    Integer index
+
     /**
      * path from root of hierarchy to element
      */
     List<ElementHierarchy> path
 
-    public ElementAndFullPath() {
-        pathDelimeter = "\\"
+    public ElementAndFullPath(String pathDelimeter = "\\") {
+        this.pathDelimeter = pathDelimeter
 
         path = new LinkedList<ElementHierarchy>()
     }
@@ -36,8 +38,8 @@ public class ElementAndFullPath {
         StringBuilder builder = new StringBuilder()
 
         for (ElementHierarchy eh : path) {
-            builder.append(eh.parentElement.id).append(pathDelimeter)
+            builder.append(eh.parentElement.label).append(pathDelimeter)
         }
-        builder.append(element.id)
+        builder.append(element.label)
     }
 }
