@@ -95,7 +95,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         List<Result> fromDb = bulkResultService.findResults(experiment)
 
         Result dbParent = fromDb.find { it.valueDisplay == "parent" }
-        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getId() }
+        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY}
 
         then:
         System.identityHashCode(parent) != System.identityHashCode(dbParent)
