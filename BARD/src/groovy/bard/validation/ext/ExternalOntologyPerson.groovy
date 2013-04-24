@@ -16,12 +16,13 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
-		String cleanId = cleanId(id);
+//		String cleanId = cleanId(id);
+		String cleanId = StringUtils.trimToEmpty(id);
 		if( StringUtils.isBlank(cleanId))
 			return null;
 		def person = Person.get(cleanId)
 		if(person){
-			ExternalItem extItem = new ExternalItem(person.id, person.userName)
+			ExternalItem extItem = new ExternalItem(person.id.toString(), person.userName)
 			return extItem
 		}
 		else
@@ -35,16 +36,19 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 
 	@Override
 	public List<ExternalItem> findMatching(String name, int limit) throws ExternalOntologyException {
-		String cleanName = cleanName(name);
+//		String cleanName = cleanName(name);
+		String cleanName = StringUtils.trimToEmpty(name);
 		if( StringUtils.isBlank(cleanName))
 			return Collections.EMPTY_LIST;
 		String likeTerm = "%" + cleanName + "%"
-		List<Person> persons = Person.findByUserNameLikeOrFullNameILike( likeTerm, likeTerm, [max: limit] )
-		if(persons){
-			// Return a concatenation of username and fullname
+		List<Person> persons = Person.findAllByUserNameIlikeOrFullNameIlike( likeTerm, likeTerm, [max: limit] )
+		if(persons){			
 			List<ExternalItem> items = new ArrayList<ExternalItem>();
 			for(Person p in persons){
-				items.add(new ExternalItem(p.id, p.userName + (p.fullName ? (" (" + p.fullName + ")") : "")))
+				// Display is the concatenation of username and fullname
+				String display = p.userName + (p.fullName ? (" (" + p.fullName + ")") : "")
+				ExternalItem extItem = new ExternalItem(p.id.toString(), display)				
+				items.add(extItem)
 			}
 			return items			
 		}
