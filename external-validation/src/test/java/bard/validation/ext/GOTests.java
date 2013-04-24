@@ -25,6 +25,21 @@ public class GOTests {
 		eo = ExternalOntologyGO.PROCESS_INSTANCE;
 		ExternalItem item = eo.findById("GO:0009987"); // force initialization of pool
 	}
+	
+	@Test
+	public void testIdPrependGO() {
+		String id = "GO9987";
+		String clean = eo.cleanId(id);
+		assertEquals(true, "GO:0009987".equals(clean));
+	}
+	
+	@Test
+	public void testFailingId() throws ExternalOntologyException {
+		String id = "ABC";
+		ExternalItem item = eo.findById(id);
+		assertEquals(null, item);
+	}
+	
 
 	@Test
 	public void testFindById() throws ExternalOntologyException {

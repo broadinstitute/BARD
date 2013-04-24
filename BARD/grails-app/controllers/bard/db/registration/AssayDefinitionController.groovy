@@ -6,6 +6,8 @@ import bard.db.enums.AssayStatus
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.web.json.JSONArray
+import bard.db.experiment.HierarchyType
+import org.apache.commons.lang.StringUtils
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
@@ -96,27 +98,33 @@ class AssayDefinitionController {
     }
 
     def addMeasure() {
-        def assayInstance = Assay.get(params.id)
-        def resultType = Element.get(params.resultTypeId)
-
-        def parentMeasure = null
-        if (params.parentMeasureId) {
-            parentMeasure = Measure.get(params.parentMeasureId)
+        final Assay assayInstance = Assay.get(params.id)
+        final Element resultType = Element.get(params.resultTypeId)
+        final String parentChildRelationship = params.relationship
+        final HierarchyType hierarchyType = HierarchyType.getByValue(parentChildRelationship?.trim())
+        if (!resultType) {
+            flash.message = 'Result Type is Required'
         }
+        else {
+            def parentMeasure = null
+            if (params.parentMeasureId) {
+                parentMeasure = Measure.get(params.parentMeasureId)
+            }
 
-        def statsModifier = null
-        if (params.statisticId) {
-            statsModifier = Element.get(params.statisticId)
+            def statsModifier = null
+            if (params.statisticId) {
+                statsModifier = Element.get(params.statisticId)
+            }
+
+            def entryUnit = null
+            if (params.entryUnitName) {
+                entryUnit = Element.findByLabel(params.entryUnitName)
+            }
+
+            Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+            flash.message = "Successfully added measure " + newMeasure.displayLabel
+
         }
-
-        def entryUnit = null
-        if (params.entryUnitName) {
-            entryUnit = Element.findByLabel(params.entryUnitName)
-        }
-
-        Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit)
-
-        flash.message = "Successfully added measure " + newMeasure.displayLabel
         redirect(action: "editMeasure", id: params.id)
     }
 
@@ -152,6 +160,25 @@ class AssayDefinitionController {
         redirect(action: "editMeasure", id: context.assay.id)
     }
 
+    def changeRelationship() {
+        def measure = Measure.get(params.measureId)
+        def parentChildRelationship = params.relationship
+
+        final HierarchyType hierarchyType = HierarchyType.getByValue(parentChildRelationship?.trim())
+
+        if (measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        }
+        else {
+            flash.message = null
+            if(measure.parentMeasure){ //if this measure has no parent then do nothing
+                assayContextService.changeParentChildRelationship(measure, hierarchyType)
+            }
+        }
+
+        redirect(action: "editMeasure", id: params.id)
+    }
+
     def findById() {
         if (params.assayId && params.assayId.isLong()) {
             def assayInstance = Assay.findById(params.assayId.toLong())
@@ -172,11 +199,11 @@ class AssayDefinitionController {
                 }
                 assays.sort {
                     a, b ->
-                        if (params.order == 'desc') {
-                            b."${params.sort}" <=> a."${params.sort}"
-                        } else {
-                            a."${params.sort}" <=> b."${params.sort}"
-                        }
+                    if (params.order == 'desc') {
+                        b."${params.sort}" <=> a."${params.sort}"
+                    } else {
+                        a."${params.sort}" <=> b."${params.sort}"
+                    }
                 }
                 render(view: "findByName", params: params, model: [assays: assays])
             } else if (assays?.size() == 1)
@@ -241,21 +268,21 @@ class AssayDefinitionController {
         }
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
-	
-	def launchEditItemInCard(Long assayContextId, Long assayContextItemId){
-		def assayContextItem = AssayContextItem.get(assayContextItemId)
-		render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
-	}
-	
-	def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel){
-		def assayContextItem = AssayContextItem.get(assayContextItemId)
-		assayContextItem.valueNum = numericValue.toFloat().floatValue()
-		if (valueUnitLabel)
-			assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
-		assayContextItem.save()		
-		Assay assay = assayContextItem.assayContext.assay
-		render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-	}
+
+    def launchEditItemInCard(Long assayContextId, Long assayContextItemId) {
+        def assayContextItem = AssayContextItem.get(assayContextItemId)
+        render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
+    }
+
+    def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel) {
+        def assayContextItem = AssayContextItem.get(assayContextItemId)
+        assayContextItem.valueNum = numericValue.toFloat().floatValue()
+        if (valueUnitLabel)
+            assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
+        assayContextItem.save()
+        Assay assay = assayContextItem.assayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
 
     def createCard(Long instanceId, String cardName, String cardSection) {
         if (instanceId == null) {

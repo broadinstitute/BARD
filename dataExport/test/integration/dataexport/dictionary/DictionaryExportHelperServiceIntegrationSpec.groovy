@@ -12,6 +12,8 @@ import groovy.xml.MarkupBuilder
 import spock.lang.Unroll
 
 import javax.sql.DataSource
+import bard.db.audit.BardContextUtils
+import org.hibernate.SessionFactory
 
 @Unroll
 class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
@@ -21,6 +23,7 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     FixtureLoader fixtureLoader
+    SessionFactory sessionFactory
 
     void setup() {
         this.writer = new StringWriter()
@@ -29,6 +32,9 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
         TestDataConfigurationHolder.reset()
         this.resetSequenceUtil.resetSequence('ELEMENT_ID_SEQ')
+
+        BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
+//        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
     }
 
     void tearDown() {
@@ -116,12 +122,23 @@ class DictionaryExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate Element hierarchies #label"() {
         given:
 
-        def fixture = fixtureLoader.build {
-            parentElement(Element, label: 'IC50')
-            childElement(Element, label: 'log IC50')
-            elementHierarchy(ElementHierarchy, relationshipType: 'subClassOf',
-                    parentElement: ref('parentElement'), childElement: ref('childElement'))
-        }
+        Element parentElement = Element.build()
+        parentElement.label = "IC50"
+        Element childElement = Element.build()
+        childElement.label = "log IC50"
+        ElementHierarchy elementHierarchy = new ElementHierarchy(relationshipType: "subClassOf",
+                parentElement: parentElement, childElement: childElement, dateCreated: new Date())
+        assert elementHierarchy.save()
+        parentElement.parentHierarchies.add(elementHierarchy)
+        childElement.childHierarchies.add(elementHierarchy)
+
+
+//        def fixture = fixtureLoader.build {
+//            parentElement(Element, label: 'IC50')
+//            childElement(Element, label: 'log IC50')
+//            elementHierarchy(ElementHierarchy, relationshipType: 'subClassOf',
+//                    parentElement: ref('parentElement'), childElement: ref('childElement'))
+//        }
         when:
         this.dictionaryExportHelperService.generateElementHierarchies(this.markupBuilder)
         then:

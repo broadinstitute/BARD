@@ -75,9 +75,8 @@ class ExperimentMeasureConstraintUnitSpec extends Specification {
 
 
         'null valid'  | null                                                 | true  | null
-        'valid value' | 'Derived from'                                       | true  | null
-        'valid value' | 'has Child'                                          | true  | null
-        'valid value' | 'has Sibling'                                        | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
     }
 
     void "test experiment constraints #desc experiment: '#valueUnderTest'"() {

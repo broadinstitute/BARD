@@ -1,4 +1,4 @@
-<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="bard.db.experiment.HierarchyType; java.text.SimpleDateFormat" %>
 
 <div class="row-fluid">
 <div id="accordion-foo" class="span12 accordion">
@@ -27,13 +27,13 @@
 
                 <dt>Description</dt><dd>
                 <input class="input-xxlarge" type="text" name="description"
-                       value="${fieldValue(bean: experiment, field: "description")}"/>               
+                       value="${fieldValue(bean: experiment, field: "description")}"/>
             </dd>
 
                 <dt><g:message code="experiment.experimentStatus.label" default="Fix i18n"/>:</dt>
                 <dd><g:select id="experimentStatus" name="experimentStatus"
                               from="${bard.db.enums.ExperimentStatus.values()}"
-                              value="${experiment?.experimentStatus}" /></dd>
+                              value="${experiment?.experimentStatus}"/></dd>
 
                 <dt>Hold until date</dt><dd>
                 <input type="text" class="input-small date-selection" name="holdUntilDate"
@@ -61,63 +61,67 @@
 </div>
 
 <div class="accordion-group">
-    <div class="accordion-heading">
-        <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
-           data-target="#target-contexts-info">
-            <i class="icon-chevron-down"></i>
-            Measures
-        </a>
+<div class="accordion-heading">
+    <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
+       data-target="#target-contexts-info">
+        <i class="icon-chevron-down"></i>
+        Measures
+    </a>
+</div>
+
+<r:require module="dynatree"/>
+<div class="accordion-body in collapse">
+<div class="accordion-inner">
+<input type="hidden" name="measureIds" id="measureIds">
+
+<div class="row-fluid">
+
+    <div class="span6">
+        <h4>Measures available on assay</h4>
+
+        <p>Check the box by a measure to add it to this experiment and it will appear in the tree on the right.  Select the measure in the tree on the right to change it's parent or relationship.</p>
+
+        <div id="assay-measure-tree"></div>
     </div>
 
-    <r:require module="dynatree"/>
-    <div class="accordion-body in collapse">
-        <div class="accordion-inner">
-            <input type="hidden" name="measureIds" id="measureIds">
+    <div class="span6">
+        <h4>Measures on this experiment</h4>
 
-            <div class="row-fluid">
-
-                <div class="span6">
-                    <h4>Measures available on assay</h4>
-                    <p>Check the box by a measure to add it to this experiment and it will appear in the tree on the right.  Select the measure in the tree on the right to change it's parent or relationship.</p>
-                    <div id="assay-measure-tree"></div>
-                </div>
-
-                <div class="span6">
-                    <h4>Measures on this experiment</h4>
-                    <div id="parent-selection-pane">
-                        <div class="form-inline">
-                            <label>Change parent of selection to
-                                <select id="parent-selection" disabled>
-                                    <option>
-                                    </option>
-                                </select>
-                            </label>
-                        </div>
-
-                        <div class="form-inline">
-
-                            <label>Relationship of child to parent is
-                                <select id="relationship-selection" disabled>
-                                    <option value="Derived from">Derived from</option>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-                    <input type="hidden" id="experimentTree" name="experimentTree">
-
-                    <div id="experiment-measure-tree"></div>
-                </div>
-
+        <div id="parent-selection-pane">
+            <div class="form-inline">
+                <label>Change parent of selection to
+                    <select name="parentMeasure" id="parent-selection" disabled>
+                        <option>
+                        </option>
+                    </select>
+                </label>
             </div>
 
-            <r:script>
+            <div class="form-inline">
+                <input type="hidden" id="selectedMeasureId" name="selectedMeasureId"/>
+                <label for="relationship">Relationship of child to parent is:</label>
+                <g:select name="relationship" id="relationship-selection" disabled="true"
+                          noSelection="${['null': 'Select One...']}"
+                          from="${HierarchyType.list()}"
+                          optionValue="${{it.value}}"
+                          optionKey="value"/>
+             </div>
+        </div>
+        <input type="hidden" id="experimentTree" name="experimentTree">
+
+        <div id="experiment-measure-tree"></div>
+    </div>
+
+</div>
+
+<r:script>
                 var nextNodeId = 1
                 var nodeKeyByMeasureId = {}
                 var currentSelectionKey = null;
 
                 /* Convert the current experiment measure tree into a serialized json object for form submission */
                 var updateFormField = function(tree) {
-                    var edges = []
+                    var edges = [];
                     var root = tree.getRoot();
 
                     root.visit(function(n) {
@@ -125,7 +129,8 @@
                         if(n.getParent() != null && n.getParent() != root) {
                             parentId = n.getParent().data.key;
                         }
-                        edges.push({id: n.data.key, parentId: parentId, measureId: n.data.measureId, relationship: n.data.relationship});
+                       var relationship = n.data.relationship ;
+                        edges.push({id: n.data.key, parentId: parentId, measureId: n.data.measureId, relationship: relationship});
                     });
                     $("#experimentTree").val(JSON.stringify(edges));
                 }
@@ -142,16 +147,27 @@
 
                 var createKeyForMeasure = function(measureId) {
                     nextNodeId += 1;
-                    var key = "new-"+nextNodeId
-                    nodeKeyByMeasureId[measureId] = key
+                    var key = "new-"+nextNodeId;
+                    nodeKeyByMeasureId[measureId] = key;
 
                     return key
                 }
 
                 var addRootNode = function(title, measureId) {
                     var tree = $("#experiment-measure-tree").dynatree("getTree");
+                   var relationship = "";
 
-                    tree.getRoot().addChild({title: title, key: createKeyForMeasure(measureId), measureId: measureId, relationship: "Derived from"});
+                    var indexOfLeftParen = title.indexOf("(")
+                    if (indexOfLeftParen >= 0) {  //if there is a '(' left parenthesis in the title, then we can assume that it contains the
+                    //the relationship
+                       var indexOfRightParen = title.indexOf(")") ;
+                       if(indexOfRightParen > 0){
+                        //grab the string between the left and right parenthesis
+                         relationship = title.substring(indexOfLeftParen+1,indexOfRightParen);
+                       }
+
+                    }
+                    tree.getRoot().addChild({title: title, key: createKeyForMeasure(measureId), measureId: measureId, relationship: relationship});
                     updateFormField(tree);
                 }
 
@@ -169,7 +185,7 @@
                     var tree = $("#experiment-measure-tree").dynatree("getTree");
                     var child = tree.getNodeByKey(childKey);
 
-                    var parent = tree.getRoot()
+                    var parent = tree.getRoot();
                     if(parentKey != "") {
                         parent = tree.getNodeByKey(parentKey);
                     }
@@ -190,21 +206,64 @@
                 $("#parent-selection").on("change", function(event, v) {
                     currentSelectionKey = assignParent(currentSelectionKey, event.target.value);
                 });
+                $("#relationship-selection").on("change", function(event, v) {
+
+
+                   var node = $("#experiment-measure-tree").dynatree("getActiveNode");
+                  if( !node ) {
+                   return;
+                  }
+                   if(node.getParent() == null || node.getParent().data.title == null){  //do nothing if this node does not have a parent
+                     return;
+                   }
+                   //get the selected option
+                   var selectedOption =  $('#relationship-selection').val();
+
+                   var title = node.data.title;
+                   var indexOfLeftParen = title.indexOf("(") ;
+
+                    if (indexOfLeftParen >= 0) {  //if there is a '(' left parenthesis in the title, then we can assume that it contains the
+                    //the relationship
+                       var indexOfRightParen = title.indexOf(")") ;
+                       if(indexOfRightParen > 0){
+                        //grab the string between the left and right parenthesis
+                         title = title.substring(indexOfRightParen+1);
+                       }
+                    }
+                    var relationship = null;
+                    // Set node data
+                    if(selectedOption == 'null'){
+                       relationship='';
+                    } else{
+                        relationship = "(" + selectedOption + ")"
+                    }
+
+                  node.fromDict({
+                        title: relationship + title,
+                        relationship: selectedOption
+                  });
+                   var tree = $("#experiment-measure-tree").dynatree("getTree");
+                  updateFormField(tree);
+
+                });
 
                 var populateParentSelect = function(node) {
                     var tree = $("#experiment-measure-tree").dynatree("getTree");
-                    var options = ["<option value=''>Top of tree</option>"]
+                    var options = ["<option value=''>Top of tree</option>"];
                     var parentKey = node.getParent() == null ? null : node.getParent().data.key;
                     tree.getRoot().visit(function(n){
                         if(n.data.key == node.data.key) {
                             return "skip";
                         }
                         var selected = n.data.key == parentKey ? "selected" : "";
-                        options.push("<option value='"+(n.data.key)+"' "+selected+">"+(n.data.title)+"</option>");
+                        var title = n.data.title
+                        var relationship = n.data.relationship;
+                        options.push("<option value='"+(n.data.key)+"' "+selected+">"+(title)+"</option>");
 
                         return true;
                     });
                     $("#parent-selection").removeAttr("disabled").html(options.join(""));
+                    $("#relationship-selection").removeAttr("disabled");
                 };
 
                 var expMeasureTree = $("#experiment-measure-tree").dynatree({
@@ -224,15 +283,15 @@
                     checkbox: true,
                     onSelect: function(flag, node) {
                         if(flag) {
-                            addRootNode(node.data.title, node.data.key)
+                            addRootNode(node.data.title, node.data.key);
                         } else {
-                            removeNodeByMeasureId(node.data.key)
+                            removeNodeByMeasureId(node.data.key);
                         }
                     }
                 })
-            </r:script>
-        </div>
-    </div>
+</r:script>
+</div>
+</div>
 </div>
 </div>    <!-- End accordion -->
 </div>

@@ -57,6 +57,7 @@ public class ATCCTests {
 	@Test
 	public void testATCCId() throws ExternalOntologyException {
 		ExternalOntologyAPI api = new ExternalOntologyATCC();
+		System.out.println(id);
 		ExternalItem item = api.findById(id);
 		assertEquals(item != null, expected);
 	}

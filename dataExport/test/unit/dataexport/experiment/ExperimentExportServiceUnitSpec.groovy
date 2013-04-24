@@ -21,6 +21,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static common.tests.XmlTestSamples.*
+import bard.db.experiment.HierarchyType
 
 @Unroll
 /**
@@ -100,10 +101,10 @@ class ExperimentExportServiceUnitSpec extends Specification {
         XmlTestAssertions.validate(schemaResource, actualXml)
 
         where:
-        label                             | results                                             | mapClosure                                                                       | numAssayContextMeasureRefs
-        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                          | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                          | 0
-        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: 'Derived from'] } | 0
+        label                             | results                                             | mapClosure                                                                                              | numAssayContextMeasureRefs
+        "minimal"                         | EXPERIMENT_MEASURE_MINIMAL                          | { [:] }                                                                                                 | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF                  | { [parent: ExperimentMeasure.build()] }                                                                 | 0
+        "with parentExperimentMeasureRef" | EXPERIMENT_MEASURE_WITH_PARENT_REF_AND_RELATIONSHIP | { [parent: ExperimentMeasure.build(), parentChildRelationship: HierarchyType.SUPPORTED_BY.getValue()] } | 0
     }
 
     void "test generate Experiment #label"() {
@@ -124,7 +125,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         where:
         label                                    | results                                            | numExtRef | numExpCtx | numExpMsr | map
         "Minimal"                                | EXPERIMENT_MINIMAL                                 | 0         | 0         | 0         | [:]
-        "with optional properties"               | EXPERIMENT_WITH_OPTIONAL_PROPERTIES                | 0         | 0         | 0         | [lastUpdated:new Date(0),holdUntilDate: new Date(0), runDateFrom: new Date(0), runDateTo: new Date(0), description: 'description']
+        "with optional properties"               | EXPERIMENT_WITH_OPTIONAL_PROPERTIES                | 0         | 0         | 0         | [lastUpdated: new Date(0), holdUntilDate: new Date(0), runDateFrom: new Date(0), runDateTo: new Date(0), description: 'description']
 
         "with 1 ExternalReference"               | EXPERIMENT_WITH_ONE_EXT_REF                        | 1         | 0         | 0         | [:]
         "with 2 ExternalReferences"              | EXPERIMENT_WITH_TWO_EXT_REF                        | 2         | 0         | 0         | [:]
@@ -132,7 +133,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         "with 1 context"                         | EXPERIMENT_WITH_ONE_CONTEXT                        | 0         | 1         | 0         | [:]
         "with 2 contexts"                        | EXPERIMENT_WITH_TWO_CONTEXT                        | 0         | 2         | 0         | [:]
 
-        "with 1 context and 1 ExperimentMeasure" | EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE | 0         | 1         | 1         | [lastUpdated:new Date(0)]
+        "with 1 context and 1 ExperimentMeasure" | EXPERIMENT_WITH_ONE_CONTEXT_ONE_EXPERIMENT_MEASURE | 0         | 1         | 1         | [lastUpdated: new Date(0)]
 
         "with 1 ExperimentMeasure"               | EXPERIMENT_WITH_ONE_EXPERIMENT_MEASURE             | 0         | 0         | 1         | [:]
         "with 2 ExperimentMeasures"              | EXPERIMENT_WITH_TWO_EXPERIMENT_MEASURE             | 0         | 0         | 2         | [:]

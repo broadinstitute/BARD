@@ -1,7 +1,5 @@
 package bard.db.experiment
 
-import bard.db.registration.Assay
-import bard.db.registration.AssayContextMeasure
 import bard.db.registration.Measure
 
 /**
@@ -14,7 +12,7 @@ import bard.db.registration.Measure
 class ExperimentMeasure {
 
     private static final int MODIFIED_BY_MAX_SIZE = 40
-    private static final int PARENT_CHILD_RELATIONSHIP_MAX_SIZE = 20
+    public static final int PARENT_CHILD_RELATIONSHIP_MAX_SIZE = 20
 
     ExperimentMeasure parent
     String parentChildRelationship
@@ -33,7 +31,8 @@ class ExperimentMeasure {
 
     static constraints = {
         parent(nullable: true)
-        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE, inList: ['Derived from', 'has Child', 'has Sibling'])
+        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE,
+                inList: [HierarchyType.CALCULATED_FROM.getValue(),HierarchyType.SUPPORTED_BY.getValue()])
         experiment()
         measure()
 

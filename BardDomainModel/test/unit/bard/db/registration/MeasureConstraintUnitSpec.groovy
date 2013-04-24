@@ -10,6 +10,9 @@ import spock.lang.Unroll
 import static bard.db.registration.Measure.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
+import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
+import bard.db.experiment.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -46,6 +49,34 @@ class MeasureConstraintUnitSpec extends Specification {
         'null not valid' | { null }          | false | 'nullable'
         'valid assay'    | { Assay.build() } | true  | null
 
+    }
+
+    void "test parentChildRelationship constraints #desc parentChildRelationship: '#valueUnderTest'"() {
+
+        final String field = 'parentChildRelationship'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc          | valueUnderTest                                       | valid | errorCode
+        'too long'    | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'blank valid' | ''                                                   | false | 'blank'
+        'blank valid' | '  '                                                 | false | 'blank'
+        'not inList'  | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE)     | false | 'not.inList'
+
+        'null valid'  | null                                                 | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
     }
 
     void "test resultType constraints #desc resultType: '#valueUnderTest'"() {

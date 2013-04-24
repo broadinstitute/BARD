@@ -13,6 +13,7 @@ import org.junit.Ignore
  */
 class ExperimentHandlerServiceIntegrationTest extends GroovyTestCase {
     def experimentHandlerService
+    def projectExperimentStageHandlerService
 
     @Ignore
     void testLoadExperimentsContext() {
@@ -28,11 +29,15 @@ class ExperimentHandlerServiceIntegrationTest extends GroovyTestCase {
         experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
     }
 
-    @Ignore
     void testLoad() {
-        final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset1/aids_dataset_1.csv')
-        def dirs = ['data/maas/maasDataset1']
+        final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset2/aids.csv')
+        def dirs = ['data/maas/maasDataset2']
             experimentHandlerService.handle('xiaorong', dirs, mustLoadAids)
     }
 
+    void testStage() {
+        final List<Long> mustLoadAids = MustLoadAid.mustLoadedAids('data/maas/maasDataset2/aids.csv')
+        def dirs = ['data/maas/maasDataset2']
+        projectExperimentStageHandlerService.handle('xiaorong', dirs, mustLoadAids)
+    }
 }

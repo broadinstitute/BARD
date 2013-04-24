@@ -27,7 +27,7 @@ class FixPersonNameService {
         List<Element> elements = getElements()
         List<AbstractContextItem> items = []
         elements.each{Element element->
-            items.addAll(AssayContextItem.findAllByAttributeElement(element)) // Names are free in the assaycontextitem so no need to fix, really, project lead name
+//            items.addAll(AssayContextItem.findAllByAttributeElement(element)) // Names are free in the assaycontextitem so no need to fix, really, project lead name
             items.addAll(ExperimentContextItem.findAllByAttributeElement(element))
             items.addAll(ProjectContextItem.findAllByAttributeElement(element))
             println("fixing total ${items.size()} contextitems for ${element.label}")
@@ -48,11 +48,15 @@ class FixPersonNameService {
      * @return
      */
     def fixEachItem(AbstractContextItem item, String modifiedBy) {
+        if (!item.valueDisplay) {
+            println("Context Item ${item.id}: No person name be found in valueDisplay field")
+            return
+        }
         Person person = Person.findByUserNameIlike(item.valueDisplay)
         if (!person){
             person = new Person(userName: item.valueDisplay, fullName: item.valueDisplay, modifiedBy: modifiedBy)
             if (!person.save(flush: true)) {
-                println "error in saving ${person.errors.toString()}"
+                println "error in saving Person ${person.errors.toString()}"
             }
         }
         item.extValueId = person.id
