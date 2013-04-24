@@ -879,8 +879,8 @@ class ResultsService {
             def statsModifierId = parent.statsModifier?.id
 
             long []ids = new long[2];
-            ids[0] = resultTypeId == null ? 0 : resultTypeId.longValue()
-            ids[1] = statsModifierId == null ? 0 : statsModifierId.longValue()
+            ids[0] = resultTypeId == null ? 0L : resultTypeId.longValue()
+            ids[1] = statsModifierId == null ? 0L : statsModifierId.longValue()
             return ids
         } else {
             throw new RuntimeException("Result ${result} has ${result.resultHierarchiesForResult.size()} parents");
