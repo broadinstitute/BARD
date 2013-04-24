@@ -851,6 +851,23 @@ class ResultsService {
         return errors
     }
 
+    private long[] getFakeParentIds(Result result) {
+        if (result.resultHierarchiesForResult.size() == 0) {
+            return 0;
+        } else if (result.resultHierarchiesForResult.size() == 1) {
+            Result parent = result.resultHierarchiesForResult.first().parentResult;
+            def resultTypeId = parent.resultType?.id
+            def statsModifierId = parent.statsModifier?.id
+
+            long []ids = new long[2];
+            ids[0] = resultTypeId == null ? 0L : resultTypeId.longValue()
+            ids[1] = statsModifierId == null ? 0L : statsModifierId.longValue()
+            return ids
+        } else {
+            throw new RuntimeException("Result ${result} has ${result.resultHierarchiesForResult.size()} parents");
+        }
+    }
+
     private LogicalKey constructKey(Result result) {
         LogicalKey key = new LogicalKey()
 
@@ -864,6 +881,9 @@ class ResultsService {
         key.valueMin = result.valueMin
         key.valueMax = result.valueMax
         key.valueDisplay = result.valueDisplay
+        long[] ids = getFakeParentIds(result)
+        key.parentElementId = ids[0]
+        key.parentStatId = ids[0]
 
         key.items = result.resultContextItems.collect(new HashSet(), {
             LogicalKeyItem item = new LogicalKeyItem()

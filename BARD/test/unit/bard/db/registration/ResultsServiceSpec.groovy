@@ -524,7 +524,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
     }
 
     Result createResult() {
-        return new Result(substanceId: 100, resultType: new Element())
+        return new Result(substanceId: 100, resultType: Element.build())
     }
 
     ResultContextItem createContextItem(params) {
@@ -532,6 +532,35 @@ class ResultsServiceSpec extends spock.lang.Specification {
         Result result = params.result;
         result.resultContextItems.add(item)
         return item
+    }
+
+    void 'test different parents in dup check'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
+        Element childElement = Element.build();
+
+        Result parent1 = createResult()
+        Result parent2 = createResult()
+        Result child1 = new Result(substanceId: 100, resultType: childElement)
+        Result child2 = new Result(substanceId: 100, resultType: childElement)
+
+        ResultHierarchy link1 = new ResultHierarchy(result: child1, parentResult: parent1)
+        ResultHierarchy link2 = new ResultHierarchy(result: child2, parentResult: parent2)
+        child1.resultHierarchiesForResult.add(link1)
+        parent1.resultHierarchiesForParentResult.add(link1)
+        child2.resultHierarchiesForResult.add(link2)
+        parent2.resultHierarchiesForParentResult.add(link2)
+
+        assert child1.resultHierarchiesForResult.size() == 1
+        assert child2.resultHierarchiesForResult.size() == 1
+
+        when:
+        service.checkForDuplicates(errors, [child1, child2])
+
+        then:
+        !errors.hasErrors()
     }
 
     void 'test duplicate check'() {
