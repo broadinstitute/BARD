@@ -4,6 +4,8 @@ import groovy.json.JsonBuilder
 
 class ElementController {
 
+    BuildElementPathsService buildElementPathsService
+
     def list() {
 
         // Define a recursive closure to assemble the JSON
@@ -30,4 +32,14 @@ class ElementController {
         render builder.toString()
     }
 
+
+    def edit() {
+        List<ElementAndFullPath> list = buildElementPathsService.createListSortedByString(buildElementPathsService.buildAll())
+
+        [list: list, maxPathLength: buildElementPathsService.maxPathLength]
+    }
+
+    def update() {
+        render("hello world")
+    }
 }

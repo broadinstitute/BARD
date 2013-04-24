@@ -12,6 +12,7 @@ import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
+import bard.db.experiment.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -74,8 +75,8 @@ class MeasureConstraintUnitSpec extends Specification {
         'not inList'  | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE)     | false | 'not.inList'
 
         'null valid'  | null                                                 | true  | null
-        'valid value' | 'is calculated from'                                 | true  | null
-        'valid value' | 'is related to'                                      | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
     }
 
     void "test resultType constraints #desc resultType: '#valueUnderTest'"() {

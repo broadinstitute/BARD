@@ -53,6 +53,10 @@ class AssayExportHelperService extends ExportAbstractService {
         if (measure.parentMeasure) {
             attributes.put('parentMeasureRef', measure.parentMeasure.id.toString())
         }
+        String parentChildRelationship = measure.parentChildRelationship
+        if (StringUtils.isNotBlank(parentChildRelationship)) {
+            attributes.put('parentChildRelationship', parentChildRelationship)
+        }
         return attributes
     }
 
@@ -72,6 +76,7 @@ class AssayExportHelperService extends ExportAbstractService {
             if (entryUnit) {
                 createElementRef(markupBuilder, entryUnit, 'entryUnitRef', this.mediaTypesDTO.elementMediaType)
             }
+
             generateAssayContextMeasureRefs(markupBuilder, 'assayContextRef', measure.assayContextMeasures)
         }
     }

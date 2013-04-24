@@ -43,7 +43,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def childCell = new RawCell(columnName: "child", value: "1")
 
         ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(measure: parentMeasure)
-        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: "is calculated from")
+        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: "calculated from")
         parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
         List<Row> rows;
@@ -80,7 +80,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         childResult.resultHierarchiesForResult == parentResult.resultHierarchiesForParentResult
 
         def relationship = childResult.resultHierarchiesForResult.first()
-        relationship.hierarchyType == HierarchyType.IS_CALCULATED_FROM
+        relationship.hierarchyType == HierarchyType.CALCULATED_FROM
 
         where:
         desc              | onSameLine

@@ -88,12 +88,13 @@ class AssayDefinitionControllerUnitSpec extends Specification {
             params.statisticId = statistic.id
 
             def assayContextService = mockFor(AssayContextService)
-            assayContextService.demand.addMeasure(1) {assayInstance, parentMeasure, rt, sm, entryUnit ->
+            assayContextService.demand.addMeasure(1) {assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
                 assert assayInstance == assay
                 assert parentMeasure == null
                 assert rt == resultType
                 assert sm == statistic
                 assert entryUnit == null
+                assert hierarchyType==null
 
                 return Measure.build()
             }
