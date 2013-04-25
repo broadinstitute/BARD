@@ -2,9 +2,8 @@ package bard.db.experiment
 
 import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
-import grails.plugin.spock.IntegrationSpec
-import spock.lang.Specification
 
 /**
  * Created with IntelliJ IDEA.
@@ -63,7 +62,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         child.resultType = resultType
         child.statsModifier = statsModifier
         child.substanceId = substance.id
-        child.valueDisplay = HierarchyType.SUPPORTED_BY.toString()
+        child.valueDisplay = HierarchyType.SUPPORTED_BY.getId()
 
         ResultHierarchy hierarchy = new ResultHierarchy()
         hierarchy.parentResult = parent
@@ -94,7 +93,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         List<Result> fromDb = bulkResultService.findResults(experiment)
 
         Result dbParent = fromDb.find { it.valueDisplay == "parent" }
-        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getValue() }
+        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getId()}
 
         then:
         System.identityHashCode(parent) != System.identityHashCode(dbParent)

@@ -18,7 +18,9 @@ import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 
-import bard.db.experiment.results.*;
+import bard.db.experiment.results.*
+import bard.db.enums.HierarchyType
+import org.apache.commons.lang.StringUtils;
 
 class ResultsService {
 
@@ -30,7 +32,7 @@ class ResultsService {
     // pattern matching a number
     static Pattern NUMBER_PATTERN = Pattern.compile(NUMBER_PATTERN_STRING)
 
-    static String QUALIFIER_PATTERN_STRING = (Result.QUALIFIER_VALUES.collect{ "(?:${it.trim()})"}).join("|")
+    static String QUALIFIER_PATTERN_STRING = (Result.QUALIFIER_VALUES.collect { "(?:${it.trim()})"}).join("|")
 
     // pattern matching a qualifier followed by a number
     static Pattern QUALIFIED_NUMBER_PATTERN = Pattern.compile("(${QUALIFIER_PATTERN_STRING})?\\s*(${NUMBER_PATTERN_STRING})")
@@ -76,7 +78,7 @@ class ResultsService {
         } else {
             def labelMap = [:]
             contextItems.each {
-                if(it.valueDisplay != null)
+                if (it.valueDisplay != null)
                     labelMap[it.valueDisplay.trim()] = it
             }
             AssayContextItem selectedItem = labelMap[value.trim()]
@@ -101,21 +103,19 @@ class ResultsService {
             }
 
             float a
-            try
-            {
+            try {
                 a = Float.parseFloat(matcher.group(2));
             }
-            catch(NumberFormatException e)
-            {
+            catch (NumberFormatException e) {
                 return "Could not parse \"${matcher.group(2)}\" as a number"
             }
 
             String valueDisplay = a.toString()
             if (foundQualifier != "= ") {
-                valueDisplay = foundQualifier.trim()+valueDisplay
+                valueDisplay = foundQualifier.trim() + valueDisplay
             }
 
-            Cell cell = new Cell(value: a, qualifier: foundQualifier, valueDisplay: valueDisplay )
+            Cell cell = new Cell(value: a, qualifier: foundQualifier, valueDisplay: valueDisplay)
 
             return cell
         } else {
@@ -127,13 +127,11 @@ class ResultsService {
         def rangeMatch = RANGE_PATTERN.matcher(value)
         if (rangeMatch.matches()) {
             float minValue, maxValue
-            try
-            {
+            try {
                 minValue = Float.parseFloat(rangeMatch.group(1));
                 maxValue = Float.parseFloat(rangeMatch.group(2));
             }
-            catch(NumberFormatException e)
-            {
+            catch (NumberFormatException e) {
                 // if we fail to parse it as a range, treat it as free text
                 return new Cell(valueDisplay: value)
             }
@@ -146,13 +144,13 @@ class ResultsService {
     }
 
     static def parseAnything(String value) {
-        if(QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
+        if (QUALIFIED_NUMBER_PATTERN.matcher(value).matches()) {
             return parseQualifiedNumber(value)
         } else if (RANGE_PATTERN.matcher(value).matches()) {
             return parseRange(value)
         } else {
             // assume it's free text and we take it literally
-            return new Cell(valueDisplay:value)
+            return new Cell(valueDisplay: value)
         }
     }
 
@@ -186,7 +184,7 @@ class ResultsService {
         void addError(int line, int column, String message) {
             if (!tooMany()) {
                 if (line != 0) {
-                    errors << "On line ${line}, column ${column+1}: ${message}"
+                    errors << "On line ${line}, column ${column + 1}: ${message}"
                 } else {
                     errors << message
                 }
@@ -210,11 +208,11 @@ class ResultsService {
         List asTable() {
             def lines = []
 
-            lines.add(["",EXPERIMENT_ID_LABEL, experiment.id])
-            lines.add(["",EXPERIMENT_NAME_LABEL, experiment.experimentName])
+            lines.add(["", EXPERIMENT_ID_LABEL, experiment.id])
+            lines.add(["", EXPERIMENT_NAME_LABEL, experiment.experimentName])
 
             // add the fields for values that are constant across entire experiment
-            constantItems.each { lines.add(["",it]) }
+            constantItems.each { lines.add(["", it]) }
             lines.add([])
 
             // add the first line of the header
@@ -251,19 +249,19 @@ class ResultsService {
         Set<String> columns = [] as Set
 
         // add all the non-fixed context items
-        for(item in constantItems) {
+        for (item in constantItems) {
             String name = item.attributeElement.label
             constants.add(name)
         }
 
         // add all of the measurements
-        for(measure in measures) {
+        for (measure in measures) {
             String name = measure.displayLabel
             columns.add(name)
         }
 
         // add all the measure context items
-        for(item in measureItems) {
+        for (item in measureItems) {
             String name = item.attributeElement.label
             columns.add(name)
         }
@@ -286,9 +284,9 @@ class ResultsService {
 
         List<List<String>> topLines = []
 
-        String [] readLine() {
-            lineNumber ++;
-            String [] line = reader.readNext()
+        String[] readLine() {
+            lineNumber++;
+            String[] line = reader.readNext()
 
             if (line != null && topLines.size() < LINES_TO_SHOW_USER)
                 topLines.add(line)
@@ -302,7 +300,7 @@ class ResultsService {
     }
 
     boolean allEmptyColumns(String[] columns) {
-        for(column in columns) {
+        for (column in columns) {
             if (!column.isEmpty())
                 return false
         }
@@ -314,7 +312,7 @@ class ResultsService {
         InitialParse result = new InitialParse()
         Map experimentAnnotations = [:]
 
-        while(true) {
+        while (true) {
             String[] values = reader.readLine();
             if (values == null)
                 break;
@@ -324,7 +322,7 @@ class ResultsService {
                 break;
             }
 
-            for(int i=3;i<values.length;i++) {
+            for (int i = 3; i < values.length; i++) {
                 if (!values[i].isEmpty()) {
                     errors.addError(reader.lineNumber, values.length, "Wrong number of columns in initial header.  Expected 3 but found value in column ${values[i]}")
                 }
@@ -356,13 +354,13 @@ class ResultsService {
 
         // walk through all the context items on the assay
         List<ExperimentContext> experimentContexts = []
-        for(entry in (constantItems.groupBy {it.assayContext}).entrySet()) {
+        for (entry in (constantItems.groupBy {it.assayContext}).entrySet()) {
             AssayContext assayContext = entry.key;
             Collection<ItemService.Item> values = entry.value;
 
             ExperimentContext context = new ExperimentContext()
             context.setContextName(assayContext.contextName)
-            for(item in values) {
+            for (item in values) {
                 String label = item.displayLabel;
 
                 unusedKeyNames.remove(label);
@@ -381,7 +379,7 @@ class ResultsService {
                 result.contexts.add(context)
         }
 
-        for(unusedKey in unusedKeyNames) {
+        for (unusedKey in unusedKeyNames) {
             errors.addError(0, 0, "Unknown field \"${unusedKey}\" in header")
         }
 
@@ -391,27 +389,27 @@ class ResultsService {
     void forEachDataRow(LineReader reader, List<String> columns, ImportSummary errors, Closure fn) {
         int expectedColumnCount = columns.size() + FIXED_COLUMNS.size();
 
-        while(true) {
+        while (true) {
             List<String> values = reader.readLine();
             if (values == null)
                 break;
 
             // verify and reshape columns
-            while(values.size() < expectedColumnCount) {
+            while (values.size() < expectedColumnCount) {
                 values.add("")
             }
 
             // verify there aren't too many columns
-            while(values.size() > expectedColumnCount) {
-                String value = values.remove(values.size()-1)
+            while (values.size() > expectedColumnCount) {
+                String value = values.remove(values.size() - 1)
                 if (value.trim().length() != 0) {
-                    errors.addError(reader.lineNumber, values.size()+1, "Found \"${value}\" in extra column")
+                    errors.addError(reader.lineNumber, values.size() + 1, "Found \"${value}\" in extra column")
                 }
             }
 
             // now that values is guaranteed to be the right length, make the entire row isn't empty
             boolean allEmpty = true;
-            for(cell in values) {
+            for (cell in values) {
                 if (!cell.isEmpty()) {
                     allEmpty = false;
                     break;
@@ -431,10 +429,10 @@ class ResultsService {
         boolean hadFailure = false;
 
         Object[] parsed = new Object[fns.size()]
-        for(int i=0;i<fns.size();i++) {
+        for (int i = 0; i < fns.size(); i++) {
             try {
                 parsed[i] = fns[i](values[i])
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 errors.addError(lineNumber, i, "Could not parse \"${values[i]}\"")
                 hadFailure = true
 //                ex.printStackTrace()
@@ -448,13 +446,13 @@ class ResultsService {
         }
     }
 
-    List<String> parseTableHeader(LineReader reader, Template template, ImportSummary errors)      {
+    List<String> parseTableHeader(LineReader reader, Template template, ImportSummary errors) {
         List<String> columnNames = reader.readLine()
 
         // validate the fixed columns are where they should be
-        for(int i = 0;i<FIXED_COLUMNS.size();i++) {
+        for (int i = 0; i < FIXED_COLUMNS.size(); i++) {
             if (columnNames.size() < i || columnNames[i] != FIXED_COLUMNS[i]) {
-                errors.addError(reader.lineNumber, i, "Expected "+FIXED_COLUMNS[i]+" in column header at position "+(i+1))
+                errors.addError(reader.lineNumber, i, "Expected " + FIXED_COLUMNS[i] + " in column header at position " + (i + 1))
             }
         }
 
@@ -464,11 +462,10 @@ class ResultsService {
         def seenColumns = [] as Set
 
         def columns = []
-        for(int i=FIXED_COLUMNS.size();i<columnNames.size();i++) {
+        for (int i = FIXED_COLUMNS.size(); i < columnNames.size(); i++) {
             def name = columnNames[i]
 
-            if (seenColumns.contains(name))
-            {
+            if (seenColumns.contains(name)) {
                 errors.addError(reader.lineNumber, i, "Duplicated column name \"${name}\"")
                 columns.add("")
                 continue
@@ -499,8 +496,8 @@ class ResultsService {
         // walking the measure tree, it's possible that some cells might not get consumed.  Those should be
         // errors.
         IdentityHashMap<RawCell, Row> unused = new IdentityHashMap();
-        for(row in rows) {
-            for(cell in row.cells) {
+        for (row in rows) {
+            for (cell in row.cells) {
                 unused.put(cell, row)
             }
         }
@@ -511,12 +508,12 @@ class ResultsService {
         // start with the rows with no parents because these must contain the root measures
         Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
-        for(measure in rootMeasures) {
+        for (measure in rootMeasures) {
             println("creating results for ${measure}")
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
-        for(cell in unused.keySet()) {
+        for (cell in unused.keySet()) {
             Row row = unused.get(cell);
             errors.addError(row.lineNumber, 0, "Didn't know what to do with the value on line ${row.lineNumber} in column ${cell.columnName}");
         }
@@ -528,10 +525,10 @@ class ResultsService {
     }
 
     private addAllResults(Collection<Result> all, Collection<Result> toAdd) {
-        for(result in toAdd) {
+        for (result in toAdd) {
             if (!all.contains(result)) {
                 all.add(result)
-                addAllResults(all, result.resultHierarchiesForParentResult.collect { it.result } )
+                addAllResults(all, result.resultHierarchiesForParentResult.collect { it.result })
             }
         }
     }
@@ -541,11 +538,11 @@ class ResultsService {
 
         String label = measure.measure.displayLabel
 
-        for(row in rows) {
+        for (row in rows) {
             // change this to a call to find
             RawCell cell = row.find(label)
 
-            if(cell != null) {
+            if (cell != null) {
                 // mark this cell as having been consumed
                 unused.remove(cell)
                 String cellValue = cell.value
@@ -563,17 +560,17 @@ class ResultsService {
                 }
 
                 // for each child measure, create a result per row in each of the child rows
-                for(child in measure.childMeasures) {
+                for (child in measure.childMeasures) {
                     Collection<Result> resultChildren = extractResultFromEachRow(child, possibleChildRows, byParent, unused, errors, itemsByMeasure)
 
-                    for(childResult in resultChildren) {
+                    for (childResult in resultChildren) {
                         linkResults(child.parentChildRelationship, errors, 0, childResult, result);
                     }
                 }
 
                 // likewise create each of the context items associated with this measure
                 results.add(result);
-                for(item in itemsByMeasure[measure.measure]) {
+                for (item in itemsByMeasure[measure.measure]) {
                     RawCell itemCell = row.find(item.displayLabel)
                     if (itemCell != null) {
                         unused.remove(itemCell)
@@ -593,11 +590,11 @@ class ResultsService {
 
     void validateParentRowsExist(Collection<Row> rows, ImportSummary errors) {
         def rowByNumber = [:]
-        for(row in rows) {
+        for (row in rows) {
             rowByNumber[row.rowNumber] = row
         }
 
-        for(row in rows) {
+        for (row in rows) {
             if (row.parentRowNumber != null && !rowByNumber.containsKey(row.parentRowNumber)) {
                 errors.addError(row.lineNumber, 0, "Could not find row ${row.parentRowNumber} but this row ${row.rowNumber} is a child")
             }
@@ -622,7 +619,7 @@ class ResultsService {
 
             return new Cell(value: floatValue)
         } else {
-            throw new RuntimeException("Did not know how to handle attribute type "+item.type)
+            throw new RuntimeException("Did not know how to handle attribute type " + item.type)
         }
     }
 
@@ -634,13 +631,13 @@ class ResultsService {
             ResultContextItem item = new ResultContextItem()
 
             item.attributeElement = assayItem.attributeElement
-            item.valueNum= cell.value
-            item.qualifier= cell.qualifier
-            item.valueMin= cell.minValue
-            item.valueMax= cell.maxValue
+            item.valueNum = cell.value
+            item.qualifier = cell.qualifier
+            item.valueMin = cell.minValue
+            item.valueMax = cell.maxValue
             item.valueElement = cell.element
             Element unit = assayItem.attributeElement.unit;
-            item.valueDisplay= cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
+            item.valueDisplay = cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
 
             return item
         } else {
@@ -658,7 +655,7 @@ class ResultsService {
 
             Result result = new Result()
             result.qualifier = cell.qualifier
-            result.valueDisplay= cell.valueDisplay + ((unit == null || cell.valueDisplay == "NA") ? "" : " ${unit.abbreviation}")
+            result.valueDisplay = cell.valueDisplay + ((unit == null || cell.valueDisplay == "NA") ? "" : " ${unit.abbreviation}")
             result.valueNum = cell.value
             result.valueMin = cell.minValue
             result.valueMax = cell.maxValue
@@ -682,7 +679,7 @@ class ResultsService {
             Cell cell = parsed
 
             Element unit = assayItem.attributeElement.unit;
-            String valueDisplay= cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
+            String valueDisplay = cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
 
             ExperimentContextItem item = new ExperimentContextItem(attributeElement: assayItem.attributeElement,
                     valueElement: cell.element,
@@ -697,22 +694,7 @@ class ResultsService {
         }
     }
 
-    private void linkResults(String relationship, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
-        HierarchyType hierarchyType = HierarchyType.getByValue(relationship);
-       if (hierarchyType == null) {
-            // hack until values are consistent in database
-            if (relationship == null) {
-                hierarchyType = HierarchyType.SUPPORTED_BY;
-            } else if (relationship == HierarchyType.SUPPORTED_BY.getValue()) {
-                hierarchyType = HierarchyType.SUPPORTED_BY;
-            } else if (relationship == HierarchyType.CALCULATED_FROM.getValue()) {
-                hierarchyType = HierarchyType.CALCULATED_FROM;
-            } else {
-                errors.addError(lineNumber, 0, "Experiment measures has the relationship ${relationship} which was unrecognized");
-                return;
-            }
-        }
-
+    private void linkResults(HierarchyType hierarchyType, ImportSummary errors, int lineNumber, Result childResult, Result parentResult) {
         ResultHierarchy resultHierarchy = new ResultHierarchy()
         resultHierarchy.hierarchyType = hierarchyType
         resultHierarchy.result = childResult
@@ -739,15 +721,15 @@ class ResultsService {
         if (errors.hasErrors())
             return
 
-        def parseInt = {x->Integer.parseInt(x)}
-        def parseOptInt = {x-> if(x.trim().length() > 0) { return Integer.parseInt(x) } }
-        def parseLong = {x->Long.parseLong(x)}
+        def parseInt = {x -> Integer.parseInt(x)}
+        def parseOptInt = {x -> if (x.trim().length() > 0) { return Integer.parseInt(x) } }
+        def parseLong = {x -> Long.parseLong(x)}
 
         // all data rows
         List rows = []
         Set usedRowNumbers = [] as Set
         forEachDataRow(reader, columns, errors) { int lineNumber, List<String> values ->
-            def parsed = safeParse(errors, values, lineNumber, [ parseInt, parseLong, parseOptInt, parseOptInt ])
+            def parsed = safeParse(errors, values, lineNumber, [parseInt, parseLong, parseOptInt, parseOptInt])
 
             if (parsed == null) {
                 // if we got errors parsing the fixed columns, don't proceed to the rest of the columns
@@ -770,11 +752,11 @@ class ResultsService {
             }
             usedRowNumbers.add(rowNumber)
 
-            Row row = new Row (lineNumber: lineNumber, rowNumber: rowNumber, replicate: replicate, parentRowNumber: parentRowNumber, sid: sid)
+            Row row = new Row(lineNumber: lineNumber, rowNumber: rowNumber, replicate: replicate, parentRowNumber: parentRowNumber, sid: sid)
 
             // parse the dynamic columns
-            for(int i=0;i<columns.size();i++) {
-                String cellString = values[i+FIXED_COLUMNS.size()];
+            for (int i = 0; i < columns.size(); i++) {
+                String cellString = values[i + FIXED_COLUMNS.size()];
                 if (cellString.isEmpty())
                     continue
 
@@ -817,9 +799,9 @@ class ResultsService {
     Map<Measure, Collection<ItemService.Item>> constructItemsByMeasure(Experiment experiment) {
         Map<Measure, Collection<ItemService.Item>> itemsByMeasure = experiment.experimentMeasures.collectEntries { ExperimentMeasure em ->
             [em.measure,
-                em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
-                    itemService.getLogicalItems(acm.assayContext.contextItems)
-                } ]
+                    em.measure.assayContextMeasures.collectMany { AssayContextMeasure acm ->
+                        itemService.getLogicalItems(acm.assayContext.contextItems)
+                    }]
         }
 
         return itemsByMeasure
@@ -840,14 +822,13 @@ class ResultsService {
 
             def missingSids = []
             if (options.validateSubstances)
-                missingSids = pugService.validateSubstanceIds( parsed.rows.collect {it.sid} )
+                missingSids = pugService.validateSubstanceIds(parsed.rows.collect {it.sid})
 
             missingSids.each {
                 errors.addError(0, 0, "Could not find substance with id ${it}")
             }
 
-            if (!errors.hasErrors())
-            {
+            if (!errors.hasErrors()) {
                 def results = createResults(parsed.rows, experiment.experimentMeasures, errors, itemsByMeasure)
 
                 if (!errors.hasErrors() && results.size() == 0) {
@@ -860,7 +841,7 @@ class ResultsService {
 
                 if (!errors.hasErrors()) {
                     // and persist these results to the DB
-                    Collection<ExperimentContext>contexts = parsed.contexts;
+                    Collection<ExperimentContext> contexts = parsed.contexts;
 
                     persist(experiment, results, errors, contexts, originalFilename, exportFilename, options)
                 }
@@ -923,11 +904,11 @@ class ResultsService {
     private void checkForDuplicates(ImportSummary errors, Collection<Result> results) {
         Set<LogicalKey> seen = new HashSet()
 
-        for(result in results) {
+        for (result in results) {
             LogicalKey key = constructKey(result)
             boolean added = seen.add(key)
             if (!added) {
-                errors.addError(0,0,"Found duplicate: ${key}")
+                errors.addError(0, 0, "Found duplicate: ${key}")
             }
         }
     }
@@ -947,7 +928,7 @@ class ResultsService {
             errors.substanceIds.add(it.substanceId)
 
             if (it.resultHierarchiesForParentResult.size() > 0 || it.resultHierarchiesForResult.size() > 0)
-                errors.resultsWithRelationships ++;
+                errors.resultsWithRelationships++;
 
             errors.resultAnnotations += it.resultContextItems.size()
         }
@@ -971,7 +952,7 @@ class ResultsService {
 
     private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename) {
         ExperimentFile file = new ExperimentFile(experiment: experiment, originalFile: originalFilename, exportFile: exportFilename, dateCreated: new Date(), submissionVersion: experiment.experimentFiles.size())
-        file.save(failOnError:true)
+        file.save(failOnError: true)
         experiment.experimentFiles.add(file)
     }
 
@@ -984,6 +965,7 @@ class ResultsService {
     }
 
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
+
     public void deleteExperimentResults(Experiment experiment) {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.

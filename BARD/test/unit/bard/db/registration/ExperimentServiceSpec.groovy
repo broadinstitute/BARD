@@ -8,6 +8,7 @@ import grails.converters.JSON
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
 import grails.test.mixin.*
+import bard.db.enums.HierarchyType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -44,7 +45,7 @@ class ExperimentServiceSpec  extends spock.lang.Specification {
 
         then:
         childExpMeasure != null
-        childExpMeasure.parentChildRelationship == "Derived from"
+        childExpMeasure.parentChildRelationship == HierarchyType.SUPPORTED_BY
     }
 
     void 'update measures'() {

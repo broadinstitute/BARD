@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.registration.Measure
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,7 +16,7 @@ class ExperimentMeasure {
     public static final int PARENT_CHILD_RELATIONSHIP_MAX_SIZE = 20
 
     ExperimentMeasure parent
-    String parentChildRelationship
+    HierarchyType parentChildRelationship
 
     Experiment experiment
     Measure measure
@@ -31,8 +32,7 @@ class ExperimentMeasure {
 
     static constraints = {
         parent(nullable: true)
-        parentChildRelationship(nullable: true, blank: false, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE,
-                inList: [HierarchyType.CALCULATED_FROM.getValue(),HierarchyType.SUPPORTED_BY.getValue()])
+        parentChildRelationship(nullable: true, maxSize: PARENT_CHILD_RELATIONSHIP_MAX_SIZE)
         experiment()
         measure()
 

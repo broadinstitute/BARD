@@ -11,6 +11,7 @@ import static bard.db.experiment.ExperimentMeasure.MODIFIED_BY_MAX_SIZE
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -84,15 +85,9 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
         where:
         desc          | valueUnderTest                                       | valid | errorCode
-        'too long'    | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid' | ''                                                   | false | 'blank'
-        'blank valid' | '  '                                                 | false | 'blank'
-        'not inList'  | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE)     | false | 'not.inList'
-
-
         'null valid'  | null                                                 | true  | null
-        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
-        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM                        | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY                           | true  | null
     }
 
     void "test experiment constraints #desc experiment: '#valueUnderTest'"() {

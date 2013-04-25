@@ -1,4 +1,4 @@
-<%@ page import="bard.db.experiment.HierarchyType; java.text.SimpleDateFormat" %>
+<%@ page import="bard.db.enums.HierarchyType;java.text.SimpleDateFormat" %>
 
 <div class="row-fluid">
 <div id="accordion-foo" class="span12 accordion">
@@ -102,9 +102,9 @@
                 <label for="relationship">Relationship of child to parent is:</label>
                 <g:select name="relationship" id="relationship-selection" disabled="true"
                           noSelection="${['null': 'Select One...']}"
-                          from="${HierarchyType.list()}"
-                          optionValue="${{it.value}}"
-                          optionKey="value"/>
+                          from="${bard.db.enums.HierarchyType.values()}"
+                          optionValue="${{it.id}}"
+                          optionKey="id"/>
              </div>
         </div>
         <input type="hidden" id="experimentTree" name="experimentTree">

@@ -7,7 +7,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import grails.test.mixin.TestFor
-import bard.db.experiment.HierarchyType
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,10 +36,10 @@ class AssayContextServiceUnitSpec extends Specification {
         assert foundMeasure
 
         where:
-        desc                                                 | hierarchyType
+        desc                                              | hierarchyType
         "Hierarchy Type ${HierarchyType.CALCULATED_FROM}" | HierarchyType.CALCULATED_FROM
-        "Hierarchy Type ${HierarchyType.SUPPORTED_BY}"      | HierarchyType.SUPPORTED_BY
-        ""                                                   | null
+        "Hierarchy Type ${HierarchyType.SUPPORTED_BY}"    | HierarchyType.SUPPORTED_BY
+        ""                                                | null
 
     }
 

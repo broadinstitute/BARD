@@ -1,9 +1,6 @@
 package bard.db.experiment
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
-import org.hibernate.Session
 
 import java.util.zip.GZIPOutputStream
 
@@ -30,7 +27,7 @@ class ResultsExportService {
         List related = []
         result.resultHierarchiesForParentResult.each {
             def child = convertToJson(it.result);
-            child.relationship = it.hierarchyType.value
+            child.relationship = it.hierarchyType.id
             related.add(child);
         }
 
