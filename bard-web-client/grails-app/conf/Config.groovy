@@ -102,11 +102,18 @@ CbipCrowd {
     applicationSpecificRoles = ['ROLE_USER','ROLE_Bard', 'ROLE_NO_ROLE', 'ROLE_MOBILE']
 }
 webquery
+
+rememberme.key = 'bard_web_client_crowd_remember_me'
+rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'
+
+grails.plugins.springsecurity.providerNames = ['crowdAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
+grails.plugins.springsecurity.rememberMe.key = rememberme.key
 grails {
     plugins {
         springsecurity {
             roleHierarchy = '''ROLE_USER > ROLE_Bard > ROLE_NO_ROLE'''
-            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+//            providerNames = ['crowdAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
             useBasicAuth = true
             basic.realmName = 'WEBQUERY'
             filterChain.chainMap = [
@@ -138,6 +145,13 @@ grails {
             successHandler.targetUrlParameter = AbstractAuthenticationTargetUrlRequestHandler.DEFAULT_TARGET_PARAMETER // 'spring-security-redirect'
             successHandler.useReferer = false
             successHandler.ajaxSuccessUrl = '/bardLogin/ajaxSuccess'
+
+            /**
+             * accessDeniedHandler
+             * set errorPage to null to send Error 403 instead of showing error page
+             */
+            adh.errorPage = '/bardLogin/denied'
+            adh.ajaxErrorPage = '/bardLogin/ajaxDenied'
 
         }
     }

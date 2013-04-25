@@ -4,6 +4,7 @@ import org.apache.commons.collections.Factory
 import org.apache.commons.collections.ListUtils
 import curverendering.Curve
 import org.apache.commons.collections.FactoryUtils
+import grails.plugins.springsecurity.Secured
 
 /**
  * Command object used to parse all the search parameters coming in from the client.

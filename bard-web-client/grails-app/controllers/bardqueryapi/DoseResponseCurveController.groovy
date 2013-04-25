@@ -6,7 +6,7 @@ import grails.plugins.springsecurity.Secured
 import javax.servlet.http.HttpServletResponse
 
 @Mixin(InetAddressUtil)
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isRememberMe()', 'isAuthenticated()'])
 class DoseResponseCurveController {
 
     DoseCurveRenderingService doseCurveRenderingService
