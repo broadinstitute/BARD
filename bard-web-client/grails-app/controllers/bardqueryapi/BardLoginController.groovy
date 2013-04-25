@@ -69,11 +69,12 @@ class BardLoginController {
      * Show denied page.
      */
     def denied = {
-        if (springSecurityService.isLoggedIn() &&
-                authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
+        if (springSecurityService?.isLoggedIn() &&
+                authenticationTrustResolver?.isRememberMe(SCH.context?.authentication)) {
             // have cookie but the page is guarded with IS_AUTHENTICATED_FULLY
             redirect action: 'full', params: params
         }
+        render(view: "/login/denied")
     }
 
     /**
@@ -81,7 +82,7 @@ class BardLoginController {
      */
     def full = {
         def config = SpringSecurityUtils.securityConfig
-        render view: AUTH_VIEW, params: params,
+        render template: AUTH_VIEW, params: params,
                 model: [hasCookie: authenticationTrustResolver.isRememberMe(SCH.context?.authentication),
                         postUrl: "${request.contextPath}${config.apf.filterProcessesUrl}"]
     }

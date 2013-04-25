@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Mixin(SearchHelper)
 @Mixin(InetAddressUtil)
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isRememberMe()', 'isAuthenticated()'])
 class BardWebInterfaceController {
     def shoppingCartService
     BardUtilitiesService bardUtilitiesService

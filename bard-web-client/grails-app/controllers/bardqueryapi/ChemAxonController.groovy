@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isRememberMe()', 'isAuthenticated()'])
 @Mixin(InetAddressUtil)
 class ChemAxonController {
     ChemAxonService chemAxonService

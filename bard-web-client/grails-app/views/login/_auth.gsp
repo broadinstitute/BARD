@@ -74,10 +74,11 @@
                placeholder="${message(code: "springSecurity.login.password.label")}" name='j_password' id='password'>
 
         <label for='remember_me' class="checkbox">
-            <input type="checkbox" value="remember-me" name='${rememberMeParameter}' id='remember_me'
+            <input type="checkbox" name='${rememberMeParameter}' id='remember_me'
                    <g:if test='${hasCookie}'>checked='checked'</g:if>>
             <g:message code="springSecurity.login.remember.me.label"/>
         </label>
+
         <button class="btn btn-large btn-primary" type="submit">
             <g:message code="springSecurity.login.button"/>
         </button>

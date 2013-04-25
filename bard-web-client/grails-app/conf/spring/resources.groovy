@@ -6,6 +6,7 @@ import mockServices.MockQueryService
 import org.springframework.web.client.RestTemplate
 import bard.core.rest.spring.*
 import bardqueryapi.ETagsService
+import bardqueryapi.BardLoginController
 
 /**
  * Spring Configuration of resources
@@ -14,7 +15,7 @@ beans = {
     String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
 
-    externalUrlDTO(ExternalUrlDTO){
+    externalUrlDTO(ExternalUrlDTO) {
         baseUrl = ncgcBaseURL
         promiscuityUrl = badApplePromiscuityUrl
     }
@@ -54,12 +55,12 @@ beans = {
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
-    eTagRestService(ETagRestService){
+    eTagRestService(ETagRestService) {
         externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
-    targetRestService(TargetRestService){
+    targetRestService(TargetRestService) {
         externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
@@ -76,14 +77,14 @@ beans = {
                 compoundRestService = ref('compoundRestService')
                 projectRestService = ref('projectRestService')
                 assayRestService = ref('assayRestService')
-                substanceRestService=ref('substanceRestService')
-                experimentRestService=ref('experimentRestService')
+                substanceRestService = ref('substanceRestService')
+                experimentRestService = ref('experimentRestService')
             }
-            eTagsService(ETagsService){
+            eTagsService(ETagsService) {
                 compoundRestService = ref('compoundRestService')
                 projectRestService = ref('projectRestService')
                 assayRestService = ref('assayRestService')
-                eTagRestService=ref('eTagRestService')
+                eTagRestService = ref('eTagRestService')
 
             }
     }
@@ -92,4 +93,19 @@ beans = {
         grailsApplication = application
     }
     inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService)
+
+    switch (GrailsUtil.environment) {
+        case "production":
+        case "oracleqa":
+        case "oracledev":
+            userDetailsService(org.broadinstitute.cbip.crowd.CrowdUserDetailsService) {
+                crowdAuthenticationProvider = ref('crowdAuthenticationProvider')
+            }
+            break;
+        default:
+            userDetailsService(org.broadinstitute.cbip.crowd.CrowdUserDetailsService) {
+                crowdAuthenticationProvider = ref('inMemMapAuthenticationProviderService')
+            }
+            break;
+    }
 }
