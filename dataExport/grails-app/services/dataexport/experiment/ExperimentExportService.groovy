@@ -18,6 +18,7 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
 import org.apache.commons.lang.StringUtils
+import bard.db.enums.HierarchyType
 
 /**
  * Class that generates Experiments as XML
@@ -310,9 +311,9 @@ class ExperimentExportService extends ExportAbstractService {
         if (parent) {
             attributes.put('parentExperimentMeasureRef', parent.id)
         }
-        String parentChildRelationship = experimentMeasure.parentChildRelationship
+       HierarchyType parentChildRelationship = experimentMeasure.parentChildRelationship
         if (parentChildRelationship) {
-            attributes.put('parentChildRelationship', parentChildRelationship)
+            attributes.put('parentChildRelationship', parentChildRelationship.getId())
         }
         markupBuilder.experimentMeasure(attributes)
     }

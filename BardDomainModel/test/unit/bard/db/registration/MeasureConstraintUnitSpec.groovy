@@ -10,9 +10,9 @@ import spock.lang.Unroll
 import static bard.db.registration.Measure.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
+
 import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
-import bard.db.experiment.HierarchyType
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -69,14 +69,9 @@ class MeasureConstraintUnitSpec extends Specification {
 
         where:
         desc          | valueUnderTest                                       | valid | errorCode
-        'too long'    | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid' | ''                                                   | false | 'blank'
-        'blank valid' | '  '                                                 | false | 'blank'
-        'not inList'  | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE)     | false | 'not.inList'
-
         'null valid'  | null                                                 | true  | null
-        'valid value' | HierarchyType.CALCULATED_FROM.getValue()             | true  | null
-        'valid value' | HierarchyType.SUPPORTED_BY.getValue()                | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM                        | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY                           | true  | null
     }
 
     void "test resultType constraints #desc resultType: '#valueUnderTest'"() {

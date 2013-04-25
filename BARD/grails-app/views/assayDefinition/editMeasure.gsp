@@ -1,4 +1,4 @@
-<%@ page import="bard.db.experiment.HierarchyType; bard.db.registration.*" %>
+<%@ page import="bard.db.enums.HierarchyType;bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,9 +74,9 @@
                             <div class="controls">
                                 <g:select name="relationship"
                                           noSelection="${['null':'Select One...']}"
-                                          from="${HierarchyType.list()}"
-                                          optionValue="${{it.value}}"
-                                          optionKey="value"/>
+                                          from="${bard.db.enums.HierarchyType.values()}"
+                                          optionValue="${{it.id}}"
+                                          optionKey="id"/>
                             </div>
                         </div>
                         <div class="control-group">
@@ -213,9 +213,9 @@
                         <label class="control-label" for="relationship">Child to Parent: </label>
                         <g:select name="relationship"
                                   noSelection="${['null':'Select One...']}"
-                                  from="${HierarchyType.list()}"
-                                  optionValue="${{it.value}}"
-                                  optionKey="value"/>
+                                  from="${bard.db.enums.HierarchyType.values()}"
+                                  optionValue="${{it.id}}"
+                                  optionKey="id"/>
                         <button type="button" class="btn" onclick="this.form.submit()">Change</button>
                     </g:form>
                 </div>

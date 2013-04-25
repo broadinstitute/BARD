@@ -125,7 +125,7 @@ class PubchemReformatService {
 
         public ResultMap(String aid, Collection<ResultMapRecord> rs) {
             this.aid = aid;
-            records = rs.groupBy {it.resultType}
+            records = rs.groupBy { makeLabel(it.resultType, it.statsModifier) }
             recordsByParentTid = rs.groupBy {it.parentTid}
             tids = rs.collect {it.tid}
             allRecords = new ArrayList(rs);
@@ -140,11 +140,15 @@ class PubchemReformatService {
             List<Map<String,String>> rows = []
             String label = makeLabel(resultType, statsModifier)
             Collection<ResultMapRecord> records = records.get(label).findAll { it.parentTid == parentTid }
+
             // each record represents a column in the pubchem file
+            // loop through all the child columns of the given parent (parentTid)
             for(record in records) {
                 Map<String,String> kvs = ["Replicate #": record.series?.toString(), "TID": record.tid]
 
+                // get the value for the current column (record) in the current row (pubchemRow)
                 String measureValue = pubchemRow[record.tid]
+
                 if (measureValue != null && measureValue.length() > 0)
                 {
                     if (record.qualifierTid != null) {
@@ -156,6 +160,11 @@ class PubchemReformatService {
 
                 rows.add(kvs)
             }
+
+//            if(resultType == "percent response") {
+//                println("${resultType} stats=${statsModifier}, rows=${rows}")
+//            }
+
             return rows
         }
 

@@ -3,7 +3,7 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.registration.additemwizard.*
 import org.apache.commons.lang.StringUtils
-import bard.db.experiment.HierarchyType
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -57,7 +57,7 @@ class AssayContextService {
         return assayContext
     }
     public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType){
-        measure.parentChildRelationship=hierarchyType?.value
+        measure.parentChildRelationship=hierarchyType
         measure.save(flush: true)
         return measure
     }
@@ -207,7 +207,7 @@ class AssayContextService {
     public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
         Measure measure =
             new Measure(assay: assayInstance, resultType: resultType, statsModifier: statsModifier,
-                    entryUnit: entryUnit, parentMeasure: parentMeasure ,parentChildRelationship: hierarchyType?.value);
+                    entryUnit: entryUnit, parentMeasure: parentMeasure ,parentChildRelationship: hierarchyType);
         assayInstance.addToMeasures(measure)
         measure.save()
 

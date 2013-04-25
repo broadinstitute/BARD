@@ -6,7 +6,7 @@ import bard.db.enums.AssayStatus
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.web.json.JSONArray
-import bard.db.experiment.HierarchyType
+import bard.db.enums.HierarchyType
 import org.apache.commons.lang.StringUtils
 
 @Secured(['isFullyAuthenticated()'])
@@ -101,7 +101,11 @@ class AssayDefinitionController {
         final Assay assayInstance = Assay.get(params.id)
         final Element resultType = Element.get(params.resultTypeId)
         final String parentChildRelationship = params.relationship
-        final HierarchyType hierarchyType = HierarchyType.getByValue(parentChildRelationship?.trim())
+        HierarchyType hierarchyType = null
+        if(StringUtils.isNotBlank(parentChildRelationship)){
+            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
+        }
+
         if (!resultType) {
             flash.message = 'Result Type is Required'
         }
@@ -164,8 +168,10 @@ class AssayDefinitionController {
         def measure = Measure.get(params.measureId)
         def parentChildRelationship = params.relationship
 
-        final HierarchyType hierarchyType = HierarchyType.getByValue(parentChildRelationship?.trim())
-
+        HierarchyType hierarchyType = null
+        if(StringUtils.isNotBlank(parentChildRelationship)){
+            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
+        }
         if (measure == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
         }

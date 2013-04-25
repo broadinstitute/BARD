@@ -6,6 +6,8 @@ import bard.db.registration.Assay
 import bard.db.registration.Measure
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
+import bard.db.enums.HierarchyType
+import org.apache.commons.lang.StringUtils
 
 class ExperimentService {
 
@@ -59,8 +61,10 @@ class ExperimentService {
                 parentId = record.getString("parentId");
 
             String relationship = null;
-            if (record.has("relationship"))
+            HierarchyType hierarchyType = null;
+            if (record.has("relationship")){
                 relationship = record.getString("relationship");
+            }
 
             ExperimentMeasure child = byId[id];
             ExperimentMeasure parent = null;
@@ -71,7 +75,10 @@ class ExperimentService {
             if (parent != null) {
                 parent.addToChildMeasures(child);
             }
-            child.parentChildRelationship = relationship;
+            if(StringUtils.isNotBlank(relationship) && relationship != 'null'){
+              hierarchyType = HierarchyType.byId(relationship);
+            }
+            child.parentChildRelationship = hierarchyType;
         }
 
         // now get rid of the unused measures
@@ -105,7 +112,7 @@ class ExperimentService {
         measureToExpMeasure.values().each { ExperimentMeasure child ->
             if (child.measure.parentMeasure != null) {
                 ExperimentMeasure parent = measureToExpMeasure[child.measure.parentMeasure]
-                child.parentChildRelationship = "Derived from"
+                child.parentChildRelationship = HierarchyType.SUPPORTED_BY
                 child.parent = parent
             }
         }
