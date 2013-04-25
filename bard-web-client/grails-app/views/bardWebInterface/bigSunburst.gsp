@@ -13,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
-    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="../js/sunburst/d3.min.js"></script>
     <script src="../js/sunburst/createALegend.js"></script>
     <script src="../js/sunburst/createASunburst.js"></script>
     <style>
