@@ -124,7 +124,7 @@ class BulkResultService {
 
                 statement.setLong(1, relationship.result.id)
                 statement.setLong(2, relationship.parentResult.id)
-                def hierarchyType = relationship.hierarchyType.id
+                def hierarchyType = relationship.hierarchyType?.id
                 statement.setString(3, hierarchyType)
                 relationshipValues.add(hierarchyType)
 

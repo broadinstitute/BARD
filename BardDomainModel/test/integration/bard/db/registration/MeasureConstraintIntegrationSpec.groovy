@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -9,9 +10,6 @@ import spock.lang.Unroll
 import static bard.db.registration.Measure.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
-import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -112,10 +110,10 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc          | valueUnderTest                                       | valid | errorCode
-        'null valid'  | null                                                 | true  | null
-        'valid value' | HierarchyType.CALCULATED_FROM.getId()                | true  | null
-        'valid value' | HierarchyType.SUPPORTED_BY.getId()                   | true  | null
+        desc          | valueUnderTest                | valid | errorCode
+        'null valid'  | null                          | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY    | true  | null
     }
 
     void "test entryUnit constraints #desc entryUnit: '#valueUnderTest'"() {
