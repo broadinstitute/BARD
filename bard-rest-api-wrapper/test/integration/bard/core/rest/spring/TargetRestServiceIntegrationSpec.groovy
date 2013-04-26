@@ -87,7 +87,7 @@ class TargetRestServiceIntegrationSpec extends IntegrationSpec {
         when:
         final String resourceContext = targetRestService.getResource()
         then:
-        assert "http://bard.nih.gov/api/v15/targets/" == resourceContext
+        assert "http://bard.nih.gov/api/v16/targets/" == resourceContext
     }
 
     void "getSearchResource"() {
