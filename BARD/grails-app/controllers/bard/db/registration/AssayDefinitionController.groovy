@@ -102,14 +102,13 @@ class AssayDefinitionController {
         final Element resultType = Element.get(params.resultTypeId)
         final String parentChildRelationship = params.relationship
         HierarchyType hierarchyType = null
-        if(StringUtils.isNotBlank(parentChildRelationship)){
+        if (StringUtils.isNotBlank(parentChildRelationship)) {
             hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
         }
 
         if (!resultType) {
             flash.message = 'Result Type is Required'
-        }
-        else {
+        } else {
             def parentMeasure = null
             if (params.parentMeasureId) {
                 parentMeasure = Measure.get(params.parentMeasureId)
@@ -169,15 +168,14 @@ class AssayDefinitionController {
         def parentChildRelationship = params.relationship
 
         HierarchyType hierarchyType = null
-        if(StringUtils.isNotBlank(parentChildRelationship)){
+        if (StringUtils.isNotBlank(parentChildRelationship)) {
             hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
         }
         if (measure == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
-        }
-        else {
+        } else {
             flash.message = null
-            if(measure.parentMeasure){ //if this measure has no parent then do nothing
+            if (measure.parentMeasure) { //if this measure has no parent then do nothing
                 assayContextService.changeParentChildRelationship(measure, hierarchyType)
             }
         }
@@ -205,11 +203,11 @@ class AssayDefinitionController {
                 }
                 assays.sort {
                     a, b ->
-                    if (params.order == 'desc') {
-                        b."${params.sort}" <=> a."${params.sort}"
-                    } else {
-                        a."${params.sort}" <=> b."${params.sort}"
-                    }
+                        if (params.order == 'desc') {
+                            b."${params.sort}" <=> a."${params.sort}"
+                        } else {
+                            a."${params.sort}" <=> b."${params.sort}"
+                        }
                 }
                 render(view: "findByName", params: params, model: [assays: assays])
             } else if (assays?.size() == 1)
@@ -301,6 +299,20 @@ class AssayDefinitionController {
 
     def updateCardName(String edit_card_name, Long contextId) {
         AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
+        Assay assay = assayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
+    /**
+     *
+     * @param context_group - The new context group
+     * @param contextMoveId - The context that we are moving to new group
+     *
+     */
+    def moveCard(String context_group, Long contextMoveId) {
+        AssayContext assayContext = AssayContext.findById(contextMoveId)
+        if (assayContext.contextGroup != context_group) {
+            assayContext.setContextGroup(context_group)
+        }
         Assay assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }

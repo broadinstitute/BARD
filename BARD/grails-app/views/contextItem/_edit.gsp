@@ -29,7 +29,8 @@
                                                            onclick="launchAddItemWizard(${context.owner.id}, ${context.id}, '${cardSection.replace(' > ', '> ')}');
                                                            return false;"><i class="icon-road"></i> Add item wizard</a>
                             </li>
-
+                            <li><a href="#" onclick="moveCard(${context.id},'${cardSection.replace(' > ', '> ')}');
+                            return false;"><i class="icon-move"></i> Move card</a></li>
                             <g:if test="${context.contextItems.size() == 0}">
                                 <li style="text-align:left"><a href="#" onclick="deleteCard(${context.id});
                                 return false;"><i class="icon-trash"></i> Delete card</a></li>

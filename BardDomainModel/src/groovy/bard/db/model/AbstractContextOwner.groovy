@@ -19,7 +19,26 @@ abstract class AbstractContextOwner {
         String description;
         List<AbstractContext> value;
     }
-
+    static Map<String,String> groupDesc = [
+            "assay protocol> assay component>":"",
+            "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
+            "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
+            "assay protocol> assay readout>":"",
+            "assay protocol> assay type>":"", // relatively small list
+            "biology> molecular interaction>":"",
+            "biology>":"",
+            "result type> item count>":"",
+            "project management> project information>":"",
+            "project management> experiment>":"",
+            "unclassified>":""
+    ]
+    /**
+     * Just return the keys for the map
+     * @return
+     */
+    static List<String> groupContextKeys(){
+       return new ArrayList<String>(groupDesc.keySet())
+    }
     /**
      * Create a map where all the assayContexts are grouped a common root in the ontology hierarchy based on a prefered
      * descriptor for the context.
@@ -38,19 +57,19 @@ abstract class AbstractContextOwner {
         /* These ten groups are what is currently in the database for groups.  In the future, we'd like to move these group
            definitions out of this code and someplace where the RDM or some end users can maintain it.
         */
-        def groupDesc = [
-                "assay protocol> assay component>":"",
-                "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
-                "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
-                "assay protocol> assay readout>":"",
-                "assay protocol> assay type>":"", // relatively small list
-                "biology> molecular interaction>":"",
-                "biology>":"",
-                "result type> item count>":"",
-                "project management> project information>":"",
-                "project management> experiment>":"",
-                "unclassified>":""
-        ]
+//        def groupDesc = [
+//                "assay protocol> assay component>":"",
+//                "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
+//                "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
+//                "assay protocol> assay readout>":"",
+//                "assay protocol> assay type>":"", // relatively small list
+//                "biology> molecular interaction>":"",
+//                "biology>":"",
+//                "result type> item count>":"",
+//                "project management> project information>":"",
+//                "project management> experiment>":"",
+//                "unclassified>":""
+//        ]
 
         mapByPath.keySet().each { if(!groupDesc.containsKey(it)) groupDesc.put(it, "") }
 
