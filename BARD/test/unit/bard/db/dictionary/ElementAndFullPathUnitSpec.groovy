@@ -46,7 +46,7 @@ class ElementAndFullPathUnitSpec extends Specification {
         String pathString = "abcd/efghij/"
 
         when:
-        List<String> tokenList = ElementAndFullPath.splitPathIntoTokens(pathString, delimeter)
+        ElementAndFullPath.splitPathIntoTokens(pathString, delimeter)
 
         then:
         thrown(InvalidElementPathStringException)
@@ -57,7 +57,18 @@ class ElementAndFullPathUnitSpec extends Specification {
         String pathString = "/abcd/efghij"
 
         when:
-        List<String> tokenList = ElementAndFullPath.splitPathIntoTokens(pathString, delimeter)
+        ElementAndFullPath.splitPathIntoTokens(pathString, delimeter)
+
+        then:
+        thrown(InvalidElementPathStringException)
+    }
+
+    void "no delimeters just text"() {
+        setup:
+        String pathString = "abcd"
+
+        when:
+        ElementAndFullPath.splitPathIntoTokens(pathString, delimeter)
 
         then:
         thrown(InvalidElementPathStringException)
