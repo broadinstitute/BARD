@@ -5,10 +5,12 @@ import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 
+import spock.lang.Unroll;
+
 import bard.db.audit.BardContextUtils
 import bard.db.people.Person
 
-
+@Unroll
 class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 	
 	ExternalOntologyPerson extOntologyPerson
@@ -45,34 +47,67 @@ class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 		then:
 		
 		extItem1.id == testPerson.id.toString()
-		extItem1.display == testPerson.userName
+		extItem1.display == 'testuser1 (New Test User1)'
 		extItem2 == null
 	}
 	
-	void "test findMatching"() {
+	void "test findById desc: '#desc' item: '#item' itemDisplay: '#itemDisplay'"(){		
 		when:
-		List<ExternalItem> items1 = extOntologyPerson.findMatching("test", 20)
-		List<ExternalItem> items2 = extOntologyPerson.findMatching("test", 5)
-		List<ExternalItem> items3 = extOntologyPerson.findMatching("ABCDE", 20)
-		List<ExternalItem> items4 = extOntologyPerson.findMatching("XYZ123", 20)
-		List<ExternalItem> items5 = extOntologyPerson.findMatching("test123", 20)
-		List<ExternalItem> items6 = extOntologyPerson.findMatching("new", 20)
-		List<ExternalItem> items7 = extOntologyPerson.findMatching("abCDE", 20)
-		List<ExternalItem> items8 = extOntologyPerson.findMatching("testuser5", 20)
-		List<ExternalItem> items9 = extOntologyPerson.findMatching("TESTuser", 20)
-		
+		Person testPerson = persons.get(0)
+		ExternalItem extItem = extOntologyPerson.findById(searchId)
 		
 		then:
-		items1.size() == 10
-		items2.size() == 5
-		items3.size() == 1
-		items4.size() == 1
-		items5.size() == 0
-		items6.size() == 12
-		items7.size() == 1
-		items8.size() == 1
-		items8.get(0).display == "testuser5 (New Test User5)"
-		items9.size() == 10
+		item == extItem
+		itemDisplay == extItem?.display
+		
+		where:
+		desc                                        		 | item			| itemDisplay   				| searchId
+		"Return null with invalid null searchId"			 | null		    | null      					| null
+		"Return null with invalid empty searchId"			 | null		    | null      					| ''
+		"Return null with invalid blank searchId"			 | null		    | null      					| '   '
+		"Return null with not found searchId"			     | null		    | null      					| '10000'
 		
 	}
+	
+	void "test findMatching and check # of items returned desc: '#desc' numberOfPersons: '#numberOfPersons'"(){
+		when:
+		List<ExternalItem> items = extOntologyPerson.findMatching(searchTerm, limit)
+		
+		then:
+		numberOfPersons == items.size()
+		
+		where:
+		desc                                        		 | numberOfPersons | searchTerm   | limit
+		"1 person"											 | 1               | 'testuser5'  | 20
+		"0 person due to searchTerm no match"       		 | 0               | 'test123'    | 20
+		"0 person due to searchTerm null"           		 | 0               | null         | 20
+		"0 person due to searchTerm empty"          		 | 0               | ''           | 20
+		"10 persons that contain searchTerm"        		 | 10              | 'test'       | 20
+		"5 persons due to limit set to 5"           		 | 5               | 'test'       | 5
+		"1 person with lower and upper case searchTerm"      | 1               | 'abCDE'      | 20
+		"12 persons with searchTerm in fullname"      		 | 12              | 'new'        | 20
+		"12 persons with searchTerm in username & fullname"  | 12              | 'user'       | 20
+		"10 persons with lower and upper case searchTerm"    | 10              | 'TESTuser'   | 20
+		
+	}
+	
+	void "test findMatching and check list of names returned desc: '#desc' expectedPersons: '#expectedPersons'"(){
+		when:
+		List<ExternalItem> items = extOntologyPerson.findMatching(searchTerm, limit)
+		
+		then:
+		expectedPersons == items*.display
+		
+		where:
+		desc                                               | expectedPersons                     | searchTerm   | limit
+		"1 person"									       | ['testuser5 (New Test User5)']	  	 | 'testuser5'  | 20
+		"0 person due to searchTerm no match"              | []								     | 'test1234'   | 20
+		"0 person due to searchTerm null"                  | []								     | null         | 20
+		"0 person due to searchTerm empty"                 | []								     | ''           | 20
+		"0 person due to searchTerm with multiple spaces"  | []								     | '   '        | 20
+		"3 persons" 									   | ['testuser1 (New Test User1)', 'testuser10 (New Test User10)', 'user1000 (New XYZ123 User)'] | 'user1'      | 20
+		"2 persons due to limit set to 2" 				   | ['testuser1 (New Test User1)', 'testuser2 (New Test User2)'] | 'new'      | 2
+		
+	}
+	
 }

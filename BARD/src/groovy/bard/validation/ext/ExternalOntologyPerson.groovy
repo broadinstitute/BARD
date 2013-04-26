@@ -22,7 +22,9 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 			return null;
 		def person = Person.get(cleanId)
 		if(person){
-			ExternalItem extItem = new ExternalItem(person.id.toString(), person.userName)
+			// Display is the concatenation of username and fullname
+			String display = person.userName + (person.fullName ? (" (" + person.fullName + ")") : "")
+			ExternalItem extItem = new ExternalItem(person.id.toString(), display)
 			return extItem
 		}
 		else
