@@ -48,7 +48,8 @@ class TargetRestService extends AbstractRestService {
                     append(source)
 
         final URL url = new URL(resource.toString())
-        List<TargetClassification> targetClassifications = getForObject(url.toURI(), TargetClassification[].class) as List<TargetClassification>
+        Map<String, List<TargetClassification>> targetClassificationsMap = getForObject(url.toURI(), HashMap.class)
+        List<TargetClassification> targetClassifications = targetClassificationsMap.get(targetAccessionNumber) as List<TargetClassification>
         return targetClassifications
     }
     /**
