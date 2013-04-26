@@ -20,6 +20,14 @@ $(document).ready(function () {
         draggable: false,
         zIndex: 3999
     });
+    $("#dialog_move_card").dialog({
+        height: 180,
+        width: 500,
+        autoOpen: false,
+        modal: true,
+        draggable: false,
+        zIndex: 3999
+    });
     $("#dialog_edit_card").dialog("option", "buttons", [
         {
             text: "Save",
@@ -34,6 +42,25 @@ $(document).ready(function () {
             click: function () {
                 $(this).dialog("close");
                 $("#edit_card_form").clearForm();
+                $("#assayContextId").val('');
+            }
+        }
+    ]);
+
+    $("#dialog_move_card").dialog("option", "buttons", [
+        {
+            text: "Save",
+            class: "btn btn-primary",
+            click: function () {
+                $("#move_card_form").submit();
+            }
+        },
+        {
+            text: "Cancel",
+            class: "btn",
+            click: function () {
+                $(this).dialog("close");
+                $("#move_card_form").clearForm();
                 $("#assayContextId").val('');
             }
         }
@@ -58,7 +85,20 @@ $(document).ready(function () {
             updateCardHolder(responseText)
         }
     });
+    $("#move_card_form").ajaxForm({
+        url: '../moveCard',
+        type: 'POST',
+        beforeSubmit: function (formData, jqForm, options) {
+            var form = jqForm[0];
+            $("#dialog_move_card").dialog("close");
 
+        },
+        success: function (responseText, statusText, xhr, jqForm) {
+            $("#move_card_form").clearForm();
+            $("#contextMoveId").val('');
+            updateCardHolder(responseText)
+        }
+    });
     $("#dialog_new_card").dialog({
         height: 180,
         width: 500,
@@ -115,24 +155,7 @@ $(document).ready(function () {
         zIndex: 3999,
         title: "Move card item"
     });
-    $("#dialog_edit_card").dialog("option", "buttons", [
-        {
-            text: "Save",
-            class: "btn btn-primary",
-            click: function () {
-                $("#edit_card_form").submit();
-            }
-        },
-        {
-            text: "Cancel",
-            class: "btn",
-            click: function () {
-                $(this).dialog("close");
-                $("#edit_card_form").clearForm();
-                $("#assayContextId").val('');
-            }
-        }
-    ]);
+
 
     $("#dialog_add_item_wizard_confirm_cancel").dialog({
         height: 200,
@@ -470,7 +493,13 @@ function deleteCard(cardId) {
 
     $("#dialog_confirm_delete_card").dialog("open");
 }
+function moveCard(contextToMoveId, new_context_group) {
+    $("#move_card").val(new_context_group);
+    $("#contextMoveId").val(contextToMoveId);
+    $("#dialog_move_card").dialog({title: "Move card to new group"});
+    $("#dialog_move_card").dialog("open");
 
+}
 function editCardName(cardId, cardName) {
     $("#edit_card_name").val(cardName);
     $("#contextId").val(cardId);

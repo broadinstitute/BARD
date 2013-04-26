@@ -45,7 +45,7 @@ class BuildElementPathsServiceSpec extends Specification {
         assert buildElementPathsService.relationshipType != null
     }
 
-    static ElementHierarchy buildElementHierarchy(Element parent, Element child, String relationshipType) {
+    public static ElementHierarchy buildElementHierarchy(Element parent, Element child, String relationshipType) {
         ElementHierarchy elementHierarchy = new ElementHierarchy(parentElement: parent, childElement: child,
                 relationshipType: relationshipType, dateCreated: new Date())
         assert elementHierarchy.save()
@@ -262,4 +262,51 @@ class BuildElementPathsServiceSpec extends Specification {
         sortedList.get(6).path.get(1) == eh4
         sortedList.get(6).element == eh4.childElement
     }
+
+    void "test loop detection - exception thrown"() {
+        setup:
+        ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        ElementHierarchy eh1 = buildElementHierarchy(eh0.childElement, Element.build(), service.relationshipType)
+        ElementHierarchy eh2 = buildElementHierarchy(eh1.childElement, eh0.parentElement, service.relationshipType)
+        assert eh0.parentElement == eh2.childElement
+
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: eh2.childElement)
+        elementAndFullPath.path.add(eh2)
+
+
+        when:
+        service.recursiveBuild(elementAndFullPath)
+
+
+        then:
+        thrown(BuildElementPathsServiceLoopInPathException)
+    }
+
+    void "test loop detection - contents of exception"() {
+        setup:
+        ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        ElementHierarchy eh1 = buildElementHierarchy(eh0.childElement, Element.build(), service.relationshipType)
+        ElementHierarchy eh2 = buildElementHierarchy(eh1.childElement, eh0.parentElement, service.relationshipType)
+        assert eh0.parentElement == eh2.childElement
+
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: eh2.childElement)
+        elementAndFullPath.path.add(eh2)
+
+
+        when:
+        BuildElementPathsServiceLoopInPathException exception = null
+        try {
+            service.recursiveBuild(elementAndFullPath)
+        } catch (BuildElementPathsServiceLoopInPathException e) {
+            exception = e
+        }
+
+        then:
+        exception != null
+        exception.elementAndFullPath.path.size() == 2
+        exception.elementAndFullPath.path.get(0) == eh1
+        exception.elementAndFullPath.path.get(1) == eh2
+        exception.nextTopElementHierarchy == eh0
+    }
+
 }

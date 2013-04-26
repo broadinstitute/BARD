@@ -19,8 +19,7 @@ select rm_prob.aid, vpaj.project_uid, dpu.dataset_id, ds.name from
     and resulttype not in ('standard deviation', 'confidence limit 95%')
     group by aid, resulttype, seriesno, concentration, concentrationunit,
     attribute1, value1, attribute2, value2 having count(*) > 1
-    ) group by aid) x where exists (select 1 from bard_data_qa.external_reference er
-    where er.ext_assay_ref = 'aid='||x.aid)) rm_prob
+    ) group by aid) x ) rm_prob
   join bard_data_qa_dashboard.vw_project_aid_join vpaj on vpaj.aid=rm_prob.aid
   join bard_data_qa_dashboard.dataset_project_uid dpu on dpu.project_uid=vpaj.project_uid
   join bard_data_qa_dashboard.dataset ds on ds.id = dpu.dataset_id
