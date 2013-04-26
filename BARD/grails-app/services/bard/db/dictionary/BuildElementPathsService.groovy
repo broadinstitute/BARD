@@ -4,10 +4,13 @@ class BuildElementPathsService {
 
     final String relationshipType
 
+    final String pathDelimeter
+
     Integer maxPathLength
 
-    public BuildElementPathsService(String relationshipType = "subClassOf") {
+    public BuildElementPathsService(String relationshipType = "subClassOf", String pathDelimeter = "/") {
         this.relationshipType = relationshipType
+        this.pathDelimeter = pathDelimeter
 
         maxPathLength = null
     }
@@ -33,8 +36,11 @@ class BuildElementPathsService {
         return result
     }
 
-    Set<ElementAndFullPath> buildAll() {
+    Set<ElementAndFullPath> buildAll() throws BuildElementPathsServiceLoopInPathException {
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
+
+        //retrieve all element hierarchy to reduce database round trips
+        List<ElementHierarchy> elementHierarchyList = ElementHierarchy.findAll()
 
         List<Element> elementList = Element.findAll()
         for (Element element : elementList) {
@@ -44,12 +50,12 @@ class BuildElementPathsService {
         return result
     }
 
-    Set<ElementAndFullPath> build(Element element) {
+    Set<ElementAndFullPath> build(Element element) throws BuildElementPathsServiceLoopInPathException {
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
         Set<ElementHierarchy> elementHierarchySet = buildSetThatMatchRelationship(element.childHierarchies)
 
-        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: element)
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: element, pathDelimeter: pathDelimeter)
         result.add(elementAndFullPath)
 
         if (elementHierarchySet.size() > 0) {
@@ -71,7 +77,7 @@ class BuildElementPathsService {
     }
 
 
-    Set<ElementAndFullPath> recursiveBuild(ElementAndFullPath elementAndFullPath) {
+    Set<ElementAndFullPath> recursiveBuild(ElementAndFullPath elementAndFullPath) throws BuildElementPathsServiceLoopInPathException {
         assert elementAndFullPath.path.size() > 0
 
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
@@ -83,16 +89,30 @@ class BuildElementPathsService {
         if (elementHierarchySet.size() > 0) {
             Iterator<ElementHierarchy> iterator = elementHierarchySet.iterator()
 
-            for (int i = 0; i < elementHierarchySet.size() - 1; i++) {
-                ElementAndFullPath copy = elementAndFullPath.copy()
-                copy.path.add(0, iterator.next())
+            List<PathAndElementHierarchyPair> pairList = new ArrayList<PathAndElementHierarchyPair>(elementHierarchySet.size())
+            pairList.add(new PathAndElementHierarchyPair(elementAndFullPath: elementAndFullPath, elementHierarchy: iterator.next()))
 
+            while (iterator.hasNext()) {
+                ElementHierarchy elementHierarchy = iterator.next()
+
+                ElementAndFullPath copy = elementAndFullPath.copy()
                 result.add(copy)
-                result.addAll(recursiveBuild(copy))
+
+                pairList.add(new PathAndElementHierarchyPair(elementAndFullPath: copy, elementHierarchy: elementHierarchy))
             }
 
-            elementAndFullPath.path.add(0, iterator.next())
-            result.addAll(recursiveBuild(elementAndFullPath))
+
+            for (PathAndElementHierarchyPair pair : pairList) {
+                ElementAndFullPath curPath = pair.elementAndFullPath
+                ElementHierarchy elementHierarchy = pair.elementHierarchy
+
+                if (! curPath.pathContainsElement(elementHierarchy.parentElement)) {
+                    curPath.path.add(0, elementHierarchy)
+                    result.addAll(recursiveBuild(curPath))
+                } else {
+                    throw new BuildElementPathsServiceLoopInPathException(elementAndFullPath: curPath, nextTopElementHierarchy: elementHierarchy)
+                }
+            }
         }
 
         return result
@@ -109,4 +129,14 @@ class BuildElementPathsService {
 
         return result
     }
+
+    private class PathAndElementHierarchyPair {
+        ElementHierarchy elementHierarchy
+        ElementAndFullPath elementAndFullPath
+    }
+}
+
+class BuildElementPathsServiceLoopInPathException extends Exception {
+    ElementHierarchy nextTopElementHierarchy
+    ElementAndFullPath elementAndFullPath
 }
