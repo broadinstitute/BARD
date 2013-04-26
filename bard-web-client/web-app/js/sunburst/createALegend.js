@@ -32,7 +32,7 @@ function createALegend(legendWidth, legendHeight, numberOfDivisions, colorScale,
             return (i * 2) + 11;
         })
         .text(function (d, i) {
-            if ((i % textSpacing) == 0) {
+            if ((i % textSpacing) === 0) {
                 var valToWrite = (i / numberOfDivisions);
                 return valToWrite.toString();
             }

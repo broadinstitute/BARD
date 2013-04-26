@@ -23,12 +23,12 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
     function colorByActivity(d) {
         var returnValue = new String();
         if (d.ac != undefined) {
-            if (d.name=="/")   { // root is special cased
+            if (d.name==="/")   { // root is special cased
                 return "#fff";
             }
             var actives = parseInt(d.ac);
             var inactives = parseInt(d.inac);
-            if ((actives + inactives)==0) // this should never happen, but safety first!
+            if ((actives + inactives)===0) // this should never happen, but safety first!
                 return "#fff";
             var prop = actives / (actives + inactives);
             returnValue = colorScale(prop);
@@ -88,7 +88,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
             tooltip.style("visibility", "visible").style("opacity", "0").transition()
                 .duration(200).style("opacity", "1")
         }
-        if (d.children == undefined)
+        if (d.children === undefined)
             return tooltip.html(d.name + '<br/>' + 'active in ' + d.ac + '<br/>' + 'inactive in ' + d.inac);
         else
             return tooltip.html(d.name);
