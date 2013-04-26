@@ -1,4 +1,4 @@
-<div id="showstep" class="row-fluid">
+<div id="showstep" style="position: relative;">
     <input type="hidden" id="projectIdForStep" name="projectIdForStep" value="${projectId}"/>
 
     <div id="stepGraph" style="display: none">${pegraph}</div>
@@ -8,9 +8,9 @@
 
     <div id="ajaxProgress" style="color:#5bb75b"></div>
 
-    <div id="canvas" class="span7"></div>
+    <div id="canvas"></div>
 
-    <div id="placeholder" class="span2" style="float: right;">
+    <div id="placeholder">
 
         <div id="node-selection-details">
             Click on an experiment to see the details here.
@@ -36,7 +36,7 @@
         </script>
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
-
+            <p id="selectedEdgeId" style="display: none">{{selectedEdgeId}}</p>
             <h5>Selected Edge:
                 <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{fromNode.bardExptId}}">{{fromNode.eid}}</a>
                 ->
@@ -45,6 +45,7 @@
         </script>
 
         <script id="node-selection-template1" type="text/x-handlebars-template">
+            <p id="selectedNodeId" style="display: none">{{selectedNodeId}}</p>
             <h5>Experiment Id:
                 <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.bardExptId}}">{{selected.eid}}</a>
             </h5>

@@ -40,6 +40,7 @@ modules = {
         resource url: '/js/projectstep/projectstep.show.js'
         resource url: '/js/projectstep/rcolor.js'
         resource url: '/js/projectstep/viz.js'
+        resource url: '/css/projectstep.css'
     }
     //Adding version allows clients to not cache javascript
     search {
