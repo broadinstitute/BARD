@@ -3,12 +3,14 @@ package barddataqa
 class TidIssueController {
     def tidIssueService
 
-    def issues(Long id) {
+
+    def duplicateResultTypes(Long id) {
         def aid = id
         assert aid != null
-        return [tidIssueList: tidIssueService.findTidIssues(aid), headers: tidIssueService.columns]
+        return [rowList: tidIssueService.findTidsWithDuplicateResultTypes(aid), headerList: tidIssueService.columns]
     }
 
-    def index() {
+    def resultTypeContextConflict() {
+        return [rowList:  tidIssueService.findTidsWithResultTypeContextConflict(), headerList: tidIssueService.columns]
     }
 }
