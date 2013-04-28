@@ -58,6 +58,42 @@ assert(attr(subject,'id') === 'testSubject',
 assert(attr(subject,'id','other') === 'other',
     "new id value set");
 
+(function(){                                      //#1
+
+    var PROPERTIES = {                              //#2
+        position: "absolute",
+        visibility: "hidden",
+        display: "block"
+    };
+
+    window.getDimensions = function(element) {      //#3
+
+        var previous = {};                            //#4
+        for (var key in PROPERTIES) {
+            previous[key] = element.style[key];
+            element.style[key] = PROPERTIES[key];       //#5
+        }
+
+        var result = {                                //#6
+            width: element.offsetWidth,
+            height: element.offsetHeight
+        };
+
+        for (key in PROPERTIES) {                     //#7
+            element.style[key] = previous[key];
+        }
+        return result;
+    };
+
+})();
+
+
+var dimensions = getDimensions(withShuriken);        //#10
+
+assert(dimensions.width == 36,                       //#11
+    "Shuriken image width fetched; actual: " +
+        dimensions.width + ", expected: 36");
+
 
 function assert(value, desc) {
     var resultsList = document.getElementById("results");
