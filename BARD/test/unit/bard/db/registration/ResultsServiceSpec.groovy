@@ -524,7 +524,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
     }
 
     Result createResult() {
-        return new Result(substanceId: 100, resultType: Element.build())
+        return new Result(substanceId: 100, resultType: Element.build(), measure: Measure.build())
     }
 
     ResultContextItem createContextItem(params) {
@@ -543,8 +543,10 @@ class ResultsServiceSpec extends spock.lang.Specification {
 
         Result parent1 = createResult()
         Result parent2 = createResult()
-        Result child1 = new Result(substanceId: 100, resultType: childElement)
-        Result child2 = new Result(substanceId: 100, resultType: childElement)
+        Measure measure1 = Measure.build()
+        Measure measure2 = Measure.build()
+        Result child1 = new Result(substanceId: 100, resultType: childElement, measure: measure1)
+        Result child2 = new Result(substanceId: 100, resultType: childElement, measure: measure2)
 
         ResultHierarchy link1 = new ResultHierarchy(result: child1, parentResult: parent1)
         ResultHierarchy link2 = new ResultHierarchy(result: child2, parentResult: parent2)
