@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td>Missing AID's</td>
-            <td><g:link controller="checkForMissingAids" action="index">Check for AID's that are in a dataset but missing from external_reference table</g:link> </td>
+            <td><g:link controller="checkForMissingAids" action="index">Check for AID's that are in a dataset but missing from external_reference table (${missingAidCount})</g:link> </td>
         </tr>
     </table>
 </body>
