@@ -24,6 +24,7 @@ new File(fileName).eachLine {String line ->
     }
 }
 
+Assay.withTransaction { status ->
 for (String id : ids) {
     def assayIds = StringUtils.split(id, ",")
     def assays = []
@@ -38,6 +39,7 @@ for (String id : ids) {
    // def aids = [2050,5644,5635,5636,5642,1947,5634,5638,5978,5645,5637,5221,5223,5414,1468,5163, 5509]   // dataset1, should update the status
    // updateStatus(aids, modifiedBy)
 }
+}
 
 def merge(List<Assay> assays, String modifiedBy) {
     def mergeAssayService = new MergeAssayService()
@@ -47,31 +49,20 @@ def merge(List<Assay> assays, String modifiedBy) {
     Assay assayWillKeep = mergeAssayService.keepAssay(assays)
     List<Assay> removingAssays = mergeAssayService.assaysNeedToRemove(assays, assayWillKeep)
     println("start mergeAssayContextItem")
-    Assay.withTransaction { status ->
-        mergeAssayService.mergeAssayContextItem(removingAssays, assayWillKeep, modifiedBy)  // merege assay contextitem, experiment contextitem
-    }
+    mergeAssayService.mergeAssayContextItem(removingAssays, assayWillKeep, modifiedBy)  // merege assay contextitem, experiment contextitem
     println("end mergeAssayContextItem")
     println("start handleExperiments")
-    Assay.withTransaction { status ->
-        mergeAssayService.handleExperiments(removingAssays, assayWillKeep, modifiedBy)     // associate experiments with kept
-    }
+    mergeAssayService.handleExperiments(removingAssays, assayWillKeep, modifiedBy)     // associate experiments with kept
     println("end handleExperiments")
     println("start handleDocuments ")
-    Assay.withTransaction { status ->
-        mergeAssayService.handleDocuments(removingAssays, assayWillKeep, modifiedBy)       // associate document
-    }
+    mergeAssayService.handleDocuments(removingAssays, assayWillKeep, modifiedBy)       // associate document
     println("end handleDocuments ")
     println("start handleMeasure")
-    Assay.withTransaction { status ->
-        mergeAssayService.handleMeasure(removingAssays, assayWillKeep, modifiedBy)         // associate measure
-    }
+    mergeAssayService.handleMeasure(removingAssays, assayWillKeep, modifiedBy)         // associate measure
     println("end handleMeasure")
     println("Update assays status to Retired")
-    Assay.withTransaction { status ->
-        mergeAssayService.updateStatus(removingAssays, modifiedBy)         // associate measure
-    }
+    mergeAssayService.updateStatus(removingAssays, modifiedBy)         // associate measure
     println("End of marking assayStatus to retired")
-
 }
 
 def updateStatus(List<Long> aids, modifiedBy) {

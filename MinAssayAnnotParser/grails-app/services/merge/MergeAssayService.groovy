@@ -111,7 +111,6 @@ class MergeAssayService {
 
                 }
 
-
                 if (context) {
                     item.modifiedBy = modifiedBy + "-movedFromA-${item.assayContext.assay.id}"
                     item.assayContext.removeFromAssayContextItems(item)
@@ -127,6 +126,20 @@ class MergeAssayService {
                     assaycontextitem # not in keep assay  ${assayContextItemNotInKeep}""")
         assayWillKeep.save()
         // Assay.findById(assayWillKeep.id)
+    }
+
+    private void validateAssayConsistent(Assay assay) {
+        for(measure in assay.measures) {
+            for(expMeasure in measure.experimentMeasures) {
+                assert expMeasure.experiment.assay == assay
+            }
+        }
+
+        for(experiment in assay.experiments) {
+            for(expMeasure in experiment.experimentMeasures) {
+                assert expMeasure.experiment.assay == assay
+            }
+        }
     }
 
     private void createExperimentContextAndItem(AssayContext assayContext, String modifiedBy) {
@@ -244,6 +257,12 @@ class MergeAssayService {
                 measure.assay = assayWillKeep
                 measure.assayContextMeasures.each {it.assayContext.assay = assayWillKeep}
 
+                measure.parentMeasure = null   // measure
+                measure.childMeasures.each{
+                    it.parentMeasure = null
+                }
+                measure.childMeasures.clear()
+
             } else if (measure.assayContextMeasures.size() != 0) {
                 measure.assayContextMeasures.each {
                     it.assayContext.assay = assayWillKeep
@@ -282,6 +301,8 @@ class MergeAssayService {
         println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, delete ${deletedMeasure}, add to experiment ${addMeasureToExperimentInKeep}")
         assayWillKeep.save()
         // Assay.findById(assayWillKeep.id)
+
+        validateAssayConsistent(assayWillKeep)
     }
 
     def updateStatus(List<Assay> assays, String modifiedBy) {
