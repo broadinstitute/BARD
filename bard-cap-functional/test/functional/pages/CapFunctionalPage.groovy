@@ -21,14 +21,4 @@ public class CapFunctionalPage extends Page {
 			}
 		}
 	}
-	
-/*	def UIContexts(def cardHolders){
-		def uiContexts = []
-		if(cardHolders.cardTable.find("caption")){
-			cardHolders.cardTable.find("caption").each{ contextName ->
-				uiContexts.add(contextName.text())
-			}
-		}
-		return uiContexts
-	}*/
 }

@@ -1,8 +1,5 @@
 dataSource {
 	pooled = true
-	//    driverClassName = "org.h2.Driver"
-	//    username = "sa"
-	//    password = ""
 	driverClassName = "oracle.jdbc.OracleDriver"
 	url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
 	username = "bard_qa_cap"
@@ -41,7 +38,7 @@ environments {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:h2:prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
-			
+
 			pooled = true
 			properties {
 				maxActive = -1

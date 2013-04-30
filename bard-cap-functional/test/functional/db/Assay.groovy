@@ -2,53 +2,110 @@ package db
 
 import java.util.Map;
 import db.DatabaseConnectivity
+import db.CapQueries;
 
-class Assay extends DatabaseConnectivity{
+class Assay extends DatabaseConnectivity implements CapQueries{
 
-	Map<String, String> getAssaySummaryById(def value) {
-		def resultMap = [:]
+	/**
+	 * @param assayId
+	 * @return assay summary information
+	 */
+	Map<String, String> getAssaySummaryById(def assayId) {
+		def assaySummaryInfo = [:]
 		def sql = getSql()
-		sql.eachRow("SELECT A.ASSAY_ID adid, A.ASSAY_STATUS status, A.ASSAY_SHORT_NAME sName, A.ASSAY_NAME name, A.ASSAY_VERSION aVersion, A.ASSAY_TYPE aType, A.DESIGNED_BY designedBy FROM ASSAY A WHERE A.ASSAY_ID=$value") { row ->
-			resultMap = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
+		sql.eachRow(ASSAY_SUMMARY_BYID, [assayId]) { row ->
+			assaySummaryInfo = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
 		}
-		return resultMap
+		return assaySummaryInfo
 	}
-
-	Map<String, String> getAssaySummaryByName(def value) {
-		def resultMap = [:]
+	/**
+	 * @param assayName
+	 * @return assay summary information 
+	 */
+	Map<String, String> getAssaySummaryByName(def assayName) {
+		def assaySummaryInfo = [:]
 		def sql = getSql()
-		sql.eachRow("SELECT A.ASSAY_ID adid, A.ASSAY_STATUS status, A.ASSAY_SHORT_NAME sName, A.ASSAY_NAME name, A.ASSAY_VERSION aVersion, A.ASSAY_TYPE aType, A.DESIGNED_BY designedBy FROM ASSAY A WHERE A.ASSAY_NAME=$value") { row ->
-			resultMap = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
+		sql.eachRow(ASSAY_SUMMARY_BYNAME, [assayName]) { row ->
+			assaySummaryInfo = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
 		}
-		return resultMap
+		return assaySummaryInfo
 	}
-
-	def getAssaySearchCount(def value) {
-		def resultCount
+	/**
+	 * @param searchStr
+	 * @return searched result count
+	 */
+	def getAssaySearchCount(def searchStr) {
+		def searchResultCount
 		def sql = getSql()
-		sql.eachRow("SELECT COUNT(A.ASSAY_NAME) Count from ASSAY A where A.ASSAY_NAME LIKE ?", ['%'+value+'%']){ row->
-			resultCount = 	row.Count
+		sql.eachRow(ASSAY_SEARCH_NAME_STR, ['%'+searchStr+'%']){ row->
+			searchResultCount = 	row.Count
 		}
-		return resultCount
+		return searchResultCount
 	}
-
+	/**
+	 * @param assayId
+	 * @param contextGroup
+	 * @return list of assay context cards of sepecific group
+	 */
 	List<String> getAssayContext(def assayId, def contextGroup) {
-		def resultList = []
+		def contextCardsList = []
 		def sql = getSql()
-		sql.eachRow("SELECT AC.CONTEXT_NAME CName FROM ASSAY_CONTEXT AC WHERE AC.ASSAY_ID = ${assayId} AND AC.CONTEXT_GROUP = ${contextGroup}") { row ->
-			resultList.add(row.CName)
+		sql.eachRow(ASSAY_CONTEXT_CARDS, [assayId, contextGroup]) { row ->
+			contextCardsList.add(row.CName)
 		}
-		return resultList
+		return contextCardsList
 	}
-	
+	/**
+	 * @param assayId
+	 * @param contextGroup
+	 * @param contextName
+	 * @return list of assay context items present in a specific assay context card
+	 */
 	List<String> getAssayContextItem(def assayId, def contextGroup, def contextName) {
-		def resultMap = [:]
-		def resultList = []
+		def contextITemMap = [:]
+		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow("SELECT E.LABEL AttributeLable, ACI.VALUE_DISPLAY ValueDisplay FROM ASSAY_CONTEXT_ITEM ACI, ELEMENT E WHERE ACI.ATTRIBUTE_ID = E.ELEMENT_ID AND ACI.ASSAY_CONTEXT_ID IN(SELECT AC.ASSAY_CONTEXT_ID ContextID FROM ASSAY_CONTEXT AC WHERE AC.ASSAY_ID = ${assayId} AND AC.CONTEXT_GROUP = ${contextGroup} AND AC.CONTEXT_NAME = ${contextName})") { row ->
-			resultMap = ['attributeLable':row.AttributeLable, 'valueDisplay':row.ValueDisplay]
-			resultList.add(resultMap) 
+		sql.eachRow(ASSAY_CONTEXT_ITEMS, [assayId, contextGroup, contextName]) { row ->
+			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay]
+			contextItemsList.add(contextITemMap)
 		}
-		return resultList
+		return contextItemsList
+	}
+	/**
+	 * @param assayId
+	 * @return measure added in a specific assay
+	 */
+	def getMeasureAdded(def assayId) {
+		def assayMeasures
+		def sql = getSql()
+		sql.eachRow(ASSAY_MEASURE, [assayId]) { row ->
+			assayMeasures = row.measure+" ("+row.label+")"
+		}
+		return assayMeasures
+	}
+	/**
+	 * @param assayId
+	 * @return list of assay measures
+	 */
+	List<String> getAssayMeasures(def assayId) {
+		def assayMeasuresList = []
+		def sql = getSql()
+		sql.eachRow(ASSAY_MEASURES_LIST, [assayId]) { row ->
+			assayMeasuresList.add(row.measure)
+		}
+		return assayMeasuresList
+	}
+	/**
+	 * @param assayId
+	 * @param measureName
+	 * @return measures associated with contexts 
+	 */
+	Map<String, String> getContextMeasures(def assayId, def measureName) {
+		def associatedContextMeasureMap = [:]
+		def sql = getSql()
+		sql.eachRow(ASSAY_ASSOCIATED_MEASURE_CONTEXT, [assayId, measureName]) { row ->
+			associatedContextMeasureMap = ['measure':row.measure, 'context':row.context]
+		}
+		return associatedContextMeasureMap
 	}
 }

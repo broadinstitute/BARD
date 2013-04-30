@@ -10,8 +10,11 @@ import geb.navigator.Navigator
 import geb.report.Reporter
 
 class EditAssayContextPage extends Page{
+	final static WAIT_INTERVAL = 20
+	final static R_INTERVAL = 3
+	final static SLEEP_INTERVAL = 2000
 	static url=""
-	static at = {waitFor(10, 0.5){$("h4").text().contains("Edit Assay Context")}
+	static at = {waitFor(WAIT_INTERVAL, R_INTERVAL){$("h4").text().contains("Edit Assay Context")}
 	}
 
 	static content = {
@@ -32,10 +35,10 @@ class EditAssayContextPage extends Page{
 		if(isCardPresent(cardName)){
 			if(isContextItem(cardName)){
 				deleContextItem(cardName)
-				waitFor(20, 2) { !isContextItem(cardName) }
+				waitFor(WAIT_INTERVAL, R_INTERVAL) { !isContextItem(cardName) }
 			}
 			deletAssayCard(cardName)
-			waitFor(20, 2) { !isCardPresent(cardName) }
+			waitFor(WAIT_INTERVAL, R_INTERVAL) { !isCardPresent(cardName) }
 		}
 		addCard(cardName)
 	}
@@ -56,7 +59,7 @@ class EditAssayContextPage extends Page{
 		assert cardHolders.cardItemMenuDD[1]
 		assert cardHolders.cardItemMenuDD[2]
 		cardHolders.cardItemMenuDD[2].click()
-		waitFor(10, 1){ deleteAssayCards.deleteBtn }
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ deleteAssayCards.deleteBtn }
 		deleteAssayCards.deleteBtn.click()
 	}
 	def addCard(def cardName){
@@ -66,16 +69,17 @@ class EditAssayContextPage extends Page{
 		assert addEditAssayCards.enterCardName
 		assert addEditAssayCards.saveBtn
 		assert addEditAssayCards.cancelBtn
-		addEditAssayCards.enterCardName << "$cardName"
+		addEditAssayCards.enterCardName << cardName
 		addEditAssayCards.saveBtn.click()
-		waitFor(20, 3) { isCardPresent(cardName) }
+		waitFor(WAIT_INTERVAL, R_INTERVAL) { isCardPresent(cardName) }
 	}
 	def verifyEmptyCardsMenu(def cardName){
-		assert cardHolders.cardName("$cardName")
-		cardHolders.cardMenu("$cardName").click()
-		assert cardHolders.cardDDMenu[1]	// edit card name button
-		assert cardHolders.cardDDMenu[2]	// add item wizard button
-		assert cardHolders.cardDDMenu[3]	// delete card button
+		int INDEX = 1
+		assert cardHolders.cardName(cardName)
+		cardHolders.cardMenu(cardName).click()
+		assert cardHolders.cardDDMenu[INDEX++]	// edit card name button
+		assert cardHolders.cardDDMenu[INDEX++]	// add item wizard button
+		assert cardHolders.cardDDMenu[INDEX++]	// delete card button
 		cardHolders.cardDDMenu[0].click()
 	}
 
@@ -100,67 +104,67 @@ class EditAssayContextPage extends Page{
 	}
 
 	def defineAttributes(searchAttribValue){
-		Thread.sleep(3000)
-		waitFor(15, 3){ itemWizard.selectAttrib.selectLink }
+		Thread.sleep(SLEEP_INTERVAL)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ itemWizard.selectAttrib.selectLink }
 		assert itemWizard.selectAttrib.selectLink
 		assert itemWizard.nextBtn
 		assert itemWizard.cancelBtn
 		itemWizard.selectAttrib.selectLink.click()
-		selectToSearch.enterResult.value("$searchAttribValue")
-		waitFor(15, 3){ selectResult.resultPopup }
-		Thread.sleep(2000)
+		selectToSearch.enterResult.value(searchAttribValue)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ selectResult.resultPopup }
+		Thread.sleep(SLEEP_INTERVAL)
 		selectResult.resultPopup.click()
 		itemWizard.nextBtn.click()
 	}
 
 	def defineValueType(val){
-		Thread.sleep(2000)
-		waitFor(15, 3){ itemWizard.valueType("$val") }
-		assert itemWizard.valueType("$val")
+		Thread.sleep(SLEEP_INTERVAL)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ itemWizard.valueType(val) }
+		assert itemWizard.valueType(val)
 		assert itemWizard.nextBtn
 		assert itemWizard.previousBtn
-		itemWizard.valueType("$val").click()
+		itemWizard.valueType(val).click()
 		itemWizard.nextBtn.click()
 	}
 
 	def defineValue(searchAttribValue, qualifier, unitVal, selectUnit){
-		Thread.sleep(2000)
-		waitFor(15, 3){ itemWizard.selectValue.selectLink }
+		Thread.sleep(SLEEP_INTERVAL)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ itemWizard.selectValue.selectLink }
 		assert itemWizard.selectValue.selectLink
 		assert itemWizard.nextBtn
 		assert itemWizard.cancelBtn
 		assert itemWizard.previousBtn
 		itemWizard.selectValue.selectLink.click()
-		selectToSearch.enterResult.value("$searchAttribValue")
-		waitFor(15, 5){ selectResult.resultPopup }
-		Thread.sleep(2000)
+		selectToSearch.enterResult.value(searchAttribValue)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ selectResult.resultPopup }
+		Thread.sleep(SLEEP_INTERVAL)
 		selectResult.resultPopup.click()
-		itemWizard.valueQualifier.value("$qualifier")
-		itemWizard.numericVal.value("$unitVal")
-		itemWizard.selectValueUnit.selectLink.click()
-		selectToSearch.enterResult.value("")
-		waitFor(15, 3){ selectResult.resultPopup }
-		Thread.sleep(2000)
-		selectResult.resultPopup.click()
+		//itemWizard.valueQualifier.value(qualifier)
+		//itemWizard.numericVal.value(unitVal)
+		//itemWizard.selectValueUnit.selectLink.click()
+		//selectToSearch.enterResult.value("")
+		//waitFor(WAIT_INTERVAL, R_INTERVAL){ selectResult.resultPopup }
+		//Thread.sleep(SLEEP_INTERVAL)
+		//selectResult.resultPopup.click()
 		itemWizard.nextBtn.click()
 	}
 
 	def reviewAndSave(){
-		Thread.sleep(2000)
-		waitFor(15, 3){ itemWizard.reviewContents.text() ==~ "Please review the information for this item above." }
+		Thread.sleep(SLEEP_INTERVAL)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ itemWizard.reviewContents.text() ==~ "Please review the information for this item above." }
 		assert itemWizard.saveBtn
 		assert itemWizard.cancelBtn
 		assert itemWizard.previousBtn
 		itemWizard.saveBtn.click()
-		Thread.sleep(2000)
-		waitFor(15, 3){ itemWizard.successAlert }
+		Thread.sleep(SLEEP_INTERVAL)
+		waitFor(WAIT_INTERVAL, R_INTERVAL){ itemWizard.successAlert }
 		assert itemWizard.closeBtn
 		assert itemWizard.addAnotherBtn
 		itemWizard.closeBtn.click()
 		waitFor { finishEditingBtn}
 	}
 
-	def UIContexts(){
+	def getUIContexts(){
 		def uiContexts = []
 		if(cardHolders.cardTable.find("caption")){
 			cardHolders.cardTable.find("caption").each{ contextName ->
@@ -170,12 +174,12 @@ class EditAssayContextPage extends Page{
 		return uiContexts
 	}
 
-	def contextCardItems(def card){
+	def getContextCardItems(def card){
 		def resultList = []
 		def resultMap = [:]
 		if(isContextItem(card))
 			cardHolders.cardItems(card).each{
-				resultMap = ['attributeLable':it.find("td")[0].text(), 'valueDisplay':it.find("td")[1].text()]
+				resultMap = ['attributeLabel':it.find("td")[0].text(), 'valueDisplay':it.find("td")[1].text()]
 				resultList.add(resultMap)
 			}
 		return resultList
@@ -216,7 +220,7 @@ class MoveCardItemsModule extends Module {
 	static content = {
 		titleBar { $("span#ui-dialog-title-dialog_move_item") }
 		selectCardId(wait: true) {$("#cardId")}
-		newCardHolder {cardName -> $("#cardId").value("$cardName")}
+		newCardHolder {cardName -> $("#cardId").value(cardName)}
 		moveBtn (wait: true) { $("button.btn.btn-primary", text:"Move") }
 		cancelBtn (wait: true) { $("button.btn.btn-primary").next() }
 	}

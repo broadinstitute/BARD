@@ -17,6 +17,8 @@ class SearchAssaySpec extends BardFunctionalSpec {
 	String assayExactName = testData.assayExactName
 	def assays = new Assay()
 	def summaryData = [:]
+	final static WAIT_INTERVAL = 15
+	final static R_INTERVAL = 3
 	
 	void setupSpec() {
 		// pre-condition of each test: user is logged in
@@ -27,8 +29,9 @@ class SearchAssaySpec extends BardFunctionalSpec {
 	def "Test Find Assay By Assay Definition Id"() {
 		when: "User is navigating to Find Assay page"
 		at HomePage
+		def INDEX = 0
 		capHeaders.assayTab.click()
-		capHeaders.assayChildTabs[0].click()
+		capHeaders.assayChildTabs[INDEX].click()
 
 		then: "User is at Find Assay page"
 		at FindAssayByIdPage
@@ -42,15 +45,16 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		then: "User is navigated to View Assay Definition page"
 		at ViewAssayDefinitionPage
 		assert viewAssayDefinition.contains(testData.assayId)
-		assert assaySummary.ddValue[0].text() ==~ assayId
-		assert assaySummary.ddValue[1].text().equalsIgnoreCase(summaryData.assayVersion)
-		assert assaySummary.ddValue[2].text().equalsIgnoreCase(summaryData.shortName)
-		assert assaySummary.ddValue[3].text().equalsIgnoreCase(summaryData.assayName)
-		assert assaySummary.ddValue[4].text().equalsIgnoreCase(summaryData.designedBy)
-		assert assaySummary.ddValue[5].text().equalsIgnoreCase(summaryData.assayStatus)
-		assert assaySummary.ddValue[6].text().equalsIgnoreCase(summaryData.assayType)
+		assert assaySummary.ddValue[INDEX++].text() ==~ assayId
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayVersion)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.shortName)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayName)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.designedBy)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayStatus)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayType)
 		report "FindAssayById"
-		when:"Navigating to Home Page"
+		
+		when:"Seach is complete, Navigating to Home Page"
 		at ViewAssayDefinitionPage
 		capHeaders.bardLogo.click()
 		
@@ -73,19 +77,21 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		assaySearchBtns.inputBtns << assayExactName
 		assaySearchBtns.searchBtn.click()
 		summaryData = assays.getAssaySummaryByName(assayExactName)
+		def INDEX = 1
 		
 		then: "User is navigated to view assay definition page"
 		at ViewAssayDefinitionPage
 		assert assaySummary.ddValue[3].text() ==~ assayExactName
 		
-		assert assaySummary.ddValue[1].text().equalsIgnoreCase(summaryData.assayVersion)
-		assert assaySummary.ddValue[2].text().equalsIgnoreCase(summaryData.shortName)
-		assert assaySummary.ddValue[3].text().equalsIgnoreCase(summaryData.assayName)
-		assert assaySummary.ddValue[4].text().equalsIgnoreCase(summaryData.designedBy)
-		assert assaySummary.ddValue[5].text().equalsIgnoreCase(summaryData.assayStatus)
-		assert assaySummary.ddValue[6].text().equalsIgnoreCase(summaryData.assayType)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayVersion)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.shortName)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayName)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.designedBy)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayStatus)
+		assert assaySummary.ddValue[INDEX++].text().equalsIgnoreCase(summaryData.assayType)
 		report "FindAssayByExactName"
-		when:"User is at View assay definition page"
+		
+		when:"Seach is complete, Navigating to Home Page"
 		at ViewAssayDefinitionPage
 		capHeaders.bardLogo.click()
 		
@@ -110,13 +116,14 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		
 		then: "wait for result to populate in assay result accordian"
 		def accordianText = assayResultAccordian.text()
-		waitFor(10, 2) { accordianText.contains(ASSAYRESULTACCORDIAN) }
+		waitFor(WAIT_INTERVAL, R_INTERVAL) { accordianText.contains(ASSAYRESULTACCORDIAN) }
 		def resultCount = accordianText.subSequence(accordianText.indexOf('(')+1, accordianText.indexOf(')'))
 		assert resultHolderTable.size().toString() == resultCount
 		assert resultHolderTable.size() != ISEMPTY
 		assert resultHolderTable.size() == searchCount
 		report "FindAssayByName"
-		when:"Navigating to Home Page"
+		
+		when:"Seach is complete, Navigating to Home Page"
 		at FindAssayByNamePage
 		capHeaders.bardLogo.click()
 		
@@ -141,19 +148,22 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		
 		then: "wait for result to populate in assay result accordian"
 		def accordianText = assayResultAccordian.text()
-		waitFor(10, 2) { accordianText.contains(ASSAYRESULTACCORDIAN) }
+		waitFor(WAIT_INTERVAL, R_INTERVAL) { accordianText.contains(ASSAYRESULTACCORDIAN) }
 		assert resultHolderTable.size() != ISEMPTY
 		def resultCount = accordianText.subSequence(accordianText.indexOf('(')+1, accordianText.indexOf(')'))
 		assert resultHolderTable.size().toString() == resultCount
 		assert resultHolderTable.size() == searchCount
 		report "FindAssayBySearchString"
+		
 		when:"Navigating to Home Page"
 		at FindAssayByNamePage
 		assaysResults(0).assayId.click()
+		
 		then:
 		at ViewAssayDefinitionPage
 		report "OpenAssayFromSearchResult"
-		when:
+		
+		when: "Seach is complete, Navigate to Home page"
 		at ViewAssayDefinitionPage
 		capHeaders.bardLogo.click()
 		
@@ -174,19 +184,21 @@ class SearchAssaySpec extends BardFunctionalSpec {
 		at FindAssayByNamePage
 		assaySearchBtns.inputBtns << assayString
 		def searchCount = assays.getAssaySearchCount(assayString)
-		waitFor(15, 5) { autocompleteItems.size() > 1 }
+		waitFor(WAIT_INTERVAL, R_INTERVAL) { autocompleteItems.size() > 1 }
 		assert isAutocompleteListOk(autocompleteItems, assayString)
 		assaySearchBtns.searchBtn.click()
 		report "AutoSuggestResult"
+		
 		then: "wait for result to populate in assay result accordian"
 		def accordianText = assayResultAccordian.text()
-		waitFor(10, 2) { accordianText.contains(ASSAYRESULTACCORDIAN) }
+		waitFor(WAIT_INTERVAL, R_INTERVAL) { accordianText.contains(ASSAYRESULTACCORDIAN) }
 		assert resultHolderTable.size() != ISEMPTY
 		def resultCount = accordianText.subSequence(accordianText.indexOf('(')+1, accordianText.indexOf(')'))
 		assert resultHolderTable.size().toString() == resultCount
 		assert resultHolderTable.size() == searchCount
 		report "FindAssayByAutoSuggest"
-		when:"Navigating to Home Page"
+		
+		when:"Seach is complete, Navigating to Home Page"
 		at FindAssayByNamePage
 		capHeaders.bardLogo.click()
 		
