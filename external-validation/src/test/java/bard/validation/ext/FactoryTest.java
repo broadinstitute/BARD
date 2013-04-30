@@ -22,7 +22,7 @@ public class FactoryTest {
 		Object[][] data = new Object[][] {
 //				{ "http://www.ncbi.nlm.nih.gov/gquery/?term=", false }, not a valid ncbi database
 				{ "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=", true },
-				{ "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn", false },
+				{ "http://amigo.geneontology.org/cgi-bin/amigo/gp-details.cgi?gp=FB:FBgn", true },
 				{ "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", true },
 				{ "http://cas.org/", false },
 				{ "http://omim.org/entry/", true},
