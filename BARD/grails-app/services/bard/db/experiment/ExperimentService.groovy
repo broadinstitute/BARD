@@ -1,8 +1,11 @@
 package bard.db.experiment
 
+import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextMeasure
 import bard.db.registration.Measure
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -118,5 +121,54 @@ class ExperimentService {
         }
 
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
+    }
+
+    Map cloneAssay(Assay assay) {
+        Map<AssayContext, AssayContext> assayContextOldToNew = [:]
+
+        Assay newAssay = new Assay();
+        for(context in assay.assayContexts) {
+            AssayContext newContext = context.clone(newAssay)
+            assayContextOldToNew[context] = newContext
+
+            newContext.save()
+        }
+
+        // clone all measures
+        Map<Measure, Measure> measureOldToNew = [:]
+        for(measure in assay.measures) {
+            Measure newMeasure = new Measure(
+                    assay: newAssay,
+                    resultType: measure.resultType,
+                    parentChildRelationship: measure.parentChildRelationship,
+                    entryUnit: measure.entryUnit,
+                    statsModifier: measure.statsModifier,
+                    dateCreated: new Date())
+            measureOldToNew[measure] = newMeasure
+        }
+
+        // assign parent measures now that all measures have been created
+        for(measure in assay.measures) {
+            measureOldToNew[measure].parentMeasure = measureOldToNew[measure.parentMeasure]
+        }
+
+        for(measure in measureOldToNew.values()) {
+            measure.save()
+        }
+
+        // clone assay context measures
+        Set<AssayContextMeasure> assayContextMeasures = assay.measures.collectAll { it.assayContextMeasures }
+        for(assayContextMeasure in assayContextMeasures) {
+            AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure(
+                    assayContext: assayContextOldToNew[assayContextMeasure.assayContext],
+                    measure: measureOldToNew[assayContextMeasure.measure])
+            newAssayContextMeasure.save()
+        }
+
+        return [assay: newAssay, measureOldToNew: measureOldToNew]
+    }
+
+    void splitExperimentFromAssay(Experiment experiment) {
+
     }
 }

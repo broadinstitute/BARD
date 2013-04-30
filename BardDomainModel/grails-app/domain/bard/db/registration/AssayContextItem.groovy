@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.dictionary.Element
 import bard.db.model.AbstractContextItem
 import groovy.transform.TypeChecked
 import org.springframework.validation.Errors
@@ -57,4 +58,20 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
             errors.reject('assayContextItem.attributeType.free.required.fields')
         }
     }
+
+    public AssayContextItem clone(AssayContext newContext) {
+        AssayContextItem newItem = new AssayContextItem(
+                attributeType: attributeType,
+                attributeElement: attributeElement,
+                valueElement: valueElement,
+                extValueId: extValueId,
+                qualifier: qualifier,
+                valueNum: valueNum,
+                valueMin: valueMin,
+                valueMax: valueMax,
+                valueDisplay: valueDisplay)
+        newContext.addToAssayContextItems(newItem)
+        return newContext;
+    }
+
 }
