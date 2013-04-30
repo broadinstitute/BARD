@@ -10,12 +10,9 @@ package pages
 class LoginPage extends ScaffoldPage {
     static url = "login/auth"
 
-    static at = { $("button#submit") }
 
     static content = {
         loginForm { $("form#loginForm") }
-        usernameInput { $("input#username") }
-        passwordInput { $("input#password") }
         errorMessage { $("div.ui-state-error.ui-corner-all p strong") }
         signIn { $("button#submit") }
     }
@@ -35,8 +32,8 @@ class LoginPage extends ScaffoldPage {
     }
 
     def logInNoValidation(String username, String password) {
-        usernameInput = username
-        passwordInput = password
+        loginForm.j_username = username
+        loginForm.j_password = password
         signIn.click()
     }
 }
