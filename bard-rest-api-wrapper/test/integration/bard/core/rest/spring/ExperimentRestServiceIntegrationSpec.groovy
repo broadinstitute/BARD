@@ -16,6 +16,9 @@ import bard.core.rest.spring.experiment.*
 class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     ExperimentRestService experimentRestService
     CompoundRestService compoundRestService
+    AssayRestService assayRestService
+    ProjectRestService projectRestService
+    ETagRestService eTagRestService
     @Shared
     List<Long> TEST_CIDS = [6019589, 53347993]
     @Shared
@@ -26,6 +29,69 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> TEST_EIDS = [1, 2]
     @Shared
     List<Long> TEST_EID_LONG_LIST = [1, 2, 3, 4, 5, 6, 7, 8]
+
+
+
+    void "test activitiesByCIDsAndEIDs "() {
+        when: "generate activities directly via post"
+        final ExperimentData experimentDataNoCompounds = experimentRestService.activitiesByCIDsAndEIDs(TEST_CIDS.findAll{it ==null},TEST_EIDS)
+        final ExperimentData experimentDataNoExperiments = experimentRestService.activitiesByCIDsAndEIDs(TEST_CIDS.findAll{it ==null},TEST_EIDS)
+        final ExperimentData experimentDataNoMatchingData = experimentRestService.activitiesByCIDsAndEIDs([1L,2L],[2500000L,2500001L])
+
+        then:
+        assert experimentDataNoCompounds==null
+        assert experimentDataNoExperiments==null
+        assert experimentDataNoMatchingData.activities == null
+
+
+    }
+
+
+    void "test activitiesByCIDsAndEIDs with varying parameters"() {
+        when: "generate activities directly via post"
+        final ExperimentData experimentData = experimentRestService.activitiesByCIDsAndEIDs(cids,eids)
+
+        then:
+        experimentData.activities.size()>minNumOfReturnValues
+        experimentData.activities.size()<=maxNumOfReturnValues
+
+        where:
+        cids                                        |   eids                                    |   minNumOfReturnValues    |   maxNumOfReturnValues
+        TEST_CIDS                                   |   TEST_EIDS                               |   1                       |   100
+        TEST_CIDS.findAll{it ==TEST_CIDS[0]}        |   TEST_EIDS                               |   0                       |   1
+        TEST_CIDS                                   |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
+        TEST_CIDS.findAll{it ==TEST_CIDS[0]}        |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
+    }
+
+
+
+    void "test activitiesBySIDsAndEIDs"() {
+        when: "generate activities directly via post"
+        final ExperimentData experimentData = experimentRestService.activitiesBySIDsAndEIDs(TEST_SIDS,TEST_EIDS)
+
+        then:
+        assert experimentData.activities.size()>0
+    }
+
+
+
+    void "test activitiesBySIDsAndEIDs with varying parameters"() {
+        when: "generate activities directly via post"
+        final ExperimentData experimentData = experimentRestService.activitiesBySIDsAndEIDs(sids,eids)
+
+        then:
+        experimentData.activities.size()>minNumOfReturnValues
+        experimentData.activities.size()<=maxNumOfReturnValues
+
+        where:
+        sids                                        |   eids                                    |   minNumOfReturnValues    |   maxNumOfReturnValues
+        TEST_SIDS                                   |   TEST_EIDS                               |   1                       |   100
+        TEST_SIDS.findAll{it ==TEST_SIDS[0]}        |   TEST_EIDS                               |   0                       |   1
+        TEST_SIDS                                   |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
+        TEST_SIDS.findAll{it ==TEST_SIDS[0]}        |   TEST_EIDS.findAll{it ==TEST_EIDS[0]}    |   0                       |   1
+    }
+
+
 
 
     void "test activitiesByCIDs"() {

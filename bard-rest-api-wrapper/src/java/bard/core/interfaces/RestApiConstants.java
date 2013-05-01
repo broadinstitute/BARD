@@ -56,6 +56,7 @@ public interface RestApiConstants {
     final String TOP = AMPERSAND + "top=";
     final String EXPAND_TRUE = "expand=true";
     final String SOLR_QUERY_PARAM_NAME = "q=";
+    final String EXPTDATABYIDS_RESOURCE = "/getExptDataByIds";
 
     final String SUMMARY = "/summary";
     final String COLON = ":";

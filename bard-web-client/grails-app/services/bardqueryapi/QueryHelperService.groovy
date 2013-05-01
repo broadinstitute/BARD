@@ -38,7 +38,13 @@ class QueryHelperService {
             'assay_type': 'Assay Type',
             'iso_smiles': 'ISO SMILES',
             'iupac_name': 'IUPAC Name',
-            'preferred_term': 'Preferred Term'
+            'preferred_term': 'Preferred Term',
+            'title': 'Title',
+            'protocol': 'Protocol',
+            'av_dict_label': 'Dictionary Value',
+            'description': 'Description',
+            'name': 'Name',
+            'ak_dict_label': 'Dictionary Key'
     ]
     final static String PROBE = "PROB"
 
