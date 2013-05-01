@@ -1,6 +1,5 @@
 package bard.db.dictionary
 
-import groovy.json.JsonBuilder
 import bard.hibernate.AuthenticatedUserRequired
 import grails.plugins.springsecurity.Secured
 
@@ -8,25 +7,41 @@ import grails.plugins.springsecurity.Secured
 class ElementController {
 
     private static final String errorMessageKey = "errorMessageKey"
-
+    ElementService elementService
     BuildElementPathsService buildElementPathsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
     def list() {
         Map parameterMap = generatePaths()
 
-        if (! parameterMap.containsKey(errorMessageKey)) {
+        if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
         } else {
             render(parameterMap.get(errorMessageKey))
         }
     }
 
+    def addTerm() {
+        render(view: 'addTerm', model: [termCommand: new TermCommand()])
+    }
+
+    def saveTerm(TermCommand termCommand) {
+        Element currentElement = null
+        if (termCommand.validate()) {
+
+            if (!termCommand.hasErrors()) {
+                currentElement =
+                    this.elementService.addNewTerm(termCommand)
+            }
+        }
+
+        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
+    }
 
     def edit() {
         Map parameterMap = generatePaths()
 
-        if (! parameterMap.containsKey(errorMessageKey)) {
+        if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
         } else {
             render(parameterMap.get(errorMessageKey))
@@ -39,7 +54,7 @@ class ElementController {
             List<ElementAndFullPath> list = buildElementPathsService.createListSortedByString(buildElementPathsService.buildAll())
             result = [list: list, maxPathLength: buildElementPathsService.maxPathLength]
         } catch (BuildElementPathsServiceLoopInPathException e) {
-            result = [errorMessageKey : """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
+            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
         The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
         Path element hierarchies: ${e.elementAndFullPath.path}<br/>
         The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"""]
@@ -107,7 +122,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     static Element findElementFromId(Long id) {
         Element result = Element.findById(id)
 
-        if (! result) {
+        if (!result) {
             throw new UnrecognizedElementIdException()
         }
 
@@ -115,7 +130,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     }
 
     static List<ElementHierarchy> findElementHierarchyFromIds(List<Long> elementHierarchyIdList) throws
-            UnrecognizedElementHierachyIdException{
+            UnrecognizedElementHierachyIdException {
 
         List<ElementHierarchy> result = new ArrayList<ElementHierarchy>(elementHierarchyIdList.size())
 
@@ -142,7 +157,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
 
         NewElementAndPath result = new NewElementAndPath()
 
-        for (int tokenIndex = 0; tokenIndex < tokenList.size()-1; tokenIndex++) {
+        for (int tokenIndex = 0; tokenIndex < tokenList.size() - 1; tokenIndex++) {
             String token = tokenList.get(tokenIndex)
 
             if (token != "") {
@@ -157,12 +172,49 @@ detected loop id's:${idBuilder.toString()}<br/>"""
             }
         }
 
-        result.newElementLabel = tokenList.get(tokenList.size()-1)
+        result.newElementLabel = tokenList.get(tokenList.size() - 1)
 
         return result
     }
 }
+class TermCommand {
+    Long parentId
+    String label
+    String description
+    String abbreviation
+    String synonyms
+    String comments
+    Long unitId
+    String relationship="subClassOf"
 
+    static constraints = {
+        parentId nullable: false, validator: { value, command ->
+            if (value) {
+                if (!Element.findById(value)) {
+                    return 'mustexist'
+                }
+            }
+        }
+        label blank: false, nullable: false, maxSize:  Element.LABEL_MAX_SIZE, validator: { value, command ->
+            if (value) {
+                if (Element.findByLabel(value)) {
+                    return 'unique'
+                }
+            }
+        }
+        description(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        comments(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        abbreviation(blank: true, nullable: true, maxSize:  Element.ABBREVIATION_MAX_SIZE)
+        synonyms(blank: true, nullable: true, maxSize:  Element.SYNONYMS_MAX_SIZE)
+        unitId nullable: true, validator: { value, command ->
+            if (value) {
+                if (!Element.findById(value)) {
+                    return 'unit.element.mustexist'
+                }
+            }
+        }
+    }
+}
 
 class NewElementAndPath {
     List<Element> newPathElementList
