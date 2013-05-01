@@ -34,21 +34,29 @@
 </p>
 
 <div class="row-fluid">
-    <g:hiddenField name="paginationUrl"
-                   id="paginationUrl"/> %{--Used to hold the pagination url, if a paging link has been clicked--}%
-    <div class="pagination offset3">
-        <g:paginate
-                total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
-                params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
-    </div>
+    <g:if test="${tableModel.data}">
+        <g:hiddenField name="paginationUrl"
+                       id="paginationUrl"/> %{--Used to hold the pagination url, if a paging link has been clicked--}%
+        <div class="pagination offset3">
+            <g:paginate
+                    total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
+                    params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
+        </div>
 
-    <div id="resultData">
-    <g:render template="experimentResultRenderer" model="[tableModel: tableModel, landscapeLayout: false, innerBorder: innerBorder]"/>
-    </div>
+        <div id="resultData">
+            <g:render template="experimentResultRenderer"
+                      model="[tableModel: tableModel, landscapeLayout: false, innerBorder: innerBorder]"/>
+        </div>
 
-    <div class="pagination offset3">
-        <g:paginate
-                total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
-                params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
-    </div>
+        <div class="pagination offset3">
+            <g:paginate
+                    total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
+                    params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
+        </div>
+    </g:if>
+    <g:else>
+        <p class="text-info"><i
+                class="icon-warning-sign"></i> No experimental data found
+        </p>
+    </g:else>
 </div>
