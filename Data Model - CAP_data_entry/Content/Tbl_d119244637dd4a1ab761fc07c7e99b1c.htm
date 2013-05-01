@@ -43,7 +43,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE UNIT_CONVERSION(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_CONVERSION_ID&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp FROM_UNIT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp TO_UNIT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MULTIPLIER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp OFFSET&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp FORMULA&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(256)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VERSION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6)&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT sysdate NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED_BY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_VALUE CHECK (formula LIKE 'FORMULA%'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_MULTIPLIER CHECK ((formula LIKE 'Unit_Conversion%' AND multiplier != 1)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR (multiplier IS NULL AND formula NOT LIKE 'Unit_Conversion%')</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR multiplier = 1),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_OFFSET CHECK ((formula LIKE 'Unit_Conversion%' AND offset != 0)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR (offset IS NULL AND formula NOT LIKE 'Unit_Conversion%')</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR offset = 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_VALUE CHECK (formula LIKE 'Unit_Conversion%'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_UNIT_CONVERSION PRIMARY KEY (UNIT_CONVERSION_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTFREE 10</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INITRANS 2</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXTRANS 255</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp STORAGE(INITIAL 64K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINEXTENTS 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXEXTENTS UNLIMITED</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTINCREASE 0</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT AK_UNIT_CONVERSION&nbsp&nbsp UNIQUE (FROM_UNIT_ID, TO_UNIT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTFREE 10</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INITRANS 2</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXTRANS 255</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp STORAGE(INITIAL 2048K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NEXT 2048K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINEXTENTS 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXEXTENTS UNLIMITED</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTINCREASE 0</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp BUFFER_POOL DEFAULT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_UNIT_CONVERSN_FRM_UNT_ELMNT FOREIGN KEY (FROM_UNIT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES ELEMENT(ELEMENT_ID) ON DELETE CASCADE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_UNIT_CONVERSN_TO_UNT_ELMNT FOREIGN KEY (TO_UNIT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES ELEMENT(ELEMENT_ID) ON DELETE CASCADE</TT><BR><TT>)</TT><BR><TT>PCTFREE 10</TT><BR><TT>INITRANS 1</TT><BR><TT>MAXTRANS 255</TT><BR><TT>LOGGING</TT><BR><TT>STORAGE(INITIAL 64K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINEXTENTS 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXEXTENTS UNLIMITED</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTINCREASE 0</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp )</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE UNIT_CONVERSION(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_CONVERSION_ID&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp FROM_UNIT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp TO_UNIT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MULTIPLIER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp OFFSET&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp FORMULA&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(256)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VERSION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(38, 0)&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT 0 NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Date_Created&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6)&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DEFAULT sysdate NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Last_Updated&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp TIMESTAMP(6),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MODIFIED_BY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(40),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_MULTIPLIER CHECK ((formula LIKE '%multiplier%' AND multiplier != 1)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR (multiplier IS NULL AND formula NOT LIKE '%multiplier%')</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR multiplier = 1),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_OFFSET CHECK ((formula LIKE '%offset%' AND offset != 0)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR (offset IS NULL AND formula NOT LIKE '%offset%')</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp OR offset = 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT CK_UNIT_CONVERSION_VALUE CHECK (formula LIKE '%value%'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_UNIT_CONVERSION PRIMARY KEY (UNIT_CONVERSION_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTFREE 10</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INITRANS 2</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXTRANS 255</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp STORAGE(INITIAL 64K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINEXTENTS 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXEXTENTS UNLIMITED</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTINCREASE 0</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT AK_UNIT_CONVERSION&nbsp&nbsp UNIQUE (FROM_UNIT_ID, TO_UNIT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTFREE 10</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INITRANS 2</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXTRANS 255</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp STORAGE(INITIAL 2048K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NEXT 2048K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINEXTENTS 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXEXTENTS UNLIMITED</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTINCREASE 0</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp BUFFER_POOL DEFAULT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_UNIT_CONVERSN_FRM_UNT_ELMNT FOREIGN KEY (FROM_UNIT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES ELEMENT(ELEMENT_ID) ON DELETE CASCADE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_UNIT_CONVERSN_TO_UNT_ELMNT FOREIGN KEY (TO_UNIT_ID)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES ELEMENT(ELEMENT_ID) ON DELETE CASCADE</TT><BR><TT>)</TT><BR><TT>PCTFREE 10</TT><BR><TT>INITRANS 1</TT><BR><TT>MAXTRANS 255</TT><BR><TT>LOGGING</TT><BR><TT>STORAGE(INITIAL 64K</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINEXTENTS 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MAXEXTENTS UNLIMITED</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp PCTINCREASE 0</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp )</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -239,15 +239,15 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CK_UNIT_CONVERSION_MULTIPLIER&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">(formula LIKE 'Unit_Conversion%' AND multiplier != 1)\line           OR (multiplier IS NULL AND formula NOT LIKE 'Unit_Conversion%')\line           OR multiplier = 1&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">(formula LIKE '%multiplier%' AND multiplier != 1)\line           OR (multiplier IS NULL AND formula NOT LIKE '%multiplier%')\line           OR multiplier = 1&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CK_UNIT_CONVERSION_OFFSET&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">(formula LIKE 'Unit_Conversion%' AND offset != 0)\line           OR (offset IS NULL AND formula NOT LIKE 'Unit_Conversion%')\line           OR offset = 0&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">(formula LIKE '%offset%' AND offset != 0)\line           OR (offset IS NULL AND formula NOT LIKE '%offset%')\line           OR offset = 0&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CK_UNIT_CONVERSION_VALUE&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">formula LIKE 'Unit_Conversion%'&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">formula LIKE '%value%'&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -422,18 +422,6 @@
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
 <TR>
-<TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">UNIT_CONVERSION Bound Attachments&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP  WIDTH=30% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Name&nbsp;</FONT></B></TD>
-<TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Current Value&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<P>
-<TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
-<TR>
 <TD VALIGN=TOP BGCOLOR="LIGHTGREY" ><B><FONT SIZE=4 FACE="Arial">UNIT_CONVERSION Where Used - Model Usage&nbsp;</FONT></B></TD>
 </TR>
 </TABLE>
@@ -467,7 +455,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_750084a9a56d46cb8bd38047dadb3f6b.htm>Data_Mig previous version</A> (Oracle)<BR><A HREF = ./Tbl_4e138d01a38e44a08d3456e008b3111a.htm>DATA_MIG.UNIT_CONVERSION</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Data_Mig previous version (Oracle)<BR>UNIT_CONVERSION&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -487,7 +475,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b_img.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_558f9af28b3745988970aa5c8f62ab7b.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_3615115bde194f0985042d14e26b4981.htm>Logical</A>&nbsp;</FONT></TD>
@@ -507,7 +495,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD_Dev</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779_img.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_ae8f61b5a34d4dae9ac84bcd6e556779.htm>Main Model</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_398ef9366d784ddb95b034e21ed22ee6.htm>BARD_Dev</A> (Oracle)&nbsp;</FONT></TD>
@@ -518,12 +506,12 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_1f90106c2fd44586b59bbd5c18b984bb_img.htm>RI hierarchy</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_750084a9a56d46cb8bd38047dadb3f6b.htm>Data_Mig previous version</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5ef77ed890d84b99ad8f659d3d006a6e.htm>Main Model</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Data_Mig previous version (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Main Model&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_750084a9a56d46cb8bd38047dadb3f6b.htm>Data_Mig previous version</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_8b6b1b5f6f7c40cb8e09998e65afb9f0.htm>Dictionary</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Data_Mig previous version (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Dictionary&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
