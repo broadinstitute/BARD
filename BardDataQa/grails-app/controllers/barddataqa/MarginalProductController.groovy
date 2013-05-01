@@ -6,8 +6,20 @@ class MarginalProductController {
     def index() { }
 
     def show() {
-        Long datasetId = Long.valueOf(params.get("datasetId"))
+        Long datasetId = params.get("datasetId").toString().toLong()
         Dataset dataset = Dataset.findById(datasetId)
-        [headerList: marginalProductService.columns, rowList: marginalProductService.runMarginalProductCalculationForDataset(dataset.id), dataset: dataset]
+        [marginalProductList: marginalProductService.runMarginalProductCalculationForDataset(dataset.id), dataset: dataset]
+    }
+
+    def showMaas() {
+        Long projectUid = params.get("projectUid").toString().toLong()
+
+        [aidList: marginalProductService.findAidsNeedMaasForProject(projectUid), projectUid: projectUid]
+    }
+
+    def showRta() {
+        Long projectUid = params.get("projectUid").toString().toLong()
+
+        [aidList: marginalProductService.findAidsNeedRtaForProject(projectUid), projectUid: projectUid]
     }
 }
