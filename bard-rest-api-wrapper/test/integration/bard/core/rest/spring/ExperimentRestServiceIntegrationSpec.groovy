@@ -41,7 +41,7 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert experimentDataNoCompounds==null
         assert experimentDataNoExperiments==null
-        assert experimentDataNoMatchingData==null
+        assert experimentDataNoMatchingData.activities == null
 
 
     }
