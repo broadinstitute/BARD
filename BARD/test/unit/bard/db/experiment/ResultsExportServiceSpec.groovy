@@ -89,6 +89,7 @@ class ResultsExportServiceSpec extends Specification {
 
     void 'test dumpFromList'() {
         setup:
+        new File("out").mkdirs();
         ArchivePathService archivePathService = Mock(ArchivePathService)
         archivePathService.prepareForWriting("path") >> destination
 
