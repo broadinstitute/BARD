@@ -32,7 +32,9 @@ class CompoundBioActivitySummaryBuilder {
                                  List<Assay> hitAssays,
                                  List<FilterTypes> filterTypes,
                                  Map<Long, List<ExperimentSearch>> experimentsMap,
-                                 List<Long> sortedKeys) {
+                                 List<Long> sortedKeys,
+                                 Double yNormMin = null,
+                                 Double yNormMax = null) {
 
         TableModel tableModel = new TableModel()
         //Setup the headers
@@ -65,7 +67,7 @@ class CompoundBioActivitySummaryBuilder {
                 ExperimentSearch experimentSearch = experimentsMap[exptData.bardExptId].first()
                 WebQueryValue experiment = new ExperimentValue(value: experimentSearch)
 
-                List<WebQueryValue> results = convertExperimentResultsToValues(exptData)
+                List<WebQueryValue> results = convertExperimentResultsToValues(exptData, yNormMin, yNormMax)
 
                 experimentBox.put(experiment, results)
                 //Cast the experimentBox to a MapValue type

@@ -149,7 +149,9 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
                 hitAssays,
                 filterTypes,
                 experimentsMap,
-                sortedKeys)
+                sortedKeys,
+                -10,
+                10)
 
         then:
         this.queryService.findProjectsByPIDs(_) >> {['projectAdapters': [new ProjectAdapter(project1)]]}

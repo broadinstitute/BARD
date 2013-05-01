@@ -324,6 +324,8 @@ class QueryService implements IQueryService {
             experimentalData = compoundSummary.hitExptdata
         }
 
+        Map experimentalDetails = this.queryHelperService.extractExperimentDetails(experimentalData, NormalizeAxis.Y_NORM_AXIS)
+
         Map<Long, List<Activity>> groupedByExperimentalData = [:]
         switch (groupTypes) {
             case GroupByTypes.ASSAY:
@@ -374,7 +376,7 @@ class QueryService implements IQueryService {
         // for confirmatory assays (dose-curve) over primary assay (single-point).
         //First sort all the elements (experiment's activities) in each key-set based on the experiment's confidence level
         groupedByExperimentalData.values().each {List<Activity> exptDataList ->
-            exptDataList.sort { Activity lExptData, Activity rExptData  ->
+            exptDataList.sort { Activity lExptData, Activity rExptData ->
                 Long lConfidenceLevel = experimentsMap[lExptData.bardExptId]?.first()?.confidenceLevel ?: 0
                 Long rConfidenceLevel = experimentsMap[rExptData.bardExptId]?.first()?.confidenceLevel ?: 0
                 return rConfidenceLevel <=> lConfidenceLevel
@@ -389,7 +391,15 @@ class QueryService implements IQueryService {
 
 
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
-        TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes, groupedByExperimentalData, testedAssays, hitAssays, filterTypes, experimentsMap, sortedKeys)
+        TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes,
+                groupedByExperimentalData,
+                testedAssays,
+                hitAssays,
+                filterTypes,
+                experimentsMap,
+                sortedKeys,
+                experimentalDetails?.yNormMin,
+                experimentalDetails?.yNormMax)
         tableModel.additionalProperties.put('compoundSummary', compoundSummary)
         return tableModel
     }
