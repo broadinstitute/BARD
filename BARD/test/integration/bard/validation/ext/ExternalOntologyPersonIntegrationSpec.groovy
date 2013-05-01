@@ -20,22 +20,24 @@ class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 	def setup() {
 		BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'integrationTestUser')
 		SpringSecurityUtils.reauthenticate('integrationTestUser', null)	
-		
-		Person.executeUpdate("delete from Person")		
-		extOntologyPerson = ExternalOntologyPerson.PERSON_INSTANCE
+				
+		extOntologyPerson = new ExternalOntologyPerson()
 
 		for(int i = 1; i < 11; i++){
-			Person p = new Person(userName: "testuser" + i, fullName: "New Test User" + i, accountExpired: false, accountLocked: false, accountEnabled: true)
+			Person p = new Person(userName: "testuserExternalOntologyPersonIntegrationSpec" + i, fullName: "New ExternalOntologyPersonIntegrationSpec Test User" + i, accountExpired: false, accountLocked: false, accountEnabled: true)
 			p.save(flush: true)
 		}
-		Person p1 = new Person(userName: "userABCDE", fullName: "New User", accountExpired: false, accountLocked: false, accountEnabled: true)
+		Person p1 = new Person(userName: "userABCDEExternalOntologyPersonIntegrationSpec", fullName: "New ExternalOntologyPersonIntegrationSpec User", accountExpired: false, accountLocked: false, accountEnabled: true)
 		p1.save(flush: true)
-		Person p2 = new Person(userName: "user1000", fullName: "New XYZ123 User", accountExpired: false, accountLocked: false, accountEnabled: true)
+		Person p2 = new Person(userName: "userExternalOntologyPersonIntegrationSpec1000", fullName: "New ExternalOntologyPersonIntegrationSpec XYZ123 User", accountExpired: false, accountLocked: false, accountEnabled: true)
 		p2.save(flush: true)
-		persons = Person.list()
+		persons = Person.findAllByUserNameIlike( "%ExternalOntologyPersonIntegrationSpec%" )
 	}
 
 	def cleanup() {
+		for(Person p in persons){
+			p.delete(flush: true)
+		}
 	}
 
 	void "test findById"() {
@@ -47,7 +49,7 @@ class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 		then:
 		
 		extItem1.id == testPerson.id.toString()
-		extItem1.display == 'testuser1 (New Test User1)'
+		extItem1.display == 'testuserExternalOntologyPersonIntegrationSpec1 (New ExternalOntologyPersonIntegrationSpec Test User1)'
 		extItem2 == null
 	}
 	
@@ -77,17 +79,17 @@ class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 		numberOfPersons == items.size()
 		
 		where:
-		desc                                        		 | numberOfPersons | searchTerm   | limit
-		"1 person"											 | 1               | 'testuser5'  | 20
-		"0 person due to searchTerm no match"       		 | 0               | 'test123'    | 20
+		desc                                        		 | numberOfPersons | searchTerm   									   | limit
+		"1 person"											 | 1               | 'testuserExternalOntologyPersonIntegrationSpec5'  | 20
+		"0 person due to searchTerm no match"       		 | 0               | 'testExternalOntologyPersonIntegrationSpec123'    | 20
 		"0 person due to searchTerm null"           		 | 0               | null         | 20
 		"0 person due to searchTerm empty"          		 | 0               | ''           | 20
-		"10 persons that contain searchTerm"        		 | 10              | 'test'       | 20
-		"5 persons due to limit set to 5"           		 | 5               | 'test'       | 5
-		"1 person with lower and upper case searchTerm"      | 1               | 'abCDE'      | 20
-		"12 persons with searchTerm in fullname"      		 | 12              | 'new'        | 20
-		"12 persons with searchTerm in username & fullname"  | 12              | 'user'       | 20
-		"10 persons with lower and upper case searchTerm"    | 10              | 'TESTuser'   | 20
+		"10 persons that contain searchTerm"        		 | 10              | 'testuserExternalOntologyPersonIntegrationSpec'   | 20
+		"5 persons due to limit set to 5"           		 | 5               | 'testuserExternalOntologyPersonIntegrationSpec'   | 5
+		"1 person with lower and upper case searchTerm"      | 1               | 'abCDEExternalOntologyPersonIntegrationSpec'      | 20
+		"12 persons with searchTerm in fullname"      		 | 12              | 'new ExternalOntologyPersonIntegrationSpec'       | 20
+		"12 persons with searchTerm in username & fullname"  | 12              | 'ExternalOntologyPersonIntegrationSpec'           | 20
+		"10 persons with lower and upper case searchTerm"    | 10              | 'TESTuserExternalOntologyPersonIntegrationSpec'   | 20
 		
 	}
 	
@@ -100,13 +102,13 @@ class ExternalOntologyPersonIntegrationSpec extends IntegrationSpec {
 		
 		where:
 		desc                                               | expectedPersons                     | searchTerm   | limit
-		"1 person"									       | ['testuser5 (New Test User5)']	  	 | 'testuser5'  | 20
-		"0 person due to searchTerm no match"              | []								     | 'test1234'   | 20
+		"1 person"									       | ['testuserExternalOntologyPersonIntegrationSpec5 (New ExternalOntologyPersonIntegrationSpec Test User5)']	  	 | 'testuserExternalOntologyPersonIntegrationSpec5'  | 20
+		"0 person due to searchTerm no match"              | []								     | 'test1234ExternalOntologyPersonIntegrationSpec'   | 20
 		"0 person due to searchTerm null"                  | []								     | null         | 20
 		"0 person due to searchTerm empty"                 | []								     | ''           | 20
 		"0 person due to searchTerm with multiple spaces"  | []								     | '   '        | 20
-		"3 persons" 									   | ['testuser1 (New Test User1)', 'testuser10 (New Test User10)', 'user1000 (New XYZ123 User)'] | 'user1'      | 20
-		"2 persons due to limit set to 2" 				   | ['testuser1 (New Test User1)', 'testuser2 (New Test User2)'] | 'new'      | 2
+		"3 persons" 									   | ['testuserExternalOntologyPersonIntegrationSpec1 (New ExternalOntologyPersonIntegrationSpec Test User1)', 'testuserExternalOntologyPersonIntegrationSpec10 (New ExternalOntologyPersonIntegrationSpec Test User10)', 'userExternalOntologyPersonIntegrationSpec1000 (New ExternalOntologyPersonIntegrationSpec XYZ123 User)'] | 'userExternalOntologyPersonIntegrationSpec1'      | 20
+		"2 persons due to limit set to 2" 				   | ['testuserExternalOntologyPersonIntegrationSpec1 (New ExternalOntologyPersonIntegrationSpec Test User1)', 'testuserExternalOntologyPersonIntegrationSpec10 (New ExternalOntologyPersonIntegrationSpec Test User10)'] | 'new ExternalOntologyPersonIntegrationSpec'      | 2
 		
 	}
 	
