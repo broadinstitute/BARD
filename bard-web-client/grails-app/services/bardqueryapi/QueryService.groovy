@@ -429,8 +429,6 @@ class QueryService implements IQueryService {
                 activities: activities,
                 experiment: experimentShow,
                 hasPlot: experimentDetails.hasPlot,
-                priorityDisplays: experimentDetails.priorityDisplays,
-                dictionaryIds: experimentDetails.dictionaryIds,
                 hasChildElements: experimentDetails.hasChildElements,
                 yNormMin: experimentDetails.yNormMin,
                 yNormMax: experimentDetails.yNormMax,
