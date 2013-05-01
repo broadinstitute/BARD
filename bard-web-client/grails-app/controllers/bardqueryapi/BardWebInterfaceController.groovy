@@ -92,7 +92,9 @@ class BardWebInterfaceController {
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(eids: [id])
 
             //If this is the first time we are loading the page, we want the 'Normalize Y-Axis' and 'Active filters to be checked-off by default so we would normalize the Y-axis as a default and also for actives-only.
+            Boolean noFiltersFromPage
             if (!searchCommand.filters) {
+                noFiltersFromPage = true
                 searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
                 searchCommand.filters << new SearchFilter(filterName: 'activity_outcome', filterValue: 'Active Compounds')
             }
@@ -111,8 +113,15 @@ class BardWebInterfaceController {
                 filters.add(FilterTypes.TESTED)
             }
 
-            final TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+            TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
+            //If the 'Active Compound' filter was set as a default but we didn't get back any result, uncheck Active filter and search again.
+            if (noFiltersFromPage && !tableModel.data) {
+                searchCommand.filters.removeAll {SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome'}
+                filters.add(FilterTypes.TESTED)
+                tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
+                        GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
+            }
             //TODO: these should become redundant if we use command objects. In any case these additional params should already be in the params object
             tableModel.additionalProperties.put("searchString", params.searchString)
             tableModel.additionalProperties.put("normalizeYAxis", normalizeAxis.toString())
@@ -122,10 +131,8 @@ class BardWebInterfaceController {
             //Create fake facets to generate the two filters we want: normalize Y-axis and filter for active compounds only.
             Integer numOfActiveCmpds = tableModel?.additionalProperties?.actives ?: 0
             Integer totalNumOfCmpds = tableModel?.additionalProperties?.total ?: 0
-            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: totalNumOfCmpds)])]
-            if (numOfActiveCmpds > 0) {
-                facetValues << new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])
-            }
+            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
+            facetValues << new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])
 
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
@@ -655,9 +662,9 @@ class BardWebInterfaceController {
                 tableModel.additionalProperties.put("activityOutcome", activityOutcome)
                 tableModel.additionalProperties.put("id", id.toString())
                 tableModel.additionalProperties.put("resourceType", resourceType.name())
-                session.'compoundSummary' =  tableModel.additionalProperties?.compoundSummary
-                session.'actives' =  true
-                session.'inactives' =  true
+                session.'compoundSummary' = tableModel.additionalProperties?.compoundSummary
+                session.'actives' = true
+                session.'inactives' = true
 
             }
 
@@ -688,14 +695,14 @@ class BardWebInterfaceController {
     def bigSunburst(Long id, SearchCommand searchCommand) {
         int dropDown1Choice = 0
 
-        if ((params.actives==null) || ('t' == params.actives)) {
+        if ((params.actives == null) || ('t' == params.actives)) {
             dropDown1Choice += 1
             session.'actives' = true
         } else {
             session.'actives' = false
         }
 
-        if ((params.inactives==null) || ('t' == params.inactives)) {
+        if ((params.inactives == null) || ('t' == params.inactives)) {
             dropDown1Choice += 2
             session.'inactives' = true
         } else {
@@ -732,8 +739,6 @@ class BardWebInterfaceController {
 
 
 }
-
-
 
 /**
  * We would use this helper class as Mixin for

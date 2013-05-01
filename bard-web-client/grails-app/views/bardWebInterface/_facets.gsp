@@ -43,7 +43,7 @@
                                     <g:set var="checked"
                                            value="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id)))}}"/>
                                     <g:checkBox name="filters[${childIndex}].filterValue" value="${childFacet.id}"
-                                                checked="${checked}" class="${formName}_Chk"/> ${childFacet.id}${childFacet.value ? " (${childFacet.value})" : ""}
+                                                checked="${checked}" class="${formName}_Chk"/> ${childFacet.id}${childFacet.value>=0 ? " (${childFacet.value})" : ""}
                                 </label>
                                 <g:hiddenField name="filters[${childIndex}].filterName" value="${parentFacet.id}"/>
                                 <g:set var="childIndex" value="${childIndex + 1}"/>
