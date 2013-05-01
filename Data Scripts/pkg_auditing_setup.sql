@@ -157,6 +157,8 @@ WHERE table_name in (select table_name from tabs)
   AND TABLE_NAME NOT LIKE ''%0%''
   AND TABLE_NAME NOT LIKE ''TEMP%''
   AND TABLE_NAME NOT LIKE ''DATA%''
+  AND TABLE_NAME NOT LIKE ''%TREE''
+  AND TABLE_NAME NOT LIKE ''MIGRAT%''
   AND TABLE_NAME NOT LIKE ''%LOG''';
       IF avi_table_name IS NOT NULL
       THEN
