@@ -26,7 +26,8 @@ class TidIssueService {
     "VALUE2",
     "SERIESNO"]
 
-    private final static String queryFromString = """
+    private final static String duplicateResultTypeQueryString = """
+select orm.${columns.join(",orm.")}
 from bard_data_qa.vw_data_mig_result_map orm
 join (
 select aid,
@@ -61,15 +62,24 @@ where orm.aid = :aid
 order by orm.aid, tid
 """
 
+    private static final String resultTypeAndContextConflictQuery = """
+select ${columns.join(",")}
+  from bard_data_qa.vw_data_mig_result_map where RESULTTYPE is not null and
+    (contexttid is not null and contexttid <> tid)
+  order by aid,tid
+"""
+
+
     def sessionFactory
-    def resultMapIssueService
 
-    List<Object[]> findTidIssues(Long aid) {
-        final String queryString = "select orm.${columns.join(",orm.")} $queryFromString"
-
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryString)
+    List<Object[]> findTidsWithDuplicateResultTypes(Long aid) {
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(duplicateResultTypeQueryString)
         query.setParameter("aid", aid)
 
         return query.list()
+    }
+
+    List<Object> findTidsWithResultTypeContextConflict() {
+        return sessionFactory.getCurrentSession().createSQLQuery(resultTypeAndContextConflictQuery).list()
     }
 }

@@ -9,8 +9,8 @@
     <h2>Available pages / actions:</h2>
     <table cellpadding="10" cellspacing="1">
         <tr>
-            <td>AID Issues</td>
-            <td><g:link controller="aidIssue" action="index">List AID issues</g:link></td>
+            <td>Issue tracking</td>
+            <td><a href="https://jira.broadinstitute.org/secure/IssueNavigator.jspa?sorter/field=updated&sorter/order=DESC">JIRA list of issues</a></td>
         </tr>
         <tr>
             <td>Datasets</td>
@@ -19,6 +19,10 @@
         <tr>
             <td>Result Map Issues</td>
             <td><g:link controller="resultMapIssue" action="index">List AID's with current known issues in the result_map table</g:link></td>
+        </tr>
+        <tr>
+            <td>Missing AID's</td>
+            <td><g:link controller="checkForMissingAids" action="index">Check for AID's that are in a dataset but missing from external_reference table (${missingAidCount})</g:link> </td>
         </tr>
     </table>
 </body>

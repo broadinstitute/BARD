@@ -15,21 +15,7 @@
 <h1>TID's identified with duplicate result-types in result_map</h1>
 <h2>(causing problems with result loading)</h2>
 
-<table border="1" cellpadding="10" cellspacing="1">
-    <tr>
-        <g:each in="${headers}" var="header">
-            <th>${header}</th>
-        </g:each>
-    </tr>
+<g:render template="/table"/>
 
-
-    <g:each in="${tidIssueList}" var="row">
-        <tr>
-            <g:each in="${row}" var="entry">
-                <td>${entry}</td>
-            </g:each>
-        </tr>
-    </g:each>
-</table>
 </body>
 </html>

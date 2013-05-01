@@ -78,9 +78,12 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
     void "test parentMeasure constraints #desc parentMeasure: '#valueUnderTest'"() {
 
         final String field = 'parentMeasure'
-
+        final String parentChildRelationShip = HierarchyType.SUPPORTED_BY
         when:
-        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance[(field)] = valueUnderTest?.call()
+        if (valueUnderTest != null) {
+            domainInstance['parentChildRelationship'] = parentChildRelationShip
+        }
         domainInstance.validate()
 
         then:
@@ -88,7 +91,7 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
         where:
         desc                  | valueUnderTest      | valid | errorCode
-        'null valid'          | { null }            | true  | null
+        'null valid'          | null                | true  | null
         'valid parentMeasure' | { Measure.build() } | true  | null
 
     }
@@ -96,7 +99,9 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
     void "test parentChildRelationship constraints #desc parentChildRelationship: '#valueUnderTest'"() {
 
         final String field = 'parentChildRelationship'
-
+        if (valueUnderTest) {
+            domainInstance['parentMeasure'] = Measure.build()
+        }
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()

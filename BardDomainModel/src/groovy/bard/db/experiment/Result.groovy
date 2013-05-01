@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Element
 import bard.db.enums.ReadyForExtraction
+import bard.db.registration.Measure
 import org.codehaus.groovy.grails.orm.hibernate.cfg.IdentityEnumType
 
 class Result {
@@ -29,6 +30,7 @@ class Result {
     Date lastUpdated
     String modifiedBy
     Long id;
+    transient Measure measure
 
     Set<ResultContextItem> resultContextItems = [] as Set<ResultContextItem>
     Set<ResultHierarchy> resultHierarchiesForResult = [] as Set<ResultHierarchy>

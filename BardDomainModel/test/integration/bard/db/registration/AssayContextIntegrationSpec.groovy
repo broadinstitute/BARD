@@ -44,14 +44,6 @@ class AssayContextIntegrationSpec extends BardIntegrationSpec {
         assayContext.assayContextItems.size() == 2
         assayContext.assayContextItems*.valueDisplay == ['a', 'b']
 
-        when: ' list order changed'
-        assayContext.assayContextItems.reverse(true)
-        assayContext = flushClearReload(id)
-
-        then: ' the new order is preserved'
-        assayContext.assayContextItems*.valueDisplay == ['b', 'a']
-
-
     }
 
     private AssayContext flushClearReload(long id) {

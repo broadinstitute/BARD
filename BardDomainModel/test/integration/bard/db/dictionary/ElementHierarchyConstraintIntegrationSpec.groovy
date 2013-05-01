@@ -49,7 +49,7 @@ class ElementHierarchyConstraintIntegrationSpec extends BardIntegrationSpec {
 
         where:
         desc                  | valueUnderTest    | valid | errorCode
-        'null valid'          | {null}            | true  | null
+        'null valid'          | {null}            | false | 'nullable'
         'valid parentElement' | {Element.build()} | true  | null
 
     }
