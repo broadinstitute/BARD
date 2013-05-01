@@ -6,21 +6,17 @@ class BuildElementPathsService {
 
     final String pathDelimeter
 
-    Integer maxPathLength
-
     public BuildElementPathsService(String relationshipType = "subClassOf", String pathDelimeter = "/") {
         this.relationshipType = relationshipType
         this.pathDelimeter = pathDelimeter
-
-        maxPathLength = null
     }
 
-    List<ElementAndFullPath> createListSortedByString(Collection<ElementAndFullPath> elementAndFullPathCollection) {
+    ElementAndFullPathListAndMaxPathLength createListSortedByString(Collection<ElementAndFullPath> elementAndFullPathCollection) {
         List<ElementAndFullPath> result = new ArrayList<ElementAndFullPath>(elementAndFullPathCollection)
 
         Collections.sort(result, new ElementAndFullPathComparatorByString())
 
-        maxPathLength = 0
+        int maxPathLength = 0
         int i = 0;
         for (ElementAndFullPath elementAndFullPath : result) {
             elementAndFullPath.index = i
@@ -33,7 +29,7 @@ class BuildElementPathsService {
             i++
         }
 
-        return result
+        return new ElementAndFullPathListAndMaxPathLength(result, maxPathLength)
     }
 
     Set<ElementAndFullPath> buildAll() throws BuildElementPathsServiceLoopInPathException {
@@ -139,4 +135,14 @@ class BuildElementPathsService {
 class BuildElementPathsServiceLoopInPathException extends Exception {
     ElementHierarchy nextTopElementHierarchy
     ElementAndFullPath elementAndFullPath
+}
+
+class ElementAndFullPathListAndMaxPathLength {
+    final List<ElementAndFullPath> elementAndFullPathList
+    final int maxPathLength
+
+    ElementAndFullPathListAndMaxPathLength(List<ElementAndFullPath> elementAndFullPathList, int maxPathLength) {
+        this.elementAndFullPathList = elementAndFullPathList
+        this.maxPathLength = maxPathLength
+    }
 }

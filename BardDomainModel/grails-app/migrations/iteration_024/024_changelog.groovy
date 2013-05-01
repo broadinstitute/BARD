@@ -43,6 +43,14 @@ databaseChangeLog = {
             }
         }
     }
+    changeSet(author: "jasiedu", id: "remove parent child relationship for null parent_measures", dbms: 'oracle', context:'standard') {
+        grailsChange {
+            change {
+                String updateStatement = "UPDATE MEASURE SET PARENT_CHILD_RELATIONSHIP = NULL WHERE PARENT_MEASURE_ID IS NULL"
+                sql.executeUpdate(updateStatement)
+            }
+        }
+    }
     changeSet(author: 'jasiedu', id: 'add parent child constraint to MEASURE_PARENT', dbms: 'oracle', context: 'standard') {
         grailsChange {
             change {

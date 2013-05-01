@@ -226,7 +226,9 @@ class BuildElementPathsServiceSpec extends Specification {
         Set<ElementAndFullPath> allSet = service.buildAll()
 
         when:
-        List<ElementAndFullPath> sortedList = service.createListSortedByString(allSet)
+        ElementAndFullPathListAndMaxPathLength result = service.createListSortedByString(allSet)
+        List<ElementAndFullPath> sortedList = result.elementAndFullPathList
+
 
         then:
         sortedList.size() == 7
@@ -248,7 +250,7 @@ class BuildElementPathsServiceSpec extends Specification {
         sortedList.get(3).path.get(1) == eh1
         sortedList.get(3).path.get(2) == eh2
         sortedList.get(3).element == eh2.childElement
-        service.maxPathLength == sortedList.get(3).toString().length()
+        result.maxPathLength == sortedList.get(3).toString().length()
 
         sortedList.get(4).path.size() == 0
         sortedList.get(4).element == eh3.parentElement

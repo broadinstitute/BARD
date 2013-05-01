@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import org.hibernate.SessionFactory
 import org.junit.Before
 import org.springframework.dao.DataIntegrityViolationException
@@ -27,7 +28,9 @@ class MeasureIntegrationSpec extends BardIntegrationSpec {
 
         given: 'a measure with child Measures'
         3.times {
-            domainInstance.addToChildMeasures(buildWithoutSaveMeasure())
+            Measure measure = buildWithoutSaveMeasure()
+            measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+            domainInstance.addToChildMeasures(measure)
         }
 
         when: 'the parent measure is saved and the session cleared'
