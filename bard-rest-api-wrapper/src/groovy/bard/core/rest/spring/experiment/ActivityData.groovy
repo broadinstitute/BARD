@@ -28,7 +28,7 @@ public class ActivityData extends JsonUtil {
 
     public String getDictionaryLabel() {
         if (dictElemId) {
-            final Node dictionaryElement = dummy.dataExportRestService.findDictionaryElementById(this.dictElemId)
+            final Node dictionaryElement = dummy?.dataExportRestService?.findDictionaryElementById(this.dictElemId)
             if (dictionaryElement) {
                 return dictionaryElement.label
             }

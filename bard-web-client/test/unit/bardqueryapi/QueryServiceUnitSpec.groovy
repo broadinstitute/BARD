@@ -28,6 +28,9 @@ import bard.core.rest.spring.SubstanceRestService
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
+import bard.core.util.FilterTypes
+import bard.core.rest.spring.experiment.Activity
+import bard.core.rest.spring.experiment.ExperimentSearchResult
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -46,17 +49,26 @@ class QueryServiceUnitSpec extends Specification {
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
     @Shared ExpandedAssay expandedAssay2 = new ExpandedAssay()
     @Shared ProjectResult projectResult = new ProjectResult()
-    @Shared Assay assay1 = new Assay(name: "A1")
+    @Shared Assay assay1 = new Assay(bardAssayId: 1, name: "A1")
+    @Shared Assay assay2 = new Assay(bardAssayId: 2, name: "A2")
     @Shared Compound compound1 = new Compound(name: "C1")
     @Shared Compound compound2 = new Compound(name: "C2")
     @Shared ProjectExpanded project1 = new ProjectExpanded(name: "P1")
-    @Shared Project project2 = new Project(name: "P2")
+    @Shared Project project2 = new Project(bardProjectId: 2, name: "P2")
+    @Shared Project project3 = new Project(bardProjectId: 3, name: "P3")
     @Shared Map compoundAdapterMap1 = [compoundAdapters: [], facets: null, nHits: 0, eTag: null]
     @Shared Map compoundAdapterMap2 = [compoundAdapters: [], facets: [], nHits: 0, eTag: null]
     @Shared Map assayAdapterMap1 = [assayAdapters: [new AssayAdapter(assay1)], facets: [], nHits: 0]
     @Shared Map assayAdapterMap2 = [assayAdapters: [], facets: null, nHits: 0]
     @Shared Map projectAdapterMap1 = [projectAdapters: [new ProjectAdapter(project1)], facets: null, nHits: 0]
     @Shared Map projectAdapterMap2 = [projectAdapters: [], facets: [], nHits: 0]
+    @Shared CompoundSummary compoundSummary = new CompoundSummary(ntest: 2,
+            testedExptdata: [new Activity(bardExptId: 1, eid: 1, bardAssayId: 1, bardProjId: [2]),
+                    new Activity(bardExptId: 4, eid: 4, bardAssayId: 2, bardProjId: [3])],
+            testedAssays: [assay1, assay2],
+            nhit: 1,
+            hitAssays: [assay1],
+            hitExptdata: [new Activity(bardExptId: 1, eid: 1, bardAssayId: 1, bardProjId: [2])])
 
     void setup() {
         compoundRestService = Mock(CompoundRestService)
@@ -694,5 +706,27 @@ class QueryServiceUnitSpec extends Specification {
         "Returns a null Promiscuity Score" | 23435 | null                            | 404            | "Error getting Promiscuity Score for 23435"
 
 
+    }
+
+    void "test createCompoundBioActivitySummaryDataTable #label"() {
+        when:
+        final TableModel tableModel = service.createCompoundBioActivitySummaryDataTable(cid, groupBy, filterTypes, new SearchParams(top: 10, skip: 0))
+
+        then:
+        this.compoundRestService.getSummaryForCompound(cid) >> {this.compoundSummary}
+        this.experimentRestService.searchExperimentsByIds(_) >> {new ExperimentSearchResult(experiments: [new ExperimentSearch(bardExptId: 1), new ExperimentSearch(bardExptId: 4)])}
+        this.projectRestService.searchProjectsByIds(_) >> {new ProjectResult(projects: [new Project(bardProjectId: 3), new Project(bardProjectId: 6)])}
+        this.queryHelperService.projectsToAdapters(_) >>> [[new ProjectAdapter(project2)], [new ProjectAdapter(project3)]]
+
+        assert tableModel.columnHeaders.size() == 2
+        assert tableModel.data.size() == expectedTableModelDataSize
+        assert tableModel.data.first().first().class == expectedResourceType
+
+        where:
+        label                            | cid  | groupBy              | filterTypes          | expectedTableModelDataSize | expectedResourceType
+        "group-by assay, tested"         | 1234 | GroupByTypes.ASSAY   | [FilterTypes.TESTED] | 2                          | AssayValue
+        "group-by assay, actives-only"   | 1234 | GroupByTypes.ASSAY   | []                   | 1                          | AssayValue
+        "group-by project, tested"       | 1234 | GroupByTypes.PROJECT | [FilterTypes.TESTED] | 2                          | ProjectValue
+        "group-by project, actives-pnly" | 1234 | GroupByTypes.PROJECT | []                   | 1                          | ProjectValue
     }
 }
