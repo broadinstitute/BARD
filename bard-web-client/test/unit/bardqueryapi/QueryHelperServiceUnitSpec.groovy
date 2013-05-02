@@ -44,10 +44,10 @@ class QueryHelperServiceUnitSpec extends Specification {
         assert map == expectedMap
         where:
         label                      | normalizeYAxis              | activities       | expectedMap
-        "Empty Activities"         | NormalizeAxis.Y_NORM_AXIS   | []               | [hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
-        "Activity, no Result Data" | NormalizeAxis.Y_NORM_AXIS   | [new Activity()] | [hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
-        "Empty Activities"         | NormalizeAxis.Y_DENORM_AXIS | []               | [hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
-        "Activity, no Result Data" | NormalizeAxis.Y_DENORM_AXIS | [new Activity()] | [hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+        "Empty Activities"         | NormalizeAxis.Y_NORM_AXIS   | []               | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Activity, no Result Data" | NormalizeAxis.Y_NORM_AXIS   | [new Activity()] | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Empty Activities"         | NormalizeAxis.Y_DENORM_AXIS | []               | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Activity, no Result Data" | NormalizeAxis.Y_DENORM_AXIS | [new Activity()] | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
@@ -84,8 +84,8 @@ class QueryHelperServiceUnitSpec extends Specification {
 
         where:
         label                      | normalizeYAxis              | priorityElement                                                                                               | expectedMap
-        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
-        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
+        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
+        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
     }
 
     void "matchMLProbe #label"() {
