@@ -61,5 +61,8 @@ databaseChangeLog = {
             }
         }
     }
+    changeSet(author: "jasiedu", id: "iteration-024/04-add-comments-field-to-Element", dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration_024/04-add-comments-field-to-Element.sql", stripComments: true)
+    }
 }
 
