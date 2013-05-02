@@ -324,7 +324,11 @@ class QueryService implements IQueryService {
             experimentalData = compoundSummary.hitExptdata
         }
 
-        Map experimentalDetails = this.queryHelperService.extractExperimentDetails(experimentalData, NormalizeAxis.Y_NORM_AXIS)
+        NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
+        if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
+            normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
+        }
+        Map experimentalDetails = this.queryHelperService.extractExperimentDetails(experimentalData, normalizeAxis)
 
         Map<Long, List<Activity>> groupedByExperimentalData = [:]
         switch (groupTypes) {

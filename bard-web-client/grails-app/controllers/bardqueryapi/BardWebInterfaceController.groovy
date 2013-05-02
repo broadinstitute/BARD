@@ -639,14 +639,26 @@ class BardWebInterfaceController {
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
             return
         }
+
         try {
 
             Map<String, Integer> searchParams = handleSearchParams() //top, skip, nhits
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(cids: [id])
 
+            Boolean noFiltersFromPage = false
+            if (!searchCommand.filters) {
+                noFiltersFromPage = true
+                searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
+            }
+
             final List<FilterTypes> filters = []
 //            filters.add(FilterTypes.TESTED)
-            NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
+            Boolean normalizeYAxisFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis'}?.filterValue
+            NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
+            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
+                filters.add(FilterTypes.Y_DENORM_AXIS)
+            }
+
             ActivityOutcome activityOutcome = ActivityOutcome.ACTIVE
 
             GroupByTypes resourceType = params.groupByType ? params.groupByType as GroupByTypes : GroupByTypes.ASSAY
@@ -668,11 +680,15 @@ class BardWebInterfaceController {
 
             }
 
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
+
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,
                             resourceType: resourceType,
-                            facets: [],
-                            appliedFilters: [],
+                            facets: facetValues,
+                            appliedFilters: getAppliedFilters(searchFilters, facetValues),
                             sidebarTitle: 'Options'])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request

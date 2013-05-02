@@ -33,7 +33,7 @@ function pushStateHandler(url) {
     return false;
 }
 
-//Adding event handlers to the facets form submission
+//Adding event handlers to the showExperiment facets form submission
 $(document).on("submit", "#ExperimentFacetForm", function (event) {
     //replace the action with a redirect to the same page
     var paginationUrl = $('#paginationUrl').attr('value')
@@ -46,9 +46,26 @@ $(document).on("submit", "#ExperimentFacetForm", function (event) {
     $(this).attr('action', formUrl)
     return true; //submit tue form the normal way
 });
-
 $(document).on("click", "#ExperimentFacetForm_ResetButton", function () {
     resetAllFilters('ExperimentFacetForm');
+});
+
+//Adding event handlers to the showCBAS facets form submission
+$(document).on("submit", "#CompoundBioActivitySummaryForm", function (event) {
+    //replace the action with a redirect to the same page
+    var paginationUrl = $('#paginationUrl').attr('value')
+    var formUrl
+    if (paginationUrl) {
+        formUrl = paginationUrl;
+    } else {
+        formUrl = '/bardwebclient/bardWebInterface/showCompoundBioActivitySummary/' + $('input#compoundId').attr('value');
+    }
+    $(this).attr('action', formUrl)
+    return true; //submit tue form the normal way
+});
+
+$(document).on("click", "#CompoundBioActivitySummaryForm_ResetButton", function () {
+    resetAllFilters('CompoundBioActivitySummaryForm');
 });
 
 function resetAllFilters(facetForm) {
