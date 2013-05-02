@@ -1,32 +1,60 @@
 package bard.db.dictionary
 
-import groovy.json.JsonBuilder
 import bard.hibernate.AuthenticatedUserRequired
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
 class ElementController {
 
     private static final String errorMessageKey = "errorMessageKey"
-
+    ElementService elementService
     BuildElementPathsService buildElementPathsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
     def list() {
         Map parameterMap = generatePaths()
 
-        if (! parameterMap.containsKey(errorMessageKey)) {
+        if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
         } else {
             render(parameterMap.get(errorMessageKey))
         }
     }
 
+    def addTerm() {
+        flash.message=''
+        List elementHierarchyTree = elementService.createElementHierarchyTree()
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
+        render(view: 'addTerm', model: [termCommand: new TermCommand(), elementHierarchyAsJsonTree: elementHierarchyAsJsonTree])
+    }
+
+    def saveTerm(TermCommand termCommand) {
+        Element currentElement = null
+        flash.message=''
+        if (termCommand.validate()) {
+
+            if (!termCommand.hasErrors()) {
+                //remove duplicate white spaces, then trim the string
+                //we probably should also consider removing some other characters
+                termCommand.label = termCommand.label.replaceAll("\\s+", " ").toLowerCase().trim()
+                currentElement =
+                    this.elementService.addNewTerm(termCommand)
+                termCommand = new TermCommand()
+                flash.message = "Proposed term ${currentElement?.label} has been saved"
+            }
+        }
+        List elementHierarchyTree = elementService.createElementHierarchyTree()
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
+
+        //if currentElement exists then select the node
+        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement,elementHierarchyAsJsonTree: elementHierarchyAsJsonTree])
+    }
 
     def edit() {
         Map parameterMap = generatePaths()
 
-        if (! parameterMap.containsKey(errorMessageKey)) {
+        if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
         } else {
             render(parameterMap.get(errorMessageKey))
@@ -40,7 +68,7 @@ class ElementController {
             result = [list: elementAndFullPathListAndMaxPathLength.elementAndFullPathList,
                     maxPathLength: elementAndFullPathListAndMaxPathLength.maxPathLength]
         } catch (BuildElementPathsServiceLoopInPathException e) {
-            result = [errorMessageKey : """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
+            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
         The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
         Path element hierarchies: ${e.elementAndFullPath.path}<br/>
         The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"""]
@@ -106,7 +134,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     static Element findElementFromId(Long id) {
         Element result = Element.findById(id)
 
-        if (! result) {
+        if (!result) {
             throw new UnrecognizedElementIdException()
         }
 
@@ -114,7 +142,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     }
 
     static List<ElementHierarchy> findElementHierarchyFromIds(List<Long> elementHierarchyIdList) throws
-            UnrecognizedElementHierachyIdException{
+            UnrecognizedElementHierachyIdException {
 
         List<ElementHierarchy> result = new ArrayList<ElementHierarchy>(elementHierarchyIdList.size())
 
@@ -141,7 +169,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
 
         NewElementAndPath result = new NewElementAndPath()
 
-        for (int tokenIndex = 0; tokenIndex < tokenList.size()-1; tokenIndex++) {
+        for (int tokenIndex = 0; tokenIndex < tokenList.size() - 1; tokenIndex++) {
             String token = tokenList.get(tokenIndex)
 
             if (token != "") {
@@ -156,12 +184,55 @@ detected loop id's:${idBuilder.toString()}<br/>"""
             }
         }
 
-        result.newElementLabel = tokenList.get(tokenList.size()-1)
+        result.newElementLabel = tokenList.get(tokenList.size() - 1)
 
         return result
     }
 }
+class TermCommand {
+    BuildElementPathsService buildElementPathsService
+    String parentLabel
+    String parentDescription
+    String label
+    String description
+    String abbreviation
+    String synonyms
+    String comments
+    Long unitId
+    String relationship = "subClassOf"
 
+    static constraints = {
+        parentLabel blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
+            if (value) {
+                //this value must exist
+                if (!Element.findByLabel(value.replaceAll("\\s+", " ").toLowerCase().trim())) {
+                    return 'mustexist'
+                }
+            }
+        }
+        label blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
+            if (value) {
+                Element currentElement = Element.findByLabel(value.replaceAll("\\s+", " ").toLowerCase().trim())
+                if (currentElement) {
+                    String path = command.buildElementPathsService.buildSinglePath(currentElement)
+                    return ['unique',value,path]
+                }
+            }
+        }
+        parentDescription(blank: true, nullable: true, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        description(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        comments(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        abbreviation(blank: true, nullable: true, maxSize: Element.ABBREVIATION_MAX_SIZE)
+        synonyms(blank: true, nullable: true, maxSize: Element.SYNONYMS_MAX_SIZE)
+        unitId nullable: true, validator: { value, command ->
+            if (value) {
+                if (!Element.findById(value)) {
+                    return 'unit.element.mustexist'
+                }
+            }
+        }
+    }
+}
 
 class NewElementAndPath {
     List<Element> newPathElementList
