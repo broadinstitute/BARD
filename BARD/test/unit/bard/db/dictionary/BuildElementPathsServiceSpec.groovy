@@ -217,10 +217,14 @@ class BuildElementPathsServiceSpec extends Specification {
     void "create list sorted by String"() {
         setup:
         ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        //set the label of the root element of this path to a string that will be sorted into the first position
+        eh0.parentElement.label = "aaaa"
         ElementHierarchy eh1 = buildElementHierarchy(eh0.childElement, Element.build(), service.relationshipType)
         ElementHierarchy eh2 = buildElementHierarchy(eh1.childElement, Element.build(), service.relationshipType)
 
         ElementHierarchy eh3 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        //set the label of the root element of this path to a string that will be sorted into the second position
+        eh3.parentElement.label = "bbbb"
         ElementHierarchy eh4 = buildElementHierarchy(eh3.childElement, Element.build(), service.relationshipType)
 
         Set<ElementAndFullPath> allSet = service.buildAll()
@@ -263,6 +267,8 @@ class BuildElementPathsServiceSpec extends Specification {
         sortedList.get(6).path.get(0) == eh3
         sortedList.get(6).path.get(1) == eh4
         sortedList.get(6).element == eh4.childElement
+
+        println(sortedList)
     }
 
     void "test loop detection - exception thrown"() {
