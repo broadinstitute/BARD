@@ -3,6 +3,7 @@ package bard.db.dictionary
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import spock.lang.Specification
+import spock.lang.Unroll
 import test.TestUtils
 
 /**
@@ -14,32 +15,54 @@ import test.TestUtils
  */
 @TestFor(ElementController)
 @Build(Element)
+@Unroll
 class ElementControllerUnitSpec extends Specification {
     private static final String pathDelimeter = "/"
 
     private static final EXPECTED_ADD_TERN_VIEW = "/element/addTerm"
+    final String parentLabelField = 'parentLabel'
+    Element parentElement
 
+    def setup() {
+        this.controller.elementService = Mock(ElementService.class)
+        this.parentElement = Element.build(label: 'parent label with spaces')
+    }
 
-    void "test label constraints #desc TermCommand: '#valueUnderTest'"() {
+    void "test parent label constraints #desc TermCommand: '#valueUnderTest'"() {
         final String field = 'label'
         given:
-        Element parentElement = Element.build()
-        Element.build(label: "Label")
         TermCommand termCommand =
-            new TermCommand(parentId: parentElement.id, description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(parentLabel: valueUnderTest, label: "label",
+                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
         termCommand.validate()
-//        if (termCommand.hasErrors()) {
-//            termCommand.errors?.allErrors.each { xyz ->
-//                if (xyz != null) {
-//                    println "Field:${xyz?.getField()}| Error: ${messageSource?.getMessage(xyz, null)}"
-//                }
-//            }
-//        }
         then: 'verify valid or invalid for expected reason'
         TestUtils.assertFieldValidationExpectations(termCommand, field, valid, errorCode)
+
+
+        where:
+        desc          | valueUnderTest                                     | valid | errorCode
+        'null '       | null                                               | false | 'nullable'
+        'blank value' | ''                                                 | false | 'blank'
+        'blank value' | '  '                                               | false | 'blank'
+        'too long'    | TestUtils.createString(Element.LABEL_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+    }
+
+    void "test label constraints #desc TermCommand: '#valueUnderTest'"() {
+
+        given:
+        Element.build(label: "label")
+        TermCommand termCommand =
+            new TermCommand(parentLabel: this.parentElement.label,
+                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+        termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
+        when: 'a value is set for the field under test'
+        termCommand[('label')] = valueUnderTest
+        termCommand.validate()
+        then: 'verify valid or invalid for expected reason'
+        TestUtils.assertFieldValidationExpectations(termCommand, 'label', valid, errorCode)
 
 
         where:
@@ -49,15 +72,39 @@ class ElementControllerUnitSpec extends Specification {
         'blank value'                 | '  '                                               | false | 'blank'
         'too long'                    | TestUtils.createString(Element.LABEL_MAX_SIZE + 1) | false | 'maxSize.exceeded'
         'exactly at limit'            | TestUtils.createString(Element.LABEL_MAX_SIZE)     | true  | null
-        'existing element with label' | "Label"                                            | false | 'unique'
+        'existing element with label' | "label"                                            | false | 'unique'
+    }
+
+    void "test parent description constraints #desc TermCommand: '#valueUnderTest'"() {
+        final String field = 'parentDescription'
+        given:
+        TermCommand termCommand =
+            new TermCommand(parentLabel: this.parentElement.label, description: "description",
+                    label: "label", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+
+        when: 'a value is set for the field under test'
+        termCommand[(field)] = valueUnderTest
+        termCommand.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        TestUtils.assertFieldValidationExpectations(termCommand, field, valid, errorCode)
+
+
+        where:
+        desc               | valueUnderTest                                           | valid | errorCode
+        'null '            | null                                                     | true  | null
+        'blank value'      | ''                                                       | true  | null
+        'blank value'      | '  '                                                     | true  | null
+        'too long'         | TestUtils.createString(Element.DESCRIPTION_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+        'exactly at limit' | TestUtils.createString(Element.DESCRIPTION_MAX_SIZE)     | true  | null
     }
 
     void "test description constraints #desc TermCommand: '#valueUnderTest'"() {
         final String field = 'description'
         given:
-        Element parentElement = Element.build()
+
         TermCommand termCommand =
-            new TermCommand(parentId: parentElement.id, label: "label", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(parentLabel: this.parentElement.label, label: "label", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -79,9 +126,8 @@ class ElementControllerUnitSpec extends Specification {
     void "test comments constraints #desc TermCommand: Comments '#valueUnderTest'"() {
         final String field = 'comments'
         given:
-        Element parentElement = Element.build()
         TermCommand termCommand =
-            new TermCommand(parentId: parentElement.id, label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg")
+            new TermCommand(parentLabel: this.parentElement.label, label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -100,24 +146,45 @@ class ElementControllerUnitSpec extends Specification {
         'exactly at limit' | TestUtils.createString(Element.DESCRIPTION_MAX_SIZE)     | true  | null
     }
 
-    void "test ParentId constraints #desc TermCommand: '#valueUnderTest'"() {
-        final String field = 'parentId'
+    void "test Parent Label must exist constraints #desc TermCommand: '#valueUnderTest'"() {
+
         given:
         TermCommand termCommand =
             new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
 
         when: 'a value is set for the field under test'
-        termCommand[(field)] = valueUnderTest
+        termCommand[(this.parentLabelField)] = valueUnderTest
         termCommand.validate()
 
         then: 'verify valid or invalid for expected reason'
-        TestUtils.assertFieldValidationExpectations(termCommand, field, valid, errorCode)
+        TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
 
 
         where:
-        desc                      | valueUnderTest | valid | errorCode
-        'null '                   | null           | false | 'nullable'
-        'ParentID does not exist' | 111            | false | 'termCommand.parentId.mustexist'
+        desc                          | valueUnderTest | valid | errorCode
+        'Parent Label does not exist' | "parentl"      | false | 'termCommand.parentLabel.mustexist'
+
+    }
+
+    void "test Parent Label constraints #desc TermCommand: '#valueUnderTest'"() {
+
+        given:
+        Element.build(label: valueUnderTest)
+        TermCommand termCommand =
+            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+
+        when: 'a value is set for the field under test'
+        termCommand[(this.parentLabelField)] = valueUnderTest
+        termCommand.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
+
+
+        where:
+        desc               | valueUnderTest                                 | valid | errorCode
+        'exactly at limit' | TestUtils.createString(Element.LABEL_MAX_SIZE) | true  | null
+
     }
 
     void "add New Term Page"() {
@@ -126,36 +193,39 @@ class ElementControllerUnitSpec extends Specification {
         this.controller.addTerm()
         then:
         assert EXPECTED_ADD_TERN_VIEW == view
+        assert model.termCommand
+        assert model.elementHierarchyAsJsonTree
     }
 
-    void "Save Term Page ParentId #desc"() {
+    void "Save Term Page Parent Label #desc"() {
         given:
-        ElementService elementService = Mock(ElementService.class)
-        this.controller.elementService = elementService
         TermCommand termCommand =
-            new TermCommand(parentId: valueUnderTest.call(), label: "Label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(parentLabel: valueUnderTest.call(), label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+        termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
         then:
         assert EXPECTED_ADD_TERN_VIEW == view
-        TestUtils.assertFieldValidationExpectations(termCommand, "parentId", valid, errorCode)
+        assert flashMessage == flash.message
+        TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
         where:
-        desc                      | valueUnderTest         | valid | errorCode
-        'null '                   | { null }               | false | 'nullable'
-        'ParentID does not exist' | { 111 }                | false | 'termCommand.parentId.mustexist'
-        'ParentID  exist'         | { Element.build().id } | true  | null
+        desc                                                             | valueUnderTest                         | valid | errorCode                           | flashMessage
+        'null '                                                          | { null }                               | false | 'nullable'                          | ""
+        'Parent Label does not exist'                                    | { "parentlabel2" }                     | false | 'termCommand.parentLabel.mustexist' | ""
+        'Parent Label  exist'                                            | { "parent label with spaces" }         | true  | null                                | "Proposed term null has been saved"
+        'Parent Label in cap, should much lowercase parent label'        | { "PARENT LABEL WITH SPACES" }         | true  | null                                | "Proposed term null has been saved"
+        'Parent Label in mixed case, should much lowercase parent label' | { "parEnt LABEL with Spaces" }         | true  | null                                | "Proposed term null has been saved"
+        'Parent Label with multiple spaces'                              | { "parent    label    with   spaces" } | true  | null                                | "Proposed term null has been saved"
     }
 
     void "Save Term Page label #desc"() {
         given:
-        Element parentElement = Element.build()
-        Element.build(label: "Label")
-        ElementService elementService = Mock(ElementService.class)
-        this.controller.elementService = elementService
+        Element.build(label: "label with spaces")
         TermCommand termCommand =
-            new TermCommand(parentId: parentElement.id, label: valueUnderTest,
+            new TermCommand(parentLabel: this.parentElement.label, label: valueUnderTest,
                     description: "description", abbreviation: "abbr",
                     synonyms: "abc,efg", comments: "comments")
+        termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
         then:
@@ -164,10 +234,14 @@ class ElementControllerUnitSpec extends Specification {
 
 
         where:
-        desc                           | valueUnderTest | valid | errorCode
-        'null '                        | null           | false | 'nullable'
-        'Label already exist'          | "Label"        | false | 'unique'
-        'Label does not already exist' | "Label2"       | true  | null
+        desc                                               | valueUnderTest          | valid | errorCode
+        'null '                                            | null                    | false | 'nullable'
+        'Label already exist'                              | "label with spaces"     | false | 'unique'
+        'Label does not already exist'                     | "label2"                | true  | null
+        'Label in cap, should much lowercase label'        | "LABEL WITH SPACES"     | false | 'unique'
+        'Label in mixed case, should much lowercase label' | "lABel wITH Spaces"     | false | 'unique'
+        'Label with multiple spaces'                       | "lABel   with   spaces" | false | 'unique'
+
     }
 
     void "simple test findElementsFromPathString"() {

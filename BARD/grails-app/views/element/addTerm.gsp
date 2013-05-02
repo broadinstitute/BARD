@@ -1,39 +1,74 @@
-<%@ page import="bard.db.dictionary.Element" %>
-<!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'element.label', default: 'Element')}" />
-		<title><g:message code="default.create.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#create-element" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="create-element" class="content scaffold-create" role="main">
-			<h1><g:message code="default.create.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<g:hasErrors bean="${elementInstance}">
-			<ul class="errors" role="alert">
-				<g:eachError bean="${elementInstance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-				</g:eachError>
-			</ul>
-			</g:hasErrors>
-			<g:form action="save" >
-				<fieldset class="form">
-					<g:render template="form"/>
-				</fieldset>
-				<fieldset class="buttons">
-					<g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+<head>
+    <r:require modules="core,bootstrap,newTerm"/>
+    <meta name="layout" content="basic"/>
+    <title>Propose new term</title>
+</head>
+
+<body>
+<g:render template="/common/message"/>
+<g:render template="/common/errors" model="['errors': termCommand?.errors?.allErrors]"/>
+<div class="row-fluid">
+
+    <div class="span6 offset1">
+        <g:form class="form-horizontal" action="saveTerm">
+            <g:hiddenField name="currentElementId" id="currentElementId"
+                           value="${currentElement ? currentElement.id : ''}"/>
+            <g:render template="addTermForm"/>
+            <div class="control-group">
+                <label>
+                    <h4>5. Choose to save your proposed term.</h4>
+                </label>
+            </div>
+
+            <div class="control-group">
+                <div class="controls">
+                    <input type="submit" class="btn btn-primary" value="save">
+                    <g:link action="addTerm"
+                            fragment="documents-header" class="btn">Cancel</g:link>
+                </div>
+            </div>
+        </g:form>
+    </div>
+
+    <div class="span5">
+        <r:require module="dynatree"/>
+        <h3>Current BARD Hierarchy</h3>
+
+        <div id="element-hierarchy-tree"></div>
+
+        <div>
+            <br/><strong>Note:</strong> All proposed terms will be reviewed by
+        BARD Dictionary Curators and modified or recategorized as needed to fit into the BARD
+        Hierarchy. They will contact you if they have questions. You will be notified once your term has been curated. In the meantime, you can continue to work
+        and use your newly proposed term.
+        </div>
+        <r:script>
+            $("#element-hierarchy-tree").dynatree({
+            children: ${elementHierarchyAsJsonTree},
+            onActivate: function(node) {
+                $("#parentLabel").val(node.data.title);
+                $("#parentDescription").val(node.data.description);
+            }
+           }
+        );
+        selectCurrentElement();
+
+        function selectCurrentElement(){
+            var currentElementId = $("#currentElementId").val();
+            if(currentElementId){
+               $("#element-hierarchy-tree").dynatree("getTree").activateKey(currentElementId);
+            }
+         }
+        function trim(input) {
+            var s = input.value;
+            s = s.replace(/(^\s*)|(\s*$)/gi,"");
+            s = s.replace(/[ ]{2,}/gi," ");
+            s = s.replace(/\n /,"\n");
+            input.value = s;
+        }
+        </r:script>
+    </div>
+</div>
+</body>
 </html>

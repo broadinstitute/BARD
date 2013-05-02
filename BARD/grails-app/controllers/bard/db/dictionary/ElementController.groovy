@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.hibernate.AuthenticatedUserRequired
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isFullyAuthenticated()'])
@@ -22,20 +23,32 @@ class ElementController {
     }
 
     def addTerm() {
-        render(view: 'addTerm', model: [termCommand: new TermCommand()])
+        flash.message=''
+        List elementHierarchyTree = elementService.createElementHierarchyTree()
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
+        render(view: 'addTerm', model: [termCommand: new TermCommand(), elementHierarchyAsJsonTree: elementHierarchyAsJsonTree])
     }
 
     def saveTerm(TermCommand termCommand) {
         Element currentElement = null
+        flash.message=''
         if (termCommand.validate()) {
 
             if (!termCommand.hasErrors()) {
+                //remove duplicate white spaces, then trim the string
+                //we probably should also consider removing some other characters
+                termCommand.label = termCommand.label.replaceAll("\\s+", " ").toLowerCase().trim()
                 currentElement =
                     this.elementService.addNewTerm(termCommand)
+                termCommand = new TermCommand()
+                flash.message = "Proposed term ${currentElement?.label} has been saved"
             }
         }
+        List elementHierarchyTree = elementService.createElementHierarchyTree()
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
 
-        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
+        //if currentElement exists then select the node
+        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement,elementHierarchyAsJsonTree: elementHierarchyAsJsonTree])
     }
 
     def edit() {
@@ -178,34 +191,40 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     }
 }
 class TermCommand {
-    Long parentId
+    BuildElementPathsService buildElementPathsService
+    String parentLabel
+    String parentDescription
     String label
     String description
     String abbreviation
     String synonyms
     String comments
     Long unitId
-    String relationship="subClassOf"
+    String relationship = "subClassOf"
 
     static constraints = {
-        parentId nullable: false, validator: { value, command ->
+        parentLabel blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
             if (value) {
-                if (!Element.findById(value)) {
+                //this value must exist
+                if (!Element.findByLabel(value.replaceAll("\\s+", " ").toLowerCase().trim())) {
                     return 'mustexist'
                 }
             }
         }
-        label blank: false, nullable: false, maxSize:  Element.LABEL_MAX_SIZE, validator: { value, command ->
+        label blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
             if (value) {
-                if (Element.findByLabel(value)) {
-                    return 'unique'
+                Element currentElement = Element.findByLabel(value.replaceAll("\\s+", " ").toLowerCase().trim())
+                if (currentElement) {
+                    String path = command.buildElementPathsService.buildSinglePath(currentElement)
+                    return ['unique',value,path]
                 }
             }
         }
+        parentDescription(blank: true, nullable: true, maxSize: Element.DESCRIPTION_MAX_SIZE)
         description(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
         comments(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
-        abbreviation(blank: true, nullable: true, maxSize:  Element.ABBREVIATION_MAX_SIZE)
-        synonyms(blank: true, nullable: true, maxSize:  Element.SYNONYMS_MAX_SIZE)
+        abbreviation(blank: true, nullable: true, maxSize: Element.ABBREVIATION_MAX_SIZE)
+        synonyms(blank: true, nullable: true, maxSize: Element.SYNONYMS_MAX_SIZE)
         unitId nullable: true, validator: { value, command ->
             if (value) {
                 if (!Element.findById(value)) {

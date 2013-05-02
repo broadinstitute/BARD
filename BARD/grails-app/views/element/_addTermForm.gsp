@@ -1,63 +1,107 @@
-<%@ page import="bard.db.dictionary.Element" %>
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: '', 'error')} required">
-    <label for="label">
-        <g:message code="element.label.label" default="Proposed term" />
-        <span class="required-indicator">*</span>
+<%@ page import="bard.db.dictionary.*" %>
+<h3>Propose New Term</h3>
+<div class="control-group">
+    <label>
+        <h4>1. Select a parent term from the current BARD Hierarchy.</h4>
     </label>
-    <g:textField name="label" maxlength="128" value="${elementInstance?.label}"/>
 </div>
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'description', 'error')} required">
-    <label for="description">
-        <g:message code="element.description.label" default="Proposed definition" />
+<div class="control-group ${hasErrors(bean: termCommand, field: 'parentLabel', 'error')} required">
+    <label class="control-label" for="parentLabel">
+        <strong><g:message code="termCommand.parentLabel.label"/>  </strong>
         <span class="required-indicator">*</span>
-    </label>
-    <g:textArea name="description" cols="40" rows="5" maxlength="1000" value="${elementInstance?.description}"/>
-</div>
-
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'label', 'error')} required">
-    <label for="label">
-        <g:message code="element.label.label" default="Proposed term" />
-        <span class="required-indicator">*</span>
-    </label>
-    <g:textField name="label" maxlength="128" value="${elementInstance?.label}"/>
-</div>
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'description', 'error')} required">
-	<label for="description">
-		<g:message code="element.description.label" default="Proposed definition" />
-        <span class="required-indicator">*</span>
-	</label>
-	<g:textArea name="description" cols="40" rows="5" maxlength="1000" value="${elementInstance?.description}"/>
-</div>
-
-
-
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'abbreviation', 'error')} ">
-    <label for="abbreviation">
-        <g:message code="element.abbreviation.label" default="Abbreviation" />
 
     </label>
-    <g:textField name="abbreviation" maxlength="20" value="${elementInstance?.abbreviation}"/>
+
+    <div class="controls">
+        <g:textField id="parentLabel" name="parentLabel" readonly="true"  maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.parentLabel}"/>
+        <span class="help-inline"><g:fieldError field="parentLabel" bean="${termCommand}"/></span>
+    </div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'synonyms', 'error')} ">
-	<label for="synonyms">
-		<g:message code="element.synonyms.label" default="Synonyms" />
-		
-	</label>
-	<g:textArea name="synonyms" cols="40" rows="5" maxlength="1000" value="${elementInstance?.synonyms}"/>
-</div>
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'unit', 'error')} ">
-    <label for="unit">
-        <g:message code="element.unit.label" default="Unit" />
-
+<div class="control-group ${hasErrors(bean: termCommand, field: 'parentDescription', 'error')} required">
+    <label class="control-label" for="description">
+        <strong><g:message code="termCommand.parentDescription.label"/></strong>
     </label>
-    <g:select id="unit" name="unit.id" from="${bard.db.dictionary.Element.list()}" optionKey="id" value="${elementInstance?.unit?.id}" class="many-to-one" noSelection="['null': '']"/>
+
+    <div class="controls">
+        <g:textArea name="parentDescription" id="parentDescription" readonly="true" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.parentDescription}"/>
+        <span class="help-inline"><g:fieldError field="parentDescription" bean="${termCommand}"/></span>
+    </div>
+</div>
+<div class="control-group">
+    <label>
+        <h4>2. Enter the name of your term and a definition for it. (both are required)</h4>
+    </label>
+</div>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'label', 'error')} required">
+    <label class="control-label" for="label">
+       <strong><g:message code="termCommand.label.label"/></strong>
+        <span class="required-indicator">*</span>
+    </label>
+
+    <div class="controls">
+        <g:textField name="label" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.label}" class="lowercase" onblur="trim(this)"/>
+        <span class="help-inline"><g:fieldError field="label" bean="${termCommand}"/></span>
+    </div>
+</div>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'description', 'error')} required">
+    <label class="control-label" for="description">
+        <strong><g:message code="termCommand.description.label"/></strong>
+        <span class="required-indicator">*</span>
+    </label>
+
+    <div class="controls">
+        <g:textArea name="description" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.description}" />
+        <span class="help-inline"><g:fieldError field="description" bean="${termCommand}"/></span>
+    </div>
+</div>
+<div class="control-group">
+    <label>
+        <h4>3. Enter additional optional information about your term.</h4>
+    </label>
+</div>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'abbreviation', 'error')}">
+    <label class="control-label" for="abbreviation">
+        <strong><g:message code="termCommand.abbreviation.label"/> </strong>
+    </label>
+
+    <div class="controls">
+        <g:textField name="abbreviation" maxlength="${bard.db.dictionary.Element.ABBREVIATION_MAX_SIZE}" value="${termCommand?.abbreviation}" onblur="trim(this)"/>
+        <span class="help-inline"><g:fieldError field="abbreviation" bean="${termCommand}"/></span>
+    </div>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: elementInstance, field: 'comments', 'error')} required">
-	<label for="comments">
-		<g:message code="element.comments.label" default="Explanation/Comments" />
+<div class="control-group ${hasErrors(bean: termCommand, field: 'synonyms', 'error')}">
+    <label class="control-label" for="synonyms">
+        <strong><g:message code="termCommand.synonyms.label"/></strong>
+    </label>
+
+    <div class="controls">
+        <g:textArea name="synonyms" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.SYNONYMS_MAX_SIZE}" value="${termCommand?.synonyms}" class="lowercase" onblur="trim(this)"/>
+        <span class="help-inline"><g:fieldError field="synonyms" bean="${termCommand}"/></span>
+    </div>
+</div>
+
+%{--<div class="fieldcontain ${hasErrors(bean: termCommand, field: 'unit', 'error')} ">--}%
+    %{--<label for="unit">--}%
+        %{--<g:message code="termCommand.unit.label" default="Unit" />--}%
+
+    %{--</label>--}%
+    %{--<g:select id="unit" name="unit.id" from="${bard.db.dictionary.Element.list()}" optionKey="id" value="${termCommand?.unit?.id}" class="many-to-one" noSelection="['null': '']"/>--}%
+%{--</div>--}%
+<div class="control-group">
+    <label>
+        <h4>4. Explain why you need to add this term.</h4>
+    </label>
+</div>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'comments', 'error')} required">
+    <label class="control-label" for="comments">
+        <strong><g:message code="termCommand.comments.label"/></strong>
         <span class="required-indicator">*</span>
-	</label>
-	<g:textArea name="comments" cols="40" rows="5" maxlength="1000" value="${elementInstance?.comments}"/>
+    </label>
+
+    <div class="controls">
+        <g:textArea name="comments" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.comments}" onblur="trim(this)"/>
+        <span class="help-inline"><g:fieldError field="comments" bean="${termCommand}"/></span>
+    </div>
 </div>

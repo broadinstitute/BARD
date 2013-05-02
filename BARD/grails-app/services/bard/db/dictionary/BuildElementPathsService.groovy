@@ -49,7 +49,10 @@ class BuildElementPathsService {
 
         return result
     }
-
+    String buildSinglePath(Element element){
+        Set<ElementAndFullPath> paths = build(element)
+        return paths?.iterator()?.next()?.toString()
+    }
     Set<ElementAndFullPath> build(Element element) throws BuildElementPathsServiceLoopInPathException {
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
