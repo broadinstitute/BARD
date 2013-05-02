@@ -22,7 +22,11 @@
         </tr>
         <tr>
             <td>Missing AID's</td>
-            <td><g:link controller="checkForMissingAids" action="index">Check for AID's that are in a dataset but missing from external_reference table (${missingAidCount})</g:link> </td>
+            <td><g:link controller="checkForMissingAids" action="index">Check for AID's that are in a dataset but missing from external_reference table (${missingAidCount})</g:link></td>
+        </tr>
+        <tr>
+            <td>Projects, Assays and their Centers</td>
+            <td><g:link controller="projectAssaysCenters" action="index">List assays associated with each project and the center for each</g:link></td>
         </tr>
     </table>
 </body>

@@ -1,26 +1,36 @@
 package bard.db.dictionary
 
+/**
+ * Used to convert the ElementHierarchy graph into paths from individual elements to root elements.
+ */
 class BuildElementPathsService {
 
     final String relationshipType
 
     final String pathDelimeter
 
-    Integer maxPathLength
-
+    /**
+     * @param relationshipType    specify the relationshipType to be used when querying ElementHierarchy
+     * @param pathDelimeter       delimeter to be used to separate elements within a path string
+     */
     public BuildElementPathsService(String relationshipType = "subClassOf", String pathDelimeter = "/") {
         this.relationshipType = relationshipType
         this.pathDelimeter = pathDelimeter
-
-        maxPathLength = null
     }
 
-    List<ElementAndFullPath> createListSortedByString(Collection<ElementAndFullPath> elementAndFullPathCollection) {
+    /**
+     * create a list of all the full paths (possible paths through the ElementHierarchy graph) for all the elements in
+     * the system, which is sorted by the string representation of the paths.  Also calculate the maximum length of the
+     * strings representing those paths
+     * @param elementAndFullPathCollection
+     * @return
+     */
+    ElementAndFullPathListAndMaxPathLength createListSortedByString(Collection<ElementAndFullPath> elementAndFullPathCollection) {
         List<ElementAndFullPath> result = new ArrayList<ElementAndFullPath>(elementAndFullPathCollection)
 
         Collections.sort(result, new ElementAndFullPathComparatorByString())
 
-        maxPathLength = 0
+        int maxPathLength = 0
         int i = 0;
         for (ElementAndFullPath elementAndFullPath : result) {
             elementAndFullPath.index = i
@@ -33,9 +43,14 @@ class BuildElementPathsService {
             i++
         }
 
-        return result
+        return new ElementAndFullPathListAndMaxPathLength(result, maxPathLength)
     }
 
+    /**
+     * Build all the full paths (possible paths through the ElementHierarchy graph) for all of the elements in the system
+     * @return
+     * @throws BuildElementPathsServiceLoopInPathException
+     */
     Set<ElementAndFullPath> buildAll() throws BuildElementPathsServiceLoopInPathException {
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
@@ -49,10 +64,20 @@ class BuildElementPathsService {
 
         return result
     }
+
     String buildSinglePath(Element element){
         Set<ElementAndFullPath> paths = build(element)
         return paths?.iterator()?.next()?.toString()
     }
+
+
+    /**
+     * starting with the provided element, work through the element hierarchy's graph to build the paths to the root(s) of
+     * the hierarchy graph
+     * @param element
+     * @return
+     * @throws BuildElementPathsServiceLoopInPathException
+     */
     Set<ElementAndFullPath> build(Element element) throws BuildElementPathsServiceLoopInPathException {
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
@@ -79,7 +104,13 @@ class BuildElementPathsService {
         return result
     }
 
-
+    /**
+     * for all the element hierarchies associated with the root of the provided path in elementAndFullPath, build the
+     * set ElementAndFullPath that represent all the possible paths to root elements of the element hierarchy graph
+     * @param elementAndFullPath
+     * @return
+     * @throws BuildElementPathsServiceLoopInPathException
+     */
     Set<ElementAndFullPath> recursiveBuild(ElementAndFullPath elementAndFullPath) throws BuildElementPathsServiceLoopInPathException {
         assert elementAndFullPath.path.size() > 0
 
@@ -121,6 +152,12 @@ class BuildElementPathsService {
         return result
     }
 
+    /**
+     * create a new set of ElementHierarchy that only contains ElementHierarchy from the input set that match the
+     * relationship type specified for the service (relationshipType member of the class)
+     * @param elementHierarchySet
+     * @return
+     */
     Set<ElementHierarchy> buildSetThatMatchRelationship(Set<ElementHierarchy> elementHierarchySet) {
         Set<ElementHierarchy> result = new HashSet<ElementHierarchy>(elementHierarchySet)
 
@@ -142,4 +179,14 @@ class BuildElementPathsService {
 class BuildElementPathsServiceLoopInPathException extends Exception {
     ElementHierarchy nextTopElementHierarchy
     ElementAndFullPath elementAndFullPath
+}
+
+class ElementAndFullPathListAndMaxPathLength {
+    final List<ElementAndFullPath> elementAndFullPathList
+    final int maxPathLength
+
+    ElementAndFullPathListAndMaxPathLength(List<ElementAndFullPath> elementAndFullPathList, int maxPathLength) {
+        this.elementAndFullPathList = elementAndFullPathList
+        this.maxPathLength = maxPathLength
+    }
 }

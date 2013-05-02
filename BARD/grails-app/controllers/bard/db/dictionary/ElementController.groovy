@@ -64,8 +64,9 @@ class ElementController {
     private Map generatePaths() {
         Map result = null
         try {
-            List<ElementAndFullPath> list = buildElementPathsService.createListSortedByString(buildElementPathsService.buildAll())
-            result = [list: list, maxPathLength: buildElementPathsService.maxPathLength]
+            ElementAndFullPathListAndMaxPathLength elementAndFullPathListAndMaxPathLength = buildElementPathsService.createListSortedByString(buildElementPathsService.buildAll())
+            result = [list: elementAndFullPathListAndMaxPathLength.elementAndFullPathList,
+                    maxPathLength: elementAndFullPathListAndMaxPathLength.maxPathLength]
         } catch (BuildElementPathsServiceLoopInPathException e) {
             result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
         The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
@@ -103,8 +104,6 @@ class ElementController {
                 errorMessage = "internal data was corrupted - Element ID not recognized - seek help"
             } catch (NewElementLabelMatchesExistingElementLabelException e) {
                 errorMessage = "The new label provided for this element matches an existing element ID=${e.matchingElement.id} ${e.matchingElement.label}"
-            } catch (AuthenticatedUserRequired e) {
-                errorMessage = "You must be logged in / authenticated to use this"
             } catch (InvalidElementPathStringException e) {
                 errorMessage = "The path entered is invalid:  it must beging and end with the path delimeter ${buildElementPathsService.pathDelimeter}"
             } catch (ModifyElementAndHierarchyLoopInPathException e) {

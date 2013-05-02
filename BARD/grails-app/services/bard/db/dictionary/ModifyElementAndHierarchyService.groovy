@@ -3,16 +3,29 @@ package bard.db.dictionary
 import bard.hibernate.AuthenticatedUserRequired
 import grails.plugins.springsecurity.SpringSecurityService
 
+/**
+ * used to modify Element's and ElementHierarchy's
+ */
 class ModifyElementAndHierarchyService {
 
     String relationshipType
 
     SpringSecurityService springSecurityService
 
+    /**
+     * @param relationshipType    relationshipType to be used when finding and modifying ElementHierarchy's
+     */
     public ModifyElementAndHierarchyService(String relationshipType = "subClassOf") {
         this.relationshipType = relationshipType
     }
 
+    /**
+     * Attempt to modify the element and path to match the proposed changes contained in newElementAndPath
+     * @param newElementAndPath
+     * @throws NewElementLabelMatchesExistingElementLabelException
+     * @throws AuthenticatedUserRequired
+     * @throws ModifyElementAndHierarchyLoopInPathException
+     */
     void modify(NewElementAndPath newElementAndPath) throws NewElementLabelMatchesExistingElementLabelException,
             AuthenticatedUserRequired, ModifyElementAndHierarchyLoopInPathException {
 
@@ -97,6 +110,12 @@ class ModifyElementAndHierarchyService {
         }
     }
 
+    /**
+     * attempt to rename the provided element with the provided new label
+     * @param element
+     * @param newLabel
+     * @throws NewElementLabelMatchesExistingElementLabelException
+     */
     void renameElement(Element element, String newLabel) throws NewElementLabelMatchesExistingElementLabelException {
         Element duplicate = Element.findByLabel(newLabel)
         if (duplicate) {
@@ -115,6 +134,13 @@ class ModifyElementAndHierarchyService {
         return username
     }
 
+    /**
+     * check to see if changing the current set of ElementHierarchy's to the path indicated by the provided newPath will
+     * cause loops to be present in the set of ElementHierarchy's
+     * @param newPath
+     * @param child
+     * @return
+     */
     public static List<Element> checkPathForLoop(List<Element> newPath, Element child) {
         assert newPath.size() > 0
 
