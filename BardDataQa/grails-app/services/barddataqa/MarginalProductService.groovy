@@ -2,12 +2,14 @@ package barddataqa
 
 import org.hibernate.SQLQuery
 
+
 class MarginalProductService {
 
     ConvertObjectToTypeService convertObjectToTypeService
 
     private static final Set<Integer> datasetIdParameterIndexSet = [0,1,3,4,5] as Set<Integer>
     private static final Set<Integer> holdUntilDateParameterIndexSet = [2,6] as Set<Integer>
+
 
     private static final String[] baseQueryStringArray = ["""
 select project_uid, total, ready, diff, marginal_product, diff_maas, diff_rta, diff_hold from
@@ -97,6 +99,12 @@ select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
 
     def sessionFactory
 
+    /**
+     * calculate marginal product of work for projects within dataset identified by provided datasetId
+     * Based on AID's that are not summary AID's
+     * @param datasetId
+     * @return
+     */
     List<MarginalProductForProject> runMarginalProductCalculationForDataset(long datasetId) {
 
         StringBuilder builder = new StringBuilder()
@@ -113,7 +121,6 @@ select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
         }
 
         SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(builder.toString())
-
 
         List<MarginalProductForProject> result = new LinkedList<MarginalProductForProject>()
 
