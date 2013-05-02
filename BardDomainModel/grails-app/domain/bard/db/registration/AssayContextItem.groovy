@@ -71,7 +71,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
                 valueMax: valueMax,
                 valueDisplay: valueDisplay)
         newContext.addToAssayContextItems(newItem)
-        return newContext;
+        return newItem;
     }
 
 }
