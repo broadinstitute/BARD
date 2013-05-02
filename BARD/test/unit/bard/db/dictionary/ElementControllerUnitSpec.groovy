@@ -209,13 +209,11 @@ class ElementControllerUnitSpec extends Specification {
         assert flashMessage == flash.message
         TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
         where:
-        desc                                                             | valueUnderTest                         | valid | errorCode                           | flashMessage
-        'null '                                                          | { null }                               | false | 'nullable'                          | ""
-        'Parent Label does not exist'                                    | { "parentlabel2" }                     | false | 'termCommand.parentLabel.mustexist' | ""
-        'Parent Label  exist'                                            | { "parent label with spaces" }         | true  | null                                | "Proposed term null has been saved"
-        'Parent Label in cap, should much lowercase parent label'        | { "PARENT LABEL WITH SPACES" }         | true  | null                                | "Proposed term null has been saved"
-        'Parent Label in mixed case, should much lowercase parent label' | { "parEnt LABEL with Spaces" }         | true  | null                                | "Proposed term null has been saved"
-        'Parent Label with multiple spaces'                              | { "parent    label    with   spaces" } | true  | null                                | "Proposed term null has been saved"
+        desc                                | valueUnderTest                         | valid | errorCode                           | flashMessage
+        'null '                             | { null }                               | false | 'nullable'                          | ""
+        'Parent Label does not exist'       | { "parentlabel2" }                     | false | 'termCommand.parentLabel.mustexist' | ""
+        'Parent Label  exist'               | { "parent label with spaces" }         | true  | null                                | "Proposed term null has been saved"
+        'Parent Label with multiple spaces' | { "parent    label    with   spaces" } | true  | null                                | "Proposed term null has been saved"
     }
 
     void "Save Term Page label #desc"() {
@@ -234,13 +232,11 @@ class ElementControllerUnitSpec extends Specification {
 
 
         where:
-        desc                                               | valueUnderTest          | valid | errorCode
-        'null '                                            | null                    | false | 'nullable'
-        'Label already exist'                              | "label with spaces"     | false | 'unique'
-        'Label does not already exist'                     | "label2"                | true  | null
-        'Label in cap, should much lowercase label'        | "LABEL WITH SPACES"     | false | 'unique'
-        'Label in mixed case, should much lowercase label' | "lABel wITH Spaces"     | false | 'unique'
-        'Label with multiple spaces'                       | "lABel   with   spaces" | false | 'unique'
+        desc                           | valueUnderTest          | valid | errorCode
+        'null '                        | null                    | false | 'nullable'
+        'Label already exist'          | "label with spaces"     | false | 'unique'
+        'Label does not already exist' | "label2"                | true  | null
+        'Label with multiple spaces'   | "label   with   spaces" | false | 'unique'
 
     }
 

@@ -1,6 +1,5 @@
 package bard.db.dictionary
 
-import grails.converters.JSON
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
@@ -36,18 +35,7 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         assert !path.isEmpty()
     }
 
-    void "test createElementHierarchyTree()"() {
-        given:
-        Element parentElement = Element.build(label: "parentLabel")
-        Element childElement = Element.build(label: "childElement")
-        ElementHierarchy.build(parentElement: parentElement, childElement: childElement, relationshipType: 'subClassOf')
-        when:
-        List hierarchyTree = elementService.createElementHierarchyTree()
-        then:
-        JSON measuresAsJsonTree = new JSON(hierarchyTree)
-        assert hierarchyTree
-        assert measuresAsJsonTree
-    }
+
 
     void "test add Element Hierarchy"() {
 

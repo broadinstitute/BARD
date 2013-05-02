@@ -21,13 +21,14 @@
     <g:else>
 
         <h1>Search or browse for a defined term to use as the value.  Or, enter a number directly into the numeric value field. If entering a numerical value, choose the relevant units that describe the number entered. </h1>
+        <g:link controller="element" action="addTerm"
+               target="proposeTerm" class="btn btn-primary add-card-button">Propose a new term </g:link> <br/><br/>
 
         <input type="radio" name="term-entry-group" id="term-select-button" checked> Enter a term from the dictionary
-        <input type="radio" name="term-entry-group" id="propose-term-button" > Propose a new term
+
 
         <div id="propose-term-div" class="row-fluid" style="display: none">
-            <div class="span2">
-                <label class="control-label">Propose and use new term:</label>
+             <div class="span2">
             </div>
 
             <div class="span4">

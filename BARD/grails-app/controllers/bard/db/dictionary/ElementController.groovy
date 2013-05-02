@@ -205,14 +205,14 @@ class TermCommand {
         parentLabel blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
             if (value) {
                 //this value must exist
-                if (!Element.findByLabel(value.replaceAll("\\s+", " ").toLowerCase().trim())) {
+                if (!Element.findByLabel(value.replaceAll("\\s+", " ").trim())) {
                     return 'mustexist'
                 }
             }
         }
         label blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
             if (value) {
-                Element currentElement = Element.findByLabel(value.replaceAll("\\s+", " ").toLowerCase().trim())
+                Element currentElement = Element.findByLabel(value.replaceAll("\\s+", " ").trim())
                 if (currentElement) {
                     String path = command.buildElementPathsService.buildSinglePath(currentElement)
                     return ['unique',value,path]

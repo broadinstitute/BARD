@@ -1,5 +1,7 @@
 package bard.db.dictionary
 
+import org.apache.commons.lang.StringUtils
+
 /**
  * Used to convert the ElementHierarchy graph into paths from individual elements to root elements.
  */
@@ -67,7 +69,10 @@ class BuildElementPathsService {
 
     String buildSinglePath(Element element){
         Set<ElementAndFullPath> paths = build(element)
-        return paths?.iterator()?.next()?.toString()
+        if(!paths.isEmpty()) {
+            return StringUtils.join(paths,",")
+        }
+        return ""
     }
 
 
