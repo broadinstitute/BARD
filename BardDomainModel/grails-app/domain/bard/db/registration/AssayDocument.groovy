@@ -17,4 +17,12 @@ class AssayDocument extends AbstractDocument {
     public Object getOwner() {
         return assay;
     }
+
+    public AssayDocument clone() {
+        AssayDocument document = new AssayDocument(documentName: documentName,
+                documentType: documentType,
+                documentContent: documentContent);
+
+        return document;
+    }
 }
