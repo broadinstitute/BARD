@@ -9,8 +9,8 @@ import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.util.Assert
 
-import static bard.validation.ext.ExternalOntologyFactory.NCBI_EMAIL
-import static bard.validation.ext.ExternalOntologyFactory.NCBI_TOOL
+import static bard.validation.ext.ExternalOntologyNCBI.NCBI_EMAIL
+import static bard.validation.ext.ExternalOntologyNCBI.NCBI_TOOL
 
 class OntologyDataAccessService {
 
@@ -18,7 +18,7 @@ class OntologyDataAccessService {
 
     ExternalOntologyFactory externalOntologyFactory
 
-    private static final Properties externalOntologyProperites = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
+    protected static final Properties EXTERNAL_ONTOLOGY_PROPERTIES = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'default@bard.nih.gov'])
 
     /**
      * for like query using single backslash as the escape char, as a literal here needs to be escaped itself
@@ -166,7 +166,7 @@ class OntologyDataAccessService {
     boolean externalOntologyHasIntegratedSearch(String externalUrl) {
         boolean hasSupport = false
         try {
-            if (externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)) {
+            if (externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)) {
                 hasSupport = true
             }
         }
@@ -207,7 +207,7 @@ class OntologyDataAccessService {
         Assert.hasText(term, "term cannot be blank")
         final List<ExternalItem> externalItems = []
         try {
-            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
+            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)
             if (externalOntology) {
                 externalItems.addAll(externalOntology.findMatching(term, limit))
             }
@@ -233,7 +233,7 @@ class OntologyDataAccessService {
         ExternalItem externalItem
 
         try {
-            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, externalOntologyProperites)
+            ExternalOntologyAPI externalOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, EXTERNAL_ONTOLOGY_PROPERTIES)
             if (externalOntology) {
                 externalItem = externalOntology.findById(id)
             }
