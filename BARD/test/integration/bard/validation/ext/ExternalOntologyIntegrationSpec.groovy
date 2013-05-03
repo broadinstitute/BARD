@@ -1,11 +1,10 @@
 package bard.validation.ext
 
 import edu.scripps.fl.entrez.EUtilsWeb
+import grails.plugin.spock.IntegrationSpec
 import spock.lang.Ignore
-import spock.lang.Specification
 import spock.lang.Unroll
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
-
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,16 +14,18 @@ import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ExternalOntologyIntegrationSpec extends Specification {
+class ExternalOntologyIntegrationSpec extends IntegrationSpec {
 
-    String NCBI_EMAIL = BardExternalOntologyFactory.NCBI_EMAIL
-    String NCBI_TOOL = BardExternalOntologyFactory.NCBI_TOOL
+    String NCBI_EMAIL = ExternalOntologyNCBI.NCBI_EMAIL
+    String NCBI_TOOL = ExternalOntologyNCBI.NCBI_TOOL
 
-    void "test valid urls externalOntologyFactory().getExternalOntologyAPI() for #externalUrl"() {
+    ExternalOntologyFactory externalOntologyFactory
+
+    void "test valid urls externalOntologyFactory.getExternalOntologyAPI() for #externalUrl"() {
         when:
         println("url: $externalUrl")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI externalOntologyAPI = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI externalOntologyAPI = externalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
 
         then:
         (externalOntologyAPI != null) == notNull
@@ -46,9 +47,9 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://www.ncbi.nlm.nih.gov/structure/?term="                                                 | true
         "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="                                  | true
         "http://www.uniprot.org/uniprot/"                                                              | true
-        "http://cas.org/"                                                                              | true
+        "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=" | true
 
-        "http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=" | false
+        "http://cas.org/"                                                                              | false
         "https://mli.nih.gov/mli/?dl_id="                                                              | false
         "http://regid.org/find"                                                                        | false
 
@@ -59,7 +60,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
+        externalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
 
         then:
         ExternalOntologyException e = thrown()
@@ -74,7 +75,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl externalValueId: $externalValueId")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
         ExternalItem externalItem = extOntology.findById(externalValueId)
 
         then:
@@ -101,12 +102,11 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl externalValueId: $externalValueId")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
         ExternalItem externalItem = extOntology.findById(externalValueId)
 
         then:
-        def e = thrown(expectedException)
-        println(e.message)
+        notThrown()
 
         where:
         externalUrl                                                      | externalValueId | expectedException
@@ -123,7 +123,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl term: $term")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
         List<ExternalItem> externalItems = extOntology.findMatching(term)
 
         then:
@@ -138,7 +138,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         externalItems
 
         where:
-        externalUrl | term
+        externalUrl                                                      | term
         "http://omim.org/entry/"                                         | "PROTEASOME 26S SUBUNIT, ATPase, 1;"
         "http://www.ncbi.nlm.nih.gov/biosystems/"                        | "9986"
         "http://www.ncbi.nlm.nih.gov/gene/"                              | "9986"
@@ -149,7 +149,7 @@ class ExternalOntologyIntegrationSpec extends Specification {
         "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id="    | "Cellana capensis"
         "http://www.ncbi.nlm.nih.gov/nuccore/"                           | "91199539"
         "http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid="       | "9562061"
-        "http://www.uniprot.org/uniprot/" | "Q9Y6Q9"
+        "http://www.uniprot.org/uniprot/"                                | "Q9Y6Q9"
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | "apoptotic process"
     }
 
@@ -157,22 +157,21 @@ class ExternalOntologyIntegrationSpec extends Specification {
         when:
         println("url: $externalUrl term: $term")
         Properties props = new Properties([(NCBI_TOOL): 'bard', (NCBI_EMAIL): 'test@test.com'])
-        ExternalOntologyAPI extOntology = new BardExternalOntologyFactory().getExternalOntologyAPI(externalUrl, props)
+        ExternalOntologyAPI extOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, props)
         List<ExternalItem> externalItems = extOntology.findMatching(term)
 
         then:
-        def e = thrown(expectedException)
-        println(e.message)
+        notThrown()
 
         where:
-        externalUrl | term | expectedException
+        externalUrl                                                      | term | expectedException
         "http://www.ncbi.nlm.nih.gov/gene/"                              | null | NullPointerException
-        "http://www.ncbi.nlm.nih.gov/gene/" | " " | ExternalOntologyException
-        "http://www.ncbi.nlm.nih.gov/gene/" | "" | ExternalOntologyException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | " "  | ExternalOntologyException
+        "http://www.ncbi.nlm.nih.gov/gene/"                              | ""   | ExternalOntologyException
         "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=" | null | ExternalOntologyException
-        "http://www.uniprot.org/uniprot/" | null | RemoteDataAccessException
-        "http://www.uniprot.org/uniprot/" | " " | RemoteDataAccessException
-        "http://www.uniprot.org/uniprot/" | "" | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/"                                | null | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/"                                | " "  | RemoteDataAccessException
+        "http://www.uniprot.org/uniprot/"                                | ""   | RemoteDataAccessException
     }
 
     @Ignore

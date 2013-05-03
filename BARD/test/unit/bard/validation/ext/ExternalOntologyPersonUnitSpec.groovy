@@ -1,5 +1,6 @@
 package bard.validation.ext
 
+import grails.buildtestdata.mixin.Build
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -7,9 +8,10 @@ import spock.lang.Unroll
 import bard.db.people.Person
 
 @Unroll
+@Build([Person])
 class ExternalOntologyPersonUnitSpec extends Specification {
-	
-	ExternalOntologyPerson extOntologyPerson	
+
+	ExternalOntologyPerson extOntologyPerson
 
 	def setup() {
 		extOntologyPerson = new ExternalOntologyPerson()
@@ -17,57 +19,54 @@ class ExternalOntologyPersonUnitSpec extends Specification {
 
 	def cleanup() {
 	}
-	
-	void "test getItem  desc: '#desc' item: '#item'"() {
+
+	void "test null returned for null person"() {
 		when:
-		Person newPerson = new Person(id: 20L, userName: 'user100', fullName: 'User 100', accountExpired: false, accountLocked: false, accountEnabled: true)
-		ExternalItem extItem1 = ExternalOntologyPerson.getItem(newPerson)
 		ExternalItem extItem2 = ExternalOntologyPerson.getItem(null)
-		
+
 		then:
-		extItem1 != null
-		extItem1.display == 'user100 (User 100)'
 		extItem2 == null
-		   			
 	}
 
-	void "test getItem  desc: '#desc' itemDisplay: '#itemDisplay'"() {
+	void "test id and display populated for getItem  desc: '#desc' itemDisplay: '#itemDisplay'"() {
 		when:
-		Person person = new Person(id: 10L, userName: username, fullName: fullName, accountExpired: false, accountLocked: false, accountEnabled: true)
+		Person person = Person.build( userName: username, fullName: fullName)
 		ExternalItem extItem = ExternalOntologyPerson.getItem(person)
-		
+
 		then:
-		itemDisplay == extItem.display
-		
+        extItem.id == person.id.toString()
+		extItem.display == itemDisplay
+
 		where:
 		desc                                        		     | itemDisplay			  | username   		| fullName
 		"Return concatenation of username and fullname"			 | 'user500 (User 500)'	  | 'user500'      	| 'User 500'
 		"Return username since fullname is null"			     | 'user500'	          | 'user500'      	| null
-		
-	}
-	
+
+    }
+
+
 	void "test findByName"() {
 		when:
 		extOntologyPerson.findByName("test")
-		
+
 		then:
 		ExternalOntologyException e = thrown()
 		e.message == 'Unimplemented method findByName(String name)'
 	}
-	
+
 	void "test getExternalURL"() {
 		when:
 		extOntologyPerson.getExternalURL("1234")
-		
+
 		then:
 		ExternalOntologyException e = thrown()
 		e.message == 'Unimplemented method getExternalURL(String id)'
 	}
-	
+
 	void "test queryGenerator"() {
 		when:
 		extOntologyPerson.queryGenerator("term")
-		
+
 		then:
 		ExternalOntologyException e = thrown()
 		e.message == 'Unimplemented method queryGenerator(String term)'
