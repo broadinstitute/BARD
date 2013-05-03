@@ -36,7 +36,7 @@ grails.project.dependency.resolution = {
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
-        compile "bard:external-validation:20130328.1"
+        compile "bard:external-validation:20130430"
 
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
@@ -85,8 +85,8 @@ grails.project.dependency.resolution = {
 
         // compile scope
         compile ":ajaxflow:0.2.4"
-        compile(":cbipcrowdauthentication:0.3.0") {
-            excludes('spock', 'release')
+        compile(":cbipcrowdauthentication:0.3.1") {
+            excludes('spock', 'release', 'google-collections')
         }
         compile ":clover:3.1.6"
         compile ":console:1.2"

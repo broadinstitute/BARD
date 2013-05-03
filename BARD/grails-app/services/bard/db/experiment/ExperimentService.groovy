@@ -1,15 +1,24 @@
 package bard.db.experiment
 
+import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
+import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextMeasure
+import bard.db.registration.AssayDocument
 import bard.db.registration.Measure
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import bard.db.enums.HierarchyType
 import org.apache.commons.lang.StringUtils
+import registration.AssayService
 
 class ExperimentService {
+
+    AssayService assayService;
 
     void updateMeasures(Experiment experiment, JSONArray edges) {
         // populate map with ids as strings
@@ -118,5 +127,29 @@ class ExperimentService {
         }
 
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
+    }
+
+    void splitExperimentsFromAssay(List<Experiment> experiments) {
+        Assay oldAssay = experiments.first().assay
+
+        def mapping = assayService.cloneAssay(oldAssay)
+
+        Assay newAssay = mapping.assay
+        Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
+
+        for(experiment in experiments)  {
+            oldAssay.removeFromExperiments(experiment)
+            newAssay.addToExperiments(experiment)
+
+            // map measures over to new assay
+            for(experimentMeasure in experiment.experimentMeasures) {
+                Measure oldMeasure = experimentMeasure.measure
+                Measure newMeasure = measureOldToNew[oldMeasure]
+                assert newMeasure != null
+
+                oldMeasure.removeFromExperimentMeasures(experimentMeasure)
+                newMeasure.addToExperimentMeasures(experimentMeasure)
+            }
+        }
     }
 }
