@@ -1,61 +1,91 @@
-//element name	description	parentId
-// before 3-2013
-percent parasitemia	percent content or parasites in the blood	 
-hematocrit	 volume percentage of red blood cells. aka packed cell volume or erythrocyte volume fraction	 
-PerkinElmer AlphaScreen reagent	 
-green coffee bean	 unroasted coffee bean	 
-ABI Prism 7900HT	 sequence detection system instrument designed for automated, high-throughput detection of fluorescent PCR-related chemistries	 
-Tecan Spectra Mini Reader	 
-PerkinElmer AlphaScreen SureFire ERK reagent	 
-Bacillus anthracis	 
-Bacillus subtilis	 
-Biorad ChemiDoc Plus Imager	 
-Giardia lamblia	 
-Cercopithecus aethiops	 
-Microcal VP-ITC	 
-Packard Cobra Gamma Counter	 
-Methanococcus maripaludis	 
-Accuri C6 flow cytometer	 
-Marburg marburgvirus	 
-Lassa virus	 
-Avian infectious bronchitis virus	 
-Cricetulus griseus	 Chinese Hamster	 
-Tecan Freedom Evo 150	 
-Streptococcus pyogenes	 spherical gram-positive bacteria	 
-BMG Pherastar	 
-Alpco insulin ELISA assay kit	 
-//jasonR starts here
-SpectraMax M5 Multi-Mode Microplate Reader	 
-Perkin Elmer LabChip EZReader	 
-HT1080	 
-cytometer	 
-SDS-PAGE	 
-CCD fluorometer	 Charge-coupled device fluorometric camera	 
-BD Accuri C6 Flow Cytometer	 
-GE Typhoon laser scanner	 
-Sybr Green PCR Reagent Kit	 
-AB 7500 rtPCR System	 Applied Biosystems model 7500 real time PCR system	 
-LC-MS/MS	 Liquid Chromatography, tandem-mass spectrometry	 
-mass spectrometer	 
-Thermo Scientific Orbitrap Velos	 
-MDA-MB-435	 
-Tecan Spectrafluor Plus	 Tecan Spectrafluor Plus plate reader	 
-PerkinElmer AlphaScreen Bead Kit	 AlphaScreen protein-protein interaction assay	 
-Thermo Scientific LTQ-Orbitrap	 
-Biotek Synergy 2 plate reader	 Bio-Tek Synergy 2 Multi-Mode Microplate Reader	 
-ThermoFluor 384 System	 
-Roche LightCycler480Ž	 Roche Applied Science: LightCycler 480 System	 
-LJL Analyst	 Molecular Devices LJL Analyst HT Microplate Reader	 
-Agilent Cary Eclipse Fluorescence Spectrophotometer	 
-Streptomyces avidinii	 
-ABI PRISM 7700 sequence detector	 
-Beckman LS 6000SC counter	 
-Huh7	 Huh7 cell line	 
-CytoTox-ONE Homogenous Membrane Integrity Assay	 
-// 3-2013
-science officer	 	555
-uCi/mL	 	1170
-//Label	Description	Parent ID	Parent Label
+////element name	description	parentId
+////// before 3-2013
+//percent parasitemia	percent content or parasites in the blood	 
+//hematocrit	 volume percentage of red blood cells. aka packed cell volume or erythrocyte volume fraction	 
+//PerkinElmer AlphaScreen reagent	 
+//green coffee bean	 unroasted coffee bean	 
+//ABI Prism 7900HT	 sequence detection system instrument designed for automated, high-throughput detection of fluorescent PCR-related chemistries	 
+//Tecan Spectra Mini Reader	 
+//PerkinElmer AlphaScreen SureFire ERK reagent	 
+//Bacillus anthracis	 
+//Bacillus subtilis	 
+//Biorad ChemiDoc Plus Imager	 
+//Giardia lamblia	 
+//Cercopithecus aethiops	 
+//Microcal VP-ITC	 
+//Packard Cobra Gamma Counter	 
+//Methanococcus maripaludis	 
+//Accuri C6 flow cytometer	 
+//Marburg marburgvirus	 
+//Lassa virus	 
+//Avian infectious bronchitis virus	 
+//Cricetulus griseus	 Chinese Hamster	 
+//Tecan Freedom Evo 150	 
+//Streptococcus pyogenes	 spherical gram-positive bacteria	 
+//BMG Pherastar	 
+//Alpco insulin ELISA assay kit	 
+////jasonR starts here
+//SpectraMax M5 Multi-Mode Microplate Reader	 
+//Perkin Elmer LabChip EZReader	 
+//HT1080	 
+//cytometer	 
+//SDS-PAGE	 
+//CCD fluorometer	 Charge-coupled device fluorometric camera	 
+//BD Accuri C6 Flow Cytometer	 
+//GE Typhoon laser scanner	 
+//Sybr Green PCR Reagent Kit	 
+//AB 7500 rtPCR System	 Applied Biosystems model 7500 real time PCR system	 
+//LC-MS/MS	 Liquid Chromatography, tandem-mass spectrometry	 
+//mass spectrometer	 
+//Thermo Scientific Orbitrap Velos	 
+//MDA-MB-435	 
+//Tecan Spectrafluor Plus	 Tecan Spectrafluor Plus plate reader	 
+//PerkinElmer AlphaScreen Bead Kit	 AlphaScreen protein-protein interaction assay	 
+//Thermo Scientific LTQ-Orbitrap	 
+//Biotek Synergy 2 plate reader	 Bio-Tek Synergy 2 Multi-Mode Microplate Reader	 
+//ThermoFluor 384 System	 
+//Roche LightCycler480Ž	 Roche Applied Science: LightCycler 480 System	 
+//LJL Analyst	 Molecular Devices LJL Analyst HT Microplate Reader	 
+//Agilent Cary Eclipse Fluorescence Spectrophotometer	 
+//Streptomyces avidinii	 
+//ABI PRISM 7700 sequence detector	 
+//Beckman LS 6000SC counter	 
+//Huh7	 Huh7 cell line	 
+//CytoTox-ONE Homogenous Membrane Integrity Assay	 
+//// 3-2013
+//science officer	 	555
+//uCi/mL	 	1170
+////Label	Description	Parent ID	Parent Label
 ThermoFinnigan TSQ Quantum triple quadrupole MS		92	detection instrument name
 gel electrophoresis		177	label-free method	
 Duke Scientific 4 um bead	63	assay kit name
+//Label	Description	Parent ID	Parent Label
+SCC-12F	Human squamous cell line	377	cultured cell name
+Polar Screen PPARg Competitor Assay	63	assay kit name
+Roche FuGene6	DNA Transfection Agent	63	assay kit name
+Cos-1	Fibroblast-like cell line	377	cultured cell name
+K562	Erythroleukemia cell line	377	cultured cell name
+CDP-Star		63	assay kit name
+Alembic Instruments VE-2 amplifier	Current clamp recorder	92	detection instrument name
+Fura-2-AM 	fluorescent indicator	63	assay kit name
+DHL10	Round lymphoid cell line	377	cultured cell name
+Analyst-GT reader		92	detection instrument name
+EL-4	Mouse lymphona cell line	377	cultured cell name
+qPCR		177	label-free method
+LTQ Ion Trap	Thermo Scientific LTQ ion trap mass spectrometer	92	detection instrument name
+CyBi-Well system		92	detection instrument name
+PC3M	Human prostate cancer cell line	377	cultured cell name
+Iuvo Single Microchannel Plate		92	detection instrument name
+Caco-2	 human epithelial colorectal adenocarcinoma cell line	377	cultured cell name
+Flexstation 3 microplate reader		92	detection instrument name
+Qpatch 16 voltage clamp		92	detection instrument name
+Membrane Potential Assay Kit	Molecular Devices Membrane Potential Assay Kit	63	assay kit name
+IMR-90	Human Caucasian fetal lung fibroblast cell line	377	cultured cell name
+FACScanTM flow cytometer (BD Biosciences)		92	detection instrument name
+Perkin Elmer Victor V3	Multilabel Plate Reader	92	detection instrument name
+Photon Technology International fluorimeter		92	detection instrument name
+Molecular Devices LMAX 384 reader	384 well-plate reader	92	detection instrument name
+RNeasy Qiagen	RNA isolation kit	63	assay kit name
+rtPCR		177	label-free method
+Molecular Devices Thermomax microplate reader		92	detection instrument name
+GE/Amersham (Thermo) INCell 1000	automated cellular and subcellular imaging system	92	detection instrument name
