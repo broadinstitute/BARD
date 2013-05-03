@@ -30,17 +30,17 @@ class MeasureTreeServiceSpec extends Specification {
         List result = service.createMeasureTree(assay, false)
 
         then:
-        result == [[key:2, title:"parent", children: [[key:1, title: "child", children: [], expand:true]], expand:true]]
+        result == [[key:2, title:"parent", children:[[key:1, title:"child", children:[], expand:true, relationship:null]], expand:true, relationship:null]]
     }
 
     private static String sortedRootMeasuresAB = '''[
-                                                    [key:2, title:a, children:[], expand:true],
-                                                    [key:1, title:b, children:[], expand:true]
+                                                    [key:2, title:a, children:[], expand:true,relationship:null],
+                                                    [key:1, title:b, children:[], expand:true,relationship:null]
                                                    ]'''
     private static String sortedRootMeasuresABC = '''[
-                                                       [key:3, title:a, children:[], expand:true],
-                                                       [key:2, title:B, children:[], expand:true],
-                                                       [key:1, title:c, children:[], expand:true]
+                                                       [key:3, title:a, children:[], expand:true,relationship:null],
+                                                       [key:2, title:B, children:[], expand:true,relationship:null],
+                                                       [key:1, title:c, children:[], expand:true,relationship:null]
                                                       ]'''
 
 
@@ -68,23 +68,23 @@ class MeasureTreeServiceSpec extends Specification {
                                                         [key:1,
                                                         title:parent,
                                                         children:[
-                                                                    [key:3,title:a,children:[], expand:true],
-                                                                    [key:2,title:b,children:[], expand:true]
-                                                                   ]   , expand:true
+                                                                    [key:3,title:a,children:[], expand:true,relationship:null],
+                                                                    [key:2,title:b,children:[], expand:true,relationship:null]
+                                                                   ]   , expand:true,relationship:null
                                                          ]
                                                       ]'''
     private static String sortedChildMeasuresABC = '''[
                                                         [key:1,
                                                         title:parent,
                                                         children:[
-                                                                    [key:4,title:a,children:[], expand:true],
-                                                                    [key:3,title:B,children:[], expand:true],
-                                                                    [key:2,title:c,children:[], expand:true]
-                                                                   ]     , expand:true
+                                                                    [key:4,title:a,children:[], expand:true,relationship:null],
+                                                                    [key:3,title:B,children:[], expand:true,relationship:null],
+                                                                    [key:2,title:c,children:[], expand:true,relationship:null]
+                                                                   ]     , expand:true,relationship:null
                                                          ]
                                                       ]'''
 
-    void 'test sorting of child measures in json measurements'() {
+    void 'test sorting of child measures in json measurements #measureLabels'() {
         given:
         Measure parent = Measure.build(resultType: Element.build(label: "parent"))
         Assay assay = Assay.build()

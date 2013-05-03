@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -88,12 +89,13 @@ class AssayDefinitionControllerUnitSpec extends Specification {
             params.statisticId = statistic.id
 
             def assayContextService = mockFor(AssayContextService)
-            assayContextService.demand.addMeasure(1) {assayInstance, parentMeasure, rt, sm, entryUnit ->
+            assayContextService.demand.addMeasure(1) {assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
                 assert assayInstance == assay
                 assert parentMeasure == null
                 assert rt == resultType
                 assert sm == statistic
                 assert entryUnit == null
+                assert hierarchyType==null
 
                 return Measure.build()
             }
@@ -193,7 +195,35 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         then:
         notThrown(Exception.class)
     }
+    void "test moveCard"(){
+        given:
+        assay = Assay.build(assayName:'Test')
+        AssayContext context = AssayContext.build(assay: assay,contextGroup: "context_group")
+        String new_context_group = 'context_group2'
+        when:
+        controller.moveCard(new_context_group,context.id)
+        then:
+        new_context_group==context.contextGroup
 
+    }
+    void "test changeRelationship"(){
+        given:
+        def assayContextService = mockFor(AssayContextService)
+        assay = Assay.build(assayName:'Test')
+        Measure parent = Measure.build(assay: assay)
+        parent.parentChildRelationship=HierarchyType.CALCULATED_FROM
+        params.measureId = parent.id
+        params.relationship =  HierarchyType.SUPPORTED_BY.getId()
+        when:
+        assayContextService.demand.changeParentChildRelationship(1) {Measure measureParam, HierarchyType hierarchyType ->
+            assert measureParam == parent
+            assert hierarchyType== HierarchyType.SUPPORTED_BY
+        }
+        controller.changeRelationship()
+        then:
+        response.redirectedUrl == '/assayDefinition/editMeasure'
+
+    }
     void 'test edit summary'(){
         when:
         assay = Assay.build()

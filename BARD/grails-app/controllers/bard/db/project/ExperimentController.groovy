@@ -111,6 +111,8 @@ class ExperimentController {
 		experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : null
 		experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
 		experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
+
+
 	}
 
     def show() {
@@ -122,6 +124,8 @@ class ExperimentController {
 
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
 
-        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree]
+        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
+
+        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]
     }
 }

@@ -25,6 +25,7 @@ public class LogicalKey {
     Float valueMax;
     Element valueElement;
     String valueDisplay;
+    long measureId;
 
     java.util.Set<LogicalKeyItem> items = new HashSet();
 
@@ -45,6 +46,7 @@ public class LogicalKey {
         if (valueMax != that.valueMax) return false
         if (valueMin != that.valueMin) return false
         if (valueNum != that.valueNum) return false
+        if (measureId != that.measureId) return false;
 
         return true
     }
@@ -62,6 +64,7 @@ public class LogicalKey {
         result = 31 * result + (valueElement != null ? valueElement.hashCode() : 0)
         result = 31 * result + (valueDisplay != null ? valueDisplay.hashCode() : 0)
         result = 31 * result + (items != null ? items.hashCode() : 0)
+        result = 31 * result + measureId
         return result
     }
 
@@ -79,6 +82,7 @@ public class LogicalKey {
                 ", valueElement=" + valueElement +
                 ", valueDisplay='" + valueDisplay + '\'' +
                 ", items=" + items +
+                ", measureId=" + measureId +
                 '}';
     }
 
@@ -169,4 +173,6 @@ public class LogicalKey {
     public void setItems(Set<LogicalKeyItem> items) {
         this.items = items;
     }
+
+
 }

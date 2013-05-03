@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -9,8 +10,6 @@ import spock.lang.Unroll
 import static bard.db.registration.Measure.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
 
 /**
  * Created with IntelliJ IDEA.
@@ -79,9 +78,12 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
     void "test parentMeasure constraints #desc parentMeasure: '#valueUnderTest'"() {
 
         final String field = 'parentMeasure'
-
+        final String parentChildRelationShip = HierarchyType.SUPPORTED_BY
         when:
-        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance[(field)] = valueUnderTest?.call()
+        if (valueUnderTest != null) {
+            domainInstance['parentChildRelationship'] = parentChildRelationShip
+        }
         domainInstance.validate()
 
         then:
@@ -89,14 +91,17 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
 
         where:
         desc                  | valueUnderTest      | valid | errorCode
-        'null valid'          | { null }            | true  | null
+        'null valid'          | null                | true  | null
         'valid parentMeasure' | { Measure.build() } | true  | null
 
     }
+
     void "test parentChildRelationship constraints #desc parentChildRelationship: '#valueUnderTest'"() {
 
         final String field = 'parentChildRelationship'
-
+        if (valueUnderTest) {
+            domainInstance['parentMeasure'] = Measure.build()
+        }
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
@@ -110,17 +115,12 @@ class MeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc          | valueUnderTest                                       | valid | errorCode
-        'too long'    | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid' | ''                                                   | false | 'blank'
-        'blank valid' | '  '                                                 | false | 'blank'
-        'not inList'  | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE)     | false | 'not.inList'
-
-
-        'null valid'  | null                                                 | true  | null
-        'valid value' | 'is calculated from'                                 | true  | null
-        'valid value' | 'is related to'                                      | true  | null
+        desc          | valueUnderTest                | valid | errorCode
+        'null valid'  | null                          | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY    | true  | null
     }
+
     void "test entryUnit constraints #desc entryUnit: '#valueUnderTest'"() {
 
         final String field = 'entryUnit'

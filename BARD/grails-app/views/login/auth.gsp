@@ -42,7 +42,7 @@
 					<div class="control-group">
 		    			<label class="control-label" for="username"><g:message code="springSecurity.login.username.label"/>:</label>
 		    			<div class="controls">
-		      				<input type="text" name='j_username' id='username' placeholder="Username">
+		      				<input type="text" name='j_username' id='username' placeholder="Username" autofocus="true">
 		    			</div>
 		  			</div>
 

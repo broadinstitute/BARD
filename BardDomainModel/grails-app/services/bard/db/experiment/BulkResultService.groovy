@@ -5,13 +5,13 @@ import bard.db.enums.ReadyForExtraction
 import org.hibernate.Session
 import org.hibernate.jdbc.Work
 
-import javax.sql.DataSource
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
-import java.sql.Statement
+
 import java.sql.Types
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -112,23 +112,29 @@ class BulkResultService {
                 "MODIFIED_BY) VALUES (RESULT_HIERARCHY_ID_SEQ.NEXTVAL, ?,?,?, 1,sysdate,sysdate, ?)";
 
         PreparedStatement statement = connection.prepareStatement(query)
+        def relationshipValues = [] as Set
         try {
             int inBatch = 0;
             for(relationship in relationships) {
                 if (inBatch > BATCH_SIZE) {
                     println(""+new Date()+" writing ${inBatch} hierarchy records");
                     statement.executeBatch();
+                    relationshipValues.clear()
                 }
 
                 statement.setLong(1, relationship.result.id)
                 statement.setLong(2, relationship.parentResult.id)
-                statement.setString(3, relationship.hierarchyType.value)
+                def hierarchyType = relationship.hierarchyType?.id
+                statement.setString(3, hierarchyType)
+                relationshipValues.add(hierarchyType)
 
                 statement.setString(4, username)
                 statement.addBatch()
                 inBatch++;
             }
             statement.executeBatch()
+        } catch (Exception ex) {
+            throw new RuntimeException("hierarchyTypes: ${relationshipValues}", ex)
         } finally {
             statement.close()
         }
@@ -368,7 +374,7 @@ class BulkResultService {
             rh.result = results.get(i)
             rh.result.resultHierarchiesForResult.add(rh)
 
-            rh.hierarchyType = HierarchyType.getByValue(resultHierarchies.get(i))
+            rh.hierarchyType = HierarchyType.byId(resultHierarchies.get(i))
         }
     }
 

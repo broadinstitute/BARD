@@ -10,6 +10,7 @@ import bard.db.registration.*
 import org.apache.commons.lang.StringUtils
 import javax.xml.datatype.XMLGregorianCalendar
 import javax.xml.datatype.DatatypeFactory
+import bard.db.enums.HierarchyType
 
 /**
  * Helper Service for handling generation for XML documents for Assay definition extraction
@@ -53,6 +54,10 @@ class AssayExportHelperService extends ExportAbstractService {
         if (measure.parentMeasure) {
             attributes.put('parentMeasureRef', measure.parentMeasure.id.toString())
         }
+        HierarchyType parentChildRelationship = measure.parentChildRelationship
+        if (parentChildRelationship) {
+            attributes.put('parentChildRelationship', parentChildRelationship.getId())
+        }
         return attributes
     }
 
@@ -72,6 +77,7 @@ class AssayExportHelperService extends ExportAbstractService {
             if (entryUnit) {
                 createElementRef(markupBuilder, entryUnit, 'entryUnitRef', this.mediaTypesDTO.elementMediaType)
             }
+
             generateAssayContextMeasureRefs(markupBuilder, 'assayContextRef', measure.assayContextMeasures)
         }
     }

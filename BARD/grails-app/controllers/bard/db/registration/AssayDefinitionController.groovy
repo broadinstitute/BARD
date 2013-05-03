@@ -6,6 +6,8 @@ import bard.db.enums.AssayStatus
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import org.codehaus.groovy.grails.web.json.JSONArray
+import bard.db.enums.HierarchyType
+import org.apache.commons.lang.StringUtils
 
 @Secured(['isFullyAuthenticated()'])
 class AssayDefinitionController {
@@ -96,27 +98,36 @@ class AssayDefinitionController {
     }
 
     def addMeasure() {
-        def assayInstance = Assay.get(params.id)
-        def resultType = Element.get(params.resultTypeId)
-
-        def parentMeasure = null
-        if (params.parentMeasureId) {
-            parentMeasure = Measure.get(params.parentMeasureId)
+        final Assay assayInstance = Assay.get(params.id)
+        final Element resultType = Element.get(params.resultTypeId)
+        final String parentChildRelationship = params.relationship
+        HierarchyType hierarchyType = null
+        if (StringUtils.isNotBlank(parentChildRelationship)) {
+            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
         }
 
-        def statsModifier = null
-        if (params.statisticId) {
-            statsModifier = Element.get(params.statisticId)
+        if (!resultType) {
+            flash.message = 'Result Type is Required'
+        } else {
+            def parentMeasure = null
+            if (params.parentMeasureId) {
+                parentMeasure = Measure.get(params.parentMeasureId)
+            }
+
+            def statsModifier = null
+            if (params.statisticId) {
+                statsModifier = Element.get(params.statisticId)
+            }
+
+            def entryUnit = null
+            if (params.entryUnitName) {
+                entryUnit = Element.findByLabel(params.entryUnitName)
+            }
+
+            Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+            flash.message = "Successfully added measure " + newMeasure.displayLabel
+
         }
-
-        def entryUnit = null
-        if (params.entryUnitName) {
-            entryUnit = Element.findByLabel(params.entryUnitName)
-        }
-
-        Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit)
-
-        flash.message = "Successfully added measure " + newMeasure.displayLabel
         redirect(action: "editMeasure", id: params.id)
     }
 
@@ -150,6 +161,26 @@ class AssayDefinitionController {
         }
 
         redirect(action: "editMeasure", id: context.assay.id)
+    }
+
+    def changeRelationship() {
+        def measure = Measure.get(params.measureId)
+        def parentChildRelationship = params.relationship
+
+        HierarchyType hierarchyType = null
+        if (StringUtils.isNotBlank(parentChildRelationship)) {
+            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
+        }
+        if (measure == null) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+        } else {
+            flash.message = null
+            if (measure.parentMeasure) { //if this measure has no parent then do nothing
+                assayContextService.changeParentChildRelationship(measure, hierarchyType)
+            }
+        }
+
+        redirect(action: "editMeasure", id: params.id)
     }
 
     def findById() {
@@ -241,21 +272,21 @@ class AssayDefinitionController {
         }
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
-	
-	def launchEditItemInCard(Long assayContextId, Long assayContextItemId){
-		def assayContextItem = AssayContextItem.get(assayContextItemId)
-		render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
-	}
-	
-	def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel){
-		def assayContextItem = AssayContextItem.get(assayContextItemId)
-		assayContextItem.valueNum = numericValue.toFloat().floatValue()
-		if (valueUnitLabel)
-			assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
-		assayContextItem.save()		
-		Assay assay = assayContextItem.assayContext.assay
-		render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-	}
+
+    def launchEditItemInCard(Long assayContextId, Long assayContextItemId) {
+        def assayContextItem = AssayContextItem.get(assayContextItemId)
+        render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
+    }
+
+    def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel) {
+        def assayContextItem = AssayContextItem.get(assayContextItemId)
+        assayContextItem.valueNum = numericValue.toFloat().floatValue()
+        if (valueUnitLabel)
+            assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
+        assayContextItem.save()
+        Assay assay = assayContextItem.assayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
 
     def createCard(Long instanceId, String cardName, String cardSection) {
         if (instanceId == null) {
@@ -268,6 +299,20 @@ class AssayDefinitionController {
 
     def updateCardName(String edit_card_name, Long contextId) {
         AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
+        Assay assay = assayContext.assay
+        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+    }
+    /**
+     *
+     * @param context_group - The new context group
+     * @param contextMoveId - The context that we are moving to new group
+     *
+     */
+    def moveCard(String context_group, Long contextMoveId) {
+        AssayContext assayContext = AssayContext.findById(contextMoveId)
+        if (assayContext.contextGroup != context_group) {
+            assayContext.setContextGroup(context_group)
+        }
         Assay assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }

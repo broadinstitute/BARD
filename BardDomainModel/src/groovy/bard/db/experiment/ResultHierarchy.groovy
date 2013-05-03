@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
+import bard.db.enums.HierarchyType
 
 class ResultHierarchy implements Serializable {
 

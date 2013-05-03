@@ -2,9 +2,8 @@ package bard.db.experiment
 
 import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
-import grails.plugin.spock.IntegrationSpec
-import spock.lang.Specification
 
 /**
  * Created with IntelliJ IDEA.
@@ -63,14 +62,14 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         child.resultType = resultType
         child.statsModifier = statsModifier
         child.substanceId = substance.id
-        child.valueDisplay = HierarchyType.IS_RELATED_TO.toString()
+        child.valueDisplay = HierarchyType.SUPPORTED_BY.getId()
 
         ResultHierarchy hierarchy = new ResultHierarchy()
         hierarchy.parentResult = parent
         parent.resultHierarchiesForParentResult.add(hierarchy)
         hierarchy.result = child
         child.resultHierarchiesForResult.add(hierarchy)
-        hierarchy.hierarchyType = HierarchyType.IS_RELATED_TO
+        hierarchy.hierarchyType = HierarchyType.SUPPORTED_BY
     }
 
     boolean compareMaps(Map a, Map b) {
@@ -94,7 +93,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         List<Result> fromDb = bulkResultService.findResults(experiment)
 
         Result dbParent = fromDb.find { it.valueDisplay == "parent" }
-        Result dbChild = fromDb.find { it.valueDisplay == "is related to" }
+        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getId()}
 
         then:
         System.identityHashCode(parent) != System.identityHashCode(dbParent)

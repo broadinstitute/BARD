@@ -74,6 +74,7 @@ class OntologyDataAccessService {
         return trees
     }
 
+
     public void ensureTreeCached() {
         if (cachedElements == null) {
             cachedElements = Collections.synchronizedMap(computeTrees())

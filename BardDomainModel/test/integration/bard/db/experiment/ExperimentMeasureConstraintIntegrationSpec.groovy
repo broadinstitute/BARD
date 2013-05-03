@@ -1,14 +1,14 @@
 package bard.db.experiment
 
 import bard.db.BardIntegrationSpec
+import bard.db.enums.HierarchyType
 import bard.db.registration.Measure
-import grails.plugin.spock.IntegrationSpec
 import org.junit.After
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.experiment.ExperimentMeasure.MODIFIED_BY_MAX_SIZE
-import static bard.db.experiment.ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -38,26 +38,30 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         }
     }
 
+
     void "test parent constraints #desc parent: '#valueUnderTest'"() {
 
         final String field = 'parent'
-
+        final String parentChildRelationShip = HierarchyType.SUPPORTED_BY
         when:
-        domainInstance[(field)] = valueUnderTest.call()
+        domainInstance[(field)] = valueUnderTest?.call()
+        if (valueUnderTest != null) {
+            domainInstance['parentChildRelationship'] = parentChildRelationShip
+        }
         domainInstance.validate()
 
         then:
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc           | valueUnderTest              | valid | errorCode
-        'null valid'   | {null}                      | true  | null
-        'valid parent' | {ExperimentMeasure.build()} | true  | null
+        desc           | valueUnderTest                | valid | errorCode
+        'null valid'   | null                          | true  | null
+        'valid parent' | { ExperimentMeasure.build() } | true  | null
     }
 
     void "test parent child link"() {
         when:
-        ExperimentMeasure child = ExperimentMeasure.build(parent: domainInstance)
+        ExperimentMeasure child = ExperimentMeasure.build(parent: domainInstance, parentChildRelationship: HierarchyType.SUPPORTED_BY)
 
         then:
         child.id != null
@@ -69,30 +73,28 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
     void "test parentChildRelationship constraints #desc parentChildRelationship: '#valueUnderTest'"() {
 
         final String field = 'parentChildRelationship'
-
+        given:
+        if (valueUnderTest) {
+            domainInstance['parent'] = ExperimentMeasure.build()
+        }
         when: 'a value is set for the field under test'
+
         domainInstance[(field)] = valueUnderTest
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
 
         where:
-        desc          | valueUnderTest                                       | valid | errorCode
-        'too long'    | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank valid' | ''                                                   | false | 'blank'
-        'blank valid' | '  '                                                 | false | 'blank'
-        'not inList'  | createString(PARENT_CHILD_RELATIONSHIP_MAX_SIZE)     | false | 'not.inList'
-
-
-        'null valid'  | null                                                 | true  | null
-        'valid value' | 'is calculated from'                                 | true  | null
-        'valid value' | 'is related to'                                      | true  | null
+        desc          | valueUnderTest                | valid | errorCode
+        'null valid'  | null                          | true  | null
+        'valid value' | HierarchyType.CALCULATED_FROM | true  | null
+        'valid value' | HierarchyType.SUPPORTED_BY    | true  | null
     }
 
     void "test experiment constraints #desc experiment: '#valueUnderTest'"() {
@@ -107,9 +109,9 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest       | valid | errorCode
-        'null not valid'   | {null}               | false | 'nullable'
-        'valid experiment' | {Experiment.build()} | true  | null
+        desc               | valueUnderTest         | valid | errorCode
+        'null not valid'   | { null }               | false | 'nullable'
+        'valid experiment' | { Experiment.build() } | true  | null
 
     }
 
@@ -125,9 +127,9 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc             | valueUnderTest    | valid | errorCode
-        'null not valid' | {null}            | false | 'nullable'
-        'valid measure'  | {Measure.build()} | true  | null
+        desc             | valueUnderTest      | valid | errorCode
+        'null not valid' | { null }            | false | 'nullable'
+        'valid measure'  | { Measure.build() } | true  | null
 
     }
 

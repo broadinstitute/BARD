@@ -90,10 +90,10 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         then:
         map.records.size() == 2
-        map.records["parent"].size() == 1
+        map.records["parent (stats)"].size() == 1
         map.records["child"].size() == 1
 
-        PubchemReformatService.ResultMapRecord parent = map.records["parent"].first()
+        PubchemReformatService.ResultMapRecord parent = map.records["parent (stats)"].first()
         PubchemReformatService.ResultMapRecord child = map.records["child"].first()
 
         parent.qualifierTid == "3"
@@ -127,6 +127,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         InputStream inputStream = PubchemReformatServiceUnitSpec.getClassLoader().getResourceAsStream("bard/db/experiment/pubchem-input.txt")
         assert inputStream != null
 
+        new File("out").mkdirs();
         new File("out/PubchemReformatServiceUnitSpec-in.txt").withOutputStream { fos ->
             IOUtils.copy(inputStream, fos)
         }

@@ -37,19 +37,20 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	public final static String TYPE_BIOLOGICAL_PROCESS = "biological_process";
 	public final static String TYPE_CELLULAR_COMPONENT = "cellular_component";
 	public final static String TYPE_MOLECULAR_FUNCTION = "molecular_function";
+	public static DataSource GO_DATASOURCE;
 	
 	public static ExternalOntologyGO COMPONENT_INSTANCE, FUNCTION_INSTANCE, PROCESS_INSTANCE;
 
 	static {
 		try {
-			DataSource dataSource = configureDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://mysql.ebi.ac.uk:4085/go_latest",
+			GO_DATASOURCE = configureDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://mysql.ebi.ac.uk:4085/go_latest",
 					"go_select", "amigo");
 			COMPONENT_INSTANCE = new ExternalOntologyGO(TYPE_CELLULAR_COMPONENT);
-			COMPONENT_INSTANCE.setDataSource(dataSource);
+			COMPONENT_INSTANCE.setDataSource(GO_DATASOURCE);
 			FUNCTION_INSTANCE = new ExternalOntologyGO(TYPE_MOLECULAR_FUNCTION);
-			FUNCTION_INSTANCE.setDataSource(dataSource);
+			FUNCTION_INSTANCE.setDataSource(GO_DATASOURCE);
 			PROCESS_INSTANCE = new ExternalOntologyGO(TYPE_BIOLOGICAL_PROCESS);
-			PROCESS_INSTANCE.setDataSource(dataSource);
+			PROCESS_INSTANCE.setDataSource(GO_DATASOURCE);
 		} catch (ClassNotFoundException ex) {
 			throw new RuntimeException(ex);
 		}

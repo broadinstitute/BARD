@@ -50,7 +50,19 @@
                 <input type="hidden" id="instanceId" name="instanceId" value="${contextOwner.id}"/>
             </form>
         </div>
+        <div id="dialog_move_card">
+            <form id="move_card_form" class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="context_group">New group:</label>
 
+                    <div class="controls">
+                        <g:select id="context_group" name="context_group"  placeholder="Move card to new group"
+                                  from="${bard.db.registration.Assay.groupContextKeys()}"/>
+                     </div>
+                </div>
+                <input type="hidden" id="contextMoveId" name="contextMoveId" value=""/>
+             </form>
+        </div>
         <div id="dialog_move_item"></div>
         
         <div id="dialog_edit_card_item"></div>

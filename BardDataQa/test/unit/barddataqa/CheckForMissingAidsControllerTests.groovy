@@ -8,10 +8,10 @@ import org.junit.*
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(AidIssueController)
-class AidIssueControllerTests {
+@TestFor(CheckForMissingAidsController)
+class CheckForMissingAidsControllerTests {
 
     void testSomething() {
-       fail "Implement me"
+        fail "Implement me"
     }
 }

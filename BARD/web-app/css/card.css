@@ -118,3 +118,9 @@ table.table td.deleteItemButton {
 .unknown-section {
 
 }
+.borderlist
+{
+    border: 1px solid black;
+    list-style-position: inside;
+    padding-left: 1em;
+}

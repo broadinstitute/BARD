@@ -9,6 +9,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Unroll
+import bard.db.enums.HierarchyType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -43,7 +44,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         def childCell = new RawCell(columnName: "child", value: "1")
 
         ExperimentMeasure parentExperimentMeasure = ExperimentMeasure.build(measure: parentMeasure)
-        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: "is calculated from")
+        ExperimentMeasure childExperimentMeasure = ExperimentMeasure.build(parent: parentExperimentMeasure, measure: childMeasure, parentChildRelationship: HierarchyType.CALCULATED_FROM)
         parentExperimentMeasure.childMeasures.add(childExperimentMeasure)
 
         List<Row> rows;
@@ -80,7 +81,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
         childResult.resultHierarchiesForResult == parentResult.resultHierarchiesForParentResult
 
         def relationship = childResult.resultHierarchiesForResult.first()
-        relationship.hierarchyType == HierarchyType.IS_CALCULATED_FROM
+        relationship.hierarchyType == HierarchyType.CALCULATED_FROM
 
         where:
         desc              | onSameLine
@@ -523,7 +524,7 @@ class ResultsServiceSpec extends spock.lang.Specification {
     }
 
     Result createResult() {
-        return new Result(substanceId: 100, resultType: new Element())
+        return new Result(substanceId: 100, resultType: Element.build(), measure: Measure.build())
     }
 
     ResultContextItem createContextItem(params) {
@@ -531,6 +532,37 @@ class ResultsServiceSpec extends spock.lang.Specification {
         Result result = params.result;
         result.resultContextItems.add(item)
         return item
+    }
+
+    void 'test different parents in dup check'() {
+        setup:
+        ResultsService service = new ResultsService();
+        ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
+
+        Element childElement = Element.build();
+
+        Result parent1 = createResult()
+        Result parent2 = createResult()
+        Measure measure1 = Measure.build()
+        Measure measure2 = Measure.build()
+        Result child1 = new Result(substanceId: 100, resultType: childElement, measure: measure1)
+        Result child2 = new Result(substanceId: 100, resultType: childElement, measure: measure2)
+
+        ResultHierarchy link1 = new ResultHierarchy(result: child1, parentResult: parent1)
+        ResultHierarchy link2 = new ResultHierarchy(result: child2, parentResult: parent2)
+        child1.resultHierarchiesForResult.add(link1)
+        parent1.resultHierarchiesForParentResult.add(link1)
+        child2.resultHierarchiesForResult.add(link2)
+        parent2.resultHierarchiesForParentResult.add(link2)
+
+        assert child1.resultHierarchiesForResult.size() == 1
+        assert child2.resultHierarchiesForResult.size() == 1
+
+        when:
+        service.checkForDuplicates(errors, [child1, child2])
+
+        then:
+        !errors.hasErrors()
     }
 
     void 'test duplicate check'() {

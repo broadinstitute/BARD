@@ -10,6 +10,7 @@ import java.util.zip.GZIPInputStream
 
 import grails.test.mixin.*
 import grails.test.mixin.support.*
+import bard.db.enums.HierarchyType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -38,7 +39,7 @@ class ResultsExportServiceSpec extends Specification {
         ResultContextItem contextItem = new ResultContextItem(valueNum: 1.0, valueDisplay: "1 uM", qualifier: "> ", attributeElement: concentration, result: child)
         child.resultContextItems.add(contextItem)
 
-        ResultHierarchy relationship = new ResultHierarchy(parentResult: parent, result: child, hierarchyType: HierarchyType.IS_RELATED_TO)
+        ResultHierarchy relationship = new ResultHierarchy(parentResult: parent, result: child, hierarchyType: HierarchyType.SUPPORTED_BY)
         parent.getResultHierarchiesForParentResult().add(relationship)
         child.getResultHierarchiesForResult().add(relationship)
 
@@ -66,7 +67,7 @@ class ResultsExportServiceSpec extends Specification {
         tParent.related.size() == 1
 
         JsonResult tChild = tParent.related.first()
-        tChild.relationship == HierarchyType.IS_RELATED_TO.toString()
+        tChild.relationship == HierarchyType.SUPPORTED_BY.getId()
         tChild.qualifier == "<"
         tChild.valueDisplay == "10-20"
         tChild.valueNum == null
@@ -88,6 +89,7 @@ class ResultsExportServiceSpec extends Specification {
 
     void 'test dumpFromList'() {
         setup:
+        new File("out").mkdirs();
         ArchivePathService archivePathService = Mock(ArchivePathService)
         archivePathService.prepareForWriting("path") >> destination
 

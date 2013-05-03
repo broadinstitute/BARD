@@ -6,6 +6,8 @@ import grails.test.mixin.Mock
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
+import grails.test.mixin.TestFor
+import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,12 +18,30 @@ import spock.lang.Unroll
  */
 @Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@TestFor(AssayContextService)
 @Unroll
 class AssayContextServiceUnitSpec extends Specification {
 
-    AssayContextService service = new AssayContextService()
     @Shared String ORIGINAL_CONTEXT_NAME = 'original title'
     @Shared String NEW_CONTEXT_NAME = 'new title'
+
+
+
+    void "test changeParentChildRelationship #desc"() {
+        given:
+        Measure measure = Measure.build()
+        when:
+        Measure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType)
+        then:
+        assert foundMeasure
+
+        where:
+        desc                                              | hierarchyType
+        "Hierarchy Type ${HierarchyType.CALCULATED_FROM}" | HierarchyType.CALCULATED_FROM
+        "Hierarchy Type ${HierarchyType.SUPPORTED_BY}"    | HierarchyType.SUPPORTED_BY
+        ""                                                | null
+
+    }
 
     void "test addItemToEndOfList #desc"() {
         given: 'an a'

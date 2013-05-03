@@ -12,11 +12,11 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
  */
 abstract class AbstractElement {
 
-    private static final int LABEL_MAX_SIZE = 128
-    private static final int DESCRIPTION_MAX_SIZE = 1000
-    private static final int ABBREVIATION_MAX_SIZE = 20
-    private static final int SYNONYMS_MAX_SIZE = 1000
-    private static final int BARD_URI_MAX_SIZE = 250
+    public static final int LABEL_MAX_SIZE = 128
+    public static final int DESCRIPTION_MAX_SIZE = 1000
+    public static final int ABBREVIATION_MAX_SIZE = 20
+    public static final int SYNONYMS_MAX_SIZE = 1000
+    public static final int BARD_URI_MAX_SIZE = 250
     private static final int EXTERNAL_URL_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
 

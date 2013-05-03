@@ -83,8 +83,8 @@
         <h5>Experiment Name:</h5>
 
         <p>{{selected.ename}}</p>
-        <h5>Assay Id:</h5><a href="/BARD/assayDefinition/show/{{selected.assay}}" id="assaylink1" target="_blank">{{selected.assay}}</a>
-        <h5>PubChem AID: </h5> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}" id="aidlink1" target="_blank">{{selected.aid}}</a>
+        <h5>ADID:</h5> <a href="/BARD/assayDefinition/show/{{selected.assay}}" id="assaylink1" target="_blank">{{selected.assay}}</a>
+        <h5>PubChem AID:</h5> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}" id="aidlink1" target="_blank">{{selected.aid}}</a>
     </script>
 
 

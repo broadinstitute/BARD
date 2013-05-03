@@ -2,6 +2,10 @@ package dataexport.experiment
 
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
+import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.ExternalReference
 import dataexport.registration.BardHttpResponse
 import dataexport.registration.MediaTypesDTO
@@ -11,12 +15,10 @@ import exceptions.NotFoundException
 import groovy.xml.MarkupBuilder
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
-import javax.servlet.http.HttpServletResponse
 import javax.xml.datatype.DatatypeFactory
 import javax.xml.datatype.XMLGregorianCalendar
-
-import bard.db.experiment.*
-import clover.org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.StringUtils
+import bard.db.enums.HierarchyType
 
 /**
  * Class that generates Experiments as XML
@@ -309,9 +311,9 @@ class ExperimentExportService extends ExportAbstractService {
         if (parent) {
             attributes.put('parentExperimentMeasureRef', parent.id)
         }
-        String parentChildRelationship = experimentMeasure.parentChildRelationship
+       HierarchyType parentChildRelationship = experimentMeasure.parentChildRelationship
         if (parentChildRelationship) {
-            attributes.put('parentChildRelationship', parentChildRelationship)
+            attributes.put('parentChildRelationship', parentChildRelationship.getId())
         }
         markupBuilder.experimentMeasure(attributes)
     }

@@ -228,4 +228,5 @@
     <xs:element name="context" type="contextType"/>
     <xs:attribute name="lastUpdated" type="xs:dateTime"> </xs:attribute>
     <xs:attribute name="modifiedBy" type="xs:string"> </xs:attribute>
+    <xs:attribute name="parentChildRelationship" type="xs:string"/>
 </xs:schema>

@@ -28,6 +28,10 @@ modules = {
         resource url:'/css/card.css'
         resource url:'/css/bootstrap-plus.css'
     }
+    newTerm {
+        resource url:'/css/newterm/newTerms.css'
+
+    }
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
 	}

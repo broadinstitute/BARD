@@ -14,7 +14,7 @@ class ElementHierarchy {
     String modifiedBy
 
     static constraints = {
-        parentElement(nullable: true)
+        parentElement(nullable: false)
         childElement(nullable: false)
         relationshipType(nullable: false, blank: false, maxSize: RELATIONSHIP_TYPE_MAX_SIZE)
 

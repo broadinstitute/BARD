@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.experiment.ExperimentMeasure
+import bard.db.enums.HierarchyType
 
 class Measure {
 
@@ -10,7 +11,7 @@ class Measure {
     Assay assay
     Element resultType
     Measure parentMeasure
-    String parentChildRelationship
+    HierarchyType parentChildRelationship
     Element entryUnit
     Element statsModifier
 
@@ -43,22 +44,24 @@ class Measure {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
-        parentChildRelationship(nullable: true, blank: false, maxSize: ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE, inList: ['is calculated from', 'is related to'])
+        parentChildRelationship(nullable: true,  maxSize: ExperimentMeasure.PARENT_CHILD_RELATIONSHIP_MAX_SIZE)
 
     }
 
     /**
      * @return concatenation of resultType.label and statsModifier.label if statsModifier is defined otherwise just the resultType.label
      */
-    String getDisplayLabel(){
-        String statsModifierLabel = statsModifier? "(${statsModifier.label})" : null
+    String getDisplayLabel() {
+        String statsModifierLabel = statsModifier ? "(${statsModifier.label})" : null
+        if(resultType==null && statsModifier==null){
+            return ""
+        }
         return [resultType.label, statsModifierLabel].findAll().join(' ')
     }
-
     /**
      * @return childMeasures sorted by displayLabel case insensitive
      */
-    List<Measure> getChildrenMeasuresSorted(){
+    List<Measure> getChildrenMeasuresSorted() {
         childMeasures.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
     }
 }

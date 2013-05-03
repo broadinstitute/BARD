@@ -3,25 +3,27 @@
 
     <ul>
         <g:each in="${assayInstance.experiments}" var="experiment">
-            <li>
+            <li class="borderlist">
                 <p><g:link controller="experiment" id="${experiment.id}"
-                           action="show">${experiment.experimentName}</g:link></p>
+                           action="show"> ${experiment.experimentName} </g:link></p>
 
                 <g:if test="${experiment.externalReferences.size() > 0}">
-                    <p><strong>External References</strong></p>
-                    <ul>
-                        <g:each in="${experiment.externalReferences}" var="xRef">
+                     <ul> <p><strong> External References </strong></p>
+
+                         <g:each in="${experiment.externalReferences}" var="xRef">
                             <li>
                                 <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
                                    target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
                             </li>
                         </g:each>
+
                     </ul>
                 </g:if>
-
+                <br/>
                 <g:if test="${experiment.projectExperiments.size() > 0}">
-                    <p><strong>Referenced in the following projects:</strong></p>
+
                     <ul>
+                        <p><strong> Referenced in the following projects: </strong></p>
                         <g:each in="${experiment.projectExperiments}" var="projExp">
                             <li>
                                 <g:link controller="project" id="${projExp.project.id}"
@@ -31,6 +33,8 @@
                     </ul>
                 </g:if>
             </li>
+            <br/>
+            <br/>
         </g:each>
     </ul>
 

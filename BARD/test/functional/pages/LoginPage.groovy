@@ -10,7 +10,6 @@ package pages
 class LoginPage extends ScaffoldPage {
     static url = "login/auth"
 
-    static at = { $("button#submit") }
 
     static content = {
         loginForm { $("form#loginForm") }
