@@ -2,27 +2,6 @@
 <g:render template="/common/message"/>
 <g:render template="/common/errors" model="['errors': termCommand?.errors?.allErrors]"/>
 <h3>Propose New Term</h3>
-%{--<g:if test="${flash.message}">--}%
-    %{--<div class="row-fluid">--}%
-        %{--<div class="span12">--}%
-            %{--<span class="label label-success">${flash.message}</span>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</g:if>--}%
-
-%{--<g:if test="${termCommand?.errors?.allErrors}">--}%
-            %{--<div class="ui-widget">--}%
-                %{--<div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">--}%
-                %{--<p>--}%
-                    %{--<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"/>--}%
-                    %{--<g:each var="error" in="${termCommand?.errors?.allErrors}">--}%
-                        %{--<p><g:message error="${error}"/></p>--}%
-
-                    %{--</g:each>--}%
-                %{--</p>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-%{--</g:if>--}%
 <div class="control-group">
     <label>
         <h4>1. Select a parent term from the current BARD Hierarchy.</h4>
