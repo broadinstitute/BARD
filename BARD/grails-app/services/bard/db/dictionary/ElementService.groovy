@@ -19,9 +19,8 @@ class ElementService {
      */
     Element addNewTerm(TermCommand termCommand) {
         Element parentElement = Element.findByLabel(termCommand.parentLabel)
-        Element unit = termCommand.unitId ?: Element.findById(termCommand.unitId)
-        Element element = new Element(label: termCommand.label, description: termCommand.description,
-                abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, unit: unit, comments: termCommand.comments)
+         Element element = new Element(label: termCommand.label, description: termCommand.description,
+                abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, comments: termCommand.comments)
         element.save(flush: true)
         addElementHierarchy(parentElement, element, termCommand.relationship)
         return element
@@ -48,64 +47,34 @@ class ElementService {
         return elementHierarchy
 
     }
-
-    protected void addChildren(Element element, Collection results, Map<Element, List<ElementHierarchy>> parentToChildren, Set seen, boolean expand) {
-        if (!seen.contains(element)) {
-            seen.add(element)
-
-            if (element.elementStatus != ElementStatus.Retired) {
-                final long key = element.id;
-                final String title = element.label
-                final String relationshipType = "subClassOf"
-                final String description = element.description
-                def children = []
-                final List<ElementHierarchy> elementHierarchies = parentToChildren.get(element)
-                for (ElementHierarchy elementHierarchy : elementHierarchies) {
-                    addChildren(elementHierarchy.childElement, children, parentToChildren, seen, false)
-                }
-                results.add([key: key, title: title, description: description, children: children, expand: expand, relationship: relationshipType])
+    /**
+     * Return all the immediate child nodes for a given element
+     * @param elementId
+     * @return List
+     */
+    List getChildNodes(long elementId) {
+        def childNodes = []
+        final Element parentElement = Element.get(elementId)
+        final Set<ElementHierarchy> hierarchies = parentElement.parentHierarchies
+        Set<Element> seenSet = new HashSet<Element>()
+        for (ElementHierarchy elementHierarchy : hierarchies) {
+            final Element childElement = elementHierarchy.childElement
+            if (!seenSet.contains(childElement)) {
+                seenSet.add(childElement)
+                boolean isLazy = childElement.parentHierarchies ? true : false
+                boolean isFolder = childElement.parentHierarchies ? true : false
+                childNodes.add([elementId: childElement.id, title: childElement.label, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
             }
-
         }
+        childNodes.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }
+        return childNodes
     }
     /**
-     *
+     * @param full = will render the full tree otherwise it will lazily render it
      * @return list of hierarchy
      */
     public List createElementHierarchyTree() {
-        def rootTrees = []
-
-        //we need to get all of the parent element that are not child elements. Find the root of the trees in the forest
-        List<ElementHierarchy> rootHierarchies =
-            ElementHierarchy.findAll("from ElementHierarchy parentHierarchy WHERE parentHierarchy.parentElement not in (Select childHierarchy.childElement from ElementHierarchy childHierarchy)")
-        Map<Element, List<ElementHierarchy>> rootParentToChildren = rootHierarchies.groupBy { it.parentElement }
-
-        List<ElementHierarchy> elementHierarchies = ElementHierarchy.findAll();
-        // let hibernate also load the elements for this round
-        Element.findAll()
-
-        // create a mapping of parent -> children.  Again, the domain could be changed to accommodate, but want to
-        // make sure this works before invasive changes
-        Map<Element, List<ElementHierarchy>> parentToChildrenMap = elementHierarchies.groupBy { it.parentElement }
-
-
-
-        for (Element rootElement in rootParentToChildren.keySet()) {
-            addChildren(rootElement, rootTrees, parentToChildrenMap, new HashSet(), true)
-        }
-
-        sortByKey(rootTrees)
-        return rootTrees
+         Element element = Element.findByLabel("BARD")//find the ROOT OF THE BARD TREE
+        return getChildNodes(element.id)
     }
-
-
-    void sortByKey(List<Map> children) {
-        for (c in children) {
-            if (c.containsKey("children"))
-                sortByKey(c["children"])
-        }
-
-        children.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }
-    }
-
 }

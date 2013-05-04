@@ -30,6 +30,7 @@ modules = {
     }
     newTerm {
         resource url:'/css/newterm/newTerms.css'
+        resource url:'/js/element/newTerm.js'
 
     }
 	datatables {

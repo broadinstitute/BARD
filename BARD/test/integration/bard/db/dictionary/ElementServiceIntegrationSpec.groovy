@@ -15,7 +15,6 @@ import spock.lang.Unroll
 class ElementServiceIntegrationSpec extends IntegrationSpec {
 
     ElementService elementService
-    BuildElementPathsService buildElementPathsService
 
     @Before
     void setup() {
@@ -23,19 +22,64 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test element path"() {
+    void "test List getChildNodes"() {
         given:
-        Element parentElement = Element.build(label: "parentLabel")
-        Element childElement = Element.build(label: "childElement")
-        ElementHierarchy.build(parentElement: parentElement, childElement: childElement, relationshipType: 'subClassOf')
+
+        final Element parentElement = Element.build(label: parentLabel, description: description)
+        final Element childElement = Element.build(label: childLabel, description: description)
+        final Element leafElement = Element.build(label: leafLabel, description: description)
+        ElementHierarchy eh0a = buildElementHierarchy(parentElement, childElement, "subClassOf")
+        buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
         when:
-        Set<ElementAndFullPath> path = buildElementPathsService.build(childElement)
+        List hierarchies = elementService.getChildNodes(childElement.id)
         then:
-        assert path
-        assert !path.isEmpty()
+        assert hierarchies
+        assert 1 == hierarchies.size()
+        final Map map = (Map)hierarchies.get(0)
+        assert leafLabel == map.title
+        assert description == map.description
+        assert false == map.isFolder
+        assert false == map.isLazy
+        where:
+        description          | parentLabel | childLabel | leafLabel
+        "Has 'BARD' as root" | "BARD"      | "child"    | "leaf"
+
     }
 
+    void "test createElementHierarchyTree"() {
+        given:
 
+        final Element parentElement = Element.build(label: parentLabel, description: description)
+        final Element childElement = Element.build(label: childLabel, description: description)
+        final Element leafElement = Element.build(label: leafLabel, description: description)
+        ElementHierarchy eh0a = buildElementHierarchy(parentElement, childElement, "subClassOf")
+        buildElementHierarchy(eh0a.childElement, leafElement, "subClassOf")
+        when:
+        List hierarchies = elementService.createElementHierarchyTree()
+        then:
+        assert hierarchies
+        assert 1 == hierarchies.size()
+        final Map map = (Map)hierarchies.get(0)
+        assert childLabel == map.title
+        assert description == map.description
+        assert true == map.isFolder
+        assert true == map.isLazy
+
+        where:
+        description          | parentLabel | childLabel | leafLabel
+        "Has 'BARD' as root" | "BARD"      | "child"    | "leaf"
+    }
+
+    public static ElementHierarchy buildElementHierarchy(Element parent, Element child, String relationshipType) {
+        ElementHierarchy elementHierarchy = new ElementHierarchy(parentElement: parent, childElement: child,
+                relationshipType: relationshipType, dateCreated: new Date())
+        assert elementHierarchy.save()
+
+        parent.parentHierarchies.add(elementHierarchy)
+        child.childHierarchies.add(elementHierarchy)
+
+        return elementHierarchy
+    }
 
     void "test add Element Hierarchy"() {
 
@@ -64,10 +108,9 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         String abbreviation = "MNL"
         String synonyms = "Abc,efg"
         String comments = "Adding for testing"
-        Long unitId = null
         TermCommand termCommand =
             new TermCommand(parentLabel: parentElement.label, label: newElementLabel, description: description,
-                    abbreviation: abbreviation, synonyms: synonyms, comments: comments, unitId: unitId)
+                    abbreviation: abbreviation, synonyms: synonyms, comments: comments)
         when:
         Element element = elementService.addNewTerm(termCommand)
 
@@ -80,7 +123,6 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         assert comments == element.comments
         assert element.childHierarchies
     }
-
 
 
 }
