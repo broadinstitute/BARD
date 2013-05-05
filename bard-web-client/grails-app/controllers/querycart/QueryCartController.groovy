@@ -8,7 +8,7 @@ import grails.plugins.springsecurity.Secured
 import bardqueryapi.ETagsService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 @Mixin(InetAddressUtil)
 class QueryCartController {
 
