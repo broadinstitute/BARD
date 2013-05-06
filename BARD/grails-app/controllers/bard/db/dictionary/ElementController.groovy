@@ -1,32 +1,78 @@
 package bard.db.dictionary
 
-import groovy.json.JsonBuilder
-import bard.hibernate.AuthenticatedUserRequired
+import bard.db.command.BardCommand
+import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.validation.Validateable
+import grails.validation.ValidationErrors
+import groovy.transform.InheritConstructors
 
 @Secured(['isFullyAuthenticated()'])
 class ElementController {
 
     private static final String errorMessageKey = "errorMessageKey"
-
+    ElementService elementService
     BuildElementPathsService buildElementPathsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
     def list() {
         Map parameterMap = generatePaths()
 
-        if (! parameterMap.containsKey(errorMessageKey)) {
+        if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
         } else {
             render(parameterMap.get(errorMessageKey))
         }
     }
 
+    def getChildrenAsJson(long elementId) {
+        List elementHierarchyTree = elementService.getChildNodes(elementId)
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
+        render elementHierarchyAsJsonTree
+    }
+
+    def buildTopLevelHierarchyTree() {
+        List elementHierarchyTree = elementService.createElementHierarchyTree()
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
+        render elementHierarchyAsJsonTree
+    }
+
+    def addTerm() {
+        flash.message = ''
+        render(view: 'addTerm', model: [termCommand: new TermCommand()])
+    }
+
+    def saveTerm(TermCommand termCommand) {
+        Element currentElement = null
+        flash.message = ''
+        if (termCommand.validate()) {
+
+            if (!termCommand.hasErrors()) {
+                //remove duplicate white spaces, then trim the string
+                //we probably should also consider removing some other characters
+                termCommand.label = termCommand.label.replaceAll("\\s+", " ").trim()
+                currentElement =
+                    this.elementService.addNewTerm(termCommand)
+                if (currentElement.hasErrors()) {
+                    termCommand.currentElement = currentElement
+                    termCommand.transferErrorsFromCurrentElement()
+                } else {
+                    termCommand = new TermCommand()
+                    flash.message = "Proposed term ${currentElement?.label} has been saved"
+                }
+            }
+        }
+        if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
+            render(template: 'addForm', model: [termCommand: termCommand, currentElement: currentElement])
+            return
+        }
+        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
+    }
 
     def edit() {
         Map parameterMap = generatePaths()
 
-        if (! parameterMap.containsKey(errorMessageKey)) {
+        if (!parameterMap.containsKey(errorMessageKey)) {
             return parameterMap
         } else {
             render(parameterMap.get(errorMessageKey))
@@ -40,7 +86,7 @@ class ElementController {
             result = [list: elementAndFullPathListAndMaxPathLength.elementAndFullPathList,
                     maxPathLength: elementAndFullPathListAndMaxPathLength.maxPathLength]
         } catch (BuildElementPathsServiceLoopInPathException e) {
-            result = [errorMessageKey : """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
+            result = [errorMessageKey: """A loop was found in one of the paths based on ElementHierarchy (for the relationship ${buildElementPathsService.relationshipType}).<br/>
         The path starting before the loop was detected is:  ${e.elementAndFullPath.toString()}<br/>
         Path element hierarchies: ${e.elementAndFullPath.path}<br/>
         The id of the element hierarchy where the loop was detected is:  ${e.nextTopElementHierarchy.id}"""]
@@ -106,7 +152,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     static Element findElementFromId(Long id) {
         Element result = Element.findById(id)
 
-        if (! result) {
+        if (!result) {
             throw new UnrecognizedElementIdException()
         }
 
@@ -114,7 +160,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
     }
 
     static List<ElementHierarchy> findElementHierarchyFromIds(List<Long> elementHierarchyIdList) throws
-            UnrecognizedElementHierachyIdException{
+            UnrecognizedElementHierachyIdException {
 
         List<ElementHierarchy> result = new ArrayList<ElementHierarchy>(elementHierarchyIdList.size())
 
@@ -141,7 +187,7 @@ detected loop id's:${idBuilder.toString()}<br/>"""
 
         NewElementAndPath result = new NewElementAndPath()
 
-        for (int tokenIndex = 0; tokenIndex < tokenList.size()-1; tokenIndex++) {
+        for (int tokenIndex = 0; tokenIndex < tokenList.size() - 1; tokenIndex++) {
             String token = tokenList.get(tokenIndex)
 
             if (token != "") {
@@ -156,12 +202,65 @@ detected loop id's:${idBuilder.toString()}<br/>"""
             }
         }
 
-        result.newElementLabel = tokenList.get(tokenList.size()-1)
+        result.newElementLabel = tokenList.get(tokenList.size() - 1)
 
         return result
     }
 }
+@InheritConstructors
+@Validateable
+class TermCommand extends BardCommand {
+    BuildElementPathsService buildElementPathsService
+    String parentLabel
+    String parentDescription
+    String label
+    String description
+    String abbreviation
+    String synonyms
+    String comments
+    String relationship = "subClassOf"
+    Element currentElement
 
+    /**
+     * Copy errors from the current element into the Command object for display
+     */
+    void transferErrorsFromCurrentElement() {
+        this.addToErrors(new ValidationErrors(currentElement))
+    }
+
+    static def validateLabelUniqueness(String label, TermCommand termCommand) {
+        if (label) {
+            Element currentElement = Element.findByLabel(label.replaceAll("\\s+", " ").trim())
+            if (currentElement) {
+                String path = termCommand.buildElementPathsService.buildSinglePath(currentElement)
+                return ['unique', label, path]
+            }
+        }
+    }
+
+    static def validateParentLabelMustExist(String parentLabel, TermCommand termCommand) {
+        if (parentLabel) {
+            //this value must exist
+            if (!Element.findByLabel(parentLabel.replaceAll("\\s+", " ").trim())) {
+                return 'mustexist'
+            }
+        }
+    }
+
+    static constraints = {
+        parentLabel(blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
+            validateParentLabelMustExist(value, command)
+        })
+        label(blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
+            validateLabelUniqueness(value, command)
+        })
+        parentDescription(blank: true, nullable: true, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        description(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        comments(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        abbreviation(blank: true, nullable: true, maxSize: Element.ABBREVIATION_MAX_SIZE)
+        synonyms(blank: true, nullable: true, maxSize: Element.SYNONYMS_MAX_SIZE)
+    }
+}
 
 class NewElementAndPath {
     List<Element> newPathElementList

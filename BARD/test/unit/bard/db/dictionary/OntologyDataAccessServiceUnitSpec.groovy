@@ -1,6 +1,5 @@
 package bard.db.dictionary
 
-import bard.validation.ext.BardExternalOntologyFactory
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
@@ -63,7 +62,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
 
         then:
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> null
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> null
         externalItem == null
     }
 
@@ -77,7 +76,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
 
         then:
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> externalOntologyAPI
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> externalOntologyAPI
         1 * externalOntologyAPI.findById(id) >> returnedExternalItem
         externalItem == returnedExternalItem
     }
@@ -91,7 +90,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
 
         then: 'logging should happen at the error level and an exception should be thrown'
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
         1 * log.error(_, _)
         thrown(ExternalOntologyException)
     }
@@ -124,7 +123,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
 
         then:
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { null }
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { null }
         externalItems.isEmpty()
     }
 
@@ -142,7 +141,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final List<ExternalItem> actualItemsData = externalItems.collect { ExternalItem item -> [item.id, item.display] }
 
         then:
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> externalOntologyAPI
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> externalOntologyAPI
         1 * externalOntologyAPI.findMatching(term, OntologyDataAccessService.DEFAULT_EXTERNAL_ONTOLOGY_MATCHING_PAGE_SIZE) >> returnedExternalItems
 //        actualItemsData == expectedItemsData
         actualItemsData.toString() == expectedItemsData.toString()
@@ -165,7 +164,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
 
         then: 'logging should happen at the error level and an exception should be thrown'
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
         1 * log.error(_, _)
         thrown(ExternalOntologyException)
     }
@@ -178,7 +177,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         boolean hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(externalUrl)
 
         then: 'logging should happen at the error level and an exception should be thrown'
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { throw new ExternalOntologyException("some exception") }
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
         1 * log.error(_, _)
         hasIntegratedSearch == false
     }
@@ -189,7 +188,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         boolean hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(externalUrl)
 
         then: 'logging should happen at the error level and an exception should be thrown'
-        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, ontologyDataAccessService.externalOntologyProperites) >> { returnedExternalOntologyAPI }
+        1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { returnedExternalOntologyAPI }
         hasIntegratedSearch == expectIntegratedSearch
 
         where:

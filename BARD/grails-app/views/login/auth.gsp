@@ -16,7 +16,7 @@
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1" style="text-align:center;">
-	        	<h3>Welcome to CAP - Catalog of Assay Protocols</h4>
+	        	<h3>Welcome to CAP - Catalog of Assay Protocols</h3>
 	        </div>
 	    </div>
 	</div>
@@ -55,11 +55,10 @@
 
 		  			<div class="control-group">
 		    			<div class="controls">
-		    				%{--
 		    				<label class="checkbox">
         						<input type="checkbox" name='${rememberMeParameter}' id='remember_me' <g:if test='${hasCookie}'>checked='checked'</g:if>> Remember me
      	 					</label>
-     	 					--}%
+
 		      				<button id="submit" type="submit" class="btn btn-primary">Sign in</button>
 		    			</div>
 	  				</div>

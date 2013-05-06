@@ -9,12 +9,13 @@ import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
 import grails.test.mixin.*
 import bard.db.enums.HierarchyType
+import registration.AssayService
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@Build([Assay, Measure, Experiment,ExperimentMeasure])
-@Mock([Assay, Measure, Experiment,ExperimentMeasure])
+@Build([Assay, Measure, Experiment, AssayContextMeasure, AssayContext, ExperimentMeasure, AssayContextItem, AssayDocument])
+@Mock([Assay, Measure, Experiment,ExperimentMeasure,AssayContext,AssayContextMeasure, AssayContextItem, AssayDocument])
 @TestMixin(ServiceUnitTestMixin)
 class ExperimentServiceSpec  extends spock.lang.Specification {
     void 'test create experiment'() {
@@ -91,4 +92,38 @@ class ExperimentServiceSpec  extends spock.lang.Specification {
         experiment.experimentMeasures.size() == 2
         (experiment.experimentMeasures.findAll { it.parent == null}).size() == 1
     }
+
+    void 'test splitting experiment from assay'() {
+        setup:
+        ExperimentService experimentService = new ExperimentService()
+        experimentService.assayService = new AssayService()
+
+        Assay assay = Assay.build()
+        AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
+        Measure measure = Measure.build(assay: assay)
+        AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: measure)
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure experimentMeasure = ExperimentMeasure.build(experiment: experiment, measure: measure)
+
+        when:
+        experimentService.splitExperimentsFromAssay([experiment])
+
+        then:
+        experiment.assay != assay // the assay is different
+        experimentMeasure.measure != measure // and measure is different
+
+        // but the new measure is identical to the original measure
+        experimentMeasure.measure.resultType == measure.resultType
+        experimentMeasure.measure.statsModifier == measure.statsModifier
+
+        Assay newAssay = experiment.assay
+        newAssay.assayContexts.size() == 1
+        newAssay.assayContexts.first().contextName == "alpha"
+
+        // verify the assayContextMeasures are hooked up right
+        experimentMeasure.measure.assayContextMeasures.size() == 1
+        experimentMeasure.measure.assayContextMeasures.first().assayContext == newAssay.assayContexts.first()
+        experimentMeasure.measure.assayContextMeasures.first().measure == experimentMeasure.measure
+    }
+
 }

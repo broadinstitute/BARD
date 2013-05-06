@@ -8,6 +8,7 @@ class Element extends AbstractElement {
 
     Set<TreeRoot> treeRoots = [] as Set<TreeRoot>
     Set<OntologyItem> ontologyItems = [] as Set<OntologyItem>
+    String comments //Used in UI to explain why you are adding a new term
 
     /**
      * the element hierarchy objects that have this element as the parentElement
@@ -30,7 +31,9 @@ class Element extends AbstractElement {
     static mappedBy = [parentHierarchies: "parentElement",
             childHierarchies: "childElement"
     ]
-
+    static constraints = {
+        comments(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
+    }
     OntologyBreadcrumb getOntologyBreadcrumb(){
         return new OntologyBreadcrumb(this)
     }

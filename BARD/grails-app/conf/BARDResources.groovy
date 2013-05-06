@@ -28,6 +28,11 @@ modules = {
         resource url:'/css/card.css'
         resource url:'/css/bootstrap-plus.css'
     }
+    newTerm {
+        resource url:'/css/newterm/newTerms.css'
+        resource url:'/js/element/newTerm.js'
+
+    }
 	datatables {
 		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
 	}
@@ -46,6 +51,7 @@ modules = {
 	}
 
 	assayshow {
+        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
 		resource url: '/js/cap/assay.show.js'
 	}
 

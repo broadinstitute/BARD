@@ -23,7 +23,10 @@
                     <g:hiddenField class="span8" id="attributeElementId" name="attributeElementId"
                                    value="${instance?.attributeElementId}" disabled="${disabledInput}"/>
                     <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
+                    <g:link controller="element" action="addTerm"
+                            target="proposeTerm" class="btn">Propose a new term </g:link>
                 </div>
+
             </div>
 
 

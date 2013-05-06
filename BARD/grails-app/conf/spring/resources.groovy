@@ -34,5 +34,7 @@ beans = {
         crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
     }
 
-    externalOntologyFactory(bard.validation.ext.BardExternalOntologyFactory)
+    externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory){ bean ->
+                bean.factoryMethod = "getInstance"
+    }
 }

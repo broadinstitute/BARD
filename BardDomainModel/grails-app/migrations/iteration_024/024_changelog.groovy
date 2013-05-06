@@ -61,5 +61,12 @@ databaseChangeLog = {
             }
         }
     }
+    changeSet(author: "jasiedu", id: "iteration-024/04-add-comments-field-to-Element", dbms: 'oracle', context: 'standard') {
+        sqlFile(path: "${migrationsDir}/iteration_024/04-add-comments-field-to-Element.sql", stripComments: true)
+    }
+
+    changeSet(author: "pmontgom", id: "iteration-024/05-recreate-deferred-constraints", dmbs: "oracle", context: "standard") {
+        sqlFile(path: "${migrationsDir}/iteration_024/05-recreate-deferred-constraints.sql", stripComments: true)
+    }
 }
 

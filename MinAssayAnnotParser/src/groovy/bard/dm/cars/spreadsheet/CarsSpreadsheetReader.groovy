@@ -13,13 +13,7 @@ import bard.dm.cars.spreadsheet.exceptions.CouldNotReadHeadersException
  */
 class CarsSpreadsheetReader {
 
-    ProjectIdsToLoad projectIdsToLoadSet
-
-    public CarsSpreadsheetReader(ProjectIdsToLoad projectIdsToLoadSet) {
-        this.projectIdsToLoadSet = projectIdsToLoadSet
-    }
-
-    List<CarsProject>  readProjectsFromFile(String inputFilePath, String headerMappingsConfigPath) throws FileNotFoundException, Exception {
+    List<CarsProject>  readProjectsFromFile(String inputFilePath, String headerMappingsConfigPath, Set<Integer> projectUidsToLoadSet) throws FileNotFoundException, Exception {
         Log.logger.info("read data from file " + inputFilePath)
 
         HeaderNamesReader headerNamesReader = new HeaderNamesReader()
@@ -44,7 +38,7 @@ class CarsSpreadsheetReader {
                 try {
                     Integer projectUid = Integer.valueOf(projectUidString)
 
-                    if (projectIdsToLoadSet.contains(projectUid)) {
+                    if (projectUidsToLoadSet.contains(projectUid)) {
                         CarsProject project = projectUidProjectMap.get(projectUid)
                         if (null == project) {
                             project = new CarsProject(projectUid: projectUid)

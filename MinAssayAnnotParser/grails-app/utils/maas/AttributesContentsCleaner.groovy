@@ -21,7 +21,7 @@ class AttributesContentsCleaner {
      */
 
    static void cleanDtos(List<Dto> dtos) {
-       Map attributeNameMapping = AttributeNameMapping.build()
+       Map attributeNameMapping = ElementIdMapping.build()
         dtos.each{Dto dto->
             List<ContextDTO> cleanedContextDTOs = []
             dto.contextDTOs.each{ContextDTO contextDTO ->

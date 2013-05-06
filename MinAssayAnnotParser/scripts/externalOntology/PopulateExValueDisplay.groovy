@@ -28,7 +28,7 @@ join aci.assayContext as ac
 join ac.assay as a
 join a.experiments as experiment
 join experiment.projectExperiments as pe
-where aci.extValueId is not null and aci.modifiedBy <> '${modifiedBy}'
+where aci.extValueId is not null and aci.modifiedBy <> '${modifiedBy}' and aci.modifiedBy <> 'BAO_1000'
 """)
 
 int updatedAssayContextItem = 0
@@ -46,13 +46,13 @@ List<ExperimentContextItem> ecItems = ExperimentContextItem.executeQuery("""sele
 join eci.experimentContext as ec
 join ec.experiment as e
 join e.projectExperiments as pe
-where eci.extValueId is not null and eci.modifiedBy <> '${modifiedBy}'
+where eci.extValueId is not null and eci.modifiedBy <> '${modifiedBy}' and eci.modifiedBy <> 'BAO_1000'
 """)
 int updatedExperimentContextItem = 0
 for (ExperimentContextItem item : ecItems) {
     if (processItem(item, externalOntologyAccessService, "Experiment", modifiedBy)){
         BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
- //       println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
+//       println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedExperimentContextItem++
     }
@@ -62,7 +62,7 @@ println("Finish process experiment context item, total ${ecItems.size()}, update
 //List<ProjectContextItem> pcItems = ProjectContextItem.findAllByExtValueIdIsNotNull()
 List<ProjectContextItem> pcItems =  ProjectContextItem.executeQuery("""select pci from ProjectContextItem as pci
 join pci.context as pc
-where pci.extValueId is not null and pci.modifiedBy <> '${modifiedBy}'
+where pci.extValueId is not null and pci.modifiedBy <> '${modifiedBy}' and pci.modifiedBy <> 'BAO_1000'
 """)
 int updatedProjectContextItem = 0
 for (ProjectContextItem item : pcItems) {

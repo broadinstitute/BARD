@@ -32,4 +32,16 @@ class AssayContext extends AbstractContext {
     AbstractContextOwner getOwner() {
         return assay
     }
+
+    public AssayContext clone(Assay newOwner) {
+        AssayContext newContext = new AssayContext(contextName: contextName, contextGroup: contextGroup);
+
+        for(item in assayContextItems) {
+            item.clone(newContext)
+        }
+
+        newOwner.addToAssayContexts(newContext)
+
+        return newContext;
+    }
 }

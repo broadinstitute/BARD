@@ -1,10 +1,10 @@
 package bard.db.dictionary
 
-import grails.test.mixin.TestFor
-import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
+import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
@@ -16,12 +16,12 @@ class BuildElementPathsServiceSpec extends Specification {
 
     BuildElementPathsService service
 
-	def setup() {
+    def setup() {
         service = new BuildElementPathsService()
-	}
+    }
 
-	def cleanup() {
-	}
+    def cleanup() {
+    }
 
     void "buildElement with 0 parents"() {
         setup:
@@ -56,7 +56,7 @@ class BuildElementPathsServiceSpec extends Specification {
         return elementHierarchy
     }
 
-	void "build simplest"() {
+    void "build simplest"() {
         setup:
         ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
 
@@ -78,7 +78,7 @@ class BuildElementPathsServiceSpec extends Specification {
         elementAndFullPath.path.get(0) == eh0
         elementAndFullPath.path.get(1) == eh1
         elementAndFullPath.path.get(2) == eh2
-	}
+    }
 
     void "build forked in middle two ends"() {
         setup:
@@ -168,6 +168,26 @@ class BuildElementPathsServiceSpec extends Specification {
         }
     }
 
+
+    void "build single path"() {
+        given:
+        final Element parentElement = Element.build(label: parentLabel)
+        final Element childElement = Element.build(label: childLabel)
+        final Element leafElement = Element.build(label: leafLabel)
+        ElementHierarchy eh0a = buildElementHierarchy(parentElement, childElement, service.relationshipType)
+        buildElementHierarchy(eh0a.childElement, leafElement, service.relationshipType)
+        when:
+        String path = service.buildSinglePath(leafElement)
+        then:
+        assert expectedPath == path
+        where:
+
+        description           | parentLabel | childLabel | leafLabel | expectedPath
+        "Has 'BARD' as root"  | "BARD"      | "child"    | "leaf"    | "/child/leaf/"
+        "Has 'BARD2' as root" | "BARD2"     | "child"    | "leaf"    | "/BARD2/child/leaf/"
+
+
+    }
 
     void "build all"() {
         setup:
