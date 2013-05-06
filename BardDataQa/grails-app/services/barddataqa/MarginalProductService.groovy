@@ -2,164 +2,149 @@ package barddataqa
 
 import org.hibernate.SQLQuery
 
-
 class MarginalProductService {
 
-    ConvertObjectToTypeService convertObjectToTypeService
+    private static final String datasetIdParam = "datasetId"
+    private static final String onHoldDateParam = "onHoldDate"
 
-    private static final Set<Integer> datasetIdParameterIndexSet = [0,1,3,4,5] as Set<Integer>
-    private static final Set<Integer> holdUntilDateParameterIndexSet = [2,6] as Set<Integer>
+    private static final String noMaasView = "bard_data_qa_dashboard.vw_ds_prjct_no_maas_aid"
+    private static final String noRtaView = "bard_data_qa_dashboard.vw_ds_prjct_no_rta_aid"
+    private static final String rmConflictView = "bard_data_qa_dashboard.vw_ds_prjct_rm_cnflct_aid"
+    private static final String duplicateResultView = "bard_data_qa_dashboard.vw_ds_prjct_rm_dup_rslt_aid"
+    private static final String rmRelationshipProblemView = "bard_data_qa_dashboard.vw_ds_prjct_rm_relat_prblm_aid"
 
-
-    private static final String[] baseQueryStringArray = ["""
-select project_uid, total, ready, diff, marginal_product, diff_maas, diff_rta, diff_hold from
-  (select total.project_uid, total, ready, (total - ready) diff,
-    case when total = ready then 0
-      else round((total / ((total - ready_maas) + ((total - ready_rta)/5) + ((total - ready_hold)/2.5))),1)
-      end marginal_product,
-    (total - ready_maas) diff_maas, (total - ready_rta) diff_rta, (total - ready_hold) diff_hold
+    private static final String marginalProductQueryString = """
+select project_uid,
+       total,
+       no_maas,
+       no_rta,
+       rm_cnflct,
+       rm_dup_rslt,
+       rm_relat_prblm,
+       on_hold,
+       case when total_prob = 0 then 0
+        else total / (no_maas+0.2*no_rta+0.2*rm_cnflct+0.2*rm_dup_rslt+0.2*rm_relat_prblm+on_hold)
+        end marginal_product
+  from (
+select project_uid, total, no_maas,no_rta,rm_cnflct,rm_dup_rslt,rm_relat_prblm,on_hold,
+  no_maas+no_rta+rm_cnflct+rm_dup_rslt+rm_relat_prblm+on_hold total_prob
+from (
+select total.project_uid, total, nvl(no_maas,0) no_maas, nvl(no_rta,0) no_rta,
+    nvl(rm_cnflct,0) rm_cnflct, nvl(rm_dup_rslt,0) rm_dup_rslt, nvl(rm_relat_prblm,0) rm_relat_prblm,
+    nvl(on_hold,0) on_hold
   from
-    (select vpaj.project_uid, count(vpaj.aid) total from bard_data_qa_dashboard.vw_project_aid_join vpaj
-        join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-        where vpaj.project_uid in (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=""",
+    (select project_uid, count(*) total from bard_data_qa_dashboard.vw_ds_prjct_not_summary_aid
+      where dataset_id=:$datasetIdParam
+      group by project_uid) total
+  left join
+    (select project_uid, count(*) no_maas from $noMaasView
+      where dataset_id=:$datasetIdParam
+      group by project_uid) no_maas on no_maas.project_uid = total.project_uid
+  left join
+    (select project_uid, count(*) no_rta from $noRtaView
+      where dataset_id=:$datasetIdParam
+      group by project_uid) no_rta on no_rta.project_uid = total.project_uid
+  left join
+    (select project_uid, count(*) rm_cnflct from $rmConflictView
+      where dataset_id=:$datasetIdParam
+      group by project_uid) rm_cnflct on rm_cnflct.project_uid = total.project_uid
+  left join
+    (select project_uid, count(*) rm_dup_rslt from $duplicateResultView
+      where dataset_id=:$datasetIdParam
+      group by project_uid) rm_dup_rslt on rm_dup_rslt.project_uid = total.project_uid
+  left join
+    (select project_uid, count(*) rm_relat_prblm from $rmRelationshipProblemView
+      where dataset_id=:$datasetIdParam
+      group by project_uid) rm_relat_prblm on rm_relat_prblm.project_uid = total.project_uid
+  left join
+    (select vpaj.project_uid, count(*) on_hold from bard_data_qa_dashboard.vw_project_aid_join vpaj
+      join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
+      where ai.hold_until_date > :$onHoldDateParam
+      group by vpaj.project_uid) on_hold on on_hold.project_uid = total.project_uid
+)
+)
+order by marginal_product desc
+    """
 
-            """)
-          and ai.is_summary_aid <> 'y'
-        group by vpaj.project_uid)
-      total
-    join
-      (--query for aid's in each project that have maas and result type annotations and are not on hold
-        select vpaj.project_uid, count(vpaj.aid) ready from bard_data_qa_dashboard.vw_project_aid_join vpaj
-          join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-          where vpaj.project_uid in (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=""",
-
-            """)
-            and ai.is_summary_aid <> 'y'
-            and vpaj.aid in (select aid from bard_data_qa_dashboard.maas_spreadsheet_aid)
-            and vpaj.aid in (select aid from bard_data_qa_dashboard.result_type_annotation where status <> 'on hold')
-            and ai.hold_until_date < '""",
-
-            """'
-          group by vpaj.project_uid)
-      ready on ready.project_uid = total.project_uid
-    join
-      (--query for aid's in each project that have maas
-        select vpaj.project_uid, count(vpaj.aid) ready_maas from bard_data_qa_dashboard.vw_project_aid_join vpaj
-          join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-          where vpaj.project_uid in (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=""",
-
-            """)
-            and ai.is_summary_aid <> 'y'
-            and vpaj.aid in (select aid from bard_data_qa_dashboard.maas_spreadsheet_aid)
-          group by vpaj.project_uid)
-      ready_maas on ready_maas.project_uid = total.project_uid
-    join
-      (--query for aid's in each project that have result type mapping
-        select vpaj.project_uid, count(vpaj.aid) ready_rta from bard_data_qa_dashboard.vw_project_aid_join vpaj
-          join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-          where vpaj.project_uid in (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=""",
-
-            """)
-            and ai.is_summary_aid <> 'y'
-            and vpaj.aid in (select aid from bard_data_qa_dashboard.result_type_annotation where status not in ('on hold'))
-          group by vpaj.project_uid)
-      ready_rta on ready_rta.project_uid = total.project_uid
-    join
-      (--query for aid's in each project that are not on hold
-        select vpaj.project_uid, count(vpaj.aid) ready_hold from bard_data_qa_dashboard.vw_project_aid_join vpaj
-          join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-          where vpaj.project_uid in (select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=""",
-
-            """)
-            and ai.is_summary_aid <> 'y'
-            and ai.hold_until_date < '""",
-
-            """'
-          group by vpaj.project_uid)
-      ready_hold on ready_hold.project_uid = total.project_uid)
-  order by marginal_product desc, total desc, project_uid
-"""]
-
-
-    private static final String projectUidParamName = "projectUid"
-
-    private static final String needMaasQueryString = """
-select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
-  join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-  where ai.is_summary_aid='n' and vpaj.project_uid=:$projectUidParamName and vpaj.aid not in
-    (select aid from bard_data_qa_dashboard.maas_spreadsheet_aid)
-"""
-
-    private static final String needRtaQueryString = """
-select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
-  join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-  where ai.is_summary_aid='n' and vpaj.project_uid=:$projectUidParamName and vpaj.aid not in
-    (select aid from bard_data_qa_dashboard.result_type_annotation where status <> 'on hold')
-"""
+    private static final String projectUidParam = "projectUid"
+    private static final String selectColumnsFrom = "select aid from "
+    private static final String whereOrderBy = " where dataset_id=:$datasetIdParam and project_uid=:$projectUidParam order by aid"
 
     def sessionFactory
 
-    /**
-     * calculate marginal product of work for projects within dataset identified by provided datasetId
-     * Based on AID's that are not summary AID's
-     * @param datasetId
-     * @return
-     */
-    List<MarginalProductForProject> runMarginalProductCalculationForDataset(long datasetId) {
+    ConvertObjectToTypeService convertObjectToTypeService
 
-        StringBuilder builder = new StringBuilder()
+    List<MarginalProductForProject> calculate(Long datasetId, Date onHoldDate) {
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(marginalProductQueryString)
+        query.setLong(datasetIdParam, datasetId)
+        query.setDate(onHoldDateParam, onHoldDate)
 
-        String dateString = (new Date()).format("dd-MMM-yyyy")
-        for (int i = 0; i < baseQueryStringArray.length; i++) {
-            builder.append(baseQueryStringArray[i])
+        List<Object[]> rawList = query.list()
 
-            if (datasetIdParameterIndexSet.contains(i)) {
-                builder.append(datasetId)
-            } else if (holdUntilDateParameterIndexSet.contains(i)) {
-                builder.append(dateString)
-            }
-        }
+        List<MarginalProductForProject> result = new ArrayList<MarginalProductForProject>(rawList.size())
 
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(builder.toString())
-
-        List<MarginalProductForProject> result = new LinkedList<MarginalProductForProject>()
-
-        for (Object[] row : query.list()) {
-            result.add(new MarginalProductForProject(projectUid: (Integer)row[0], totalAids: (Integer)row[1],
-                    readyAids: (Integer)row[2], difference: (Integer)row[3], marginalProduct: (Double)row[4],
-                    countThatNeedMaas: (Integer)row[5], countThatNeedRta: (Integer)row[6], countOnHold: (Integer)row[7]))
+        for (Object[] row : rawList) {
+            result.add(new MarginalProductForProject((Integer)row[0], (Integer)row[1], (Integer)row[2], (Integer)row[3],
+                    (Integer)row[4], (Integer)row[5], (Integer)row[6], (Integer)row[7], (Double)row[8]))
         }
 
         return result
     }
 
-    List<Integer> findAidsNeedMaasForProject(Long projectUid) {
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(needMaasQueryString)
-        query.setLong(projectUidParamName, projectUid)
 
-        List<Integer> result = convertObjectToTypeService.convert(query.list())
+    private List<Integer> findAidsThatNeed(Long datasetId, Integer projectUid, String view) {
+        String queryString = "$selectColumnsFrom $view $whereOrderBy"
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryString)
+        query.setLong(datasetIdParam, datasetId)
+        query.setInteger(projectUidParam, projectUid)
 
-        return result
+        List<Integer> aidList = convertObjectToTypeService.convert(query.list())
+        return aidList
     }
 
-    List<Integer> findAidsNeedRtaForProject(Long projectUid) {
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(needRtaQueryString)
-        query.setLong(projectUidParamName, projectUid)
-
-        List<Integer> result = convertObjectToTypeService.convert(query.list())
-
-        return result
+    List<Integer> findAidsThatNeedMaas(Long datasetId, Integer projectUid) {
+        return findAidsThatNeed(datasetId, projectUid, noMaasView)
+    }
+    List<Integer> findAidsThatNeedRta(Long datasetId, Integer projectUid) {
+        return findAidsThatNeed(datasetId, projectUid, noRtaView)
+    }
+    List<Integer> findAidsThatHaveRmConflict(Long datasetId, Integer projectUid) {
+        return findAidsThatNeed(datasetId, projectUid, rmConflictView)
+    }
+    List<Integer> findAidsThatHaveDuplicateResult(Long datasetId, Integer projectUid) {
+        return findAidsThatNeed(datasetId, projectUid, duplicateResultView)
+    }
+    List<Integer> findAidsThatHaveRmRelationshipProblem(Long datasetId, Integer projectUid) {
+        return findAidsThatNeed(datasetId, projectUid, rmRelationshipProblemView)
     }
 }
 
 
 class MarginalProductForProject {
     Integer projectUid
-    Integer totalAids
-    Integer readyAids
-    Integer difference
-    Double marginalProduct
+    Integer totalAidCount
     Integer countThatNeedMaas
     Integer countThatNeedRta
+    Integer countWitheResultMapConflictBetweenResultTypeAndContextItem
+    Integer countWithResultMapDuplicateResult
+    Integer countWithResultMapRelationshipProblem
     Integer countOnHold
+    Double marginalProduct
+
+    MarginalProductForProject(Integer projectUid, Integer totalAidCount, Integer countThatNeedMaas,
+                              Integer countThatNeedRta, Integer countWitheResultMapConflictBetweenResultTypeAndContextItem,
+                              Integer countWithResultMapDuplicateResult, Integer countWithResultMapRelationshipProblem,
+                              Integer countOnHold, Double marginalProduct) {
+
+        this.projectUid = projectUid
+        this.totalAidCount = totalAidCount
+        this.countThatNeedMaas = countThatNeedMaas
+        this.countThatNeedRta = countThatNeedRta
+        this.countWitheResultMapConflictBetweenResultTypeAndContextItem = countWitheResultMapConflictBetweenResultTypeAndContextItem
+        this.countWithResultMapDuplicateResult = countWithResultMapDuplicateResult
+        this.countWithResultMapRelationshipProblem = countWithResultMapRelationshipProblem
+        this.countOnHold = countOnHold
+        this.marginalProduct = marginalProduct
+    }
 }
+
