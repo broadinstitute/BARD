@@ -14,6 +14,7 @@ import bard.dm.cars.spreadsheet.exceptions.CouldNotReadHeadersException
 import bard.dm.cars.spreadsheet.exceptions.MultipleProjectsForProjectUidException
 import bard.dm.cars.spreadsheet.exceptions.ExternalReferenceMissingProjectException
 import bard.dm.cars.spreadsheet.ProjectIdsToLoad
+import org.apache.commons.lang.StringUtils
 
 Log.initializeLogger("data/maas/cars/output/parseCarsSpreadsheet.log")
 println("Start script")
@@ -24,18 +25,41 @@ final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappin
 //TODO rename this file, it is more general now
 final String elementFieldMappingRelativePath = "grails-app/conf/resources/ElementFieldMapping.config"
 final String username = "dlahr_CARS"
-final String projectIdsToLoadFileRelativePath = "data/maas/cars/project_UID_dataset.csv"
+//final String projectIdsToLoadFileRelativePath = "data/maas/cars/project_UID_dataset.csv"
 
+String dataset_id = System.getProperty("datasetid")
+String willCommit = System.getProperty("willcommit")
+if (!dataset_id && !StringUtils.isNumeric(dataset_id)) {
+    println("Please provide a valid dataset id: -Ddatasetid=validid")
+    return
+}
+if (!willCommit) {
+    println("This will be a dry run to check if there is any errors need to be fixed in spreadsheet.")
+    println("If you are sure you need to commit: -Dwillcommit=true|false")
+}
+def projectUidsToLoad
+Project.withSession { session ->
+    projectUidsToLoad = session.createSQLQuery("""
+        select distinct project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=${dataset_id} order by project_uid
+  """).setCacheable(false).list().collect {it.longValue()}
+}
+
+println (projectUidsToLoad)
+if (!projectUidsToLoad) {
+    println("No project UID to load")
+    return
+}
 
 final Date startDate = new Date()
 
 try {
     final CarsBardMapping carsBardMapping = new CarsBardMapping(elementFieldMappingRelativePath)
 
-    ProjectIdsToLoad projectIdsToLoadSet = new ProjectIdsToLoad()
-    projectIdsToLoadSet.loadProjectIds(projectIdsToLoadFileRelativePath, 1)
+//    ProjectIdsToLoad projectIdsToLoadSet = new ProjectIdsToLoad()
+//    projectIdsToLoadSet.loadProjectIds(projectIdsToLoadFileRelativePath, 1)
 
-    List<CarsProject> carsProjectList = (new CarsSpreadsheetReader(projectIdsToLoadSet)).readProjectsFromFile(inputFileRelativePath, headerMappingRelativePath)
+
+    List<CarsProject> carsProjectList = (new CarsSpreadsheetReader()).readProjectsFromFile(inputFileRelativePath, headerMappingRelativePath, projectUidsToLoad)
 
     (new CarsSpreadsheetValidator()).validateProjects(carsProjectList)
 
@@ -81,9 +105,7 @@ finally {
     Log.close()
 }
 
-println("Finished with script")
-
-return
+println("Finished with cars loading")
 
 
 
