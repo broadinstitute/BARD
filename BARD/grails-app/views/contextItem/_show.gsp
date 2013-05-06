@@ -16,7 +16,7 @@
                 <g:if test="${context.hasProperty('assayContextMeasures') && context.assayContextMeasures}">
                     <p>Measure<g:if test="${context.assayContextMeasures.size() > 1}">s</g:if>:
                         <g:each in="${context.assayContextMeasures}" status="i" var="assayContextMeasure">
-                            <a href="#measures-header">${assayContextMeasure.measure.displayLabel}<g:if test="${i < context.assayContextMeasures.size() - 1}">,  </g:if></a>
+                            <a href="#measures-header" class="treeNode" id="${assayContextMeasure.measure.id}">${assayContextMeasure.measure.displayLabel}<g:if test="${i < context.assayContextMeasures.size() - 1}">,  </g:if></a>
                         </g:each>
                     </p>
                 </g:if>
