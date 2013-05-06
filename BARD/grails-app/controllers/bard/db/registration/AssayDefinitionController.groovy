@@ -65,10 +65,6 @@ class AssayDefinitionController {
     }
 
     def editMeasure() {
-        // while not directly used in the rendering of this page, make sure the tree is cached before rendering the
-        // edit page to ensure the autocomplete comes up quickly when the user tries.
-        // Perhaps a better approach would be to simply ensure some loading indicator is more predominant when the autocomplete is running.
-        ontologyDataAccessService.ensureTreeCached();
         JSON measuresTreeAsJson = null;
 
         def assayInstance = Assay.get(params.id)

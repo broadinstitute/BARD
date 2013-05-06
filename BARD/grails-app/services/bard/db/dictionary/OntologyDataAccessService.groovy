@@ -9,6 +9,11 @@ import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.util.Assert
 
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
 import static bard.validation.ext.ExternalOntologyNCBI.NCBI_EMAIL
 import static bard.validation.ext.ExternalOntologyNCBI.NCBI_TOOL
 
@@ -26,68 +31,72 @@ class OntologyDataAccessService {
     private static final String ORACLE_LIKE_ESCAPE = '\\'
 
 
-    private static final String ASSAY_DESCRIPTOR = "assay protocol"
-
-    private static final String BIOLOGY_DESCRIPTOR = "biology"
-
-    private static final String INSTANCE_DESCRIPTOR = "project management"
-
     public static class ElementSummary {
         String label;
         Number elementId;
     }
+    //TODO: Thinking about using Grails Cache
+    final ConcurrentMap<String, Collection<ElementSummary>> cachedElements = new ConcurrentHashMap<String, Collection<ElementSummary>>()
 
-    Map<String, Collection<ElementSummary>> cachedElements = null;
+    public void reloadCache() {
+        this.computeTrees(true)
+    }
 
-    public Map<String, Collection<ElementSummary>> computeTrees() {
-        Map<String, Collection<ElementSummary>> trees = new HashMap()
-        List<ElementHierarchy> relationships = ElementHierarchy.findAll();
+    public void addChildren(final Element element, final Collection<ElementSummary> results, final Set<Element> seen, final Map<Element, List<ElementHierarchy>> parentToChildren) {
+        if (!seen.contains(element)) {
+            seen.add(element)
+
+            if (element.elementStatus != ElementStatus.Retired) {
+                results.add(new ElementSummary(label: element.label, elementId: element.id))
+                final List<ElementHierarchy> elementHierarchies = parentToChildren.get(element)
+                for (ElementHierarchy relationship : elementHierarchies) {
+                    addChildren(relationship.childElement, results, seen, parentToChildren)
+                }
+            }
+        }
+    }
+    /**
+     *
+     * @param reloadCache - true if we are reloading the caches
+     * @return
+     */
+    public void computeTrees(boolean reloadCache) {
+
+        final List<ElementHierarchy> relationships = ElementHierarchy.findAll();
 
         // let hibernate also load the elements for this round
         Element.findAll()
 
         // create a mapping of parent -> children.  Again, the domain could be changed to accommodate, but want to
         // make sure this works before invasive changes
-        def parentToChildren = relationships.groupBy { it.parentElement }
+        final Map<Element, List<ElementHierarchy>> parentToChildren = relationships.groupBy { it.parentElement }
 
-        def addChildren;
-        addChildren = { Element element, Collection results, Set seen ->
-            if (!seen.contains(element)) {
-                seen.add(element)
-
-                if (element.elementStatus != ElementStatus.Retired) {
-                    results.add(new ElementSummary(label: element.label, elementId: element.id))
-                    for (relationship in parentToChildren.get(element)) {
-                        addChildren(relationship.childElement, results, seen)
-                    }
-                }
+        //TODO: In future we might want to do this in parallel
+        final List<TreeRoot> treeRoots = TreeRoot.findAll()
+        for (TreeRoot root : treeRoots) {
+            final List<Element> results = []
+            addChildren(root.element, results, new HashSet(), parentToChildren)
+            final List<Element> sortedList = results.sort { it.label }
+            if (reloadCache) {
+                this.cachedElements.replace(root.treeName, sortedList)
+            } else {
+                this.cachedElements.putIfAbsent(root.treeName, sortedList)
             }
         }
-
-        for (root in TreeRoot.findAll()) {
-            List<Element> results = []
-            addChildren(root.element, results, new HashSet())
-
-            trees.put(root.treeName, results.sort { it.label })
-        }
-
-        return trees
-    }
-
-
-    public void ensureTreeCached() {
-        if (cachedElements == null) {
-            cachedElements = Collections.synchronizedMap(computeTrees())
+        //reload all database trees
+        if (reloadCache) {
+            Element.withSession { session ->
+                session.createSQLQuery("""BEGIN Manage_Ontology.make_trees(); END;""").executeUpdate()
+            }
         }
     }
 
     public List<ElementSummary> getElementsFromTree(String treeName, String label) {
-        ensureTreeCached()
-
-        if (label == null)
+        if (label == null) {
             label = ""
+        }
 
-        Collection<ElementSummary> elements = cachedElements.get(treeName)
+        Collection<ElementSummary> elements = this.cachedElements.get(treeName)
 
         return elements.findAll { it.label != null && it.label.toLowerCase().contains(label.toLowerCase()) }
     }
@@ -127,8 +136,8 @@ class OntologyDataAccessService {
      * @param term
      * @return the term trimmed, lowercase and having the chars % _ and \ escaped for oracle like search
      */
-    private trimLowerCaseEscapeForLike(String term) {
-        term?.trim()?.toLowerCase()?.replaceAll(/(%|_|\\)/, /${ORACLE_LIKE_ESCAPE}\$1/)
+    private String trimLowerCaseEscapeForLike(String term) {
+        return term?.trim()?.toLowerCase()?.replaceAll(/(%|_|\\)/, /${ORACLE_LIKE_ESCAPE}\$1/)
     }
 
     public List<Element> getElementsForValues(Long elementId, String term) {

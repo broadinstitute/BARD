@@ -110,22 +110,34 @@ bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 rememberme.key = 'bard_cap_crowd_remember_me'
 rememberme.cookieName = 'bard_cap_crowd_remember_me_cookie'
 
-
+grails.plugins.springsecurity.providerNames = ['crowdAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
+grails.plugins.springsecurity.rememberMe.key = rememberme.key
 grails {
     plugins {
         springsecurity {
-            providerNames = ['inMemMapAuthenticationProviderService','crowdAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
-            rememberMe.cookieName = rememberme.cookieName
-            rememberMe.key = rememberme.key
             controllerAnnotations.staticRules = [
                     '/console/**': ['ROLE_CONSOLE_USER']
             ]
             ipRestrictions = [
                     '/console/**': '127.0.0.1'
             ]
+            useBasicAuth = true
+            basic.realmName = 'CAP'
+            filterChain.chainMap = [
+//                    '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+//                    '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+//                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+//                    '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+            ]
         }
     }
 }
+//prevent session fixation attacks
+grails.plugins.springsecurity.useSessionFixationPrevention = true
+
+//grails.plugins.springsecurity.rejectIfNoRule = true
 
 CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
