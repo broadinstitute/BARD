@@ -138,6 +138,18 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         SpreadSheetActivityStorage spreadSheetActivityStorage8 = new SpreadSheetActivityStorage()
         spreadSheetActivityStorage8.childElements = null
         spreadSheetActivityStorage8.hillCurveValueHolderList  = [hillCurveValueHolder2]
+        //--  check axis labels
+        SpreadSheetActivityStorage spreadSheetActivityStorage9 = new SpreadSheetActivityStorage()
+        final HillCurveValueHolder hillCurveValueHolder3 = new HillCurveValueHolder()
+        hillCurveValueHolder3.identifier = 1
+        hillCurveValueHolder3.s0 = 1d
+        hillCurveValueHolder3.slope = 1d
+        hillCurveValueHolder3.coef = 1d
+        hillCurveValueHolder3.conc = [1d,2d]
+        hillCurveValueHolder3.response = [1d,2d]
+        hillCurveValueHolder3.xAxisLabel = 'myXlabel'
+        hillCurveValueHolder3.yAxisLabel = 'myYlabel'
+        spreadSheetActivityStorage9.hillCurveValueHolderList  = [hillCurveValueHolder3]
 
 
         when:
@@ -148,7 +160,8 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         String results5 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage5])
         String results6 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage6])
         String results7 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7])
-        String results8 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage7])
+        String results8 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage8])
+        String results9 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage9])
 
         then:
         results1.contains("Not tested in this experiment")
@@ -161,8 +174,15 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         results5.contains("s0=")
         results6.contains("<FONT COLOR=\"#000000\"><nobr>")
         (!results7.contains("<FONT COLOR=\"#000000\"><nobr>"))
+        results7.contains("doseResponseCurve/doseResponseCurve")
+        (!results7.contains("nobr"))
+
+        (!results8.contains("<FONT COLOR=\"#000000\"><nobr>"))
         results8.contains("doseResponseCurve/doseResponseCurve")
         (!results8.contains("nobr"))
+        results9.contains("myXlabel")
+        results9.contains("myYlabel")
+
     }
 
 
@@ -176,6 +196,7 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         List<MolSpreadSheetColumnHeader> mssHeaders3 = []
         List<MolSpreadSheetColumnHeader> mssHeaders4 = []
         List<MolSpreadSheetColumnHeader> mssHeaders5 = []
+        List<MolSpreadSheetColumnHeader> mssHeaders6 = []
         MolSpreadSheetData molSpreadSheetData = new MolSpreadSheetData()
         MolSpreadSheetData molSpreadSheetData2 = new MolSpreadSheetData()
         MolSpreadSheetData molSpreadSheetData3 = new MolSpreadSheetData()
@@ -294,6 +315,16 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         molSpreadSheetData3.columnPointer[235L] =0
         molSpreadSheetData3.experimentNameList[0]="9388"
         molSpreadSheetData3.mapColumnsNormalization["9388"]=true
+        // error case with missing min/max
+        SpreadSheetActivityStorage spreadSheetActivityStorage10 = new SpreadSheetActivityStorage()
+        spreadSheetActivityStorage10.eid = 235L
+        mssHeaders6 << new MolSpreadSheetColumnHeader()
+        mssHeaders6 << new MolSpreadSheetColumnHeader()
+        mssHeaders6 << new MolSpreadSheetColumnHeader()
+        mssHeaders6 << new MolSpreadSheetColumnHeader()
+        mssHeaders6 << new MolSpreadSheetColumnHeader()
+        mssHeaders6[4].molSpreadSheetColSubHeaderList = [new MolSpreadSheetColSubHeader(minimumResponse: null, maximumResponse: null), new MolSpreadSheetColSubHeader(minimumResponse: null, maximumResponse: null), new MolSpreadSheetColSubHeader(minimumResponse: null, maximumResponse: null)]
+        spreadSheetActivityStorage10.hillCurveValueHolderList  = [hillCurveValueHolder]
 
 
         when:
@@ -307,6 +338,7 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         String results8 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage8, mssHeaders: mssHeaders4, molSpreadSheetData: molSpreadSheetData])
         String results9 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage9, mssHeaders: mssHeaders5, molSpreadSheetData: molSpreadSheetData2])
         String results10 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage9, mssHeaders: mssHeaders5, molSpreadSheetData: molSpreadSheetData3])
+        String results11 = new  SpreadsheetElementsTagLib().exptDataCell([colCnt: 1, spreadSheetActivityStorage: spreadSheetActivityStorage10, mssHeaders: mssHeaders6, molSpreadSheetData: molSpreadSheetData3])
 
         then:
         results1.contains("Not tested in this experiment")
@@ -319,6 +351,9 @@ class SpreadsheetElementsTagLibUnitSpec  extends Specification {
         (!results8.contains("yNormMin"))
         (!results9.contains("yNormMin"))
         (results10.contains("yNormMin"))
+        (results10.contains("Substance Id : null"))
+        (!results11.contains("yNormMin"))
+        (results11.contains("doseResponseCurve/doseResponseCurve"))
     }
 
 
