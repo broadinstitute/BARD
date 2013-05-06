@@ -1,4 +1,4 @@
-package molspreadsheet
+package bard.core.util
 
 import bard.core.rest.spring.util.RingNode
 import spock.lang.Specification
@@ -9,7 +9,7 @@ import spock.lang.Unroll
  */
 //@TestFor(RingNode)
 @Unroll
-class RingNodeUnitSpec  extends Specification{
+class RingNodeUnitSpec extends Specification{
 
 
     void setup() {
@@ -89,6 +89,37 @@ class RingNodeUnitSpec  extends Specification{
             assert ringNodeLinkedHashMap[key] < 1
         }
     }
+
+
+
+    void "Test hashcode with degenerate input"() {
+        when:
+        RingNode ringNode  =  new RingNode( name, identifier, description, levelIdentifier, "source")
+
+        then:
+        ringNode.hashCode() != null
+
+        where:
+        name            |   identifier          |   description         |   levelIdentifier
+        "test name"     |  "test identifier"    |  "test description"   |   "test levelIdentifier"
+        null            |  "test identifier"    |  "test description"   |   "test levelIdentifier"
+        "test name"     |  null                 |  "test description"   |   "test levelIdentifier"
+        "test name"     |  "test identifier"    |  null                 |   "test levelIdentifier"
+        "test name"     |  "test identifier"    |  "test description"   |   null
+        null            |  null                 |  "test description"   |   "test levelIdentifier"
+        null            |  "test identifier"    |  null                 |   "test levelIdentifier"
+        null            |  "test identifier"    |  "test description"   |   null
+        null            |  "test identifier"    |  "test description"   |   "test levelIdentifier"
+        "test name"     |  null                 |  null                 |   "test levelIdentifier"
+        "test name"     |  null                 |  "test description"   |   null
+        "test name"     |  "test identifier"    |  null                 |   null
+        null            |  null                 |  null                 |   "test levelIdentifier"
+        null            |  null                 |  "test description"   |   null
+        "test name"     |  null                 |  null                 |   null
+        "test name"     |  null                 |  null                 |   null
+        null            |  null                 |  null                 |   null
+    }
+
 
 
 
@@ -229,6 +260,37 @@ class RingNodeUnitSpec  extends Specification{
         ringNode.deriveColors(["A","B"],2).trim()=="\"A\",\n\"B\"".toString()
     }
 
+    void "test determineColorMappingRange " (){
+        given:
+        Map<String, RingNode> ringNodeMgr =  [:]
+        ringNodeMgr["1."] = new RingNode("\\", "0", "root", "1", "none")
+        ringNodeMgr["1."].actives = ['active1','active2','active3']
+        ringNodeMgr["1."].inactives = ['inactive1']
+        ringNodeMgr["1.01"] = new RingNode("nameA", "idA", "descriptionA", "levelIdentifierA","sourceA")
+        ringNodeMgr["1.01"].actives = ['active1']
+        ringNodeMgr["1.01"].inactives = ['inactive1','inactive2']
+        ringNodeMgr["1.02"] = new RingNode("nameB", "idB", "descriptionB", "levelIdentifierB","sourceA")
+        ringNodeMgr["1.02"].actives = ['active1']
+        ringNodeMgr["1.02"].inactives = ['inactive1','inactive2','inactive3']
+        // degenerate case -- no actives or inactivates. This is bad data, but we need to respond sensibly
+        ringNodeMgr["1.01.77"] = new RingNode("nameA1", "idA1", "descriptionA1", "levelIdentifierA1","sourceA")
+        ringNodeMgr["1."].children <<  ringNodeMgr["1.01"]
+        ringNodeMgr["1."].children <<  ringNodeMgr["1.02"]
+        ringNodeMgr["1.01"].children <<  ringNodeMgr["1.01.77"]
+
+        when:
+        LinkedHashMap<String, String>  determineColorMappingRangeA  =  ringNodeMgr["1."].determineColorMappingRange ()
+        LinkedHashMap<String, String>  determineColorMappingRangeB   =  ringNodeMgr["1.01"].determineColorMappingRange ()
+        LinkedHashMap<String, String>  determineColorMappingRangeC   =  ringNodeMgr["1.01.77"].determineColorMappingRange ()
+
+        then:
+        determineColorMappingRangeA["minimumValue"].contains('.33')
+        determineColorMappingRangeA["maximumValue"].contains('.75')
+        determineColorMappingRangeB["minimumValue"].contains('.33')
+        determineColorMappingRangeB["maximumValue"].contains('.33')
+        determineColorMappingRangeC["minimumValue"].contains('0')
+        determineColorMappingRangeC["maximumValue"].contains('0')
+    }
 
 
 }
