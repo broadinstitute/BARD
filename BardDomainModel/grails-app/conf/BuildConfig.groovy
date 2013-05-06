@@ -15,6 +15,7 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+
     repositories {
         inherit(false) // don't repositories from plugins
         grailsPlugins()
@@ -22,10 +23,12 @@ grails.project.dependency.resolution = {
         mavenRepo 'http://bard-repo:8081/artifactory/bard-virtual-repo'
         grailsRepo('http://bard-repo:8081/artifactory/bard-virtual-repo', 'grailsCentral')
     }
+
     dependencies {
         build 'com.oracle:ojdbc6:11.2.0.2.0'
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         compile 'org.apache.commons:commons-lang3:3.1'
+        compile 'org.apache.commons:commons-math3:3.1'
     }
 
     plugins {
@@ -36,7 +39,6 @@ grails.project.dependency.resolution = {
         build(":rest-client-builder:1.0.2") { export = false }
         build(":release:2.2.1") { export = false }
         build(":improx:0.2") { export = false } // Interactive Mode Proxy; useful for IDE integration
-
         compile(":clover:3.1.10.1") { export = false }
         compile(":console:1.2") { export = false }
         compile(":cbipcrowdauthentication:0.3.0") {

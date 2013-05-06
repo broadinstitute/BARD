@@ -125,5 +125,4 @@ class ExperimentServiceSpec  extends spock.lang.Specification {
         experimentMeasure.measure.assayContextMeasures.first().assayContext == newAssay.assayContexts.first()
         experimentMeasure.measure.assayContextMeasures.first().measure == experimentMeasure.measure
     }
-
 }
