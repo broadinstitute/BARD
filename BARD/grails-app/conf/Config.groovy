@@ -107,10 +107,16 @@ bard.services.elasticSearchService.restNode.baseUrl = 'http://bard-dev-vm:9200'
 bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 
 //grails.plugins.springsecurity.successHandler.defaultTargetUrl = '/home'
+rememberme.key = 'bard_cap_crowd_remember_me'
+rememberme.cookieName = 'bard_cap_crowd_remember_me_cookie'
+
+
 grails {
     plugins {
         springsecurity {
-            providerNames = ['inMemMapAuthenticationProviderService', 'crowdAuthenticationProvider']
+            providerNames = ['inMemMapAuthenticationProviderService','crowdAuthenticationProvider', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+            rememberMe.cookieName = rememberme.cookieName
+            rememberMe.key = rememberme.key
             controllerAnnotations.staticRules = [
                     '/console/**': ['ROLE_CONSOLE_USER']
             ]

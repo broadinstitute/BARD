@@ -1,4 +1,6 @@
 <%@ page import="bard.db.dictionary.*" %>
+<g:render template="/common/message"/>
+<g:render template="/common/errors" model="['errors': termCommand?.errors?.allErrors]"/>
 <h3>Propose New Term</h3>
 <div class="control-group">
     <label>
@@ -40,7 +42,7 @@
     </label>
 
     <div class="controls">
-        <g:textField name="label" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.label}" class="lowercase" onblur="trim(this)"/>
+        <g:textField name="label" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.label}" class="lowercase" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="label" bean="${termCommand}"/></span>
     </div>
 </div>
@@ -66,7 +68,7 @@
     </label>
 
     <div class="controls">
-        <g:textField name="abbreviation" maxlength="${bard.db.dictionary.Element.ABBREVIATION_MAX_SIZE}" value="${termCommand?.abbreviation}" onblur="trim(this)"/>
+        <g:textField name="abbreviation" maxlength="${bard.db.dictionary.Element.ABBREVIATION_MAX_SIZE}" value="${termCommand?.abbreviation}" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="abbreviation" bean="${termCommand}"/></span>
     </div>
 </div>
@@ -77,18 +79,10 @@
     </label>
 
     <div class="controls">
-        <g:textArea name="synonyms" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.SYNONYMS_MAX_SIZE}" value="${termCommand?.synonyms}" class="lowercase" onblur="trim(this)"/>
+        <g:textArea name="synonyms" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.SYNONYMS_MAX_SIZE}" value="${termCommand?.synonyms}" class="lowercase" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="synonyms" bean="${termCommand}"/></span>
     </div>
 </div>
-
-%{--<div class="fieldcontain ${hasErrors(bean: termCommand, field: 'unit', 'error')} ">--}%
-    %{--<label for="unit">--}%
-        %{--<g:message code="termCommand.unit.label" default="Unit" />--}%
-
-    %{--</label>--}%
-    %{--<g:select id="unit" name="unit.id" from="${bard.db.dictionary.Element.list()}" optionKey="id" value="${termCommand?.unit?.id}" class="many-to-one" noSelection="['null': '']"/>--}%
-%{--</div>--}%
 <div class="control-group">
     <label>
         <h4>4. Explain why you need to add this term.</h4>
@@ -101,7 +95,7 @@
     </label>
 
     <div class="controls">
-        <g:textArea name="comments" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.comments}" onblur="trim(this)"/>
+        <g:textArea name="comments" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.comments}" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="comments" bean="${termCommand}"/></span>
     </div>
 </div>

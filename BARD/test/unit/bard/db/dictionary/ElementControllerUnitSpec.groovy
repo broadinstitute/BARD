@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import grails.buildtestdata.mixin.Build
+import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -26,6 +27,51 @@ class ElementControllerUnitSpec extends Specification {
     def setup() {
         this.controller.elementService = Mock(ElementService.class)
         this.parentElement = Element.build(label: 'parent label with spaces')
+    }
+
+    void "test buildTopLevelHierarchyTree"() {
+
+        given:
+        final String label = "label"
+        final String description = "description"
+        final boolean isFolder = false
+        final boolean isLazy = false
+        long elementId = Element.build(label: label).id
+        when:
+        controller.buildTopLevelHierarchyTree()
+        then:
+        controller.elementService.createElementHierarchyTree() >> {
+            [[elementId: elementId, title: label, description: description, isFolder: isFolder, isLazy: isLazy]]
+        }
+        def controllerResponse = controller.response.contentAsString
+        def jsonResult  = JSON.parse(controllerResponse)
+        assert jsonResult
+        assert [elementId] == jsonResult.elementId
+        assert [label]==jsonResult.title
+        assert [false]==jsonResult.isFolder
+        assert [false]==jsonResult.isLazy
+    }
+    void "test getChildrenAsJson"() {
+
+        given:
+        final String label = "label"
+        final String description = "description"
+        final boolean isFolder = false
+        final boolean isLazy = false
+        long elementId = Element.build(label: label).id
+        when:
+        controller.getChildrenAsJson(elementId)
+        then:
+        controller.elementService.getChildNodes(_) >> {
+            [[elementId: elementId, title: label, description: description, isFolder: isFolder, isLazy: isLazy]]
+        }
+        def controllerResponse = controller.response.contentAsString
+        def jsonResult  = JSON.parse(controllerResponse)
+        assert jsonResult
+        assert [elementId] == jsonResult.elementId
+        assert [label]==jsonResult.title
+        assert [false]==jsonResult.isFolder
+        assert [false]==jsonResult.isLazy
     }
 
     void "test parent label constraints #desc TermCommand: '#valueUnderTest'"() {
@@ -194,17 +240,18 @@ class ElementControllerUnitSpec extends Specification {
         then:
         assert EXPECTED_ADD_TERN_VIEW == view
         assert model.termCommand
-        assert model.elementHierarchyAsJsonTree
     }
 
     void "Save Term Page Parent Label #desc"() {
+        final String label = "label"
         given:
         TermCommand termCommand =
-            new TermCommand(parentLabel: valueUnderTest.call(), label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(parentLabel: valueUnderTest.call(), label: label, description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
         then:
+        this.controller.elementService.addNewTerm(_) >>{Element.build(label:label)}
         assert EXPECTED_ADD_TERN_VIEW == view
         assert flashMessage == flash.message
         TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
@@ -212,13 +259,14 @@ class ElementControllerUnitSpec extends Specification {
         desc                                | valueUnderTest                         | valid | errorCode                           | flashMessage
         'null '                             | { null }                               | false | 'nullable'                          | ""
         'Parent Label does not exist'       | { "parentlabel2" }                     | false | 'termCommand.parentLabel.mustexist' | ""
-        'Parent Label  exist'               | { "parent label with spaces" }         | true  | null                                | "Proposed term null has been saved"
-        'Parent Label with multiple spaces' | { "parent    label    with   spaces" } | true  | null                                | "Proposed term null has been saved"
+        'Parent Label  exist'               | { "parent label with spaces" }         | true  | null                                | "Proposed term label has been saved"
+        'Parent Label with multiple spaces' | { "parent    label    with   spaces" } | true  | null                                | "Proposed term label has been saved"
     }
 
     void "Save Term Page label #desc"() {
+        final String label = "label with spaces"
         given:
-        Element.build(label: "label with spaces")
+        Element.build(label: label)
         TermCommand termCommand =
             new TermCommand(parentLabel: this.parentElement.label, label: valueUnderTest,
                     description: "description", abbreviation: "abbr",
@@ -227,6 +275,7 @@ class ElementControllerUnitSpec extends Specification {
         when:
         this.controller.saveTerm(termCommand)
         then:
+        this.controller.elementService.addNewTerm(_) >>{Element.build(label:valueUnderTest)}
         assert EXPECTED_ADD_TERN_VIEW == view
         TestUtils.assertFieldValidationExpectations(termCommand, "label", valid, errorCode)
 

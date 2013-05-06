@@ -1,8 +1,11 @@
 package bard.db.dictionary
 
-import bard.hibernate.AuthenticatedUserRequired
+import bard.db.command.BardCommand
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.validation.Validateable
+import grails.validation.ValidationErrors
+import groovy.transform.InheritConstructors
 
 @Secured(['isFullyAuthenticated()'])
 class ElementController {
@@ -22,33 +25,48 @@ class ElementController {
         }
     }
 
-    def addTerm() {
-        flash.message=''
+    def getChildrenAsJson(long elementId) {
+        List elementHierarchyTree = elementService.getChildNodes(elementId)
+        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
+        render elementHierarchyAsJsonTree
+    }
+
+    def buildTopLevelHierarchyTree() {
         List elementHierarchyTree = elementService.createElementHierarchyTree()
         JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
-        render(view: 'addTerm', model: [termCommand: new TermCommand(), elementHierarchyAsJsonTree: elementHierarchyAsJsonTree])
+        render elementHierarchyAsJsonTree
+    }
+
+    def addTerm() {
+        flash.message = ''
+        render(view: 'addTerm', model: [termCommand: new TermCommand()])
     }
 
     def saveTerm(TermCommand termCommand) {
         Element currentElement = null
-        flash.message=''
+        flash.message = ''
         if (termCommand.validate()) {
 
             if (!termCommand.hasErrors()) {
                 //remove duplicate white spaces, then trim the string
                 //we probably should also consider removing some other characters
-                termCommand.label = termCommand.label.replaceAll("\\s+", " ").toLowerCase().trim()
+                termCommand.label = termCommand.label.replaceAll("\\s+", " ").trim()
                 currentElement =
                     this.elementService.addNewTerm(termCommand)
-                termCommand = new TermCommand()
-                flash.message = "Proposed term ${currentElement?.label} has been saved"
+                if (currentElement.hasErrors()) {
+                    termCommand.currentElement = currentElement
+                    termCommand.transferErrorsFromCurrentElement()
+                } else {
+                    termCommand = new TermCommand()
+                    flash.message = "Proposed term ${currentElement?.label} has been saved"
+                }
             }
         }
-        List elementHierarchyTree = elementService.createElementHierarchyTree()
-        JSON elementHierarchyAsJsonTree = new JSON(elementHierarchyTree)
-
-        //if currentElement exists then select the node
-        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement,elementHierarchyAsJsonTree: elementHierarchyAsJsonTree])
+        if (request.getHeader('X-Requested-With') == 'XMLHttpRequest') {  //if ajax then render template
+            render(template: 'addForm', model: [termCommand: termCommand, currentElement: currentElement])
+            return
+        }
+        render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
     }
 
     def edit() {
@@ -189,7 +207,9 @@ detected loop id's:${idBuilder.toString()}<br/>"""
         return result
     }
 }
-class TermCommand {
+@InheritConstructors
+@Validateable
+class TermCommand extends BardCommand {
     BuildElementPathsService buildElementPathsService
     String parentLabel
     String parentDescription
@@ -198,39 +218,47 @@ class TermCommand {
     String abbreviation
     String synonyms
     String comments
-    Long unitId
     String relationship = "subClassOf"
+    Element currentElement
+
+    /**
+     * Copy errors from the current element into the Command object for display
+     */
+    void transferErrorsFromCurrentElement() {
+        this.addToErrors(new ValidationErrors(currentElement))
+    }
+
+    static def validateLabelUniqueness(String label, TermCommand termCommand) {
+        if (label) {
+            Element currentElement = Element.findByLabel(label.replaceAll("\\s+", " ").trim())
+            if (currentElement) {
+                String path = termCommand.buildElementPathsService.buildSinglePath(currentElement)
+                return ['unique', label, path]
+            }
+        }
+    }
+
+    static def validateParentLabelMustExist(String parentLabel, TermCommand termCommand) {
+        if (parentLabel) {
+            //this value must exist
+            if (!Element.findByLabel(parentLabel.replaceAll("\\s+", " ").trim())) {
+                return 'mustexist'
+            }
+        }
+    }
 
     static constraints = {
-        parentLabel blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
-            if (value) {
-                //this value must exist
-                if (!Element.findByLabel(value.replaceAll("\\s+", " ").trim())) {
-                    return 'mustexist'
-                }
-            }
-        }
-        label blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
-            if (value) {
-                Element currentElement = Element.findByLabel(value.replaceAll("\\s+", " ").trim())
-                if (currentElement) {
-                    String path = command.buildElementPathsService.buildSinglePath(currentElement)
-                    return ['unique',value,path]
-                }
-            }
-        }
+        parentLabel(blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
+            validateParentLabelMustExist(value, command)
+        })
+        label(blank: false, nullable: false, maxSize: Element.LABEL_MAX_SIZE, validator: { value, command ->
+            validateLabelUniqueness(value, command)
+        })
         parentDescription(blank: true, nullable: true, maxSize: Element.DESCRIPTION_MAX_SIZE)
         description(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
         comments(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
         abbreviation(blank: true, nullable: true, maxSize: Element.ABBREVIATION_MAX_SIZE)
         synonyms(blank: true, nullable: true, maxSize: Element.SYNONYMS_MAX_SIZE)
-        unitId nullable: true, validator: { value, command ->
-            if (value) {
-                if (!Element.findById(value)) {
-                    return 'unit.element.mustexist'
-                }
-            }
-        }
     }
 }
 

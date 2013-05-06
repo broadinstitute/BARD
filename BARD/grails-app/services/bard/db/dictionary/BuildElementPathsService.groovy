@@ -57,7 +57,7 @@ class BuildElementPathsService {
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
         //retrieve all element hierarchy to reduce database round trips
-        List<ElementHierarchy> elementHierarchyList = ElementHierarchy.findAll()
+        ElementHierarchy.findAll()
 
         List<Element> elementList = Element.findAll()
         for (Element element : elementList) {
@@ -66,11 +66,25 @@ class BuildElementPathsService {
 
         return result
     }
-
-    String buildSinglePath(Element element){
+    /**
+     * Display all of the paths as a csv String
+     *
+     * Note that, we remove the root nodes from the message
+     * @param element
+     * @return
+     */
+    String buildSinglePath(final Element element){
         Set<ElementAndFullPath> paths = build(element)
-        if(!paths.isEmpty()) {
-            return StringUtils.join(paths,",")
+        List<String> pathMessage = []
+        for(ElementAndFullPath elementAndFullPath: paths){
+            String pathAsString = elementAndFullPath.toString()
+            if(pathAsString.startsWith("/BARD/")){  //remove the root node. This method should change as soon as we start using trees other than the BARD tree
+                pathAsString = pathAsString.replaceFirst("/BARD/", "/")
+            }
+            pathMessage.add(pathAsString)
+        }
+        if(!pathMessage.isEmpty()) {
+            return StringUtils.join(pathMessage,",")
         }
         return ""
     }

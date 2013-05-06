@@ -30,6 +30,7 @@ modules = {
     }
     newTerm {
         resource url:'/css/newterm/newTerms.css'
+        resource url:'/js/element/newTerm.js'
 
     }
 	datatables {
@@ -50,6 +51,7 @@ modules = {
 	}
 
 	assayshow {
+        resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
 		resource url: '/js/cap/assay.show.js'
 	}
 

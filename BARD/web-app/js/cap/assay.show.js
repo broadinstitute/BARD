@@ -11,6 +11,10 @@ $(document).ready(function () {
         var icon = $(this).siblings().find("i.icon-chevron-down");
         icon.removeClass('icon-chevron-down').addClass('icon-chevron-right');
     });
+    $('a.treeNode').on('click',function(){
+        var measureId = $(this).attr('id');
+        $("#measure-tree").dynatree("getTree").activateKey(measureId);
+    });
 
 });
 
