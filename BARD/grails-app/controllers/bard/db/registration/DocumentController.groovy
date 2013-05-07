@@ -9,7 +9,7 @@ import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import groovy.transform.InheritConstructors
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class DocumentController {
     static allowedMethods = [save: "POST", update: "POST"]
 

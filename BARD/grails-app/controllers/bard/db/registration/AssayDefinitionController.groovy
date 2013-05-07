@@ -9,7 +9,7 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 import bard.db.enums.HierarchyType
 import org.apache.commons.lang.StringUtils
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class AssayDefinitionController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
