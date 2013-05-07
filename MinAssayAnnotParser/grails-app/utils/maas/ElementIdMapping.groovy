@@ -13,10 +13,10 @@ import bard.db.dictionary.Element
 class ElementIdMapping {
     // By default, put file under data/maas, it is a tab delimited file with vocabulary used in spreadsheet and mapped id in element table
     // This is a way to handle if terms used to annotate does not match terms defined in element table
-    private static final String MAPPING_FILE_NAME = "data/maas/element_id_mapping.txt"
+    private static final String MAPPING_FILE_NAME = "data/maas/element-id-mapping.txt"
 
     static Map<String, String> build(String fileName) {
-        println("in build element_id_mapping")
+        println("in build element-id-mapping")
         if (StringUtils.isBlank(fileName)) {
             fileName = MAPPING_FILE_NAME
         }
