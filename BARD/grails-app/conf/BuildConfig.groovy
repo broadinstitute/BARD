@@ -85,7 +85,7 @@ grails.project.dependency.resolution = {
 
         // compile scope
         compile ":ajaxflow:0.2.4"
-        compile(":cbipcrowdauthentication:0.3.1") {
+        compile(":cbipcrowdauthentication:0.3.2") {
             excludes('spock', 'release', 'google-collections')
         }
         compile ":clover:3.1.6"

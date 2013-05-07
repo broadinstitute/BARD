@@ -2,6 +2,9 @@ package bard.db.dictionary
 
 import grails.plugins.springsecurity.SpringSecurityService
 
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
 /**
  * Created with IntelliJ IDEA.
  * User: ddurkin
@@ -11,6 +14,8 @@ import grails.plugins.springsecurity.SpringSecurityService
  */
 class ElementService {
     SpringSecurityService springSecurityService
+    OntologyDataAccessService ontologyDataAccessService
+    final ExecutorService executorService = Executors.newCachedThreadPool()
 
     /**
      *
@@ -23,6 +28,14 @@ class ElementService {
                 abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, comments: termCommand.comments)
         element.save(flush: true)
         addElementHierarchy(parentElement, element, termCommand.relationship)
+
+        //execute async
+        this.executorService.execute(new Runnable() {
+            public void run() {
+                ontologyDataAccessService.reloadCache()
+            }
+        });
+
         return element
     }
     /**

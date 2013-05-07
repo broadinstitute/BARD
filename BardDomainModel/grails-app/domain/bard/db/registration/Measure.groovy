@@ -64,4 +64,14 @@ class Measure {
     List<Measure> getChildrenMeasuresSorted() {
         childMeasures.sort(new MeasureCaseInsensitiveDisplayLabelComparator())
     }
+
+    public Measure clone() {
+        Measure newMeasure = new Measure(
+                resultType: resultType,
+                parentChildRelationship: parentChildRelationship,
+                entryUnit: entryUnit,
+                statsModifier: statsModifier,
+                dateCreated: new Date())
+        return newMeasure
+    }
 }
