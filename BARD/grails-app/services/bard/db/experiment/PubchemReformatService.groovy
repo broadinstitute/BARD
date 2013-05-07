@@ -11,6 +11,7 @@ import org.hibernate.jdbc.Work
 
 import java.sql.Connection
 import java.sql.SQLException
+import java.util.regex.Pattern
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +21,12 @@ import java.sql.SQLException
  * To change this template use File | Settings | File Templates.
  */
 class PubchemReformatService {
+
+    static class MissingColumnsException extends RuntimeException {
+        MissingColumnsException(String s) {
+            super(s)
+        }
+    }
 
     final static Map<String,String> pubchemOutcomeTranslation = new HashMap();
     static {
@@ -64,6 +71,9 @@ class PubchemReformatService {
         }
     }
 
+    /**
+     * Handles the writing of the CAP formatted results file.  Construct an instance and call addRow per row in the pubchem file.
+     */
     static class CapCsvWriter {
         CSVWriter writer
         int rowCount = 0;
@@ -127,7 +137,15 @@ class PubchemReformatService {
             this.aid = aid;
             records = rs.groupBy { makeLabel(it.resultType, it.statsModifier) }
             recordsByParentTid = rs.groupBy {it.parentTid}
-            tids = rs.collect {it.tid}
+            tids = [] as Set
+            rs.each {
+                tids.add(it.tid)
+                tids.add(it.qualifierTid)
+                it.contextItemColumns.each {
+                    tids.add(it.tid)
+                    tids.add(it.qualifierTid)
+                }
+            }
             allRecords = new ArrayList(rs);
             allRecords.sort { Integer.parseInt(it.tid) }
         }
@@ -136,6 +154,17 @@ class PubchemReformatService {
             return recordsByParentTid.get(tid);
         }
 
+        public int getNumberOfCustomColumns() {
+            return (allRecords.findAll {it.tid > 0}).size()
+        }
+
+        public boolean hasTid(String tid) {
+            return tids.contains(tid);
+        }
+
+        /**
+         * construct a list of CAP result rows for the given resultType, statsModifier and the parentTid
+         */
         List<Map<String,String>> getValues(Map<String,String> pubchemRow, String resultType, String statsModifier, String parentTid) {
             List<Map<String,String>> rows = []
             String label = makeLabel(resultType, statsModifier)
@@ -160,10 +189,6 @@ class PubchemReformatService {
 
                 rows.add(kvs)
             }
-
-//            if(resultType == "percent response") {
-//                println("${resultType} stats=${statsModifier}, rows=${rows}")
-//            }
 
             return rows
         }
@@ -222,6 +247,9 @@ class PubchemReformatService {
         return found;
     }
 
+    /**
+     * modify the pubchemRow to include a NA for all elements that are blank _BUT_ there is a non-blank child
+     */
     void naMissingValues(Map<String,String> pubchemRow, ResultMap map) {
         List needsNa = []
         Map cache = [:]
@@ -268,9 +296,18 @@ class PubchemReformatService {
         return new ArrayList(colNames)
     }
 
+    /**
+     * Construct a ResultMap from a list of selected rows from the RESULT_MAP table
+     */
     public ResultMap convertToResultMap(String aid, List rows) {
         Map byTid = [:]
         List<ResultMapRecord>  records = [];
+        Set<String> unusedTids = new HashSet();
+
+        // Keep track which TIDs we've used for something
+        for(row in rows) {
+            unusedTids.add(row.TID.toString())
+        }
 
         // first pass: create all the items for result types
         for(row in rows) {
@@ -283,6 +320,10 @@ class PubchemReformatService {
                         statsModifier: row.STATS_MODIFIER,
                         qualifierTid: row.QUALIFIERTID)
                 records.add(record)
+
+                if (record.qualifierTid != null)
+                    unusedTids.remove(record.qualifierTid)
+                unusedTids.remove(record.tid)
 
                 if (row.CONTEXTITEM != null) {
                     record.staticContextItems[row.CONTEXTITEM] = row.CONCENTRATION?.toString()
@@ -305,7 +346,15 @@ class PubchemReformatService {
                 ResultMapContextColumn col = new ResultMapContextColumn( attribute: row.CONTEXTITEM, tid: row.TID, qualifierTid: row.QUALIFIERTID)
                 ResultMapRecord record = byTid[row.CONTEXTTID.toString()]
                 record.contextItemColumns.add(col)
+
+                unusedTids.remove(col.tid)
+                if (col.qualifierTid != null)
+                    unusedTids.remove(col.qualifierTid)
             }
+        }
+
+        if (unusedTids.size() != 0) {
+            throw new MissingColumnsException("Did not know what to do with columns with tids: ${unusedTids}")
         }
 
         ResultMap map = new ResultMap(aid, records)
@@ -351,7 +400,13 @@ class PubchemReformatService {
         return pubchemRow;
     }
 
-    public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
+    public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map){
+        if (!map.hasTid("0"))
+            throw new RuntimeException("Missing pubchem score from result map of ${map.aid}")
+
+        if (!map.hasTid("-1"))
+            throw new RuntimeException("Missing pubchem outcome from result map of ${map.aid}")
+
         List dynamicColumns = constructCapColumns(experiment)
 
         Map expItems = (experiment.experimentContexts.collectMany { ExperimentContext context ->
@@ -362,7 +417,15 @@ class PubchemReformatService {
 
         CapCsvWriter writer = new CapCsvWriter(experiment.id, expItems, dynamicColumns, new FileWriter(outputFilename))
         CSVReader reader = new CSVReader(new FileReader(pubchemFilename))
+
         List<String> header = reader.readNext()
+        Pattern numberPattern = Pattern.compile("\\d+")
+        for(int i=0;i<header.size();i++) {
+            if (numberPattern.matcher(header[i]).matches() && !map.hasTid(header[i])) {
+                throw new MissingColumnsException("Result map of ${map.aid} missing tid ${header[i]}")
+            }
+        }
+
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
         while(true) {
             List<String> row = reader.readNext()
