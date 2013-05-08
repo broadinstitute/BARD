@@ -20,10 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
+import bard.util.BoneCPUtil;
 import bard.util.SQLUtil;
-
-import com.jolbox.bonecp.BoneCPConfig;
-import com.jolbox.bonecp.BoneCPDataSource;
 
 /**
  * Implementation for GO ontology via SQL. Default instantiation makes a
@@ -37,37 +35,23 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	public final static String TYPE_BIOLOGICAL_PROCESS = "biological_process";
 	public final static String TYPE_CELLULAR_COMPONENT = "cellular_component";
 	public final static String TYPE_MOLECULAR_FUNCTION = "molecular_function";
-	public static DataSource GO_DATASOURCE;
 	
-	public static ExternalOntologyGO COMPONENT_INSTANCE, FUNCTION_INSTANCE, PROCESS_INSTANCE;
-
-	static {
-		try {
-			GO_DATASOURCE = configureDataSource("com.mysql.jdbc.Driver", "jdbc:mysql://mysql.ebi.ac.uk:4085/go_latest",
-					"go_select", "amigo");
-			COMPONENT_INSTANCE = new ExternalOntologyGO(TYPE_CELLULAR_COMPONENT);
-			COMPONENT_INSTANCE.setDataSource(GO_DATASOURCE);
-			FUNCTION_INSTANCE = new ExternalOntologyGO(TYPE_MOLECULAR_FUNCTION);
-			FUNCTION_INSTANCE.setDataSource(GO_DATASOURCE);
-			PROCESS_INSTANCE = new ExternalOntologyGO(TYPE_BIOLOGICAL_PROCESS);
-			PROCESS_INSTANCE.setDataSource(GO_DATASOURCE);
-		} catch (ClassNotFoundException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	private static DataSource configureDataSource(String driverClass, String jdbcUrl, String user, String pwd)
-			throws ClassNotFoundException {
-		Class.forName(driverClass);
-		BoneCPConfig config = new BoneCPConfig();
-		config.setJdbcUrl(jdbcUrl);
-		config.setUsername(user);
-		config.setPassword(pwd);
-		DataSource dataSource = new BoneCPDataSource(config);
-		return dataSource;
-	}
-
 	public static class GOCreator implements ExternalOntologyCreator {
+		
+		private DataSource dataSource;
+		
+		public GOCreator(DataSource dataSource) {
+			setDataSource(dataSource);
+		}
+		
+		public void setDataSource(DataSource dataSource) {
+			this.dataSource = dataSource;
+		}
+		
+		public DataSource getDataSource() {
+			return dataSource;
+		}
+		
 		@Override
 		public ExternalOntologyAPI create(URI uri, Properties props) throws ExternalOntologyException {
 			String host = uri.getHost();
@@ -79,18 +63,23 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 				return null;
 			Map<String, List<String>> params = getUriParameters(uri);
 			List<String> subtree = params.get("subtree");
+			String type = null;
 			if (subtree == null)
-				return PROCESS_INSTANCE;
+				type = TYPE_BIOLOGICAL_PROCESS;
 
 			String sub = subtree.get(0);
 			if (TYPE_MOLECULAR_FUNCTION.equals(sub))
-				return FUNCTION_INSTANCE;
+				type = TYPE_MOLECULAR_FUNCTION;
 			else if (TYPE_CELLULAR_COMPONENT.equals(sub))
-				return COMPONENT_INSTANCE;
+				type = TYPE_CELLULAR_COMPONENT;
 			else if (TYPE_BIOLOGICAL_PROCESS.equals(sub))
-				return PROCESS_INSTANCE;
+				type = TYPE_BIOLOGICAL_PROCESS;
 
-			return null;
+			if( type == null )
+				return null;
+			else {
+				return new ExternalOntologyGO(type, getDataSource());
+			}
 		}
 
 		private Map<String, List<String>> getUriParameters(URI uri) {
@@ -107,8 +96,9 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 	private String type;
 	private Pattern goPattern = Pattern.compile("^(GO:?)?(\\d+)$");
 
-	public ExternalOntologyGO(String type) {
+	public ExternalOntologyGO(String type, DataSource dataSource) {
 		this.type = type;
+		this.setDataSource(dataSource);
 	}
 
 	/**

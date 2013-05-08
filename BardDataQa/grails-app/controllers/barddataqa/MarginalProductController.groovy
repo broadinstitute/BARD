@@ -48,7 +48,7 @@ class MarginalProductController {
         newParams.put(actionKey, "resultTypeContextConflict")
         newParams.put(descriptionKey, "show result map entries")
 
-        redirect(action: "showAids", params: newParams)
+        redirect(view: "showAids", model: newParams)
     }
 
     def showResultMapDuplicateResult() {
@@ -62,7 +62,7 @@ class MarginalProductController {
         newParams.put(actionKey, "duplicateResultTypes")
         newParams.put(descriptionKey, "show result map entries")
 
-        redirect(action: "showAids", params: newParams)
+        render(view: "showAids", model: newParams)
     }
 
     def showResultMapRelationshipProblem() {
@@ -77,11 +77,7 @@ class MarginalProductController {
         newParams.put(actionKey, "relationshipProblem")
         newParams.put(descriptionKey, "show result map entries")
 
-        redirect(action: "showAids", params: newParams)
-    }
-
-    def showAids() {
-        params
+        render(view: "showAids", model: newParams)
     }
 
     private Map buildMap(Map params, Closure<List<Integer>> findAidsClosure, String title) {
@@ -89,10 +85,7 @@ class MarginalProductController {
         Integer projectUid = params.get("projectUid").toString().toInteger()
 
         List<Integer> aidList = findAidsClosure(datasetId, projectUid)
-        if (aidList.size() == 1) {
-            aidList.add(null)
-        }
 
-        [title: title, aidList: aidList]
+        return [title: title, aidList: aidList]
     }
 }

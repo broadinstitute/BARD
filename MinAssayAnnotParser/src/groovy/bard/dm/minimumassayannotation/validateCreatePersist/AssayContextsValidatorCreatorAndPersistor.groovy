@@ -81,6 +81,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     }
 
                     assayContext.contextName = contextDTO.name
+                    assayContext.contextGroup = contextDTO.contextGroupName
 
                     //create the assay-context-item and add them to assay-context
                     for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {

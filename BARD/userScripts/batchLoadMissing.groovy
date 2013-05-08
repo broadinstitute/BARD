@@ -4,10 +4,17 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import bard.db.experiment.PubchemReformatService
 import bard.db.registration.ExternalReference
 import java.text.SimpleDateFormat
+org.apache.commons.lang.exception.ExceptionUtils
 
-pubchemFileDir = "/Users/pmontgom/data/pubchem-conversion/pubchem-files"
-convertedFileDir = "/Users/pmontgom/data/pubchem-conversion/converted-files"
-aidListFilename = "/Users/pmontgom/data/pubchem-conversion/dataset2-small.txt"
+pubchemPrefix=System.getProperty("pubchemPrefix", "/cbplat/bard/pubchem_files")
+
+
+pubchemFileDir = "${pubchemPrefix}/pubchem-files"
+convertedFileDir = "${pubchemPrefix}/converted-files"
+aidListFilename = System.getProperty("aidFile")
+if(aidListFilename == null) {
+	throw new RuntimeException("Need filename to read AIDs from.  Specify with -DaidFile=filename")
+}
 
 boolean forceReloadResults = false;
 boolean forceRecreateMeasures = true;
@@ -67,7 +74,12 @@ recreateMeasuresAndLoad = { aid ->
 
     if (forceConvertPubchem || !(new File(capFile).exists())) {
         log("Converting pubchem file ${pubchemFile} -> ${capFile}")
-        pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
+	try {
+	        pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
+	} catch (Exception ex) {
+		log("failed to convert pubchem file: ${aid}")
+		log("Exception while converting: ${ExceptionUtils.getStackTrace(ex)}")
+	}
     }
 
     log("Importing ${aid}...")
