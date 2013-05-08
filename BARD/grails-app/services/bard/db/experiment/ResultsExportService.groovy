@@ -7,7 +7,6 @@ import java.util.zip.GZIPOutputStream
 class ResultsExportService {
 
     ArchivePathService archivePathService
-//    BulkResultService bulkResultService
 
     ObjectMapper mapper = new ObjectMapper()
 
@@ -19,8 +18,9 @@ class ResultsExportService {
             valueNum: item.valueNum,
             valueMin: item.valueMin,
             valueMax: item.valueMax,
-            valueDisplay: item.valueDisplay,
-            valueElementId: item.valueElement?.id)
+            valueDisplay: item.valueDisplay.trim(),
+            valueElementId: item.valueElement?.id,
+            extValueId: item?.extValueId?.trim())
     }
 
     JsonResult convertToJson(Result result) {
@@ -55,7 +55,7 @@ class ResultsExportService {
 
         List resultsAsJson = roots.collect { convertToJson(it) }
 
-        JsonSubstanceResults substanceResults = new JsonSubstanceResults(sid: sid, rootElem: resultsAsJson)
+        return new JsonSubstanceResults(sid: sid, rootElem: resultsAsJson)
     }
 
     void writeResultsForSubstance(Writer writer, Long sid, List<Result> results) {
