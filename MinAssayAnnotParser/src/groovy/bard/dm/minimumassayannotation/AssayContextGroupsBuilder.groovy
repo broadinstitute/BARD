@@ -84,18 +84,18 @@ class AssayContextGroupsBuilder {
         ]
 
         List<ContextGroup> spreadsheetAssayContextGroups = [
-                new ContextGroup(name: 'biology', contextItemDtoList: biology),
-                new ContextGroup(name: 'assay format', contextItemDtoList: assayFormat),
-                new ContextGroup(name: 'assay component', contextItemDtoList: assayComponent),
-                new ContextGroup(name: 'detection method type', contextItemDtoList: detectionMethodType),
-                new ContextGroup(name: 'assay readout', contextItemDtoList: assayReadout),
-                new ContextGroup(name: 'detection method', contextItemDtoList: detectionMethod),
-                new ContextGroup(name: 'assay footprint', contextItemDtoList: assayFootprint),
-                new ContextGroup(name: 'measurement wavelength', contextItemDtoList: measurementWavelength),
-                new ContextGroup(name: 'absorbance wavelength', contextItemDtoList: absorbanceWavelength),
-                new ContextGroup(name: 'activity threshold', contextItemDtoList: activityThreshold),
-                new ContextGroup(name: 'number of replicates', contextItemDtoList: numberOfReplicates),
-                new ContextGroup(name: 'project lead name', contextItemDtoList: projectLeadName)
+                new ContextGroup("biology", "biology>", biology),
+                new ContextGroup("assay format", "assay protocol> assay format>", assayFormat),
+                new ContextGroup("assay component", "assay protocol> assay component>", assayComponent),
+                new ContextGroup("detection method type", "assay protocol> assay readout>",detectionMethodType),
+                new ContextGroup("assay readout", "assay protocol> assay readout>", assayReadout),
+                new ContextGroup("detection method", "assay protocol> assay readout>", detectionMethod),
+                new ContextGroup("assay footprint", "assay protocol> assay design>", assayFootprint),
+                new ContextGroup("measurement wavelength", "assay protocol> assay readout>", measurementWavelength),
+                new ContextGroup("absorbance wavelength", "assay protocol> assay readout> ", absorbanceWavelength),
+                new ContextGroup("activity threshold", "project management> experiment>", activityThreshold),
+                new ContextGroup("number of replicates", "project management> experiment>", numberOfReplicates),
+                new ContextGroup("project lead name", "project management> project information>", projectLeadName)
         ]
 
 
