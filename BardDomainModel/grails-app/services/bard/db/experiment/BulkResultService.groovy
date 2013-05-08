@@ -404,6 +404,7 @@ class BulkResultService {
         List<Element> attributes = columns.get(1).collect { Long id -> Element.get(id) }
         List<Element> values = columns.get(2).collect { Long id -> Element.get(id) }
 
+        List<String> extValueIds = columns.get(4)
         List<String> qualifiers = columns.get(5)
 
         List<Float> valueNum = columns.get(6)
@@ -424,6 +425,7 @@ class BulkResultService {
             item.valueMin = valueMin.get(i)
             item.valueMax = valueMax.get(i)
             item.valueDisplay = valueDisplay.get(i)
+            item.extValueId = extValueIds.get(i)
         }
     }
 

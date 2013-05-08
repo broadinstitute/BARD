@@ -141,7 +141,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         assert foundItem
         assert item.extValueId == foundItem.extValueId
         assert item.valueDisplay == foundItem.valueDisplay
-        assert foundItem.qualifier == ""
+        assert foundItem.qualifier == null
 
         //Result dbParent = results.find { it.valueDisplay == "parent" }
         //assert dbParent
