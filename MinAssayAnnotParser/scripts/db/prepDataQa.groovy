@@ -5,6 +5,17 @@ dst = createDbTarget(args[1])
 
 dataqa = createConnection("dataqa")
 
+def dstSql = new Sql(createConnection(args[1]))
+// check for dblink
+def inBcbDev = !(dstSql.firstRow("select count(*) from user_db_links where db_link = 'BARDDEV'")[0] > 0)
+println "inBcbDev=${inBcbDev}"
+
+if (!inBcbDev) {
+	executeSql(dst,"""create or replace view result_map as select * from southern.result_map@barddev""")
+} else {
+	executeSql(dst,"""create or replace view result_map as select * from southern.result_map""")
+}
+
 def dataqaSql = new Sql(dataqa)
 
 /////////////////////////////////////////////////////////////////////
@@ -86,7 +97,7 @@ def assayPaths = [
 
 datamig = createConnection("datamig")
 executeSql(dst, disableConstraints)
-copy(datamig, dst, ["EXTERNAL_SYSTEM", "ELEMENT", "ELEMENT_HIERARCHY"])
+copy(datamig, dst, ["EXTERNAL_SYSTEM", "ELEMENT", "ELEMENT_HIERARCHY", "TREE_ROOT"])
 copyTree(datamig, dst, assayPaths, adids)
 executeSql(dst, enableConstraints)
 
@@ -188,7 +199,7 @@ begin
 end;
 /
 """
-for(cleanupSql in cleanup.split("/\n")){
+for(cleanupSql in cleanup.split("\n/\n")){
 	executeSql(dst, cleanupSql)
 }
 println("Finished cleaning up schema")
@@ -198,6 +209,7 @@ println("Finished cleaning up schema")
 //production sequences.  Since it all is within the same database, I
 //think that should work.
 
+if(!inBcbDev) {
 executeSql(dst, """
 begin
   for my_rec in (select sequence_name from seq)
@@ -208,6 +220,16 @@ BARD_CAP_PROD.'||my_rec.sequence_name;
   end loop;
 end;
 """)
+}
 
 println("Recreated sequences as aliases to production schema")
+
+for(chunk in new File("scripts/db/packages.sql").text.split("\n/\n")) {
+	executeSql(dst, chunk)
+}
+
+executeSql(dst, """ begin
+ manage_ontology.make_trees;
+end;")
+
 dst.close()
