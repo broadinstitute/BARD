@@ -32,7 +32,7 @@ class ResultsService {
     // pattern matching a number
     static Pattern NUMBER_PATTERN = Pattern.compile(NUMBER_PATTERN_STRING)
 
-    static String QUALIFIER_PATTERN_STRING = (Result.QUALIFIER_VALUES.collect { "(?:${it.trim()})"}).join("|")
+    static String QUALIFIER_PATTERN_STRING = (Result.QUALIFIER_VALUES.collect { "(?:${it.trim()})" }).join("|")
 
     // pattern matching a qualifier followed by a number
     static Pattern QUALIFIED_NUMBER_PATTERN = Pattern.compile("(${QUALIFIER_PATTERN_STRING})?\\s*(${NUMBER_PATTERN_STRING})")
@@ -218,7 +218,7 @@ class ResultsService {
             // add the first line of the header
             def row = []
             row.addAll(FIXED_COLUMNS)
-            columns.each {row.add(it)}
+            columns.each { row.add(it) }
             lines.add(row)
             lines.add(["1"])
 
@@ -233,7 +233,7 @@ class ResultsService {
         def measureItems = assayItems.findAll { it.assayContext.assayContextMeasures.size() > 0 }
         assayItems.removeAll(measureItems)
 
-        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect {it.measure} as List, itemService.getLogicalItems(measureItems)]
+        return [itemService.getLogicalItems(assayItems), experiment.experimentMeasures.collect { it.measure } as List, itemService.getLogicalItems(measureItems)]
     }
 
     Template generateMaxSchema(Experiment experiment) {
@@ -354,7 +354,7 @@ class ResultsService {
 
         // walk through all the context items on the assay
         List<ExperimentContext> experimentContexts = []
-        for (entry in (constantItems.groupBy {it.assayContext}).entrySet()) {
+        for (entry in (constantItems.groupBy { it.assayContext }).entrySet()) {
             AssayContext assayContext = entry.key;
             Collection<ItemService.Item> values = entry.value;
 
@@ -624,26 +624,34 @@ class ResultsService {
     }
 
     ResultContextItem createResultItem(String stringValue, ItemService.Item assayItem, ImportSummary errors) {
-        def parsed = parseContextItem(stringValue, assayItem)
-        //Experiment measures had the relationship is calculated from which was unrecognized
-        if (parsed instanceof Cell) {
-            Cell cell = parsed
-            ResultContextItem item = new ResultContextItem()
-
-            item.attributeElement = assayItem.attributeElement
-            item.valueNum = cell.value
-            item.qualifier = cell.qualifier
-            item.valueMin = cell.minValue
-            item.valueMax = cell.maxValue
-            item.valueElement = cell.element
-            Element unit = assayItem.attributeElement.unit;
-            item.valueDisplay = cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
-
-            return item
+        ResultContextItem item = null
+        Element attributeElement = assayItem.attributeElement
+        final String externalURL = attributeElement.externalURL
+        if (externalURL) {
+            item = new ResultContextItem()
+            item.attributeElement = attributeElement
+            item.extValueId = stringValue//external value id
+            item.valueDisplay = attributeElement.externalURL + stringValue//external value id
         } else {
-            errors.addError(0, 0, parsed)
-            return null
+            def parsed = parseContextItem(stringValue, assayItem)
+            //Experiment measures had the relationship is calculated from which was unrecognized
+            if (parsed instanceof Cell) {
+                Cell cell = parsed
+                item = new ResultContextItem()
+                //
+                item.attributeElement = assayItem.attributeElement
+                item.valueNum = cell.value
+                item.qualifier = cell.qualifier
+                item.valueMin = cell.minValue
+                item.valueMax = cell.maxValue
+                item.valueElement = cell.element
+                Element unit = assayItem.attributeElement.unit;
+                item.valueDisplay = cell.valueDisplay + (unit == null || cell.valueDisplay == "NA" ? "" : " ${unit.abbreviation}")
+            } else {
+                errors.addError(0, 0, parsed)
+            }
         }
+        return item
     }
 
     Result createResult(Integer replicate, Measure measure, String valueString, Long substanceId, ImportSummary errors) {
@@ -709,8 +717,8 @@ class ResultsService {
         LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
-        List potentialExperimentColumns = itemService.getLogicalItems(template.experiment.assay.assayContexts.collectMany {AssayContext context ->
-            context.assayContextItems.findAll {it.attributeType != AttributeType.Fixed}
+        List potentialExperimentColumns = itemService.getLogicalItems(template.experiment.assay.assayContexts.collectMany { AssayContext context ->
+            context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
         })
 
         InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
@@ -722,9 +730,13 @@ class ResultsService {
         if (errors.hasErrors())
             return
 
-        def parseInt = {x -> Integer.parseInt(x)}
-        def parseOptInt = {x -> if (x.trim().length() > 0) { return Integer.parseInt(x) } }
-        def parseLong = {x -> Long.parseLong(x)}
+        def parseInt = { x -> Integer.parseInt(x) }
+        def parseOptInt = { x ->
+            if (x.trim().length() > 0) {
+                return Integer.parseInt(x)
+            }
+        }
+        def parseLong = { x -> Long.parseLong(x) }
 
         // all data rows
         List rows = []
@@ -823,7 +835,7 @@ class ResultsService {
 
             def missingSids = []
             if (options.validateSubstances)
-                missingSids = pugService.validateSubstanceIds(parsed.rows.collect {it.sid})
+                missingSids = pugService.validateSubstanceIds(parsed.rows.collect { it.sid })
 
             missingSids.each {
                 errors.addError(0, 0, "Could not find substance with id ${it}")

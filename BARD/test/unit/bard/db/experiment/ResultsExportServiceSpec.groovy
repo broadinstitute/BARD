@@ -4,7 +4,9 @@ import bard.db.dictionary.Element
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ObjectReader
+import grails.buildtestdata.mixin.Build
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.util.zip.GZIPInputStream
 
@@ -16,13 +18,37 @@ import bard.db.enums.HierarchyType
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(GrailsUnitTestMixin)
+@TestFor(ResultsExportService)
+@Build([Substance,Element])
+@Unroll
 class ResultsExportServiceSpec extends Specification {
 
     static File destination = new File("out/resultExportServiceTest.txt.gz")
 
-    void 'test transform to json' () {
+    void 'test contextItemAsJson'() {
+        given:
+        Substance substance = Substance.build(smiles: 'CC')
+        Element attributeElement = Element.build(externalURL: "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", label: "someLabel")
+
+        Result child = new Result(substanceId: substance.id, valueDisplay: "http://unprot.com")
+        ResultContextItem contextItem = new ResultContextItem(extValueId: "222", valueDisplay: "http://unprot.com?term=222", attributeElement: attributeElement, result: child)
+        when:
+        JsonResultContextItem jsonResultContextItem = service.contextItemAsJson(contextItem)
+        then:
+        assert jsonResultContextItem
+        assert contextItem.valueDisplay == jsonResultContextItem.valueDisplay
+        assert !jsonResultContextItem.valueElementId
+        assert attributeElement.id == jsonResultContextItem.attributeId
+        assert contextItem.id == jsonResultContextItem.itemId
+        assert attributeElement.label == jsonResultContextItem.attribute
+        assert !jsonResultContextItem.qualifier
+        assert !jsonResultContextItem.valueNum
+        assert !jsonResultContextItem.valueMin
+        assert !jsonResultContextItem.valueMax
+    }
+
+    void 'test transform to json'() {
         setup:
-        ResultsExportService service = new ResultsExportService()
 
         Substance substance = new Substance()
         substance.id = 100
@@ -91,6 +117,7 @@ class ResultsExportServiceSpec extends Specification {
         setup:
         new File("out").mkdirs();
         ArchivePathService archivePathService = Mock(ArchivePathService)
+        this.service.archivePathService = archivePathService
         archivePathService.prepareForWriting("path") >> destination
 
         Substance substance1 = new Substance()
@@ -99,13 +126,11 @@ class ResultsExportServiceSpec extends Specification {
         Substance substance2 = new Substance()
         substance2.id = 2
 
-        ResultsExportService service = new ResultsExportService()
-        service.archivePathService = archivePathService
         List results = [new Result(resultType: new Element(label: "ac50"), substanceId: substance1.id),
-            new Result(resultType: new Element(label: "bingo"),substanceId: substance2.id)]
+                new Result(resultType: new Element(label: "bingo"), substanceId: substance2.id)]
 
         when:
-        service.dumpFromList("path", results)
+        this.service.dumpFromList("path", results)
 
         then:
         destination.exists()

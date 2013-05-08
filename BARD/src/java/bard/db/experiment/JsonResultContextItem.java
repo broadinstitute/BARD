@@ -20,6 +20,18 @@ public class JsonResultContextItem {
     Float valueMax;
     String valueDisplay;
     Long valueElementId;
+    String extValueId;
+
+    public String getExtValueId() {
+        return extValueId;
+    }
+
+    public void setExtValueId(String extValueId) {
+        this.extValueId = extValueId;
+    }
+
+
+
 
     public Long getItemId() {
         return itemId;

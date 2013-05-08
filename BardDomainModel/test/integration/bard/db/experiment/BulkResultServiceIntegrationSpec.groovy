@@ -4,6 +4,8 @@ import bard.db.BardIntegrationSpec
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import bard.db.enums.ReadyForExtraction
+import spock.lang.IgnoreRest
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +14,7 @@ import bard.db.enums.ReadyForExtraction
  * Time: 5:02 PM
  * To change this template use File | Settings | File Templates.
  */
+@Unroll
 class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
     BulkResultService bulkResultService
 
@@ -20,6 +23,9 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
     Experiment experiment
 
     def setup() {
+    }
+
+    void buildForTests() {
         experiment = Experiment.build()
         Element resultType = Element.build()
         Element statsModifier = Element.build()
@@ -70,6 +76,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         hierarchy.result = child
         child.resultHierarchiesForResult.add(hierarchy)
         hierarchy.hierarchyType = HierarchyType.SUPPORTED_BY
+
     }
 
     boolean compareMaps(Map a, Map b) {
@@ -77,7 +84,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
 
         Set nestedProps = ["resultContextItems", "resultHierarchiesForParentResult", "resultHierarchiesForResult"] as Set
 
-        for(k in a.keySet()) {
+        for (k in a.keySet()) {
             if (nestedProps.contains(k))
                 continue
             assert a[k] == b[k]
@@ -85,7 +92,66 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         return true
     }
 
-    void 'test load, query, delete' () {
+    @IgnoreRest
+    void 'test load, query, delete for results with external urls'() {
+        given:
+        experiment = Experiment.build()
+        Element resultType = Element.build()
+        Element statsModifier = Element.build()
+        Substance substance = Substance.build()
+
+
+        // construct a parent and a child with one context item
+        final Result parentResult = new Result()
+        parentResult.experiment = experiment
+        parentResult.qualifier = "< "
+        parentResult.readyForExtraction = ReadyForExtraction.NOT_READY
+        parentResult.replicateNumber = 1
+        parentResult.resultStatus = "Pending"
+        parentResult.resultType = resultType
+        parentResult.statsModifier = statsModifier
+        parentResult.substanceId = substance.id
+        parentResult.valueDisplay = "parentResult"
+        parentResult.valueMin = 1
+        parentResult.valueMax = 100
+        parentResult.valueNum = 50
+
+        ResultContextItem item = new ResultContextItem()
+        item.result = parentResult
+        item.extValueId = "222"
+        item.valueDisplay = "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=222"
+        item.attributeElement = Element.build(externalURL: "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=",label:"someLabel")
+
+        parentResult.resultContextItems.add(item)
+        when: "Results are inserted"
+        //Experiment experiment = Experiment.build()
+
+        Element.withSession { s -> s.flush() }
+        bulkResultService.insertResults("test", experiment, [parentResult])
+
+
+        then:
+        final List<Result> results = bulkResultService.findResults(experiment)
+        assert results.size() == 1
+        Result result = results.get(0)
+        assert result
+        final List<ResultContextItem> items = new ArrayList<ResultContextItem>(result.resultContextItems)
+        assert 1 == items.size()
+        ResultContextItem foundItem = items.get(0)
+        assert foundItem
+        assert item.extValueId == foundItem.extValueId
+        assert item.valueDisplay == foundItem.valueDisplay
+        assert foundItem.qualifier == ""
+
+        //Result dbParent = results.find { it.valueDisplay == "parent" }
+        //assert dbParent
+
+
+    }
+
+    void 'test load, query, delete'() {
+        given:
+        buildForTests()
         when:
         Element.withSession { s -> s.flush() }
         bulkResultService.insertResults("test", experiment, [parent, child])
@@ -93,7 +159,7 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         List<Result> fromDb = bulkResultService.findResults(experiment)
 
         Result dbParent = fromDb.find { it.valueDisplay == "parent" }
-        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getId()}
+        Result dbChild = fromDb.find { it.valueDisplay == HierarchyType.SUPPORTED_BY.getId() }
 
         then:
         System.identityHashCode(parent) != System.identityHashCode(dbParent)
@@ -102,12 +168,12 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
         dbParent != null
         dbChild != null
 
-        compareMaps(parent.properties,dbParent.properties)
+        compareMaps(parent.properties, dbParent.properties)
         dbParent.resultContextItems.size() == 1
-        compareMaps(dbParent.resultContextItems.first().properties,dbParent.resultContextItems.first().properties)
+        compareMaps(dbParent.resultContextItems.first().properties, dbParent.resultContextItems.first().properties)
         dbParent.resultHierarchiesForParentResult.size() == 1
 
-        compareMaps(child.properties,dbChild.properties)
+        compareMaps(child.properties, dbChild.properties)
         dbChild.resultHierarchiesForResult.size() == 1
 
         when:
@@ -118,6 +184,8 @@ class BulkResultServiceIntegrationSpec extends BardIntegrationSpec {
     }
 
     void 'test delete'() {
+        given:
+        buildForTests()
         when: "Results are inserted under two different experiments, delete only touches one of them"
         Experiment experiment1 = Experiment.build()
         Experiment experiment2 = Experiment.build()

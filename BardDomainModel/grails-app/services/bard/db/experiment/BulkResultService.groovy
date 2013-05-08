@@ -35,6 +35,7 @@ class BulkResultService {
 
                     // flatten all items and do a bulk insert
                     List items = results.collectMany([], {Result result -> result.resultContextItems})
+
                     insertItems(connection, items, username)
 
                     // flatten and sort all hierarchies
@@ -139,8 +140,7 @@ class BulkResultService {
             statement.close()
         }
     }
-
-    private void insertItems(Connection connection, Collection<ResultContextItem> items, String username) {
+    private void insertItems_old(Connection connection, Collection<ResultContextItem> items, String username) {
         String query = "INSERT INTO RSLT_CONTEXT_ITEM (RSLT_CONTEXT_ITEM_ID," +
                 "RESULT_ID, ATTRIBUTE_ID, VALUE_ID," +
                 "DISPLAY_ORDER, EXT_VALUE_ID, QUALIFIER," +
@@ -165,7 +165,80 @@ class BulkResultService {
                 statement.setObject(3, item.valueElement?.id, Types.BIGINT)
 
                 statement.setInt(4, displayOrder)
-                statement.setNull(5, Types.INTEGER)
+                statement.setString(5, item.extValueId)
+                statement.setString(6, item.qualifier)
+
+                statement.setObject(7, item.valueNum, Types.FLOAT)
+                statement.setObject(8, item.valueMin, Types.FLOAT)
+                statement.setObject(9, item.valueMax, Types.FLOAT)
+
+                statement.setString(10, item.valueDisplay)
+                statement.setString(11, username)
+
+                statement.addBatch()
+                inBatch++;
+            }
+            statement.executeBatch()
+        } finally {
+            statement.close()
+        }
+    }
+    private void insertItems(Connection connection, Collection<ResultContextItem> items, String username) {
+        String query =
+            "INSERT INTO RSLT_CONTEXT_ITEM " +
+                "(" +
+                "RSLT_CONTEXT_ITEM_ID," +
+                "RESULT_ID, " +
+                "ATTRIBUTE_ID, " +
+                "VALUE_ID," +
+                "DISPLAY_ORDER, " +
+                "EXT_VALUE_ID, " +
+                "QUALIFIER," +
+                "VALUE_NUM, " +
+                "VALUE_MIN, " +
+                "VALUE_MAX, " +
+                "VALUE_DISPLAY, " +
+                "VERSION, " +
+                "DATE_CREATED, " +
+                "LAST_UPDATED, " +
+                "MODIFIED_BY" +
+                ") " +
+                "VALUES " +
+                "(" +
+                "RSLT_CONTEXT_ITEM_ID_SEQ.NEXTVAL, "+
+                "?," +
+                "?," +
+                "?," +
+                "?," +
+                "?," +
+                "?, " +
+                "?," +
+                "?," +
+                "?," +
+                "?," +
+                "1," +
+                "sysdate," +
+                "sysdate," +
+                "?" +
+                ")"
+
+        PreparedStatement statement = connection.prepareStatement(query)
+        try {
+            int inBatch = 0;
+            for (item in items) {
+                if (inBatch > BATCH_SIZE) {
+                    println(""+new Date()+" writing ${inBatch} items");
+                    statement.executeBatch();
+                }
+
+                int displayOrder = 0 // Not defined because owning collection is a set
+
+                statement.setLong(1, item.result.id)
+                statement.setLong(2, item.attributeElement.id)
+                statement.setObject(3, item.valueElement?.id, Types.BIGINT)
+
+                statement.setInt(4, displayOrder)
+                statement.setString(5, item?.extValueId?.toString())
                 statement.setString(6, item.qualifier)
 
                 statement.setObject(7, item.valueNum, Types.FLOAT)
@@ -201,7 +274,6 @@ class BulkResultService {
                     println(""+new Date()+" writing ${inBatch} results");
                     statement.executeBatch();
                 }
-
                 statement.setString(1, result.resultStatus)
                 statement.setString(2, result.readyForExtraction.id)
                 statement.setObject(3, experiment.id)
