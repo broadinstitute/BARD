@@ -1,4 +1,4 @@
-package bard.validation.ext;
+package bard.validation.ext.util;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,8 +10,10 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import bard.util.SQLUtil;
+import bard.validation.ext.ExternalItem;
+import bard.validation.ext.ExternalOntologyException;
 
-public class DBUtils {
+public class DBUtil {
 
 	public static List<ExternalItem> runQuery(DataSource dataSource, String sql, int prefetchSize, int limit, Object... terms) throws ExternalOntologyException {
 		Connection conn = null;

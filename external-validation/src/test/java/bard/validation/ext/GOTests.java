@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import bard.validation.ext.util.GOUtil;
+
 public class GOTests {
 
 	private static ExternalOntologyGO eo;
@@ -22,7 +24,7 @@ public class GOTests {
 	
 	@BeforeClass
 	public static void initialize() throws Exception {
-		eo = ExternalOntologyGO.PROCESS_INSTANCE;
+		eo = new ExternalOntologyGO(ExternalOntologyGO.TYPE_BIOLOGICAL_PROCESS, GOUtil.getEBIDataSource());
 		ExternalItem item = eo.findById("GO:0009987"); // force initialization of pool
 	}
 	
@@ -68,5 +70,19 @@ public class GOTests {
 		assertEquals("'%cellular%' in the GO database should return multiple items", items.size() > 0, true);
 		System.out.println("testFindMatching took (ms): " + (System.currentTimeMillis() - start) );
 		System.out.println(String.format("returned %s items", items.size()));
+	}
+	
+	@Test
+	public void testLongRunning() throws ExternalOntologyException {
+		long start = System.currentTimeMillis();
+		testFindById();
+		try {
+			Thread.currentThread();
+			Thread.sleep(3600*1000);
+		}
+		catch(InterruptedException ex) {
+			ex.printStackTrace();
+		}
+		testFindById();
 	}
 }

@@ -11,6 +11,8 @@ import javax.sql.DataSource;
 
 import org.apache.commons.lang.StringUtils;
 
+import bard.validation.ext.util.DBUtil;
+
 /**
  * Implementation for GO ontology via SQL. Default instantiation makes a
  * connection to a public mysql database at the EBI.
@@ -21,6 +23,20 @@ import org.apache.commons.lang.StringUtils;
 public class ExternalOntologyGOGeneProduct extends ExternalOntologyAPI {
 
 	public static class GOCreator implements ExternalOntologyCreator {
+		private DataSource dataSource;
+
+		public GOCreator(DataSource dataSource) {
+			setDataSource(dataSource);
+		}
+
+		public void setDataSource(DataSource dataSource) {
+			this.dataSource = dataSource;
+		}
+
+		public DataSource getDataSource() {
+			return dataSource;
+		}
+
 		@Override
 		public ExternalOntologyAPI create(URI uri, Properties props) throws ExternalOntologyException {
 			String host = uri.getHost();
@@ -28,19 +44,19 @@ public class ExternalOntologyGOGeneProduct extends ExternalOntologyAPI {
 			if (!"amigo.geneontology.org".equals(host))
 				return null;
 			String path = uri.getPath();
-			if(path.endsWith("gp-details.cgi"))
-				return new ExternalOntologyGOGeneProduct();
+			if (path.endsWith("gp-details.cgi")) {
+				return new ExternalOntologyGOGeneProduct(getDataSource());
+			}
 			return null;
 		}
-
 	}
 
 	private DataSource dataSource;
 	private int prefetchSize = 1000;
 	private Pattern idPattern = Pattern.compile("^([^:]+):([^\\(]+).*$");
 
-	public ExternalOntologyGOGeneProduct() {
-		setDataSource(ExternalOntologyGO.GO_DATASOURCE);
+	public ExternalOntologyGOGeneProduct(DataSource dataSource) {
+		setDataSource(dataSource);
 	}
 
 	/**
@@ -60,7 +76,7 @@ public class ExternalOntologyGOGeneProduct extends ExternalOntologyAPI {
 		String db = matcher.group(1);
 		String key = matcher.group(2).trim();
 
-		List<ExternalItem> items = DBUtils
+		List<ExternalItem> items = DBUtil
 				.runQuery(
 						getDataSource(),
 						"select concat(dbx.xref_dbname, ':', dbx.xref_key) as id, concat(dbx.xref_dbname, ':', dbx.xref_key, ' (', gp.full_name, ', ', gp.symbol, ', ', s.genus, ' ', s.species, ')') as name"
@@ -95,8 +111,8 @@ public class ExternalOntologyGOGeneProduct extends ExternalOntologyAPI {
 		name = cleanName(name);
 		if (StringUtils.isBlank(name))
 			return Collections.EMPTY_LIST;
-		name= queryGenerator(name);
-		List<ExternalItem> items = DBUtils
+		name = queryGenerator(name);
+		List<ExternalItem> items = DBUtil
 				.runQuery(getDataSource(),
 				// find matching query.
 				// OR drives mysql crazy slow so we use a union instead.

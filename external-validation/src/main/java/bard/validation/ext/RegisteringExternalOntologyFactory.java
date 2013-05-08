@@ -6,22 +6,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import bard.validation.ext.util.GOUtil;
+
 public class RegisteringExternalOntologyFactory implements ExternalOntologyFactory {
-	
+
 	private static RegisteringExternalOntologyFactory instance;
-	
-	public static ExternalOntologyFactory getInstance() {
+
+	public static ExternalOntologyFactory getInstance() throws ExternalOntologyException {
+		if( instance == null )
+			synchronized(RegisteringExternalOntologyFactory.class) {
+				if( instance == null ) {
+					instance = new RegisteringExternalOntologyFactory();
+					instance.initialize();
+				}
+			}
 		return instance;
 	}
-	
-	static {
-		instance = new RegisteringExternalOntologyFactory();
-		instance.getCreators().add( new ExternalOntologyNCBI.NCBICreator() );
-//		instance.getCreators().add( new ExternalOntologyOLS.OLSCreator() );
-		instance.getCreators().add( new ExternalOntologyGO.GOCreator() );
-		instance.getCreators().add( new ExternalOntologyGOGeneProduct.GOCreator() );
-		instance.getCreators().add( new ExternalOntologyUniprot.UniprotCreator() );
-		instance.getCreators().add( new ExternalOntologyATCC.ATCCCreator() );
+
+	protected void initialize() throws ExternalOntologyException {
+		getCreators().add(new ExternalOntologyNCBI.NCBICreator());
+		// instance.getCreators().add( new ExternalOntologyOLS.OLSCreator() );
+		getCreators().add(new ExternalOntologyGO.GOCreator(GOUtil.getEBIDataSource()));
+		getCreators().add(new ExternalOntologyGOGeneProduct.GOCreator(GOUtil.getEBIDataSource()));
+		getCreators().add(new ExternalOntologyUniprot.UniprotCreator());
+		getCreators().add(new ExternalOntologyATCC.ATCCCreator());
 	}
 
 	private List<ExternalOntologyCreator> creators = new LinkedList<ExternalOntologyCreator>();
