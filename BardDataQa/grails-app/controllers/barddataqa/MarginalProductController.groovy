@@ -4,7 +4,13 @@ import grails.validation.Validateable
 
 class MarginalProductController {
 
+    private static final String controllerKey = "extraController"
+    private static final String actionKey = "extraAction"
+    private static final String descriptionKey = "extraDescription"
+
     MarginalProductService marginalProductService
+
+    TidIssueService tidIssueService
 
     def index() { }
 
@@ -35,8 +41,14 @@ class MarginalProductController {
             return marginalProductService.findAidsThatHaveRmConflict(datasetId, projectUid)
         }
 
-        redirect(action: "showAids", params: buildMap(params, findHaveConflictBetweenResultTypeAndContextItem,
-                "AID's that have Result Map conflict between Result Type and Context Item"))
+        Map newParams = buildMap(params, findHaveConflictBetweenResultTypeAndContextItem,
+                        "AID's that have Result Map conflict between Result Type and Context Item")
+
+        newParams.put(controllerKey, "tidIssue")
+        newParams.put(actionKey, "resultTypeContextConflict")
+        newParams.put(descriptionKey, "show result map entries")
+
+        redirect(view: "showAids", model: newParams)
     }
 
     def showResultMapDuplicateResult() {
@@ -44,8 +56,13 @@ class MarginalProductController {
             return marginalProductService.findAidsThatHaveDuplicateResult(datasetId, projectUid)
         }
 
-        redirect(action: "showAids", params: buildMap(params, findDuplicateResult,
-                "AID's in Result Map that will generate duplicate results"))
+        Map newParams = buildMap(params, findDuplicateResult, "AID's in Result Map that will generate duplicate results")
+
+        newParams.put(controllerKey, "tidIssue")
+        newParams.put(actionKey, "duplicateResultTypes")
+        newParams.put(descriptionKey, "show result map entries")
+
+        render(view: "showAids", model: newParams)
     }
 
     def showResultMapRelationshipProblem() {
@@ -53,12 +70,14 @@ class MarginalProductController {
             return marginalProductService.findAidsThatHaveRmRelationshipProblem(datasetId, projectUid)
         }
 
-        redirect(action: "showAids", params: buildMap(params, findRelationshipProblems,
-                "AID's in Result Map that have relationship problems (one but not both of parentTid or relationship are present)"))
-    }
+        Map newParams = buildMap(params, findRelationshipProblems,
+                "AID's in Result Map that have relationship problems (one but not both of parentTid or relationship are present)")
 
-    def showAids() {
-        params
+        newParams.put(controllerKey, "tidIssue")
+        newParams.put(actionKey, "relationshipProblem")
+        newParams.put(descriptionKey, "show result map entries")
+
+        render(view: "showAids", model: newParams)
     }
 
     private Map buildMap(Map params, Closure<List<Integer>> findAidsClosure, String title) {
@@ -66,12 +85,7 @@ class MarginalProductController {
         Integer projectUid = params.get("projectUid").toString().toInteger()
 
         List<Integer> aidList = findAidsClosure(datasetId, projectUid)
-        if (aidList.size() == 1) {
-            aidList.add(null)
-        }
 
-        [title: title, aidList: aidList]
+        return [title: title, aidList: aidList]
     }
-
-
 }

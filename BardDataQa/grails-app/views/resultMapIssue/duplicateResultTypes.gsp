@@ -26,7 +26,7 @@
             <g:each status="i" in="${row}" var="entry">
                 <td>
                     <g:if test="${i == 0}">
-                        <g:link controller="tidIssue" action="duplicateResultTypes" id="${entry}">${entry}</g:link>
+                        <g:link controller="tidIssue" action="duplicateResultTypes" params="[aid:entry]">${entry}</g:link>
                     </g:if>
                     <g:else>
                         ${entry}
