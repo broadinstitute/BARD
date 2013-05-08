@@ -49,12 +49,7 @@ class AssayService {
         // clone all measures
         Map<Measure, Measure> measureOldToNew = [:]
         for(measure in assay.measures) {
-            Measure newMeasure = new Measure(
-                    resultType: measure.resultType,
-                    parentChildRelationship: measure.parentChildRelationship,
-                    entryUnit: measure.entryUnit,
-                    statsModifier: measure.statsModifier,
-                    dateCreated: new Date())
+            Measure newMeasure = measure.clone()
 
             measureOldToNew[measure] = newMeasure
 

@@ -1,5 +1,6 @@
 package merge
 
+import bard.db.dictionary.Element
 import bard.db.registration.Assay
 import bard.db.registration.AssayContextItem
 import bard.db.registration.AttributeType
@@ -71,10 +72,12 @@ class MergeAssayService {
         for (AssayContextItem item : candidateContextItems) {
             if (!item)
                 continue
+
             if (isAssayContextItemIn(assayWillKeep.assayContextItems, item)) {
                 assayContextItemInKeep++
                 continue
             }
+
             AssayContextItem second = assayWillKeep.assayContextItems.find {it.attributeElement == item.attributeElement && it.valueElement != item.valueElement}
             if (second) {
                 assayContextItemInKeepWithDifferentValue++
@@ -85,7 +88,6 @@ class MergeAssayService {
                 item.assayContext.removeFromAssayContextItems(item)
                 item.assayContext = second.assayContext
                 second.assayContext.addToAssayContextItems(item)
-                //item.attributeType = AttributeType.List
                 second.attributeType = AttributeType.List
             }
             else {
@@ -97,27 +99,15 @@ class MergeAssayService {
                 if (!context) {
                     // Add assay context to assay that will be kept if there is no one exist
                     int assayContextNotInKeep = 0 // count number of assayContext not seeing in kept assay
-                    context = candidateContexts.find {
-                        item.assayContext.contextName == it.contextName && item.assayContext.contextGroup == it.contextGroup
-                    }
-
-                    if (context) {
-                        assayContextNotInKeep++
-                        context.modifiedBy = modifiedBy + "-addedFromA-${context.assay.id}"
-                        context.assay.removeFromAssayContexts(context)
-                        context.assay = assayWillKeep
-                        assayWillKeep.addToAssayContexts(context)
-                    }
-
-                }
-
-                if (context) {
+                    context = item.assayContext.clone(assayWillKeep)
+                    assayContextNotInKeep++
+                    context.modifiedBy = modifiedBy + "-addedFromA-${context.assay.id}"
+                } else {
                     item.modifiedBy = modifiedBy + "-movedFromA-${item.assayContext.assay.id}"
                     item.assayContext.removeFromAssayContextItems(item)
                     context.addToAssayContextItems(item)
                     item.assayContext = context
                 }
-                item.attributeType = AttributeType.List
             }
         }
         println("""Total candidate candidateContextItems: ${candidateContextItems.size()},
@@ -226,86 +216,127 @@ class MergeAssayService {
         Assay.findById(assayWillKeep.id)
     }
 
-    // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
-    // delete the measures that are duplicates (and the assay-measures)
-    def handleMeasure(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
-        assayWillKeep = Assay.findById(assayWillKeep.id)
-        List<Measure> measures = []
-        removingAssays.each {Assay assay ->
-            measures.addAll(assay.measures)
+    // create a map of contexts from removingAssays to contexts on assayWillKeep that are
+    // representing the same thing.  Since there does not exist a good way to do this mapping, use the heuristic
+    // of matching up thier names
+    Map<AssayContext, AssayContext> createContextMapping(List<Assay> removingAssays, Assay assayWillKeep) {
+        Map<String,Collection<AssayContext>> contextsByName = assayWillKeep.contexts.groupBy { it.contextName }
+        Map<Set<Element>,AssayContext> contextsByAttributes = assayWillKeep.contexts.collectEntries { context ->
+            [new HashSet(context.assayContextItems.collect { it.attributeElement }), context]
         }
+        Map<AssayContext, AssayContext> mapping = [:]
+
+        for(sourceAssay in removingAssays) {
+            for(sourceContext in sourceAssay.contexts) {
+                Collection<AssayContext> possibleDestinations = contextsByName[sourceContext.contextName]
+                if(possibleDestinations == null || possibleDestinations.size() != 1) {
+                    // second heuristic:  Try matching up contexts by attributes
+                    Set sourceAttributes = new HashSet(sourceContext.assayContextItems.collect { it.attributeElement })
+                    AssayContext found = null;
+                    for(Map.Entry<Set<Element>, AssayContext> entry : contextsByAttributes) {
+                        if (entry.key.containsAll(sourceAttributes)) {
+                            found = entry.value
+                            break
+                        }
+                    }
+                    mapping[sourceContext] = found
+                } else {
+                    mapping[sourceContext] = possibleDestinations.first()
+                }
+            }
+        }
+
+        return mapping
+    }
+
+    def constructMeasureKey(Measure measure) {
+        String key = "r=${measure.resultType.id} s=${measure.statsModifier?.id}"
+        if (measure.parentMeasure != null) {
+            key = "${constructMeasureKey(measure.parentMeasure)}, ${key}";
+        }
+        return key
+    }
+
+    List<Measure> collectMeasuresSortedByPath(List<Assay> assays) {
+        Map measuresByKey = [:]
+        for(assay in assays) {
+            for(measure in assay.measures) {
+                measuresByKey[constructMeasureKey(measure)] = measure
+            }
+        }
+
+        List<String> keys = new ArrayList(measuresByKey.keySet())
+        keys.sort()
+
+        return keys.collect { measuresByKey[it] }
+    }
+
+    // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
+    // a measure is uniquely identified by the full path leading up to it as well as its result type and stats modifier
+    // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
+    // which implies that all of the contexts have already been copied over as well.
+    def handleMeasure(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
         int addMeasureToKeep = 0 // count number of measures added to assay
         int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
-        int deletedMeasure = 0 // count number of measures deleted
-        def deleteMeasures = []
-        def measureMap = [:]     // map to keep id and found measure
+
+        // create a map of measure key -> measure
+        Map<String,Measure> measureByKey = assayWillKeep.measures.collectEntries { [constructMeasureKey(it), it] }
+        Map<Measure,Measure> measureMap = [:]     // map to keep id and found measure
+        Map<AssayContext,AssayContext> contextMap = createContextMapping(removingAssays, assayWillKeep)
+
+        // iterate through measures sorted by path to ensure that the parents of the current measure
+        // have been completed prior to doing the current measure
+        List<Measure> measures = collectMeasuresSortedByPath(removingAssays)
         for (Measure measure : measures) {
-            Measure found = assayWillKeep.measures.find{it.id == measure.id}
-            if (found)
-                continue
-            found = assayWillKeep.measures.find {
-                (it.resultType == measure.resultType) &&
-                         (it.statsModifier == measure.statsModifier ) //&&
-                         //(it.parentMeasure == measure.parentMeasure )
-            }
+            String key = constructMeasureKey(measure)
+            Measure found = measureByKey[key]
 
             if (!found) {
-                measure.modifiedBy = modifiedBy + "-movedFromA-${measure.assay.id}"
+                // copy measure to destination
+                found = measure.clone()
+                found.modifiedBy = modifiedBy + "-movedFromA-${measure.assay.id}"
+                assayWillKeep.addToMeasures(found)
+                found.parentMeasure = measureMap[measure]
+                found.parentChildRelationship = measure.parentChildRelationship
                 addMeasureToKeep++
-                measure.assay.removeFromMeasures(measure)
-                assayWillKeep.addToMeasures(measure)
-                measure.assay = assayWillKeep
-                measure.assayContextMeasures.each {it.assayContext.assay = assayWillKeep}
-                measure.parentMeasure = null   // measure
-                measure.childMeasures.each{
-                    it.parentMeasure = null
-                }
-                measure.childMeasures.clear()
+            }
 
-                measure.parentMeasure = null   // measure
-                measure.childMeasures.each{
-                    it.parentMeasure = null
-                }
-                measure.childMeasures.clear()
+            measureMap.put(measure, found)
+        }
 
-            } else if (measure.assayContextMeasures.size() != 0) {
-                measure.assayContextMeasures.each {
-                    it.assayContext.assay = assayWillKeep
-                    found.addToAssayContextMeasures(it)
-                    //it.assayContext.removeFromAssayContextMeasures(it)
+        // copy over assayContextMeasures
+        for (Measure measure : measures) {
+            for(assayContextMeasure in measure.assayContextMeasures) {
+                Measure newMeasure = measureMap[measure]
+                AssayContext newAssayContext = contextMap[assayContextMeasure.assayContext]
+                assert newAssayContext != null
+                assert newMeasure != null
+
+                // only if we don't already have this link, create it
+                if (newMeasure.assayContextMeasures.find { it.assayContext == newAssayContext } == null) {
+                    AssayContextMeasure newAssayContextMeasure = new AssayContextMeasure(assayContext: newAssayContext, measure: newMeasure)
+                    newAssayContext.addToAssayContextMeasures(newAssayContextMeasure)
+                    newMeasure.addToAssayContextMeasures(newAssayContextMeasure)
+                    newAssayContextMeasure.save(failOnError: true)
                 }
-                measureMap.put(measure.id, found)
-               // deleteMeasures.add(measure)
-            } else {
-               // deleteMeasures.add(measure)
-                measureMap.put(measure.id, found)
             }
         }
 
-        for (Measure measure : deleteMeasures) {
-            for (ExperimentMeasure experimentMeasure : measure.experimentMeasures) {
-                measure.removeFromExperimentMeasures(experimentMeasure)
-                experimentMeasure.measure = null
-            }
-            measure.assay.removeFromMeasures(measure)
-            measure.assay = null
-            measure.delete()
-        }
-
-
+        // update experiment measures
         for (Experiment experiment : assayWillKeep.experiments) {
             for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
-                if (!experimentMeasure.measure) continue
-                if (measureMap.containsKey(experimentMeasure.measure.id)) {
-                    experimentMeasure.measure = measureMap.get(experimentMeasure.measure.id)
+                // move those experiment measures which refer to a measure that got mapped to the destination.
+                // (skip those measures that already point to the destination)
+                if (measureMap.containsKey(experimentMeasure.measure)) {
+                    Measure newMeasure = measureMap.get(experimentMeasure.measure)
+                    assert newMeasure != null
+                    experimentMeasure.measure = newMeasure
                 }
             }
         }
 
-
-        println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, delete ${deletedMeasure}, add to experiment ${addMeasureToExperimentInKeep}")
+        println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
         assayWillKeep.save()
-        // Assay.findById(assayWillKeep.id)
 
         validateAssayConsistent(assayWillKeep)
     }

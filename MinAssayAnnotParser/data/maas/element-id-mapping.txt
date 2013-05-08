@@ -1,0 +1,2064 @@
+//label	ID
+# concentration points	1397
+# replicates	1358
+%	1247
+[detector] assay component (type in)	4
+[detector] assay component role	152
+1. complete	1491
+100 percent growth inhibition	1001
+100-percent growth inhibition	1001
+12-well plate	313
+1536-well plate	314
+2. partial	1492
+24-well plate	315
+293T/17	712
+3. high efficacy	1493
+3456-well plate	316
+384-well plate	317
+3-parameter Hill equation	401
+4. partial efficacy	1494
+48-well plate	318
+4-methylumbelliferyl laurate	1510
+4-parameter Hill equation	402
+50 percent activation	997
+50 percent cytotoxicity	1015
+50 percent growth inhibition	1000
+50 percent inhibition	1002
+50 percent viability	993
+50-percent activation	997
+50-percent cytotoxicity	1015
+50-percent growth inhibition	1000
+50-percent inhibition	1002
+50-percent viability	993
+600 MHz Bruker Avance III	1627
+6-well plate	319
+80 percent inhibition	1003
+80-percent inhibition	1003
+8453 UV-Visible spectrophotometer	752
+8-well square agar plates	1427
+96-well plate	320
+µci/mL	1446
+µg protein/mL	1453
+µg/mL	1453
+µm	1078
+A375	1880
+A498	1931
+A549	713
+A673	1888
+AAT Bioquest	1684
+AB 7500 rtPCR System	1843
+AB Power SYBR GreenApplied Biosystems Power SYBR Green master mix	1842
+AB Power SYBR GreenApplied Biosystems Power SYBR Green master mix	1964
+ABD Bioquest	1691
+ABI PRISM 7700 sequence detector	1857
+ABI Prism 7900HT	1762
+AbsAC40	946
+absolute	1797
+absolute IC50	965
+absorbance	361
+absorbance method	1431
+absorbance unit	1256
+absorbance wavelength	101
+absorbed dose unit	1178
+AC10	951
+AC1000	944
+AC35	945
+AC40	946
+AC50	959
+AC500	947
+academic chemist	657
+acceleration unit	1220
+Accuri C6 flow cytometer	1766
+acetylation assay	193
+ACHN	714
+acid-ionization constant determination assay	110
+activation voltage	1029
+activator	321
+activator activity type	1710
+active concentration	1451
+activity (of a radionuclide) unit	1170
+activity class	896
+activity qualifier	1341
+Activity Summary	1473
+activity threshold	589
+activity type	1708
+ACTIVITY_RGS16	1708
+ACTIVITY_RGS19	1708
+ACTIVITY_RGS4	1708
+ACTIVITY_RGS7	1708
+ACTIVITY_RGS8	1708
+ACTOne Membrane Potential Dye Kit	664
+Acumen EX3	788
+Acumen eX3 Explorer	788
+Acumen eX3 scanning laser cytometer	1433
+Adapta Universal Kinase Assay Kit	665
+adherent	484
+ADMET assay	1575
+ADP Hunter Plus Kit	666
+ADP-Glo Kinase Assay	667
+ADR-RES	1928
+aggregated protein	1659
+Agilent Cary Eclipse Fluorescence Spectrophotometer	1855
+Agilent Technologies	1642
+agonist	322
+Alamar Blue	1511
+Alembic Instruments VE-2 amplifier	2002
+allosteric	1687
+allosteric binding	237
+allosteric modulation	264
+Alpco insulin ELISA assay kit	1773
+AlphaLISA	1748
+Alphalisa Bead kit	1890
+Alphalisa Bead kit	1966
+AlphaScreen	310
+Alphascreen (Perkin Elmer)	1524
+AlphaScreen Beads	1632
+AlphaScreen SureFire	1707
+AlphaScreen SureFire Erk reagent	1768
+alternative assay component	638
+alternative assay format	639
+alternative assay parameter	640
+alternative assay readout	641
+alternative assay type	642
+alternative cell-line assay	654
+alternative confirmatory assay	633
+alternative organism assay	655
+alternative target assay	656
+AMINCO-Bowman Series 2 Luminescence Spectrometer	1626
+amino acid substitution	525
+amino acid truncation	526
+AML12	715
+ampere	1057
+ampicillin	1466
+Amplex Red Glucos/Glucose Assay Kit	668
+amplification curve	926
+amplified luminescent proximity homogeneous assay (Alpha)	1747
+Analyst HT microplate reader	753
+Analyst-GT reader	2005
+analyte	256
+analytical array	417
+angle unit	1160
+angstrom	1038
+angular acceleration unit	1073
+angular velocity unit	1222
+animal subject	364
+antagonist	323
+antibiotic	249
+antibody	1316
+antibody reporter assay	1317
+antigen down assay	441
+antitarget	1792
+API 4000 LC/MS/MS system	754
+apoptosis assay	134
+application role	59
+Applied Biosystems	1692
+arabinose	1467
+area density unit	1226
+area measurement	1350
+area unit	1216
+area-under-curve	924
+array	156
+artificial regulatory region	472
+assay biosafety level	78
+assay component	4
+assay component concentration	9
+assay component concentration (%/mass)	1945
+assay component concentration (%/vol)	1946
+assay component concentration (molar)	1944
+assay component concentration (type in)	9
+assay component concentration (W/V)	1947
+assay component concentration units	57
+assay component name	10
+assay component role	11
+assay component type	12
+assay condition	79
+assay control role	150
+assay definition role	60
+assay design	5
+assay detection	93
+Assay Explorer	1308
+assay footprint	80
+assay format	6
+assay humidity	142
+assay kit name	63
+assay medium	340
+assay method	13
+assay mode	1303
+assay parameter	14
+assay percent carbon dioxide	143
+assay percent oxygen	144
+assay pH	145
+assay phase	81
+assay pressure	146
+assay protocol	3
+assay provider name	565
+assay readout	7
+assay readout content	7
+assay readout name	1743
+assay readout type	27
+assay reagent name	64
+assay stage	556
+assay target type	8
+assay temperature	147
+assay type	8
+ATCC	1938
+ATCC	1969
+ATCC cell name	1952
+atomic absorption spectrophotometry	362
+atomic force microscopy	476
+ATP quantitation	215
+ATPlite Luminescence Assay System	669
+attomole	1069
+auditory system	1811
+autofluorescence factor	1942
+autoradiography	337
+Avance III	1627
+Avian infectious bronchitis virus	1832
+Axiovert 200M fluorescence light microscope	755
+Axopatch-200B amplifier	1894
+BA/F3	716
+Bacillus anthracis	1825
+Bacillus subtilis	1826
+background control	229
+bacterial infection method	434
+bacterium	487
+BacTiter-Glo Microbial Cell Viability Assay	670
+BARD	892
+BARD Dictionary	893
+BARD External Ontology	894
+base pair	1245
+base unit	1031
+BD Accuri C6 Flow Cytometer	1840
+BD Bioscience LSR II	1407
+BD Biosciences	1693
+BD Biosciences LSR II	1407
+Beckman Coulter IC100	1666
+Beckman LS 6000SC counter	1858
+becquerel	1171
+beta-galactosidase induction	353
+Beta-Glo Assay System	671
+beta-lactamase induction	354
+Betaplate liquid scintillation counter	1892
+BHK-21	1887
+BIAcore	1526
+bi-directional signal	120
+binary outcome	1725
+binding assay	28
+binding assessment method	191
+binding constant	900
+binding interaction	605
+bioavailability assay	107
+biochemical	16
+biochemical constant	1027
+biochemical format	16
+bio-layer interferometry	410
+biological component	65
+biological component base name	4
+biological component type	162
+biological fluid	243
+biological process	542
+biological project goal	566
+biological role	61
+biology	541
+bioluminescence	311
+bioluminescence resonance energy transfer	370
+Biorad ChemiDoc Plus Imager	1763
+Bio-Rad Chemi-Doc Plus Imager	1763
+Biorad ChemiDoc XRS	1380
+Biorad ChemiDoc XRS imaging system	1380
+Biorad Chemidocxrs Imaging System	1380
+Bio-Tek Instruments	1643
+Biotek plate reader	1408
+Biotek Synergy 2 plate reader	1851
+Bio-Tek Synergy 2 plate reader	1408
+BioTek Synergy II plate reader	1408
+bit	1274
+BJ	1578
+blank mean	1339
+blank percent cv	1340
+blocker	324
+Bmax	901
+BMG Labtech	1644
+BMG Pherastar	1761
+BODIPY Nucleotide Analogue	1633
+brain	1508
+brain penetrance	1717
+Bridget K Wagner	710
+brightfield microscopy	456
+Bright-Glo Luciferase Assay System	672
+BriteLite Plus (Perkin Elmer)	1706
+britelite plus Reporter Gene Assay System	673
+Broad	796
+Broad Institute	796
+Bruker	1645
+BSC-1	1579
+B-score	976
+BSL1	137
+BSL2	138
+BSL2+	139
+BSL3	140
+BSL4	141
+BSR	1580
+BT-549	717
+BTC AM Fluorescent Dye Indicator	1634
+buffer	341
+Burnham	802
+BW5147	1868
+byte	1275
+C2C12	1581
+C-33A	718
+C6	1582
+Caco-2	2012
+CAKI-1	719
+Calcium Assay Kit	674
+calcium redistribution	358
+calculated value	123
+Caliper LabChip EZ Reader	1527
+Caliper microfluidics	1528
+Cambrex	1694
+cAMP-Screen Direct System	675
+cancer	1812
+candela	1071
+candela per square meter	1203
+Candida albicans	818
+Capillary electrophoresis	1876
+Caplier Life Sciences capillary electrophoresis device	1455
+carbon nanotube-based sensor	387
+cardiovascular disease	1790
+carrier	342
+CAS registry	891
+caspase activity determination	216
+Caspase-Glo 3/7 Assay System	676
+catalytic (activity) concentration unit	1104
+catalytic activity unit	1157
+categorical result	1724
+CC50	952
+CCD fluorometer	1839
+CCD luminometer	756
+CCRF-CEM	720
+CDP-Star	2001
+cell based: lysed cell	17
+cell concentration unit	1102
+cell count	1375
+cell cycle assay	29
+cell death	1690
+cell density	1372
+cell fixation method	169
+cell growth assay	30
+cell line	1421
+cell membrane format	209
+cell modification temperature	1542
+cell modification time	286
+cell morphology assay	31
+cell motility assay	32
+cell movement measurement method	67
+cell number determination	217
+cell phagocytosis assay	1668
+cell ratio	1474
+Cell Signaling	1695
+cell surface expression	1671
+cell surface expression assay	1671
+cell-based format	17
+cell-based: live cell	17
+cell-culture component	430
+cell-culture condition	375
+cell-culture role	151
+cell-free format	18
+cell-fusion method	435
+cell-growth mode	431
+cell-line modification method	376
+cell-processing method	82
+cell-proliferation assay	135
+cells per microliter	1533
+cells per milliliter	1103
+cells/µL	1533
+cells/ml	1103
+cells/uL	1533
+cells/well	1444
+CellTiter 96 Reagent	1939
+CellTiter-Glo Luminescent Cell Viability Assay	677
+cellular organism	437
+CEM21	1886
+CEM-SS	1941
+centimeter	1034
+century	1194
+Cercopithecus aethiops	1828
+chaperone	1681
+ChemBank	1413
+ChemBridge	1683
+ChemDiv	1696
+chemical role	62
+chemically labeled protein	1382
+chemiluminescence	312
+chemiluminescence resonance energy transfer	371
+chemiluminescence-linked immunosorbent assay	442
+Chinese Hamster	1833
+chi-squared	979
+chloramphenicol	1468
+chloramphenicol acetyltransferase induction	355
+CHO	721
+CHO-K1	722
+chroma sampling unit	1279
+Chroma-Glo Luciferase Assay System	678
+chromatin condensation visualization	218
+Chrome azurol S	1512
+CID	878
+circular dichroism	293
+Cisbio	1697
+clinical isolate name	1744
+cMax	923
+cns function	1818
+coefficient of variation	623
+cofactor	1420
+COLO205	723
+colony counting	1426
+colony forming unit	1243
+colony forming unit per milliliter	1112
+colony forming unit per volume	1111
+colorimetric cell-staining method	372
+colorimetric labeling method	301
+colorimetric protein-staining method	373
+Columbia University Molecular Screening Center	797
+comment	1329
+commercial vendor	658
+competitive binding	238
+competitive immunoassay	443
+competitive inhibition	265
+competitive saturation transfer difference	1475
+competitor	325
+component name (type in)	10
+compound aggregation assay	661
+compound fluorescence assay	662
+Compound QC	1476
+compound redox activity assay	663
+compound toxicity assay	645
+Compound Type	870
+computational profile	939
+concentration determination assay	111
+concentration endpoint	942
+concentration throughput	580
+concentration unit	57
+concentration value	58
+concentration-point number	650
+concentration-response curve	1731
+conduction unit	1294
+confidence limit 95%	981
+confirmatory assay	571
+confluence percentage	1250
+confocal microscopy	502
+conformation determination method	68
+control mean	1337
+Cos-1	1999
+COS-7	724
+coulomb	1266
+count per molar	1241
+count per molar second	1239
+count per nanomolar	1240
+count unit	1238
+counter-screening assay	634
+Countess Automated Cell Counter	1535
+counts per minute	1176
+coupled enzyme	343
+coupled enzyme activity assay	94
+coupled substrate	344
+coupled substrate incubation time	287
+covalent label	1383
+Cp	927
+Cq	928
+CRE-460 Curve Description	1477
+CRE-530 Curve Description	1477
+CRE-ratio Curve Description	1477
+Cricetulus griseus	1833
+CRL-1963	1622
+CRL-2307	1938
+cross-linking reagent	345
+crystal violet staining method	374
+CSM14.1	1583
+Ct	929
+cubic centimeter	1134
+cubic centimeter per mole	1120
+cubic decimeter	1137
+cubic meter	1133
+cubic meter per kilogram	1126
+cubic meter per mole	1119
+culture additive	478
+culture antibiotic	479
+culture medium	480
+culture serum	481
+cultured cell	244
+cultured cell name	1953
+cultured organism	245
+cultured organism type	378
+cultured tissue	246
+cultured tissue name	246
+curie	1172
+current clamp	453
+curve class	1477
+Curve Description	1477
+curve specification	590
+curve-fit class	1477
+curve-fit concentration-point number	600
+curve-fit method	601
+curve-fit model	602
+curve-fit repetition-point number	603
+curve-fit specification	590
+cuvette	157
+CyAn Flow Cytometer	1628
+CyBi-Well system	2009
+cybrid cell creation method	482
+cyclic-AMP redistribution	359
+cyclic-GMP redistribution	360
+Cys_1hr-Read-Curve_Description	1477
+cytokine quantitation method	69
+cytometer	1837
+cytosol format	210
+cytostatic concentration	1726
+cytotoxic activity type	1712
+cytotoxicity assay	136
+cytotoxicity response	1367
+CytoTox-ONE Homogenous Membrane Integrity Assay	1860
+D54	1885
+Dako	1646
+Dako CyAn ADP flow cytometer	757
+dalton	1048
+DAPI	1513
+darkfield microscopy	457
+day	1198
+deactivation time	915
+decibel	1254
+deciliter	1142
+degree	1163
+degree celcius	1167
+degree celsius	1167
+degree fahrenheit	1168
+degree-of-freedom	1351
+dehydrogenase activity determination	219
+deleted gene	509
+density unit	1224
+depolarizer	326
+deposition date	557
+derived unit	1072
+description	1329
+detection filter	91
+detection instrument	92
+detection instrument name	92
+detection method	15
+detection method type	93
+detection role	152
+detergent	346
+developmental biology	1819
+Developmental Therapeutics Program National Cancer Institute	1414
+DHL10	2004
+difference readout	164
+differential interference contrast microscopy	458
+differentiated cultured cell	1461
+differentiation agent	250
+Differientated cultured cells	1461
+dilution	1705
+dilution factor	1705
+dimensionless unit	1230
+direct enzyme activity assay	95
+direct response	1733
+disaggregation rating	1325
+DiscoveRx	1698
+disease	576
+disintegrations per minute	1175
+disintegrations per second	1177
+dissociation rate	1352
+dissociation-enhanced lanthanide fluorescent immunoassay (DELFIA) method	1745
+DIVERSet	810
+DLD-1	725
+DMSO	1472
+DNA construct	247
+DNA construct sequence	380
+DNA content estimation	220
+DNA intercalation assay	1436
+DNA oligonucleotide duplex	1437
+DNA sequence	380
+DNA vector	381
+DNA-coated bead-based method	183
+DNA-RNA	545
+DNA-small molecule	1400
+DNA-small molecule interaction assay	1401
+Do Not Use #1841	1841
+dosage endpoint	916
+dosage unit	1309
+dose equivalent unit	1184
+dot immunobinding assay	390
+dots per inch	1282
+drug	577
+drug abuse assay	127
+drug interaction assay	128
+DTP.NCI	1414
+DU145	726
+DU-145	726
+DU-145	1968
+Dual-Luciferase Reporter Assay System	679
+Duke Scientific 4 um bead	1864
+dye	257
+dye exclusion method	427
+dye redistribution	198
+dye-binding method	189
+dynamic range unit	1280
+dyne per cm	1290
+EC20	948
+EC30	954
+EC50	961
+EC80	949
+EC90	950
+effective concentration	1943
+effective concentration	1719
+effective dose unit	1192
+efficacy	983
+Efficacy (% of Control)	1016
+efflux ratio	1009
+EKVX	1902
+EL-4	2006
+electric charge	1265
+electric current	1349
+electric current unit	1056
+electric field strength unit	1299
+electric potential difference	1257
+electrical conduction unit	1295
+electrical endpoint	1028
+electrical sensor	294
+electron microscopy	405
+electronvolt	1154
+electrophysiological method	190
+ELISA	1529
+ELISA cAMP Competition Assay using cAMP-Screen Direct System	1635
+ELx808 absorbance microplate reader	758
+E-Max	1676
+E-Min	1677
+emission filter	173
+emission ratio	1478
+emission wavelength	102
+Emory	798
+Emory University Molecular Libraries Screening Center	798
+endpoint	972
+endpoint measurement	96
+endpoint mode-of-action	591
+endpoint normalization method	593
+endpoint statistic	592
+endpoint transform	1673
+energy unit	1150
+engineered genotype	463
+EnVision multilabel reader	759
+enzyme activation	266
+enzyme activity assay	33
+enzyme activity measurement method	70
+enzyme inhibition	267
+enzyme modulation	606
+enzyme reaction time	288
+enzyme unit	1159
+enzyme-linked immunosorbent assay	391
+enzyme-linked immunosorbent spot assay	444
+enzyme-multiplied immunoassay technique	392
+Erythrosin B	1536
+Escherichia coli	825
+esiRNA	496
+esterase activity determination	221
+eukaryote	488
+event count	1680
+ex situ immunoassay	234
+excitation filter	174
+excitation wavelength	103
+excluded points	1348
+exogenous protein	493
+experiment	553
+experiment panel name	554
+experiment throughput	558
+exposure unit	1190
+expressed component	382
+expressed protein	447
+expressed RNA	448
+extraction from natural source	466
+F-2111	1741
+F-2112	1742
+F-87	1740
+Fa2N-4	1422
+FACScanTM flow cytometer (BD Biosciences)	1960
+FDSS	760
+FDSS 6000	761
+FDSS 7000	762
+femtogram	1047
+femtoliter	1141
+femtomolar	1081
+femtomole	1068
+fiber optic waveguide	411
+filter-based method	273
+filter-based scintillation method	424
+fixative	251
+fixed cell	1313
+Flexstation 3 microplate reader	2013
+FlexStation II microplate reader	763
+FlexStation III microplate reader	763
+FLIPR Tetra	764
+flow cytometer	1898
+flow cytometry	274
+flow cytometry | side scatter	1429
+flow cytometry side scatter	1429
+Fluo-4 AM Calcium Indicator	1636
+Fluo4-AM	1636
+Fluo-8 Calcium Assay Kit	1637
+Fluo-8 No Wash Calcium Assay Kit	680
+fluorescence anisotropy readout	165
+fluorescence intensity	275
+fluorescence interference assay	1405
+fluorescence method	175
+fluorescence microscopy	459
+fluorescence polarization	276
+fluorescence polarization readout	166
+fluorescence quenching assay	1443
+Fluorescence ratio	1479
+fluorescence resonance energy transfer	277
+fluorescence response	1353
+fluorescence-linked immunosorbent assay	445
+fluorescent activity type	1711
+fluorescent DNA hybridization probe method	398
+fluorescent DNA intercalation method	399
+fluorescent dye transfer method	400
+fluorescent labeling method	302
+fluorescent protein induction	356
+fluoresence ratio	1479
+fluorometer	765
+FluoZin	1638
+FluoZin-2	1639
+FluoZin2-AM	1639
+FluxOR Thallium Detection Kit	681
+FLx800 fluorescence microplate reader	766
+fm	1081
+fold activation	1021
+fold change	1020
+fold decrease	1735
+fold dilution	1705
+fold increase	1480
+fold inhibition	1022
+fold of standard (X)	1023
+fold response	1734
+fold selectivity	1354
+fold selectivity index	1354
+fold shift	1387
+fold-of-control	1023
+fold-selectivity index	1354
+foot candle	1206
+force unit	1145
+foreign regulatory region	473
+Formazin Nephelometric Unit	1723
+fraction	1252
+frequency unit	1143
+functional activation	307
+functional assay	1576
+functional inhibition	308
+functional stimulation	309
+fungus	514
+Fura-2-AM	2003
+fused protein	506
+GalScreen base kit	1869
+GE Healthcare	1699
+GE Typhoon 8600	1396
+GE Typhoon laser scanner	1396
+GE Typhoon laser scanner	1956
+GE/Amersham (Thermo) INCell 1000	2021
+gel electrophoresis	1863
+GenBank ID	881
+gene	1774
+gene array	408
+gene Entrez GI	880
+gene form	383
+gene knockdown	489
+gene knockdown by antisense RNA	518
+gene knockdown by dsRNA transfection	533
+gene knockdown by lentiviral shRNA transduction	534
+gene knockdown by morpholino treatment	519
+gene knockdown by RNA interference	520
+gene knockdown by shRNA transfection	535
+gene knockdown by siRNA transfection	536
+gene knockin	490
+gene knockout	491
+gene overexpression	492
+gene overexpression by stable transfection	521
+gene overexpression by transient transfection	522
+GeneBLAzer	682
+gene-expression assay	34
+gene-expression detection method	71
+gene-expression profile	940
+genetic modification method	436
+genotoxicity assay	35
+geometric mean	1796
+GI50	964
+Giardia lamblia	1827
+Gilson	1647
+glucose	1469
+GO biological process term	1419
+GO cellular function	1951
+GO gene-product ID	1504
+GO molecular function	551
+goodness of fit	1481
+goodness-of-fit	1481
+GPCR	1791
+gram	1042
+gram per cubic centimeter	1095
+gram per deciliter	1100
+gram per liter	1099
+gram per liter	1098
+gram per milliliter	1096
+gram per mole	1117
+grams-per-liter	1098
+grant number	567
+granule count	1369
+graphical calculation	918
+GraphPad Prism	1686
+gray	1179
+green coffee bean	1824
+growth factor	252
+growth inhibitory concentration	1727
+H226	1905
+H322M	1906
+H4	1584
+H460	1907
+H-4-II-E	727
+H522	1908
+H69AR	728
+half-life	1195
+Hamamatsu	1648
+Hamamatsu FDSS	760
+Hamamatsu FDSS 6000	761
+Hamamatsu FDSS 7000	762
+HCC-2998	1909
+HCT116	729
+HCT-15	1910
+HDAC fluorometric detection Assay Kit	1456
+heart	1505
+heat conduction unit	1297
+HEC-1-A	1585
+HEL	730
+HeLa	731
+hematocrit	1770
+HepG2	732
+hertz	1144
+heterogeneous phase	160
+High Performance Calcium Assay Kit	683
+high-signal control	230
+Hill coefficient	919
+Hill dS	922
+Hill equation	255
+Hill s0	920
+Hill sinf	921
+HL-60	733
+HMLE	1870
+homogeneous phase	161
+homogeneous time-resolved fluorescence	396
+HOP-62	1903
+HOP-92	1904
+Hopkins Screening	799
+host cell	365
+hour	1197
+hours	1197
+HPLC System	1629
+Hs578T	734
+HT1080	735
+HT1080	1955
+HT-1080	735
+HT-29	736
+HTFC Screening System	767
+HTRF cAMP HiRange Kit	684
+HTRF cAMP Kit	685
+HTRF KinEASE TK assay system	686
+HTScan IKK-beta Kinase Assay Kit	687
+HTScan PKC-beta Kinase Assay Kit	688
+HTScan PKC-theta Kinase Assay Kit	689
+Huh7	1859
+Human beta-actin	1514
+Human cytochrome c ELISA kit	1434
+Human cytochrome c ELISA kit (R&D # SCTC0)	1434
+Human Herpesvirus 8	1875
+human plasma	1424
+HUV-EC-C	737
+hybrid cell creation method	483
+hydrolase	1800
+HyperCyt high-throughput flow-cytometry system	768
+HYPERflask	862
+IC10	1370
+IC50	963
+IC50 qualifier	1347
+IC80	969
+IC90	955
+iCi	1174
+identification assay	112
+IEC-6	738
+IgMXP3	1897
+IGROV1	1923
+illuminance unit	1204
+image resolution unit	1278
+image-based measurement	98
+ImagExpress	769
+ImageXpress Micro	769
+ImageXpress Micro 	769
+ImageXpress Ultra	770
+imaging method	176
+imaging methods	176
+IMAP Fluorescence Polarization reader	771
+IMAP Kinase assay kit	1402
+immune response function	1813
+immunoblot	393
+immunocytochemistry	284
+immunofluorescent labeling method	403
+immunogold labeling method	404
+immunohistochemistry	285
+immunolabeling method	303
+impedance-based sensor	388
+IMR-90	2016
+IN Cell Analyzer 1000	1389
+IN Cell Analyzer 2000	1664
+in situ immunoassay	192
+in vitro	1304
+in vivo	1305
+inactive activity type	1713
+in-cell Western assay	451
+InChI	876
+InChI key	877
+inconclusive activity type	1714
+incubation temperature	148
+incubation time	149
+Indo-1 Calcium Indicator	1640
+inducer	327
+infection assay	36
+infectious agent	366
+infectious disease	1820
+Infinite PF200	1630
+inflammation	1814
+Inflection Point Concentration	1482
+inflection-point slope	925
+Influenza A virus subtype H5N1	828
+information unit	1273
+infrared imaging	512
+inhibitor	328
+inhibitor activity type	1709
+inhibitory concentration	1728
+initial ratio	1718
+input data	604
+inserted gene	510
+instrument manufacturer name	1545
+IntelliCyt Corporation	1649
+intended activator	620
+intended cytotoxicity	1544
+intended inhibitor	621
+intended mode-of-action	578
+intended modulator	622
+intended target	579
+intensity ratio	1483
+inverse agonist	329
+invertebrate	537
+Invitrogen	1689
+ion channel	1801
+ion redistribution	199
+ion-channel assay	37
+Ionworks Quattro	1895
+IP-One HTRF Assay	690
+IPTG	1470
+Iron Ferrite FeCl3	1515
+Iron mobilization	1516
+irradiance unit	1209
+irreversible binding	239
+isomerase	1802
+Isopropyl Dodecylfluorophosphonate	1517
+Isoquinoline carboxylic acid	1518
+isothermal titration calorimetry	295
+isotope labeling method	304
+item count	978
+Iuvo Single Microchannel Plate	2011
+Johns Hopkins Ion Channel Center	799
+Joshua A Bittker	809
+joule	1151
+Jurkat	739
+K562	2000
+katal	1158
+katal per cubic meter	1105
+katal per liter	1106
+kcat	909
+Kd	902
+kelvin	1061
+Ki	903
+kibibyte	1286
+kidney	1506
+kilobyte	1276
+kilodalton	1049
+kilogram	1041
+kilogram meter per second	1122
+kilogram per cubic meter	1094
+kilogram per liter	1097
+kilogram per meter	1229
+kilogram per mole	1116
+kilogram per square meter	1227
+kilovolt	1260
+kilovolt-hour	1270
+kilowatt-hour	1153
+kinase	1803
+Kinase profile	1525
+Kinase-Glo Luminescent Kinase Assay	691
+Kinase-Glo Plus Luminescent Kinase Assay	692
+kinetic constant	904
+kinetic measurement	97
+Km	906
+Km/Vmax	910
+KM12	1911
+kMESF	1323
+Kodak BioMax MR-1	1390
+koff	907
+kon	908
+KOPN-8	1586
+L-6	1891
+label-free method	177
+labeling method	170
+laboratory name	559
+LANCE cAMP Detection Kit	693
+LANCE method	1746
+Lassa virus	1831
+LC50	956
+LCL	1878
+LC-MS/MS	1844
+LD50	917
+lead-optimization assay	572
+length unit	1032
+lethal concentration	1729
+LI-COR Biosciences	1650
+LI-COR Odyssey Imaging System	775
+ligand	347
+ligand function	607
+ligase	1804
+light unit	1201
+LightCycler480	1963
+linear density unit	1228
+lipophilicity assay	113
+liter	1136
+liter per kilogram	1127
+LiveBLAzer-FRET B/G Loading Kit	694
+liver	1507
+LJL Analyst	1854
+LJL BioSystems	1651
+localization assay	38
+log AC50	960
+log CC50	953
+log EC50	962
+log GI50	1355
+log IC50	968
+log MIC	958
+log TGI	1385
+log virus titer change	1024
+log virus titre change	1024
+logarithm	608
+logarithm of the inverse	609
+logD	931
+logP	932
+Lonza	1700
+LOPAC 1280	811
+low-signal control	231
+LOX IMVI	1919
+LSM-510 Confocal Fluorescent Microscope	1541
+LTQ Ion Trap	2008
+luciferase induction	357
+lumen	1208
+luminance unit	1202
+luminescence method	178
+luminescence response	1025
+luminometer	772
+luminous flux unit	1207
+luminous intensity unit	1070
+lux	1205
+LYMP1-002	1587
+LYMP1-003	1588
+LYMP2-001	1589
+LYMP2-002	1590
+LYMP2-003	1591
+LYMP2-004	1592
+LYMP2-005	1593
+LYMP2-006	1594
+LYMP2-007	1595
+LYMP2-008	1596
+LYMP2-009	1597
+LYMP2-010	1598
+LYMP2-011	1599
+LYMP2-012	1600
+LYMP2-013	1601
+LYMP2-014	1602
+LYMP2-015	1603
+LYMP2-016	1604
+LYMP2-017	1605
+LYMP2-018	1606
+LYMP2-019	1607
+LYMP2-020	1608
+LYMP2-021	1609
+LYMP2-022	1610
+LYMP2-023	1611
+LYMP2-024	1612
+LYMP2-025	1613
+LYMP2-026	1614
+lysate array	418
+lysate-based scintillation method	425
+m/s	1131
+M14	1920
+macromolecule	384
+macromolecule description	871
+macromolecule identifier	868
+macromolecule name	872
+macromolecule sequence	873
+macromolecule type	870
+MAD score	975
+magnetic flux density unit	1271
+magnetic flux unit	1267
+MALME3	1874
+mammal	539
+manual selection	1452
+Marburg marburgvirus	1830
+Marburg virus	1830
+Marquardt-Levenberg	1311
+mass density unit	1225
+mass per unit volume	1093
+mass percentage	1251
+mass spectrometer	1845
+mass spectrometry	296
+mass unit	1040
+mass volume percentage	1248
+material entity biologics and screening manufacturer	1547
+material entity construct selectable marker	1549
+maximal activation	985
+maximal inhibition	984
+maximum	1572
+maximum percent activation	985
+maximum percent change	1333
+maximum percent inhibition	984
+MCF7	740
+MDA-MB-231	741
+MDA-MB-435	1847
+MDCK	742
+mean	610
+measured component	258
+measured profile	124
+measured value	125
+measurement timing	22
+measurement type	23
+measurement wavelength	24
+mebibyte	1287
+media component	253
+median	611
+megabyte	1277
+megavolt	1264
+melting-point determination assay	114
+membrane permeability assessment	222
+membrane potential assay	39
+Membrane Potential Assay Kit	2015
+Membrane Potential Assay Kit Blue	1896
+membrane potential measurement method	72
+mESC	1889
+mesencephalon	1660
+Mesh term	886
+Meso Scale Discovery	1652
+metabolic disorder	1817
+metal ion redistribution	200
+metastasis assay	40
+metazoan	515
+meter	1033
+meter per second	1131
+meter per second per second	1221
+Methanococcus maripaludis	1829
+methylation assay	194
+MIC	957
+micro curie per milliliter	1446
+micro interational unit per milliliter	1403
+microampere	1059
+MicroBeta scintillation counter	1410
+MicroCal iTC200 calorimeter	1537
+Microcal VP-ITC	1764
+microcurie	1174
+microeinstein per square meter per second	1211
+microelectrode measurement	389
+microgram	1044
+microgram per liter	1101
+microgram per milliliter	1453
+microgray	1181
+microliter	1138
+microliter per kilogram	1129
+microliters per minute	1302
+micrometer	1036
+micromolal	1085
+micromolar	1078
+micromole	1064
+micron pixel	1283
+microplate	158
+microscope	1538
+Microscope cover slip 22 mm sq	1391
+microscope slide	1428
+microscopy	282
+Microscopy slide	1428
+microsecond	1054
+microsievert	1187
+microsome format	211
+MicroSource Discovery Systems	1701
+microvolt	1261
+mid-infrared imaging	523
+milliampere	1058
+millicurie	1173
+milligram	1043
+milligram per kilogram	1310
+milligram per milliliter	1099
+milligray	1182
+milliliter	1135
+milliliter per cubic meter	1109
+milliliter per kilogram	1128
+milliliter per liter	1110
+millimeter	1035
+millimetres of mercury	1149
+millimolal	1084
+millimolar	1077
+millimole	1065
+Millipore HDAC Assay Kit	1872
+millisecond	1053
+millisievert	1186
+millivolt	1259
+min	1196
+minimum	1662
+minute	1196
+miRNA	497
+mitochondrial membrane potential assay	104
+mitochondrial membrane potential assessment	223
+mitochondrion format	212
+mixed	485
+mixed source	659
+mixture of perturbagens	584
+ML-2	1615
+MLSMR compound collection	812
+mm	1077
+Mode of infection	1409
+modified protein	464
+modulator	330
+modulator role	153
+molal	1083
+molar	1076
+molar mass unit	1115
+molar volume unit	1118
+mole	1063
+mole fraction	1253
+Molecular Devices	1653
+Molecular Devices LMAX 384 reader	2017
+Molecular Devices M5 Plate Reader	784
+Molecular Devices Thermomax microplate reader	2020
+molecular entity	207
+molecular entity perturbagen	1562
+molecular function	551
+molecular interaction	543
+molecular interaction assessment method	73
+Molecular Probes	1702
+molecular target	544
+MolecularDevices M5 reader	784
+molecule count	1242
+moles-per-liter	1076
+MOLT-4	1899
+momentum unit	1121
+monochrometer-based method	278
+Monolight 2010 luminometer	773
+morphology assessment method	74
+mouse plasma	1432
+MRC-5	743
+mRNA	498
+MSC80	1616
+MSD SECTOR	1631
+multicellular fungus	531
+multi-parameter	118
+multiple concentration	598
+multiple repetition	629
+multiplexed measurement	99
+musculoskeletal system disease	1816
+mutated gene	449
+mutated protein	507
+MV-4-11	1617
+Mx3005P QPCR System	774
+Mycobacterium tuberculosis	838
+N2a	1618
+nanogram	1045
+nanogram per milliliter	1392
+nanogray	1183
+nanoliter	1139
+nanometer	1037
+nanomolal	1086
+nanomolar	1079
+nanomole	1066
+nanosecond	1051
+nanosievert	1189
+nanovolt	1262
+National Cancer Institute Developmental Therapeutics Program	1414
+National Cancer Institute Initiative for Chemical Genetics	1760
+National Chemical Genomics Center	800
+native regulatory region	474
+natural logarithm	612
+natural product	660
+NCBI accession number	1795
+NCBI BioSystems term	885
+near-infrared imaging	524
+negative control	232
+Neuro-2A	1867
+neurodegeneration	1815
+New Mexico Molecular Libraries Screening Center	801
+newton	1146
+newton per meter	1289
+ng	1045
+ng/ml	1392
+ng/uL	1453
+NIH-3T3	744
+Nikon TE2000 microscope	1540
+NINDS compound library	813
+nm	1079
+NMR spectrometer	1667
+NMR tube	1670
+non-competitive binding	240
+non-competitive inhibition	268
+non-mammal	540
+non-specific protein-binding assay	108
+normal	1089
+normalized as B-score	614
+normalized as MAD-score	615
+normalized as Z-score	616
+normalized data	291
+normalized percent activation	617
+normalized percent inhibition	618
+normalized to control	619
+nuclear extract format	213
+nuclear magnetic resonance spectroscopy	297
+nuclear membrane potential assay	105
+nuclear receptor	1805
+nucleic acid amplification method	184
+nucleic acid array	226
+nucleic acid array method	185
+nucleic acid conformation assessment	171
+nucleic acid format	87
+nucleic acid sequencing method	186
+nucleosome format	214
+nucleotide	884
+nucleus count	1377
+number of anti-targets	1357
+number of blank wells	1450
+number of control wells	1338
+number of exclusions	1307
+number of points	1397
+number of replicates	1358
+number of wells	1732
+number per well	1444
+number-per-well	1444
+OCI-Ly3	1619
+OD500	1327
+OD600	1327
+Odyssey infrared imager	775
+oleic acid released	1720
+oligonucleotide array	409
+OMIM term	887
+one turn per second	1124
+ONE-Glo Lucierase Assay System	695
+Opera QEHS plate-reader	776
+OptEIA Human IL-8 ELISA Set	696
+optical densitometry	1393
+optical density	1327
+Optical density (600nm)	1327
+Optical density (OD)	1327
+optical microscopy	406
+optical waveguide grating	412
+optical-based detection	298
+organism count	1376
+organism genetic modification	379
+organism-based format	19
+orthogonal assay method	643
+orthogonal detection method	644
+orthogonal target assay	646
+orthosteric	1688
+other cell name	377
+OVCAR-3	1924
+OVCAR-4	1925
+OVCAR-5	1926
+OVCAR-8	1927
+overexpressed protein	494
+oxidative phosphorylation assay	41
+oxidative stress assay	42
+oxidoreductase	1806
+P450-Glo CYP1A2 Screening System	697
+P450-Glo CYP2C19 Screening System	698
+P450-Glo CYP2C9 Screening System	699
+P450-Glo CYP2D6 Screening System	700
+P450-Glo CYP3A4 Screening System	701
+pAC10	1384
+pAC1000	1373
+pAC35	1371
+pAC40	1374
+pAC50	1378
+pAC500	1381
+Packard Cobra Gamma Counter	1765
+Packard Fusion microplate reader	777
+panel-assay profile	941
+parental cell-line assay	647
+partial agonist	331
+partial inhibition	269
+partially purified protein	469
+parts per billion	1235
+parts per hundred	1232
+parts per million	1234
+parts per notation	1231
+parts per quadrillion	1237
+parts per thousand	1233
+parts per trillion	1236
+pascal	1148
+pascal second	1292
+passage number	432
+patch clamp	454
+PathHunter 93-0001	1530
+PathHunter beta-Arrestin Assay	702
+pathogenic virus transduction method	529
+PC-3	1935
+PC3M	2010
+peak current	1030
+Penn	805
+peptide	889
+Peptide complex format	196
+peptide-peptide interaction assay	84
+peptie-peptide	84
+percent	1247
+percent activation	996
+percent activity	986
+percent apoptosis	1017
+percent area	1359
+percent augmentation	1004
+percent bound	994
+percent by volume	1108
+percent capsule formation	1330
+percent cells	1484
+percent cellular ATP content	1322
+percent change	1736
+percent conversion	1509
+percent count	1005
+percent current	1006
+percent current potentiation	1320
+percent dead	1018
+percent decrease	1737
+percent displacement	1007
+percent dying	1019
+percent effect	1016
+percent efficacy	1008
+percent efflux	1009
+percent Emax bottom	1010
+percent Emax top	1011
+percent fluorescence	1368
+percent G1 arrested	1415
+percent G1 arrested cells	1415
+percent G2-M arrested	991
+percent G2-M arrested cells	991
+percent growth inhibition	999
+percent hematocrit	1770
+percent increase	1485
+percent induction	1361
+percent inhibition	998
+percent intensity	1483
+percent interphase cells	989
+percent mitotic cells	987
+percent non-arrested	988
+percent non-arrested cells	988
+percent of control	982
+percent parasitemia	1769
+percent proliferative cells	990
+percent recovery	995
+percent remaining	1486
+percent response	982
+percent S arrested	1416
+percent S-arrested cells	1416
+percent side scatter shift	1324
+percent subG1 arrested	1417
+percent subG1 arrested cells	1417
+percent survival	1013
+percent toxicity	1014
+percent turnover	1319
+percent unblocked	1487
+percent viability	992
+percent-of-control	1012
+Perkin Elmer	1654
+Perkin Elmer Envision	779
+Perkin Elmer EnvisionÂ	779
+Perkin Elmer Envision¬	779
+Perkin Elmer LabChip EZReader	1527
+Perkin Elmer LabChip EZReader	1954
+Perkin Elmer Victor V3	790
+Perkin Elmer Victor V3	1961
+PerkinElmer Alphalisa Bead kit	1890
+PerkinElmer AlphaScreen	1524
+PerkinElmer AlphaScreen Bead Kit	1632
+PerkinElmer AlphaScreen Bead Kit	1957
+PerkinElmer AlphaScreen reagent	1771
+PerkinElmer AlphaScreen SureFire ERK reagent	1768
+PerkinElmer britelite	1706
+PerkinElmer EnSpire	778
+PerkinElmer EnVision	779
+PerkinElmer Operetta	780
+PerkinElmer ViewLux	781
+permeability	935
+permeability A-B	935
+permeability B-A	936
+perturbagen	332
+perturbagen collection	560
+perturbagen delivery method	561
+perturbagen extract	586
+perturbagen extract fraction	587
+perturbagen incubation time	289
+perturbagen purity	562
+pH	1255
+pharmacodynamic assay	43
+pharmacokinetic assay	44
+pharmacologic mode	1685
+phase-contrast microscopy	460
+phenotype	1708
+phenotype behavior	897
+phenotypic activator	1496
+phenotypic inhibitor	1495
+phenotypically cytotoxic	1498
+phenotypically fluorescent	1497
+phenotypically inactive	1499
+phenotypically inconclusive	1500
+PHERAstar Plus	782
+phosphatase	1807
+Phospho(Thr180/Tyr182)/Total p38 Assay Whole Cell Lysate Kit	703
+phosphodiesterase	1808
+phospholipid redistribution estimation	224
+phosphoprotein detection method	75
+phosphorimaging	338
+phosphorylated protein	508
+phosphorylation assay	195
+photoaffinity labeling method	305
+Photon Technology International	1655
+Photon Technology International fluorimeter	1962
+physical property	930
+physicochemical assay	648
+physicochemical property determination assay	45
+pIC50	967
+picogram	1046
+picoliter	1140
+picometer	1039
+picomolal	1087
+picomolar	1080
+picomole	1067
+picosecond	1055
+picovolt	1263
+Pitt	807
+pixels per inch	1284
+pixels per millimeter	1285
+pKa	933
+PKLight Assay Kit	704
+plane angle unit	1161
+plant	516
+plaque forming unit	1244
+plaque forming unit per milliliter	1114
+plaque forming unit per volume	1113
+plasma	1661
+plasma membrane potential assay	106
+platelet-rich plasma	1465
+pm	1080
+point-mutated gene	511
+poise	1293
+Polar Screen PPARg Competitor Assay	1997
+polymerase	1809
+polymerase chain reaction	335
+positive control	233
+post-translational modification assay	130
+potentiator	333
+power	1674
+power unit	1155
+PPC-1	1620
+presence flag	1326
+pressure unit	1147
+primary assay	573
+principal investigator	1783
+probe	1715
+probe identifier	1775
+probe report	1776
+process assay	1577
+product formation method	181
+profile endpoint	938
+project information	555
+Project Lead	568
+project lead name	568
+project management	552
+project name	569
+Promega	1703
+promoter gene	1573
+protease	1810
+protease activity determination	225
+Proteasome inhibition assay	1521
+Proteasome-Glo Chymotrypsine-Like Assay	705
+protein	1785
+protein array	227
+protein complex format	196
+protein conformation assessment	172
+protein Entrez GI	882
+protein expression	1425
+protein expression assay	1425
+protein form	420
+protein format	88
+protein fragment complementation assay	235
+protein preparation	248
+protein preparation method	421
+protein purity	422
+protein redistribution	201
+protein sequence	423
+protein-DNA	546
+protein-DNA complex	1784
+protein-DNA interaction assay	83
+protein-expression assay	1425
+protein-folding assay	46
+protein-nucleotide	547
+protein-protein	548
+protein-protein interaction assay	84
+protein-reporter complex	1314
+protein-RNA	549
+protein-RNA interaction assay	85
+protein-small molecule	550
+protein-small molecule interaction assay	86
+protein-turnover assay	47
+protozoan	517
+PubChem activity score	898
+PubChem AID	563
+PubChem CID	878
+PubChem outcome	896
+PubChem SID	879
+PubMed	888
+purified DNA	1471
+purified perturbagen	588
+purified protein	470
+purified protein array	419
+purity	934
+purity determination assay	115
+purity percentage	1249
+QC analyst	1476
+qFRET	277
+Qpatch 16 voltage clamp	2014
+qPCR	475
+qPCR	2007
+QT interval assay	129
+quality assessment method	594
+quality-control flag	1334
+quantitative reverse transcription polymerase chain reaction	475
+quartz crystal microbalance	299
+rad	1180
+radian	1162
+radian per second	1223
+radian per second per second	1074
+radiance unit	1214
+radiant intensity unit	1212
+radiation unit	1169
+radioactive label	259
+radioactivity count	1362
+radioimmunoassay	394
+radioligand binding assay	236
+radiometric	179
+radiometry method	179
+Raman imaging	513
+ratio	1246
+ratio unit	1246
+ratiometric readout	167
+ratiometric response	1738
+raw activity	973
+raw data	292
+RBL-2H3	1621
+RD	1940
+readout content	25
+readout signal direction	26
+readout type	27
+reagent	348
+reagent role	154
+real-time polymerase chain reaction	415
+receptor	367
+recombinant expression	467
+recombinant virus transduction method	530
+recovery response	1463
+redistribution assay	48
+redistribution determination method	76
+reducing agent	349
+reference	260
+regulatory region	385
+relative	1798
+relative fluorescence unit	1503
+relative IC50	966
+Renilla Glo luciferase assay	1884
+repetition throughput	581
+repetition-point number	651
+reporter	261
+reporter assay	1312
+reporter gene	495
+reporter-gene assay	131
+reporter-gene method	187
+reproducibility	1490
+resonant waveguide grating	413
+response endpoint	972
+result detail	564
+Result type	564
+result type	1328
+reverse transcription polymerase chain reaction	416
+reversible binding	241
+RFU	1503
+RNA aptamer	499
+RNA construct collection	582
+RNA construct collection name	631
+RNA construct collection type	632
+RNA-seq method	336
+RNA-splicing assay	49
+RNeasy Qiagen	2018
+robust z-prime factor	624
+Roche FuGene6	1998
+Roche LightCycler 480	1963
+Roche LightCycler480�	1865
+Roche LightCycler480Æ	1853
+Roche LightCycler480Ž	1853
+Roche LightCycler480�	1963
+Roche LightCycler480�	1853
+Roche LightCycler480�	1958
+Roche Thermocycler	1522
+roentgen	1191
+Roentgen equivalent man	1188
+rotational frequency unit	1123
+RPMI-8226	1900
+R-squared	980
+rtPCR	2019
+RXF 393	1932
+S1P1	1793
+S1P3	1794
+S2	1756
+Saccharomyces cerevisiae	845
+safety pharmacology assay	50
+San Diego Center for Chemical Genomics	1821
+sandwich enzyme-linked immunosorbent assay	446
+Sanford-Burnham Center for Chemical Genomics	802
+saturation binding	242
+saturation transfer difference	1321
+scanning electron microscopy	439
+scanning near-field optical microscopy	461
+scanning probe microscopy	407
+scanning tunneling microscopy	477
+SCC-12F	1996
+science officer	1823
+scintillation counter	1532
+scintillation counting	339
+scintillation proximity assay	426
+screening campaign name	570
+screening concentration	1943
+screening concentration (%/mass)	1948
+screening concentration (%/vol)	1949
+screening concentration (molar)	971
+screening concentration (W/V)	1950
+Scripps	806
+sds page	1838
+SDS-PAGE	1838
+SDS-PAGE gel	1838
+second	1052
+second messenger assay	132
+second messenger redistribution	202
+secondary assay	574
+secreted protein assay	133
+selectable marker	386
+selectivity assay	635
+selectivity index	1501
+sensitizer	334
+sensitizer assay	51
+serial analysis of gene expression	188
+SF-268	1913
+SF-295	1914
+SF-539	1915
+shRNA	500
+shRNA library	652
+SH-SY5Y	745
+SI	1501
+si mod	1343
+side scatter	1539
+siemens	1296
+sievert	1185
+Sigma-Aldrich	1704
+SigmaFast protease inhibitor substrate	1881
+signal decrease	121
+signal decrease corresponding to activation	203
+signal decrease corresponding to inhibition	204
+signal direction	26
+signal increase	122
+signal increase corresponding to activation	205
+signal increase corresponding to cell survival	122
+signal increase corresponding to inhibition	206
+signal to noise ratio	625
+signal transduction assay	52
+signal window	626
+SILAC ratio	1363
+single concentration	599
+single measurement	100
+single parameter	119
+single perturbagen	585
+single protein format	197
+single repetition	630
+single-feature extraction	1457
+siRNA	501
+siRNA library	653
+SK-BR-3	1623
+SK-MEL-5	1873
+SK-N-SH	746
+SK-OV-3	1929
+slope	1739
+small molecule	208
+small-molecule array	228
+small-molecule collection	583
+small-molecule collection name	636
+small-molecule collection source	637
+small-molecule component	66
+small-molecule format	20
+small-molecule name	874
+small-molecule structure	875
+SMILES	890
+SNB-19	1916
+SNB-75	1917
+software	1306
+solid angle unit	1164
+solid phase	280
+solid phase bead	1423
+solubility	937
+solubility assay	116
+solute	350
+solution phase	281
+solvent	351
+Southern Research Institute	803
+Southern Research Specialized Biocontainment Screening Center	1822
+spatial resolution unit	1281
+species	163
+species name	163
+specific volume unit	1125
+spectra count	1364
+SpectraMax 190 microplate reader	783
+Spectramax Gemini XS	1893
+SpectraMax M5 Multi-Mode microplate reader	784
+Spectramax Plus 384 Microplate Reader	1935
+Spectramax Plus384 microplate reader	1395
+spectrophotometry method	180
+speed/velocity unit	1130
+sperm	1344
+spots per cell	1365
+SPR	1531
+square centimeter	1218
+square meter	1217
+square millimeter	1219
+SR	1901
+SRI	803
+SRI SRI Screening	803
+stability	1386
+stability assay	117
+stable	1315
+stable transfection method	527
+stain	262
+standard deviation	613
+standard error	1335
+statistical endpoint	974
+Steady-Glo Luciferase Assay System	706
+steadylite HTS Reagent	707
+steradian	1165
+Storem PhosphorImager	1534
+Storm Phosphorimager	1534
+Streptococcus pyogenes	1834
+Streptomyces Avidinii	1856
+Structural Genomics Consortium	804
+subcellular format	89
+subject role	155
+substance unit	1062
+substrate	263
+substrate depletion method	182
+substrate incubation time	290
+sum of squares	1679
+sum readout	168
+SUM159	1877
+summary assay	575
+SUMOylation assay	1404
+SuperSignal ELISA Femto Luminol/Enhancer Solution	1464
+surface plasmon resonance	414
+surface tension unit	1288
+suspension	486
+SV40	1882
+SW620	1866
+SW-620	1866
+SW-620	1967
+Sybr Green PCR Reagent Kit	1842
+synthesis by chemical process	468
+T1/2	1195
+T175	863
+T225	864
+T25	865
+t-4 bacteriophage	1412
+T-47D	1937
+T75	866
+Tango GPCR Assay System	708
+target	368
+target cell	369
+target class	1781
+TC50	1388
+TD50	1379
+Tecan	1656
+Tecan Freedom Evo 150	1767
+Tecan Infinite F200	785
+Tecan Infinite M200	1430
+Tecan Safire 2	1459
+Tecan Safire 2	1965
+Tecan Safire2	1459
+Tecan Spectra Mini Reader	1772
+Tecan Spectrafluor Plus	1848
+temperature derived unit	1166
+temperature endpoint	911
+temperature unit	1060
+tesla	1272
+TGI	970
+The Penn Center for Molecular Discovery	805
+The Scripps Research Institute Molecular Screening Center	806
+therapeutic area	1777
+therapeutic efficacy assay	53
+thermal shift	279
+Thermo Fisher Scientific	1657
+Thermo Fisher VarioSkan	786
+Thermo Scientific LTQ-Orbitrap	1850
+Thermo Scientific Orbitrap Velos	1846
+ThermoFinnigan TSQ Quantum triple quadrupole MS	1862
+Thermofluor	1852
+ThermoFluor 384 System	1852
+ThioGlo-1 detection reagent	1879
+THP-1	747
+threshold signal direction	595
+Threshold units	597
+tight-binding inhibition	270
+time course	126
+time derived unit	1193
+time endpoint	913
+time to reach EC50	1721
+time unit	1050
+time-dependent inhibition	271
+time-resolved fluorescence resonance energy transfer	397
+tissue distribution assay	109
+tissue-based format	21
+tissue-culture flask name	433
+TK-10	1933
+Tm	912
+Tm shift	1678
+tomography	283
+TopCount NXT microplate scintillation and luminescence counter	787
+total internal reflection fluorescence microscopy	503
+toxic concentration	1730
+toxicity assay	54
+tracer	1458
+transcription factor	1574
+transfection agent	254
+transfection method	504
+transient transfection method	528
+translocation to nucleus	1331
+transmission electron microscopy	440
+transmittance	363
+transporter	1799
+transporter assay	55
+TripleFlask	867
+TTP LabTech Acumen	788
+turbidity	1716
+turbidity unit	1722
+two-site enzyme immunoassay	395
+typhoon 8600 variable mode imager	1396
+Typhoon laser scanner	1956
+U/ml	1091
+U251	1918
+U-2OS	748
+U3A	1624
+U937(CD59+)	749
+UACC-257	1921
+UACC-62	1922
+ubiquitination assay	1406
+uCi	1174
+uCi/mL	1446
+uCi/mL	1959
+ug/ml	1453
+uIU/mL	1403
+uL	1138
+uL/well	1445
+um	1078
+uncompetitive inhibition	272
+unfolded conformation	1682
+unicellular fungus	532
+UniProt	1398
+UniProt accession number	1398
+unit	597
+unit of molality	1082
+unit of molarity	1075
+unit of normality	1088
+unit per liter	1092
+unit per milliliter	1091
+unit per volume unit	1090
+University of Pittsburgh Molecular Library Screening Center	807
+UNM	801
+unpurified protein sample	471
+Untreated	1488
+UO-31	1934
+validation flag	1336
+Vanderbilt	808
+Vanderbilt	808
+Vanderbilt Screening Center for GPCRs	808
+Vanderbilt Screening Center for GPCRs Ion Channels and Transporters	808
+Vanderbilt Vanderbilt Chemistry	808
+Varian Cary Eclipse fluorescence spectrophotometer	1855
+variant construct assay	649
+vehicle	352
+verification flag	1489
+Vero	750
+VERO76	751
+vertebrate	538
+viability assay	56
+viability measurement method	77
+vial	159
+vibrational spectroscopy	462
+Vibrio harveyi	857
+VICTOR X2 multilabel plate-reader	789
+VICTOR X3 multilabel plate-reader	790
+ViewLux CCD Imager	791
+ViewLux ultraHTS microplate imager	792
+viral transduction method	505
+virus	438
+virus titer change	1332
+viscosity unit	1291
+visual detection	793
+visual selection	1346
+vital dye staining method	306
+vital staining of cells	428
+vital staining of organelles	429
+Vmax	905
+volt	1258
+volt per meter	1300
+voltage clamp	455
+volt-hour	1269
+volume per unit volume	1107
+volume percentage	1108
+volume unit	1132
+volumetric flow rate unit	1301
+VP-ITC isothermal titration calorimeter	794
+Vybrant MTT Cell Proliferation Assay Kit	1641
+Wallac MicroBeta liquid scintillation counter	795
+watt	1156
+watt per meter kelvin	1298
+watt per square meter	1210
+watt per steradian	1213
+watt per steradian per square meter	1215
+watt-hour	1152
+weber	1268
+week	1199
+well volume	1445
+Western blot	452
+whole-cell lysate format	90
+wild-type gene	450
+wild-type protein	465
+WRO	1625
+Xlfit	1675
+xMAP Kit	709
+X-ray crystallography	300
+year	1200
+Zeiss	1658
+Zeiss Axiovert 200M	755
+Zeiss LSM 510 Meta	1541
+z-factor	627
+Zinc sulfate	1523
+zone diameter	1026
+z-prime factor	628
+Z-score	977

@@ -14,7 +14,7 @@ class ExperimentCommand implements Serializable {
 	
 }
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class ExperimentController {
     ExperimentService experimentService;
     MeasureTreeService measureTreeService
