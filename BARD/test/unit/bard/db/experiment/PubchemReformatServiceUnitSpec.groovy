@@ -137,6 +137,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         // and the result map we're using
         PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [
+                new PubchemReformatService.ResultMapRecord(tid: "-1", resultType: "pubchem outcome"),
+                new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "pubchem score"),
                 new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "parent"),
                 new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "child", parentTid: "1", staticContextItems: [concentration: "100"]),
         ])
@@ -157,6 +159,35 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         then:
         assertFilesMatch("bard/db/experiment/expected-conversion-output.txt", "out/PubchemReformatServiceUnitSpec-out.txt")
+    }
+
+    def 'test missing columns in result map'() {
+        setup:
+        // copy the pubchem input file to a known path
+        InputStream inputStream = PubchemReformatServiceUnitSpec.getClassLoader().getResourceAsStream("bard/db/experiment/pubchem-input.txt")
+        assert inputStream != null
+
+        new File("out").mkdirs();
+        new File("out/PubchemReformatServiceUnitSpec-in.txt").withOutputStream { fos ->
+            IOUtils.copy(inputStream, fos)
+        }
+
+        // set up the service
+        PubchemReformatService service = new PubchemReformatService()
+
+        // and the result map we're using
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [
+                new PubchemReformatService.ResultMapRecord(tid: "-1", resultType: "pubchem outcome"),
+                new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "pubchem score"),
+        ])
+
+        Experiment experiment = Experiment.build()
+
+        when:
+        service.convert(experiment, "out/PubchemReformatServiceUnitSpec-in.txt", "out/PubchemReformatServiceUnitSpec-out.txt", map);
+
+        then:
+        thrown(PubchemReformatService.MissingColumnsException)
     }
 
     boolean assertFilesMatch(String expected, String pathToVerify) {
@@ -208,5 +239,21 @@ class PubchemReformatServiceUnitSpec extends Specification {
         map["0"] == "0"
         map["1"] == "-1.483"
         map["2"] == "5"
+    }
+
+    def 'test fail if columns not used'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+
+        def rows = [
+                [TID: 1, RESULTTYPE: "parent"],
+                [TID: 2]
+        ]
+
+        when:
+        service.convertToResultMap("100", fillInRows(rows))
+
+        then:
+        thrown(PubchemReformatService.MissingColumnsException)
     }
 }
