@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-  <title>TID Issues</title>
+  <title>Duplicate Result Types based on Result_Map</title>
 </head>
 <body>
 <h1>TID's identified with duplicate result-types in result_map</h1>
