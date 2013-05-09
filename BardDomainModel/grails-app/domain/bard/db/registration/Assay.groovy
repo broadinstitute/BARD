@@ -35,10 +35,12 @@ class Assay extends AbstractContextOwner {
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
-    static hasMany = [experiments: Experiment,
+    static hasMany = [
+            experiments: Experiment,
             measures: Measure,
             assayContexts: AssayContext,
-            assayDocuments: AssayDocument]
+            assayDocuments: AssayDocument
+    ]
 
     static constraints = {
         assayStatus()
@@ -60,7 +62,7 @@ class Assay extends AbstractContextOwner {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
         assayStatus(type: AssayStatusEnumUserType)
         readyForExtraction(type: ReadyForExtractionEnumUserType)
-        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true')
+        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true',cascade: 'all-delete-orphan')
     }
 
     static transients = ['assayContextItems']

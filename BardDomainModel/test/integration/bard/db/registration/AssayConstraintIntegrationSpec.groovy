@@ -277,5 +277,26 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
+    @IgnoreRest
+    void "test delete orphan constraint #desc assayContext: '#valueUnderTest'"(){
+        given:
+        long assayContextId = null
+        Assay.withNewTransaction {
+            3.times({domainInstance.addToAssayContexts(AssayContext.build(assay:domainInstance))})
+            assayContextId = domainInstance.assayContexts.first().id
+        }
+        assert assayContextId
+        final AssayContext assayContext = AssayContext.findById(assayContextId)
+        assert assayContext
+        when:
+        Assay.withNewTransaction {
+           domainInstance.removeFromAssayContexts(assayContext)
+
+        }
+        then:
+        assert AssayContext.findById(assayContextId) == null
+
+
+    }
 
 }

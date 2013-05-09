@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -16,7 +17,7 @@ import bard.db.enums.HierarchyType
  * Time: 11:30 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@Build([Assay,AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @TestFor(AssayContextService)
 @Unroll
@@ -25,7 +26,17 @@ class AssayContextServiceUnitSpec extends Specification {
     @Shared String ORIGINAL_CONTEXT_NAME = 'original title'
     @Shared String NEW_CONTEXT_NAME = 'new title'
 
-
+    void "test deleteAssayContext"() {
+        given:
+        Assay assay = Assay.build()
+        3.times({assay.addToAssayContexts(AssayContext.build(assay:assay))})
+        final AssayContext assayContext = assay.assayContexts.first()
+         int initialNumberOfContexts = assay.assayContexts.size()
+        when:
+        service.deleteAssayContext(assayContext)
+        then:
+        assert assay.assayContexts.size() == (initialNumberOfContexts-1)
+    }
 
     void "test changeParentChildRelationship #desc"() {
         given:
