@@ -2,7 +2,7 @@ import groovy.sql.Sql
 
 def datasetId = args[0]
 dst = createDbTarget(args[1])
-def outputDir = args(args[2])
+def outputDir = args[2]
 
 dataqa = createConnection("dataqa")
 
