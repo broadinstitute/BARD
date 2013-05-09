@@ -139,12 +139,12 @@ AS
 
         FOR i IN 1..ati_columns.last
         LOOP
-            Dbms_Output.put_line( ' ' || To_Char(i) || 'col:' ||ati_columns(i).column_name ||' old:' || ati_columns(i).old_value);
+            --Dbms_Output.put_line( ' ' || To_Char(i) || 'col:' ||ati_columns(i).column_name ||' old:' || ati_columns(i).old_value);
             save_audit_column (ln_audit_id,
                                ati_columns(i).column_name,
                                ati_columns(i).old_value,
                                ati_columns(i).new_value);
-             Dbms_Output.put_line(To_Char(ln_audit_id) );
+             --Dbms_Output.put_line(To_Char(ln_audit_id) );
         END LOOP;
     END save_audit;
 

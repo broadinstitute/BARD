@@ -24,6 +24,10 @@ DROP TABLE ASSAY_DOCUMENT CASCADE CONSTRAINTS
 ;
 DROP TABLE Biology_Descriptor_tree CASCADE CONSTRAINTS
 ;
+DROP TABLE CONFIDENCE_LEVEL_FACTOR CASCADE CONSTRAINTS
+;
+DROP TABLE CONFIDENCE_LEVEL_SCORE CASCADE CONSTRAINTS
+;
 DROP TABLE DICTIONARY_TREE CASCADE CONSTRAINTS
 ;
 DROP TABLE ELEMENT CASCADE CONSTRAINTS
@@ -47,6 +51,8 @@ DROP TABLE EXTERNAL_REFERENCE CASCADE CONSTRAINTS
 DROP TABLE EXTERNAL_SYSTEM CASCADE CONSTRAINTS
 ;
 DROP TABLE FAVORITE CASCADE CONSTRAINTS
+;
+DROP TABLE FACTOR_COMPONENT CASCADE CONSTRAINTS
 ;
 DROP TABLE IDENTIFIER_MAPPING CASCADE CONSTRAINTS
 ;
@@ -151,6 +157,8 @@ DROP SEQUENCE EXPRMT_CONTEXT_ID_SEQ
 DROP SEQUENCE EXPRMT_CONTEXT_ITEM_ID_SEQ
 ;
 DROP SEQUENCE EXPRMT_MEASURE_ID_SEQ
+;
+drop SEQUENCE EXPERIMENT_FILE_ID_SEQ
 ;
 DROP SEQUENCE EXTERNAL_REFERENCE_ID_SEQ
 ;
@@ -288,6 +296,16 @@ CREATE SEQUENCE ASSAY_ID_SEQ
 --
 -- SEQUENCE: ELEMENT_HIERARCHY_ID_SEQ
 --
+CREATE SEQUENCE confidence_level_score_id_SEQ
+    START WITH 1
+    INCREMENT BY 1
+    NOMINVALUE
+    MAXVALUE 2147483648
+    NOCYCLE
+    CACHE 20
+    NOORDER
+;
+
 
 CREATE SEQUENCE ELEMENT_HIERARCHY_ID_SEQ
     START WITH 1
@@ -736,7 +754,7 @@ CREATE TABLE ASSAY(
     DATE_CREATED            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Draft', 'Witnessed', 'Finished', 'Measures Done', 'Annotations Done', 'Retired')),
+    CONSTRAINT CK_ASSAY_STATUS CHECK (Assay_Status IN ('Draft', 'Witnessed', 'All Verified', 'Measures Verified', 'Annotations Verified', 'Retired')),
     CONSTRAINT CK_ASSAY_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT CK_ASSAY_TYPE CHECK (Assay_Type IN ('Regular', 'Panel - Array', 'Panel - Group', 'Template')),
     CONSTRAINT PK_ASSAY PRIMARY KEY (ASSAY_ID)
@@ -902,7 +920,41 @@ CREATE TABLE Biology_Descriptor_tree(
 )
 ;
 
+CREATE TABLE confidence_level_factor (
+  confidence_level_factor_id NUMBER(19,0)   NOT NULL,
+  factor_name                VARCHAR2(128)  NOT NULL,
+  precidence                 NUMBER(3,0)    NULL,
+  weighting                  NUMBER(3,0)    NULL,
+  min_threshold              NUMBER(3,0)    NULL,
+  max_level                  NUMBER(3,0)    NULL,
+  description                VARCHAR2(1000) NULL,
+  score_sql                  VARCHAR2(4000) NULL,
+  version                    NUMBER(38,0)   DEFAULT 0 NOT NULL,
+  date_created               TIMESTAMP(6)   DEFAULT sysdate NOT NULL,
+  last_updated               TIMESTAMP(6)   NULL,
+  modified_by                VARCHAR2(40)   NULL
+)
+  STORAGE (
+    NEXT       1024 K
+  )
+/
 
+
+PROMPT CREATE TABLE confidence_level_score
+CREATE TABLE confidence_level_score (
+  confidence_level_score_id  NUMBER(19,0) NOT NULL,
+  confidence_level_factor_id NUMBER(19,0) NOT NULL,
+  experiment_id              NUMBER(19,0) NOT NULL,
+  score                      NUMBER(5,0)  NULL,
+  version                    NUMBER(38,0) DEFAULT 0 NOT NULL,
+  date_created               TIMESTAMP(6) DEFAULT sysdate NOT NULL,
+  last_updated               TIMESTAMP(6) NULL,
+  modified_by                VARCHAR2(40) NULL
+)
+  STORAGE (
+    NEXT       1024 K
+  )
+/
 
 --
 -- TABLE: DICTIONARY_TREE
@@ -997,7 +1049,7 @@ CREATE TABLE ERROR_LOG(
 CREATE TABLE EXPERIMENT(
     EXPERIMENT_ID           NUMBER(19, 0)     NOT NULL,
     EXPERIMENT_NAME         VARCHAR2(1000)    NOT NULL,
-    EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Pending' NOT NULL,
+    EXPERIMENT_STATUS       VARCHAR2(20)      DEFAULT 'Draft' NOT NULL,
     READY_FOR_EXTRACTION    VARCHAR2(20)      DEFAULT 'Not Ready' NOT NULL,
     ASSAY_ID                NUMBER(19, 0)     NOT NULL,
     RUN_DATE_FROM           DATE,
@@ -1009,7 +1061,7 @@ CREATE TABLE EXPERIMENT(
     Date_Created            TIMESTAMP(6)      DEFAULT sysdate NOT NULL,
     Last_Updated            TIMESTAMP(6),
     MODIFIED_BY             VARCHAR2(40),
-    CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Pending', 'Approved', 'Rejected', 'Revised')),
+    CONSTRAINT CK_EXPERIMENT_STATUS CHECK (Experiment_Status IN ('Draft', 'Approved', 'Rejected')),
     CONSTRAINT CK_EXPERIMENT_EXTRACTION CHECK (ready_for_extraction IN ('Not Ready', 'Ready', 'Started', 'Complete')),
     CONSTRAINT PK_EXPERIMENT PRIMARY KEY (EXPERIMENT_ID)
 )
@@ -1101,7 +1153,10 @@ CREATE TABLE EXPRMT_MEASURE(
     DATE_CREATED                 TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
     LAST_UPDATED                 TIMESTAMP(6),
     MODIFIED_BY                  VARCHAR2(40),
-    CONSTRAINT CK_EXPRMT_MEASURE_RELATIONSHIP CHECK (Parent_Child_Relationship in('Derived from', 'has Child', 'has Sibling')),
+    CONSTRAINT CK_EXPRMT_MEASURE_RELATIONSHIP CHECK (Parent_Child_Relationship in('calculated from', 'supported by')),
+    CONSTRAINT CK_EXPRMT_MEASURE_PARENT CHECK ((Parent_Child_Relationship IS NULL and PARENT_EXPRMT_MEASURE_ID IS NULL)
+                                        OR
+                                        (Parent_Child_Relationship IS NOT NULL and PARENT_EXPRMT_MEASURE_ID IS NOT NULL)),
     CONSTRAINT PK_EXPRMT_MEASURE PRIMARY KEY (EXPRMT_MEASURE_ID)
 )
 ;
@@ -1170,6 +1225,22 @@ CREATE TABLE EXTERNAL_SYSTEM(
 )
 ;
 
+
+PROMPT CREATE TABLE factor_component
+CREATE TABLE factor_component (
+  factor_component_id        NUMBER(19,0)  NOT NULL,
+  confidence_level_factor_id NUMBER(19,0)  NOT NULL,
+  component_name             VARCHAR2(128) NOT NULL,
+  component_rating           NUMBER(5,0)   NULL,
+  version                    NUMBER(38,0)  DEFAULT 0 NOT NULL,
+  date_created               TIMESTAMP(6)  DEFAULT sysdate NOT NULL,
+  last_updated               TIMESTAMP(6)  NULL,
+  modified_by                VARCHAR2(40)  NULL
+)
+  STORAGE (
+    NEXT       1024 K
+  )
+/
 
 
 --
@@ -1260,10 +1331,15 @@ CREATE TABLE MEASURE(
     Stats_Modifier_ID    NUMBER(19, 0),
     ENTRY_UNIT_ID        NUMBER(19, 0),
     PARENT_MEASURE_ID    NUMBER(19, 0),
+    parent_child_relationship VARCHAR2(20),
     VERSION              NUMBER(38, 0)    DEFAULT 0 NOT NULL,
     Date_Created         TIMESTAMP(6)     DEFAULT sysdate NOT NULL,
     Last_Updated         TIMESTAMP(6),
     MODIFIED_BY          VARCHAR2(40),
+    CONSTRAINT CK_MEASURE_RELATIONSHIP CHECK (Parent_Child_Relationship in('calculated from', 'supported by')),
+    CONSTRAINT CK_MEASURE_PARENT CHECK ((Parent_Child_Relationship IS NULL and PARENT_MEASURE_ID IS NULL)
+                                        OR
+                                        (Parent_Child_Relationship IS NOT NULL and PARENT_MEASURE_ID IS NOT NULL)),
     CONSTRAINT PK_MEASURE PRIMARY KEY (MEASURE_ID)
 )
 ;
@@ -1625,7 +1701,7 @@ CREATE TABLE RESULT
 (
     RESULT_ID            NUMBER(19)    NOT NULL,
     PARENT_RESULT_ID     NUMBER(19)        NULL,
-    HIERARCHY_TYPE       VARCHAR2(20)      NULL,
+    PARENT_CHILD_RELATIONSHIP       VARCHAR2(20)      NULL,
     RESULT_STATUS        VARCHAR2(20)  DEFAULT 'Pending' NOT NULL,
     READY_FOR_EXTRACTION VARCHAR2(20)  DEFAULT 'Pending' NOT NULL,
     EXPERIMENT_ID        NUMBER(19)    NOT NULL,
@@ -1642,10 +1718,14 @@ CREATE TABLE RESULT
     VERSION              NUMBER(38)    DEFAULT 0 NOT NULL,
     DATE_CREATED         TIMESTAMP(6)  DEFAULT sysdate NOT NULL,
     LAST_UPDATED         TIMESTAMP(6)      NULL,
-    MODIFIED_BY          VARCHAR2(40)      NULL
+    MODIFIED_BY          VARCHAR2(40)      NULL,
+    CONSTRAINT CK_result_RELATIONSHIP CHECK (Parent_Child_Relationship in('calculated from', 'supported by')),
+    CONSTRAINT CK_RESULT_PARENT CHECK ((Parent_Child_Relationship IS NULL and PARENT_RESULT_ID IS NULL)
+                                        OR
+                                        (Parent_Child_Relationship IS NOT NULL and PARENT_RESULT_ID IS NOT NULL))
 )
 ;
-COMMENT ON COLUMN RESULT.HIERARCHY_TYPE IS
+COMMENT ON COLUMN RESULT.PARENT_CHILD_RELATIONSHIP IS
 'two types of hierarchy are allowed: parent/child where one result is dependant on or grouped with another; derived from where aresult is used to claculate another (e.g. PI used for IC50).  The hierarchy types are mutually exclusive.'
 ;
 COMMENT ON COLUMN RESULT.SUBSTANCE_ID IS
@@ -2709,6 +2789,76 @@ ALTER TABLE Biology_Descriptor_tree ADD CONSTRAINT FK_BIOLOGY_DESCRIPTOR_PRNT_SL
     REFERENCES Biology_Descriptor_tree(NODE_ID)
 ;
 
+PROMPT CREATE INDEX ak_confidence_level_factor
+ALTER TABLE confidence_level_factor
+  ADD constraint ak_confidence_level_factor
+  UNIQUE key ( factor_name )
+  STORAGE (
+    NEXT       1024 K
+  )
+/
+
+PROMPT ALTER TABLE confidence_level_factor ADD CONSTRAINT pk_confidence_level_factor PRIMARY KEY
+ALTER TABLE confidence_level_factor
+  ADD CONSTRAINT pk_confidence_level_factor PRIMARY KEY (
+    confidence_level_factor_id
+  )
+  USING INDEX
+    STORAGE (
+      NEXT       1024 K
+    )
+/
+
+PROMPT CREATE INDEX ak_confidence_level_score
+ALTER TABLE CONFIDENCE_LEVEL_SCORE
+    ADD constraint ak_confidence_level_score
+  UNIQUE KEY(
+    experiment_id,
+    confidence_level_factor_id )
+  STORAGE (
+    NEXT       1024 K
+  )
+/
+
+PROMPT ALTER TABLE confidence_level_score ADD CONSTRAINT pk_confidence_level_score PRIMARY KEY
+ALTER TABLE confidence_level_score
+  ADD CONSTRAINT pk_confidence_level_score PRIMARY KEY (
+    confidence_level_score_id
+  )
+  USING INDEX
+    STORAGE (
+      NEXT       1024 K
+    )
+/
+
+ALTER TABLE confidence_level_score
+  ADD CONSTRAINT fk_cnfdnc_lvl_score_exprmt FOREIGN KEY (
+    experiment_id
+  ) REFERENCES experiment (
+    experiment_id
+  ) ON DELETE CASCADE
+/
+
+PROMPT ALTER TABLE factor_component ADD CONSTRAINT pk_factor_component PRIMARY KEY
+ALTER TABLE factor_component
+  ADD CONSTRAINT pk_factor_component PRIMARY KEY (
+    factor_component_id
+  )
+  USING INDEX
+    STORAGE (
+      NEXT       1024 K
+    )
+/
+
+PROMPT ALTER TABLE confidence_level_score ADD CONSTRAINT fk_cnfdnc_lvl_score_factor FOREIGN KEY
+ALTER TABLE confidence_level_score
+  ADD CONSTRAINT fk_cnfdnc_lvl_score_factor FOREIGN KEY (
+    confidence_level_factor_id
+  ) REFERENCES confidence_level_factor (
+    confidence_level_factor_id
+  )
+/
+
 
 --
 -- TABLE: DICTIONARY_TREE
@@ -2839,6 +2989,14 @@ ALTER TABLE EXTERNAL_REFERENCE ADD CONSTRAINT FK_EXT_REFERENCE_PROJECT
     REFERENCES PROJECT(PROJECT_ID)
 ;
 
+PROMPT ALTER TABLE factor_component ADD CONSTRAINT fk_fctr_cmpnnt_level_factor FOREIGN KEY
+ALTER TABLE factor_component
+  ADD CONSTRAINT fk_fctr_cmpnnt_level_factor FOREIGN KEY (
+    confidence_level_factor_id
+  ) REFERENCES confidence_level_factor (
+    confidence_level_factor_id
+  )
+/
 
 --
 -- TABLE: FAVORITE
