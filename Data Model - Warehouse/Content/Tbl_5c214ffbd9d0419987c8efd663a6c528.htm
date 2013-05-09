@@ -55,7 +55,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>DECLARE</TT><BR><TT>&nbsp&nbsp ld_start&nbsp&nbsp DATE := To_Date ('01/01/2005', 'MM/DD/YYYY');</TT><BR><TT>&nbsp&nbsp ld_end DATE := To_Date ('12/31/2019', 'MM/DD/YYYY');</TT><BR><TT>&nbsp&nbsp ld_current DATE;</TT><BR><TT>&nbsp&nbsp ln_time_ref NUMBER := 1;</TT><BR><TT>&nbsp&nbsp ln_min&nbsp&nbsp NUMBER := 0;</TT><BR><TT>&nbsp&nbsp ln_hr NUMBER := 0;</TT><BR><TT></TT><BR><TT>BEGIN</TT><BR><TT>&nbsp&nbsp ld_current := ld_start;</TT><BR><TT>&nbsp&nbsp WHILE ld_current <= ld_end</TT><BR><TT>&nbsp&nbsp LOOP</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FOR ln_hr IN 0..23</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp loop</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FOR ln_Min IN 0..59</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOOP</TT><BR><TT></TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INSERT into Time</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp (time_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp time_value,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp YEAR,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MONTH,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp HOUR,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINUTE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp week_no,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp quarter)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VALUES</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp (ln_time_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Date(To_Char(ld_current, 'MM/DD/YYYY') || ' ' || To_Char(ln_HR, '00') || ':' || To_Char(ln_Min, '00'), 'MM/DD/YYYY HH24:MI'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(LD_CURRENT, 'YYYY'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current, 'MM'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current, 'DD'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ln_hr,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ln_min,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current, 'WW'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current,&nbsp&nbsp 'Q'));</TT><BR><TT></TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ln_time_ref := ln_time_ref +1;</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp END LOOP;</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp END LOOP;</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ld_current := ld_current + 1;</TT><BR><TT></TT><BR><TT>&nbsp&nbsp END LOOP;</TT><BR><TT>&nbsp&nbsp COMMIT;</TT><BR><TT>END;</TT><BR><TT></TT><BR><TT></TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>DECLARE</TT><BR><TT>&nbsp&nbsp ld_start&nbsp&nbsp DATE := To_Date ('01/01/2005', 'MM/DD/YYYY');</TT><BR><TT>&nbsp&nbsp ld_end DATE := To_Date ('12/31/2019', 'MM/DD/YYYY');</TT><BR><TT>&nbsp&nbsp ld_current DATE;</TT><BR><TT>&nbsp&nbsp ln_time_ref NUMBER := 1;</TT><BR><TT>&nbsp&nbsp ln_min&nbsp&nbsp NUMBER := 0;</TT><BR><TT>&nbsp&nbsp ln_hr NUMBER := 0;</TT><BR><TT></TT><BR><TT>BEGIN</TT><BR><TT>&nbsp&nbsp ld_current := ld_start;</TT><BR><TT>&nbsp&nbsp WHILE ld_current <= ld_end</TT><BR><TT>&nbsp&nbsp LOOP</TT><BR><TT>--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FOR ln_hr IN 0..23</TT><BR><TT>--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp loop</TT><BR><TT>--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp FOR ln_Min IN 0..59</TT><BR><TT>--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOOP</TT><BR><TT></TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INSERT into Time</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp (time_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp time_value,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp YEAR,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MONTH,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DAY,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp HOUR,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp MINUTE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp week_no,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp quarter)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VALUES</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp (ln_time_ref,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Date(To_Char(ld_current, 'MM/DD/YYYY') || ' ' || To_Char(ln_HR, '00') || ':' || To_Char(ln_Min, '00'), 'MM/DD/YYYY HH24:MI'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(LD_CURRENT, 'YYYY'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current, 'MM'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current, 'DD'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ln_hr,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ln_min,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current, 'WW'),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To_Char(ld_current,&nbsp&nbsp 'Q'));</TT><BR><TT></TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ln_time_ref := ln_time_ref +1;</TT><BR><TT>--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp END LOOP;</TT><BR><TT>--&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp END LOOP;</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp ld_current := ld_current + 1;</TT><BR><TT></TT><BR><TT>&nbsp&nbsp END LOOP;</TT><BR><TT>&nbsp&nbsp COMMIT;</TT><BR><TT>END;</TT><BR><TT>/</TT>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -198,6 +198,18 @@
 <TD VALIGN=TOP  WIDTH=6% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INVENTORY&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ASSAY_CONTEXT_ITEM&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
@@ -219,7 +231,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_d006447af5de472196f383252e114989.htm">RESULT</A>&nbsp;</FONT></TD>
@@ -477,7 +489,11 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Helper tables&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_82408b5d91214e1089fbb7eca7e396ed_img.htm>Helper tables</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_8f673a6dc7ec44ba824ffdec9fc3c7f7_img.htm>Inventory</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A>&nbsp;</FONT></TD>
@@ -493,15 +509,19 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Assay_item&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_e6dffef520f544998ebb94bb04771828_img.htm>Assay_item</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Helper tables&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_3597fe7e2e1b46358c6e9b0a912095e0_img.htm>Helper tables</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Projects&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_8e44f1ca7b904360bbb7165ab3d62303_img.htm>Inventory</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_690506457adc451ebb803ce0c91559ca_img.htm>Projects</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)&nbsp;</FONT></TD>

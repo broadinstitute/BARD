@@ -26,7 +26,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE VIEW Result_Type_Element AS</TT><BR><TT>SELECT El.Element_ID Element_ID, El.Element_Status Element_Status, El.Label Label, El.Description Description, El.Abbreviation Abbreviation, El.Synonyms Synonyms, El.Unit_ID Unit_ID, El.BARD_URI BARD_URI, El.External_URL External_URL, El.ready_for_extraction ready_for_extraction, El.Version Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.Modified_by Modified_by, El.Expected_Value_Source</TT><BR><TT>FROM Element El</TT><BR><TT>WHERE el.element_id in (select result_type_id from result_type_tree)</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE VIEW Result_Type_Element AS</TT><BR><TT>SELECT El.Element_ID Element_ID, El.Element_Status Element_Status, El.Label Label, El.Description Description, El.Abbreviation Abbreviation, El.Synonyms Synonyms, El.Unit_ID Unit_ID, El.BARD_URI BARD_URI, El.External_URL External_URL, El.ready_for_extraction ready_for_extraction, El.Version Version, El.Date_Created Date_Created, El.Last_Updated Last_Updated, El.Modified_by Modified_by, El.Expected_Value_Type, El.Add_Child_Method</TT><BR><TT>FROM Element El</TT><BR><TT>WHERE el.element_id in (select result_type_id from result_type_tree)</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <P>
@@ -112,7 +112,12 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_45161811eb2b406580ee8b9a0ddaa131.htm">Element</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Expected_Value_Source&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Expected_Value_Type&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_45161811eb2b406580ee8b9a0ddaa131.htm">Element</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Add_Child_Method&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_45161811eb2b406580ee8b9a0ddaa131.htm">Element</A>&nbsp;</FONT></TD>
 </TR>

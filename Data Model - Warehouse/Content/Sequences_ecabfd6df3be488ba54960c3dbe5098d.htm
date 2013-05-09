@@ -17,7 +17,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.ACTIVITY_THRESHOLD_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE ACTIVITY_THRESHOLD_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -38,7 +38,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.ANNOTATION_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE ANNOTATION_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -59,28 +59,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.ANNOTATION_SET_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Seq_43b9400c39484218b3b548f0d84267ba"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">ASSAY_CONTEXT_ITEM_REF_SEQ&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Object Type&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Sequence&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Description&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.ASSAY_CONTEXT_ITEM_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE ANNOTATION_SET_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -101,7 +80,49 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.ASSAY_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE ASSAY_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
+</TR>
+</TABLE>
+<HR>
+<A NAME = "Seq_b038923fe7a34034949fd40e5a5b4bbe"></A>
+<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">BIOLOGY_TARGET_REF_SEQ&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Object Type&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Sequence&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Description&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
+<TD><TT><TT>CREATE SEQUENCE BIOLOGY_TARGET_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
+</TR>
+</TABLE>
+<HR>
+<A NAME = "Seq_d38cd712b1ba434c972921ca80778a9c"></A>
+<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">CONTAINER_REF_SEQ&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Object Type&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Sequence&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Description&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
+<TD><TT><TT>CREATE SEQUENCE CONTAINER_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -122,7 +143,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.DOCUMENT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE DOCUMENT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -143,7 +164,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.ELEMENT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE ELEMENT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -164,7 +185,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.EXPERIMENT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE EXPERIMENT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -185,28 +206,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.LABORATORY_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
-</TR>
-</TABLE>
-<HR>
-<A NAME = "Seq_b038923fe7a34034949fd40e5a5b4bbe"></A>
-<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
-<TR>
-<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">MACRO_MOLECULE_TARGET_REF_SEQ&nbsp;</FONT></B></TD>
-</TR>
-</TABLE>
-<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Object Type&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Sequence&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Description&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.MACRO_MOLECULE_TARGET_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE LABORATORY_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -227,7 +227,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.PERSON_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE PERSON_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -248,7 +248,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.PROJECT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE PROJECT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -269,7 +269,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.PROJECT_STEP_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE PROJECT_STEP_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -290,7 +290,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.QUALIFIER_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE QUALIFIER_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -311,7 +311,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.QUERY_JOIN_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE QUERY_JOIN_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -332,7 +332,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.RESULT_HIERARCHY_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE RESULT_HIERARCHY_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -353,7 +353,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.RESULT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE RESULT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -374,7 +374,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.RESULT_TYPE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE RESULT_TYPE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -395,7 +395,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.SCREENING_CONCENTRATIO_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE SCREENING_CONCENTRATIO_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -416,7 +416,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.STAGE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE STAGE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -437,7 +437,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.STEP_ANNOTATION_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE STEP_ANNOTATION_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -458,7 +458,28 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.STEP_ANNOTATION_SET_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE STEP_ANNOTATION_SET_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
+</TR>
+</TABLE>
+<HR>
+<A NAME = "Seq_5c775a6b7ecf4dd4bf119a68720fb3d4"></A>
+<TABLE WIDTH=100% CELLPADDING=1 BORDER=2>
+<TR>
+<TD VALIGN=TOP BGCOLOR="darkblue" ><B><FONT SIZE=5 COLOR="white" FACE="Arial">STORAGE_LOCATION_REF_SEQ&nbsp;</FONT></B></TD>
+</TR>
+</TABLE>
+<TABLE WIDTH=100% CELLPADDING=2 BORDER=2>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Object Type&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">Sequence&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Description&nbsp;</FONT></B></TD>
+<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
+<TD><TT><TT>CREATE SEQUENCE STORAGE_LOCATION_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -479,7 +500,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.SUBSTANCE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE SUBSTANCE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -500,7 +521,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.TIME_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE TIME_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -521,7 +542,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.UNIT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE UNIT_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 <HR>
@@ -542,7 +563,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">SQL&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE SEQUENCE DSTONICH.VALUE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 2147483648</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR><TT>;</TT>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE SEQUENCE VALUE_REF_SEQ</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp START WITH 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp INCREMENT BY 1</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOMINVALUE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAXVALUE 9999999999</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOCYCLE</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CACHE 20</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp NOORDER</TT><BR>&nbsp;</TT></TD>
 </TR>
 </TABLE>
 </BODY>
