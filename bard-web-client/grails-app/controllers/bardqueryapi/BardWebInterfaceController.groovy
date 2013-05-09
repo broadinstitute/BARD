@@ -649,6 +649,7 @@ class BardWebInterfaceController {
             if (!searchCommand.filters) {
                 noFiltersFromPage = true
                 searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
+                searchCommand.filters << new SearchFilter(filterName: 'single-point_measurement', filterValue: 'Hide single-point data')
             }
 
             final List<FilterTypes> filters = []
@@ -657,6 +658,10 @@ class BardWebInterfaceController {
             NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
+            }
+            Boolean singlePointResultData = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'single-point_measurement'}?.filterValue
+            if (singlePointResultData) {
+                filters.add(FilterTypes.SINGLE_POINT_RESULT)
             }
 
             ActivityOutcome activityOutcome = ActivityOutcome.ACTIVE
@@ -683,6 +688,7 @@ class BardWebInterfaceController {
             final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
+            facetValues << new Value(id: 'single-point_measurement', children: [new IntValue(id: 'Hide single-point data', value: -1)])//disable facet count
 
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,
