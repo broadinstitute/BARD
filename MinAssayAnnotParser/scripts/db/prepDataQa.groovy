@@ -230,6 +230,7 @@ for(chunk in new File("scripts/db/packages.sql").text.split("\n/\n")) {
 
 executeSql(dst, """ begin
  manage_ontology.make_trees;
-end;")
+end;""")
 
 dst.close()
+
