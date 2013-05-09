@@ -98,4 +98,8 @@ modules = {
         resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"
     }
+    twitterBootstrapAffix {
+        resource url: "/css/twitterBootstrapAffix.css"
+        resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
+    }
 }
