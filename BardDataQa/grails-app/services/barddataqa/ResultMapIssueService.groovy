@@ -7,10 +7,10 @@ select count(*) from
     (select aid, count(*) from (
     select aid, resulttype, seriesno, concentration, concentrationunit,
     attribute1, value1, attribute2, value2, count(*)
-    from bard_data_qa.vw_data_mig_result_map rm where
-    not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
+    from bard_data_qa_dashboard.vw_data_mig_result_map rm where
+    not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r where r.aid = rm.aid and
     r.qualifiertid = rm.tid)
-    and not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
+    and not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r where r.aid = rm.aid and
     r.contexttid = rm.tid and r.contexttid <> rm.tid)
     and resulttype is not null
     and resulttype not in ('standard deviation', 'confidence limit 95%')
@@ -20,7 +20,7 @@ select count(*) from
 """
 
     private static final String countResultTypeAndContextCollisionQuery = """
-select count(distinct aid) from bard_data_qa.vw_data_mig_result_map where RESULTTYPE is not null and
+select count(distinct aid) from bard_data_qa_dashboard.vw_data_mig_result_map where RESULTTYPE is not null and
 (contexttid is not null and contexttid <> tid)
 """
 
@@ -36,10 +36,10 @@ select rm_prob.aid, vpaj.project_uid, dpu.dataset_id, ds.name, ds.load_order fro
     (select aid, count(*) from (
     select aid, resulttype, seriesno, concentration, concentrationunit,
     attribute1, value1, attribute2, value2, count(*)
-    from bard_data_qa.vw_data_mig_result_map rm where
-    not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
+    from bard_data_qa_dashboard.vw_data_mig_result_map rm where
+    not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r where r.aid = rm.aid and
     r.qualifiertid = rm.tid)
-    and not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
+    and not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r where r.aid = rm.aid and
     r.contexttid = rm.tid and r.contexttid <> rm.tid)
     and resulttype is not null
     and resulttype not in ('standard deviation', 'confidence limit 95%')
