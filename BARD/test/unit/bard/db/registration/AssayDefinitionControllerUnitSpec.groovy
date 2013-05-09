@@ -7,6 +7,7 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
 import bard.db.enums.AssayStatus
@@ -18,15 +19,16 @@ import spock.lang.Unroll
 
 
 @TestFor(AssayDefinitionController)
-@Build([Assay,Element,AssayContext, AssayContextMeasure])
-@Mock([Assay,Element,AssayContext, AssayContextMeasure])
+@Build([Assay, Element, AssayContext, AssayContextMeasure])
+@Mock([Assay, Element, AssayContext, AssayContextMeasure])
+@Unroll
 class AssayDefinitionControllerUnitSpec extends Specification {
 
     Assay assay
 
     @Before
     void setup() {
-        assay = Assay.build(assayName:'Test')
+        assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
 
@@ -54,14 +56,14 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         "/assayDefinition/show/${assay.id}" == controller.response.redirectedUrl
     }
 
-	void 'testFindByName'() {
+    void 'testFindByName'() {
         when:
-		params.assayName = assay.assayName
-		controller.findByName()
+        params.assayName = assay.assayName
+        controller.findByName()
 
         then:
         "/assayDefinition/show/${assay.id}" == controller.response.redirectedUrl
-	}
+    }
 
     void 'test editMeasure'() {
         setup:
@@ -70,40 +72,40 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         controller.measureTreeService = measureTreeService
 
         when:
-            params.id = assay.id
-            def model = controller.show()
+        params.id = assay.id
+        def model = controller.show()
 
         then:
-            model.assayInstance == assay
+        model.assayInstance == assay
     }
 
     void 'test add measure'() {
         when:
-            mockDomain(Element)
-            Element resultType = Element.build()
-            Element statistic = Element.build()
-            Element.saveAll([resultType, statistic])
+        mockDomain(Element)
+        Element resultType = Element.build()
+        Element statistic = Element.build()
+        Element.saveAll([resultType, statistic])
 
-            params.id = assay.id
-            params.resultTypeId = resultType.id
-            params.statisticId = statistic.id
+        params.id = assay.id
+        params.resultTypeId = resultType.id
+        params.statisticId = statistic.id
 
-            def assayContextService = mockFor(AssayContextService)
-            assayContextService.demand.addMeasure(1) {assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
-                assert assayInstance == assay
-                assert parentMeasure == null
-                assert rt == resultType
-                assert sm == statistic
-                assert entryUnit == null
-                assert hierarchyType==null
+        def assayContextService = mockFor(AssayContextService)
+        assayContextService.demand.addMeasure(1) { assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
+            assert assayInstance == assay
+            assert parentMeasure == null
+            assert rt == resultType
+            assert sm == statistic
+            assert entryUnit == null
+            assert hierarchyType == null
 
-                return Measure.build()
-            }
-            controller.setAssayContextService(assayContextService.createMock())
-            controller.addMeasure()
+            return Measure.build()
+        }
+        controller.setAssayContextService(assayContextService.createMock())
+        controller.addMeasure()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/'+assay.id
+        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
 
         when:
         assayContextService.verify()
@@ -112,7 +114,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         notThrown(Exception.class)
     }
 
-    @Unroll
+
     void 'test delete measure with #desc'() {
         when:
         mockDomain(Measure)
@@ -130,7 +132,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         controller.deleteMeasure()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/'+assay.id
+        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
         Measure.count == afterExpectedCount
 
         where:
@@ -141,7 +143,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     void 'test associate context'() {
         when:
-        assay = Assay.build(assayName:'Test')
+        assay = Assay.build(assayName: 'Test')
         def context = AssayContext.build(assay: assay)
         def measure = Measure.build(assay: assay)
         params.id = assay.id
@@ -149,7 +151,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         params.assayContextId = context.id
 
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.associateContext(1) {Measure measureParam, AssayContext contextParam ->
+        assayContextService.demand.associateContext(1) { Measure measureParam, AssayContext contextParam ->
             assert measureParam == measure
             assert contextParam == context
         }
@@ -157,7 +159,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         controller.associateContext()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/'+assay.id
+        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
 
         when:
         assayContextService.verify()
@@ -168,7 +170,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     void 'test disassociate context'() {
         when:
-        assay = Assay.build(assayName:'Test')
+        assay = Assay.build(assayName: 'Test')
         AssayContext context = AssayContext.build(assay: assay)
         Measure measure = Measure.build(assay: assay)
         def contextMeasure = AssayContextMeasure.build(measure: measure, assayContext: context)
@@ -179,7 +181,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         params.measureId = measure.id
         params.assayContextId = context.id
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.disassociateContext(1) {Measure measureParam, AssayContext contextParam ->
+        assayContextService.demand.disassociateContext(1) { Measure measureParam, AssayContext contextParam ->
             assert measureParam == measure
             assert contextParam == context
         }
@@ -187,7 +189,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         controller.disassociateContext()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/'+assay.id
+        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
 
         when:
         assayContextService.verify()
@@ -195,36 +197,39 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         then:
         notThrown(Exception.class)
     }
-    void "test moveCard"(){
+
+    void "test moveCard"() {
         given:
-        assay = Assay.build(assayName:'Test')
-        AssayContext context = AssayContext.build(assay: assay,contextGroup: "context_group")
+        assay = Assay.build(assayName: 'Test')
+        AssayContext context = AssayContext.build(assay: assay, contextGroup: "context_group")
         String new_context_group = 'context_group2'
         when:
-        controller.moveCard(new_context_group,context.id)
+        controller.moveCard(new_context_group, context.id)
         then:
-        new_context_group==context.contextGroup
+        new_context_group == context.contextGroup
 
     }
-    void "test changeRelationship"(){
+
+    void "test changeRelationship"() {
         given:
         def assayContextService = mockFor(AssayContextService)
-        assay = Assay.build(assayName:'Test')
+        assay = Assay.build(assayName: 'Test')
         Measure parent = Measure.build(assay: assay)
-        parent.parentChildRelationship=HierarchyType.CALCULATED_FROM
+        parent.parentChildRelationship = HierarchyType.CALCULATED_FROM
         params.measureId = parent.id
-        params.relationship =  HierarchyType.SUPPORTED_BY.getId()
+        params.relationship = HierarchyType.SUPPORTED_BY.getId()
         when:
-        assayContextService.demand.changeParentChildRelationship(1) {Measure measureParam, HierarchyType hierarchyType ->
+        assayContextService.demand.changeParentChildRelationship(1) { Measure measureParam, HierarchyType hierarchyType ->
             assert measureParam == parent
-            assert hierarchyType== HierarchyType.SUPPORTED_BY
+            assert hierarchyType == HierarchyType.SUPPORTED_BY
         }
         controller.changeRelationship()
         then:
         response.redirectedUrl == '/assayDefinition/editMeasure'
 
     }
-    void 'test edit summary'(){
+
+    void 'test edit summary'() {
         when:
         assay = Assay.build()
         controller.editSummary(assay.id, AssayStatus.DRAFT.name(), "assayName", "designedBy")
@@ -233,14 +238,27 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         assay.assayStatus == AssayStatus.DRAFT
     }
 
-    void 'test move measure'() {
-        when:
-        assay = Assay.build(assayName:'Test')
-        Measure parent = Measure.build(assay: assay)
+    @Unroll
+    void 'test move measure #desc'() {
+        given:
         Measure child = Measure.build(assay: assay)
-        controller.moveMeasureNode(child.id, parent.id)
+        Measure parent = null
+        if (parentMeasure) {
+            parent = Measure.build(assay: assay)
+            child.parentChildRelationship = relationshipType
+        }
 
+        when:
+        controller.moveMeasureNode(child.id, parent?.id)
         then:
-        child.parentMeasure == parent
+        assert parent == child.parentMeasure
+        assert expectedRelationshipType == child.parentChildRelationship
+
+        where:
+        desc                                                          | parentMeasure | relationshipType              | expectedRelationshipType
+        "has both parent and child measures and relationship type"    | true          | HierarchyType.CALCULATED_FROM | HierarchyType.CALCULATED_FROM
+        "has both parent and child measures but no relationship type" | true          | null                          | HierarchyType.SUPPORTED_BY
+        "has no parent measure"                                       | false         | null                          | null
     }
+
 }

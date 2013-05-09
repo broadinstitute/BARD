@@ -98,9 +98,7 @@ class AssayDefinitionController {
         final Element resultType = Element.get(params.resultTypeId)
         final String parentChildRelationship = params.relationship
         HierarchyType hierarchyType = null
-        if (StringUtils.isNotBlank(parentChildRelationship)) {
-            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
-        }
+
 
         if (!resultType) {
             flash.message = 'Result Type is Required'
@@ -109,19 +107,27 @@ class AssayDefinitionController {
             if (params.parentMeasureId) {
                 parentMeasure = Measure.get(params.parentMeasureId)
             }
+            //if there is a parent measure then there must be a selected relationship
+            if (parentMeasure && (StringUtils.isBlank(parentChildRelationship) || "null".equals(parentChildRelationship))) {
+                flash.message = 'Relationship to Parent is required!'
+            } else {
+                if (StringUtils.isNotBlank(parentChildRelationship)) {
+                    hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
+                }
+                def statsModifier = null
+                if (params.statisticId) {
+                    statsModifier = Element.get(params.statisticId)
+                }
 
-            def statsModifier = null
-            if (params.statisticId) {
-                statsModifier = Element.get(params.statisticId)
+
+                def entryUnit = null
+                if (params.entryUnitName) {
+                    entryUnit = Element.findByLabel(params.entryUnitName)
+                }
+
+                Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                flash.message = "Successfully added measure " + newMeasure.displayLabel
             }
-
-            def entryUnit = null
-            if (params.entryUnitName) {
-                entryUnit = Element.findByLabel(params.entryUnitName)
-            }
-
-            Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-            flash.message = "Successfully added measure " + newMeasure.displayLabel
 
         }
         redirect(action: "editMeasure", id: params.id)
@@ -145,18 +151,21 @@ class AssayDefinitionController {
 
     def associateContext() {
         def measure = Measure.get(params.measureId)
-        def context = AssayContext.get(params.assayContextId)
+        def context = null
+        if (params.assayContextId && 'null' != params.assayContextId) {
+            context = AssayContext.get(params.assayContextId)
+        }
 
         if (measure == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
         } else if (context == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
         } else {
             flash.message = null
             assayContextService.associateContext(measure, context)
         }
 
-        redirect(action: "editMeasure", id: context.assay.id)
+        redirect(action: "editMeasure", id: params.id)
     }
 
     def changeRelationship() {
@@ -352,6 +361,12 @@ class AssayDefinitionController {
             parentMeasure = Measure.get(parentMeasureId)
         }
         measure.parentMeasure = parentMeasure
+        if (!measure.parentChildRelationship) {
+            if (parentMeasure) {
+                measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+            }
+        }
+
 
         render new JSONArray()
     }
