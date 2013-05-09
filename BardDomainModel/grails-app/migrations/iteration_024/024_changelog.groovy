@@ -76,5 +76,13 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "dlahr", id: "iteration-024/07-elmnt-hrrchy-parent-elmnt-id-not-null", dbms: "oracle", context: "standard") {
+        grailsChange {
+            change {
+                sql.executeUpdate("alter table element_hierarchy modify parent_element_id not null")
+            }
+        }
+    }
 }
 
