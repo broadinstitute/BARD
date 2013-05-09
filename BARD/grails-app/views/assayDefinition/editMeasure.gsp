@@ -15,10 +15,8 @@
             <h4>Editing Measures for ${assayInstance?.assayName} (ADID: ${assayInstance?.id})</h4>
         </div>
         <g:if test="${assayInstance?.id}">
-            <div class="pull-right">
                 <g:link action="show" id="${assayInstance?.id}"
                         class="btn btn-small btn-primary">Finish Editing</g:link>
-            </div>
         </g:if>
     </div>
 </div>

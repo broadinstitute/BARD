@@ -10,7 +10,7 @@
     <g:if test="${!uneditable}">
         <div class="span12">
             <g:link action="editContext" id="${contextOwner?.id}"
-                    class="btn btn-primary">Edit</g:link>
+                    class="btn">Edit</g:link>
         </div>
     </g:if>
     <div class="row-fluid">
