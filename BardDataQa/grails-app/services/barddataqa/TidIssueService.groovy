@@ -30,7 +30,7 @@ class TidIssueService {
 
     private final static String duplicateResultTypeQueryString = """
 select orm.${columns.join(",orm.")}
-from bard_data_qa.vw_data_mig_result_map orm
+from bard_data_qa_dashboard.vw_data_mig_result_map orm
 join (
 select aid,
   nvl(resulttype, 'NULL') resulttype,
@@ -41,10 +41,10 @@ select aid,
   nvl(value1,'NULL') value1,
   nvl(attribute2, 'NULL') attribute2,
   nvl(value2, 'NULL') value2
-from bard_data_qa.vw_data_mig_result_map rm where
-not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
+from bard_data_qa_dashboard.vw_data_mig_result_map rm where
+not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r where r.aid = rm.aid and
 r.qualifiertid = rm.tid)
-and not exists (select 1 from bard_data_qa.vw_data_mig_result_map r where r.aid = rm.aid and
+and not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r where r.aid = rm.aid and
 r.contexttid = rm.tid and r.contexttid <> rm.tid)
 and resulttype is not null
 and resulttype not in ('standard deviation', 'confidence limit 95%')
@@ -66,7 +66,7 @@ order by orm.aid, tid
 
     private static final String resultTypeAndContextConflictBaseQueryString = """
 select ${columns.join(",")}
-  from bard_data_qa.vw_data_mig_result_map where RESULTTYPE is not null and
+  from bard_data_qa_dashboard.vw_data_mig_result_map where RESULTTYPE is not null and
     contexttid is not null and contexttid <> tid
 """
 
@@ -74,7 +74,7 @@ select ${columns.join(",")}
     private static final String tidOrderByClause = " order by tid "
 
     private static final String relationshipBaseQueryString = """
-select ${columns.join(",")} from bard_data_qa.vw_data_mig_result_map where
+select ${columns.join(",")} from bard_data_qa_dashboard.vw_data_mig_result_map where
   ((parenttid IS NOT NULL AND relationship IS NULL)
   OR (parenttid IS NULL AND relationship IS NOT NULL))
 """

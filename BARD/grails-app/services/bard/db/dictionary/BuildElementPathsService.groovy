@@ -80,8 +80,9 @@ class BuildElementPathsService {
             String pathAsString = elementAndFullPath.toString()
             if(pathAsString.startsWith("/BARD/")){  //remove the root node. This method should change as soon as we start using trees other than the BARD tree
                 pathAsString = pathAsString.replaceFirst("/BARD/", "/")
+                pathMessage.add(pathAsString)
             }
-            pathMessage.add(pathAsString)
+
         }
         if(!pathMessage.isEmpty()) {
             return StringUtils.join(pathMessage,",")

@@ -8,7 +8,7 @@
 
 <div id="showSummary">
     <r:require modules="summary"/>
-    <div class="span12"><button id="editSummaryButton" class="btn btn-primary">Edit</button>
+    <div class="span12"><button id="editSummaryButton" class="btn">Edit</button>
     </div>
     <g:render template='editSummary' model="['assay': assayInstance]"/>
     <g:render template="summaryDetail" model="['assay': assayInstance]"/>

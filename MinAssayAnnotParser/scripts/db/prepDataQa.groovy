@@ -2,6 +2,7 @@ import groovy.sql.Sql
 
 def datasetId = args[0]
 dst = createDbTarget(args[1])
+def outputDir = args[2]
 
 dataqa = createConnection("dataqa")
 
@@ -42,8 +43,8 @@ void writeToFile(filename, values) {
 	w.close()
 }
 
-writeToFile("dataset${datasetId}-aids.txt", aids)
-writeToFile("dataset${datasetId}-adids.txt", adids)
+writeToFile("${outputDir}/dataset${datasetId}-aids.txt", aids)
+writeToFile("${outputDir}/dataset${datasetId}-adids.txt", adids)
 
 // drop triggers in destination
 executeSql(dst,"""begin

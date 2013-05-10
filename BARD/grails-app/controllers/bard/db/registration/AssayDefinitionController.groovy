@@ -271,10 +271,7 @@ class AssayDefinitionController {
     def deleteEmptyCard(Long assay_context_id) {
         AssayContext assayContext = AssayContext.findById(assay_context_id)
         Assay assay = assayContext.assay
-        if (assayContext.assayContextItems.size() == 0) {
-            assay.removeFromAssayContexts(assayContext)
-            assayContext.delete(flush: true)
-        }
+        assayContextService.deleteAssayContext(assayContext)
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
