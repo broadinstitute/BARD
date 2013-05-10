@@ -3,9 +3,7 @@ package bard.db.registration
 import bard.db.BardIntegrationSpec
 import bard.db.enums.AssayStatus
 import bard.db.enums.ReadyForExtraction
-import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.registration.Assay.*
@@ -277,5 +275,6 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
+
 
 }

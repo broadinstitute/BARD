@@ -184,7 +184,7 @@ class BuildElementPathsServiceSpec extends Specification {
 
         description           | parentLabel | childLabel | leafLabel | expectedPath
         "Has 'BARD' as root"  | "BARD"      | "child"    | "leaf"    | "/child/leaf/"
-        "Has 'BARD2' as root" | "BARD2"     | "child"    | "leaf"    | "/BARD2/child/leaf/"
+        "Has 'BARD2' as root" | "BARD2"     | "child"    | "leaf"    | ""
 
 
     }

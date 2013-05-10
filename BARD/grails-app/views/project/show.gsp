@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,projectstep,select2,accessontology"/>
+    <r:require modules="core,bootstrap,assayshow,projectstep,select2,accessontology,twitterBootstrapAffix"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -42,79 +42,66 @@
 </g:if>
 
 <g:if test="${instance?.id}">
-    <div class="row-fluid">
-        <div id="accordion-foo" class="span12 accordion">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#summary-header" id="summary-header" class="accordion-toggle" data-toggle="collapse"
-                       data-target="#target-summary-info">
-                        <i class="icon-chevron-down"></i>
-                        Summary
-                    </a>
-
-                    <div id="target-summary-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:render template="showSummary" model="['project': instance]"/>
-                        </div>
-                    </div>
-                </div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span3 bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
+                    <li><a href="#summary-header"><i class="icon-chevron-right"></i>Summary</a></li>
+                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
+                    <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>Experiments and steps
+                    </a></li>
+                    <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a></li>
+                </ul>
             </div>
 
-
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#contexts-header" id="contexts-header" class="accordion-toggle" data-toggle="collapse"
-                       data-target="#target-contexts-info">
-                        <i class="icon-chevron-down"></i>
-                        Contexts
-                    </a>
-
-                    <div id="target-contexts-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:render template="../context/show"
-                                      model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
-                        </div>
+            <div class="span9">
+                <section id="summary-header">
+                    <div class="page-header">
+                        <h3>Summary</h3>
                     </div>
-                </div>
-            </div>
 
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#experiment-and-step-header" id="experiment-and-step-header" class="accordion-toggle"
-                       data-toggle="collapse"
-                       data-target="#target-experiment-and-step-info">
-                        <i class="icon-chevron-down"></i>
-                        Experiments and steps
-                    </a>
-
-                    <div id="target-experiment-and-step-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:render template='/project/editstep' model="['instanceId': instance.id]"/>
-                            <g:render template="showstep" model="['experiments': instance.projectExperiments, 'pegraph': pexperiment, 'instanceId': instance.id]"/>
-                        </div>
+                    <div class="row-fluid">
+                        <g:render template="showSummary" model="['project': instance]"/>
                     </div>
-                </div>
-            </div>
-
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#documents-header" id="documents-header" class="accordion-toggle" data-toggle="collapse"
-                       data-target="#target-documents-info">
-                        <i class="icon-chevron-down"></i>
-                        Documents
-                    </a>
-
-                    <div id="target-documents-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:link action="create" controller="document" params="${[projectId: instance.id]}" class="btn btn-primary">Add new document</g:link>
-                            <g:render template="/document/list" model="['documents': instance.documents, documentTemplate: '/document/edit']"/>
-                        </div>
+                </section>
+                <section id="contexts-header">
+                    <div class="page-header">
+                        <h3>Contexts</h3>
                     </div>
-                </div>
+
+                    <div class="row-fluid">
+                        <g:render template="../context/show"
+                                    model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
+                    </div>
+                </section>
+                <section id="experiment-and-step-header">
+                    <div class="page-header">
+                        <h3>Experiments and steps</h3>
+                    </div>
+
+                    <div class="row-fluid">
+                        <g:render template='/project/editstep'
+                                  model="['instanceId': instance.id]"/>
+                        <g:render template="showstep"
+                                  model="['experiments': instance.projectExperiments, 'pegraph': pexperiment, 'instanceId': instance.id]"/>
+
+                    </div>
+                </section>
+                <section id="documents-header">
+                    <div class="page-header">
+                        <h3>Documents</h3>
+                    </div>
+
+                    <div class="row-fluid">
+                        <g:link action="create" controller="document" params="${[projectId: instance.id]}"
+                                class="btn">Add new document</g:link>
+                        <g:render template="/document/list"
+                                  model="['documents': instance.documents, documentTemplate: '/document/edit']"/>
+                    </div>
+                </section>
             </div>
-        </div>    <!-- End accordion -->
+        </div>
     </div>
-
 </g:if>
 
 </body>

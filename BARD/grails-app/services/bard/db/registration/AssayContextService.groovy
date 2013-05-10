@@ -14,6 +14,17 @@ import bard.db.enums.HierarchyType
  */
 class AssayContextService {
 
+    /**
+     *
+     * @param assayContext
+     */
+    public void deleteAssayContext(AssayContext assayContext) {
+        Assay assay = assayContext.assay
+        if (assayContext.assayContextItems.isEmpty()) {
+            assay.removeFromAssayContexts(assayContext)
+        }
+    }
+
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
         if (sourceItem && sourceItem.assayContext != targetAssayContext) {
             return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
@@ -56,11 +67,13 @@ class AssayContextService {
         }
         return assayContext
     }
-    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType){
-        measure.parentChildRelationship=hierarchyType
+
+    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType) {
+        measure.parentChildRelationship = hierarchyType
         measure.save(flush: true)
         return measure
     }
+
     public void associateContext(Measure measure, AssayContext context) {
         AssayContextMeasure assayContextMeasure = new AssayContextMeasure();
         assayContextMeasure.measure = measure;
@@ -157,7 +170,7 @@ class AssayContextService {
             newAssayContextItem.setAttributeType(AttributeType.Fixed);
             if (fixedValCmd.valueQualifier) {
                 newAssayContextItem.qualifier = fixedValCmd.valueQualifier
-            } else if (fixedValCmd.isNumericValue){
+            } else if (fixedValCmd.isNumericValue) {
                 newAssayContextItem.qualifier = "= "
             }
 
@@ -180,7 +193,7 @@ class AssayContextService {
             newAssayContextItem.setAttributeType(AttributeType.List);
             if (listValCmd.valueQualifier) {
                 newAssayContextItem.qualifier = listValCmd.valueQualifier
-            } else if (listValCmd.isNumericValue){
+            } else if (listValCmd.isNumericValue) {
                 newAssayContextItem.qualifier = "= "
             }
 
@@ -207,7 +220,7 @@ class AssayContextService {
     public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
         Measure measure =
             new Measure(assay: assayInstance, resultType: resultType, statsModifier: statsModifier,
-                    entryUnit: entryUnit, parentMeasure: parentMeasure ,parentChildRelationship: hierarchyType);
+                    entryUnit: entryUnit, parentMeasure: parentMeasure, parentChildRelationship: hierarchyType);
         assayInstance.addToMeasures(measure)
         measure.save()
 
