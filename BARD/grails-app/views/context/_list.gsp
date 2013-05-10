@@ -4,7 +4,7 @@
         <g:if test="${entry.value.size() > 0 || (subTemplate.equals("edit") && contextOwner instanceof bard.db.registration.Assay)}">
         <div id="${entry.key}" class="roundedBorder card-group ${entry.key.trim().replaceAll(/( |>)/, '-')}">
             <div class="row-fluid">
-                <h2>${entry.key}</h2>
+                <h4>${entry.key}</h4>
             </div>
             <g:if test="${contextOwner instanceof bard.db.registration.Assay}">
                 <g:render template="../contextItem/${subTemplate}GroupHeader"
