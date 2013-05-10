@@ -10,9 +10,9 @@ class MarginalProductController {
 
     MarginalProductService marginalProductService
 
-    TidIssueService tidIssueService
-
-    def index() { }
+    def index() {
+        render("Hello, world!")
+    }
 
     def show() {
         Long datasetId = params.get("datasetId").toString().toLong()
@@ -25,7 +25,7 @@ class MarginalProductController {
             return marginalProductService.findAidsThatNeedMaas(datasetId, projectUid)
         }
 
-        redirect(action: "showAids", params: buildMap(params, findNeedMaasClosure, "AID's that need Minimum Assay Annotation"))
+        render(view: "showAids", model: buildMap(params, findNeedMaasClosure, "AID's that need Minimum Assay Annotation"))
     }
 
     def showNeedRta() {
@@ -33,7 +33,7 @@ class MarginalProductController {
             return marginalProductService.findAidsThatNeedRta(datasetId, projectUid)
         }
 
-        redirect(action: "showAids", params: buildMap(params, findNeedRtaClosure, "AID's that need Result Type Annotation"))
+        render(view: "showAids", model: buildMap(params, findNeedRtaClosure, "AID's that need Result Type Annotation"))
     }
 
     def showResultMapConflictBetweenResultTypeAndContextItem() {
@@ -48,7 +48,7 @@ class MarginalProductController {
         newParams.put(actionKey, "resultTypeContextConflict")
         newParams.put(descriptionKey, "show result map entries")
 
-        redirect(view: "showAids", model: newParams)
+        render(view: "showAids", model: newParams)
     }
 
     def showResultMapDuplicateResult() {
