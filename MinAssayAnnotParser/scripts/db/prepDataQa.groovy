@@ -11,10 +11,11 @@ def inBcbDev = !(dstSql.firstRow("select count(*) from user_db_links where db_li
 println "inBcbDev=${inBcbDev}"
 
 if (!inBcbDev) {
-	executeSql(dst,"""create or replace view result_map as select * from southern.result_map@barddev""")
+	executeSql(dst,"""create or replace view vw_result_map as select * from southern.result_map@barddev""")
 } else {
-	executeSql(dst,"""create or replace view result_map as select * from southern.result_map""")
+	executeSql(dst,"""create or replace view vw_result_map as select * from southern.result_map""")
 }
+executeSql(dst,"""create table result_map as select *  from vw_result_map""");
 
 def dataqaSql = new Sql(dataqa)
 
@@ -91,8 +92,7 @@ def assayPaths = [
             "EXPERIMENT->EXPRMT_CONTEXT.EXPERIMENT_ID",
             "EXPRMT_CONTEXT->EXPRMT_CONTEXT_ITEM.EXPRMT_CONTEXT_ID",
             "EXPERIMENT->EXTERNAL_REFERENCE.EXPERIMENT_ID",
-            "EXPERIMENT->EXPRMT_MEASURE.EXPERIMENT_ID",
-            "EXPERIMENT->RESULT.EXPERIMENT_ID"
+            "EXPERIMENT->EXPRMT_MEASURE.EXPERIMENT_ID"
 	]
 
 datamig = createConnection("datamig")
