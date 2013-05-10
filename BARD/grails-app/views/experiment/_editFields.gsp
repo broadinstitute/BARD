@@ -30,7 +30,7 @@
                        value="${fieldValue(bean: experiment, field: "description")}"/>
             </dd>
 
-                <dt><g:message code="experiment.experimentStatus.label" default="Fix i18n"/>:</dt>
+                <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
                 <dd><g:select id="experimentStatus" name="experimentStatus"
                               from="${bard.db.enums.ExperimentStatus.values()}"
                               value="${experiment?.experimentStatus}"/></dd>
