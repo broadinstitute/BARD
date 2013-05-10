@@ -9,7 +9,8 @@
 
 <body>
 <div class="row-fluid" id="showExperimentDiv">
-    <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm]"/>
+    <g:render template="facets"
+              model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm, 'total': tableModel.additionalProperties?.total]"/>
     <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
 
     <div class="span9">
