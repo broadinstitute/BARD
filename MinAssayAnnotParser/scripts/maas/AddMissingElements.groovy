@@ -14,10 +14,11 @@ import bard.db.audit.BardContextUtils
  * To change this template use File | Settings | File Templates.
  */
 
+String fileName = System.getProperty("fileName")
 Map elementAndDescription = [:]
 Map elementParent = [:]
 // data format with element, description, parentid
-ElementHandlerService.build("data/maas/missingElements.txt", elementAndDescription, elementParent)
+ElementHandlerService.build(fileName, elementAndDescription, elementParent)
 ElementHandlerService elementHandlerService = new ElementHandlerService()
 Element.withTransaction { DefaultTransactionStatus status ->
     BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, "xiaorong-maas")
