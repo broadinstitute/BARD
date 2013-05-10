@@ -89,30 +89,21 @@ else {
 }
 println("End loading ExperimentContext")
 
-println("Start loading Project from cars")
-if (!StringUtils.equals("true", willCommit)) {
-    Project.withTransaction {status ->
-        loadCars(dataset_id)
-        status.setRollbackOnly()
-    }
-}
-else {
-    loadCars(dataset_id)
-}
-println("Finished cars loading")
-
-println("Start loading ProjectContext")
+println("Start loading Project from cars and projectcontext")
 ProjectHandlerService projectHandlerService = new ProjectHandlerService()
 if (!StringUtils.equals("true", willCommit)) {
     Project.withTransaction {status ->
+        loadCars(dataset_id)
         projectHandlerService.handle(runBy, inputDirs, mustLoadedAids)
         status.setRollbackOnly()
     }
 }
 else {
+    loadCars(dataset_id)
     projectHandlerService.handle(runBy, inputDirs, mustLoadedAids)
 }
-println("Finished  loading projectContext")
+println("Finished loading Project from cars and projectcontext")
+
 println("Start loading ProjectExperimentStage")
 ProjectExperimentStageHandlerService handlerService = new ProjectExperimentStageHandlerService()
 
