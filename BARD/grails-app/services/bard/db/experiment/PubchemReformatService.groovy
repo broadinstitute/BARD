@@ -307,6 +307,9 @@ class PubchemReformatService {
         // Keep track which TIDs we've used for something
         for(row in rows) {
             unusedTids.add(row.TID.toString())
+            if (row.EXCLUDED_POINTS_SERIES_NO != null) {
+                unusedTids.remove(row.TID.toString())
+            }
         }
 
         // first pass: create all the items for result types
@@ -364,7 +367,7 @@ class PubchemReformatService {
     //TODO: fix concentration unit check
     public ResultMap loadMap(Connection connection, Long aid) {
         Sql sql = new Sql(connection)
-        List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID FROM result_map WHERE AID = ?", [aid])
+        List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID, EXCLUDED_POINTS_SERIES_NO FROM result_map WHERE AID = ?", [aid])
         ResultMap map = convertToResultMap(aid.toString(), rows)
         return map
     }

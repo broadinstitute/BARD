@@ -33,7 +33,8 @@ class PubchemReformatServiceUnitSpec extends Specification {
             "ATTRIBUTE2",
             "VALUE2",
             "SERIESNO",
-            "QUALIFIERTID"];
+            "QUALIFIERTID",
+            "EXCLUDED_POINTS_SERIES_NO"];
 
     def fillInRows(List<Map> rows) {
         for (row in rows) {
