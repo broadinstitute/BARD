@@ -94,7 +94,7 @@
 
                     <div class="row-fluid">
                         <g:link action="create" controller="document" params="${[projectId: instance.id]}"
-                                class="btn btn-primary">Add new document</g:link>
+                                class="btn">Add new document</g:link>
                         <g:render template="/document/list"
                                   model="['documents': instance.documents, documentTemplate: '/document/edit']"/>
                     </div>

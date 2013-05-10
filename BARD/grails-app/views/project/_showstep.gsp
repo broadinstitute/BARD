@@ -4,8 +4,8 @@
     <div id="stepGraph" style="display: none">${pegraph}</div>
 
     <div>
-        <div class="span12"><button id="addExperimentToProject" class="btn btn-primary">Add Experiment</button>
-            <button id="linkExperiment" class="btn btn-primary">Link Experiment</button></div>
+        <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
+            <button id="linkExperiment" class="btn">Link Experiment</button></div>
     </div>
 
     <div id="serviceResponse" style="display: none"></div>
