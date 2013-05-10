@@ -1,4 +1,4 @@
-<div id="showstep">
+<div id="showstep" style="position: relative;">
     <input type="hidden" id="projectIdForStep" name="projectIdForStep" value="${instanceId}"/>
 
     <div id="stepGraph" style="display: none">${pegraph}</div>
