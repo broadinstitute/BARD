@@ -14,10 +14,11 @@ $(document).ready(function () {
             "Update Summary": function() {
                 var instanceId = $("#assayId").text();
                 var assayStatus = $("#assayStatus option:selected").text()
+                var assayType = $("#assayType option:selected").text()
                 var assayName = $("#assayName").val();
                 var designedBy = $("#designedBy").val();
                 if (!validateRequiredField(assayName, "assayNameValidation")) return false;
-                var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy};
+                var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy, 'assayType':assayType};
                 $.ajax
                     ({
                         url:"../editSummary",

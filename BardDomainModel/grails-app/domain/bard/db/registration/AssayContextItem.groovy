@@ -60,6 +60,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     }
 
     public AssayContextItem clone(AssayContext newContext) {
+
         AssayContextItem newItem = new AssayContextItem(
                 attributeType: attributeType,
                 attributeElement: attributeElement,
@@ -70,7 +71,9 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
                 valueMin: valueMin,
                 valueMax: valueMax,
                 valueDisplay: valueDisplay)
+
         newContext.addToAssayContextItems(newItem)
+
         return newItem;
     }
 

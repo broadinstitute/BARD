@@ -17,12 +17,15 @@
             <div class="pull-left">
                 <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
             </div>
-            <g:if test="${assayInstance?.id}">
-                <div class="pull-right">
-                    <g:link action="edit" id="${assayInstance?.id}" class="btn btn-small btn-info">Clone</g:link>
-                </div>
-            </g:if>
         </div>
+    </div>
+
+    <div class="span12">
+        <g:if test="${assayInstance?.id}">
+            <div class="pull-left">
+                <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn btn-small btn-info">Clone</g:link>
+            </div>
+        </g:if>
     </div>
 </div>
 

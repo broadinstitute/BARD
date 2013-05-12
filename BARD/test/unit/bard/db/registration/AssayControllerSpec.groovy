@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.enums.AssayType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -19,8 +20,8 @@ import spock.lang.Specification
 class AssayControllerSpec extends Specification {
     def 'test list templates'() {
         when:
-        Assay template = Assay.build(assayType: Assay.TEMPLATE_ASSAY_TYPE)
-        Assay nontemplate = Assay.build(assayType: Assay.REGULAR_ASSAY_TYPE)
+        Assay template = Assay.build(assayType: AssayType.TEMPLATE)
+        Assay nontemplate = Assay.build(assayType: AssayType.REGULAR)
 
         def m = controller.listTemplates()
 

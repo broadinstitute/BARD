@@ -12,10 +12,19 @@
 
 
         <dt><g:message code="assay.assayStatus.label" default="Fix i18n"/>:</dt>
-        <dd><g:select id="assayStatus" name="assayStatus"
+        <dd>
+            <g:select name="assayStatus" id="assayStatus" value="${assay?.assayStatus.id}"
                       from="${bard.db.enums.AssayStatus.values()}"
-                      value="${assay?.assayStatus}" /></dd>
-
+                      optionValue="${{ it.id }}"
+                      optionKey="id"/>
+         </dd>
+        <dt><g:message code="assay.assayType.label" default="Fix i18n"/>:</dt>
+        <dd>
+            <g:select name="assayType" id="assayType" value="${assay?.assayType.id}"
+                      from="${bard.db.enums.AssayType.values()}"
+                      optionValue="${{ it.id }}"
+                      optionKey="id"/>
+        </dd>
         <dt><g:message code="assay.designedBy.label" default="Fix i18n"/>:</dt>
         <dd><g:textField id="designedBy" name="designedBy" class="designedBy" required="required" value="${assay?.designedBy}"/></dd>
 

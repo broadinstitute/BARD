@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import bard.db.experiment.*
 import bard.db.experiment.results.RawCell
 import bard.db.experiment.results.Row
@@ -9,10 +10,8 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.db.enums.HierarchyType
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions

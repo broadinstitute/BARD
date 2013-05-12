@@ -7,7 +7,10 @@
 		<g:message code="assay.assayStatus.label" default="Assay Status" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select name="assayStatus" from="${bard.db.registration.AssayStatus?.values()}" keys="${bard.db.registration.AssayStatus.values()*.name()}" required="" value="${assayInstance?.assayStatus?.name()}"/>
+    <g:select name="assayStatus" id="assayStatus" value="${assayInstance?.assayStatus.id}"
+              from="${bard.db.enums.AssayStatus.values()}"
+              optionValue="${{ it.id }}"
+              optionKey="id"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayShortName', 'error')} required">
@@ -50,12 +53,15 @@
 	<g:select name="readyForExtraction" from="${bard.db.enums.ReadyForExtraction?.values()}" keys="${bard.db.enums.ReadyForExtraction.values()*.name()}" required="" value="${assayInstance?.readyForExtraction?.name()}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayType', 'error')} ">
+<div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'assayType.id', 'error')} ">
 	<label for="assayType">
 		<g:message code="assay.assayType.label" default="Assay Type" />
 
 	</label>
-	<g:select name="assayType" from="${assayInstance.constraints.assayType.inList}" value="${assayInstance?.assayType}" valueMessagePrefix="assay.assayType" noSelection="['': '']"/>
+    <g:select name="assayType" value="${assayInstance?.assayType.id}"
+              from="${bard.db.enums.AssayType.values()}"
+              optionValue="${{ it.id }}"
+              optionKey="id" valueMessagePrefix="assay.assayType" noSelection="['': '']"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: assayInstance, field: 'modifiedBy', 'error')} ">

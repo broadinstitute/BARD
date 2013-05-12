@@ -3,7 +3,10 @@
 <div class="control-group">
 	<label class="control-label" for="assayStatus"><g:message code="assay.assayStatus.label" default="Assay Status:" /></label>
 	<div class="controls">
-		<g:select name="assayStatus" from="${bard.db.registration.AssayStatus?.values()}" keys="${bard.db.registration.AssayStatus.values()*.name()}" required="" value="${assayInstance?.assayStatus?.name()}"/>
+        <g:select name="assayStatus" value="${assayInstance?.assayStatus.id}"
+                  from="${bard.db.enums.AssayStatus.values()}"
+                  optionValue="${{ it.id }}"
+                  optionKey="id"/>
 	</div>
 </div>
 
@@ -74,6 +77,9 @@
 <div class="control-group">
 	<label class="control-label" for="assayType"><g:message code="assay.assayType.label" default="Assay Type" /></label>
 	<div class="controls">
-		<g:select name="assayType" from="${assayInstance.constraints.assayType.inList}" value="${assayInstance?.assayType}" valueMessagePrefix="assay.assayType" noSelection="['': '']"/>
+        <g:select name="assayType" value="${assayInstance?.assayType.id}"
+                  from="${bard.db.enums.AssayType.values()}"
+                  optionValue="${{ it.id }}"
+                  optionKey="id" valueMessagePrefix="assay.assayType" noSelection="['': '']"/>
 	</div>
 </div>

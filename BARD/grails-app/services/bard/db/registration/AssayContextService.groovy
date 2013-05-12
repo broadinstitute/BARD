@@ -1,9 +1,11 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
+import bard.db.enums.HierarchyType
 import bard.db.registration.additemwizard.*
 import org.apache.commons.lang.StringUtils
-import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +15,31 @@ import bard.db.enums.HierarchyType
  * To change this template use File | Settings | File Templates.
  */
 class AssayContextService {
-
+    public void editSummary(Long assayId, String assayStatus, String assayName, String designedBy, String assayType) {
+        boolean recomputeAssayShortName = false
+        boolean hasChanged = false
+        Assay assayInstance = Assay.findById(assayId)
+        if (assayInstance.assayName != assayName) {
+            assayInstance.assayName = assayName
+            recomputeAssayShortName = true
+            hasChanged = true
+        }
+        if (assayInstance.designedBy != designedBy) {
+            assayInstance.designedBy = designedBy
+            hasChanged = true
+        }
+        if (assayInstance.assayStatus != AssayStatus.byId(assayStatus)) {
+            assayInstance.assayStatus = AssayStatus.byId(assayStatus)
+            hasChanged = true
+        }
+        if (assayInstance.assayType != AssayType.byId(assayType)) {
+            assayInstance.assayType = AssayType.byId(assayType)
+            hasChanged = true
+        }
+        if(hasChanged){
+            assayInstance.save(flush: true)
+        }
+    }
     /**
      *
      * @param assayContext

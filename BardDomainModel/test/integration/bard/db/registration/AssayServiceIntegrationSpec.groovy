@@ -2,7 +2,6 @@ package bard.db.registration
 
 import bard.db.BardIntegrationSpec
 import bard.db.experiment.Experiment
-import grails.plugin.spock.IntegrationSpec
 import registration.AssayService
 import spock.lang.Unroll
 
