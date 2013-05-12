@@ -5,6 +5,7 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.junit.Before
@@ -29,6 +30,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayService assayService = Mock(AssayService)
         AssayContextService assayContextService = Mock(AssayContextService)
+        controller.springSecurityService = Mock(SpringSecurityService)
         controller.measureTreeService = measureTreeService
         controller.assayService = assayService
         controller.assayContextService = assayContextService
@@ -44,7 +46,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayService.cloneAssayForEditing(_) >> { return newAssay }
+        controller.assayService.cloneAssayForEditing(_,_) >> { return newAssay }
         assert response.redirectedUrl == "/assayDefinition/show/${newAssay.id}"
     }
 

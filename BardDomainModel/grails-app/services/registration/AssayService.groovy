@@ -3,15 +3,9 @@ package registration
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
-import bard.db.registration.Assay
-import bard.db.registration.AssayContext
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AssayDocument
-import bard.db.registration.Measure
-import grails.plugins.springsecurity.SpringSecurityService
+import bard.db.registration.*
 
 class AssayService {
-    SpringSecurityService springSecurityService
 
     List<Assay> findByPubChemAid(Long aid) {
         def criteria = Assay.createCriteria()
@@ -29,7 +23,7 @@ class AssayService {
      */
     Map cloneAssay(Assay assay) {
         String assayNamePrefix = ""
-        Assay newAssay = cloneAssayOnly(assay, assay.dateCreated, assay.modifiedBy, assayNamePrefix, assay.assayStatus, assay.readyForExtraction)
+        Assay newAssay = cloneAssayOnly(assay, assay.dateCreated, assay.designedBy, assayNamePrefix, assay.assayStatus, assay.readyForExtraction)
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay)
         cloneDocuments(assay, newAssay)
         // clone all measures
@@ -43,8 +37,8 @@ class AssayService {
     /**
      * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
      */
-    Assay cloneAssayForEditing(Assay assay) {
-        Assay newAssay = cloneAssayOnly(assay, new Date(),springSecurityService.principal?.username)
+    Assay cloneAssayForEditing(Assay assay, String designedBy) {
+        Assay newAssay = cloneAssayOnly(assay, new Date(), designedBy)
         if (newAssay.assayType == AssayType.TEMPLATE) { //convert templates to regular
             newAssay.assayType = AssayType.REGULAR
         }
@@ -60,17 +54,17 @@ class AssayService {
 
     }
 
-    protected Assay cloneAssayOnly(Assay assay,
-                                   Date dateCreated,
-                                   String designedBy,
-                                   String assayNamePrefix = "Clone of ",
-                                   AssayStatus assayStatus = AssayStatus.DRAFT,
-                                   ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY) {
+    Assay cloneAssayOnly(Assay assay,
+                         Date dateCreated,
+                         String designedBy,
+                         String assayNamePrefix = "Clone of ",
+                         AssayStatus assayStatus = AssayStatus.DRAFT,
+                         ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY) {
 
         String assayName = assayNamePrefix + assay.assayName
         //we do not want to go over the max number of characters
-        if(assayName.length() >= Assay.ASSAY_NAME_MAX_SIZE){
-            assayName = assayName?.trim().substring(0,Assay.ASSAY_NAME_MAX_SIZE)
+        if (assayName.length() >= Assay.ASSAY_NAME_MAX_SIZE) {
+            assayName = assayName?.trim().substring(0, Assay.ASSAY_NAME_MAX_SIZE)
         }
 
         return new Assay(

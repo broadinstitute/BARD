@@ -6,7 +6,6 @@ import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
 import grails.buildtestdata.mixin.Build
-import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -26,9 +25,6 @@ import spock.lang.Specification
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(AssayService)
 public class AssayServiceUnitSpec extends Specification {
-    def setup() {
-        service.springSecurityService = Mock(SpringSecurityService)
-    }
 
     void "test cloneMeasures"() {
         given:
@@ -99,7 +95,7 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: context, measure: measure)
 
         when:
-        Assay newAssay = service.cloneAssayForEditing(assay);
+        Assay newAssay = service.cloneAssayForEditing(assay,assay.designedBy);
 
         then:
         // test assay props are good

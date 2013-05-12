@@ -11,7 +11,9 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.services.ServiceUnitTestMixin
+import org.junit.Before
 import registration.AssayService
+import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -20,9 +22,13 @@ import registration.AssayService
 @Mock([Assay, Measure, Experiment,ExperimentMeasure,AssayContext,AssayContextMeasure, AssayContextItem, AssayDocument])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ExperimentService)
-class ExperimentServiceSpec  extends spock.lang.Specification {
+class ExperimentServiceSpec  extends Specification {
+    @Before
+    void setup() {
+
+    }
     void 'test create experiment'() {
-        setup:
+        given:
         mockDomain(Experiment)
         Measure parent = Measure.build()
         Measure child = Measure.build(parentMeasure: parent)
@@ -52,7 +58,7 @@ class ExperimentServiceSpec  extends spock.lang.Specification {
     }
 
     void 'update measures'() {
-        setup:
+        given:
         mockDomain(ExperimentMeasure);
 
         when:
@@ -97,7 +103,6 @@ class ExperimentServiceSpec  extends spock.lang.Specification {
     void 'test splitting experiment from assay'() {
         setup:
         service.assayService = new AssayService()
-        service.assayService.springSecurityService = Mock(SpringSecurityService)
         Assay assay = Assay.build()
         AssayContext context = AssayContext.build(assay: assay, contextName: "alpha")
         Measure measure = Measure.build(assay: assay)

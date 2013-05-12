@@ -7,6 +7,7 @@ import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import registration.AssayService
@@ -17,8 +18,9 @@ class AssayDefinitionController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
-    OntologyDataAccessService ontologyDataAccessService;
-    MeasureTreeService measureTreeService;
+    OntologyDataAccessService ontologyDataAccessService
+    SpringSecurityService springSecurityService
+    MeasureTreeService measureTreeService
     AssayService assayService
     def index() {
         redirect(action: "description", params: params)
@@ -29,7 +31,7 @@ class AssayDefinitionController {
     }
     def cloneAssay(Long id){
         Assay assay  = Assay.get(id)
-        Assay newAssay = assayService.cloneAssayForEditing(assay)
+        Assay newAssay = assayService.cloneAssayForEditing(assay,springSecurityService.principal?.username)
         redirect(action: "show", id: newAssay.id)
     }
     def save() {
