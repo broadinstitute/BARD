@@ -200,15 +200,15 @@ class AssayExportHelperService extends ExportAbstractService {
 
         final Map<String, String> attributes = [:]
         attributes.put("assayId", assay.id.toString())
-        attributes.put('readyForExtraction', assay.readyForExtraction.getId())
+        attributes.put('readyForExtraction', assay.readyForExtraction.id)
         if (assay.assayVersion) {
             attributes.put('assayVersion', assay.assayVersion)
         }
         if (assay.assayType) {
-            attributes.put('assayType', assay.assayType)
+            attributes.put('assayType', assay.assayType.id)
         }
         if (assay.assayStatus) {
-            attributes.put('status', assay.assayStatus.getId())
+            attributes.put('status', assay.assayStatus.id)
         }
         if(assay.lastUpdated){
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
