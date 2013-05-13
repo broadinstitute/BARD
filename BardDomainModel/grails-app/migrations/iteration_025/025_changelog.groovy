@@ -20,7 +20,7 @@ END;
     changeSet(author: 'jasiedu', id: 'drop trigger to recompute assay short name on assayType update', dbms: 'oracle', context: 'standard') {
         grailsChange {
             change {
-                sql.execute("""DROP TRIGGER TR_UPD_ASSAY_TYPE);""")
+                sql.execute("""DROP TRIGGER TR_UPD_ASSAY_TYPE;""")
             }
         }
     }
