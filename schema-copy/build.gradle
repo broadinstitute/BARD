@@ -1,0 +1,21 @@
+buildscript {
+    repositories { maven {
+            url(mavenRepoUrl)
+        }
+    }
+    dependencies {
+        classpath(group:'com.github.oracle-schema-copy', name: 'oracle-schema-copy', version: '1.2')
+    }
+}
+repositories {
+    maven {
+        url(mavenRepoUrl)
+    }
+}
+project.configurations.create('oracleSchemaCopyClasspath')
+dependencies {
+    oracleSchemaCopyClasspath(group:'com.github.oracle-schema-copy', name: 'oracle-schema-copy', version: '1.2')
+}
+
+apply plugin: 'groovy'
+apply plugin: 'oracle-schema-copy'
