@@ -68,7 +68,8 @@ class ElementService {
     List getChildNodes(long elementId) {
         def childNodes = []
         final Element parentElement = Element.get(elementId)
-        final Set<ElementHierarchy> hierarchies = parentElement.parentHierarchies
+        final List<ElementHierarchy> list = new ArrayList(parentElement.parentHierarchies)
+        final List<ElementHierarchy> hierarchies = list.findAll{it.relationshipType=='subClassOf'}
         Set<Element> seenSet = new HashSet<Element>()
         for (ElementHierarchy elementHierarchy : hierarchies) {
             final Element childElement = elementHierarchy.childElement

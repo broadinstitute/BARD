@@ -1,14 +1,13 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
-import spock.lang.IgnoreRest
+import grails.test.mixin.TestFor
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import grails.test.mixin.TestFor
-import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.

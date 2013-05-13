@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -43,11 +44,11 @@ class AssayConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc             | valueUnderTest               | valid | errorCode
-        'null not valid' | null                         | false | 'nullable'
-        'valid value'    | AssayStatus.DRAFT            | true  | null
-        'valid value'    | AssayStatus.APPROVED         | true  | null
-        'valid value'    | AssayStatus.RETIRED          | true  | null
+        desc             | valueUnderTest       | valid | errorCode
+        'null not valid' | null                 | false | 'nullable'
+        'valid value'    | AssayStatus.DRAFT    | true  | null
+        'valid value'    | AssayStatus.APPROVED | true  | null
+        'valid value'    | AssayStatus.RETIRED  | true  | null
 
     }
 
@@ -203,14 +204,12 @@ class AssayConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc               | valueUnderTest  | valid | errorCode
-        'null valid'       | null            | false | null
-        'value not inList' | 'Foo'           | false | 'not.inList'
-
-        'valid value'      | 'Regular'       | true  | null
-        'valid value'      | 'Panel - Array' | true  | null
-        'valid value'      | 'Panel - Group' | true  | null
-        'valid value'      | 'Template'      | true  | null
+        desc          | valueUnderTest        | valid | errorCode
+        'null valid'  | null                  | false | null
+        'valid value' | AssayType.REGULAR     | true  | null
+        'valid value' | AssayType.PANEL_ARRAY | true  | null
+        'valid value' | AssayType.PANEL_GROUP | true  | null
+        'valid value' | AssayType.TEMPLATE    | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {

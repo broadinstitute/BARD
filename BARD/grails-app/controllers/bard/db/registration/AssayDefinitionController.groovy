@@ -3,11 +3,14 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
+import bard.db.enums.HierarchyType
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
-import org.codehaus.groovy.grails.web.json.JSONArray
-import bard.db.enums.HierarchyType
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.lang.StringUtils
+import org.codehaus.groovy.grails.web.json.JSONArray
+import registration.AssayService
 
 @Secured(['isAuthenticated()'])
 class AssayDefinitionController {
@@ -15,9 +18,10 @@ class AssayDefinitionController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
-    OntologyDataAccessService ontologyDataAccessService;
-    MeasureTreeService measureTreeService;
-
+    OntologyDataAccessService ontologyDataAccessService
+    SpringSecurityService springSecurityService
+    MeasureTreeService measureTreeService
+    AssayService assayService
     def index() {
         redirect(action: "description", params: params)
     }
@@ -25,7 +29,11 @@ class AssayDefinitionController {
     def description() {
         [assayInstance: new Assay(params)]
     }
-
+    def cloneAssay(Long id){
+        Assay assay  = Assay.get(id)
+        Assay newAssay = assayService.cloneAssayForEditing(assay,springSecurityService.principal?.username)
+        redirect(action: "show", id: newAssay.id)
+    }
     def save() {
         def assayInstance = new Assay(params)
         if (!assayInstance.save(flush: true)) {
@@ -336,13 +344,11 @@ class AssayDefinitionController {
         render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy) {
-        def assayInstance = Assay.findById(instanceId)
-        assayInstance.assayName = assayName
-        assayInstance.designedBy = designedBy
-        assayInstance.assayStatus = AssayStatus.valueOf(AssayStatus.class, assayStatus)
-        assayInstance.save(flush: true)
-        assayInstance = Assay.findById(instanceId)
+    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy, String assayType) {
+        //TODO Move into a service and invoke the recomputation of assay short name, if the name has changed
+        assayContextService.editSummary(instanceId,assayStatus,assayName,designedBy,assayType)
+
+        Assay assayInstance = Assay.findById(instanceId)
         render(template: "summaryDetail", model: [assay: assayInstance])
     }
 

@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import spock.lang.Specification
@@ -29,10 +30,10 @@ class AssayUnitSpec extends Specification {
         assay.allowsNewExperiments() == expectedAllowsNewExperiments
 
         where:
-        desc              | assayType                 | assayStatus         | measureCount | expectedAllowsNewExperiments
-        'retired assay'   | Assay.REGULAR_ASSAY_TYPE  | AssayStatus.RETIRED | 1            | false
-        'template assay'  | Assay.TEMPLATE_ASSAY_TYPE | AssayStatus.DRAFT   | 1            | false
-        'no measures'     | Assay.REGULAR_ASSAY_TYPE  | AssayStatus.DRAFT   | 0            | false
-        'everything good' | Assay.REGULAR_ASSAY_TYPE  | AssayStatus.DRAFT   | 1            | true
+        desc              | assayType          | assayStatus         | measureCount | expectedAllowsNewExperiments
+        'retired assay'   | AssayType.REGULAR  | AssayStatus.RETIRED | 1            | false
+        'template assay'  | AssayType.TEMPLATE | AssayStatus.DRAFT   | 1            | false
+        'no measures'     | AssayType.REGULAR  | AssayStatus.DRAFT   | 0            | false
+        'everything good' | AssayType.REGULAR  | AssayStatus.DRAFT   | 1            | true
     }
 }

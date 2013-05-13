@@ -1,20 +1,19 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import grails.test.mixin.TestMixin
-import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.junit.Before
-import spock.lang.IgnoreRest
+import registration.AssayService
 import spock.lang.Specification
-import grails.buildtestdata.mixin.Build
-import bard.db.enums.AssayStatus
 import spock.lang.Unroll
 
 /**
- * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 
 
@@ -28,18 +27,35 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     @Before
     void setup() {
+        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
+        AssayService assayService = Mock(AssayService)
+        AssayContextService assayContextService = Mock(AssayContextService)
+        controller.springSecurityService = Mock(SpringSecurityService)
+        controller.measureTreeService = measureTreeService
+        controller.assayService = assayService
+        controller.assayContextService = assayContextService
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
 
+
+    void 'test clone assay'() {
+        given:
+        Assay newAssay = Assay.build()
+        controller.measureTreeService.createMeasureTree(_, _) >> []
+        when:
+        controller.cloneAssay(assay.id)
+        then:
+        controller.assayService.cloneAssayForEditing(_,_) >> { return newAssay }
+        assert response.redirectedUrl == "/assayDefinition/show/${newAssay.id}"
+    }
+
     void 'test show'() {
-        setup:
-        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
-        measureTreeService.createMeasureTree(_, _) >> []
+        given:
+        controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
         params.id = assay.id
-        controller.measureTreeService = measureTreeService
         def model = controller.show()
 
         then:
@@ -66,10 +82,8 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     }
 
     void 'test editMeasure'() {
-        setup:
-        MeasureTreeService measureTreeService = Mock(MeasureTreeService)
-        measureTreeService.createMeasureTree(_, _) >> []
-        controller.measureTreeService = measureTreeService
+        given:
+        controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
         params.id = assay.id
@@ -230,9 +244,10 @@ class AssayDefinitionControllerUnitSpec extends Specification {
     }
 
     void 'test edit summary'() {
-        when:
+        given:
         assay = Assay.build()
-        controller.editSummary(assay.id, AssayStatus.DRAFT.name(), "assayName", "designedBy")
+        when:
+        controller.editSummary(assay.id, AssayStatus.DRAFT.id, "assayName", "designedBy", AssayType.REGULAR.id)
 
         then:
         assay.assayStatus == AssayStatus.DRAFT

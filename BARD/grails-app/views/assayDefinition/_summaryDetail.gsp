@@ -16,10 +16,10 @@
         <dd><g:fieldValue bean="${assay}" field="designedBy"/></dd>
 
         <dt><g:message code="assay.assayStatus.label" default="Fix i18n"/>:</dt>
-        <dd><g:fieldValue bean="${assay}" field="assayStatus"/></dd>
+        <dd><g:fieldValue bean="${assay}" field="assayStatus.id"/></dd>
 
         <dt><g:message code="assay.assayType.label" default="Fix i18n"/>:</dt>
-        <dd><g:fieldValue bean="${assay}" field="assayType"/></dd>
+        <dd><g:fieldValue bean="${assay}" field="assayType.id"/></dd>
 
         <dt><g:message code="default.dateCreated.label"/>:</dt>
         <dd><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></dd>

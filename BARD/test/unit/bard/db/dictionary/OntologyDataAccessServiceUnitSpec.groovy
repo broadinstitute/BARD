@@ -21,7 +21,6 @@ import spock.lang.Unroll
 @TestFor(OntologyDataAccessService)
 class OntologyDataAccessServiceUnitSpec extends Specification {
 
-    OntologyDataAccessService ontologyDataAccessService = new OntologyDataAccessService()
     ExternalOntologyFactory externalOntologyFactory
     @Shared ExternalOntologyAPI externalOntologyAPI
     Log log
@@ -30,14 +29,14 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         externalOntologyFactory = Mock(ExternalOntologyFactory)
         externalOntologyAPI = Mock(ExternalOntologyAPI)
         log = Mock(Log)
-        ontologyDataAccessService.externalOntologyFactory = externalOntologyFactory
-        ontologyDataAccessService.log = log
+        service.externalOntologyFactory = externalOntologyFactory
+        service.log = log
 
     }
 
     void "test findExternalItemById for #expectedException when #desc"(String desc, String externalUrl, String id, String expectedMessage) {
         when:
-        ontologyDataAccessService.findExternalItemById(externalUrl, id)
+        service.findExternalItemById(externalUrl, id)
 
         then:
         IllegalArgumentException e = thrown(IllegalArgumentException)
@@ -59,7 +58,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final String id = '1'
 
         when:
-        ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
+        ExternalItem externalItem = service.findExternalItemById(externalUrl, id)
 
         then:
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> null
@@ -73,7 +72,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final ExternalItem returnedExternalItem = new ExternalItem(id, 'someDisplay')
 
         when:
-        ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
+        ExternalItem externalItem = service.findExternalItemById(externalUrl, id)
 
         then:
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> externalOntologyAPI
@@ -87,7 +86,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final String id = '1'
 
         when: 'an exception is thrown'
-        ExternalItem externalItem = ontologyDataAccessService.findExternalItemById(externalUrl, id)
+        ExternalItem externalItem = service.findExternalItemById(externalUrl, id)
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
@@ -98,7 +97,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
     void "test findExternalItemsByTerm for #expectedException when #desc"(String desc, String externalUrl, String term, String expectedMessage) {
 
         when:
-        ontologyDataAccessService.findExternalItemsByTerm(externalUrl, null)
+        service.findExternalItemsByTerm(externalUrl, null)
 
         then:
         IllegalArgumentException e = thrown(IllegalArgumentException)
@@ -120,7 +119,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final String term = '1'
 
         when:
-        List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
+        List<ExternalItem> externalItems = service.findExternalItemsByTerm(externalUrl, term)
 
         then:
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { null }
@@ -137,7 +136,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         }
 
         when:
-        List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
+        List<ExternalItem> externalItems = service.findExternalItemsByTerm(externalUrl, term)
         final List<ExternalItem> actualItemsData = externalItems.collect { ExternalItem item -> [item.id, item.display] }
 
         then:
@@ -161,7 +160,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final String term = '1'
 
         when: 'an exception is thrown'
-        List<ExternalItem> externalItems = ontologyDataAccessService.findExternalItemsByTerm(externalUrl, term)
+        List<ExternalItem> externalItems = service.findExternalItemsByTerm(externalUrl, term)
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
@@ -174,7 +173,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
         final String externalUrl = 'http://foo.com'
 
         when: 'an exception is thrown'
-        boolean hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(externalUrl)
+        boolean hasIntegratedSearch = service.externalOntologyHasIntegratedSearch(externalUrl)
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { throw new ExternalOntologyException("some exception") }
@@ -185,7 +184,7 @@ class OntologyDataAccessServiceUnitSpec extends Specification {
     void "test externalOntologyHasIntegratedSearch() #desc"() {
 
         when: 'an exception is thrown'
-        boolean hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(externalUrl)
+        boolean hasIntegratedSearch = service.externalOntologyHasIntegratedSearch(externalUrl)
 
         then: 'logging should happen at the error level and an exception should be thrown'
         1 * externalOntologyFactory.getExternalOntologyAPI(externalUrl, OntologyDataAccessService.EXTERNAL_ONTOLOGY_PROPERTIES) >> { returnedExternalOntologyAPI }
