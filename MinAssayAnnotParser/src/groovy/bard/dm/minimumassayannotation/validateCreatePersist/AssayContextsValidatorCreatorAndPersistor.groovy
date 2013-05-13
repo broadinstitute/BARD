@@ -108,36 +108,37 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         //if the value string could be matched against an element then add it to the valueElement
                         if (element) {
                             if (contextItemDto.attributeType != AttributeType.Free) {
-                            assayContextItem.valueElement = element
-                            assayContextItem.valueDisplay = element.label
+                                assayContextItem.valueElement = element
+                                assayContextItem.valueDisplay = element.label
                             }
                         }
                         //else, if the attribute's value is a number value, store it in the valueNum field
                         else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
                             if (contextItemDto.attributeType != AttributeType.Free) {
-                            Float val = new Float(contextItemDto.value)
-                            assayContextItem.valueNum = val
-                            //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
-                            assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
+                                Float val = new Float(contextItemDto.value)
+                                assayContextItem.valueNum = val
+                                assayContextItem.qualifier = "="
+                                //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
+                                assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
                             }
                         }
                         //else, if the attribute is a numeric range (e.g., 440-460nm -> 440-460), then store it in valueMin, valueMax and make AttributeType=range.
                         else if (contextItemDto.value && (contextItemDto.value instanceof String) && contextItemDto.value.matches(/^\d+\-\d+$/)) {
                             if (contextItemDto.attributeType != AttributeType.Free) {
-                            final String[] rangeStringArray = contextItemDto.value.split("-")
-                            assayContextItem.valueMin = new Float(rangeStringArray[0])
-                            assayContextItem.valueMax = new Float(rangeStringArray[1])
-                            assayContextItem.valueDisplay = contextItemDto.value + concentrationUnitsAbbreviation //range-units are reported separately.
-                            assayContextItem.attributeType = AttributeType.Range
+                                final String[] rangeStringArray = contextItemDto.value.split("-")
+                                assayContextItem.valueMin = new Float(rangeStringArray[0])
+                                assayContextItem.valueMax = new Float(rangeStringArray[1])
+                                assayContextItem.valueDisplay = contextItemDto.value + concentrationUnitsAbbreviation //range-units are reported separately.
+                                assayContextItem.attributeType = AttributeType.Range
                             }
                         }
                         //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
                         else if (contextItemDto.typeIn  ){
-                                //|| (contextItemDto.attributeType == AttributeType.Free)) {
+                            //|| (contextItemDto.attributeType == AttributeType.Free)) {
                             assayContextItem.valueDisplay = contextItemDto.value
                         }
-                            else if (contextItemDto.attributeType == AttributeType.Free) {
-                            //do nothing
+                        else if (contextItemDto.attributeType == AttributeType.Free) {
+                            //do nothing - since it is free no need to apply any value
                         }
                         else {
                             final String message = "Value of context item not recognized as element or numerical value: '${contextItemDto.key}'/'${contextItemDto.value}'"
