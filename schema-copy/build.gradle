@@ -4,7 +4,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath(group:'com.github.oracle-schema-copy', name: 'oracle-schema-copy', version: '1.2')
+        classpath(group:'com.github.oracle-schema-copy', name: 'oracle-schema-copy', version: '1.2'){
+            exclude module: 'ojdbc5'
+        }
     }
 }
 repositories {
