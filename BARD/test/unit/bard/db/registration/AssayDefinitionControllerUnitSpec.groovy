@@ -47,6 +47,7 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         controller.cloneAssay(assay.id)
         then:
         controller.assayService.cloneAssayForEditing(_,_) >> { return newAssay }
+        controller.assayService.recomputeAssayShortName(_) >> {return newAssay}
         assert response.redirectedUrl == "/assayDefinition/show/${newAssay.id}"
     }
 

@@ -15,13 +15,12 @@ import org.apache.commons.lang.StringUtils
  * To change this template use File | Settings | File Templates.
  */
 class AssayContextService {
-    public void editSummary(Long assayId, String assayStatus, String assayName, String designedBy, String assayType) {
+    public boolean editSummary(Long assayId, String assayStatus, String assayName, String designedBy, String assayType) {
         boolean recomputeAssayShortName = false
         boolean hasChanged = false
         Assay assayInstance = Assay.findById(assayId)
         if (assayInstance.assayName != assayName) {
             assayInstance.assayName = assayName
-            recomputeAssayShortName = true
             hasChanged = true
         }
         if (assayInstance.designedBy != designedBy) {
@@ -30,15 +29,18 @@ class AssayContextService {
         }
         if (assayInstance.assayStatus != AssayStatus.byId(assayStatus)) {
             assayInstance.assayStatus = AssayStatus.byId(assayStatus)
+
             hasChanged = true
         }
         if (assayInstance.assayType != AssayType.byId(assayType)) {
             assayInstance.assayType = AssayType.byId(assayType)
+            recomputeAssayShortName = true
             hasChanged = true
         }
         if(hasChanged){
             assayInstance.save(flush: true)
         }
+        return recomputeAssayShortName
     }
     /**
      *
