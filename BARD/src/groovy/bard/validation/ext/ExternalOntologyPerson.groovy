@@ -1,15 +1,33 @@
 package bard.validation.ext
 
+import java.net.URI;
+import java.util.Properties;
+
 import org.apache.commons.lang.StringUtils
 
 import bard.db.people.Person
+import bard.validation.ext.ExternalOntologyCreator
 
 class ExternalOntologyPerson extends ExternalOntologyAPI {	
+	
+	public static String PERSON_URL = "http://www.bard.nih.gov/person#"
+	
+	public static URI PERSON_URI = new URI(PERSON_URL)
+	
+	public static class PersonCreator implements ExternalOntologyCreator {
+		@Override
+		public ExternalOntologyAPI create(URI uri, Properties props) throws ExternalOntologyException {
+			if(PERSON_URI.equals(uri))
+				return new ExternalOntologyPerson();
+			else
+				return null
+		}
+		
+	}
 
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
-//		String cleanId = cleanId(id);
-		String cleanId = StringUtils.trimToEmpty(id)
+		String cleanId = cleanId(id);
 		ExternalItem item = null
 		if( StringUtils.isNotBlank(cleanId)){
 			def person = Person.get(cleanId)
@@ -20,8 +38,7 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 
 	@Override
 	public List<ExternalItem> findMatching(String name, int limit) throws ExternalOntologyException {
-//		String cleanName = cleanName(name);
-		String cleanName = StringUtils.trimToEmpty(name)
+		String cleanName = cleanName(name);
 		List<ExternalItem> items = new ArrayList<ExternalItem>()
 		if( StringUtils.isNotBlank(cleanName)){
 			String likeTerm = "%" + StringUtils.lowerCase(cleanName) + "%"

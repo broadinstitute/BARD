@@ -1,5 +1,7 @@
 import bard.hibernate.ModifiedByListener
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
+import bard.validation.ext.ExternalOntologyPerson
+import bard.validation.ext.ExternalOntologyFactory
 
 // Place your Spring DSL code here
 beans = {
@@ -34,7 +36,8 @@ beans = {
         crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
     }
 
-    externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory){ bean ->
+    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory){ bean ->
                 bean.factoryMethod = "getInstance"
     }
+
 }
