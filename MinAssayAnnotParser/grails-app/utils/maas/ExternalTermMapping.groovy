@@ -1,6 +1,7 @@
 package maas
 
 import org.apache.commons.lang3.StringUtils
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 /**
  * Read a file containing mapping between terms that need to be treated as external ontology, and its ID. For example:
@@ -17,7 +18,8 @@ import org.apache.commons.lang3.StringUtils
  */
 class ExternalTermMapping {
     // As an initial stage, let's expecting there is a file under data/maas/externalTermMapping.txt
-    private static final String MAPPING_FILE_NAME = "data/maas/externalTermMapping.txt"
+    //private static final String MAPPING_FILE_NAME = "data/maas/externalTermMapping.txt"
+    private static final String MAPPING_FILE_NAME = ConfigurationHolder.config.data.migration.termmapping.base + 'external_term_mapping.txt'
 
     private static final Map<String, String> externalTerms
 
@@ -28,7 +30,7 @@ class ExternalTermMapping {
     }
 
     static Map<String, String> build(String fileName) {
-        println("in build external term mapping")
+        println("in build external term mapping, read term from ${MAPPING_FILE_NAME}")
         if (StringUtils.isBlank(fileName)) {
            fileName = MAPPING_FILE_NAME
         }
