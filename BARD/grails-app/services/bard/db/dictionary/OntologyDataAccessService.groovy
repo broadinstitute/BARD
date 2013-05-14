@@ -11,8 +11,6 @@ import org.springframework.util.Assert
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 import static bard.validation.ext.ExternalOntologyNCBI.NCBI_EMAIL
 import static bard.validation.ext.ExternalOntologyNCBI.NCBI_TOOL

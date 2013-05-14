@@ -65,8 +65,28 @@ databaseChangeLog = {
         sqlFile(path: "${migrationsDir}/iteration_024/04-add-comments-field-to-Element.sql", stripComments: true)
     }
 
-    changeSet(author: "pmontgom", id: "iteration-024/05-recreate-deferred-constraints", dmbs: "oracle", context: "standard") {
+    changeSet(author: "pmontgom", id: "iteration-024/05-recreate-deferred-constraints", dbms: "oracle", context: "standard") {
         sqlFile(path: "${migrationsDir}/iteration_024/05-recreate-deferred-constraints.sql", stripComments: true)
+    }
+
+    changeSet(author: "pmontgom", id: "iteration-024/06-create-ext-ontology-tree", dbms: "oracle", context: "standard") {
+        grailsChange {
+            change {
+                sql.executeUpdate("create table ext_ontology_tree as select * from assay_descriptor_tree")
+            }
+        }
+    }
+
+    changeSet(author: "dlahr", id: "iteration-024/07-elmnt-hrrchy-parent-elmnt-id-not-null", dbms: "oracle", context: "standard") {
+        grailsChange {
+            change {
+                sql.executeUpdate("alter table element_hierarchy modify parent_element_id not null")
+            }
+        }
+    }
+
+    changeSet(author: "pmontgom", id: "iteration-024/08-add-replaced-by-to-element", dbms: "oracle", context: "standard") {
+        sqlFile(path: "${migrationsDir}/iteration_024/08-add-replaced-by-to-element.sql", stripComments: true)
     }
 }
 

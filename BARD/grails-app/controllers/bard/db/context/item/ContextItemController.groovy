@@ -5,7 +5,7 @@ import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import grails.plugins.springsecurity.Secured
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class ContextItemController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]

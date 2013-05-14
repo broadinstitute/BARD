@@ -13,12 +13,22 @@
 </head>
 <body>
 <h1>${title}</h1>
-<h2>Click the link to view the AID in PubChem</h2>
+<h2>Click the AID link to view in PubChem</h2>
 
+<table cellpadding="10">
     <g:each in="${aidList}" var="aid">
-        <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=${aid}">${aid}</a>
-        <br/>
+        <tr>
+            <td>
+                <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=${aid}">${aid}</a>
+            </td>
+            <g:if test="${extraController && aid}">
+                <td>
+                    <g:link controller="${extraController}" action="${extraAction}" params="[aid:aid]">${extraDescription}</g:link>
+                </td>
+            </g:if>
+        </tr>
     </g:each>
+</table>
 
 </body>
 </html>

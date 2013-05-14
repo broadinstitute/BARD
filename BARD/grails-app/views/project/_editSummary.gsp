@@ -10,7 +10,7 @@
             <dt><g:message code="project.description.label" default="Fix i18n"/></dt>
             <dd><g:textField id="description" name="description" class="description" required="required" value="${project?.description}"/></dd>
 
-            <dt><g:message code="project.projectStatus.label" default="Fix i18n"/></dt>
+            <dt><g:message code="project.projectStatus.label" default="Project Status"/></dt>
             <dd><g:select id="projectStatus" name="projectStatus"
                           from="${bard.db.enums.ProjectStatus.values()}"
                           value="${project.projectStatus}" /></dd>

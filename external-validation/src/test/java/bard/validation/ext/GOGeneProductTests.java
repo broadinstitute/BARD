@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import bard.validation.ext.util.GOUtil;
+
 public class GOGeneProductTests {
 
 	private static ExternalOntologyGOGeneProduct eo;
@@ -22,7 +24,7 @@ public class GOGeneProductTests {
 	
 	@BeforeClass
 	public static void initialize() throws Exception {
-		eo = new ExternalOntologyGOGeneProduct();
+		eo = new ExternalOntologyGOGeneProduct(GOUtil.getEBIDataSource());
 		eo.findMatching("PPARG", 20); // force initialization of pool
 	}
 	

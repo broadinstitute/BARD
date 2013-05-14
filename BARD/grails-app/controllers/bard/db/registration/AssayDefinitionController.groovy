@@ -3,21 +3,25 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
+import bard.db.enums.HierarchyType
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
-import org.codehaus.groovy.grails.web.json.JSONArray
-import bard.db.enums.HierarchyType
+import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.lang.StringUtils
+import org.codehaus.groovy.grails.web.json.JSONArray
+import registration.AssayService
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class AssayDefinitionController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
-    OntologyDataAccessService ontologyDataAccessService;
-    MeasureTreeService measureTreeService;
-
+    OntologyDataAccessService ontologyDataAccessService
+    SpringSecurityService springSecurityService
+    MeasureTreeService measureTreeService
+    AssayService assayService
     def index() {
         redirect(action: "description", params: params)
     }
@@ -25,7 +29,12 @@ class AssayDefinitionController {
     def description() {
         [assayInstance: new Assay(params)]
     }
-
+    def cloneAssay(Long id){
+        Assay assay  = Assay.get(id)
+        assay = assayService.cloneAssayForEditing(assay,springSecurityService.principal?.username)
+        assay = assayService.recomputeAssayShortName(assay)
+        redirect(action: "show", id: assay.id)
+    }
     def save() {
         def assayInstance = new Assay(params)
         if (!assayInstance.save(flush: true)) {
@@ -98,9 +107,7 @@ class AssayDefinitionController {
         final Element resultType = Element.get(params.resultTypeId)
         final String parentChildRelationship = params.relationship
         HierarchyType hierarchyType = null
-        if (StringUtils.isNotBlank(parentChildRelationship)) {
-            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
-        }
+
 
         if (!resultType) {
             flash.message = 'Result Type is Required'
@@ -109,19 +116,27 @@ class AssayDefinitionController {
             if (params.parentMeasureId) {
                 parentMeasure = Measure.get(params.parentMeasureId)
             }
+            //if there is a parent measure then there must be a selected relationship
+            if (parentMeasure && (StringUtils.isBlank(parentChildRelationship) || "null".equals(parentChildRelationship))) {
+                flash.message = 'Relationship to Parent is required!'
+            } else {
+                if (StringUtils.isNotBlank(parentChildRelationship)) {
+                    hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
+                }
+                def statsModifier = null
+                if (params.statisticId) {
+                    statsModifier = Element.get(params.statisticId)
+                }
 
-            def statsModifier = null
-            if (params.statisticId) {
-                statsModifier = Element.get(params.statisticId)
+
+                def entryUnit = null
+                if (params.entryUnitName) {
+                    entryUnit = Element.findByLabel(params.entryUnitName)
+                }
+
+                Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                flash.message = "Successfully added measure " + newMeasure.displayLabel
             }
-
-            def entryUnit = null
-            if (params.entryUnitName) {
-                entryUnit = Element.findByLabel(params.entryUnitName)
-            }
-
-            Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-            flash.message = "Successfully added measure " + newMeasure.displayLabel
 
         }
         redirect(action: "editMeasure", id: params.id)
@@ -145,18 +160,21 @@ class AssayDefinitionController {
 
     def associateContext() {
         def measure = Measure.get(params.measureId)
-        def context = AssayContext.get(params.assayContextId)
+        def context = null
+        if (params.assayContextId && 'null' != params.assayContextId) {
+            context = AssayContext.get(params.assayContextId)
+        }
 
         if (measure == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
         } else if (context == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
         } else {
             flash.message = null
             assayContextService.associateContext(measure, context)
         }
 
-        redirect(action: "editMeasure", id: context.assay.id)
+        redirect(action: "editMeasure", id: params.id)
     }
 
     def changeRelationship() {
@@ -262,10 +280,7 @@ class AssayDefinitionController {
     def deleteEmptyCard(Long assay_context_id) {
         AssayContext assayContext = AssayContext.findById(assay_context_id)
         Assay assay = assayContext.assay
-        if (assayContext.assayContextItems.size() == 0) {
-            assay.removeFromAssayContexts(assayContext)
-            assayContext.delete(flush: true)
-        }
+        assayContextService.deleteAssayContext(assayContext)
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
@@ -330,13 +345,13 @@ class AssayDefinitionController {
         render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy) {
-        def assayInstance = Assay.findById(instanceId)
-        assayInstance.assayName = assayName
-        assayInstance.designedBy = designedBy
-        assayInstance.assayStatus = AssayStatus.valueOf(AssayStatus.class, assayStatus)
-        assayInstance.save(flush: true)
-        assayInstance = Assay.findById(instanceId)
+    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy, String assayType) {
+        boolean recomputeAssayShortName = assayContextService.editSummary(instanceId,assayStatus,assayName,designedBy,assayType)
+
+        Assay assayInstance = Assay.findById(instanceId)
+        if(recomputeAssayShortName){
+            assayInstance = assayService.recomputeAssayShortName(assayInstance)
+        }
         render(template: "summaryDetail", model: [assay: assayInstance])
     }
 
@@ -352,6 +367,12 @@ class AssayDefinitionController {
             parentMeasure = Measure.get(parentMeasureId)
         }
         measure.parentMeasure = parentMeasure
+        if (!measure.parentChildRelationship) {
+            if (parentMeasure) {
+                measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+            }
+        }
+
 
         render new JSONArray()
     }

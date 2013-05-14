@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap"/>
+    <r:require modules="core,bootstrap,twitterBootstrapAffix,dynatree"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>Show Experiment</title>
@@ -37,31 +37,36 @@
         <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
     </p>
 
-    <div class="row-fluid">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span3 bs-docs-sidebar">
+                <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
+                    <li><a href="#summary-header"><i class="icon-chevron-right"></i>Summary</a></li>
+                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
+                    <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+                </ul>
+            </div>
 
-        <div id="accordion-foo" class="span12 accordion">
+            <div class="span9">
+                <section id="summary-header">
+                    <div class="page-header">
+                        <h3>Summary</h3>
+                    </div>
 
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
-                       data-target="#target-contexts-info">
-                        <i class="icon-chevron-down"></i>
-                        Summary
-                    </a>
-                </div>
-
-                <div class="accordion-body in collapse">
-                    <div class="accordion-inner">
+                    <div class="row-fluid">
                         <%-- Added &nbsp; because there appears to be some problem with dd tags that causes them to shift up a row if a dd tag no content.  Need to investigate this further later. --%>
                         <dl class="dl-horizontal">
                             <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
-                                                  id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
+                                                      id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
                             <dt>Experiment Name</dt><dd>${instance.experimentName}&nbsp;</dd>
                             <dt>Description</dt><dd>${instance.description}&nbsp;</dd>
                             <dt>Status</dt><dd>${instance.experimentStatus}&nbsp;</dd>
-                            <dt>Hold until</dt><dd><g:formatDate format="MM/dd/yyyy" date="${instance.holdUntilDate}"/></dd>
-                            <dt>Run Date from</dt><dd><g:formatDate format="MM/dd/yyyy" date="${instance.runDateFrom}"/></dd>
-                            <dt>Run Date to</dt><dd><g:formatDate format="MM/dd/yyyy" date="${instance.runDateTo}"/></dd>
+                            <dt>Hold until</dt><dd><g:formatDate format="MM/dd/yyyy"
+                                                                 date="${instance.holdUntilDate}"/></dd>
+                            <dt>Run Date from</dt><dd><g:formatDate format="MM/dd/yyyy"
+                                                                    date="${instance.runDateFrom}"/></dd>
+                            <dt>Run Date to</dt><dd><g:formatDate format="MM/dd/yyyy"
+                                                                  date="${instance.runDateTo}"/></dd>
                         </dl>
 
                         <p>External references</p>
@@ -82,9 +87,11 @@
                             </g:each>
                         </ul>
 
-                        <g:link controller="results" action="configureTemplate" params="${[experimentId: instance.id]}"
+                        <g:link controller="results" action="configureTemplate"
+                                params="${[experimentId: instance.id]}"
                                 class="btn">Download a template</g:link>
-                        <a href="#uploadResultsModal" role="button" class="btn" data-toggle="modal">Upload results</a>
+                        <a href="#uploadResultsModal" role="button" class="btn"
+                           data-toggle="modal">Upload results</a>
                         <%-- Dialog for uploading results --%>
                         <div id="uploadResultsModal" class="modal fade" tabindex="-1" role="dialog"
                              aria-labelledby="uploadResultsModalLabel" aria-hidden="true">
@@ -93,7 +100,8 @@
                             </div>
 
                             <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data" action="${createLink(action: "uploadResults", controller:"results")}"
+                                <form method="POST" enctype="multipart/form-data"
+                                      action="${createLink(action: "uploadResults", controller: "results")}"
                                       id="uploadResultsForm">
                                     <p>Uploading results will replace any results already stored for this experiment.</p>
 
@@ -110,59 +118,38 @@
                         </div>
 
                         <r:script>
-                            console.log("h")
                             $("#uploadResultsButton").on("click", function () {
-                                console.log("b")
-                                $("#uploadResultsForm").submit()
+                                $("#uploadResultsForm").submit();
                             })
                         </r:script>
-
                     </div>
-                </div>
-            </div>
-
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#measures-header" id="measures-header" class="accordion-toggle" data-toggle="collapse"
-                       data-target="#target-measures-info">
-                        <i class="icon-chevron-down"></i>
-                        Measures
-                    </a>
-                </div>
-
-                <div id="target-measures-info" class="accordion-body in collapse">
-                    <div class="accordion-inner">
-
-                        <r:require module="dynatree"/>
-                        <div id="measure-tree"></div>
-                        <r:script>
-                            $("#measure-tree").dynatree({
-                                children: ${ measuresAsJsonTree } })
-                        </r:script>
+                </section>
+                <section id="contexts-header">
+                    <div class="page-header">
+                        <h3>Contexts</h3>
                     </div>
-                </div>
-            </div>
 
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#contexts-header" id="contexts-header" class="accordion-toggle" data-toggle="collapse"
-                       data-target="#target-contexts-info">
-                        <i class="icon-chevron-down"></i>
-                        Contexts
-                    </a>
-                </div>
-
-                <div id="target-contexts-info" class="accordion-body in collapse">
-                    <div class="accordion-inner">
+                    <div class="row-fluid">
                         <g:render template="../context/show"
                                   model="[contextOwner: instance, contexts: instance.groupContexts(), uneditable: true]"/>
                     </div>
-                </div>
+                </section>
+                <section id="measures-header">
+                    <div class="page-header">
+                        <h3>Measures</h3>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div id="measure-tree"></div>
+                        <r:script>
+                            $("#measure-tree").dynatree({
+                                children: ${measuresAsJsonTree} })
+                        </r:script>
+                    </div>
+                </section>
             </div>
-
-        </div>    <!-- End accordion -->
+        </div>
     </div>
-
 </g:if>
 
 </body>

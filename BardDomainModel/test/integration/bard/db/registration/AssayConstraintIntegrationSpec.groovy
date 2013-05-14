@@ -2,10 +2,9 @@ package bard.db.registration
 
 import bard.db.BardIntegrationSpec
 import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
-import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.registration.Assay.*
@@ -41,11 +40,11 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc             | valueUnderTest               | valid | errorCode
-        'null not valid' | null                         | false | 'nullable'
-        'valid value'    | AssayStatus.DRAFT            | true  | null
-        'valid value'    | AssayStatus.APPROVED         | true  | null
-        'valid value'    | AssayStatus.RETIRED          | true  | null
+        desc             | valueUnderTest       | valid | errorCode
+        'null not valid' | null                 | false | 'nullable'
+        'valid value'    | AssayStatus.DRAFT    | true  | null
+        'valid value'    | AssayStatus.APPROVED | true  | null
+        'valid value'    | AssayStatus.RETIRED  | true  | null
     }
 
     void "test assayShortName constraints #desc assayShortName: "() {
@@ -200,14 +199,12 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc               | valueUnderTest  | valid | errorCode
-        'null valid'       | null            | false | null
-        'value not inList' | 'Foo'           | false | 'not.inList'
-
-        'valid value'      | 'Regular'       | true  | null
-        'valid value'      | 'Panel - Array' | true  | null
-        'valid value'      | 'Panel - Group' | true  | null
-        'valid value'      | 'Template'      | true  | null
+        desc          | valueUnderTest        | valid | errorCode
+        'null valid'  | null                  | false | null
+        'valid value' | AssayType.REGULAR     | true  | null
+        'valid value' | AssayType.PANEL_ARRAY | true  | null
+        'valid value' | AssayType.PANEL_GROUP | true  | null
+        'valid value' | AssayType.TEMPLATE    | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
@@ -277,5 +274,6 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'null valid' | null           | true  | null
         'date valid' | new Date()     | true  | null
     }
+
 
 }

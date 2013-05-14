@@ -5,7 +5,7 @@
             %{--<input type="submit" value="Delete" class="btn btn-primary">--}%
         </g:form>
     </div>
-    <dt><g:message code="document.content.label" default="Name:"/></dt>
+    <dt><g:message code="document.name.label" default="Name:"/></dt>
     <dd><g:fieldValue bean="${document}" field="documentName"/></dd>
 
     <dt><g:message code="document.content.label" default="Content:"/></dt>

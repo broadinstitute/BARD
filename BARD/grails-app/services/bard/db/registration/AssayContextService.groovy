@@ -1,9 +1,11 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
+import bard.db.enums.HierarchyType
 import bard.db.registration.additemwizard.*
 import org.apache.commons.lang.StringUtils
-import bard.db.enums.HierarchyType
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +15,43 @@ import bard.db.enums.HierarchyType
  * To change this template use File | Settings | File Templates.
  */
 class AssayContextService {
+    public boolean editSummary(Long assayId, String assayStatus, String assayName, String designedBy, String assayType) {
+        boolean recomputeAssayShortName = false
+        boolean hasChanged = false
+        Assay assayInstance = Assay.findById(assayId)
+        if (assayInstance.assayName != assayName) {
+            assayInstance.assayName = assayName
+            hasChanged = true
+        }
+        if (assayInstance.designedBy != designedBy) {
+            assayInstance.designedBy = designedBy
+            hasChanged = true
+        }
+        if (assayInstance.assayStatus != AssayStatus.byId(assayStatus)) {
+            assayInstance.assayStatus = AssayStatus.byId(assayStatus)
+
+            hasChanged = true
+        }
+        if (assayInstance.assayType != AssayType.byId(assayType)) {
+            assayInstance.assayType = AssayType.byId(assayType)
+            recomputeAssayShortName = true
+            hasChanged = true
+        }
+        if(hasChanged){
+            assayInstance.save(flush: true)
+        }
+        return recomputeAssayShortName
+    }
+    /**
+     *
+     * @param assayContext
+     */
+    public void deleteAssayContext(AssayContext assayContext) {
+        Assay assay = assayContext.assay
+        if (assayContext.assayContextItems.isEmpty()) {
+            assay.removeFromAssayContexts(assayContext)
+        }
+    }
 
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
         if (sourceItem && sourceItem.assayContext != targetAssayContext) {
@@ -56,11 +95,13 @@ class AssayContextService {
         }
         return assayContext
     }
-    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType){
-        measure.parentChildRelationship=hierarchyType
+
+    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType) {
+        measure.parentChildRelationship = hierarchyType
         measure.save(flush: true)
         return measure
     }
+
     public void associateContext(Measure measure, AssayContext context) {
         AssayContextMeasure assayContextMeasure = new AssayContextMeasure();
         assayContextMeasure.measure = measure;
@@ -157,7 +198,7 @@ class AssayContextService {
             newAssayContextItem.setAttributeType(AttributeType.Fixed);
             if (fixedValCmd.valueQualifier) {
                 newAssayContextItem.qualifier = fixedValCmd.valueQualifier
-            } else if (fixedValCmd.isNumericValue){
+            } else if (fixedValCmd.isNumericValue) {
                 newAssayContextItem.qualifier = "= "
             }
 
@@ -180,7 +221,7 @@ class AssayContextService {
             newAssayContextItem.setAttributeType(AttributeType.List);
             if (listValCmd.valueQualifier) {
                 newAssayContextItem.qualifier = listValCmd.valueQualifier
-            } else if (listValCmd.isNumericValue){
+            } else if (listValCmd.isNumericValue) {
                 newAssayContextItem.qualifier = "= "
             }
 
@@ -207,7 +248,7 @@ class AssayContextService {
     public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
         Measure measure =
             new Measure(assay: assayInstance, resultType: resultType, statsModifier: statsModifier,
-                    entryUnit: entryUnit, parentMeasure: parentMeasure ,parentChildRelationship: hierarchyType);
+                    entryUnit: entryUnit, parentMeasure: parentMeasure, parentChildRelationship: hierarchyType);
         assayInstance.addToMeasures(measure)
         measure.save()
 

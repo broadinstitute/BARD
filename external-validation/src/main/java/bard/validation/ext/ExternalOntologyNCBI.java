@@ -3,7 +3,6 @@ package bard.validation.ext;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -59,23 +58,13 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 			return new ExternalOntologyNCBI(db, props.getProperty(NCBI_TOOL), props.getProperty(NCBI_EMAIL));
 		}
 	}
-	private static Set<String> databases = new HashSet<String>();
+	private static Set<String> databases = null;
 	public static String NCBI_EMAIL = "ncbi.email";
 	public static String NCBI_TOOL = "ncbi.tool";
-	static {
-		try {
-			EUtilsWeb web = new EUtilsWeb("BARD-CAP", "anonymous@bard.nih.gov");
-			databases.addAll(web.getDatabases());
-		} catch (EUtilsException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
 
 	private int chunkSize = 100000;
 	private String database;
-
 	private EUtilsWeb eutils;
-
 	private Transformer transformer;
 
 	/**
@@ -91,6 +80,7 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 	 * @throws ExternalOntologyException
 	 */
 	public ExternalOntologyNCBI(String database, String tool, String email) throws ExternalOntologyException {
+		init(database, tool, email);
 		this.database = database;
 		if (!databases.contains(database))
 			throw new ExternalOntologyException("Unknown NCBI database " + database);
@@ -98,6 +88,19 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 		if (transformer == null)
 			throw new ExternalOntologyException("Cannot find Transformer for NCBI database " + database);
 		eutils = new EUtilsWeb(tool, email);
+	}
+	
+	private void init(String databaase, String tool, String email) throws ExternalOntologyException {
+		try {
+			if( databases == null )
+				synchronized(ExternalOntologyNCBI.class) {
+					if( databases == null )
+						databases = new EUtilsWeb(tool, email).getDatabases();
+				}
+		}
+		catch(Exception ex) {
+			throw new ExternalOntologyException(ex);
+		}
 	}
 
 	/**

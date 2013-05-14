@@ -27,7 +27,7 @@
 				<li class="fieldcontain">
 					<span id="assayStatus-label" class="property-label"><g:message code="assay.assayStatus.label" default="Assay Status" /></span>
 
-						<span class="property-value" aria-labelledby="assayStatus-label"><g:fieldValue bean="${assayInstance}" field="assayStatus"/></span>
+						<span class="property-value" aria-labelledby="assayStatus-label"><g:fieldValue bean="${assayInstance}" field="assayStatus.id"/></span>
 
 				</li>
 				</g:if>
@@ -81,7 +81,7 @@
 				<li class="fieldcontain">
 					<span id="assayType-label" class="property-label"><g:message code="assay.assayType.label" default="Assay Type" /></span>
 
-						<span class="property-value" aria-labelledby="assayType-label"><g:fieldValue bean="${assayInstance}" field="assayType"/></span>
+						<span class="property-value" aria-labelledby="assayType-label"><g:fieldValue bean="${assayInstance}" field="assayType.id"/></span>
 
 				</li>
 				</g:if>

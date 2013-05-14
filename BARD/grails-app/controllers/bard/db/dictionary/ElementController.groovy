@@ -7,7 +7,7 @@ import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import groovy.transform.InheritConstructors
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class ElementController {
 
     private static final String errorMessageKey = "errorMessageKey"

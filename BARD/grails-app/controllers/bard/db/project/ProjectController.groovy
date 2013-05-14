@@ -7,7 +7,7 @@ import bard.db.registration.Assay
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService

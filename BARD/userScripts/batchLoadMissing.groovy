@@ -4,10 +4,17 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import bard.db.experiment.PubchemReformatService
 import bard.db.registration.ExternalReference
 import java.text.SimpleDateFormat
+import org.apache.commons.lang.exception.ExceptionUtils
 
-pubchemFileDir = "/Users/pmontgom/data/pubchem-conversion/pubchem-files"
-convertedFileDir = "/Users/pmontgom/data/pubchem-conversion/converted-files"
-aidListFilename = "/Users/pmontgom/data/pubchem-conversion/dataset2-small.txt"
+pubchemPrefix=System.getProperty("pubchemPrefix", "/cbplat/bard/pubchem_files")
+
+
+pubchemFileDir = "${pubchemPrefix}/pubchem-files"
+convertedFileDir = "${pubchemPrefix}/converted-files"
+aidListFilename = System.getProperty("aidFile")
+if(aidListFilename == null) {
+	throw new RuntimeException("Need filename to read AIDs from.  Specify with -DaidFile=filename")
+}
 
 boolean forceReloadResults = false;
 boolean forceRecreateMeasures = true;
@@ -46,7 +53,14 @@ recreateMeasuresAndLoad = { aid ->
         return
     }
 
-    def map = pubchemReformatService.loadMap(Long.parseLong(aid))
+    def map
+    try {
+        map = pubchemReformatService.loadMap(Long.parseLong(aid))
+    } catch (Exception ex) {
+                log("failed to load result map: ${aid}")
+                log("Exception while loading result map: ${ExceptionUtils.getStackTrace(ex)}")
+                return
+    }
 
     if(map.allRecords.size() == 0) {
         log("Skipping ${aid} -> ${ref.experiment.id} because we're missing resultmapping")
@@ -67,7 +81,13 @@ recreateMeasuresAndLoad = { aid ->
 
     if (forceConvertPubchem || !(new File(capFile).exists())) {
         log("Converting pubchem file ${pubchemFile} -> ${capFile}")
-        pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
+	try {
+	        pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
+	} catch (Exception ex) {
+		log("failed to convert pubchem file: ${aid}")
+		log("Exception while converting: ${ExceptionUtils.getStackTrace(ex)}")
+		return
+	}
     }
 
     log("Importing ${aid}...")
@@ -90,26 +110,18 @@ recreateMeasuresAndLoad = { aid ->
     }
 }
 
-copyResultMap = {
-    log("copying result map from southern.result_map")
-    ExternalReference.withSession { session -> 
-        session.createSQLQuery("""
-        BEGIN
-          delete from result_map;
-          insert into result_map select * from southern.result_map@barddev;
-        END;
-        """).executeUpdate()
-    }
-}
-
 recreateMeasures = { aid ->
     ExternalReference.withSession { session -> 
+        def lastErrorId = session.createSQLQuery("""select max(error_log_id) from error_log""").setCacheable(false).uniqueResult()
         session.createSQLQuery("""
         BEGIN
           result_map_util.transfer_result_map('${aid}');
         END;
         """).executeUpdate()
-
+	def errors = session.createSQLQuery("""select err_msg || ' '|| ERR_COMMENT from error_log where error_log_id > ${lastErrorId}""").setCacheable(false).list()
+	if(errors.size() > 0) {
+		throw new RuntimeException("result_map_util.transfer_result_map('${aid}') failed: ${errors}")
+	}
 	session.clear()
     }
 }
@@ -121,7 +133,6 @@ readAids = { filename ->
 aids = readAids(aidListFilename)
 log("Processing ${aids.size} AIDs from ${aidListFilename}")
 
-copyResultMap()
 for(aid in aids) {
   if(Thread.currentThread().isInterrupted()) 
       break

@@ -9,6 +9,7 @@ class Element extends AbstractElement {
     Set<TreeRoot> treeRoots = [] as Set<TreeRoot>
     Set<OntologyItem> ontologyItems = [] as Set<OntologyItem>
     String comments //Used in UI to explain why you are adding a new term
+    Element replacedBy // when an element is retired, this can be set to indicate what term should be used in its place.
 
     /**
      * the element hierarchy objects that have this element as the parentElement

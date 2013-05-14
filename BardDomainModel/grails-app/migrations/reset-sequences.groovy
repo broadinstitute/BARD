@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-    changeSet(author: "ddurkin", id: "reset sequneces", dbms: 'oracle', context:'standard,load-data,delete-data',runAlways: 'true') {
+    changeSet(author: "ddurkin", id: "reset sequneces", dbms: 'oracle', context:'load-data,delete-data',runAlways: 'true') {
         grailsChange {
             change {
                 def sequenceNames = []

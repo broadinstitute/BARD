@@ -48,7 +48,8 @@ AS
           AID             southern.result_map.aid%type,
           RESULTTYPE      southern.result_map.resultType%type,
           STATS_MODIFIER  southern.result_map.stats_modifier%type,
-          relationship    southern.result_map.relationship%TYPE,
+--          relationship    southern.result_map.relationship%TYPE,
+          relationship    VARCHAR2(20),
           TID             southern.result_map.tid%type,
           --entry_unit      southern.result_map.concentrationunit%TYPE,
           entry_unit      VARCHAR2(10),
@@ -182,100 +183,6 @@ as
 
     END delete_measure;
 
-    function save_measure (ani_parent_measure_id IN NUMBER,
-                          ari_measure IN r_resulttype)
-        RETURN NUMBER
-    AS
-        ln_measure_id     NUMBER := null;
-        Ln_entry_unit_id  NUMBER;
-
-        CURSOR cur_measure
-        IS
-        SELECT measure_id
-        FROM measure
-        WHERE assay_id = ari_measure.assay_id
-          AND result_type_id = ari_measure.result_type_id
-          AND Nvl(stats_modifier_id, -100) = Nvl(ari_measure.stats_modifier_id, -100)
-          AND Nvl(parent_measure_id, -200) = Nvl(ani_parent_measure_id, -200);
-
-    BEGIN
-        -- check the arguments
-         IF ari_measure.assay_id IS NULL
-        OR ari_measure.result_type_id IS NULL
-        THEN
-            ln_measure_id := -1;
-            RETURN ln_measure_id;
-        END IF;
-
-       -- try to find an existing measure using the AK
-        OPEN cur_measure;
-        FETCH cur_measure INTO ln_measure_id;
-        CLOSE cur_measure;
-
-        -- if it exists update parent_measure_id and units
-            -- and return the measure_id
-        -- if not insert a new measure row
-        IF ln_measure_id IS NULL
-        THEN
-            -- find the appropriate entry unit
-            IF ari_measure.entry_unit IS NOT NULL
-            THEN
-                BEGIN
-                    -- use unit_tree 'cos this handles abreviations like Result_map does
-                    SELECT unit_id
-                    INTO ln_entry_unit_id
-                    FROM unit_tree
-                    WHERE unit = ari_measure.entry_unit;
-                EXCEPTION
-                WHEN OTHERS THEN
-                    ln_entry_unit_id := NULL;
-                END;
-            END IF;
-            -- if we can't use or find the specified one, try the default for the result type
-            IF ln_entry_unit_id IS NULL
-            THEN
-                SELECT unit_id
-                INTO ln_entry_unit_id
-                FROM element
-                WHERE element_id = ari_measure.result_type_id;
-            END IF;
-
-            ln_measure_id := get_new_id ('measure_id_seq');
-
-            INSERT INTO measure
-                (Measure_id,
-                 assay_id,
-                 result_type_id,
-                 stats_modifier_id,
-                 entry_unit_id,
-                 parent_measure_id,
-                 version,
-                 date_created,
-                 last_updated,
-                 modified_by)
-            VALUES
-                (ln_Measure_id,
-                 ari_measure.assay_id,
-                 ari_measure.result_type_id,
-                 ari_measure.stats_modifier_id,
-                 ln_entry_unit_id,
-                 ani_parent_measure_id,
-                 0,
-                 sysdate,
-                 null,
-                 pv_modified_by);
---        ELSE
---            UPDATE measure
---            SET entry_unit_id = ln_entry_unit_id
---            WHERE measure_id = ln_measure_id
---            AND Nvl(entry_unit_id, -100) != Nvl(ln_entry_unit_id, -100);
-
-        END IF;
-
-        RETURN ln_measure_id;
-
-    END save_measure;
-
     procedure log_error (an_errnum    in  number,
                         av_errmsg     in varchar2,
                         av_location   in varchar2,
@@ -304,6 +211,114 @@ as
         then
             null;
     end log_error;
+
+    function save_measure (ani_parent_measure_id IN NUMBER,
+                          ari_measure IN r_resulttype)
+        RETURN NUMBER
+    AS
+        ln_measure_id     NUMBER := null;
+        Ln_entry_unit_id  NUMBER;
+
+        CURSOR cur_measure
+        IS
+        SELECT measure_id
+        FROM measure
+        WHERE assay_id = ari_measure.assay_id
+          AND result_type_id = ari_measure.result_type_id
+          AND Nvl(stats_modifier_id, -100) = Nvl(ari_measure.stats_modifier_id, -100)
+          AND Nvl(parent_measure_id, -200) = Nvl(ani_parent_measure_id, -200);
+
+    BEGIN
+        -- check the arguments
+         IF ari_measure.assay_id IS NULL
+        OR ari_measure.result_type_id IS NULL
+        THEN
+            ln_measure_id := -1;
+            log_error (-90005, 'No result type specified', 'Save_measure',
+                'assay_ID= '|| To_Char(ari_measure.assay_id)
+                || ', result_type_id= ' || To_Char(ari_measure.result_type_id)
+                || ', AID= ' || To_Char(ari_measure.aid)
+                || ', resultType= ' || ari_measure.resultType);
+            RETURN ln_measure_id;
+        END IF;
+        IF (ani_parent_measure_id IS NULL AND ari_measure.relationship IS null)
+            OR
+            (ani_parent_measure_id IS NOT NULL AND ari_measure.relationship IS NOT null)
+        THEN
+          -- try to find an existing measure using the AK
+            OPEN cur_measure;
+            FETCH cur_measure INTO ln_measure_id;
+            CLOSE cur_measure;
+
+            -- if it exists update parent_measure_id and units
+                -- and return the measure_id
+            -- if not insert a new measure row
+            IF ln_measure_id IS NULL
+            THEN
+                -- find the appropriate entry unit
+                IF ari_measure.entry_unit IS NOT NULL
+                THEN
+                    BEGIN
+                        -- use unit_tree 'cos this handles abreviations like Result_map does
+                        SELECT unit_id
+                        INTO ln_entry_unit_id
+                        FROM unit_tree
+                        WHERE unit = ari_measure.entry_unit;
+                    EXCEPTION
+                    WHEN OTHERS THEN
+                        ln_entry_unit_id := NULL;
+                    END;
+                END IF;
+                -- if we can't use or find the specified one, try the default for the result type
+                IF ln_entry_unit_id IS NULL
+                THEN
+                    SELECT unit_id
+                    INTO ln_entry_unit_id
+                    FROM element
+                    WHERE element_id = ari_measure.result_type_id;
+                END IF;
+
+                ln_measure_id := get_new_id ('measure_id_seq');
+
+                INSERT INTO measure
+                    (Measure_id,
+                    assay_id,
+                    result_type_id,
+                    stats_modifier_id,
+                    entry_unit_id,
+                    parent_measure_id,
+                    parent_child_relationship,     -- add this column 4/25/13 SJC
+                    version,
+                    date_created,
+                    last_updated,
+                    modified_by)
+                VALUES
+                    (ln_Measure_id,
+                    ari_measure.assay_id,
+                    ari_measure.result_type_id,
+                    ari_measure.stats_modifier_id,
+                    ln_entry_unit_id,
+                    ani_parent_measure_id,
+                    ari_measure.relationship,     -- add this column 4/25/13 SJC
+                    0,
+                    sysdate,
+                    null,
+                    pv_modified_by);
+
+            END IF;
+
+        ELSE
+            log_error (-90004, 'Null parentage in Measure', 'Save_measure',
+                'AID='|| To_Char(ari_measure.Aid)
+                || ', resultType=' || ari_measure.resultType
+                || ', parent_measure_id=' || To_Char(ani_parent_measure_id)
+                || ', parent_child_relationship=' || ari_measure.relationship);
+            ln_measure_id := -1;
+        END IF;
+        RETURN ln_measure_id;
+
+
+    END save_measure;
 
     PROCEDURE separate_value_unit (avi_value_string IN  varchar2,
                                     avio_value_num IN OUT number,
@@ -521,7 +536,7 @@ as
                     lr_context_item.assay_id is NULL
                 THEN
                     -- log the error;
-                    log_error (-90002, 'Attribute not in Element', 'save_context_item_set',
+                    log_error (-90002, 'Attribute not in Element', 'save_exprmt_context_item_set',
                             'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
                             || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
                             || ', contextItem/attribute1=' || lr_context_item.contextItem
@@ -534,7 +549,7 @@ as
                     and lr_context_item.attribute_type != 'Free'
                 THEN
                     -- log the error;
-                    log_error (-90003, 'WARNING: no value specified', 'save_context_item_set',
+                    log_error (-90003, 'WARNING: no value_id available', 'save_exprmt_context_item_set',
                             'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
                             || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
                             || ', attribute=' || lr_context_item.contextItem
@@ -611,10 +626,17 @@ as
               rm.entry_unit,
               rm.series_nos,
               rm.parent_tids
-        FROM (SELECT aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit) entry_unit,
-            --listagg(relationship, ',') within GROUP (ORDER BY tid) relationship,
-            listagg(seriesno, ',') within GROUP (ORDER BY tid) series_nos,
-            listagg(parenttid, ',') within GROUP (ORDER BY tid) parent_tids
+        FROM (SELECT aid,
+                resulttype,
+                stats_modifier,
+                Decode (Lower(relationship),
+                      'derives', 'calculated from',
+                      'child', 'supported by',
+                      relationship) relationship,  -- change this to do the translation  4/25/2013
+                tid,
+                Decode(contextitem, NULL, concentrationunit) entry_unit,
+                listagg(seriesno, ',') within GROUP (ORDER BY tid) series_nos,
+                listagg(parenttid, ',') within GROUP (ORDER BY tid) parent_tids
             FROM southern.result_map
             WHERE aid = cn_aid   --1705
               AND resulttype IS NOT NULL
@@ -698,7 +720,7 @@ as
                   AND aci2.assay_context_id < aci.assay_context_id)
               AND aci.assay_id = lr_assay_experiment.assay_id;
 
-            update_context_name(lr_rm_resulttype.assay_id);
+            manage_names.update_context_name(lr_rm_resulttype.assay_id);
 
         END LOOP;
 
@@ -905,7 +927,7 @@ as
                     and lr_context_item.attribute_type != 'Free'
                 THEN
                     -- log the error;
-                    log_error (-90003, 'WARNING: no value specified', 'save_context_item_set',
+                    log_error (-90003, 'WARNING: no value_id available', 'save_context_item_set',
                             'resultType=' || lr_context_item.resultType || lr_context_item.statsmodifier
                             || ', Attr_Id='|| To_Char(lr_context_item.attribute_id)
                             || ', attribute=' || lr_context_item.contextItem
@@ -1024,25 +1046,35 @@ as
 
         IF ln_exists = 0 OR ln_exists IS null
         THEN
-            ln_exprmt_measure_id := get_new_id ('exprmt_measure_id_seq');
-            INSERT INTO exprmt_measure
-                (exprmt_measure_id,
-                parent_exprmt_measure_id,
-                parent_child_relationship,
-                experiment_id,
-                measure_id,
-                modified_by)
-            VALUES( ln_exprmt_measure_id,
-                ln_parent_exprmt_measure_id,
-                Decode (Lower(Trim(avi_relationship)),
-                                      'derives', 'Derived from',
-                                      'child', 'has Child',
-                                      'sibling', 'has Sibling',
-                                      'has Child'),
-                ani_experiment_id,
-                ani_measure_id,
-                pv_modified_by);
-
+            IF (avi_relationship IS NULL AND ln_parent_exprmt_measure_id IS NULL)
+                OR
+               (avi_relationship IS NOT NULL AND ln_parent_exprmt_measure_id IS NOT NULL)
+            THEN
+                ln_exprmt_measure_id := get_new_id ('exprmt_measure_id_seq');
+                INSERT INTO exprmt_measure
+                    (exprmt_measure_id,
+                    parent_exprmt_measure_id,
+                    parent_child_relationship,
+                    experiment_id,
+                    measure_id,
+                    modified_by)
+                VALUES( ln_exprmt_measure_id,
+                    ln_parent_exprmt_measure_id,
+                  -- Decode (Lower(Trim(avi_relationship)),
+                  --        'derives', 'Derived from',
+                  --        'child', 'has Child',
+                  --        'sibling', 'has Sibling',
+                  --        'has Child'),
+                    avi_relationship,   -- no translation needed here, it's done at the select from result_map  4-25-13 - SJC
+                    ani_experiment_id,
+                    ani_measure_id,
+                    pv_modified_by);
+            ELSE
+                log_error (-90004, 'Null parentage in Exprmt_measure', 'Save_exprmt_measure',
+                    'measure_ID='|| To_Char(ani_measure_id)
+                    || ', parent_measure_id=' || To_Char(ln_parent_exprmt_measure_id)
+                    || ', parent_child_relationship=' || avi_relationship);
+            END IF;
         END IF;
     END save_exprmt_measure;
 
@@ -1072,10 +1104,17 @@ as
               rm.entry_unit,
               rm.series_nos,
               rm.parent_tids
-        FROM (SELECT aid, resulttype, stats_modifier, relationship, tid, Decode(contextitem, NULL, concentrationunit) entry_unit,
-            --listagg(relationship, ',') within GROUP (ORDER BY tid) relationship,
-            listagg(seriesno, ',') within GROUP (ORDER BY tid) series_nos,
-            listagg(parenttid, ',') within GROUP (ORDER BY tid) parent_tids
+        FROM (SELECT aid,
+                resulttype,
+                stats_modifier,
+                Decode (Lower(relationship),
+                      'derives', 'calculated from',
+                      'child', 'supported by',
+                      relationship) relationship,  -- change this to do the translation  4/25/2013
+                tid,
+                Decode(contextitem, NULL, concentrationunit) entry_unit,
+                listagg(seriesno, ',') within GROUP (ORDER BY tid) series_nos,
+                listagg(parenttid, ',') within GROUP (ORDER BY tid) parent_tids
             FROM southern.result_map
             WHERE aid = cn_aid
               AND resulttype IS NOT NULL

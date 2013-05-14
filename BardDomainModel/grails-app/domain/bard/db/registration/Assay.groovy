@@ -1,21 +1,21 @@
 package bard.db.registration
 
 import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.AssayStatusEnumUserType
+import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextOwner
 
 class Assay extends AbstractContextOwner {
-    private static final int ASSAY_NAME_MAX_SIZE = 1000
+    public static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     private static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
-    public static String TEMPLATE_ASSAY_TYPE = "Template"
-    public static String REGULAR_ASSAY_TYPE = "Regular"
 
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
@@ -23,7 +23,7 @@ class Assay extends AbstractContextOwner {
     String assayVersion
     String designedBy
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
-    String assayType = REGULAR_ASSAY_TYPE
+    AssayType assayType = AssayType.REGULAR
 
     String modifiedBy
     // grails auto-timestamp
@@ -35,10 +35,12 @@ class Assay extends AbstractContextOwner {
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
-    static hasMany = [experiments: Experiment,
+    static hasMany = [
+            experiments: Experiment,
             measures: Measure,
             assayContexts: AssayContext,
-            assayDocuments: AssayDocument]
+            assayDocuments: AssayDocument
+    ]
 
     static constraints = {
         assayStatus()
@@ -49,8 +51,7 @@ class Assay extends AbstractContextOwner {
         readyForExtraction(nullable: false)
         // TODO we can use enum mapping for this http://stackoverflow.com/questions/3748760/grails-enum-mapping
         // the ' - ' is this issue in this case
-        assayType(inList: ['Regular', 'Panel - Array', 'Panel - Group', 'Template'])
-
+        assayType(nullable: false)
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
@@ -60,7 +61,8 @@ class Assay extends AbstractContextOwner {
         id(column: "ASSAY_ID", generator: "sequence", params: [sequence: 'ASSAY_ID_SEQ'])
         assayStatus(type: AssayStatusEnumUserType)
         readyForExtraction(type: ReadyForExtractionEnumUserType)
-        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true')
+        assayType(type: AssayTypeEnumUserType)
+        assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
     static transients = ['assayContextItems']
@@ -105,6 +107,6 @@ class Assay extends AbstractContextOwner {
     }
 
     boolean allowsNewExperiments() {
-        return (assayStatus != AssayStatus.RETIRED && assayType != TEMPLATE_ASSAY_TYPE && measures.size() > 0)
+        return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE && measures.size() > 0)
     }
 }
