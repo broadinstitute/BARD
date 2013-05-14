@@ -34,6 +34,7 @@ class Element extends AbstractElement {
     ]
     static constraints = {
         comments(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
+        replacedBy(nullable: true)
     }
     OntologyBreadcrumb getOntologyBreadcrumb(){
         return new OntologyBreadcrumb(this)
