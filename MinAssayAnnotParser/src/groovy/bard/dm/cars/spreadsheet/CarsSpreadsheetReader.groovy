@@ -38,7 +38,6 @@ class CarsSpreadsheetReader {
             if (projectUidString) {
                 try {
                     Integer projectUid = Integer.valueOf(projectUidString)
-                    println(projectUid)
 
                     if (projectUidsToLoadSet.contains(projectUid)) {
                         CarsProject project = projectUidProjectMap.get(projectUid)
