@@ -271,7 +271,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
     /**
-     * For now use dummy routine to pull back real data from v12 of the API
+     * As of version 17 of the NCGC API we have real data
      */
     void "test working with Current compound summary information"(){
         given:
@@ -281,8 +281,8 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         LinkedHashMap activeInactiveData = ringManagerService.retrieveActiveInactiveDataFromCompound(compoundSummary)
 
         then:
-        activeInactiveData ["hits"].size ()   == 0
-        activeInactiveData ["misses"].size ()   == 0
+        activeInactiveData ["hits"].size ()    > 0
+        activeInactiveData ["misses"].size ()   > 0
     }
 
 
@@ -310,7 +310,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         Boolean classDataExists = ringManagerService.classDataExistsForThisCompound(compoundSummary)
 
         then:
-        classDataExists == false
+        classDataExists == true
     }
 
 
