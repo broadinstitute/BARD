@@ -48,6 +48,7 @@ class ContextHandlerService {
         else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
             Float val = new Float(contextItemDto.value)
             contextItem.valueNum = val
+            contextItem.qualifier = "= "
             //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
             contextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
         }
