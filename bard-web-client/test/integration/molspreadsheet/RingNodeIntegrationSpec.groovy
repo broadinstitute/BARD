@@ -6,6 +6,7 @@ import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import grails.plugin.spock.IntegrationSpec
 import bard.core.rest.spring.util.RingNode
+import groovy.json.JsonBuilder
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +19,80 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
     SunburstCacheService sunburstCacheService
     RingManagerService ringManagerService
     CompoundRestService compoundRestService
+
+
+
+    void "test getLinkedAnnotationData"(){
+        given:
+        final List<Long> aids = [25, 26, 27]
+
+        when:
+        LinkedHashMap<Long, LinkedHashMap <String,List<String>>> accumulatedAnnotationInformation = ringManagerService.getLinkedAnnotationData (aids)
+
+        then:
+        accumulatedAnnotationInformation
+        accumulatedAnnotationInformation.keySet().size()==3
+        accumulatedAnnotationInformation[25L]
+        accumulatedAnnotationInformation[25L]["assay type".replaceAll(/\s/,"_")]
+        accumulatedAnnotationInformation[25L]["assay format".replaceAll(/\s/,"_")]
+        (!accumulatedAnnotationInformation[25L]["GO biological process term".replaceAll(/\s/,"_")])
+        accumulatedAnnotationInformation[26L]["GO biological process term".replaceAll(/\s/,"_")]
+        accumulatedAnnotationInformation[26L].keySet().size()==3
+        accumulatedAnnotationInformation[27L].keySet().size()==3
+    }
+
+
+
+    void "test combineLinkedAnnotationDataWithTargetInformation"(){
+        given:
+        final List<Long> aids = [26]
+
+        when:
+        LinkedHashMap<Long, LinkedHashMap <String,List<String>>> accumulatedAnnotationInformation = ringManagerService.getLinkedAnnotationData (aids)
+        ringManagerService.combineLinkedAnnotationDataWithTargetInformation ( accumulatedAnnotationInformation, null )
+
+        then:
+        accumulatedAnnotationInformation.getClass().name
+    }
+
+    void "test convertDataIntoJson"(){
+        given:
+        final List<Long> aids = [25,26,27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 32, 43, 44, 45]
+
+        when:
+        LinkedHashMap<Long, LinkedHashMap <String,List<String>>> accumulatedAnnotationInformation = ringManagerService.getLinkedAnnotationData (aids)
+        ArrayList<Map> superSimpleList = []
+        for (Long aid in accumulatedAnnotationInformation.keySet())   {
+            LinkedHashMap <String,List<String>> value =  accumulatedAnnotationInformation [aid]
+            LinkedHashMap <String,String> elementsOfAnAssay = [:]
+            for (String elementKey in value.keySet()) {
+                List<String> elementValue = value [elementKey]
+                if  (elementValue.size()==0) {
+                    elementsOfAnAssay [elementKey]  = 'none'
+                }  else {
+                    elementsOfAnAssay [elementKey]  = elementValue [0]
+                }
+            }
+            Map simplifiedAnnotationInformation = [:]
+            simplifiedAnnotationInformation ['assayId'] = aid.toString()
+            simplifiedAnnotationInformation ['data'] = elementsOfAnAssay
+            superSimpleList << simplifiedAnnotationInformation
+        }
+
+        String jsonString = ringManagerService.convertDataIntoJson ( accumulatedAnnotationInformation )
+        JsonBuilder jsonBuilder = new  JsonBuilder( superSimpleList as List )
+        String superSimpleJsonString = jsonBuilder.toPrettyString()
+
+        then:
+        jsonString
+        superSimpleJsonString
+
+    }
+
+
+
+
+
 
 
     void "test sunburst machinery with the target that has no Panther classes"(){

@@ -7,11 +7,67 @@ import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.RingNode
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.assays.BardAnnotation
+import groovy.json.JsonBuilder
 
 
 class RingManagerService {
     CompoundRestService compoundRestService
     SunburstCacheService sunburstCacheService
+    AssayRestService assayRestService
+
+    /***
+     * Retrieve all the data we need to build a linked visualization based on multiple calls
+     * to the annotation data on a per assay basis. The return value will have one key for
+     * each assay, and then each assay will have multiple keyvalue pairs containing
+     * the information we came for. Those values in the inner map may have a multiplicity
+     * greater than one, so let's just return a list to be safe.
+     *
+     * @param aidList
+     * @return
+     */
+    LinkedHashMap<Long, LinkedHashMap <String,List<String>>>  getLinkedAnnotationData ( List <Long> aidList )  {
+        LinkedHashMap<Long, LinkedHashMap <String,List<String>>> returnData = [:]
+        if (aidList) {
+            for(Long aid in aidList){
+                BardAnnotation bardAnnotation = assayRestService.findAnnotations(aid)
+                LinkedHashMap <String,List<String>> mapForThisAssay = [:]
+                if (bardAnnotation)  {
+                    String keyTerm =  "GO biological process term"
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.display
+                    keyTerm =  "assay format"
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.value
+                    keyTerm =  "assay type"
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.value
+                }
+                returnData[aid]  =  mapForThisAssay
+            }
+        }
+        returnData
+    }
+
+    /***
+     * Unfortunately we have to get the target information from elsewhere and combine it with the linked annotation data.
+     * @param annotationData
+     * @param compoundSummary
+     */
+    void  combineLinkedAnnotationDataWithTargetInformation ( LinkedHashMap<Long, LinkedHashMap <String,List<String>>> annotationData, CompoundSummary compoundSummary )  {
+        // Since we currently have no target data we can safely leave this method as a no-op for now.
+        return;
+    }
+
+
+    String  convertDataIntoJson ( LinkedHashMap<Long, LinkedHashMap <String,List<String>>> annotationData )  {
+        // Since we currently have no target data we can safely leave this method as a no-op for now.
+        JsonBuilder jsonBuilder = new  JsonBuilder( annotationData )
+        jsonBuilder.toPrettyString()
+    }
+
+
+
+
+
 
     String writeRingTree( RingNode ringNode, boolean includeText, int typeOfColoring = 0 ) {
         if (typeOfColoring  == 2) {
