@@ -180,8 +180,6 @@ def loadCars(dataset_id) {
             } else if (projectPair.project != null) {
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace()
     } catch (FileNotFoundException e) {
         e.printStackTrace()
     } catch (CouldNotReadHeadersException e) {
@@ -190,6 +188,8 @@ def loadCars(dataset_id) {
         e.printStackTrace()
     } catch (ExternalReferenceMissingProjectException e) {
         e.printStackTrace()
+    }catch (Exception e) {
+        println("Exception ${e.message} ")
     }
     finally {
         final Date endDate = new Date()

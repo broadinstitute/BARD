@@ -23,13 +23,9 @@ class ExternalTermMapping {
 
     private static final Map<String, String> externalTerms
 
-    static Map<String, String> getExternalTermsMap(String fileName){
+    static Map<String, String> build(String fileName) {
         if (externalTerms)
             return externalTerms
-        return build(fileName)
-    }
-
-    static Map<String, String> build(String fileName) {
         println("in build external term mapping, read term from ${MAPPING_FILE_NAME}")
         if (StringUtils.isBlank(fileName)) {
            fileName = MAPPING_FILE_NAME

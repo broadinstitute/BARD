@@ -22,7 +22,7 @@ class ElementIdMapping {
     static Map<String, String> build(String fileName) {
         if (elementIdMapping)
             return elementIdMapping
-        println("in build element-id-mapping")
+        println("in build element-id-mapping, read from ${MAPPING_FILE_NAME}")
         if (StringUtils.isBlank(fileName)) {
             fileName = MAPPING_FILE_NAME
         }
