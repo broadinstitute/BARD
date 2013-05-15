@@ -117,7 +117,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                             if (contextItemDto.attributeType != AttributeType.Free) {
                                 Float val = new Float(contextItemDto.value)
                                 assayContextItem.valueNum = val
-                                assayContextItem.qualifier = "="
+                                assayContextItem.qualifier = "= "
                                 //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
                                 assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
                             }
