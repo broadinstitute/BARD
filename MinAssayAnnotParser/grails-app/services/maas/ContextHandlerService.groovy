@@ -48,6 +48,7 @@ class ContextHandlerService {
         else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
             Float val = new Float(contextItemDto.value)
             contextItem.valueNum = val
+            contextItem.qualifier = "= "
             //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
             contextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
         }
@@ -61,6 +62,9 @@ class ContextHandlerService {
         //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
         else if (contextItemDto.typeIn || (contextItemDto.attributeType == AttributeType.Free)) {
             contextItem.valueDisplay = contextItemDto.value
+            def attributesString = ['project lead name', 'science officer', 'assay provider name']
+            if (attributesString.contains(contextItemDto.key))
+                contextItem.extValueId = 'NA'      // put a value as a place holder in order to pass validation
         }
         else {
             final String message = "Can not handle Key: ${contextItemDto.key}, Value: ${contextItemDto.value}"

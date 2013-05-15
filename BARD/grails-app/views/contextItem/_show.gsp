@@ -1,3 +1,4 @@
+<%@ page import="bard.db.registration.AttributeType" %>
 <%--
   Created by IntelliJ IDEA.
   User: xiaorong
@@ -25,6 +26,13 @@
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">
             <tr id="${contextItem.id}" class="context_item_row ${highlightedItemId==contextItem.id?'warning':''}">
+                <td>
+                    <g:if test="${contextItem.hasProperty("attributeType")}">
+                        <g:if test="${contextItem.attributeType == AttributeType.List || contextItem.attributeType == AttributeType.Free || contextItem.attributeType == AttributeType.Range }">
+                            <a title="The value for ${contextItem.attributeElement?.label} will be specified as part of the experiment"><i class="icon-share"></i>
+                        </g:if>
+                    </g:if>
+                </td>
                 <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
                 <g:if test="${ contextItem.attributeElement?.externalURL }">
                 	<td class="valuedLabel">

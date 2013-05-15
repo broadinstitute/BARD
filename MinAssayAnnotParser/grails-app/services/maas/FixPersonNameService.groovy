@@ -48,7 +48,7 @@ class FixPersonNameService {
      * @return
      */
     def fixEachItem(AbstractContextItem item, String modifiedBy) {
-        if (item.extValueId)
+        if (item.extValueId && item.extValueId != 'NA')
             return
         if (!item.valueDisplay) {
             println("Context Item ${item.id}: No person name be found in valueDisplay field")

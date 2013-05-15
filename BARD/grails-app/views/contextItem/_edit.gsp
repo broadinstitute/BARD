@@ -1,4 +1,4 @@
-<%@ page import="bard.db.context.item.ContextItemController" %>
+<%@ page import="bard.db.registration.AttributeType; bard.db.context.item.ContextItemController" %>
 <%--
   Created by IntelliJ IDEA.
   User: xiaorong
@@ -59,6 +59,13 @@
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">
             <tr id="${contextItem.id}" class='context_item_row'>
+                <td>
+                    <g:if test="${contextItem.hasProperty("attributeType")}">
+                        <g:if test="${contextItem.attributeType == AttributeType.List || contextItem.attributeType == AttributeType.Free || contextItem.attributeType == AttributeType.Range }">
+                            <a title="The value for ${contextItem.attributeElement?.label} will be specified as part of the experiment"><i class="icon-share"></i>
+                        </g:if>
+                    </g:if>
+                </td>
                 <td class="attributeLabel">${contextItem.attributeElement?.label}</td>
                 <td class="valuedLabel">${contextItem.valueDisplay}</td>
                 <td class="deleteItemButton">

@@ -50,10 +50,26 @@ class AssayService {
         assignParentMeasures(assay, measureOldToNew)
 
         cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
-        return newAssay
+        newAssay.save(flush: true)
+        //now call the manage names stored procedure
+        //then look up and return the assay
+        return Assay.findById(newAssay.id)
 
     }
+    /**
+     * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
+     */
+    Assay recomputeAssayShortName(Assay assay) {
 
+
+        Assay.withSession { session ->
+            session.createSQLQuery("""BEGIN MANAGE_NAMES.UPDATE_ASSAY_SHORT_NAME('${assay.id}'); END;""").executeUpdate()
+        }
+        //now call the manage names stored procedure
+        //then look up and return the assay
+        return Assay.findById(assay.id)
+
+    }
     Assay cloneAssayOnly(Assay assay,
                          Date dateCreated,
                          String designedBy,
@@ -86,7 +102,7 @@ class AssayService {
             AssayContext newContext = context.clone(newAssay)
             assayContextOldToNew[context] = newContext
 
-            newContext.save(validate: false)
+            newContext.save(failOnError: true)
         }
         return assayContextOldToNew
     }

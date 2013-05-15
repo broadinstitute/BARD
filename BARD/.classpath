@@ -42,32 +42,32 @@
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="BuildConfig.groovy|*DataSource.groovy|UrlMappings.groovy|Config.groovy|BootStrap.groovy|spring/resources.groovy" kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.0/grails-app/conf">
+	<classpathentry excluding="BuildConfig.groovy|*DataSource.groovy|UrlMappings.groovy|Config.groovy|BootStrap.groovy|spring/resources.groovy" kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.1/grails-app/conf">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.0/grails-app/controllers">
+	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.1/grails-app/controllers">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.0/grails-app/i18n">
+	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.1/grails-app/i18n">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.0/grails-app/services">
+	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.1/grails-app/services">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.0/grails-app/utils">
+	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.1/grails-app/utils">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.0/grails-app/views">
+	<classpathentry kind="src" path=".link_to_grails_plugins/cbipcrowdauthentication-0.3.1/grails-app/views">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>
@@ -328,6 +328,11 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path=".link_to_grails_plugins/webxml-1.4.1/src/groovy">
+		<attributes>
+			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="src" path="/BardDomainModel">
 		<attributes>
 			<attribute name="org.grails.ide.eclipse.core.SOURCE_FOLDER" value="true"/>
 		</attributes>

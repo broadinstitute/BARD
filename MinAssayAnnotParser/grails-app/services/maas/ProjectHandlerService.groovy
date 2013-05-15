@@ -25,13 +25,14 @@ class ProjectHandlerService {
 
     def loadProjectsContext(String loadedBy, List<File> inputFiles, List<Long> mustLoadedAids, FileWriter logWriter) {
         def contextGroups = ContextGroupsBuilder.buildProjectContextGroup()
+        Map attributeNameMapping = ElementIdMapping.build()
         inputFiles.each{File file ->
             def dtos = ExcelHandler.buildDto(file, START_ROW, contextGroups, MAX_ROWS)
             String currentModifiedBy = "${loadedBy}_${file.name}"
             if (currentModifiedBy.length() >= 40){
                 currentModifiedBy = currentModifiedBy.substring(0,40)
             }
-            AttributesContentsCleaner.cleanDtos(dtos)
+            AttributesContentsCleaner.cleanDtos(dtos, attributeNameMapping)
             try{
                 dtos.each{
                         loadProjectContext(currentModifiedBy, it, mustLoadedAids, logWriter)

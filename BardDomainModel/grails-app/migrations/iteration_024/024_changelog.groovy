@@ -84,5 +84,9 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "pmontgom", id: "iteration-024/08-add-replaced-by-to-element", dbms: "oracle", context: "standard") {
+        sqlFile(path: "${migrationsDir}/iteration_024/08-add-replaced-by-to-element.sql", stripComments: true)
+    }
 }
 

@@ -3,6 +3,7 @@ package bard.validation.ext
 import edu.scripps.fl.entrez.EUtilsWeb
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Ignore
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 import uk.ac.ebi.kraken.uuw.services.remoting.RemoteDataAccessException
 
@@ -173,6 +174,32 @@ class ExternalOntologyIntegrationSpec extends IntegrationSpec {
         "http://www.uniprot.org/uniprot/"                                | " "  | RemoteDataAccessException
         "http://www.uniprot.org/uniprot/"                                | ""   | RemoteDataAccessException
     }
+	
+	void "test externalOntologyPerson instance"(){
+		when:
+		ExternalOntologyAPI extOntology1 = externalOntologyFactory.getExternalOntologyAPI(ExternalOntologyPerson.PERSON_URI, null)
+		ExternalOntologyAPI extOntology2 = externalOntologyFactory.getExternalOntologyAPI(ExternalOntologyPerson.PERSON_URL, null)
+		
+		then:
+		extOntology1 != null
+		ExternalOntologyPerson.class == extOntology1.class
+		extOntology2 != null
+		ExternalOntologyPerson.class == extOntology2.class
+	}
+	
+	@IgnoreRest
+	void "test obtaining a null ExternalOntologyPerson instance"(){
+		when:
+		ExternalOntologyAPI extOntology = externalOntologyFactory.getExternalOntologyAPI(externalUrl, null)
+		
+		then:
+		value == extOntology
+		
+		where:
+		desc                                             | value | externalUrl 
+		"returned null due to invalid url"               | null  | "http://www.test.test"
+		"returned null due to invalid uri"               | null  | new URI("http://www.test.test")
+	}
 
     @Ignore
     void "test show NCBI Databases"() {

@@ -31,8 +31,9 @@ class AssayDefinitionController {
     }
     def cloneAssay(Long id){
         Assay assay  = Assay.get(id)
-        Assay newAssay = assayService.cloneAssayForEditing(assay,springSecurityService.principal?.username)
-        redirect(action: "show", id: newAssay.id)
+        assay = assayService.cloneAssayForEditing(assay,springSecurityService.principal?.username)
+        assay = assayService.recomputeAssayShortName(assay)
+        redirect(action: "show", id: assay.id)
     }
     def save() {
         def assayInstance = new Assay(params)
@@ -345,10 +346,12 @@ class AssayDefinitionController {
     }
 
     def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy, String assayType) {
-        //TODO Move into a service and invoke the recomputation of assay short name, if the name has changed
-        assayContextService.editSummary(instanceId,assayStatus,assayName,designedBy,assayType)
+        boolean recomputeAssayShortName = assayContextService.editSummary(instanceId,assayStatus,assayName,designedBy,assayType)
 
         Assay assayInstance = Assay.findById(instanceId)
+        if(recomputeAssayShortName){
+            assayInstance = assayService.recomputeAssayShortName(assayInstance)
+        }
         render(template: "summaryDetail", model: [assay: assayInstance])
     }
 
