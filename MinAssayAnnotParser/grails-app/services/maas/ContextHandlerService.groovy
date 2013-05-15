@@ -62,8 +62,10 @@ class ContextHandlerService {
         //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
         else if (contextItemDto.typeIn || (contextItemDto.attributeType == AttributeType.Free)) {
             contextItem.valueDisplay = contextItemDto.value
-            def attributesString = ['project lead name', 'science officer', 'assay provider name']
-            if (attributesString.contains(contextItemDto.key))
+            def nameElementId = [565, //assay provider name
+                    568, // project lead name
+                    1823] // science officer
+            if (nameElementId.contains(contextItem.attributeElement.id))
                 contextItem.extValueId = 'NA'      // put a value as a place holder in order to pass validation
         }
         else {
