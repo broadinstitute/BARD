@@ -93,13 +93,13 @@ println("Start loading Project from cars and projectcontext")
 ProjectHandlerService projectHandlerService = new ProjectHandlerService()
 if (!StringUtils.equals("true", willCommit)) {
     Project.withTransaction {status ->
-        loadCars(dataset_id)
+        loadCars(dataset_id, inputDirs)
         projectHandlerService.handle(runBy, inputDirs, mustLoadedAids)
         status.setRollbackOnly()
     }
 }
 else {
-    loadCars(dataset_id)
+    loadCars(dataset_id, inputDirs)
     projectHandlerService.handle(runBy, inputDirs, mustLoadedAids)
 }
 println("Finished loading Project from cars and projectcontext")
@@ -131,8 +131,8 @@ else {
 }
 println("Finished fixing person name")
 
-def loadCars(dataset_id) {
-    Log.initializeLogger("data/maas/cars/output/parseCarsSpreadsheet.log")
+def loadCars(dataset_id,inputDirs) {
+    Log.initializeLogger("${inputDirs}/output/parseCarsSpreadsheet.log")
 //constants
     final String inputFileRelativePath = "data/maas/cars/project_data_from_CARS.csv"
     final String headerMappingRelativePath = "grails-app/conf/resources/HeaderMappings.config"
