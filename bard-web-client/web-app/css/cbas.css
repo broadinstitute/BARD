@@ -23,9 +23,6 @@ table.cbasInnerTableBorder {
     border: solid #000000 1px;
 }
 
-tr.cbasInnerTableRow {
-}
-
-td.cbasInnerTableCell td p {
+.lineSpacing {
     line-height: 33%;
 }

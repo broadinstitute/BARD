@@ -88,7 +88,7 @@
                                     <g:set var="results" value="${cell.value[experimentValue]}"/>
                                     <g:set var="resultSize" value="${results?.size()}"/>
                                     <thead>
-                                    <tr class="cbasInnerTableRow" align="center">
+                                    <tr align="center">
                                         %{--First row is the experiment description--}%
                                         <th class="cbasOutterTableCell" colspan="${resultSize}">
                                             <g:experimentDescription name="${experiment.name}"

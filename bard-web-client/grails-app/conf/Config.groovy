@@ -101,7 +101,6 @@ CbipCrowd {
     application.password = '2345'
     applicationSpecificRoles = ['ROLE_USER','ROLE_Bard', 'ROLE_NO_ROLE', 'ROLE_MOBILE']
 }
-webquery
 
 rememberme.key = 'bard_web_client_crowd_remember_me'
 rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'

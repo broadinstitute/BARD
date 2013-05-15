@@ -1,12 +1,11 @@
 package bardqueryapi.compoundBioActivitySummary
 
-import org.apache.commons.lang3.tuple.ImmutablePair
-import org.apache.commons.lang3.tuple.Pair
-
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
 import bard.core.util.FilterTypes
+import org.apache.commons.lang3.tuple.ImmutablePair
+import org.apache.commons.lang3.tuple.Pair
 import org.apache.log4j.Logger
 import bard.core.rest.spring.experiment.*
 import bardqueryapi.*
@@ -69,14 +68,24 @@ class CompoundBioActivitySummaryBuilder {
 
                 List<WebQueryValue> results = convertExperimentResultsToValues(exptData, yNormMin, yNormMax)
 
-                experimentBox.put(experiment, results)
-                //Cast the experimentBox to a MapValue type
-                MapValue experimentBoxValue = new MapValue(value: experimentBox)
-                //Add the experimnet box to the row's list of value
-                singleRowData << experimentBoxValue
+                //If the single-point data filter is set, remove the SP (PairValue) result-types from the list.
+                if (filterTypes.contains(FilterTypes.SINGLE_POINT_RESULT)) {
+                    results.removeAll {WebQueryValue webQueryValue -> webQueryValue instanceof PairValue}
+                }
+                //If we don't have any results for the experiment, don't display the experiment box at all.
+                if (results) {
+                    experimentBox.put(experiment, results)
+                    //Cast the experimentBox to a MapValue type
+                    MapValue experimentBoxValue = new MapValue(value: experimentBox)
+                    //Add the experimnet box to the row's list of value
+                    singleRowData << experimentBoxValue
+                }
             }
 
-            tableModel.data << singleRowData
+            //If no results, don't display the assay/project altogether.
+            if (singleRowData.size() > 1) {
+                tableModel.data << singleRowData
+            }
         }
         return tableModel
     }

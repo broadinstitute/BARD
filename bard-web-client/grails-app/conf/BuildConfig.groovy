@@ -91,7 +91,7 @@ grails.project.dependency.resolution = {
         compile ":resources:1.2.RC2"
         // compile ":functional-spock:0.6"
         compile ":twitter-bootstrap:2.3.0"
-        compile(":cbipcrowdauthentication:0.3.1"){
+        compile(":cbipcrowdauthentication:0.3.2"){
             excludes('spock', 'release')
         }
         compile ":clover:3.1.10.1"

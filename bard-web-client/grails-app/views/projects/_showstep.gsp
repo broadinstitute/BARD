@@ -22,7 +22,7 @@
 
         <script id="node-selection-template" type="text/x-handlebars-template">
             <h5>Experiment Id:
-                <td><a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.data.link}}">{{selected.data.link}}</a>
+                <a href="${createLink(controller: 'bardWebInterface', action: 'showExperiment')}/{{selected.data.link}}">{{selected.data.link}}</a>
             </h5>
 
             <h5>Experiment Name:</h5>

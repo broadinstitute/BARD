@@ -10,7 +10,9 @@ package bard.core.util
 enum FilterTypes {
     TESTED("Tested Assays"),
     SHOW_OTHERS("Show Single Point, Primary, UnMapped Assays"),
-    Y_DENORM_AXIS('DeNormalize Y-Axis');
+    Y_DENORM_AXIS('DeNormalize Y-Axis'),
+    SINGLE_POINT_RESULT('Single-point result type');
+
     String description
     FilterTypes(String description){
       this.description = description
