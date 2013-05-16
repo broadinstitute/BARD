@@ -87,7 +87,7 @@ class ExperimentHandlerService {
 
         if (errorMessages.size() == 0) {
             if (!experiment.save(flush: true)) {
-                writeToLog(logWriter, "Error Save experiment ${experiment.id} with aid ${dto.aid}: ${experiment.errors.toString()}")
+                writeToLog(logWriter, "Error Save experiment ${experiment.id} with aid ${dto.aid} in ${dto.sourceFile.name}: ${experiment.errors.toString()}")
             }
             else {
                 writeToLog(logWriter, "Success Saved expriment ${experiment.id} with aid ${dto.aid}, #dup context ${dupContextCnt}, # new contexts ${newContextCnt}, # new ContextItem ${newItemsCnt}, # duplicate ContextItem ${dupItemCnt}")
