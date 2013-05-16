@@ -22,6 +22,8 @@ class ContextHandlerService {
 
 
     AbstractContextItem updateContextItem(ContextItemDto contextItemDto, String loadedBy, List<String> errorMessages, String contextType) {
+        if (!contextItemDto.value)
+            return
         Element attributeElement = Element.findByLabelIlike(contextItemDto.key)
         if (!attributeElement) {
             final String message = "Attribute element not exist: (${contextItemDto.key})"
