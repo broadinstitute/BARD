@@ -113,9 +113,9 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                             }
                         }
                         //else, if the attribute's value is a number value, store it in the valueNum field
-                        else if (contextItemDto.value && contextItemDto.value.isNumber()) {
+                        else if (contextItemDto.value && (contextItemDto.value instanceof Number)) {
                             if (contextItemDto.attributeType != AttributeType.Free) {
-                                Double val = (Double)contextItemDto.value
+                                Double val = (Number)contextItemDto.value.doubleValue()
                                 assayContextItem.valueNum = val
                                 assayContextItem.qualifier = "= "
                                 //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
