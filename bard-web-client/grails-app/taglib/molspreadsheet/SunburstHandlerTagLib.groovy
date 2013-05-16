@@ -31,7 +31,9 @@ class SunburstHandlerTagLib {
         Boolean includeHits = session."actives"
         Boolean includeNonHits = session."inactives"
         int typeOfColoring = session."colorOption"  ?: 3
-        RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
+//        RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
+        RingNode root =   ringManagerService.convertCompoundIntoSunburst (attrs."compoundSummary", includeHits, includeNonHits )
+
         LinkedHashMap extremeValues = root.determineColorMappingRange()
         out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]
         out << "\n"

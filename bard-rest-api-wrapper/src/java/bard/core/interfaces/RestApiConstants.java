@@ -31,6 +31,9 @@ public interface RestApiConstants {
 
     //relative path to the experiment resource
     final String EXPERIMENTS_RESOURCE = "/experiments";
+    //relative path to the biology resource
+    final String BIOLOGY_RESOURCE = "/biology";
+
     //relative path to the assays resource
     final String ASSAYS_RESOURCE = "/assays";
 

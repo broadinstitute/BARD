@@ -20,6 +20,32 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
     RingManagerService ringManagerService
     CompoundRestService compoundRestService
 
+    void "test generateAccessionIdentifiers"(){
+        given:
+        final List<Long> bids = [155L]
+
+        when:
+        List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits")
+
+        then:
+        accessionIdentifiers.size()  > 0
+    }
+
+
+    void "test convertBiologyIdsToAscensionNumbers"(){
+        given:
+        LinkedHashMap activeInactiveDataPriorToConversion = [:]
+        LinkedHashMap activeInactiveDataAfterConversion
+        activeInactiveDataPriorToConversion["hits"] = [155L]
+        activeInactiveDataPriorToConversion["misses"] = [156L, 157L]
+
+        when:
+        activeInactiveDataAfterConversion = ringManagerService.convertBiologyIdsToAscensionNumbers (activeInactiveDataPriorToConversion)
+
+        then:
+        activeInactiveDataAfterConversion["hits"].size ()   > 0
+        activeInactiveDataAfterConversion["misses"].size ()   > 0
+    }
 
 
     void "test getLinkedAnnotationData"(){

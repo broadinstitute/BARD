@@ -1,21 +1,23 @@
 package molspreadsheet
 
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.BiologyRestService
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.assays.Assay
+import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.RingNode
-import bard.core.rest.spring.AssayRestService
-import bard.core.rest.spring.assays.BardAnnotation
 import groovy.json.JsonBuilder
-
+import bard.core.rest.spring.biology.BiologyEntity
 
 class RingManagerService {
     CompoundRestService compoundRestService
     SunburstCacheService sunburstCacheService
     AssayRestService assayRestService
+    BiologyRestService biologyRestService
 
     /***
      * Retrieve all the data we need to build a linked visualization based on multiple calls
@@ -236,9 +238,59 @@ class RingManagerService {
         return  rootRingNode
     }
 
+    /***
+     *
+     * @param unconvertedValues
+     * @param whichSubset
+     * @return
+     */
+    private List <String> generateAccessionIdentifiers(List<String>  unconvertedValues,String whichSubset)   {
+        final List<String> targets = []
+        List <String> returnValues = []
+
+        unconvertedValues.each {targets <<  it }
+        if (targets.size() > 0)  {
+            List<Long> targetsAsLongs = []
+            for (String target in targets) {
+                try {
+                    targetsAsLongs << Long.parseLong(target)
+                } catch (NumberFormatException numberFormatException){
+                    println("Please contact NCGC. We saw a nonnumeric value in the targets field coming back from/compound/{cid}/summary. Instead = ${target}.")
+                    break
+                }
+
+            }
+            List <BiologyEntity> biologyEntityList =  biologyRestService.convertBiologyId(targetsAsLongs)
+            // processes, as opposed to proteins, start with the suffix GO. Remove those, since they are relevant to the Sunburst
+            //As well, check to make sure that whatever comes back really has the format of a UNIPROT accession number
+            returnValues=  biologyEntityList*.extId.findAll{!(it==~/^GO.*/)}.findAll{it==~/([A-N,R-Z][0-9][A-Z][A-Z,0-9][A-Z,0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z,0-9][A-Z,0-9][0-9])/}
+        }
+        returnValues
+    }
+
+    /***
+     *
+     * @param unconvertedValues
+     * @return
+     */
+    private LinkedHashMap convertBiologyIdsToAscensionNumbers (LinkedHashMap unconvertedValues)  {
+        LinkedHashMap convertedValues  = [:]
+        // first will convert the hits
+        convertedValues["hits"]  =  generateAccessionIdentifiers(unconvertedValues["hits"],"hits")
+        // now add those assays that did not hit for this compound
+        convertedValues["misses"]  =  generateAccessionIdentifiers(unconvertedValues["misses"],"misses")
+
+        return  convertedValues
+    }
+
+
+
+
+
 
     public  RingNode convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
-        LinkedHashMap activeInactiveData = retrieveActiveInactiveDataFromCompound(compoundSummary)
+        LinkedHashMap activeInactiveDataPriorToConversion = retrieveActiveInactiveDataFromCompound(compoundSummary)
+        LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion)
         final List<String> targets = []
         if (includeHits) {
             activeInactiveData["hits"].each {targets <<  it }
@@ -251,7 +303,12 @@ class RingManagerService {
         accumulatedTargets.each{k,v->
             List<String> hierarchyDescription = sunburstCacheService.getTargetClassInfo(k)
             if (hierarchyDescription != null){
-                accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
+                List<TargetClassInfo> temporaryValue = null
+                temporaryValue = sunburstCacheService.getTargetClassInfo(k)
+                if (temporaryValue != null)
+                    accumulatedMaps<<temporaryValue
+                else
+                    println "null value omitted from Sunburst"
             }
         }
         return ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
@@ -270,6 +327,15 @@ class RingManagerService {
         CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(cid)
         convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
     }
+
+
+
+    public  RingNode convertCompoundIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
+        // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
+//        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
+        convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
+    }
+
 
 
 
