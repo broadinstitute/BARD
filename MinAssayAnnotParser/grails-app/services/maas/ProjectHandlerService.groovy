@@ -84,7 +84,7 @@ class ProjectHandlerService {
 
         if (errorMessages.size() == 0) {
             if (!project.save(flush: true)) {
-                writeToLog(logWriter, "Error Save project ${project.id} with aid ${dto.aid}: ${project.errors.toString()}")
+                writeToLog(logWriter, "Error Save project ${project.id} with aid ${dto.aid} in ${dto.sourceFile.name}: ${project.errors.toString()}")
             }
             else {
                 writeToLog(logWriter, "Success Saved project ${project.id} with aid ${dto.aid}, #dup context ${dupContextCnt}, # new contexts ${newContextCnt}, # new ContextItem ${newItemsCnt}, # duplicate ContextItem ${dupItemCnt}")
