@@ -45,7 +45,7 @@
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
 	        	<g:form action="findByName" class="form-inline">
 	        		<label class="control-label" for="projectName">Enter Project Name:</label>
-	        		<input type="text" size="50" id="projectName" name='projectName' value="${params.projectName}">
+	        		<input type="text" size="50" id="projectName" name='projectName' value="${params.projectName}" autofocus="true">
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
 				</g:form>
 	        </div>

@@ -284,7 +284,14 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                 assayContext.assay.assayContexts.remove(assayContext)
                 logger.info("AssayContext errors: ${assayContext.errors.dump()}")
                 loadResultType = ContextLoadResultsWriter.LoadResultType.fail
-                message = "failed to load b/c of database errors:  ${assayContext.errors.dump()}"
+
+                StringBuilder builder = new StringBuilder()
+                builder.append("failed to save.  contextItemDTO's:  ")
+                for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
+                    builder.append("${contextItemDto.key}:${contextItemDto.value}, ")
+                }
+                builder.append("database errors:  ${assayContext.errors.dump()}")
+                message = builder.toString()
                 numLoaded = 0
             } else {
                 loadResultType = ContextLoadResultsWriter.LoadResultType.success
