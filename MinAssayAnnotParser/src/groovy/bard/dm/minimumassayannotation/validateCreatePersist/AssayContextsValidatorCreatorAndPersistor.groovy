@@ -73,8 +73,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     assayContext.assay = getAssayFromAid(contextDTO.aid)
 
                     assayContext.modifiedBy = modifiedBy
-                    //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
-                    if (!assayContext.assay) {//skip this assay context
+
+                    if (!assayContext.assay) {
                         writeMessageWhenAidNotFoundInDb(contextDTO)
                         status.setRollbackOnly()
                         return false
@@ -159,6 +159,14 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
 
                         if (! postProcessAssayContextItem(assayContextItem, contextDTO)) {
+                            status.setRollbackOnly()
+                            return false
+                        }
+
+                        if (! assayContextItem.validate()) {
+                            final String message = "Problem creating assay context item.  spreadsheet: $contextItemDto  gorm:  ${convertToString(assayContextItem)} error message:  ${assayContextItem.errors.dump()}"
+                            loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
+                                    null, 0, message)
                             status.setRollbackOnly()
                             return false
                         }
@@ -303,5 +311,19 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         }
 
         return doSave
+    }
+
+    private static String convertToString(AssayContextItem aci) {
+        StringBuilder builder = new StringBuilder()
+
+        builder.append("attribute:  ${aci.attributeElement.label} ${aci.attributeElement.id} ")
+        builder.append("valueDisplay:  ${aci.valueDisplay} ")
+        builder.append("valueElement:  ${aci.valueElement.label} ${aci.valueElement.id} ")
+        builder.append("valueNum:  ${aci.valueNum} ")
+        builder.append("valueMin valueMax:  ${aci.valueMin} ${aci.valueMax} ")
+        builder.append("attributeType:  ${aci.attributeType} ")
+        builder.append("qualifier:  ${aci.qualifier} ")
+
+        return builder.toString()
     }
 }
