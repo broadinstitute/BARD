@@ -114,19 +114,18 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         if (rejectNullField('valueNum', errors) ||
                 rejectBlankField('qualifier', errors) ||
                 rejectNotNullFields(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)) {
-            errors.rejectValue('valueNum', 'contextItem.valueNum.required.fields', " in attribute ${this.attributeElement.label}")
+            errors.reject('contextItem.valueNum.required.fields')
         }
     }
 
     protected void rangeConstraints(Errors errors) {
         if (rejectNullFields(['valueMin', 'valueMax'], errors) ||
                 rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
-            //TODO: this error code messages should be added iin message.properties
-            errors.rejectValue('valueMin', 'contextItem.range.required.fields', " in attribute ${this.attributeElement.label}")
+            errors.reject('contextItem.range.required.fields')
         } else if (valueMin || valueMax) {
             if (valueMin >= valueMax) {
-                errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax', " in attribute ${this.attributeElement.label}")
-                errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin', " in attribute ${this.attributeElement.label}")
+                errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax')
+                errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin')
             }
         }
     }
@@ -141,7 +140,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
     protected void externalOntologyConstraints(Errors errors) {
         if (rejectBlankFields(['extValueId', 'valueDisplay'], errors) ||
                 rejectNotNullFields(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)) {
-            errors.rejectValue('attributeElement', 'contextItem.attribute.externalURL.required.fields', " in attribute ${this.attributeElement.label}")
+            errors.reject('contextItem.attribute.externalURL.required.fields')
         }
     }
 
@@ -155,7 +154,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     protected boolean rejectNonBlankField(String fieldName, Errors errors) {
         if (StringUtils.isNotBlank(this[(fieldName)])) {
-            errors.rejectValue(fieldName, "contextItem.${fieldName}.blank", " in attribute ${this.attributeElement.label}")
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
             return true
         }
         return false
@@ -171,7 +170,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     protected boolean rejectBlankField(String fieldName, Errors errors) {
         if (StringUtils.isBlank(this[(fieldName)])) {
-            errors.rejectValue(fieldName, "contextItem.${fieldName}.blank", " in attribute ${this.attributeElement.label}")
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
             return true
         }
         return false
@@ -187,7 +186,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     private boolean rejectNotNullField(String fieldName, Errors errors) {
         if (this[(fieldName)] != null) {
-            errors.rejectValue(fieldName, "contextItem.${fieldName}.not.null", " in attribute ${this.attributeElement.label}")
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.not.null")
             return true
         }
         return false
@@ -203,7 +202,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     private boolean rejectNullField(String fieldName, Errors errors) {
         if (this[(fieldName)] == null) {
-            errors.rejectValue(fieldName, "contextItem.${fieldName}.null", " in attribute ${this.attributeElement.label}")
+            errors.rejectValue(fieldName, "contextItem.${fieldName}.null")
             return true
         }
         return false
