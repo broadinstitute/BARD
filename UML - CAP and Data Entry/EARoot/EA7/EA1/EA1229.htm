@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Data Deposition UI</title>
+<title>CAP data access</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {	
@@ -34,15 +34,15 @@ function nameClassifier(name, separator)
 <div class="pageHeader"></div>
 <div class="PageBody">
 	<div id="name_classifier" style="display: none;"></div>
-	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("Data Deposition UI", " : "))</script>  : Public  &lt;&lt;Web&gt;&gt; Component</span>
+	<span class="ObjectTitle"><script type="text/javascript">document.write(nameClassifier("CAP data access", " : "))</script>  : Public  &lt;&lt;hibernate&gt;&gt; Component</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/9/2011 9:33:16 AM</td>
+			<td width="85%" class="ObjectDetailsValue">6/8/2012 9:30:44 AM</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">9/9/2011 9:45:10 AM</td>
+			<td class="ObjectDetailsValue">6/8/2012 9:30:44 AM</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -51,7 +51,7 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="proj00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
-			<td class="ObjectDetailsValue">Owner</td>
+			<td class="ObjectDetailsValue">Simon</td>
 		</tr>
 		<tr id="proj01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
@@ -87,49 +87,45 @@ function nameClassifier(name, separator)
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{2ABAEAEE-1B99-4447-85D4-D9052CABC7BB}</td>
+			<td class="ObjectDetailsValue">{6A3DF85D-F2F6-408e-B2B3-0D3CEAD5E07A}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA1194.htm">BARD overview</a>, <a href="EA1196.htm">Data entry info flow</a>, <a href="EA1188.htm">BARD data upload</a>, <a href="EA1198.htm">File processing</a>, <a href="EA1184.htm">BARD Application stacks</a>, <a href="EA1182.htm">BARD application interactions</a></td>
+			<td class="ObjectDetailsValue"><a href="EA1192.htm">BARD application interactions</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('MessagesTo');" id="MessagesToTitle">Messages To</li>
+			<li onClick="parent.toggleItem('AssociationsTo');" id="AssociationsToTitle">Associations To</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Advanced</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="MessagesToTable">
+		<div class="ItemBody" id="AssociationsToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="50%" class="TableHeading">Element</td>
-					<td width="50%" class="TableHeading">Message</td>
+					<td width="40%" class="TableHeading">Element</td>
+					<td width="30%" class="TableHeading">Source Role</td>
+					<td width="30%" class="TableHeading">Target Role</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1243.htm">File Reader</a></td>
-					<td width="50%" class="TableRow" valign="top">Start Upload</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1552" onclick="parent.toggleDiv('detailsDIVMessage1552', 'DetailsImageMessage1552')" />Details:
-							<div id="detailsDIVMessage1552" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
-							&nbsp;
-							</div>
-						</div>
+					<td width="40%" class="TableRow" valign="top">
+						<a href="EA1226.htm">«DB» Assay data</a><br />
+						Component &nbsp;
+					</td>
+					<td width="30%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="30%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
 					</td>
 				</tr>
 				<tr>
-					<td width="50%" class="TableRow" valign="top"><a href="EA1281.htm">«Web» Upload Dashboard UI</a></td>
-					<td width="50%" class="TableRow" valign="top">showDashboard</td>
-				</tr>
-		   		<tr>
-					<td class="TableRowBottomDashed"  colspan="2">
-						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageMessage1553" onclick="parent.toggleDiv('detailsDIVMessage1553', 'DetailsImageMessage1553')" />Details:
-							<div id="detailsDIVMessage1553" class="DetailsDiv" >
-							<strong>Type:</strong> Sequence Synchronous Call<br />
+					<td class="TableRowBottomDashed"  colspan="3">
+						<div class="DetailsDivParent"><img src="../../../images/minus03.gif" align="absmiddle" id="DetailsImageLink1563" onclick="parent.toggleDiv('detailsDIVLink1563','DetailsImageLink1563')" />Details:
+							<div id="detailsDIVLink1563" class="DetailsDiv" >
 							&nbsp;
 							</div>
 						</div>
@@ -160,37 +156,19 @@ function nameClassifier(name, separator)
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="../../EA3/EA1/EA550.htm">Assay Registrar</a></td>
-					<td width="15%" class="TableRow" valign="top">Actor</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1215.htm">«Web» Assay Catalog Registry</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1228.htm">«grails» CAP Business layer</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1222.htm">Catalog Rules Engine</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1245.htm">«grails» DD file import</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
+					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1237.htm">ETL Engine</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1215.htm">«Web» Assay Catalog Registry</a></td>
-					<td width="15%" class="TableRow" valign="top">Component</td>
-					<td width="15%" class="TableRow" valign="top">Information Flow</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA1235.htm">«grails» DD file import</a></td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA1258.htm">«grails» Ontology Business layer</a></td>
 					<td width="15%" class="TableRow" valign="top">Component</td>
 					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
