@@ -133,10 +133,12 @@ class PubchemReformatService {
         Collection<String> tids;
         Collection<ResultMapRecord> allRecords;
 
-        public ResultMap(String aid, Collection<ResultMapRecord> rs) {
+        public ResultMap(String aid, Collection<ResultMapRecord> rs, Set tids=null) {
             this.aid = aid;
             records = rs.groupBy { makeLabel(it.resultType, it.statsModifier) }
             recordsByParentTid = rs.groupBy {it.parentTid}
+            
+            if(tids == null) {
             tids = [] as Set
             rs.each {
                 tids.add(it.tid)
@@ -146,6 +148,9 @@ class PubchemReformatService {
                     tids.add(it.qualifierTid)
                 }
             }
+            }
+	    this.tids = tids
+
             allRecords = new ArrayList(rs);
             allRecords.sort { Integer.parseInt(it.tid) }
         }
@@ -283,7 +288,7 @@ class PubchemReformatService {
         Set colNames = [] as Set
 
         experiment.experimentMeasures.each {
-            // add measure names
+            // add measure name
             colNames.add(makeLabel(it.measure.resultType.label, it.measure.statsModifier?.label))
             // add context items
             it.measure.assayContextMeasures.each {
@@ -303,19 +308,25 @@ class PubchemReformatService {
         Map byTid = [:]
         List<ResultMapRecord>  records = [];
         Set<String> unusedTids = new HashSet();
+        Set<String> tids = new HashSet()
 
         // Keep track which TIDs we've used for something
         for(row in rows) {
+	    tids.add(row.TID.toString())
             unusedTids.add(row.TID.toString())
-            if (row.EXCLUDED_POINTS_SERIES_NO != null) {
+
+            if (row.EXCLUDED_POINTS_SERIES_NO != null || row.CONTEXTITEM == "do not import") {
                 unusedTids.remove(row.TID.toString())
             }
+
         }
 
         // first pass: create all the items for result types
         for(row in rows) {
             if (row.RESULTTYPE != null) {
-                assert row.CONTEXTTID == null || row.CONTEXTTID == row.TID
+                if( !( row.CONTEXTTID == null || row.CONTEXTTID == row.TID) ) { 
+			throw new RuntimeException("aid=${aid} tid=${row.TID} appears to be both a result type and a context item")
+		}
                 ResultMapRecord record = new ResultMapRecord(series: row.SERIESNO,
                         tid: row.TID,
                         parentTid: row.PARENTTID?.toString(),
@@ -360,7 +371,14 @@ class PubchemReformatService {
             throw new MissingColumnsException("Did not know what to do with columns with tids: ${unusedTids}")
         }
 
-        ResultMap map = new ResultMap(aid, records)
+	// now, finally, drop any context items for which we only have one result type.  Reason being that the transfer_result_map will
+	// create these as "fixed", so don't bother to write these context items into the new file.
+	def byLabel = records.groupBy { "${it.parentTid} ${makeLabel(it.resultType, it.statsModifier)} ${it.series}" }
+	byLabel.entrySet().findAll { it.value.size() == 1 } . each {
+		it.value[0].staticContextItems.clear()
+	}
+
+        ResultMap map = new ResultMap(aid, records, tids)
         return map;
     }
 

@@ -619,7 +619,7 @@ class ResultsService {
 
             return new Cell(value: floatValue)
         } else {
-            throw new RuntimeException("Did not know how to handle attribute ${item.displayLabel} of type ${item.type}")
+            throw new RuntimeException("Did not know how to handle attribute ${item.displayLabel} of type ${item.type} (value: ${stringValue}) ")
         }
     }
 
