@@ -107,10 +107,10 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         String description = "Description"
         String abbreviation = "MNL"
         String synonyms = "Abc,efg"
-        String comments = "Adding for testing"
+        String curationNotes = "Adding for testing"
         TermCommand termCommand =
             new TermCommand(parentLabel: parentElement.label, label: newElementLabel, description: description,
-                    abbreviation: abbreviation, synonyms: synonyms, comments: comments)
+                    abbreviation: abbreviation, synonyms: synonyms, curationNotes: curationNotes)
         when:
         Element element = elementService.addNewTerm(termCommand)
 
@@ -120,7 +120,7 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         assert description == element.description
         assert abbreviation == element.abbreviation
         assert synonyms == element.synonyms
-        assert comments == element.comments
+        assert curationNotes == element.curationNotes
         assert element.childHierarchies
     }
 

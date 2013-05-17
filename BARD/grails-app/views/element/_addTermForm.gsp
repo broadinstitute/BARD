@@ -88,14 +88,14 @@
         <h4>4. Explain why you need to add this term.</h4>
     </label>
 </div>
-<div class="control-group ${hasErrors(bean: termCommand, field: 'comments', 'error')} required">
-    <label class="control-label" for="comments">
-        <strong><g:message code="termCommand.comments.label"/></strong>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'curationNotes', 'error')} required">
+    <label class="control-label" for="curationNotes">
+        <strong><g:message code="termCommand.curationNotes.label"/></strong>
         <span class="required-indicator">*</span>
     </label>
 
     <div class="controls">
-        <g:textArea name="comments" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.comments}" onblur="trimText(this)"/>
-        <span class="help-inline"><g:fieldError field="comments" bean="${termCommand}"/></span>
+        <g:textArea name="curationNotes" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.curationNotes}" onblur="trimText(this)"/>
+        <span class="help-inline"><g:fieldError field="curationNotes" bean="${termCommand}"/></span>
     </div>
 </div>

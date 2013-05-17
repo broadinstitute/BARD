@@ -217,7 +217,7 @@ class TermCommand extends BardCommand {
     String description
     String abbreviation
     String synonyms
-    String comments
+    String curationNotes
     String relationship = "subClassOf"
     Element currentElement
 
@@ -256,7 +256,7 @@ class TermCommand extends BardCommand {
         })
         parentDescription(blank: true, nullable: true, maxSize: Element.DESCRIPTION_MAX_SIZE)
         description(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
-        comments(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
+        curationNotes(blank: false, nullable: false, maxSize: Element.DESCRIPTION_MAX_SIZE)
         abbreviation(blank: true, nullable: true, maxSize: Element.ABBREVIATION_MAX_SIZE)
         synonyms(blank: true, nullable: true, maxSize: Element.SYNONYMS_MAX_SIZE)
     }

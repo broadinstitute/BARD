@@ -25,7 +25,7 @@ class ElementService {
     Element addNewTerm(TermCommand termCommand) {
         Element parentElement = Element.findByLabel(termCommand.parentLabel)
          Element element = new Element(label: termCommand.label, description: termCommand.description,
-                abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, comments: termCommand.comments)
+                abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, curationNotes: termCommand.curationNotes)
         element.save(flush: true)
         addElementHierarchy(parentElement, element, termCommand.relationship)
 
