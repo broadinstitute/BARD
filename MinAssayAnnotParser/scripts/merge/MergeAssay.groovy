@@ -1,6 +1,7 @@
 import bard.db.registration.Assay
 import org.apache.commons.lang3.StringUtils
 import merge.MergeAssayService
+
 /**
  * Created with IntelliJ IDEA.
  * User: xiaorong
@@ -24,8 +25,6 @@ if (!willCommit) {
 
 final String modifiedBy = "merge"
 
-//String fileName = "data/merge/assayIdNeedToMerge.txt"
-
 List<String> ids = []
 new File(fileName).eachLine {String line ->
     line = StringUtils.trim(line)
@@ -33,19 +32,20 @@ new File(fileName).eachLine {String line ->
         ids << line
     }
 }
-if (!StringUtils.equals("true", willCommit)) {
-    Assay.withSession { status ->
-        mergeAll(ids, modifiedBy)
-        status.setRollbackOnly()
-    }
-}
-else {
-    Assay.withSession { status ->
-        mergeAll(ids, modifiedBy)
-    }
-}
 
-def mergeAll(List<String> ids, String modifiedBy) {
+Assay.withTransaction { s ->
+    if (!StringUtils.equals("true", willCommit)) {
+        s.setRollbackOnly()
+    }
+
+Assay.withSession { status ->
+    mergeAll(status, ids, modifiedBy)
+}
+}
+println("Finished!")
+
+
+def mergeAll(def status, List<String> ids, String modifiedBy) {
     for (String id : ids) {
         def assayIds = StringUtils.split(id, ",")
         def assays = []
@@ -56,11 +56,11 @@ def mergeAll(List<String> ids, String modifiedBy) {
             else
                 println("Assay id ${it} not found")
         }
-        merge(assays, modifiedBy)
+        merge(status, assays, modifiedBy)
     }
 }
 
-def merge(List<Assay> assays, String modifiedBy) {
+def merge(def session, List<Assay> assays, String modifiedBy) {
     def mergeAssayService = new MergeAssayService()
     println("Merge Assay : ${assays.collect {it.id}}")
     Assay assayWillKeep = mergeAssayService.keepAssay(assays)
@@ -69,20 +69,25 @@ def merge(List<Assay> assays, String modifiedBy) {
     println("start mergeAssayContextItem")
     mergeAssayService.mergeAssayContextItem(removingAssays, assayWillKeep, modifiedBy)  // merege assay contextitem, experiment contextitem
     println("end mergeAssayContextItem")
+    session.flush()
 
     println("start handleExperiments")
     mergeAssayService.handleExperiments(removingAssays, assayWillKeep, modifiedBy)     // associate experiments with kept
     println("end handleExperiments")
+    session.flush()
 
     println("start handleDocuments ")
     mergeAssayService.handleDocuments(removingAssays, assayWillKeep, modifiedBy)       // associate document
     println("end handleDocuments ")
+    session.flush()
 
     println("start handleMeasure")
-    mergeAssayService.handleMeasure(removingAssays, assayWillKeep, modifiedBy)         // associate measure
+    mergeAssayService.handleMeasure(session,removingAssays, assayWillKeep, modifiedBy)         // associate measure
     println("end handleMeasure")
+    session.flush()
 
     println("Update assays status to Retired")
     mergeAssayService.updateStatus(removingAssays, modifiedBy)         // associate measure
     println("End of marking assayStatus to retired")
+    session.flush()
 }
