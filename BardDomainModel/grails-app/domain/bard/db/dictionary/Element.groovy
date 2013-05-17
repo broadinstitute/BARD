@@ -8,7 +8,7 @@ class Element extends AbstractElement {
 
     Set<TreeRoot> treeRoots = [] as Set<TreeRoot>
     Set<OntologyItem> ontologyItems = [] as Set<OntologyItem>
-    String comments //Used in UI to explain why you are adding a new term
+    String curationNotes //Used in UI to explain why you are adding a new term
     Element replacedBy // when an element is retired, this can be set to indicate what term should be used in its place.
 
     /**
@@ -33,7 +33,7 @@ class Element extends AbstractElement {
             childHierarchies: "childElement"
     ]
     static constraints = {
-        comments(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
+        curationNotes(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
         replacedBy(nullable: true)
     }
     OntologyBreadcrumb getOntologyBreadcrumb(){

@@ -36,48 +36,18 @@ class MarginalProductController {
         render(view: "showAids", model: buildMap(params, findNeedRtaClosure, "AID's that need Result Type Annotation"))
     }
 
-    def showResultMapConflictBetweenResultTypeAndContextItem() {
-        Closure<List<Integer>> findHaveConflictBetweenResultTypeAndContextItem = {Long datasetId, Integer projectUid ->
-            return marginalProductService.findAidsThatHaveRmConflict(datasetId, projectUid)
+    def showMissingAid() {
+        Closure<List<Integer>> findMissingClosure = {Long datasetId, Integer projectUid ->
+            return marginalProductService.findAidsThatAreMissing(datasetId, projectUid)
         }
 
-        Map newParams = buildMap(params, findHaveConflictBetweenResultTypeAndContextItem,
-                        "AID's that have Result Map conflict between Result Type and Context Item")
-
-        newParams.put(controllerKey, "tidIssue")
-        newParams.put(actionKey, "resultTypeContextConflict")
-        newParams.put(descriptionKey, "show result map entries")
-
-        render(view: "showAids", model: newParams)
+        render(view: "showAids", model: buildMap(params, findMissingClosure, "AID's that are not in the external_reference table"))
     }
 
-    def showResultMapDuplicateResult() {
-        Closure<List<Integer>> findDuplicateResult = {Long datasetId, Integer projectUid ->
-            return marginalProductService.findAidsThatHaveDuplicateResult(datasetId, projectUid)
-        }
+    def showResultMapProblems() {
+        Integer projectUid = params.get("projectUid").toString().toInteger()
 
-        Map newParams = buildMap(params, findDuplicateResult, "AID's in Result Map that will generate duplicate results")
-
-        newParams.put(controllerKey, "tidIssue")
-        newParams.put(actionKey, "duplicateResultTypes")
-        newParams.put(descriptionKey, "show result map entries")
-
-        render(view: "showAids", model: newParams)
-    }
-
-    def showResultMapRelationshipProblem() {
-        Closure<List<Integer>> findRelationshipProblems = {Long datasetId, Integer projectUid ->
-            return marginalProductService.findAidsThatHaveRmRelationshipProblem(datasetId, projectUid)
-        }
-
-        Map newParams = buildMap(params, findRelationshipProblems,
-                "AID's in Result Map that have relationship problems (one but not both of parentTid or relationship are present)")
-
-        newParams.put(controllerKey, "tidIssue")
-        newParams.put(actionKey, "relationshipProblem")
-        newParams.put(descriptionKey, "show result map entries")
-
-        render(view: "showAids", model: newParams)
+        return [problemAidMap: marginalProductService.findAidsWithResultMapProblem(projectUid)]
     }
 
     private Map buildMap(Map params, Closure<List<Integer>> findAidsClosure, String title) {

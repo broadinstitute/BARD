@@ -79,7 +79,7 @@ class ElementControllerUnitSpec extends Specification {
         given:
         TermCommand termCommand =
             new TermCommand(parentLabel: valueUnderTest, label: "label",
-                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -102,7 +102,7 @@ class ElementControllerUnitSpec extends Specification {
         Element.build(label: "label")
         TermCommand termCommand =
             new TermCommand(parentLabel: this.parentElement.label,
-                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+                    description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when: 'a value is set for the field under test'
         termCommand[('label')] = valueUnderTest
@@ -126,7 +126,7 @@ class ElementControllerUnitSpec extends Specification {
         given:
         TermCommand termCommand =
             new TermCommand(parentLabel: this.parentElement.label, description: "description",
-                    label: "label", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+                    label: "label", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -150,7 +150,7 @@ class ElementControllerUnitSpec extends Specification {
         given:
 
         TermCommand termCommand =
-            new TermCommand(parentLabel: this.parentElement.label, label: "label", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(parentLabel: this.parentElement.label, label: "label", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(field)] = valueUnderTest
@@ -169,8 +169,8 @@ class ElementControllerUnitSpec extends Specification {
         'exactly at limit' | TestUtils.createString(Element.DESCRIPTION_MAX_SIZE)     | true  | null
     }
 
-    void "test comments constraints #desc TermCommand: Comments '#valueUnderTest'"() {
-        final String field = 'comments'
+    void "test curation notes constraints #desc TermCommand: Curation Notes '#valueUnderTest'"() {
+        final String field = 'curationNotes'
         given:
         TermCommand termCommand =
             new TermCommand(parentLabel: this.parentElement.label, label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg")
@@ -196,7 +196,7 @@ class ElementControllerUnitSpec extends Specification {
 
         given:
         TermCommand termCommand =
-            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(this.parentLabelField)] = valueUnderTest
@@ -217,7 +217,7 @@ class ElementControllerUnitSpec extends Specification {
         given:
         Element.build(label: valueUnderTest)
         TermCommand termCommand =
-            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
 
         when: 'a value is set for the field under test'
         termCommand[(this.parentLabelField)] = valueUnderTest
@@ -246,7 +246,7 @@ class ElementControllerUnitSpec extends Specification {
         final String label = "label"
         given:
         TermCommand termCommand =
-            new TermCommand(parentLabel: valueUnderTest.call(), label: label, description: "description", abbreviation: "abbr", synonyms: "abc,efg", comments: "comments")
+            new TermCommand(parentLabel: valueUnderTest.call(), label: label, description: "description", abbreviation: "abbr", synonyms: "abc,efg", curationNotes: "curationNotes")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
@@ -270,7 +270,7 @@ class ElementControllerUnitSpec extends Specification {
         TermCommand termCommand =
             new TermCommand(parentLabel: this.parentElement.label, label: valueUnderTest,
                     description: "description", abbreviation: "abbr",
-                    synonyms: "abc,efg", comments: "comments")
+                    synonyms: "abc,efg", curationNotes: "curationNotes")
         termCommand.buildElementPathsService = Mock(BuildElementPathsService.class)
         when:
         this.controller.saveTerm(termCommand)
