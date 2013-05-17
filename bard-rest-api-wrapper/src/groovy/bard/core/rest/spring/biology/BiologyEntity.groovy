@@ -43,7 +43,7 @@ public class BiologyEntity extends JsonUtil {
 
     @JsonProperty("biology")
     public String getBiology() {
-        return entity;
+        return biology;
     }
 
     @JsonProperty("biology")

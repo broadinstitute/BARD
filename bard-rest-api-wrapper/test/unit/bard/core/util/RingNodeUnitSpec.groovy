@@ -251,6 +251,19 @@ class RingNodeUnitSpec extends Specification{
     }
 
 
+    void "test corner case for numberOfLevels"() {
+        when:
+        RingNode ringNode = new RingNode("name",
+                "ID",
+                "description",
+                null,
+                "source")
+
+        then:
+        ringNode.numberOfLevels() == 0
+    }
+
+
 
     void "test deriveColors" (){
         when:

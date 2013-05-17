@@ -61,7 +61,7 @@ class SunburstHandlerTagLib {
 //        out <<   g.makeMicroSunburst(attrs, body)
 //        out << """
 //        </div>
-        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right; font-size: 80%">Sunburst visualization<br/>(sample data only)</a>
+        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right;">Sunburst<br/>visualization</a>
     </div>""".toString()
 //        }
     }

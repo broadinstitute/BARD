@@ -121,7 +121,7 @@
                     <option value="3" <g:if test="${dropDown2Choice == 3}">selected</g:if>>Color by class</option>
                 </select>
                 <div  style="padding-top: 320px;"></div>
-                <select id="activity">
+                <select id="activity" style="visibility: hidden">
                         <option value="1" <g:if test="${dropDown1Choice == 1}">selected</g:if>>Active only</option>
                         <option value="2" <g:if test="${dropDown1Choice == 2}">selected</g:if>>Inactive only</option>
                         <option value="3"
