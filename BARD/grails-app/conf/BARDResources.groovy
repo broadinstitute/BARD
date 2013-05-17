@@ -20,6 +20,10 @@ modules = {
 		resource url:'/js/application.js'
 		resource url: '/css/dl-horizontal-fix.css'
 	}
+    xeditable{
+        resource url:"/js/x-editable/bootstrap-editable.js"
+        resource url:"/css/x-editable/bootstrap-editable.css"
+    }
     contextItem {
         dependsOn('select2')
         resource url:'/js/cap/contextItem.js'
