@@ -25,10 +25,10 @@ END;
         }
     }
     changeSet(author: "jasiedu", id: "iteration-025/01-recreate-context-item-constraints", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration-025/01-recreate-context-item-constraints.sql", stripComments: true)
+        sqlFile(path: "${migrationsDir}/iteration_025/01-recreate-context-item-constraints.sql", stripComments: true)
     }
     changeSet(author: "jasiedu", id: "iteration-025/02-rename-comments-column-element", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration-025/02-rename-comments-column-element.sql", stripComments: true)
+        sqlFile(path: "${migrationsDir}/iteration_025/02-rename-comments-column-element.sql", stripComments: true)
     }
 }
 
