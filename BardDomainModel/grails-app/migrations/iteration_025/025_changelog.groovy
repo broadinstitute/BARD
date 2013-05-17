@@ -25,5 +25,23 @@ END;
         }
     }
 
+    changeSet(author: 'ddurkin', id: 'drop update name procedures', dbms: 'oracle', context: 'standard') {
+        grailsChange {
+            change {
+                String query = """SELECT OBJECT_NAME  ,OBJECT_TYPE
+                                  FROM USER_PROCEDURES
+                                  WHERE OBJECT_NAME IN ('UPDATE_CONTEXT_NAME','UPDATE_PROJECT_CONTEXT_NAME',
+                                                        'UPDATE_ASSAY_SHORT_NAME','UPDATE_EXPRMT_CONTEXT_NAME',
+                                                        'UPDATE_STEP_CONTEXT_NAME', 'LOAD_DATA')
+                                  GROUP BY OBJECT_NAME  ,OBJECT_TYPE"""
+                sql.eachRow(query){ row ->
+                    String dropStatement = "DROP ${row.OBJECT_TYPE} ${row.OBJECT_NAME}"
+                    println(dropStatement)
+                    sql.execute(dropStatement)
+                }
+            }
+        }
+    }
+
 }
 
