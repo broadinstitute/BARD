@@ -51,11 +51,11 @@ END;
         }
     }
 
-    changeSet(author: "ddurkin", id: "iteration_025/01-add-element-columns.sql", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration_025/01-add-element-columns.sql", stripComments: true)
+    changeSet(author: "ddurkin", id: "iteration_025/03-add-element-columns.sql", dbms: "oracle", context: "standard") {
+        sqlFile(path: "${migrationsDir}/iteration_025/03-add-element-columns.sql", stripComments: true)
     }
 
-    changeSet(author: "ddurkin", id: "iteration_025/02-element-update-data-for-2-new-columns.sql", dbms: "oracle", context: "production-data-update") {
+    changeSet(author: "ddurkin", id: "iteration_025/04-element-update-data-for-2-new-columns.sql", dbms: "oracle", context: "production-data-update") {
         grailsChange {
             change {
                 sql.execute("""BEGIN
@@ -64,7 +64,7 @@ END;
                                """)
             }
         }
-        sqlFile(path: "${migrationsDir}/iteration_025/02-element-update-data-for-2-new-columns.sql", stripComments: false) // there was a --- in a string that was getting stripped and messing up the executed sql
+        sqlFile(path: "${migrationsDir}/iteration_025/04-element-update-data-for-2-new-columns.sql", stripComments: false) // there was a --- in a string that was getting stripped and messing up the executed sql
     }
 
 }
