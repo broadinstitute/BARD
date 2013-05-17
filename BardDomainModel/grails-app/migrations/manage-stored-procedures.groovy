@@ -36,29 +36,6 @@ databaseChangeLog = {
 
     }
 
-    changeSet(author: 'ddurkin', id: 'create-load-data-package.sql', dbms: 'oracle', context: 'standard, load-data', runOnChange: 'true') {
-
-        grailsChange {
-            final List<String> sqlBlocks = []
-            String text = resourceAccessor.getResourceAsStream('sql/create-load-data-package.sql').text
-            for (String sqlBlock in text.split(BACKSLASH_ONLY_OPTIONAL_WHITESPACE)) {
-                sqlBlocks.add(sqlBlock)
-            }
-
-            change {
-                for (String sqlBlock in sqlBlocks) {
-//                      println( '**************' )
-//                      println( sqlBlock )
-//                      println( '**************' )
-                    sql.call(sqlBlock)
-                }
-            }
-
-            checkSum(text)
-        }
-
-    }
-
     changeSet(author: 'ddurkin', id: 'create-or-replace-update-context-groups.sql', dbms: 'oracle', context: 'standard', runOnChange: 'true') {
 
         grailsChange {
