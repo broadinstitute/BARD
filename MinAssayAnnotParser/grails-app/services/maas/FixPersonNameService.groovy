@@ -7,6 +7,7 @@ import bard.db.project.ProjectContextItem
 import bard.db.model.AbstractContextItem
 import bard.db.people.Person
 import bard.db.registration.AttributeType
+import org.apache.commons.lang.StringUtils
 
 /**
  * This service ran after populating context to fix
@@ -48,7 +49,7 @@ class FixPersonNameService {
      * @return
      */
     def fixEachItem(AbstractContextItem item, String modifiedBy) {
-        if (item.extValueId)
+        if (item.extValueId && StringUtils.isNumeric(item.extValueId))
             return
         if (!item.valueDisplay) {
             println("Context Item ${item.id}: No person name be found in valueDisplay field")

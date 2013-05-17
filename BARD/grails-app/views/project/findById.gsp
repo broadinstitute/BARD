@@ -45,7 +45,7 @@
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
 	        	<g:form action="findById" class="form-inline">	
 	        		<label class="control-label" for="projectId">Enter Project ID:</label>
-	        		<g:textField name="projectId"/>
+	        		<g:textField name="projectId" autofocus="true"/>
 	        		<span class="help-inline">${hasErrors(bean: instance, field: 'projectId', 'error')}</span>
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
 				</g:form>

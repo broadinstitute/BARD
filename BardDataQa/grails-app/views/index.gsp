@@ -28,6 +28,10 @@
             <td>Projects, Assays and their Centers</td>
             <td><g:link controller="projectAssaysCenters" action="index">List assays associated with each project and the center for each</g:link></td>
         </tr>
+        <tr>
+            <td>AID's in MAAS</td>
+            <td><g:link controller="aidSpreadsheet" action="index">List AID's and the spreadsheets and datasets they are in</g:link></td>
+        </tr>
     </table>
 </body>
 </html>

@@ -73,8 +73,8 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                     assayContext.assay = getAssayFromAid(contextDTO.aid)
 
                     assayContext.modifiedBy = modifiedBy
-                    //TODO DELETE DELETE DELETE the following line should be deleted once all assays have been uploaded to CAP
-                    if (!assayContext.assay) {//skip this assay context
+
+                    if (!assayContext.assay) {
                         writeMessageWhenAidNotFoundInDb(contextDTO)
                         status.setRollbackOnly()
                         return false
@@ -113,11 +113,11 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                             }
                         }
                         //else, if the attribute's value is a number value, store it in the valueNum field
-                        else if (contextItemDto.value && (!(contextItemDto.value instanceof String) || contextItemDto.value.isNumber())) {
+                        else if (contextItemDto.value && (contextItemDto.value instanceof Number)) {
                             if (contextItemDto.attributeType != AttributeType.Free) {
-                                Float val = new Float(contextItemDto.value)
+                                Double val = (Number)contextItemDto.value.doubleValue()
                                 assayContextItem.valueNum = val
-                                assayContextItem.qualifier = "="
+                                assayContextItem.qualifier = "= "
                                 //If the value is a number and also has concentration-units, we need to find the units element ID and update the valueDisplay accrdingly
                                 assayContextItem.valueDisplay = val.toString() + concentrationUnitsAbbreviation
                             }
@@ -159,6 +159,14 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
 
 
                         if (! postProcessAssayContextItem(assayContextItem, contextDTO)) {
+                            status.setRollbackOnly()
+                            return false
+                        }
+
+                        if (! assayContextItem.validate()) {
+                            final String message = "Problem creating assay context item.  spreadsheet: $contextItemDto  gorm:  ${convertToString(assayContextItem)} error message:  ${assayContextItem.errors.dump()}"
+                            loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
+                                    null, 0, message)
                             status.setRollbackOnly()
                             return false
                         }
@@ -284,7 +292,14 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                 assayContext.assay.assayContexts.remove(assayContext)
                 logger.info("AssayContext errors: ${assayContext.errors.dump()}")
                 loadResultType = ContextLoadResultsWriter.LoadResultType.fail
-                message = "failed to load b/c of database errors:  ${assayContext.errors.dump()}"
+
+                StringBuilder builder = new StringBuilder()
+                builder.append("failed to save.  contextItemDTO's:  ")
+                for (ContextItemDto contextItemDto : contextDTO.contextItemDtoList) {
+                    builder.append("${contextItemDto.key}:${contextItemDto.value}, ")
+                }
+                builder.append("database errors:  ${assayContext.errors.dump()}")
+                message = builder.toString()
                 numLoaded = 0
             } else {
                 loadResultType = ContextLoadResultsWriter.LoadResultType.success
@@ -296,5 +311,19 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
         }
 
         return doSave
+    }
+
+    private static String convertToString(AssayContextItem aci) {
+        StringBuilder builder = new StringBuilder()
+
+        builder.append("attribute:  ${aci.attributeElement.label} ${aci.attributeElement.id} ")
+        builder.append("valueDisplay:  ${aci.valueDisplay} ")
+        builder.append("valueElement:  ${aci.valueElement.label} ${aci.valueElement.id} ")
+        builder.append("valueNum:  ${aci.valueNum} ")
+        builder.append("valueMin valueMax:  ${aci.valueMin} ${aci.valueMax} ")
+        builder.append("attributeType:  ${aci.attributeType} ")
+        builder.append("qualifier:  ${aci.qualifier} ")
+
+        return builder.toString()
     }
 }

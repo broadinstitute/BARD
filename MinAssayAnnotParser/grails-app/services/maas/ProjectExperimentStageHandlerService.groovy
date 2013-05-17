@@ -19,6 +19,7 @@ class ProjectExperimentStageHandlerService {
 
     def loadExperimentsContext(String loadedBy, List<File> inputFiles, List<Long> mustLoadedAids) {
         def contextGroups = ContextGroupsBuilder.buildProjectExperimentStage()
+        Map attributeNameMapping = ElementIdMapping.build()
         inputFiles.each {File file ->
             println("Processing file ${file.name}")
             def dtos = ExcelHandler.buildDto(file, START_ROW, contextGroups, MAX_ROWS)
@@ -26,7 +27,7 @@ class ProjectExperimentStageHandlerService {
             if (currentModifiedBy.length() >= 40) {
                 currentModifiedBy = currentModifiedBy.substring(0, 40)
             }
-            AttributesContentsCleaner.cleanDtos(dtos)
+            AttributesContentsCleaner.cleanDtos(dtos, attributeNameMapping)
             try {
                 dtos.each {
                     loadProjectExprimentStage(currentModifiedBy, it, mustLoadedAids)

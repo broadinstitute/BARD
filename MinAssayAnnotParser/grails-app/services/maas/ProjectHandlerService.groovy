@@ -4,6 +4,7 @@ import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 
+
 class ProjectHandlerService {
     def contextHandlerService = new ContextHandlerService()
 
@@ -25,13 +26,14 @@ class ProjectHandlerService {
 
     def loadProjectsContext(String loadedBy, List<File> inputFiles, List<Long> mustLoadedAids, FileWriter logWriter) {
         def contextGroups = ContextGroupsBuilder.buildProjectContextGroup()
+        Map attributeNameMapping = ElementIdMapping.build()
         inputFiles.each{File file ->
             def dtos = ExcelHandler.buildDto(file, START_ROW, contextGroups, MAX_ROWS)
             String currentModifiedBy = "${loadedBy}_${file.name}"
             if (currentModifiedBy.length() >= 40){
                 currentModifiedBy = currentModifiedBy.substring(0,40)
             }
-            AttributesContentsCleaner.cleanDtos(dtos)
+            AttributesContentsCleaner.cleanDtos(dtos, attributeNameMapping)
             try{
                 dtos.each{
                         loadProjectContext(currentModifiedBy, it, mustLoadedAids, logWriter)
@@ -83,7 +85,15 @@ class ProjectHandlerService {
 
         if (errorMessages.size() == 0) {
             if (!project.save(flush: true)) {
-                writeToLog(logWriter, "Error Save project ${project.id} with aid ${dto.aid}: ${project.errors.toString()}")
+                writeToLog(logWriter, "Error Save project ${project.id} with aid ${dto.aid} in ${dto.sourceFile.name}: ${project.errors.toString()}")
+                StringBuilder builder = new StringBuilder()
+                for (ProjectContext context : project.contexts) {
+                    for (ProjectContextItem item : context.contextItems) {
+                        builder.append("""attributeElement label: ${item.attributeElement.label}, attributeElementId: ${item.attributeElement},
+                               valueELement: ${item.valueElement}, externalValueId: ${item.extValueId}\n""")
+                    }
+                }
+                writeToLog(logWriter,builder.toString())
             }
             else {
                 writeToLog(logWriter, "Success Saved project ${project.id} with aid ${dto.aid}, #dup context ${dupContextCnt}, # new contexts ${newContextCnt}, # new ContextItem ${newItemsCnt}, # duplicate ContextItem ${dupItemCnt}")
