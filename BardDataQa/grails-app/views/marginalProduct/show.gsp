@@ -21,11 +21,10 @@
         <th>Project UID</th>
         <th>Total AID's</th>
         <th>Marginal Product</th>
+        <th># missing</th>
         <th># need MAAS</th>
         <th># need RTA</th>
-        <th>Result map:  # with conflict between Result type and Context item</th>
-        <th>Result map:  # with duplicate results</th>
-        <th>Result map:  # with relationship problem</th>
+        <th># Result map problems</th>
         <th># on hold</th>
     </tr>
     <g:each in="${marginalProductList}" var="marginalProduct">
@@ -33,6 +32,15 @@
             <td>${marginalProduct.projectUid}</td>
             <td>${marginalProduct.totalAidCount}</td>
             <td>${marginalProduct.marginalProduct}</td>
+
+            <td>
+                ${marginalProduct.missingCount}
+                <g:if test="${marginalProduct.missingCount > 0}">
+                    <g:link action="showMissingAid" params="[projectUid:marginalProduct.projectUid, datasetId:dataset.id]">
+                        (click to list)
+                    </g:link>
+                </g:if>
+            </td>
 
             <td>
                 ${marginalProduct.countThatNeedMaas}
@@ -53,27 +61,9 @@
             </td>
 
             <td>
-                ${marginalProduct.countWitheResultMapConflictBetweenResultTypeAndContextItem}
-                <g:if test="${marginalProduct.countWitheResultMapConflictBetweenResultTypeAndContextItem > 0}">
-                    <g:link action="showResultMapConflictBetweenResultTypeAndContextItem" params="[projectUid:marginalProduct.projectUid, datasetId: dataset.id]">
-                        (click to list)
-                    </g:link>
-                </g:if>
-            </td>
-
-            <td>
-                ${marginalProduct.countWithResultMapDuplicateResult}
-                <g:if test="${marginalProduct.countWithResultMapDuplicateResult > 0}">
-                    <g:link action="showResultMapDuplicateResult" params="[projectUid:marginalProduct.projectUid, datasetId: dataset.id]">
-                        (click to list)
-                    </g:link>
-                </g:if>
-            </td>
-
-            <td>
-                ${marginalProduct.countWithResultMapRelationshipProblem}
-                <g:if test="${marginalProduct.countWithResultMapRelationshipProblem > 0}">
-                    <g:link action="showResultMapRelationshipProblem" params="[projectUid:marginalProduct.projectUid, datasetId: dataset.id]">
+                ${marginalProduct.countWitheResultMapProblem}
+                <g:if test="${marginalProduct.countWitheResultMapProblem > 0}">
+                    <g:link action="showResultMapProblems" params="[projectUid:marginalProduct.projectUid]">
                         (click to list)
                     </g:link>
                 </g:if>

@@ -11,7 +11,13 @@ import org.junit.*
 @TestFor(MarginalProductService)
 class MarginalProductServiceTests {
 
-    void testSomething() {
-        fail "Implement me"
+
+    void setUp() {
+    }
+
+    void test() {
+        String result = MarginalProductService.buildRmProbQuery()
+        assert result
+        println(result)
     }
 }
