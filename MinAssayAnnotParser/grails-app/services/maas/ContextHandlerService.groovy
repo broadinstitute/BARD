@@ -22,6 +22,8 @@ class ContextHandlerService {
 
 
     AbstractContextItem updateContextItem(ContextItemDto contextItemDto, String loadedBy, List<String> errorMessages, String contextType) {
+        if (!contextItemDto.value)
+            return
         Element attributeElement = Element.findByLabelIlike(contextItemDto.key)
         if (!attributeElement) {
             final String message = "Attribute element not exist: (${contextItemDto.key})"
@@ -62,11 +64,11 @@ class ContextHandlerService {
         //else, if the attribute's is a type-in or attribute-type is Free, then simply store it the valueDisplay field
         else if (contextItemDto.typeIn || (contextItemDto.attributeType == AttributeType.Free)) {
             contextItem.valueDisplay = contextItemDto.value
-            def nameElementId = [565, //assay provider name
-                    568, // project lead name
-                    1823] // science officer
+            def nameElementId = [565l, //assay provider name
+                    568l, // project lead name
+                    1823l] // science officer
             if (nameElementId.contains(contextItem.attributeElement.id))
-                contextItem.extValueId = 'NA'      // put a value as a place holder in order to pass validation
+                contextItem.extValueId = contextItemDto.value      // put a value as a place holder in order to pass validation
         }
         else {
             final String message = "Can not handle Key: ${contextItemDto.key}, Value: ${contextItemDto.value}"

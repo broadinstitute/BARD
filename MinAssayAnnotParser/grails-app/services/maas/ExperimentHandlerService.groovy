@@ -88,6 +88,14 @@ class ExperimentHandlerService {
         if (errorMessages.size() == 0) {
             if (!experiment.save(flush: true)) {
                 writeToLog(logWriter, "Error Save experiment ${experiment.id} with aid ${dto.aid} in ${dto.sourceFile.name}: ${experiment.errors.toString()}")
+                StringBuilder builder = new StringBuilder()
+                for (ExperimentContext context : experiment.contexts) {
+                    for (ExperimentContextItem item : context.contextItems) {
+                        builder.append("""attributeElement label: ${item.attributeElement.label}, attributeElementId: ${item.attributeElement},
+                               valueELement: ${item.valueElement}, externalValueId: ${item.extValueId}\n""")
+                    }
+                }
+                writeToLog(logWriter,builder.toString())
             }
             else {
                 writeToLog(logWriter, "Success Saved expriment ${experiment.id} with aid ${dto.aid}, #dup context ${dupContextCnt}, # new contexts ${newContextCnt}, # new ContextItem ${newItemsCnt}, # duplicate ContextItem ${dupItemCnt}")
