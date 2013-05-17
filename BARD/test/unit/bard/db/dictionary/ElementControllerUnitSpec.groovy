@@ -169,8 +169,8 @@ class ElementControllerUnitSpec extends Specification {
         'exactly at limit' | TestUtils.createString(Element.DESCRIPTION_MAX_SIZE)     | true  | null
     }
 
-    void "test comments constraints #desc TermCommand: Comments '#valueUnderTest'"() {
-        final String field = 'comments'
+    void "test curation notes constraints #desc TermCommand: Curation Notes '#valueUnderTest'"() {
+        final String field = 'curationNotes'
         given:
         TermCommand termCommand =
             new TermCommand(parentLabel: this.parentElement.label, label: "label", description: "description", abbreviation: "abbr", synonyms: "abc,efg")
