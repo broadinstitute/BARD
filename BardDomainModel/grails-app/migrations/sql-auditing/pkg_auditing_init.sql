@@ -154,7 +154,7 @@ AS
                   || '    lt_columns  auditing.t_columns;' || cr
                   || '    lv_table_owner VARCHAR2(30) := ''' || USER || ''';' || cr
                   || '    lv_table_name VARCHAR2(30) := ''' || avi_table_name || ''';' || cr
-                  || '    lv_username VARCHAR2(30);' || cr
+                  || '    lv_username VARCHAR2(40);' || cr
                   || '    lv_primary_key  VARCHAR2(1000);' || cr
                   || '    lv_action VARCHAR2(30) := ''' || avi_type || ''';' || cr
                   || '    i BINARY_INTEGER := 0;' || cr || CR

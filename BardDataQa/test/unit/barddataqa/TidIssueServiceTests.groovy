@@ -12,6 +12,8 @@ import org.junit.*
 class TidIssueServiceTests {
 
     void testSomething() {
-        fail "Implement me"
+        TidIssueService tidIssueService = new TidIssueService()
+
+        println(tidIssueService.columnsString)
     }
 }

@@ -17,10 +17,6 @@
             <td><g:link controller="dataset" action="index">List datasets and calculate marginal product of work for them</g:link></td>
         </tr>
         <tr>
-            <td>Result Map Issues</td>
-            <td><g:link controller="resultMapIssue" action="index">List AID's with current known issues in the result_map table</g:link></td>
-        </tr>
-        <tr>
             <td>Missing AID's</td>
             <td><g:link controller="checkForMissingAids" action="index">Check for AID's that are in a dataset but missing from external_reference table (${missingAidCount})</g:link></td>
         </tr>
