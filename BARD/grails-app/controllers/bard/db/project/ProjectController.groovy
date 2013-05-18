@@ -1,11 +1,15 @@
 package bard.db.project
 
+import bard.db.command.BardCommand
 import bard.db.dictionary.Element
+import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.validation.Validateable
+import groovy.transform.InheritConstructors
 
 @Secured(['isAuthenticated()'])
 class ProjectController {
@@ -32,6 +36,15 @@ class ProjectController {
             flash.message = null
 
         [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
+    }
+
+    def reloadProjectSteps(Long projectId) {
+        try {
+            Project project = Project.findById(projectId)
+            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (Exception e) {
+            render 'serviceError:' + e.message
+        }
     }
 
     def removeExperimentFromProject(Long experimentId, Long projectId) {
@@ -96,6 +109,40 @@ class ProjectController {
         } catch (UserFixableException e) {
             render 'serviceError:' + e.message
         }
+    }
+
+    def projectStages() {
+        List<String> sorted = []
+        final Collection<StageTree> stageTrees = StageTree.findAll()
+        for (StageTree stageTree : stageTrees) {
+            sorted.add(stageTree.label)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
+
+    def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
+        //pass in the project experiment
+        ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+
+        //x-editable will not send a new value only when the original is different from the selected
+        //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL
+        Long originalStageElementId = new Long(inlineEditableCommand.name)
+        Element newStage = Element.findByLabel(inlineEditableCommand.value)
+
+        if (originalStageElementId != newStage?.id) {//there has been a change
+
+            if (newStage) {
+                projectExperiment.stage = newStage
+                projectExperiment.save(flush: true)
+                projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+            } else {
+                render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
+                return
+            }
+        }
+        render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
     }
 
     def ajaxFindAvailableExperimentByName(String experimentName, Long projectId) {
@@ -192,6 +239,19 @@ class ProjectController {
         def query = params?.term
         def projects = Project.findAllByNameIlike("%${query}%", [sort: "name", order: "asc"])
         render projects.collect { it.name } as JSON
+    }
+}
+@InheritConstructors
+@Validateable
+class InlineEditableCommand extends BardCommand {
+    Long pk
+    String name
+    String value
+
+    static constraints = {
+        pk(blank: false, nullable: false)
+        name(blank: false, nullable: false)
+        value(blank: false, nullable: false)
     }
 }
 

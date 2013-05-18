@@ -19,8 +19,9 @@ log = {msg ->
     logWriter.write(msg+"\n")
     logWriter.flush()
 }
+SpringSecurityUtils.reauthenticate('fixValueDisplay', null)
 
-String modifiedBy = "fixExternalValueDisplay"
+String modifiedBy = "fixValueDisplay"
 
 OntologyDataAccessService externalOntologyAccessService = ctx.ontologyDataAccessService
 //List<AssayContextItem> acItems = AssayContextItem.findAllByExtValueIdIsNotNull()
@@ -35,7 +36,7 @@ where aci.extValueId is not null and aci.modifiedBy <> '${modifiedBy}' and aci.m
 int updatedAssayContextItem = 0
 for (AssayContextItem item : acItems) {
     if (processItem(item, externalOntologyAccessService, "Assay", modifiedBy)){
-        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
+//        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
         item.save()
         updatedAssayContextItem++
     }
@@ -52,7 +53,7 @@ where eci.extValueId is not null and eci.modifiedBy <> '${modifiedBy}' and eci.m
 int updatedExperimentContextItem = 0
 for (ExperimentContextItem item : ecItems) {
     if (processItem(item, externalOntologyAccessService, "Experiment", modifiedBy)){
-        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
+  //      BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
 //       println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedExperimentContextItem++
@@ -68,7 +69,7 @@ where pci.extValueId is not null and pci.modifiedBy <> '${modifiedBy}' and pci.m
 int updatedProjectContextItem = 0
 for (ProjectContextItem item : pcItems) {
     if (processItem(item, externalOntologyAccessService, "Project", modifiedBy)){
-        BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
+    //    BardContextUtils.setBardContextUsername(ctx.sessionFactory.currentSession, modifiedBy)
  //       println("username: " + BardContextUtils.getCurrentUsername(ctx.sessionFactory.currentSession))
         item.save()
         updatedProjectContextItem++

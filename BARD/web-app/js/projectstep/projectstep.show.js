@@ -1,9 +1,23 @@
 var redraw;
 
 /* only do all this when document has finished loading (needed for RaphaelJS) */
-window.onload = function () {
+$(document).ready(function () {
+    $.fn.editable.defaults.mode = 'inline';
     initFunction();
-};
+});
+function refreshProjectSteps(){
+    var projectId = $("#projectIdForStep").val();
+    var inputdata = {'projectId':projectId};
+    $.ajax
+    ({
+        url:"../reloadProjectSteps",
+        data:inputdata,
+        cache:false,
+        success:function(data) {
+            handleSuccess(data)
+        }
+    });
+}
 
 function initFunction() {
     // a list of most distinguishable color
@@ -240,6 +254,11 @@ function initFunction1() {
                 $('#node-selection-details').html(template(params));
             }
         }
+        $('.projectStageId').editable({
+            success: function (response, newValue) {
+                refreshProjectSteps();
+            }
+        });
     });
     var template1 = Handlebars.compile($("#edge-selection-template").html());
     var edges = graphInJSON.edges;
