@@ -35,6 +35,17 @@ log = {msg ->
    logWriter.flush()
 }
 
+copyResultMap = { aid -> 
+    ExternalReference.withSession { session -> 
+        session.createSQLQuery("""
+        BEGIN
+          delete from result_map;
+          insert into result_map select * from vw_result_map where aid = ${aid};
+        END;
+        """).executeUpdate()
+   }
+}
+
 recreateMeasuresAndLoad = { aid ->
     ExternalReference ref = ExternalReference.findByExtAssayRef("aid=${aid}")
 
@@ -53,6 +64,8 @@ recreateMeasuresAndLoad = { aid ->
         return
     }
 
+    copyResultMap(aid)
+
     def map
     try {
         map = pubchemReformatService.loadMap(Long.parseLong(aid))
@@ -66,14 +79,21 @@ recreateMeasuresAndLoad = { aid ->
         log("Skipping ${aid} -> ${ref.experiment.id} because we're missing resultmapping")
         return
     } else {
-        log("Result map for ${aid}")
-        for(r in map.allRecords) {
-           log("   ${r}")
-        }
+//        log("Result map for ${aid}")
+//        for(r in map.allRecords) {
+//           log("   ${r}")
+//        }
     }
 
     log("Creating measures for ${aid} -> ${ref.experiment.id}")
-    recreateMeasures(aid)
+    try {
+	recreateMeasures(aid)
+    } catch (Exception ex) {
+	log("failed to execute transfer result map: ${aid}")
+	log("Exception while creating measures: ${ExceptionUtils.getStackTrace(ex)}")
+	return
+    }
+
     ref = ExternalReference.findByExtAssayRef("aid=${aid}")
 
     def pubchemFile = "${pubchemFileDir}/${aid}.csv"
@@ -113,11 +133,13 @@ recreateMeasuresAndLoad = { aid ->
 recreateMeasures = { aid ->
     ExternalReference.withSession { session -> 
         def lastErrorId = session.createSQLQuery("""select max(error_log_id) from error_log""").setCacheable(false).uniqueResult()
+
         session.createSQLQuery("""
         BEGIN
           result_map_util.transfer_result_map('${aid}');
         END;
         """).executeUpdate()
+
 	def errors = session.createSQLQuery("""select err_msg || ' '|| ERR_COMMENT from error_log where error_log_id > ${lastErrorId}""").setCacheable(false).list()
 	if(errors.size() > 0) {
 		throw new RuntimeException("result_map_util.transfer_result_map('${aid}') failed: ${errors}")
