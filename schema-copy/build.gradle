@@ -21,3 +21,62 @@ dependencies {
 
 apply plugin: 'groovy'
 apply plugin: 'oracle-schema-copy'
+
+
+import static com.github.utils.SqlUtils.getConnection
+import static org.gradle.utils.GradleUtils.*
+import groovy.sql.Sql
+
+task dropAll << {
+        ensureRequiredProperties(project, ['dst'])
+	prodCheck(project)
+
+        final String alias = project['dst']
+
+        Map dstConnMap = getConnectionInfo(project, alias)
+        def dstConn = getConnection(dstConnMap)
+
+	def excludedDataTables = project["excluded.dataTables"].split(',') as List
+	def excludedSchemaTables = project["excluded.schemaTables"].split(',') as List
+
+	def sql = new Sql(dstConn)
+
+	println("dropping from ${dstConnMap}")
+	sqlexecute = { s -> 
+		println("executing: ${s}")
+		sql.execute(s as String) 
+	}
+
+	sql.eachRow("select table_name, constraint_name from user_constraints where table_name not like 'BIN\$%' and constraint_type = 'R'") {
+		row ->
+		sqlexecute("alter table ${row.TABLE_NAME} drop constraint ${row.CONSTRAINT_NAME}")
+	}
+
+	sql.eachRow("select view_name from user_views") { row ->
+		sqlexecute("drop view ${row.VIEW_NAME}")
+	}
+
+	sql.eachRow("select object_name from user_objects where object_type = 'PACKAGE'") { row ->
+		sqlexecute("drop package ${row.OBJECT_NAME}")
+	}
+
+	sql.eachRow("select object_name from user_objects where object_type = 'PROCEDURE'") { row ->
+		sqlexecute("drop procedure ${row.OBJECT_NAME}")
+	}
+
+	sql.eachRow("select synonym_name from user_synonyms") { row -> 
+		sqlexecute("drop synonym ${row.SYNONYM}")
+	}
+
+	sql.eachRow("select table_name name from user_tables where table_name not like 'BIN\$%'") { row ->
+		if(excludedSchemaTables.contains(row.NAME)) {
+			if(!excludedDataTables.contains(row.NAME)) {
+				sqlexecute("delete from ${row.NAME}")
+			}
+		} else {
+			sqlexecute("drop table ${row.NAME}")
+		}
+	}
+
+	dstConn.close()
+}
