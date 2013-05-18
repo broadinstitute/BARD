@@ -1,16 +1,29 @@
 import bard.db.dictionary.OntologyDataAccessService
-import org.springframework.web.context.support.WebApplicationContextUtils
-import bard.validation.ext.ExternalOntologyPerson
 import bard.validation.ext.ExternalOntologyFactory
+import bard.validation.ext.ExternalOntologyPerson
 
 class BootStrap {
-     OntologyDataAccessService ontologyDataAccessService
-	 ExternalOntologyFactory externalOntologyFactory
-	def init = { servletContext ->
-		externalOntologyFactory.getCreators().add(new ExternalOntologyPerson.PersonCreator())
-		ontologyDataAccessService.computeTrees(false)
-	}
-	def destroy = {
-	}
+    OntologyDataAccessService ontologyDataAccessService
+    ExternalOntologyFactory externalOntologyFactory
+    def init = { servletContext ->
+        loadPersonOntology()
+        computeTrees()
+    }
+    void loadPersonOntology(){
+        try {
+            externalOntologyFactory.getCreators().add(new ExternalOntologyPerson.PersonCreator())
+        } catch (Exception ee) {
+            log.error(ee)
+        }
+    }
+    void computeTrees(){
+        try {
+            ontologyDataAccessService.computeTrees(false)
+        } catch (Exception ee) {
+            log.error(ee)
+        }
+    }
+    def destroy = {
+    }
 
 }
