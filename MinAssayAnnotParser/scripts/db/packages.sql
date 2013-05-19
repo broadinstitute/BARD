@@ -156,12 +156,16 @@ AS
                     -- we're guaranteed just one from the count(*) in the curosr
                     AND e.element_id = aci.attribute_id;
 
+begin
                   SELECT SubStr(full_path, InStr(full_path, '>') +2, InStr(full_path, '>', 1,3)-InStr(full_path, '>'))
                   INTO lv_context_group
                   FROM bard_tree
                   WHERE label = lv_context_name
                   AND ROWNUM = 1;
-
+exception
+when no_data_found then
+  lv_context_group := 'unclassified>';
+end;
                   lv_context_group := Nvl(lv_context_group, 'unclassified>');
 
             ELSIF lr_assay_context.attributes LIKE '%assay component role%'
