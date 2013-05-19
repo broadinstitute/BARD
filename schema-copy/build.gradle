@@ -34,6 +34,9 @@ task dropAll << {
         final String alias = project['dst']
 
         Map dstConnMap = getConnectionInfo(project, alias)
+	if(dstConnMap.username.toLowerCase() == "bard_cap_prod") {
+		throw new RuntimeException("Do not drop production")
+	}
         def dstConn = getConnection(dstConnMap)
 
 	def excludedDataTables = project["excluded.dataTables"].split(',') as List
@@ -56,6 +59,10 @@ task dropAll << {
 		sqlexecute("drop view ${row.VIEW_NAME}")
 	}
 
+	sql.eachRow("select sequence_name from user_sequences") { row ->
+		sqlexecute("drop sequence ${row.SEQUENCE_NAME}")
+	}
+
 	sql.eachRow("select object_name from user_objects where object_type = 'PACKAGE'") { row ->
 		sqlexecute("drop package ${row.OBJECT_NAME}")
 	}
@@ -65,7 +72,7 @@ task dropAll << {
 	}
 
 	sql.eachRow("select synonym_name from user_synonyms") { row -> 
-		sqlexecute("drop synonym ${row.SYNONYM}")
+		sqlexecute("drop synonym ${row.SYNONYM_NAME}")
 	}
 
 	sql.eachRow("select table_name name from user_tables where table_name not like 'BIN\$%'") { row ->
