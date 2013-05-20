@@ -143,7 +143,7 @@ CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'CURATOR']
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR','CURATOR']
     mockUsers {
         integrationTestUser {
             roles = ['ROLE_USER','ROLE_CURATOR']
