@@ -44,7 +44,9 @@ class QueryHelperService {
             'av_dict_label': 'Dictionary Value',
             'description': 'Description',
             'name': 'Name',
-            'ak_dict_label': 'Dictionary Key'
+            'ak_dict_label': 'Dictionary Key',
+            'class_name': 'Panther class name',
+            'class_descr': 'Panther class description'
     ]
     final static String PROBE = "PROB"
 
