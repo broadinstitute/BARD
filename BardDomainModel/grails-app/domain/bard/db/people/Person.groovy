@@ -30,6 +30,9 @@ class Person {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
     Set<Role> getRoles() {
-        return PersonRole.findAllByPerson(this).collect { it.role } as Set
-    }
+
+        PersonRole.withTransaction {  //see http://jira.grails.org/browse/GRAILS-8450
+            return PersonRole.findAllByPerson(this).collect { it.role } as Set
+        }
+     }
 }

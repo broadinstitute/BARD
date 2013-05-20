@@ -1,6 +1,7 @@
 package bard.db.dictionary
 
 import bard.hibernate.AuthenticatedUserRequired
+import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 
 /**
@@ -26,6 +27,7 @@ class ModifyElementAndHierarchyService {
      * @throws AuthenticatedUserRequired
      * @throws ModifyElementAndHierarchyLoopInPathException
      */
+    @Secured(["hasRole('ROLE_CURATOR')"])
     void modify(NewElementAndPath newElementAndPath) throws NewElementLabelMatchesExistingElementLabelException,
             AuthenticatedUserRequired, ModifyElementAndHierarchyLoopInPathException {
 
@@ -45,6 +47,7 @@ class ModifyElementAndHierarchyService {
      * @param newPathElementList
      * @throws AuthenticatedUserRequired
      */
+    @Secured(["hasRole('ROLE_CURATOR')"])
     void updateHierarchyIfNeeded(NewElementAndPath newElementAndPath) throws AuthenticatedUserRequired,
             ModifyElementAndHierarchyLoopInPathException {
 
