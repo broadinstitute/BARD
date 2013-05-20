@@ -31,7 +31,7 @@ class PersonRole implements Serializable {
     }
 
     static PersonRole create(Person person, Role role, String modifiedBy,boolean flush = false) {
-        new PersonRole(person: person, role: role, modifiedBy: modifiedBy,lastUpdated: new Date()).save(flush: flush, insert: true)
+        new PersonRole(person: person, role: role, modifiedBy: modifiedBy,dateCreated: new Date(), lastUpdated: new Date()).save(flush: flush, insert: true)
     }
 
     static boolean remove(Person person, Role role, boolean flush = false) {
@@ -56,7 +56,7 @@ class PersonRole implements Serializable {
     static mapping = {
         table('PERSON_ROLE')
         id(column: 'PERSON_ROLE_ID', generator: "sequence", params: [sequence: 'PERSON_ROLE_ID_SEQ'])
-        id composite: ['role', 'person']
+        //id composite: ['role', 'person']
 
     }
 

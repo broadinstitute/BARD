@@ -1,7 +1,6 @@
 package bard.db.people
 
 import bard.db.BardIntegrationSpec
-import org.junit.Before
 import spock.lang.Unroll
 
 import static bard.db.people.Person.NAME_MAX_SIZE
@@ -19,10 +18,6 @@ import static test.TestUtils.createString
 class PersonConstraintIntegrationSpec extends BardIntegrationSpec {
     Person domainInstance
 
-    @Before
-    void doSetup() {
-
-    }
 
     void "test name constraints #desc name: '#valueUnderTest'"() {
         given:
@@ -52,9 +47,9 @@ class PersonConstraintIntegrationSpec extends BardIntegrationSpec {
 
     void "test getRoles"() {
         given:
-        Person person = Person.build(userName: "name1")
-        Role role = Role.build(authority: "authority1")
-        PersonRole.create(person, role, "me")
+        Person person = Person.build()
+        Role role = Role.build()
+        PersonRole.create(person, role, "me",false)
         when:
         Set<Role> roles = person.getRoles()
 
