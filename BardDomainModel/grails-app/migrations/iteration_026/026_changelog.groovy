@@ -6,7 +6,23 @@ databaseChangeLog = {
 
 
     changeSet(author: "jasiedu", id: "iteration-026/01-add-display-name-column-to-Role", dbms: "oracle", context: "standard") {
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('jasiedu');
+                               END;
+                               """)
+            }
+        }
         sqlFile(path: "${migrationsDir}/iteration_026/01-add-display-name-column-to-Role.sql", stripComments: true)
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.clear_username();
+                               END;
+                               """)
+            }
+        }
     }
 }
 
