@@ -9,13 +9,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-  <title>Edit BARD Ontology</title>
+    <title>Edit BARD Ontology</title>
 </head>
+
 <body>
 <g:each in="${list}" var="elementAndPath">
-    <g:form name="elementEditForm" url="[controller: 'element', action:'update']">
-        <g:textField name="newPathString" value="${elementAndPath.toString()}" size="${maxPathLength}" />
-        <g:submitButton name="submitButtonName" value="Do it!"/>
+    <g:form name="elementEditForm" url="[controller: 'element', action: 'update']">
+        <g:textField name="newPathString" value="${elementAndPath.toString()}" size="${maxPathLength}"/>
+        <sec:ifAnyGranted roles="ROLE_CURATOR">
+            <g:submitButton name="submitButtonName" value="Do it!"/>
+        </sec:ifAnyGranted>
         <br/>
 
         <g:hiddenField name="elementId" value="${elementAndPath.element.id}"/>
