@@ -1,8 +1,8 @@
 package bard.db.people
 
 class Person {
-    private static final int NAME_MAX_SIZE = 255
-    private static final int MODIFIED_BY_MAX_SIZE = 40
+    public static final int NAME_MAX_SIZE = 255
+    public static final int MODIFIED_BY_MAX_SIZE = 40
 
     String userName
     String emailAddress
@@ -28,5 +28,8 @@ class Person {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+    }
+    Set<Role> getRoles() {
+        return PersonRole.findAllByPerson(this).collect { it.role } as Set
     }
 }
