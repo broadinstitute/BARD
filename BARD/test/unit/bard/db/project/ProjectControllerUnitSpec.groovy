@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.dictionary.Element
+import bard.db.dictionary.StageTree
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
@@ -21,23 +22,28 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference])
-@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference])
+@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
 class ProjectControllerUnitSpec extends Specification {
     @Shared Project project
     @Shared ProjectExperiment projectExperimentFrom
     @Shared ProjectExperiment projectExperimentTo
-
+    @Shared StageTree stageTree1
+    @Shared StageTree stageTree2
     ProjectService projectService
 
     @Before
     void setup() {
         project = Project.build()
+        Element element1 = Element.build(label: "primary assay")
+        Element element2 = Element.build(label: "secondary assay")
+        stageTree1 = StageTree.build(element: element1)
+        stageTree2 = StageTree.build(element: element2)
         Experiment experimentFrom = Experiment.build()
         Experiment experimentTo = Experiment.build()
-        projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom)
-        projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo)
+        projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: element1)
+        projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo, stage: element2)
         ProjectStep projectStep = ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo)
         projectExperimentFrom.addToFollowingProjectSteps(projectStep)
         projectExperimentTo.addToPrecedingProjectSteps(projectStep)
@@ -46,6 +52,80 @@ class ProjectControllerUnitSpec extends Specification {
             projectExperimentRenderService(ProjectExperimentRenderService)
         }
         projectService = Mock()
+    }
+
+    void 'test projectStages'() {
+
+        when:
+        controller.projectStages()
+
+        then:
+        assert response.text
+
+
+    }
+
+    void 'test reloadProjectSteps'() {
+        given:
+        views['/project/_showstep.gsp'] = 'mock contents'
+        controller.projectService = projectService
+        when:
+        controller.reloadProjectSteps(project.id)
+        then:
+        assert response.text == 'mock contents'
+    }
+
+    void 'test updateProjectStage change the stage'() {
+        given:
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: projectExperimentTo.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom.stage.id == projectExperimentTo.stage.id
+        assert response.text == "secondary assay"
+        assert response.status == 200
+    }
+
+    void 'test updateProjectStage no change in stage'() {
+        given:
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: projectExperimentFrom.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom.stage.id != projectExperimentTo.stage.id
+        assert response.text == "primary assay"
+        assert response.status == 200
+
+    }
+
+    void 'test updateProjectStage new stage not found'() {
+        given:
+        String label = "Some unknown stage"
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom.stage.id != projectExperimentTo.stage.id
+        assert response.text == "Could not find stage with label ${label}"
+        assert response.status == 404
+
+    }
+
+    void 'test reload project fail {#description}'() {
+        given:
+        controller.projectService = projectService
+
+        when:
+        controller.reloadProjectSteps(null)
+        then:
+        assert response.text.startsWith(responsetext)
+
+        where:
+        description                          | responsetext
+        "failed due to experiment not found" | "serviceError"
     }
 
     void 'test show'() {

@@ -53,6 +53,10 @@ class MergeAssayService {
     //     add an experiment_context_item that corresponds the attribute with a value as specified in the original assay
 
     def mergeAssayContextItem(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
+        if (!assayWillKeep.validate()) {
+            throw new RuntimeException("Target assay was invalid before we started merge: ${assayWillKeep.errors}")
+        }
+
         List<AssayContextItem> candidateContextItems = []
         removingAssays.each {
             candidateContextItems.addAll(it.assayContextItems)
@@ -78,7 +82,7 @@ class MergeAssayService {
                 continue
             }
 
-            AssayContextItem second = assayWillKeep.assayContextItems.find {it.attributeElement == item.attributeElement && it.valueElement != item.valueElement}
+            AssayContextItem second = assayWillKeep.assayContextItems.find { it.attributeElement == item.attributeElement && it.valueElement != item.valueElement }
             if (second) {
                 assayContextItemInKeepWithDifferentValue++
                 createExperimentContextAndItem(item.assayContext, modifiedBy)
@@ -89,8 +93,7 @@ class MergeAssayService {
                 item.assayContext = second.assayContext
                 second.assayContext.addToAssayContextItems(item)
                 second.attributeType = AttributeType.List
-            }
-            else {
+            } else {
                 assayContextItemNotInKeep++
                 // At the point we should be able to find a corresponding context
                 AssayContext context = assayWillKeep.assayContexts.find {
@@ -114,19 +117,19 @@ class MergeAssayService {
                     assaycontextitem # in keep assay ${assayContextItemInKeep},
                     assaycontextitem # in keep assay with different value ${assayContextItemInKeepWithDifferentValue},
                     assaycontextitem # not in keep assay  ${assayContextItemNotInKeep}""")
-        assayWillKeep.save()
+        assayWillKeep.save(failOnError: true)
         // Assay.findById(assayWillKeep.id)
     }
 
     private void validateAssayConsistent(Assay assay) {
-        for(measure in assay.measures) {
-            for(expMeasure in measure.experimentMeasures) {
+        for (measure in assay.measures) {
+            for (expMeasure in measure.experimentMeasures) {
                 assert expMeasure.experiment.assay == assay
             }
         }
 
-        for(experiment in assay.experiments) {
-            for(expMeasure in experiment.experimentMeasures) {
+        for (experiment in assay.experiments) {
+            for (expMeasure in experiment.experimentMeasures) {
                 assert expMeasure.experiment.assay == assay
             }
         }
@@ -134,13 +137,13 @@ class MergeAssayService {
 
     private void createExperimentContextAndItem(AssayContext assayContext, String modifiedBy) {
         for (Experiment experiment : assayContext.assay.experiments) {
-            def foundExperimentContext = experiment.experimentContexts.find {it?.contextName == assayContext.contextName && it?.contextGroup == assayContext.contextGroup}
+            def foundExperimentContext = experiment.experimentContexts.find { it?.contextName == assayContext.contextName && it?.contextGroup == assayContext.contextGroup }
             if (!foundExperimentContext) {
                 foundExperimentContext = new ExperimentContext(contextName: assayContext?.contextName, contextGroup: assayContext?.contextGroup, experiment: experiment)
                 experiment.addToExperimentContexts(foundExperimentContext)
                 foundExperimentContext.experiment = experiment
                 foundExperimentContext.modifiedBy = modifiedBy + "-addedFromACI-${assayContext.id}"
-                if (!foundExperimentContext.save()) {
+                if (!foundExperimentContext.save(failOnError: true)) {
                     println(foundExperimentContext.errors)
                 }
             }
@@ -151,7 +154,7 @@ class MergeAssayService {
                     foundExperimentContext.addToExperimentContextItems(newExperimentContextItem)
                     newExperimentContextItem.experimentContext = foundExperimentContext
                     newExperimentContextItem.modifiedBy = modifiedBy + "-addedFromACI-${assayContextItem.id}"
-                    newExperimentContextItem.save()
+                    newExperimentContextItem.save(failOnError: true)
                 }
             }
         }
@@ -174,12 +177,12 @@ class MergeAssayService {
     def handleExperiments(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
 
         List<Experiment> experiments = []
-        removingAssays.each {Assay assay ->
+        removingAssays.each { Assay assay ->
             experiments.addAll(assay.experiments)
         }
         int addExperimentToKept = 0 // count number of experiments added to kept assays
-        experiments.each {Experiment experiment ->
-            Experiment found = assayWillKeep.experiments.find {it.id == experiment.id}
+        experiments.each { Experiment experiment ->
+            Experiment found = assayWillKeep.experiments.find { it.id == experiment.id }
             if (!found) {
                 addExperimentToKept++
                 experiment.modifiedBy = modifiedBy + "-movedFromA-${experiment?.assay?.id}"
@@ -190,18 +193,18 @@ class MergeAssayService {
             }
         }
         println("Total candidate experiments: ${experiments.size()}, added ${addExperimentToKept}")
-        assayWillKeep.save()
+        assayWillKeep.save(failOnError: true)
         // Assay.findById(assayWillKeep.id)
     }
 
     //assay documents:  check for exact string matches, copy over everything that does not match
     def handleDocuments(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
         List<AssayDocument> docs = []
-        removingAssays.each {Assay assay ->
+        removingAssays.each { Assay assay ->
             docs.addAll(assay.documents)
         }
         int addDocsToKeep = 0 // count number of documents added to kept assay
-        docs.each {AssayDocument doc ->
+        docs.each { AssayDocument doc ->
             if (!isDocumentInAssay(doc, assayWillKeep)) {
                 addDocsToKeep++
                 doc.modifiedBy = modifiedBy + "-movedFromA-${doc.assay.id}"
@@ -212,33 +215,40 @@ class MergeAssayService {
             }
         }
         println("Total candidate documents: ${docs.size()}, added ${addDocsToKeep}")
-        // assayWillKeep.save()
+        // assayWillKeep.save(failOnError: true)
         Assay.findById(assayWillKeep.id)
     }
 
     // create a map of contexts from removingAssays to contexts on assayWillKeep that are
     // representing the same thing.  Since there does not exist a good way to do this mapping, use the heuristic
-    // of matching up thier names
+    // of matching up thier names.  If that fails, try to find similar contents
     Map<AssayContext, AssayContext> createContextMapping(List<Assay> removingAssays, Assay assayWillKeep) {
-        Map<String,Collection<AssayContext>> contextsByName = assayWillKeep.contexts.groupBy { it.contextName }
-        Map<Set<Element>,AssayContext> contextsByAttributes = assayWillKeep.contexts.collectEntries { context ->
+        Map<String, Collection<AssayContext>> contextsByName = assayWillKeep.contexts.groupBy { it.contextName }
+        Map<Set<Element>, AssayContext> contextsByAttributes = assayWillKeep.contexts.collectEntries { context ->
             [new HashSet(context.assayContextItems.collect { it.attributeElement }), context]
         }
         Map<AssayContext, AssayContext> mapping = [:]
 
-        for(sourceAssay in removingAssays) {
-            for(sourceContext in sourceAssay.contexts) {
+        for (sourceAssay in removingAssays) {
+            for (sourceContext in sourceAssay.contexts) {
                 Collection<AssayContext> possibleDestinations = contextsByName[sourceContext.contextName]
-                if(possibleDestinations == null || possibleDestinations.size() != 1) {
+
+                if (possibleDestinations == null || possibleDestinations.size() != 1) {
                     // second heuristic:  Try matching up contexts by attributes
                     Set sourceAttributes = new HashSet(sourceContext.assayContextItems.collect { it.attributeElement })
                     AssayContext found = null;
-                    for(Map.Entry<Set<Element>, AssayContext> entry : contextsByAttributes) {
+
+                    for (Map.Entry<Set<Element>, AssayContext> entry : contextsByAttributes) {
                         if (entry.key.containsAll(sourceAttributes)) {
                             found = entry.value
                             break
                         }
                     }
+
+                    if (found == null) {
+                        println("Could not map ${sourceContext} because found matches: ${possibleDestinations}");
+                    }
+
                     mapping[sourceContext] = found
                 } else {
                     mapping[sourceContext] = possibleDestinations.first()
@@ -259,8 +269,8 @@ class MergeAssayService {
 
     List<Measure> collectMeasuresSortedByPath(List<Assay> assays) {
         Map measuresByKey = [:]
-        for(assay in assays) {
-            for(measure in assay.measures) {
+        for (assay in assays) {
+            for (measure in assay.measures) {
                 measuresByKey[constructMeasureKey(measure)] = measure
             }
         }
@@ -271,23 +281,30 @@ class MergeAssayService {
         return keys.collect { measuresByKey[it] }
     }
 
+    def validateMeasures(def measures) {
+        for (found in measures) {
+            assert ((found.parentMeasure == null && found.parentChildRelationship == null) || (found.parentMeasure != null && found.parentChildRelationship != null));
+        }
+    }
+
     // Measures:  keep the measures that are the unique set of all the measures in the duplicate set of removingAssays.
     // a measure is uniquely identified by the full path leading up to it as well as its result type and stats modifier
     // assume by this point, all of the context items have already been copied from removingAssays to assayWillKeep,
     // which implies that all of the contexts have already been copied over as well.
-    def handleMeasure(List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
+    def handleMeasure(def session, List<Assay> removingAssays, Assay assayWillKeep, String modifiedBy) {
         int addMeasureToKeep = 0 // count number of measures added to assay
         int addMeasureToExperimentInKeep = 0  //count number of measures added to experiments
 
         // create a map of measure key -> measure
-        Map<String,Measure> measureByKey = assayWillKeep.measures.collectEntries { [constructMeasureKey(it), it] }
-        Map<Measure,Measure> measureMap = [:]     // map to keep id and found measure
-        Map<AssayContext,AssayContext> contextMap = createContextMapping(removingAssays, assayWillKeep)
+        Map<String, Measure> measureByKey = assayWillKeep.measures.collectEntries { [constructMeasureKey(it), it] }
+        Map<AssayContext, AssayContext> contextMap = createContextMapping(removingAssays, assayWillKeep)
 
         // iterate through measures sorted by path to ensure that the parents of the current measure
         // have been completed prior to doing the current measure
         List<Measure> measures = collectMeasuresSortedByPath(removingAssays)
         for (Measure measure : measures) {
+            session?.flush()
+
             String key = constructMeasureKey(measure)
             Measure found = measureByKey[key]
 
@@ -295,21 +312,37 @@ class MergeAssayService {
                 // copy measure to destination
                 found = measure.clone()
                 found.modifiedBy = modifiedBy + "-movedFromA-${measure.assay.id}"
-                assayWillKeep.addToMeasures(found)
-                found.parentMeasure = measureMap[measure]
+
+                if (measure.parentMeasure != null) {
+                    found.parentMeasure = measureByKey[constructMeasureKey(measure.parentMeasure)]
+                    if (found.parentMeasure == null) {
+                        throw new RuntimeException("Could not find target parent measure for ${measure.parentMeasure}")
+                    }
+                }
+
                 found.parentChildRelationship = measure.parentChildRelationship
                 addMeasureToKeep++
+                println("xCould not find measure for ${key}: ${measure} so created ${measure} (${found.parentMeasure}, ${found.parentChildRelationship})")
+
+                validateMeasures(measures)
+                validateMeasures(assayWillKeep.measures)
+
+                assayWillKeep.addToMeasures(found)
+                found.save(failOnError: true)
             }
 
-            measureMap.put(measure, found)
+            measureByKey.put(key, found)
+            println("mapping ${measure} -> ${found}")
         }
 
         // copy over assayContextMeasures
         for (Measure measure : measures) {
-            for(assayContextMeasure in measure.assayContextMeasures) {
-                Measure newMeasure = measureMap[measure]
+            for (assayContextMeasure in measure.assayContextMeasures) {
+                Measure newMeasure = measureByKey[constructMeasureKey(measure)]
                 AssayContext newAssayContext = contextMap[assayContextMeasure.assayContext]
-                assert newAssayContext != null
+                if (newAssayContext == null) {
+                    throw new RuntimeException("Could not find context corresponding to ${assayContextMeasure.assayContext} in ${assayWillKeep}")
+                }
                 assert newMeasure != null
 
                 // only if we don't already have this link, create it
@@ -327,25 +360,28 @@ class MergeAssayService {
             for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
                 // move those experiment measures which refer to a measure that got mapped to the destination.
                 // (skip those measures that already point to the destination)
-                if (measureMap.containsKey(experimentMeasure.measure)) {
-                    Measure newMeasure = measureMap.get(experimentMeasure.measure)
-                    assert newMeasure != null
-                    experimentMeasure.measure = newMeasure
-                }
+                Measure newMeasure = measureByKey[constructMeasureKey(experimentMeasure.measure)]
+
+                assert newMeasure != null
+                experimentMeasure.measure = newMeasure
+
             }
         }
 
         println("Total candidate measure: ${measures.size()}, added to assay ${addMeasureToKeep}, add to experiment ${addMeasureToExperimentInKeep}")
-        assayWillKeep.save()
+        assayWillKeep.save(failOnError: true)
 
         validateAssayConsistent(assayWillKeep)
+        println("validating")
+        validateMeasures(measures)
+        validateMeasures(assayWillKeep.measures)
     }
 
     def updateStatus(List<Assay> assays, String modifiedBy) {
-        assays.each{ Assay assay->
+        assays.each { Assay assay ->
             assay.assayStatus = AssayStatus.RETIRED
             assay.modifiedBy = modifiedBy
-            if (!assay.save()){
+            if (!assay.save()) {
                 println("Error happened when update assay status ${assay.errors}")
             }
         }
@@ -381,16 +417,16 @@ class MergeAssayService {
     }
 
     def deleteAssay(Assay assay) {
-        assay.experiments.each{
+        assay.experiments.each {
             it.delete()
         }
         assay.experiments.removeAll(assay.experiments)
-        assay.documents.each{
+        assay.documents.each {
             it.delete()
         }
         assay.documents.removeAll(assay.documents)
 
-        assay.measures.each{Measure measure->
+        assay.measures.each { Measure measure ->
             measure.assayContextMeasures.removeAll(measure.assayContextMeasures)
             measure.experimentMeasures.removeAll(measure.experimentMeasures)
         }
@@ -401,7 +437,7 @@ class MergeAssayService {
         }
         assay.assayContextItems.removeAll(assay.assayContextItems)
 
-        assay.assayContexts.each{
+        assay.assayContexts.each {
             it.delete()
         }
         assay.assayContexts.removeAll(assay.assayContexts)
@@ -430,12 +466,12 @@ class MergeAssayService {
         if (a.attributeType == AttributeType.Free && b.attributeType == AttributeType.Free)  // if they are the same, we don't care the rest
             return true
         if ((a.attributeType == b.attributeType) &&
-             (a.valueElement == b.valueElement) &&
-             (a.extValueId == b.extValueId) &&
-             (Precision.equalsIncludingNaN(nullToNaN(a.valueNum), nullToNaN(b.valueNum), eps) && StringUtils.equals(a.qualifier, b.qualifier)) &&
-             (Precision.equalsIncludingNaN(nullToNaN(a.valueMin), nullToNaN(b.valueMin), eps) && Precision.equalsIncludingNaN(nullToNaN(a.valueMax), nullToNaN(b.valueMax), eps)) &&
-             (StringUtils.equals(a.valueDisplay, b.valueDisplay))
-            )
+                (a.valueElement == b.valueElement) &&
+                (a.extValueId == b.extValueId) &&
+                (Precision.equalsIncludingNaN(nullToNaN(a.valueNum), nullToNaN(b.valueNum), eps) && StringUtils.equals(a.qualifier, b.qualifier)) &&
+                (Precision.equalsIncludingNaN(nullToNaN(a.valueMin), nullToNaN(b.valueMin), eps) && Precision.equalsIncludingNaN(nullToNaN(a.valueMax), nullToNaN(b.valueMax), eps)) &&
+                (StringUtils.equals(a.valueDisplay, b.valueDisplay))
+        )
             return true
         return false
     }
@@ -463,7 +499,7 @@ class MergeAssayService {
 
     boolean isAbstractContextItemSame(AbstractContextItem a, AbstractContextItem b) {
         float eps = 0.00001
-        if (    (a.attributeElement == b.attributeElement) &&
+        if ((a.attributeElement == b.attributeElement) &&
                 (a.valueElement == b.valueElement) &&
                 (a.extValueId == b.extValueId) &&
                 (Precision.equalsIncludingNaN(nullToNaN(a.valueNum), nullToNaN(b.valueNum), eps) && StringUtils.equals(a.qualifier, b.qualifier)) &&
@@ -471,7 +507,7 @@ class MergeAssayService {
                 (StringUtils.equals(a.valueDisplay, b.valueDisplay))
         )
             return true
-       return false
+        return false
     }
 
     boolean isDocumentEqual(AssayDocument a, AssayDocument b) {

@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,projectstep,select2,accessontology,twitterBootstrapAffix"/>
+    <r:require modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">

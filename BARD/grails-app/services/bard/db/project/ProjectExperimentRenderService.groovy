@@ -46,8 +46,7 @@ class ProjectExperimentRenderService {
             Node node = constructNode(pe)           // construct node
             if (isIsolatedNode(pe)) {
                 isolatedNodes << node
-            }
-            else {
+            } else {
                 nodes << node
                 edges.addAll(constructEdges(pe, queue))   // construct edge
             }
@@ -65,15 +64,15 @@ class ProjectExperimentRenderService {
     void countInOutEdges(Set<Edge> edges, List<Node> nodes) {
         def nodeInCount = [:]
         def nodeOutCount = [:]
-        nodes.each{
+        nodes.each {
             nodeInCount[it.id] = 0
             nodeOutCount[it.id] = 0
         }
-        edges.each{Edge edge ->
+        edges.each { Edge edge ->
             nodeInCount[edge.to]++
             nodeOutCount[edge.from]++
         }
-        nodes.each{
+        nodes.each {
             it.keyValues.incount = nodeInCount.get(it.id).toString()
             it.keyValues.outcount = nodeOutCount.get(it.id).toString()
         }
@@ -95,13 +94,14 @@ class ProjectExperimentRenderService {
      */
     Node constructNode(ProjectExperiment pe) {
         def peAttributes = ['eid': pe?.experiment?.id,
-                            'stage': pe?.stage?.label,
-                            'assay': pe?.experiment?.assay?.id,
-                            'ename': pe?.experiment?.experimentName,
-                            'incount': 0,
-                            'outcount': 0,
-                            'aid': getAidByExperiment(pe.experiment)
-                            ]
+                'stage': pe?.stage?.label,
+                'assay': pe?.experiment?.assay?.id,
+                'ename': pe?.experiment?.experimentName,
+                'incount': 0,
+                'outcount': 0,
+                'aid': getAidByExperiment(pe.experiment),
+                'peid':pe?.id, 'stageid':pe?.stage?.id
+        ]
         return new Node(id: pe?.id, keyValues: peAttributes)
     }
 
@@ -148,8 +148,8 @@ class ProjectExperimentRenderService {
         queue.add(step.nextProjectExperiment.id)
         queue.add(step.previousProjectExperiment.id)
         Edge edge = new Edge(from: step?.previousProjectExperiment?.id,
-                             to: step?.nextProjectExperiment?.id,
-                             label: step?.edgeName)
+                to: step?.nextProjectExperiment?.id,
+                label: step?.edgeName)
         return edge
     }
 }
@@ -180,9 +180,15 @@ class Edge implements Serializable {
 
     @Override
     boolean equals(Object obj) {
-        if (obj == null) { return false }
-        if (obj.is(this)) { return true }
-        if (obj.getClass() != getClass()) { return false }
+        if (obj == null) {
+            return false
+        }
+        if (obj.is(this)) {
+            return true
+        }
+        if (obj.getClass() != getClass()) {
+            return false
+        }
 
         Edge rhs = (Edge) obj
 

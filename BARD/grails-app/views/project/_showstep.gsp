@@ -56,9 +56,14 @@
                 Remove from Project
             </a>
         </script>
-
         <script id="node-selection-template1" type="text/x-handlebars-template">
+
             <div id="selectedNodeId" style="display: none">{{selectedNodeId}}</div>
+            <strong>Experiment Stage:</strong>
+             <a href="#" data-sourceError="Error loading stages" data-sourceCache="true" class="projectStageId" id="{{selected.stageid}}" data-type="select" data-value="{{selected.stage}}" data-source="/BARD/project/projectStages" data-pk="{{selected.peid}}" data-url="/BARD/project/updateProjectStage" data-original-title="Select New Stage">{{selected.stage}}</a>
+            <i class="icon-pencil"></i>
+
+            <br/>
             <strong>Experiment Id:</strong>
             <a href='/BARD/experiment/show/{{selected.eid}}'>{{selected.eid}}</a>
             <a href="#" onclick="deleteItem({{selected.eid}}, ${instanceId});return false;"
