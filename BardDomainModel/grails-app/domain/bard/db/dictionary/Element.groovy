@@ -1,10 +1,5 @@
 package bard.db.dictionary
 
-import bard.db.enums.AddChildMethod
-import bard.db.enums.ExpectedValueType
-import bard.db.enums.hibernate.AddChildMethodEnumUserType
-import bard.db.enums.hibernate.ExpectedValueTypeEnumUserType
-
 class Element extends AbstractElement {
 
     Set<BiologyDescriptor> biologyDescriptors = [] as Set<BiologyDescriptor>

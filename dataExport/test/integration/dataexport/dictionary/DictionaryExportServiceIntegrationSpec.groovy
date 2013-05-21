@@ -12,6 +12,7 @@ import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.sql.DataSource

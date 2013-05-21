@@ -1,10 +1,8 @@
 package bard.db.dictionary
 
 import bard.db.enums.AddChildMethod
-import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.AddChildMethodEnumUserType
-import bard.db.enums.hibernate.ExpectedValueTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 
 /**
@@ -34,7 +32,7 @@ abstract class AbstractElement {
     String bardURI
     String externalURL
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
-    ExpectedValueType expectedValueType = ExpectedValueType.NONE
+    //ExpectedValueType expectedValueType = ExpectedValueType.NONE
     AddChildMethod addChildMethod= AddChildMethod.NO
     Date dateCreated = new Date()
     Date lastUpdated = new Date()
@@ -46,7 +44,7 @@ abstract class AbstractElement {
         elementStatus(nullable: false)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
-        expectedValueType(nullable:false)
+        //expectedValueType(nullable:false)
         addChildMethod(nullable:false)
         unit(nullable: true)
         abbreviation(nullable: true, maxSize: ABBREVIATION_MAX_SIZE)
@@ -66,7 +64,7 @@ abstract class AbstractElement {
         bardURI(column: 'BARD_URI')
         externalURL(column: 'EXTERNAL_URL')
         readyForExtraction(type: ReadyForExtractionEnumUserType)
-        expectedValueType(type: ExpectedValueTypeEnumUserType)
+        //expectedValueType(type: ExpectedValueTypeEnumUserType)
         addChildMethod(type:AddChildMethodEnumUserType)
     }
 }
