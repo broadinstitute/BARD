@@ -20,17 +20,13 @@
                 %{--Assay description--}%
                     <g:if test="${cell instanceof bardqueryapi.AssayValue}">
                         <td class="cbasOutterTableCell">
-                            <g:assayDescription name="${cell?.value?.title ?: ''}"
-                                                adid="${cell?.value?.capAssayId ?: ''}"
-                                                bardAssayId="${cell?.value?.bardAssayId ?: ''}"/>
+                            <g:assayDescription assayAdapter="${cell?.value}"/>
                         </td>
                     </g:if>
                 %{--Project description--}%
                     <g:elseif test="${cell instanceof bardqueryapi.ProjectValue}">
                         <td class="cbasOutterTableCell">
-                            <g:projectDescription name="${cell?.value?.name ?: ''}"
-                                                  pid="${cell?.value?.capProjectId ?: ''}"
-                                                  bardProjectId="${cell?.value?.id ?: ''}"/>
+                            <g:projectDescription projectAdapter="${cell?.value}"/>
                         </td>
                     </g:elseif>
                 %{--Structure rendering--}%
