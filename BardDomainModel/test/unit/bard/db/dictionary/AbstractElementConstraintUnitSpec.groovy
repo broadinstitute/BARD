@@ -1,5 +1,7 @@
 package bard.db.dictionary
 
+import bard.db.enums.AddChildMethod
+import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
 import org.junit.Before
 import spock.lang.Specification
@@ -34,7 +36,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -42,10 +44,59 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         where:
         desc             | valueUnderTest           | valid | errorCode
         'null not value' | null                     | false | 'nullable'
-        'valid value'   | ElementStatus.Pending    | true  | null
-        'valid value'   | ElementStatus.Published  | true  | null
-        'valid value'   | ElementStatus.Deprecated | true  | null
-        'valid value'   | ElementStatus.Retired    | true  | null
+        'valid value'    | ElementStatus.Pending    | true  | null
+        'valid value'    | ElementStatus.Published  | true  | null
+        'valid value'    | ElementStatus.Deprecated | true  | null
+        'valid value'    | ElementStatus.Retired    | true  | null
+    }
+
+
+    void "test addChildMethod constraints #desc addChildMethod: '#valueUnderTest'"() {
+        final String field = 'addChildMethod'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.save()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the it can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc             | valueUnderTest             | valid | errorCode
+        'null not value' | null                       | false | 'nullable'
+        'valid value'    | AddChildMethod.NO          | true  | null
+        'valid value'    | AddChildMethod.DIRECT      | true  | null
+        'valid value'    | AddChildMethod.RDM_REQUEST | true  | null
+    }
+
+    void "test expectedValueType constraints #desc expectedValueType: '#valueUnderTest'"() {
+        final String field = 'expectedValueType'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.save()
+
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+
+        and: 'verify the it can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
+        }
+
+        where:
+        desc             | valueUnderTest                      | valid | errorCode
+        'null not value' | null                                | false | 'nullable'
+        'valid value'    | ExpectedValueType.NONE              | true  | null
+        'valid value'    | ExpectedValueType.ELEMENT           | true  | null
+        'valid value'    | ExpectedValueType.EXTERNAL_ONTOLOGY | true  | null
+        'valid value'    | ExpectedValueType.FREE_TEXT         | true  | null
+        'valid value'    | ExpectedValueType.NUMERIC           | true  | null
     }
 
     void "test label constraints #desc label: '#valueUnderTest'"() {
@@ -58,7 +109,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -82,7 +133,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -106,7 +157,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -130,7 +181,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -160,9 +211,9 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc          | valueUnderTest      | valid | errorCode
-        'null value'  | { null }            | true  | null
-        'valid value' | { Element.build() } | true  | null
+        desc          | valueUnderTest                           | valid | errorCode
+        'null value'  | { null }                                 | true  | null
+        'valid value' | { Element.build(label: "elementLabel") } | true  | null
     }
 
     void "test bardURI constraints #desc bardURI: '#valueUnderTest'"() {
@@ -175,7 +226,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -199,7 +250,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -224,7 +275,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -251,7 +302,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -276,7 +327,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -297,7 +348,7 @@ abstract class AbstractElementConstraintUnitSpec extends Specification {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
