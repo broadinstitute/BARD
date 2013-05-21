@@ -34,6 +34,8 @@ abstract class AbstractElement {
     String bardURI
     String externalURL
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
+    ExpectedValueType expectedValueType = ExpectedValueType.NONE
+    AddChildMethod addChildMethod= AddChildMethod.NO
     Date dateCreated = new Date()
     Date lastUpdated = new Date()
     String modifiedBy
@@ -44,12 +46,16 @@ abstract class AbstractElement {
         elementStatus(nullable: false)
 
         label(nullable: false, unique: true, maxSize: LABEL_MAX_SIZE)
+        expectedValueType(nullable:false)
+        addChildMethod(nullable:false)
         unit(nullable: true)
         abbreviation(nullable: true, maxSize: ABBREVIATION_MAX_SIZE)
         bardURI(nullable: true, maxSize: BARD_URI_MAX_SIZE)
         description(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
         synonyms(nullable: true, maxSize: SYNONYMS_MAX_SIZE)
         externalURL(nullable: true, maxSize: EXTERNAL_URL_MAX_SIZE)
+
+        readyForExtraction(nullable: false)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
@@ -60,6 +66,8 @@ abstract class AbstractElement {
         bardURI(column: 'BARD_URI')
         externalURL(column: 'EXTERNAL_URL')
         readyForExtraction(type: ReadyForExtractionEnumUserType)
+        expectedValueType(type: ExpectedValueTypeEnumUserType)
+        addChildMethod(type:AddChildMethodEnumUserType)
     }
 }
 
