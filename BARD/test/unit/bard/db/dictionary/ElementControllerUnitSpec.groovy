@@ -1,5 +1,6 @@
 package bard.db.dictionary
 
+import bard.db.enums.AddChildMethod
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
 import grails.test.mixin.TestFor
@@ -44,13 +45,14 @@ class ElementControllerUnitSpec extends Specification {
             [[elementId: elementId, title: label, description: description, isFolder: isFolder, isLazy: isLazy]]
         }
         def controllerResponse = controller.response.contentAsString
-        def jsonResult  = JSON.parse(controllerResponse)
+        def jsonResult = JSON.parse(controllerResponse)
         assert jsonResult
         assert [elementId] == jsonResult.elementId
-        assert [label]==jsonResult.title
-        assert [false]==jsonResult.isFolder
-        assert [false]==jsonResult.isLazy
+        assert [label] == jsonResult.title
+        assert [false] == jsonResult.isFolder
+        assert [false] == jsonResult.isLazy
     }
+
     void "test getChildrenAsJson"() {
 
         given:
@@ -63,15 +65,26 @@ class ElementControllerUnitSpec extends Specification {
         controller.getChildrenAsJson(elementId)
         then:
         controller.elementService.getChildNodes(_) >> {
-            [[elementId: elementId, title: label, description: description, isFolder: isFolder, isLazy: isLazy]]
+            [[elementId: elementId,
+                    title: label,
+                    description: description,
+                    isFolder: isFolder,
+                    isLazy: isLazy,
+                    childMethodDescription: "child Description",
+                    childMethod: AddChildMethod.DIRECT.toString(),
+                    addClass: AddChildMethod.DIRECT.label
+            ]]
         }
         def controllerResponse = controller.response.contentAsString
-        def jsonResult  = JSON.parse(controllerResponse)
+        def jsonResult = JSON.parse(controllerResponse)
         assert jsonResult
         assert [elementId] == jsonResult.elementId
-        assert [label]==jsonResult.title
-        assert [false]==jsonResult.isFolder
-        assert [false]==jsonResult.isLazy
+        assert [label] == jsonResult.title
+        assert [false] == jsonResult.isFolder
+        assert [false] == jsonResult.isLazy
+        assert [AddChildMethod.DIRECT.label] == jsonResult.addClass
+        assert ["child Description"] == jsonResult.childMethodDescription
+        assert [AddChildMethod.DIRECT.toString()] == jsonResult.childMethod
     }
 
     void "test parent label constraints #desc TermCommand: '#valueUnderTest'"() {
@@ -251,7 +264,7 @@ class ElementControllerUnitSpec extends Specification {
         when:
         this.controller.saveTerm(termCommand)
         then:
-        this.controller.elementService.addNewTerm(_) >>{Element.build(label:label)}
+        this.controller.elementService.addNewTerm(_) >> { Element.build(label: label) }
         assert EXPECTED_ADD_TERN_VIEW == view
         assert flashMessage == flash.message
         TestUtils.assertFieldValidationExpectations(termCommand, this.parentLabelField, valid, errorCode)
@@ -275,7 +288,7 @@ class ElementControllerUnitSpec extends Specification {
         when:
         this.controller.saveTerm(termCommand)
         then:
-        this.controller.elementService.addNewTerm(_) >>{Element.build(label:valueUnderTest)}
+        this.controller.elementService.addNewTerm(_) >> { Element.build(label: valueUnderTest) }
         assert EXPECTED_ADD_TERN_VIEW == view
         TestUtils.assertFieldValidationExpectations(termCommand, "label", valid, errorCode)
 

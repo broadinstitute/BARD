@@ -1,5 +1,6 @@
 package bard.db.dictionary
 
+import bard.db.enums.AddChildMethod
 import grails.plugins.springsecurity.SpringSecurityService
 
 import java.util.concurrent.ExecutorService
@@ -24,7 +25,7 @@ class ElementService {
      */
     Element addNewTerm(TermCommand termCommand) {
         Element parentElement = Element.findByLabel(termCommand.parentLabel)
-         Element element = new Element(label: termCommand.label, description: termCommand.description,
+        Element element = new Element(label: termCommand.label, description: termCommand.description,
                 abbreviation: termCommand.abbreviation, synonyms: termCommand.synonyms, curationNotes: termCommand.curationNotes)
         element.save(flush: true)
         addElementHierarchy(parentElement, element, termCommand.relationship)
@@ -69,7 +70,7 @@ class ElementService {
         def childNodes = []
         final Element parentElement = Element.get(elementId)
         final List<ElementHierarchy> list = new ArrayList(parentElement.parentHierarchies)
-        final List<ElementHierarchy> hierarchies = list.findAll{it.relationshipType=='subClassOf'}
+        final List<ElementHierarchy> hierarchies = list.findAll { it.relationshipType == 'subClassOf' }
         Set<Element> seenSet = new HashSet<Element>()
         for (ElementHierarchy elementHierarchy : hierarchies) {
             final Element childElement = elementHierarchy.childElement
@@ -77,7 +78,8 @@ class ElementService {
                 seenSet.add(childElement)
                 boolean isLazy = childElement.parentHierarchies ? true : false
                 boolean isFolder = childElement.parentHierarchies ? true : false
-                childNodes.add([elementId: childElement.id, title: childElement.label, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
+                final AddChildMethod childMethod = childElement.addChildMethod
+                childNodes.add([elementId: childElement.id, childMethodDescription:childMethod.description,childMethod: childMethod.toString(), addClass: childMethod.label, title: childElement.label, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
             }
         }
         childNodes.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }
@@ -88,7 +90,7 @@ class ElementService {
      * @return list of hierarchy
      */
     public List createElementHierarchyTree() {
-         Element element = Element.findByLabel("BARD")//find the ROOT OF THE BARD TREE
+        Element element = Element.findByLabel("BARD")//find the ROOT OF THE BARD TREE
         return getChildNodes(element.id)
     }
 }

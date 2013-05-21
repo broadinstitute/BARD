@@ -68,7 +68,7 @@ class ElementController {
         }
         render(view: 'addTerm', model: [termCommand: termCommand, currentElement: currentElement])
     }
-
+    @Secured(["hasRole('ROLE_CURATOR')"])
     def edit() {
         Map parameterMap = generatePaths()
 
@@ -94,7 +94,7 @@ class ElementController {
 
         return result
     }
-
+    @Secured(["hasRole('ROLE_CURATOR')"])
     def update(ElementEditCommand elementEditCommand) {
         String errorMessage = null
 

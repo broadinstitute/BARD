@@ -1,5 +1,6 @@
 package bard.db.dictionary
 
+import bard.db.enums.AddChildMethod
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
@@ -35,11 +36,15 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert hierarchies
         assert 1 == hierarchies.size()
-        final Map map = (Map)hierarchies.get(0)
+        final Map map = (Map) hierarchies.get(0)
         assert leafLabel == map.title
         assert description == map.description
         assert false == map.isFolder
         assert false == map.isLazy
+        assert AddChildMethod.NO.label == map.addClass
+        assert AddChildMethod.NO.description == map.childMethodDescription
+        assert AddChildMethod.NO.toString() == map.childMethod
+
         where:
         description          | parentLabel | childLabel | leafLabel
         "Has 'BARD' as root" | "BARD"      | "child"    | "leaf"
@@ -59,7 +64,7 @@ class ElementServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert hierarchies
         assert 1 == hierarchies.size()
-        final Map map = (Map)hierarchies.get(0)
+        final Map map = (Map) hierarchies.get(0)
         assert childLabel == map.title
         assert description == map.description
         assert true == map.isFolder

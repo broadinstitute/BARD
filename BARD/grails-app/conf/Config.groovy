@@ -110,7 +110,7 @@ bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 rememberme.key = 'bard_cap_crowd_remember_me'
 rememberme.cookieName = 'bard_cap_crowd_remember_me_cookie'
 
-grails.plugins.springsecurity.providerNames = ['crowdAuthenticationProvider', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
 grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
 grails.plugins.springsecurity.rememberMe.key = rememberme.key
 grails {
@@ -143,10 +143,10 @@ CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE']
+    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR','CURATOR']
     mockUsers {
         integrationTestUser {
-            roles = ['ROLE_USER']
+            roles = ['ROLE_USER','ROLE_CURATOR']
             username = 'integrationTestUser'
             password = 'integrationTestUser'
             email = 'integrationTestUser@nowhere.com'

@@ -11,7 +11,7 @@
 
         <div class="control-group">
             <div class="controls">
-                <input type="submit" class="btn btn-primary" value="Save">
+                <input type="submit" class="btn btn-primary" value="Save" id="saveBtn">
                 <g:link action="addTerm"
                         fragment="documents-header" class="btn">Cancel</g:link>
             </div>

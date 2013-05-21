@@ -99,7 +99,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         parent.qualifierTid == "3"
         parent.tid == "1"
-        parent.staticContextItems.size() == 3
+        parent.staticContextItems.size() == 0
         parent.contextItemColumns.size() == 0
         parent.resultType == "parent"
         parent.parentTid == null

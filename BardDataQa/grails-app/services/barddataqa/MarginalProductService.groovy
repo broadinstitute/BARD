@@ -60,6 +60,7 @@ select total.project_uid, total, nvl(missing,0) missing, nvl(no_maas,0) no_maas,
   left join
     (select project_uid, count(distinct aid) rm_prob from (
 """
+
     private static final String mpQueryAfterRmProblem = """
    ) group by project_uid) rm_prob on rm_prob.project_uid = total.project_uid
   left join
@@ -113,7 +114,11 @@ order by marginal_product desc
             rmProblemQueryList.add("$indivResultMapProblemQueryPrefix $rmProbView $indivResultMapProblemQuerySuffix")
         }
 
-        return rmProblemQueryList.join("union ")
+        return """
+select project_uid, aid from
+    (${rmProblemQueryList.join("union ")})
+  where aid in (select aid from bard_data_qa_dashboard.vw_ds_prjct_not_summary_aid where dataset_id = :$datasetIdParam)
+"""
     }
 
 
@@ -143,8 +148,12 @@ order by marginal_product desc
         for (ResultMapProblemEnum resultMapProblemEnum : rmProblemViewMap.keySet()) {
             String view = rmProblemViewMap.get(resultMapProblemEnum)
 
-            String queryString = """select distinct aid from $view where aid in
-            (select aid from bard_data_qa_dashboard.vw_project_aid_join where project_uid = :$projectUidParam) order by aid"""
+            String queryString = """
+select distinct aid from $view
+  where aid in
+      (select aid from bard_data_qa_dashboard.vw_project_aid_join where project_uid = :$projectUidParam)
+    and aid in (select aid from bard_data_qa_dashboard.vw_ds_prjct_not_summary_aid)
+  order by aid"""
 
             SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryString)
             query.setInteger(projectUidParam, projectUid)
