@@ -51,7 +51,8 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         then:
         controller.assayService.cloneAssayForEditing(_, _) >> { return newAssay }
         controller.assayService.recomputeAssayShortName(_) >> { return newAssay }
-        assert response.redirectedUrl == "/assayDefinition/show/${newAssay.id}"
+        assert view == "/assayDefinition/show"
+        assert model.assayInstance == newAssay
     }
 
     void 'test clone assay fail'() {
@@ -61,9 +62,8 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         controller.cloneAssay(assay.id)
         then:
         controller.assayService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
-        assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team to fix this assay"
-        assert response.redirectedUrl == "/assayDefinition/show/${assay.id}"
-
+        assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
+        assert view == "/assayDefinition/show"
     }
 
     void 'test show'() {
