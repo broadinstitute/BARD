@@ -1,13 +1,11 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
-import bard.db.dictionary.OntologyDataAccessService
-import bard.db.enums.AssayStatus
-import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
+import grails.validation.ValidationException
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import registration.AssayService
@@ -18,10 +16,10 @@ class AssayDefinitionController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
-    OntologyDataAccessService ontologyDataAccessService
     SpringSecurityService springSecurityService
     MeasureTreeService measureTreeService
     AssayService assayService
+
     def index() {
         redirect(action: "description", params: params)
     }
@@ -29,12 +27,18 @@ class AssayDefinitionController {
     def description() {
         [assayInstance: new Assay(params)]
     }
-    def cloneAssay(Long id){
-        Assay assay  = Assay.get(id)
-        assay = assayService.cloneAssayForEditing(assay,springSecurityService.principal?.username)
-        assay = assayService.recomputeAssayShortName(assay)
+
+    def cloneAssay(Long id) {
+        Assay assay = Assay.get(id)
+        try {
+            assay = assayService.cloneAssayForEditing(assay, springSecurityService.principal?.username)
+            assay = assayService.recomputeAssayShortName(assay)
+        } catch (ValidationException ee) {
+            flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team to fix this assay"
+        }
         redirect(action: "show", id: assay.id)
     }
+
     def save() {
         def assayInstance = new Assay(params)
         if (!assayInstance.save(flush: true)) {
@@ -346,10 +350,10 @@ class AssayDefinitionController {
     }
 
     def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy, String assayType) {
-        boolean recomputeAssayShortName = assayContextService.editSummary(instanceId,assayStatus,assayName,designedBy,assayType)
+        boolean recomputeAssayShortName = assayContextService.editSummary(instanceId, assayStatus, assayName, designedBy, assayType)
 
         Assay assayInstance = Assay.findById(instanceId)
-        if(recomputeAssayShortName){
+        if (recomputeAssayShortName) {
             assayInstance = assayService.recomputeAssayShortName(assayInstance)
         }
         render(template: "summaryDetail", model: [assay: assayInstance])
