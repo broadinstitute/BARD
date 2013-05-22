@@ -39,10 +39,10 @@ class Element extends AbstractElement {
     static mappedBy = [parentHierarchies: "parentElement",
             childHierarchies: "childElement"
     ]
-    static mapping = {
-        expectedValueType(type: ExpectedValueTypeEnumUserType)
-        addChildMethod(type: AddChildMethodEnumUserType)
-    }
+//    static mapping = {
+//        expectedValueType(type: ExpectedValueTypeEnumUserType)
+//        addChildMethod(type: AddChildMethodEnumUserType)
+//    }
     static constraints = {
         curationNotes(nullable: true, maxSize: DESCRIPTION_MAX_SIZE)
         replacedBy(nullable: true)

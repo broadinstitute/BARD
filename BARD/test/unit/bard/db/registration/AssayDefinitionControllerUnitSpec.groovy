@@ -8,8 +8,11 @@ import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.validation.ValidationException
+import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import registration.AssayService
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,9 +49,21 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayService.cloneAssayForEditing(_,_) >> { return newAssay }
-        controller.assayService.recomputeAssayShortName(_) >> {return newAssay}
+        controller.assayService.cloneAssayForEditing(_, _) >> { return newAssay }
+        controller.assayService.recomputeAssayShortName(_) >> { return newAssay }
         assert response.redirectedUrl == "/assayDefinition/show/${newAssay.id}"
+    }
+
+    void 'test clone assay fail'() {
+        given:
+        controller.measureTreeService.createMeasureTree(_, _) >> []
+        when:
+        controller.cloneAssay(assay.id)
+        then:
+        controller.assayService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
+        assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team to fix this assay"
+        assert response.redirectedUrl == "/assayDefinition/show/${assay.id}"
+
     }
 
     void 'test show'() {

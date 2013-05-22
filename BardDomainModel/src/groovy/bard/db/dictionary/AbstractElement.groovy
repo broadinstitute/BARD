@@ -1,7 +1,6 @@
 package bard.db.dictionary
 
 import bard.db.enums.ReadyForExtraction
-import bard.db.enums.hibernate.AddChildMethodEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 
 /**
