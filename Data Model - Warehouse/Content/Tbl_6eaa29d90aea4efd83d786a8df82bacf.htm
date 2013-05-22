@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE STEP_ANNOTATION(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STEP_ANNOTATION_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_NAME&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(120),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_DESCRIPTION&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_TYPE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXT_VALUE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(60),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_DISPLAY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_DESCRIPTION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_NUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp QUALIFIER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Step_Annotation_Step_Annot FOREIGN KEY (STEP_ANNOTATION_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES STEP_ANNOTATION_SET(STEP_ANNOTATION_REF)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE STEP_ANNOTATION(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STEP_ANNOTATION_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_NAME&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(120),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_DESCRIPTION&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ATTRIBUTE_TYPE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXT_VALUE_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(60),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_DISPLAY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_DESCRIPTION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_NUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp QUALIFIER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(2),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Step_Anntn_Unit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_Step_Annotation_Step_Annot FOREIGN KEY (STEP_ANNOTATION_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES STEP_ANNOTATION_SET(STEP_ANNOTATION_REF)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -164,7 +164,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_6eaa29d90aea4efd83d786a8df82bacf_Attr.htm#Attr_1eda852db50a4aa19a0efade0354e94e">UNIT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_6eaa29d90aea4efd83d786a8df82bacf_Attr.htm#Attr_1eda852db50a4aa19a0efade0354e94e">Step_Anntn_Unit</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(128)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -453,6 +453,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_e680ce22fefb497ba2afc3ae53b885b5.htm>Staging</A> (Oracle)<BR>Does Not Exist&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)<BR><A HREF = ./Tbl_6eaa29d90aea4efd83d786a8df82bacf.htm>STEP_ANNOTATION</A>&nbsp;</FONT></TD>

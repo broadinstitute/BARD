@@ -31,7 +31,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Dimension Table Type&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">Fixed&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">Slowly Changing Type 1&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Owner&nbsp;</FONT></B></TD>
@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE ELEMENT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ELEMENT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ELEMENT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp BARD_URI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(250),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ELEMENT_STATUS&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LABEL&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ABBREVIATION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXTERNAL_URL&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(250),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SYNONYMS&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp DESCRIPTION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_Element PRIMARY KEY (ELEMENT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE ELEMENT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ELEMENT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ELEMENT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp BARD_URI&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(250),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ELEMENT_STATUS&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LABEL&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Base_Unit&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ABBREVIATION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXTERNAL_URL&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(250),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SYNONYMS&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp DESCRIPTION&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_Element PRIMARY KEY (ELEMENT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -108,7 +108,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d16ee5d88c0647019bacbfb729c8182a_Attr.htm#Attr_c8b868bb9fdd423b9612394c1f7b1c24">UNIT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d16ee5d88c0647019bacbfb729c8182a_Attr.htm#Attr_c8b868bb9fdd423b9612394c1f7b1c24">Base_Unit</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(128)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -219,14 +219,14 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ASSAY_CONTEXT_ITEM&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_ASSAY_CNTXT_Item_El_UNIT&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ASSAY_CONTEXT_ITEM&nbsp;</FONT></TD>
@@ -456,6 +456,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_e680ce22fefb497ba2afc3ae53b885b5.htm>Staging</A> (Oracle)<BR>Does Not Exist&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)<BR><A HREF = ./Tbl_d16ee5d88c0647019bacbfb729c8182a.htm>ELEMENT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -485,6 +492,10 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_2e34b683d187473aba2633bf8c03d098_img.htm>Results</A>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Submodel_5060aaeec4dd4e7cbd1fe5ba8a6437bc_img.htm>Staging</A>&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)&nbsp;</FONT></TD>

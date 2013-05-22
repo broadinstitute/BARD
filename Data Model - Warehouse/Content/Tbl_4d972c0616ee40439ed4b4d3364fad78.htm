@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE UNIT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(20)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_Unit PRIMARY KEY (UNIT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE UNIT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp Unit_of_Measure&nbsp&nbsp&nbsp&nbsp VARCHAR2(20)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_Unit PRIMARY KEY (UNIT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -80,7 +80,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_4d972c0616ee40439ed4b4d3364fad78_Attr.htm#Attr_bd81df1761f94a799ad86605db61249c">UNIT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_4d972c0616ee40439ed4b4d3364fad78_Attr.htm#Attr_bd81df1761f94a799ad86605db61249c">Unit_of_Measure</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(20)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -151,8 +151,8 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INVENTORY&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">FK_INVNTRY_UNT&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -386,6 +386,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_e680ce22fefb497ba2afc3ae53b885b5.htm>Staging</A> (Oracle)<BR>Does Not Exist&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)<BR><A HREF = ./Tbl_4d972c0616ee40439ed4b4d3364fad78.htm>UNIT</A>&nbsp;</FONT></TD>
