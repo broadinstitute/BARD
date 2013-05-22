@@ -30,17 +30,15 @@ class AssayDefinitionController {
 
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
-        JSON measureTreeAsJson = null
         try {
             assay = assayService.cloneAssayForEditing(assay, springSecurityService.principal?.username)
             assay = assayService.recomputeAssayShortName(assay)
-            measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assay, false))
         } catch (ValidationException ee) {
             assay = Assay.get(id)
             flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
         }
+        JSON measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assay, false))
         render(view: "show", model: [assayInstance: assay, measureTreeAsJson: measureTreeAsJson])
-        // redirect(action: "show", id: assay.id)
     }
 
     def save() {
