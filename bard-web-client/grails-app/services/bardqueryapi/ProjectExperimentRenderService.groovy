@@ -5,6 +5,8 @@ import bard.core.rest.spring.project.ProjectExperiment
 import bard.core.rest.spring.project.ProjectStep
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.http.HttpStatus
 
 /**
  * This is a service that return a list of nodes and edges in JSON format to be displayed in views.
@@ -26,6 +28,10 @@ class ProjectExperimentRenderService {
             final List<ProjectStep> projectSteps = projectRestService.findProjectSteps(bardProjectId);
             final Collection<ProjectExperiment> projectExperiments = projectStepsToProjectExperiments(projectSteps)
             result = processProjectExperiments(projectExperiments, experimentTypes)
+        } catch (HttpClientErrorException exp) {
+            if (exp.statusCode != HttpStatus.NOT_FOUND) {
+                log.error(exp)
+            }
         } catch (Exception ee) {
             log.error(ee)
         }
