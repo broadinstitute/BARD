@@ -76,7 +76,7 @@ public class AssayServiceUnitSpec extends Specification {
         assert clonedAssay.assayStatus == expectedAssayStatus
         assert clonedAssay.readyForExtraction == assay.readyForExtraction
         assert clonedAssay.assayShortName == assay.assayShortName
-        assert clonedAssay.assayVersion == assay.assayVersion
+        assert clonedAssay.assayVersion == "1"
         assert clonedAssay.designedBy == "me"
 
         where:
@@ -106,7 +106,7 @@ public class AssayServiceUnitSpec extends Specification {
         assert assay.assayType != newAssay.assayType
         assert newAssay.assayType == AssayType.REGULAR
         assert assay.designedBy == newAssay.designedBy
-        assert assay.assayVersion == newAssay.assayVersion
+        assert newAssay.assayVersion =="1"
         assert ReadyForExtraction.NOT_READY == newAssay.readyForExtraction
 
         // test assay documents are good
@@ -160,7 +160,7 @@ public class AssayServiceUnitSpec extends Specification {
         assay.assayStatus == newAssay.assayStatus
         assay.assayType == newAssay.assayType
         assay.designedBy == newAssay.designedBy
-        assay.assayVersion == newAssay.assayVersion
+        newAssay.assayVersion  == "1"
         assay.readyForExtraction == newAssay.readyForExtraction
 
         // test assay documents are good

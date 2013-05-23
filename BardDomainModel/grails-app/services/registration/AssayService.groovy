@@ -82,12 +82,12 @@ class AssayService {
         if (assayName.length() >= Assay.ASSAY_NAME_MAX_SIZE) {
             assayName = assayName?.trim().substring(0, Assay.ASSAY_NAME_MAX_SIZE)
         }
-
+        //assay version should always be set to 1 after colining
         return new Assay(
                 assayStatus: assayStatus,
                 assayShortName: assay.assayShortName,
                 assayName: assayName,
-                assayVersion: assay.assayVersion,
+                assayVersion: "1",
                 designedBy: designedBy,
                 readyForExtraction: readyForExtraction,
                 dateCreated: dateCreated
