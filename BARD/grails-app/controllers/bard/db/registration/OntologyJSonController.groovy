@@ -56,7 +56,7 @@ class OntologyJSonController {
                 "id": element.id,
                 "text": element.label,
                 "unitId": element.unit?.id,
-                "externalUrl": element.externalURL
+                "expectedValueType": element.expectedValueType.name()
         ]
     }
 
