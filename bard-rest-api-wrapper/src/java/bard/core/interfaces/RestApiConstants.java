@@ -33,6 +33,9 @@ public interface RestApiConstants {
     final String EXPERIMENTS_RESOURCE = "/experiments";
     //relative path to the biology resource
     final String BIOLOGY_RESOURCE = "/biology";
+    //relative path to the result types, as used to request histogram data
+    final String RESULT_TYPES = "/resulttypes";
+
 
     //relative path to the assays resource
     final String ASSAYS_RESOURCE = "/assays";

@@ -19,6 +19,20 @@ class ExperimentRestService extends AbstractRestService {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
 
+
+    public String histogramDataByEID(final Long eid) {
+        if (eid) {
+            final String urlString = buildURLToExperimentHistogramData(eid)
+            final URL url = new URL(urlString)
+            final String histogramJson = (String)this.getForObject(url.toURI(), String.class)
+            return histogramJson
+        }
+        return null
+
+    }
+
+
+
     public ExperimentData activitiesByEIDs(final List<Long> eids, final SearchParams searchParams) {
         if (eids) {
             MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
@@ -74,6 +88,18 @@ class ExperimentRestService extends AbstractRestService {
         }
         return null
     }
+
+
+    String buildURLToExperimentHistogramData(final Long eid) {
+        final StringBuilder resource =
+            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPERIMENTS_RESOURCE)
+
+        resource.append(RestApiConstants.FORWARD_SLASH).append(eid).append(RestApiConstants.RESULT_TYPES)
+          .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
+         return resource.toString()
+
+    }
+
 
     String buildURLToExperimentData(final SearchParams searchParams) {
         final StringBuilder resource =

@@ -31,6 +31,20 @@ class ExperimentRestServiceIntegrationSpec extends IntegrationSpec {
     List<Long> TEST_EID_LONG_LIST = [1, 2, 3, 4, 5, 6, 7, 8]
 
 
+    void "test histogramDataByEID "() {
+        when:
+        final String jsonData = experimentRestService.histogramDataByEID(21L)
+
+        then:
+        jsonData.contains('name')
+        jsonData.contains('max')
+        jsonData.contains('min')
+        jsonData.contains('num')
+        jsonData.contains('histogram')
+    }
+
+
+
 
     void "test activitiesByCIDsAndEIDs "() {
         when: "generate activities directly via post"
