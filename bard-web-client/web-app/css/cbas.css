@@ -24,5 +24,9 @@ table.cbasInnerTableBorder {
 }
 
 .lineSpacing {
-    line-height: 33%;
+    line-height: normal;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }

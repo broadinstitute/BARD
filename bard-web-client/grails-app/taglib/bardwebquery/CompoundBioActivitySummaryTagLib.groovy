@@ -44,15 +44,15 @@ class CompoundBioActivitySummaryTagLib {
         }"/>
         """
 
-        out << "<p style='padding-top: 10px;'><b>${attrs?.title?.value?.left?.value ?: ''}"
+        out << "<p class='lineSpacing' style='padding-top: 10px;'><b>${attrs?.title?.value?.left?.value ?: ''}"
         if (attrs?.title?.dictionaryElement) {
             out << "<a href=\"${attrs?.title?.dictionaryElement.value}\" target=\"datadictionary\">"
             out << "<i class=\"icon-question-sign\"></i></a>"
         }
         out << ": ${attrs?.title?.value?.right?.value ?: ''}</b></p>"
-        out << "<p>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
-        out << "<p>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
-        out << "<p>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
+        out << "<p class='lineSpacing'>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
+        out << "<p class='lineSpacing'>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
+        out << "<p class='lineSpacing'>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
     }
 
     def curveValues = { attrs, body ->
@@ -78,14 +78,14 @@ class CompoundBioActivitySummaryTagLib {
             String concentrationReminder = concentrationSplit.size() > 1 ? concentrationSplit[1] : '00'
 
             out << "<tr>"
-            out << "<td><p style='text-align:right;'><small>${activityIntValue}</small></p></td>"
-            out << "<td><p>.</p></td>"
-            out << "<td><p style='text-align:left;'><small>${activityReminder}</small></p></td>"
-            out << "<td><p>@</p></td>"
-            out << "<td><p style='text-align:right;'><small>${concentrationIntValue}</small></p></td>"
-            out << "<td><p>.</p></td>"
-            out << "<td><p style='text-align:left;'><small>${concentrationReminder}</small></p></td>"
-            out << "<td><p><small>${attrs.testConcentrationUnit}</small></p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${activityIntValue}</small></p></td>"
+            out << "<td><p class='lineSpacing'>.</p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:left;'><small>${activityReminder}</small></p></td>"
+            out << "<td><p class='lineSpacing'>@</p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${concentrationIntValue}</small></p></td>"
+            out << "<td><p class='lineSpacing'>.</p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:left;'><small>${concentrationReminder}</small></p></td>"
+            out << "<td><p class='lineSpacing'><small>${attrs.testConcentrationUnit}</small></p></td>"
             out << "</tr>"
 
             i++
