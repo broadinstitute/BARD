@@ -9,6 +9,9 @@ import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import grails.validation.Validateable
 import org.apache.commons.lang.StringUtils
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import bard.utils.NumberUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +23,8 @@ import org.apache.commons.lang.StringUtils
  */
 @Validateable
 class BasicContextItemCommand extends BardCommand {
-
+	
+	private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
     static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
     static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
     AbstractContext context
@@ -37,9 +41,14 @@ class BasicContextItemCommand extends BardCommand {
     Long valueElementId
 
     String qualifier
+	BigDecimal valueMin
+	BigDecimal valueMax
     BigDecimal valueNum
+	String valueMinField
+	String valueMaxField
+	String valueNumField
     Long valueNumUnitId
-
+	
     String valueDisplay
 
     Date dateCreated = new Date()
@@ -49,7 +58,11 @@ class BasicContextItemCommand extends BardCommand {
     static constraints = {
         qualifier(nullable: true, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
         attributeElementId(nullable: false)
-
+		
+		valueNumField(nullable: true)
+		valueMinField(nullable: true)
+		valueMaxField(nullable: true)
+		
 //        contextId(nullable: false)
 ////        contextType(nullable: false, inList: CONTEXT_TYPES)
 //
@@ -82,6 +95,11 @@ class BasicContextItemCommand extends BardCommand {
     BasicContextItemCommand(AbstractContextItem contextItem) {
         copyFromDomainToCmd(contextItem)
     }
+	
+	private convertValue(String value){
+		BigDecimal convertedValue = NumberUtils.convertScientificNotationValue(value)
+		return convertedValue ?: value
+	}
 
     private copyFromDomainToCmd(AbstractContextItem contextItem) {
         this.context = contextItem.context
