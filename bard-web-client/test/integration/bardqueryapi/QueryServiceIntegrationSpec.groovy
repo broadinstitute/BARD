@@ -294,8 +294,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         label                      | capIDs             | skip | top | numberOfAssays | filters
         "Cap ID List"              | [5168, 5981, 5982] | 0    | 10  | 3              | []
         "Empty Cap ID List"        | []                 | 0    | 10  | 0              | []
-        "Cap ID List with Filters" | [5168, 5981, 5982] | 0    | 10  | 0              | [new SearchFilter("target_name", "Coagulation factor XII")]
-
+        "Cap ID List with Filters" | [5168, 5981, 5982] | 0    | 10  | 1              | [new SearchFilter("target_name", "import")]
     }
 
     void "test find Assays By ADIDs #label"() {
@@ -357,8 +356,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.facets.isEmpty()
         assert projectAdapters.size() == pids.size()
         where:
-        label                               | pids
-        "Single PID"                        | [PIDS.get(0)]
+        label        | pids
+        "Single PID" | [PIDS.get(0)]
         //"Search with a list of project ids" | PIDS
     }
 }

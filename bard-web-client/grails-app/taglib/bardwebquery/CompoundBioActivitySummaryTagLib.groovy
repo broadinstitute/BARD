@@ -6,12 +6,14 @@ import java.text.DecimalFormat
 class CompoundBioActivitySummaryTagLib {
     def assayDescription = { attrs, body ->
 
-        out << generateShortNameHTML(attrs.name, attrs.bardAssayId, attrs.adid, 'showAssay')
+        out << generateShortNameHTML(attrs.assayAdapter?.title, attrs.assayAdapter?.bardAssayId, attrs.assayAdapter?.capAssayId, 'showAssay')
+        out << "<p><b>Designed by:</b>${attrs.assayAdapter?.designedBy}</p>"
+        out << "<p><b>Targets:</b>${attrs.assayAdapter?.targets}</p>"
     }
 
     def projectDescription = { attrs, body ->
 
-        out << generateShortNameHTML(attrs.name, attrs.bardProjectId, attrs.pid, 'showProject')
+        out << generateShortNameHTML(attrs.projectAdapter?.name, attrs.projectAdapter?.id, attrs.projectAdapter?.capProjectId, 'showProject')
     }
 
     def experimentDescription = { attrs, body ->
@@ -42,15 +44,15 @@ class CompoundBioActivitySummaryTagLib {
         }"/>
         """
 
-        out << "<p style='padding-top: 10px;'><b>${attrs?.title?.value?.left?.value ?: ''}"
+        out << "<p class='lineSpacing' style='padding-top: 10px;'><b>${attrs?.title?.value?.left?.value ?: ''}"
         if (attrs?.title?.dictionaryElement) {
             out << "<a href=\"${attrs?.title?.dictionaryElement.value}\" target=\"datadictionary\">"
             out << "<i class=\"icon-question-sign\"></i></a>"
         }
         out << ": ${attrs?.title?.value?.right?.value ?: ''}</b></p>"
-        out << "<p>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
-        out << "<p>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
-        out << "<p>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
+        out << "<p class='lineSpacing'>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
+        out << "<p class='lineSpacing'>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
+        out << "<p class='lineSpacing'>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
     }
 
     def curveValues = { attrs, body ->
@@ -76,14 +78,14 @@ class CompoundBioActivitySummaryTagLib {
             String concentrationReminder = concentrationSplit.size() > 1 ? concentrationSplit[1] : '00'
 
             out << "<tr>"
-            out << "<td><p style='text-align:right;'><small>${activityIntValue}</small></p></td>"
-            out << "<td><p>.</p></td>"
-            out << "<td><p style='text-align:left;'><small>${activityReminder}</small></p></td>"
-            out << "<td><p>@</p></td>"
-            out << "<td><p style='text-align:right;'><small>${concentrationIntValue}</small></p></td>"
-            out << "<td><p>.</p></td>"
-            out << "<td><p style='text-align:left;'><small>${concentrationReminder}</small></p></td>"
-            out << "<td><p><small>${attrs.testConcentrationUnit}</small></p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${activityIntValue}</small></p></td>"
+            out << "<td><p class='lineSpacing'>.</p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:left;'><small>${activityReminder}</small></p></td>"
+            out << "<td><p class='lineSpacing'>@</p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${concentrationIntValue}</small></p></td>"
+            out << "<td><p class='lineSpacing'>.</p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:left;'><small>${concentrationReminder}</small></p></td>"
+            out << "<td><p class='lineSpacing'><small>${attrs.testConcentrationUnit}</small></p></td>"
             out << "</tr>"
 
             i++
@@ -96,17 +98,17 @@ class CompoundBioActivitySummaryTagLib {
         StringBuilder sb = new StringBuilder()
 
         if (nameWords.size() > 7) {
-            sb.append("<p title='${name}' data-placement='bottom' data-toggle='tooltip'>${nameWords[0..6].join(' ')} ...")
+            sb.append("<p title='${name}' data-placement='bottom' data-toggle='tooltip'><em>${nameWords[0..6].join(' ')} ...</em>")
         }
         else if (name) {
-            sb.append("<p>${name}")
+            sb.append("<p><em>${name}</em>")
         }
         else {
             sb.append("<p>")
         }
 
         if (bardId && capId) {
-            sb.append("""<a href="${createLink(controller: 'bardWebInterface', action: action, id: bardId)}"> (${capId})</a>""")
+            sb.append("""<a href="${createLink(controller: 'bardWebInterface', action: action, id: bardId)}"><em> (${capId})</em></a>""")
         }
 
         sb.append("</p>")
