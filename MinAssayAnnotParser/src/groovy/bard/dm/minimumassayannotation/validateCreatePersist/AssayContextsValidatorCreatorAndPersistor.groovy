@@ -164,7 +164,7 @@ class AssayContextsValidatorCreatorAndPersistor extends ValidatorCreatorAndPersi
                         }
 
                         if (! assayContextItem.validate()) {
-                            final String message = "Problem creating assay context item.  spreadsheet: $contextItemDto  gorm:  ${convertToString(assayContextItem)} error message:  ${assayContextItem.errors.dump()}"
+                            final String message = "Problem creating assay context item.  spreadsheet data: $contextItemDto  gorm:  ${convertToString(assayContextItem)} error message:  ${assayContextItem.errors.dump()}"
                             loadResultsWriter.write(contextDTO, assayContext.assay.id, ContextLoadResultsWriter.LoadResultType.fail,
                                     null, 0, message)
                             status.setRollbackOnly()

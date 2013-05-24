@@ -1,18 +1,18 @@
-package bard.dm.assaycompare.minimumassayannotation.validateCreatePersist
+package bard.dm.minimumassayannotation.validateCreatePersist
 
 import spock.lang.Specification
 import grails.buildtestdata.mixin.Build
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import grails.test.mixin.Mock
-import bard.dm.minimumassayannotation.validateCreatePersist.AssayContextsValidatorCreatorAndPersistor
+
 import bard.dm.minimumassayannotation.ContextLoadResultsWriter
 import bard.dm.minimumassayannotation.ContextDTO
 import bard.db.registration.Assay
 import bard.db.dictionary.Element
 import bard.dm.minimumassayannotation.ContextItemDto
 import bard.db.registration.AttributeType
-import bard.dm.Log
+
 import org.apache.log4j.Logger
 
 /**
