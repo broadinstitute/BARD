@@ -84,15 +84,14 @@ modules = {
     }
     jqueryMobile {
         dependsOn 'jquery, jquery-ui, jquery-theme'
-
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.min.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.min.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css"
-        resource url: "js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.js"
-        resource url: "js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"
         resource url: "css/bard-mobile.css"
     }
     jqueryMobileInit {
