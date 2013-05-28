@@ -32,8 +32,8 @@ class ViewAssayDefinitionPage extends Page{
 		editAssaySummary.ddValue(1).value("")
 		editAssaySummary.ddValue(1).value(name)
 		editAssaySummary.ddSelect(3).value(assayStatus)
-		editAssaySummary.ddValue(4).value("")
-		editAssaySummary.ddValue(4).value(designedBy)
+		editAssaySummary.ddValue(5).value("")
+		editAssaySummary.ddValue(5).value(designedBy)
 		assert dialogButtonset.button[0]
 		assert dialogButtonset.button[1]
 		dialogButtonset.button[0].click()
