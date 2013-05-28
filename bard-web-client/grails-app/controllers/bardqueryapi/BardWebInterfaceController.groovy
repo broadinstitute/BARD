@@ -6,6 +6,7 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
@@ -39,6 +40,7 @@ class BardWebInterfaceController {
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
+    ExperimentRestService  experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
     ProjectExperimentRenderService projectExperimentRenderService
     List<SearchFilter> filters = []
@@ -160,6 +162,10 @@ class BardWebInterfaceController {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "${message}")
         }
+    }
+
+    def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
+        render experimentRestService.histogramDataByEID(id)
     }
 
     def probe(String probeId) {

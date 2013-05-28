@@ -1,0 +1,63 @@
+
+.bar rect {
+    shape-rendering: crispEdges;
+}
+.xaxis path, .xaxis line {
+    fill: none;
+    stroke: #000;
+}
+.xaxis text {
+    font-size: 12px;
+    shape-rendering: crispEdges;
+    text-rendering: optimizeLegibility;
+    stroke: #000;
+}
+.yaxis line {
+    fill: none;
+    stroke: #ccc;
+    shape-rendering: crispEdges;
+}
+.yaxis path {
+    display: none;
+}
+.yaxis text {
+    fill: none;
+    font-size: 12px;
+    text-rendering: optimizeLegibility;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.histogramDiv {
+    display: inline-block;
+    border-style:solid;
+    border-width: 2px;
+    border-color:#000000;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    background-color:#E7FFF9;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+
+}
+.toolTextAppearance {
+    font: 16px serif;
+    font-weight: bold;
+    margin: 5px;
+    padding: 10px;
+    background: #eeeeee;
+    border: 1px solid blue;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+.histogramTitle {
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 20px;
+}
+.histogramMouseInfo {
+    font-size: 9px;
+    font-weight: normal;
+    font-style: italic;
+    color: #000000;
+}

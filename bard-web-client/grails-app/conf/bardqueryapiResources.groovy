@@ -121,5 +121,12 @@ modules = {
         resource url: "js/sunburst/createASunburst.js"
         resource url: "css/sunburst.css"
     }
+    histogram {
+        dependsOn 'bootstrap,jquery'
+
+        resource url: "js/sunburst/d3.min.js"
+        resource url: "js/histogram/experimentalResultsHistogram.js"
+        resource url: "css/experimentalResultHistogram.css"
+    }
 
 }
