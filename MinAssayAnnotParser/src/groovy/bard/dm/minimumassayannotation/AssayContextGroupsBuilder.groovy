@@ -60,9 +60,9 @@ class AssayContextGroupsBuilder {
         ]
 
         List<ContextItemDto> measurementWavelength = [
-                new ContextItemDto('2/V', '$/V', AttributeType.Fixed, true, null),//The wavelength units are fixed in cell 2/BI
+                new ContextItemDto('2/V', '$/V', AttributeType.Fixed, true, null),
                 new ContextItemDto('2/W', '$/W', AttributeType.Fixed, true, null)
-        ]//The wavelength units are fixed in cell 2/BI
+        ]
 
         List<ContextItemDto> absorbanceWavelength = [
                 new ContextItemDto('2/X', '$/X', AttributeType.Fixed)
