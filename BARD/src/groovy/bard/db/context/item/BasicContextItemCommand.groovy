@@ -9,7 +9,12 @@ import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import bard.db.project.ProjectService
 import grails.validation.Validateable
+import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
+import org.springframework.context.MessageSource
+
+import java.math.MathContext
+import java.math.RoundingMode
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import bard.utils.NumberUtils;
@@ -24,10 +29,12 @@ import bard.utils.NumberUtils;
  */
 @Validateable
 class BasicContextItemCommand extends BardCommand {
-	
-	private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
+
+    private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
     static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
     static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
+
+    MessageSource messageSource
     AbstractContext context
     AbstractContextItem contextItem
     ProjectService projectService
@@ -43,14 +50,11 @@ class BasicContextItemCommand extends BardCommand {
     Long valueElementId
 
     String qualifier
-	BigDecimal valueMin
-	BigDecimal valueMax
-    BigDecimal valueNum
-	String valueMinField
-	String valueMaxField
-	String valueNumField
+    String valueMin
+    String valueMax
+    String valueNum
     Long valueNumUnitId
-	
+
     String valueDisplay
 
     Date dateCreated = new Date()
@@ -60,48 +64,13 @@ class BasicContextItemCommand extends BardCommand {
     static constraints = {
         qualifier(nullable: true, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
         attributeElementId(nullable: false)
-		
-		valueNumField(nullable: true)
-		valueMinField(nullable: true)
-		valueMaxField(nullable: true)
-		
-//        contextId(nullable: false)
-////        contextType(nullable: false, inList: CONTEXT_TYPES)
-//
-//        valueElementId(nullable: true)
-//        extValueId(nullable: true)
-//        qualifier(nullable: true)
-//        valueNum(nullable: true)
-//        valueDisplay(nullable: true)
     }
-//
-//    /**
-//     * a context item has a number of nullable fields, however, they should only ever be partially populated
-//     *
-//     * that is some columns should be mutually exclusive
-//     * @return true if this item looks to be valid
-//     */
-//    boolean validateCommand() {
-//        if(valueElementId){
-//            return true
-//        }
-//        else if (StringUtils.isNotBlank(extValueId)){
-//            return true
-//        }
-//        else if (valueNum){
-//
-//        }
-//    }
+
     BasicContextItemCommand() {}
 
     BasicContextItemCommand(AbstractContextItem contextItem) {
         copyFromDomainToCmd(contextItem)
     }
-	
-	private convertValue(String value){
-		BigDecimal convertedValue = NumberUtils.convertScientificNotationValue(value)
-		return convertedValue ?: value
-	}
 
     private copyFromDomainToCmd(AbstractContextItem contextItem) {
         this.context = contextItem.context
@@ -117,7 +86,9 @@ class BasicContextItemCommand extends BardCommand {
         this.extValueId = contextItem.extValueId
 
         this.qualifier = contextItem.qualifier
-        this.valueNum = contextItem.valueNum?.toBigDecimal()
+        this.valueNum = contextItem.valueNum ? new BigDecimal(contextItem.valueNum.toString()).stripTrailingZeros() : null
+        this.valueMin = contextItem.valueMin ? new BigDecimal(contextItem.valueMin.toString()).stripTrailingZeros() : null
+        this.valueMax = contextItem.valueMax ? new BigDecimal(contextItem.valueMax.toString()).stripTrailingZeros() : null
         this.valueNumUnitId = contextItem.attributeElement.unit?.id
 
         this.valueDisplay = contextItem.valueDisplay
@@ -155,15 +126,16 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
         contextItem.qualifier = qualifier
-        contextItem.valueNum = valueNum
+        contextItem.valueNum = convertToBigDecimal('valueNum', valueNum)
         if (valueNumUnitId != contextItem.attributeElement.unit?.id) {
             Element fromUnit = attemptFindById(Element, valueNumUnitId)
             UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, contextItem.attributeElement.unit)
-            contextItem.valueNum = unitConversion?.convert(valueNum)
+            contextItem.valueNum = unitConversion?.convert(convertToBigDecimal('valueNum', valueNum))
         }
-        if (valueNum){
+        if (valueNum) {
             contextItem.valueDisplay = contextItem.deriveDisplayValue()
         }
+
     }
 
     boolean update() {
@@ -186,9 +158,9 @@ class BasicContextItemCommand extends BardCommand {
 
     boolean delete() {
         AbstractContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
-        if(context){
-            return projectService.deleteContextItem(context,this.contextId)
-        } else{
+        if (context) {
+            return projectService.deleteContextItem(context, this.contextId)
+        } else {
             return false
         }
     }
@@ -199,6 +171,22 @@ class BasicContextItemCommand extends BardCommand {
      */
     String getOwnerController() {
         'project'
+    }
+
+    private BigDecimal convertToBigDecimal(String field, String value) {
+        try {
+            def bd = new BigDecimal(value)
+            println(bd.dump())
+            println("bd.toString() : ${bd.toString()}")
+            println("bd.toPlainString() : ${bd.toPlainString()}")
+            println("bd.toEngineeringString() : ${bd.toEngineeringString()}")
+            return bd
+        }
+        catch (NumberFormatException nfe) {
+            ValidationErrors localErrors = new ValidationErrors(this)
+            localErrors.rejectValue(field, 'contextItem.valueNum.not.valid')
+            addToErrors(localErrors)
+        }
     }
 
 }
