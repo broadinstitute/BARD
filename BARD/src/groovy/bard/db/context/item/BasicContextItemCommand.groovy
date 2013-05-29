@@ -1,5 +1,6 @@
 package bard.db.context.item
 
+import bard.db.ContextItemService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.UnitConversion
@@ -38,6 +39,7 @@ class BasicContextItemCommand extends BardCommand {
     AbstractContext context
     AbstractContextItem contextItem
     ProjectService projectService
+    ContextItemService contextItemService
 
     Long contextOwnerId
     Long contextId
@@ -72,7 +74,7 @@ class BasicContextItemCommand extends BardCommand {
         copyFromDomainToCmd(contextItem)
     }
 
-    private copyFromDomainToCmd(AbstractContextItem contextItem) {
+    void copyFromDomainToCmd(AbstractContextItem contextItem) {
         this.context = contextItem.context
         this.contextItem = contextItem
         this.contextOwnerId = contextItem.context.owner.id
@@ -116,7 +118,7 @@ class BasicContextItemCommand extends BardCommand {
         createSuccessful
     }
 
-    private copyFromCmdToDomain(ProjectContextItem contextItem) {
+    void copyFromCmdToDomain(ProjectContextItem contextItem) {
         contextItem.attributeElement = attemptFindById(Element, attributeElementId)
         Element valueElement
         if (valueElementId) {
@@ -139,30 +141,15 @@ class BasicContextItemCommand extends BardCommand {
     }
 
     boolean update() {
-        boolean updateSuccessful = false
-        if (validate()) {
-            ProjectContextItem contextItem = attemptFindById(ProjectContextItem, contextItemId)
-            if (contextItem) {
-                if (this.version?.longValue() != contextItem.version.longValue()) {
-                    getErrors().reject('default.optimistic.locking.failure', [ProjectContextItem] as Object[], 'optimistic lock failure')
-                    copyFromDomainToCmd(contextItem)
-                } else {
-                    copyFromCmdToDomain(contextItem)
-                    updateSuccessful = attemptSave(contextItem)
-                    copyFromDomainToCmd(contextItem)
-                }
-            }
-        }
-        updateSuccessful
+        return validate() && contextItemService.updateContextItem(this)
     }
 
     boolean delete() {
-        AbstractContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
-        if (context) {
-            return projectService.deleteContextItem(context, this.contextId)
-        } else {
-            return false
-        }
+        contextItemService.delete(this)
+    }
+
+    AbstractContext findContext(){
+        attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
     }
 
     /**
@@ -173,7 +160,7 @@ class BasicContextItemCommand extends BardCommand {
         'project'
     }
 
-    private BigDecimal convertToBigDecimal(String field, String value) {
+    BigDecimal convertToBigDecimal(String field, String value) {
         try {
             def bd = new BigDecimal(value)
             println(bd.dump())
