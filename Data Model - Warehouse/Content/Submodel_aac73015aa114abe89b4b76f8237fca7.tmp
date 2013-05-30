@@ -199,6 +199,9 @@ Attr_8fe0007e60ad4fecaa413ce81c45b147.altTxt = "Column"
 Attr_635a33336f6e474f9755828506005ea0 = insDoc(Tbl_dd686baeb15343e7871077c0eab85455, gLnk("R", "VALUE_TEXT", "Content/Tbl_dd686baeb15343e7871077c0eab85455_Attr.htm#Attr_635a33336f6e474f9755828506005ea0"))
 Attr_635a33336f6e474f9755828506005ea0.iconSrc = ICONPATH + "Gif/attr.gif"
 Attr_635a33336f6e474f9755828506005ea0.altTxt = "Column"
+Attr_0e9e1656b0744a7e8a901874b3986fde = insDoc(Tbl_dd686baeb15343e7871077c0eab85455, gLnk("R", "EXPONENT", "Content/Tbl_dd686baeb15343e7871077c0eab85455_Attr.htm#Attr_0e9e1656b0744a7e8a901874b3986fde"))
+Attr_0e9e1656b0744a7e8a901874b3986fde.iconSrc = ICONPATH + "Gif/attr.gif"
+Attr_0e9e1656b0744a7e8a901874b3986fde.altTxt = "Column"
 }
 }
 AttrFolder = insFld(Submodel_1962a744f24c4feb8167d6b0131284a8, gFld("Columns", "javascript:parent.op()"))
@@ -270,6 +273,9 @@ Attr_cdd6a8f028524c798707b7038e6154c5.altTxt = "Foreign Key"
 Attr_3c645aa68f424e718c5dd52983de03fe = insDoc(AttrFolder, gLnk("R", "EXPERIMMENT_STATUS.EXPERIMENT", "Content/Tbl_bda24f9265504f218ab4a73dfe7f0123_Attr.htm#Attr_3c645aa68f424e718c5dd52983de03fe"))
 Attr_3c645aa68f424e718c5dd52983de03fe.iconSrc = ICONPATH + "Gif/attr.gif"
 Attr_3c645aa68f424e718c5dd52983de03fe.altTxt = "Column"
+Attr_0e9e1656b0744a7e8a901874b3986fde = insDoc(AttrFolder, gLnk("R", "EXPONENT.VALUE", "Content/Tbl_dd686baeb15343e7871077c0eab85455_Attr.htm#Attr_0e9e1656b0744a7e8a901874b3986fde"))
+Attr_0e9e1656b0744a7e8a901874b3986fde.iconSrc = ICONPATH + "Gif/attr.gif"
+Attr_0e9e1656b0744a7e8a901874b3986fde.altTxt = "Column"
 Attr_7fbca1de9538478a986b828cdf09250f = insDoc(AttrFolder, gLnk("R", "FUNDING_SOURCE.PROJECT", "Content/Tbl_24db8983d93549ad8da97a991a949740_Attr.htm#Attr_7fbca1de9538478a986b828cdf09250f"))
 Attr_7fbca1de9538478a986b828cdf09250f.iconSrc = ICONPATH + "Gif/attr.gif"
 Attr_7fbca1de9538478a986b828cdf09250f.altTxt = "Column"

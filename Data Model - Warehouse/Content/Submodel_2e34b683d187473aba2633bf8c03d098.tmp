@@ -199,6 +199,9 @@ Attr_d5fc87fcf6de433fb352652c0a053e30.altTxt = "Attribute"
 Attr_c32142d545df4e308e9c97cc1ad8c49f = insDoc(Tbl_2308c92c931146eab18b5bb6e211ab97, gLnk("R", "Value_Text", "Content/Tbl_2308c92c931146eab18b5bb6e211ab97_Attr.htm#Attr_c32142d545df4e308e9c97cc1ad8c49f"))
 Attr_c32142d545df4e308e9c97cc1ad8c49f.iconSrc = ICONPATH + "Gif/attr.gif"
 Attr_c32142d545df4e308e9c97cc1ad8c49f.altTxt = "Attribute"
+Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a = insDoc(Tbl_2308c92c931146eab18b5bb6e211ab97, gLnk("R", "EXPONENT", "Content/Tbl_2308c92c931146eab18b5bb6e211ab97_Attr.htm#Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a"))
+Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a.iconSrc = ICONPATH + "Gif/attr.gif"
+Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a.altTxt = "Attribute"
 }
 }
 AttrFolder = insFld(Submodel_1c2fb8155a2d4f6c8e80895b97b83951, gFld("Attributes", "javascript:parent.op()"))
@@ -240,6 +243,9 @@ Attr_64d448510e4944339e6472dc4e97ea53.altTxt = "Attribute"
 Attr_d305beccfe57413abb0435e7f96fadaa = insDoc(AttrFolder, gLnk("R", "Designed_by.Assay", "Content/Tbl_e70497e5a7b0440180009ae3fecdc1e2_Attr.htm#Attr_d305beccfe57413abb0435e7f96fadaa"))
 Attr_d305beccfe57413abb0435e7f96fadaa.iconSrc = ICONPATH + "Gif/attr.gif"
 Attr_d305beccfe57413abb0435e7f96fadaa.altTxt = "Attribute"
+Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a = insDoc(AttrFolder, gLnk("R", "EXPONENT.Value", "Content/Tbl_2308c92c931146eab18b5bb6e211ab97_Attr.htm#Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a"))
+Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a.iconSrc = ICONPATH + "Gif/attr.gif"
+Attr_1d8039b33e8a4bf2b504c0a84fa7cf1a.altTxt = "Attribute"
 Attr_affaad5f8c9b454eadeaed106cffab30 = insDoc(AttrFolder, gLnk("R", "Effective_from.result_type", "Content/Tbl_c3ab6a1b8adb45f3afeb4a001771b1ce_Attr.htm#Attr_affaad5f8c9b454eadeaed106cffab30"))
 Attr_affaad5f8c9b454eadeaed106cffab30.iconSrc = ICONPATH + "Gif/attr.gif"
 Attr_affaad5f8c9b454eadeaed106cffab30.altTxt = "Attribute"
