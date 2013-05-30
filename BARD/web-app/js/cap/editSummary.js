@@ -1,79 +1,130 @@
 $(document).ready(function () {
-    $( "#editSummaryButton" )
-        .button()
-        .click(function() {
-            $( "#dialog_edit_summary" ).dialog( "open" );
-            initFunction();
-        });
-    $( "#dialog_edit_summary" ).dialog({
-        autoOpen: false,
-        height: 400,
-        width: 500,
-        modal: true,
-        buttons: {
-            "Update Summary": function() {
-                var instanceId = $("#assayId").text();
-                var assayStatus = $("#assayStatus option:selected").text()
-                var assayType = $("#assayType option:selected").text()
-                var assayName = $("#assayName").val();
-                var designedBy = $("#designedBy").val();
-                if (!validateRequiredField(assayName, "assayNameValidation")) return false;
-                var inputdata = {'instanceId':instanceId, 'assayStatus':assayStatus, 'assayName':assayName, 'designedBy':designedBy, 'assayType':assayType};
-                $.ajax
-                    ({
-                        url:"../editSummary",
-                        data:inputdata,
-                        cache:false,
-                        success:function(responseText, statusText, xhr, jqForm){
-                                $("#summaryDetailSection").html(responseText);
-                        }
-                    });
-                $( this ).dialog( "close" );
-            },
-            Cancel: function() {
-                resetAfterCloseOrCancel();
-                $( this ).dialog( "close" );
-            }
+
+    //inline editing
+    $.fn.editable.defaults.mode = 'inline';
+
+    //set up editing for documents
+    $('.documents').editable({
+        params: function (params) {
+            var version = $(this).attr('data-version');
+            var owningEntityId = $(this).attr('data-owningEntityId');
+            params.version = version;
+            params.owningEntityId = owningEntityId;
+            params.documentName = $(this).attr('data-document-name');
+            params.documentType = $(this).attr('data-documentType');
+            return params;
         },
-        close: function() {
-            resetAfterCloseOrCancel();
+        ajaxOptions: {
+            complete: function (response, serverMessage) {
+                updateEntityVersion(response, serverMessage);
+            }
+        }
+
+    });
+
+    //Set up editing for button
+    $('.documentPencil').click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var dataId = $(this).attr('data-id');
+        $("#" + dataId).editable('toggle');
+    });
+
+    //edit assay status
+    $('.assayStatus').editable({
+        params: function (params) {
+            var version = $('#versionId').val();
+            params.version = version;
+            return params;
+        },
+        validate: function (value) {
+            return validateInput(value);
+        },
+        success: function (response, newValue) {
+            updateAssaySummary(response, newValue);
+        }
+    });
+
+    //edit assay type
+    $('.assayType').editable({
+        params: function (params) {
+            var version = $('#versionId').val();
+            params.version = version;
+            return params;
+        },
+        validate: function (value) {
+            return validateInput(value);
+        },
+        success: function (response, newValue) {
+            updateAssaySummary(response, newValue);
+        }
+    });
+
+    //edit assay name
+    $('#assayNameId').editable({
+        inputclass: 'input-large',
+        params: function (params) {
+            var version = $('#versionId').val();
+            params.version = version;
+            return params;
+        },
+        validate: function (value) {
+            return validateInput(value);
+        },
+        success: function (response, newValue) {
+            updateAssaySummary(response, newValue);
+        }
+    });
+
+    //edit designed by
+    $('.designedBy').editable({
+        inputclass: 'input-large',
+        params: function (params) {
+            var version = $('#versionId').val();
+            params.version = version;
+            return params;
+        },
+        validate: function (value) {
+            return validateInput(value);
+        },
+        success: function (response, newValue) {
+            updateAssaySummary(response, newValue);
         }
     });
 });
+function updateAssaySummary(response, newValue) {
 
-function validateRequiredField(fieldName, messageHolder){
-    if( !fieldName || 0 === fieldName || (/^\s*$/).test(fieldName)) {
-        $("#"+messageHolder).html("Required and cannot be empty");
-        return false;
+    var version = response.version;
+    var modifiedBy = response.modifiedBy;
+    var lastUpdated = response.lastUpdate;
+    var shortName = response.shortName;
+
+
+    $("#versionId").val(version);
+    $("#modifiedById").html(modifiedBy);
+    $("#lastUpdatedId").html(lastUpdated);
+    $("#shortNameId").html(shortName);
+    return response.data;
+}
+function updateEntityVersion(response, serverresponse) {
+    if (serverresponse == "success") { //only update the version on success
+        //update the version of the assay
+        var version = response.getResponseHeader("version");
+        var entityId = response.getResponseHeader("entityId");
+
+        //we use the entity id as the name of the class
+        var elements = document.getElementsByClassName("" + entityId);
+        for (var i = elements.length - 1; i >= 0; --i) {
+            var element = elements[i];
+            element.setAttribute("data-version", version);
+        }
     }
-    return true;
-};
-
-function initFunction() {
-    $("input#assayName").blur(function()
-    {    var assayName = $(this).val();
-        validateRequiredField(assayName, "assayNameValidation");
-    });
-    $("input#assayName").click(function()
-    {
-        $("#assayNameValidation").html("");
-    });
 }
 
-function resetAfterCloseOrCancel() {
-    var instanceId = $("#assayId").text();
-    $("#editSummaryForm").clearForm();
-    // Need to reload the original data
-    var inputdata = {'instanceId':instanceId};
-    $.ajax
-        ({
-            url:"../showEditSummary",
-            data:inputdata,
-            cache:false,
-            success:function(responseText, statusText, xhr, jqForm){
-                $("#dialog_edit_summary").html(responseText);
-            }
-        });
+function validateInput(value) {
+    if ($.trim(value) == '') {
+        return 'Required and cannot be empty';
+    }
 }
 
 

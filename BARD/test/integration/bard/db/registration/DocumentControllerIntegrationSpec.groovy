@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import bard.db.model.IDocumentType
+import bard.db.enums.DocumentType
 import grails.plugin.spock.IntegrationSpec
 import grails.validation.ValidationErrors
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -35,7 +35,7 @@ class DocumentControllerIntegrationSpec extends IntegrationSpec {
         when:
         controller.params.assayId = -1
         controller.params.documentName = 'foo'
-        controller.params.documentType = IDocumentType.DOCUMENT_TYPE_DESCRIPTION
+        controller.params.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
         controller.save()
 
         then:

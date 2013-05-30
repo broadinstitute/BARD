@@ -1,3 +1,4 @@
+<%@ page import="bard.db.enums.DocumentType" %>
 <div class="well well-small">
     <div>
         <g:form action="delete" controller="document" params="${[type:document.owner.class.simpleName]}" id="${document.id}" onsubmit="return confirm('Are you sure you wish to delete the document?');">
@@ -13,7 +14,7 @@
 
             <dt><g:message code="document.content.label" default="Content:"/></dt>
             <dd>
-                <g:if test="${document.documentType in [bard.db.model.IDocumentType.DOCUMENT_TYPE_EXTERNAL_URL, bard.db.model.IDocumentType.DOCUMENT_TYPE_PUBLICATION]}">
+                <g:if test="${document.documentType in [DocumentType.DOCUMENT_TYPE_EXTERNAL_URL,DocumentType.DOCUMENT_TYPE_PUBLICATION]}">
                     <a href="${document.documentContent}">
                         <g:fieldValue bean="${document}" field="documentContent"/>
                     </a>

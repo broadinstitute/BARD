@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.enums.hibernate.DocumentTypeEnumUserType
 import bard.db.model.AbstractDocument
 
 class AssayDocument extends AbstractDocument {
@@ -12,6 +13,7 @@ class AssayDocument extends AbstractDocument {
         table('ASSAY_DOCUMENT')
         id(column: 'ASSAY_DOCUMENT_ID', generator: 'sequence', params: [sequence: 'ASSAY_DOCUMENT_ID_SEQ'])
         documentContent(type: "text", sqlType: 'clob')
+        documentType(type:DocumentTypeEnumUserType)
     }
 
     public Object getOwner() {

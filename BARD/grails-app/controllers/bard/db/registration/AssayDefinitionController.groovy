@@ -1,7 +1,10 @@
 package bard.db.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.AssayStatus
+import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
@@ -10,6 +13,11 @@ import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import registration.AssayService
 
+import javax.servlet.http.HttpServletResponse
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+@Mixin(AssayDefinitionHelper)
 @Secured(['isAuthenticated()'])
 class AssayDefinitionController {
 
@@ -19,6 +27,92 @@ class AssayDefinitionController {
     SpringSecurityService springSecurityService
     MeasureTreeService measureTreeService
     AssayService assayService
+
+    def editAssayType(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final AssayType assayType = AssayType.byId(inlineEditableCommand.value)
+            Assay assay = Assay.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            assay = assayService.updateAssayType(inlineEditableCommand.pk, assayType)
+            generateAndRenderJSONResponse(assay, this.assayService,assay.assayType.id)
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the assay type. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+
+    def editAssayStatus(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final AssayStatus assayStatus = AssayStatus.byId(inlineEditableCommand.value)
+            Assay assay = Assay.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            assay = assayService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
+            generateAndRenderJSONResponse(assay, this.assayService,assay.assayStatus.id)
+
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the assay status. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+
+    def editAssayName(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Assay assay = Assay.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            assay = assayService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            generateAndRenderJSONResponse(assay, this.assayService,assay.assayName)
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the assay name. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+
+    def editDesignedBy(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Assay assay = Assay.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            assay = assayService.updateDesignedBy(inlineEditableCommand.pk, inlineEditableCommand.value)
+            generateAndRenderJSONResponse(assay, this.assayService,assay.designedBy)
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the Designer name. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+
+    def assayStatus() {
+        List<String> sorted = []
+        final Collection<AssayStatus> assayStatuses = AssayStatus.values()
+        for (AssayStatus assayStatus : assayStatuses) {
+            sorted.add(assayStatus.id)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+
+    }
+
+    def assayTypes() {
+        List<String> sorted = []
+        final Collection<AssayType> assayTypes = AssayType.values()
+        for (AssayType assayType : assayTypes) {
+            sorted.add(assayType.id)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
 
     def index() {
         redirect(action: "description", params: params)
@@ -36,6 +130,7 @@ class AssayDefinitionController {
         } catch (ValidationException ee) {
             assay = Assay.get(id)
             flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
+
         }
         JSON measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assay, false))
         render(view: "show", model: [assayInstance: assay, measureTreeAsJson: measureTreeAsJson])
@@ -351,15 +446,6 @@ class AssayDefinitionController {
         render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def editSummary(Long instanceId, String assayStatus, String assayName, String designedBy, String assayType) {
-        boolean recomputeAssayShortName = assayContextService.editSummary(instanceId, assayStatus, assayName, designedBy, assayType)
-
-        Assay assayInstance = Assay.findById(instanceId)
-        if (recomputeAssayShortName) {
-            assayInstance = assayService.recomputeAssayShortName(assayInstance)
-        }
-        render(template: "summaryDetail", model: [assay: assayInstance])
-    }
 
     def showEditSummary(Long instanceId) {
         def assayInstance = Assay.findById(instanceId)
@@ -382,4 +468,22 @@ class AssayDefinitionController {
 
         render new JSONArray()
     }
+}
+class AssayDefinitionHelper {
+    static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
+
+    def generateAndRenderJSONResponse(final Assay assay, final AssayService assayService, final String newValue) {
+        //TODO: Assay short name recomputation happens elsewhere
+       // Assay assay = assayService.recomputeAssayShortName(originalAssay)
+        Map<String, String> dataMap = [:]
+        dataMap.put('version', assay.version.toString())
+        dataMap.put('modifiedBy', assay.modifiedBy)
+        dataMap.put('lastUpdated', formatter.format(assay.lastUpdated))
+        dataMap.put("shortName", assay.assayShortName)
+        dataMap.put("data", newValue)
+
+        JSON jsonResponse = dataMap as JSON
+        render status: HttpServletResponse.SC_OK, text: jsonResponse, contentType: 'text/json', template: null
+    }
+
 }

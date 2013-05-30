@@ -244,14 +244,27 @@ class ProjectController {
 @InheritConstructors
 @Validateable
 class InlineEditableCommand extends BardCommand {
-    Long pk
+    Long pk //primary key of the current entity
     String name
-    String value
+    String value //the new value
+    Long version  //version of the current entity
+    Long owningEntityId //if this has an owning entity
 
     static constraints = {
         pk(blank: false, nullable: false)
         name(blank: false, nullable: false)
         value(blank: false, nullable: false)
+        version(blank: false, nullable: false)
+        owningEntityId(nullable: true)
     }
+    String validateVersions(Long currentVersion, Class entityClass){
+        StringBuilder b = new StringBuilder()
+        if (this.version?.longValue() != currentVersion.longValue()) {
+            getErrors().reject('default.optimistic.locking.failure', [entityClass] as Object[], 'optimistic lock failure')
+            b.append(g.message(code: 'default.optimistic.locking.failure'))
+        }
+        return b.toString()
+    }
+
 }
 

@@ -1,11 +1,12 @@
-<%@ page import="bard.db.model.IDocumentType" %>
+<%@ page import="bard.db.enums.DocumentType" %>
+
 
 <div class="control-group ${hasErrors(bean: document, field: 'documentType', 'error')}">
     <label class="control-label" for="documentType">
         <g:message code="document.type.label"/>:</label>
 
     <div class="controls">
-        <g:select id="documentType" name="documentType" from="${IDocumentType.DOCUMENT_TYPE_DISPLAY_ORDER}"
+        <g:select id="documentType" name="documentType" from="${DocumentType.DOCUMENT_TYPE_DISPLAY_ORDER}"
                   value="${document?.documentType}" noSelection="${['': 'Select a Type']}"/>
         <span class="help-inline"><g:fieldError field="documentType" bean="${document}"/></span>
     </div>
