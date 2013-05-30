@@ -4,7 +4,7 @@
 <head>
     <title>BioAssay Research Database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile, jqueryMobileInit, autocomplete, search, bootstrap, core"/>
+    <r:require modules="jqueryMobile, autocomplete, search, bootstrap, core"/>
     <r:layoutResources/>
 </head>
 

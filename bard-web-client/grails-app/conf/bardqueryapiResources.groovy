@@ -83,20 +83,21 @@ modules = {
         resource url: "js/experimentalResults.js"
     }
     jqueryMobile {
-        dependsOn 'jquery, jquery-ui, jquery-theme'
+        dependsOn 'jqueryMobilePreInit'
         resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"
         resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.css"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"
         resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.css"
-        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"
         resource url: "css/bard-mobile.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"
+        resource url: "js/jqueryMobilePostInit.js"
     }
-    jqueryMobileInit {
-        dependsOn('jqueryMobile')
-        resource url: "js/jqueryMobileInit.js"
+    jqueryMobilePreInit {
+        dependsOn 'jquery, jquery-ui, jquery-theme'
+        resource url: "js/jqueryMobilePreInit.js"
     }
     twitterBootstrapAffix {
         resource url: "css/twitterBootstrapAffix.css"

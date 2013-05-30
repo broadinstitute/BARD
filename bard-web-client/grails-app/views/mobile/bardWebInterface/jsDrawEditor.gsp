@@ -4,26 +4,26 @@
 <head>
     <title>JSDraw Structure Editor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jquery, jquery-ui, jquery-theme"/>
+    <r:require modules="jqueryMobilePreInit"/>
     <r:layoutResources/>
     %{--This whole section here of importing JQuery Mobile is needed because of issues with the resources manager and loading order.--}%
     <link rel="stylesheet" type="text/css"
           href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"/>
+    %{--<link rel="stylesheet" type="text/css"--}%
+          %{--href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"/>--}%
     <link rel="stylesheet" type="text/css"
           href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"/>
+    %{--<link rel="stylesheet" type="text/css"--}%
+          %{--href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"/>--}%
     <link rel="stylesheet" type="text/css"
           href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.css"/>
-    <link rel="stylesheet" type="text/css"
-          href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"/>
+    %{--<link rel="stylesheet" type="text/css"--}%
+          %{--href="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"/>--}%
     <script type="text/javascript" src="${request.contextPath}/jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"></script>
-    <script type="text/javascript"
-            src="${request.contextPath}/jquery.mobile-1.3.1//jquery.mobile-1.3.1.min.js"></script>
+    %{--<script type="text/javascript"--}%
+            %{--src="${request.contextPath}/jquery.mobile-1.3.1//jquery.mobile-1.3.1.min.js"></script>--}%
     <link rel="stylesheet" type="text/css" href="${request.contextPath}/css/bard-mobile.css"/>
-    <script type="text/javascript" src="${request.contextPath}/js/jqueryMobileInit.js"></script>
+    <script type="text/javascript" src="${request.contextPath}/js/jqueryMobilePostInit.js"></script>
 
     <script type="text/javascript" src="${request.contextPath}/js/dojo-min/dojo/dojo.js"></script>
     <script type="text/javascript" src="${request.contextPath}/js/jsDraw/Scilligence.JSDraw2.js"></script>
