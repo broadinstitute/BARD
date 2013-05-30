@@ -1,5 +1,5 @@
 function drawHistogram(domMarker, oneHistogramsData) {
-
+    "use strict";
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // This D3 graphic is implemented in three sections: definitions, tools, and then building the DOM
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -14,41 +14,46 @@ function drawHistogram(domMarker, oneHistogramsData) {
         chart_dimensions = {
             width: container_dimensions.width - margin.left - margin.right,
             height: container_dimensions.height - margin.top - margin.bottom
-        };
+        },
 
     // adjustable parameters
-    var barPadding = 1;
-    var ticksAlongHorizontalAxis = 5;
-    var numberOfHorizontalGridlines = 10;
-    var yLabelProportion = 1; /* implies 8% is reserved for y axis labels  */
+        barPadding = 1,
+        ticksAlongHorizontalAxis = 5,
+        numberOfHorizontalGridlines = 10,
+        paddingOnTopForTitle = 10,
+        yLabelProportion = 1, /* implies (1-yLabelProportion is) reserved for y axis labels  */
 
     // D3 scaling definitions
-    var xScale = d3.scale.linear()
-        .domain([oneHistogramsData.min, oneHistogramsData.max])
-        .range([0, chart_dimensions.width]);
-    var yScale = d3.scale.linear()
-        .domain([0, d3.max(oneHistogramsData.histogram, function (d) {return d[0];})])
-        .range([chart_dimensions.height, margin.bottom]);
+        xScale = d3.scale.linear()
+            .domain([d3.min(oneHistogramsData.histogram, function (d) {return d[1];}), d3.max(oneHistogramsData.histogram, function (d) {return d[2];})])
+            .range([0, chart_dimensions.width]),
+        yScale = d3.scale.linear()
+            .domain([0, d3.max(oneHistogramsData.histogram, function (d) {return d[0];})])
+            .range([chart_dimensions.height, margin.bottom]),
 
     //
     // Part 2: tools
     //
 
+
     // D3 axis definitions
-    // D3 axis definitions
-    var xAxis = d3.svg.axis()
-        .scale(xScale)
-        .orient("bottom")
-        .ticks(ticksAlongHorizontalAxis);
-    var yAxis = d3.svg.axis()
-        .scale(yScale)
-        .orient("left")
-        .ticks(numberOfHorizontalGridlines)
-        .tickSize(-chart_dimensions.width*yLabelProportion);
+        xAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom")
+            .ticks(ticksAlongHorizontalAxis),
+        yAxis = d3.svg.axis()
+            .scale(yScale)
+            .orient("left")
+            .ticks(numberOfHorizontalGridlines)
+            .tickSize(-chart_dimensions.width*yLabelProportion),
 
     // Encapsulate the variables/methods necessary to handle tooltips
-    var tooltipHandler  = new TooltipHandler ();
-    function TooltipHandler()  {
+    TooltipHandler = function ()  {
+        // Safety trick for constructors
+        if (! (this instanceof TooltipHandler)){
+            return new TooltipHandler ();
+        }
+
         // private variable =  tooltip
         var tooltip = d3.select("body")
             .append("div")
@@ -81,7 +86,8 @@ function drawHistogram(domMarker, oneHistogramsData) {
         this.respondToBarChartMouseMove =  function(d) {
             return tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
         };
-    }
+    },
+    tooltipHandler  = new TooltipHandler ();
 
     //
     //  part 3:  Build up the Dom
@@ -132,7 +138,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
     // Create title  across the top of the graphic
     svg.append("text")
         .attr("x", (chart_dimensions.width / 2))
-        .attr("y", 0 - (margin.top / 2)+10)
+        .attr("y", -(margin.top / 2)+paddingOnTopForTitle)
         .attr("text-anchor", "middle")
         .attr("class", "histogramTitle")
         .text("Distribution of '" +oneHistogramsData.name + "'");
@@ -141,7 +147,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
     svg
         .append("text")
         .attr("x", (4* chart_dimensions.width / 5))
-        .attr("y", 0 - (margin.top / 2)+10)
+        .attr("y", -(margin.top / 2)+paddingOnTopForTitle)
         .attr("text-anchor", "right")
         .attr("class", "histogramMouseInfo")
         .text("Mouse-over bars for more information");
