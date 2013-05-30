@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.DocumentKind; bard.db.enums.DocumentType; bard.db.registration.AssayDocument" %>
+<%@ page import="bard.db.registration.DocumentKind; bard.db.enums.DocumentType" %>
 <section id="documents-header">
     <div class="page-header">
         <h3>4. Documents</h3>
@@ -116,7 +116,7 @@
                                          data-owningEntityId="${project.id}"
                                          data-inputclass="input-xxlarge"
                                          data-document-name="${publication.documentContent}"
-                                         id="${publication.id}">
+                                         id="${publication.id}_Name">
                     <g:fieldValue bean="${publication}" field="documentName"/>
                 </a>
                     <br/>
@@ -160,7 +160,7 @@
                                   data-owningEntityId="${project.id}"
                                   data-inputclass="input-xxlarge"
                                   data-document-name="${externalURL.documentContent}"
-                                  id="${externalURL.id}">
+                                  id="${externalURL.id}_Name">
                 <g:fieldValue bean="${externalURL}" field="documentName"/>
             </a> <br/>
                 Document URL: <a href="#" data-type="url"

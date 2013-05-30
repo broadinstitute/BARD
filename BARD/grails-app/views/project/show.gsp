@@ -11,7 +11,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,summary"/>
+            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,projectsummary"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="row-fluid">
-                        <g:render template="showSummary" model="['project': instance]"/>
+                        <g:render template='editSummary' model="['project': instance]"/>
                     </div>
                 </section>
                 <section id="contexts-header">

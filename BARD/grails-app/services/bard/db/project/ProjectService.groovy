@@ -1,12 +1,33 @@
 package bard.db.project
 
+import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.dictionary.Element
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 
 class ProjectService {
+    Project updateProjectStatus(Long projectId, ProjectStatus newProjectStatus){
+        Project project = Project.findById(projectId)
+        project.projectStatus = newProjectStatus
 
+        project.save(flush: true)
+        return Project.findById(projectId)
+    }
+    Project updateProjectDescription(Long projectId, String newProjectDescription) {
+        Project project = Project.findById(projectId)
+        project.description = newProjectDescription
+
+        project.save(flush: true)
+        return Project.findById(projectId)
+    }
+    Project updateProjectName(Long projectId, String newProjectName) {
+        Project project = Project.findById(projectId)
+        project.name = newProjectName
+
+        project.save(flush: true)
+        return Project.findById(projectId)
+    }
     boolean updateProjectContextItem(ProjectContextItem contextItem, Long version) {
         boolean updateSuccessful = false
         updateSuccessful

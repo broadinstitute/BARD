@@ -104,7 +104,7 @@
                                          data-owningEntityId="${assay.id}"
                                          data-inputclass="input-xxlarge"
                                          data-document-name="${publication.documentContent}"
-                                         id="${publication.id}">
+                                         id="${publication.id}_Name">
                     <g:fieldValue bean="${publication}" field="documentName"/>
                 </a>
                     <br/>
@@ -148,7 +148,7 @@
                                   data-owningEntityId="${assay.id}"
                                   data-inputclass="input-xxlarge"
                                   data-document-name="${externalURL.documentContent}"
-                                  id="${externalURL.id}">
+                                  id="${externalURL.id}_Name">
                 <g:fieldValue bean="${externalURL}" field="documentName"/>
             </a> <br/>
                 Document URL: <a href="#" data-type="url"
