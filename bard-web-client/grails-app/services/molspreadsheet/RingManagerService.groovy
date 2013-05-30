@@ -305,10 +305,10 @@ class RingManagerService {
             if (hierarchyDescription != null){
                 List<TargetClassInfo> temporaryValue = null
                 temporaryValue = sunburstCacheService.getTargetClassInfo(k)
-                if (temporaryValue != null)
+                if ((temporaryValue != null) &&
+                    (temporaryValue.size() > 0)) {
                     accumulatedMaps<<temporaryValue
-                else
-                    println "null value omitted from Sunburst"
+                }
             }
         }
         return ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
@@ -321,10 +321,9 @@ class RingManagerService {
      * @param includeNonHits
      * @return
      */
-    public  RingNode convertCompoundIntoSunburst (Long cid, Boolean includeHits, Boolean includeNonHits ){
+    public  RingNode convertCompoundIntoSunburstById (Long cid, Boolean includeHits, Boolean includeNonHits ){
         // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
-//        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
-        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(cid)
+        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
         convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
     }
 

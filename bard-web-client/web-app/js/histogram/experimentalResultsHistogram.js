@@ -17,7 +17,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
         },
 
     // adjustable parameters
-        barPadding = 1,
+        barPadding = 2,
         ticksAlongHorizontalAxis = 5,
         numberOfHorizontalGridlines = 10,
         paddingOnTopForTitle = 10,
@@ -60,6 +60,8 @@ function drawHistogram(domMarker, oneHistogramsData) {
             .style("position", "absolute")
             .style("visibility", "visible")
             .attr("class", "toolTextAppearance");
+
+        // public methods
         this.respondToBarChartMouseOver = function(d) {
             var stringToReturn = tooltip.html('Compounds in bin: ' + d[0] +
                 '<br/>' + 'Minimim bin value: ' + d[1].toPrecision(3) +

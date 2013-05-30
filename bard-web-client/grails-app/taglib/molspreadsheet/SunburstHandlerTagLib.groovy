@@ -31,7 +31,17 @@ class SunburstHandlerTagLib {
         Boolean includeHits = true // session."actives"
         Boolean includeNonHits = true // session."inactives"
         int typeOfColoring = session."colorOption"  ?: 3
-        RingNode root =   ringManagerService.convertCompoundIntoSunburst (attrs."compoundSummary", includeHits, includeNonHits )
+        RingNode root =  null
+//        if (attrs."compoundSummary" == null) {
+
+        // For now let's get the data explicitly so that we are sure were getting the right compound.
+        // Once we get an ID into compoundSummary then we can reuse the data if it's available
+            root =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
+
+//        } else {
+//            root =   ringManagerService.convertCompoundIntoSunburst (attrs."compoundSummary", includeHits, includeNonHits )
+//        }
+
 
         LinkedHashMap extremeValues = root.determineColorMappingRange()
         out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]

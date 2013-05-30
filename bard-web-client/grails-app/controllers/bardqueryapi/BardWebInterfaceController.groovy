@@ -721,7 +721,12 @@ class BardWebInterfaceController {
 
 
     def bigSunburst(Long id, SearchCommand searchCommand) {
-        int dropDown1Choice = 0
+
+        if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
+            return
+        }
+
+            int dropDown1Choice = 0
 
         if ((params.actives == null) || ('t' == params.actives)) {
             dropDown1Choice += 1
@@ -754,14 +759,15 @@ class BardWebInterfaceController {
             }
         }
 
-        if (!session.'compoundSummary') {
-            println 'we have no information'
-        } else {
+//        if (!session.'compoundSummary') {
+//            println 'we have no information'
+//        } else {
             render(view: 'bigSunburst',
                     model: [compoundSummary: session.'compoundSummary',
                             dropDown1Choice: dropDown1Choice,
-                            dropDown2Choice: session.colorOption])
-        }
+                            dropDown2Choice: session.colorOption,
+                            cid: id])
+//        }
 
     }
 
