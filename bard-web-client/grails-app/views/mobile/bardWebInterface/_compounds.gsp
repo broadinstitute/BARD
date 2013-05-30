@@ -2,11 +2,6 @@
 <%@ page import="grails.converters.JSON" %>
 <g:hiddenField name="totalCompounds" id="totalCompounds" value="${nhits}"/>
 
-%{--<div data-role="header">--}%
-%{--<h1>Compounds</h1>--}%
-%{--</div><!-- /header -->--}%
-
-
 <div data-role="content">
     <g:if test="${nhits > 0}">
         <table class="table">

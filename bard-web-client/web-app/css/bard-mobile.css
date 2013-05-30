@@ -1,1 +1,16 @@
 /*.ui-page { -webkit-backface-visibility: hidden; }*/
+td.rightAligned {
+    text-align: right;
+}
+
+td.leftAligned {
+    text-align: left;
+}
+
+td.centerAligned {
+    text-align: center;
+}
+
+.noMarker, ul.noMarker {
+    list-style-type: none;
+}

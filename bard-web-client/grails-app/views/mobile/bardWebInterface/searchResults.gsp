@@ -21,7 +21,7 @@
         });
 
         $(document).on('search.complete', '#assaysDiv, #compoundsDiv, #projectsDiv', function () {
-            //Restory the JQuery Mobile navigation button style after overriding the button's html with the total-value.
+            //Restore the JQuery Mobile navigation button style after overriding the button's html with the total-value.
             updateNavigationButtonStyle($('#assaysTab'));
             updateNavigationButtonStyle($('#compoundsTab'));
             updateNavigationButtonStyle($('#projectsTab'));

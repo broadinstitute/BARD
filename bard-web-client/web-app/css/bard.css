@@ -14,6 +14,10 @@ a.btn {
     text-align: center;
 }
 
+.left-aligned {
+    text-align: left;
+}
+
 .header {
     margin-top: 10px;
 }
