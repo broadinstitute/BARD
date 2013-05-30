@@ -37,6 +37,9 @@ class DocumentController {
     }
 
     def save(DocumentCommand documentCommand) {
+        if (!documentCommand.documentType) {
+            documentCommand.documentType = DocumentType.byId(params.documentType)
+        }
         Object document = documentCommand.createNewDocument()
         if (document) {
             redirectToOwner(document)
@@ -272,9 +275,9 @@ class DocumentCommand extends BardCommand {
 
 
 
-    void copyFromCmdToDomain(AbstractDocument assayDocument) {
+    void copyFromCmdToDomain(AbstractDocument document) {
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
-            assayDocument[(field)] = this[(field)]
+            document[(field)] = this[(field)]
         }
     }
 

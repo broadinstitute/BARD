@@ -5,7 +5,6 @@ import bard.db.enums.HierarchyType
 import bard.db.registration.Measure
 import org.junit.After
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.experiment.ExperimentMeasure.MODIFIED_BY_MAX_SIZE

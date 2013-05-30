@@ -1,6 +1,6 @@
 package bard.db.project
 
-import bard.db.enums.ExperimentStatus
+import bard.db.enums.DocumentType
 import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
@@ -66,5 +66,37 @@ class Project extends AbstractContextOwner {
         projectSteps.addAll(this.projectExperiments*.precedingProjectSteps)
         projectSteps.flatten()
     }
+    List<ProjectDocument> getPublications() {
+        final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<ProjectDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
 
+    List<ProjectDocument> getExternalURLs() {
+        final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL } as List<ProjectDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+
+    List<ProjectDocument> getComments() {
+        final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS } as List<ProjectDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+    List<ProjectDocument> getDescriptions() {
+        final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION } as List<ProjectDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+    List<ProjectDocument> getProtocols() {
+        final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL } as List<ProjectDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+
+    List<ProjectDocument> getOtherDocuments() {
+        final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<ProjectDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
 }

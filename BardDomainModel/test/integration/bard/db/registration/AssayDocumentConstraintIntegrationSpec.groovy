@@ -1,13 +1,8 @@
 package bard.db.registration
 
-import grails.plugin.spock.IntegrationSpec
+import bard.db.model.AbstractDocumentConstraintIntegrationSpec
 import org.junit.Before
 import spock.lang.Unroll
-
-import static bard.db.model.AbstractDocument.*
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
-import bard.db.model.AbstractDocumentConstraintIntegrationSpec
 
 /**
  * Created with IntelliJ IDEA.

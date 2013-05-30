@@ -1,11 +1,12 @@
 package bard.db.model
 
 import bard.db.BardIntegrationSpec
-import grails.plugin.spock.IntegrationSpec
+import bard.db.enums.DocumentType
 import org.junit.Before
 import spock.lang.Unroll
 
-import static bard.db.model.AbstractDocument.*
+import static bard.db.model.AbstractDocument.DOCUMENT_NAME_MAX_SIZE
+import static bard.db.model.AbstractDocument.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
 
@@ -57,21 +58,13 @@ abstract class AbstractDocumentConstraintIntegrationSpec extends BardIntegration
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc               | valueUnderTest                           | valid | errorCode
-        'null not valid'   | null                                     | false | 'nullable'
-        'blank not valid'  | ''                                       | false | 'blank'
-        'blank not valid'  | '   '                                    | false | 'blank'
-
-        'too long'         | createString(DOCUMENT_TYPE_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-
-        'value not inList' | 'Foo'                                    | false | 'not.inList'
-        'valid value'      | 'Description'                            | true  | null
-        'valid value'      | 'Protocol'                               | true  | null
-        'valid value'      | 'Comments'                               | true  | null
-        'valid value'      | 'Publication'                            | true  | null
-        'valid value'      | 'External URL'                           | true  | null
-        'valid value'      | 'Other'                                  | true  | null
-        //        'exactly at limit' | createString(DOCUMENT_TYPE_MAX_SIZE)     | true  | null
+        desc          | valueUnderTest                          | valid | errorCode
+        'valid value' | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | true  | null
+        'valid value' | DocumentType.DOCUMENT_TYPE_PROTOCOL     | true  | null
+        'valid value' | DocumentType.DOCUMENT_TYPE_COMMENTS     | true  | null
+        'valid value' | DocumentType.DOCUMENT_TYPE_PUBLICATION  | true  | null
+        'valid value' | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | true  | null
+        'valid value' | DocumentType.DOCUMENT_TYPE_OTHER        | true  | null
     }
 
     void "test documentContent constraints #desc documentContent: "() {
@@ -87,16 +80,16 @@ abstract class AbstractDocumentConstraintIntegrationSpec extends BardIntegration
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc                                      | documentType               | valueUnderTest         | valid | errorCode
-        'blank not valid'                         | DOCUMENT_TYPE_DESCRIPTION  | ''                     | false | 'blank'
-        'blank not valid'                         | DOCUMENT_TYPE_DESCRIPTION  | '   '                  | false | 'blank'
-        'url expected for publication not valid'  | DOCUMENT_TYPE_PUBLICATION  | 'foo'                  | false | 'document.invalid.url.message'
-        'url expected for external url not valid' | DOCUMENT_TYPE_EXTERNAL_URL | 'foo'                  | false | 'document.invalid.url.message'
+        desc                                      | documentType                            | valueUnderTest         | valid | errorCode
+        'blank not valid'                         | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | ''                     | false | 'blank'
+        'blank not valid'                         | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | '   '                  | false | 'blank'
+        'url expected for publication not valid'  | DocumentType.DOCUMENT_TYPE_PUBLICATION  | 'foo'                  | false | 'document.invalid.url.message'
+        'url expected for external url not valid' | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | 'foo'                  | false | 'document.invalid.url.message'
 
-        'url expected for publication valid'      | DOCUMENT_TYPE_PUBLICATION  | 'http://foo.bar'       | true  | null
-        'url expected for external url valid'     | DOCUMENT_TYPE_EXTERNAL_URL | 'http://foo.bar'       | true  | null
-        'null valid'                              | DOCUMENT_TYPE_DESCRIPTION  | null                   | true  | null
-        'greater than varchar limit'              | DOCUMENT_TYPE_DESCRIPTION  | createString(4000 + 1) | true  | null
+        'url expected for publication valid'      | DocumentType.DOCUMENT_TYPE_PUBLICATION  | 'http://foo.bar'       | true  | null
+        'url expected for external url valid'     | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | 'http://foo.bar'       | true  | null
+        'null valid'                              | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | null                   | true  | null
+        'greater than varchar limit'              | DocumentType.DOCUMENT_TYPE_DESCRIPTION  | createString(4000 + 1) | true  | null
 
     }
 

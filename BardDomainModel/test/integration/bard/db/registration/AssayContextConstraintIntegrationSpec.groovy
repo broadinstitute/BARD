@@ -1,10 +1,7 @@
 package bard.db.registration
 
-import bard.db.audit.BardContextUtils
 import bard.db.model.AbstractContextConstraintIntegrationSpec
-import org.hibernate.SessionFactory
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations

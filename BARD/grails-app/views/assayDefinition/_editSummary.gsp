@@ -10,7 +10,7 @@
             <dd>
                 <a href="#"
                    data-sourceCache="true"
-                   class="assayStatus"
+                   class="status"
                    id="${assay?.assayStatus?.id}"
                    data-type="select"
                    data-value="${assay?.assayStatus?.id}"
@@ -24,7 +24,7 @@
             <dd>
                 <a href="#"
                    class="assayNameY"
-                   id="assayNameId"
+                   id="nameId"
                    data-type="text"
                    data-value="${assay?.assayName}"
                    data-pk="${assay.id}"
@@ -55,7 +55,7 @@
             <dt><g:message code="assay.assayType.label" default="Fix i18n"/>:</dt>
             <dd>
                 <a href="#"
-                   class="assayType"
+                   class="type"
                    data-sourceCache="true"
                    id="${assay?.assayType?.id}"
                    data-type="select"

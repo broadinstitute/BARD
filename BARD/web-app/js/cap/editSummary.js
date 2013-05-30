@@ -30,49 +30,46 @@ $(document).ready(function () {
         $("#" + dataId).editable('toggle');
     });
 
-    //edit assay status
-    $('.assayStatus').editable({
+    //edit status
+    $('.status').editable({
         params: function (params) {
-            var version = $('#versionId').val();
-            params.version = version;
+            params.version = $('#versionId').val();
             return params;
         },
         validate: function (value) {
             return validateInput(value);
         },
         success: function (response, newValue) {
-            updateAssaySummary(response, newValue);
+            updateSummary(response, newValue);
         }
     });
 
-    //edit assay type
-    $('.assayType').editable({
+    //edit  type
+    $('.type').editable({
         params: function (params) {
-            var version = $('#versionId').val();
-            params.version = version;
+            params.version = $('#versionId').val();
             return params;
         },
         validate: function (value) {
             return validateInput(value);
         },
         success: function (response, newValue) {
-            updateAssaySummary(response, newValue);
+            updateSummary(response, newValue);
         }
     });
 
-    //edit assay name
-    $('#assayNameId').editable({
+    //edit name
+    $('#nameId').editable({
         inputclass: 'input-large',
         params: function (params) {
-            var version = $('#versionId').val();
-            params.version = version;
+            params.version = $('#versionId').val();
             return params;
         },
         validate: function (value) {
             return validateInput(value);
         },
         success: function (response, newValue) {
-            updateAssaySummary(response, newValue);
+            updateSummary(response, newValue);
         }
     });
 
@@ -80,19 +77,18 @@ $(document).ready(function () {
     $('.designedBy').editable({
         inputclass: 'input-large',
         params: function (params) {
-            var version = $('#versionId').val();
-            params.version = version;
+            params.version = $('#versionId').val();
             return params;
         },
         validate: function (value) {
             return validateInput(value);
         },
         success: function (response, newValue) {
-            updateAssaySummary(response, newValue);
+            updateSummary(response, newValue);
         }
     });
 });
-function updateAssaySummary(response, newValue) {
+function updateSummary(response, newValue) {
 
     var version = response.version;
     var modifiedBy = response.modifiedBy;
