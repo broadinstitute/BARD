@@ -75,14 +75,14 @@ class ProjectExportService extends ExportAbstractService {
         if (project.groupType) {
             attributes.put('groupType', project.groupType)
         }
-        if(project.lastUpdated){
+        if (project.lastUpdated) {
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
             gregorianCalendar.setTime(project.lastUpdated);
             final XMLGregorianCalendar lastUpdatedDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             attributes.put('lastUpdated', lastUpdatedDate.toString())
 
         }
-        if(StringUtils.isNotBlank(project.modifiedBy)){
+        if (StringUtils.isNotBlank(project.modifiedBy)) {
             attributes.put('modifiedBy', project.modifiedBy)
         }
         markupBuilder.project(attributes) {
@@ -106,8 +106,8 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     protected void generateProjectSteps(MarkupBuilder markupBuilder, Set<ProjectStep> projectSteps) {
-        markupBuilder.projectSteps{
-            for(ProjectStep projectStep in projectSteps){
+        markupBuilder.projectSteps {
+            for (ProjectStep projectStep in projectSteps) {
                 generateProjectStep(markupBuilder, projectStep)
             }
         }
@@ -214,7 +214,7 @@ class ProjectExportService extends ExportAbstractService {
     protected void generateProjectContexts(final MarkupBuilder markupBuilder, final List<ProjectContext> contexts) {
         if (contexts) {
             markupBuilder.contexts() {
-                for (ProjectContext context: contexts) {
+                for (ProjectContext context : contexts) {
                     generateProjectContext(markupBuilder, context)
                 }
             }
@@ -261,8 +261,11 @@ class ProjectExportService extends ExportAbstractService {
     }
 
     public void generateProjectDocument(final MarkupBuilder markupBuilder, ProjectDocument projectDocument) {
-        generateDocument(this.grailsLinkGenerator, markupBuilder, projectDocument,
-                'projectDocument', 'project',
+        generateDocument(this.grailsLinkGenerator,
+                markupBuilder,
+                projectDocument,
+                'projectDocument',
+                'project',
                 projectDocument.id,
                 projectDocument.project.id,
                 this.mediaTypesDTO.projectDocMediaType,

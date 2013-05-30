@@ -81,7 +81,7 @@ class ExportAbstractService {
             final String mediaType, final String relatedMediaType) {
 
 
-        markupBuilder."${resourceName}"(documentType: abstractDocument.documentType) {
+        markupBuilder."${resourceName}"(documentType: abstractDocument.documentType?.id) {
             if (abstractDocument.documentName) {
                 documentName(abstractDocument.documentName)
             }

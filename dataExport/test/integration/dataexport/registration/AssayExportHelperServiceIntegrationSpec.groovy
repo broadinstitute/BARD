@@ -1,6 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -110,7 +111,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate AssayDocument"() {
         given:
-        AssayDocument assayDocument = AssayDocument.build(documentName: 'a doc', documentType: 'Protocol', documentContent: 'content')
+        AssayDocument assayDocument = AssayDocument.build(documentName: 'a doc', documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, documentContent: 'content')
 
         when:
         this.assayExportHelperService.generateDocument(this.markupBuilder, assayDocument)
