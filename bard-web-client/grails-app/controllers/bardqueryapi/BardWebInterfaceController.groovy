@@ -53,9 +53,9 @@ class BardWebInterfaceController {
             if (mobileService.gspExists(newView)) {
                 modelAndView.viewName = newView
             }
-            else {
-                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
-            }
+//            else {
+//                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
+//            }
         }
     }
 
