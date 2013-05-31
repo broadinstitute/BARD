@@ -1041,7 +1041,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         then:
         queryService.showProject(_) >> {projectAdapter }
-        projectExperimentRenderService.constructGraph(_,_)>> {[:]}
+        projectExperimentRenderService.constructGraph(_, _) >> {[:]}
         expectedProjectView == view
         if (pid && projectAdapter) {
             assert model.projectAdapter
@@ -1192,10 +1192,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         assert modelAndView.viewName == expectedViewName
 
         where:
-        dataModel          | viewName | isMobile | gspExists | expectedViewName                            | label
-        [data: 'someData'] | '/view1' | true     | true      | '/mobile/view1'                             | 'mobile-platform request'
-        [data: 'someData'] | '/view1' | false    | true      | '/view1'                                    | 'regular request'
-        [data: 'someData'] | '/view1' | true     | false     | '/mobile/bardWebInterface/missingPageError' | 'missing GSP'
+        dataModel          | viewName | isMobile | gspExists | expectedViewName | label
+        [data: 'someData'] | '/view1' | true     | true      | '/mobile/view1'  | 'mobile-platform request'
+        [data: 'someData'] | '/view1' | false    | true      | '/view1'         | 'regular request'
+        [data: 'someData'] | '/view1' | true     | false     | '/view1'         | 'missing GSP'
     }
 
     void "test isMobile #label"() {
