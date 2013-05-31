@@ -14,18 +14,19 @@
     <g:render template="/layouts/templates/mobileLoginStrip"/>
 </div>
 
+<div data-role="header" style="text-align: center; margin: 0 auto;">
+    <p>${compound?.name}
+        <g:if test="${compound.isDrug()}">
+            <span class="badge badge-success">Drug</span>
+        </g:if>
+        <g:elseif test="${compound.isProbe()}">
+            <span class="badge badge-info">Probe</span>
+        </g:elseif>
+        <small>(PubChem CID: ${compound?.pubChemCID})</small>
+    </p>
+</div>
+
 <div data-role="content" style="text-align: center; margin: 0 auto;">
-
-<h3>${compound?.name}
-    <g:if test="${compound.isDrug()}">
-        <span class="badge badge-success">Drug</span>
-    </g:if>
-    <g:elseif test="${compound.isProbe()}">
-        <span class="badge badge-info">Probe</span>
-    </g:elseif>
-    <small>(PubChem CID: ${compound?.pubChemCID})</small>
-</h3>
-
 <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
         style="float: right;">Bio-activity Summary</g:link>
 <div style="text-align: center;">

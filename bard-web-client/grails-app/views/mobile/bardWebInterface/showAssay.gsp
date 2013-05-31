@@ -10,13 +10,13 @@
 </head>
 
 <body>
-<div data-role="page" id="showCompound">
+<div data-role="page" id="showAssay">
     <div>
         <g:render template="/layouts/templates/mobileLoginStrip"/>
     </div>
 
-    <div data-role="content" style="text-align: center; margin: 0 auto;">
-        <h3>Assay Definition: ${assayAdapter?.title}
+    <div data-role="header" style="text-align: center; margin: 0 auto;">
+        <p>Assay Definition: ${assayAdapter?.title}
             <small>(ADID: ${assayAdapter?.capAssayId})
                 <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
                     <img src="${resource(dir: 'images', file: 'witnessed.png')}"
@@ -31,8 +31,10 @@
                          alt="Draft or Retired" title="Draft or Retired"/>
                 </g:if>
             </small>
-        </h3>
+        </p>
+    </div>
 
+    <div data-role="content" style="text-align: center; margin: 0 auto;">
 
         <div>
             <g:render template="/bardWebInterface/assaySummary" model="[assayAdapter: assayAdapter]"/>
@@ -69,7 +71,8 @@
                     </div>
 
                     <div id="cardView" class="cardView" style="display: inline-block;">
-                        <g:render template="/bardWebInterface/listContexts" model="[annotations: assayAdapter.annotations]"/>
+                        <g:render template="/bardWebInterface/listContexts"
+                                  model="[annotations: assayAdapter.annotations]"/>
                     </div>
 
                 </section>
