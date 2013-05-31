@@ -13,6 +13,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
+                        onlyShowWidgetsForExpectedValueType(data.expectedValueType);
                         if (data.unitId) {
                             initializeUnits(data.unitId);
                         }
@@ -36,9 +37,32 @@ $(document).ready(function () {
             $("#valueElementId").select2("data", {results: []});
             $("#extValueId").select2("data", {results: []});
             $("#valueNumUnitId").select2("data", {results: []});
-            initializeUnits($("#attributeElementId").select2("data").unitId);
-
+            //initializeUnits($("#attributeElementId").select2("data").unitId);
+            onlyShowWidgetsForExpectedValueType($("#attributeElementId").select2("data").expectedValueType);
         });
+
+    function onlyShowWidgetsForExpectedValueType(expectedValueType) {
+        hideAllValueWidgets();
+        if ('NUMERIC' === expectedValueType) {
+            $('#numericValueContainer').show();
+        }
+        else if ('ELEMENT'=== expectedValueType) {
+            $('#elementValueContainer').show();
+        }
+        else if ('EXTERNAL_ONTOLOGY'=== expectedValueType) {
+            $('#externalOntologyContainer').show();
+        }
+        else if ('FREE_TEXT'=== expectedValueType) {
+            $('#freeTextValueContainer').show();
+        }
+        else {
+            // we have a problem
+        }
+    }
+
+    function hideAllValueWidgets(){
+        $("[id$=ValueContainer]").hide();
+    }
 
 
     $("#valueElementId").select2({
@@ -109,7 +133,7 @@ $(document).ready(function () {
     if ($("#extValueId").val()) {
         $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
     }
-    initialFocus();
+    //initialFocus();
 
     // try and pick best focus
     function initialFocus() {
