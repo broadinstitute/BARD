@@ -93,9 +93,9 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         if (attributeElement) {
             if (attributeElement.externalURL) {
                 externalOntologyConstraints(errors)
-            } else if (attributeElement.unit || valueNum) {
+            } else if (attributeElement.unit || valueNum != null) {
                 valueNumConstraints(errors)
-            } else if (includeRangeConstraints && (valueMin || valueMax)) {
+            } else if (includeRangeConstraints && (valueMin != null || valueMax != null)) {
                 rangeConstraints(errors)
             } else if (valueElement) {
                 dictionaryConstraints(errors)
