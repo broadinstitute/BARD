@@ -9,8 +9,7 @@
 </head>
 
 <body>
-<!-- page 'search' -->
-<div data-role="page" id="search">
+<div data-role="page" id="showCompound">
 <div>
     <g:render template="/layouts/templates/mobileLoginStrip"/>
 </div>

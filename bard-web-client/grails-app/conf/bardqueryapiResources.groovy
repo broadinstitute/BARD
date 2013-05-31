@@ -22,10 +22,13 @@ modules = {
         resource url: '/js/jquery-table-sorter/theme.default.css'
     }
     showProjectAssay {
+        dependsOn("cardDisplayCSS")
         //Polyfill for handling History
         resource url: "js/html5historyapi/history.js"
         resource url: "js/coreShowProjectAssay.js"
         // Stylesheet for context card view
+    }
+    cardDisplayCSS {
         resource url: "css/card.css"
     }
     handlebars {
