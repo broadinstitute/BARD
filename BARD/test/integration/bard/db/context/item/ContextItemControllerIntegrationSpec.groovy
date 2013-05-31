@@ -6,7 +6,6 @@ import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 import org.springframework.context.MessageSource
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 /**
@@ -37,13 +36,9 @@ class ContextItemControllerIntegrationSpec extends IntegrationSpec {
         given:
         ProjectContextItem contextItem = ProjectContextItem.build()
 
-        controller.params.contextOwnerId = contextItem.context?.owner?.id
-        controller.params.contextId = contextItem.context?.id
-        controller.params.contextItemId = contextItem.id
+        setContextItemRelatedParams(contextItem)
 
-        controller.params.version = contextItem.version
-        controller.params.contextClass = 'ProjectContext'
-        controller.params.attributeElementId = '3'
+        controller.params.attributeElementId = contextItem.attributeElement.id
         controller.params.valueNum = valueNumParam
         controller.params.qualifier = '= '
 
@@ -66,6 +61,28 @@ class ContextItemControllerIntegrationSpec extends IntegrationSpec {
         ''   | '0.000003'    | '0.000003'
 
 
+    }
+
+    void "test delete"() {
+        given:
+        ProjectContextItem contextItem = ProjectContextItem.build()
+        final Long id = contextItem.id
+        setContextItemRelatedParams(contextItem)
+
+        when:
+        controller.delete()
+
+        then:
+        ProjectContextItem.findById(id) == null
+
+    }
+
+    private void setContextItemRelatedParams(ProjectContextItem contextItem) {
+        controller.params.contextOwnerId = contextItem.context?.owner?.id
+        controller.params.contextId = contextItem.context?.id
+        controller.params.contextItemId = contextItem.id
+        controller.params.version = contextItem.version
+        controller.params.contextClass = 'ProjectContext'
     }
 
 
