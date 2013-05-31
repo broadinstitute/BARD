@@ -92,20 +92,10 @@ beans = {
         crowdClient = ref('crowdClient')
         grailsApplication = application
     }
-    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService)
-
-    switch (GrailsUtil.environment) {
-        case "production":
-        case "oracleqa":
-        case "oracledev":
-            userDetailsService(org.broadinstitute.cbip.crowd.CrowdUserDetailsService) {
-                crowdAuthenticationProvider = ref('crowdAuthenticationProvider')
-            }
-            break;
-        default:
-            userDetailsService(org.broadinstitute.cbip.crowd.CrowdUserDetailsService) {
-                crowdAuthenticationProvider = ref('inMemMapAuthenticationProviderService')
-            }
-            break;
+    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService) {
+        grailsApplication = application
+    }
+    userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
+        crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
     }
 }

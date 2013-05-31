@@ -21,22 +21,19 @@ class MobileService {
 
         def device = request.getAttribute('currentDevice')
 
-        Boolean detected = device.isMobile()
+        Boolean isMobile = device.isMobile()
 
-        if (detected) {
+        def userAgent = request.getHeader('User-Agent')
+        Boolean isTablet = false
 
-            def userAgent = request.getHeader('User-Agent')
-
-            if (userAgent?.contains('iPad')) { // skip iPads
-                detected = false
-            } else if (userAgent?.contains('Android') && !userAgent?.contains('Mobile')) {
-                // and android tablets
-                detected = false
-            }
-
+        if (userAgent?.contains('iPad')) { // skip iPads
+            isTablet = true
+        } else if (userAgent?.contains('Android') && !userAgent?.contains('Mobile')) {
+            // and android tablets
+            isTablet = true
         }
 
-        return detected
+        return isMobile || isTablet
     }
 
 

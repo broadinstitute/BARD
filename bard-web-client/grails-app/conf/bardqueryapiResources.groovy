@@ -22,14 +22,20 @@ modules = {
         resource url: '/js/jquery-table-sorter/theme.default.css'
     }
     showProjectAssay {
+        dependsOn("cardDisplayCSS")
         //Polyfill for handling History
         resource url: "js/html5historyapi/history.js"
         resource url: "js/coreShowProjectAssay.js"
         // Stylesheet for context card view
+    }
+    cardDisplayCSS {
         resource url: "css/card.css"
     }
     handlebars {
         resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
+    }
+    d3Library {
+        resource url: "js/sunburst/d3.min.js"
     }
     projectstep {
         dependsOn "handlebars"
@@ -83,21 +89,21 @@ modules = {
         resource url: "js/experimentalResults.js"
     }
     jqueryMobile {
-        dependsOn 'jquery, jquery-ui, jquery-theme'
-
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.structure-1.2.0.min.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile.theme-1.2.0.min.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.css"
-        resource url: "css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css"
-        resource url: "js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.js"
-        resource url: "js/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"
+        dependsOn 'jqueryMobilePreInit'
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile.structure-1.3.1.min.css"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile.theme-1.3.1.min.css"
         resource url: "css/bard-mobile.css"
+//        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.min.js"
+        resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.js"
+        resource url: "js/jqueryMobilePostInit.js"
     }
-    jqueryMobileInit {
-        dependsOn('jqueryMobile')
-        resource url: "js/jqueryMobileInit.js"
+    jqueryMobilePreInit {
+        dependsOn 'jquery, jquery-ui, jquery-theme'
+        resource url: "js/jqueryMobilePreInit.js"
     }
     twitterBootstrapAffix {
         resource url: "css/twitterBootstrapAffix.css"
@@ -115,11 +121,17 @@ modules = {
         resource url: "css/cbas.css"
     }
     sunburst {
-        dependsOn 'bootstrap,jquery'
+        dependsOn 'bootstrap,jquery,d3Library'
 
         resource url: "js/sunburst/createALegend.js"
         resource url: "js/sunburst/createASunburst.js"
         resource url: "css/sunburst.css"
+    }
+    histogram {
+        dependsOn 'bootstrap,jquery,d3Library'
+
+        resource url: "js/histogram/experimentalResultsHistogram.js"
+        resource url: "css/experimentalResultHistogram.css"
     }
 
 }

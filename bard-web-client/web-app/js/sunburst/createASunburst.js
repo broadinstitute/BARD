@@ -1,4 +1,5 @@
 function createASunburst(width, height, padding, duration, colorScale, domSelector) {
+/*    "use strict";    */
 
     var radius = Math.min(width, height) / 2;
 
@@ -9,7 +10,6 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
 
 
     function colorArcFill(d) {
-//                return colorByRandomMap(d)
         return colorByActivity(d)
     }
 

@@ -44,10 +44,10 @@ class QueryHelperServiceUnitSpec extends Specification {
         assert map == expectedMap
         where:
         label                      | normalizeYAxis              | activities       | expectedMap
-        "Empty Activities"         | NormalizeAxis.Y_NORM_AXIS   | []               | [priorityDisplays: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
-        "Activity, no Result Data" | NormalizeAxis.Y_NORM_AXIS   | [new Activity()] | [priorityDisplays: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
-        "Empty Activities"         | NormalizeAxis.Y_DENORM_AXIS | []               | [priorityDisplays: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
-        "Activity, no Result Data" | NormalizeAxis.Y_DENORM_AXIS | [new Activity()] | [priorityDisplays: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: 0.0, yNormMax: 0.0]
+        "Empty Activities"         | NormalizeAxis.Y_NORM_AXIS   | []               | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Activity, no Result Data" | NormalizeAxis.Y_NORM_AXIS   | [new Activity()] | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Empty Activities"         | NormalizeAxis.Y_DENORM_AXIS | []               | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Activity, no Result Data" | NormalizeAxis.Y_DENORM_AXIS | [new Activity()] | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
@@ -60,10 +60,10 @@ class QueryHelperServiceUnitSpec extends Specification {
 
         where:
         label                                                  | normalizeYAxis              | resultData                                                                                                       | expectedMap
-        "Has Priority, ResponseClass=CR_SER"                   | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplays: [display], priorityDescriptions: [null], dictionaryIds: [0], yNormMin: null, yNormMax: null, hasPlot: true, hasChildElements: false]
-        "Has Priority, ResponseClass=CR_SER, Normalize Y-Axis" | NormalizeAxis.Y_NORM_AXIS   | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [priorityDisplays: [display], priorityDescriptions: [null], dictionaryIds: [0], hasPlot: true, hasChildElements: false]
-        "Has Priority, ResponseClass=CR_NO_SER"                | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [priorityDisplays: [display], priorityDescriptions: [null], dictionaryIds: [0], yNormMin: null, yNormMax: null, hasPlot: false, hasChildElements: false]
-        "No Priority, ResponseClass=CR_NO_SER"                 | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [priorityDisplays: [], priorityDescriptions: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        "Has Priority, ResponseClass=CR_SER"                   | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [yNormMin: null, yNormMax: null, hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_SER, Normalize Y-Axis" | NormalizeAxis.Y_NORM_AXIS   | new ResultData(responseClass: "CR_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)])    | [hasPlot: true, hasChildElements: false]
+        "Has Priority, ResponseClass=CR_NO_SER"                | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [new PriorityElement(pubChemDisplayName: display)]) | [yNormMin: null, yNormMax: null, hasPlot: false, hasChildElements: false]
+        "No Priority, ResponseClass=CR_NO_SER"                 | NormalizeAxis.Y_DENORM_AXIS | new ResultData(responseClass: "CR_NO_SER", priorityElements: [])                                                 | [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
@@ -84,8 +84,8 @@ class QueryHelperServiceUnitSpec extends Specification {
 
         where:
         label                      | normalizeYAxis              | priorityElement                                                                                               | expectedMap
-        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [priorityDisplays: [display], dictionaryIds: [211], hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
-        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [priorityDisplays: [display], dictionaryIds: [211], hasPlot: true, hasChildElements: true, yNormMin: 0.0, yNormMax: 0.0]
+        "with Normalized Y Axis"   | NormalizeAxis.Y_NORM_AXIS   | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
+        "with DeNormalized Y Axis" | NormalizeAxis.Y_DENORM_AXIS | new PriorityElement(pubChemDisplayName: display, dictElemId: dictElemId, childElements: [new ActivityData()]) | [hasPlot: true, hasChildElements: true, yNormMin: null, yNormMax: null]
     }
 
     void "matchMLProbe #label"() {
@@ -103,27 +103,6 @@ class QueryHelperServiceUnitSpec extends Specification {
 
     }
 
-    void "test extractPriorityDisplayDescription #label"() {
-        given:
-        DataExportRestService dataExportRestService = Mock(DataExportRestService)
-        Dummy d = new Dummy()
-        d.dataExportRestService = dataExportRestService
-
-        PriorityElement priorityElement = new PriorityElement(pubChemDisplayName: expectedPriorityDisplay, dictElemId: dictId)
-        priorityElement.dummy = d
-        when:
-        Map map = service.extractPriorityDisplayDescription([priorityElement])
-        then:
-        d.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
-        assert map.priorityDisplays == [expectedPriorityDisplay]
-        assert map.priorityDescriptions == expectedPriorityDescriptions
-        assert map.dictionaryIds == expectedDictionaryIds
-        where:
-        label                      | expectedPriorityDisplay | expectedPriorityDescriptions | dictId     | expectedDictionaryIds | dictionaryElement
-        "Map with dictionaryID"    | display                 | [description]                | dictElemId | [dictElemId]          | new Node(elementId: dictElemId, label: display, description: description)
-        "Map without dictionaryID" | display                 | [null]                       | 0          | [0]                   | null
-
-    }
     /**
      * {@link QueryHelperService#convertSearchFiltersToFilters(List)}
      */

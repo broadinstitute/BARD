@@ -2,22 +2,17 @@ package bardqueryapi.compoundBioActivitySummary
 
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
-
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentSearch
-
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
-
 import bard.core.util.FilterTypes
-
+import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-
 import bardqueryapi.*
-import com.fasterxml.jackson.databind.ObjectMapper
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -28,22 +23,22 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
     CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder
 
     @Shared ProjectResult projectResult = new ProjectResult()
-    @Shared Assay assay1 = new Assay(bardAssayId: 1, name: "A1")
-    @Shared Assay assay2 = new Assay(bardAssayId: 2, name: "A2")
+    @Shared Assay assay1 = new Assay(bardAssayId: 1L, name: "A1")
+    @Shared Assay assay2 = new Assay(bardAssayId: 2L, name: "A2")
     @Shared ProjectExpanded project1 = new ProjectExpanded(name: "P1")
-    @Shared Project project2 = new Project(bardProjectId: 2, name: "P2")
-    @Shared Project project3 = new Project(bardProjectId: 3, name: "P3")
-    @Shared Activity activity1 = new Activity(bardExptId: 1, eid: 1, bardAssayId: 1, bardProjId: [2])
-    @Shared Activity activity2 = new Activity(bardExptId: 4, eid: 4, bardAssayId: 2, bardProjId: [3])
+    @Shared Project project2 = new Project(bardProjectId: 2L, name: "P2")
+    @Shared Project project3 = new Project(bardProjectId: 3L, name: "P3")
+    @Shared Activity activity1 = new Activity(bardExptId: 1L, eid: 1L, bardAssayId: 1L, bardProjId: [2L])
+    @Shared Activity activity2 = new Activity(bardExptId: 4L, eid: 4L, bardAssayId: 2L, bardProjId: [3L])
     @Shared Activity activityCrSer
     @Shared Activity activitySp
     @Shared Activity activityUnclass
     @Shared List<Assay> testedAssays = [assay1, assay2]
     @Shared List<Assay> hitAssays = [assay1]
-    @Shared Map groupedByExperimentalData = [1: [activity1], 2: [activity2]]
-    @Shared ExperimentSearch experiment1 = new ExperimentSearch(bardExptId: 1)
-    @Shared ExperimentSearch experiment2 = new ExperimentSearch(bardExptId: 2)
-    @Shared Map<Long, List<ExperimentSearch>> experimentsMap = [1: experiment1, 2: experiment2]
+    @Shared Map groupedByExperimentalData
+    @Shared ExperimentSearch experiment1 = new ExperimentSearch(bardExptId: 1L)
+    @Shared ExperimentSearch experiment2 = new ExperimentSearch(bardExptId: 2L)
+    @Shared Map<Long, List<ExperimentSearch>> experimentsMap = [1L: [experiment1], 2L: [experiment2]]
 
     @Shared ObjectMapper objectMapper = new ObjectMapper()
     final String ACTIVITY_UNCLASS = """
@@ -77,14 +72,14 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
 
     final String ACTIVITY_SP = """
 {
-   "exptDataId" : "17.115950079",
+   "exptDataId" : "2.115950079",
    "eid" : 0,
    "cid" : 650573,
    "sid" : 115950079,
-   "bardExptId" : 17,
-   "bardAssayId" : 39,
-   "capExptId" : 5514,
-   "capAssayId" : 5519,
+   "bardExptId" : 2,
+   "bardAssayId" : 1,
+   "capExptId" : 2,
+   "capAssayId" : 1,
    "capProjId" :
       [
          3
@@ -106,14 +101,14 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
 
     final String ACTIVITY_CR_SER = """
 {
-   "exptDataId" : "23.115950071",
+   "exptDataId" : "1.115950071",
    "eid" : 0,
    "cid" : 1017704,
    "sid" : 115950071,
-   "bardExptId" : 23,
-   "bardAssayId" : 44,
-   "capExptId" : 5409,
-   "capAssayId" : 5499,
+   "bardExptId" : 1,
+   "bardAssayId" : 2,
+   "capExptId" : 1,
+   "capAssayId" : 2,
    "capProjId" :
       [
          3
@@ -139,6 +134,7 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
         this.activityCrSer = objectMapper.readValue(ACTIVITY_CR_SER, Activity.class)
         this.activitySp = objectMapper.readValue(ACTIVITY_SP, Activity.class)
         this.activityUnclass = objectMapper.readValue(ACTIVITY_UNCLASS, Activity.class)
+        this.groupedByExperimentalData = [1L: [activityCrSer], 2L: [activitySp]]
     }
 
     void "test buildModel #label"() {
@@ -149,7 +145,9 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
                 hitAssays,
                 filterTypes,
                 experimentsMap,
-                sortedKeys)
+                sortedKeys,
+                -10,
+                10)
 
         then:
         this.queryService.findProjectsByPIDs(_) >> {['projectAdapters': [new ProjectAdapter(project1)]]}
@@ -159,11 +157,12 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
         assert tableModel.data.first().first().class == expectedResourceType
 
         where:
-        label                            | sortedKeys | groupBy              | filterTypes          | expectedTableModelDataSize | expectedResourceType
-        "group-by assay, tested"         | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.TESTED] | 2                          | AssayValue
-        "group-by assay, actives-only"   | [1]        | GroupByTypes.ASSAY   | []                   | 1                          | AssayValue
-        "group-by project, tested"       | [1, 2]     | GroupByTypes.PROJECT | [FilterTypes.TESTED] | 2                          | ProjectValue
-        "group-by project, actives-pnly" | [1]        | GroupByTypes.PROJECT | []                   | 1                          | ProjectValue
+        label                            | sortedKeys | groupBy              | filterTypes                                           | expectedTableModelDataSize | expectedResourceType
+        "group-by assay, tested"         | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.TESTED]                                  | 2                          | AssayValue
+        "group-by assay, actives-only"   | [1]        | GroupByTypes.ASSAY   | []                                                    | 1                          | AssayValue
+        "group-by project, tested"       | [1, 2]     | GroupByTypes.PROJECT | [FilterTypes.TESTED]                                  | 2                          | ProjectValue
+        "group-by project, actives-pnly" | [1]        | GroupByTypes.PROJECT | []                                                    | 1                          | ProjectValue
+        "group-by assay, single-point"   | [1, 2]     | GroupByTypes.ASSAY   | [FilterTypes.TESTED, FilterTypes.SINGLE_POINT_RESULT] | 1                          | AssayValue
     }
 
     void "test convertExperimentResultsToValues #label"() {

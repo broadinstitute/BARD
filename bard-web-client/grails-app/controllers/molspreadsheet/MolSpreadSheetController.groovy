@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse
 import bardqueryapi.InetAddressUtil
 import bardqueryapi.BardUtilitiesService
 
-@Secured(['isFullyAuthenticated()'])
+@Secured(['isAuthenticated()'])
 @Mixin(InetAddressUtil)
 class MolSpreadSheetController {
     MolecularSpreadSheetService molecularSpreadSheetService

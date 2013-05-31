@@ -6,7 +6,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationTar
 ncgc.thickclient.compounds.url="http://bard.nih.gov/bard/compounds/"
 ncgc.thickclient.etags.url="http://bard.nih.gov/bard/etag/"
 
-ncgc.server.root.url = "http://bard.nih.gov/api/v16"
+ncgc.server.root.url = "http://bard.nih.gov/api/v17"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
 //override in config file for environment
 server.port = System.properties.getProperty('server.port') ?: 8080
@@ -101,7 +101,6 @@ CbipCrowd {
     application.password = '2345'
     applicationSpecificRoles = ['ROLE_USER','ROLE_Bard', 'ROLE_NO_ROLE', 'ROLE_MOBILE']
 }
-webquery
 
 rememberme.key = 'bard_web_client_crowd_remember_me'
 rememberme.cookieName = 'bard_web_client_crowd_remember_me_cookie'
@@ -118,6 +117,8 @@ grails {
             basic.realmName = 'WEBQUERY'
             filterChain.chainMap = [
                     '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
             ]

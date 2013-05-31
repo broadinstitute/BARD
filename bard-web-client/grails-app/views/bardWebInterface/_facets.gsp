@@ -3,6 +3,9 @@
     <g:if test="${facets}">
         <div class="facets">
             <g:form name="${formName.toString()}" id="${formName.toString()}">
+                <g:if test="${total}">
+                    <p>Total: ${total}</p>
+                </g:if>
                 <g:submitButton name="applyFilters" value="Apply Filters" id="${formName}_Button"
                                 class="btn btn-small"/>
                 <input type="button" class="btn btn-small" id="${formName}_ResetButton" value="Clear All Filters"

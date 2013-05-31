@@ -8,24 +8,17 @@ import bardqueryapi.*
 
 class ExperimentBuilder {
 
-    List<WebQueryValue> buildHeader(List<String> priorityDisplays, List<String> dictionaryIds, final boolean hasPlot, final boolean hasChildElements) {
+    List<WebQueryValue> buildHeader(final boolean hasPlot, final boolean hasChildElements) {
         List<WebQueryValue> columnHeaders = []
         columnHeaders.add(new StringValue(value: "SID"))
         columnHeaders.add(new StringValue(value: "CID"))
         columnHeaders.add(new StringValue(value: "Structure"))
         columnHeaders.add(new StringValue(value: "Outcome"))
         columnHeaders.add(new StringValue(value: "Results"))
-//        columnHeaders.add(new MapValue(value: [(new StringValue(value: "priorityDisplays")): priorityDisplays,
-//                (new StringValue(value: "dictionaryIds")): dictionaryIds]))
         columnHeaders.add(new StringValue(value: "Experiment Descriptors"))
         if (hasChildElements) {
             columnHeaders.add(new StringValue(value: "Child Elements"))
         }
-//        if (hasPlot) {
-//            columnHeaders.add(new StringValue(value: "Concentration Response Series"))
-//            columnHeaders.add(new StringValue(value: "Concentration Response Plot"))
-//            columnHeaders.add(new StringValue(value: "Misc Data"))
-//        }
         return columnHeaders
     }
 
@@ -37,7 +30,6 @@ class ExperimentBuilder {
      * @param normalizeYAxis
      * @param yNormMin
      * @param yNormMax
-     * @param priorityDisplays
      * @param compoundAdapterMap
      * @return
      */
@@ -45,7 +37,6 @@ class ExperimentBuilder {
                                final NormalizeAxis normalizeYAxis,
                                final Double yNormMin,
                                final Double yNormMax,
-                               List<String> priorityDisplays,
                                final Map<Long, CompoundAdapter> compoundAdapterMap) {
 
         //A row is a list of table cells, each implements WebQueryValue.
@@ -136,29 +127,15 @@ class ExperimentBuilder {
         return rowData;
     }
 
-//    List<Pair> extractActivityToConcentratonList(ConcentrationResponseSeries concentrationResponseSeries) {
-//        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
-//
-//        final String testConcentrationUnit = concentrationResponseSeries.testConcentrationUnit
-//        List<Pair> activityToConcentration = []
-//        for (ConcentrationResponsePoint concentrationResponsePoint : concentrationResponsePoints) {
-//            final String displayActivity = concentrationResponsePoint.displayActivity()
-//            final String concentration = concentrationResponsePoint.displayConcentration(testConcentrationUnit)
-//            Pair<String, String> concentrationDisplayTuple = new ImmutablePair<String, String>(displayActivity, concentration)
-//            activityToConcentration.add(concentrationDisplayTuple)
-//        }
-//        return activityToConcentration
-//    }
 
     void addRows(final List<Activity> activities,
                  final TableModel tableModel,
                  final NormalizeAxis normalizeYAxis,
                  final Double yNormMin,
                  final Double yNormMax,
-                 List<String> priorityDisplays,
                  final Map<Long, CompoundAdapter> compoundAdapterMap) {
         for (Activity activity : activities) {
-            final List<WebQueryValue> rowData = addRow(activity, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
+            final List<WebQueryValue> rowData = addRow(activity, normalizeYAxis, yNormMin, yNormMax, compoundAdapterMap)
             tableModel.addRowData(rowData)
         }
     }
@@ -179,12 +156,11 @@ class ExperimentBuilder {
 
         Map<Long, CompoundAdapter> compoundAdapterMap = experimentDetails?.compoundAdaptersMap
         final boolean hasPlot = experimentDetails.hasPlot
-        List<String> priorityDisplays = experimentDetails.priorityDisplays
         final boolean hasChildElements = experimentDetails.hasChildElements
         Double yNormMin = null
         Double yNormMax = null
         final NormalizeAxis normalizeYAxis = experimentDetails.normalizeYAxis
-        tableModel.setColumnHeaders(buildHeader(priorityDisplays, experimentDetails?.dictionaryIds, hasPlot, hasChildElements))
+        tableModel.setColumnHeaders(buildHeader(hasPlot, hasChildElements))
         final List<Activity> activities = experimentDetails.activities
         if (normalizeYAxis == NormalizeAxis.Y_NORM_AXIS) {
             yNormMin = experimentDetails.yNormMin
@@ -192,74 +168,10 @@ class ExperimentBuilder {
 
         }
 
-        addRows(activities, tableModel, normalizeYAxis, yNormMin, yNormMax, priorityDisplays, compoundAdapterMap)
+        addRows(activities, tableModel, normalizeYAxis, yNormMin, yNormMax, compoundAdapterMap)
 
         return tableModel
     }
-
-//    private Map concentrationResponseMap(final ConcentrationResponseSeries concentrationResponseSeries,
-//                                         final NormalizeAxis normalizeAxis,
-//                                         final Long cid,
-//                                         final Double slope,
-//                                         final String testConcentrationUnit,
-//                                         final Double yNormMin,
-//                                         final Double yNormMax,
-//                                         final String priorityDisplay) {
-//
-//        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
-//        ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
-//        CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-//        Map valueMap = [:]
-//
-//
-//        if (!concentrationResponsePoints.isEmpty()) {
-//            valueMap.put("title", "Plot for CID ${cid}")
-//
-//            if (normalizeAxis == NormalizeAxis.Y_NORM_AXIS) {
-//                Map mapParams = [
-//                        sinf: curveFitParameters?.getSInf(),
-//                        s0: curveFitParameters?.getS0(),
-//                        slope: slope,
-//                        hillSlope: curveFitParameters?.getHillCoef(),
-//                        concentrations: doseResponsePointsMap.concentrations,
-//                        activities: doseResponsePointsMap.activities,
-//                        yAxisLabel: "${concentrationResponseSeries?.getYAxisLabel()}",
-//                        xAxisLabel: "Log(Concentration) ${testConcentrationUnit}",
-//                        yNormMin: "${yNormMin}",
-//                        yNormMax: "${yNormMax}"
-//                ]
-//                valueMap.put("plot", mapParams)
-//
-//            }
-//            else {
-//                Map mapParams = [
-//                        sinf: curveFitParameters?.getSInf(),
-//                        s0: curveFitParameters?.getS0(),
-//                        slope: slope,
-//                        hillSlope: curveFitParameters?.getHillCoef(),
-//                        concentrations: doseResponsePointsMap.concentrations,
-//                        activities: doseResponsePointsMap.activities,
-//                        yAxisLabel: "${concentrationResponseSeries?.getYAxisLabel()}",
-//                        xAxisLabel: "Log(Concentration) ${testConcentrationUnit}"
-//                ]
-//                valueMap.put("plot", mapParams)
-//
-//
-//            }
-//            List<String> curveParams = []
-//            if (priorityDisplay) {
-//                curveParams.add("${priorityDisplay} : ${slope}")
-//            }
-//            curveParams.add("sInf: " + new ExperimentalValueUtil(curveFitParameters.sInf, false).toString())
-//            curveParams.add("s0: " + new ExperimentalValueUtil(curveFitParameters.s0, false).toString())
-//            curveParams.add("HillSlope: " + new ExperimentalValueUtil(curveFitParameters.hillCoef, false).toString())
-//            valueMap.put("curveFitParams", curveParams)
-//
-//            valueMap.put("miscData", concentrationResponseSeries.miscData)
-//        }
-//        return valueMap
-//    }
-
 }
 
 

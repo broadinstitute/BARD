@@ -1,22 +1,37 @@
 package bard.core.rest.spring
 
+import bard.core.SearchParams
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.compounds.CompoundResult
 import bard.core.rest.spring.project.ProjectResult
 import bard.core.rest.spring.util.MetaData
+import bard.core.util.FilterTypes
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import org.springframework.web.client.HttpClientErrorException
 import bard.core.rest.spring.experiment.*
-import bard.core.SearchParams
-import bard.core.util.FilterTypes
 
 class ExperimentRestService extends AbstractRestService {
     def transactional=false
     public String getResourceContext() {
         return RestApiConstants.EXPERIMENTS_RESOURCE;
     }
+
+
+    public String histogramDataByEID(final Long eid) {
+        if (eid) {
+            final String urlString = buildURLToExperimentHistogramData(eid)
+            final URL url = new URL(urlString)
+            final String histogramJson = (String)this.getForObject(url.toURI(), String.class)
+            return histogramJson
+        }
+        return null
+
+    }
+
+
 
     public ExperimentData activitiesByEIDs(final List<Long> eids, final SearchParams searchParams) {
         if (eids) {
@@ -74,6 +89,18 @@ class ExperimentRestService extends AbstractRestService {
         return null
     }
 
+
+    String buildURLToExperimentHistogramData(final Long eid) {
+        final StringBuilder resource =
+            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPERIMENTS_RESOURCE)
+
+        resource.append(RestApiConstants.FORWARD_SLASH).append(eid).append(RestApiConstants.RESULT_TYPES)
+          .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
+         return resource.toString()
+
+    }
+
+
     String buildURLToExperimentData(final SearchParams searchParams) {
         final StringBuilder resource =
             new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
@@ -88,6 +115,29 @@ class ExperimentRestService extends AbstractRestService {
         return resource.toString()
 
     }
+
+
+
+
+    String buildURLToExptDataByIds(final SearchParams searchParams) {
+        final StringBuilder resource =
+            new StringBuilder(this.externalUrlDTO.baseUrl).
+                    append(RestApiConstants.EXPTDATA_RESOURCE).
+                    append(RestApiConstants.EXPTDATABYIDS_RESOURCE)
+
+        if (searchParams.getTop()) {
+            resource.append(RestApiConstants.QUESTION_MARK)
+            resource.append(RestApiConstants.SKIP).
+                    append(searchParams.getSkip()).
+                    append(RestApiConstants.TOP).
+                    append(searchParams.getTop())
+        }
+        return resource.toString()
+
+    }
+
+
+
     /**
      *
      * @param eid
@@ -133,6 +183,47 @@ class ExperimentRestService extends AbstractRestService {
 
     }
 
+
+
+
+    public ExperimentData activitiesByCIDsAndEIDs(final List<Long> cids,final List<Long> eids, int maximumValues = 500 ) {
+        final SearchParams searchParams = new SearchParams( skip:  0, top: maximumValues)
+        if ((cids) && (eids)) {
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("cids", cids.join(","));
+            map.add("eids", eids.join(","));
+            final String urlString = buildURLToExperimentData(searchParams)
+            final URL url = new URL(urlString)
+            List<Activity> activities  = null
+            try {
+                activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
+            } catch (HttpClientErrorException hce) {
+                println  hce.toString()
+                // the NCGC rest API uses a 404 error to indicate no data found. This is a legitimate condition,
+                // not an error, so we can swallow the HTTP client exception in this case
+            }
+            ExperimentData experimentData = new ExperimentData()
+            experimentData.setActivities(activities)
+            return experimentData
+        }
+        return null
+    }
+
+    public ExperimentData activitiesBySIDsAndEIDs(final List<Long> sids,final List<Long> eids, int maximumValues = 500 ) {
+        final SearchParams searchParams = new SearchParams(  skip:  0, top: maximumValues)
+        if ((sids) && (eids)) {
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+            map.add("sids", sids.join(","));
+            map.add("eids", eids.join(","));
+            final String urlString = buildURLToExperimentData(searchParams)
+            final URL url = new URL(urlString)
+            final List<Activity> activities = this.postForObject(url.toURI(), Activity[].class, map) as List<Activity>;
+            ExperimentData experimentData = new ExperimentData()
+            experimentData.setActivities(activities)
+            return experimentData
+        }
+        return null
+    }
 
     public ExperimentData activities(Long experimentId) {
         return activities(experimentId, null)

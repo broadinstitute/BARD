@@ -317,6 +317,7 @@ function handleMainFormSubmit(searchString) {
             //We intend to change to a modal view, where a user picks
             //the type of id (like we do with structure searches) so that we
             //can only send the query to the resource of interest
+            activateCurrentTab('assaysTab');
             handleAllIdSearches();
             break;
         case 'STRUCTURE':
@@ -408,7 +409,7 @@ function activateCurrentTab(currentTab) {
             activateTabs('projectsTab', 'projectsTabLi', 'projects', 'Projects ');
             break;
         default:
-            activateCurrentTab('compoundsTab');
+            activateCurrentTab('assaysTab');
             break;
     }
 }

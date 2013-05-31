@@ -27,7 +27,13 @@ class SunburstCacheService extends AbstractRestService {
         List<TargetClassInfo> targetClassInfo = this.targets.get(accessionNumber)
         if (!targetClassInfo) {
             log.info("Not found ${accessionNumber} going to REST-API")
-            final Target target = this.targetRestService.getTargetByAccessionNumber(accessionNumber)
+            Target target = null
+            try{
+                target = this.targetRestService.getTargetByAccessionNumber(accessionNumber)
+            }catch (Exception) {
+                log.info("No information available for ${accessionNumber}")
+                return null
+            }
             targetClassInfo = Target.constructTargetInformation(target)
              this.targets.put(accessionNumber,targetClassInfo)
         }

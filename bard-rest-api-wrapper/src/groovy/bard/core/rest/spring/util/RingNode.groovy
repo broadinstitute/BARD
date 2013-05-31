@@ -200,10 +200,17 @@ class RingNode {
      * @return
      */
     public LinkedHashMap<String, String> determineColorMappingRange ( ) {
-        BigDecimal minimumSoFar = 1
-        BigDecimal maximumSoFar = 0
+        final BigDecimal topOfMaximumRange = 1
+        final BigDecimal bottomOfMinimumRange = 0
+        BigDecimal minimumSoFar = topOfMaximumRange
+        BigDecimal maximumSoFar = bottomOfMinimumRange
         LinkedHashMap<String, BigDecimal> valueForPassing = [minimumSoFar:minimumSoFar, maximumSoFar:maximumSoFar]
         goDownOneLevel ( this,  valueForPassing)
+        // test for degenerate case  -- if we never received any actives or in actives then reset our values to something sensible
+        if ((valueForPassing["minimumSoFar"] == topOfMaximumRange)  && (valueForPassing["maximumSoFar"] == bottomOfMinimumRange)){
+            valueForPassing["minimumSoFar"] = bottomOfMinimumRange
+            valueForPassing["maximumSoFar"] = bottomOfMinimumRange
+        }
         return [minimumValue:valueForPassing["minimumSoFar"].toString(),maximumValue:valueForPassing["maximumSoFar"].toString()]
     }
 

@@ -13,9 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
-    <script src="../js/sunburst/d3.min.js"></script>
-    <script src="../js/sunburst/createALegend.js"></script>
-    <script src="../js/sunburst/createASunburst.js"></script>
+    %{--<script src="../js/sunburst/d3.min.js"></script>--}%
+    %{--<script src="../js/sunburst/createALegend.js"></script>--}%
+    %{--<script src="../js/sunburst/createASunburst.js"></script>--}%
     <style>
     #sunburstdiv {
         font-family: sans-serif;
@@ -99,11 +99,11 @@
 
     </div>
 
-    <g:bigSunburstData compoundSummary="${compoundSummary}"/>
+    <g:bigSunburstData compoundSummary="${compoundSummary}" cid="${cid}"/>
 
     <div class="row-fluid">
         <div class="span9 pull-left">
-            <g:bigSunburstSection compoundSummary="${compoundSummary}"/>
+            <g:bigSunburstSection compoundSummary="${compoundSummary}" cid="${cid}"/>
         </div>
 
         <div class="span3" style="padding-top: 50px;  height: 600px;">
@@ -121,7 +121,7 @@
                     <option value="3" <g:if test="${dropDown2Choice == 3}">selected</g:if>>Color by class</option>
                 </select>
                 <div  style="padding-top: 320px;"></div>
-                <select id="activity">
+                <select id="activity" style="visibility: hidden">
                         <option value="1" <g:if test="${dropDown1Choice == 1}">selected</g:if>>Active only</option>
                         <option value="2" <g:if test="${dropDown1Choice == 2}">selected</g:if>>Inactive only</option>
                         <option value="3"

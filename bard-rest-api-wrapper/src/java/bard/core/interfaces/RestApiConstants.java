@@ -31,6 +31,12 @@ public interface RestApiConstants {
 
     //relative path to the experiment resource
     final String EXPERIMENTS_RESOURCE = "/experiments";
+    //relative path to the biology resource
+    final String BIOLOGY_RESOURCE = "/biology";
+    //relative path to the result types, as used to request histogram data
+    final String RESULT_TYPES = "/resulttypes";
+
+
     //relative path to the assays resource
     final String ASSAYS_RESOURCE = "/assays";
 
@@ -56,6 +62,7 @@ public interface RestApiConstants {
     final String TOP = AMPERSAND + "top=";
     final String EXPAND_TRUE = "expand=true";
     final String SOLR_QUERY_PARAM_NAME = "q=";
+    final String EXPTDATABYIDS_RESOURCE = "/getExptDataByIds";
 
     final String SUMMARY = "/summary";
     final String COLON = ":";

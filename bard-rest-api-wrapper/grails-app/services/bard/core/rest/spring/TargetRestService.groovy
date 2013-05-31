@@ -88,7 +88,7 @@ class TargetRestService extends AbstractRestService {
                      append(accessionNumber)
 
         final URL url = new URL(resource.toString())
-        final Target target = getForObject(url.toURI(), Target.class)
+        Target target = getForObject(url.toURI(), Target.class)
         return target
     }
 }

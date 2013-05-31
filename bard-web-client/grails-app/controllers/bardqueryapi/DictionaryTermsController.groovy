@@ -4,7 +4,7 @@ import bard.core.rest.spring.DataExportRestService
 import bard.core.rest.spring.util.CapDictionary
 import grails.plugins.springsecurity.Secured
 
-@Secured(['isRememberMe()', 'isAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class DictionaryTermsController {
     DataExportRestService dataExportRestService
 

@@ -10,6 +10,8 @@ class MatchedTermsToHumanReadableLabelsMapper {
             "av_dict_label": "Dictionary Value",
             "bardAssayId": "do not use",
             "capAssayId": "Assay Definition ID",
+            "class_descr": "Panther class description",
+            "class_name": "Panther class name",
             "comment": "Comment",
             "description": "Description",
             "detection_method_type": "Detection Method Type",

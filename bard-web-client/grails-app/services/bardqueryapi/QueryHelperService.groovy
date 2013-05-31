@@ -38,7 +38,15 @@ class QueryHelperService {
             'assay_type': 'Assay Type',
             'iso_smiles': 'ISO SMILES',
             'iupac_name': 'IUPAC Name',
-            'preferred_term': 'Preferred Term'
+            'preferred_term': 'Preferred Term',
+            'title': 'Title',
+            'protocol': 'Protocol',
+            'av_dict_label': 'Dictionary Value',
+            'description': 'Description',
+            'name': 'Name',
+            'ak_dict_label': 'Dictionary Key',
+            'class_name': 'Panther class name',
+            'class_descr': 'Panther class description'
     ]
     final static String PROBE = "PROB"
 
@@ -48,7 +56,7 @@ class QueryHelperService {
             final List<PriorityElement> priorityElements = resultData.priorityElements
 
             final boolean hasChildElements = priorityElements.find {PriorityElement priorityElement -> priorityElement.hasChildElements()}
-            final Map priorityMap = this.extractPriorityDisplayDescription(priorityElements)
+            final Map priorityMap = [:]
             if (resultData.hasPlot()) {
                 hasPlot = true
             }
@@ -74,19 +82,17 @@ class QueryHelperService {
             priorityMap.put("hasChildElements", hasChildElements)
             return priorityMap
         }
-        return [priorityDisplays: [], priorityDescriptions: [], dictionaryIds: [], hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
+        return [hasPlot: false, hasChildElements: false, yNormMin: null, yNormMax: null]
 
     }
 
     Map extractExperimentDetails(List<Activity> activities, NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS) {
-        Double yNormMin = 0
-        Double yNormMax = 0
+        Double yNormMin = null
+        Double yNormMax = null
         boolean firstMinValue = false
         boolean firstMaxValue = false
         boolean hasPlot = false
         boolean hasChildElements = false
-        List<String> priorityDisplays = []
-        List<String> dictionaryIds = []
         for (Activity activity : activities) {
 
             final ResultData resultData = activity.resultData
@@ -122,28 +128,10 @@ class QueryHelperService {
                 if (priorityMap.hasChildElements) {
                     hasChildElements = true
                 }
-                if (priorityMap.dictionaryIds) {
-                    dictionaryIds = priorityMap.dictionaryIds
-                }
-                if (priorityMap.priorityDisplays) {
-                    priorityDisplays = priorityMap.priorityDisplays
-                }
-
             }
         }
-        return [priorityDisplays: priorityDisplays, dictionaryIds: dictionaryIds,
-                hasPlot: hasPlot, hasChildElements: hasChildElements,
+        return [hasPlot: hasPlot, hasChildElements: hasChildElements,
                 yNormMin: yNormMin, yNormMax: yNormMax]
-    }
-
-    Map extractPriorityDisplayDescription(List<PriorityElement> priorityElements) {
-        List<String> priorityDisplays = priorityElements*.getDictionaryLabel()
-        List<String> priorityDescriptions = priorityElements*.getDictionaryDescription()
-        List<Long> dictionaryIds = []
-        if (priorityDescriptions) {
-            dictionaryIds = priorityElements*.getDictElemId()
-        }
-        return [priorityDisplays: priorityDisplays, priorityDescriptions: priorityDescriptions, dictionaryIds: dictionaryIds]
     }
 
     //filters that starts with a number or '[' to denote ranges

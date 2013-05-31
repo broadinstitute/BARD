@@ -1,21 +1,17 @@
 package bardqueryapi
 
-import static org.junit.Assert.*
-
-import grails.test.mixin.*
-import grails.test.mixin.support.*
-import org.junit.*
-import spock.lang.Unroll
-import spock.lang.Specification
 import grails.plugins.springsecurity.SpringSecurityService
-import javax.servlet.http.HttpServletRequest
-import org.springframework.mock.web.MockHttpServletRequest
-import spock.lang.Shared
-import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import javax.servlet.http.HttpSession
+import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import javax.servlet.ServletContext
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
+import org.springframework.mock.web.MockHttpServletRequest
+import spock.lang.Specification
+import spock.lang.Unroll
+
+import javax.servlet.ServletContext
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
 
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
@@ -101,8 +97,8 @@ class MobileServiceUnitSpec extends Specification {
 
         where:
         label                     | userAgent        | expectedResult
-        'an iPad device'          | 'iPad'           | false
-        'an Android device'       | 'Android'        | false
+        'an iPad device'          | 'iPad'           | true
+        'an Android device'       | 'Android'        | true
         'a mobile Android device' | 'Android Mobile' | true
     }
 

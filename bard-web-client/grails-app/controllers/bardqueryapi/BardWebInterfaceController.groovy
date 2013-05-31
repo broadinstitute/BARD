@@ -6,6 +6,7 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
@@ -32,13 +33,14 @@ import javax.servlet.http.HttpServletResponse
  */
 @Mixin(SearchHelper)
 @Mixin(InetAddressUtil)
-@Secured(['isRememberMe()', 'isAuthenticated()'])
+@Secured(['isAuthenticated()'])
 class BardWebInterfaceController {
     def shoppingCartService
     BardUtilitiesService bardUtilitiesService
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
+    ExperimentRestService  experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
     ProjectExperimentRenderService projectExperimentRenderService
     List<SearchFilter> filters = []
@@ -53,9 +55,9 @@ class BardWebInterfaceController {
             if (mobileService.gspExists(newView)) {
                 modelAndView.viewName = newView
             }
-            else {
-                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
-            }
+//            else {
+//                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
+//            }
         }
     }
 
@@ -162,6 +164,10 @@ class BardWebInterfaceController {
         }
     }
 
+    def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
+        render experimentRestService.histogramDataByEID(id)
+    }
+
     def probe(String probeId) {
         if (isHTTPBadRequest(probeId, 'Probe ID is a required Field', bardUtilitiesService.username)) {
             return
@@ -260,7 +266,8 @@ class BardWebInterfaceController {
             Map compoundAdapterMap = this.queryService.searchCompoundsByCids(cids, top, skip, searchFilters)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
 
-            render(template: 'compounds', model: [
+            String template = isMobile() ? "/mobile/bardWebInterface/compounds" : "compounds"
+            render(template: template, model: [
                     compoundAdapters: compoundAdapters,
                     facets: compoundAdapterMap.facets,
                     nhits: compoundAdapterMap.nHits,
@@ -312,8 +319,9 @@ class BardWebInterfaceController {
                 capIds.add(new Long(id))
             }
 
+            String template = isMobile() ? "/mobile/bardWebInterface/assays" : "assays"
             final Map assayAdapterMap = this.queryService.findAssaysByCapIds(capIds, top, skip, searchFilters)
-            render(template: "assays", model: [
+            render(template: template, model: [
                     assayAdapters: assayAdapterMap.assayAdapters,
                     facets: assayAdapterMap.facets,
                     nhits: assayAdapterMap.nHits,
@@ -366,7 +374,9 @@ class BardWebInterfaceController {
                 capIds.add(new Long(id))
             }
             Map projectAdapterMap = this.queryService.findProjectsByCapIds(capIds, top, skip, searchFilters)
-            render(template: 'projects', model: [
+
+            String template = isMobile() ? "/mobile/bardWebInterface/projects" : "projects"
+            render(template: template, model: [
                     projectAdapters: projectAdapterMap.projectAdapters,
                     facets: projectAdapterMap.facets,
                     nhits: projectAdapterMap.nHits,
@@ -639,14 +649,31 @@ class BardWebInterfaceController {
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
             return
         }
+
         try {
 
             Map<String, Integer> searchParams = handleSearchParams() //top, skip, nhits
             SpreadSheetInput spreadSheetInput = new SpreadSheetInput(cids: [id])
 
+            Boolean noFiltersFromPage = false
+            if (!searchCommand.filters) {
+                noFiltersFromPage = true
+                searchCommand.filters << new SearchFilter(filterName: 'plot_axis', filterValue: 'Normalize Y-Axis')
+                searchCommand.filters << new SearchFilter(filterName: 'single-point_measurement', filterValue: 'Hide single-point data')
+            }
+
             final List<FilterTypes> filters = []
 //            filters.add(FilterTypes.TESTED)
-            NormalizeAxis normalizeAxis = NormalizeAxis.Y_NORM_AXIS
+            Boolean normalizeYAxisFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis'}?.filterValue
+            NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
+            if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
+                filters.add(FilterTypes.Y_DENORM_AXIS)
+            }
+            Boolean singlePointResultData = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'single-point_measurement'}?.filterValue
+            if (singlePointResultData) {
+                filters.add(FilterTypes.SINGLE_POINT_RESULT)
+            }
+
             ActivityOutcome activityOutcome = ActivityOutcome.ACTIVE
 
             GroupByTypes resourceType = params.groupByType ? params.groupByType as GroupByTypes : GroupByTypes.ASSAY
@@ -668,11 +695,16 @@ class BardWebInterfaceController {
 
             }
 
+            final List<SearchFilter> searchFilters = searchCommand.appliedFilters ?: []
+            queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
+            List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
+            facetValues << new Value(id: 'single-point_measurement', children: [new IntValue(id: 'Hide single-point data', value: -1)])//disable facet count
+
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,
                             resourceType: resourceType,
-                            facets: [],
-                            appliedFilters: [],
+                            facets: facetValues,
+                            appliedFilters: getAppliedFilters(searchFilters, facetValues),
                             sidebarTitle: 'Options'])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
@@ -693,7 +725,12 @@ class BardWebInterfaceController {
 
 
     def bigSunburst(Long id, SearchCommand searchCommand) {
-        int dropDown1Choice = 0
+
+        if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
+            return
+        }
+
+            int dropDown1Choice = 0
 
         if ((params.actives == null) || ('t' == params.actives)) {
             dropDown1Choice += 1
@@ -726,14 +763,15 @@ class BardWebInterfaceController {
             }
         }
 
-        if (!session.'compoundSummary') {
-            println 'we have no information'
-        } else {
+//        if (!session.'compoundSummary') {
+//            println 'we have no information'
+//        } else {
             render(view: 'bigSunburst',
                     model: [compoundSummary: session.'compoundSummary',
                             dropDown1Choice: dropDown1Choice,
-                            dropDown2Choice: session.colorOption])
-        }
+                            dropDown2Choice: session.colorOption,
+                            cid: id])
+//        }
 
     }
 

@@ -6,32 +6,43 @@ class SunburstHandlerTagLib {
 
     RingManagerService ringManagerService
 
-    def prepMicroSunburst = { attrs, body ->
-        // for now we leave in test data.  Remove these when real data come along
-        Boolean includeHits = session."actives"
-        Boolean includeNonHits = session."inactives"
-        RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
-        //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
-        out << ringManagerService.writeRingTree(root,false)
-        out << "\n"
-//        out << ringManagerService.placeSunburstOnPage(274,200,root,4)
-        out << ringManagerService.colorMappingOnPage ( )
-    }
-
-
-    def makeMicroSunburst = { attrs, body ->
-        out << ringManagerService.placeSunburstOnPage(300,200)
-    }
-
-
+//    def prepMicroSunburst = { attrs, body ->
+//        // for now we leave in test data.  Remove these when real data come along
+//        Boolean includeHits = session."actives"
+//        Boolean includeNonHits = session."inactives"
+//        RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
+//        //       RingNode root =   ringManagerService.convertCompoundSummaryIntoSunburst (attrs.compoundSummary, true, true )
+//        out << ringManagerService.writeRingTree(root,false)
+//        out << "\n"
+////        out << ringManagerService.placeSunburstOnPage(274,200,root,4)
+//        out << ringManagerService.colorMappingOnPage ( )
+//    }
+//
+//
+//    def makeMicroSunburst = { attrs, body ->
+//        out << ringManagerService.placeSunburstOnPage(300,200)
+//    }
+//
+//
 
 
     def prepMacroSunburst = { attrs, body ->
         // for now we leave in test data.  Remove these when real data come along
-        Boolean includeHits = session."actives"
-        Boolean includeNonHits = session."inactives"
+        Boolean includeHits = true // session."actives"
+        Boolean includeNonHits = true // session."inactives"
         int typeOfColoring = session."colorOption"  ?: 3
-        RingNode root =   ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
+        RingNode root =  null
+//        if (attrs."compoundSummary" == null) {
+
+        // For now let's get the data explicitly so that we are sure were getting the right compound.
+        // Once we get an ID into compoundSummary then we can reuse the data if it's available
+            root =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
+
+//        } else {
+//            root =   ringManagerService.convertCompoundIntoSunburst (attrs."compoundSummary", includeHits, includeNonHits )
+//        }
+
+
         LinkedHashMap extremeValues = root.determineColorMappingRange()
         out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]
         out << "\n"
@@ -59,7 +70,7 @@ class SunburstHandlerTagLib {
 //        out <<   g.makeMicroSunburst(attrs, body)
 //        out << """
 //        </div>
-        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right; font-size: 80%">Sunburst visualization<br/>(sample data only)</a>
+        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right;">Target class<br/>visualization</a>
     </div>""".toString()
 //        }
     }
