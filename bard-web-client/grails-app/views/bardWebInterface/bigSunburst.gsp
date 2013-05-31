@@ -13,9 +13,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
-    <script src="../js/sunburst/d3.min.js"></script>
-    <script src="../js/sunburst/createALegend.js"></script>
-    <script src="../js/sunburst/createASunburst.js"></script>
+    %{--<script src="../js/sunburst/d3.min.js"></script>--}%
+    %{--<script src="../js/sunburst/createALegend.js"></script>--}%
+    %{--<script src="../js/sunburst/createASunburst.js"></script>--}%
     <style>
     #sunburstdiv {
         font-family: sans-serif;
@@ -99,11 +99,11 @@
 
     </div>
 
-    <g:bigSunburstData compoundSummary="${compoundSummary}"/>
+    <g:bigSunburstData compoundSummary="${compoundSummary}" cid="${cid}"/>
 
     <div class="row-fluid">
         <div class="span9 pull-left">
-            <g:bigSunburstSection compoundSummary="${compoundSummary}"/>
+            <g:bigSunburstSection compoundSummary="${compoundSummary}" cid="${cid}"/>
         </div>
 
         <div class="span3" style="padding-top: 50px;  height: 600px;">

@@ -1,6 +1,7 @@
 package molspreadsheet
 
 import bard.core.rest.spring.experiment.ActivityData
+import bardqueryapi.JavaScriptUtility
 
 class SpreadsheetElementsTagLib {
 
@@ -125,7 +126,7 @@ class SpreadsheetElementsTagLib {
                            rel="tooltip"
                            data-container="body"
                            data-html="true"
-                           data-original-title="${childElements.toString()}"
+                           data-original-title="${JavaScriptUtility.cleanup(childElements.toString())}"
                            data-trigger="hover">"""
                 }
                 out << """<FONT COLOR="${molSpreadSheetCellActivityOutcome.color}"><nobr>${resultValueHolder} ${spreadSheetActivityStorage.printUnits(resultValueHolder)}</nobr></FONT>"""

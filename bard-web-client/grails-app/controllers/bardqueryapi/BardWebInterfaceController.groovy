@@ -6,6 +6,7 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
@@ -39,6 +40,7 @@ class BardWebInterfaceController {
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
+    ExperimentRestService  experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
     ProjectExperimentRenderService projectExperimentRenderService
     List<SearchFilter> filters = []
@@ -160,6 +162,10 @@ class BardWebInterfaceController {
             return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "${message}")
         }
+    }
+
+    def retrieveExperimentResultsSummary(Long id, SearchCommand searchCommand) {
+        render experimentRestService.histogramDataByEID(id)
     }
 
     def probe(String probeId) {
@@ -719,7 +725,12 @@ class BardWebInterfaceController {
 
 
     def bigSunburst(Long id, SearchCommand searchCommand) {
-        int dropDown1Choice = 0
+
+        if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
+            return
+        }
+
+            int dropDown1Choice = 0
 
         if ((params.actives == null) || ('t' == params.actives)) {
             dropDown1Choice += 1
@@ -752,14 +763,15 @@ class BardWebInterfaceController {
             }
         }
 
-        if (!session.'compoundSummary') {
-            println 'we have no information'
-        } else {
+//        if (!session.'compoundSummary') {
+//            println 'we have no information'
+//        } else {
             render(view: 'bigSunburst',
                     model: [compoundSummary: session.'compoundSummary',
                             dropDown1Choice: dropDown1Choice,
-                            dropDown2Choice: session.colorOption])
-        }
+                            dropDown2Choice: session.colorOption,
+                            cid: id])
+//        }
 
     }
 

@@ -9,7 +9,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script>
         function makeBigSunburstWindow() {
-            window.open("../bigSunburst", "mywindow", "menubar=0,resizable=1,width=1100,height=950");
+            window.open("../bigSunburst/${tableModel?.additionalProperties?.id}", "mywindow", "menubar=0,resizable=1,width=1100,height=950");
         }
         window.onload = function () {
             $('#sunburstdiv_bigwin').click(function () {

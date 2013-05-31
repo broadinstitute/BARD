@@ -34,6 +34,9 @@ modules = {
     handlebars {
         resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
     }
+    d3Library {
+        resource url: "js/sunburst/d3.min.js"
+    }
     projectstep {
         dependsOn "handlebars"
         resource url: '/js/projectstep/raphael.js'
@@ -118,11 +121,17 @@ modules = {
         resource url: "css/cbas.css"
     }
     sunburst {
-        dependsOn 'bootstrap,jquery'
+        dependsOn 'bootstrap,jquery,d3Library'
 
         resource url: "js/sunburst/createALegend.js"
         resource url: "js/sunburst/createASunburst.js"
         resource url: "css/sunburst.css"
+    }
+    histogram {
+        dependsOn 'bootstrap,jquery,d3Library'
+
+        resource url: "js/histogram/experimentalResultsHistogram.js"
+        resource url: "css/experimentalResultHistogram.css"
     }
 
 }

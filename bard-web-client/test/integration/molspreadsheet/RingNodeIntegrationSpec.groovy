@@ -374,7 +374,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
     void "test convertCompoundIntoSunburst"() {
         when:
-        RingNode ringNode = ringManagerService.convertCompoundIntoSunburst (2382353L , includeHits, includeNonHits )
+        RingNode ringNode = ringManagerService.convertCompoundIntoSunburstById (2382353L , includeHits, includeNonHits )
 
         then:
         ringNode.toString().size() > 0
