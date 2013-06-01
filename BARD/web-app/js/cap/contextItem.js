@@ -1,4 +1,31 @@
+
 $(document).ready(function () {
+    hideAllValueWidgets();
+    //initialFocus();
+    // try and pick best focus
+    function initialFocus() {
+        if ($("#attributeElementId").is(':disabled')) {
+            $('button.btn-primary').focus();
+        }
+        else if (!$("#attributeElementId").val()) {
+            $("#attributeElementId").select2("open");
+        }
+    }
+    function potentiallyFocus(elementId){
+        if ($("#attributeElementId").is(':disabled')) {
+            // do nothing we in review mode
+        }
+        else {
+            var valueElement = $(elementId);
+            if(valueElement.data('select2')){
+                valueElement.select2("open");
+            }
+            else{
+                valueElement.focus();
+            }
+        }
+    }
+
     $("#attributeElementId").select2({
         minimumInputLength: 1,
         allowClear: true,
@@ -13,10 +40,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        onlyShowWidgetsForExpectedValueType(data.expectedValueType);
-                        if (data.unitId) {
-                            initializeUnits(data.unitId);
-                        }
+                        onlyShowWidgetsForExpectedValueType(data.expectedValueType, data.unitId);
                     });
             }
         },
@@ -32,39 +56,50 @@ $(document).ready(function () {
             }
         }
     }).on("change", function (e) {
-            // on change the attribute, clear all the other fields
-            $(':text').val("");
-            $("#valueElementId").select2("data", {results: []});
-            $("#extValueId").select2("data", {results: []});
-            $("#valueNumUnitId").select2("data", {results: []});
-            //initializeUnits($("#attributeElementId").select2("data").unitId);
-            onlyShowWidgetsForExpectedValueType($("#attributeElementId").select2("data").expectedValueType);
+            // on change of the attribute, clear all value fields
+            clearAllValueFields();
+            // based on the attribute selected only show the appropriate value widgets
+            var data = $("#attributeElementId").select2("data");
+            onlyShowWidgetsForExpectedValueType(data.expectedValueType,data.unitId);
         });
 
-    function onlyShowWidgetsForExpectedValueType(expectedValueType) {
+    function clearAllValueFields() {
+        $(':text').val("");
+        $("#valueElementId").select2("data", {results: []});
+        $("#extValueId").select2("data", {results: []});
+        $("#valueNumUnitId").select2("data", {results: []});
+    }
+
+    function hideAllValueWidgets() {
+        $("[id$=ValueContainer]").hide();
+    }
+    function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId) {
         hideAllValueWidgets();
         if ('NUMERIC' === expectedValueType) {
             $('#numericValueContainer').show();
+            initializeUnits(unitId);
+            potentiallyFocus("#valueNum")
+
         }
-        else if ('ELEMENT'=== expectedValueType) {
+        else if ('ELEMENT' === expectedValueType) {
             $('#elementValueContainer').show();
+            potentiallyFocus("#valueElementId");
         }
-        else if ('EXTERNAL_ONTOLOGY'=== expectedValueType) {
-            $('#externalOntologyContainer').show();
-        }
-        else if ('FREE_TEXT'=== expectedValueType) {
+        else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
+            $('#externalOntologyValueContainer').show();
             $('#freeTextValueContainer').show();
+            potentiallyFocus("#extValueId");
         }
-        else if('NONE'=== expectedValueType){
+        else if ('FREE_TEXT' === expectedValueType) {
+            $('#freeTextValueContainer').show();
+            potentiallyFocus("#valueDisplay");
+        }
+        else if ('NONE' === expectedValueType) {
             $('#noneValueContainer').show();
         }
-        else{
+        else {
             // problem
         }
-    }
-
-    function hideAllValueWidgets(){
-        $("[id$=ValueContainer]").hide();
     }
 
 
@@ -112,7 +147,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        initialFocus();
+                        potentiallyFocus("#extValueId");
                     });
             }
         },
@@ -136,29 +171,7 @@ $(document).ready(function () {
     if ($("#extValueId").val()) {
         $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
     }
-    //initialFocus();
 
-    // try and pick best focus
-    function initialFocus() {
-        if ($("#attributeElementId").is(':disabled')) {
-            $('button.btn-primary').focus();
-        }
-        else if (!$("#attributeElementId").val()) {
-            $("#attributeElementId").select2("open");
-        }
-        else if ($("#valueElementId").val()) {
-            $("#valueElementId").select2("open");
-        }
-        else if ($("#extValueId").val()) {
-            $("#extValueId").select2("open");
-        }
-        else if ($("#valueNum").val()) {
-            $("#valueNum").focus();
-        }
-        else if ($("#valueDisplay").val()) {
-            $("#valueDisplay").focus();
-        }
-    }
 
     function initializeUnits(attributeUnitId) {
         var unitSelector = '#valueNumUnitId'
