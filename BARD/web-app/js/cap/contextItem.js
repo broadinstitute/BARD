@@ -55,8 +55,11 @@ $(document).ready(function () {
         else if ('FREE_TEXT'=== expectedValueType) {
             $('#freeTextValueContainer').show();
         }
-        else {
-            // we have a problem
+        else if('NONE'=== expectedValueType){
+            $('#noneValueContainer').show();
+        }
+        else{
+            // problem
         }
     }
 

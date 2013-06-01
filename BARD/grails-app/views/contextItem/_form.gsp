@@ -111,6 +111,14 @@
                 </div>
             </div>
 
+            <div class="row-fluid">
+                <div id="noneValueContainer" class="offset2 span6 alert alert-info">
+                    <h4>Warning!</h4>
+                    <p>This attribute isn't allowed to have values assigned to it. Please select another attribute.</p>
+                </div>
+            </div>
+
+
             <div class="control-group">
                 <div class="controls">
 
