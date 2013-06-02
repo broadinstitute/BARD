@@ -51,7 +51,7 @@ class ExperimentControllerUnitSpec extends Specification {
     void 'test edit Experiment hold until date success'() {
         given:
 
-        Experiment newExperiment = Experiment.build(version: 0, experimentName: "My Name", runDateTo: new Date())
+        Experiment newExperiment = Experiment.build(version: 0, experimentName: "My Name", holdUntilDate: new Date())
         Experiment updatedExperiment = Experiment.build(experimentName: "My New Name", version: 1,
                 lastUpdated: new Date(), holdUntilDate: new Date())
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(
@@ -89,7 +89,7 @@ class ExperimentControllerUnitSpec extends Specification {
     void 'test edit Experiment Run From Date success'() {
         given:
 
-        Experiment newExperiment = Experiment.build(version: 0, experimentName: "My Name", runDateTo: new Date())
+        Experiment newExperiment = Experiment.build(version: 0, experimentName: "My Name", runDateFrom: new Date())
         Experiment updatedExperiment = Experiment.build(experimentName: "My New Name", version: 1,
                 lastUpdated: new Date(), runDateFrom: new Date())
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newExperiment.id,
