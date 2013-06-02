@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,summary"/>
+    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,assaysummary"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'measures-dynatree.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">

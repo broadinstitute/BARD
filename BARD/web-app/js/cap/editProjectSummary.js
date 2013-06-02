@@ -78,9 +78,11 @@ function updateSummary(response, newValue) {
 
     var version = response.version;
     var lastUpdated = response.lastUpdate;
-
+    var modifiedBy = response.modifiedBy;
     $("#versionId").val(version);
     $("#lastUpdatedId").html(lastUpdated);
+    $("#modifiedById").html(modifiedBy);
+
     return response.data;
 }
 function updateEntityVersion(response, serverresponse) {
@@ -104,48 +106,6 @@ function validateInput(value) {
     }
 }
 
-//$(document).ready(function () {
-//    $( "#editProjectSummaryButton" )
-//        .button()
-//        .click(function() {
-//            $( "#dialog_edit_project_summary" ).dialog( "open" );
-//            initFunction();
-//        });
-//    $( "#dialog_edit_project_summary" ).dialog({
-//        autoOpen: false,
-//        height: 400,
-//        width: 500,
-//        modal: true,
-//        buttons: {
-//            "Update Summary": function() {
-//                var instanceId = $("#projectId").text();
-//                var projectName = $("#projectName").val();
-//                var description = $("#description").val();
-//                var projectStatus = $("#projectStatus").val();
-//                if (!validateRequiredField(projectName, "projectNameNameValidation")) return false;
-//                var inputdata = {'instanceId':instanceId, 'projectName':projectName, 'description':description, 'projectStatus':projectStatus};
-//                $.ajax
-//                    ({
-//                        type:"POST",
-//                        url:"../editSummary",
-//                        data:inputdata,
-//                        cache:false,
-//                        success:function(responseText, statusText, xhr, jqForm){
-//                                $("#summaryDetailSection").html(responseText);
-//                        }
-//                    });
-//                $( this ).dialog( "close" );
-//            },
-//            Cancel: function() {
-//                resetAfterCloseOrCancel();
-//                $( this ).dialog( "close" );
-//            }
-//        },
-//        close: function() {
-//            resetAfterCloseOrCancel();
-//        }
-//    });
-//});
 
 function validateRequiredField(fieldName, messageHolder) {
     if (!fieldName || 0 === fieldName || (/^\s*$/).test(fieldName)) {
@@ -164,21 +124,4 @@ function initFunction() {
         $("#projectNameValidation").html("");
     });
 }
-
-//function resetAfterCloseOrCancel() {
-//    var instanceId = $("#projectId").text();
-//    $("#editSummaryForm").clearForm();
-//    // Need to reload the original data
-//    var inputdata = {'instanceId':instanceId};
-//    $.ajax
-//        ({
-//            url:"../showEditSummary",
-//            data:inputdata,
-//            cache:false,
-//            success:function(responseText, statusText, xhr, jqForm){
-//                $("#dialog_edit_project_summary").html(responseText);
-//            }
-//        });
-//}
-
 
