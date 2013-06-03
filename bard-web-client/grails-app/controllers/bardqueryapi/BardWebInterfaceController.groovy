@@ -55,9 +55,9 @@ class BardWebInterfaceController {
             if (mobileService.gspExists(newView)) {
                 modelAndView.viewName = newView
             }
-            else {
-                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
-            }
+//            else {
+//                modelAndView.viewName = "/mobile/bardWebInterface/missingPageError"
+//            }
         }
     }
 
@@ -266,7 +266,8 @@ class BardWebInterfaceController {
             Map compoundAdapterMap = this.queryService.searchCompoundsByCids(cids, top, skip, searchFilters)
             List<CompoundAdapter> compoundAdapters = compoundAdapterMap.compoundAdapters
 
-            render(template: 'compounds', model: [
+            String template = isMobile() ? "/mobile/bardWebInterface/compounds" : "compounds"
+            render(template: template, model: [
                     compoundAdapters: compoundAdapters,
                     facets: compoundAdapterMap.facets,
                     nhits: compoundAdapterMap.nHits,
@@ -318,8 +319,9 @@ class BardWebInterfaceController {
                 capIds.add(new Long(id))
             }
 
+            String template = isMobile() ? "/mobile/bardWebInterface/assays" : "assays"
             final Map assayAdapterMap = this.queryService.findAssaysByCapIds(capIds, top, skip, searchFilters)
-            render(template: "assays", model: [
+            render(template: template, model: [
                     assayAdapters: assayAdapterMap.assayAdapters,
                     facets: assayAdapterMap.facets,
                     nhits: assayAdapterMap.nHits,
@@ -372,7 +374,9 @@ class BardWebInterfaceController {
                 capIds.add(new Long(id))
             }
             Map projectAdapterMap = this.queryService.findProjectsByCapIds(capIds, top, skip, searchFilters)
-            render(template: 'projects', model: [
+
+            String template = isMobile() ? "/mobile/bardWebInterface/projects" : "projects"
+            render(template: template, model: [
                     projectAdapters: projectAdapterMap.projectAdapters,
                     facets: projectAdapterMap.facets,
                     nhits: projectAdapterMap.nHits,

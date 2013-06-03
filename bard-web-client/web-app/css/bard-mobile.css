@@ -1,1 +1,53 @@
 /*.ui-page { -webkit-backface-visibility: hidden; }*/
+td.rightAligned {
+    text-align: right;
+}
+
+td.leftAligned {
+    text-align: left;
+}
+
+td.centerAligned {
+    text-align: center;
+}
+
+.noMarker, ul.noMarker {
+    list-style-type: none;
+}
+
+/*Used in showAssay*/
+.dl-horizontal {
+    *zoom: 1;
+}
+
+.dl-horizontal:before,
+.dl-horizontal:after {
+    display: table;
+    line-height: 0;
+    content: "";
+}
+
+.dl-horizontal:after {
+    clear: both;
+}
+
+.dl-horizontal dt {
+    float: left;
+    width: 200px;
+    overflow: hidden;
+    clear: left;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dl-horizontal dd {
+    margin-left: 210px;
+    text-align: left;
+}
+
+.dl-horizontal ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}

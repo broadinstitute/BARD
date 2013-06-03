@@ -5,8 +5,8 @@
 task wrapper(type: Wrapper) {
     gradleVersion = '1.0'
 }
-buildscript {
 
+buildscript {
     repositories {
         maven {
             url 'http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo'
@@ -16,7 +16,6 @@ buildscript {
     dependencies {
         classpath group: 'com.github.timurstrekalov', name: 'gradle-saga-plugin', version: '1.3.0'
     }
-
 }
 
 apply plugin: 'saga'
@@ -32,4 +31,50 @@ saga {
 
     sourcesToPreload = 'web-app/js/**.js'
     //outputStrategy = 'BOTH'
+}
+
+configurations {
+    jslintTask
+}
+
+repositories {
+    maven {
+        url 'http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo'
+    }
+}
+
+dependencies {
+    jslintTask group: 'com.googlecode.jslint4java', name: 'jslint4java', version: '2.0.5'
+    jslintTask group: 'com.googlecode.jslint4java', name: 'jslint4java-ant', version: '2.0.5'
+}
+
+task runJslint << {
+    def excludeList = [
+            'addons/pager/*.js',
+            'DataTables-1.9.4/*.js',
+            'dojo-min/**/*.js',
+            'handlebars-1.0.rc.2/*.js',
+            'html5historyapi/*.js',
+            'jquery-table-sorter/*.js',
+            'jquery-ui-extensions/**/*.js',
+            'jquery.mobile-1.2.0/*.js',
+            'jsDraw/**/*.js',
+            'projectstep/arbor*.js',
+            'projectstep/dracula*.js',
+            'projectstep/raphael.js',
+            'projectstep/rcolor.js',
+            'projectstep/viz.js',
+            'sunburst/d3.min.js'
+    ]
+    ant {
+        taskdef(name: "jslint",
+                classname: "com.googlecode.jslint4java.ant.JSLintTask",
+                classpath: configurations.jslintTask.asPath)
+        jslint(){
+            formatter(type: 'junit', destfile: 'target/test-reports/jslint')
+            fileset(dir: 'web-app/js',
+                    includes: '**/*.js',
+                    excludes: excludeList)
+        }
+    }
 }

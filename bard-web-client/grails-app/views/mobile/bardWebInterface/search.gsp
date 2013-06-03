@@ -4,7 +4,7 @@
 <head>
     <title>BioAssay Research Database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile, jqueryMobileInit, autocomplete, search, bootstrap, core"/>
+    <r:require modules="jqueryMobile, autocomplete, search, bootstrap, core"/>
     <r:layoutResources/>
 </head>
 
@@ -27,7 +27,7 @@
                     id="searchFormMobile" data-ajax="false">
                 <div data-role="fieldcontain">
                     <label for="searchString">Search BARD:</label>
-                    <input type="text" id="searchString" name="searchString"
+                    <input type="search" id="searchString" name="searchString"
                            value="${flash.searchString ?: params?.searchString ?: ''}"/>
                 </div>
 
@@ -40,9 +40,9 @@
                     </g:link>
                 </div>
 
-                <button value="Search" name="search" id="searchButton" data-theme="b" type="submit"
-                        class="ui-btn-hidden"
-                        aria-disabled="false" data-inline="true" data-theme="b">Submit</button>
+                <div data-role="fieldcontain">
+                    <button id="searchButton">Search</button>
+                </div>
             </g:form>
         </div>
 

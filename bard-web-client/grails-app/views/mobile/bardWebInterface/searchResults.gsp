@@ -3,7 +3,7 @@
 <head>
     <title>BioAssay Research Database</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile, jqueryMobileInit, search, bootstrap, core"/>
+    <r:require modules="jqueryMobile, search, bootstrap, core"/>
     <r:layoutResources/>
     <r:script>
         $(document).ready(function () {
@@ -21,7 +21,7 @@
         });
 
         $(document).on('search.complete', '#assaysDiv, #compoundsDiv, #projectsDiv', function () {
-            //Restory the JQuery Mobile navigation button style after overriding the button's html with the total-value.
+            //Restore the JQuery Mobile navigation button style after overriding the button's html with the total-value.
             updateNavigationButtonStyle($('#assaysTab'));
             updateNavigationButtonStyle($('#compoundsTab'));
             updateNavigationButtonStyle($('#projectsTab'));

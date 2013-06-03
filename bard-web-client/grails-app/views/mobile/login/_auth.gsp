@@ -12,7 +12,7 @@
 <head>
     <title>Login Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <r:require modules="jqueryMobile, jqueryMobileInit"/>
+    <r:require modules="jqueryMobile"/>
     <r:layoutResources/>
     <r:script type='text/javascript'>
         $.mobile.ajaxEnabled = false;
