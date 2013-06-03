@@ -3,10 +3,6 @@ package molspreadsheet
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.experiment.ActivityData
-import bard.core.rest.spring.compounds.CompoundSummary
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.mock.web.MockHttpSession
 
 /**
  *   These are the tags that are used to build the different cells within a molecular spreadsheet.  The same methods
@@ -36,7 +32,7 @@ class SunburstHandlerTagLibUnitSpec extends Specification {
         String results = this.tagLib.sunburstLegend()
         then:
         results.contains("createALegend")
-        results.contains("sunburstlegend")
+        results.contains("legendGoesHere")
     }
 
 

@@ -2,7 +2,18 @@ function createALegend(legendWidth, legendHeight, numberOfDivisions, colorScale,
     var numberOfTics = 10;
     var arr = Array.apply(null, {length:numberOfDivisions + 1}).map(Number.call, Number);
     var intervals = (legendHeight) / numberOfDivisions;
-    var legendHolder = d3.select(domSelector).append("svg")
+
+    var rootLegendHolder = d3.select(domSelector).append("div")
+        .attr("id", "sunburstlegend")
+        .attr("class", "legendHolder")
+        .html('<br />Color assignment:<br /> x = active / <br />(active + inactive)')
+
+    rootLegendHolder.append('hr')
+        .attr("width", '100%')
+        .attr("color", '#000');
+
+
+    var legendHolder = rootLegendHolder.append("svg")
         .attr("width", legendWidth)
         .attr("height", legendHeight + 10)
         .attr("transform", "translate(" + legendWidth / 2 + "," + (legendHeight * 0.5 + 5) + ")");

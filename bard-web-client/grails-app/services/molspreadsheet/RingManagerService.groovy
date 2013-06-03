@@ -159,20 +159,33 @@ class RingManagerService {
         var continuousColorScale = d3.scale.linear()
             .domain([${minimumValue}, ${maximumValue}])
             .interpolate(d3.interpolateRgb)
-            .range(["#ff0000", "#00ff00"]);
+            .range(["#deffd9", "#74c476"]);
     """.toString()
         stringBuilder.toString()
     }
 
 
 
-    String placeSunburstOnPage ( int width, int height ) {
+    String placeSunburstOnPage ( int width, int height, long cid ) {
         StringBuilder stringBuilder = new StringBuilder("")
 
             stringBuilder << """
         <div id="sunburstdiv">
         <script>
-                createASunburst( ${width}, ${height},5,1000,continuousColorScale,'div#sunburstdiv');
+            if (\$data[0].children !== undefined) {
+                createASunburst( ${width}, ${height},5,1000,continuousColorScale,'div#sunburstdiv', ${cid} );
+            } else {
+                            d3.select('div#sunburstdiv')
+                                    .append('div')
+                                    .attr("width", ${width})
+                                    .attr("height", ${height} )
+                                    .style("padding-top", '200px' )
+                                    .style("text-align", 'center' )
+                                    .append("h1")
+                                    .html("No off-embargo assay data are  available for this compound." +
+                                    "Please either choose a different compound, or else come" +
+                                    " back later when more assay data may have accumulated.\");
+                        }
         </script>
 
         </div>""".toString()

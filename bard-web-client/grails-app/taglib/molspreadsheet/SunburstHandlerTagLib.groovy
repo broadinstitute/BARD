@@ -53,7 +53,7 @@ class SunburstHandlerTagLib {
 
 
     def makeMacroSunburst = { attrs, body ->
-        out << ringManagerService.placeSunburstOnPage(800,800)
+        out << ringManagerService.placeSunburstOnPage(1000,1000,attrs.cid)
     }
 
 
@@ -107,20 +107,27 @@ class SunburstHandlerTagLib {
     def sunburstLegend = { attrs, body ->
 //        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
         out << """
-<div id="sunburstlegend" class="legendHolder">
-    Color assignment:<br />
-    x = active / <br />
-    (active + inactive)
-    <hr width=100% color=black style="color: #000; height:1px;">
-
-    <script>
-        createALegend(120, 200,100,continuousColorScale,'div#sunburstlegend');
-    </script>
-
-    <div  style="padding-top: 5px;"></div>
-
-</div>
-    """.toString()
+                  <script>
+                        if (\$data[0].children !== undefined) {
+                            createALegend(120, 200,100,continuousColorScale,'div#legendGoesHere');
+                        }
+                  </script>""".toString()
+//<div id="sunburstlegend" class="legendHolder">
+//    Color assignment:<br />
+//    x = active / <br />
+//    (active + inactive)
+//    <hr width=100% color=black style="color: #000; height:1px;">
+//
+//    <script>
+//                    if (\$data[0].children !== undefined) {
+//                        createALegend(120, 200,100,continuousColorScale,'div#legendGoesHere');
+//                    }
+//    </script>
+//
+//    <div  style="padding-top: 5px;"></div>
+//
+//</div>
+//    """.toString()
 //        }
     }
 
