@@ -14,11 +14,7 @@ import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
 import org.springframework.context.MessageSource
 
-import java.math.MathContext
-import java.math.RoundingMode
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import bard.utils.NumberUtils;
 
 /**
  * Created with IntelliJ IDEA.
