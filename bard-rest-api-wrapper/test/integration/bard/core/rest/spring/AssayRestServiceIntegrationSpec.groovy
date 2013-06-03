@@ -385,7 +385,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void "test free text Assay search with filters"() {
         given: "A GO biological term filters"
         List<String[]> filters = []
-        filters.add(["gobp_term", "cholesterol uptake"] as String[])
+        filters.add(["gobp_term", "cholesterol efflux"] as String[])
 
         and: "A search parameter is constructed using the filters and the search string 'Scarb1'"
         SearchParams searchParams = new SearchParams("Scarb1", filters);

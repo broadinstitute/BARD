@@ -30,7 +30,7 @@ class RESTTestHelper {
         filters.add(["gobp_term", "protein homooligomerization"] as String[])
 //        filters.add(["gobp_term", "response to UV-C"] as String[])
         //construct Search Params
-        return new SearchParams("DiI", filters);
+        return new SearchParams("Kcnj2", filters);
 
     }
 
