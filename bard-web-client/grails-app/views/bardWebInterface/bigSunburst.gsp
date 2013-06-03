@@ -13,42 +13,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
-    %{--<script src="../js/sunburst/d3.min.js"></script>--}%
-    %{--<script src="../js/sunburst/createALegend.js"></script>--}%
-    %{--<script src="../js/sunburst/createASunburst.js"></script>--}%
-    <style>
-    #sunburstdiv {
-        font-family: sans-serif;
-        font-size: 12px;
-        position: relative;
-    }
+    %{--<style>--}%
+    %{--#sunburstdiv {--}%
+        %{--font-family: sans-serif;--}%
+        %{--font-size: 12px;--}%
+        %{--position: relative;--}%
+    %{--}--}%
 
-    .toolTextAppearance {
-        font: 20px serif;
-        font-weight: bold;
-        margin: 5px;
-        padding: 10px;
-        background: #eeeeee;
-        border: 1px solid blue;
-        -moz-border-radius: 15px;
-        border-radius: 15px;
-    }
+    %{--.toolTextAppearance {--}%
+        %{--font: 20px serif;--}%
+        %{--font-weight: bold;--}%
+        %{--margin: 5px;--}%
+        %{--padding: 10px;--}%
+        %{--background: #eeeeee;--}%
+        %{--border: 1px solid blue;--}%
+        %{---moz-border-radius: 15px;--}%
+        %{--border-radius: 15px;--}%
+    %{--}--}%
 
-    .legend {
-        font: 14px sans-serif;
-        font-weight: bold;
-    }
+    %{--.legend {--}%
+        %{--font: 14px sans-serif;--}%
+        %{--font-weight: bold;--}%
+    %{--}--}%
 
-    .legendHolder {
-        border: 3px solid black;
-        font: 12px sans-serif;
-        font-weight: bold;
-        text-align: center;
-        background: #eeeeee;
-        width: 160px;
-    }
+    %{--.legendHolder {--}%
+        %{--border: 3px solid black;--}%
+        %{--font: 12px sans-serif;--}%
+        %{--font-weight: bold;--}%
+        %{--text-align: center;--}%
+        %{--background: #eeeeee;--}%
+        %{--width: 160px;--}%
+    %{--}--}%
 
-    </style>
+    %{--</style>--}%
 
     <script>
         window.onload = function () {
@@ -108,6 +105,7 @@
 
         <div class="span3" style="padding-top: 50px;  height: 600px;">
             <div style="float:right;">
+                <div id="legendGoesHere"></div>
                <g:sunburstLegend/>
             </div>
 

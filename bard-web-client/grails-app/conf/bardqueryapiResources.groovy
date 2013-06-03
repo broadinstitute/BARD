@@ -4,6 +4,7 @@ modules = {
             resource id: 'theme', url: '/css/flick/jquery-ui-1.8.20.custom.css'
         }
     }
+
     core {
         dependsOn 'jquery, jquery-ui, jquery-theme'
         resource url: '/js/application.js'

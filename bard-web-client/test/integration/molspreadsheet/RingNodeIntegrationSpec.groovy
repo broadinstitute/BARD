@@ -242,13 +242,14 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
     void "test placeSunburstOnPage method"(){
         when:
-        String sunburstOnPage = ringManagerService.placeSunburstOnPage(1024,768)
+        String sunburstOnPage = ringManagerService.placeSunburstOnPage(1024,768,2382353L)
 
         then:
         sunburstOnPage =~ /sunburstdiv/
         sunburstOnPage =~ /createASunburst/
         sunburstOnPage =~ /1024/
         sunburstOnPage =~ /768/
+        sunburstOnPage =~ /2382353/
     }
 
 
