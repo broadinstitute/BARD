@@ -42,19 +42,23 @@ class OntologyJsonControllerUnitSpec extends Specification {
         Map actualMap = controller.asMapForSelect2(element)
 
         then:
+        1 * ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL) >> { hasIntegratedSearch }
         actualMap.id == element.id
         actualMap.text == element.label
-        actualMap.unitId == element.unit?.id
+        actualMap.unitId == element.unit.id
         actualMap.expectedValueType == element.expectedValueType.name()
-        actualMap.size() == 4
+        actualMap.externalUrl == element.externalURL
+        actualMap.hasIntegratedSearch == hasIntegratedSearch
+        actualMap.size() == 6
 
         where:
-        desc                  || elementMap
-        'external valueType'  || [label: 'l1', expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY]
-        'element valueType'   || [label: 'l1', expectedValueType: ExpectedValueType.ELEMENT]
-        'numeric valueType'   || [label: 'l1', expectedValueType: ExpectedValueType.NUMERIC]
-        'free text valueType' || [label: 'l1', expectedValueType: ExpectedValueType.FREE_TEXT]
-        'None valueType'      || [label: 'l1', expectedValueType: ExpectedValueType.NONE]
+        desc                                       | elementMap                                                                                                  | hasIntegratedSearch
+        'external valueType with integratedSearch' | [label: 'l1', expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY, externalURL: 'http://someUrl.com']    | true
+        'external valueType no integratedSearch'   | [label: 'l1', expectedValueType: ExpectedValueType.EXTERNAL_ONTOLOGY, externalURL: 'http://anotherUrl.com'] | false
+        'element valueType'                        | [label: 'l1', expectedValueType: ExpectedValueType.ELEMENT]                                                 | false
+        'numeric valueType'                        | [label: 'l1', expectedValueType: ExpectedValueType.NUMERIC]                                                 | false
+        'free text valueType'                      | [label: 'l1', expectedValueType: ExpectedValueType.FREE_TEXT]                                               | false
+        'None valueType'                           | [label: 'l1', expectedValueType: ExpectedValueType.NONE]                                                    | false
     }
 
     void "test getDescriptors #desc"() {
@@ -76,7 +80,7 @@ class OntologyJsonControllerUnitSpec extends Specification {
         where:
         desc                | serviceReturnValue                                                             | expectedMap
         'no elements found' | { [] }                                                                         | [results: []]
-        '1 element found'   | { [Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)] } | [results: [[id: '1', text: 'l1', expectedValueType: ExpectedValueType.NUMERIC, unitId: null]]]
+        '1 element found'   | { [Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)] } | [results: [[id: '1', text: 'l1', expectedValueType: ExpectedValueType.NUMERIC, hasIntegratedSearch: false, externalUrl: null, unitId: null]]]
     }
 
     void "test findExternalItemsByTerm #desc "() {

@@ -56,7 +56,9 @@ class OntologyJSonController {
                 "id": element.id,
                 "text": element.label,
                 "unitId": element.unit?.id,
-                "expectedValueType": element.expectedValueType.name()
+                "expectedValueType": element.expectedValueType.name(),
+                "externalUrl": element.externalURL,
+                "hasIntegratedSearch": ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
         ]
     }
 
