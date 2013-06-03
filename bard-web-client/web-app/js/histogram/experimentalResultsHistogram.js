@@ -49,6 +49,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
 
     // Encapsulate the variables/methods necessary to handle tooltips
     TooltipHandler = function ()  {
+
         // Safety trick for constructors
         if (! (this instanceof TooltipHandler)){
             return new TooltipHandler ();
@@ -95,8 +96,8 @@ function drawHistogram(domMarker, oneHistogramsData) {
     //  part 3:  Build up the Dom
     //
 
-    // Create a div for each histogram we make. All of those dudes are held within the div with ID = histogramHere
-    var histogramDiv = d3.select("#histogramHere")
+    // Create a div for each histogram we make. All of those divs are held within the div with ID = histogramHere
+    var histogramDiv = domMarker
         .append("div");
 
     // Create an SVG to hold the graphics
