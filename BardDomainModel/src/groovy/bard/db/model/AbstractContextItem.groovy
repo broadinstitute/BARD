@@ -1,6 +1,9 @@
 package bard.db.model
 
 import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
+
+import static bard.db.enums.ExpectedValueType.*
 import org.apache.commons.lang3.StringUtils
 import org.springframework.validation.Errors
 
@@ -91,16 +94,23 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      */
     protected void valueValidation(Errors errors, boolean includeRangeConstraints) {
         if (attributeElement) {
-            if (attributeElement.externalURL) {
+            final ExpectedValueType expectedValueType = attributeElement.expectedValueType
+            if (EXTERNAL_ONTOLOGY == expectedValueType) {
                 externalOntologyConstraints(errors)
-            } else if (attributeElement.unit || valueNum != null) {
-                valueNumConstraints(errors)
-            } else if (includeRangeConstraints && (valueMin != null || valueMax != null)) {
-                rangeConstraints(errors)
-            } else if (valueElement) {
+            } else if (ELEMENT == expectedValueType) {
                 dictionaryConstraints(errors)
-            } else { // text value
+            } else if (NUMERIC == expectedValueType) {
+                if (includeRangeConstraints && attributeElement?.expectedValueType == NUMERIC && (valueMin != null || valueMax != null)) {
+                    rangeConstraints(errors)
+                } else {
+                    valueNumConstraints(errors)
+                }
+            } else if (FREE_TEXT == expectedValueType) {
                 textValueConstraints(errors)
+            } else if (NONE == expectedValueType) {
+                errors.reject('contextItem.attribute.expectedValueType.NONE')
+            } else {
+                throw new RuntimeException("Unsupported ExpectedValueType ${attributeElement.expectedValueType}")
             }
         }
     }

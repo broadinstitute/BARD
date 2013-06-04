@@ -1,3 +1,5 @@
+import bard.db.enums.ExpectedValueType
+
 ///**
 // * see https://bitbucket.org/tednaleid/grails-test-data/wiki/Features
 // * see https://bitbucket.org/tednaleid/grails-test-data/wiki/TestDataConfig
@@ -36,6 +38,7 @@ testDataConfig {
         'bard.db.dictionary.Element' {
             def i = 1
             label = {-> "label${i++}" }
+            expectedValueType = {-> ExpectedValueType.NUMERIC} // defaulting to numeric types for testing
         }
         'bard.db.dictionary.UnitTree' {
             def i = 1
