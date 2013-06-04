@@ -124,13 +124,13 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
         contextItem.qualifier = qualifier
-        contextItem.valueNum = convertToBigDecimal('valueNum', valueNum)
-        if (valueNumUnitId != contextItem.attributeElement.unit?.id) {
-            Element fromUnit = attemptFindById(Element, valueNumUnitId)
-            UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, contextItem.attributeElement.unit)
-            contextItem.valueNum = unitConversion?.convert(convertToBigDecimal('valueNum', valueNum))
+        contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
+        if(contextItem.valueNum!=null && StringUtils.isBlank(qualifier)){
+            contextItem.qualifier = '= '
         }
-        if (valueNum) {
+        contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
+        contextItem.valueMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat()
+        if (valueNum || valueMin || valueMax) {
             contextItem.valueDisplay = contextItem.deriveDisplayValue()
         }
 
@@ -144,7 +144,7 @@ class BasicContextItemCommand extends BardCommand {
         contextItemService.delete(this)
     }
 
-    AbstractContext findContext(){
+    AbstractContext findContext() {
         attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
     }
 
@@ -156,20 +156,28 @@ class BasicContextItemCommand extends BardCommand {
         'project'
     }
 
-    BigDecimal convertToBigDecimal(String field, String value) {
-        try {
-            def bd = new BigDecimal(value)
-            println(bd.dump())
-            println("bd.toString() : ${bd.toString()}")
-            println("bd.toPlainString() : ${bd.toPlainString()}")
-            println("bd.toEngineeringString() : ${bd.toEngineeringString()}")
-            return bd
+    BigDecimal convertToBigDecimal(String field, String value, Element unit) {
+        BigDecimal convertedValue = null
+        if (StringUtils.trimToNull(value)) {
+            try {
+                convertedValue = new BigDecimal(value).stripTrailingZeros()
+                if (unit && unit.id != this.valueNumUnitId) {
+                    Element fromUnit = attemptFindById(Element, valueNumUnitId)
+                    UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, unit)
+                    BigDecimal unitConvertedValue = unitConversion?.convert(convertedValue)
+                    if (unitConvertedValue) {
+                        convertedValue = unitConvertedValue.stripTrailingZeros()
+                    }
+                }
+            }
+            catch (NumberFormatException nfe) {
+                ValidationErrors localErrors = new ValidationErrors(this)
+                localErrors.rejectValue(field, 'contextItem.valueNum.not.valid')
+                addToErrors(localErrors)
+            }
         }
-        catch (NumberFormatException nfe) {
-            ValidationErrors localErrors = new ValidationErrors(this)
-            localErrors.rejectValue(field, 'contextItem.valueNum.not.valid')
-            addToErrors(localErrors)
-        }
+        return convertedValue
     }
+
 
 }

@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     hideAllValueWidgets();
-    //initialFocus();
+
     // try and pick best focus
     function initialFocus() {
         if ($("#attributeElementId").is(':disabled')) {
@@ -62,6 +62,8 @@ $(document).ready(function () {
             var data = $("#attributeElementId").select2("data");
             onlyShowWidgetsForExpectedValueType(data.expectedValueType,data.unitId);
         });
+
+    initialFocus();
 
     function clearAllValueFields() {
         $(':text').val("");
@@ -177,7 +179,8 @@ $(document).ready(function () {
         var unitSelector = '#valueNumUnitId'
         $(unitSelector).select2({
             placeholder: "Select a Unit",
-            width: "70%",
+            allowClear: true,
+            width: 'resolve',
             data: []
         });
         var unitsData = {results: []};
@@ -201,7 +204,8 @@ $(document).ready(function () {
         var unitSelector = '#valueNumUnitId'
         $(unitSelector).select2({
             placeholder: "Select a Unit",
-            width: "70%",
+            allowClear: true,
+            width: 'resolve',
             data: data
         });
         if (selectedId) {

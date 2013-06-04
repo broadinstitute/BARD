@@ -1,6 +1,10 @@
 %{--<g:render template="message"/>--}%
-<g:render template="/common/errors" model="['errors': instance?.errors?.globalErrors]"/>
-<g:set var="disabledInput" value="${reviewNewItem ? "true" : "false"}"/>
+<div class="row-fluid">
+    <div class="offset1 span10">
+        <g:render template="/common/errors" model="['errors': instance?.errors?.allErrors]"/>
+    </div>
+</div>
+<g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>
 
 <g:form class="form-horizontal" action="edit">
     <g:hiddenField name="contextOwnerId" value="${instance?.contextOwnerId}"/>
@@ -58,41 +62,58 @@
     </div>
 
     <div id="numericValueContainer">
+        <g:if test="${disabledInput == false}">
+            <div class="row-fluid">
+                <div class="span6 offset2 alert alert-info">
+                    <p>This attribute expects a numeric value.  Please enter a scalar value or a range</p>
+                </div>
+            </div>
+        </g:if>
         <div class="control-group ${hasErrors(bean: instance, field: 'qualifier', 'error')}">
-            <label class="control-label" for="qualifier"><g:message
-                    code="contextItem.qualifier.label"/>:</label>
+            <label class="control-label" for="valueNum"><g:message
+                    code="contextItem.valueNum.label"/>:</label>
 
-            <div class="controls">
-                <g:select class="span2" id="qualifier" name="qualifier"
+            <div class="control controls-row">
+                <g:select class="offset1 span2" id="qualifier" name="qualifier"
                           noSelection="${['': message(code: "contextItem.qualifier.label")]}"
                           from="${instance?.constraints.qualifier.inList}"
-                          value="${instance?.qualifier}"/>
-                <span class="help-block"><g:fieldError field="qualifier" bean="${instance}"/></span>
-            </div>
-        </div>
+                          value="${instance?.qualifier}"
+                          disabled="${disabledInput}"/>
 
-        <div class="control-group ${hasErrors(bean: instance, field: 'valueNum', 'error')}">
-            <label class="control-label" for="valueNum"><g:message code="contextItem.valueNum.label"/>:</label>
-
-            <div class="controls ">
                 <g:textField class="span2" id="valueNum" name="valueNum"
                              placeholder="${message(code: "contextItem.valueNum.label")}"
                              value="${instance?.valueNum}" disabled="${disabledInput}"/>
-                <span class="help-block">
-                    <g:fieldError field="valueNum" bean="${instance}"/>
-                </span>
-            </div>
-        </div>
 
-        <div class="control-group ${hasErrors(bean: instance, field: 'valueNumUnitId', 'error')}">
-            <label class="control-label" for="valueNumUnitId"><g:message
-                    code="contextItem.valueNumUnitId.label"/>:</label>
-
-            <div class="controls">
-                <g:textField class="span8" id="valueNumUnitId" name="valueNumUnitId"
+                <g:textField class="span2" id="valueNumUnitId" name="valueNumUnitId"
                              value="${instance?.valueNumUnitId}"
                              disabled="${disabledInput}"/>
-                <span class="help-block"><g:fieldError field="valueNumUnitId" bean="${instance}"/></span>
+                <p class="help-block"><g:fieldError field="qualifier" bean="${instance}"/></p>
+
+                <p class="help-block">
+                    <g:fieldError field="valueNum" bean="${instance}"/>
+                </p>
+
+                <p class="help-block"><g:fieldError field="valueNumUnitId" bean="${instance}"/></p>
+
+            </div>
+        </div>
+        <div class="row-fluid">
+            <br/>
+            <p class="offset4 span1">OR</p>
+            <br/>
+        </div>
+
+        <div class="control-group ${hasErrors(bean: instance, field: 'valueMin', 'error')}">
+            <label class="control-label"><g:message code="contextItem.range.label"/>:</label>
+
+            <div class="control controls-row">
+                <g:textField class="offset1 span2" id="valueMin" name="valueMin"
+                             placeholder="${message(code: "contextItem.valueMin.label")}" value="${instance?.valueMin}"
+                             disabled="${disabledInput}"/>
+                <span class="span1">TO</span>
+                <g:textField class="span2" id="valueMax" name="valueMax"
+                             placeholder="${message(code: "contextItem.valueMax.label")}" value="${instance?.valueMax}"
+                             disabled="${disabledInput}"/>
             </div>
         </div>
     </div>
