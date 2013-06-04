@@ -90,7 +90,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
             return returnValue;
         };
         this.respondToBarChartMouseMove =  function(d) {
-            return tooltip.style("top", (event.pageY - 10) + "px").style("left", (event.pageX + 10) + "px");
+            return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
         };
     },
     tooltipHandler  = new TooltipHandler ();
