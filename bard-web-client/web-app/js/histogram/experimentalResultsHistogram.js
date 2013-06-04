@@ -17,7 +17,8 @@ function drawHistogram(domMarker, oneHistogramsData) {
         },
 
     // adjustable parameters
-        barPadding = 2,
+        barPaddingPercent = 12,
+        histogramBarWidth = 1,
         ticksAlongHorizontalAxis = 5,
         numberOfHorizontalGridlines = 10,
         paddingOnTopForTitle = 10,
@@ -59,7 +60,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
         var tooltip = d3.select("body")
             .append("div")
             .style("position", "absolute")
-            .style("visibility", "visible")
+            .style("opacity", "0")
             .attr("class", "toolTextAppearance");
 
         // public methods
@@ -67,8 +68,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
             var stringToReturn = tooltip.html('Compounds in bin: ' + d[0] +
                 '<br/>' + 'Minimim bin value: ' + d[1].toPrecision(3) +
                 '<br/>' + 'Maximum bin value:' + d[2].toPrecision(3));
-            tooltip.style("visibility", "visible")
-                .style("opacity", "0")
+            tooltip
                 .transition()
                 .duration(500)
                 .style("opacity", "1");
@@ -79,7 +79,10 @@ function drawHistogram(domMarker, oneHistogramsData) {
             return stringToReturn;
         };
         this.respondToBarChartMouseOut =  function(d) {
-            var returnValue = tooltip.style("visibility", "hidden");
+            var returnValue = tooltip
+                .transition()
+                .duration(500)
+                .style("opacity", "0");
             d3.select(this)
                 .transition()
                 .duration(250)
@@ -117,6 +120,8 @@ function drawHistogram(domMarker, oneHistogramsData) {
         .call(yAxis);
 
     // Create the rectangles that make up the histogram
+    histogramBarWidth = chart_dimensions.width / oneHistogramsData.histogram.length;
+    histogramBarWidth =  histogramBarWidth-((barPaddingPercent/100)*histogramBarWidth);
     var bar = svg.selectAll("rect")
         .data(oneHistogramsData.histogram)
         .enter()
@@ -126,7 +131,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
         .append("rect")
         .attr("x", function (d, i) { return xScale(d[1]);  })
         .attr("y", function (d) { return yScale(d[0]);  })
-        .attr("width", (chart_dimensions.width / oneHistogramsData.histogram.length) - barPadding)
+        .attr("width", histogramBarWidth )
         .attr("height", function (d) { return chart_dimensions.height-yScale(d[0]);})
         .on("mouseover", tooltipHandler.respondToBarChartMouseOver)
         .on("mousemove", tooltipHandler.respondToBarChartMouseMove)

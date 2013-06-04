@@ -227,20 +227,27 @@ class RingManagerService {
             for (TargetClassInfo targetClassInfo in targetClassInfoList) {
                 RingNode currentRingNode = ringNodeMgr["/"]
                 List<String> pathElements = targetClassInfo.path?.split("\\\\")
+//                if (pathElements?.size()>0){
+//                    String onePathElements = pathElements.last()
                 for (String onePathElements in pathElements) {
+                    String terminalElement = pathElements.last()
                     if (onePathElements?.size()>0) {
                         // is this piece of path in the tree already? If not then add it, otherwise boost the reference count of the existing element
                         if (ringNodeMgr.containsKey(onePathElements)) {
                             currentRingNode =  ringNodeMgr[onePathElements]
-                            currentRingNode.size += 1
+                            if (terminalElement == onePathElements) {  // don't repeatedly count an element which is serving only to mark our place in the tree
+                                currentRingNode.size += 1
+                            }
                         }  else {
                             ringNodeMgr[onePathElements] = new RingNode (onePathElements)
                             currentRingNode.children << ringNodeMgr[onePathElements]
                         }
-                        if (activeInactiveData["hits"]?.contains (targetClassInfo.accessionNumber)){
+                        if ( (activeInactiveData["hits"]?.contains (targetClassInfo.accessionNumber)) &&
+                                (terminalElement == onePathElements)  ){
                             ringNodeMgr[onePathElements].actives <<   targetClassInfo.accessionNumber
                         }
-                        if (activeInactiveData["misses"]?.contains (targetClassInfo.accessionNumber)){
+                        if ( (activeInactiveData["misses"]?.contains (targetClassInfo.accessionNumber)) &&
+                                (terminalElement == onePathElements)   ){
                             ringNodeMgr[onePathElements].inactives <<   targetClassInfo.accessionNumber
                         }
                     }

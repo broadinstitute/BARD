@@ -16,7 +16,16 @@ class JavaScriptUtility {
     static String cleanup(String incoming) {
         String returnValue = ""
         if (incoming) {
-            returnValue =  incoming.replace("'", "\\'").replace("\"", "")
+            returnValue =  incoming.replace("'", "\\'")
+        }
+        return returnValue
+    }
+
+
+    static String cleanupForHTML(String incoming) {
+        String returnValue = ""
+        if (incoming) {
+            returnValue =  incoming.replace("'", "\'").replace("\"", "&quot;")
         }
         return returnValue
     }

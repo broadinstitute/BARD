@@ -126,7 +126,7 @@ class SpreadsheetElementsTagLib {
                            rel="tooltip"
                            data-container="body"
                            data-html="true"
-                           data-original-title="${JavaScriptUtility.cleanup(childElements.toString())}"
+                           data-original-title="${JavaScriptUtility.cleanupForHTML(childElements.toString())}"
                            data-trigger="hover">"""
                 }
                 out << """<FONT COLOR="${molSpreadSheetCellActivityOutcome.color}"><nobr>${resultValueHolder} ${spreadSheetActivityStorage.printUnits(resultValueHolder)}</nobr></FONT>"""

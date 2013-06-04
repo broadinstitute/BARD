@@ -27,6 +27,22 @@ class JavaScriptUtilityUnitSpec extends Specification {
         "String with no appostrophe" | "Stuff"       | "Stuff"
         "String with appostrophe"    | "Stuff's"     | "Stuff\\'s"
     }
+
+    void "test cleanupForHTML with String arg"() {
+        when:
+        String cleanedUp = bardqueryapi.JavaScriptUtility.cleanupForHTML(cleanUpString)
+        then:
+        assert cleanedUp == expectedLabel
+        where:
+        label                        | cleanUpString                    | expectedLabel
+        "Empty String"               | ""                               | ""
+        "Null String"                | null                             | ""
+        "String with no appostrophe" | "Stuff"                          | "Stuff"
+        "String with appostrophe"    | "Stuff's"                        | "Stuff\'s"
+        "String with quotation"      | """say "hello" Joe""".toString() | "say &quot;hello&quot; Joe"
+    }
+
+
     /**
      * {@link bardqueryapi.JavaScriptUtility.cleanup ( Long )}
      */

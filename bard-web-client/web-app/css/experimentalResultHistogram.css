@@ -40,6 +40,7 @@
 
 }
 .toolTextAppearance {
+    position: relative;
     font: 16px serif;
     font-weight: bold;
     margin: 5px;
