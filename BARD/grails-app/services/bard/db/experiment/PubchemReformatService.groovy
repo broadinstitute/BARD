@@ -2,8 +2,15 @@ package bard.db.experiment
 
 import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
+import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import bard.db.registration.AssayContextMeasure
 import bard.db.registration.AttributeType
 import bard.db.registration.ExternalReference
+import bard.db.registration.Measure
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.hibernate.classic.Session
@@ -21,6 +28,7 @@ import java.util.regex.Pattern
  * To change this template use File | Settings | File Templates.
  */
 class PubchemReformatService {
+    static final int SCREENING_CONCENTRATION_ID = 971;
 
     static class MissingColumnsException extends RuntimeException {
         MissingColumnsException(String s) {
@@ -47,6 +55,8 @@ class PubchemReformatService {
         Integer series
         String tid;
         String parentTid;
+
+        String parentChildRelationship;
 
         String resultType
         String statsModifier
@@ -331,6 +341,7 @@ class PubchemReformatService {
                         tid: row.TID,
                         parentTid: row.PARENTTID?.toString(),
                         resultType: row.RESULTTYPE,
+                        parentChildRelationship: row.RELATIONSHIP,
                         statsModifier: row.STATS_MODIFIER,
                         qualifierTid: row.QUALIFIERTID)
                 records.add(record)
@@ -385,7 +396,7 @@ class PubchemReformatService {
     //TODO: fix concentration unit check
     public ResultMap loadMap(Connection connection, Long aid) {
         Sql sql = new Sql(connection)
-        List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID, EXCLUDED_POINTS_SERIES_NO FROM result_map WHERE AID = ?", [aid])
+        List rows = sql.rows("SELECT TID, TIDNAME, PARENTTID, RESULTTYPE, STATS_MODIFIER, CONTEXTTID, CONTEXTITEM, CONCENTRATION, CONCENTRATIONUNIT, PANELNO, ATTRIBUTE1, VALUE1, ATTRIBUTE2, VALUE2, SERIESNO, QUALIFIERTID, EXCLUDED_POINTS_SERIES_NO, RELATIONSHIP FROM result_map WHERE AID = ?", [aid])
         ResultMap map = convertToResultMap(aid.toString(), rows)
         return map
     }
@@ -470,4 +481,260 @@ class PubchemReformatService {
         ResultMap map = loadMap(aid)
         convert(experiment, pubchemFilename, outputFilename, map)
     }
+
+    static class MeasureStub {
+        String resultType
+        String statsModifier
+        String parentChildRelationship;
+        Collection<MeasureStub> children = [];
+        Map<String,Collection<String>> contextItems = [:]
+    }
+
+    static class MappedStub {
+        Element resultType
+        Element statsModifier
+        HierarchyType parentChildRelationship
+        MappedStub parent;
+        Collection<MappedStub> children = [];
+        Map<Element, Collection<String>> contextItems = [:]
+    }
+
+    public MappedStub mapStub(MeasureStub stub) {
+        MappedStub mapped = new MappedStub()
+        mapped.resultType = Element.findByLabel(stub.resultType)
+        if (stub.statsModifier) {
+            mapped.statsModifier = Element.findByLabel(stub.statsModifier)
+        }
+
+        String relationship = stub.parentChildRelationship
+        if(relationship != null && relationship.toLowerCase() == "derives")
+            mapped.parentChildRelationship = HierarchyType.CALCULATED_FROM
+        else
+            mapped.parentChildRelationship = HierarchyType.SUPPORTED_BY
+
+        for(attribute in stub.contextItems.keySet()) {
+            Element attributeElement = Element.findByLabel(attribute)
+            mapped.contextItems[attributeElement] = stub.contextItems[attribute]
+        }
+
+        mapped.children = stub.children.collect {
+            MappedStub mappedChild = mapStub(it)
+            mappedChild.parent = mapped
+            return mappedChild
+        }
+
+        return mapped
+    }
+
+    static class MeasureAndParents {
+        MeasureStub measure;
+        Collection<String> tids
+    }
+
+    Object getUniqueValue(Collection values) {
+        Set set = new HashSet()
+        set.addAll(values)
+        if (set.size() != 1) {
+            throw new RuntimeException("Expected a single value but got: ${set}")
+        }
+
+        return set.first()
+    }
+
+    MeasureStub createMeasure(Collection<ResultMapRecord> resultTypes) {
+        MeasureStub measure = new MeasureStub()
+        measure.resultType = (getUniqueValue(resultTypes.collect { it.resultType } ))
+        measure.statsModifier = (getUniqueValue(resultTypes.collect { it.statsModifier } ))
+        measure.parentChildRelationship = getUniqueValue(resultTypes.collect { it.parentChildRelationship } )
+        measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}
+
+        return measure
+    }
+
+    Collection<MeasureAndParents> getChildMeasures(ResultMap resultMap, Collection<String> parentTids) {
+        Collection<ResultMapRecord> childResultTypes = resultMap.allRecords.findAll { parentTids.contains(it.parentTid) }
+        Map uniqueResultTypes = childResultTypes.groupBy {[it.resultType, it.statsModifier]}
+        Collection<MeasureAndParents> children = uniqueResultTypes.values().collect { Collection<ResultMapRecord> records ->
+            new MeasureAndParents(measure: createMeasure(records), tids: records.collect { it.tid } )
+        }
+        return children;
+    }
+
+    void addChildMeasures(ResultMap resultMap, Collection<MeasureStub> childrenDest, Collection<ResultMapRecord> children) {
+        children.each { MeasureAndParents measureAndParents ->
+            childrenDest.add( measureAndParents.measure )
+            Collection<ResultMapRecord> nextChildren = getChildMeasures(resultMap, measureAndParents.tids)
+            addChildMeasures(resultMap, measureAndParents.measure.children, nextChildren)
+        }
+    }
+
+    Collection<MeasureStub> createMeasures(ResultMap resultMap) {
+        Collection<MeasureStub> measures = []
+        addChildMeasures(resultMap, measures, getChildMeasures(resultMap, [null]))
+        return measures
+    }
+
+    String makeMeasureKey(Measure measure) {
+        String prefix = ""
+        if (measure.parentMeasure != null) {
+            prefix = makeMeasureKey(measure.parentMeasure)
+        }
+        return "${prefix}/${measure.resultType?.id},${measure.statsModifier?.id}"
+    }
+
+    String makeMeasureKey(MappedStub stub) {
+        String prefix = ""
+        if (stub.parent != null) {
+            prefix = makeMeasureKey(stub.parent)
+        }
+        return "${prefix}/${stub.resultType?.id},${stub.statsModifier?.id}"
+    }
+
+    // recreate experiment measures on an already existing experiment/assay (Given a ResultMap)
+    void recreateMeasures(Experiment experiment, ResultMap resultMap) {
+        Collection<MappedStub> newMeasures = createMeasures(resultMap).collect { mapStub(it) }
+        recreateMeasures(experiment, newMeasures)
+    }
+
+    // recreate experiment measures on an already existing experiment/assay
+    void recreateMeasures(Experiment experiment, Collection<MappedStub> newMeasures) {
+        Assay assay = experiment.assay
+        Map<String,Measure> measureByKey = [:]
+        for(measure in assay.measures) {
+            measureByKey[makeMeasureKey(measure)] = measure
+        }
+
+        // first, make sure all of the measures we want exist
+        for(newMeasure in newMeasures) {
+            String newMeasureKey = makeMeasureKey(newMeasure)
+
+            // find the context items which are variable
+            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
+
+            if (measureByKey.containsKey(newMeasureKey)){
+                Measure existingMeasure = measureByKey[newMeasureKey]
+                if(elementKeys.size() > 0) {
+                    verifyContextsAreCompatible(existingMeasure, elementKeys)
+                }
+            } else {
+                // create a new measure on this assay
+                Measure measure = new Measure()
+                assay.addToMeasures(measure)
+                measure.statsModifier = newMeasure.statsModifier
+                measure.resultType = newMeasure.resultType
+                measure.parentChildRelationship = newMeasure.parentChildRelationship
+
+                if (elementKeys.size() > 0) {
+                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, measure)
+                }
+
+                measure.save(failOnError: true)
+                measureByKey[newMeasureKey] = measure
+            }
+        }
+
+        // delete all existing experiment measures
+        for(ExperimentMeasure experimentMeasure in new ArrayList(experiment.experimentMeasures)) {
+            experiment.removeFromExperimentMeasures(experimentMeasure)
+            experimentMeasure.delete()
+        }
+
+        // now, create the experiment measures anew
+        createExperimentMeasures(experiment, measureByKey, newMeasures, null)
+    }
+
+    void createExperimentMeasures(Experiment experiment, Map<String,Measure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
+        for(newMeasure in newMeasures) {
+            ExperimentMeasure experimentMeasure = new ExperimentMeasure(dateCreated: new Date())
+            experimentMeasure.measure = measureByKey[makeMeasureKey(newMeasure)]
+            if(parentExperimentMeasure != null) {
+                experimentMeasure.parentChildRelationship = newMeasure.parentChildRelationship
+                experimentMeasure.parent = parentExperimentMeasure
+            }
+            println("relationship: ${experimentMeasure.parentChildRelationship}, ${experimentMeasure.parent}")
+
+            experiment.addToExperimentMeasures(experimentMeasure)
+
+            experimentMeasure.save(failOnError: true)
+
+            createExperimentMeasures(experiment, measureByKey, newMeasure.children, experimentMeasure)
+        }
+    }
+
+    void verifyContextsAreCompatible(Measure existingMeasure, Collection<Element> attributes) {
+        if (existingMeasure.assayContextMeasures.size() == 1) {
+            AssayContext context = existingMeasure.assayContextMeasures.first().assayContext
+            Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
+            if (!nonfixedAttributes.containsAll(attributes)) {
+                throw new RuntimeException("Context did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
+            }
+        } else if (existingMeasure.assayContextMeasures.size() > 1) {
+            throw new RuntimeException("Too many associated contexts.  Could not verify")
+        } else {
+            throw new RuntimeException("No associated context to measure ${existingMeasure.id}: ${existingMeasure.resultType.label}, expected attributes: ${attributes}")
+        }
+    }
+
+    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element,Collection<String>> attributeValues, Measure measure) {
+        AssayContext context = new AssayContext()
+        context.contextName = "annotations for ${measure.resultType.label}";
+        context.contextGroup = "project management> experiment>";
+
+        AssayContextMeasure assayContextMeasure = new AssayContextMeasure()
+        context.addToAssayContextMeasures(assayContextMeasure)
+        measure.addToAssayContextMeasures(assayContextMeasure)
+
+        for(attribute in attributeKeys) {
+            if(attribute.id == SCREENING_CONCENTRATION_ID) {
+                // handle screening concentration as a special case:  Collapse all the values to a range instead a list
+                float maxConcentration = Collections.max(attributeValues[attribute].collect { Float.parseFloat(it) }) * 10
+
+                AssayContextItem item = new AssayContextItem();
+                item.attributeType = AttributeType.Range
+                item.attributeElement = attribute
+                item.valueMin = 0
+                item.valueMax = maxConcentration
+
+                context.addToAssayContextItems(item)
+            } else {
+                for(value in attributeValues[attribute]) {
+                    AssayContextItem item = new AssayContextItem();
+                    item.attributeType = AttributeType.List
+                    item.attributeElement = attribute
+
+                    assignValue(item, value)
+
+                    context.addToAssayContextItems(item)
+                }
+            }
+        }
+
+        assay.addToAssayContexts(context)
+    }
+
+    public void assignValue(AssayContextItem item, String value) {
+        // if term is an external identifier
+        if(item.attributeElement.externalURL != null) {
+            item.extValueId = value
+        } else {
+            // try parsing as a number
+            boolean populatedValueNum = false
+            try {
+                item.valueNum = Float.parseFloat(value)
+                populatedValueNum = true
+            } catch(NumberFormatException ex) {
+            }
+
+            // if that doesn't work, look it up as a dictionary element
+            if (!populatedValueNum) {
+                item.valueElement = Element.findByLabel(value)
+                if (item.valueElement == null) {
+                    throw new RuntimeException("Could not find element with label ${value}")
+                }
+            }
+        }
+
+        item.valueDisplay = value
+    }
 }
+
