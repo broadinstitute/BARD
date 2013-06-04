@@ -4,60 +4,64 @@ modules = {
 //			resource id:'theme', url:'/css/flick/jquery-ui-1.8.20.custom.css'
 //		}
 //	}
-	overrides {
-		'jquery-theme' {
-			resource id:'theme', url:'/js/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom.css'
-		}
-		'bootstrap' {
-			resource id:'bootstrap-css', url:'/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
-		}
-	}
-	core {
-		dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
-		//resource url:'/css/main.css'
-		//resource url:'/css/mobile.css'
-		resource url:'/css/datatables/demo_table_jui.css'
-		resource url:'/js/application.js'
-		resource url: '/css/dl-horizontal-fix.css'
-	}
-    xeditable{
-        resource url:"/js/x-editable/bootstrap-editable.js"
-        resource url:"/css/x-editable/bootstrap-editable.css"
+    overrides {
+        'jquery-theme' {
+            resource id: 'theme', url: '/js/jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.8.16.custom.css'
+        }
+        'bootstrap' {
+            resource id: 'bootstrap-css', url: '/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
+        }
+    }
+    core {
+        dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
+        resource url: '/css/datatables/demo_table_jui.css'
+        resource url: '/js/application.js'
+        resource url: '/css/dl-horizontal-fix.css'
+    }
+    xeditable {
+        resource url: "/js/x-editable/bootstrap-editable.js"
+        resource url: "/css/x-editable/bootstrap-editable.css"
+        resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css"
+        resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"
+        resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"
+        resource url: "/js/x-editable/inputs-ext/wysihtml5/wysihtml5.js"
+        resource url:"/js/x-editable/moment.js"
+        resource url:"/js/x-editable/combodate.js"
     }
     contextItem {
         dependsOn('select2')
-        resource url:'/js/cap/contextItem.js'
+        resource url: '/js/cap/contextItem.js'
         // adding the card and bootstrap-plus.css to get the current styling
         // but may want to simplify the styling going forward
-        resource url:'/css/card.css'
-        resource url:'/css/bootstrap-plus.css'
+        resource url: '/css/card.css'
+        resource url: '/css/bootstrap-plus.css'
     }
     newTerm {
-        resource url:'/css/newterm/newTerms.css'
-        resource url:'/js/element/newTerm.js'
+        resource url: '/css/newterm/newTerms.css'
+        resource url: '/js/element/newTerm.js'
 
     }
-	datatables {
-		resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
-	}
+    datatables {
+        resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
+    }
     dynatree {
         dependsOn 'jquery, jquery-ui'
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/dynatree-1.2.2/skin/ui.dynatree.css'
     }
 
-	jqueryform {
-		resource url: '/js/jquery.form.js'
-	}
+    jqueryform {
+        resource url: '/js/jquery.form.js'
+    }
 
-	assaycards {
-		resource url: '/js/cap/assay.cards.js'
-	}
+    assaycards {
+        resource url: '/js/cap/assay.cards.js'
+    }
 
-	assayshow {
+    assayshow {
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
-		resource url: '/js/cap/assay.show.js'
-	}
+        resource url: '/js/cap/assay.show.js'
+    }
 
     handlebars {
         resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
@@ -76,16 +80,18 @@ modules = {
         resource url: '/js/projectstep/projectstep.css'
     }
 
-    summary{
-        resource url: '/js/cap/editSummary.js'		
+    assaysummary {
+        resource url: '/js/cap/editSummary.js'
     }
 
-    projectsummary{
+    projectsummary {
         resource url: '/js/cap/editProjectSummary.js'
     }
-
-	images {
-	}
+    experimentsummary {
+        resource url: '/js/cap/editExperimentSummary.js'
+    }
+    images {
+    }
 
     select2 {
         dependsOn 'jquery'
@@ -97,7 +103,7 @@ modules = {
         resource url: "/js/cap/accessOntology.js"
     }
 
-    richtexteditor{
+    richtexteditor {
         resource url: "/js/nicedit/nicEdit.js"
         resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"

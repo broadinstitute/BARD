@@ -11,11 +11,71 @@ import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
 
+import javax.servlet.http.HttpServletResponse
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+@Mixin(ProjectControllerHelper)
 @Secured(['isAuthenticated()'])
 class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService
     ProjectService projectService
+
+
+    def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final ProjectStatus projectStatus = ProjectStatus.byId(inlineEditableCommand.value)
+            final Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
+            generateAndRenderJSONResponse(project, project.projectStatus.id)
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the project status. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+    def editProjectName(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            generateAndRenderJSONResponse(project, project.name)
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the project name. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+    def editDescription(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                return
+            }
+            project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
+            generateAndRenderJSONResponse(project, project.description)
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the project description. ${ee.message}", contentType: 'text/plain', template: null
+        }
+    }
+    def projectStatus() {
+        List<String> sorted = []
+        final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
+        for (ProjectStatus projectStatus : projectStatuses) {
+            sorted.add(projectStatus.id)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
 
     def show() {
         def projectInstance = Project.get(params.id)
@@ -244,14 +304,42 @@ class ProjectController {
 @InheritConstructors
 @Validateable
 class InlineEditableCommand extends BardCommand {
-    Long pk
+    Long pk //primary key of the current entity
     String name
-    String value
+    String value //the new value
+    Long version  //version of the current entity
+    Long owningEntityId //if this has an owning entity
 
     static constraints = {
         pk(blank: false, nullable: false)
         name(blank: false, nullable: false)
         value(blank: false, nullable: false)
+        version(blank: false, nullable: false)
+        owningEntityId(nullable: true)
     }
+
+    String validateVersions(Long currentVersion, Class entityClass) {
+        StringBuilder b = new StringBuilder()
+        if (this.version?.longValue() != currentVersion.longValue()) {
+            getErrors().reject('default.optimistic.locking.failure', [entityClass] as Object[], 'optimistic lock failure')
+            b.append(g.message(code: 'default.optimistic.locking.failure'))
+        }
+        return b.toString()
+    }
+
+}
+class ProjectControllerHelper {
+    static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
+
+    def generateAndRenderJSONResponse(final Project project, final String newValue) {
+        Map<String, String> dataMap = [:]
+        dataMap.put('version', project.version.toString())
+        dataMap.put('lastUpdated', formatter.format(project.lastUpdated))
+        dataMap.put("data", newValue)
+
+        JSON jsonResponse = dataMap as JSON
+        render status: HttpServletResponse.SC_OK, text: jsonResponse, contentType: 'text/json', template: null
+    }
+
 }
 

@@ -2,17 +2,23 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
 import bard.db.registration.ExternalReference
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
+
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +41,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     @Before
     void setup() {
+        controller.metaClass.mixin(ProjectControllerHelper)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
@@ -51,7 +58,111 @@ class ProjectControllerUnitSpec extends Specification {
         defineBeans {
             projectExperimentRenderService(ProjectExperimentRenderService)
         }
-        projectService = Mock()
+        projectService = Mock(ProjectService)
+        controller.projectService = projectService
+    }
+
+    void 'test edit Project Status success'() {
+        given:
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.projectStatus.id
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Status with errors'() {
+        given:
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { throw new Exception("") }
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.text == "Could not edit the project status. "
+        assert response.contentType == "text/plain;charset=utf-8"
+    }
+
+
+    void 'test edit Project Name success'() {
+        given:
+        Project newProject = Project.build(version: 0, name: "My Name")  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.name)
+        when:
+        controller.editProjectName(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectName(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.name
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Name with errors'() {
+        given:
+        Project newProject = Project.build(version: 0)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name)
+        when:
+        controller.editProjectName(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectName(_, _) >> { throw new Exception("") }
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.text == "Could not edit the project name. "
+        assert response.contentType == "text/plain;charset=utf-8"
+    }
+
+
+    void 'test edit Project Description success'() {
+        given:
+        Project newProject = Project.build(version: 0, name: "My Name", description: "My Description")  //no designer
+        Project updatedProject = Project.build(description: "My New Description", name: "My New Name", version: 1, lastUpdated: new Date())
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.description)
+        when:
+        controller.editDescription(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectDescription(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.description
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Description with errors'() {
+        given:
+        Project newProject = Project.build(version: 0)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: newProject.description)
+        when:
+        controller.editDescription(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectDescription(_, _) >> { throw new Exception("") }
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        assert response.text == "Could not edit the project description. "
+        assert response.contentType == "text/plain;charset=utf-8"
     }
 
     void 'test projectStages'() {

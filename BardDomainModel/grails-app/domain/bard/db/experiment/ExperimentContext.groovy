@@ -83,7 +83,6 @@ class ExperimentContext extends AbstractContext {
                 }
             }
         }
-        println("preferredName: ${preferredName}")
         return preferredName
     }
 

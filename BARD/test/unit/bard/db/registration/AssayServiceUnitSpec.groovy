@@ -26,6 +26,41 @@ import spock.lang.Specification
 @TestFor(AssayService)
 public class AssayServiceUnitSpec extends Specification {
 
+
+    void "test update designed By"() {
+        given:
+        final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD")
+        final String newDesignedBy = "CAP"
+        when:
+        final Assay updatedAssay = service.updateDesignedBy(assay.id, newDesignedBy)
+        then:
+        assert newDesignedBy == updatedAssay.designedBy
+    }
+    void "test update assay name"() {
+        given:
+        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT)
+        final String newAssayName = "New Assay Name"
+        when:
+        final Assay updatedAssay = service.updateAssayName(assay.id, newAssayName)
+        then:
+        assert newAssayName == updatedAssay.assayName
+    }
+    void "test update assay status"() {
+        given:
+        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: AssayStatus.DRAFT)
+        when:
+        final Assay updatedAssay = service.updateAssayStatus(assay.id, AssayStatus.APPROVED)
+        then:
+        assert AssayStatus.APPROVED == updatedAssay.assayStatus
+    }
+    void "test update assay type"() {
+        given:
+        final Assay assay = Assay.build(assayName: 'assayName10', assayType: AssayType.PANEL_GROUP)
+        when:
+        final Assay updatedAssay = service.updateAssayType(assay.id, AssayType.TEMPLATE)
+        then:
+        assert AssayType.TEMPLATE == updatedAssay.assayType
+    }
     void "test cloneMeasures"() {
         given:
         Assay assay = Assay.build()
@@ -76,7 +111,7 @@ public class AssayServiceUnitSpec extends Specification {
         assert clonedAssay.assayStatus == expectedAssayStatus
         assert clonedAssay.readyForExtraction == assay.readyForExtraction
         assert clonedAssay.assayShortName == assay.assayShortName
-        assert clonedAssay.assayVersion == assay.assayVersion
+        assert clonedAssay.assayVersion == "1"
         assert clonedAssay.designedBy == "me"
 
         where:
@@ -106,7 +141,7 @@ public class AssayServiceUnitSpec extends Specification {
         assert assay.assayType != newAssay.assayType
         assert newAssay.assayType == AssayType.REGULAR
         assert assay.designedBy == newAssay.designedBy
-        assert assay.assayVersion == newAssay.assayVersion
+        assert newAssay.assayVersion =="1"
         assert ReadyForExtraction.NOT_READY == newAssay.readyForExtraction
 
         // test assay documents are good
@@ -160,7 +195,7 @@ public class AssayServiceUnitSpec extends Specification {
         assay.assayStatus == newAssay.assayStatus
         assay.assayType == newAssay.assayType
         assay.designedBy == newAssay.designedBy
-        assay.assayVersion == newAssay.assayVersion
+        newAssay.assayVersion  == "1"
         assay.readyForExtraction == newAssay.readyForExtraction
 
         // test assay documents are good

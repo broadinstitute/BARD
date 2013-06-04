@@ -26,7 +26,8 @@ class AssayContextGroupsBuilder {
         ]
 
         List<ContextItemDto> assayFormat = [
-                new ContextItemDto('1/E', '$/E', AttributeType.Fixed), new ContextItemDto('2/F', '$/F', AttributeType.Fixed)
+                new ContextItemDto('1/E', '$/E', AttributeType.Fixed),
+                new ContextItemDto('2/F', '$/F', AttributeType.Fixed)
         ]
 
         List<ContextItemDto> assayComponent = [
@@ -34,7 +35,6 @@ class AssayContextGroupsBuilder {
                 new ContextItemDto('2/H', '$/H', AttributeType.Fixed),        // CID can be here , assay component type
                 new ContextItemDto('2/I', '$/I', AttributeType.Fixed, true, null, null),
                 new ContextItemDto('2/J', '$/J', AttributeType.Fixed, true, null, '$/K'), //concentration + units
-//                new Attribute('2/K', '$/K', AttributeType.Fixed),
                 new ContextItemDto('2/L', '$/L', AttributeType.Fixed, true, null, null),
                 new ContextItemDto('2/M', '$/M', AttributeType.Fixed, true, null, null)      // Species
         ]
@@ -60,9 +60,9 @@ class AssayContextGroupsBuilder {
         ]
 
         List<ContextItemDto> measurementWavelength = [
-                new ContextItemDto('2/V', '$/V', AttributeType.Fixed, true, null,'2/BI'),//The wavelength units are fixed in cell 2/BI
-                new ContextItemDto('2/W', '$/W', AttributeType.Fixed, true, null,'2/BI')
-        ]//The wavelength units are fixed in cell 2/BI
+                new ContextItemDto('2/V', '$/V', AttributeType.Fixed, true, null),
+                new ContextItemDto('2/W', '$/W', AttributeType.Fixed, true, null)
+        ]
 
         List<ContextItemDto> absorbanceWavelength = [
                 new ContextItemDto('2/X', '$/X', AttributeType.Fixed)
