@@ -85,7 +85,7 @@ class BardAuthorizationProviderService extends CrowdAuthenticationProviderServic
             if (rolesFromDatabase) {
                 roles.addAll(rolesFromDatabase)
             }
-            return new CbipUser(user.getUsername(), user.getFullName(), user.getEmail(), user.isActive(), roles);
+            return new CbipUser(user.getUsername(), user.getFullName(), user.getEmail(), user.isActive, roles);
         } catch (Exception ee) {
             throw new UsernameNotFoundException(ee.getMessage());
         }
