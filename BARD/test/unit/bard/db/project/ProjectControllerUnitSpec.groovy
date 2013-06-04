@@ -4,7 +4,9 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
+import bard.db.registration.AbstractInlineEditingControllerUnitSpec
 import bard.db.registration.Assay
+import bard.db.registration.EditingHelper
 import bard.db.registration.ExternalReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -14,9 +16,7 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Shared
-import spock.lang.Specification
 
 import javax.servlet.http.HttpServletResponse
 
@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse
 @Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
-class ProjectControllerUnitSpec extends Specification {
+class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Shared Project project
     @Shared ProjectExperiment projectExperimentFrom
     @Shared ProjectExperiment projectExperimentTo
@@ -41,7 +41,7 @@ class ProjectControllerUnitSpec extends Specification {
 
     @Before
     void setup() {
-        controller.metaClass.mixin(ProjectControllerHelper)
+        controller.metaClass.mixin(EditingHelper)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
@@ -87,13 +87,13 @@ class ProjectControllerUnitSpec extends Specification {
         Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.APPROVED)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+        controller.metaClass.message = { Map p -> return "foo" }
+
         when:
         controller.editProjectStatus(inlineEditableCommand)
         then:
         controller.projectService.updateProjectStatus(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the project status. "
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
 
 
@@ -121,13 +121,13 @@ class ProjectControllerUnitSpec extends Specification {
         given:
         Project newProject = Project.build(version: 0)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name)
+        controller.metaClass.message = { Map p -> return "foo" }
+
         when:
         controller.editProjectName(inlineEditableCommand)
         then:
         controller.projectService.updateProjectName(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the project name. "
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
 
 
@@ -156,13 +156,13 @@ class ProjectControllerUnitSpec extends Specification {
         Project newProject = Project.build(version: 0)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
                 version: newProject.version, name: newProject.name, value: newProject.description)
+        controller.metaClass.message = { Map p -> return "foo" }
+
         when:
         controller.editDescription(inlineEditableCommand)
         then:
         controller.projectService.updateProjectDescription(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the project description. "
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
 
     void 'test projectStages'() {
