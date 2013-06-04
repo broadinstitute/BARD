@@ -42,7 +42,7 @@ class OntologyJsonControllerUnitSpec extends Specification {
         Map actualMap = controller.asMapForSelect2(element)
 
         then:
-        1 * ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL) >> { hasIntegratedSearch }
+        (_..1) * ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL) >> { hasIntegratedSearch }
         actualMap.id == element.id
         actualMap.text == element.label
         actualMap.unitId == element.unit.id
