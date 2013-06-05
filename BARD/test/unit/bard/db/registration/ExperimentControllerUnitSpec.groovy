@@ -4,7 +4,6 @@ import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.project.ExperimentController
-import bard.db.project.ExperimentControllerHelper
 import bard.db.project.InlineEditableCommand
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,10 +26,10 @@ import javax.servlet.http.HttpServletResponse
 @TestFor(ExperimentController)
 @TestMixin(DomainClassUnitTestMixin)
 @Build([Assay, Experiment])
-class ExperimentControllerUnitSpec extends Specification {
+class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
     void setup() {
-        controller.metaClass.mixin(ExperimentControllerHelper)
+        controller.metaClass.mixin(EditingHelper)
 
         ExperimentService experimentService = Mock(ExperimentService)
         controller.experimentService = experimentService
@@ -44,9 +43,7 @@ class ExperimentControllerUnitSpec extends Specification {
         controller.editExperimentName(inlineEditableCommand)
         then:
         inlineEditableCommand.validateVersions(_, _) >> { "Some error message" }
-        assert response.status == HttpServletResponse.SC_CONFLICT
-        assert response.text == "default.optimistic.locking.failure"
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertOptimisticLockFailure()
     }
     void 'test edit Experiment hold until date success'() {
         given:
@@ -68,7 +65,7 @@ class ExperimentControllerUnitSpec extends Specification {
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
 
         assert responseJSON.get("version").asText() == "0"
-        assert responseJSON.get("data").asText() == ExperimentController.formatter.format(updatedExperiment.holdUntilDate)
+        assert responseJSON.get("data").asText() == EditingHelper.formatter.format(updatedExperiment.holdUntilDate)
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
@@ -78,13 +75,12 @@ class ExperimentControllerUnitSpec extends Specification {
         Experiment newExperiment = Experiment.build(version: 0)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newExperiment.id,
                 version: newExperiment.version, name: newExperiment.experimentName, value: newExperiment.holdUntilDate)
+        controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editHoldUntilDate(inlineEditableCommand)
         then:
         controller.experimentService.updateHoldUntilDate(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the hold until date. null"
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
     void 'test edit Experiment Run From Date success'() {
         given:
@@ -104,7 +100,7 @@ class ExperimentControllerUnitSpec extends Specification {
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
 
         assert responseJSON.get("version").asText() == "0"
-        assert responseJSON.get("data").asText() == ExperimentController.formatter.format(updatedExperiment.runDateFrom)
+        assert responseJSON.get("data").asText() == EditingHelper.formatter.format(updatedExperiment.runDateFrom)
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
@@ -114,13 +110,12 @@ class ExperimentControllerUnitSpec extends Specification {
         Experiment newExperiment = Experiment.build(version: 0)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newExperiment.id,
                 version: newExperiment.version, name: newExperiment.experimentName, value: newExperiment.runDateFrom)
+        controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editRunFromDate(inlineEditableCommand)
         then:
         controller.experimentService.updateRunFromDate(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the run from date. null"
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
 
     void 'test edit Experiment Run To Date success'() {
@@ -139,7 +134,7 @@ class ExperimentControllerUnitSpec extends Specification {
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
 
         assert responseJSON.get("version").asText() == "0"
-        assert responseJSON.get("data").asText() == ExperimentController.formatter.format(updatedExperiment.runDateTo)
+        assert responseJSON.get("data").asText() == EditingHelper.formatter.format(updatedExperiment.runDateTo)
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
@@ -149,13 +144,12 @@ class ExperimentControllerUnitSpec extends Specification {
         Experiment newExperiment = Experiment.build(version: 0)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newExperiment.id,
                 version: newExperiment.version, name: newExperiment.experimentName, value: newExperiment.runDateTo)
+        controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editRunToDate(inlineEditableCommand)
         then:
         controller.experimentService.updateRunToDate(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the run to date. null"
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
     void 'test edit Experiment Description success'() {
         given:
@@ -182,13 +176,12 @@ class ExperimentControllerUnitSpec extends Specification {
         Experiment newExperiment = Experiment.build(version: 0)
         InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newExperiment.id,
                 version: newExperiment.version, name: newExperiment.experimentName, value: newExperiment.description)
+        controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editDescription(inlineEditableCommand)
         then:
         controller.experimentService.updateExperimentDescription(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the experiment description. "
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
 
     void 'test edit Experiment Name success'() {
@@ -216,13 +209,12 @@ class ExperimentControllerUnitSpec extends Specification {
         Experiment newExperiment = Experiment.build(version: 0)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName)
+        controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editExperimentName(inlineEditableCommand)
         then:
         controller.experimentService.updateExperimentName(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the experiment name. "
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
     void 'test edit Experiment Status success'() {
         given:
@@ -247,19 +239,17 @@ class ExperimentControllerUnitSpec extends Specification {
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
     }
-
     void 'test edit Experiment Status with errors'() {
         given:
         Experiment newExperiment = Experiment.build(version: 0, experimentStatus: ExperimentStatus.APPROVED)
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: newExperiment.id, version: newExperiment.version, name: newExperiment.experimentName, value: ExperimentStatus.APPROVED.id)
+        controller.metaClass.message = { Map p -> return "foo" }
         when:
         controller.editExperimentStatus(inlineEditableCommand)
         then:
         controller.experimentService.updateExperimentStatus(_, _) >> { throw new Exception("") }
-        assert response.status == HttpServletResponse.SC_BAD_REQUEST
-        assert response.text == "Could not edit the experiment status. "
-        assert response.contentType == "text/plain;charset=utf-8"
+        assertEditingErrorMessage()
     }
 
     def 'test create'() {
