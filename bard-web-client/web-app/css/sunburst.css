@@ -41,3 +41,16 @@
     background: #eeeeee;
     width: 160px;
 }
+.indicateZoomIn {
+    cursor:crosshair;
+    cursor:-webkit-zoom-in;
+    cursor:-moz-zoom-in;
+}
+.indicateZoomOut {
+    cursor:crosshair;
+    cursor:-webkit-zoom-out;
+    cursor:-moz-zoom-out;
+}
+.indicateNoZoomingPossible {
+    cursor:auto;
+}
