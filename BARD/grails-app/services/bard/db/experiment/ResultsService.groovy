@@ -612,7 +612,7 @@ class ResultsService {
         } else if (item.type == AttributeType.Range) {
             Double rangeMin = item.contextItems[0].valueMin
             Double rangeMax = item.contextItems[0].valueMax
-            Double rangeName = item.attributeElement.label
+            String rangeName = item.attributeElement.label
 
             float floatValue = Float.parseFloat(stringValue)
 
