@@ -34,12 +34,13 @@ class ProjectController {
                 return
             }
             project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy,null,project.lastUpdated,project.projectStatus.id)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.projectStatus.id)
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
     }
+
     def editProjectName(InlineEditableCommand inlineEditableCommand) {
         try {
             Project project = Project.findById(inlineEditableCommand.pk)
@@ -49,13 +50,14 @@ class ProjectController {
                 return
             }
             project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy,null,project.lastUpdated,project.name)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
 
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
     }
+
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
             Project project = Project.findById(inlineEditableCommand.pk)
@@ -65,13 +67,14 @@ class ProjectController {
                 return
             }
             project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
-            generateAndRenderJSONResponse(project.version, project.modifiedBy,null,project.lastUpdated,project.description)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
 
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
     }
+
     def projectStatus() {
         List<String> sorted = []
         final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
@@ -190,25 +193,32 @@ class ProjectController {
 
     def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
         //pass in the project experiment
-        ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+        try {
+            ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
 
-        //x-editable will not send a new value only when the original is different from the selected
-        //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL
-        Long originalStageElementId = new Long(inlineEditableCommand.name)
-        Element newStage = Element.findByLabel(inlineEditableCommand.value)
-
-        if (originalStageElementId != newStage?.id) {//there has been a change
-
-            if (newStage) {
-                projectExperiment.stage = newStage
-                projectExperiment.save(flush: true)
-                projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
-            } else {
-                render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
-                return
+            //x-editable will not send a new value only when the original is different from the selected
+            //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL
+            Long originalStageElementId = null
+            if (inlineEditableCommand?.name?.isNumber()) {
+                originalStageElementId = new Long(inlineEditableCommand.name)
             }
+            Element newStage = Element.findByLabel(inlineEditableCommand.value)
+
+            if (originalStageElementId != newStage?.id) {//there has been a change
+
+                if (newStage) {
+                    projectExperiment.stage = newStage
+                    projectExperiment.save(flush: true)
+                    projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+                } else {
+                    render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
+                    return
+                }
+            }
+            render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
-        render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
     }
 
     def ajaxFindAvailableExperimentByName(String experimentName, Long projectId) {

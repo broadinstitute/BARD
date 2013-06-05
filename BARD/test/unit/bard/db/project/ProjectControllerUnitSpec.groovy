@@ -16,6 +16,7 @@ import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 
 import javax.servlet.http.HttpServletResponse
@@ -184,6 +185,26 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.reloadProjectSteps(project.id)
         then:
         assert response.text == 'mock contents'
+    }
+
+
+    void 'test update stage for an Experiment with null stage'() {
+        given:
+        ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
+
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom1.id, name: stage, value: projectExperimentTo.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom1.stage.id == projectExperimentTo.stage.id
+        assert response.text == expectedStage
+        assert response.status == 200
+
+        where:
+        desc                                                  | stage  | expectedStage
+        "ProjectExperiment has null stage element ID"         | null   | "secondary assay"
+        "ProjectExperiment has stage ID that is not a number" | "name" | "secondary assay"
     }
 
     void 'test updateProjectStage change the stage'() {
