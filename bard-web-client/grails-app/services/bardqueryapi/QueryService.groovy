@@ -423,7 +423,7 @@ class QueryService implements IQueryService {
         if (filterTypes.contains(FilterTypes.Y_DENORM_AXIS)) {
             normalizeAxis = NormalizeAxis.Y_DENORM_AXIS
         }
-        long totalNumberOfRecords = filterTypes.contains(FilterTypes.TESTED) ? experimentShow?.getCompounds() ?: 0 : experimentShow?.getActiveCompounds() ?: 0
+        long totalNumberOfRecords = experimentShow?.getCompounds() ?: 0
         long numberOfActiveCompounds = experimentShow?.getActiveCompounds() ?: 0
         Map experimentDetails = [:]
         Map<Long, CompoundAdapter> compoundAdaptersMap = [:]
