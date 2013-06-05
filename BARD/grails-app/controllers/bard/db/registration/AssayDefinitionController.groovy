@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-@Mixin(AssayDefinitionHelper)
+@Mixin(EditingHelper)
 @Secured(['isAuthenticated()'])
 class AssayDefinitionController {
 
@@ -34,13 +34,14 @@ class AssayDefinitionController {
             Assay assay = Assay.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
             if (message) {
-                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                conflictMessage(message)
                 return
             }
             assay = assayService.updateAssayType(inlineEditableCommand.pk, assayType)
-            generateAndRenderJSONResponse(assay, this.assayService,assay.assayType.id)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayType.id)
         } catch (Exception ee) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the assay type. ${ee.message}", contentType: 'text/plain', template: null
+            log.error(ee)
+            editErrorMessage()
         }
     }
 
@@ -50,14 +51,15 @@ class AssayDefinitionController {
             Assay assay = Assay.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
             if (message) {
-                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                conflictMessage(message)
                 return
             }
             assay = assayService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
-            generateAndRenderJSONResponse(assay, this.assayService,assay.assayStatus.id)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayStatus.id)
 
         } catch (Exception ee) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the assay status. ${ee.message}", contentType: 'text/plain', template: null
+            log.error(ee)
+            editErrorMessage()
         }
     }
 
@@ -66,13 +68,14 @@ class AssayDefinitionController {
             Assay assay = Assay.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
             if (message) {
-                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                conflictMessage(message)
                 return
             }
             assay = assayService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
-            generateAndRenderJSONResponse(assay, this.assayService,assay.assayName)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
         } catch (Exception ee) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the assay name. ${ee.message}", contentType: 'text/plain', template: null
+            log.error(ee)
+            editErrorMessage()
         }
     }
 
@@ -81,13 +84,14 @@ class AssayDefinitionController {
             Assay assay = Assay.findById(inlineEditableCommand.pk)
             final String message = inlineEditableCommand.validateVersions(assay.version, Assay.class)
             if (message) {
-                render(status: HttpServletResponse.SC_CONFLICT, text: "${message}", contentType: 'text/plain', template: null)
+                conflictMessage(message)
                 return
             }
             assay = assayService.updateDesignedBy(inlineEditableCommand.pk, inlineEditableCommand.value)
-            generateAndRenderJSONResponse(assay, this.assayService,assay.designedBy)
+            generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.designedBy)
         } catch (Exception ee) {
-            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Could not edit the Designer name. ${ee.message}", contentType: 'text/plain', template: null
+            log.error(ee)
+            editErrorMessage()
         }
     }
 
@@ -469,21 +473,29 @@ class AssayDefinitionController {
         render new JSONArray()
     }
 }
-class AssayDefinitionHelper {
+class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
-    def generateAndRenderJSONResponse(final Assay assay, final AssayService assayService, final String newValue) {
-        //TODO: Assay short name recomputation happens elsewhere
-       // Assay assay = assayService.recomputeAssayShortName(originalAssay)
+
+    def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
         Map<String, String> dataMap = [:]
-        dataMap.put('version', assay.version.toString())
-        dataMap.put('modifiedBy', assay.modifiedBy)
-        dataMap.put('lastUpdated', formatter.format(assay.lastUpdated))
-        dataMap.put("shortName", assay.assayShortName)
+        dataMap.put('version', currentVersion.toString())
+        dataMap.put('modifiedBy', modifiedBy)
+        dataMap.put('lastUpdated', formatter.format(lastUpdated))
+        if (shortName) {
+            dataMap.put("shortName", shortName)
+        }
         dataMap.put("data", newValue)
 
         JSON jsonResponse = dataMap as JSON
         render status: HttpServletResponse.SC_OK, text: jsonResponse, contentType: 'text/json', template: null
     }
 
+    def conflictMessage(String message) {
+        render(status: HttpServletResponse.SC_CONFLICT, text: message, contentType: 'text/plain', template: null)
+    }
+
+    def editErrorMessage() {
+        render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
+    }
 }
