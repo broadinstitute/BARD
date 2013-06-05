@@ -512,7 +512,6 @@ class ResultsService {
         Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
         for (measure in rootMeasures) {
-            println("creating results for ${measure}")
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 

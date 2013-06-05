@@ -488,6 +488,7 @@ class PubchemReformatService {
         String parentChildRelationship;
         Collection<MeasureStub> children = [];
         Map<String,Collection<String>> contextItems = [:]
+        Collection<String> contextItemColumns = []
     }
 
     static class MappedStub {
@@ -497,6 +498,7 @@ class PubchemReformatService {
         MappedStub parent;
         Collection<MappedStub> children = [];
         Map<Element, Collection<String>> contextItems = [:]
+        Collection<Element> contextItemColumns = []
     }
 
     public MappedStub mapStub(MeasureStub stub) {
@@ -516,6 +518,7 @@ class PubchemReformatService {
             Element attributeElement = Element.findByLabel(attribute)
             mapped.contextItems[attributeElement] = stub.contextItems[attribute]
         }
+        mapped.contextItemColumns = stub.contextItemColumns.collect { Element.findByLabel(it) }
 
         mapped.children = stub.children.collect {
             MappedStub mappedChild = mapStub(it)
@@ -547,7 +550,7 @@ class PubchemReformatService {
         measure.statsModifier = (getUniqueValue(resultTypes.collect { it.statsModifier } ))
         measure.parentChildRelationship = getUniqueValue(resultTypes.collect { it.parentChildRelationship } )
         measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}
-
+        measure.contextItemColumns = resultTypes.collectMany { it.contextItemColumns.collect {x -> x.attribute} }
         return measure
     }
 
@@ -605,33 +608,7 @@ class PubchemReformatService {
         }
 
         // first, make sure all of the measures we want exist
-        for(newMeasure in newMeasures) {
-            String newMeasureKey = makeMeasureKey(newMeasure)
-
-            // find the context items which are variable
-            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
-
-            if (measureByKey.containsKey(newMeasureKey)){
-                Measure existingMeasure = measureByKey[newMeasureKey]
-                if(elementKeys.size() > 0) {
-                    verifyContextsAreCompatible(existingMeasure, elementKeys)
-                }
-            } else {
-                // create a new measure on this assay
-                Measure measure = new Measure()
-                assay.addToMeasures(measure)
-                measure.statsModifier = newMeasure.statsModifier
-                measure.resultType = newMeasure.resultType
-                measure.parentChildRelationship = newMeasure.parentChildRelationship
-
-                if (elementKeys.size() > 0) {
-                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, measure)
-                }
-
-                measure.save(failOnError: true)
-                measureByKey[newMeasureKey] = measure
-            }
-        }
+        verifyOrCreateMeasures(newMeasures, measureByKey, assay)
 
         // delete all existing experiment measures
         for(ExperimentMeasure experimentMeasure in new ArrayList(experiment.experimentMeasures)) {
@@ -643,6 +620,42 @@ class PubchemReformatService {
         createExperimentMeasures(experiment, measureByKey, newMeasures, null)
     }
 
+     private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, Measure> measureByKey, Assay assay) {
+        for (newMeasure in newMeasures) {
+            String newMeasureKey = makeMeasureKey(newMeasure)
+
+            // find the context items which are variable
+            Collection<Element> elementKeys = newMeasure.contextItems.keySet().findAll { newMeasure.contextItems[it].size() > 1 }
+
+            if (measureByKey.containsKey(newMeasureKey)) {
+                Measure existingMeasure = measureByKey[newMeasureKey]
+                if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
+                    verifyContextsAreCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns)
+                }
+            } else {
+                // create a new measure on this assay
+                Measure measure = new Measure()
+                assay.addToMeasures(measure)
+                measure.statsModifier = newMeasure.statsModifier
+                measure.resultType = newMeasure.resultType
+
+                if(newMeasure.parent != null) {
+                    measure.parentMeasure = measureByKey[makeMeasureKey(newMeasure.parent)]
+                    measure.parentChildRelationship = newMeasure.parentChildRelationship
+                }
+
+                if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
+                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
+                }
+
+                measure.save(failOnError: true)
+                measureByKey[newMeasureKey] = measure
+            }
+
+            verifyOrCreateMeasures(newMeasure.children, measureByKey, assay)
+        }
+    }
+
     void createExperimentMeasures(Experiment experiment, Map<String,Measure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
         for(newMeasure in newMeasures) {
             ExperimentMeasure experimentMeasure = new ExperimentMeasure(dateCreated: new Date())
@@ -651,7 +664,6 @@ class PubchemReformatService {
                 experimentMeasure.parentChildRelationship = newMeasure.parentChildRelationship
                 experimentMeasure.parent = parentExperimentMeasure
             }
-            println("relationship: ${experimentMeasure.parentChildRelationship}, ${experimentMeasure.parent}")
 
             experiment.addToExperimentMeasures(experimentMeasure)
 
@@ -675,7 +687,7 @@ class PubchemReformatService {
         }
     }
 
-    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element,Collection<String>> attributeValues, Measure measure) {
+    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element,Collection<String>> attributeValues, Collection<Element>freeAttributes, Measure measure) {
         AssayContext context = new AssayContext()
         context.contextName = "annotations for ${measure.resultType.label}";
         context.contextGroup = "project management> experiment>";
@@ -707,6 +719,13 @@ class PubchemReformatService {
                     context.addToAssayContextItems(item)
                 }
             }
+        }
+
+        for(freeAttribute in freeAttributes) {
+            AssayContextItem item = new AssayContextItem();
+            item.attributeType = AttributeType.Free
+            item.attributeElement = freeAttribute
+            context.addToAssayContextItems(item)
         }
 
         assay.addToAssayContexts(context)
