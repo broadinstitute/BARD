@@ -70,7 +70,7 @@
             <div class="span9">
                 <section id="summary-header">
                     <div class="page-header">
-                        <h3>Summary</h3>
+                        <h3>Overview</h3>
                     </div>
 
                     <div class="row-fluid">
