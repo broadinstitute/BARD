@@ -2,13 +2,31 @@ package bardwebquery
 
 import java.math.MathContext
 import java.text.DecimalFormat
+import bard.core.rest.spring.BiologyRestService
+import bard.core.rest.spring.biology.BiologyEntity
 
 class CompoundBioActivitySummaryTagLib {
+
+    BiologyRestService biologyRestService
+
     def assayDescription = { attrs, body ->
 
         out << generateShortNameHTML(attrs.assayAdapter?.title, attrs.assayAdapter?.bardAssayId, attrs.assayAdapter?.capAssayId, 'showAssay')
         out << "<p><b>Designed by:</b>${attrs.assayAdapter?.designedBy}</p>"
-        out << "<p><b>Targets:</b>${attrs.assayAdapter?.targets}</p>"
+        List<BiologyEntity> biologyEntities = biologyRestService.convertBiologyId(attrs.assayAdapter?.targetIds as List<Long>)
+        String targets = biologyEntities.collect {BiologyEntity biologyEntity ->
+            switch (biologyEntity.biology) {
+                case 'PROCESS':
+                    return "${biologyEntity.name} [${biologyEntity.biology.toLowerCase()}: <a href='http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=${biologyEntity.extId}'>${biologyEntity.extId}</a>]"
+                    break;
+                case 'PROTEIN':
+                    return "${biologyEntity.name} [${biologyEntity.biology.toLowerCase()}: <a href='http://www.uniprot.org/uniprot/?query=${biologyEntity.extId}'>${biologyEntity.extId}</a>]"
+                    break;
+                default:
+                    return "${biologyEntity.name} [${biologyEntity.biology.toLowerCase()}: ${biologyEntity.extId}]"
+            }
+        }.join(', ')
+        out << "<p><b>Targets:</b> ${targets}</p>"
     }
 
     def projectDescription = { attrs, body ->
