@@ -28,7 +28,7 @@
 		<g:if test="${assayInstance?.aid}">
 		<div id="accordion">
 		
-			<h3><a href="#">Summary for Assay ID: ${assayInstance.aid}</a></h3>
+			<h3><a href="#">Summary for Assay Definition ID: ${assayInstance.aid}</a></h3>
 			<div>
 				<g:render template="assaySummary" model="['assayInstance': assayInstance]" />							
 			</div>		

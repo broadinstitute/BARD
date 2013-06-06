@@ -5,7 +5,7 @@
 <r:require modules="core,bootstrap"/>
 <meta name="layout" content="basic"/>
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-<title>CAP - Find assay by id</title>
+<title>Search for Assay Definition by ID</title>
 <r:script>
 	 
 </r:script>
@@ -16,7 +16,7 @@
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1">
-	        	<h4>Search assay by ID</h4>
+	        	<h4>Search for Assay Definition by ID</h4>
 	        </div>
 	    </div>
 	</div>
@@ -48,7 +48,7 @@
 	    <div class="span12">
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
 	        	<g:form action="findById" class="form-inline">	
-	        		<label class="control-label" for="assayId">Enter Assay ID:</label>
+	        		<label class="control-label" for="assayId">Enter Assay Definition ID:</label>
 	        		<g:textField name="assayId" autofocus="true"/>
 	        		<span class="help-inline">${hasErrors(bean: personInstance, field: 'assayId', 'error')}</span>														
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>

@@ -55,7 +55,7 @@
 
                     <div class="row-fluid">
                         <dl class="dl-horizontal">
-                            <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
+                            <dt>Assay Definition</dt><dd><g:link controller="assayDefinition" action="show"
                                                       id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
                             <dt><g:message code="experiment.id.label" default="EID"/>:</dt>
                             <dd>${instance?.id}</dd>
