@@ -48,8 +48,8 @@
                     </ul>
                     <sec:ifLoggedIn>
                         <g:form class="navbar-form pull-right" name="logoutForm" controller="logout">
-                            Logged in as: <span
-                                style="color: white; font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
+                             <span
+                                style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
                             <button type="submit" class="btn btn-primary">Logout</button>
                         </g:form>
                     </sec:ifLoggedIn>
