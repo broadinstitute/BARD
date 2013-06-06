@@ -95,7 +95,8 @@ class ExperimentRestService extends AbstractRestService {
             new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPERIMENTS_RESOURCE)
 
         resource.append(RestApiConstants.FORWARD_SLASH).append(eid).append(RestApiConstants.RESULT_TYPES)
-          .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE)
+          .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE).append(RestApiConstants.AMPERSAND)
+          .append(RestApiConstants.COLLAPSE_RESULTS).append(RestApiConstants.MAXIMUM_NUMBER_OF_HISTOGRAM_BARS)
          return resource.toString()
 
     }

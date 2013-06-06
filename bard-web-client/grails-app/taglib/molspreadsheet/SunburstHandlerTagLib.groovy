@@ -109,7 +109,7 @@ class SunburstHandlerTagLib {
         out << """
                   <script>
                         if (\$data[0].children !== undefined) {
-                            createALegend(120, 200,100,continuousColorScale,'div#legendGoesHere');
+                            createALegend(120, 200,100,continuousColorScale,'div#legendGoesHere',minimumValue, maximumValue);
                         }
                   </script>""".toString()
 //<div id="sunburstlegend" class="legendHolder">

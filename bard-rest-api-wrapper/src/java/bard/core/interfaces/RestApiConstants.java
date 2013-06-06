@@ -19,6 +19,7 @@ public interface RestApiConstants {
 
     final String FILTER_ACTIVE = AMPERSAND_FILTER + ACTIVE;
     final int MAXIMUM_NUMBER_OF_COMPOUNDS = 500;
+    final int MAXIMUM_NUMBER_OF_HISTOGRAM_BARS = 40;
     final int MAXIMUM_NUMBER_OF_EXPERIMENTS = 1000;
     final String ANNOTATIONS = "/annotations";
     final String SUBSTANCES_RESOURCE = "/substances";
@@ -35,6 +36,7 @@ public interface RestApiConstants {
     final String BIOLOGY_RESOURCE = "/biology";
     //relative path to the result types, as used to request histogram data
     final String RESULT_TYPES = "/resulttypes";
+    final String COLLAPSE_RESULTS = "collapse=";
 
 
     //relative path to the assays resource
