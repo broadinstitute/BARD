@@ -8,7 +8,7 @@
 
             <dt><g:message code="assay.assayStatus.label" default="Fix i18n"/>:</dt>
             <dd>
-                <a href="#"
+                <a href="#"  title="Click to edit Status"
                    data-sourceCache="true"
                    class="status"
                    id="${assay?.assayStatus?.id}"
@@ -22,7 +22,7 @@
 
             <dt><g:message code="assay.assayName.label" default="Fix i18n"/>:</dt>
             <dd>
-                <a href="#"
+                <a href="#" title="Click to edit Name"
                    class="assayNameY"
                    id="nameId"
                    data-type="text"
@@ -39,7 +39,7 @@
 
             <dt><g:message code="assay.designedBy.label" default="Fix i18n"/>:</dt>
             <dd>
-                <a href="#"
+                <a href="#" title="Click to edit designed by"
                    class="designedBy"
                    id="designedById"
                    data-type="text"
@@ -54,7 +54,7 @@
             <dd><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></dd>
             <dt><g:message code="assay.assayType.label" default="Fix i18n"/>:</dt>
             <dd>
-                <a href="#"
+                <a href="#"  title="Click to edit type"
                    class="type"
                    data-sourceCache="true"
                    id="${assay?.assayType?.id}"
