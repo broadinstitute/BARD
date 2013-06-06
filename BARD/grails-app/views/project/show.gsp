@@ -70,7 +70,7 @@
             <div class="span9">
                 <section id="summary-header">
                     <div class="page-header">
-                        <h3>Summary</h3>
+                        <h3>1. Summary</h3>
                     </div>
 
                     <div class="row-fluid">
@@ -79,7 +79,7 @@
                 </section>
                 <section id="contexts-header">
                     <div class="page-header">
-                        <h3>Contexts</h3>
+                        <h3>2. Contexts</h3>
                     </div>
 
                     <div class="row-fluid">
@@ -89,7 +89,7 @@
                 </section>
                 <section id="experiment-and-step-header">
                     <div class="page-header">
-                        <h3>Experiments and steps</h3>
+                        <h3>3. Experiments and steps</h3>
                     </div>
 
                     <div class="row-fluid">
