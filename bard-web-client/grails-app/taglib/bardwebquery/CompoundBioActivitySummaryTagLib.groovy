@@ -1,9 +1,9 @@
 package bardwebquery
 
-import java.math.MathContext
-import java.text.DecimalFormat
 import bard.core.rest.spring.BiologyRestService
 import bard.core.rest.spring.biology.BiologyEntity
+
+import java.text.DecimalFormat
 
 class CompoundBioActivitySummaryTagLib {
 
@@ -131,5 +131,19 @@ class CompoundBioActivitySummaryTagLib {
 
         sb.append("</p>")
         return sb.toString()
+    }
+
+    def generateLinksList = { attrs, body ->
+
+        String controller = attrs.controller
+        String action = attrs.action
+        List ids = attrs.ids
+
+        List<String> idsLinkStringList = []
+        for (def id in ids) {
+            String idLinkString = "<a href='${createLink(controller: controller, action: action, id: id)}'>${id}</a>"
+            idsLinkStringList << idLinkString
+        }
+        out << "<a class='linksListPopup' data-content=\"${idsLinkStringList.join(', ')}\" data-placement='top' data-toggle='popover' data-trigger='hover' href='#' data-html='true'>${idsLinkStringList.size()}</a>"
     }
 }
