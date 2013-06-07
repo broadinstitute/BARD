@@ -5,9 +5,9 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound Bio-Activity Summary: ${tableModel?.additionalProperties?.id}</title>
-    <r:require modules="experimentData, cbas"/>
+    <r:require modules="experimentData, cbas, core"/>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script>
+    <r:script>
         function makeBigSunburstWindow() {
             window.open("../bigSunburst/${tableModel?.additionalProperties?.id}", "mywindow", "menubar=0,resizable=1,width=1100,height=950");
         }
@@ -16,7 +16,12 @@
                 makeBigSunburstWindow();
             })
         }
-    </script>
+        $(document).ready(function() {
+            $('.linksListPopup').popover({
+            delay: { show: 0, hide: 3000 }
+            });
+        });
+    </r:script>
 </head>
 
 <body>
@@ -54,6 +59,31 @@
                     <g:if test="${tableModel.additionalProperties.activityOutcome == ActivityOutcome.ACTIVE}">
                         <p class="text-info"><i
                                 class="icon-info-sign"></i>Only showing results where the compound is active
+                        </p>
+                    </g:if>
+                </div>
+
+                <div>
+                    <g:if test="${tableModel.additionalProperties?.experimentWithSinglePointDataOnly?.size()}">
+                        <p class="text-info"><i
+                                class="icon-info-sign"></i><span>Please note:</span>
+                            <span>there are
+                            <g:generateLinksList
+                                    controller="bardWebInterface"
+                                    action="showExperiment"
+                                    ids="${tableModel.additionalProperties.experimentWithSinglePointDataOnly*.value*.bardExptId}"/>
+                            experiment with single-point data only</span>
+                        </p>
+                    </g:if>
+                    <g:if test="${tableModel.additionalProperties.experimentsWithoutResultData?.size()}">
+                        <p class="text-info"><i
+                                class="icon-info-sign"></i><span>Please note:</span>
+                            <span>there are
+                            <g:generateLinksList
+                                    controller="bardWebInterface"
+                                    action="showExperiment"
+                                    ids="${tableModel.additionalProperties.experimentsWithoutResultData*.value*.bardExptId}"/>
+                            experiment with no data</span>
                         </p>
                     </g:if>
                 </div>

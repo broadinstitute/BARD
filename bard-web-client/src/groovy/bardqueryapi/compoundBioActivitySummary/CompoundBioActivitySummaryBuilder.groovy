@@ -40,6 +40,8 @@ class CompoundBioActivitySummaryBuilder {
         tableModel.columnHeaders = [new StringValue(value: "${groupByType == GroupByTypes.ASSAY ? 'Assay Definition' : 'Project'}"), new StringValue(value: 'Experiments')]
 
         //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
+        Set<ExperimentValue> experimentWithSinglePointDataOnly = []
+        Set<ExperimentValue> experimentsWithoutResultData = []
         for (Long resourceId in sortedKeys) {
             List<WebQueryValue> singleRowData = []
 
@@ -69,6 +71,7 @@ class CompoundBioActivitySummaryBuilder {
                 List<WebQueryValue> results = convertExperimentResultsToValues(exptData, yNormMin, yNormMax)
 
                 //If the single-point data filter is set, remove the SP (PairValue) result-types from the list.
+                Integer resultsSizeBefore = results.size()
                 if (filterTypes.contains(FilterTypes.SINGLE_POINT_RESULT)) {
                     results.removeAll {WebQueryValue webQueryValue -> webQueryValue instanceof PairValue}
                 }
@@ -80,6 +83,12 @@ class CompoundBioActivitySummaryBuilder {
                     //Add the experimnet box to the row's list of value
                     singleRowData << experimentBoxValue
                 }
+                else if (resultsSizeBefore) {//All the results were of type SP
+                    experimentWithSinglePointDataOnly.add(new ExperimentValue(value: experimentSearch))
+                }
+                else {//We did't have result data at all
+                    experimentsWithoutResultData.add(new ExperimentValue(value: experimentSearch))
+                }
             }
 
             //If no results, don't display the assay/project altogether.
@@ -87,6 +96,9 @@ class CompoundBioActivitySummaryBuilder {
                 tableModel.data << singleRowData
             }
         }
+
+        tableModel.additionalProperties.put('experimentWithSinglePointDataOnly', filterTypes.contains(FilterTypes.SINGLE_POINT_RESULT) ? experimentWithSinglePointDataOnly : [])
+        tableModel.additionalProperties.put('experimentsWithoutResultData', experimentsWithoutResultData)
         return tableModel
     }
 
