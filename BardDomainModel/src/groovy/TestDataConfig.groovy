@@ -38,7 +38,6 @@ testDataConfig {
         'bard.db.dictionary.Element' {
             def i = 1
             label = {-> "label${i++}" }
-            expectedValueType = {-> ExpectedValueType.NUMERIC} // defaulting to numeric types for testing
         }
         'bard.db.dictionary.UnitTree' {
             def i = 1
@@ -61,22 +60,22 @@ testDataConfig {
             id = {-> i++ }
         }
         'bard.db.project.ProjectContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.registration.AssayContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.experiment.ExperimentContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.project.ProjectExperimentContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.project.StepContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.project.ResultContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
 
     }

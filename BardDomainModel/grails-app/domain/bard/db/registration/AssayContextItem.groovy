@@ -36,15 +36,15 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     protected void valueValidation(Errors errors) {
         if (attributeElement) {
             switch (attributeType) {
-                case AttributeType.Free:
-                    freeTypeConstraints(errors)
-                    break;
-                case AttributeType.Range:
+                case AttributeType.Fixed: // so with Fixed and List all the standard validations apply
+                case AttributeType.List:
+                    super.valueValidation(errors, true)
+                    break
+                case AttributeType.Range: // with Range a specified range is the only valid state
                     rangeConstraints(errors)
                     break
-                case AttributeType.Fixed:
-                case AttributeType.List:
-                    super.valueValidation(errors, false)
+                case AttributeType.Free:
+                    freeTypeConstraints(errors)
                     break
                 default:
                     throw new RuntimeException("unknow attributeType: $attributeType")
