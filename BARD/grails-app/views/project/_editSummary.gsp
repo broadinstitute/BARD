@@ -2,7 +2,7 @@
 <div class="row-fluid">
     <div class="span9">
         <dl class="dl-horizontal">
-            <dt><g:message code="default.id.label" default="PID"/>:</dt>
+            <dt><g:message code="project.id.label" default="PID"/>:</dt>
             <dd>${project.id}</dd>
 
 
