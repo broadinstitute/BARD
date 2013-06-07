@@ -24,12 +24,12 @@
                         <li><a href="/BARD">CAP</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                Assays
+                                Assay Definitions
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/BARD/assayDefinition/findById">Find assay by ID</a></li>
-                                <li><a href="/BARD/assayDefinition/findByName">Find assay by Name</a></li>
+                                <li><a href="/BARD/assayDefinition/findById">Search by Assay Definition ID</a></li>
+                                <li><a href="/BARD/assayDefinition/findByName">Search by Assay Definition Name</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">
@@ -38,8 +38,8 @@
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/BARD/project/findById">Find project by ID</a></li>
-                                <li><a href="/BARD/project/findByName">Find project by Name</a></li>
+                                <li><a href="/BARD/project/findById">Search by Project ID</a></li>
+                                <li><a href="/BARD/project/findByName">Search by Project Name</a></li>
                             </ul>
                         </li>
                         <li>
@@ -48,8 +48,8 @@
                     </ul>
                     <sec:ifLoggedIn>
                         <g:form class="navbar-form pull-right" name="logoutForm" controller="logout">
-                            Logged in as: <span
-                                style="color: white; font-weight: bold;"><sec:username/></span>&nbsp;&nbsp;
+                             <span
+                                style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
                             <button type="submit" class="btn btn-primary">Logout</button>
                         </g:form>
                     </sec:ifLoggedIn>

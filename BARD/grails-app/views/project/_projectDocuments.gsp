@@ -133,6 +133,7 @@
                                        id="${publication.id}">
                     <g:fieldValue bean="${publication}" field="documentContent"/>
                 </a>
+                    <a href="${publication.documentContent}" target="externalUrl" title="Click on globe icon to view URL"><i class="icon-globe"></i></a>
                     <g:render template="deleteDocumentForm" model="[document: publication]"/>
                 </div>
             </g:each>
@@ -176,6 +177,7 @@
                                  id="${externalURL.id}">
                 <g:fieldValue bean="${externalURL}" field="documentContent"/>
             </a>
+                <a href="${externalURL.documentContent}" target="externalUrl" title="Click on globe icon to view URL"><i class="icon-globe"></i></a>
                 <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
             </div>
         </g:each>

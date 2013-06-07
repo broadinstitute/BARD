@@ -5,14 +5,14 @@
 <r:require modules="core,bootstrap"/>
 <meta name="layout" content="basic"/>
 <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-<title>CAP - Find Project by ID</title>
+<title>Search for Project by ID</title>
 </head>
 <body>
 
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1">
-	        	<h4>Search Project by ID</h4>
+	        	<h4>Search for Project by ID</h4>
 	        </div>
 	    </div>
 	</div>
