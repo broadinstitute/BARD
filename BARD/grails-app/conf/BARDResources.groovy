@@ -25,16 +25,23 @@ modules = {
         resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"
         resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"
         resource url: "/js/x-editable/inputs-ext/wysihtml5/wysihtml5.js"
-        resource url:"/js/x-editable/moment.js"
-        resource url:"/js/x-editable/combodate.js"
+        resource url: "/js/x-editable/moment.js"
+        resource url: "/js/x-editable/combodate.js"
+    }
+    bootstrapplus {
+        resource url: '/css/bootstrap-plus.css'
+    }
+    card{
+        resource url: '/css/card.css'
+    }
+    addItem {
+        dependsOn(['bootstrapplus','card'])
+
+        resource url: '/css/AddItemWizard.css'
     }
     contextItem {
-        dependsOn('select2')
+        dependsOn(['select2','bootstrapplus','card'])
         resource url: '/js/cap/contextItem.js'
-        // adding the card and bootstrap-plus.css to get the current styling
-        // but may want to simplify the styling going forward
-        resource url: '/css/card.css'
-        resource url: '/css/bootstrap-plus.css'
     }
     newTerm {
         resource url: '/css/newterm/newTerms.css'
@@ -55,12 +62,15 @@ modules = {
     }
 
     assaycards {
+        dependsOn('card')
         resource url: '/js/cap/assay.cards.js'
     }
 
     assayshow {
+        dependsOn(['bootstrapplus','card'])
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
+        resource url:'/css/measures-dynatree.css'
     }
 
     handlebars {
@@ -85,7 +95,9 @@ modules = {
     }
 
     projectsummary {
+        dependsOn('card')
         resource url: '/js/cap/editProjectSummary.js'
+
     }
     experimentsummary {
         resource url: '/js/cap/editExperimentSummary.js'

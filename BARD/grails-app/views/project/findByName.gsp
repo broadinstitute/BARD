@@ -2,9 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<r:require modules="core,bootstrap"/>
+<r:require modules="core,bootstrap,bootstrapplus"/>
 <meta name="layout" content="basic"/>
-<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
 <title>Search for Project by Name</title>
 <r:script>
 	$(document).ready(function() {
