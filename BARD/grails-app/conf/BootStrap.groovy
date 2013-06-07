@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
 import bard.validation.ext.ExternalOntologyPerson
 import bard.validation.ext.ExternalOntologyFactory
+import bard.validation.ext.ExternalOntologyPerson
 
 class BootStrap {
     OntologyDataAccessService ontologyDataAccessService
@@ -12,8 +13,8 @@ class BootStrap {
     GrailsApplication grailsApplication
 
 	def init = { servletContext ->
-		externalOntologyFactory.getCreators().add(new ExternalOntologyPerson.PersonCreator())
-		ontologyDataAccessService.computeTrees(false)
+        loadPersonOntology()
+        computeTrees()
 
         def applicationContext = grailsApplication.mainContext
         applicationContext.eventTriggeringInterceptor.datastores.each { k, datastore ->
@@ -21,7 +22,26 @@ class BootStrap {
             applicationContext.addApplicationListener(new ReadyForExtractListener(datastore))
         }
 	}
+
 	def destroy = {
 	}
 
+    void loadPersonOntology(){
+        try {
+            externalOntologyFactory.getCreators().add(new ExternalOntologyPerson.PersonCreator())
+        } catch (Exception ee) {
+            log.error(ee)
+        }
+    }
+
+    void computeTrees(){
+        try {
+            ontologyDataAccessService.computeTrees(false)
+        } catch (Exception ee) {
+            log.error(ee)
+        }
+    }
+
+    def destroy = {
+    }
 }

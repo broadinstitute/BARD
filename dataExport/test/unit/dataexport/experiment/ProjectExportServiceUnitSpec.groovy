@@ -1,6 +1,7 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
 import bard.db.project.*
 import bard.db.registration.ExternalReference
@@ -211,8 +212,8 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         where:
         label          | results                       | map
-        "Minimal"      | PROJECT_DOCUMENT_MINIMAL      | [:]
-        "with content" | PROJECT_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent']
+        "Minimal"      | PROJECT_DOCUMENT_MINIMAL      | [documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION]
+        "with content" | PROJECT_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent', documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION]
 
     }
 

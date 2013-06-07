@@ -1,6 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.DocumentType
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -11,6 +12,7 @@ import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.sql.DataSource
@@ -80,7 +82,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate AssayDocument"() {
         given: "Given an Assay "
-        final AssayDocument assayDocument = AssayDocument.build()
+        final AssayDocument assayDocument = AssayDocument.build(documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION)
 
         when: "A service call is made to generate the measures for that Assay"
         this.assayExportService.generateAssayDocument(this.markupBuilder, assayDocument.id)

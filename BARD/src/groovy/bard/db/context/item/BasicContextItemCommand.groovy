@@ -7,6 +7,7 @@ import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
+import bard.db.project.ProjectService
 import grails.validation.Validateable
 import org.apache.commons.lang.StringUtils
 
@@ -25,6 +26,7 @@ class BasicContextItemCommand extends BardCommand {
     static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
     AbstractContext context
     AbstractContextItem contextItem
+    ProjectService projectService
 
     Long contextOwnerId
     Long contextId
@@ -166,13 +168,11 @@ class BasicContextItemCommand extends BardCommand {
 
     boolean delete() {
         AbstractContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
-        AbstractContextItem contextItem = context.contextItems.find { it.id == this.contextItemId }
-        if (contextItem) {
-            context.contextItems.remove(contextItem)
-            contextItem.delete(flush: true)
-            return true
+        if(context){
+            return projectService.deleteContextItem(context,this.contextId)
+        } else{
+            return false
         }
-        return false
     }
 
     /**

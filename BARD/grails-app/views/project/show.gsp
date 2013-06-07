@@ -10,7 +10,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,projectstep,select2,accessontology,twitterBootstrapAffix"/>
+    <r:require
+            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,projectsummary"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
@@ -46,12 +47,24 @@
         <div class="row-fluid">
             <div class="span3 bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
-                    <li><a href="#summary-header"><i class="icon-chevron-right"></i>Summary</a></li>
-                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
-                    <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>Experiments and steps
+                    <li><a href="#summary-header"><i class="icon-chevron-right"></i>1. Overview</a></li>
+                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>2. Contexts</a></li>
+                    <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>3. Experiments and steps
+                        <li><a href="#documents-header"><i class="icon-chevron-right"></i>4. Documents</a></li>
+                        <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>4.1 Descriptions
+                        </a>
+                        </li>
+                        <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>4.2 Protocols</a>
+                        </li>
+                        <li><a href="#documents-comment-header"><i class="icon-chevron-right"></i>4.3 Comments</a></li>
+                        <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>4.4 Publications
+                        </a>
+                        </li>
+                        <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>4.5 External URLS</a>
+                        </li>
+                        <li><a href="#documents-other-header"><i class="icon-chevron-right"></i>4.6 Others</a></li>
                     </a></li>
-                    <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a></li>
-                </ul>
+                 </ul>
             </div>
 
             <div class="span9">
@@ -61,7 +74,7 @@
                     </div>
 
                     <div class="row-fluid">
-                        <g:render template="showSummary" model="['project': instance]"/>
+                        <g:render template='editSummary' model="['project': instance]"/>
                     </div>
                 </section>
                 <section id="contexts-header">
@@ -71,7 +84,7 @@
 
                     <div class="row-fluid">
                         <g:render template="../context/show"
-                                    model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
+                                  model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
                     </div>
                 </section>
                 <section id="experiment-and-step-header">
@@ -83,22 +96,12 @@
                         <g:render template='/project/editstep'
                                   model="['instanceId': instance.id]"/>
                         <g:render template="showstep"
-                                  model="['experiments': instance.projectExperiments, 'pegraph': pexperiment, 'instanceId': instance.id]"/>
+                                  model="['experiments': instance.projectExperiments,
+                                          'pegraph': pexperiment, 'instanceId': instance.id]"/>
 
                     </div>
                 </section>
-                <section id="documents-header">
-                    <div class="page-header">
-                        <h3>Documents</h3>
-                    </div>
-
-                    <div class="row-fluid">
-                        <g:link action="create" controller="document" params="${[projectId: instance.id]}"
-                                class="btn">Add new document</g:link>
-                        <g:render template="/document/list"
-                                  model="['documents': instance.documents, documentTemplate: '/document/edit']"/>
-                    </div>
-                </section>
+                <g:render template="projectDocuments" model="[project: instance]"/>
             </div>
         </div>
     </div>

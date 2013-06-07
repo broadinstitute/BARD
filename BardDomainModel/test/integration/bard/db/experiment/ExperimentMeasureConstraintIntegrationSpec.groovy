@@ -5,7 +5,6 @@ import bard.db.enums.HierarchyType
 import bard.db.registration.Measure
 import org.junit.After
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.experiment.ExperimentMeasure.MODIFIED_BY_MAX_SIZE
@@ -144,7 +143,7 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -169,7 +168,7 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }
@@ -190,7 +189,7 @@ class ExperimentMeasureConstraintIntegrationSpec extends BardIntegrationSpec {
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }

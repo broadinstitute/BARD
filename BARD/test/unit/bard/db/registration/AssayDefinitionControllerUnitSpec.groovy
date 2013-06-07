@@ -4,14 +4,20 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.project.InlineEditableCommand
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.validation.ValidationException
+import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import registration.AssayService
-import spock.lang.Specification
 import spock.lang.Unroll
+
+import javax.servlet.http.HttpServletResponse
 
 /**
  */
@@ -21,12 +27,14 @@ import spock.lang.Unroll
 @Build([Assay, Element, AssayContext, AssayContextMeasure])
 @Mock([Assay, Element, AssayContext, AssayContextMeasure])
 @Unroll
-class AssayDefinitionControllerUnitSpec extends Specification {
+class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
 
     Assay assay
 
     @Before
     void setup() {
+        controller.metaClass.mixin(EditingHelper)
+        // controller.metaClass.mixin(EditingErrorMessageHelper)
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayService assayService = Mock(AssayService)
         AssayContextService assayContextService = Mock(AssayContextService)
@@ -38,6 +46,154 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         assert assay.validate()
     }
 
+    void 'test edit Assay Type success'() {
+        given:
+        Assay newAssay = Assay.build(version: 0, assayType: AssayType.TEMPLATE)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayType: AssayType.REGULAR)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayType.id)
+        when:
+        controller.editAssayType(inlineEditableCommand)
+        then:
+        controller.assayService.updateAssayType(_, _) >> { return updatedAssay }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedAssay.assayType.id
+        assert responseJSON.get("lastUpdated").asText()
+        assert responseJSON.get("shortName").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Assay Type with errors'() {
+        given:
+        Assay newAssay = Assay.build(version: 0, assayType: AssayType.TEMPLATE)  //no designer
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: newAssay.assayType.id)
+        controller.metaClass.message = { Map p -> return "foo" }
+        when:
+        controller.editAssayType(inlineEditableCommand)
+        then:
+        controller.assayService.updateAssayType(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
+    void 'test edit Assay Status success'() {
+        given:
+        Assay newAssay = Assay.build(version: 0, assayStatus: AssayStatus.DRAFT)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: AssayStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayStatus.id)
+        when:
+        controller.editAssayStatus(inlineEditableCommand)
+        then:
+        controller.assayService.updateAssayStatus(_, _) >> { return updatedAssay }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedAssay.assayStatus.id
+        assert responseJSON.get("lastUpdated").asText()
+        assert responseJSON.get("shortName").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Assay Status with errors'() {
+        given:
+        Assay newAssay = Assay.build(version: 0, assayStatus: AssayStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: AssayStatus.APPROVED.id)
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editAssayStatus(inlineEditableCommand)
+        then:
+        controller.assayService.updateAssayStatus(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
+    void 'test edit Assay Name success'() {
+        given:
+        Assay newAssay = Assay.build(version: 0, assayName: "My Name")  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer")
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayName)
+        when:
+        controller.editAssayName(inlineEditableCommand)
+        then:
+        controller.assayService.updateAssayName(_, _) >> { return updatedAssay }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedAssay.assayName
+        assert responseJSON.get("lastUpdated").asText()
+        assert responseJSON.get("shortName").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Assay Name with errors'() {
+        given:
+        Assay newAssay = Assay.build(version: 0)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: "Designer")
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editAssayName(inlineEditableCommand)
+        then:
+        controller.assayService.updateAssayName(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
+    void 'test edit DesignedBy success'() {
+        given:
+        Assay newAssay = Assay.build(version: 0)  //no designer
+        Assay updatedAssay = Assay.build(version: 1, lastUpdated: new Date(), designedBy: "Designer")
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.designedBy)
+        when:
+        controller.editDesignedBy(inlineEditableCommand)
+        then:
+        controller.assayService.updateDesignedBy(_, _) >> { return updatedAssay }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedAssay.designedBy
+        assert responseJSON.get("lastUpdated").asText()
+        assert responseJSON.get("shortName").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit optimistic lock failure'() {
+        given:
+        Assay newAssay = Assay.build()
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: "Designer")
+        when:
+        controller.editDesignedBy(inlineEditableCommand)
+        then:
+        inlineEditableCommand.validateVersions(_, _) >> { "Some error message" }
+        assertOptimisticLockFailure()
+    }
+
+
+    void 'test edit DesignedBy with errors'() {
+        given:
+        Assay newAssay = Assay.build(version: 0)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id, version: newAssay.version, name: newAssay.assayName, value: "Designer")
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editDesignedBy(inlineEditableCommand)
+        then:
+        controller.assayService.updateDesignedBy(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
 
     void 'test clone assay'() {
         given:
@@ -46,9 +202,21 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayService.cloneAssayForEditing(_,_) >> { return newAssay }
-        controller.assayService.recomputeAssayShortName(_) >> {return newAssay}
-        assert response.redirectedUrl == "/assayDefinition/show/${newAssay.id}"
+        controller.assayService.cloneAssayForEditing(_, _) >> { return newAssay }
+        controller.assayService.recomputeAssayShortName(_) >> { return newAssay }
+        assert view == "/assayDefinition/show"
+        assert model.assayInstance == newAssay
+    }
+
+    void 'test clone assay fail'() {
+        given:
+        controller.measureTreeService.createMeasureTree(_, _) >> []
+        when:
+        controller.cloneAssay(assay.id)
+        then:
+        controller.assayService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
+        assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
+        assert view == "/assayDefinition/show"
     }
 
     void 'test show'() {
@@ -244,17 +412,8 @@ class AssayDefinitionControllerUnitSpec extends Specification {
 
     }
 
-    void 'test edit summary'() {
-        given:
-        assay = Assay.build()
-        when:
-        controller.editSummary(assay.id, AssayStatus.DRAFT.id, "assayName", "designedBy", AssayType.REGULAR.id)
 
-        then:
-        assay.assayStatus == AssayStatus.DRAFT
-    }
 
-    @Unroll
     void 'test move measure #desc'() {
         given:
         Measure child = Measure.build(assay: assay)
@@ -276,5 +435,4 @@ class AssayDefinitionControllerUnitSpec extends Specification {
         "has both parent and child measures but no relationship type" | true          | null                          | HierarchyType.SUPPORTED_BY
         "has no parent measure"                                       | false         | null                          | null
     }
-
 }

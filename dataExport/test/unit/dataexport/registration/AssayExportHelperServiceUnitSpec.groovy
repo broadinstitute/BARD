@@ -1,6 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.DocumentType
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
 import grails.buildtestdata.TestDataConfigurationHolder
@@ -164,7 +165,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         where:
         label          | results                     | map
-        "minimal"      | ASSAY_DOCUMENT_MINIMAL      | [:]
-        "with content" | ASSAY_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent']
+        "minimal"      | ASSAY_DOCUMENT_MINIMAL      | [ documentType:DocumentType.DOCUMENT_TYPE_DESCRIPTION]
+        "with content" | ASSAY_DOCUMENT_WITH_CONTENT | [documentContent: 'documentContent', documentType:DocumentType.DOCUMENT_TYPE_DESCRIPTION]
     }
 }

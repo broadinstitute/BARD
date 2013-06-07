@@ -1,14 +1,18 @@
 package bard.db.registration
 
 import bard.db.command.BardCommand
+import bard.db.enums.DocumentType
 import bard.db.model.AbstractDocument
+import bard.db.project.InlineEditableCommand
 import bard.db.project.Project
 import bard.db.project.ProjectDocument
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
-import grails.validation.ValidationErrors
 import groovy.transform.InheritConstructors
 
+import javax.servlet.http.HttpServletResponse
+
+@Mixin(DocumentHelper)
 @Secured(['isAuthenticated()'])
 class DocumentController {
     static allowedMethods = [save: "POST", update: "POST"]
@@ -24,7 +28,7 @@ class DocumentController {
         if (document.getOwner() instanceof Assay) {
             Assay assay = document.getOwner()
             redirect(controller: "assayDefinition", action: "show", id: assay.id, fragment: "document-${document.id}")
-        } else if (document.getOwner() instanceof Project){
+        } else if (document.getOwner() instanceof Project) {
             Project project = document.getOwner()
             redirect(controller: "project", action: "show", id: project.id, fragment: "document-${document.id}")
         } else {
@@ -33,6 +37,9 @@ class DocumentController {
     }
 
     def save(DocumentCommand documentCommand) {
+        if (!documentCommand.documentType) {
+            documentCommand.documentType = DocumentType.byId(params.documentType)
+        }
         Object document = documentCommand.createNewDocument()
         if (document) {
             redirectToOwner(document)
@@ -49,6 +56,44 @@ class DocumentController {
         }
         dc.populateWithExistingDocument(domainClass, id)
         [document: dc]
+    }
+
+    def editDocument(InlineEditableCommand inlineEditableCommand) {
+        if (!inlineEditableCommand.validate()) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Field is required and must not be empty", contentType: 'text/plain', template: null
+        } else {
+            DocumentCommand documentCommand =
+                createDocumentCommand(
+                        params.documentName,
+                        inlineEditableCommand.pk,
+                        inlineEditableCommand.value,
+                        DocumentType.byId(params.documentType),
+                        inlineEditableCommand.version,
+                        inlineEditableCommand.owningEntityId,
+                        inlineEditableCommand.name as DocumentKind
+                )
+            render(renderDocument(documentCommand))
+        }
+
+    }
+
+    def editDocumentName(InlineEditableCommand inlineEditableCommand) {
+        if (!inlineEditableCommand.validate()) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Field is required and must not be empty", contentType: 'text/plain', template: null
+        } else {
+            DocumentCommand documentCommand =
+                createDocumentCommand(
+                        inlineEditableCommand.value,
+                        inlineEditableCommand.pk,
+                        params.documentName,
+                        DocumentType.byId(params.documentType),
+                        inlineEditableCommand.version,
+                        inlineEditableCommand.owningEntityId,
+                        inlineEditableCommand.name as DocumentKind
+                )
+            render(renderDocument(documentCommand))
+        }
+
     }
 
     def update(DocumentCommand documentCommand) {
@@ -71,16 +116,77 @@ class DocumentController {
         redirectToOwner(document)
     }
 }
+
+class DocumentHelper {
+    def renderDocument(DocumentCommand documentCommand) {
+        try {
+            def document = documentCommand.updateExistingDocument()
+            if (documentCommand.hasErrors()) {
+                StringBuilder b = new StringBuilder()
+                b.append(g.message(code: 'default.optimistic.locking.failure'))
+                return [status: HttpServletResponse.SC_CONFLICT, text: "${b.toString()}", contentType: 'text/plain', template: null]
+            } else {
+                response.setHeader('version', document.version.toString())
+                response.setHeader('entityId', document.id.toString())
+                if (document.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL || document.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION) {
+                    return [status: HttpServletResponse.SC_OK, text: "${document.documentName}", contentType: 'text/plain', template: null]
+                } else {
+                    return [status: HttpServletResponse.SC_OK, template: "/document/docsWithLineBreaks", model: [documentContent: document.documentContent]]
+                }
+            }
+        } catch (Exception ee) {
+            log.error(ee)
+            return [status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)", contentType: 'text/plain', template: null]
+        }
+    }
+    /**
+     *
+     * @param documentName
+     * @param documentId
+     * @param documentContent
+     * @param documentType
+     * @param version
+     * @param owningEntityId
+     * @param currentDocumentKind
+     * @return {@link DocumentCommand}
+     */
+    DocumentCommand createDocumentCommand(final String documentName,
+                                          final Long documentId,
+                                          final String documentContent,
+                                          final DocumentType documentType,
+                                          final Long version,
+                                          final Long owningEntityId,
+                                          final DocumentKind currentDocumentKind) {
+        Long assayId = null
+        Long projectId = null
+        if (DocumentKind.AssayDocument == currentDocumentKind) {
+            assayId = owningEntityId
+        }
+        if (DocumentKind.ProjectDocument == currentDocumentKind) {
+            projectId = owningEntityId
+        }
+
+        return new DocumentCommand(
+                documentName: documentName,
+                documentId: documentId,
+                documentContent: documentContent,
+                documentType: documentType,
+                version: version,
+                assayId: assayId,
+                projectId: projectId
+        )
+    }
+}
 @InheritConstructors
 @Validateable
-class DocumentCommand extends BardCommand{
+class DocumentCommand extends BardCommand {
     Long assayId
     Long projectId
 
     Long documentId
     Long version
     String documentName
-    String documentType
+    DocumentType documentType
     String documentContent
     Date dateCreated
     Date lastUpdated
@@ -103,7 +209,7 @@ class DocumentCommand extends BardCommand{
         version(nullable: true)
     }
 
-    DocumentCommand(){}
+    DocumentCommand() {}
 
     DocumentCommand(AssayDocument assayDocument) {
         copyFromDomainToCmd(assayDocument)
@@ -170,9 +276,9 @@ class DocumentCommand extends BardCommand{
 
 
 
-    void copyFromCmdToDomain(AbstractDocument assayDocument) {
+    void copyFromCmdToDomain(AbstractDocument document) {
         for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
-            assayDocument[(field)] = this[(field)]
+            document[(field)] = this[(field)]
         }
     }
 
@@ -190,7 +296,6 @@ class DocumentCommand extends BardCommand{
         }
         return this
     }
-
 
 /**
  * Hack to determine the id of owning to forward to given presence of assay or project ids
@@ -218,4 +323,8 @@ class DocumentCommand extends BardCommand{
             throw new RuntimeException('need either a projectId or assayId to determine owner')
         }
     }
+}
+enum DocumentKind {
+    AssayDocument,
+    ProjectDocument
 }

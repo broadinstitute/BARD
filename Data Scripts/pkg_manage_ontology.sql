@@ -18,9 +18,10 @@ AS
                         avi_element_abbreviation in varchar2,
                         avi_element_synonyms in varchar2);
 
+--  SCHATWIN 5-17-2013  extend swap_element_id to create a replacement record in Element_hierarchy
     procedure swap_element_id (ani_element_id   in  number,
                                ani_new_element_id   in   number,
-                               ab_delete_old    in boolean default false);
+                               ab_re_parent    in boolean default false);
 
 end manage_ontology;
 /
@@ -906,7 +907,7 @@ as
 
     procedure swap_element_id (ani_element_id   in  number,
                                ani_new_element_id   in   number,
-                               ab_delete_old    in boolean default false)
+                               ab_re_parent    in boolean default false)
     as
     -- tables in this order
     -- result_context_item, attribute, value
@@ -921,14 +922,26 @@ as
     lv_old_label    element.label%type;
     lv_new_label    element.label%type;
 
-    begin
-        select label into lv_old_label
-        from element
-        where element_id = ani_element_id;
+    CURSOR cur_elem_hier(cn_element_id  NUMBER)
+    IS
+    SELECT *
+    FROM element_hierarchy
+    WHERE parent_element_id = cn_element_id;
 
-        select label into lv_new_label
-        from element
-        where element_id = ani_new_element_id;
+    begin
+        BEGIN
+            select label into lv_old_label
+            from element
+            where element_id = ani_element_id;
+
+            select label into lv_new_label
+            from element
+            where element_id = ani_new_element_id;
+
+        EXCEPTION
+        WHEN no_data_found THEN
+            RETURN;
+        END;
 
         update tree_root
            set element_id = ani_new_element_id
@@ -983,10 +996,6 @@ as
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
 
-        update result
-           set result_type_id = ani_new_element_id
-         where result_type_id = ani_element_id;
-
         update assay_context_item
            set attribute_id = ani_new_element_id
          where attribute_id = ani_element_id;
@@ -996,25 +1005,25 @@ as
                value_display = replace(value_display, lv_old_label, lv_new_label)
          where value_id = ani_element_id;
 
-        update measure m
+        update measure
            set result_type_id = ani_new_element_id
          where result_type_id = ani_element_id;
 
-        update measure m
-           set stats_modifier_id = ani_new_element_id
-         where stats_modifier_id = ani_element_id;
-
-        update result m
-           set result_type_id = ani_new_element_id
-         where result_type_id = ani_element_id;
-
-        update result m
+        update measure
            set stats_modifier_id = ani_new_element_id
          where stats_modifier_id = ani_element_id;
 
         update measure
            set entry_unit_id = ani_new_element_id
          where entry_unit_id = ani_element_id;
+
+        update result
+           set result_type_id = ani_new_element_id
+         where result_type_id = ani_element_id;
+
+        update result
+           set stats_modifier_id = ani_new_element_id
+         where stats_modifier_id = ani_element_id;
 
         update project_experiment
            set stage_id = ani_new_element_id
@@ -1038,39 +1047,51 @@ as
             where uc2.to_unit_id = ani_new_element_id
             and uc2.from_unit_id = uc.from_unit_id);
 
-        update unit_conversion uc
-              set uc.from_unit_id = ani_new_element_id
-            where uc.from_unit_id = ani_element_id
-              and not exists (select 1 from unit_conversion uc2
-                where uc2.from_unit_id = ani_new_element_id
-                and uc2.to_unit_id = uc.to_unit_id);
-
-          -- this IS handled BY the element deletion
---        update element_hierarchy eh
---          set eh.parent_element_id = ani_new_element_id
---        where eh.parent_element_id = ani_element_id
---          and not exists (select 1 from element_hierarchy eh2
---            where eh2.parent_element_id = ani_new_element_id
---            and eh2.child_element_id = eh.child_element_id);
-
---        update element_hierarchy eh
---          set eh.child_element_id = ani_new_element_id
---        where eh.child_element_id = ani_element_id
---          and not exists (select 1 from element_hierarchy eh2
---            where eh2.child_element_id = ani_new_element_id
---            and eh2.parent_element_id = eh.parent_element_id);
-
-        if ab_delete_old
+        if ab_re_parent
         then
-            delete from element
-            where element_id = ani_element_id;
+            -- transfer the hierarchy to the new element
+            -- We need to leave the old one in its place in the hierarchy
+            -- but to move all its children to the new item
+            FOR lr_elem_hier IN cur_elem_hier(ani_element_id)
+            LOOP
+                -- got all the links to the children.
+                UPDATE element_hierarchy eh
+                   SET parent_element_id = ani_new_element_id
+                 WHERE element_hierarchy_id = lr_elem_hier.element_hierarchy_id
+                   and not exists (select 1 from element_hierarchy eh2
+                            where eh2.child_element_id = lr_elem_hier.child_element_id
+                            and eh2.parent_element_id = ani_new_element_id
+                            AND eh2.relationship_type = lr_elem_hier.relationship_type);
 
-            delete from identifier_mapping
-            where target_id = ani_element_id
-              and table_name = 'ELEMENT';
+                IF SQL%ROWCOUNT = 0
+                THEN    -- the update failed because the new hierarchy link already exists
+                    -- so we just need to delete the old one
+                    DELETE FROM element_hierarchy
+                    WHERE element_hierarchy_id = lr_elem_hier.element_hierarchy_id;
+                END IF;
+            END LOOP;
+
+--  SCHATWIN 5-17-2013  extend swap_element_id to create a replacement record in Element_hierarchy
+
+            INSERT INTO element_hierarchy
+                (element_hierarchy_id,
+                parent_element_id,
+                child_element_id,
+                relationship_type)
+            VALUES
+                (element_hierarchy_id_seq.nextval,
+                ani_element_id,
+                ani_new_element_id,
+                'replaced by');
+
+--            UPDATE element
+--            SET element_status = 'Retired'
+--            WHERE element_id = ani_element_id;
+
         end if;
 
-        commit;
+-- do this yourself outside the procedure - it's safer.
+--        commit;
 
     end swap_element_id;
 

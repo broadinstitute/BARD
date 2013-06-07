@@ -1,17 +1,90 @@
 package bard.db.project
 
+import bard.db.command.BardCommand
 import bard.db.dictionary.Element
+import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
+import bard.db.registration.EditingHelper
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.validation.Validateable
+import groovy.transform.InheritConstructors
 
+import javax.servlet.http.HttpServletResponse
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+@Mixin(EditingHelper)
 @Secured(['isAuthenticated()'])
 class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService
     ProjectService projectService
+
+
+    def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
+        try {
+            final ProjectStatus projectStatus = ProjectStatus.byId(inlineEditableCommand.value)
+            final Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.projectStatus.id)
+        } catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
+
+    def editProjectName(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
+
+        } catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
+
+    def editDescription(InlineEditableCommand inlineEditableCommand) {
+        try {
+            Project project = Project.findById(inlineEditableCommand.pk)
+            final String message = inlineEditableCommand.validateVersions(project.version, Project.class)
+            if (message) {
+                conflictMessage(message)
+                return
+            }
+            project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
+            generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
+
+        } catch (Exception ee) {
+            log.error(ee)
+            editErrorMessage()
+        }
+    }
+
+    def projectStatus() {
+        List<String> sorted = []
+        final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
+        for (ProjectStatus projectStatus : projectStatuses) {
+            sorted.add(projectStatus.id)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
 
     def show() {
         def projectInstance = Project.get(params.id)
@@ -32,6 +105,15 @@ class ProjectController {
             flash.message = null
 
         [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
+    }
+
+    def reloadProjectSteps(Long projectId) {
+        try {
+            Project project = Project.findById(projectId)
+            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (Exception e) {
+            render 'serviceError:' + e.message
+        }
     }
 
     def removeExperimentFromProject(Long experimentId, Long projectId) {
@@ -95,6 +177,47 @@ class ProjectController {
             }
         } catch (UserFixableException e) {
             render 'serviceError:' + e.message
+        }
+    }
+
+    def projectStages() {
+        List<String> sorted = []
+        final Collection<StageTree> stageTrees = StageTree.findAll()
+        for (StageTree stageTree : stageTrees) {
+            sorted.add(stageTree.label)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
+
+    def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
+        //pass in the project experiment
+        try {
+            ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+
+            //x-editable will not send a new value only when the original is different from the selected
+            //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL
+            Long originalStageElementId = null
+            if (inlineEditableCommand?.name?.isNumber()) {
+                originalStageElementId = new Long(inlineEditableCommand.name)
+            }
+            Element newStage = Element.findByLabel(inlineEditableCommand.value)
+
+            if (originalStageElementId != newStage?.id) {//there has been a change
+
+                if (newStage) {
+                    projectExperiment.stage = newStage
+                    projectExperiment.save(flush: true)
+                    projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+                } else {
+                    render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
+                    return
+                }
+            }
+            render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
     }
 
@@ -193,5 +316,32 @@ class ProjectController {
         def projects = Project.findAllByNameIlike("%${query}%", [sort: "name", order: "asc"])
         render projects.collect { it.name } as JSON
     }
+}
+@InheritConstructors
+@Validateable
+class InlineEditableCommand extends BardCommand {
+    Long pk //primary key of the current entity
+    String name
+    String value //the new value
+    Long version  //version of the current entity
+    Long owningEntityId //if this has an owning entity
+
+    static constraints = {
+        pk(blank: false, nullable: false)
+        name(blank: false, nullable: false)
+        value(blank: false, nullable: false)
+        version(blank: false, nullable: false)
+        owningEntityId(nullable: true)
+    }
+
+    String validateVersions(Long currentVersion, Class entityClass) {
+        StringBuilder b = new StringBuilder()
+        if (this.version?.longValue() != currentVersion.longValue()) {
+            getErrors().reject('default.optimistic.locking.failure', [entityClass] as Object[], 'optimistic lock failure')
+            b.append(g.message(code: 'default.optimistic.locking.failure'))
+        }
+        return b.toString()
+    }
+
 }
 

@@ -65,25 +65,30 @@ class AssayHandlerService {
                      attributesContentsCleaner.clean(assayDtoList)
 
                     for (AssayDto assayDto : assayDtoList) {
-                        if (assayDto.aid && mustLoadedAids.contains(assayDto.aid)) {
-                            Log.logger.info("Processing: aid: ${assayDto.aid}, line #: ${assayDto.rowNum} in file ${inputFile.absolutePath}")
-                            attributeContentAgainstElementTableValidator.removeInvalid(assayDto.assayContextDTOList, attributeNameMapping)
+                        if (assayDto.aid) {
+                            if (mustLoadedAids.contains(assayDto.aid)) {
+                                Log.logger.info("Processing: aid: ${assayDto.aid}, line #: ${assayDto.rowNum} in file ${inputFile.absolutePath}")
+                                attributeContentAgainstElementTableValidator.removeInvalid(assayDto.assayContextDTOList, attributeNameMapping)
 
-                            if (assayDto.assayContextDTOList.size() > 0) {
-                                assayContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
-                                if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
-                                    assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success,
-                                            "successfully loaded assay context")
+                                if (assayDto.assayContextDTOList.size() > 0) {
+                                    assayContextsValidatorCreatorAndPersistor.modifiedBy = currentModifiedBy
+                                    if (assayContextsValidatorCreatorAndPersistor.createAndPersist(assayDto.assayContextDTOList)) {
+                                        assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.success,
+                                                "successfully loaded assay context")
+                                    } else {
+                                        assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
+                                                "failed to load assay contexts loaded assay context")
+                                    }
                                 } else {
-                                    assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                                            "failed to load assay contexts loaded assay context")
+                                    assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.nothingToLoad, null)
                                 }
                             } else {
-                                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.nothingToLoad, null)
+                                assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.nothingToLoad,
+                                        "aid found in cell not in must load list")
                             }
                         } else {
                             assayLoadResultsWriter.write(assayDto, AssayLoadResultsWriter.LoadResultType.fail,
-                                    "aid found in cell not a number or not in must load list")
+                                    "aid found in cell not a number")
                         }
                     }
                 } catch (CouldNotReadExcelFileException e) {

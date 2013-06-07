@@ -30,10 +30,11 @@ abstract class AbstractElement {
     String bardURI
     String externalURL
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
-
     Date dateCreated = new Date()
     Date lastUpdated = new Date()
     String modifiedBy
+
+
 
     static constraints = {
         elementStatus(nullable: false)

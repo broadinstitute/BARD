@@ -1,5 +1,4 @@
 <%@ page import="bard.db.registration.*" %>
-<%@ page import="bard.db.model.IDocumentType" %>
 <!DOCTYPE html>
 <html>
 <head>

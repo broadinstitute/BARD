@@ -1,9 +1,47 @@
 package bard.db.project
 
+import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.dictionary.Element
+import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextItem
 
 class ProjectService {
+    Project updateProjectStatus(Long projectId, ProjectStatus newProjectStatus){
+        Project project = Project.findById(projectId)
+        project.projectStatus = newProjectStatus
+
+        project.save(flush: true)
+        return Project.findById(projectId)
+    }
+    Project updateProjectDescription(Long projectId, String newProjectDescription) {
+        Project project = Project.findById(projectId)
+        project.description = newProjectDescription
+
+        project.save(flush: true)
+        return Project.findById(projectId)
+    }
+    Project updateProjectName(Long projectId, String newProjectName) {
+        Project project = Project.findById(projectId)
+        project.name = newProjectName
+
+        project.save(flush: true)
+        return Project.findById(projectId)
+    }
+    boolean updateProjectContextItem(ProjectContextItem contextItem, Long version) {
+        boolean updateSuccessful = false
+        updateSuccessful
+    }
+
+    boolean deleteContextItem(AbstractContext context,Long contextItemId) {
+        AbstractContextItem contextItem = context.contextItems.find { it.id == contextItemId }
+        if (contextItem) {
+            context.contextItems.remove(contextItem)
+            contextItem.delete(flush: true)
+            return true
+        }
+        return false
+    }
     /**
      * remove experiment from project, if experiment has context, remove them. remove all steps associated with
      * this experiment, and step contexts
@@ -29,7 +67,7 @@ class ProjectService {
 
         if (projectExperimentContexts) {
             projectExperiment.projectExperimentContexts.removeAll(projectExperimentContexts)
-            projectExperimentContexts.each {it.delete()}
+            projectExperimentContexts.each { it.delete() }
         }
     }
 
@@ -115,7 +153,7 @@ class ProjectService {
      * @param toExperiment
      * @param project
      */
-    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Project project){
+    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Project project) {
         if (!fromExperiment || !toExperiment) {
             throw new UserFixableException("Either or both experiment you were trying to link does not exist in the system.")
         }
@@ -123,7 +161,7 @@ class ProjectService {
             throw new UserFixableException("Link between same experiments is not allowed.")
         }
         if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
-            !isExperimentAssociatedWithProject(toExperiment, project))
+                !isExperimentAssociatedWithProject(toExperiment, project))
             throw new UserFixableException("Experiment " + fromExperiment.id + " or experiment " + toExperiment.id + " is not associated with project " + project.id)
         ProjectExperiment peFrom = ProjectExperiment.findByProjectAndExperiment(project, fromExperiment)
         ProjectExperiment peTo = ProjectExperiment.findByProjectAndExperiment(project, toExperiment)
@@ -145,12 +183,12 @@ class ProjectService {
      * @param project
      * @return
      */
-    boolean isExperimentAssociatedWithProject(Experiment experiment, Project project ) {
+    boolean isExperimentAssociatedWithProject(Experiment experiment, Project project) {
         boolean isAssociated = false
-        experiment.projectExperiments.each{
+        experiment.projectExperiments.each {
             ProjectExperiment pe ->
-            if (pe.project.id == project?.id)
-                isAssociated = true
+                if (pe.project.id == project?.id)
+                    isAssociated = true
         }
         return isAssociated
     }
@@ -189,9 +227,9 @@ class ProjectService {
      */
     void processNode(Long currentId, List<Long> visiting) {
         ProjectExperiment pe = ProjectExperiment.findById(currentId)
-        pe.followingProjectSteps.each{
+        pe.followingProjectSteps.each {
             ProjectStep step ->
-            visiting.add(step.nextProjectExperiment.id)
+                visiting.add(step.nextProjectExperiment.id)
         }
     }
 }

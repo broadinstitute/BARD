@@ -53,13 +53,15 @@ a.value_max = b.value_max"""
 
   Experiment.withSession { session ->
     for(stmt in dropTablesSql) {
-    try { 
+    try {
+//      println(stmt)
       session.createSQLQuery(stmt).executeUpdate()
     } catch(Exception ex) {
     }
     }
 
     for(stmt in createTablesSql) {
+//      println(stmt)
       session.createSQLQuery(stmt).executeUpdate()
     }
   }
@@ -78,7 +80,12 @@ createTmpTables()
 // load items per assay id
 import bard.db.experiment.Experiment
 results = Experiment.withSession { session -> 
-  return session.createSQLQuery("select assay_id, id from tmp_assay_unique_items").setCacheable(false).list()
+  return session.createSQLQuery("""
+select ac.assay_id, i.id 
+from tmp_unique_item_to_id i 
+join assay_context_item aci on aci.assay_context_item_id = i.assay_context_item_id
+join assay_context ac on aci.assay_context_id = ac.assay_context_id
+""").setCacheable(false).list()
 }
 byAssayId = results.groupBy { (long)it[0] }
 u = byAssayId.collectEntries { k, v -> [k, v.collect(new HashSet()){ it[1] }] }
@@ -87,19 +94,20 @@ u = byAssayId.collectEntries { k, v -> [k, v.collect(new HashSet()){ it[1] }] }
 
 capIds = []
 import bard.db.experiment.Experiment
-Experiment.withSession { session -> 
-  capIds = session.createSQLQuery("""
-select distinct e.assay_id 
-from external_reference r 
-join experiment e on r.experiment_id = e.experiment_id
-join (select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
-      join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
-      where vpaj.project_uid in (
-            select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=(
-                   select id from bard_data_qa_dashboard.dataset where name = '002'))
-      and ai.is_summary_aid = 'n') da on 'aid='||da.aid = r.ext_assay_ref
-  """).setCacheable(false).list().collect {it.longValue()}
-}
+//Experiment.withSession { session -> 
+//  capIds = session.createSQLQuery("""
+//select distinct e.assay_id 
+//from external_reference r 
+//join experiment e on r.experiment_id = e.experiment_id
+//join (select vpaj.aid from bard_data_qa_dashboard.vw_project_aid_join vpaj
+//      join bard_data_qa_dashboard.aid_info ai on ai.aid = vpaj.aid
+//      where vpaj.project_uid in (
+//            select project_uid from bard_data_qa_dashboard.dataset_project_uid where dataset_id=(
+//                   select id from bard_data_qa_dashboard.dataset where name = '002'))
+//      and ai.is_summary_aid = 'n') da on 'aid='||da.aid = r.ext_assay_ref
+//  """).setCacheable(false).list().collect {it.longValue()}
+//}
+capIds.addAll(byAssayId.keySet())
 println(capIds)
 
 // find assay ids where score is 1.0

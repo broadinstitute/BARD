@@ -42,7 +42,7 @@
     </label>
 
     <div class="controls">
-        <g:textField name="label" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.label}" class="lowercase" onblur="trimText(this)"/>
+        <g:textField id="termLabelId" name="label" maxlength="${bard.db.dictionary.Element.LABEL_MAX_SIZE}" value="${termCommand?.label}" class="lowercase" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="label" bean="${termCommand}"/></span>
     </div>
 </div>
@@ -53,7 +53,7 @@
     </label>
 
     <div class="controls">
-        <g:textArea name="description" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.description}" />
+        <g:textArea id="termDescriptionId" name="description" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.description}" />
         <span class="help-inline"><g:fieldError field="description" bean="${termCommand}"/></span>
     </div>
 </div>
@@ -68,7 +68,7 @@
     </label>
 
     <div class="controls">
-        <g:textField name="abbreviation" maxlength="${bard.db.dictionary.Element.ABBREVIATION_MAX_SIZE}" value="${termCommand?.abbreviation}" onblur="trimText(this)"/>
+        <g:textField id="abbrvId" name="abbreviation" maxlength="${bard.db.dictionary.Element.ABBREVIATION_MAX_SIZE}" value="${termCommand?.abbreviation}" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="abbreviation" bean="${termCommand}"/></span>
     </div>
 </div>
@@ -79,7 +79,7 @@
     </label>
 
     <div class="controls">
-        <g:textArea name="synonyms" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.SYNONYMS_MAX_SIZE}" value="${termCommand?.synonyms}" class="lowercase" onblur="trimText(this)"/>
+        <g:textArea id="synonymsId" name="synonyms" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.SYNONYMS_MAX_SIZE}" value="${termCommand?.synonyms}" class="lowercase" onblur="trimText(this)"/>
         <span class="help-inline"><g:fieldError field="synonyms" bean="${termCommand}"/></span>
     </div>
 </div>
@@ -88,14 +88,14 @@
         <h4>4. Explain why you need to add this term.</h4>
     </label>
 </div>
-<div class="control-group ${hasErrors(bean: termCommand, field: 'comments', 'error')} required">
-    <label class="control-label" for="comments">
-        <strong><g:message code="termCommand.comments.label"/></strong>
+<div class="control-group ${hasErrors(bean: termCommand, field: 'curationNotes', 'error')} required">
+    <label class="control-label" for="curationNotes">
+        <strong><g:message code="termCommand.curationNotes.label"/></strong>
         <span class="required-indicator">*</span>
     </label>
 
     <div class="controls">
-        <g:textArea name="comments" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.comments}" onblur="trimText(this)"/>
-        <span class="help-inline"><g:fieldError field="comments" bean="${termCommand}"/></span>
+        <g:textArea id="curationNotesId" name="curationNotes" cols="40" rows="5" maxlength="${bard.db.dictionary.Element.DESCRIPTION_MAX_SIZE}" value="${termCommand?.curationNotes}" onblur="trimText(this)"/>
+        <span class="help-inline"><g:fieldError field="curationNotes" bean="${termCommand}"/></span>
     </div>
 </div>

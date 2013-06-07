@@ -28,6 +28,8 @@ class TidIssueService {
 
     private final static String aidParam = "aid"
 
+    private static final String columnsString = columns.join(", ")
+
     private final static String duplicateResultTypeQueryString = """
 select orm.${columns.join(",orm.")}
 from bard_data_qa_dashboard.vw_data_mig_result_map orm
@@ -48,7 +50,7 @@ and not exists (select 1 from bard_data_qa_dashboard.vw_data_mig_result_map r wh
 r.contexttid = rm.tid and r.contexttid <> rm.tid)
 and resulttype is not null
 and resulttype not in ('standard deviation', 'confidence limit 95%')
-and aid = :aid
+and aid = :$aidParam
 group by aid, resulttype, seriesno, concentration, concentrationunit,
 attribute1, value1, attribute2, value2 having count(*) > 1)
 sub on (nvl(orm.resulttype, 'NULL') = sub.resulttype
@@ -64,58 +66,29 @@ where orm.aid = :$aidParam
 order by orm.aid, tid
 """
 
-    private static final String resultTypeAndContextConflictBaseQueryString = """
-select ${columns.join(",")}
-  from bard_data_qa_dashboard.vw_data_mig_result_map where RESULTTYPE is not null and
-    contexttid is not null and contexttid <> tid
-"""
-
-    private static final String aidClause = " and aid = :$aidParam "
-    private static final String tidOrderByClause = " order by tid "
-
-    private static final String relationshipBaseQueryString = """
-select ${columns.join(",")} from bard_data_qa_dashboard.vw_data_mig_result_map where
-  ((parenttid IS NOT NULL AND relationship IS NULL)
-  OR (parenttid IS NULL AND relationship IS NOT NULL))
-"""
-
 
     def sessionFactory
 
-    List<Object[]> findTidsWithDuplicateResultTypes(Integer aid) {
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(duplicateResultTypeQueryString)
+    public List<Object[]> findTidsWithResultMapProblem(ResultMapProblemEnum problem, Integer aid) {
+
+        String queryString = null
+
+        if (problem != ResultMapProblemEnum.duplicateResult) {
+            String view = MarginalProductService.rmProblemViewMap.get(problem)
+
+            queryString = """
+select $columnsString from bard_data_qa_dashboard.vw_data_mig_result_map
+    where tid in (select tid from $view where aid = :$aidParam)
+    and aid = :$aidParam
+    order by tid
+"""
+        } else {
+            queryString = duplicateResultTypeQueryString
+        }
+
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(queryString)
         query.setInteger(aidParam, aid)
 
         return query.list()
-    }
-
-    List<Object[]> findTidsWithResultTypeContextConflict(Integer aid) {
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(
-                "$resultTypeAndContextConflictBaseQueryString $aidClause $tidOrderByClause"
-        )
-        query.setInteger(aidParam, aid)
-        return query.list()
-    }
-
-    List<Object[]> findAllTidsWithResultTypeContextConflict() {
-        return sessionFactory.getCurrentSession().createSQLQuery(
-                "$resultTypeAndContextConflictBaseQueryString $tidOrderByClause"
-        ).list()
-    }
-
-    List<Object[]> findTidsWithRelationshipProblems(Integer aid) {
-        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(
-                "$relationshipBaseQueryString $aidClause $tidOrderByClause"
-        )
-
-        query.setInteger(aidParam, aid)
-
-        return query.list()
-    }
-
-    List<Object[]> findAllTidsWithRelationshipProblems() {
-        return sessionFactory.getCurrentSession().createSQLQuery(
-                "$relationshipBaseQueryString $tidOrderByClause"
-        ).list()
     }
 }

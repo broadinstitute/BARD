@@ -1,17 +1,25 @@
 package bard.db.project
 
 import bard.db.dictionary.Element
+import bard.db.dictionary.StageTree
+import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
+import bard.db.registration.AbstractInlineEditingControllerUnitSpec
 import bard.db.registration.Assay
+import bard.db.registration.EditingHelper
 import bard.db.registration.ExternalReference
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Shared
-import spock.lang.Specification
+
+import javax.servlet.http.HttpServletResponse
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,23 +29,29 @@ import spock.lang.Specification
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(ProjectController)
-@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference])
-@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference])
+@Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
+@Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
-class ProjectControllerUnitSpec extends Specification {
+class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Shared Project project
     @Shared ProjectExperiment projectExperimentFrom
     @Shared ProjectExperiment projectExperimentTo
-
+    @Shared StageTree stageTree1
+    @Shared StageTree stageTree2
     ProjectService projectService
 
     @Before
     void setup() {
+        controller.metaClass.mixin(EditingHelper)
         project = Project.build()
+        Element element1 = Element.build(label: "primary assay")
+        Element element2 = Element.build(label: "secondary assay")
+        stageTree1 = StageTree.build(element: element1)
+        stageTree2 = StageTree.build(element: element2)
         Experiment experimentFrom = Experiment.build()
         Experiment experimentTo = Experiment.build()
-        projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom)
-        projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo)
+        projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: element1)
+        projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo, stage: element2)
         ProjectStep projectStep = ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo)
         projectExperimentFrom.addToFollowingProjectSteps(projectStep)
         projectExperimentTo.addToPrecedingProjectSteps(projectStep)
@@ -45,7 +59,205 @@ class ProjectControllerUnitSpec extends Specification {
         defineBeans {
             projectExperimentRenderService(ProjectExperimentRenderService)
         }
-        projectService = Mock()
+        projectService = Mock(ProjectService)
+        controller.projectService = projectService
+    }
+
+    void 'test edit Project Status success'() {
+        given:
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.projectStatus.id
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Status with errors'() {
+        given:
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name, value: ProjectStatus.APPROVED.id)
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
+
+    void 'test edit Project Name success'() {
+        given:
+        Project newProject = Project.build(version: 0, name: "My Name")  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.name)
+        when:
+        controller.editProjectName(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectName(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.name
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Name with errors'() {
+        given:
+        Project newProject = Project.build(version: 0)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id, version: newProject.version, name: newProject.name)
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editProjectName(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectName(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
+
+    void 'test edit Project Description success'() {
+        given:
+        Project newProject = Project.build(version: 0, name: "My Name", description: "My Description")  //no designer
+        Project updatedProject = Project.build(description: "My New Description", name: "My New Name", version: 1, lastUpdated: new Date())
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.description)
+        when:
+        controller.editDescription(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectDescription(_, _) >> { return updatedProject }
+        assert response.status == HttpServletResponse.SC_OK
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
+
+        assert responseJSON.get("version").asText() == "0"
+        assert responseJSON.get("data").asText() == updatedProject.description
+        assert responseJSON.get("lastUpdated").asText()
+        assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Description with errors'() {
+        given:
+        Project newProject = Project.build(version: 0)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: newProject.description)
+        controller.metaClass.message = { Map p -> return "foo" }
+
+        when:
+        controller.editDescription(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectDescription(_, _) >> { throw new Exception("") }
+        assertEditingErrorMessage()
+    }
+
+    void 'test projectStages'() {
+
+        when:
+        controller.projectStages()
+
+        then:
+        assert response.text
+
+
+    }
+
+    void 'test reloadProjectSteps'() {
+        given:
+        views['/project/_showstep.gsp'] = 'mock contents'
+        controller.projectService = projectService
+        when:
+        controller.reloadProjectSteps(project.id)
+        then:
+        assert response.text == 'mock contents'
+    }
+
+
+    void 'test update stage for an Experiment with null stage'() {
+        given:
+        ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
+
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom1.id, name: stage, value: projectExperimentTo.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom1.stage.id == projectExperimentTo.stage.id
+        assert response.text == expectedStage
+        assert response.status == 200
+
+        where:
+        desc                                                  | stage  | expectedStage
+        "ProjectExperiment has null stage element ID"         | null   | "secondary assay"
+        "ProjectExperiment has stage ID that is not a number" | "name" | "secondary assay"
+    }
+
+    void 'test updateProjectStage change the stage'() {
+        given:
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: projectExperimentTo.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom.stage.id == projectExperimentTo.stage.id
+        assert response.text == "secondary assay"
+        assert response.status == 200
+    }
+
+    void 'test updateProjectStage no change in stage'() {
+        given:
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: projectExperimentFrom.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom.stage.id != projectExperimentTo.stage.id
+        assert response.text == "primary assay"
+        assert response.status == 200
+
+    }
+
+    void 'test updateProjectStage new stage not found'() {
+        given:
+        String label = "Some unknown stage"
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        assert projectExperimentFrom.stage.id != projectExperimentTo.stage.id
+        assert response.text == "Could not find stage with label ${label}"
+        assert response.status == 404
+
+    }
+
+    void 'test reload project fail {#description}'() {
+        given:
+        controller.projectService = projectService
+
+        when:
+        controller.reloadProjectSteps(null)
+        then:
+        assert response.text.startsWith(responsetext)
+
+        where:
+        description                          | responsetext
+        "failed due to experiment not found" | "serviceError"
     }
 
     void 'test show'() {

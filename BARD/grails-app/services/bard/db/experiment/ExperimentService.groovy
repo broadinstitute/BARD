@@ -1,14 +1,7 @@
 package bard.db.experiment
 
-import bard.db.dictionary.Element
-import bard.db.enums.AssayStatus
-import bard.db.enums.ReadyForExtraction
-import bard.db.experiment.Experiment
-import bard.db.experiment.ExperimentMeasure
+import bard.db.enums.ExperimentStatus
 import bard.db.registration.Assay
-import bard.db.registration.AssayContext
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AssayDocument
 import bard.db.registration.Measure
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -19,6 +12,45 @@ import registration.AssayService
 class ExperimentService {
 
     AssayService assayService;
+    Experiment updateRunFromDate(final Long experimentId, final Date runDateFrom){
+        Experiment experiment = Experiment.findById(experimentId)
+        experiment.runDateFrom = runDateFrom
+        experiment.save(flush: true)
+        return Experiment.findById(experimentId)
+    }
+    Experiment updateRunToDate(final Long experimentId, final Date runDateTo){
+        Experiment experiment = Experiment.findById(experimentId)
+        experiment.runDateTo = runDateTo
+        experiment.save(flush: true)
+        return Experiment.findById(experimentId)
+    }
+    Experiment updateHoldUntilDate(final Long experimentId, final Date newHoldUntilDate) {
+        Experiment experiment = Experiment.findById(experimentId)
+        experiment.holdUntilDate = newHoldUntilDate
+        experiment.save(flush: true)
+        return Experiment.findById(experimentId)
+    }
+    Experiment updateExperimentDescription(final Long experimentId, final String newExperimentDescription) {
+        Experiment experiment = Experiment.findById(experimentId)
+        experiment.description = newExperimentDescription
+
+        experiment.save(flush: true)
+        return Experiment.findById(experimentId)
+    }
+    Experiment updateExperimentName(final Long experimentId, final String newExperimentName) {
+        Experiment experiment = Experiment.findById(experimentId)
+        experiment.experimentName = newExperimentName
+        //validate version here
+        experiment.save(flush: true)
+        return Experiment.findById(experimentId)
+    }
+
+    Experiment updateExperimentStatus(final Long experimentId, final ExperimentStatus experimentStatus) {
+        Experiment experiment = Experiment.findById(experimentId)
+        experiment.experimentStatus = experimentStatus
+        experiment.save(flush: true)
+        return Experiment.findById(experimentId)
+    }
 
     void updateMeasures(Experiment experiment, JSONArray edges) {
         // populate map with ids as strings
@@ -31,7 +63,7 @@ class ExperimentService {
         Set unused = new HashSet(experiment.experimentMeasures)
 
         // clear relationships between measures
-        unused.each {ExperimentMeasure measure ->
+        unused.each { ExperimentMeasure measure ->
             measure.childMeasures = new HashSet();
             measure.parent = null;
         }
@@ -39,13 +71,13 @@ class ExperimentService {
         // start over fresh and walk through the elements in tree
         experiment.experimentMeasures = new HashSet()
 
-        for(int i=0;i<edges.length();i++) {
+        for (int i = 0; i < edges.length(); i++) {
             JSONObject record = edges.getJSONObject(i);
             String id = record.getString("id");
             Long measureId = record.getLong("measureId");
 
             ExperimentMeasure experimentMeasure;
-            if (id.startsWith("new-")){
+            if (id.startsWith("new-")) {
                 Measure measure = Measure.get(measureId);
                 experimentMeasure = new ExperimentMeasure(experiment: experiment, measure: measure, dateCreated: new Date());
                 experimentMeasure.save()
@@ -53,7 +85,7 @@ class ExperimentService {
             } else {
                 experimentMeasure = byId[id];
                 if (experimentMeasure == null) {
-                    throw new RuntimeException("Could not find measure with id "+id);
+                    throw new RuntimeException("Could not find measure with id " + id);
                 }
                 unused.remove(experimentMeasure);
             }
@@ -62,7 +94,7 @@ class ExperimentService {
 
         // at this point, we've got all of the experimentMeasures indexable by ids
         // so re-walk the list of edges and assign parent child relationships
-        for(int i=0;i<edges.length();i++) {
+        for (int i = 0; i < edges.length(); i++) {
             JSONObject record = edges.getJSONObject(i);
             String id = record.getString("id");
             String parentId = null;
@@ -71,7 +103,7 @@ class ExperimentService {
 
             String relationship = null;
             HierarchyType hierarchyType = null;
-            if (record.has("relationship")){
+            if (record.has("relationship")) {
                 relationship = record.getString("relationship");
             }
 
@@ -84,14 +116,14 @@ class ExperimentService {
             if (parent != null) {
                 parent.addToChildMeasures(child);
             }
-            if(StringUtils.isNotBlank(relationship) && relationship != 'null'){
-              hierarchyType = HierarchyType.byId(relationship);
+            if (StringUtils.isNotBlank(relationship) && relationship != 'null') {
+                hierarchyType = HierarchyType.byId(relationship);
             }
             child.parentChildRelationship = hierarchyType;
         }
 
         // now get rid of the unused measures
-        unused.each {ExperimentMeasure measure ->
+        unused.each { ExperimentMeasure measure ->
             measure.delete();
         }
 
@@ -137,12 +169,12 @@ class ExperimentService {
         Assay newAssay = mapping.assay
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
 
-        for(experiment in experiments)  {
+        for (experiment in experiments) {
             oldAssay.removeFromExperiments(experiment)
             newAssay.addToExperiments(experiment)
 
             // map measures over to new assay
-            for(experimentMeasure in experiment.experimentMeasures) {
+            for (experimentMeasure in experiment.experimentMeasures) {
                 Measure oldMeasure = experimentMeasure.measure
                 Measure newMeasure = measureOldToNew[oldMeasure]
                 assert newMeasure != null

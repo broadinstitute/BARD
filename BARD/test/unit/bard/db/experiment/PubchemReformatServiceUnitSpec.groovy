@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.HierarchyType
 import bard.db.registration.*
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
@@ -34,7 +35,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
             "VALUE2",
             "SERIESNO",
             "QUALIFIERTID",
-            "EXCLUDED_POINTS_SERIES_NO"];
+            "EXCLUDED_POINTS_SERIES_NO","RELATIONSHIP"];
 
     def fillInRows(List<Map> rows) {
         for (row in rows) {
@@ -99,7 +100,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         parent.qualifierTid == "3"
         parent.tid == "1"
-        parent.staticContextItems.size() == 3
+        parent.staticContextItems.size() == 0
         parent.contextItemColumns.size() == 0
         parent.resultType == "parent"
         parent.parentTid == null
@@ -256,5 +257,92 @@ class PubchemReformatServiceUnitSpec extends Specification {
 
         then:
         thrown(PubchemReformatService.MissingColumnsException)
+    }
+
+    def 'test recreating measures from result map'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+        Assay assay = Assay.build()
+        Experiment experiment = Experiment.build(assay: assay)
+        Element cellCount = Element.build(label: "cell count")
+
+        Collection<PubchemReformatService.MappedStub> newMeasures = [
+                new PubchemReformatService.MappedStub(resultType: Element.build(), parentChildRelationship: HierarchyType.CALCULATED_FROM,
+                        contextItems: [ (cellCount): ["100.0", "200.0"]])
+        ]
+
+        when:
+        service.recreateMeasures(experiment, newMeasures)
+
+        then:
+        assay.assayContexts.size() == 1
+        AssayContext context = assay.assayContexts.first()
+        context.assayContextMeasures.size() == 1
+
+        experiment.experimentMeasures.size() == 1
+        assay.measures.size() == 1
+    }
+
+    def 'test recreating measures on an existing experiment'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+        Assay assay = Assay.build()
+        Measure oldMeasure = Measure.build(assay: assay)
+        Experiment experiment = Experiment.build(assay: assay)
+        ExperimentMeasure oldExperimentMeasure = ExperimentMeasure.build(experiment: experiment, measure: oldMeasure)
+        Element cellCount = Element.build(label: "cell count")
+
+        Collection<PubchemReformatService.MappedStub> newMeasures = [
+                new PubchemReformatService.MappedStub(resultType: Element.build(), parentChildRelationship: HierarchyType.CALCULATED_FROM,
+                        contextItems: [ (cellCount): ["100.0", "200.0"]])
+        ]
+
+        when:
+        service.recreateMeasures(experiment, newMeasures)
+
+        then:
+        assay.assayContexts.size() == 1
+        AssayContext context = assay.assayContexts.first()
+        context.assayContextMeasures.size() == 1
+
+        experiment.experimentMeasures.size() == 1
+        !experiment.experimentMeasures.contains(oldExperimentMeasure)
+        // there is the original measure, and a new one used by this experiment
+        assay.measures.size() == 2
+    }
+
+    def 'test creating measure hierarchy from result map'() {
+        setup:
+        PubchemReformatService service = new PubchemReformatService()
+
+        when:
+        PubchemReformatService.ResultMap map = new PubchemReformatService.ResultMap("100", [
+                new PubchemReformatService.ResultMapRecord(tid: "0", resultType: "outcome"),
+                new PubchemReformatService.ResultMapRecord(tid: "1", resultType: "activity", statsModifier: "mean", parentTid: "0"),
+                new PubchemReformatService.ResultMapRecord(tid: "2", resultType: "activity", parentTid: "1", staticContextItems: ["cell count":"100"]),
+                new PubchemReformatService.ResultMapRecord(tid: "3", resultType: "activity", parentTid: "1", staticContextItems: ["cell count":"100"])
+        ])
+        def measures = service.createMeasures(map)
+
+        then:
+        measures.size() == 1
+        PubchemReformatService.MeasureStub grandparent = measures.first()
+        grandparent.resultType == "outcome"
+        grandparent.statsModifier == null
+        grandparent.children.size() == 1
+        grandparent.contextItems.size() == 0
+
+        PubchemReformatService.MeasureStub parent = grandparent.children.first()
+        parent.resultType == "activity"
+        parent.statsModifier == "mean"
+        parent.children.size() == 1
+        parent.contextItems.size() == 0
+
+        PubchemReformatService.MeasureStub child = parent.children.first()
+        child.resultType == "activity"
+        child.statsModifier == null
+        child.children.size() == 0
+        child.contextItems.size() == 1
+        child.contextItems["cell count"].size() == 2
     }
 }

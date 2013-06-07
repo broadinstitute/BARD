@@ -47,7 +47,7 @@ class MergeAssayServiceUnitSpec extends Specification {
 
         mergeAssayService.handleDocuments(removingAssays, targetAssay, modifiedBy)       // associate document
 
-        mergeAssayService.handleMeasure(removingAssays, targetAssay, modifiedBy)         // associate measure
+        mergeAssayService.handleMeasure(null, removingAssays, targetAssay, modifiedBy)         // associate measure
     }
 
     void verifyMeasuresAreConsistent(Assay assay) {
@@ -61,9 +61,9 @@ class MergeAssayServiceUnitSpec extends Specification {
     void "test merging measures"() {
         mockDomain(Measure)
 
-        Element rtA = Element.build()
-        Element rtB = Element.build()
-        Element statModifier = Element.build()
+        Element rtA = Element.build(label: "element1")
+        Element rtB = Element.build(label: "element2")
+        Element statModifier = Element.build(label: "modifier")
 
         Assay assayA = Assay.build()
         Measure measureAA = Measure.build(assay: assayA, resultType: rtA)
@@ -86,9 +86,9 @@ class MergeAssayServiceUnitSpec extends Specification {
         mockDomain(Measure)
         mockDomain(ExperimentMeasure)
 
-        Element rtA = Element.build()
-        Element rtB = Element.build()
-        Element rtC = Element.build()
+        Element rtA = Element.build(label: "element1")
+        Element rtB = Element.build(label: "element2")
+        Element rtC = Element.build(label: "element3")
 
         Assay assayA = Assay.build()
         Experiment experimentA = Experiment.build(assay: assayA)
@@ -124,7 +124,7 @@ class MergeAssayServiceUnitSpec extends Specification {
     void "test measures with context association"() {
         setup:
         "we have two assays, with measures that will be merged, and one has a link to a context"
-        Element rt = Element.build()
+        Element rt = Element.build(label: "element1")
 
         Assay assayA = Assay.build()
         Experiment experimentA = Experiment.build(assay: assayA)
@@ -134,7 +134,7 @@ class MergeAssayServiceUnitSpec extends Specification {
         Experiment experimentB = Experiment.build(assay: assayB)
         Measure measureBA = Measure.build(assay: assayB, resultType: rt)
         AssayContext contextB = AssayContext.build(assay: assayB)
-        AssayContextItem.build(assayContext: contextB)
+        AssayContextItem.build(assayContext: contextB, valueDisplay: "value display")
         AssayContextMeasure link = AssayContextMeasure.build(assayContext: contextB, measure: measureBA)
 
         when:
@@ -151,18 +151,18 @@ class MergeAssayServiceUnitSpec extends Specification {
 
     void "test merging of assay contexts where fixed items mismatch"() {
         setup:
-        Element attribute = Element.build()
-        Element valueA = Element.build()
-        Element valueB = Element.build()
+        Element attribute = Element.build(label: "element1")
+        Element valueA = Element.build(label: "element2")
+        Element valueB = Element.build(label: "element3")
 
         Assay assayA = Assay.build()
         AssayContext contextA = AssayContext.build(assay: assayA)
-        AssayContextItem itemA = AssayContextItem.build(assayContext: contextA, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA)
+        AssayContextItem itemA = AssayContextItem.build(assayContext: contextA, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA, valueDisplay: "value display")
         Experiment experimentA = Experiment.build(assay: assayA)
 
         Assay assayB = Assay.build()
         AssayContext contextB = AssayContext.build(assay: assayB)
-        AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueB)
+        AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueB, valueDisplay: "value display")
         Experiment experimentB = Experiment.build(assay: assayB)
 
         when:
@@ -183,17 +183,17 @@ class MergeAssayServiceUnitSpec extends Specification {
 
     void "test merging of assay contexts where fixed items match"() {
         setup:
-        Element valueA = Element.build()
-        Element attribute = Element.build()
+        Element valueA = Element.build(label: "element1")
+        Element attribute = Element.build(label: "element2")
 
         Assay assayA = Assay.build()
         AssayContext contextA = AssayContext.build(assay: assayA)
-        AssayContextItem itemA = AssayContextItem.build(assayContext: contextA, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA)
+        AssayContextItem itemA = AssayContextItem.build(assayContext: contextA, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA, valueDisplay: "value display")
         Experiment experimentA = Experiment.build(assay: assayA)
 
         Assay assayB = Assay.build()
         AssayContext contextB = AssayContext.build(assay: assayB)
-        AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA)
+        AssayContextItem itemB = AssayContextItem.build(assayContext: contextB, attributeType: AttributeType.Fixed, attributeElement: attribute, valueElement: valueA, valueDisplay: "value Display")
         Experiment experimentB = Experiment.build(assay: assayB)
 
         when:
@@ -202,7 +202,7 @@ class MergeAssayServiceUnitSpec extends Specification {
         then: "the assay contexts should not have changed nor the experiment contexts changed"
         experimentA.experimentContexts.size() == 0
         experimentB.experimentContexts.size() == 0
-        contextA.contextItems.size() == 1
+        contextA.contextItems.size() == 2
         contextA.contextItems.first().attributeType == AttributeType.Fixed
     }
 
@@ -220,8 +220,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         String valueDisplay = "value for display"
 
         when:
-        AssayContextItem aci1 = AssayContextItem.build(attributeElement: e1)
-        AssayContextItem aci2 = AssayContextItem.build(attributeElement: e2)
+        AssayContextItem aci1 = AssayContextItem.build(attributeElement: e1, valueDisplay: valueDisplay)
+        AssayContextItem aci2 = AssayContextItem.build(attributeElement: e2, valueDisplay: valueDisplay)
 
         then: "these two item are not the same because attribute element are not match"
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
@@ -238,8 +238,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
         when:
-        aci1 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed)
-        aci2 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed)
+        aci1 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
+        aci2 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
         then: "this two items are the same since they have same valueElement"
         assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
@@ -254,8 +254,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
         when:
-        aci1 = AssayContextItem.build(attributeElement: ex1, extValueId: extValueId, attributeType: AttributeType.Fixed)
-        aci2 = AssayContextItem.build(attributeElement: ex1, extValueId: extValueId, attributeType: AttributeType.Fixed)
+        aci1 = AssayContextItem.build(attributeElement: ex1, extValueId: extValueId, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
+        aci2 = AssayContextItem.build(attributeElement: ex1, extValueId: extValueId, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
         then: "This two are the same due to same extValueId"
         assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
         when:

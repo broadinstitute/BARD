@@ -20,8 +20,7 @@ class AttributesContentsCleaner {
      * 4. Convert text field to numerical values where appropriate (e.g, '680 nm' --> 680, and the 'nm' part is discarded)
      */
 
-   static void cleanDtos(List<Dto> dtos) {
-       Map attributeNameMapping = ElementIdMapping.build()
+   static void cleanDtos(List<Dto> dtos, Map attributeNameMapping) {
         dtos.each{Dto dto->
             List<ContextDTO> cleanedContextDTOs = []
             dto.contextDTOs.each{ContextDTO contextDTO ->

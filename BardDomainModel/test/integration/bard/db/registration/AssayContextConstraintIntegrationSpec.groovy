@@ -1,10 +1,7 @@
 package bard.db.registration
 
-import bard.db.audit.BardContextUtils
 import bard.db.model.AbstractContextConstraintIntegrationSpec
-import org.hibernate.SessionFactory
 import org.junit.Before
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static test.TestUtils.assertFieldValidationExpectations
@@ -34,7 +31,7 @@ class AssayContextConstraintIntegrationSpec extends AbstractContextConstraintInt
         then: 'verify valid or invalid for expected reason'
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-        and: 'verify the domainspreadsheetmapping can be persisted to the db'
+        and: 'verify the domain can be persisted to the db'
         if (valid) {
             domainInstance == domainInstance.save(flush: true)
         }

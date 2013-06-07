@@ -2,6 +2,7 @@ package bard.db.registration
 
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.AssayStatusEnumUserType
 import bard.db.enums.hibernate.AssayTypeEnumUserType
@@ -65,7 +66,43 @@ class Assay extends AbstractContextOwner {
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
-    static transients = ['assayContextItems']
+    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions']
+
+
+
+    List<AssayDocument> getPublications() {
+        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+
+    List<AssayDocument> getExternalURLs() {
+        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL } as List<AssayDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+
+    List<AssayDocument> getComments() {
+        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS } as List<AssayDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+    List<AssayDocument> getDescriptions() {
+        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION } as List<AssayDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+    List<AssayDocument> getProtocols() {
+        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL } as List<AssayDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
+
+    List<AssayDocument> getOtherDocuments() {
+        final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<AssayDocument>
+        documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
+        return documents
+    }
 
     List<AssayContextItem> getAssayContextItems() {
         Set<AssayContextItem> assayContextItems = new HashSet<AssayContextItem>()
