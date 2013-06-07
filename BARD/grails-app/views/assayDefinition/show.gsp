@@ -29,7 +29,9 @@
 
         <div class="span9">
             <div class="pull-left">
-                <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+                <g:if test="${assayInstance?.id}">
+                    <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+                </g:if>
             </div>
         </div>
     </div>
@@ -41,8 +43,10 @@
 
         <div class="span9">
             <div class="pull-left">
-                <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn"><g:img
-                        uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
+                <g:if test="${assayInstance?.id}">
+                    <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn"><g:img
+                            uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
+                </g:if>
             </div>
         </div>
     </div>
