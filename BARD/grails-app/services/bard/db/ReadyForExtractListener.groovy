@@ -76,6 +76,7 @@ class ReadyForExtractListener extends AbstractPersistenceEventListener {
     protected void handleDirtyExternalReference(ExternalReference reference) {
         if (reference.project != null)
             handleDirtyProject(reference.project)
+
         if (reference.experiment != null)
             handleDirtyExperiment(reference.experiment)
     }
