@@ -16,6 +16,8 @@ public class Assay extends AbstractAssay {
     private List<String> experimentIds = new ArrayList<String>();
     @JsonProperty("projects")
     private List<String> projectsIds = new ArrayList<String>();
+    @JsonProperty("minimumAnnotations")
+    private MinimumAnnotation minimumAnnotations = (MinimumAnnotation) null ;
 
 
     @JsonProperty("documents")
@@ -57,5 +59,18 @@ public class Assay extends AbstractAssay {
     public void setProjectsIds(List<String> projectIds) {
         this.projectsIds = projectIds;
     }
+
+
+    @JsonProperty("minimumAnnotations")
+    public MinimumAnnotation getMinimumAnnotation() {
+        return minimumAnnotations;
+    }
+
+    @JsonProperty("minimumAnnotations")
+    public void setMinimumAnnotation(MinimumAnnotation minimumAnnotations) {
+        this.minimumAnnotations = minimumAnnotations;
+    }
+
+
 
 }
