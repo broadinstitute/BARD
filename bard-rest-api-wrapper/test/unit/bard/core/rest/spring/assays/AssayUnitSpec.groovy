@@ -117,7 +117,12 @@ class AssayUnitSpec extends Specification {
         assert assay.getMinimumAnnotation().getDetectionInstrumentName() == "PerkinElmer EnVision"
         assert assay.getMinimumAnnotation().getAssayFormat() == "cell-based format"
         assert assay.getMinimumAnnotation().getAssayType() == "transporter assay"
-
+        assert assay.getMinimumAnnotation().getSpeciesName() == null
+        assert assay.getMinimumAnnotation().getCulturedCellName() == null
+        assert assay.getMinimumAnnotation().getExcitationWavelength() == null
+        assert assay.getMinimumAnnotation().getEmissionWavelength() == null
+        assert assay.getMinimumAnnotation().getAbsorbanceWavelength() == null
+        assert assay.getMinimumAnnotation().getMeasurementWavelength() == null
     }
 
 
