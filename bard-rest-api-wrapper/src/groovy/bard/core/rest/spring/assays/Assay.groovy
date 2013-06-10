@@ -17,6 +17,8 @@ public class Assay extends AbstractAssay {
     @JsonProperty("projects")
     private List<String> projectsIds = new ArrayList<String>();
 
+    Map<String,String> minimumAnnotations = new HashMap<String,String>();
+
 
     @JsonProperty("documents")
     public List<String> getDocumentIds() {

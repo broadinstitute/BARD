@@ -177,4 +177,11 @@ public class AssayAdapter implements AssayAdapterInterface {
         }
         return documentIds
     }
+
+    public Map<String,String> getMinimumAnnotations() {
+        if (assay instanceof ExpandedAssay || assay instanceof Assay) {
+            return assay.getMinimumAnnotations()
+        }
+        return [:]
+    }
 }

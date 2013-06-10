@@ -17,6 +17,42 @@
     <div align="right">
         <g:selectAllItemsInPage mainDivName="assays"/>
     </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th rowspan="2">ADID</th>
+                <th colspan="6">Assay Title</th>
+            </tr>
+            <tr>
+                <th>AssayType</th><th>Assay Format</th><th>Detection Method Type</th><th>Designed By</th><th>Assay Footprint</th><th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <g:each var="assayAdapter" in="${assayAdapters}">
+                <tr>
+                    <td rowspan="2">${assayAdapter.capAssayId}</td>
+                    <td colspan="6"><g:link action="showAssay" id="${assayAdapter.id}">
+                        ${assayAdapter.name}</g:link></td>
+                </tr>
+                <tr>
+                    <td>${assayAdapter.minimumAnnotations.get("assay type")}</td>
+                    <td>${assayAdapter.minimumAnnotations.get("assay format")}</td>
+                    <td>${assayAdapter.minimumAnnotations.get("detection method type")}</td>
+                    <td>${assayAdapter.designedBy}</td>
+                    <td>${assayAdapter.minimumAnnotations.get("assay footprint")}</td>
+                    <td><g:if test="${assayAdapter.assayStatus == 'Draft'}">
+                        <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                             alt="Draft" title="Warning this assay definition has not yet been reviewed for accuracy"/>
+                        </g:if>
+                        <g:elseif test="${assayAdapter.assayStatus == 'Approved' || assayAdapter.assayStatus == 'Witnessed'}">
+                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                                 alt="Witnessed" title="This assay has been reviewed for accuracy"/>
+                        </g:elseif>
+                        ${assayAdapter.assayStatus}</td>
+                </tr>
+            </g:each>
+        </tbody>
+    </table>
     <ul class="unstyled results">
         <g:each var="assayAdapter" in="${assayAdapters}">
             <li>
