@@ -754,6 +754,7 @@ class PubchemReformatService {
             boolean populatedValueNum = false
             try {
                 item.valueNum = Float.parseFloat(value)
+                item.qualifier = "= "
                 populatedValueNum = true
             } catch(NumberFormatException ex) {
             }
