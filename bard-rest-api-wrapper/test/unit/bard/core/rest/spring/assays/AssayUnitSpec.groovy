@@ -57,64 +57,67 @@ class AssayUnitSpec extends Specification {
 
 
     public static final String ASSAY2 = '''
-bardAssayId: 43,
-capAssayId: 973,
-category: 0,
-summary: 0,
-assays: 0,
-classification: 0,
-name: "Using DiI-HDL to assay lipid transfer in ldlA[SR-BI] cells Measured in Cell-Based System Using Plate Reader - 2085-01",
-source: null,
-grantNo: null,
-title: "Scarb1, scavenger receptor class B, member 1 [Mus musculus]; cell-based format; transporter assay; using measured value et al",
-designedBy: "Broad Institute",
-deposited: null,
-updated: "2013-04-25",
-assayType: "Regular",
-assayStatus: "Approved",
-documents: [ ],
-targets: [
+{
+"bardAssayId": 43,
+"capAssayId": 973,
+"category": 0,
+"summary": 0,
+"assays": 0,
+"classification": 0,
+"name": "Using DiI-HDL to assay lipid transfer in ldlA[SR-BI] cells Measured in Cell-Based System Using Plate Reader - 2085-01",
+"source": null,
+"grantNo": null,
+"title": "Scarb1, scavenger receptor class B, member 1 [Mus musculus]; cell-based format; transporter assay; using measured value et al",
+"designedBy": "Broad Institute",
+"deposited": null,
+"updated": "2013-04-25",
+"assayType": "Regular",
+"assayStatus": "Approved",
+"documents": [ ],
+"targets": [
 232,
 231
 ],
-experiments: [
+"experiments": [
 21
 ],
-projects: [
+"projects": [
 2
 ],
-minimumAnnotations: {
-assay footprint: "384-well plate",
-detection method type: "fluorescence intensity",
-detection instrument name: "PerkinElmer EnVision",
-assay format: "cell-based format",
-assay type: "transporter assay"
+"minimumAnnotations": {
+"assay footprint": "384-well plate",
+"detection method type": "fluorescence intensity",
+"detection instrument name": "PerkinElmer EnVision",
+"assay format": "cell-based format",
+"assay type": "transporter assay"
 },
-score: 1,
-resourcePath: "/assays/43"'''
+"score": 1,
+"resourcePath": "/assays/43"
+}'''
 
 
-    void "test serialization to Assay2"() {
+    void "test serialization to updated Assay format focusing on MinimumAnnotation"() {
         when:
         final Assay assay = objectMapper.readValue(ASSAY2, Assay.class)
         then:
         assert assay.getBardAssayId() == 43
         assert assay.getCapAssayId() == 973
-        assert assay.getName() == "Using DiI-HDL to assay lipid transfer in ldlA[SR-BI] cells Measured in Cell-Based System Using Plate Reader - 2085-01\","
+        assert assay.getName() == "Using DiI-HDL to assay lipid transfer in ldlA[SR-BI] cells Measured in Cell-Based System Using Plate Reader - 2085-01"
         assert assay.getTitle() == "Scarb1, scavenger receptor class B, member 1 [Mus musculus]; cell-based format; transporter assay; using measured value et al"
         assert assay.getAssayStatus() == "Approved"
-//        assert assay.getSummary() == 0
-//        assert assay.getAssays() == 0
-//        assert assay.getSource() == "NCGC"
-//        assert !assay.getGrantNo()
-//        assert !assay.getDeposited()
-//        assert !assay.getUpdated()
-//        assert !assay.getKegg_disease_names()
-//        assert !assay.getKegg_disease_cat()
-//        assert assay.getDocumentIds()
-//        assert assay.getTargetIds()
-//        assert assay.getAssayId() == 0
+        assert assay.getClassification() == 0
+        assert assay.getAssays() == 0
+        assert !assay.getSource()
+        assert !assay.getGrantNo()
+        assert !assay.getDeposited()
+        assert assay.getUpdated() == "2013-04-25"
         assert assay.getMinimumAnnotation() != null
+        assert assay.getMinimumAnnotation().getAssayFootprint() == "384-well plate"
+        assert assay.getMinimumAnnotation().getDetectionMethodType() == "fluorescence intensity"
+        assert assay.getMinimumAnnotation().getDetectionInstrumentName() == "PerkinElmer EnVision"
+        assert assay.getMinimumAnnotation().getAssayFormat() == "cell-based format"
+        assert assay.getMinimumAnnotation().getAssayType() == "transporter assay"
+
     }
 
 
