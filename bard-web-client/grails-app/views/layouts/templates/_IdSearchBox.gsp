@@ -1,3 +1,4 @@
+<%@page defaultCodec="none"%>
 <%@ page import="bardqueryapi.IDSearchType" %>
 
 <r:require module="idSearch"/>
