@@ -64,6 +64,7 @@ class CompoundRestServiceIntegrationSpec extends IntegrationSpec {
         assert compoundSummary.nhit
         assert compoundSummary.ntest
         assert compoundSummary.testedAssays
+        assert compoundSummary.testedAssays*.minimumAnnotation
         assert compoundSummary.testedExptdata
         assert compoundSummary.testedExptdata.resultData
     }

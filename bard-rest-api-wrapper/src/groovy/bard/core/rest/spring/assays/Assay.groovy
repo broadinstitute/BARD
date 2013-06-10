@@ -2,7 +2,6 @@ package bard.core.rest.spring.assays
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
-
 /**
  * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
  */
@@ -16,8 +15,8 @@ public class Assay extends AbstractAssay {
     private List<String> experimentIds = new ArrayList<String>();
     @JsonProperty("projects")
     private List<String> projectsIds = new ArrayList<String>();
-
-    Map<String,String> minimumAnnotations = new HashMap<String,String>();
+    @JsonProperty("minimumAnnotations")
+    private MinimumAnnotation minimumAnnotations;
 
 
     @JsonProperty("documents")
@@ -59,5 +58,17 @@ public class Assay extends AbstractAssay {
     public void setProjectsIds(List<String> projectIds) {
         this.projectsIds = projectIds;
     }
+
+    @JsonProperty("minimumAnnotations")
+    public MinimumAnnotation getMinimumAnnotation() {
+        return minimumAnnotations;
+    }
+
+    @JsonProperty("minimumAnnotations")
+    public void setMinimumAnnotation(MinimumAnnotation minimumAnnotations) {
+        this.minimumAnnotations = minimumAnnotations;
+    }
+
+
 
 }
