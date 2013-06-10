@@ -47,18 +47,24 @@ import static org.grails.datastore.mapping.engine.event.EventType.*
  * To change this template use File | Settings | File Templates.
  */
 class ReadyForExtractListener extends AbstractPersistenceEventListener {
+    Closure updateReadyForExtractionCallback
+
     public ReadyForExtractListener(final Datastore datastore) {
         super(datastore)
+
+        // use this to allow mocking out updateReadyForExtraction because I've had nothing
+        // but pain trying to get mocking of withSession() to work
+        updateReadyForExtractionCallback = {x -> updateReadyForExtraction(x)}
     }
 
     protected void updateReadyForExtraction(Object entity) {
         if(entity.readyForExtraction != ReadyForExtraction.READY) {
-            Project.withSession { Session existingSession ->
+            Assay.withSession { Session existingSession ->
                 // since this is in response to a flush, we cannot use the existing session
                 // so, create a new session.  The grails docs seem to claim that this will use
                 // the same transaction as the currently open one, but the changes don't seem
                 // to persist unless I commit a new transaction
-                Project.withNewSession { Session session ->
+                Assay.withNewSession { Session session ->
                     Transaction transaction = session.beginTransaction();
                     def safeReference = session.merge(entity)
                     safeReference.readyForExtraction = ReadyForExtraction.READY;
@@ -74,19 +80,19 @@ class ReadyForExtractListener extends AbstractPersistenceEventListener {
     }
 
     protected void handleDirtyAssay(Assay assay ){
-        updateReadyForExtraction(assay)
+        updateReadyForExtractionCallback(assay)
     }
 
     protected void handleDirtyProject(Project project){
-        updateReadyForExtraction(project)
+        updateReadyForExtractionCallback(project)
     }
 
     protected void handleDirtyExperiment(Experiment experiment) {
-        updateReadyForExtraction(experiment)
+        updateReadyForExtractionCallback(experiment)
     }
 
     protected void handleDirtyElement(Element element) {
-        updateReadyForExtraction(element)
+        updateReadyForExtractionCallback(element)
     }
 
     protected void handleDirtyExternalReference(ExternalReference reference) {
