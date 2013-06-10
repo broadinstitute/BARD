@@ -33,6 +33,8 @@ import org.apache.commons.logging.LogFactory
 import org.grails.datastore.mapping.core.Datastore
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEventListener
+import org.hibernate.Session
+import org.hibernate.Transaction
 import org.springframework.context.ApplicationEvent
 
 import static org.grails.datastore.mapping.engine.event.EventType.*
@@ -49,28 +51,42 @@ class ReadyForExtractListener extends AbstractPersistenceEventListener {
         super(datastore)
     }
 
-    protected void handleDirtyAssay(Assay assay ){
-        if (assay.assayStatus != AssayStatus.DRAFT) {
-            assay.readyForExtraction = ReadyForExtraction.READY;
+    protected void updateReadyForExtraction(Object entity) {
+        if(entity.readyForExtraction != ReadyForExtraction.READY) {
+            Project.withSession { Session existingSession ->
+                // since this is in response to a flush, we cannot use the existing session
+                // so, create a new session.  The grails docs seem to claim that this will use
+                // the same transaction as the currently open one, but the changes don't seem
+                // to persist unless I commit a new transaction
+                Project.withNewSession { Session session ->
+                    Transaction transaction = session.beginTransaction();
+                    def safeReference = session.merge(entity)
+                    safeReference.readyForExtraction = ReadyForExtraction.READY;
+                    transaction.commit();
+                }
+
+                // now, the entity has changed.  Pull it back out of the database.  I would have preferred to do
+                // existingSession.merge(safeReference), however, the values pulled from the database used
+                // for dirty checking are now stale, so the next persist would result in a optimistic lock exception
+                existingSession.refresh(entity)
+            }
         }
+    }
+
+    protected void handleDirtyAssay(Assay assay ){
+        updateReadyForExtraction(assay)
     }
 
     protected void handleDirtyProject(Project project){
-        if (project.projectStatus != ProjectStatus.DRAFT) {
-            project.readyForExtraction = ReadyForExtraction.READY;
-        }
+        updateReadyForExtraction(project)
     }
 
     protected void handleDirtyExperiment(Experiment experiment) {
-        if (experiment.experimentStatus != ExperimentStatus.DRAFT) {
-            experiment.readyForExtraction = ReadyForExtraction.READY;
-        }
+        updateReadyForExtraction(experiment)
     }
 
     protected void handleDirtyElement(Element element) {
-        if (element.elementStatus != ElementStatus.Pending) {
-            element.readyForExtraction = ReadyForExtraction.READY;
-        }
+        updateReadyForExtraction(element)
     }
 
     protected void handleDirtyExternalReference(ExternalReference reference) {
