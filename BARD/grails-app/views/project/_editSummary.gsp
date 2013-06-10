@@ -2,7 +2,7 @@
 <div class="row-fluid">
     <div class="span9">
         <dl class="dl-horizontal">
-            <dt><g:message code="default.id.label" default="PID"/>:</dt>
+            <dt><g:message code="project.id.label" default="PID"/>:</dt>
             <dd>${project.id}</dd>
 
 
@@ -19,8 +19,7 @@
                    data-url="/BARD/project/editProjectStatus"
                    data-original-title="Select Project Status">${project?.projectStatus?.id}</a> <i
                     class="icon-pencil"></i>
-                <br/>
-            </dd>
+             </dd>
 
             <dt><g:message code="project.name.label" default="Fix i18n"/>:</dt>
             <dd>
@@ -33,7 +32,6 @@
                    data-url="/BARD/project/editProjectName"
                    data-placeholder="Required"
                    data-original-title="Edit Project Name">${project?.name}</a> <i class="icon-pencil"></i>
-                <br/>
             </dd>
 
             <dt><g:message code="project.description.label" default="Fix i18n"/>:</dt>
@@ -47,7 +45,6 @@
                    data-url="/BARD/project/editDescription"
                    data-placeholder="Required"
                    data-original-title="Edit Description By">${project.description}</a> <i class="icon-pencil"></i>
-                <br/>
             </dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>

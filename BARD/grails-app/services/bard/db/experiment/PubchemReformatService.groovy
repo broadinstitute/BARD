@@ -549,7 +549,7 @@ class PubchemReformatService {
         measure.resultType = (getUniqueValue(resultTypes.collect { it.resultType } ))
         measure.statsModifier = (getUniqueValue(resultTypes.collect { it.statsModifier } ))
         measure.parentChildRelationship = getUniqueValue(resultTypes.collect { it.parentChildRelationship } )
-        measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}
+	measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}.collectEntries { key, value -> [key, value.collect { it.value } ]  }
         measure.contextItemColumns = resultTypes.collectMany { it.contextItemColumns.collect {x -> x.attribute} }
         return measure
     }
@@ -630,7 +630,21 @@ class PubchemReformatService {
             if (measureByKey.containsKey(newMeasureKey)) {
                 Measure existingMeasure = measureByKey[newMeasureKey]
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-                    verifyContextsAreCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns)
+			if (existingMeasure.assayContextMeasures.size() == 0) {
+	                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, existingMeasure)
+			} else {
+				boolean found = false;
+				for(acm in existingMeasure.assayContextMeasures) {
+                                    AssayContext context = acm.assayContext;
+                                    if(isContextCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns, context)) {
+                                         found = true;
+                                         break;
+                                    }
+				}
+				if(!found) {
+					throw new RuntimeException("Could not find context that contained ${elementKeys + newMeasure.contextItemColumns} for ${existingMeasure}")
+				}
+			} 
                 }
             } else {
                 // create a new measure on this assay
@@ -644,11 +658,13 @@ class PubchemReformatService {
                     measure.parentChildRelationship = newMeasure.parentChildRelationship
                 }
 
+                measure.save(failOnError: true)
+
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
+		    println("newMeasure.contextItems=${newMeasure.contextItems}")
                     createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
                 }
 
-                measure.save(failOnError: true)
                 measureByKey[newMeasureKey] = measure
             }
 
@@ -673,28 +689,19 @@ class PubchemReformatService {
         }
     }
 
-    void verifyContextsAreCompatible(Measure existingMeasure, Collection<Element> attributes) {
-        if (existingMeasure.assayContextMeasures.size() == 1) {
-            AssayContext context = existingMeasure.assayContextMeasures.first().assayContext
-            Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
-            if (!nonfixedAttributes.containsAll(attributes)) {
-                throw new RuntimeException("Context did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
-            }
-        } else if (existingMeasure.assayContextMeasures.size() > 1) {
-            throw new RuntimeException("Too many associated contexts.  Could not verify")
-        } else {
-            throw new RuntimeException("No associated context to measure ${existingMeasure.id}: ${existingMeasure.resultType.label}, expected attributes: ${attributes}")
+    boolean isContextCompatible(Measure existingMeasure, Collection<Element> attributes, AssayContext context) {
+       Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
+       if (!nonfixedAttributes.containsAll(attributes)) {
+//            throw new RuntimeException("Context \"${context.contextName}\" for measure ${existingMeasure} did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
+		return false;
         }
+	return true;
     }
 
     void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element,Collection<String>> attributeValues, Collection<Element>freeAttributes, Measure measure) {
         AssayContext context = new AssayContext()
         context.contextName = "annotations for ${measure.resultType.label}";
         context.contextGroup = "project management> experiment>";
-
-        AssayContextMeasure assayContextMeasure = new AssayContextMeasure()
-        context.addToAssayContextMeasures(assayContextMeasure)
-        measure.addToAssayContextMeasures(assayContextMeasure)
 
         for(attribute in attributeKeys) {
             if(attribute.id == SCREENING_CONCENTRATION_ID) {
@@ -729,6 +736,13 @@ class PubchemReformatService {
         }
 
         assay.addToAssayContexts(context)
+
+	context.save(failOnError: true)
+
+        AssayContextMeasure assayContextMeasure = new AssayContextMeasure()
+        context.addToAssayContextMeasures(assayContextMeasure)
+        measure.addToAssayContextMeasures(assayContextMeasure)
+	assayContextMeasure.save(failOnError: true)
     }
 
     public void assignValue(AssayContextItem item, String value) {
@@ -740,6 +754,7 @@ class PubchemReformatService {
             boolean populatedValueNum = false
             try {
                 item.valueNum = Float.parseFloat(value)
+                item.qualifier = "= "
                 populatedValueNum = true
             } catch(NumberFormatException ex) {
             }

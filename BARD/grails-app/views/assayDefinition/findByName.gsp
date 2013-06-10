@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<r:require modules="core,bootstrap"/>
+<r:require modules="core,bootstrap,bootstrapplus"/>
 <meta name="layout" content="basic"/>
-<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-<title>CAP - Find assay by name</title>
+<title>Search for Assay Definition by Name</title>
 <r:script>
 	$(document).ready(function() {
 		var autoOpts = {
@@ -22,7 +21,7 @@
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1">
-	        	<h4>Search assay by name</h4>
+	        	<h4>Search for Assay Definition by Name</h4>
 	        </div>
 	    </div>
 	</div>
@@ -44,7 +43,7 @@
 	    <div class="span12">
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
 	        	<g:form action="findByName" class="form-inline">
-	        		<label class="control-label" for="assayName">Enter Assay Name:</label>
+	        		<label class="control-label" for="assayName">Enter Assay Definition Name:</label>
 	        		<input type="text" size="50" id="name" name='assayName' value="${params.assayName}" autofocus="true">
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
 				</g:form>

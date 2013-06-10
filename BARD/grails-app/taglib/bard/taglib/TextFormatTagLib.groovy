@@ -10,7 +10,7 @@ package bard.taglib
 class TextFormatTagLib {
     def renderWithBreaks = { attrs, body ->
         def text = attrs.text;
-        def lines = text.split("\n")
+        def lines = text?.split("\n")
         for(line in lines) {
             out << "<p>"
 //            out << line.encodeAsHTML()
