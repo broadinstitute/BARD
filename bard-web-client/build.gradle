@@ -70,7 +70,8 @@ task runJslint << {
         taskdef(name: "jslint",
                 classname: "com.googlecode.jslint4java.ant.JSLintTask",
                 classpath: configurations.jslintTask.asPath)
-        jslint(){
+        jslint(options: "vars, white"){
+            predef("jQuery, \$, document, d3, ajax")
             formatter(type: 'junit', destfile: 'target/test-reports/jslint')
             fileset(dir: 'web-app/js',
                     includes: '**/*.js',
