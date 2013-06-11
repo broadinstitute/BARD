@@ -403,9 +403,11 @@ class RingManagerService {
 
 
 
-    public  RingNode convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
+    public  LinkedHashMap<String, Object>  convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
+        LinkedHashMap<String, Object> returnValue = [:]
         LinkedHashMap activeInactiveDataPriorToConversion = retrieveActiveInactiveDataFromCompound(compoundSummary)
         generateAccessionIdentifiers(activeInactiveDataPriorToConversion["compoundSummaryCategorizer"])
+        returnValue ["CompoundSummaryCategorizer"]  =  activeInactiveDataPriorToConversion["compoundSummaryCategorizer"]
         LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion)
         final List<String> targets = []
         if (includeHits) {
@@ -427,7 +429,8 @@ class RingManagerService {
                 }
             }
         }
-        return ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
+        returnValue ["RingNode"]  =   ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
+        returnValue
     }
 
     /**
@@ -437,18 +440,19 @@ class RingManagerService {
      * @param includeNonHits
      * @return
      */
-    public  RingNode convertCompoundIntoSunburstById (Long cid, Boolean includeHits, Boolean includeNonHits ){
+    public  LinkedHashMap<String,Object> convertCompoundIntoSunburstById (Long cid, Boolean includeHits, Boolean includeNonHits ){
         // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
         CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
-        convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
+        LinkedHashMap ringNodeAndCrossLinks =  convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
+        return ringNodeAndCrossLinks
     }
 
 
 
-    public  RingNode convertCompoundIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
+    public  LinkedHashMap<String,Object>  convertCompoundIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
         // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
 //        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
-        convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
+        return convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
     }
 
 

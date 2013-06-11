@@ -74,14 +74,6 @@ class CompoundSummaryCategorizer {
         deriveArbitraryIndex (proteinTargetMap,proteinTargets)
     }
 
-    public addNewRecord (long eid, String assayFormat, String assayType, List<Integer> unconvertedBiologyObjects ) {
-        if (totalContents.keySet().contains(eid)) {
-            log.warn("Error aggregating experiment data. Repeated experiment ID =: '${eid}'")
-        }  else {
-            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, unconvertedBiologyObjects)
-        }
-
-    }
     public addNewRecord (long eid, String assayFormat, String assayType ) {
         if (totalContents.keySet().contains(eid)) {
             log.warn("Error aggregating experiment data. Repeated experiment ID =: '${eid}'")
@@ -152,12 +144,12 @@ class CompoundSummaryCategorizer {
         int outcome = 0
 
 
-        public SingleEidSummary(long eid, String assayFormat, String assayType, List<Integer> unconvertedBiologyObjects) {
-            this.eid =  eid
-            this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
-            this.assayTypeIndex = deriveAssayTypeIndex (assayType)
-            this.unconvertedBiologyObjects = unconvertedBiologyObjects
-        }
+//        public SingleEidSummary(long eid, String assayFormat, String assayType, List<Integer> unconvertedBiologyObjects) {
+//            this.eid =  eid
+//            this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
+//            this.assayTypeIndex = deriveAssayTypeIndex (assayType)
+//            this.unconvertedBiologyObjects = unconvertedBiologyObjects
+//        }
 
 
         public SingleEidSummary(long eid, String assayFormat, String assayType) {
@@ -166,9 +158,9 @@ class CompoundSummaryCategorizer {
             this.assayTypeIndex = deriveAssayTypeIndex (assayType)
         }
 
-        public List<Long>  retrieveBiologyObjects (){
-            unconvertedBiologyObjects
-        }
+//        public List<Long>  retrieveBiologyObjects (){
+//            unconvertedBiologyObjects
+//        }
 
 
     }

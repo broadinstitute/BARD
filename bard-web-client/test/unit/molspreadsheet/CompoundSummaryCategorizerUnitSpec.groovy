@@ -104,4 +104,36 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
 
 
 
+
+    void "test addNewRecord"() {
+        given:
+        CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
+
+        when:
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay")
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay")
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay")
+        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay")
+        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay")
+        compoundSummaryCategorizer.updateOutcome(123L,2,[26],[])
+        compoundSummaryCategorizer.updateOutcome(456L,1,[],[])
+        compoundSummaryCategorizer.updateOutcome(666L,1,[146, 145],[])
+        compoundSummaryCategorizer.updateOutcome(667L,2,[],[326, 325])
+        compoundSummaryCategorizer.updateOutcome(789L,2,[326],[])
+        compoundSummaryCategorizer.combineInNewProteinTargetValue(123L,"Transporter")
+        compoundSummaryCategorizer.combineInNewBiologicalProcessValue(666L,"Potassium channel")
+        compoundSummaryCategorizer.combineInNewProteinTargetValue(666L,"Ion channel")
+        compoundSummaryCategorizer.combineInNewBiologicalProcessValue(667L,"G protein receptor")
+        compoundSummaryCategorizer.combineInNewBiologicalProcessValue(667L,"G protein")
+        compoundSummaryCategorizer.combineInNewProteinTargetValue(789L,"Kinase")
+
+        then: "Should equal the expected"
+        assert ! (compoundSummaryCategorizer == null)
+     }
+
+
+
+
+
+
 }

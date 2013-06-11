@@ -32,6 +32,22 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
     }
 
 
+
+
+    void "test convertCompoundIntoSunburst for CompoundSummaryCategorizer"() {
+        when:
+        LinkedHashMap<String,Object>  ringNodeAndCrossLinks   = ringManagerService.convertCompoundIntoSunburstById (2382353L , true, true )
+        CompoundSummaryCategorizer compoundSummaryCategorizer  =  ringNodeAndCrossLinks ["CompoundSummaryCategorizer"]
+
+        then:
+        compoundSummaryCategorizer.toString().size() > 0
+    }
+
+
+
+
+
+
     void "test convertBiologyIdsToAscensionNumbers"(){
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
@@ -282,22 +298,6 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
     /**
-     * For now use dummy routine to pull back real data from v12 of the API
-     */
-    void "test working with Out of date compound summary information"(){
-        given:
-        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(0L)
-
-        when:
-        LinkedHashMap activeInactiveData = ringManagerService.retrieveActiveInactiveDataFromCompound(compoundSummary)
-
-        then:
-        activeInactiveData ["hits"].size ()   > 0
-        activeInactiveData ["misses"].size ()   > 0
-    }
-
-
-    /**
      * As of version 17 of the NCGC API we have real data
      */
     void "test working with Current compound summary information"(){
@@ -342,40 +342,10 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-
-
-
-    void "test sunburst with real (though old) classes, but with no active/inactive distinctions"(){
-        given:
-        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(0L)
-        LinkedHashMap activeInactiveData = ringManagerService.retrieveActiveInactiveDataFromCompound(compoundSummary)
-        final List<String> targets = []
-        activeInactiveData["hits"].each {targets <<  it }
-        activeInactiveData["misses"].each {targets <<  it }
-        LinkedHashMap<String, Integer> accumulatedTargets = ringManagerService.accumulateAccessionNumbers( targets )
-
-        when:
-        List<List<TargetClassInfo>> accumulatedMaps = []
-        accumulatedTargets.each{k,v->
-            List<String> hierarchyDescription = sunburstCacheService.getTargetClassInfo(k)
-            if (hierarchyDescription != null){
-                accumulatedMaps<<sunburstCacheService.getTargetClassInfo(k)
-            }
-        }
-        RingNode ringNode = ringManagerService.ringNodeFactory(accumulatedMaps.flatten())
-
-        then:
-        ringNode.toString().size() > 0
-        ringNode.toString().contains("actin family cytoskeletal protein")
-        ringNode.toString().find(/basic helix-loop-helix transcription factor[^\n]+/).find(/size\":\d/).find(/\d/) == '5'
-        ringNode.toString().find(/microtubule family cytoskeletal protein[^\n]+/).find(/children/) == 'children'
-        ringNode.toString().find(/actin and actin related protein[^\n]+/).find(/size\":\d/).find(/\d/) == '6'
-    }
-
-
     void "test convertCompoundIntoSunburst"() {
         when:
-        RingNode ringNode = ringManagerService.convertCompoundIntoSunburstById (2382353L , includeHits, includeNonHits )
+        LinkedHashMap<String,Object>  ringNodeAndCrossLinks   = ringManagerService.convertCompoundIntoSunburstById (2382353L , includeHits, includeNonHits )
+        RingNode ringNode  =  ringNodeAndCrossLinks ["RingNode"]
 
         then:
         ringNode.toString().size() > 0

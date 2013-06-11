@@ -36,7 +36,8 @@ class SunburstHandlerTagLib {
 
         // For now let's get the data explicitly so that we are sure were getting the right compound.
         // Once we get an ID into compoundSummary then we can reuse the data if it's available
-            root =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
+        LinkedHashMap<String,Object>  ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
+            root =   ringnodeAndCrossLinks ["RingNode"]
 
 //        } else {
 //            root =   ringManagerService.convertCompoundIntoSunburst (attrs."compoundSummary", includeHits, includeNonHits )
