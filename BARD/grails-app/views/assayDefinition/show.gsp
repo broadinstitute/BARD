@@ -4,9 +4,6 @@
 <head>
     <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,assaysummary"/>
     <meta name="layout" content="basic"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'measures-dynatree.css')}" type="text/css">
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <title>Assay Definition</title>
 </head>
 
@@ -32,7 +29,9 @@
 
         <div class="span9">
             <div class="pull-left">
-                <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+                <g:if test="${assayInstance?.id}">
+                    <h4>View Assay Definition (ADID: ${assayInstance?.id})</h4>
+                </g:if>
             </div>
         </div>
     </div>
@@ -44,8 +43,10 @@
 
         <div class="span9">
             <div class="pull-left">
-                <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn"><g:img
-                        uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
+                <g:if test="${assayInstance?.id}">
+                    <g:link action="cloneAssay" id="${assayInstance?.id}" class="btn"><g:img
+                            uri="/images/clone-icon.png"/> Clone Assay Definition</g:link>
+                </g:if>
             </div>
         </div>
     </div>

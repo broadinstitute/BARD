@@ -309,7 +309,7 @@ class DocumentCommand extends BardCommand {
         if (projectId) {
             return projectId
         } else if (assayId) {
-            return projectId
+            return assayId
         } else {
             throw new RuntimeException('need either a projectId or assayId to determine ownerId')
         }
