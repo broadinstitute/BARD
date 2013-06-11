@@ -29,18 +29,25 @@ class SaveToCartButtonTagLibSpec extends Specification {
         given:
         def template = '<g:saveToCartButton id="${id}" ' +
                 'name="${title}" ' +
-                'type="'+QueryItemType.AssayDefinition.name()+'"/>'
+                'type="'+QueryItemType.AssayDefinition.name()+'" hideLabel="${hideLabel}"/>'
 
         QueryItem queryItem = new CartAssay(title, id)
         assert queryItem.save()
 
         when:
-        String actualResults = applyTemplate(template, [id: id, title: title]).toString()
+        String actualResults = applyTemplate(template, [id: id, title: title, hideLabel: hideLabel]).toString()
 
         then:
         1 * queryCartService.isInShoppingCart(queryItem) >> {isInCart}
 
-        assert actualResults.contains('<label class="checkbox">')
+        if (!hideLabel) {
+            assert actualResults.contains('<label class="checkbox">')
+            assert actualResults.contains('Save to Cart for analysis')
+        }
+        else {
+            assert !actualResults.contains('<label class="checkbox">')
+            assert !actualResults.contains('Save to Cart for analysis')
+        }
         assert actualResults.contains('input type="checkbox" name="saveToCart"')
         assert actualResults.contains('class="addToCartCheckbox"')
         assert actualResults.contains("data-cart-name=\"${title}\"")
@@ -51,9 +58,10 @@ class SaveToCartButtonTagLibSpec extends Specification {
         }
 
         where:
-        label         | id | title          | isInCart
-        "in cart"     | 1  | 'Test Title'   | true
-        "not in cart" | 2  | 'Test Title'   | false
+        label            | id | title          | isInCart | hideLabel
+        "in cart"        | 1  | 'Test Title'   | true     | false
+        "not in cart"    | 2  | 'Test Title'   | false    | false
+        "no label"       | 2  | 'Test Title'   | true     | true
     }
 
 }

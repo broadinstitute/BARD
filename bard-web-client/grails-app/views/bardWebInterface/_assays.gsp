@@ -20,6 +20,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th rowspan="2">Save to Cart</th>
                 <th rowspan="2">ADID</th>
                 <th colspan="6">Assay Title</th>
             </tr>
@@ -30,6 +31,11 @@
         <tbody>
             <g:each var="assayAdapter" in="${assayAdapters}">
                 <tr>
+                    <td rowspan="2"><g:saveToCartButton id="${assayAdapter.id}"
+                                                        name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
+                                                        type="${querycart.QueryItemType.AssayDefinition}"
+                                                        hideLabel="true"/>
+                    </td>
                     <td rowspan="2">${assayAdapter.capAssayId}</td>
                     <td colspan="6"><g:link action="showAssay" id="${assayAdapter.id}">
                         ${assayAdapter.name}</g:link></td>
