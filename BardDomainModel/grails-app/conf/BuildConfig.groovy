@@ -59,6 +59,7 @@ grails.project.dependency.resolution = {
             case ('oracleqa'):
             case ('oracledev'):
                 break
+
             default:
                 compile(":build-test-data:2.0.4") { export = true }
                 compile(":fixtures:1.2") {
