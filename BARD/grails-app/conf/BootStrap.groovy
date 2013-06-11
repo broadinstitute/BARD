@@ -16,11 +16,10 @@ class BootStrap {
         loadPersonOntology()
         computeTrees()
 
-        def applicationContext = grailsApplication.mainContext
-        applicationContext.eventTriggeringInterceptor.datastores.each { k, datastore ->
-            println("datastore=${datastore} isinstance ${datastore instanceof org.grails.datastore.mapping.core.Datastore}")
-            applicationContext.addApplicationListener(new ReadyForExtractListener(datastore))
-        }
+//        def applicationContext = grailsApplication.mainContext
+//        applicationContext.eventTriggeringInterceptor.datastores.each { k, datastore ->
+//            applicationContext.addApplicationListener(new ReadyForExtractListener(datastore))
+//        }
 	}
 
 	def destroy = {
