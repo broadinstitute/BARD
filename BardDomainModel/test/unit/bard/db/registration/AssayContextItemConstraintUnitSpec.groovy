@@ -195,4 +195,22 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         'valid Free Type & FREE_TEXT but valueMax'                      | [expectedValueType: FREE_TEXT]                             | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: 1.0, valueDisplay: null]               | false         | ['assayContextItem.attributeType.free.required.fields']                  | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: 'contextItem.valueMax.not.null', valueDisplay: null]
         'valid Free Type & FREE_TEXT but valueDisplay'                  | [expectedValueType: FREE_TEXT]                             | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: 'someDisplay']     | false         | ['assayContextItem.attributeType.free.required.fields']                  | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: 'contextItem.valueDisplay.not.null']
     }
+
+    void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
+
+        final String field = 'attributeType'
+
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
+
+        then: 'verify valid or invalid for expected reason'
+        RuntimeException e = thrown()
+        e.message == 'Unknown attributeType: null'
+
+        where:
+        desc                   | valueUnderTest
+        'null'                 | null
+
+    }
 }

@@ -2,6 +2,8 @@ package bard.db.registration
 
 import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
+import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -17,12 +19,14 @@ import org.junit.Before
 class AssayContextIntegrationSpec extends BardIntegrationSpec {
 
     AssayContext assayContext
+    Element textAttribute
 
     Session session
 
     @Before
     void doSetup() {
         session = sessionFactory.currentSession
+        textAttribute = Element.build(expectedValueType: ExpectedValueType.FREE_TEXT)
         assayContext = AssayContext.buildWithoutSave()
         assert assayContext.assay.save()
     }
@@ -30,8 +34,8 @@ class AssayContextIntegrationSpec extends BardIntegrationSpec {
     void "test list order of assayContextItems persisted"() {
 
         given: 'an ordered list of assayContextItems'
-        List<AssayContextItem> assayContextItems = [AssayContextItem.build(assayContext: assayContext, valueDisplay: 'a'),
-                AssayContextItem.build(assayContext: assayContext, valueDisplay: 'b')]
+        List<AssayContextItem> assayContextItems = [AssayContextItem.build(assayContext: assayContext, attributeElement: textAttribute, valueDisplay: 'a'),
+                AssayContextItem.build(assayContext: assayContext, attributeElement: textAttribute, valueDisplay: 'b')]
 
         assert assayContext.save()
         def id = assayContext.getId()

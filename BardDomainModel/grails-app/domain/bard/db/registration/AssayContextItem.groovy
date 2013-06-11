@@ -55,7 +55,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
                     }
                     break
                 default:
-                    throw new RuntimeException("unknow attributeType: $attributeType")
+                    throw new RuntimeException("Unknown attributeType: $attributeType")
                     break
             }
         }
