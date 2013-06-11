@@ -11,7 +11,7 @@
             <g:each var="assayAdapter" in="${assayAdapters}">
                 <li>
                     <g:link action="showAssay" id="${assayAdapter.id}"
-                            params='[searchString: "${searchString}"]'>${assayAdapter.title} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
+                            params='[searchString: "${searchString}"]'>${assayAdapter.name} <small>(ADID: ${assayAdapter.capAssayId})</small></g:link>
                 </li>
             </g:each>
         </ul>

@@ -23,7 +23,7 @@
                 <h3>
                     <g:if test="${searchString}">
                         <g:link action="showAssay" id="${assayAdapter.id}"
-                                params='[searchString: "${searchString}"]'>${assayAdapter.title}  <small>(ADID: ${assayAdapter.capAssayId})</small>
+                                params='[searchString: "${searchString}"]'>${assayAdapter.name}  <small>(ADID: ${assayAdapter.capAssayId})</small>
                             <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
                                <img src="${resource(dir: 'images', file: 'witnessed.png')}"
                                     alt="Witnessed" title="Witnessed"/>
@@ -41,14 +41,14 @@
                     <g:else>
                         <g:link action="showAssay"
                                 id="${assayAdapter.id}">
-                            ${assayAdapter.title}
+                            ${assayAdapter.name}
                             <small>(ADID: ${assayAdapter.capAssayId})</small>
                         </g:link>
                     </g:else>
 
                 </h3>
                 <g:saveToCartButton id="${assayAdapter.id}"
-                                    name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
+                                    name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                                     type="${querycart.QueryItemType.AssayDefinition}"/>
                 <g:if test="${assayAdapter.highlight}">
                     <dl class="dl-horizontal">
