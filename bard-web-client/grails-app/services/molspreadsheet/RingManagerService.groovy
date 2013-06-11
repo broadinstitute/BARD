@@ -12,12 +12,22 @@ import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.RingNode
 import groovy.json.JsonBuilder
 import bard.core.rest.spring.biology.BiologyEntity
+import org.apache.log4j.Level
+import org.apache.log4j.Logger
 
 class RingManagerService {
     CompoundRestService compoundRestService
     SunburstCacheService sunburstCacheService
     AssayRestService assayRestService
     BiologyRestService biologyRestService
+
+    static Logger log
+    static {
+        this.log = Logger.getLogger(RingManagerService.class)
+        log.setLevel(Level.ERROR)
+    }
+
+
 
     /***
      * Retrieve all the data we need to build a linked visualization based on multiple calls
@@ -102,48 +112,79 @@ class RingManagerService {
         return returnValue
     }
 
-    /**
+
+    void retrievedTargetsAndBiologicalProcesses (List<String> currentTargets,
+                                                 List<String>  currentExperimentIds,
+                                                 CompoundSummary compoundSummary,
+                                                 LinkedHashMap<String, Object> returnValue,
+                                                 String assayFormat,
+                                                 String assayType )  {
+        for (String currentExperimentId in currentExperimentIds) {
+            Long  experimentIdAsLong
+            try {
+                experimentIdAsLong = Long.parseLong(currentExperimentId)
+            } catch (NumberFormatException nfe) {
+                log.warn("Error in response data from REST API. Expected experiment ID as a long but received: '${currentExperimentId}'")
+                return
+            }
+            CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
+
+            List<Activity> testedExperimentList = compoundSummary.getTestedExptdata().findAll {Activity activity -> activity.bardExptId == experimentIdAsLong}
+            if (testedExperimentList?.size() > 0)   {
+                for (Activity testedExperiment in testedExperimentList)   {
+                    if (testedExperiment.outcome==2) {  // It's a hit!  Save all targets!
+                        for (String oneTarget in currentTargets) {
+                            returnValue ["hits"] <<  oneTarget
+                        }
+                    }  else { // It's a miss.  Save all the targets to a different list.
+                        for (String oneTarget in currentTargets) {
+                            returnValue ["misses"] <<  oneTarget
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+/**
      * The ideas to bring back a map which contains two lists, identified by the keys "hits" and "misses".  For
      * each one of these we will bring back a list of strings, where each string represents a target. Strings in
      * this list are not meant to be unique necessarily.  So we might have:
      *  "hits": "Q123", "Q123", "P456"
      *  "misses": "R789"
+     *  [documentation note:  now we are getting biology IDs from the backend, so we might have
+     *      "hits": 123, 734, 991  [and]   "misses": 666 ]
      * A particular protein target could conceivably be in both the hits and the misses category.
      *
      * @param compoundSummary
      * @return
      */
-    LinkedHashMap<String, List <String>> retrieveActiveInactiveDataFromCompound (CompoundSummary compoundSummary){
+    LinkedHashMap<String, Object> retrieveActiveInactiveDataFromCompound (CompoundSummary compoundSummary){
         LinkedHashMap<String, List <String>> returnValue = [:]
         returnValue ["hits"]  = []
         returnValue ["misses"]  = []
+        returnValue ["compoundSummaryCategorizer"]  = new CompoundSummaryCategorizer()
         if (compoundSummary != null){
            for (Assay assay in compoundSummary.testedAssays) {
                List<String>  currentExperimentIds = assay.experiments
                List<String>  currentTargets = assay.targetIds
-               if (currentTargets != null)  {  // If the assay has no targets there is nothing for us to do
-                   for (String currentExperimentId in currentExperimentIds) {
-                       Long  experimentIdAsLong
-                       try {
-                           experimentIdAsLong = Long.parseLong(currentExperimentId)
-                       } catch (NumberFormatException nfe) {
-                           println"Unexpected error. Failure parsing currentExperimentId long"
-                       }
-                       List<Activity> testedExperimentList = compoundSummary.getTestedExptdata().findAll {Activity activity -> activity.bardExptId == experimentIdAsLong}
-                       if (testedExperimentList?.size() > 0)   {
-                           for (Activity testedExperiment in testedExperimentList)   {
-                               if (testedExperiment.outcome==2) {  // It's a hit!  Save all targets!
-                                   for (String oneTarget in currentTargets) {
-                                       returnValue ["hits"] <<  oneTarget
-                                   }
-                               }  else { // It's a miss.  Save all the targets and a different list.
-                                   for (String oneTarget in currentTargets) {
-                                       returnValue ["misses"] <<  oneTarget
-                                   }
-                               }
-                           }
-                       }
-                   }
+               String assayFormat = assay.minimumAnnotation.assayFormat
+               String assayType = assay.minimumAnnotation.assayType
+               if ( (currentTargets != null)  ||
+                    (assayFormat != null) ||
+                    (assayType != null)){  // If one of the values we care about is non-null then retrieve everything we can find
+                   retrievedTargetsAndBiologicalProcesses ( currentTargets,
+                                                            currentExperimentIds,
+                                                            compoundSummary,
+                                                            returnValue,
+                                                            assayFormat,
+                                                            assayType )
 
                }
              }
