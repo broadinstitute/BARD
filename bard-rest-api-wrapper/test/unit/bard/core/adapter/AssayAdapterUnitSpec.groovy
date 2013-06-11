@@ -139,6 +139,13 @@ class AssayAdapterUnitSpec extends Specification {
            "kegg_disease_cat":
            [
            ],
+           "minimumAnnotations": {
+               "assay footprint": "1536-well plate",
+               "detection method type": "luminescence method",
+               "detection instrument name": "PerkinElmer ViewLux",
+               "assay format": "cell-based format",
+               "assay type": "signal transduction assay"
+           },
            "resourcePath": "/assays/17"
        }
        '''
@@ -190,6 +197,7 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.targetIds
         assert !assayAdapter.documents
         assert !assayAdapter.targets
+        assert assayAdapter.minimumAnnotation
     }
 
     void "test getters With Expanded Assay"() {
@@ -226,7 +234,7 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.documents
         assert assayAdapter.targets
         assert assayAdapter.title
-        assert assayAdapter.minimumAnnotations
+        assert assayAdapter.minimumAnnotation
     }
 
 

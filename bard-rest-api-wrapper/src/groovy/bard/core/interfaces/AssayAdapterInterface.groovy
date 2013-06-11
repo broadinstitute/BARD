@@ -1,7 +1,7 @@
-package bard.core.interfaces;
-
-
+package bard.core.interfaces
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.assays.MinimumAnnotation
+import bard.core.rest.spring.util.NameDescription
 
 public interface AssayAdapterInterface {
 
@@ -15,6 +15,13 @@ public interface AssayAdapterInterface {
 
     public Long getCapAssayId()
 
+    Double getScore()
+
+    NameDescription getMatchingField()
+
+    public String getTitle()
+
+    public Long getBardAssayId()
 
     public AssayType getType()
 
@@ -41,4 +48,7 @@ public interface AssayAdapterInterface {
     public List<String> getKeggDiseaseCategories()
 
     public Map<String, List<String>> getKeggAnnotations()
+
+    public MinimumAnnotation getMinimumAnnotation()
+
 }

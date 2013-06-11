@@ -24,7 +24,7 @@
                 <th colspan="6">Assay Title</th>
             </tr>
             <tr>
-                <th>AssayType</th><th>Assay Format</th><th>Detection Method Type</th><th>Designed By</th><th>Assay Footprint</th><th>Status</th>
+                <th>Assay Type</th><th>Assay Format</th><th>Detection Method Type</th><th>Designed By</th><th>Assay Footprint</th><th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -35,11 +35,11 @@
                         ${assayAdapter.name}</g:link></td>
                 </tr>
                 <tr>
-                    <td>${assayAdapter.minimumAnnotations.get("assay type")}</td>
-                    <td>${assayAdapter.minimumAnnotations.get("assay format")}</td>
-                    <td>${assayAdapter.minimumAnnotations.get("detection method type")}</td>
+                    <td>${assayAdapter.minimumAnnotation.getAssayType()}</td>
+                    <td>${assayAdapter.minimumAnnotation.getAssayFormat()}</td>
+                    <td>${assayAdapter.minimumAnnotation.getDetectionMethodType()}</td>
                     <td>${assayAdapter.designedBy}</td>
-                    <td>${assayAdapter.minimumAnnotations.get("assay footprint")}</td>
+                    <td>${assayAdapter.minimumAnnotation.getAssayFootprint()}</td>
                     <td><g:if test="${assayAdapter.assayStatus == 'Draft'}">
                         <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
                              alt="Draft" title="Warning this assay definition has not yet been reviewed for accuracy"/>

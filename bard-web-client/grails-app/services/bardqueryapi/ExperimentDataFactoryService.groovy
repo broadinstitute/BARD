@@ -5,7 +5,7 @@ import molspreadsheet.MolecularSpreadSheetService
 import bard.core.util.FilterTypes
 
 class ExperimentDataFactoryService {
-    QueryService queryService
+    IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
 
     TableModel createTableModel(

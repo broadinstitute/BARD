@@ -112,6 +112,10 @@ public class AssayAdapter implements AssayAdapterInterface {
         return annotations
     }
 
+    public MinimumAnnotation getMinimumAnnotation() {
+        return assay.getMinimumAnnotation()
+    }
+
     public List<String> getKeggDiseaseNames() {
         return assay.getKegg_disease_names()
     }
@@ -178,10 +182,4 @@ public class AssayAdapter implements AssayAdapterInterface {
         return documentIds
     }
 
-    public Map<String,String> getMinimumAnnotations() {
-        if (assay instanceof ExpandedAssay || assay instanceof Assay) {
-            return assay.getMinimumAnnotations()
-        }
-        return [:]
-    }
 }

@@ -12,6 +12,5 @@ public class ExpandedAssay extends AbstractAssay {
     List<Target> targets = new ArrayList<Target>();
     List<ExperimentSearch> experiments = new ArrayList<ExperimentSearch>();
     List<Project> projects = new ArrayList<Project>();
-    Map<String,String> minimumAnnotations = new HashMap<String,String>();
 
 }
