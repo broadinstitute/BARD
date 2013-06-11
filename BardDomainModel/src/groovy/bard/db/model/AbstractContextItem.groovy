@@ -105,11 +105,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
             } else if (ELEMENT == expectedValueType) {
                 dictionaryConstraints(errors)
             } else if (NUMERIC == expectedValueType) {
-                if (includeRangeConstraints && attributeElement.expectedValueType == NUMERIC && (valueMin != null || valueMax != null)) {
-                    rangeConstraints(errors)
-                } else {
                     valueNumConstraints(errors)
-                }
             } else if (FREE_TEXT == expectedValueType) {
                 textValueConstraints(errors)
             } else if (NONE == expectedValueType) {
