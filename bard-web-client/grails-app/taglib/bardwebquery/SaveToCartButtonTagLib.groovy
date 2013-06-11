@@ -16,7 +16,7 @@ class SaveToCartButtonTagLib {
         if (item) {
             isInCart = queryCartService.isInShoppingCart(item)
         }
-        out << render(template: "saveToCartButton", model: [name: attrs.name, id: attrs.id, type: attrs.type,
+        out << render(template: "/tagLibTemplates/saveToCartButton", model: [name: attrs.name, id: attrs.id, type: attrs.type,
                 smiles: attrs.smiles, isInCart: isInCart, numAssays: attrs.numAssays, numActive: attrs.numActive])
     }
 }
