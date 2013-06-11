@@ -55,7 +55,7 @@
         <div class="pagination offset3">
 
             <g:paginate
-                    total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
+                    total="${totalNumOfCmpds}"
                     params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
         </div>
 
@@ -67,7 +67,7 @@
 
         <div class="pagination offset3">
             <g:paginate
-                    total="${tableModel?.additionalProperties?.total ? tableModel?.additionalProperties?.total : 0}"
+                    total="${totalNumOfCmpds}"
                     params='[id: "${params?.id}", normalizeYAxis: "${tableModel?.additionalProperties.normalizeYAxis}"]'/>
         </div>
     </g:if>
