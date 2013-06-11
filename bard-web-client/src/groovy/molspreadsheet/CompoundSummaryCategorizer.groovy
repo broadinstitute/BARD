@@ -74,27 +74,100 @@ class CompoundSummaryCategorizer {
         deriveArbitraryIndex (proteinTargetMap,proteinTargets)
     }
 
+    public addNewRecord (long eid, String assayFormat, String assayType, List<Integer> unconvertedBiologyObjects ) {
+        if (totalContents.keySet().contains(eid)) {
+            log.warn("Error aggregating experiment data. Repeated experiment ID =: '${eid}'")
+        }  else {
+            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, unconvertedBiologyObjects)
+        }
+
+    }
     public addNewRecord (long eid, String assayFormat, String assayType ) {
         if (totalContents.keySet().contains(eid)) {
             log.warn("Error aggregating experiment data. Repeated experiment ID =: '${eid}'")
         }  else {
-            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType)
+            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType )
         }
 
     }
+
+
+    public combineInNewProteinTargetValue (long eid, String proteinTarget ) {
+        if (!totalContents.keySet().contains(eid)) {
+            log.warn("Error expected experiment ID =: '${eid}'")
+        }  else {
+            SingleEidSummary singleEidSummary = totalContents[eid]
+            int proteinTargetIndex = deriveProteinTargetIndex (proteinTarget)
+            if (!singleEidSummary.proteinTargetsIndexList.contains(proteinTargetIndex))
+                singleEidSummary.proteinTargetsIndexList <<  proteinTargetIndex
+        }
+
+    }
+
+
+    public combineInNewBiologicalProcessValue (long eid, String biologicalProcess ) {
+        if (!totalContents.keySet().contains(eid)) {
+            log.warn("Error expected experiment ID =:  '${eid}'")
+        }  else {
+            SingleEidSummary singleEidSummary = totalContents[eid]
+            int biologicalProcessIndex = deriveBiologicalProcessIndex (biologicalProcess)
+            if (!singleEidSummary.biologicalProcessIndexList.contains(biologicalProcessIndex))
+                singleEidSummary.biologicalProcessIndexList <<  biologicalProcessIndex
+        }
+
+    }
+
+
+
+
+    public updateOutcome (long eid, int outcome, List <String> unconvertedBiologyHitIdList,List <String> unconvertedBiologyMissIdList) {
+        if (!totalContents.keySet().contains(eid)) {
+            log.warn("Programming error. Expected to find experiment ID = '${eid}' already stored.")
+        }  else {
+            SingleEidSummary singleEidSummary = totalContents[eid]
+            singleEidSummary.setOutcome(outcome)
+            // always one or the other -- is that right?
+            for (String singleUnconvertedBiologyHitId in unconvertedBiologyHitIdList){
+                singleEidSummary.getUnconvertedBiologyObjects() << Long.parseLong(singleUnconvertedBiologyHitId)
+            }
+            for (String singleUnconvertedBiologyMissId in unconvertedBiologyMissIdList){
+                singleEidSummary.getUnconvertedBiologyObjects() << Long.parseLong(singleUnconvertedBiologyMissId)
+            }
+
+        }
+
+    }
+
+
+    public
+
 
     class SingleEidSummary {
         long eid = 0
         int assayFormatIndex = 0
         int assayTypeIndex = 0
-        int biologicalProcessIndex = 0
-        int proteinTargetsIndex = 0
+        List<Integer> biologicalProcessIndexList = []
+        List<Integer>  proteinTargetsIndexList = []
+        List<Long> unconvertedBiologyObjects = []
+        int outcome = 0
+
+
+        public SingleEidSummary(long eid, String assayFormat, String assayType, List<Integer> unconvertedBiologyObjects) {
+            this.eid =  eid
+            this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
+            this.assayTypeIndex = deriveAssayTypeIndex (assayType)
+            this.unconvertedBiologyObjects = unconvertedBiologyObjects
+        }
 
 
         public SingleEidSummary(long eid, String assayFormat, String assayType) {
             this.eid =  eid
             this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
             this.assayTypeIndex = deriveAssayTypeIndex (assayType)
+        }
+
+        public List<Long>  retrieveBiologyObjects (){
+            unconvertedBiologyObjects
         }
 
 

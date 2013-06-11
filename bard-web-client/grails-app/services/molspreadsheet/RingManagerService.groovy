@@ -6,12 +6,12 @@ import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.biology.BiologyEntity
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.RingNode
 import groovy.json.JsonBuilder
-import bard.core.rest.spring.biology.BiologyEntity
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
 
@@ -127,21 +127,31 @@ class RingManagerService {
                 log.warn("Error in response data from REST API. Expected experiment ID as a long but received: '${currentExperimentId}'")
                 return
             }
-            CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
-
             List<Activity> testedExperimentList = compoundSummary.getTestedExptdata().findAll {Activity activity -> activity.bardExptId == experimentIdAsLong}
             if (testedExperimentList?.size() > 0)   {
+
+                // only if it's tested? Is this right?
+                CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
+                compoundSummaryCategorizer.addNewRecord (experimentIdAsLong, assayFormat, assayType )
+                List <String> unconvertedBiologyHitIds = []
+                List <String> unconvertedBiologyMissIds = []
+                int outcome
                 for (Activity testedExperiment in testedExperimentList)   {
+                    outcome = testedExperiment.outcome
                     if (testedExperiment.outcome==2) {  // It's a hit!  Save all targets!
                         for (String oneTarget in currentTargets) {
+                            unconvertedBiologyHitIds << oneTarget
                             returnValue ["hits"] <<  oneTarget
                         }
                     }  else { // It's a miss.  Save all the targets to a different list.
                         for (String oneTarget in currentTargets) {
                             returnValue ["misses"] <<  oneTarget
+                            unconvertedBiologyMissIds << oneTarget
+
                         }
                     }
                 }
+                compoundSummaryCategorizer.updateOutcome(experimentIdAsLong,outcome,unconvertedBiologyHitIds,unconvertedBiologyMissIds)
             }
         }
     }
@@ -329,6 +339,50 @@ class RingManagerService {
         returnValues
     }
 
+
+
+    private List <String> generateAccessionIdentifiers(CompoundSummaryCategorizer compoundSummaryCategorizer)   {
+
+        // Make a map, so I can remember what went where
+        List<Long> targetsAsLongs = []
+        LinkedHashMap<Long,Long> biologyIdToEid = [:]
+        for ( element in compoundSummaryCategorizer.getTotalContents() )  {
+            Long eid =  element.key
+            List<Long> unconvertedBiologyObjectList =  ((CompoundSummaryCategorizer.SingleEidSummary) element.value).unconvertedBiologyObjects
+            for ( Long unconvertedBiologyObject in unconvertedBiologyObjectList){
+                if (!biologyIdToEid.containsKey(unconvertedBiologyObject)) {
+                    biologyIdToEid [unconvertedBiologyObject]  =  eid
+                }
+            }
+        }
+
+        //  Perform the conversion
+        List <BiologyEntity> biologyEntityList =  biologyRestService.convertBiologyId(biologyIdToEid.keySet() as List<Long>)
+
+        // Now go through the generated list, pull out the information I need and put it back where
+        //  it belongs using our map
+        for (BiologyEntity biologyEntity in biologyEntityList) {
+            Long biologyId =  biologyEntity.serial
+            Long targetEid = 0
+            if (!biologyIdToEid.containsKey(biologyId)){
+                println  "I am surprised. I expected ${biologyId} to be in this set"
+            } else {
+                targetEid =  biologyIdToEid [biologyId]
+                if (biologyEntity.biology == "PROTEIN") {
+                    compoundSummaryCategorizer.combineInNewProteinTargetValue(targetEid,biologyEntity.name)
+                }  else {
+                    compoundSummaryCategorizer.combineInNewBiologicalProcessValue(targetEid,biologyEntity.name)
+                }
+            }
+        }
+        return []
+    }
+
+
+
+
+
+
     /***
      *
      * @param unconvertedValues
@@ -351,6 +405,7 @@ class RingManagerService {
 
     public  RingNode convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
         LinkedHashMap activeInactiveDataPriorToConversion = retrieveActiveInactiveDataFromCompound(compoundSummary)
+        generateAccessionIdentifiers(activeInactiveDataPriorToConversion["compoundSummaryCategorizer"])
         LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion)
         final List<String> targets = []
         if (includeHits) {
