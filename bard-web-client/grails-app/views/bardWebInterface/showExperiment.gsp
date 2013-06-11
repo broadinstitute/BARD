@@ -17,7 +17,7 @@
 
     <div class="span9">
         <div id="experimentalResults">
-            <g:render template='experimentResultData' model='[tableModel: tableModel, innerBorder: false]'/>
+            <g:render template='experimentResultData' model='[tableModel: tableModel, innerBorder: true]'/>
         </div>
     </div>
 </div>

@@ -62,7 +62,7 @@
         <div id="resultData">
 
             <g:render template="experimentResultRenderer"
-                      model="[tableModel: tableModel, landscapeLayout: false, innerBorder: innerBorder]"/>
+                      model="[tableModel: tableModel, landscapeLayout: true, innerBorder: innerBorder]"/>
         </div>
 
         <div class="pagination offset3">
