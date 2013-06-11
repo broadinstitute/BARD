@@ -1,5 +1,6 @@
 package merge
 
+import bard.db.enums.ExpectedValueType
 import spock.lang.Specification
 import spock.lang.Ignore
 
@@ -134,7 +135,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         Experiment experimentB = Experiment.build(assay: assayB)
         Measure measureBA = Measure.build(assay: assayB, resultType: rt)
         AssayContext contextB = AssayContext.build(assay: assayB)
-        AssayContextItem.build(assayContext: contextB, valueDisplay: "value display")
+        Element attributeElement = Element.build(label:'text attr', expectedValueType: ExpectedValueType.FREE_TEXT)
+        AssayContextItem.build(assayContext: contextB, attributeElement: attributeElement,  valueDisplay: "value display")
         AssayContextMeasure link = AssayContextMeasure.build(assayContext: contextB, measure: measureBA)
 
         when:
@@ -151,7 +153,7 @@ class MergeAssayServiceUnitSpec extends Specification {
 
     void "test merging of assay contexts where fixed items mismatch"() {
         setup:
-        Element attribute = Element.build(label: "element1")
+        Element attribute = Element.build(label: "element1", expectedValueType: ExpectedValueType.ELEMENT)
         Element valueA = Element.build(label: "element2")
         Element valueB = Element.build(label: "element3")
 
@@ -184,7 +186,7 @@ class MergeAssayServiceUnitSpec extends Specification {
     void "test merging of assay contexts where fixed items match"() {
         setup:
         Element valueA = Element.build(label: "element1")
-        Element attribute = Element.build(label: "element2")
+        Element attribute = Element.build(label: "element2", expectedValueType: ExpectedValueType.ELEMENT)
 
         Assay assayA = Assay.build()
         AssayContext contextA = AssayContext.build(assay: assayA)
@@ -209,8 +211,8 @@ class MergeAssayServiceUnitSpec extends Specification {
     //TODO: add more tests
     void testIsAssayContextItemEquals() {
         setup:
-        Element e1 = Element.build(id: 1, label: "e1")
-        Element e2 = Element.build(id: 2, label: "e2")
+        Element e1 = Element.build(id: 1, label: "e1", expectedValueType: ExpectedValueType.FREE_TEXT)
+        Element e2 = Element.build(id: 2, label: "e2", expectedValueType: ExpectedValueType.FREE_TEXT)
         Element e3 = Element.build(id: 3, label: "e3")
 
         Element ex1 = Element.build(id: 1, label: "ex1", externalURL: "xurl")

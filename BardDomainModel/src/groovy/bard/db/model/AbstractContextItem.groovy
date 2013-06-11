@@ -77,6 +77,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         } else if (valueMin != null || valueMax != null) {
             result = [valueMin, valueMax].findAll().join(' - ')
         }
+        result
     }
 
     /**
