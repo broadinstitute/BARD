@@ -9,14 +9,11 @@ import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.broadinstitute.cbip.crowd.CbipUser
-import org.broadinstitute.cbip.crowd.Email
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.GrantedAuthorityImpl
-import spock.lang.IgnoreRest
 import spock.lang.Specification
 import spock.lang.Unroll
-
 
 /**
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
@@ -73,7 +70,9 @@ class BardAuthorizationProviderServiceSpec extends Specification {
     void "test authenticate with failure"() {
         given:
         Authentication authentication = Mock(Authentication)
-        service.metaClass.getRolesFromDatabase = { throw new Exception("") }
+        use(MockedTestCategoryException) {
+            service.getRolesFromDatabase("userName")
+        }
         when:
         service.authenticate(authentication)
         then:
@@ -91,11 +90,14 @@ class BardAuthorizationProviderServiceSpec extends Specification {
         crowdClient.getUser(_) >> { throw new Exception("") }
         thrown(Exception)
     }
+
     void "test findByUserName with success"() {
         given:
         CrowdClient crowdClient = Mock(CrowdClient)
         service.crowdClient = crowdClient
-        service.metaClass.getRolesFromDatabase = { [new GrantedAuthorityImpl("ROLE_TEST")] }
+        use(MockedTestCategory) {
+            List list = service.getRolesFromDatabase("userName")
+        }
         when:
         CbipUser cbipUser = service.findByUserName("userName")
         then:
@@ -108,11 +110,28 @@ class BardAuthorizationProviderServiceSpec extends Specification {
         Authentication authentication = Mock(Authentication)
         CrowdClient crowdClient = Mock(CrowdClient)
         service.crowdClient = crowdClient
-        service.metaClass.getRolesFromDatabase = { [new GrantedAuthorityImpl("ROLE_TEST")] }
+        use(MockedTestCategory) {
+            List list = service.getRolesFromDatabase("userName")
+        }
         when:
         def results = service.authenticate(authentication)
         then:
+
         crowdClient.authenticateUser(_, _) >> { new UserEntity("name", "firstName", "lastName", "displayName", "emailAddress", null, true) }
         assert results
     }
+}
+class MockedTestCategory {
+
+    static List getRolesFromDatabase(String userName) {
+        return [new GrantedAuthorityImpl("ROLE_TEST")]
+    }
+
+}
+class MockedTestCategoryException {
+
+    static List getRolesFromDatabase(String userName) {
+        throw new Exception("")
+    }
+
 }
