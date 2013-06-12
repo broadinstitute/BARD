@@ -378,10 +378,13 @@ class AssayDefinitionController {
 
         final AssayContextItem assayContextItem = AssayContextItem.get(assay_context_item_id)
         if (assayContextItem) {
-            this.validateContextItemBeforeDelete(assayContextItem)
             AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
-            Assay assay = assayContext.assay
-            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+            if (assayContext) {
+                Assay assay = assayContext.assay
+                render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+                return
+            }
+            render(status: HttpServletResponse.SC_PRECONDITION_FAILED, text: message(code: 'assayContextItem.label.cannotdelete'), contentType: 'text/plain', template: null)
         }
     }
 

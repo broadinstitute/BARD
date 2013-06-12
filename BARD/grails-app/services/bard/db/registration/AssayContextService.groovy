@@ -37,7 +37,7 @@ class AssayContextService {
             recomputeAssayShortName = true
             hasChanged = true
         }
-        if(hasChanged){
+        if (hasChanged) {
             assayInstance.save(flush: true)
         }
         return recomputeAssayShortName
@@ -75,16 +75,14 @@ class AssayContextService {
 
     public AssayContext deleteItem(AssayContextItem assayContextItem) {
 
-        AssayContext assayContext = assayContextItem.assayContext
-        final Assay assay = assayContext.assay
-        //see https://www.pivotaltracker.com/story/show/51248965
-        if(assay.experiments){
-            //prevent context item from getting deleted if this assay has experiments
+        if (AssayContextItem.canDeleteContextItem(assayContextItem)) {
+            AssayContext assayContext = assayContextItem.assayContext
 
+            assayContext.removeFromAssayContextItems(assayContextItem)
+            assayContextItem.delete(flush: true)
+            return assayContext
         }
-        assayContext.removeFromAssayContextItems(assayContextItem)
-        assayContextItem.delete(flush: true)
-        return assayContext
+        return null
     }
 
     public AssayContext createCard(Long assayId, String name, String cardSection) {

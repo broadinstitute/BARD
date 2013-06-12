@@ -4,6 +4,7 @@ package bard.db.registration
 import bard.db.enums.ExpectedValueType
 import bard.db.model.AbstractContextItem
 import groovy.transform.TypeChecked
+import org.springframework.validation.Errors
 
 class AssayContextItem extends AbstractContextItem<AssayContext> {
 
@@ -21,11 +22,6 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
 
     static transients = ['context']
 
-    def beforeDelete() {
-        AssayContextItem.withNewSession {
-            validateContextItemBeforeDelete(this)
-        }
-    }
     //If we have any experiments associated with an assay, we should prevent some classes of edits.
     // Specifically:
     //Users should not be able to delete any context items with
@@ -36,20 +32,23 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     // "Cannot remove attribute which is specified as part of the experiment
     // while this assay has experiments."
     //see https://www.pivotaltracker.com/story/show/51248965
-    static void validateContextItemBeforeDelete(AssayContextItem assayContextItem) {
-        AssayContext assayContext = assayContextItem.assayContext
+    static boolean canDeleteContextItem(AssayContextItem assayContextItem) {
+
+        AssayContext assayContext = assayContextItem.assayContext ?: AssayContextItem.findById(assayContextItem.id).assayContext
         final Assay assay = assayContext.assay
 
         if (assay.experiments) {
-           rejectDeletionOfContextItem(assayContextItem)
+           return safeToDeleteContextItem(assayContextItem)
         }
+        return true
     }
-    static void rejectDeletionOfContextItem(AssayContextItem assayContextItem){
+    protected static boolean safeToDeleteContextItem(AssayContextItem assayContextItem){
         if (assayContextItem.attributeType == AttributeType.Free ||
                 assayContextItem.attributeType == AttributeType.List ||
                 assayContextItem.attributeType == AttributeType.Range) {
-            assayContextItem.errors.rejectValue("attributeType",'assayContextItem.label.cannotdelete')
+           return false
         }
+        return true
     }
 
     @Override
