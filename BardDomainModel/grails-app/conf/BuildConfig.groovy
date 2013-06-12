@@ -42,7 +42,8 @@ grails.project.dependency.resolution = {
         compile(":clover:3.1.10.1") { export = false }
         compile(":console:1.2") { export = false }
         compile(":cbipcrowdauthentication:0.3.4") {
-            excludes('spock', 'release', 'google-collections')
+		export = false
+		excludes('spock', 'release', 'google-collections')
         }
         compile(":spring-security-acl:1.1.1")
         compile(":database-migration:1.3.2") { export = true }

@@ -28,20 +28,7 @@ class ProjectService {
         project.save(flush: true)
         return Project.findById(projectId)
     }
-    boolean updateProjectContextItem(ProjectContextItem contextItem, Long version) {
-        boolean updateSuccessful = false
-        updateSuccessful
-    }
 
-    boolean deleteContextItem(AbstractContext context,Long contextItemId) {
-        AbstractContextItem contextItem = context.contextItems.find { it.id == contextItemId }
-        if (contextItem) {
-            context.contextItems.remove(contextItem)
-            contextItem.delete(flush: true)
-            return true
-        }
-        return false
-    }
     /**
      * remove experiment from project, if experiment has context, remove them. remove all steps associated with
      * this experiment, and step contexts

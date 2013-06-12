@@ -15,6 +15,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import static common.tests.XmlTestSamples.*
+import bard.db.enums.ExpectedValueType
 
 /**
  * Created with IntelliJ IDEA.
@@ -78,7 +79,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
     void "test generate AssayContextItem #label"() {
         given:
-        Element attributeElement = Element.build(label: attributeLabel)
+        Element attributeElement = Element.build(label: attributeLabel, expectedValueType: ExpectedValueType.ELEMENT)
         Element valueElement = null
         if (valueLabel) {
             valueElement = new Element(label: valueLabel)
@@ -102,7 +103,6 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         where:
         label                      | attributeLabel   | valueLabel   | results
-        "with attribute only"      | "attributeLabel" | null         | ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE
         "with attribute and value" | "attributeLabel" | "valueLabel" | ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE
     }
 
@@ -110,7 +110,7 @@ class AssayExportHelperServiceUnitSpec extends Specification {
         given:
         final Map<String, String> results = [displayOrder: "0", attributeType: "Fixed", valueDisplay: "Display"]
 
-        Element attributeElement = new Element(label: "attributeLabel")
+        Element attributeElement = new Element(label: "attributeLabel",expectedValueType: ExpectedValueType.ELEMENT)
         Element valueElement = new Element(label: "valueLabel")
         final AssayContextItem assayContextItem =
             AssayContextItem.build(attributeType: AttributeType.Fixed,

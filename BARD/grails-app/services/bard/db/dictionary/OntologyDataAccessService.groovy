@@ -119,6 +119,7 @@ class OntologyDataAccessService {
                                 and bt.element_status != :elementStatus
                                 and bt.ELEMENT_ID = element.ELEMENT_ID
                              )
+                and element.expected_value_type != 'none'
                 order by lower(element.label)
             """)
             query.addEntity(Element)
