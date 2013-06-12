@@ -1,4 +1,3 @@
-import bard.db.ReadyForExtractListener
 import bard.db.dictionary.OntologyDataAccessService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.context.ApplicationContext
@@ -15,11 +14,6 @@ class BootStrap {
 	def init = { servletContext ->
         loadPersonOntology()
         computeTrees()
-
-//        def applicationContext = grailsApplication.mainContext
-//        applicationContext.eventTriggeringInterceptor.datastores.each { k, datastore ->
-//            applicationContext.addApplicationListener(new ReadyForExtractListener(datastore))
-//        }
 	}
 
 	def destroy = {
