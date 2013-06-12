@@ -822,7 +822,7 @@ class XmlTestSamples {
             <assayContext assayContextId='1' displayOrder='0'>
               <contextName />
               <assayContextItems>
-                <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+                <assayContextItem displayOrder='0' attributeType='Fixed'>
                   <attributeId label='label1'>
                     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
@@ -920,7 +920,7 @@ class XmlTestSamples {
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
               </assayContextItem>
-              <assayContextItem displayOrder='1' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+              <assayContextItem displayOrder='1' attributeType='Fixed'>
                 <attributeId label='a label'>
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
