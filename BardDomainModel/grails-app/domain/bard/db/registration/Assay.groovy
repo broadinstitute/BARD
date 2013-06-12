@@ -36,6 +36,10 @@ class Assay extends AbstractContextOwner {
     List<AssayContext> assayContexts = [] as List<AssayContext>
     Set<AssayDocument> assayDocuments = [] as Set<AssayDocument>
 
+    // if this is set, then don't automatically update readyForExtraction when this entity is dirty
+    // this is needed to change the value to anything except "Ready"
+    boolean disableUpdateReadyForExtraction = false
+
     static hasMany = [
             experiments: Experiment,
             measures: Measure,
@@ -66,7 +70,7 @@ class Assay extends AbstractContextOwner {
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
-    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions']
+    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions',"disableUpdateReadyForExtraction"]
 
 
 

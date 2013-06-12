@@ -9,6 +9,7 @@ import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.junit.Before
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -42,11 +43,6 @@ class DocumentControllerUnitSpec extends Specification {
         assert flash.message == null
     }
 
-    void tearDown() {
-        // Tear down logic here
-    }
-
-
     void 'test render Assay Document - exception'() {
         given:
         Long assayId = null
@@ -75,7 +71,9 @@ class DocumentControllerUnitSpec extends Specification {
         then:
         assert map.status == HttpServletResponse.SC_INTERNAL_SERVER_ERROR
         assert !map.template
-        assert map.text == "need either a projectId or assayId to determine owner"
+        assert map.text == "An internal server error occurred while you were editing this page. " +
+                "Please refresh your browser and try again. " +
+                "If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)"
         assert map.contentType == 'text/plain'
     }
 
@@ -474,5 +472,21 @@ class DocumentControllerUnitSpec extends Specification {
 
         where:
         field << DocumentCommand.PROPS_FROM_DOMAIN_TO_CMD
+    }
+
+    void 'test command object removeHtmlLineBreaks #desc'() {
+        given:
+        DocumentCommand documentCommand = new DocumentCommand(documentType: documentType,
+                documentContent: "http://aaa.ccc.com<div>  <br> </div>")
+        when:
+        String externalURL = documentCommand.removeHtmlLineBreaks()
+        then:
+        assert externalURL == expectedDocumentContent
+
+        where:
+        desc              | documentType                            | expectedDocumentContent
+        "External URL"    | DocumentType.DOCUMENT_TYPE_EXTERNAL_URL | "http://aaa.ccc.com"
+        "Publication URL" | DocumentType.DOCUMENT_TYPE_PUBLICATION  | "http://aaa.ccc.com"
+        "Other Documents" | DocumentType.DOCUMENT_TYPE_OTHER        | "http://aaa.ccc.com<div>  <br> </div>"
     }
 }

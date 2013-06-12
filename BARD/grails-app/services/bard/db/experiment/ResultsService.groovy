@@ -55,6 +55,7 @@ class ResultsService {
     public static class ImportOptions {
         boolean validateSubstances = true;
         boolean writeResultsToDb = true;
+        boolean skipExperimentContexts = false;
     }
 
     static boolean isNumber(value) {
@@ -308,7 +309,7 @@ class ResultsService {
     }
 
 
-    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems) {
+    InitialParse parseConstantRegion(LineReader reader, ImportSummary errors, Collection<ItemService.Item> constantItems, boolean skipExperimentContextItems) {
         InitialParse result = new InitialParse()
         Map experimentAnnotations = [:]
 
@@ -350,37 +351,39 @@ class ResultsService {
             }
         }
 
-        Set<String> unusedKeyNames = new HashSet(experimentAnnotations.keySet())
+        if(!skipExperimentContextItems) {
+            Set<String> unusedKeyNames = new HashSet(experimentAnnotations.keySet())
 
-        // walk through all the context items on the assay
-        List<ExperimentContext> experimentContexts = []
-        for (entry in (constantItems.groupBy { it.assayContext }).entrySet()) {
-            AssayContext assayContext = entry.key;
-            Collection<ItemService.Item> values = entry.value;
+            // walk through all the context items on the assay
+            List<ExperimentContext> experimentContexts = []
+            for (entry in (constantItems.groupBy { it.assayContext }).entrySet()) {
+                AssayContext assayContext = entry.key;
+                Collection<ItemService.Item> values = entry.value;
 
-            ExperimentContext context = new ExperimentContext()
-            context.setContextName(assayContext.contextName)
-            for (item in values) {
-                String label = item.displayLabel;
+                ExperimentContext context = new ExperimentContext()
+                context.setContextName(assayContext.contextName)
+                for (item in values) {
+                    String label = item.displayLabel;
 
-                unusedKeyNames.remove(label);
-                String stringValue = experimentAnnotations.get(label)
-                if (stringValue == null || stringValue.isEmpty())
-                    continue;
+                    unusedKeyNames.remove(label);
+                    String stringValue = experimentAnnotations.get(label)
+                    if (stringValue == null || stringValue.isEmpty())
+                        continue;
 
-                ExperimentContextItem experimentContextItem = createExperimentContextItem(item, stringValue, errors)
-                if (experimentContextItem != null) {
-                    context.contextItems.add(experimentContextItem)
-                    experimentContextItem.experimentContext = context
+                    ExperimentContextItem experimentContextItem = createExperimentContextItem(item, stringValue, errors)
+                    if (experimentContextItem != null) {
+                        context.contextItems.add(experimentContextItem)
+                        experimentContextItem.experimentContext = context
+                    }
                 }
+
+                if (context.experimentContextItems.size() > 0)
+                    result.contexts.add(context)
             }
 
-            if (context.experimentContextItems.size() > 0)
-                result.contexts.add(context)
-        }
-
-        for (unusedKey in unusedKeyNames) {
-            errors.addError(0, 0, "Unknown field \"${unusedKey}\" in header")
+            for (unusedKey in unusedKeyNames) {
+                errors.addError(0, 0, "Unknown field \"${unusedKey}\" in header")
+            }
         }
 
         return result
@@ -509,7 +512,6 @@ class ResultsService {
         Collection<ExperimentMeasure> rootMeasures = experimentMeasures.findAll { it.parent == null }
         List<Result> results = []
         for (measure in rootMeasures) {
-            println("creating results for ${measure}")
             results.addAll(extractResultFromEachRow(measure, byParent.get(null), byParent, unused, errors, itemsByMeasure))
         }
 
@@ -609,7 +611,7 @@ class ResultsService {
         } else if (item.type == AttributeType.Range) {
             Double rangeMin = item.contextItems[0].valueMin
             Double rangeMax = item.contextItems[0].valueMax
-            Double rangeName = item.attributeElement.label
+            String rangeName = item.attributeElement.label
 
             float floatValue = Float.parseFloat(stringValue)
 
@@ -713,7 +715,7 @@ class ResultsService {
         parentResult.resultHierarchiesForParentResult.add(resultHierarchy)
     }
 
-    InitialParse initialParse(Reader input, ImportSummary errors, Template template) {
+    InitialParse initialParse(Reader input, ImportSummary errors, Template template, boolean skipExperimentContextItems) {
         LineReader reader = new LineReader(new BufferedReader(input))
 
         // first section
@@ -721,7 +723,7 @@ class ResultsService {
             context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }
         })
 
-        InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns)
+        InitialParse result = parseConstantRegion(reader, errors, potentialExperimentColumns, skipExperimentContextItems)
         if (errors.hasErrors())
             return
 
@@ -826,7 +828,7 @@ class ResultsService {
         Template template = generateMaxSchema(experiment)
         Map<Measure, Collection<ItemService.Item>> itemsByMeasure = constructItemsByMeasure(experiment)
 
-        def parsed = initialParse(new InputStreamReader(input), errors, template)
+        def parsed = initialParse(new InputStreamReader(input), errors, template, options.skipExperimentContexts)
         if (parsed != null && !errors.hasErrors()) {
             errors.linesParsed = parsed.linesParsed
 
@@ -908,7 +910,7 @@ class ResultsService {
     }
 
     private void persist(Experiment experiment, Collection<Result> results, ImportSummary errors, List<ExperimentContext> contexts, String originalFilename, String exportFilename, ImportOptions options) {
-        deleteExperimentResults(experiment)
+        deleteExperimentResults(experiment, options.skipExperimentContexts)
 
         results.each {
             String label = it.displayLabel
@@ -926,11 +928,13 @@ class ResultsService {
             errors.resultAnnotations += it.resultContextItems.size()
         }
 
-        contexts.each {
-            it.experiment = experiment
-            experiment.addToExperimentContexts(it)
+        if(!options.skipExperimentContexts) {
+            contexts.each {
+                it.experiment = experiment
+                experiment.addToExperimentContexts(it)
 
-            errors.experimentAnnotationsCreated += it.contextItems.size()
+                errors.experimentAnnotationsCreated += it.contextItems.size()
+            }
         }
 
         errors.resultsCreated = results.size()
@@ -959,17 +963,19 @@ class ResultsService {
 
     /* removes all data that gets populated via upload of results.  (That is, bard.db.experiment.ExperimentContextItem, bard.db.experiment.ExperimentContext, Result and bard.db.experiment.ResultContextItem */
 
-    public void deleteExperimentResults(Experiment experiment) {
+    public void deleteExperimentResults(Experiment experiment, boolean skipExperimentContextItems) {
         // this is probably ridiculously slow, but my preference would be allow DB constraints to cascade the deletes, but that isn't in place.  So
         // walk the tree and delete all the objects.
 
-        new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
-            new ArrayList(context.experimentContextItems).each { item ->
-                context.removeFromExperimentContextItems(item)
-                item.delete()
+        if(!skipExperimentContextItems) {
+            new ArrayList(experiment.experimentContexts).each { ExperimentContext context ->
+                new ArrayList(context.experimentContextItems).each { item ->
+                    context.removeFromExperimentContextItems(item)
+                    item.delete()
+                }
+                experiment.removeFromExperimentContexts(context)
+                context.delete()
             }
-            experiment.removeFromExperimentContexts(context)
-            context.delete()
         }
 
         bulkResultService.deleteResults(experiment)

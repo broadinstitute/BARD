@@ -18,6 +18,8 @@ class Element extends AbstractElement {
     ExpectedValueType expectedValueType = ExpectedValueType.NONE
     AddChildMethod addChildMethod = AddChildMethod.NO
 
+    boolean disableUpdateReadyForExtraction = false
+
     /**
      * the element hierarchy objects that have this element as the parentElement
      */
@@ -26,6 +28,8 @@ class Element extends AbstractElement {
      * the element hierarchy objects that have this element as the childElement
      */
     Set<ElementHierarchy> childHierarchies = [] as Set<ElementHierarchy>
+
+    static transients = ['disableUpdateReadyForExtraction']
 
     static hasMany = [treeRoots: TreeRoot,
             ontologyItems: OntologyItem,

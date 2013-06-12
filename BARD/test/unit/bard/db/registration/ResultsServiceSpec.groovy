@@ -155,7 +155,7 @@ class ResultsServiceSpec extends Specification {
         when:
         String sample = ",Experiment ID,123\n,column," + cellString + "\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
 
         then:
         initialParse.contexts.size() == 1
@@ -195,7 +195,7 @@ class ResultsServiceSpec extends Specification {
         String sample = ",Experiment ID,123\n,column,trumpet\n"
         BufferedReader reader = new BufferedReader(new StringReader(sample))
 
-        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item])
+        ResultsService.InitialParse initialParse = service.parseConstantRegion(new ResultsService.LineReader(reader), errors, [item], false)
 
         then:
         !errors.hasErrors()
@@ -214,7 +214,7 @@ class ResultsServiceSpec extends Specification {
         def fixture = createSampleFile()
 
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(fixture.sample), errors, fixture.template)
+        ResultsService.InitialParse result = service.initialParse(new StringReader(fixture.sample), errors, fixture.template, false)
 
         then:
         result.experimentId == 123
@@ -255,7 +255,7 @@ class ResultsServiceSpec extends Specification {
         def sample = (table.collect { it.join(",") }).join("\n")
 
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        ResultsService.InitialParse result = service.initialParse(new StringReader(sample), errors, fixture.template)
+        ResultsService.InitialParse result = service.initialParse(new StringReader(sample), errors, fixture.template, false)
 
         then:
         errors.errors.size() == expectedErrorCount

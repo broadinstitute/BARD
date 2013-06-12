@@ -40,6 +40,8 @@ class DocumentController {
         if (!documentCommand.documentType) {
             documentCommand.documentType = DocumentType.byId(params.documentType)
         }
+        documentCommand.documentContent=documentCommand.removeHtmlLineBreaks()
+
         Object document = documentCommand.createNewDocument()
         if (document) {
             redirectToOwner(document)
@@ -118,6 +120,8 @@ class DocumentController {
 }
 
 class DocumentHelper {
+
+
     def renderDocument(DocumentCommand documentCommand) {
         try {
             def document = documentCommand.updateExistingDocument()
@@ -135,7 +139,8 @@ class DocumentHelper {
                 }
             }
         } catch (Exception ee) {
-            return [status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "${ee.message}", contentType: 'text/plain', template: null]
+            log.error(ee)
+            return [status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal server error occurred while you were editing this page. Please refresh your browser and try again. If you still encounter issues please report it to the BARD team (bard-users@broadinstitute.org)", contentType: 'text/plain', template: null]
         }
     }
     /**
@@ -304,7 +309,7 @@ class DocumentCommand extends BardCommand {
         if (projectId) {
             return projectId
         } else if (assayId) {
-            return projectId
+            return assayId
         } else {
             throw new RuntimeException('need either a projectId or assayId to determine ownerId')
         }
@@ -321,6 +326,15 @@ class DocumentCommand extends BardCommand {
         } else {
             throw new RuntimeException('need either a projectId or assayId to determine owner')
         }
+    }
+    String removeHtmlLineBreaks() {
+
+        if (this.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL ||
+                this.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION) {
+            String content = this.documentContent
+            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.trim()
+        }
+        return this.documentContent
     }
 }
 enum DocumentKind {

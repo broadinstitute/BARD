@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
 
         compile "bard:external-validation:20130430"
 
+
         // runtime scope
         runtime 'com.github.groovy-wslite:groovy-wslite:0.7.0'
         runtime 'commons-net:commons-net:3.2'
@@ -95,6 +96,7 @@ grails.project.dependency.resolution = {
         compile(':webflow:2.0.0') {
             exclude 'grails-webflow'
         }
+        compile(":spring-security-acl:1.1.1")
 
         // runtime scope
         runtime ":jquery:1.7.1"

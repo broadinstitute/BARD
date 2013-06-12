@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<r:require modules="core,bootstrap"/>
+<r:require modules="core,bootstrap,bootstrapplus"/>
 <meta name="layout" content="basic"/>
-<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-<title>CAP - Find Project by Name</title>
+<title>Search for Project by Name</title>
 <r:script>
 	$(document).ready(function() {
 		var autoOpts = {
@@ -22,7 +21,7 @@
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1">
-	        	<h4>Search Project by name</h4>
+	        	<h4>Search for Project by Name</h4>
 	        </div>
 	    </div>
 	</div>

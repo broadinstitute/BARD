@@ -13,8 +13,6 @@
     <r:require
             modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,projectsummary"/>
     <meta name="layout" content="basic"/>
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'card.css')}" type="text/css">
-    <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
     <title>Show Project</title>
 </head>
 
@@ -70,7 +68,8 @@
             <div class="span9">
                 <section id="summary-header">
                     <div class="page-header">
-                        <h3>Summary</h3>
+                        <h3>1. Overview</h3>
+
                     </div>
 
                     <div class="row-fluid">
@@ -79,7 +78,7 @@
                 </section>
                 <section id="contexts-header">
                     <div class="page-header">
-                        <h3>Contexts</h3>
+                        <h3>2. Contexts</h3>
                     </div>
 
                     <div class="row-fluid">
@@ -89,7 +88,7 @@
                 </section>
                 <section id="experiment-and-step-header">
                     <div class="page-header">
-                        <h3>Experiments and steps</h3>
+                        <h3>3. Experiments and steps</h3>
                     </div>
 
                     <div class="row-fluid">

@@ -14,7 +14,7 @@
                   model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
         <g:each in="${assay.descriptions}" var="description">
             <div class="borderlist">
-                <a href="#" data-type="wysihtml5"
+                <a href="#" data-type="wysihtml5" title="Click to edit content"
                    data-pk="${description.id}" data-rows="60" data-inputclass="document-wysihtml5"
                    class="documents ${description.id}"
                    data-url="/BARD/document/editDocument"
@@ -40,7 +40,7 @@
                   model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
         <g:each in="${assay.protocols}" var="protocol">
             <div class="borderlist">
-                <a href="#" data-type="wysihtml5"
+                <a href="#" data-type="wysihtml5" title="Click to edit content"
                    data-pk="${protocol.id}" data-rows="60" data-inputclass="document-wysihtml5"
                    class="documents ${protocol.id}"
                    data-url="/BARD/document/editDocument"
@@ -67,7 +67,7 @@
 
         <g:each in="${assay.comments}" var="comment">
             <div class="borderlist">
-                <a href="#" data-type="wysihtml5"
+                <a href="#" data-type="wysihtml5"  title="Click to edit content"
                    data-pk="${comment.id}" data-rows="60" data-inputclass="document-wysihtml5"
                    class="documents ${comment.id}"
                    data-url="/BARD/document/editDocument"
@@ -95,6 +95,7 @@
             <g:each in="${assay.publications}" var="publication">
                 <div class="borderlist">
                     Publication Name: <a href="#" data-type="text"
+                                         title="Click to edit name"
                                          data-pk="${publication.id}"
                                          class="documents ${publication.id}"
                                          data-url="/BARD/document/editDocumentName"
@@ -108,7 +109,7 @@
                     <g:fieldValue bean="${publication}" field="documentName"/>
                 </a>
                     <br/>
-                    Publication URL:<a href="#" data-type="url"
+                    Publication URL:<a href="#" data-type="url" title="Click to edit URL"
                                        data-pk="${publication.id}"
                                        class="documents ${publication.id}"
                                        data-url="/BARD/document/editDocument"
@@ -120,7 +121,9 @@
                                        data-document-name="${publication.documentName}"
                                        id="${publication.id}">
                     <g:fieldValue bean="${publication}" field="documentContent"/>
+
                 </a>
+                    <a href="${publication.documentContent}" target="publication" title="Click on globe icon to view URL">><i class="icon-globe"></i></a>
                     <g:render template="deleteDocumentForm" model="[document: publication]"/>
                 </div>
             </g:each>
@@ -138,7 +141,7 @@
 
         <g:each in="${assay.externalURLs}" var="externalURL">
             <div class="borderlist">
-                External Name: <a href="#" data-type="text"
+                External Name: <a href="#" data-type="text" title="Click to edit name"
                                   data-pk="${externalURL.id}"
                                   class="documents ${externalURL.id}"
                                   data-url="/BARD/document/editDocumentName"
@@ -151,7 +154,7 @@
                                   id="${externalURL.id}_Name">
                 <g:fieldValue bean="${externalURL}" field="documentName"/>
             </a> <br/>
-                Document URL: <a href="#" data-type="url"
+                Document URL: <a href="#" data-type="url" title="Click to edit URL"
                                  data-pk="${externalURL.id}"
                                  class="documents ${externalURL.id}"
                                  data-url="/BARD/document/editDocument"
@@ -163,6 +166,7 @@
                                  data-document-name="${externalURL.documentName}" id="${externalURL.id}">
                 <g:fieldValue bean="${externalURL}" field="documentContent"/>
             </a>
+                <a href="${externalURL.documentContent}" target="externalUrl" title="Click on globe icon to view URL"><i class="icon-globe"></i></a>
                 <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
             </div>
         </g:each>
@@ -178,7 +182,7 @@
                   model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
         <g:each in="${assay.otherDocuments}" var="otherDocument">
             <div class="borderlist">
-                <a href="#" data-type="text"
+                <a href="#" data-type="text"  title="Click to edit text"
                    data-pk="${otherDocument.id}"
                    class="documents ${otherDocument.id}"
                    data-url="/BARD/document/editDocument"

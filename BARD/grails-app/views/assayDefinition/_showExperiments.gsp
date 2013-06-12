@@ -1,45 +1,49 @@
 <div id="showExperiments">
-    <p><strong>Used by the following experiments</strong></p>
-
-    <ul>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>EID</th><th>Experiment Name</th><th>External References</th> <th>Substances Tested</th> <th>PID</th><th>Project Name</th>
+        </tr>
+        </thead>
+        <tbody>
         <g:each in="${assayInstance.experiments}" var="experiment">
-            <li class="borderlist">
-                <p><g:link controller="experiment" id="${experiment.id}"
-                           action="show"> ${experiment.experimentName} </g:link></p>
+            <tr>
+                <td><g:link controller="experiment" id="${experiment.id}"
+                            action="show"> ${experiment.id} </g:link></td>
+                <td>${experiment.experimentName}</td>
+                <td>
+                    <g:if test="${!experiment.externalReferences.isEmpty()}">
 
-                <g:if test="${experiment.externalReferences.size() > 0}">
-                     <ul> <p><strong> External References </strong></p>
-
-                         <g:each in="${experiment.externalReferences}" var="xRef">
-                            <li>
-                                <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
-                                   target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
-                            </li>
+                        <g:each in="${experiment.externalReferences}" var="xRef">
+                            <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
+                               target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
                         </g:each>
+                    </g:if>
+                </td>
+                <td></td>
+                <g:if test="${!experiment.projectExperiments.isEmpty()}">
 
-                    </ul>
-                </g:if>
-                <br/>
-                <g:if test="${experiment.projectExperiments.size() > 0}">
+                    <g:each in="${experiment.projectExperiments}" var="projExp">
+                        <td>
+                        <g:link controller="project" id="${projExp.project.id}"
+                                action="show">${projExp.project.id}</g:link>
+                        </td>
+                        <td>
+                            ${projExp.project.name}
+                        </td>
+                    </g:each>
 
-                    <ul>
-                        <p><strong> Referenced in the following projects: </strong></p>
-                        <g:each in="${experiment.projectExperiments}" var="projExp">
-                            <li>
-                                <g:link controller="project" id="${projExp.project.id}"
-                                        action="show">${projExp.project.name}</g:link>
-                            </li>
-                        </g:each>
-                    </ul>
                 </g:if>
-            </li>
-            <br/>
-            <br/>
+                <g:else>
+                    <td></td><td></td>
+                </g:else>
+            </tr>
         </g:each>
-    </ul>
-
+        </tbody>
+    </table>
+    <br/>
     <g:if test="${assayInstance.allowsNewExperiments()}">
-    <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
-            class="btn">Create a new experiment</g:link>
+         <g:link controller="experiment" action="create" params="${[assayId: assayInstance.id]}"
+                class="btn"><i class="icon-plus"></i>Add New Experiment</g:link>
     </g:if>
 </div>

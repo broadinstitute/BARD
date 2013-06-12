@@ -1,4 +1,4 @@
-mavenRepoUrl=repoUrl
+mavenRepoUrl=http://bard-repo:8081/artifactory/bard-virtual-repo
 
 devenv.url=jdbc:oracle:thin:@localhost:1522:AL32UTF8
 devenv.username=devenv
