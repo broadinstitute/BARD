@@ -266,7 +266,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         PubchemReformatService service = new PubchemReformatService()
         Assay assay = Assay.build()
         Experiment experiment = Experiment.build(assay: assay)
-        Element cellCount = Element.build(label: "cell count")
+        Element cellCount = Element.build(label: "cell count", expectedValueType: NUMERIC)
 
         Collection<PubchemReformatService.MappedStub> newMeasures = [
                 new PubchemReformatService.MappedStub(resultType: Element.build(), parentChildRelationship: HierarchyType.CALCULATED_FROM,
@@ -292,7 +292,7 @@ class PubchemReformatServiceUnitSpec extends Specification {
         Measure oldMeasure = Measure.build(assay: assay)
         Experiment experiment = Experiment.build(assay: assay)
         ExperimentMeasure oldExperimentMeasure = ExperimentMeasure.build(experiment: experiment, measure: oldMeasure)
-        Element cellCount = Element.build(label: "cell count")
+        Element cellCount = Element.build(label: "cell count", expectedValueType: NUMERIC)
 
         Collection<PubchemReformatService.MappedStub> newMeasures = [
                 new PubchemReformatService.MappedStub(resultType: Element.build(), parentChildRelationship: HierarchyType.CALCULATED_FROM,
