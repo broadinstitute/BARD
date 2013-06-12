@@ -142,7 +142,7 @@ class MolSpreadSheetCell {
                                 coef: curveFitParameters.hillCoef,
                                 conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
                                 response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
-                                xAxisLabel: "Log(Concentration) ${priorityElement.testConcentrationUnit}",
+                                xAxisLabel: "Log(Concentration) ${priorityElement.concentrationResponseSeries.testConcentrationUnit?:priorityElement.testConcentrationUnit}",
                                 yAxisLabel: priorityElement.concentrationResponseSeries?.getYAxisLabel())
                     } else {
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)

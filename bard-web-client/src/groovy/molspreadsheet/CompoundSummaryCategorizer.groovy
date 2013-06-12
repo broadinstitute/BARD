@@ -131,13 +131,33 @@ class CompoundSummaryCategorizer {
     }
 
 
-    public
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder << "[\n"
+        int numberOfElements =  totalContents.size()
+        int loopingCount = 0
+        for (Long currentEid in totalContents.keySet()) {
+            SingleEidSummary singleEidSummary = totalContents[currentEid]
+            stringBuilder << "        \"assayId\": \"${currentEid}\",\n"
+            stringBuilder << "        \"data\": {\n"
+            stringBuilder << "            \"GO_biological_process_term\" : \"${singleEidSummary.getGoString()}\",\n"
+            stringBuilder << "            \"assay_format\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
+            stringBuilder << "            \"assay_type\" : \"${singleEidSummary.getAssayFormatString()}\"\n"
+            stringBuilder << "        }"
+            if ((++loopingCount) < numberOfElements) {
+                stringBuilder << ","
+            }
+            stringBuilder << "\n"
+        }
+        stringBuilder << "]\n"
+        return stringBuilder.toString()
+    }
 
 
-    class SingleEidSummary {
+    public class SingleEidSummary {
         long eid = 0
-        int assayFormatIndex = 0
-        int assayTypeIndex = 0
+        int assayFormatIndex = -1
+        int assayTypeIndex = -1
         List<Integer> biologicalProcessIndexList = []
         List<Integer>  proteinTargetsIndexList = []
         List<Long> unconvertedBiologyObjects = []
@@ -157,6 +177,70 @@ class CompoundSummaryCategorizer {
             this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
             this.assayTypeIndex = deriveAssayTypeIndex (assayType)
         }
+
+
+        public String getGoString() {
+            String returnValue = 'none'
+            if (biologicalProcessIndexList.size() > 0){
+                int firstBiologicalProcessIndex = biologicalProcessIndexList [0]
+                String biologicalProcess = biologicalProcessMap.find{it.value==firstBiologicalProcessIndex}.key
+                if (biologicalProcess != null){
+                    returnValue =  biologicalProcess
+                }  else {
+                    returnValue = 'disappeared'
+                }
+            }
+            returnValue
+        }
+
+
+        public String getTargetString() {
+            String returnValue = 'none'
+            if (proteinTargetsIndexList.size() > 0){
+                int firstProteinTargetsIndex = proteinTargetsIndexList [0]
+                String proteinTarget = proteinTargetMap.find{it.value==firstProteinTargetsIndex}.key
+                if (proteinTarget != null){
+                    returnValue =  proteinTarget
+                }  else {
+                    returnValue = 'disappeared'
+                }
+            }
+            returnValue
+        }
+
+
+
+        public String getAssayFormatString() {
+            String returnValue = 'none'
+            if (assayFormatIndex > -1){
+                String assayFormat = assayFormatMap.find{it.value==assayFormatIndex}.key
+                if (assayFormat != null){
+                    returnValue =  assayFormat
+                }  else {
+                    returnValue = 'disappeared'
+                }
+            }
+            returnValue
+        }
+
+
+
+        public String getAssayTypeString() {
+            String returnValue = 'none'
+            if (assayTypeIndex > -1){
+                String assayType = assayTypeMap.find{it.value==assayTypeIndex}.key
+                if (assayType != null){
+                    returnValue =  assayType
+                }  else {
+                    returnValue = 'disappeared'
+                }
+            }
+            returnValue
+        }
+
+
+
+
 
 //        public List<Long>  retrieveBiologyObjects (){
 //            unconvertedBiologyObjects

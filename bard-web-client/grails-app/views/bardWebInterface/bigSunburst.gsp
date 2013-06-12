@@ -13,39 +13,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
-    %{--<style>--}%
-    %{--#sunburstdiv {--}%
-        %{--font-family: sans-serif;--}%
-        %{--font-size: 12px;--}%
-        %{--position: relative;--}%
-    %{--}--}%
-
-    %{--.toolTextAppearance {--}%
-        %{--font: 20px serif;--}%
-        %{--font-weight: bold;--}%
-        %{--margin: 5px;--}%
-        %{--padding: 10px;--}%
-        %{--background: #eeeeee;--}%
-        %{--border: 1px solid blue;--}%
-        %{---moz-border-radius: 15px;--}%
-        %{--border-radius: 15px;--}%
-    %{--}--}%
-
-    %{--.legend {--}%
-        %{--font: 14px sans-serif;--}%
-        %{--font-weight: bold;--}%
-    %{--}--}%
-
-    %{--.legendHolder {--}%
-        %{--border: 3px solid black;--}%
-        %{--font: 12px sans-serif;--}%
-        %{--font-weight: bold;--}%
-        %{--text-align: center;--}%
-        %{--background: #eeeeee;--}%
-        %{--width: 160px;--}%
-    %{--}--}%
-
-    %{--</style>--}%
 
     <script>
         window.onload = function () {

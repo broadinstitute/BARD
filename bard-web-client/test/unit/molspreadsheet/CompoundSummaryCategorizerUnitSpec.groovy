@@ -126,9 +126,12 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         compoundSummaryCategorizer.combineInNewBiologicalProcessValue(667L,"G protein receptor")
         compoundSummaryCategorizer.combineInNewBiologicalProcessValue(667L,"G protein")
         compoundSummaryCategorizer.combineInNewProteinTargetValue(789L,"Kinase")
+        String json = compoundSummaryCategorizer.toString()
 
         then: "Should equal the expected"
         assert ! (compoundSummaryCategorizer == null)
+        assert ! (json == null)
+
      }
 
 
