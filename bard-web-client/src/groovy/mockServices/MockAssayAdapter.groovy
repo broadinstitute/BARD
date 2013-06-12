@@ -6,6 +6,8 @@ import bard.core.interfaces.AssayType
 import bard.core.interfaces.AssayRole
 import bard.core.rest.spring.assays.BardAnnotation
 import bard.core.interfaces.EntityNamedSources
+import bard.core.rest.spring.assays.MinimumAnnotation
+import bard.core.rest.spring.util.NameDescription
 
 /**
  * Created with IntelliJ IDEA.
@@ -63,8 +65,30 @@ class MockAssayAdapter implements AssayAdapterInterface {
     }
 
     @Override
+    MinimumAnnotation getMinimumAnnotation() {
+        return new MinimumAnnotation(assayType: "signal transduction assay", assayFormat: "cell-based format",
+                detectionMethodType: "luminescence method", assayFootprint: "1536-well plate")
+    }
+
+    @Override
     Long getCapAssayId() {
         return this.assayId ?: 233  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    Double getScore() {
+        return 1.0
+    }
+
+    NameDescription getMatchingField() {
+        return new NameDescription(name: "Test Name", description: "Test Desc")
+    }
+
+    String getTitle() {
+        return name
+    }
+
+    Long getBardAssayId() {
+        return this.assayId
     }
 
     @Override

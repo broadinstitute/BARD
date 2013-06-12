@@ -715,8 +715,8 @@ class MockQueryService implements IQueryService {
         mockAssayAdapter.category = AssayCategory.MLPCN
         mockAssayAdapter.protocol = "Please see linked AIDs for a detailed description of each assay."
         mockAssayAdapter.comments = "This project is on-going and will be updated at a later point with our findings."
-        mockAssayAdapter.description =
-            mockAssayAdapterMap.put(assayId, mockAssayAdapter)
+        mockAssayAdapter.description = "This is a test description."
+        mockAssayAdapterMap.put(assayId, mockAssayAdapter)
 
 
 
