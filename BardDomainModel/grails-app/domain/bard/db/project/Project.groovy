@@ -29,6 +29,12 @@ class Project extends AbstractContextOwner {
     Set<ExternalReference> externalReferences = [] as Set
     Set<ProjectDocument> documents = [] as Set
 
+    // if this is set, then don't automatically update readyForExtraction when this entity is dirty
+    // this is needed to change the value to anything except "Ready"
+    boolean disableUpdateReadyForExtraction = false
+
+    static transients = ['disableUpdateReadyForExtraction']
+
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
             contexts: ProjectContext,

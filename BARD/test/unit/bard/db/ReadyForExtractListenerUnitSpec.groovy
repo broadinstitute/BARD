@@ -54,28 +54,17 @@ import spock.lang.Unroll
 class ReadyForExtractListenerUnitSpec extends Specification {
     def 'test assay setting ready for extract for #description'() {
         setup:
-        ReadyForExtractListener listener = new ReadyForExtractListener(Mock(Datastore.class))
         Assay assayx = Assay.build()
         assert assayx.id != null
         Assay.get(assayx.id) != null
-        listener.updateReadyForExtractionCallback = {entity->entity.readyForExtraction = ReadyForExtraction.READY}
 
         when:
         def item = targetConstructor.call(assayx)
-        assayx.assayStatus = AssayStatus.APPROVED
-        assayx.readyForExtraction = ReadyForExtraction.NOT_READY
-        listener.handleDirtyObject(item)
+        def impacted = ReadyForExtractFlushListener.getObjectsImpactedByChange(item)
 
-    then:
-        assayx.readyForExtraction == ReadyForExtraction.READY
-
-//        when:
-//        assayx.assayStatus = AssayStatus.DRAFT
-//        assayx.readyForExtraction = ReadyForExtraction.NOT_READY
-//        listener.handleDirtyObject(item)
-//
-//        then:
-//        assayx.readyForExtraction == ReadyForExtraction.NOT_READY
+        then:
+        impacted.size() == 1
+        impacted[0] == assayx
 
         where:
         description                    | targetConstructor
@@ -87,26 +76,15 @@ class ReadyForExtractListenerUnitSpec extends Specification {
 
     def 'test element setting ready for extract for #description'() {
         setup:
-        ReadyForExtractListener listener = new ReadyForExtractListener(Mock(Datastore.class))
         Element element = Element.build()
-        listener.updateReadyForExtractionCallback = {entity->entity.readyForExtraction = ReadyForExtraction.READY}
 
         when:
         def item = targetConstructor.call(element)
-        element.elementStatus = ElementStatus.Published
-        element.readyForExtraction = ReadyForExtraction.NOT_READY
-        listener.handleDirtyObject(item)
+        def impacted = new HashSet(ReadyForExtractFlushListener.getObjectsImpactedByChange(item))
 
         then:
-        element.readyForExtraction == ReadyForExtraction.READY
-
-//        when:
-//        element.elementStatus = ElementStatus.Pending
-//        element.readyForExtraction = ReadyForExtraction.NOT_READY
-//        listener.handleDirtyObject(item)
-//
-//        then:
-//        element.readyForExtraction == ReadyForExtraction.NOT_READY
+        impacted.size() == 1
+        impacted.first() == element
 
         where:
         description                    | targetConstructor
@@ -118,26 +96,15 @@ class ReadyForExtractListenerUnitSpec extends Specification {
 
     def 'test experiment setting ready for extract for #description'() {
         setup:
-        ReadyForExtractListener listener = new ReadyForExtractListener(Mock(Datastore.class))
         Experiment experimentx = Experiment.build()
-        listener.updateReadyForExtractionCallback = {entity->entity.readyForExtraction = ReadyForExtraction.READY}
 
         when:
         def item = targetConstructor.call(experimentx)
-        experimentx.experimentStatus = ExperimentStatus.APPROVED
-        experimentx.readyForExtraction = ReadyForExtraction.NOT_READY
-        listener.handleDirtyObject(item)
+        def impacted = ReadyForExtractFlushListener.getObjectsImpactedByChange(item)
 
         then:
-        experimentx.readyForExtraction == ReadyForExtraction.READY
-
-//        when:
-//        experimentx.experimentStatus = ExperimentStatus.DRAFT
-//        experimentx.readyForExtraction = ReadyForExtraction.NOT_READY
-//        listener.handleDirtyObject(item)
-//
-//        then:
-//        experimentx.readyForExtraction == ReadyForExtraction.NOT_READY
+        impacted.size() == 1
+        impacted[0] == experimentx
 
         where:
         description                    | targetConstructor
@@ -150,26 +117,15 @@ class ReadyForExtractListenerUnitSpec extends Specification {
 
     def 'test project setting ready for extract for #description'() {
         setup:
-        ReadyForExtractListener listener = new ReadyForExtractListener(Mock(Datastore.class))
         Project projectx = Project.build()
-        listener.updateReadyForExtractionCallback = {entity->entity.readyForExtraction = ReadyForExtraction.READY}
 
         when:
         def item = targetConstructor.call(projectx)
-        projectx.projectStatus = ProjectStatus.APPROVED
-        projectx.readyForExtraction = ReadyForExtraction.NOT_READY
-        listener.handleDirtyObject(item)
+        def impacted = new HashSet( ReadyForExtractFlushListener.getObjectsImpactedByChange(item) )
 
         then:
-        projectx.readyForExtraction == ReadyForExtraction.READY
-
-//        when:
-//        projectx.projectStatus = ProjectStatus.DRAFT
-//        projectx.readyForExtraction = ReadyForExtraction.NOT_READY
-//        listener.handleDirtyObject(item)
-//
-//        then:
-//        projectx.readyForExtraction == ReadyForExtraction.NOT_READY
+        impacted.size() == 1
+        impacted.first() == projectx
 
         where:
         description                    | targetConstructor
@@ -182,8 +138,8 @@ class ReadyForExtractListenerUnitSpec extends Specification {
         "ProjectExperiment"            | { project -> ProjectExperiment.build(project: project) }
         "ProjectExperimentContext"     | { project -> ProjectExperimentContext.build(projectExperiment: ProjectExperiment.build(project: project)) }
         "ProjectExperimentContextItem" | { project -> ProjectExperimentContextItem.build(context: ProjectExperimentContext.build(projectExperiment: ProjectExperiment.build(project: project))) }
-        "ProjectStep next"             | { project -> buildStep(ProjectExperiment.build(project: project), ProjectExperiment.build()) }
-        "ProjectStep prev"             | { project -> buildStep(ProjectExperiment.build(project: project), ProjectExperiment.build()) }
+        "ProjectStep next"             | { project -> buildStep(ProjectExperiment.build(project: project), ProjectExperiment.build(project: project)) }
+        "ProjectStep prev"             | { project -> buildStep(ProjectExperiment.build(project: project), ProjectExperiment.build(project: project)) }
     }
 
     ProjectStep buildStep(ProjectExperiment next, ProjectExperiment prev) {
