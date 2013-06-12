@@ -17,10 +17,10 @@ class AddPermissionsService {
         //get the new Object role for the current user
         //TODO: Waiting for service that creates the newUserObject in person table
         /*String userName = springSecurityService.principal?.username
-        Role role = Person.findRoleByUserName(userName) //TODO: fix query when phil checks in acl stuff
+        Role role = findRoleByUserName(userName)
         addPermission(domainObjectInstance, role,BasePermission.ADMINISTRATION)*/
     }
-    void addPermission(domainObjectInstance,Role role,  Permission permission) {
+    protected void addPermission(domainObjectInstance,Role role,  Permission permission) {
         aclUtilService.addPermission(domainObjectInstance, role.authority,permission)
     }
 }
