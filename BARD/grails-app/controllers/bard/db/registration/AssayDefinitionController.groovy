@@ -375,8 +375,10 @@ class AssayDefinitionController {
 
 
     def deleteItemFromCard(Long assay_context_item_id) {
-        def assayContextItem = AssayContextItem.get(assay_context_item_id)
+
+        final AssayContextItem assayContextItem = AssayContextItem.get(assay_context_item_id)
         if (assayContextItem) {
+            this.validateContextItemBeforeDelete(assayContextItem)
             AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
             Assay assay = assayContext.assay
             render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
@@ -499,4 +501,5 @@ class EditingHelper {
     def editErrorMessage() {
         render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
     }
+
 }

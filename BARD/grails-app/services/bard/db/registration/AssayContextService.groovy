@@ -74,7 +74,14 @@ class AssayContextService {
     }
 
     public AssayContext deleteItem(AssayContextItem assayContextItem) {
+
         AssayContext assayContext = assayContextItem.assayContext
+        final Assay assay = assayContext.assay
+        //see https://www.pivotaltracker.com/story/show/51248965
+        if(assay.experiments){
+            //prevent context item from getting deleted if this assay has experiments
+
+        }
         assayContext.removeFromAssayContextItems(assayContextItem)
         assayContextItem.delete(flush: true)
         return assayContext
