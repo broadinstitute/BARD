@@ -43,7 +43,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE STG_UNIT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_OF_MEASURE&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_FULL_PATH&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE STG_UNIT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_ID&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(128),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp DESCRIPTION&nbsp&nbsp&nbsp&nbsp VARCHAR2(1000),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp FULL_PATH&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(3000)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -65,20 +65,6 @@
 <TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_694a6b74b12246bd870a47d867e9e803">UNIT_REF</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_f86d0f3768a24a65896702f176f8e583">UNIT_OF_MEASURE</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(20)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_6f294911f5e0457a8ebb1380fa95c83a">UNIT_ID</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
@@ -86,9 +72,23 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_f6120cf9a2734e1cb10f72423b682357">UNIT_FULL_PATH</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_df5742bb04a24483af6227728dad42b3">UNIT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(128)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_eb02e28c07b24534b49e5e3d07b31397">DESCRIPTION</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(1000)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_0df5bb26a29b460cb7ae7c70463d8496_Attr.htm#Attr_9ebb57641afb46b68de6859eece33d99">FULL_PATH</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(3000)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>

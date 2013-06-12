@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE INVENTORY(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp TIME_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROJECT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STORAGE_LOCATION_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp AMOUNT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(20, 10),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONTAINER_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp AMOUNT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_TM FOREIGN KEY (TIME_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TIME(TIME_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_PRJCT FOREIGN KEY (PROJECT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES PROJECT(PROJECT_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_STRG_LCTN FOREIGN KEY (STORAGE_LOCATION_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES STORAGE_LOCATION(STORAGE_LOCATION_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_SBSTNC FOREIGN KEY (SUBSTANCE_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES SUBSTANCE(SUBSTANCE_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_UNT FOREIGN KEY (UNIT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES UNIT(UNIT_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_CNTNR FOREIGN KEY (CONTAINER_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES CONTAINER(CONTAINER_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_VL_AMNT FOREIGN KEY (AMOUNT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES VALUE(VALUE_REF)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE INVENTORY(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp TIME_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROJECT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STORAGE_LOCATION_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp AMOUNT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(20, 10),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONTAINER_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp AMOUNT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_TM FOREIGN KEY (TIME_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TIME(TIME_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_PRJCT FOREIGN KEY (PROJECT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES PROJECT(PROJECT_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_STRG_LCTN FOREIGN KEY (STORAGE_LOCATION_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES STORAGE_LOCATION(STORAGE_LOCATION_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_SBSTNC FOREIGN KEY (SUBSTANCE_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES SUBSTANCE(SUBSTANCE_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_CNTNR FOREIGN KEY (CONTAINER_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES CONTAINER(CONTAINER_REF),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT FK_INVNTRY_VL_AMNT FOREIGN KEY (AMOUNT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES VALUE(VALUE_REF)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -108,7 +108,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_dd795da0dc004cf0b95431484857f403_Attr.htm#Attr_8982534ec7bd4abf918300ff39fdf58f">UNIT_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_dd795da0dc004cf0b95431484857f403_Attr.htm#Attr_922a136142154cb1ba5386a82942b2c4">UNIT_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -222,18 +222,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">TIME_REF&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_4d972c0616ee40439ed4b4d3364fad78.htm">UNIT</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_8e44f1ca7b904360bbb7165ab3d62303_Rel.htm#Rel_dc668d76b4314546ac0f94dd4005957a">FK_INVNTRY_UNT</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">UNIT_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>

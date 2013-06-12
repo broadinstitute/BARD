@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE RESULT_HIERARCHY(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PARENT_RESULT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PARENT_CHILD_RELATIONSHIP&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_Result_Hierarchy PRIMARY KEY (PARENT_RESULT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>TABLESPACE BARD_DAT</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE RESULT_HIERARCHY(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PARENT_RESULT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PARENT_CHILD_RELATIONSHIP&nbsp&nbsp&nbsp&nbsp VARCHAR2(20),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_RESULT_HIERARCHY PRIMARY KEY (PARENT_RESULT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -73,7 +73,7 @@
 <TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bba3fc1c8aec4550b2c2c38c710d39ad_Attr.htm#Attr_68e3d5610a894797aa9314beaa5ae63a">PARENT_RESULT_REF</A><img src="../Support/Gif/pk.gif" alt="(PK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_bba3fc1c8aec4550b2c2c38c710d39ad_Attr.htm#Attr_71b3b72f203246bead092cd326d0037e">PARENT_RESULT_REF</A><img src="../Support/Gif/pkfk.gif" alt="(PK)(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -100,7 +100,7 @@
 <TD VALIGN=TOP  WIDTH=50% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Keys&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PK_Result_Hierarchy&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PK_RESULT_HIERARCHY&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PrimaryKey&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_RESULT_REF&nbsp;</FONT></TD>
 </TR>
@@ -128,6 +128,18 @@
 <TD VALIGN=TOP  WIDTH=6% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Is Supertype&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=6% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Deferrable&nbsp;</FONT></B></TD>
 <TD VALIGN=TOP  WIDTH=6% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Initially Deferred&nbsp;</FONT></B></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "./Tbl_d006447af5de472196f383252e114989.htm">RESULT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">One To Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_aac73015aa114abe89b4b76f8237fca7_Rel.htm#Rel_e5300c34ad954e308f16e1ad205c7c7d">FK_RSLT_HRRCHY_RSLT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PARENT_RESULT_REF&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
