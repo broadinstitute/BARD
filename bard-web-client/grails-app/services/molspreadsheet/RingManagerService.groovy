@@ -182,7 +182,7 @@ class RingManagerService {
         returnValue ["compoundSummaryCategorizer"]  = new CompoundSummaryCategorizer()
         if (compoundSummary != null){
            for (Assay assay in compoundSummary.testedAssays) {
-               List<String>  currentExperimentIds = assay.experiments
+               List<String>  currentExperimentIds = assay.experimentIds
                List<String>  currentTargets = assay.targetIds
                String assayFormat = assay.minimumAnnotation.assayFormat
                String assayType = assay.minimumAnnotation.assayType

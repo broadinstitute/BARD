@@ -37,6 +37,9 @@ modules = {
     }
     d3Library {
         resource url: "js/sunburst/d3.min.js"
+        resource url: "js/sunburst/dc.js"
+        resource url: "js/sunburst/crossfilter.js"
+        resource url: "css/dc.css"
     }
     projectstep {
         dependsOn "handlebars"
