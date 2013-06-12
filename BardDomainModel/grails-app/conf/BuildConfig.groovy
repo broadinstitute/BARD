@@ -45,7 +45,7 @@ grails.project.dependency.resolution = {
             export = false
             excludes('spock', 'release')
         }
-
+        compile(":spring-security-acl:1.1.1")
         compile(":database-migration:1.3.2") { export = true }
         compile(":spock:0.7") {
             export = false
