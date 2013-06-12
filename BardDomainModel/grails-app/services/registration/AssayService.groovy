@@ -56,6 +56,7 @@ class AssayService {
         return Assay.findById(newAssay.id)
 
     }
+
     /**
      *
      */
@@ -68,8 +69,8 @@ class AssayService {
         //now call the manage names stored procedure
         //then look up and return the assay
         return Assay.findById(assay.id)
-
     }
+
     Assay cloneAssayOnly(Assay assay,
                          Date dateCreated,
                          String designedBy,

@@ -57,6 +57,9 @@ class ReadyForExtractFlushListener implements FlushEventListener, PostInsertEven
         }
     }
 
+    /*
+        Called after flush completes and may in turn generate an extra flush after changing the ready for extraction flag
+     */
     void onFlush(FlushEvent flushEvent) throws HibernateException {
         assert isInExtraFlush != null
 
