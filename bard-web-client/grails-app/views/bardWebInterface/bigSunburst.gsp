@@ -818,19 +818,19 @@
 
 <div id="widthTest" class="legendLine"></div>
 
-<div class="container-fluid">
+<div class="container-fluid" style="position:absolute; left: 10px; top: 1000px;">
     <div class="row-fluid">
         <div class="span6">
 
-            <a href="${createLink(controller: 'BardWebInterface', action: 'index')}">
-                <img src="${resource(dir: 'images', file: 'bard_logo_med.png')}" alt="BioAssay Research Database"/>
-            </a>
+            %{--<a href="${createLink(controller: 'BardWebInterface', action: 'index')}">--}%
+                %{--<img src="${resource(dir: 'images', file: 'bard_logo_med.png')}" alt="BioAssay Research Database"/>--}%
+            %{--</a>--}%
 
         </div>
 
         <div class="span6" style="text-align: center; vertical-align: bottom;">
-            <br/>
-            <h2>Panther class hierarchy</h2>
+            %{--<br/>--}%
+            %{--<h2>Panther class hierarchy</h2>--}%
         </div>
 
     </div>
