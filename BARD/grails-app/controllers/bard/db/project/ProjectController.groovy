@@ -36,7 +36,7 @@ class ProjectController {
             project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.projectStatus.id)
         } catch (Exception ee) {
-            log.error(ee)
+            log.error("error in editProjectStatus", ee)
             editErrorMessage()
         }
     }
@@ -70,7 +70,7 @@ class ProjectController {
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
 
         } catch (Exception ee) {
-            log.error(ee)
+            log.error("error in editDescription", ee)
             editErrorMessage()
         }
     }

@@ -38,6 +38,12 @@ class Experiment extends AbstractContextOwner {
     Set<ExperimentMeasure> experimentMeasures = [] as Set
     Set<ExperimentFile> experimentFiles = [] as Set
 
+    // if this is set, then don't automatically update readyForExtraction when this entity is dirty
+    // this is needed to change the value to anything except "Ready"
+    boolean disableUpdateReadyForExtraction = false
+
+    static transients = ['disableUpdateReadyForExtraction']
+
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
             externalReferences: ExternalReference,

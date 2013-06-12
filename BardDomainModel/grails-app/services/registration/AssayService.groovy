@@ -92,7 +92,6 @@ class AssayService {
                 readyForExtraction: readyForExtraction,
                 dateCreated: dateCreated
         )
-
     }
 
     Map<AssayContext, AssayContext> cloneContexts(Assay assay, Assay newAssay) {
