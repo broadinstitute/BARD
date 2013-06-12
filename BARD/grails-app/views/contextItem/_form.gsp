@@ -1,7 +1,7 @@
 %{--<g:render template="message"/>--}%
 <div class="row-fluid">
     <div class="offset1 span10">
-        <g:render template="/common/errors" model="['errors': instance?.errors?.allErrors]"/>
+        <g:render template="/common/errors" model="['errors': instance?.errors?.globalErrors]"/>
     </div>
 </div>
 <g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>
@@ -61,15 +61,14 @@
         </div>
     </div>
 
-    <div id="numericValueContainer">
-        <g:if test="${disabledInput == false}">
-            <div class="row-fluid">
-                <div class="span6 offset2 alert alert-info">
-                    <p>This attribute expects a numeric value.  Please enter a scalar value or a range</p>
+    <div id="numericValueContainer" class="control-group ${hasErrors(bean: instance, field: 'qualifier', 'error')}">
+            <g:if test="${disabledInput == false}">
+                <div class="row-fluid">
+                    <div class="span6 offset2 alert alert-info">
+                        <p>This attribute expects a numeric value, please enter an integer, decimal or scientific notation, e.g. 1, 1.0 or 1E-3</p>
+                    </div>
                 </div>
-            </div>
-        </g:if>
-        <div class="control-group ${hasErrors(bean: instance, field: 'qualifier', 'error')}">
+            </g:if>
             <label class="control-label" for="valueNum"><g:message
                     code="contextItem.valueNum.label"/>:</label>
 
@@ -87,21 +86,24 @@
                 <g:textField class="span2" id="valueNumUnitId" name="valueNumUnitId"
                              value="${instance?.valueNumUnitId}"
                              disabled="${disabledInput}"/>
-                <p class="help-block"><g:fieldError field="qualifier" bean="${instance}"/></p>
-
-                <p class="help-block">
-                    <g:fieldError field="valueNum" bean="${instance}"/>
-                </p>
-
-                <p class="help-block"><g:fieldError field="valueNumUnitId" bean="${instance}"/></p>
-
             </div>
+
+    </div>
+    <div class="row-fluid">
+        <div class="offset1 span10">
+            <g:render template="/common/errors" model="['errors': instance?.errors?.fieldErrors.findAll{it.field in ['qualifier', 'valueNum', 'valueNumUnitId']}]"/>
         </div>
-        <div class="row-fluid">
-            <br/>
-            <p class="offset4 span1">OR</p>
-            <br/>
-        </div>
+    </div>
+
+    <div id="numericRangeValueContainer"
+         class="control-group ${hasErrors(bean: instance, field: 'qualifier', 'error')}">
+        <g:if test="${disabledInput == false}">
+            <div class="row-fluid">
+                <div class="span6 offset2 alert alert-info">
+                    <p>This attribute expects a numeric value, please enter an integer, decimal or scientific notation, e.g. 1, 1.0 or 1E-3</p>
+                </div>
+            </div>
+        </g:if>
 
         <div class="control-group ${hasErrors(bean: instance, field: 'valueMin', 'error')}">
             <label class="control-label"><g:message code="contextItem.range.label"/>:</label>
@@ -139,7 +141,6 @@
             <p>This attribute isn't allowed to have values assigned to it. Please select another attribute.</p>
         </div>
     </div>
-
 
     <div class="control-group">
         <div class="controls">

@@ -58,6 +58,8 @@ $(document).ready(function () {
     }).on("change", function (e) {
             // on change of the attribute, clear all value fields
             clearAllValueFields();
+            // hide any existing error messages, will be redisplayed when user submits with new attribute
+            hideAnyErrorMessages();
             // based on the attribute selected only show the appropriate value widgets
             var data = $("#attributeElementId").select2("data");
             onlyShowWidgetsForExpectedValueType(data.expectedValueType,data.unitId);
@@ -70,6 +72,11 @@ $(document).ready(function () {
         $("#valueElementId").select2("data", {results: []});
         $("#extValueId").select2("data", {results: []});
         $("#valueNumUnitId").select2("data", {results: []});
+    }
+    function hideAnyErrorMessages() {
+        $('.help-inline').hide();
+        $('.help-block').hide();
+        $('.alert-error').hide();
     }
 
     function hideAllValueWidgets() {
