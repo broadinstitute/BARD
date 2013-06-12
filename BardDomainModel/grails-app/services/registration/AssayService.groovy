@@ -81,6 +81,7 @@ class AssayService {
         return Assay.findById(newAssay.id)
 
     }
+
     /**
      * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
      */
@@ -93,8 +94,8 @@ class AssayService {
         //now call the manage names stored procedure
         //then look up and return the assay
         return Assay.findById(assay.id)
-
     }
+
     Assay cloneAssayOnly(Assay assay,
                          Date dateCreated,
                          String designedBy,
