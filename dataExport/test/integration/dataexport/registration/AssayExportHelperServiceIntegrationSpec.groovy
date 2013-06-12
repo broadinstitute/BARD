@@ -2,6 +2,7 @@ package dataexport.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.DocumentType
+import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -51,7 +52,8 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
         given: "Given an Assay Id"
         Assay assay = Assay.build()
         AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50')
-        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'software'), attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
+        final Element freeTextAttribute = Element.build(label: 'software', expectedValueType: ExpectedValueType.FREE_TEXT)
+        AssayContextItem.build(assayContext: assayContext, attributeElement: freeTextAttribute, attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
         AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label'), attributeType: AttributeType.Fixed)
 
         when: "A service call is made to generate measure contexts for that Assay"

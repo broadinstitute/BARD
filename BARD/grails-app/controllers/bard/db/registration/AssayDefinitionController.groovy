@@ -11,7 +11,6 @@ import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.ValidationException
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
-import registration.AssayService
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -26,7 +25,7 @@ class AssayDefinitionController {
     AssayContextService assayContextService
     SpringSecurityService springSecurityService
     MeasureTreeService measureTreeService
-    AssayService assayService
+    AssayDefinitionService assayDefinitionService
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -37,7 +36,7 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayService.updateAssayType(inlineEditableCommand.pk, assayType)
+            assay = assayDefinitionService.updateAssayType(inlineEditableCommand.pk, assayType)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayType.id)
         } catch (Exception ee) {
             log.error(ee)
@@ -54,7 +53,7 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
+            assay = assayDefinitionService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayStatus.id)
 
         } catch (Exception ee) {
@@ -71,7 +70,7 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
         } catch (Exception ee) {
             log.error(ee)
@@ -87,7 +86,7 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayService.updateDesignedBy(inlineEditableCommand.pk, inlineEditableCommand.value)
+            assay = assayDefinitionService.updateDesignedBy(inlineEditableCommand.pk, inlineEditableCommand.value)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.designedBy)
         } catch (Exception ee) {
             log.error(ee)
@@ -129,8 +128,8 @@ class AssayDefinitionController {
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
         try {
-            assay = assayService.cloneAssayForEditing(assay, springSecurityService.principal?.username)
-            assay = assayService.recomputeAssayShortName(assay)
+            assay = assayDefinitionService.cloneAssayForEditing(assay, springSecurityService.principal?.username)
+            assay = assayDefinitionService.recomputeAssayShortName(assay)
         } catch (ValidationException ee) {
             assay = Assay.get(id)
             flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
@@ -141,13 +140,15 @@ class AssayDefinitionController {
     }
 
     def save() {
+
         def assayInstance = new Assay(params)
-        if (!assayInstance.save(flush: true)) {
+        Assay savedAssay = assayDefinitionService.saveNewAssay(assayInstance)
+        if (!savedAssay) {
             render(view: "description", model: [assayInstance: assayInstance])
             return
         }
-        flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), assayInstance.id])
-        redirect(action: "show", id: assayInstance.id)
+        flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), savedAssay.id])
+        redirect(action: "show", id: savedAssay.id)
     }
 
     def show() {

@@ -58,7 +58,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
         AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
-        sourceAssayContext.addToAssayContextItems(AssayContextItem.build(valueDisplay: ORIGINAL_CONTEXT_NAME))
+        sourceAssayContext.addToAssayContextItems(AssayContextItem.build())
         AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
         assert sourceAssayContext.assayContextItems.size() == 1
         assert sourceAssayContext == draggedAssayContextItem.assayContext
@@ -97,7 +97,7 @@ class AssayContextServiceUnitSpec extends Specification {
         given:
         AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
-        sourceAssayContext.addToAssayContextItems(AssayContextItem.build(valueDisplay: ORIGINAL_CONTEXT_NAME))
+        sourceAssayContext.addToAssayContextItems(AssayContextItem.build())
         AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
         assert sourceAssayContext.assayContextItems.size() == 1
         assert sourceAssayContext == draggedAssayContextItem.assayContext
@@ -153,7 +153,7 @@ class AssayContextServiceUnitSpec extends Specification {
     private List<AssayContextItem> createAssayContextItem(int i) {
         List<AssayContextItem> items = []
         i.times {
-            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element(), valueDisplay: 'valueDisplay')
+            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())
         }
         items
     }

@@ -69,7 +69,14 @@ class TestUtils {
         if (domainObject.errors instanceof org.grails.datastore.mapping.validation.ValidationErrors ||
                 domainObject.errors instanceof grails.validation.ValidationErrors) {
             FieldError fieldError = domainObject.errors[fieldName]
-            foundErrorCode = fieldError?.codes?.find {it == errorCode}
+            if(errorCode){
+                foundErrorCode = fieldError?.codes?.find {it == errorCode}
+            }
+            // if you're not expecting errorCode e.g. errorCode == null
+            // return any existing errors in case there are any unexpected errorCodes
+            else{
+                foundErrorCode = fieldError?.codes?.last()
+            }
         }
         else if (domainObject.errors instanceof org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors) {
             foundErrorCode = domainObject.errors[fieldName]

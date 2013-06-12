@@ -1,13 +1,15 @@
 package bard.db.registration
 
-import bard.db.audit.BardContextUtils
+import bard.db.dictionary.Element
 import bard.db.model.AbstractContextItemIntegrationSpec
-import org.hibernate.SessionFactory
 import org.junit.Before
-import spock.lang.Ignore
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
+import static bard.db.enums.ExpectedValueType.*
+import static bard.db.model.AbstractContextItem.MODIFIED_BY_MAX_SIZE
 import static test.TestUtils.assertFieldValidationExpectations
+import static test.TestUtils.createString
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +27,6 @@ class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemInteg
         domainInstance.attributeElement.save()
     }
 
-    @Ignore
     void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
 
         final String field = 'attributeType'
@@ -35,22 +36,12 @@ class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemInteg
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
+        RuntimeException e = thrown()
+        e.message == 'Unknown attributeType: null'
 
         where:
-        desc                   | valueUnderTest      | valid | errorCode
-        'null'                 | null                | false | 'nullable'
-
-        'AttributeType.Fixed'  | AttributeType.Fixed | true  | null
-        'AttributeType.List'   | AttributeType.List  | true  | null
-        'AttributeType.Range'  | AttributeType.Range | true  | null
-        'AttributeType.Number' | AttributeType.Free  | true  | null
-
+        desc   | valueUnderTest
+        'null' | null
     }
 
 }

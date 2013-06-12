@@ -331,7 +331,7 @@ class XmlTestSamples {
          <context id='1' displayOrder='0'>
             <contextName />
             <contextItems>
-                <contextItem displayOrder='0' valueDisplay='non null valueDisplay'>
+                <contextItem displayOrder='0'>
                   <attributeId label='label1'>
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
@@ -343,12 +343,12 @@ class XmlTestSamples {
          <context id='1' displayOrder='0'>
             <contextName />
             <contextItems>
-                <contextItem displayOrder='0' valueDisplay='non null valueDisplay'>
+                <contextItem displayOrder='0'>
                   <attributeId label='label1'>
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
                 </contextItem>
-                <contextItem displayOrder='1' valueDisplay='non null valueDisplay'>
+                <contextItem displayOrder='1'>
                   <attributeId label='label2'>
                     <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
@@ -674,13 +674,6 @@ class XmlTestSamples {
             <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=assay' />
         </assayDocument>'''
 
-    static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE = '''
-        <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='Display'>
-          <attributeId label='attributeLabel'>
-            <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
-          </attributeId>
-        </assayContextItem>'''
-
     static final String ASSAY_CONTEXT_ITEM_WITH_ATTRIBUTE_AND_VALUE = '''
         <assayContextItem displayOrder='0' attributeType='Fixed'  valueDisplay='Display' >
           <valueId label='valueLabel'>
@@ -766,7 +759,7 @@ class XmlTestSamples {
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName/>
           <assayContextItems>
-            <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+            <assayContextItem displayOrder='0' attributeType='Fixed'>
               <attributeId label='label1'>
                 <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
@@ -778,12 +771,12 @@ class XmlTestSamples {
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName/>
           <assayContextItems>
-            <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+            <assayContextItem displayOrder='0' attributeType='Fixed'>
               <attributeId label='label1'>
                 <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
             </assayContextItem>
-            <assayContextItem displayOrder='1' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+            <assayContextItem displayOrder='1' attributeType='Fixed'>
               <attributeId label='label2'>
                 <link rel='related' href='null' type='application/vnd.bard.cap+xml;type=element' />
               </attributeId>
@@ -829,7 +822,7 @@ class XmlTestSamples {
             <assayContext assayContextId='1' displayOrder='0'>
               <contextName />
               <assayContextItems>
-                <assayContextItem displayOrder='0' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+                <assayContextItem displayOrder='0' attributeType='Fixed'>
                   <attributeId label='label1'>
                     <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                   </attributeId>
@@ -927,7 +920,7 @@ class XmlTestSamples {
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/1' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>
               </assayContextItem>
-              <assayContextItem displayOrder='1' attributeType='Fixed' valueDisplay='non null valueDisplay'>
+              <assayContextItem displayOrder='1' attributeType='Fixed'>
                 <attributeId label='a label'>
                   <link rel='related' href='http://localhost:8080/dataExport/api/dictionary/element/2' type='application/vnd.bard.cap+xml;type=element' />
                 </attributeId>

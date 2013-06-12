@@ -1,6 +1,6 @@
 package bard.db.registration
 
-import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
 import bard.db.model.AbstractContextItem
 import groovy.transform.TypeChecked
 import org.springframework.validation.Errors
@@ -36,18 +36,26 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     protected void valueValidation(Errors errors) {
         if (attributeElement) {
             switch (attributeType) {
-                case AttributeType.Free:
-                    freeTypeConstraints(errors)
-                    break;
-                case AttributeType.Range:
-                    rangeConstraints(errors)
-                    break
-                case AttributeType.Fixed:
+                case AttributeType.Fixed: // so with Fixed and List all the standard validations apply
                 case AttributeType.List:
-                    super.valueValidation(errors, false)
+                    super.valueValidation(errors, true)
+                    break
+                case AttributeType.Range: // with Range a specified range is the only valid state
+                    if (attributeElement.expectedValueType == ExpectedValueType.NUMERIC) {
+                        rangeConstraints(errors)
+                    } else {
+                        errors.reject('assayContextItem.invalid.attributeTypeAndAttributeExpectedValueCombo')
+                    }
+                    break
+                case AttributeType.Free:
+                    if (attributeElement.expectedValueType in [ExpectedValueType.NUMERIC, ExpectedValueType.FREE_TEXT]) {
+                        freeTypeConstraints(errors)
+                    } else {
+                        errors.reject('assayContextItem.invalid.attributeTypeAndAttributeExpectedValueCombo')
+                    }
                     break
                 default:
-                    throw new RuntimeException("unknow attributeType: $attributeType")
+                    throw new RuntimeException("Unknown attributeType: $attributeType")
                     break
             }
         }

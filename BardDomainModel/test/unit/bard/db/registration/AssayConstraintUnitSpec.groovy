@@ -205,7 +205,7 @@ class AssayConstraintUnitSpec extends Specification {
 
         where:
         desc          | valueUnderTest        | valid | errorCode
-        'null valid'  | null                  | false | null
+        'null valid'  | null                  | false | 'nullable'
         'valid value' | AssayType.REGULAR     | true  | null
         'valid value' | AssayType.PANEL_ARRAY | true  | null
         'valid value' | AssayType.PANEL_GROUP | true  | null
