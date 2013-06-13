@@ -57,6 +57,13 @@
     </div>
 
     <div id="externalOntologyValueContainer">
+        <g:if test="${disabledInput == false}">
+            <div id="externalOntologyInfo" class="row-fluid">
+
+            </div>
+        </g:if>
+
+
         <div class="control-group ${hasErrors(bean: instance, field: 'extValueId', 'error')}">
             <label class="control-label" for="extValueId"><g:message
                     code="contextItem.extValueId.label"/>:</label>
@@ -174,4 +181,24 @@
         </div>
     </div>
 
+    <script id="externalOntologyIntegratedSearchTemplate" type="text/x-handlebars-template">
+        <div class="span6 offset2 alert alert-info ">
+            <p>An integrated lookup service exists for this External Ontology.</p>
+            <p>Please start typing an identifier or some text and select a value.</p>
+            <h5>Note:</h5>
+            <p>This lookup service reaches outside of this application and performance can vary
+            greatly depending on the underlying external service.</p>
+            <p>If the integrated search for the '{{attributeLabel}}' site doesn't meet your expectations, please search directly on the '{{attributeLabel}}'
+            site.  <a href="{{attributeExternalUrl}}" target="external_ontology_site" class="btn">Open '{{attributeLabel}}' Site</a></p>
+
+            <p>Then manually enter an External Ontology Id and a Display Value.</p>
+        </div>
+
+    </script>
+    <script id="externalOntologyNoIntegratedSearchTemplate" type="text/x-handlebars-template">
+        <div class="span6 offset2 alert alert-info ">
+            <p>An integrated lookup service for {{attributeLabel}} does not currently exist.</p>
+            <p>Please search directly on the {{attributeLabel}} site and manually enter an External Ontology Id and a Display Value. <a href="{{attributeExternalUrl}}" target="external_ontology_site" class="btn">open site</a></p>
+        </div>
+    </script>
 </g:form>

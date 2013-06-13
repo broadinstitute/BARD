@@ -13,7 +13,7 @@ $(document).ready(function () {
     }
     function potentiallyFocus(elementId){
         if ($("#attributeElementId").is(':disabled')) {
-            // do nothing we in review mode
+            // do nothing we're in review mode
         }
         else {
             var valueElement = $(elementId);
@@ -40,7 +40,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        onlyShowWidgetsForExpectedValueType(data.expectedValueType, data.unitId);
+                        onlyShowWidgetsForExpectedValueType(data);
                     });
             }
         },
@@ -62,7 +62,7 @@ $(document).ready(function () {
             hideAnyErrorMessages();
             // based on the attribute selected only show the appropriate value widgets
             var data = $("#attributeElementId").select2("data");
-            onlyShowWidgetsForExpectedValueType(data.expectedValueType,data.unitId);
+            onlyShowWidgetsForExpectedValueType(data);
         });
 
     initialFocus();
@@ -82,8 +82,10 @@ $(document).ready(function () {
     function hideAllValueWidgets() {
         $("[id$=ValueContainer]").hide();
     }
-    function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId) {
+    function onlyShowWidgetsForExpectedValueType(data) {
         hideAllValueWidgets();
+        var expectedValueType = data? data.expectedValueType: '';
+        var unitId = data.unitId;
         if ('NUMERIC' === expectedValueType) {
             $('#numericValueContainer').show();
             initializeUnits(unitId);
@@ -95,6 +97,7 @@ $(document).ready(function () {
             potentiallyFocus("#valueElementId");
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
+            showExternalOntologyHelpText(data);
             $('#externalOntologyValueContainer').show();
             $('#freeTextValueContainer').show();
             potentiallyFocus("#extValueId");
@@ -109,6 +112,19 @@ $(document).ready(function () {
         else {
             // problem
         }
+    }
+
+    function showExternalOntologyHelpText(data){
+        var source;
+        if(data.hasIntegratedSearch){
+            source = $('#externalOntologyIntegratedSearchTemplate').html();
+        }
+        else {
+            source = $('#externalOntologyNoIntegratedSearchTemplate').html();
+        }
+        var template = Handlebars.compile(source);
+        var html = template({attributeLabel : data.text,attributeExternalUrl : data.externalUrl});
+        $("#externalOntologyInfo").html(html);
     }
 
 
