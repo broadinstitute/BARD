@@ -19,10 +19,11 @@ import spock.lang.Unroll
 @TestFor(CapPermissionService)
 @Unroll
 class CapPermissionsServiceUnitSpec extends Specification {
+    SpringSecurityService springSecurityService
 
     def setup() {
         AclUtilService aclUtilService = Mock(AclUtilService)
-        SpringSecurityService springSecurityService = Mock(SpringSecurityService)
+        springSecurityService = Mock(SpringSecurityService)
         service.aclUtilService = aclUtilService
         service.springSecurityService = springSecurityService
     }
@@ -32,48 +33,41 @@ class CapPermissionsServiceUnitSpec extends Specification {
 
     void "addPermission - three args method"() {
         given:
-        Assay assay = Assay.build()
-        assay.capPermissionService = service
+        Assay assay = new Assay();//Assay.build(capPermissionService: service)
         Role role = Role.build()
         Permission permission = Mock(Permission)
-        //addPermission(domainObjectInstance, String username, int permission) {
         when:
         service.addPermission(assay, role, permission)
         then:
-        service.aclUtilService.addPermission(assay, role.authority,permission)
         assert assay
 
 
     }
-//    @Ignore //TODO: Not yet ready
-//    void "addPermission - two args method"() {
-//        given:
-//        Person.metaClass.findByUserName.create = { String userName ->
-//            new Role(authority: "ROLE_Y")
-//            //Some logic here
-//        }
-//        String user = "user"
-//        Person person = Person.build(userName: user)
-//        Role role = Role.build()
-//        PersonRole.create(person, role, "me", false)
-//        Assay assay = Assay.build()
-//        //TODO: add the role here
-//        service.springSecurityService = Mock(SpringSecurityService)
-//        service.aclPermissionFactory = Mock(PermissionFactory)
-//
-//        int permission = 1
-//        when:
-//        service.addPermission(assay, permission)
-//        then:
-//        service.springSecurityService.principal?.username >> {user}
-//        service.aclUtilService.addPermission(assay, role,1)
-//        assert assay
-//
-//
-//    }
+
+    void "addPermission - single args method"() {
+        given:
+        String username = "user"
+        Permission permission = Mock(Permission)
+        Person person = Person.build(userName: username, newObjectRole: Role.build(authority: "ROLE_Y"))
+        Assay assay = new Assay()
+        service.springSecurityService = Mock(SpringSecurityService)
+        use(MockedCapPermissionCategory) {
+            service.addPermission(assay, person.newObjectRole, permission)
+        }
+        when:
+        service.addPermission(assay)
+        then:
+        1 * service.springSecurityService.getPrincipal() >> [username: username]
+
+        assert assay
+
+
+    }
 }
-//@Build([Person, Role, PersonRole])
-//@Mock([Person, Role, PersonRole])
-//@TestFor(BardAuthorizationProviderService)
-//@Unroll
-//class BardAuthorizationProviderServiceSpec extends Specification {
+class MockedCapPermissionCategory {
+
+    static void addPermission(Assay domainObjectInstance, Role role, Permission permission) {
+
+    }
+
+}

@@ -1,5 +1,6 @@
 package acl
 
+import bard.db.people.Person
 import bard.db.people.Role
 import grails.plugins.springsecurity.SpringSecurityService
 import org.grails.plugins.springsecurity.service.acl.AclUtilService
@@ -12,14 +13,11 @@ class CapPermissionService {
     SpringSecurityService springSecurityService
 
     void addPermission(domainObjectInstance) {
-        //get the new Object role for the current user
-        //TODO: Waiting for service that creates the newUserObject in person table
-        /*
-        * String userName = springSecurityService.principal?.username
-        * Role role = findRoleByUserName(userName)
-        * addPermission(domainObjectInstance, role,BasePermission.ADMINISTRATION)
-        */
-        addPermission(domainObjectInstance, new Role(authority: "ROLE_BROAD_INSTITUTE"), BasePermission.ADMINISTRATION)
+        String userName = springSecurityService.principal?.username
+        Person person = Person.findByUserName(userName)
+        final Role newObjectRole = person.newObjectRole
+        //we assume that the newObjectRole should never be null. There will be a check constraint to insure that
+        addPermission(domainObjectInstance, newObjectRole, BasePermission.ADMINISTRATION)
     }
 
     protected void addPermission(domainObjectInstance, Role role, Permission permission) {
