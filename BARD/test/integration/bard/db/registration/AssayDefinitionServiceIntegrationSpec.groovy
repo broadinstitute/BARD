@@ -73,6 +73,5 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         final Assay updatedAssay = assayDefinitionService.saveNewAssay(assay)
         then:
         assert AssayType.PANEL_GROUP == updatedAssay.assayType
-        //TODO: make sure the ACL tables are also populated
     }
 }
