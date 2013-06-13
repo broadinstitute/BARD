@@ -13,12 +13,15 @@ class Person {
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
+	Role newObjectRole
+	
+	static belongsTo = [newObjectRole: Role]
 
     static mapping = {
         table('PERSON')
         id(column: 'PERSON_ID', generator: "sequence", params: [sequence: 'PERSON_ID_SEQ'])
         version(false)
-        userName(column: 'USERNAME')
+        userName(column: 'USERNAME')		
     }
 
     static constraints = {
