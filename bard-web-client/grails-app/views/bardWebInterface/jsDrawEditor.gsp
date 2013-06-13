@@ -1,4 +1,5 @@
-<%@ page import="bard.core.rest.spring.util.StructureSearchParams" contentType="text/html;charset=UTF-8" %>
+<%@page defaultCodec="none"%>
+<%@page import="bard.core.rest.spring.util.StructureSearchParams" contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
