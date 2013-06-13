@@ -252,7 +252,6 @@ log4j = {
     root {
         debug 'stdout'
         error 'mail', 'fileAppender'
-        additivity true
     }
 
 

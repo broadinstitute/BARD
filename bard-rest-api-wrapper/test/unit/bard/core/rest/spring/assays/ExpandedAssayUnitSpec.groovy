@@ -59,6 +59,13 @@ class ExpandedAssayUnitSpec extends Specification {
        [
            "a"
        ],
+       "minimumAnnotations": {
+            "assay footprint": "1536-well plate",
+            "detection method type": "luminescence method",
+            "detection instrument name": "PerkinElmer ViewLux",
+            "assay format": "cell-based format",
+            "assay type": "signal transduction assay"
+        },
        "resourcePath": "/assays/600"
     }
     '''
@@ -78,8 +85,10 @@ class ExpandedAssayUnitSpec extends Specification {
         assert expandedAssay.getUpdated() == "updated"
         assert expandedAssay.getKegg_disease_names() == ["a", "b"]
         assert expandedAssay.getKegg_disease_cat() == ["a"]
-        assert expandedAssay.getDocuments()
+        assert !expandedAssay.getDocuments()?.isEmpty()
         assert expandedAssay.getTargets()
+        assert expandedAssay.getMinimumAnnotation()
+        assert expandedAssay.getMinimumAnnotation().getAssayFormat() == "cell-based format"
         assert expandedAssay.getAssayId() == 0
         assert expandedAssay.getResourcePath() =="/assays/600"
     }
