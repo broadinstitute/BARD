@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
@@ -27,7 +28,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
     void "test deleteAssayContext"() {
         given:
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(capPermissionService: Mock(CapPermissionService))
         3.times({assay.addToAssayContexts(AssayContext.build(assay:assay))})
         final AssayContext assayContext = assay.assayContexts.first()
          int initialNumberOfContexts = assay.assayContexts.size()

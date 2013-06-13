@@ -121,9 +121,8 @@
                                        data-document-name="${publication.documentName}"
                                        id="${publication.id}">
                     <g:fieldValue bean="${publication}" field="documentContent"/>
-
                 </a>
-                    <a href="${publication.documentContent}" target="publication" title="Click on globe icon to view URL">><i class="icon-globe"></i></a>
+                    <a href="${publication.documentContent}" target="publication" title="Click on globe icon to view URL"><i class="icon-globe"></i></a>
                     <g:render template="deleteDocumentForm" model="[document: publication]"/>
                 </div>
             </g:each>

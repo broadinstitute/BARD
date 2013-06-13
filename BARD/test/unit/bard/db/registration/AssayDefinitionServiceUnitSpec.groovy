@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.experiment.Experiment
@@ -27,7 +28,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
 
     void "test update designed By"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD")
+        final Assay assay = Assay.build(assayName: 'assayName20', designedBy: "BARD", capPermissionService: Mock(CapPermissionService))
         final String newDesignedBy = "CAP"
         when:
         final Assay updatedAssay = service.updateDesignedBy(assay.id, newDesignedBy)
@@ -36,7 +37,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
     }
     void "test update assay name"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT)
+        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT, capPermissionService: Mock(CapPermissionService))
         final String newAssayName = "New Assay Name"
         when:
         final Assay updatedAssay = service.updateAssayName(assay.id, newAssayName)
@@ -45,7 +46,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
     }
     void "test update assay status"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: AssayStatus.DRAFT)
+        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: AssayStatus.DRAFT, capPermissionService: Mock(CapPermissionService))
         when:
         final Assay updatedAssay = service.updateAssayStatus(assay.id, AssayStatus.APPROVED)
         then:
@@ -53,7 +54,7 @@ public class AssayDefinitionServiceUnitSpec extends Specification {
     }
     void "test update assay type"() {
         given:
-        final Assay assay = Assay.build(assayName: 'assayName10', assayType: AssayType.PANEL_GROUP)
+        final Assay assay = Assay.build(assayName: 'assayName10', assayType: AssayType.PANEL_GROUP, capPermissionService: Mock(CapPermissionService))
         when:
         final Assay updatedAssay = service.updateAssayType(assay.id, AssayType.TEMPLATE)
         then:
