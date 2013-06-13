@@ -105,4 +105,6 @@ abstract class AbstractContextOwner {
         def splitContexts = [firstColumnContexts, secondColumnContexts].findAll() // eliminates any empty lists
         splitContexts
     }
+
+    public abstract void removeContext(AbstractContext context);
 }

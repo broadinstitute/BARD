@@ -41,6 +41,8 @@ abstract class AbstractContext {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
+    static transients = ["preferredName"]
+
     /**
      *
      * @return
@@ -80,7 +82,13 @@ abstract class AbstractContext {
         return preferredName
     }
 
+    void setPreferredName(String name) {
+        this.contextName = name;
+    }
+
     abstract List getContextItems()
 
     abstract AbstractContextOwner getOwner()
+
+    abstract String getSimpleClassName()
 }

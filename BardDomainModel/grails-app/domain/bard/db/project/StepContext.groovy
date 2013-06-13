@@ -35,4 +35,9 @@ class StepContext extends AbstractContext {
     AbstractContextOwner getOwner() {
         return projectStep
     }
+
+    @Override
+    String getSimpleClassName() {
+        return "StepContext"
+    }
 }

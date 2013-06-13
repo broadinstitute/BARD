@@ -79,7 +79,7 @@
                             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
                             <dd>
                                 <a href="#"
-                                   class="experimentNameY"
+                                   class="experimentName"
                                    id="nameId"
                                    data-type="text"
                                    data-value="${instance?.experimentName}"

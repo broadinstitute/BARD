@@ -29,4 +29,9 @@ class ProjectContext extends AbstractContext{
     AbstractContextOwner getOwner() {
         return project
     }
+
+    @Override
+    String getSimpleClassName() {
+        return "ProjectContext"
+    }
 }

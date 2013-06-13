@@ -44,4 +44,9 @@ class AssayContext extends AbstractContext {
 
         return newContext;
     }
+
+    @Override
+    String getSimpleClassName() {
+        return "AssayContext"
+    }
 }

@@ -86,4 +86,8 @@ class ExperimentContext extends AbstractContext {
         return preferredName
     }
 
+    @Override
+    String getSimpleClassName() {
+        return "ExperimentContext"
+    }
 }

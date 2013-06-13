@@ -3,7 +3,6 @@ package bard.db
 import bard.db.context.item.BasicContextItemCommand
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
-import bard.db.project.ProjectContextItem
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,10 +20,10 @@ class ContextItemService {
     boolean updateContextItem(BasicContextItemCommand basicContextItemCommand) {
         boolean updateSuccessful = false
         basicContextItemCommand.with {
-            ProjectContextItem contextItem = attemptFindById(ProjectContextItem, contextItemId)
+            AbstractContextItem contextItem = attemptFindItem()
             if (contextItem) {
                 if (version?.longValue() != contextItem.version.longValue()) {
-                    getErrors().reject('default.optimistic.locking.failure', [ProjectContextItem] as Object[], 'optimistic lock failure')
+                    getErrors().reject('default.optimistic.locking.failure', [BasicContextItemCommand.getContextItemClass(getContextClass())] as Object[], 'optimistic lock failure')
                     copyFromDomainToCmd(contextItem)
                 } else {
                     copyFromCmdToDomain(contextItem)

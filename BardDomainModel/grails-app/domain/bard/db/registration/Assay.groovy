@@ -8,6 +8,7 @@ import bard.db.enums.hibernate.AssayStatusEnumUserType
 import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 
 class Assay extends AbstractContextOwner {
@@ -149,5 +150,10 @@ class Assay extends AbstractContextOwner {
 
     boolean allowsNewExperiments() {
         return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE && measures.size() > 0)
+    }
+
+    @Override
+    void removeContext(AbstractContext context) {
+        this.removeFromAssayContexts(context)
     }
 }
