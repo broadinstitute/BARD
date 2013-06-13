@@ -19,14 +19,13 @@
     }
 
     .pieChart{
-        /*display:inline-block;*/
+
     }
     .legendLine{
         line-height: 250%;
     }
 
     #graphs{
-        /*  display: inline-block;  */
 
     }
 
@@ -102,7 +101,7 @@
         text-align: center;
     }
     .expander{
-        /*float: right;*/
+        float: right;
         border: 1px solid #5d9046;
         background: #67AA25;
         color: #fff;
@@ -223,7 +222,6 @@
                 displayWidgetY = 320, // expanded widget Y location.
                 displayWidgetWidth = 1000, // expanded widget Y width.
                 displayWidgetHeight = 1000, // expanded widget Y height.
-//                bigPie = widgetWidth + (quarterWidgetWidth / 2), // size of pie in display mode
                 bigPie = (displayWidgetWidth/2)-displayWidgetX, // size of pie in display mode
 
  //               colors = new Array();// d3.scale.category20b()+d3.scale.category20b();
@@ -527,9 +525,15 @@
                                 .attr("transform", "translate(0,0)");
 
                     },
+                    removeTheSun = function () {
+                        d3.selectAll('#suburst_container').style('pointer-events', 'none')
+                                .transition()
+                                .delay(0)
+                                .duration(500)
+                                .style('opacity', '0')
+                    }
 
-
-                    swapAPieForTheSun = function (pieDiv,sunburstContainer) {
+                    swapAPieForTheSun = function (pieDiv,sunburstContainer,expandedButtonNum,callbackToExpandOrContractOnButtonClick) {
                         pieDiv.style('pointer-events', 'none')
                                 .transition()
                                 .delay(1000)
@@ -540,6 +544,34 @@
                                 .delay(1000)
                                 .duration(500)
                                 .style('opacity', '1');
+                        d3.select('#sunburstContractor')
+                                 .on('click', function (d) {
+                                    sunburstContainer.style('pointer-events', 'none')
+                                            .style('opacity', '0');
+                                    pieDiv.style('pointer-events', null)
+                                            .style('opacity', '1');
+                                    var molecularStructure = d3.selectAll('.molstruct')
+                                            .style('opacity', '0');
+                                    var substituteData = {    index: expandedButtonNum,
+                                        orig: {
+                                            coords: {
+                                                x: compressedPos[expandedButtonNum].x,
+                                                y: compressedPos[expandedButtonNum].y },
+                                            size: {
+                                                width: widgetWidthWithoutSpacing,
+                                                height: widgetHeightWithTitle }
+                                        },
+                                        display: {
+                                            coords: {
+                                                x: displayWidgetX,
+                                                y: displayWidgetY },
+                                            size: {
+                                                width: displayWidgetWidth,
+                                                height: displayWidgetHeight }
+                                        }
+                                    }
+                                     callbackToExpandOrContractOnButtonClick(substituteData,expandedButtonNum);
+                                });
                         var molecularStructure = d3.selectAll('.molstruct')
                                 .transition()
                                 .delay(1000)
@@ -616,7 +648,7 @@
                                     origButton,
                                     expandedPos);
                             displayManipulator.expandGraphicsArea(d3.select('#a' + expandedWidget).select('.pieChart>svg'));
-                            displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget),d3.selectAll('#suburst_container'));
+                            displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget),d3.selectAll('#suburst_container'),expandedWidget,handleExpandOrContractClick);
                         }
 
                         else if (widgetPosition.expandedWidget() == d.index) {
@@ -634,7 +666,7 @@
 
                     },
 
-                    attachButtonsToThePieContainers = function (classOfPieContainers, callbackToExpandOrContractOnButtonClick, buttondata) {
+                    attachButtonsToThePieContainers = function (classOfPieContainers, callbackToExpandOrContractOnButtonClick, buttondata, sunburstContainer) {
                         var placeButtonsHere = d3.selectAll(classOfPieContainers)
                                 .data(buttondata);
 
@@ -645,6 +677,36 @@
                                     return 'expbutton' + d.index;
                                 })
                                 .on('click', callbackToExpandOrContractOnButtonClick);
+
+
+                        sunburstContainer.append("div")
+                                .text(textForContractingButton)
+                                .attr('class', 'expander')
+                                .attr('id','sunburstContractor')
+                                .data(buttondata);
+//                                .on('click', function () {
+//                                    sunburstContainer.style('pointer-events', 'none')
+//                                            .transition()
+////                                            .delay(0)
+////                                            .duration(500)
+//                                            .style('opacity', '0');
+//                                    pieDiv.style('pointer-events', null)
+////                                            .transition()
+////                                            .duration(500)
+//                                            .style('opacity', '1');
+//                                    var molecularStructure = d3.selectAll('.molstruct')
+////                                            .transition()
+////                                            .delay(1000)
+////                                            .duration(500)
+//                                            .style('opacity', '0');
+//                                    callbackToExpandOrContractOnButtonClick({'index':expandedButtonNum});
+////                                    var e = document.createEvent('UIEvents');
+////                                    e.initUIEvent('click', true, true);
+////                                    d3.select('#expbutton' + expandedButtonNum).node().dispatchEvent(e);
+//                                });
+
+
+
 
                     };
 
@@ -755,7 +817,7 @@
                     dc.renderAll();
 
                     // Finally, attach some data along with buttons and callbacks to the pie charts we've built
-                    attachButtonsToThePieContainers('.pieChartContainer', handleExpandOrContractClick, buttondata);
+                    attachButtonsToThePieContainers('.pieChartContainer', handleExpandOrContractClick, buttondata,  d3.selectAll('#suburst_container'));
 
 
                 });// d3.json
