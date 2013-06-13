@@ -325,7 +325,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         where:
         label                | searchString         | skip | top | filters
         "dna repair"         | "\"Scavenger\""      | 0    | 10  | []
-        "biological process" | "biological process" | 0    | 10  | []
+        "biological process" | "kegg_disease_cat:\"Cancer\"" | 0    | 10  | []
     }
 
     void "test find Projects Cap Ids #label"() {

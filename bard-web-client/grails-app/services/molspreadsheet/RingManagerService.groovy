@@ -119,7 +119,7 @@ class RingManagerService {
         returnValue ["misses"]  = []
         if (compoundSummary != null){
            for (Assay assay in compoundSummary.testedAssays) {
-               List<String>  currentExperimentIds = assay.experiments
+               List<String>  currentExperimentIds = assay.experimentIds
                List<String>  currentTargets = assay.targetIds
                if (currentTargets != null)  {  // If the assay has no targets there is nothing for us to do
                    for (String currentExperimentId in currentExperimentIds) {
