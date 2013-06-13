@@ -1,7 +1,7 @@
 <g:if test="${assayInstance.experiments}">
     <div id="showExperiments">
 
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
                 <th>EID</th><th>Experiment Name</th><th>External References</th> <th>Substances Tested</th> <th>PID</th><th>Project Name</th>
@@ -12,7 +12,7 @@
                 <tr>
                     <td><g:link controller="experiment" id="${experiment.id}"
                                 action="show">${experiment.id}</g:link></td>
-                    <td>${experiment.experimentName}</td>
+                    <td style="line-height: 150%"><p>${experiment.experimentName}</p></td>
                     <td>
                         <g:if test="${!experiment.externalReferences.isEmpty()}">
 
