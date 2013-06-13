@@ -150,7 +150,7 @@ class OntologyJSonController {
     }
 
     private Map toMapForSelect2(ExternalItem item) {
-        ['id': item.id, 'text': "(id:${item.id}) ${item.display}", 'display': item.display]
+        ['id': item.id, 'text': "(${item.id}) ${item.display}", 'display': item.display]
     }
 
 }

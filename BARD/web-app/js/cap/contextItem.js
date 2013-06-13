@@ -70,13 +70,14 @@ $(document).ready(function () {
     function clearAllValueFields() {
         $(':text').val("");
         $("#valueElementId").select2("data", {results: []});
-        $("#extValueId").select2("data", {results: []});
+        $("#extValueSearch").select2("data", {results: []});
         $("#valueNumUnitId").select2("data", {results: []});
     }
     function hideAnyErrorMessages() {
         $('.help-inline').hide();
         $('.help-block').hide();
         $('.alert-error').hide();
+        $('.error').removeClass('error');
     }
 
     function hideAllValueWidgets() {
@@ -100,7 +101,7 @@ $(document).ready(function () {
             showExternalOntologyHelpText(data);
             $('#externalOntologyValueContainer').show();
             $('#freeTextValueContainer').show();
-            potentiallyFocus("#extValueId");
+            potentiallyFocus("#extValueSearch");
         }
         else if ('FREE_TEXT' === expectedValueType) {
             $('#freeTextValueContainer').show();
@@ -157,7 +158,7 @@ $(document).ready(function () {
         $("#valueElementId").select2("data", {id: $("#valueElementId").val(), text: $("#valueElementText").val()});
     }
 
-    $("#extValueId").select2({
+    $("#extValueSearch").select2({
         minimumInputLength: 1,
         allowClear: true,
         placeholder: "Search for external ontology ids or terms",
@@ -172,7 +173,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        potentiallyFocus("#extValueId");
+                        potentiallyFocus("#extValueSearch");
                     });
             }
         },
@@ -190,11 +191,12 @@ $(document).ready(function () {
             }
         }
     }).on("change", function (e) {
-            $("#valueDisplay").val($("#extValueId").select2("data").display);
+            $("#extValueId").val($("#extValueSearch").select2("data").id);
+            $("#valueDisplay").val($("#extValueSearch").select2("data").text);
             $('button.btn-primary').focus();
         });
-    if ($("#extValueId").val()) {
-        $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
+    if ($("#extValueSearch").val()) {
+        $("#extValueSearch").select2("data", {id: $("#extValueSearch").val(), text: $("#extValueText").val()});
     }
 
 
