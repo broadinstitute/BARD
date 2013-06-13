@@ -1,5 +1,6 @@
 package bard.db.experiment
 
+import acl.CapPermissionService
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
@@ -13,7 +14,7 @@ class Experiment extends AbstractContextOwner {
     private static final int EXPERIMENT_NAME_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int DESCRIPTION_MAX_SIZE = 1000
-
+    def capPermissionService
     String experimentName
     ExperimentStatus experimentStatus = ExperimentStatus.DRAFT
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
@@ -80,5 +81,10 @@ class Experiment extends AbstractContextOwner {
     @Override
     List getContexts() {
         return experimentContexts;
+    }
+    def afterInsert() {
+        Experiment.withNewSession {
+            capPermissionService?.addPermission(this)
+        }
     }
 }

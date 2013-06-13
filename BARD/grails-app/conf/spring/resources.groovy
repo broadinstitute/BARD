@@ -1,8 +1,6 @@
 import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
-import bard.validation.ext.ExternalOntologyPerson
-import bard.validation.ext.ExternalOntologyFactory
 
 // Place your Spring DSL code here
 beans = {

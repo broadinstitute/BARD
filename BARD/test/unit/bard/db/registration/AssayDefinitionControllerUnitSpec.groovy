@@ -14,7 +14,6 @@ import grails.test.mixin.TestFor
 import grails.validation.ValidationException
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
-import registration.AssayService
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -34,14 +33,13 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
     @Before
     void setup() {
         controller.metaClass.mixin(EditingHelper)
-        // controller.metaClass.mixin(EditingErrorMessageHelper)
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
-        AssayService assayService = Mock(AssayService)
         AssayContextService assayContextService = Mock(AssayContextService)
+        AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
         controller.springSecurityService = Mock(SpringSecurityService)
         controller.measureTreeService = measureTreeService
-        controller.assayService = assayService
         controller.assayContextService = assayContextService
+        controller.assayDefinitionService = assayDefinitionService
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
@@ -55,7 +53,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editAssayType(inlineEditableCommand)
         then:
-        controller.assayService.updateAssayType(_, _) >> { return updatedAssay }
+        controller.assayDefinitionService.updateAssayType(_, _) >> { return updatedAssay }
         assert response.status == HttpServletResponse.SC_OK
         ObjectMapper mapper = new ObjectMapper();
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
@@ -76,7 +74,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editAssayType(inlineEditableCommand)
         then:
-        controller.assayService.updateAssayType(_, _) >> { throw new Exception("") }
+        controller.assayDefinitionService.updateAssayType(_, _) >> { throw new Exception("") }
         assertEditingErrorMessage()
     }
 
@@ -89,7 +87,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editAssayStatus(inlineEditableCommand)
         then:
-        controller.assayService.updateAssayStatus(_, _) >> { return updatedAssay }
+        controller.assayDefinitionService.updateAssayStatus(_, _) >> { return updatedAssay }
         assert response.status == HttpServletResponse.SC_OK
         ObjectMapper mapper = new ObjectMapper();
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
@@ -111,7 +109,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editAssayStatus(inlineEditableCommand)
         then:
-        controller.assayService.updateAssayStatus(_, _) >> { throw new Exception("") }
+        controller.assayDefinitionService.updateAssayStatus(_, _) >> { throw new Exception("") }
         assertEditingErrorMessage()
     }
 
@@ -124,7 +122,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editAssayName(inlineEditableCommand)
         then:
-        controller.assayService.updateAssayName(_, _) >> { return updatedAssay }
+        controller.assayDefinitionService.updateAssayName(_, _) >> { return updatedAssay }
         assert response.status == HttpServletResponse.SC_OK
         ObjectMapper mapper = new ObjectMapper();
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
@@ -145,7 +143,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editAssayName(inlineEditableCommand)
         then:
-        controller.assayService.updateAssayName(_, _) >> { throw new Exception("") }
+        controller.assayDefinitionService.updateAssayName(_, _) >> { throw new Exception("") }
         assertEditingErrorMessage()
     }
 
@@ -158,7 +156,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editDesignedBy(inlineEditableCommand)
         then:
-        controller.assayService.updateDesignedBy(_, _) >> { return updatedAssay }
+        controller.assayDefinitionService.updateDesignedBy(_, _) >> { return updatedAssay }
         assert response.status == HttpServletResponse.SC_OK
         ObjectMapper mapper = new ObjectMapper();
         JsonNode responseJSON = mapper.readValue(response.text, JsonNode.class);
@@ -191,7 +189,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.editDesignedBy(inlineEditableCommand)
         then:
-        controller.assayService.updateDesignedBy(_, _) >> { throw new Exception("") }
+        controller.assayDefinitionService.updateDesignedBy(_, _) >> { throw new Exception("") }
         assertEditingErrorMessage()
     }
 
@@ -202,8 +200,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayService.cloneAssayForEditing(_, _) >> { return newAssay }
-        controller.assayService.recomputeAssayShortName(_) >> { return newAssay }
+        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { return newAssay }
+        controller.assayDefinitionService.recomputeAssayShortName(_) >> { return newAssay }
         assert view == "/assayDefinition/show"
         assert model.assayInstance == newAssay
     }
@@ -214,7 +212,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.cloneAssay(assay.id)
         then:
-        controller.assayService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
+        controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
         assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
         assert view == "/assayDefinition/show"
     }
@@ -342,7 +340,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.associateContext()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
+        assert response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
+        assert flash.message
 
         when:
         assayContextService.verify()

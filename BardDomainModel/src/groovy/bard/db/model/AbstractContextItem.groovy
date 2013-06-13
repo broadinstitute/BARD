@@ -1,6 +1,11 @@
 package bard.db.model
 
 import bard.db.dictionary.Element
+import bard.db.enums.ExpectedValueType
+import groovy.transform.TypeChecked
+import groovy.transform.TypeCheckingMode
+
+import static bard.db.enums.ExpectedValueType.*
 import org.apache.commons.lang3.StringUtils
 import org.springframework.validation.Errors
 
@@ -32,23 +37,23 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
     static constraints = {
 
-        attributeElement(nullable: false,
-                validator: { Element field, AbstractContextItem instance, Errors errors ->
-                    instance.valueValidation(errors)
-                })
+        attributeElement(nullable: false)
         valueElement(nullable: true)
 
-        extValueId(nullable: true, blank: false, maxSize: EXT_VALUE_ID_MAX_SIZE)
-        qualifier(nullable: true, blank: false, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
+        extValueId(nullable: true, maxSize: EXT_VALUE_ID_MAX_SIZE)
+        qualifier(nullable: true, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
 
         valueNum(nullable: true)
         valueMin(nullable: true)
         valueMax(nullable: true)
-        valueDisplay(nullable: true, blank: false, maxSize: VALUE_DISPLAY_MAX_SIZE)
+        valueDisplay(nullable: true, maxSize: VALUE_DISPLAY_MAX_SIZE)
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true,)
-        modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+        modifiedBy(nullable: true, maxSize: MODIFIED_BY_MAX_SIZE,
+                validator: { String field, AbstractContextItem instance, Errors errors ->
+                    instance.valueValidation(errors)
+                })
 
     }
 
@@ -62,15 +67,17 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      *
      * @return String will try and create a reasonable displayValue based on the values populated in this item
      */
+    @TypeChecked(TypeCheckingMode.SKIP)
     String deriveDisplayValue() {
         String result = null
         if (valueElement) {
             result = valueElement.label
-        } else if (valueNum) {
+        } else if (valueNum != null) {
             result = [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation].findAll().join(' ')
-        } else if (valueMin || valueMax) {
+        } else if (valueMin != null || valueMax != null) {
             result = [valueMin, valueMax].findAll().join(' - ')
         }
+        result
     }
 
     /**
@@ -80,6 +87,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      * @see <a href="https://github.com/broadinstitute/BARD/wiki/Business-rules#general-business-rules-for-assay_context_item">general-business-rules-for-assay_context_item</a>
      * @param errors adding any errors via reject methods indicates the class is not valid
      */
+    @TypeChecked
     protected void valueValidation(Errors errors) {
         valueValidation(errors, true)
     }
@@ -89,61 +97,90 @@ abstract class AbstractContextItem<T extends AbstractContext> {
      * @param errors adding any errors via reject methods indicates the class is not valid
      * @param includeRangeConstraints range constraints be excluded by passing false here, assayContextItems need to do this
      */
+    @TypeChecked
     protected void valueValidation(Errors errors, boolean includeRangeConstraints) {
         if (attributeElement) {
-            if (attributeElement.externalURL) {
+            final ExpectedValueType expectedValueType = attributeElement.expectedValueType
+            if (EXTERNAL_ONTOLOGY == expectedValueType) {
                 externalOntologyConstraints(errors)
-            } else if (attributeElement.unit || valueNum != null) {
-                valueNumConstraints(errors)
-            } else if (includeRangeConstraints && (valueMin != null || valueMax != null)) {
-                rangeConstraints(errors)
-            } else if (valueElement) {
+            } else if (ELEMENT == expectedValueType) {
                 dictionaryConstraints(errors)
-            } else { // text value
+            } else if (NUMERIC == expectedValueType) {
+                    valueNumConstraints(errors)
+            } else if (FREE_TEXT == expectedValueType) {
                 textValueConstraints(errors)
+            } else if (NONE == expectedValueType) {
+                noneValueConstraints(errors)
+            } else {
+                throw new RuntimeException("Unsupported ExpectedValueType ${attributeElement.expectedValueType}")
             }
         }
     }
 
+    @TypeChecked
     private textValueConstraints(Errors errors) {
-        rejectNullField('valueDisplay', errors)
-        rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+        final boolean valueDisplayBlank = rejectBlankField('valueDisplay', errors)
+        final boolean otherValuesNotNull = rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+        if (valueDisplayBlank || otherValuesNotNull) {
+            errors.reject('contextItem.attribute.expectedValueType.FREE_TEXT.required.fields')
+        }
     }
 
+    @TypeChecked
+    private noneValueConstraints(Errors errors) {
+        if (rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax', 'valueDisplay'], errors)) {
+            errors.reject('contextItem.attribute.expectedValueType.NONE.required.fields')
+        }
+    }
+
+    @TypeChecked
     protected void valueNumConstraints(Errors errors) {
-        if (rejectNullField('valueNum', errors) ||
-                rejectBlankField('qualifier', errors) ||
-                rejectNotNullFields(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)) {
+        final boolean valueNumNull = rejectNullField('valueNum', errors)
+        final boolean qualifierBlank = rejectBlankField('qualifier', errors)
+        final boolean valueDisplayBlank = rejectBlankField('valueDisplay', errors)
+        final boolean otherFieldsNotNull = rejectNotNullFields(['extValueId', 'valueElement', 'valueMin', 'valueMax'], errors)
+        if (valueNumNull || qualifierBlank || valueDisplayBlank || otherFieldsNotNull) {
             errors.reject('contextItem.valueNum.required.fields')
         }
     }
 
+    @TypeChecked
     protected void rangeConstraints(Errors errors) {
-        if (rejectNullFields(['valueMin', 'valueMax'], errors) ||
-                rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)) {
+        final boolean rangeValuesNull = rejectNullFields(['valueMin', 'valueMax'], errors)
+        final boolean valueDisplayFieldBlank = rejectBlankField('valueDisplay', errors)
+        final boolean otherValueFieldsNotNull = rejectNotNullFields(['extValueId', 'valueElement', 'qualifier', 'valueNum'], errors)
+        if (rangeValuesNull || valueDisplayFieldBlank || otherValueFieldsNotNull) {
             errors.reject('contextItem.range.required.fields')
-        } else if (valueMin || valueMax) {
+        } else if (valueMin != null || valueMax != null) {
             if (valueMin >= valueMax) {
                 errors.rejectValue('valueMin', 'contextItem.valueMin.not.less.than.valueMax')
                 errors.rejectValue('valueMax', 'contextItem.valueMax.not.greater.than.valueMin')
+                errors.reject('contextItem.range.requirements')
             }
         }
     }
 
+    @TypeChecked
     protected void dictionaryConstraints(Errors errors) {
-        //TODO add global error
         //TODO check to ensure valueElement is a descendant of the attributeElement
-        rejectBlankField('valueDisplay', errors)
-        rejectNotNullFields(['extValueId', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+        final boolean valueElementNull = rejectNullField('valueElement', errors)
+        final boolean valueDisplayBlank = rejectBlankField('valueDisplay', errors)
+        final boolean otherValueFieldsNotNull = rejectNotNullFields(['extValueId', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+        if (valueElementNull || valueDisplayBlank || otherValueFieldsNotNull) {
+            errors.reject('contextItem.attribute.expectedValueType.ELEMENT.required.fields')
+        }
     }
 
+    @TypeChecked
     protected void externalOntologyConstraints(Errors errors) {
-        if (rejectBlankFields(['extValueId', 'valueDisplay'], errors) ||
-                rejectNotNullFields(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)) {
+        final boolean externalOntologyFieldsBlank = rejectBlankFields(['extValueId', 'valueDisplay'], errors)
+        final boolean otherFieldsNotNull = rejectNotNullFields(['valueElement', 'qualifier', 'valueNum', 'valueMin', 'valueMax'], errors)
+        if (externalOntologyFieldsBlank || otherFieldsNotNull) {
             errors.reject('contextItem.attribute.externalURL.required.fields')
         }
     }
 
+    @TypeChecked
     protected boolean rejectNonBlankFields(List<String> fieldNames, Errors errors) {
         List rejectedFields = []
         for (String fieldName in fieldNames) {
@@ -152,6 +189,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         rejectedFields.grep { it == true }
     }
 
+    @TypeChecked(TypeCheckingMode.SKIP)
     protected boolean rejectNonBlankField(String fieldName, Errors errors) {
         if (StringUtils.isNotBlank(this[(fieldName)])) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
@@ -160,6 +198,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         return false
     }
 
+    @TypeChecked
     protected boolean rejectBlankFields(List<String> fieldNames, Errors errors) {
         List rejectedFields = []
         for (String fieldName in fieldNames) {
@@ -168,6 +207,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         rejectedFields.grep { it == true }
     }
 
+    @TypeChecked(TypeCheckingMode.SKIP)
     protected boolean rejectBlankField(String fieldName, Errors errors) {
         if (StringUtils.isBlank(this[(fieldName)])) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.blank")
@@ -176,6 +216,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         return false
     }
 
+    @TypeChecked
     protected boolean rejectNotNullFields(List<String> fieldNames, Errors errors) {
         List rejectedFields = []
         for (String fieldName in fieldNames) {
@@ -184,6 +225,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         rejectedFields.grep { it == true }
     }
 
+    @TypeChecked
     private boolean rejectNotNullField(String fieldName, Errors errors) {
         if (this[(fieldName)] != null) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.not.null")
@@ -192,6 +234,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         return false
     }
 
+    @TypeChecked
     protected boolean rejectNullFields(List<String> fieldNames, Errors errors) {
         List rejectedFields = []
         for (String fieldName in fieldNames) {
@@ -200,6 +243,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         rejectedFields.grep { it == true }
     }
 
+    @TypeChecked
     private boolean rejectNullField(String fieldName, Errors errors) {
         if (this[(fieldName)] == null) {
             errors.rejectValue(fieldName, "contextItem.${fieldName}.null")

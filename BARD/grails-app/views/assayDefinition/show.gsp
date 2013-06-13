@@ -57,9 +57,9 @@
             <div class="span3 bs-docs-sidebar">
                 <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
                     <li><a href="#summary-header"><i class="icon-chevron-right"></i>1. Overview</a></li>
-                    <li><a href="#experiments-header"><i class="icon-chevron-right"></i>2. Experiments</a></li>
-                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>3. Contexts</a></li>
-                    <li><a href="#measures-header"><i class="icon-chevron-right"></i>4. Measures</a></li>
+                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>2. Contexts</a></li>
+                    <li><a href="#measures-header"><i class="icon-chevron-right"></i>3. Measures</a></li>
+                    <li><a href="#experiments-header"><i class="icon-chevron-right"></i>4. Experiments</a></li>
                     <li><a href="#documents-header"><i class="icon-chevron-right"></i>5. Documents</a></li>
                     <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>5.1 Descriptions</a>
                     </li>
@@ -84,18 +84,9 @@
                         </div>
                     </div>
                 </section>
-                <section id="experiments-header">
-                    <div class="page-header">
-                        <h3>2. Experiments</h3>
-                    </div>
-
-                    <div class="row-fluid">
-                        <g:render template="showExperiments" model="['assay': assayInstance]"/>
-                    </div>
-                </section>
                 <section id="contexts-header">
                     <div class="page-header">
-                        <h3>3. Contexts</h3>
+                        <h3>2. Contexts</h3>
                     </div>
 
                     <div class="row-fluid">
@@ -105,12 +96,21 @@
                 </section>
                 <section id="measures-header">
                     <div class="page-header">
-                        <h3>4. Measures</h3>
+                        <h3>3. Measures</h3>
                     </div>
 
                     <div class="row-fluid">
                         <g:render template="measuresView"
                                   model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>
+                    </div>
+                </section>
+                <section id="experiments-header">
+                    <div class="page-header">
+                        <h3>4. Experiments</h3>
+                    </div>
+
+                    <div class="row-fluid">
+                        <g:render template="showExperiments" model="['assay': assayInstance]"/>
                     </div>
                 </section>
                 <g:render template="assayDocuments" model="[assay: assayInstance]"/>

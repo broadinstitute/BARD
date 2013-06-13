@@ -2,6 +2,7 @@ package dataexport.registration
 
 import bard.db.dictionary.Element
 import bard.db.enums.DocumentType
+import bard.db.enums.ExpectedValueType
 import bard.db.enums.ReadyForExtraction
 import common.tests.XmlTestAssertions
 import common.tests.XmlTestSamples
@@ -49,9 +50,10 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate AssayContext with contextItems"() {
         given: "Given an Assay Id"
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50')
-        AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'software'), attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
+        final Element freeTextAttribute = Element.build(label: 'software', expectedValueType: ExpectedValueType.FREE_TEXT)
+        AssayContextItem.build(assayContext: assayContext, attributeElement: freeTextAttribute, attributeType: AttributeType.Fixed, valueDisplay: 'Assay Explorer')
         AssayContextItem.build(assayContext: assayContext, attributeElement: Element.build(label: 'a label'), attributeType: AttributeType.Fixed)
 
         when: "A service call is made to generate measure contexts for that Assay"
@@ -63,7 +65,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate AssayContext with measureRefs"() {
         given: "Given an Assay Id"
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.buildWithoutSave(assay: assay, contextName: 'Context for IC50')
         Measure measure = Measure.build(assay: assay, resultType: Element.build(label: 'IC50'))
         AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(measure: measure, assayContext: assayContext)
@@ -79,7 +81,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
     void "test generate Full Assay"() {
         given:
         Element element = Element.build()
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
@@ -99,7 +101,7 @@ class AssayExportHelperServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate Assays readyForExtraction"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: ReadyForExtraction.READY)
+        Assay.build(readyForExtraction: ReadyForExtraction.READY,capPermissionService:null)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportHelperService.generateAssays(this.markupBuilder)

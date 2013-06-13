@@ -9,9 +9,9 @@ grails.project.source.level = 1.6
 
 //we exclude the following from the war file
 grails.war.resources = { stagingDir ->
-    delete(file:"${stagingDir}/WEB-INF/classes/common/tests/XmlTestSamples.class")
-    delete(file:"${stagingDir}/WEB-INF/classes/common/tests/XmlTestAssertions.class")
-    delete(dir:"${stagingDir}/WEB-INF/classes/common/tests")
+    delete(file: "${stagingDir}/WEB-INF/classes/common/tests/XmlTestSamples.class")
+    delete(file: "${stagingDir}/WEB-INF/classes/common/tests/XmlTestAssertions.class")
+    delete(dir: "${stagingDir}/WEB-INF/classes/common/tests")
 }
 
 
@@ -35,34 +35,34 @@ grails.project.dependency.resolution = {
         compile('cbip:cbip_encoding:0.1') {
             excludes "junit"
         }
-        compile 'com.oracle:ojdbc6:11.2.0.2.0'
+        compile('com.oracle:ojdbc6:11.2.0.2.0')
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
 
         // used by spock for Mocking objects that have no args constructor
         //test "org.objenesis:objenesis:1.3" 
 
-        test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2'){
+        test('org.codehaus.groovy.modules.http-builder:http-builder:0.5.2') {
             exclude "groovy"
         }
-        test 'xmlunit:xmlunit:1.3'
+        test('xmlunit:xmlunit:1.3')
     }
 
     plugins {
-        build ":tomcat:$grailsVersion"
-        build ":codenarc:0.18.1" {
+        build(":tomcat:$grailsVersion")
+        build(":codenarc:0.18.1") {
             exclude "groovy-all"
         }
-        build ":improx:0.2" // Interactive Mode Proxy; useful for IDE integration
+        build(":improx:0.2") // Interactive Mode Proxy; useful for IDE integration
 
-        compile ":clover:3.1.6"
+        compile(":clover:3.1.6")
         test(":spock:0.7") {
             exclude "spock-grails-support"
         }
-        compile ":remote-control:1.4"
+        compile(":remote-control:1.4")
 
-        runtime ":hibernate:$grailsVersion"
-        runtime ":resources:1.1.6"
+        runtime(":hibernate:$grailsVersion")
+        runtime(":resources:1.1.6")
     }
 }
 

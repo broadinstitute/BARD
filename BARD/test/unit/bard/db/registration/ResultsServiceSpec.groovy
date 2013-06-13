@@ -13,14 +13,19 @@ import grails.test.mixin.services.ServiceUnitTestMixin
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static bard.db.enums.ExpectedValueType.ELEMENT
+import static bard.db.enums.ExpectedValueType.EXTERNAL_ONTOLOGY
+import static bard.db.enums.ExpectedValueType.FREE_TEXT
+import static bard.db.enums.ExpectedValueType.NUMERIC
+
 /**
  * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
 @TestMixin(ServiceUnitTestMixin)
 @Build([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
 @Mock([Assay, Measure, AssayContext, AssayContextItem, AssayContextMeasure, Element, Substance, Experiment, ExperimentMeasure])
-@Unroll
 @TestFor(ResultsService)
+@Unroll
 class ResultsServiceSpec extends Specification {
 
     void setup() {
@@ -28,7 +33,6 @@ class ResultsServiceSpec extends Specification {
         service.itemService = itemService
     }
 
-    @Unroll
     void 'test create parent child measure with relationship expressed by #desc'() {
         when:
         def substance = Substance.build()
@@ -102,10 +106,10 @@ class ResultsServiceSpec extends Specification {
         Experiment experiment = Experiment.build(assay: assay)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContext measureContext = AssayContext.build(assay: assay)
-        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line"), valueDisplay: null)
+        AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "cell line", expectedValueType: FREE_TEXT))
         Measure measure = Measure.build(resultType: Element.build(label: "ec50"))
         AssayContextMeasure assayContextMeasure = AssayContextMeasure.build(assayContext: measureContext, measure: measure)
-        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope"), valueDisplay: null)
+        AssayContextItem measureContextItem = AssayContextItem.build(assayContext: measureContext, attributeType: AttributeType.Free, attributeElement: Element.build(label: "hill slope",expectedValueType:NUMERIC))
         measureContext.assayContextMeasures = [assayContextMeasure] as Set
         assay.assayContexts = [assayContext, measureContext]
         assay.measures = [measure] as Set
@@ -142,11 +146,10 @@ class ResultsServiceSpec extends Specification {
         return [sample: sample, template: template]
     }
 
-    @Unroll
     void 'test parsing experiment level #desc'() {
         setup:
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
-        Element attribute = Element.build(label: "column")
+        Element attribute = Element.build(label: "column", expectedValueType: NUMERIC)
         def item = service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.Free, valueDisplay: null)])[0]
 
         when:
@@ -179,7 +182,7 @@ class ResultsServiceSpec extends Specification {
         setup:
 
         def tubaElement = Element.build(label: "tuba")
-        def attribute = Element.build(label: "column")
+        def attribute = Element.build(label: "column", expectedValueType: ELEMENT)
         def context = AssayContext.build(contextName: "instrument")
         def tubaItem = AssayContextItem.build(attributeElement: attribute, attributeType: AttributeType.List, valueElement: tubaElement, valueDisplay: tubaElement.label, assayContext: context)
         def trumpetElement = Element.build(label: "trumpet")
@@ -237,7 +240,6 @@ class ResultsServiceSpec extends Specification {
         row1.cells.get(0).columnName == "EC50"
     }
 
-    @Unroll("test parsing problem: #desc")
     void 'test parse failures'() {
         when:
         def fixture = createSampleFile()
@@ -270,8 +272,7 @@ class ResultsServiceSpec extends Specification {
         "missing row number"   | 3   | 0      | ""       | 1
     }
 
-    @Unroll("test parsing cell containing #cellString")
-    void 'test parse measure cell'() {
+    void 'test parsing cell containing #cellString'() {
         when:
         Measure measure = Measure.build()
         Result result = service.createResult(null, measure, cellString, 1, null)
@@ -331,8 +332,8 @@ class ResultsServiceSpec extends Specification {
         def substance = Substance.build()
         substance.save()
 
-        def attribute = Element.build(label: "item")
-        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute, valueDisplay: null)])[0]
+        def attribute = Element.build(label: "item", expectedValueType: NUMERIC)
+        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeType: AttributeType.Free, attributeElement: attribute)])[0]
         def resultType = Element.build(label: "measure")
         def measure = Measure.build(resultType: resultType)
         def experimentMeasure = ExperimentMeasure.build(measure: measure)
@@ -367,7 +368,7 @@ class ResultsServiceSpec extends Specification {
 
     void 'test parse element with external URL #desc'() {
         given:
-        Element attributeElement = Element.build(externalURL: "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=")
+        Element attributeElement = Element.build(externalURL: "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", expectedValueType: EXTERNAL_ONTOLOGY)
         final AssayContextItem assayContextItem = AssayContextItem.build(attributeElement: attributeElement, attributeType: AttributeType.Fixed, valueDisplay: "ttt", extValueId: cellString)
         ItemService.Item item = new ItemService.Item(id: "I${assayContextItem.id}", type: assayContextItem.attributeType, contextItems: [assayContextItem], attributeElement: assayContextItem.attributeElement, assayContext: assayContextItem.assayContext)
 
@@ -391,11 +392,10 @@ class ResultsServiceSpec extends Specification {
         "simple scalar" | "1"        | null          | null              | null   | null   | "http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=1"
     }
 
-    @Unroll("test parsing context item containing #cellString")
-    void 'test parse non-element context item cell'() {
+    void 'test parsing context item containing #cellString'() {
         when:
 
-        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(), attributeType: AttributeType.Free, valueDisplay: null)])[0]
+        def item = this.service.itemService.getLogicalItems([AssayContextItem.build(attributeElement: Element.build(expectedValueType: NUMERIC), attributeType: AttributeType.Free, valueDisplay: null)])[0]
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
         ResultContextItem resultContextItem = service.createResultItem(cellString, item, errors)
@@ -425,7 +425,7 @@ class ResultsServiceSpec extends Specification {
         when:
         def tubaElement = Element.build(label: "tuba")
 
-        def attribute = Element.build()
+        def attribute = Element.build(expectedValueType: ELEMENT)
         def context = AssayContext.build()
         def tubaItem = AssayContextItem.build(
                 attributeElement: attribute,
@@ -463,10 +463,10 @@ class ResultsServiceSpec extends Specification {
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
         when:
-        def attribute = Element.build()
+        def attribute = Element.build(expectedValueType: NUMERIC)
         def context = AssayContext.build()
-        def small = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 1e2, qualifier: '= ')
-        def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2, qualifier: '= ')
+        def small = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 1e2, qualifier: '= ', valueDisplay: 'someValue')
+        def large = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueNum: 2e2, qualifier: '= ', valueDisplay: 'someValue')
         def item = this.service.itemService.getLogicalItems([large, small])[0]
 
         ResultContextItem c0 = service.createResultItem("1e2", item, errors)
@@ -509,10 +509,10 @@ class ResultsServiceSpec extends Specification {
         ResultsService.ImportSummary errors = new ResultsService.ImportSummary()
 
         when:
-        def attribute = Element.build()
+        def attribute = Element.build(expectedValueType: ELEMENT)
         def context = AssayContext.build()
-        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet")
-        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba")
+        def trumpetItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "trumpet", valueElement: Element.build(label:"trumpet"))
+        def tubaItem = AssayContextItem.build(attributeElement: attribute, assayContext: context, attributeType: AttributeType.List, valueDisplay: "tuba", valueElement: Element.build(label:"tuba"))
         def item = this.service.itemService.getLogicalItems([trumpetItem, tubaItem])[0]
 
         ResultContextItem c0 = service.createResultItem("trumpet", item, errors)

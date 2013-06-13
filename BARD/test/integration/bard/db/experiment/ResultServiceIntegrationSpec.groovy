@@ -1,20 +1,16 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Element
-import bard.db.registration.AssayContext
-import bard.db.registration.AssayContextItem
-import bard.db.registration.AssayContextMeasure
-import bard.db.registration.AttributeType
-import bard.db.registration.ItemService
-import bard.db.registration.Measure
-import bard.db.registration.PugService
+import bard.db.enums.HierarchyType
+import bard.db.registration.*
 import grails.plugin.spock.IntegrationSpec
 import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
-import bard.db.enums.HierarchyType
+
+import static bard.db.enums.ExpectedValueType.NUMERIC
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,7 +31,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         if (element == null) {
 //            element = Element.findByLabel(label);
  //           if(element == null) {
-                element = Element.build(label: label)
+                element = Element.build(label: label, expectedValueType: NUMERIC)
   //          }
             byName[label] = element
         }
@@ -63,7 +59,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
 
         AssayContext context = AssayContext.build(assay: experiment.assay);
         values.each {
-            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it, qualifier:'= ')
+            AssayContextItem contextItem = AssayContextItem.build(assayContext: context, attributeElement: attribute, attributeType: AttributeType.List, valueNum: it, qualifier:'= ', valueDisplay: 'someValue')
 //            context.addToAssayContextItems(contextItem)
         }
 

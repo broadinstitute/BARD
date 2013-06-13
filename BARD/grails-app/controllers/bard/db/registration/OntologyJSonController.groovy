@@ -52,11 +52,17 @@ class OntologyJSonController {
     }
 
     private Map asMapForSelect2(Element element) {
+        boolean hasIntegratedSearch = false;
+        if (StringUtils.isNotBlank(element.externalURL)) {
+            hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
+        }
         [
                 "id": element.id,
                 "text": element.label,
                 "unitId": element.unit?.id,
-                "externalUrl": element.externalURL
+                "expectedValueType": element.expectedValueType.name(),
+                "externalUrl": element.externalURL,
+                "hasIntegratedSearch": hasIntegratedSearch
         ]
     }
 

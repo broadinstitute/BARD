@@ -1,5 +1,6 @@
 package bard.db.context.item
 
+import bard.db.ContextItemService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.UnitConversion
@@ -9,7 +10,11 @@ import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import bard.db.project.ProjectService
 import grails.validation.Validateable
+import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
+import org.springframework.context.MessageSource
+
+import java.util.regex.Pattern;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,11 +27,15 @@ import org.apache.commons.lang.StringUtils
 @Validateable
 class BasicContextItemCommand extends BardCommand {
 
+    private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
     static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
     static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
+
+    MessageSource messageSource
     AbstractContext context
     AbstractContextItem contextItem
     ProjectService projectService
+    ContextItemService contextItemService
 
     Long contextOwnerId
     Long contextId
@@ -39,7 +48,9 @@ class BasicContextItemCommand extends BardCommand {
     Long valueElementId
 
     String qualifier
-    BigDecimal valueNum
+    String valueMin
+    String valueMax
+    String valueNum
     Long valueNumUnitId
 
     String valueDisplay
@@ -51,41 +62,15 @@ class BasicContextItemCommand extends BardCommand {
     static constraints = {
         qualifier(nullable: true, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
         attributeElementId(nullable: false)
-
-//        contextId(nullable: false)
-////        contextType(nullable: false, inList: CONTEXT_TYPES)
-//
-//        valueElementId(nullable: true)
-//        extValueId(nullable: true)
-//        qualifier(nullable: true)
-//        valueNum(nullable: true)
-//        valueDisplay(nullable: true)
     }
-//
-//    /**
-//     * a context item has a number of nullable fields, however, they should only ever be partially populated
-//     *
-//     * that is some columns should be mutually exclusive
-//     * @return true if this item looks to be valid
-//     */
-//    boolean validateCommand() {
-//        if(valueElementId){
-//            return true
-//        }
-//        else if (StringUtils.isNotBlank(extValueId)){
-//            return true
-//        }
-//        else if (valueNum){
-//
-//        }
-//    }
+
     BasicContextItemCommand() {}
 
     BasicContextItemCommand(AbstractContextItem contextItem) {
         copyFromDomainToCmd(contextItem)
     }
 
-    private copyFromDomainToCmd(AbstractContextItem contextItem) {
+    void copyFromDomainToCmd(AbstractContextItem contextItem) {
         this.context = contextItem.context
         this.contextItem = contextItem
         this.contextOwnerId = contextItem.context.owner.id
@@ -99,7 +84,9 @@ class BasicContextItemCommand extends BardCommand {
         this.extValueId = contextItem.extValueId
 
         this.qualifier = contextItem.qualifier
-        this.valueNum = contextItem.valueNum?.toBigDecimal()
+        this.valueNum = contextItem.valueNum ? new BigDecimal(contextItem.valueNum.toString()).stripTrailingZeros() : null
+        this.valueMin = contextItem.valueMin ? new BigDecimal(contextItem.valueMin.toString()).stripTrailingZeros() : null
+        this.valueMax = contextItem.valueMax ? new BigDecimal(contextItem.valueMax.toString()).stripTrailingZeros() : null
         this.valueNumUnitId = contextItem.attributeElement.unit?.id
 
         this.valueDisplay = contextItem.valueDisplay
@@ -127,7 +114,7 @@ class BasicContextItemCommand extends BardCommand {
         createSuccessful
     }
 
-    private copyFromCmdToDomain(ProjectContextItem contextItem) {
+    void copyFromCmdToDomain(ProjectContextItem contextItem) {
         contextItem.attributeElement = attemptFindById(Element, attributeElementId)
         Element valueElement
         if (valueElementId) {
@@ -137,42 +124,28 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
         contextItem.qualifier = qualifier
-        contextItem.valueNum = valueNum
-        if (valueNumUnitId != contextItem.attributeElement.unit?.id) {
-            Element fromUnit = attemptFindById(Element, valueNumUnitId)
-            UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, contextItem.attributeElement.unit)
-            contextItem.valueNum = unitConversion?.convert(valueNum)
+        contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
+        if(contextItem.valueNum!=null && StringUtils.isBlank(qualifier)){
+            contextItem.qualifier = '= '
         }
-        if (valueNum){
+        contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
+        contextItem.valueMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat()
+        if (valueNum || valueMin || valueMax) {
             contextItem.valueDisplay = contextItem.deriveDisplayValue()
         }
+
     }
 
     boolean update() {
-        boolean updateSuccessful = false
-        if (validate()) {
-            ProjectContextItem contextItem = attemptFindById(ProjectContextItem, contextItemId)
-            if (contextItem) {
-                if (this.version?.longValue() != contextItem.version.longValue()) {
-                    getErrors().reject('default.optimistic.locking.failure', [ProjectContextItem] as Object[], 'optimistic lock failure')
-                    copyFromDomainToCmd(contextItem)
-                } else {
-                    copyFromCmdToDomain(contextItem)
-                    updateSuccessful = attemptSave(contextItem)
-                    copyFromDomainToCmd(contextItem)
-                }
-            }
-        }
-        updateSuccessful
+        return validate() && contextItemService.updateContextItem(this)
     }
 
     boolean delete() {
-        AbstractContext context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
-        if(context){
-            return projectService.deleteContextItem(context,this.contextId)
-        } else{
-            return false
-        }
+        contextItemService.delete(this)
+    }
+
+    AbstractContext findContext() {
+        attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
     }
 
     /**
@@ -182,5 +155,29 @@ class BasicContextItemCommand extends BardCommand {
     String getOwnerController() {
         'project'
     }
+
+    BigDecimal convertToBigDecimal(String field, String value, Element unit) {
+        BigDecimal convertedValue = null
+        if (StringUtils.trimToNull(value)) {
+            try {
+                convertedValue = new BigDecimal(value).stripTrailingZeros()
+                if (unit && unit.id != this.valueNumUnitId) {
+                    Element fromUnit = attemptFindById(Element, valueNumUnitId)
+                    UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, unit)
+                    BigDecimal unitConvertedValue = unitConversion?.convert(convertedValue)
+                    if (unitConvertedValue) {
+                        convertedValue = unitConvertedValue.stripTrailingZeros()
+                    }
+                }
+            }
+            catch (NumberFormatException nfe) {
+                ValidationErrors localErrors = new ValidationErrors(this)
+                localErrors.rejectValue(field, 'contextItem.valueNum.not.valid')
+                addToErrors(localErrors)
+            }
+        }
+        return convertedValue
+    }
+
 
 }

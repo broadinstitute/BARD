@@ -12,7 +12,7 @@ class Project extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int GROUP_TYPE_MAX_SIZE = 20
-
+    def capPermissionService
     String name
     String groupType
     String description
@@ -104,5 +104,10 @@ class Project extends AbstractContextOwner {
         final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<ProjectDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
+    }
+    def afterInsert() {
+        Project.withNewSession {
+            capPermissionService?.addPermission(this)
+        }
     }
 }
