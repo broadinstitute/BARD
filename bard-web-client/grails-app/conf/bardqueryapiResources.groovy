@@ -52,7 +52,8 @@ modules = {
     //Adding version allows clients to not cache javascript
     search {
         resource url: "js/search.js"
-        resource url = "css/facetDiv.css"
+        resource url: "css/facetDiv.css"
+        resource url: "css/searchResults.css"
     }
     idSearch {
         resource url: "js/idSearchDialog.js"
@@ -77,11 +78,14 @@ modules = {
     substances {
         resource url: "js/substances.js"
     }
-
-    molecularSpreadSheet {
-        resource url: "js/molecularSpreadSheet.js"
+    dataTables {
         resource url: "js/DataTables-1.9.4/jquery.dataTables.js"
         resource url: "css/jquery-dataTables.css"
+    }
+
+    molecularSpreadSheet {
+        dependsOn "dataTables"
+        resource url: "js/molecularSpreadSheet.js"
         resource url: "css/datatables_supplemental.css"
     }
     experimentData {
