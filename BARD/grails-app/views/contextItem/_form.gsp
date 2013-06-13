@@ -27,20 +27,30 @@
             <g:hiddenField class="span8" id="attributeElementId" name="attributeElementId"
                            value="${instance?.attributeElementId}" disabled="${disabledInput}"/>
             <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
-            <g:link controller="element" action="addTerm"
-                    target="proposeTerm" class="btn">Propose a new term</g:link>
+
         </div>
 
     </div>
 
     <div id="elementValueContainer" style="display: false;">
+        <g:if test="${disabledInput == false}">
+            <div class="row-fluid">
+                <div class="span6 offset2 alert alert-info">
+                    <p>This attribute expects a value from the dictionary, start typing to select a value.</p>
+                    <p>If you cannot find an existing value, please add a value to the dictionary.
+                    <g:link controller="element" action="addTerm" target="proposeTerm" class="btn">Propose a New Dictionary Term</g:link></p>
+                </div>
+            </div>
+        </g:if>
         <div class="control-group ${hasErrors(bean: instance, field: 'valueElementId', 'error')}">
+
             <label class="control-label" for="valueElementId"><g:message
                     code="contextItem.valueElementId.label"/>:</label>
 
             <div class="controls">
                 <g:hiddenField class="span8" id="valueElementId" name="valueElementId"
                                value="${instance?.valueElementId}" disabled="${disabledInput}"/>
+
                 <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
             </div>
         </div>
