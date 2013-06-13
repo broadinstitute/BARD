@@ -1,5 +1,6 @@
 package dataexport.experiment
 
+import bard.db.audit.BardContextUtils
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.experiment.Result
@@ -10,6 +11,7 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.hibernate.SessionFactory
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
@@ -20,13 +22,15 @@ import static bard.db.enums.ReadyForExtraction.*
 import static common.tests.XmlTestSamples.EXPERIMENTS_NONE_READY
 import static common.tests.XmlTestSamples.EXPERIMENTS_ONE_READY
 import static javax.servlet.http.HttpServletResponse.*
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+
 
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     ExperimentExportService experimentExportService
     Writer writer
     MarkupBuilder markupBuilder
-
+    SessionFactory sessionFactory
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     def grailsApplication
@@ -48,7 +52,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     void "test Generate Experiments #label"() {
         given:
         for (ReadyForExtraction rfe in readyForExtractionList) {
-            Experiment.build(readyForExtraction: rfe)
+            Experiment.build(readyForExtraction: rfe, capPermissionService:null)
         }
 
         when:
