@@ -163,12 +163,7 @@ class CompoundBioActivitySummaryBuilder {
             switch (responseClass) {
                 case ResponseClassEnum.SP:
                     //The result-type is a single-point, key/value pair.
-                    Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, priorityElement.value)
-                    LinkValue dictionaryElement
-                    if (priorityElement.dictElemId) {
-                        dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
-                    }
-                    PairValue pairValue = new PairValue(value: pair, dictionaryElement: dictionaryElement)
+                    PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
                     values << pairValue
                     break;
                 case ResponseClassEnum.CR_SER:
@@ -196,12 +191,46 @@ class CompoundBioActivitySummaryBuilder {
                         concentrationResponseSeriesValue.xAxisLabel = concentrationResponseSeriesValue.testConcentrationUnit
                         values << concentrationResponseSeriesValue
                     }
+                    else {//the result type is a key/value pair
+                        PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
+                        values << pairValue
+                    }
                     break;
                 default:
                     log.info("Response-class not supported: ${responseClass}")
             }
         }
 
-        return values
+        return values.sort {WebQueryValue valueInst ->
+            //Sort based on the WebQueryValue specific type
+            switch (valueInst.class.simpleName) {
+                case ConcentrationResponseSeriesValue.class.simpleName:
+                    return 1
+                    break;
+                case ListValue.class.simpleName:
+                    return 2
+                    break;
+                case PairValue.class.simpleName:
+                    return 3
+                    break;
+                case StringValue.class.simpleName:
+                    return 4
+                    break;
+                default:
+                    return 99
+            }
+        }
+    }
+
+    static PairValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
+        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, priorityElement.value)
+        LinkValue dictionaryElement
+
+        if (priorityElement.dictElemId) {
+            dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
+        }
+
+        PairValue pairValue = new PairValue(value: pair, dictionaryElement: dictionaryElement)
+        return pairValue
     }
 }

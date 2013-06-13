@@ -40,7 +40,7 @@
             <g:each var="assayAdapter" in="${assayAdapters}" status="i">
                 <tr>
                     <td class="align-center"><g:saveToCartButton id="${assayAdapter.id}"
-                                            name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
+                                            name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                                             type="${querycart.QueryItemType.AssayDefinition}"
                                             hideLabel="true"/></td>
                     <td>${assayAdapter.minimumAnnotation.getAssayFormat()}</td>
