@@ -340,7 +340,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.associateContext()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
+        assert response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
+        assert flash.message
 
         when:
         assayContextService.verify()

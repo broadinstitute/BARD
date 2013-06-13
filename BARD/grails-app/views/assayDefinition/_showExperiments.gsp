@@ -30,7 +30,7 @@
                                 <g:link controller="project" id="${projExp.project.id}"
                                         action="show">${projExp.project.id}</g:link>
                             </td>
-                            <td>
+                            <td style="line-height: 150%">
                                 ${projExp.project.name}
                             </td>
                         </g:each>
