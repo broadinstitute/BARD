@@ -221,7 +221,7 @@ class RingManagerService {
         StringBuilder stringBuilder = new StringBuilder("")
 
             stringBuilder << """
-        <div id="sunburstdiv">
+        <div id="sunburstdiv_empty">
         <script>
             if (\$data[0].children !== undefined) {
                 createASunburst( ${width}, ${height},5,1000,continuousColorScale,'div#sunburstdiv', ${cid} );

@@ -215,14 +215,16 @@
                 pieChartWidth = widgetWidth - 13,  // how wide is the pie chart
                 pieChartRadius = pieChartWidth / 2, // pie chart reuse
                 innerRadius = 30, // open circle in pie
+                innerRadiusWhenExpanded = 100, // open circle in pie
 
         // The expanded widgets are described below. These numbers can't be derived from anything else, because you could
         //  in principle put this display anywhere.
-                displayWidgetX = 260,// expanded widget X location.
+                displayWidgetX = 10,// expanded widget X location.
                 displayWidgetY = 320, // expanded widget Y location.
-                displayWidgetWidth = 600, // expanded widget Y width.
-                displayWidgetHeight = 660, // expanded widget Y height.
-                bigPie = widgetWidth + (quarterWidgetWidth / 2), // size of pie in display mode
+                displayWidgetWidth = 1000, // expanded widget Y width.
+                displayWidgetHeight = 1000, // expanded widget Y height.
+//                bigPie = widgetWidth + (quarterWidgetWidth / 2), // size of pie in display mode
+                bigPie = (displayWidgetWidth/2)-displayWidgetX, // size of pie in display mode
 
  //               colors = new Array();// d3.scale.category20b()+d3.scale.category20b();
         colors = [ '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
@@ -477,12 +479,12 @@
                     expandGraphicsArea = function (graphicsTarget) {
 
                         var bigarc = d3.svg.arc()
-                                .innerRadius(innerRadius * 1.2)
+                                .innerRadius(innerRadiusWhenExpanded)
                                 .outerRadius(bigPie);
 
                         graphicsTarget
-                                .attr('width', (widgetWidth * 2) + quarterWidgetWidth)
-                                .attr('height', (widgetWidth * 2) + quarterWidgetWidth);
+                                .attr('width', displayWidgetWidth)
+                                .attr('height', displayWidgetHeight);
 
                         graphicsTarget
                                 .select('g')
@@ -495,7 +497,7 @@
                                 .transition()
                                 .duration(1500)
                                 .attr("d", bigarc)
-                                .attr("transform", "translate(171,171)");
+                                .attr("transform", "translate(368,375)");    // We need use explicit numbers here, not variables. This would be something to fix
 
                     },
 
@@ -524,7 +526,28 @@
                                 .attr("d", arc)
                                 .attr("transform", "translate(0,0)");
 
+                    },
+
+
+                    swapAPieForTheSun = function (pieDiv,sunburstContainer) {
+                        pieDiv.style('pointer-events', 'none')
+                                .transition()
+                                .delay(1000)
+                                .duration(500)
+                                .style('opacity', '0');
+                        sunburstContainer.style('pointer-events', null)
+                                .transition()
+                                .delay(1000)
+                                .duration(500)
+                                .style('opacity', '1');
+                        var molecularStructure = d3.selectAll('.molstruct')
+                                .transition()
+                                .delay(1000)
+                                .duration(500)
+                                .style('opacity', '1');
+
                     };
+
             // end var
 
             // Public API for this module
@@ -536,7 +559,8 @@
                 expandDataAreaForAllPieCharts:expandDataAreaForAllPieCharts,
                 moveDataTableOutOfTheWay:moveDataTableOutOfTheWay,
                 addDcTable:addDcTable,
-                addPieChart:addPieChart
+                addPieChart:addPieChart,
+                swapAPieForTheSun:swapAPieForTheSun
             };
         }() );
 
@@ -592,6 +616,7 @@
                                     origButton,
                                     expandedPos);
                             displayManipulator.expandGraphicsArea(d3.select('#a' + expandedWidget).select('.pieChart>svg'));
+                            displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget),d3.selectAll('#suburst_container'));
                         }
 
                         else if (widgetPosition.expandedWidget() == d.index) {
@@ -837,7 +862,7 @@
 
 <div id="widthTest" class="legendLine"></div>
 
-<div class="container-fluid" style="position:absolute; left: 10px; top: 1000px;">
+<div id="suburst_container" class="container-fluid" style="position:absolute; left: 10px; top: 1000px;">
     <div class="row-fluid">
         <div class="span6">
 

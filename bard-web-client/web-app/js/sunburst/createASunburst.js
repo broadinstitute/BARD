@@ -145,6 +145,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
     var svg = d3.select(domSelector).append("svg")
         .attr("width", width)
         .attr("height", height )
+        .attr("id", 'sunburst_graphics_holder')
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + (height /2 ) + ")");
 
@@ -332,9 +333,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
             return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
         })
         .on("click", click);
-//                    .on("mouseover", tooltipHandler.mouseOver)
-//                    .on("mousemove", tooltipHandler.mouseMove)
-//                    .on("mouseout",tooltipHandler.mouseOut );
+
 
     textEnter.append("tspan")
         .attr("x", 0)
@@ -360,8 +359,17 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
             return d.depth ? d.name.split(" ")[3] || "" : "";
         });
 
-
-//            d3.select(self.frameElement).style("height", height + "px");
+    // Need to make some adjustments to fit the Sunburst in with the linked pies
+    var adjustSunburstToFitInWithThePies = (function () {
+        var sunburstContainer = d3.selectAll('#suburst_container')
+            .style('left', '-10px')
+            .style('top', '320px')
+            .style('pointer-events', 'none')
+            .style('opacity', '0');
+        var molecularStructure = d3.selectAll('.molstruct')
+            .style('top', '765px')
+            .style('opacity', '0');
+    })();
 }
 
 
