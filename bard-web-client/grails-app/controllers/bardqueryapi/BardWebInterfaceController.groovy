@@ -689,7 +689,8 @@ class BardWebInterfaceController {
                 tableModel.additionalProperties.put("activityOutcome", activityOutcome)
                 tableModel.additionalProperties.put("id", id.toString())
                 tableModel.additionalProperties.put("resourceType", resourceType.name())
-                session.'compoundSummary' = tableModel.additionalProperties?.compoundSummary
+                session.'compoundSummaryPlusId' = ['compoundSummary':tableModel.additionalProperties?.compoundSummary,
+                                                   'id': id ]
                 session.'actives' = true
                 session.'inactives' = true
 
@@ -931,7 +932,7 @@ class BardWebInterfaceController {
 //            println 'we have no information'
 //        } else {
             render(view: 'bigSunburst',
-                    model: [compoundSummary: session.'compoundSummary',
+                    model: [compoundSummaryPlusId: session.'compoundSummaryPlusId',
                             dropDown1Choice: dropDown1Choice,
                             dropDown2Choice: session.colorOption,
                             cid: id])

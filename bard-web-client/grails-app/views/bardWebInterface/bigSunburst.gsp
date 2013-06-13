@@ -835,11 +835,11 @@
 
     </div>
 
-    <g:bigSunburstData compoundSummary="${compoundSummary}" cid="${cid}"/>
+    <g:bigSunburstData compoundSummaryPlusId="${compoundSummaryPlusId}" cid="${cid}"/>
 
     <div class="row-fluid">
         <div class="span9 pull-left">
-            <g:bigSunburstSection compoundSummary="${compoundSummary}" cid="${cid}"/>
+            <g:bigSunburstSection compoundSummaryPlusId="${compoundSummaryPlusId}" cid="${cid}"/>
         </div>
 
         <div class="span3" style="padding-top: 50px;  height: 600px;">

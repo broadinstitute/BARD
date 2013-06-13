@@ -31,17 +31,22 @@ class SunburstHandlerTagLib {
         Boolean includeHits = true // session."actives"
         Boolean includeNonHits = true // session."inactives"
         int typeOfColoring = session."colorOption"  ?: 3
-        RingNode root =  null
-//        if (attrs."compoundSummary" == null) {
-
+        LinkedHashMap<String, Object>  compoundSummaryPlusId  = attrs.'compoundSummaryPlusId'
+        // We may have an existing compound summary.  If we do, and if the ID matches the request
+        // we've been given then use the existing data. Otherwise use the 'cid' we've been passed
+        // and look up the data manually.
+        LinkedHashMap<String,Object>  ringnodeAndCrossLinks
+        RingNode root
+        if ( ( compoundSummaryPlusId == null ) ||
+             ( compoundSummaryPlusId.'compoundSummary' == null )  ||
+             ( compoundSummaryPlusId.'id' == null )  ||
+             ( compoundSummaryPlusId.'id' != attrs.'cid' ) )  {
         // For now let's get the data explicitly so that we are sure were getting the right compound.
-        // Once we get an ID into compoundSummary then we can reuse the data if it's available
-        LinkedHashMap<String,Object>  ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
+            ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
             root =   ringnodeAndCrossLinks ["RingNode"]
-
-//        } else {
-//            root =   ringManagerService.convertCompoundIntoSunburst (attrs."compoundSummary", includeHits, includeNonHits )
-//        }
+        }else {
+            root =   ringManagerService.convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
+        }
 
 
         LinkedHashMap extremeValues = root.determineColorMappingRange()
