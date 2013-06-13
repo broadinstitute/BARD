@@ -39,8 +39,10 @@
         <script>
             /* Retrieve JSON data to build a histogram */
             d3.json("/bardwebclient/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function(error,dataFromServer) {
-                for ( var i = 0; i < dataFromServer.length; i++)  {
-                    drawHistogram(d3.select('#histogramHere'),dataFromServer[i]);
+                if (!(dataFromServer===undefined)){
+                    for ( var i = 0; i < dataFromServer.length; i++)  {
+                        drawHistogram(d3.select('#histogramHere'),dataFromServer[i]);
+                    }
                 }
             });
         </script>

@@ -440,9 +440,11 @@ class RingManagerService {
      * @param includeNonHits
      * @return
      */
-    public  LinkedHashMap<String,Object> convertCompoundIntoSunburstById (Long cid, Boolean includeHits, Boolean includeNonHits ){
+    public  LinkedHashMap<String,Object> convertCompoundIntoSunburstById (Long cid, Boolean includeHits, Boolean includeNonHits, LinkedHashMap<String,Object> mapToHoldCompoundSummary = [:]){
         // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
         CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
+        mapToHoldCompoundSummary.'id' = cid
+        mapToHoldCompoundSummary.'compoundSummary' = compoundSummary
         LinkedHashMap ringNodeAndCrossLinks =  convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
         return ringNodeAndCrossLinks
     }

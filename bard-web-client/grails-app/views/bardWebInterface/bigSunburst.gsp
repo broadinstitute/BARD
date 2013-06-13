@@ -1,5 +1,5 @@
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
@@ -546,7 +546,8 @@
                                     assayId: d.assayId,
                                     GO_biological_process_term: d.data.GO_biological_process_term,
                                     assay_format: d.data.assay_format,
-                                    assay_type: d.data.assay_type
+                                    assay_type: d.data.assay_type,
+                                    protein_target: d.data.protein_target
                                 });
                             }
                         });
@@ -689,7 +690,7 @@
                 ];
 
                 // Retrieve the data do whatever we want to do with it
-                d3.json("/bardwebclient/bardWebInterface/feedMeJson", function (incomingData) {
+                d3.json("/bardwebclient/bardWebInterface/feedMeJson/${cid}", function (incomingData) {
 
                     // create an empty list, Just in case we get null data
                     var assays = [];
@@ -704,7 +705,7 @@
                     allDataDcTable = displayManipulator.addDcTable(assay, 'data-table', 'assayId');
                     biologicalProcessPieChart = displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius);
                     assayFormatPieChart = displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius);
-                    assayIdDimensionPieChart = displayManipulator.addPieChart(assay, 'a2-chart', 'index', colors, pieChartWidth, pieChartRadius, innerRadius);
+                    assayIdDimensionPieChart = displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius);
                     assayTypePieChart = displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius);
 
                     // We should be ready, display it
@@ -771,7 +772,7 @@
 
         <div id = "a2"  class = "pieChartContainer" style="left: 550px; top: 10px;  width: 260px; height: 300px;">
             <div id="a2-chart" class="pieChart">
-                <span class="graphTitle">Assay format</span>
+                <span class="graphTitle">Assay type</span>
                 <a class="reset" href="javascript:assayIdDimensionPieChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
                 <span class="reset" style="display: none;"></span>
                 <div class = "clearfix"></div>

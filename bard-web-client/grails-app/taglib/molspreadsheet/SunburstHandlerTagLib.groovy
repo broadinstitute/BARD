@@ -42,10 +42,14 @@ class SunburstHandlerTagLib {
              ( compoundSummaryPlusId.'id' == null )  ||
              ( compoundSummaryPlusId.'id' != attrs.'cid' ) )  {
         // For now let's get the data explicitly so that we are sure were getting the right compound.
-            ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits )
+            ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (attrs."cid", includeHits, includeNonHits, compoundSummaryPlusId )
             root =   ringnodeAndCrossLinks ["RingNode"]
+            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
         }else {
-            root =   ringManagerService.convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
+            ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
+            root =   ringnodeAndCrossLinks ["RingNode"]
+            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+
         }
 
 

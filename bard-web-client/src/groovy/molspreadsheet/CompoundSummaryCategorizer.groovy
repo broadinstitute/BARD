@@ -138,12 +138,15 @@ class CompoundSummaryCategorizer {
         int loopingCount = 0
         for (Long currentEid in totalContents.keySet()) {
             SingleEidSummary singleEidSummary = totalContents[currentEid]
+            stringBuilder << "    {\n"
             stringBuilder << "        \"assayId\": \"${currentEid}\",\n"
             stringBuilder << "        \"data\": {\n"
             stringBuilder << "            \"GO_biological_process_term\" : \"${singleEidSummary.getGoString()}\",\n"
             stringBuilder << "            \"assay_format\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
-            stringBuilder << "            \"assay_type\" : \"${singleEidSummary.getAssayFormatString()}\"\n"
+            stringBuilder << "            \"assay_type\" : \"${singleEidSummary.getAssayTypeString()}\",\n"
+            stringBuilder << "            \"protein_target\" : \"${singleEidSummary.getTargetString()}\"\n"
             stringBuilder << "        }"
+            stringBuilder << "    }\n"
             if ((++loopingCount) < numberOfElements) {
                 stringBuilder << ","
             }
