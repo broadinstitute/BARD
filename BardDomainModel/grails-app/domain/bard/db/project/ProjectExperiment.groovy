@@ -58,4 +58,16 @@ class ProjectExperiment extends AbstractContextOwner{
     void removeContext(AbstractContext context) {
         this.removeFromProjectExperimentContexts(context)
     }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return ["unclassified":""]
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        ProjectExperimentContext context = new ProjectExperimentContext(properties)
+        addToProjectExperimentContexts(context)
+        return context
+    }
 }

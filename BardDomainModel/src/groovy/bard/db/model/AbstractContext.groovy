@@ -91,4 +91,6 @@ abstract class AbstractContext {
     abstract AbstractContextOwner getOwner()
 
     abstract String getSimpleClassName()
+
+    abstract void addContextItem(AbstractContextItem item);
 }

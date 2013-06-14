@@ -66,6 +66,7 @@ class ResultsExportService {
         writer.write("\n\n");
     }
 
+
     void dumpFromList(String filename, Collection<Result> results) {
         File file = archivePathService.prepareForWriting(filename)
         dumpFromListToAbsPath(file, results);

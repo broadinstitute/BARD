@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.model.AbstractContext
 import bard.db.dictionary.Descriptor
+import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
 import org.apache.commons.lang.StringUtils
 
@@ -33,5 +34,10 @@ class ProjectContext extends AbstractContext{
     @Override
     String getSimpleClassName() {
         return "ProjectContext"
+    }
+
+    @Override
+    void addContextItem(AbstractContextItem item) {
+        addToContextItems(item)
     }
 }

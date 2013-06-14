@@ -6,9 +6,11 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.UnitConversion
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import bard.db.project.ProjectService
+import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
 import grails.validation.Validateable
@@ -30,25 +32,26 @@ import java.util.regex.Pattern;
 class BasicContextItemCommand extends BardCommand {
 
     private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
-//    static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
+    public static final Map<String, Class> CONTEXT_NAME_TO_OWNER_CLASS = ['ProjectContext': Project, 'AssayContext': Assay]
     public static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext, 'AssayContext': AssayContext]
     public static final Map<String, Class> CONTEXT_NAME_TO_ITEM_CLASS = ['ProjectContext': ProjectContextItem, 'AssayContext': AssayContextItem]
     public static final Map<String, String> CONTEXT_NAME_TO_CONTROLLER = ['ProjectContext': 'project', 'AssayContext': 'assayDefinition']
 
     static Class getContextItemClass(String name) {
-        println("getContextItemClass(${name}) = ${CONTEXT_NAME_TO_ITEM_CLASS[name]}")
         return CONTEXT_NAME_TO_ITEM_CLASS[name]
     }
 
     static Class getContextClass(String name) {
-        println("getContextClass(${name}) = ${CONTEXT_NAME_TO_CLASS[name]}")
         return CONTEXT_NAME_TO_CLASS[name]
+    }
+
+    static Class getContextOwnerClass(String name) {
+        return CONTEXT_NAME_TO_OWNER_CLASS[name]
     }
 
 //    MessageSource messageSource
     AbstractContext context
     AbstractContextItem contextItem
-//    ProjectService projectService
     ContextItemService contextItemService
 
     Long contextOwnerId
@@ -126,7 +129,7 @@ class BasicContextItemCommand extends BardCommand {
         if (validate()) {
             AbstractContextItem contextItem = getContextItemClass(this.contextClass).newInstance()
             copyFromCmdToDomain(contextItem)
-            context.addToContextItems(contextItem)
+            context.addContextItem(contextItem)
             if (attemptSave(contextItem)) {
                 copyFromDomainToCmd(contextItem)
 
@@ -199,6 +202,4 @@ class BasicContextItemCommand extends BardCommand {
         }
         return convertedValue
     }
-
-
 }

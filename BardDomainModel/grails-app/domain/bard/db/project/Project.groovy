@@ -111,4 +111,18 @@ class Project extends AbstractContextOwner {
     void removeContext(AbstractContext context) {
         this.removeFromContexts(context)
     }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return [
+                "unclassified>":""
+        ]
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        ProjectContext context = new ProjectContext(properties)
+        addToContexts(context)
+        return context
+    }
 }

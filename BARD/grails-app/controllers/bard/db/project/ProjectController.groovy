@@ -6,6 +6,7 @@ import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
+import bard.db.registration.AssayContext
 import bard.db.registration.EditingHelper
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -22,7 +23,6 @@ class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService
     ProjectService projectService
-
 
     def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
         try {

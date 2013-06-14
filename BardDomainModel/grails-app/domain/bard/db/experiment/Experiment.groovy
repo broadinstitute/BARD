@@ -3,6 +3,7 @@ package bard.db.experiment
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
@@ -80,5 +81,22 @@ class Experiment extends AbstractContextOwner {
     @Override
     List getContexts() {
         return experimentContexts;
+    }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return ["unclassified>":""]
+    }
+
+    @Override
+    void removeContext(AbstractContext context) {
+        removeFromExperimentContexts(context)
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        ExperimentContext context = new ExperimentContext(properties)
+        addToExperimentContexts(context)
+        return context
     }
 }

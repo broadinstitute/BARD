@@ -2,6 +2,7 @@ package bard.db.experiment
 
 import bard.db.dictionary.Descriptor
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
 import org.apache.commons.lang.StringUtils
 
@@ -89,5 +90,10 @@ class ExperimentContext extends AbstractContext {
     @Override
     String getSimpleClassName() {
         return "ExperimentContext"
+    }
+
+    @Override
+    void addContextItem(AbstractContextItem item) {
+        this.addToExperimentContextItems(item)
     }
 }
