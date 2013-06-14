@@ -103,12 +103,16 @@ class OntologyDataAccessService {
     }
 
     /**
-     * Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
-     *
-     * @param startOfFullPath you can specify a portion of the fullpath like biology,project management,
-     * @return
+     * @return Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
      */
-    public List<Descriptor> getDescriptorsForAttribute(String startOfFullPath) {
+    public List<Descriptor> getDescriptorsForAttributes() {
+        getDescriptorsForAttributes(null)
+    }
+    /**
+     * @param startOfFullPath you can specify a portion of the fullpath like biology,project management,
+     * @return Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
+     */
+    public List<Descriptor> getDescriptorsForAttributes(String startOfFullPath) {
         final Criteria c = BardDescriptor.createCriteria()
         final List<Descriptor> results = c.list([readOnly: true]) {
             like("fullPath", "BARD> ${StringUtils.trimToEmpty(startOfFullPath)}%")

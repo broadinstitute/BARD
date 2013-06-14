@@ -7,7 +7,6 @@ import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
 import org.hibernate.SessionFactory
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.dictionary.ElementStatus.*
@@ -200,7 +199,7 @@ class OntologyDataAccessServiceIntegrationSpec extends IntegrationSpec {
         createDescendants(parentB, parentBChildren).each { println(it.fullPath) }
 
         when:
-        List<BardDescriptor> results = ontologyDataAccessService.getDescriptorsForAttribute(startOfFullPath)
+        List<BardDescriptor> results = ontologyDataAccessService.getDescriptorsForAttributes(startOfFullPath)
 
 
         then:

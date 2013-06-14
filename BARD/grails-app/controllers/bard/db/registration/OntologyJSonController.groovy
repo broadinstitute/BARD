@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import bard.validation.ext.ExternalItem
@@ -39,12 +40,27 @@ class OntologyJSonController {
 
         render asMapForSelect2(element) as JSON
     }
-
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     */
     def getDescriptors() {
         if (params?.term) {
             List<Element> elements = ontologyDataAccessService.getElementsForAttributes(params.term)
             List<Map> attributes = elements.collect { Element element ->
                 asMapForSelect2(element)
+            }
+            Map map = ['results': attributes]
+            render map as JSON
+        }
+    }
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     */
+    def getAttributeDescriptors() {
+        if (params?.term) {
+            List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+            List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+                asMapForSelect2(descriptor)
             }
             Map map = ['results': attributes]
             render map as JSON
@@ -66,6 +82,16 @@ class OntologyJSonController {
         ]
     }
 
+    private Map asMapForSelect2(Descriptor descriptor) {
+        boolean hasIntegratedSearch = false;
+        if (StringUtils.isNotBlank(descriptor.externalURL)) {
+            hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(descriptor.externalURL)
+        }
+        Map map = asMapForSelect2(descriptor.element)
+        map.put('text', descriptor.fullPath)
+        return map
+    }
+
     def getValueDescriptors() {
         if (params?.term && params?.attributeId) {
             List<Element> elements = ontologyDataAccessService.getElementsForValues(params.attributeId.toLong(), params.term)
@@ -82,6 +108,17 @@ class OntologyJSonController {
                 attributes.add(item)
             }
             render attributes as JSON
+        }
+    }
+
+    def getValueDescriptorsV2() {
+        if (params?.attributeId) {
+            List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(params.attributeId.toLong())
+            List<Map> values = descriptors.collect{   Descriptor descriptor->
+                [id: descriptor.element.id, text: descriptor.fullPath]
+            }
+            Map map = ['results': values]
+            render map as JSON
         }
     }
 
