@@ -67,10 +67,12 @@
         background: #146D8F;
         color: #FFFFFF;
         font-weight: 600;
+        font-size: 160%;
+        text-align: left;
     }
 
     table#data-table td, th  {
-        text-align: center;
+        text-align: left;
         margin: 0;
         outline: 0 none;
         list-style: none;
@@ -78,8 +80,8 @@
 
         border-bottom: 1px solid #6C6C6C;
         font-family: 'Open Sans';
-        font-size: 13px;
-        font-style: normal;
+        font-size: 16px;
+        font-style: bold;
         height: 50px;
         padding: 15px 5px 10px;
         width: 97px;
@@ -101,10 +103,10 @@
         clear: both;
         width: 97%;
         font-family: 'Cabin';
+        font-size: 14pt;
         border: 1px solid #6C6C6C;
         margin: 15px;
         border-spacing: 0px;
-        text-align: center;
     }
     .expandButton{
         float: right;
@@ -261,7 +263,10 @@
                 displayWidgetHeight = 1000, // expanded widget Y height.
                 bigPie = (displayWidgetWidth/2)-displayWidgetX, // size of pie in display mode
 
- //               colors = new Array();// d3.scale.category20b()+d3.scale.category20b();
+        //  I need to have a color for every possible pie slice. Since the color map is largely arbitrary, d3 does not
+        //   seem to provide An easy way to say "please give me another color unlike when you've given me before".  Note
+        //   that the colors I want are not _entirely_ arbitrary because really light colors don't seem to look good in
+        //   a pie chart filled with brighter colors, so I can't simply use randomizing function with a seed
         colors = [ '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
             '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
             '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
@@ -399,6 +404,12 @@
                     }
                 }
              } ,
+            eraseAnyOrphanedTooltips = function (){
+                var orphanedTooltips = d3.selectAll('.toolTextAppearance');
+                if (!(orphanedTooltips === undefined)) {
+                    orphanedTooltips.style('opacity', 0);
+                }
+            },
             addPieChart = function (crossFilterVariable, id, key, colors, localPieChartWidth, localPieChartRadius, localInnerRadius) {
                         var dimensionVariable = crossFilterVariable.dimension(function (d) {
                             return d[key];
@@ -463,10 +474,17 @@
                     },
 
 
-                    moveDataTableOutOfTheWay = function (dataTable, duration) {
+                    moveDataTableOutOfTheWay = function (dataTable) {
                         dataTable.transition()
-                                .duration(duration)
+                                .duration(500)
                                 .style("top", 50+displayWidgetY + displayWidgetHeight + "px");  // Extra spaces for 'click to contract' button
+                    },
+
+                    moveDataTableBackToItsOriginalPosition = function (dataTable) {
+                        dataTable.transition()
+                                .delay (1000)
+                                .duration(500)
+                                .style("top", "300px");  // Extra spaces for 'click to contract' button
                     },
 
 
@@ -493,10 +511,21 @@
                         shiftBackgroundWidgets(background1, expandedPos[0].x);
                         shiftBackgroundWidgets(background2, expandedPos[1].x);
                         shiftBackgroundWidgets(background3, expandedPos[2].x);
+
                         //   Turn off the text label based on click event for background widgets
                         background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
                         background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
                         background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
+
+                        //  Turn off the expander button, since the user needs to contract the expanded
+                        //  widget before they try to expand the new one. It would be nice to click that
+                        //  button for them, but D three does not support that sort of activation is you are
+                        //  using bound data. I should probably connect to those data dynamically to get around
+                        //  this problem.
+                        background1.selectAll('.expandButton').style('pointer-events','none').style('opacity',0.5);
+                        background2.selectAll('.expandButton').style('pointer-events','none').style('opacity',0.5);
+                        background3.selectAll('.expandButton').style('pointer-events','none').style('opacity',0.5);
+
                         origButton
                                 .text(textForContractingButton)
                                 .attr('class','contractButton')
@@ -526,6 +555,15 @@
                         background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
                         background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
                         background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
+                        //  Turn back on the expander buttons
+                        //  widget before they try to expand the new one. It would be nice to click that
+                        //  button for them, but D three does not support that sort of activation is you are
+                        //  using bound data. I should probably connect to those data dynamically to get around
+                        //  this problem.
+                        background1.selectAll('.expandButton').style('pointer-events','auto').style('opacity',1);
+                        background2.selectAll('.expandButton').style('pointer-events','auto').style('opacity',1);
+                        background3.selectAll('.expandButton').style('pointer-events','auto').style('opacity',1);
+
                         var x = origButton
                                 .text(textForExpandingButton)
                                 .attr('class','expandButton')
@@ -658,12 +696,14 @@
             return {
                 disableAllPieClickEffectors:disableAllPieClickEffectors,
                 reenableAllPieClickEffectors:reenableAllPieClickEffectors,
+                eraseAnyOrphanedTooltips:eraseAnyOrphanedTooltips,
                 contractGraphicsArea:contractGraphicsArea,
                 expandGraphicsArea:expandGraphicsArea,
                 resetOneAndResettleThree:resetOneAndResettleThree,
                 spotlightOneAndBackgroundThree:spotlightOneAndBackgroundThree,
                 expandDataAreaForAllPieCharts:expandDataAreaForAllPieCharts,
                 moveDataTableOutOfTheWay:moveDataTableOutOfTheWay,
+                moveDataTableBackToItsOriginalPosition:moveDataTableBackToItsOriginalPosition,
                 addDcTable:addDcTable,
                 addPieChart:addPieChart,
                 swapAPieForTheSun:swapAPieForTheSun
@@ -715,7 +755,7 @@
                         if (!widgetPosition.isAnyWidgetExpanded()) {
                             displayManipulator.disableAllPieClickEffectors();
                             displayManipulator.expandDataAreaForAllPieCharts(d3.select('.pieCharts'));
-                            displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'), 500);
+                            displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'));
                             widgetPosition.expandThisWidget(d.index);
                             expandedWidget = widgetPosition.expandedWidget();
                             unexpandedWidget = widgetPosition.unexpandedWidgets();
@@ -746,7 +786,9 @@
                                     origButton,
                                     expandedPos);
                             widgetPosition.unexpandAllWidgets();
+                            displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#data-table'));
                             displayManipulator.reenableAllPieClickEffectors();
+                            displayManipulator.eraseAnyOrphanedTooltips();
                         }
 
                     },

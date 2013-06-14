@@ -4,6 +4,13 @@ function drawHistogram(domMarker, oneHistogramsData) {
     // This D3 graphic is implemented in three sections: definitions, tools, and then building the DOM
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Check your data before going any further.  If something is wrong than abandon the whole process up front
+    if ((oneHistogramsData=== undefined) ||
+        (oneHistogramsData.histogram=== undefined) ||
+        (oneHistogramsData.histogram.length <= 0)) {
+        return;
+    }
+
     //
     // Part 1: definitions
     //
