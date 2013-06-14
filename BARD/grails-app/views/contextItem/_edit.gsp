@@ -55,7 +55,7 @@
                     <div class="btn-group">
                         <g:set var="contextItemParams"
                                value="${[contextItemId: contextItem.id, contextId: context?.id, contextClass: context?.simpleClassName, contextOwnerId: context?.owner?.id]}"></g:set>
-                        <g:if test="${AssayContextItem.canDeleteContextItem(contextItem)}">
+                        <g:if test="${!(contextItem instanceof AssayContextItem) || AssayContextItem.canDeleteContextItem(contextItem)}">
                             <g:form class="no-padding" controller="contextItem" action="delete"
                                     params="${contextItemParams}" method="POST">
                                 <button type="submit" title="Delete" class="btn btn-mini"
