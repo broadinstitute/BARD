@@ -642,7 +642,7 @@ class PubchemReformatService {
                                     }
 				}
 				if(!found) {
-					throw new RuntimeException("Could not find context that contained ${elementKeys + newMeasure.contextItemColumns} for ${existingMeasure}")
+					throw new RuntimeException("Could not find context that contained ${(elementKeys + newMeasure.contextItemColumns).collect{it.label}} for ${existingMeasure.displayLabel}")
 				}
 			} 
                 }
