@@ -95,7 +95,8 @@
     <br/>
     <section id="biology-header">
 
-        <h3>2. Biology</h3>
+        <h3>2. Biology <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a></h3>
 
 
         <div class="row-fluid">
@@ -119,7 +120,8 @@
     </section>
     <br/>
     <section id="assay-protocol-header">
-        <h3>3. Assay Protocol</h3>
+        <h3>3. Assay Protocol <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a></h3>
 
         <div class="row-fluid">
             <div id="cardHolderAssayProtocol" class="span12">
@@ -145,7 +147,8 @@
     <br/>
     <section id="assay-design-header">
 
-        <h4>3.1 Assay Design</h4>
+        <h4>3.1 Assay Design <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a> </h4>
 
 
         <div class="row-fluid">
@@ -170,7 +173,8 @@
     <br/>
     <section id="assay-readout-header">
 
-        <h4>3.2 Assay Readout</h4>
+        <h4>3.2 Assay Readout <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a></h4>
 
 
         <div class="row-fluid">
@@ -195,7 +199,8 @@
     <br/>
     <section id="assay-components-header">
 
-        <h4>3.3 Assay Components</h4>
+        <h4>3.3 Assay Components<a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a></h4>
 
 
         <div class="row-fluid">
@@ -254,7 +259,8 @@
     <br/>
     <section id="experimental-variables-header">
 
-        <h4>4.1 Experimental Variables</h4>
+        <h4>4.1 Experimental Variables <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a></h4>
         <div class="row-fluid">
             <div id="cardHolderExperimentalVariables" class="span12">
                 <g:render template="/context/currentCard"
@@ -278,7 +284,8 @@
     <br/>
     <section id="measures-header">
 
-        <h3>5. Measures</h3>
+        <h3>5. Measures<a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+            <i class="icon-question-sign"></i></a></h3>
 
 
         <div class="row-fluid">
