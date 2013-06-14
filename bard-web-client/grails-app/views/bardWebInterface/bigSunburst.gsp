@@ -383,8 +383,23 @@
 
 
         var displayManipulator = (function () {
-
-            var addPieChart = function (crossFilterVariable, id, key, colors, localPieChartWidth, localPieChartRadius, localInnerRadius) {
+            var rememberClickEffectors = [],
+            disableAllPieClickEffectors = function () {
+                for (var widgetCounter = 0; widgetCounter< totalWidgetNumber;widgetCounter++){
+                    rememberClickEffectors [widgetCounter]  =   d3.selectAll('#a'+widgetCounter+'-chart>svg>g>.pie-slice>path').on('click');
+                    d3.selectAll('#a'+widgetCounter+'-chart>svg>g>.pie-slice>path').on('click',null);
+                }
+            },
+            reenableAllPieClickEffectors = function () {
+                if (rememberClickEffectors === undefined)  {
+                    alert(' JavaScript error--an attempt was made to reenableAllPieClickEffectors before originally disabling those ClickEffectors');
+                }  else {
+                    for (var widgetCounter = 0; widgetCounter< totalWidgetNumber;widgetCounter++){
+                        d3.selectAll('#a'+widgetCounter+'-chart>svg>g>.pie-slice>path').on('click',rememberClickEffectors [widgetCounter]);
+                    }
+                }
+             } ,
+            addPieChart = function (crossFilterVariable, id, key, colors, localPieChartWidth, localPieChartRadius, localInnerRadius) {
                         var dimensionVariable = crossFilterVariable.dimension(function (d) {
                             return d[key];
                         });
@@ -478,6 +493,10 @@
                         shiftBackgroundWidgets(background1, expandedPos[0].x);
                         shiftBackgroundWidgets(background2, expandedPos[1].x);
                         shiftBackgroundWidgets(background3, expandedPos[2].x);
+                        //   Turn off the text label based on click event for background widgets
+                        background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
+                        background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
+                        background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
                         origButton
                                 .text(textForContractingButton)
                                 .attr('class','contractButton')
@@ -504,6 +523,9 @@
                         shiftBackgroundWidgets(background1, background1.data()[0].orig.coords.x);
                         shiftBackgroundWidgets(background2, background2.data()[0].orig.coords.x);
                         shiftBackgroundWidgets(background3, background3.data()[0].orig.coords.x);
+                        background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
+                        background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
+                        background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
                         var x = origButton
                                 .text(textForExpandingButton)
                                 .attr('class','expandButton')
@@ -634,6 +656,8 @@
 
             // Public API for this module
             return {
+                disableAllPieClickEffectors:disableAllPieClickEffectors,
+                reenableAllPieClickEffectors:reenableAllPieClickEffectors,
                 contractGraphicsArea:contractGraphicsArea,
                 expandGraphicsArea:expandGraphicsArea,
                 resetOneAndResettleThree:resetOneAndResettleThree,
@@ -689,6 +713,7 @@
                                 expandContractButton;
 
                         if (!widgetPosition.isAnyWidgetExpanded()) {
+                            displayManipulator.disableAllPieClickEffectors();
                             displayManipulator.expandDataAreaForAllPieCharts(d3.select('.pieCharts'));
                             displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'), 500);
                             widgetPosition.expandThisWidget(d.index);
@@ -721,6 +746,7 @@
                                     origButton,
                                     expandedPos);
                             widgetPosition.unexpandAllWidgets();
+                            displayManipulator.reenableAllPieClickEffectors();
                         }
 
                     },
