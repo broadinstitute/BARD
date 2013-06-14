@@ -19,7 +19,7 @@
     }
 
     .pieChart{
-
+       position: relative;
     }
     .legendLine{
         line-height: 250%;
@@ -54,6 +54,12 @@
     .graphTitle{
         font-size: 130%;
         font-weight: 700;
+    }
+
+    .expandedGraphTitle{
+        font-size: 160%;
+        font-weight: 900;
+        position: absolute;
     }
 
 
@@ -100,7 +106,7 @@
         border-spacing: 0px;
         text-align: center;
     }
-    .expander{
+    .expandButton{
         float: right;
         border: 1px solid #5d9046;
         background: #67AA25;
@@ -109,6 +115,37 @@
         text-decoration: none;
         width: 100px;
         font-size: 10px;
+        font-weight: bold;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        right: 0px;
+        bottom: 0px;
+        text-align: center;
+        display: block;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        text-shadow: 1px 1px 1px #666;
+        -moz-box-shadow: 0 1px 3px #111;
+        -webkit-box-shadow: 0 1px 3px #111;
+        box-shadow: 0 1px 3px #111;
+        background: #3F8EB5; /* old browsers */
+        background: -moz-linear-gradient(top, #3F8EB5 0%, #1D76A0 100%); /* firefox */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3F8EB5), color-stop(100%,#1D76A0)); /* webkit */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3F8EB5', endColorstr='#1D76A0',GradientType=0 );
+    }
+    .contractButton{
+        position:absolute;
+        float: right;
+        border: 1px solid #5d9046;
+        background: #67AA25;
+        color: #fff;
+        font-family: Arial, Helvetica, Sans-Serif;
+        text-decoration: none;
+        width: 150px;
+        font-size: 14px;
         font-weight: bold;
         padding-right: 0px;
         padding-bottom: 0px;
@@ -414,7 +451,7 @@
                     moveDataTableOutOfTheWay = function (dataTable, duration) {
                         dataTable.transition()
                                 .duration(duration)
-                                .style("top", displayWidgetY + displayWidgetHeight + "px");
+                                .style("top", 50+displayWidgetY + displayWidgetHeight + "px");  // Extra spaces for 'click to contract' button
                     },
 
 
@@ -443,6 +480,7 @@
                         shiftBackgroundWidgets(background3, expandedPos[2].x);
                         origButton
                                 .text(textForContractingButton)
+                                .attr('class','contractButton')
                                 .transition()
                                 .delay(1000)
                                 .duration(500)
@@ -468,13 +506,14 @@
                         shiftBackgroundWidgets(background3, background3.data()[0].orig.coords.x);
                         var x = origButton
                                 .text(textForExpandingButton)
+                                .attr('class','expandButton')
                                 .transition()
                                 .delay(1000)
                                 .duration(500)
                                 .style('opacity', 1);
                     },
 
-                    expandGraphicsArea = function (graphicsTarget) {
+                    expandGraphicsArea = function (graphicsTarget,graphicsTitle) {
 
                         var bigarc = d3.svg.arc()
                                 .innerRadius(innerRadiusWhenExpanded)
@@ -482,7 +521,7 @@
 
                         graphicsTarget
                                 .attr('width', displayWidgetWidth)
-                                .attr('height', displayWidgetHeight);
+                                .attr('height', displayWidgetHeight+50); // Extra room for the 'click to contract' button
 
                         graphicsTarget
                                 .select('g')
@@ -497,9 +536,10 @@
                                 .attr("d", bigarc)
                                 .attr("transform", "translate(368,375)");    // We need use explicit numbers here, not variables. This would be something to fix
 
+                        graphicsTitle.attr('class','expandedGraphTitle');
                     },
 
-                    contractGraphicsArea = function (graphicsTarget) {
+                    contractGraphicsArea = function (graphicsTarget,graphicsTitle) {
 
                         var arc = d3.svg.arc()
                                 .innerRadius(innerRadius)
@@ -524,6 +564,8 @@
                                 .attr("d", arc)
                                 .attr("transform", "translate(0,0)");
 
+                        graphicsTitle.attr('class','graphTitle');
+
                     },
                     removeTheSun = function () {
                         d3.selectAll('#suburst_container').style('pointer-events', 'none')
@@ -545,6 +587,14 @@
                                 .duration(500)
                                 .style('opacity', '1');
                         d3.select('#sunburstContractor')
+                            // This next step gets a little bit ugly.  What we want to do is make the
+                            // Sunburst disappear, and then have the pie charts rearrange themselves like always.
+                            // Unfortunately D3 does not provide a standardized way to execute a click ( thereby
+                            // Initiating the associated callback ) if you have data associated with your object,
+                            // Which we most certainly do. Therefore I have to mix up my own copy of the data
+                            // that the callback routine for one of the pie charts would receive, and then explicitly
+                            // execute the callback method. There has to be a better way to get the desired effect,
+                            // though for what it's worth this approach is fully functional ( just butt-ugly, that's all)
                                  .on('click', function (d) {
                                     sunburstContainer.style('pointer-events', 'none')
                                             .style('opacity', '0');
@@ -633,28 +683,37 @@
                     handleExpandOrContractClick = function (d, x) {
                         // we better decide whether where you want to expand or contract
                         var origButton = d3.select('#expbutton' + d.index)
-                                .style('opacity', 0);
+                                .style('opacity', 0),
+                                expandedWidget,
+                                unexpandedWidget,
+                                expandContractButton;
 
                         if (!widgetPosition.isAnyWidgetExpanded()) {
                             displayManipulator.expandDataAreaForAllPieCharts(d3.select('.pieCharts'));
                             displayManipulator.moveDataTableOutOfTheWay(d3.select('#data-table'), 500);
                             widgetPosition.expandThisWidget(d.index);
-                            var expandedWidget = widgetPosition.expandedWidget();
-                            var unexpandedWidget = widgetPosition.unexpandedWidgets();
+                            expandedWidget = widgetPosition.expandedWidget();
+                            unexpandedWidget = widgetPosition.unexpandedWidgets();
                             displayManipulator.spotlightOneAndBackgroundThree(d, d3.select('#a' + expandedWidget),
                                     d3.select('#a' + unexpandedWidget[0]),
                                     d3.select('#a' + unexpandedWidget[1]),
                                     d3.select('#a' + unexpandedWidget[2]),
                                     origButton,
                                     expandedPos);
-                            displayManipulator.expandGraphicsArea(d3.select('#a' + expandedWidget).select('.pieChart>svg'));
-                            displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget),d3.selectAll('#suburst_container'),expandedWidget,handleExpandOrContractClick);
+                            expandContractButton = d3.select('#a' + expandedWidget+'-chart>.graphTitle')
+                            displayManipulator.expandGraphicsArea( d3.select('#a' + expandedWidget).select('.pieChart>svg'),
+                                                                   expandContractButton );
+                            if (expandContractButton.text() === 'Protein target'){
+                                displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget),d3.selectAll('#suburst_container'),expandedWidget,handleExpandOrContractClick);
+                            }
+
                         }
 
                         else if (widgetPosition.expandedWidget() == d.index) {
-                            displayManipulator.contractGraphicsArea(d3.select('#a' + x).select('.pieChart>svg'));
-                            var expandedWidget = widgetPosition.expandedWidget();
-                            var unexpandedWidget = widgetPosition.unexpandedWidgets();
+                            expandedWidget = widgetPosition.expandedWidget();
+                            unexpandedWidget = widgetPosition.unexpandedWidgets();
+                            displayManipulator.contractGraphicsArea( d3.select('#a' + x).select('.pieChart>svg'),
+                                                                     d3.select('#a' + expandedWidget+'-chart>.expandedGraphTitle'));
                             displayManipulator.resetOneAndResettleThree(d, d3.select('#a' + expandedWidget),
                                     d3.select('#a' + unexpandedWidget[0]),
                                     d3.select('#a' + unexpandedWidget[1]),
@@ -672,41 +731,18 @@
 
                         placeButtonsHere.append("div")
                                 .text(textForExpandingButton)
-                                .attr('class', 'expander')
+                                .attr('class', 'expandButton')
                                 .attr('id', function (d) {
                                     return 'expbutton' + d.index;
                                 })
                                 .on('click', callbackToExpandOrContractOnButtonClick);
 
-
+                        // Add a button for causing misunderstood disappear
                         sunburstContainer.append("div")
                                 .text(textForContractingButton)
-                                .attr('class', 'expander')
+                                .attr('class', 'contractButton')
                                 .attr('id','sunburstContractor')
                                 .data(buttondata);
-//                                .on('click', function () {
-//                                    sunburstContainer.style('pointer-events', 'none')
-//                                            .transition()
-////                                            .delay(0)
-////                                            .duration(500)
-//                                            .style('opacity', '0');
-//                                    pieDiv.style('pointer-events', null)
-////                                            .transition()
-////                                            .duration(500)
-//                                            .style('opacity', '1');
-//                                    var molecularStructure = d3.selectAll('.molstruct')
-////                                            .transition()
-////                                            .delay(1000)
-////                                            .duration(500)
-//                                            .style('opacity', '0');
-//                                    callbackToExpandOrContractOnButtonClick({'index':expandedButtonNum});
-////                                    var e = document.createEvent('UIEvents');
-////                                    e.initUIEvent('click', true, true);
-////                                    d3.select('#expbutton' + expandedButtonNum).node().dispatchEvent(e);
-//                                });
-
-
-
 
                     };
 
