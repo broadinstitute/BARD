@@ -6,6 +6,14 @@ databaseChangeLog = {
     String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
     File migrationsDir = new File(bardDomainModelMigrationsDir)
 
+    changeSet(author: 'pmontgom', id: 'invalid-context', dbms: 'oracle', context: 'invalidContext', runAlways: true) {
+        grailsChange {
+            change {
+                throw new RuntimeException("Woah there cowboy!  Always run dbm-update with --contexts=...")
+            }
+        }
+    }
+
     changeSet(author: 'ddurkin', id: 'rename-changelog-filenames.sql', dbms: 'oracle', context: 'rename-changelog') {
         sqlFile(path: "${migrationsDir}/sql/rename-changelog-filenames.sql", stripComments: true)
     }
