@@ -1,7 +1,6 @@
+import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
-import bard.validation.ext.ExternalOntologyPerson
-import bard.validation.ext.ExternalOntologyFactory
 
 // Place your Spring DSL code here
 beans = {
@@ -20,9 +19,15 @@ beans = {
     modifiedByListener(ModifiedByListener) {
         springSecurityService = ref('springSecurityService')
     }
+    readyForExtractFlushListener(ReadyForExtractFlushListener) {
+    }
     hibernateEventListeners(HibernateEventListeners) {
-        listenerMap = ['pre-insert': modifiedByListener,
-                'pre-update': modifiedByListener
+        listenerMap = [
+                'flush' : readyForExtractFlushListener,
+                'post-insert': readyForExtractFlushListener,
+                'post-update': readyForExtractFlushListener,
+                'pre-insert': modifiedByListener,
+                'pre-update': modifiedByListener,
         ]
     }
     inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService){

@@ -1,13 +1,10 @@
 package bard.db.registration
 
-import bard.db.audit.BardContextUtils
+import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextItemIntegrationSpec
-import org.hibernate.SessionFactory
 import org.junit.Before
 import spock.lang.Ignore
 import spock.lang.Unroll
-
-import static test.TestUtils.assertFieldValidationExpectations
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +21,58 @@ class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemInteg
         domainInstance = AssayContextItem.buildWithoutSave()
         domainInstance.attributeElement.save()
     }
+    void "test canDelete has No experiments #desc"() {
+        given:
+        domainInstance.attributeType = attributeType
+        when:
+        boolean canDelete = AssayContextItem.canDeleteContextItem(domainInstance)
+        then:
+        assert canDelete == valid
 
+        where:
+        desc                   | attributeType       | valid
+        "Fixed Attribute Type" | AttributeType.Fixed | true
+        "Free Attribute Type"  | AttributeType.Free  | true
+        "List Attribute Type"  | AttributeType.List  | true
+        "Range Attribute Type" | AttributeType.Range | true
+    }
+
+    void "test canDelete has experiments #desc"() {
+        given:
+        domainInstance.attributeType = attributeType
+        Assay assay = domainInstance.assayContext.assay
+        assay.experiments = [new Experiment()]
+        when:
+        boolean canDelete = AssayContextItem.canDeleteContextItem(domainInstance)
+        then:
+        assert canDelete == valid
+
+        where:
+        desc                   | attributeType       | valid
+        "Fixed Attribute Type" | AttributeType.Fixed | true
+        "Free Attribute Type"  | AttributeType.Free  | false
+        "List Attribute Type"  | AttributeType.List  | false
+        "Range Attribute Type" | AttributeType.Range | false
+
+    }
+
+
+    void "test safeToDeleteContextItem #desc"() {
+        given:
+        domainInstance.attributeType = attributeType
+        when:
+        boolean safeToDelete = AssayContextItem.safeToDeleteContextItem(domainInstance)
+        then:
+        assert safeToDelete == valid
+
+        where:
+        desc                   | attributeType       | valid
+        "Fixed Attribute Type" | AttributeType.Fixed | true
+        "Free Attribute Type"  | AttributeType.Free  | false
+        "List Attribute Type"  | AttributeType.List  | false
+        "Range Attribute Type" | AttributeType.Range | false
+
+    }
     @Ignore
     void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
 
@@ -35,22 +83,12 @@ class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemInteg
         domainInstance.validate()
 
         then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
+        RuntimeException e = thrown()
+        e.message == 'Unknown attributeType: null'
 
         where:
-        desc                   | valueUnderTest      | valid | errorCode
-        'null'                 | null                | false | 'nullable'
-
-        'AttributeType.Fixed'  | AttributeType.Fixed | true  | null
-        'AttributeType.List'   | AttributeType.List  | true  | null
-        'AttributeType.Range'  | AttributeType.Range | true  | null
-        'AttributeType.Number' | AttributeType.Free  | true  | null
-
+        desc   | valueUnderTest
+        'null' | null
     }
 
 }

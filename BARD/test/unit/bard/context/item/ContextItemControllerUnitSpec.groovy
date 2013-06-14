@@ -1,5 +1,6 @@
 package bard.context.item
 
+import bard.db.ContextItemService
 import bard.db.context.item.BasicContextItemCommand
 import bard.db.context.item.ContextItemController
 import bard.db.project.ProjectContext
@@ -29,7 +30,7 @@ class ContextItemControllerUnitSpec extends Specification {
         ProjectContextItem contextItem = ProjectContextItem.build(context:projectContext)
 
         BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand(context:projectContext,contextItem: contextItem,contextId: projectContext.id,contextItemId: contextItem.id)
-        basicContextItemCommand.projectService=Mock(ProjectService)
+        basicContextItemCommand.contextItemService=Mock(ContextItemService)
         when:
         controller.delete(basicContextItemCommand)
         then:

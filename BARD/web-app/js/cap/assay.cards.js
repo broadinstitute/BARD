@@ -388,7 +388,14 @@ function deleteCardItem(itemId, assayContextId) {
                     url: '../deleteItemFromCard',
                     data: data,
                     success: function (data) {
+                        //remove error message if any
+                        $("#"+assayContextId+"_Errors").removeClass("alert alert-error");
+                        $("#"+assayContextId+"_Errors").html("")
                         updateCardHolder(data)
+                    },
+                    error: function (request, status, error) {
+                        $("#"+assayContextId+"_Errors").addClass("alert alert-error");
+                        $("#"+assayContextId+"_Errors").html(request.responseText)
                     }
                 });
                 $(this).dialog("close");

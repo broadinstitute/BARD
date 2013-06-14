@@ -1,3 +1,5 @@
+import bard.db.enums.ExpectedValueType
+
 ///**
 // * see https://bitbucket.org/tednaleid/grails-test-data/wiki/Features
 // * see https://bitbucket.org/tednaleid/grails-test-data/wiki/TestDataConfig
@@ -58,22 +60,22 @@ testDataConfig {
             id = {-> i++ }
         }
         'bard.db.project.ProjectContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.registration.AssayContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.experiment.ExperimentContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.project.ProjectExperimentContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.project.StepContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
         'bard.db.project.ResultContextItem' {
-            valueDisplay = 'non null valueDisplay'
+
         }
 
     }

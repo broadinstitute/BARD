@@ -4,34 +4,10 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
 import bard.db.registration.*
+import org.grails.plugins.springsecurity.service.acl.AclUtilService
 
 class AssayService {
 
-    Assay updateAssayType(long assayId, AssayType assayType) {
-        Assay assay = Assay.findById(assayId)
-        assay.assayType = assayType
-        assay.save(flush: true)
-        return Assay.findById(assayId)
-    }
-    Assay updateAssayStatus(long assayId, AssayStatus assayStatus) {
-        Assay assay = Assay.findById(assayId)
-        assay.assayStatus = assayStatus
-        assay.save(flush: true)
-        return Assay.findById(assayId)
-    }
-    Assay updateAssayName(Long assayId, String newAssayName) {
-        Assay assay = Assay.findById(assayId)
-        assay.assayName = newAssayName
-        //validate version here
-        assay.save(flush: true)
-        return Assay.findById(assayId)
-    }
-    Assay updateDesignedBy(long assayId, String newDesigner) {
-        Assay assay = Assay.findById(assayId)
-        assay.designedBy = newDesigner
-        assay.save(flush: true)
-        return Assay.findById(assayId)
-    }
     List<Assay> findByPubChemAid(Long aid) {
         def criteria = Assay.createCriteria()
         return criteria.listDistinct {
@@ -81,8 +57,9 @@ class AssayService {
         return Assay.findById(newAssay.id)
 
     }
+
     /**
-     * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
+     *
      */
     Assay recomputeAssayShortName(Assay assay) {
 
@@ -93,8 +70,8 @@ class AssayService {
         //now call the manage names stored procedure
         //then look up and return the assay
         return Assay.findById(assay.id)
-
     }
+
     Assay cloneAssayOnly(Assay assay,
                          Date dateCreated,
                          String designedBy,
@@ -117,7 +94,6 @@ class AssayService {
                 readyForExtraction: readyForExtraction,
                 dateCreated: dateCreated
         )
-
     }
 
     Map<AssayContext, AssayContext> cloneContexts(Assay assay, Assay newAssay) {

@@ -1,7 +1,12 @@
 package merge
 
-import spock.lang.Specification
-import spock.lang.Ignore
+import spock.lang.Shared
+
+import static bard.db.enums.ExpectedValueType.*
+import static bard.db.registration.AttributeType.Fixed
+import static bard.db.registration.AttributeType.Free
+
+import bard.db.enums.ExpectedValueType
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,9 +22,6 @@ import bard.db.experiment.ExperimentContextItem
 import bard.db.experiment.ExperimentMeasure
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
-import org.apache.commons.lang.NotImplementedException
-import spock.lang.Ignore
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.db.registration.Measure
@@ -32,6 +34,7 @@ import bard.db.registration.AttributeType
 
 @Build([AssayContext, AssayContextItem, AssayContextMeasure, Measure, Assay, Experiment, ExperimentMeasure, Element])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure, ExperimentMeasure, ExperimentContext, ExperimentContextItem])
+@Unroll
 class MergeAssayServiceUnitSpec extends Specification {
 
     MergeAssayService mergeAssayService = new MergeAssayService()
@@ -134,7 +137,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         Experiment experimentB = Experiment.build(assay: assayB)
         Measure measureBA = Measure.build(assay: assayB, resultType: rt)
         AssayContext contextB = AssayContext.build(assay: assayB)
-        AssayContextItem.build(assayContext: contextB, valueDisplay: "value display")
+        Element attributeElement = Element.build(label: 'text attr', expectedValueType: ExpectedValueType.FREE_TEXT)
+        AssayContextItem.build(assayContext: contextB, attributeElement: attributeElement, valueDisplay: "value display")
         AssayContextMeasure link = AssayContextMeasure.build(assayContext: contextB, measure: measureBA)
 
         when:
@@ -151,7 +155,7 @@ class MergeAssayServiceUnitSpec extends Specification {
 
     void "test merging of assay contexts where fixed items mismatch"() {
         setup:
-        Element attribute = Element.build(label: "element1")
+        Element attribute = Element.build(label: "element1", expectedValueType: ExpectedValueType.ELEMENT)
         Element valueA = Element.build(label: "element2")
         Element valueB = Element.build(label: "element3")
 
@@ -184,7 +188,7 @@ class MergeAssayServiceUnitSpec extends Specification {
     void "test merging of assay contexts where fixed items match"() {
         setup:
         Element valueA = Element.build(label: "element1")
-        Element attribute = Element.build(label: "element2")
+        Element attribute = Element.build(label: "element2", expectedValueType: ExpectedValueType.ELEMENT)
 
         Assay assayA = Assay.build()
         AssayContext contextA = AssayContext.build(assay: assayA)
@@ -209,26 +213,29 @@ class MergeAssayServiceUnitSpec extends Specification {
     //TODO: add more tests
     void testIsAssayContextItemEquals() {
         setup:
-        Element e1 = Element.build(id: 1, label: "e1")
-        Element e2 = Element.build(id: 2, label: "e2")
-        Element e3 = Element.build(id: 3, label: "e3")
+        final Element freeText = Element.build(id: 1, label: "e1", expectedValueType: FREE_TEXT)
+        final Element anotherFreeText = Element.build(id: 2, label: "e2", expectedValueType: FREE_TEXT)
 
-        Element ex1 = Element.build(id: 1, label: "ex1", externalURL: "xurl")
+        final Element dictionary = Element.build(expectedValueType: ELEMENT)
+        final Element anotherDictionary = Element.build(expectedValueType: ELEMENT)
+        final Element valueElement = Element.build(id: 3, label: "e3")
+
+        final Element externalOntology = Element.build(id: 1, label: "ex1", externalURL: "xurl", expectedValueType: EXTERNAL_ONTOLOGY)
 
         double value = 11.01
         String extValueId = "external value id"
         String valueDisplay = "value for display"
 
         when:
-        AssayContextItem aci1 = AssayContextItem.build(attributeElement: e1, valueDisplay: valueDisplay)
-        AssayContextItem aci2 = AssayContextItem.build(attributeElement: e2, valueDisplay: valueDisplay)
+        AssayContextItem aci1 = AssayContextItem.build(attributeElement: freeText, valueDisplay: valueDisplay)
+        AssayContextItem aci2 = AssayContextItem.build(attributeElement: anotherFreeText, valueDisplay: valueDisplay)
 
         then: "these two item are not the same because attribute element are not match"
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
         when:
-        aci1 = AssayContextItem.build(attributeElement: e1, attributeType: AttributeType.Free, valueDisplay: null)
-        aci2 = AssayContextItem.build(attributeElement: e1, attributeType: AttributeType.Free, valueDisplay: null)
+        aci1 = AssayContextItem.build(attributeElement: freeText, attributeType: Free, valueDisplay: null)
+        aci2 = AssayContextItem.build(attributeElement: freeText, attributeType: Free, valueDisplay: null)
         then: """these two item are the same because attribute are the same, and type are FREE"""
         assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
@@ -238,13 +245,13 @@ class MergeAssayServiceUnitSpec extends Specification {
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
         when:
-        aci1 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
-        aci2 = AssayContextItem.build(attributeElement: e1, valueElement: e2, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
+        aci1 = AssayContextItem.build(attributeElement: dictionary, valueElement: anotherFreeText, attributeType: Fixed, valueDisplay: valueDisplay)
+        aci2 = AssayContextItem.build(attributeElement: dictionary, valueElement: anotherFreeText, attributeType: Fixed, valueDisplay: valueDisplay)
         then: "this two items are the same since they have same valueElement"
         assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
         when:
-        aci2.valueElement = e3
+        aci2.valueElement = valueElement
         then: "This two are not the same since they have different valueElement"
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
@@ -254,8 +261,8 @@ class MergeAssayServiceUnitSpec extends Specification {
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
 
         when:
-        aci1 = AssayContextItem.build(attributeElement: ex1, extValueId: extValueId, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
-        aci2 = AssayContextItem.build(attributeElement: ex1, extValueId: extValueId, attributeType: AttributeType.Fixed, valueDisplay: valueDisplay)
+        aci1 = AssayContextItem.build(attributeElement: externalOntology, extValueId: extValueId, attributeType: Fixed, valueDisplay: valueDisplay)
+        aci2 = AssayContextItem.build(attributeElement: externalOntology, extValueId: extValueId, attributeType: Fixed, valueDisplay: valueDisplay)
         then: "This two are the same due to same extValueId"
         assert mergeAssayService.isAssayContextItemEquals(aci1, aci2)
         when:
@@ -268,4 +275,29 @@ class MergeAssayServiceUnitSpec extends Specification {
         assert !mergeAssayService.isAssayContextItemEquals(aci1, aci2)
     }
 
+//    was looking at converting the above test to a where block style test
+//    @Shared Element lhsAttributeElement
+//    @Shared Element rhsAttributeElement
+//    void "testIsAssayContextItemEquals with where block #desc"() {
+//
+//        given:
+//        lhsAttributeElement = lhsAttribute.call()
+//        rhsAttributeElement = rhsAttribute.call()
+//
+//        lhsItemMap.attributeElement = lhsAttributeElement
+//        rhsItemMap.attributeElement = rhsAttributeElement
+//
+//        when:
+//        AssayContextItem lhsItem = AssayContextItem.build(lhsItemMap)
+//        AssayContextItem rhsItem = AssayContextItem.build(rhsItemMap)
+//
+//        then:
+//        mergeAssayService.isAssayContextItemEquals(lhsItem, rhsItem) == expectedEquals
+//
+//        where:
+//        desc                                             | expectedEquals | lhsAttribute                                    | rhsAttribute                                    | lhsItemMap                | rhsItemMap
+//        "not equals attribute elements don't match"      | false          | { Element.build(expectedValueType: FREE_TEXT) } | { Element.build(expectedValueType: FREE_TEXT) } | [valueDisplay: "display"] | [valueDisplay: "display"]
+//        "equals attributes same and attribute Type FREE" | true           | { Element.build(expectedValueType: FREE_TEXT) } | { lhsAttributeElement }                         | [attributeType: Free]     | [attributeType: Free]
+//
+//    }
 }

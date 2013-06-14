@@ -55,7 +55,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given a Project with id #id and version #version"
-        Project.build(readyForExtraction: initialReadyForExtraction)
+        Project.build(readyForExtraction: initialReadyForExtraction,capPermissionService:null)
 
         when: "We call the project service to update this assay"
         final BardHttpResponse bardHttpResponse = this.projectExportService.update(projectId, version, READY.COMPLETE)
@@ -76,7 +76,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Project "() {
         given: "Given a Project"
-        final Project project = Project.build()
+        final Project project = Project.build(capPermissionService:null)
 
         when: "A service call is made to generate the project"
         this.projectExportService.generateProject(this.markupBuilder, project.id)
@@ -87,7 +87,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Project given an id #label"() {
         given: "Given a Project"
-        final Project project = Project.build()
+        final Project project = Project.build(capPermissionService:null)
 
         when: "A service call is made to generate the project"
         this.projectExportService.generateProject(this.markupBuilder, project.id)
@@ -98,7 +98,7 @@ class ProjectExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Projects"() {
         given: "Given there is at least one project ready for extraction"
-        Project project = Project.build(readyForExtraction: READY)
+        Project project = Project.build(readyForExtraction: READY,capPermissionService:null)
         project.save(flush: true)
 
         when: "A service call is made to generate a list of projects ready to be extracted"

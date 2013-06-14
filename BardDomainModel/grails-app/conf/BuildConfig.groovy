@@ -41,16 +41,17 @@ grails.project.dependency.resolution = {
         build(":improx:0.2") { export = false } // Interactive Mode Proxy; useful for IDE integration
         compile(":clover:3.1.10.1") { export = false }
         compile(":console:1.2") { export = false }
-        compile(":cbipcrowdauthentication:0.3.0") {
-            export = false
-            excludes('spock', 'release')
+        compile(":cbipcrowdauthentication:0.3.4") {
+		export = false
+		excludes('spock', 'release', 'google-collections')
         }
-
+        compile(":spring-security-acl:1.1.1")
         compile(":database-migration:1.3.2") { export = true }
         compile(":spock:0.7") {
             export = false
             exclude("spock-grails-support")
         }
+        compile ":spring-security-acl:1.1.1"
         /**
          * including build test data for all environments except production, oracleqa, oracledev
          */
@@ -59,6 +60,7 @@ grails.project.dependency.resolution = {
             case ('oracleqa'):
             case ('oracledev'):
                 break
+
             default:
                 compile(":build-test-data:2.0.4") { export = true }
                 compile(":fixtures:1.2") {

@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
@@ -27,7 +28,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
     void "test deleteAssayContext"() {
         given:
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(capPermissionService: Mock(CapPermissionService))
         3.times({assay.addToAssayContexts(AssayContext.build(assay:assay))})
         final AssayContext assayContext = assay.assayContexts.first()
          int initialNumberOfContexts = assay.assayContexts.size()
@@ -58,7 +59,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
         AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
-        sourceAssayContext.addToAssayContextItems(AssayContextItem.build(valueDisplay: ORIGINAL_CONTEXT_NAME))
+        sourceAssayContext.addToAssayContextItems(AssayContextItem.build())
         AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
         assert sourceAssayContext.assayContextItems.size() == 1
         assert sourceAssayContext == draggedAssayContextItem.assayContext
@@ -97,7 +98,7 @@ class AssayContextServiceUnitSpec extends Specification {
         given:
         AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
         AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
-        sourceAssayContext.addToAssayContextItems(AssayContextItem.build(valueDisplay: ORIGINAL_CONTEXT_NAME))
+        sourceAssayContext.addToAssayContextItems(AssayContextItem.build())
         AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
         assert sourceAssayContext.assayContextItems.size() == 1
         assert sourceAssayContext == draggedAssayContextItem.assayContext
@@ -153,7 +154,7 @@ class AssayContextServiceUnitSpec extends Specification {
     private List<AssayContextItem> createAssayContextItem(int i) {
         List<AssayContextItem> items = []
         i.times {
-            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element(), valueDisplay: 'valueDisplay')
+            items << new AssayContextItem(attributeType: AttributeType.Fixed, attributeElement: new Element())
         }
         items
     }

@@ -1,4 +1,31 @@
+
 $(document).ready(function () {
+    hideAllValueWidgets();
+
+    // try and pick best focus
+    function initialFocus() {
+        if ($("#attributeElementId").is(':disabled')) {
+            $('button.btn-primary').focus();
+        }
+        else if (!$("#attributeElementId").val()) {
+            $("#attributeElementId").select2("open");
+        }
+    }
+    function potentiallyFocus(elementId){
+        if ($("#attributeElementId").is(':disabled')) {
+            // do nothing we're in review mode
+        }
+        else {
+            var valueElement = $(elementId);
+            if(valueElement.data('select2')){
+                valueElement.select2("open");
+            }
+            else{
+                valueElement.focus();
+            }
+        }
+    }
+
     $("#attributeElementId").select2({
         minimumInputLength: 1,
         allowClear: true,
@@ -13,9 +40,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        if (data.unitId) {
-                            initializeUnits(data.unitId);
-                        }
+                        onlyShowWidgetsForExpectedValueType(data);
                     });
             }
         },
@@ -31,14 +56,77 @@ $(document).ready(function () {
             }
         }
     }).on("change", function (e) {
-            // on change the attribute, clear all the other fields
-            $(':text').val("");
-            $("#valueElementId").select2("data", {results: []});
-            $("#extValueId").select2("data", {results: []});
-            $("#valueNumUnitId").select2("data", {results: []});
-            initializeUnits($("#attributeElementId").select2("data").unitId);
-
+            // on change of the attribute, clear all value fields
+            clearAllValueFields();
+            // hide any existing error messages, will be redisplayed when user submits with new attribute
+            hideAnyErrorMessages();
+            // based on the attribute selected only show the appropriate value widgets
+            var data = $("#attributeElementId").select2("data");
+            onlyShowWidgetsForExpectedValueType(data);
         });
+
+    initialFocus();
+
+    function clearAllValueFields() {
+        $(':text').val("");
+        $("#valueElementId").select2("data", {results: []});
+        $("#extValueSearch").select2("data", {results: []});
+        $("#valueNumUnitId").select2("data", {results: []});
+    }
+    function hideAnyErrorMessages() {
+        $('.help-inline').hide();
+        $('.help-block').hide();
+        $('.alert-error').hide();
+        $('.error').removeClass('error');
+    }
+
+    function hideAllValueWidgets() {
+        $("[id$=ValueContainer]").hide();
+    }
+    function onlyShowWidgetsForExpectedValueType(data) {
+        hideAllValueWidgets();
+        var expectedValueType = data? data.expectedValueType: '';
+        var unitId = data.unitId;
+        if ('NUMERIC' === expectedValueType) {
+            $('#numericValueContainer').show();
+            initializeUnits(unitId);
+            potentiallyFocus("#valueNum")
+
+        }
+        else if ('ELEMENT' === expectedValueType) {
+            $('#elementValueContainer').show();
+            potentiallyFocus("#valueElementId");
+        }
+        else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
+            showExternalOntologyHelpText(data);
+            $('#externalOntologyValueContainer').show();
+            $('#freeTextValueContainer').show();
+            potentiallyFocus("#extValueSearch");
+        }
+        else if ('FREE_TEXT' === expectedValueType) {
+            $('#freeTextValueContainer').show();
+            potentiallyFocus("#valueDisplay");
+        }
+        else if ('NONE' === expectedValueType) {
+            $('#noneValueContainer').show();
+        }
+        else {
+            // problem
+        }
+    }
+
+    function showExternalOntologyHelpText(data){
+        var source;
+        if(data.hasIntegratedSearch){
+            source = $('#externalOntologyIntegratedSearchTemplate').html();
+        }
+        else {
+            source = $('#externalOntologyNoIntegratedSearchTemplate').html();
+        }
+        var template = Handlebars.compile(source);
+        var html = template({attributeLabel : data.text,attributeExternalUrl : data.externalUrl});
+        $("#externalOntologyInfo").html(html);
+    }
 
 
     $("#valueElementId").select2({
@@ -70,7 +158,7 @@ $(document).ready(function () {
         $("#valueElementId").select2("data", {id: $("#valueElementId").val(), text: $("#valueElementText").val()});
     }
 
-    $("#extValueId").select2({
+    $("#extValueSearch").select2({
         minimumInputLength: 1,
         allowClear: true,
         placeholder: "Search for external ontology ids or terms",
@@ -85,7 +173,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        initialFocus();
+                        potentiallyFocus("#extValueSearch");
                     });
             }
         },
@@ -103,41 +191,21 @@ $(document).ready(function () {
             }
         }
     }).on("change", function (e) {
-            $("#valueDisplay").val($("#extValueId").select2("data").display);
+            $("#extValueId").val($("#extValueSearch").select2("data").id);
+            $("#valueDisplay").val($("#extValueSearch").select2("data").text);
             $('button.btn-primary').focus();
         });
-    if ($("#extValueId").val()) {
-        $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
+    if ($("#extValueSearch").val()) {
+        $("#extValueSearch").select2("data", {id: $("#extValueSearch").val(), text: $("#extValueText").val()});
     }
-    initialFocus();
 
-    // try and pick best focus
-    function initialFocus() {
-        if ($("#attributeElementId").is(':disabled')) {
-            $('button.btn-primary').focus();
-        }
-        else if (!$("#attributeElementId").val()) {
-            $("#attributeElementId").select2("open");
-        }
-        else if ($("#valueElementId").val()) {
-            $("#valueElementId").select2("open");
-        }
-        else if ($("#extValueId").val()) {
-            $("#extValueId").select2("open");
-        }
-        else if ($("#valueNum").val()) {
-            $("#valueNum").focus();
-        }
-        else if ($("#valueDisplay").val()) {
-            $("#valueDisplay").focus();
-        }
-    }
 
     function initializeUnits(attributeUnitId) {
         var unitSelector = '#valueNumUnitId'
         $(unitSelector).select2({
             placeholder: "Select a Unit",
-            width: "70%",
+            allowClear: true,
+            width: 'resolve',
             data: []
         });
         var unitsData = {results: []};
@@ -161,7 +229,8 @@ $(document).ready(function () {
         var unitSelector = '#valueNumUnitId'
         $(unitSelector).select2({
             placeholder: "Select a Unit",
-            width: "70%",
+            allowClear: true,
+            width: 'resolve',
             data: data
         });
         if (selectedId) {

@@ -12,7 +12,6 @@ import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import javax.sql.DataSource
@@ -61,7 +60,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given an Assay with id #id and version #version"
-        Assay.build(readyForExtraction: initialReadyForExtraction)
+        Assay.build(readyForExtraction: initialReadyForExtraction, capPermissionService:null)
 
         when: "We call the assay service to update this assay"
         final BardHttpResponse bardHttpResponse = this.assayExportService.update(assayId, version, COMPLETE)
@@ -95,7 +94,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         given:
         Element element = Element.build()
-        Assay assay = Assay.build()
+        Assay assay = Assay.build(capPermissionService:null)
         AssayContext assayContext = AssayContext.build(assay: assay)
         AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
@@ -117,7 +116,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Assays #label"() {
         given: "Given there is at least one assay ready for extraction"
-        Assay.build(readyForExtraction: READY)
+        Assay.build(readyForExtraction: READY,capPermissionService:null)
 
         when: "A service call is made to generate a list of assays ready to be extracted"
         this.assayExportService.generateAssays(this.markupBuilder)

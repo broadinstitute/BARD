@@ -12,7 +12,7 @@ class Project extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int GROUP_TYPE_MAX_SIZE = 20
-
+    def capPermissionService
     String name
     String groupType
     String description
@@ -28,6 +28,12 @@ class Project extends AbstractContextOwner {
 
     Set<ExternalReference> externalReferences = [] as Set
     Set<ProjectDocument> documents = [] as Set
+
+    // if this is set, then don't automatically update readyForExtraction when this entity is dirty
+    // this is needed to change the value to anything except "Ready"
+    boolean disableUpdateReadyForExtraction = false
+
+    static transients = ['disableUpdateReadyForExtraction']
 
     static hasMany = [projectExperiments: ProjectExperiment,
             externalReferences: ExternalReference,
@@ -98,5 +104,10 @@ class Project extends AbstractContextOwner {
         final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<ProjectDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
+    }
+    def afterInsert() {
+        Project.withNewSession {
+            capPermissionService?.addPermission(this)
+        }
     }
 }
