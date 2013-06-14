@@ -46,7 +46,7 @@
     </form>
 </div>
 
-<div id="dialog_link_experiment" title="Link experiments">
+<div id="dialog_link_experiment" title="Link Experiments">
     <form id="linkExperimentForm">
         <div id="displayLinkExperimentErrorMessage"></div>
         <label for="fromExperimentId">From Experiment ID:</label>

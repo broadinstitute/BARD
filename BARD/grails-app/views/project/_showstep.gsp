@@ -5,7 +5,7 @@
 
     <div>
         <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
-            <button id="linkExperiment" class="btn">Link Experiment</button></div>
+            <button id="linkExperiment" class="btn">Link Experiments</button></div>
     </div>
 
     <div id="serviceResponse" style="display: none"></div>
