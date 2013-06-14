@@ -12,21 +12,6 @@ databaseChangeLog = {
      *       just modify the create-ontology-procedures.sql file directly, this way vcs and easily see diffs over time.
      */
 
-    changeSet(author: 'ddurkin', id: 'create-bard-context.sql', dbms: 'oracle', context: 'standard, auditing', runOnChange: 'true') {
-        grailsChange {
-            final List<String> sqlBlocks = []
-            String text = resourceAccessor.getResourceAsStream('sql-auditing/create-bard-context.sql').text
-            for (String sqlBlock in text.split(BACKSLASH_ONLY_OPTIONAL_WHITESPACE)) {
-                sqlBlocks.add(sqlBlock)
-            }
-            change {
-                for (String sqlBlock in sqlBlocks) {
-                    sql.call(sqlBlock)
-                }
-            }
-            checkSum(text)
-        }
-    }
     changeSet(author: 'ddurkin', id: 'pkg_auditing_setup.sql', dbms: 'oracle', context: 'standard, auditing', runOnChange: 'true') {
         grailsChange {
             final List<String> sqlBlocks = []
