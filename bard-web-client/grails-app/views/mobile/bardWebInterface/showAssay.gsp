@@ -16,7 +16,7 @@
     </div>
 
     <div data-role="header" style="text-align: center; margin: 0 auto;">
-        <p>Assay Definition: ${assayAdapter?.title}
+        <p>Assay Definition: ${assayAdapter?.name}
             <small>(ADID: ${assayAdapter?.capAssayId})
                 <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
                     <img src="${resource(dir: 'images', file: 'witnessed.png')}"

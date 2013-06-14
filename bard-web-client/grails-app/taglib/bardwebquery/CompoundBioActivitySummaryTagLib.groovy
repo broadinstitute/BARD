@@ -59,7 +59,8 @@ class CompoundBioActivitySummaryTagLib {
                             yNormMax: attrs?.yNormMax
                     ]
             )
-        }"/>
+        }"
+        style="min-width: 200px; min-height: 133px"/>
         """
 
         out << "<p class='lineSpacing' style='padding-top: 10px;'><b>${attrs?.title?.value?.left?.value ?: ''}"

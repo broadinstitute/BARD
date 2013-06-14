@@ -67,7 +67,7 @@
                             <table>
                                 <tbody>
                                 <g:render template="listValueRenderer"
-                                          model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout]"/>
+                                          model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout, innerBorder: innerBorder]"/>
                                 </tbody>
                             </table>
                         </td>
@@ -95,7 +95,7 @@
                                     </thead>
                                     <tbody>
                                     <g:render template="listValueRenderer"
-                                              model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout, columnWidth: columnWidth]"/>
+                                              model="[resultSize: resultSize, results: results, landscapeLayout: landscapeLayout, columnWidth: columnWidth, innerBorder: innerBorder]"/>
                                     </tbody>
                                 </table>
                             </div>

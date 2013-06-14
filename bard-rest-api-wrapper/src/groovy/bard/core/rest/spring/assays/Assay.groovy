@@ -14,6 +14,6 @@ public class Assay extends AbstractAssay {
     @JsonProperty("experiments")
     List<String> experimentIds = new ArrayList<String>();
     @JsonProperty("projects")
-    List<String> projectsIds = new ArrayList<String>();
+    List<String> projectIds = new ArrayList<String>();
 
 }

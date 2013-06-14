@@ -2,7 +2,8 @@
 <div class="compound-info">
     <g:if test="${smiles}">
         <img alt="${smiles}"
-             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"/>
+             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: imageWidth, height: imageHeight])}"
+        style="min-width: ${imageWidth}px; min-height: ${imageHeight}px"/>
     </g:if>
     <g:else>
         <img alt="SID: ${sid}" title="SID: ${sid}"

@@ -171,7 +171,7 @@
                             <p>
                                 <g:if test="${searchString}">
                                     <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}"
-                                            params='[searchString: "${searchString}"]'>${assay.title}
+                                            params='[searchString: "${searchString}"]'>${assay.name}
                                         <g:if test="${assay.assayStatus == 'Witnessed'}">
                                             <img src="${resource(dir: 'images', file: 'witnessed.png')}"
                                                  alt="Witnessed" title="Witnessed"/>
@@ -189,7 +189,7 @@
                                 </g:if>
                                 <g:else>
                                     <g:link controller="bardWebInterface" action="showAssay"
-                                            id="${assay.id}">${assay.title}
+                                            id="${assay.id}">${assay.name}
                                         <g:if test="${assay.assayStatus == 'Witnessed'}">
                                             <img src="${resource(dir: 'images', file: 'witnessed.png')}"
                                                  alt="Witnessed" title="Witnessed"/>

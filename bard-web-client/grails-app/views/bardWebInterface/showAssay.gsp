@@ -10,7 +10,7 @@
 <body>
 <div class="row-fluid">
     <div class="span12 page-header">
-        <h1>Assay Definition: ${assayAdapter?.title}
+        <h1>Assay Definition: ${assayAdapter?.name}
             <small>(ADID: ${assayAdapter?.capAssayId})
             <g:if test="${assayAdapter.assayStatus == 'Witnessed'}">
                 <img src="${resource(dir: 'images', file: 'witnessed.png')}"
@@ -28,7 +28,7 @@
         </h1>
 
         <g:saveToCartButton id="${assayAdapter.id}"
-                            name="${JavaScriptUtility.cleanup(assayAdapter.title)}"
+                            name="${JavaScriptUtility.cleanup(assayAdapter.name)}"
                             type="${querycart.QueryItemType.AssayDefinition}"/>
         <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.assay}${assayAdapter?.capAssayId}"
            title="Click To View Assay Definition In CAP" rel="tooltip">View in CAP</a>

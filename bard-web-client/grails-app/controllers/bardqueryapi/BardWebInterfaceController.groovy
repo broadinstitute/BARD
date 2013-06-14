@@ -40,7 +40,7 @@ class BardWebInterfaceController {
     IQueryService queryService
     MolecularSpreadSheetService molecularSpreadSheetService
     MobileService mobileService
-    ExperimentRestService  experimentRestService
+    ExperimentRestService experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
     ProjectExperimentRenderService projectExperimentRenderService
     List<SearchFilter> filters = []
@@ -132,7 +132,7 @@ class BardWebInterfaceController {
 
             //Create fake facets to generate the two filters we want: normalize Y-axis and filter for active compounds only.
             Integer numOfActiveCmpds = tableModel?.additionalProperties?.actives ?: 0
-            Integer totalNumOfCmpds = tableModel?.additionalProperties?.total ?: 0
+            Integer totalNumOfCmpds = filters.contains(FilterTypes.TESTED) ? (tableModel?.additionalProperties?.total ?: 0) : numOfActiveCmpds
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
             facetValues << new Value(id: 'activity_outcome', children: [new IntValue(id: 'Active Compounds', value: numOfActiveCmpds)])
 
@@ -148,7 +148,8 @@ class BardWebInterfaceController {
                     model: [tableModel: tableModel,
                             facets: facetValues,
                             appliedFilters: getAppliedFilters(searchFilters, facetValues),
-                            sidebarTitle: 'Options'])
+                            sidebarTitle: 'Options',
+                            totalNumOfCmpds: totalNumOfCmpds])
         }
         catch (HttpClientErrorException httpClientErrorException) { //we are assuming that this is a 404, even though it could be a bad request
             String message = "Experiment with ID ${id} does not exists"
@@ -689,8 +690,7 @@ class BardWebInterfaceController {
                 tableModel.additionalProperties.put("activityOutcome", activityOutcome)
                 tableModel.additionalProperties.put("id", id.toString())
                 tableModel.additionalProperties.put("resourceType", resourceType.name())
-                session.'compoundSummaryPlusId' = ['compoundSummary':tableModel.additionalProperties?.compoundSummary,
-                                                   'id': id ]
+                session.'compoundSummary' = tableModel.additionalProperties?.compoundSummary
                 session.'actives' = true
                 session.'inactives' = true
 
@@ -747,7 +747,7 @@ class BardWebInterfaceController {
             session.'compoundSummaryPlusId'=['compoundSummary':null,'id':id]
         }
 
-            int dropDown1Choice = 0
+        int dropDown1Choice = 0
 
         if ((params.actives == null) || ('t' == params.actives)) {
             dropDown1Choice += 1
@@ -783,11 +783,11 @@ class BardWebInterfaceController {
 //        if (!session.'compoundSummary') {
 //            println 'we have no information'
 //        } else {
-            render(view: 'bigSunburst',
-                    model: [compoundSummaryPlusId: session.'compoundSummaryPlusId',
-                            dropDown1Choice: dropDown1Choice,
-                            dropDown2Choice: session.colorOption,
-                            cid: id])
+        render(view: 'bigSunburst',
+                model: [compoundSummaryPlusId: session.'compoundSummaryPlusId',
+                        dropDown1Choice: dropDown1Choice,
+                        dropDown2Choice: session.colorOption,
+                        cid: id])
 //        }
 
     }
@@ -1100,3 +1100,4 @@ class SearchHelper {
 
 
 }
+
