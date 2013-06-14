@@ -13,7 +13,7 @@ class Project extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int DESCRIPTION_MAX_SIZE = 1000
     private static final int GROUP_TYPE_MAX_SIZE = 20
-
+    def capPermissionService
     String name
     String groupType
     String description
@@ -124,5 +124,10 @@ class Project extends AbstractContextOwner {
         ProjectContext context = new ProjectContext(properties)
         addToContexts(context)
         return context
+    }
+    def afterInsert() {
+        Project.withNewSession {
+            capPermissionService?.addPermission(this)
+        }
     }
 }

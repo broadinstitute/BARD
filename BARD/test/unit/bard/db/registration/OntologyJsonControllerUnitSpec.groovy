@@ -105,8 +105,8 @@ class OntologyJsonControllerUnitSpec extends Specification {
         where:
         desc               | serviceReturnValue                                                     | expectedMap
         'no items found'   | { [] }                                                                 | [externalItems: []]
-        '1 item found'     | { [new ExternalItem('1', 'item 1')] }                                  | [externalItems: [[id: '1', text: '(id:1) item 1', display: 'item 1']]]
-        '2 items found'    | { [new ExternalItem('1', 'item 1'), new ExternalItem('2', 'item 2')] } | [externalItems: [[id: '1', text: '(id:1) item 1', display: 'item 1'], [id: '2', text: '(id:2) item 2', display: 'item 2']]]
+        '1 item found'     | { [new ExternalItem('1', 'item 1')] }                                  | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1']]]
+        '2 items found'    | { [new ExternalItem('1', 'item 1'), new ExternalItem('2', 'item 2')] } | [externalItems: [[id: '1', text: '(1) item 1', display: 'item 1'], [id: '2', text: '(2) item 2', display: 'item 2']]]
         'exception thrown' | { throw new ExternalOntologyException("some Exception") }              | [error: 'some Exception', externalItems: []]
     }
 }

@@ -14,8 +14,8 @@
             <h4>Editing Measures for ${assayInstance?.assayName} (ADID: ${assayInstance?.id})</h4>
         </div>
         <g:if test="${assayInstance?.id}">
-                <g:link action="show" id="${assayInstance?.id}"
-                        class="btn btn-small btn-primary">Finish Editing</g:link>
+            <g:link action="show" id="${assayInstance?.id}"
+                    class="btn btn-small btn-primary">Finish Editing</g:link>
         </g:if>
     </div>
 </div>
@@ -168,6 +168,13 @@
                             return ["over"]
                         }
                     },
+                     onDragOver: function(node, sourceNode, hitMode) {
+                        // Prevent dropping a parent below it's own child
+                        if(node.isDescendantOf(sourceNode)){
+                          return false;
+                        }
+                        return true;
+                      },
                     onDrop: measureNodeDropped
                     },
                 children: ${measuresTreeAsJson}

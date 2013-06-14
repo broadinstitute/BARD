@@ -1,15 +1,10 @@
 package bard.db.registration
 
-import bard.db.dictionary.Element
+import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextItemIntegrationSpec
 import org.junit.Before
-import spock.lang.IgnoreRest
+import spock.lang.Ignore
 import spock.lang.Unroll
-
-import static bard.db.enums.ExpectedValueType.*
-import static bard.db.model.AbstractContextItem.MODIFIED_BY_MAX_SIZE
-import static test.TestUtils.assertFieldValidationExpectations
-import static test.TestUtils.createString
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +21,59 @@ class AssayContextItemConstraintIntegrationSpec extends AbstractContextItemInteg
         domainInstance = AssayContextItem.buildWithoutSave()
         domainInstance.attributeElement.save()
     }
+    void "test canDelete has No experiments #desc"() {
+        given:
+        domainInstance.attributeType = attributeType
+        when:
+        boolean canDelete = AssayContextItem.canDeleteContextItem(domainInstance)
+        then:
+        assert canDelete == valid
 
+        where:
+        desc                   | attributeType       | valid
+        "Fixed Attribute Type" | AttributeType.Fixed | true
+        "Free Attribute Type"  | AttributeType.Free  | true
+        "List Attribute Type"  | AttributeType.List  | true
+        "Range Attribute Type" | AttributeType.Range | true
+    }
+
+    void "test canDelete has experiments #desc"() {
+        given:
+        domainInstance.attributeType = attributeType
+        Assay assay = domainInstance.assayContext.assay
+        assay.experiments = [new Experiment()]
+        when:
+        boolean canDelete = AssayContextItem.canDeleteContextItem(domainInstance)
+        then:
+        assert canDelete == valid
+
+        where:
+        desc                   | attributeType       | valid
+        "Fixed Attribute Type" | AttributeType.Fixed | true
+        "Free Attribute Type"  | AttributeType.Free  | false
+        "List Attribute Type"  | AttributeType.List  | false
+        "Range Attribute Type" | AttributeType.Range | false
+
+    }
+
+
+    void "test safeToDeleteContextItem #desc"() {
+        given:
+        domainInstance.attributeType = attributeType
+        when:
+        boolean safeToDelete = AssayContextItem.safeToDeleteContextItem(domainInstance)
+        then:
+        assert safeToDelete == valid
+
+        where:
+        desc                   | attributeType       | valid
+        "Fixed Attribute Type" | AttributeType.Fixed | true
+        "Free Attribute Type"  | AttributeType.Free  | false
+        "List Attribute Type"  | AttributeType.List  | false
+        "Range Attribute Type" | AttributeType.Range | false
+
+    }
+    @Ignore
     void "test attributeType constraints #desc attributeType: '#valueUnderTest'"() {
 
         final String field = 'attributeType'

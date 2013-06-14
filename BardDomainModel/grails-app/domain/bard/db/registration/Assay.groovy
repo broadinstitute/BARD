@@ -19,7 +19,8 @@ class Assay extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
-
+    // def aclUtilService
+    def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
     String assayName
@@ -72,9 +73,13 @@ class Assay extends AbstractContextOwner {
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
-    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions',"disableUpdateReadyForExtraction"]
+    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
 
-
+    def afterInsert() {
+        Assay.withNewSession {
+            capPermissionService?.addPermission(this)
+        }
+    }
 
     List<AssayDocument> getPublications() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>
@@ -93,11 +98,13 @@ class Assay extends AbstractContextOwner {
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
+
     List<AssayDocument> getDescriptions() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
+
     List<AssayDocument> getProtocols() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL } as List<AssayDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }

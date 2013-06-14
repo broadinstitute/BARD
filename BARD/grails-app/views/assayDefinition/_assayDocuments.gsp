@@ -1,13 +1,13 @@
 <%@ page import="bard.db.registration.DocumentKind; bard.db.enums.DocumentType; bard.db.registration.AssayDocument" %>
 <section id="documents-header">
     <div class="page-header">
-        <h3>5. Documents</h3>
+        <h3>6. Documents</h3>
     </div>
 </section>
 <section id="documents-description-header">
-    <div class="page-header">
-        <h4>5.1 Descriptions</h4>
-    </div>
+
+    <h4>6.1 Descriptions</h4>
+
 
     <div class="row-fluid">
         <g:render template="addDocumentLink"
@@ -19,7 +19,7 @@
                    class="documents ${description.id}"
                    data-url="/BARD/document/editDocument"
                    data-documentType="${description.documentType.id}"
-                   data-name="${DocumentKind.AssayDocument}"  data-version="${description.version}"
+                   data-name="${DocumentKind.AssayDocument}" data-version="${description.version}"
                    data-owningEntityId="${assay.id}"
                    data-document-name="${description.documentName}" id="${description.id}">
                     <g:render template="../document/docsWithLineBreaks"
@@ -30,10 +30,10 @@
         </g:each>
     </div>
 </section>
+<br/>
 <section id="documents-protocol-header">
-    <div class="page-header">
-        <h4>5.2 Protocols</h4>
-    </div>
+    <h4>6.2 Protocols</h4>
+
 
     <div class="row-fluid">
         <g:render template="addDocumentLink"
@@ -56,10 +56,10 @@
         </g:each>
     </div>
 </section>
+<br/>
 <section id="documents-comment-header">
-    <div class="page-header">
-        <h4>5.3 Comments</h4>
-    </div>
+    <h4>6.3 Comments</h4>
+
 
     <div class="row-fluid">
         <g:render template="addDocumentLink"
@@ -67,12 +67,12 @@
 
         <g:each in="${assay.comments}" var="comment">
             <div class="borderlist">
-                <a href="#" data-type="wysihtml5"  title="Click to edit content"
+                <a href="#" data-type="wysihtml5" title="Click to edit content"
                    data-pk="${comment.id}" data-rows="60" data-inputclass="document-wysihtml5"
                    class="documents ${comment.id}"
                    data-url="/BARD/document/editDocument"
                    data-documentType="${comment.documentType.id}"
-                   data-name="${DocumentKind.AssayDocument}"  data-version="${comment.version}"
+                   data-name="${DocumentKind.AssayDocument}" data-version="${comment.version}"
                    data-owningEntityId="${assay.id}"
                    data-document-name="${comment.documentName}" id="${comment.id}">
                     <g:render template="../document/docsWithLineBreaks"
@@ -83,10 +83,9 @@
         </g:each>
     </div>
 </section>
+<br/>
 <section id="documents-publication-header">
-    <div class="page-header">
-        <h4>5.4 Publications</h4>
-    </div>
+    <h4>6.4 Publications</h4>
 
     <div class="row-fluid">
         <div class="row-fluid">
@@ -121,19 +120,18 @@
                                        data-document-name="${publication.documentName}"
                                        id="${publication.id}">
                     <g:fieldValue bean="${publication}" field="documentContent"/>
-
                 </a>
-                    <a href="${publication.documentContent}" target="publication" title="Click on globe icon to view URL">><i class="icon-globe"></i></a>
+                    <a href="${publication.documentContent}" target="publication"
+                       title="Click on globe icon to view URL"><i class="icon-globe"></i></a>
                     <g:render template="deleteDocumentForm" model="[document: publication]"/>
                 </div>
             </g:each>
         </div>
     </div>
 </section>
+<br/>
 <section id="documents-urls-header">
-    <div class="page-header">
-        <h4>5.5 External URLS</h4>
-    </div>
+    <h4>6.5 External URLS</h4>
 
     <div class="row-fluid">
         <g:render template="addDocumentLink"
@@ -166,28 +164,28 @@
                                  data-document-name="${externalURL.documentName}" id="${externalURL.id}">
                 <g:fieldValue bean="${externalURL}" field="documentContent"/>
             </a>
-                <a href="${externalURL.documentContent}" target="externalUrl" title="Click on globe icon to view URL"><i class="icon-globe"></i></a>
+                <a href="${externalURL.documentContent}" target="externalUrl" title="Click on globe icon to view URL"><i
+                        class="icon-globe"></i></a>
                 <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
             </div>
         </g:each>
     </div>
 </section>
+<br/>
 <section id="documents-other-header">
-    <div class="page-header">
-        <h4>5.6 Others</h4>
-    </div>
+    <h4>6.6 Others</h4>
 
     <div class="row-fluid">
         <g:render template="addDocumentLink"
                   model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
         <g:each in="${assay.otherDocuments}" var="otherDocument">
             <div class="borderlist">
-                <a href="#" data-type="text"  title="Click to edit text"
+                <a href="#" data-type="text" title="Click to edit text"
                    data-pk="${otherDocument.id}"
                    class="documents ${otherDocument.id}"
                    data-url="/BARD/document/editDocument"
                    data-documentType="${otherDocument.documentType.id}"
-                   data-name="${DocumentKind.AssayDocument}"  data-version="${otherDocument.version}"
+                   data-name="${DocumentKind.AssayDocument}" data-version="${otherDocument.version}"
                    data-owningEntityId="${assay.id}"
                    data-inputclass="input-xxlarge"
                    data-document-name="${otherDocument.documentName}" id="${otherDocument.id}">

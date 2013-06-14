@@ -278,8 +278,9 @@ class AssayDefinitionController {
         } else if (context == null) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
         } else {
-            flash.message = null
+
             assayContextService.associateContext(measure, context)
+            flash.message = "Measure '${measure?.displayLabel}' successfully associated to Context '${context?.contextName}'"
         }
 
         redirect(action: "editMeasure", id: params.id)
@@ -468,4 +469,5 @@ class EditingHelper {
     def editErrorMessage() {
         render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
     }
+
 }

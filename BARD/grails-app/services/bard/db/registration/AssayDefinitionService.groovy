@@ -1,25 +1,20 @@
 package bard.db.registration
 
-import bard.acl.AddPermissionsService
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import registration.AssayService
 
 class AssayDefinitionService {
-    AddPermissionsService addPermissionsService
     AssayService assayService
 
     Assay saveNewAssay(Assay assayInstance) {
-        final Assay savedAssay = assayInstance.save(flush: true)
-        if (savedAssay) {
-            addPermissionsService.addPermission(savedAssay)
-        }
-        return savedAssay
-
+        return assayInstance.save(flush: true)
     }
+
     Assay recomputeAssayShortName(Assay assay) {
         return assayService.recomputeAssayShortName(assay)
     }
+
     Assay updateAssayType(long assayId, AssayType assayType) {
         Assay assay = Assay.findById(assayId)
         assay.assayType = assayType
@@ -52,8 +47,6 @@ class AssayDefinitionService {
      * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)
      */
     Assay cloneAssayForEditing(Assay assay, String designedBy) {
-        final Assay clonedAssay = assayService.cloneAssayForEditing(assay, designedBy)
-        addPermissionsService.addPermission(clonedAssay)
-        return clonedAssay
+        return assayService.cloneAssayForEditing(assay, designedBy)
     }
 }

@@ -13,12 +13,16 @@ class Person {
     Date dateCreated = new Date()
     Date lastUpdated
     String modifiedBy
+    Role newObjectRole
+
+    static belongsTo = [newObjectRole: Role]
 
     static mapping = {
         table('PERSON')
         id(column: 'PERSON_ID', generator: "sequence", params: [sequence: 'PERSON_ID_SEQ'])
         version(false)
         userName(column: 'USERNAME')
+        newObjectRole(column: 'NEW_OBJECT_ROLE')
     }
 
     static constraints = {
@@ -28,11 +32,13 @@ class Person {
         dateCreated(nullable: false)
         lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
+        newObjectRole(nullable: true)
     }
+
     Set<Role> getRoles() {
 
         PersonRole.withTransaction {  //see http://jira.grails.org/browse/GRAILS-8450
             return PersonRole.findAllByPerson(this).collect { it.role } as Set
         }
-     }
+    }
 }

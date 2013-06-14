@@ -4,6 +4,7 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
 import bard.db.registration.*
+import org.grails.plugins.springsecurity.service.acl.AclUtilService
 
 class AssayService {
 

@@ -3,6 +3,7 @@ package dataexport.experiment
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import bard.db.experiment.Result
+import bard.db.registration.Assay
 import common.tests.XmlTestAssertions
 import dataexport.registration.BardHttpResponse
 import dataexport.util.ResetSequenceUtil
@@ -10,6 +11,7 @@ import exceptions.NotFoundException
 import grails.buildtestdata.TestDataConfigurationHolder
 import grails.plugin.spock.IntegrationSpec
 import groovy.xml.MarkupBuilder
+import org.hibernate.SessionFactory
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import spock.lang.Unroll
@@ -21,12 +23,14 @@ import static common.tests.XmlTestSamples.EXPERIMENTS_NONE_READY
 import static common.tests.XmlTestSamples.EXPERIMENTS_ONE_READY
 import static javax.servlet.http.HttpServletResponse.*
 
+
+
 @Unroll
 class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
     ExperimentExportService experimentExportService
     Writer writer
     MarkupBuilder markupBuilder
-
+    SessionFactory sessionFactory
     DataSource dataSource
     ResetSequenceUtil resetSequenceUtil
     def grailsApplication
@@ -47,8 +51,9 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test Generate Experiments #label"() {
         given:
+        Assay assay = Assay.build(capPermissionService: null)
         for (ReadyForExtraction rfe in readyForExtractionList) {
-            Experiment.build(readyForExtraction: rfe)
+            Experiment.build(readyForExtraction: rfe, capPermissionService: null, assay: assay)
         }
 
         when:
@@ -68,7 +73,8 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test update #label"() {
         given: "Given an Experiment with id #id and version #version"
-        Experiment experiment = Experiment.build(readyForExtraction: initialReadyForExtraction)
+        Assay assay = Assay.build(capPermissionService: null)
+        Experiment experiment = Experiment.build(readyForExtraction: initialReadyForExtraction, assay: assay,capPermissionService: null)
         numResults.times { Result.build(readyForExtraction: READY, experiment: experiment) }
 
         when: "We call the experiment service to update this experiment"
@@ -81,12 +87,11 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
         assert Experiment.get(experiment.id).readyForExtraction == expectedReadyForExtraction
 
         where:
-        label                  | expectedStatusCode | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
-        "Return OK and ETag 1" | SC_OK              | 1            | 0       | 0          | READY                     | COMPLETE
-//        "Return NOT_ACCEPTABLE and ETag 0"                   | SC_NOT_ACCEPTABLE      | 0            | 0       | 1          | READY                     | READY
-        "Return CONFLICT and ETag 0" | SC_CONFLICT | 0 | -1 | 0 | READY | READY
-        "Return PRECONDITION_FAILED and ETag 0" | SC_PRECONDITION_FAILED | 0 | 2 | 0 | READY | READY
-        "Return OK and ETag 0, Already completed Experiment" | SC_OK | 0 | 0 | 0 | COMPLETE | COMPLETE
+        label                                                | expectedStatusCode     | expectedETag | version | numResults | initialReadyForExtraction | expectedReadyForExtraction
+        "Return OK and ETag 1"                               | SC_OK                  | 1            | 0       | 0          | READY                     | COMPLETE
+        "Return CONFLICT and ETag 0"                         | SC_CONFLICT            | 0            | -1      | 0          | READY                     | READY
+        "Return PRECONDITION_FAILED and ETag 0"              | SC_PRECONDITION_FAILED | 0            | 2       | 0          | READY                     | READY
+        "Return OK and ETag 0, Already completed Experiment" | SC_OK                  | 0            | 0       | 0          | COMPLETE                  | COMPLETE
     }
 
     void "test update Not Found Status"() {
@@ -101,7 +106,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Experiment with id"() {
         given: "Given an Experiment"
-        final Experiment experiment = Experiment.build(readyForExtraction: READY)
+        final Experiment experiment = Experiment.build(readyForExtraction: READY,assay:Assay.build(capPermissionService:null))
 
         when: "A service call is made to generate the experiment"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment.id)
@@ -113,7 +118,7 @@ class ExperimentExportServiceIntegrationSpec extends IntegrationSpec {
 
     void "test generate and validate Experiment"() {
         given: "Given an Experiment"
-        final Experiment experiment = Experiment.build(readyForExtraction: READY)
+        final Experiment experiment = Experiment.build(readyForExtraction: READY,assay :Assay.build(capPermissionService:null))
 
         when: "A service call is made to generate the experiment"
         this.experimentExportService.generateExperiment(this.markupBuilder, experiment)
