@@ -447,16 +447,13 @@
                                 .size(20)
                                 .columns([
                                     function (d) {
-                                        return d.index;
-                                    },
-                                    function (d) {
-                                        return d.assayId;
-                                    },
-                                    function (d) {
                                         return d.GO_biological_process_term;
                                     },
                                     function (d) {
                                         return d.assay_format;
+                                    },
+                                    function (d) {
+                                        return d.protein_target;
                                     },
                                     function (d) {
                                         return d.assay_type;
@@ -464,7 +461,7 @@
                                 ])
                                 .order(d3.ascending)
                                 .sortBy(function (d) {
-                                    return d.assayId;
+                                    return d.GO_biological_process_term;
                                 });
                     },
 
@@ -1014,14 +1011,13 @@
 
 %{--</script>--}%
 
-<table id="data-table" class="table table-hover dc-data-table"  style="position:absolute; left: 10px; top: 300px;">
+<table id="data-table" class="table table-hover dc-data-table"  style="position:absolute; left: 0px; top: 300px;">
     <thead>
     <tr class="header">
-        <th class="data-table-th">Index</th>
-        <th class="data-table-th">Assay</th>
-        <th class="data-table-th">Biological process</th>
-        <th class="data-table-th">Assay format</th>
-        <th class="data-table-th">Assay type</th>
+        <th style='width: 25%' class="data-table-th">Biological process</th>
+        <th style='width: 25%' class="data-table-th">Assay format</th>
+        <th style='width: 25%' class="data-table-th">Proteins target</th>
+        <th style='width: 25%' class="data-table-th">Assay type</th>
     </tr>
     </thead>
 </table>
