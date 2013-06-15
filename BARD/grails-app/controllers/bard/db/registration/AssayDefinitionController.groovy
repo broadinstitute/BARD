@@ -214,9 +214,8 @@ class AssayDefinitionController {
         final String parentChildRelationship = params.relationship
         HierarchyType hierarchyType = null
 
-
         if (!resultType) {
-            flash.message = 'Result Type is Required'
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Result Type is Required!'
         } else {
             def parentMeasure = null
             if (params.parentMeasureId) {
@@ -224,7 +223,8 @@ class AssayDefinitionController {
             }
             //if there is a parent measure then there must be a selected relationship
             if (parentMeasure && (StringUtils.isBlank(parentChildRelationship) || "null".equals(parentChildRelationship))) {
-                flash.message = 'Relationship to Parent is required!'
+                render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Relationship to Parent is required!'
+                return
             } else {
                 if (StringUtils.isNotBlank(parentChildRelationship)) {
                     hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
@@ -241,11 +241,10 @@ class AssayDefinitionController {
                 }
 
                 Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-                flash.message = "Successfully added measure " + newMeasure.displayLabel
-            }
+                render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
 
+            }
         }
-        redirect(action: "editMeasure", id: params.id)
     }
 
     def disassociateContext() {

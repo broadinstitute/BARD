@@ -142,7 +142,7 @@ class ProjectController {
     }
 
     def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
-        if(fromExperimentId == null && toExperimentId==null){
+        if(fromExperimentId == null || toExperimentId==null){
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
             return
         }
