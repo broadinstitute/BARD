@@ -26,46 +26,60 @@ $(document).ready(function () {
         }
     }
 
-    $("#attributeElementId").select2({
-        minimumInputLength: 1,
-        allowClear: true,
-        placeholder: "Search for attribute name",
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            if (id !== "") {
-                $.ajax("/BARD/ontologyJSon/getElement", {
-                    data: {
-                        id: id
-                    },
-                    dataType: "json"
-                }).done(function (data) {
-                        callback(data);
-                        onlyShowWidgetsForExpectedValueType(data);
-                    });
-            }
-        },
-        ajax: {
-            url: "/BARD/ontologyJSon/getDescriptors",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term) {
-                return { term: term};
+    $.ajax("/BARD/ontologyJSon/getAttributeDescriptors").done(function (data) {
+        initializeAttributeSelect2(data);
+    });
+
+
+    function initializeAttributeSelect2(backingData){
+        $("#attributeElementId").select2({
+            placeholder: "Search for attribute name",
+            allowClear: true,
+            initSelection: function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("/BARD/ontologyJSon/getElement", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                            callback(data);
+                            onlyShowWidgetsForExpectedValueType(data);
+                        });
+                }
             },
-            results: function (data) {
-                return data;
+            data:backingData,
+            formatResult: function(result, container, query) {
+                var markup=[];
+                window.Select2.util.markMatch(result.fullPath, query.term, markup);
+                return markup.join("");
+            },
+            query: function (query) {
+                var filteredData = {results: []};
+                $.each(backingData.results, function(index, value){
+                    if(value.fullPath.toUpperCase().indexOf(query.term.toUpperCase())>=0){
+                        filteredData.results.push(value);
+                    }
+                });
+                query.callback(filteredData);
             }
-        }
-    }).on("change", function (e) {
+        });
+        $("#attributeElementId").on("change", function (e) {
             // on change of the attribute, clear all value fields
             clearAllValueFields();
             // hide any existing error messages, will be redisplayed when user submits with new attribute
             hideAnyErrorMessages();
             // based on the attribute selected only show the appropriate value widgets
-            var data = $("#attributeElementId").select2("data");
-            onlyShowWidgetsForExpectedValueType(data);
+            var selectedData = $("#attributeElementId").select2("data");
+            onlyShowWidgetsForExpectedValueType(selectedData);
         });
+        initialFocus();
+    }
+    initializeAttributeSelect2({results:[]});
 
-    initialFocus();
+
+//    initialFocus();
 
     function clearAllValueFields() {
         $(':text').val("");
@@ -94,7 +108,11 @@ $(document).ready(function () {
 
         }
         else if ('ELEMENT' === expectedValueType) {
-            $('#elementValueContainer').show();
+            $.ajax("/BARD/ontologyJSon/getValueDescriptorsV2",{
+                data : {attributeId : data.id}
+            }).done(function (valueData) {
+                initializeValueElementSelect2(valueData);
+            });
             potentiallyFocus("#valueElementId");
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
@@ -128,35 +146,43 @@ $(document).ready(function () {
         $("#externalOntologyInfo").html(html);
     }
 
-
-    $("#valueElementId").select2({
-        minimumInputLength: 1,
-        allowClear: true,
-        placeholder: "Search for value",
-        ajax: {
-            url: "/BARD/ontologyJSon/getValueDescriptors",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term) {
-                return { term: term,
-                    attributeId: $("#attributeElementId").val()
-                };
+    function initializeValueElementSelect2(backingData){
+        $("#valueElementId").select2({
+            allowClear: true,
+            placeholder: "Search for value",
+            data: backingData,
+            initSelection: function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("/BARD/ontologyJSon/getElement", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) { callback(data); });
+                }
             },
-            results: function (data) {
-                var selectData = {results: []}
-                $.each(data, function (index, val) {
-                    selectData.results.push({id: val.elementId, text: val.label})
+            formatResult: function(result, container, query) {
+                var markup=[];
+                window.Select2.util.markMatch(result.fullPath, query.term, markup);
+                return markup.join("");
+            },
+            query: function (query) {
+                var filteredData = {results: []};
+                $.each(backingData.results, function(index, value){
+                    if(value.fullPath.toUpperCase().indexOf(query.term.toUpperCase())>=0){
+                        filteredData.results.push(value);
+                    }
                 });
-                return selectData;
+                query.callback(filteredData);
             }
-        }
-    }).on("change", function (e) {
-            $("#valueDisplay").val($("#valueElementId").select2("data").text);
-            $('button.btn-primary').focus();
-        });
-    if ($("#valueElementId").val()) {
-        $("#valueElementId").select2("data", {id: $("#valueElementId").val(), text: $("#valueElementText").val()});
+        }).on("change", function (e) {
+                $("#valueDisplay").val($("#valueElementId").select2("data").text);
+                $('button.btn-primary').focus();
+            });
+        $('#elementValueContainer').show();
     }
+
 
     $("#extValueSearch").select2({
         minimumInputLength: 1,

@@ -57,20 +57,20 @@ class OntologyJSonController {
      * @return List of elements to be used as attributes for ContextItems
      */
     def getAttributeDescriptors() {
-        if (params?.term) {
-            List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
-            List<Map> attributes = descriptors.collect { Descriptor descriptor ->
-                asMapForSelect2(descriptor)
-            }
-            Map map = ['results': attributes]
-            render map as JSON
+
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+        List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+            asMapForSelect2(descriptor)
         }
+        Map map = ['results': attributes]
+        render map as JSON
+
     }
 
     private Map asMapForSelect2(Element element) {
         boolean hasIntegratedSearch = false;
         if (StringUtils.isNotBlank(element.externalURL)) {
-            hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
+            hasIntegratedSearch = true//ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
         }
         [
                 "id": element.id,
@@ -85,10 +85,10 @@ class OntologyJSonController {
     private Map asMapForSelect2(Descriptor descriptor) {
         boolean hasIntegratedSearch = false;
         if (StringUtils.isNotBlank(descriptor.externalURL)) {
-            hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(descriptor.externalURL)
+            hasIntegratedSearch = true // ontologyDataAccessService.externalOntologyHasIntegratedSearch(descriptor.externalURL)
         }
         Map map = asMapForSelect2(descriptor.element)
-        map.put('text', descriptor.fullPath)
+        map.put('fullPath', descriptor.fullPath)
         return map
     }
 
@@ -115,7 +115,7 @@ class OntologyJSonController {
         if (params?.attributeId) {
             List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(params.attributeId.toLong())
             List<Map> values = descriptors.collect{   Descriptor descriptor->
-                [id: descriptor.element.id, text: descriptor.fullPath]
+                asMapForSelect2(descriptor)
             }
             Map map = ['results': values]
             render map as JSON
