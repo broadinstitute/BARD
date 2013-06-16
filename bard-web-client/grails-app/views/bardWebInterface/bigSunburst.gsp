@@ -15,7 +15,8 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
     <style>
     body{
-        width: 1400px;
+        margin: 0 auto;
+        max-width: 1400px;
     }
 
     .pieChart{
@@ -77,13 +78,11 @@
         outline: 0 none;
         list-style: none;
         border-spacing: 0px;
-
         border-bottom: 1px solid #6C6C6C;
         font-family: 'Open Sans';
-        font-size: 16px;
-        font-style: bold;
-        height: 50px;
-        padding: 15px 5px 10px;
+        font-size: 18px;
+        font-weight: bold;
+        max-height: 20px;
         width: 97px;
     }
 
@@ -95,18 +94,27 @@
         background: #FFF;
     }
 
+
     table#data-table tr:hover {
         background-color: #a3a3a3;
     }
 
     table{
         clear: both;
-        width: 97%;
+        /*display: block;*/
+        display: table;
+        min-width: 100%;
+        max-width: 1100px;
         font-family: 'Cabin';
         font-size: 14pt;
         border: 1px solid #6C6C6C;
-        margin: 15px;
+        margin-top: 20px;
+        margin-left: 10px;
         border-spacing: 0px;
+    }
+    table#data-table tr:first-child td {
+        height: 0;
+        padding: 0;
     }
     .expandButton{
         float: right;
@@ -234,7 +242,7 @@
     var linkedVisualizationModule = (function () {
         //
         //  Variables to describe the layout of the whole page, with special attention
-        //   to the unexpended widgets
+        //   to the unexpanded widgets
         //
         var grandWidth = 1052,// width of the entire display
                 totalWidgetNumber = 4, // how many widgets are we dealing with
@@ -307,6 +315,9 @@
                     {'x': (widgetWidth * 1) + (quarterWidgetWidth * 2), 'y': 10},
                     {'x': (widgetWidth * 2) + (quarterWidgetWidth * 3), 'y': 10}
                 ],
+
+        //  dc vars
+        maximumRowsInTable = 150,
 
 
         //-------widgetPosition------
@@ -410,60 +421,76 @@
                     orphanedTooltips.style('opacity', 0);
                 }
             },
+
+            // convenience routine for adding a pie chart
             addPieChart = function (crossFilterVariable, id, key, colors, localPieChartWidth, localPieChartRadius, localInnerRadius) {
-                        var dimensionVariable = crossFilterVariable.dimension(function (d) {
+                var dimensionVariable = crossFilterVariable.dimension(function (d) {
+                    return d[key];
+                }),
+                dimensionVariableGroup = dimensionVariable.group().reduceSum(function (d) {
+                    return 1;
+                }),
+                displayDataGroup = function (d) {
+                    var returnValue =  d.data.key.toString() + " (" + d.data.value+")";
+                    returnValue = returnValue.replace("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", "[GO]");
+                    returnValue = returnValue.replace("http://www.ncbi.nlm.nih.gov/gquery/?term=", "[NCBI]");
+                    return returnValue;
+                };
+
+
+                return dc.pieChart("#" + id)
+                        .width(localPieChartWidth)
+                        .height(localPieChartWidth)
+                        .transitionDuration(200)
+                        .radius(localPieChartRadius)
+                        .innerRadius(localInnerRadius)
+                        .dimension(dimensionVariable)
+                        .group(dimensionVariableGroup)
+                        .colors(colors)
+                        .label(displayDataGroup);
+            },
+
+
+            addDcTable = function (crossFilterVariable, id, key) {
+                var dimensionVariable = crossFilterVariable.dimension(function (d) {
                             return d[key];
+                        }),
+                dimensionVariableGroup = function (d) {
+                    return "";
+                },
+                dimensionVariableGroupTotal = function (d) {
+                        return dimensionVariable.groupAll();
+                } ;
+
+                var theTable = dc.dataTable("#" + id)
+                        .dimension(dimensionVariable)
+                        .group(dimensionVariableGroup)
+                        .size(maximumRowsInTable)
+                        .columns([
+                            function (d) {
+                                return d.GO_biological_process_term;
+                            },
+                            function (d) {
+                                return d.assay_format;
+                            },
+                            function (d) {
+                                return d.protein_target;
+                            },
+                            function (d) {
+                                return d.assay_type;
+                            }
+                        ])
+                        .order(d3.ascending)
+                        .sortBy(function (d) {
+                            return d.GO_biological_process_term;
                         });
-                        var dimensionVariableGroup = dimensionVariable.group().reduceSum(function (d) {
-                            return 1;
-                        });
+//                        This datecount  function below doesn't seem to work for me. What's wrong?
+//                        dc.dataCount("#data-count")
+//                                .dimension(dimensionVariable)
+//                                .group(dimensionVariableGroupTotal);
 
-                        return dc.pieChart("#" + id)
-                                .width(localPieChartWidth)
-                                .height(localPieChartWidth)
-                                .transitionDuration(200)
-                                .radius(localPieChartRadius)
-                                .innerRadius(localInnerRadius)
-                                .dimension(dimensionVariable)
-                                .group(dimensionVariableGroup)
-                                .colors(colors)
-                                .label(function (d) {
-                                    return d.data.key.toString() + ": " + d.data.value;
-                                });
-                    },
-
-
-                    addDcTable = function (crossFilterVariable, id, key) {
-                        var dimensionVariable = crossFilterVariable.dimension(function (d) {
-                                    return d[key];
-                                }),
-                                dimensionVariableGroup = function (d) {
-                                    return "";
-                                };
-
-                        return dc.dataTable("#" + id)
-                                .dimension(dimensionVariable)
-                                .group(dimensionVariableGroup)
-                                .size(20)
-                                .columns([
-                                    function (d) {
-                                        return d.GO_biological_process_term;
-                                    },
-                                    function (d) {
-                                        return d.assay_format;
-                                    },
-                                    function (d) {
-                                        return d.protein_target;
-                                    },
-                                    function (d) {
-                                        return d.assay_type;
-                                    }
-                                ])
-                                .order(d3.ascending)
-                                .sortBy(function (d) {
-                                    return d.GO_biological_process_term;
-                                });
-                    },
+                return  theTable;
+            },
 
 
                     expandDataAreaForAllPieCharts = function (pieChartHolderElement) {
@@ -999,12 +1026,14 @@
     </div>
 
 
-
+     %{--I will leave off the following section until I can figure out how to make data count work--}%
+    %{--<div id="data-count">--}%
+        %{--<span class="filter-count"></span> selected out of <span class="total-count"></span> records--}%
+    %{--</div>--}%
 
 
 
 </div>
-
 
 
 
