@@ -76,29 +76,29 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
     }
 
     void "test readyForExtraction constraints #desc readyForExtraction: '#valueUnderTest'"() {
-            final String field = 'readyForExtraction'
+        final String field = 'readyForExtraction'
 
-            when: 'a value is set for the field under test'
-            domainInstance[(field)] = valueUnderTest
-            domainInstance.validate()
+        when: 'a value is set for the field under test'
+        domainInstance[(field)] = valueUnderTest
+        domainInstance.validate()
 
-            then: 'verify valid or invalid for expected reason'
-            assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
+        then: 'verify valid or invalid for expected reason'
+        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
-            and: 'verify the domain can be persisted to the db'
-            if (valid) {
-                domainInstance == domainInstance.save(flush: true)
-            }
-
-            where:
-            desc             | valueUnderTest               | valid | errorCode
-            'null not valid' | null                         | false | 'nullable'
-
-            'valid value'    | ReadyForExtraction.NOT_READY | true  | null
-            'valid value'    | ReadyForExtraction.READY     | true  | null
-            'valid value'    | ReadyForExtraction.STARTED   | true  | null
-            'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
+        and: 'verify the domain can be persisted to the db'
+        if (valid) {
+            domainInstance == domainInstance.save(flush: true)
         }
+
+        where:
+        desc             | valueUnderTest               | valid | errorCode
+        'null not valid' | null                         | false | 'nullable'
+
+        'valid value'    | ReadyForExtraction.NOT_READY | true  | null
+        'valid value'    | ReadyForExtraction.READY     | true  | null
+        'valid value'    | ReadyForExtraction.STARTED   | true  | null
+        'valid value'    | ReadyForExtraction.COMPLETE  | true  | null
+    }
 
     void "test runDateFrom constraints #desc runDateFrom: '#valueUnderTest'"() {
         final String field = 'runDateFrom'
@@ -251,8 +251,8 @@ class ExperimentConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc         | valueUnderTest | valid | errorCode
-        'null valid' | null           | true  | null
-        'date valid' | new Date()     | true  | null
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'date valid'     | new Date()     | true  | null
     }
 }

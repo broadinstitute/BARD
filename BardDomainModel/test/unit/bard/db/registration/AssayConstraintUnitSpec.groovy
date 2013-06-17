@@ -275,9 +275,9 @@ class AssayConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc         | valueUnderTest | valid | errorCode
-        'null valid' | null           | true  | null
-        'date valid' | new Date()     | true  | null
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'date valid'     | new Date()     | true  | null
     }
 
     void "test getChildrenSorted by displayLabel case insensitive input:#input expected: #expected"() {
