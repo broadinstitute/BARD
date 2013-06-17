@@ -339,24 +339,6 @@ class AssayDefinitionController {
         }
     }
 
-    def addItemToCardAfterItem(Long src_assay_context_item_id, Long target_assay_context_item_id) {
-        AssayContextItem target = AssayContextItem.findById(target_assay_context_item_id)
-        AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
-        AssayContext targetAssayContext = target.assayContext
-        int index = targetAssayContext.assayContextItems.indexOf(target)
-        assayContextService.addItem(index, source, targetAssayContext)
-        Assay assay = targetAssayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
-    def addItemToCard(Long src_assay_context_item_id, Long target_assay_context_id) {
-        AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
-        AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
-        assayContextService.addItem(source, targetAssayContext)
-        Assay assay = targetAssayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
     def reloadCardHolder(Long assayId) {
         def assay = Assay.get(assayId)
         if (assay) {
@@ -371,17 +353,6 @@ class AssayDefinitionController {
         def assayContextItem = AssayContextItem.get(assayContextItemId)
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
     }
-
-    def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel) {
-        def assayContextItem = AssayContextItem.get(assayContextItemId)
-        assayContextItem.valueNum = numericValue.toFloat().floatValue()
-        if (valueUnitLabel)
-            assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
-        assayContextItem.save()
-        Assay assay = assayContextItem.assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
 
     def updateCardName(String edit_card_name, Long contextId) {
         AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
