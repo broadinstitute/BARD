@@ -20,10 +20,10 @@ class ContextService {
         context.delete()
     }
 
-    public void updateContextName(AssayContext targetAssayContext, AssayContextItem sourceAssayContextItem) {
-        if (targetAssayContext && targetAssayContext == sourceAssayContextItem.assayContext) {
-            targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
-        }
-    }
+//    public void updateContextName(AssayContext targetAssayContext, AssayContextItem sourceAssayContextItem) {
+//        if (targetAssayContext && targetAssayContext == sourceAssayContextItem.assayContext) {
+//            targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
+//        }
+//    }
 
 }
