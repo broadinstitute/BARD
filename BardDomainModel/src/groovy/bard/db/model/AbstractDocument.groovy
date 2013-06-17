@@ -24,7 +24,7 @@ abstract class AbstractDocument {
     DocumentType documentType
     String documentContent
     Date dateCreated = new Date()
-    Date lastUpdated
+    Date lastUpdated = new Date()
     String modifiedBy
 
     static constraints = {
@@ -32,7 +32,7 @@ abstract class AbstractDocument {
         documentType(nullable:true, maxSize: DOCUMENT_TYPE_MAX_SIZE)
         documentContent(nullable: true, blank: false, validator: {val, self, errors-> validContentUrl(val,self,errors)})
         dateCreated(nullable: false)
-        lastUpdated(nullable: true)
+        lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
