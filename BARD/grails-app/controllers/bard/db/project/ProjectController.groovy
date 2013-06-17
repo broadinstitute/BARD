@@ -142,15 +142,21 @@ class ProjectController {
     }
 
     def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
+        if(fromExperimentId == null || toExperimentId==null){
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
+            return
+        }
         def project = Project.findById(projectId)
         def fromExperiment = Experiment.findById(fromExperimentId)
         def toExperiment = Experiment.findById(toExperimentId)
+
         try {
             projectService.linkExperiment(fromExperiment, toExperiment, project)
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (UserFixableException e) {
-            render 'serviceError:' + e.message
+            log.error(e)
+            render status:HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: 'An internal server error has occurred. Please notify the BARD team'
         }
     }
 
@@ -167,16 +173,22 @@ class ProjectController {
         param1.each {
             selectedExperiments.add(it)
         }
-
-        try {
-            selectedExperiments.each { String experimentDisplayName ->
-                def experimentId = experimentDisplayName.split("-")[0]
-                def experiment = Experiment.findById(experimentId)
-                projectService.addExperimentToProject(experiment, project, element)
-                render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        if (selectedExperiments.isEmpty()) {
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Experiment must be selected'
+        } else {
+            try {
+                selectedExperiments?.each { String experimentDisplayName ->
+                    def experimentId = experimentDisplayName.split("-")[0]
+                    def experiment = Experiment.findById(experimentId)
+                    projectService.addExperimentToProject(experiment, project, element)
+                    render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+                }
+            } catch (UserFixableException e) {
+                render 'serviceError:' + e.message
+            } catch (Exception ee) {
+                log.error(ee)
+                render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "Server error occurred."
             }
-        } catch (UserFixableException e) {
-            render 'serviceError:' + e.message
         }
     }
 

@@ -270,7 +270,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         params.id = assay.id
         params.resultTypeId = resultType.id
         params.statisticId = statistic.id
-
+        Measure newMeasure = Measure.build()
         def assayContextService = mockFor(AssayContextService)
         assayContextService.demand.addMeasure(1) { assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
             assert assayInstance == assay
@@ -280,14 +280,14 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
             assert entryUnit == null
             assert hierarchyType == null
 
-            return Measure.build()
+            return newMeasure
         }
         controller.setAssayContextService(assayContextService.createMock())
         controller.addMeasure()
 
         then:
-        response.redirectedUrl == '/assayDefinition/editMeasure/' + assay.id
-
+        assert response.text == "Successfully added measure ${newMeasure.displayLabel}"
+        assert response.status == HttpServletResponse.SC_OK
         when:
         assayContextService.verify()
 
@@ -295,6 +295,16 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         notThrown(Exception.class)
     }
 
+    void 'test add measure Fail'() {
+        when:
+        params.id = assay.id
+        controller.addMeasure()
+
+        then:
+        assert response.text == "Result Type is Required!"
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+
+     }
 
     void 'test delete measure with #desc'() {
         when:
