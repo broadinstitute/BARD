@@ -29,6 +29,8 @@ public interface AssayAdapterInterface {
 
     public AssayCategory getCategory()
 
+    public String getLastUpdatedDate()
+
     public String getDescription()
 
     public Long getId()

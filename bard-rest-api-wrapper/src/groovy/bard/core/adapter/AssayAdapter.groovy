@@ -84,6 +84,10 @@ public class AssayAdapter implements AssayAdapterInterface {
         return AssayCategory.valueOf(assay.category.intValue())
     }
 
+    public String getLastUpdatedDate() {
+        return assay.updated
+    }
+
     public String getDescription() {
         return assay.description
     }
