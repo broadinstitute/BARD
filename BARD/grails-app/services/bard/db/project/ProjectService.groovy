@@ -5,6 +5,8 @@ import bard.db.experiment.Experiment
 import bard.db.dictionary.Element
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
 
 class ProjectService {
     Project updateProjectStatus(Long projectId, ProjectStatus newProjectStatus){

@@ -1,10 +1,9 @@
-<%@ page import="bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assaycards,select2,addItem"/>
+    <r:require modules="core,bootstrap,select2,card,bootstrapplus"/>
     <meta name="layout" content="basic"/>
-    <title>Edit Assay Context</title>
+    <title>Edit ${assayInstance?.getDomainClass()?.getNaturalName()} Context</title>
 </head>
 
 <body>
@@ -12,22 +11,16 @@
     <div class="span12">
         <div class="well well-small">
             <div class="pull-left">
-                <h4>Edit Assay Context (ADID: ${assayInstance?.id})</h4>
+                <h4>Edit ${assayInstance?.getDomainClass()?.getNaturalName()} (${assayInstance?.id}) Contexts </h4>
             </div>
             <g:if test="${assayInstance?.id}">
                 <div class="pull-right">
                     <g:link action="show" id="${assayInstance?.id}"
                             class="btn btn-small btn-primary">Finish Editing</g:link>
-                    %{--<g:link action="show" id="${assayInstance?.id}" class="btn btn-small">Cancel</g:link>--}%
                 </div>
             </g:if>
         </div>
     </div>
-</div>
-
-<div class="alert">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
 </div>
 
 <g:if test="${flash.message}">
@@ -48,8 +41,6 @@
         <div class="row-fluid">
             <div id="accordion-foo" class="span12 accordion">
 
-
-
                 <div class="accordion-group">
                     <div class="accordion-heading">
                         <a href="#contexts-header" id="contexts-header" class="accordion-toggle" data-toggle="collapse"
@@ -60,10 +51,10 @@
                     </div>
 
                     <div id="target-contexts-info" class="accordion-body in collapse">
-                            <div class="accordion-inner">
-                                <g:render template="../context/edit"
-                                          model="[contextOwner: assayInstance, contexts: assayInstance.groupContexts()]"/>
-                            </div>
+                        <div class="accordion-inner">
+                            <g:render template="../context/edit"
+                                      model="[contextOwner: assayInstance, contexts: assayInstance?.groupContexts()]"/>
+                        </div>
                     </div>
                 </div>
 

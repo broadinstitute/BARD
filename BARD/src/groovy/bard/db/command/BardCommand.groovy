@@ -21,7 +21,7 @@ abstract class BardCommand {
             localErrors.reject('default.not.found.message', [domain, id] as Object[], 'not found')
             addToErrors(localErrors)
         }
-        instance
+        return instance
     }
 
     boolean attemptSave(Object domain) {

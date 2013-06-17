@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -26,6 +27,7 @@ class AssayDefinitionController {
     SpringSecurityService springSecurityService
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
+    ContextService contextService
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -366,36 +368,6 @@ class AssayDefinitionController {
         }
     }
 
-
-    def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
-        AssayContextItem sourceAssayContextItem = AssayContextItem.findById(src_assay_context_item_id)
-        AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
-        assayContextService.updateContextName(targetAssayContext, sourceAssayContextItem)
-        render(template: "/context/list", model: [contextOwner: targetAssayContext, contexts: targetAssayContext.groupContexts(), subTemplate: 'edit'])
-    }
-
-
-    def deleteItemFromCard(Long assay_context_item_id) {
-
-        final AssayContextItem assayContextItem = AssayContextItem.get(assay_context_item_id)
-        if (assayContextItem) {
-            AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
-            if (assayContext) {
-                Assay assay = assayContext.assay
-                render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-                return
-            }
-            render(status: HttpServletResponse.SC_PRECONDITION_FAILED, text: message(code: 'assayContextItem.label.cannotdelete'), contentType: 'text/plain', template: null)
-        }
-    }
-
-    def deleteEmptyCard(Long assay_context_id) {
-        AssayContext assayContext = AssayContext.findById(assay_context_id)
-        Assay assay = assayContext.assay
-        assayContextService.deleteAssayContext(assayContext)
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
     def launchEditItemInCard(Long assayContextId, Long assayContextItemId) {
         def assayContextItem = AssayContextItem.get(assayContextItemId)
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
@@ -411,14 +383,6 @@ class AssayDefinitionController {
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
-    def createCard(Long instanceId, String cardName, String cardSection) {
-        if (instanceId == null) {
-            throw new RuntimeException("bad instance")
-        }
-        AssayContext assayContext = assayContextService.createCard(instanceId, cardName, cardSection)
-        Assay assay = assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
 
     def updateCardName(String edit_card_name, Long contextId) {
         AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)

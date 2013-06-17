@@ -12,7 +12,7 @@
     <div class="span12">
         <div class="well well-small">
             <div class="pull-left">
-                <h4>Edit ${instance?.getDomainClass()?.getNaturalName()} Context: ${instance?.id})</h4>
+                <h4>Edit ${instance?.getDomainClass()?.getNaturalName()} (${instance?.id}) Context</h4>
             </div>
             <g:if test="${instance?.id}">
                 <div class="pull-right">
@@ -22,11 +22,6 @@
             </g:if>
         </div>
     </div>
-</div>
-
-<div class="alert">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <strong>Tips:</strong> Edits will be saved immediately. You can drag items within cards to other cards, or use menus on individual cards to move items.
 </div>
 
 <g:if test="${flash.message}">

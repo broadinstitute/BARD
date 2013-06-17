@@ -47,10 +47,6 @@ class AssayContextService {
      * @param assayContext
      */
     public void deleteAssayContext(AssayContext assayContext) {
-        Assay assay = assayContext.assay
-        if (assayContext.assayContextItems.isEmpty()) {
-            assay.removeFromAssayContexts(assayContext)
-        }
     }
 
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
@@ -67,11 +63,6 @@ class AssayContextService {
         return targetAssayContext
     }
 
-    public void updateContextName(AssayContext targetAssayContext, AssayContextItem sourceAssayContextItem) {
-        if (targetAssayContext && targetAssayContext == sourceAssayContextItem.assayContext) {
-            targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
-        }
-    }
 
     public AssayContext deleteItem(AssayContextItem assayContextItem) {
 

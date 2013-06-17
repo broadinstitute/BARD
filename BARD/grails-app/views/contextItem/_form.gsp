@@ -6,7 +6,7 @@
 </div>
 <g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>
 
-<g:form class="form-horizontal" action="edit">
+<g:form class="form-horizontal" action="${action.toLowerCase()}">
     <g:hiddenField name="contextOwnerId" value="${instance?.contextOwnerId}"/>
     <g:hiddenField name="contextId" value="${instance?.contextId}"/>
     <g:hiddenField name="contextClass" value="${instance?.contextClass}"/>
@@ -176,16 +176,16 @@
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"
                         fragment="card-${instance?.contextId}" class="btn">Back to Context</g:link>
-                <button type="submit" name="_action_edit" class="btn">Edit</button>
-                <button type="submit" name="_action_create"
-                        class="btn btn-primary focus">Add Another Item</button>
+
+                <g:set var="contextItemParams" value="${[contextItemId: instance.contextItemId, contextId: instance?.contextId, contextClass: instance?.context.simpleClassName, contextOwnerId: instance?.contextOwnerId]}"></g:set>
+                <g:link action="edit" class="btn" params="${contextItemParams}">Edit</g:link>
+                <g:link action="create" class="btn btn-primary focus" params="${contextItemParams}">Add Another Item</g:link>
             </g:if>
             <g:else>
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"
                         fragment="card-${instance?.contextId}" class="btn">Cancel</g:link>
-                <button type="submit" name="_action_${action.toLowerCase()}"
-                        class="btn btn-primary">${action}</button>
+                <button type="submit" class="btn btn-primary">${action}</button>
 
             </g:else>
         </div>

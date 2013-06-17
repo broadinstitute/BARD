@@ -1,3 +1,4 @@
+<%@ page import="bard.db.registration.Assay" %>
 <%--
   Created by IntelliJ IDEA.
   User: xiaorong
@@ -8,7 +9,7 @@
 
 
 <%-- A template for both project and assay def --%>
-
+<r:require modules="assaycards"/>
 <div id="cardView" class="cardView" class="row-fluid">
 
     <div class="row-fluid">
@@ -19,75 +20,37 @@
         registerAddNewCardButtons()
     </r:script>
 
-    <g:if test="${contextOwner instanceof  bard.db.registration.Assay}">
+    <div id="dialog_new_card">
+        <form id="new_card_form" class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="new_card_name">Name:</label>
 
-        <div id="dialog_new_card">
-            <form id="new_card_form" class="form-horizontal">
-                <div class="control-group">
-                    <label class="control-label" for="edit_card_name">Name:</label>
-
-                    <div class="controls">
-                        <input type="text" id="new_card_name" name="cardName" placeholder="Enter Card Name">
-                    </div>
+                <div class="controls">
+                    <input type="text" id="new_card_name" name="cardName" placeholder="Enter Card Name">
                 </div>
-                <input type="hidden" id="new_card_section" name="cardSection" value=""/>
-                <input type="hidden" name="instanceId" value="${contextOwner.id}"/>
-            </form>
-        </div>
+            </div>
+            <input type="hidden" id="new_card_section" name="cardSection" value=""/>
+            <input type="hidden" name="ownerId" value="${contextOwner.id}"/>
+            <input type="hidden" name="contextClass" value="${contextOwner instanceof Assay ? 'AssayContext' : 'ProjectContext'}"/>
+        </form>
+    </div>
 
+    <div id="dialog_move_item"></div>
 
+    <div id="dialog_edit_card_item"></div>
 
-        <div id="dialog_edit_card">
-            <form id="edit_card_form" class="form-horizontal">
-                <div class="control-group">
-                    <label class="control-label" for="edit_card_name">Name:</label>
+    <div id="dialog_confirm_delete_item">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+            This item will be permanently deleted and cannot be recovered. Are you sure?
+        </p>
+    </div>
 
-                    <div class="controls">
-                        <input type="text" id="edit_card_name" name="edit_card_name" placeholder="Enter Card Name">
-                    </div>
-                </div>
-                <input type="hidden" id="contextId" name="contextId" value=""/>
-                <input type="hidden" id="instanceId" name="instanceId" value="${contextOwner.id}"/>
-            </form>
-        </div>
-        <div id="dialog_move_card">
-            <form id="move_card_form" class="form-horizontal">
-                <div class="control-group">
-                    <label class="control-label" for="context_group">New group:</label>
+    <div id="dialog_confirm_delete_card">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+            This card will be permanently deleted and cannot be recovered. Are you sure?
+        </p>
+    </div>
 
-                    <div class="controls">
-                        <g:select id="context_group" name="context_group"  placeholder="Move card to new group"
-                                  from="${bard.db.registration.Assay.groupContextKeys()}"/>
-                     </div>
-                </div>
-                <input type="hidden" id="contextMoveId" name="contextMoveId" value=""/>
-             </form>
-        </div>
-        <div id="dialog_move_item"></div>
-        
-        <div id="dialog_edit_card_item"></div>
-
-        <div id="dialog_confirm_delete_item">
-            <p>
-                <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-                This item will be permanently deleted and cannot be recovered. Are you sure?
-            </p>
-        </div>
-
-        <div id="dialog_confirm_delete_card">
-            <p>
-                <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-                This card will be permanently deleted and cannot be recovered. Are you sure?
-            </p>
-        </div>
-
-        <div id="dialog_add_item_wizard"></div>
-
-        <div id="dialog_add_item_wizard_confirm_cancel">
-            <p>
-                <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
-                Are you sure you want to cancel the Add Item Wizard?
-            </p>
-        </div>
-    </g:if>
 </div>

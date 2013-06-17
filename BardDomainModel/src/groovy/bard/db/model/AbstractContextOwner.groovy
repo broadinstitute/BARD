@@ -19,25 +19,11 @@ abstract class AbstractContextOwner {
         String description;
         List<AbstractContext> value;
     }
-    static Map<String, String> groupDesc = [
-            "assay protocol> assay component>": "",
-            "assay protocol> assay design>": "", // Assay method, detection method.  Kind of an overlap with assay readout
-            "assay protocol> assay format>": "",  // tiny number of values.  One card at most under this.
-            "assay protocol> assay readout>": "",
-            "assay protocol> assay type>": "", // relatively small list
-            "biology> molecular interaction>": "",
-            "biology>": "",
-            "result type> item count>": "",
-            "project management> project information>": "",
-            "project management> experiment>": "",
-            "unclassified>": ""
-    ]
-    /**
-     * Just return the keys for the map
-     * @return
-     */
-    static List<String> groupContextKeys() {
-        return new ArrayList<String>(groupDesc.keySet())
+
+    abstract Map<String,String> getGroupDesc();
+
+    List<String> groupContextKeys(){
+       return new ArrayList<String>(groupDesc.keySet())
     }
 
     ContextGroup groupUnclassified() {
@@ -150,6 +136,7 @@ abstract class AbstractContextOwner {
         }
         return null
     }
+
     /**
      * Create a map where all the assayContexts are grouped a common root in the ontology hierarchy based on a prefered
      * descriptor for the context.
@@ -216,4 +203,8 @@ abstract class AbstractContextOwner {
         def splitContexts = [firstColumnContexts, secondColumnContexts].findAll() // eliminates any empty lists
         splitContexts
     }
+
+    public abstract void removeContext(AbstractContext context);
+
+    public abstract AbstractContext createContext(Map properties);
 }

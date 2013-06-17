@@ -4,6 +4,7 @@ import bard.db.enums.DocumentType
 import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.registration.ExternalReference
 
@@ -104,6 +105,25 @@ class Project extends AbstractContextOwner {
         final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_OTHER } as List<ProjectDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
+    }
+
+    @Override
+    void removeContext(AbstractContext context) {
+        this.removeFromContexts(context)
+    }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return [
+                "unclassified>":""
+        ]
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        ProjectContext context = new ProjectContext(properties)
+        addToContexts(context)
+        return context
     }
     def afterInsert() {
         Project.withNewSession {

@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.AssayContextItem; bard.db.registration.AttributeType; bard.db.context.item.ContextItemController" %>
+<%@ page import="bard.db.registration.Assay; bard.db.registration.AttributeType; bard.db.context.item.ContextItemController; bard.db.registration.AssayContextItem; bard.db.registration.AttributeType; bard.db.context.item.ContextItemController" %>
 <%--
   Created by IntelliJ IDEA.
   User: xiaorong
@@ -8,43 +8,30 @@
 --%>
 
 <%-- A template for both project and assay def, edit card --%>
+<r:require modules="xeditable"/>
+
 <div id="card-${context.id}" class="card roundedBorder card-table-container">
     <table class="table table-hover">
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">
                 %{--We will put error messages on this card--}%
                 <div id="${context.id}_Errors"></div>
-                ${context.preferredName}
-                <g:if test="${context instanceof bard.db.registration.AssayContext}">
-                    <a class="btn btn-mini" href="#" title="Edit card name"
-                       onclick="editCardName(${context.id}, '${context.preferredName}');
-                       return false;"><i class="icon-pencil"></i></a>
-                </g:if>
+                <g:textInPlaceEdit bean="${context}" field="preferredName" id="updatePreferredName-${context.id}"
+                                   controller="contextItem" params="${[contextClass: context.simpleClassName]}"/>
             </div>
 
             <div class="cardMenu">
                 <div class="btn-toolbar">
                     <div class="btn-group">
-                        <g:if test="${context instanceof bard.db.registration.AssayContext}">
-                            <a class="btn btn-info btn-mini" href="#" title="Add item"
-                               onclick="launchAddItemWizard(${context.owner.id}, ${context.id}, '${cardSection.replace(' > ', '> ')}');
-                               return false;"><i class="icon-plus"></i></a>
-                            <a class="btn btn-info btn-mini" href="#" title="Move card"
-                               onclick="moveCard(${context.id}, '${cardSection.replace(' > ', '> ')}');
-                               return false;"><i class="icon-move"></i></a>
-                            <g:if test="${context.contextItems.size() == 0}">
-
-                                <a class="btn btn-info btn-mini" href="#" title="Delete card"
-                                   onclick="deleteCard(${context.id});
-                                   return false;"><i class="icon-trash"></i></a>
-                            </g:if>
+                        <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
+                                action="create"
+                                params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
+                                class="icon-plus"></i></g:link>
+                        <g:if test="${context.contextItems.size() == 0}">
+                            <a class="btn btn-info btn-mini" href="#" title="Delete card"
+                               onclick="showDeleteCardConfirmation(${context.id}, '${context.simpleClassName}');
+                               return false;"><i class="icon-trash"></i></a>
                         </g:if>
-                        <g:else>
-                            <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
-                                    action="create"
-                                    params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
-                                    class="icon-plus"></i></g:link>
-                        </g:else>
                     </div>
                 </div>
             </div>
@@ -66,35 +53,18 @@
 
                 <td class="btn-toolbar" style="text-align:right">
                     <div class="btn-group">
-                        <g:if test="${context instanceof bard.db.registration.AssayContext}">
-                            <g:if test="${contextItem.valueNum}">
-                                <a class="btn btn-mini" href="#" title="Edit"
-                                   onclick="editCardItem(${contextItem.id}, ${context.id});
-                                   return false;"><i class="icon-pencil"></i></a>
-                            </g:if>
-                            <a class="btn btn-mini" href="#" title="Move"
-                               onclick="moveCardItem(${contextOwner.id}, ${contextItem.id});
-                               return false;"><i class="icon-move"></i></a>
-                            <g:if test="${AssayContextItem.canDeleteContextItem(contextItem)}">
-                                <a class="btn btn-mini" href="#" title="Delete"
-                                   onclick="deleteCardItem(${contextItem.id}, ${context.id});
-                                   return false;"><i class="icon-trash"></i></a>
-                            </g:if>
-                        </g:if>
-                        <g:else>
-                            <g:form controller="contextItem">
-                                <g:hiddenField name="contextItemId" value="${contextItem.id}"/>
-                                <g:hiddenField name="contextId" value="${context?.id}"/>
-                                <g:hiddenField name="contextClass" value="${context?.class?.simpleName}"/>
-                                <g:hiddenField name="contextOwnerId" value="${context?.owner?.id}"/>
-
-                                <button type="submit" title="Delete" name="_action_delete" class="btn btn-mini"
+                        <g:set var="contextItemParams"
+                               value="${[contextItemId: contextItem.id, contextId: context?.id, contextClass: context?.simpleClassName, contextOwnerId: context?.owner?.id]}"></g:set>
+                        <g:if test="${!(contextItem instanceof AssayContextItem) || AssayContextItem.canDeleteContextItem(contextItem)}">
+                            <g:form class="no-padding" controller="contextItem" action="delete"
+                                    params="${contextItemParams}" method="POST">
+                                <button type="submit" title="Delete" class="btn btn-mini"
                                         onclick="return confirm('Are you sure you wish to delete this item?');"><i
                                         class="icon-trash"></i></button>
-                                <button type="submit" title="Edit" name="_action_edit" class="btn btn-mini"><i
-                                        class="icon-pencil"></i></button>
                             </g:form>
-                        </g:else>
+                        </g:if>
+                        <g:link controller="contextItem" action="edit" params="${contextItemParams}"
+                                class="btn btn-mini"><i class="icon-pencil"></i></g:link>
                     </div>
                 </td>
 

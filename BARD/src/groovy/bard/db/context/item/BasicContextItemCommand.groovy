@@ -6,9 +6,13 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.UnitConversion
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
 import bard.db.project.ProjectService
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
@@ -28,13 +32,26 @@ import java.util.regex.Pattern;
 class BasicContextItemCommand extends BardCommand {
 
     private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
-    static final List<String> CONTEXT_TYPES = [ProjectContext].collect { it.simpleName }
-    static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext]
+    public static final Map<String, Class> CONTEXT_NAME_TO_OWNER_CLASS = ['ProjectContext': Project, 'AssayContext': Assay]
+    public static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext, 'AssayContext': AssayContext]
+    public static final Map<String, Class> CONTEXT_NAME_TO_ITEM_CLASS = ['ProjectContext': ProjectContextItem, 'AssayContext': AssayContextItem]
+    public static final Map<String, String> CONTEXT_NAME_TO_CONTROLLER = ['ProjectContext': 'project', 'AssayContext': 'assayDefinition']
 
-    MessageSource messageSource
+    static Class getContextItemClass(String name) {
+        return CONTEXT_NAME_TO_ITEM_CLASS[name]
+    }
+
+    static Class getContextClass(String name) {
+        return CONTEXT_NAME_TO_CLASS[name]
+    }
+
+    static Class getContextOwnerClass(String name) {
+        return CONTEXT_NAME_TO_OWNER_CLASS[name]
+    }
+
+//    MessageSource messageSource
     AbstractContext context
     AbstractContextItem contextItem
-    ProjectService projectService
     ContextItemService contextItemService
 
     Long contextOwnerId
@@ -70,6 +87,14 @@ class BasicContextItemCommand extends BardCommand {
         copyFromDomainToCmd(contextItem)
     }
 
+    AbstractContext attemptFindContext() {
+        return attemptFindById(getContextClass(contextClass), contextId)
+    }
+
+    AbstractContextItem attemptFindItem() {
+        return attemptFindById(getContextItemClass(contextClass), contextItemId)
+    }
+
     void copyFromDomainToCmd(AbstractContextItem contextItem) {
         this.context = contextItem.context
         this.contextItem = contextItem
@@ -77,7 +102,7 @@ class BasicContextItemCommand extends BardCommand {
         this.contextId = contextItem.context.id
         this.contextItemId = contextItem.id
         this.version = contextItem.version
-        this.contextClass = contextItem.context.class.simpleName
+        this.contextClass = contextItem.context.simpleClassName
 
         this.attributeElementId = contextItem.attributeElement?.id
         this.valueElementId = contextItem.valueElement?.id
@@ -100,11 +125,11 @@ class BasicContextItemCommand extends BardCommand {
 
     boolean createNewContextItem() {
         boolean createSuccessful = false
-        context = attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
+        context = attemptFindById(getContextClass(this.contextClass), contextId)
         if (validate()) {
-            ProjectContextItem contextItem = new ProjectContextItem()
+            AbstractContextItem contextItem = getContextItemClass(this.contextClass).newInstance()
             copyFromCmdToDomain(contextItem)
-            context.addToContextItems(contextItem)
+            context.addContextItem(contextItem)
             if (attemptSave(contextItem)) {
                 copyFromDomainToCmd(contextItem)
 
@@ -114,7 +139,7 @@ class BasicContextItemCommand extends BardCommand {
         createSuccessful
     }
 
-    void copyFromCmdToDomain(ProjectContextItem contextItem) {
+    void copyFromCmdToDomain(AbstractContextItem contextItem) {
         contextItem.attributeElement = attemptFindById(Element, attributeElementId)
         Element valueElement
         if (valueElementId) {
@@ -133,7 +158,6 @@ class BasicContextItemCommand extends BardCommand {
         if (valueNum || valueMin || valueMax) {
             contextItem.valueDisplay = contextItem.deriveDisplayValue()
         }
-
     }
 
     boolean update() {
@@ -153,7 +177,7 @@ class BasicContextItemCommand extends BardCommand {
      * @return
      */
     String getOwnerController() {
-        'project'
+        return CONTEXT_NAME_TO_CONTROLLER[contextClass]
     }
 
     BigDecimal convertToBigDecimal(String field, String value, Element unit) {
@@ -178,6 +202,4 @@ class BasicContextItemCommand extends BardCommand {
         }
         return convertedValue
     }
-
-
 }

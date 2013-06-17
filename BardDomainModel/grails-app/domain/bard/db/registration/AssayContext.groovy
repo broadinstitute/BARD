@@ -1,9 +1,15 @@
 package bard.db.registration
 
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
 
 class AssayContext extends AbstractContext {
+
+    private static final Map<String, String> KEY_LABEL_NAME_MAP = ['assay component role': 'label',
+            'assay component type': 'label', 'detection': 'detection method',
+            'assay readout': 'assay readout', 'wavelength': 'fluorescence/luminescence',
+            'number': 'result detail']
 
     Assay assay
 
@@ -43,5 +49,15 @@ class AssayContext extends AbstractContext {
         newOwner.addToAssayContexts(newContext)
 
         return newContext;
+    }
+
+    @Override
+    String getSimpleClassName() {
+        return "AssayContext"
+    }
+
+    @Override
+    void addContextItem(AbstractContextItem item) {
+        this.addToAssayContextItems(item)
     }
 }
