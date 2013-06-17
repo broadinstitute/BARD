@@ -47,7 +47,7 @@ class CompoundBioActivitySummaryBuilder {
 
             //The first cell (column) is the resource (assay or a project)
             WebQueryValue resource = findResourceByTypeAndId(groupByType, resourceId, testedAssays, hitAssays, filterTypes)
-            if (!resource) {
+            if (!resource.value) {
                 log.error("Could not map resource ${groupByType}: ${resourceId}")
                 continue
             }
