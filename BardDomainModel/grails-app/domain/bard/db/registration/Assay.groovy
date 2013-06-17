@@ -30,7 +30,7 @@ class Assay extends AbstractContextOwner {
     String modifiedBy
     // grails auto-timestamp
     Date dateCreated
-    Date lastUpdated
+    Date lastUpdated = new Date()
 
     Set<Experiment> experiments = [] as Set<Experiment>
     Set<Measure> measures = [] as Set<Measure>
@@ -59,7 +59,7 @@ class Assay extends AbstractContextOwner {
         // the ' - ' is this issue in this case
         assayType(nullable: false)
         dateCreated(nullable: false)
-        lastUpdated(nullable: true)
+        lastUpdated(nullable:false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
