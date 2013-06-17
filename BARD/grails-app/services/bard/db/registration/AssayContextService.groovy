@@ -42,11 +42,16 @@ class AssayContextService {
         }
         return recomputeAssayShortName
     }
+
     /**
      *
      * @param assayContext
      */
     public void deleteAssayContext(AssayContext assayContext) {
+        Assay assay = assayContext.assay
+        if (assayContext.assayContextItems.isEmpty()) {
+            assay.removeFromAssayContexts(assayContext)
+        }
     }
 
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
