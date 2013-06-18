@@ -182,6 +182,7 @@ class ExperimentController {
 
     def update() {
         def experiment = Experiment.get(params.id)
+        setEditFormParams(experiment)
         experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
         if (!experiment.save(flush: true)) {
             renderEdit(experiment, experiment.assay)
