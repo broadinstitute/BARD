@@ -197,9 +197,9 @@ class ProjectConstraintUnitSpec extends Specification {
         }
 
         where:
-        desc         | valueUnderTest | valid | errorCode
-        'null valid' | null           | true  | null
-        'date valid' | new Date()     | true  | null
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'date valid'     | new Date()     | true  | null
     }
 
 }

@@ -13,7 +13,7 @@ $(document).ready(function () {
     }
     function potentiallyFocus(elementId){
         if ($("#attributeElementId").is(':disabled')) {
-            // do nothing we in review mode
+            // do nothing we're in review mode
         }
         else {
             var valueElement = $(elementId);
@@ -40,7 +40,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        onlyShowWidgetsForExpectedValueType(data.expectedValueType, data.unitId);
+                        onlyShowWidgetsForExpectedValueType(data);
                     });
             }
         },
@@ -62,7 +62,7 @@ $(document).ready(function () {
             hideAnyErrorMessages();
             // based on the attribute selected only show the appropriate value widgets
             var data = $("#attributeElementId").select2("data");
-            onlyShowWidgetsForExpectedValueType(data.expectedValueType,data.unitId);
+            onlyShowWidgetsForExpectedValueType(data);
         });
 
     initialFocus();
@@ -70,20 +70,23 @@ $(document).ready(function () {
     function clearAllValueFields() {
         $(':text').val("");
         $("#valueElementId").select2("data", {results: []});
-        $("#extValueId").select2("data", {results: []});
+        $("#extValueSearch").select2("data", {results: []});
         $("#valueNumUnitId").select2("data", {results: []});
     }
     function hideAnyErrorMessages() {
         $('.help-inline').hide();
         $('.help-block').hide();
         $('.alert-error').hide();
+        $('.error').removeClass('error');
     }
 
     function hideAllValueWidgets() {
         $("[id$=ValueContainer]").hide();
     }
-    function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId) {
+    function onlyShowWidgetsForExpectedValueType(data) {
         hideAllValueWidgets();
+        var expectedValueType = data? data.expectedValueType: '';
+        var unitId = data.unitId;
         if ('NUMERIC' === expectedValueType) {
             $('#numericValueContainer').show();
             initializeUnits(unitId);
@@ -95,9 +98,10 @@ $(document).ready(function () {
             potentiallyFocus("#valueElementId");
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
+            showExternalOntologyHelpText(data);
             $('#externalOntologyValueContainer').show();
             $('#freeTextValueContainer').show();
-            potentiallyFocus("#extValueId");
+            potentiallyFocus("#extValueSearch");
         }
         else if ('FREE_TEXT' === expectedValueType) {
             $('#freeTextValueContainer').show();
@@ -109,6 +113,19 @@ $(document).ready(function () {
         else {
             // problem
         }
+    }
+
+    function showExternalOntologyHelpText(data){
+        var source;
+        if(data.hasIntegratedSearch){
+            source = $('#externalOntologyIntegratedSearchTemplate').html();
+        }
+        else {
+            source = $('#externalOntologyNoIntegratedSearchTemplate').html();
+        }
+        var template = Handlebars.compile(source);
+        var html = template({attributeLabel : data.text,attributeExternalUrl : data.externalUrl});
+        $("#externalOntologyInfo").html(html);
     }
 
 
@@ -141,7 +158,7 @@ $(document).ready(function () {
         $("#valueElementId").select2("data", {id: $("#valueElementId").val(), text: $("#valueElementText").val()});
     }
 
-    $("#extValueId").select2({
+    $("#extValueSearch").select2({
         minimumInputLength: 1,
         allowClear: true,
         placeholder: "Search for external ontology ids or terms",
@@ -156,7 +173,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        potentiallyFocus("#extValueId");
+                        potentiallyFocus("#extValueSearch");
                     });
             }
         },
@@ -174,11 +191,12 @@ $(document).ready(function () {
             }
         }
     }).on("change", function (e) {
-            $("#valueDisplay").val($("#extValueId").select2("data").display);
+            $("#extValueId").val($("#extValueSearch").select2("data").id);
+            $("#valueDisplay").val($("#extValueSearch").select2("data").text);
             $('button.btn-primary').focus();
         });
-    if ($("#extValueId").val()) {
-        $("#extValueId").select2("data", {id: $("#extValueId").val(), text: $("#extValueText").val()});
+    if ($("#extValueSearch").val()) {
+        $("#extValueSearch").select2("data", {id: $("#extValueSearch").val(), text: $("#extValueText").val()});
     }
 
 

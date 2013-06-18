@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 
 /**
@@ -51,5 +52,22 @@ class ProjectExperiment extends AbstractContextOwner{
     @Override
     List getContexts() {
         return projectExperimentContexts;
+    }
+
+    @Override
+    void removeContext(AbstractContext context) {
+        this.removeFromProjectExperimentContexts(context)
+    }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return ["unclassified":""]
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        ProjectExperimentContext context = new ProjectExperimentContext(properties)
+        addToProjectExperimentContexts(context)
+        return context
     }
 }

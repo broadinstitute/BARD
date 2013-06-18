@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
 
 /**
@@ -28,5 +29,15 @@ class ProjectExperimentContext extends AbstractContext{
     @Override
     AbstractContextOwner getOwner() {
         return projectExperiment
+    }
+
+    @Override
+    String getSimpleClassName() {
+        return "ProjectExperimentContext"
+    }
+
+    @Override
+    void addContextItem(AbstractContextItem item) {
+        this.addToContextItems(item)
     }
 }

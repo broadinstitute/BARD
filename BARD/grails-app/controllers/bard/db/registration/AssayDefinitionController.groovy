@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -26,6 +27,7 @@ class AssayDefinitionController {
     SpringSecurityService springSecurityService
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
+    ContextService contextService
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -214,9 +216,8 @@ class AssayDefinitionController {
         final String parentChildRelationship = params.relationship
         HierarchyType hierarchyType = null
 
-
         if (!resultType) {
-            flash.message = 'Result Type is Required'
+            render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Result Type is Required!'
         } else {
             def parentMeasure = null
             if (params.parentMeasureId) {
@@ -224,7 +225,8 @@ class AssayDefinitionController {
             }
             //if there is a parent measure then there must be a selected relationship
             if (parentMeasure && (StringUtils.isBlank(parentChildRelationship) || "null".equals(parentChildRelationship))) {
-                flash.message = 'Relationship to Parent is required!'
+                render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Relationship to Parent is required!'
+                return
             } else {
                 if (StringUtils.isNotBlank(parentChildRelationship)) {
                     hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
@@ -241,11 +243,10 @@ class AssayDefinitionController {
                 }
 
                 Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-                flash.message = "Successfully added measure " + newMeasure.displayLabel
-            }
+                render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
 
+            }
         }
-        redirect(action: "editMeasure", id: params.id)
     }
 
     def disassociateContext() {
@@ -338,24 +339,6 @@ class AssayDefinitionController {
         }
     }
 
-    def addItemToCardAfterItem(Long src_assay_context_item_id, Long target_assay_context_item_id) {
-        AssayContextItem target = AssayContextItem.findById(target_assay_context_item_id)
-        AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
-        AssayContext targetAssayContext = target.assayContext
-        int index = targetAssayContext.assayContextItems.indexOf(target)
-        assayContextService.addItem(index, source, targetAssayContext)
-        Assay assay = targetAssayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
-    def addItemToCard(Long src_assay_context_item_id, Long target_assay_context_id) {
-        AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
-        AssayContextItem source = AssayContextItem.findById(src_assay_context_item_id)
-        assayContextService.addItem(source, targetAssayContext)
-        Assay assay = targetAssayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
     def reloadCardHolder(Long assayId) {
         def assay = Assay.get(assayId)
         if (assay) {
@@ -366,58 +349,9 @@ class AssayDefinitionController {
         }
     }
 
-
-    def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
-        AssayContextItem sourceAssayContextItem = AssayContextItem.findById(src_assay_context_item_id)
-        AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
-        assayContextService.updateContextName(targetAssayContext, sourceAssayContextItem)
-        render(template: "/context/list", model: [contextOwner: targetAssayContext, contexts: targetAssayContext.groupContexts(), subTemplate: 'edit'])
-    }
-
-
-    def deleteItemFromCard(Long assay_context_item_id) {
-
-        final AssayContextItem assayContextItem = AssayContextItem.get(assay_context_item_id)
-        if (assayContextItem) {
-            AssayContext assayContext = assayContextService.deleteItem(assayContextItem)
-            if (assayContext) {
-                Assay assay = assayContext.assay
-                render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-                return
-            }
-            render(status: HttpServletResponse.SC_PRECONDITION_FAILED, text: message(code: 'assayContextItem.label.cannotdelete'), contentType: 'text/plain', template: null)
-        }
-    }
-
-    def deleteEmptyCard(Long assay_context_id) {
-        AssayContext assayContext = AssayContext.findById(assay_context_id)
-        Assay assay = assayContext.assay
-        assayContextService.deleteAssayContext(assayContext)
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
     def launchEditItemInCard(Long assayContextId, Long assayContextItemId) {
         def assayContextItem = AssayContextItem.get(assayContextItemId)
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
-    }
-
-    def updateNumericValueInItem(Long assayContextItemId, String numericValue, String valueUnitLabel) {
-        def assayContextItem = AssayContextItem.get(assayContextItemId)
-        assayContextItem.valueNum = numericValue.toFloat().floatValue()
-        if (valueUnitLabel)
-            assayContextItem.valueDisplay = assayContextItem.valueNum + " " + valueUnitLabel
-        assayContextItem.save()
-        Assay assay = assayContextItem.assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
-    def createCard(Long instanceId, String cardName, String cardSection) {
-        if (instanceId == null) {
-            throw new RuntimeException("bad instance")
-        }
-        AssayContext assayContext = assayContextService.createCard(instanceId, cardName, cardSection)
-        Assay assay = assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
     def updateCardName(String edit_card_name, Long contextId) {
@@ -489,7 +423,7 @@ class EditingHelper {
         dataMap.put('version', currentVersion.toString())
         dataMap.put('modifiedBy', modifiedBy)
         dataMap.put('lastUpdated', formatter.format(lastUpdated))
-        if (shortName) {
+        if (shortName?.trim()) {
             dataMap.put("shortName", shortName)
         }
         dataMap.put("data", newValue)

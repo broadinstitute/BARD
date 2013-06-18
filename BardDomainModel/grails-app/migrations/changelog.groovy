@@ -2,11 +2,37 @@ import static groovy.io.FileType.DIRECTORIES
 import static groovy.io.FileType.FILES
 
 databaseChangeLog = {
+    String BACKSLASH_ONLY_OPTIONAL_WHITESPACE = /(?m)^\s*\/\s*$/
     String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
     File migrationsDir = new File(bardDomainModelMigrationsDir)
 
+    changeSet(author: 'pmontgom', id: 'invalid-context', dbms: 'oracle', context: 'invalidContext', runAlways: true) {
+        grailsChange {
+            change {
+                throw new RuntimeException("Woah there cowboy!  Always run dbm-update with --contexts=...")
+            }
+        }
+    }
+
     changeSet(author: 'ddurkin', id: 'rename-changelog-filenames.sql', dbms: 'oracle', context: 'rename-changelog') {
         sqlFile(path: "${migrationsDir}/sql/rename-changelog-filenames.sql", stripComments: true)
+    }
+
+    /* this needs to be created early in the process because some of the changelogs manually call set_context */
+    changeSet(author: 'ddurkin', id: 'create-bard-context.sql', dbms: 'oracle', context: 'standard, auditing', runOnChange: 'true') {
+        grailsChange {
+            final List<String> sqlBlocks = []
+            String text = resourceAccessor.getResourceAsStream('sql-auditing/create-bard-context.sql').text
+            for (String sqlBlock in text.split(BACKSLASH_ONLY_OPTIONAL_WHITESPACE)) {
+                sqlBlocks.add(sqlBlock)
+            }
+            change {
+                for (String sqlBlock in sqlBlocks) {
+                    sql.call(sqlBlock)
+                }
+            }
+            checkSum(text)
+        }
     }
 
     changeSet(author: 'ddurkin', id: 'baseline-structure-ddl.sql', dbms: 'oracle', context: 'standard') {

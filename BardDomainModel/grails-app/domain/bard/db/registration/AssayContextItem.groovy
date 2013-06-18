@@ -42,6 +42,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
         }
         return true
     }
+
     protected static boolean safeToDeleteContextItem(AssayContextItem assayContextItem){
         if (assayContextItem.attributeType == AttributeType.Free ||
                 assayContextItem.attributeType == AttributeType.List ||

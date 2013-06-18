@@ -108,7 +108,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
 
         then: "An XML is generated that conforms to the expected XML"
         String actualXml = this.writer.toString()
-        XmlTestAssertions.assertResults(XmlTestSamples.ASSAY_FULL_DOC, actualXml)
+        XmlTestAssertions.assertResultsWithOverrideAttributes(XmlTestSamples.ASSAY_FULL_DOC, actualXml)
         XmlTestAssertions.validate(schemaResource, actualXml)
     }
 

@@ -15,44 +15,6 @@ import org.apache.commons.lang.StringUtils
  * To change this template use File | Settings | File Templates.
  */
 class AssayContextService {
-    public boolean editSummary(Long assayId, String assayStatus, String assayName, String designedBy, String assayType) {
-        boolean recomputeAssayShortName = false
-        boolean hasChanged = false
-        Assay assayInstance = Assay.findById(assayId)
-        if (assayInstance.assayName != assayName) {
-            assayInstance.assayName = assayName
-            hasChanged = true
-        }
-        if (assayInstance.designedBy != designedBy) {
-            assayInstance.designedBy = designedBy
-            hasChanged = true
-        }
-        if (assayInstance.assayStatus != AssayStatus.byId(assayStatus)) {
-            assayInstance.assayStatus = AssayStatus.byId(assayStatus)
-
-            hasChanged = true
-        }
-        if (assayInstance.assayType != AssayType.byId(assayType)) {
-            assayInstance.assayType = AssayType.byId(assayType)
-            recomputeAssayShortName = true
-            hasChanged = true
-        }
-        if (hasChanged) {
-            assayInstance.save(flush: true)
-        }
-        return recomputeAssayShortName
-    }
-    /**
-     *
-     * @param assayContext
-     */
-    public void deleteAssayContext(AssayContext assayContext) {
-        Assay assay = assayContext.assay
-        if (assayContext.assayContextItems.isEmpty()) {
-            assay.removeFromAssayContexts(assayContext)
-        }
-    }
-
     public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext) {
         if (sourceItem && sourceItem.assayContext != targetAssayContext) {
             return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
@@ -65,32 +27,6 @@ class AssayContextService {
         sourceItem.assayContext = targetAssayContext
         targetAssayContext.assayContextItems.add(index, sourceItem)
         return targetAssayContext
-    }
-
-    public void updateContextName(AssayContext targetAssayContext, AssayContextItem sourceAssayContextItem) {
-        if (targetAssayContext && targetAssayContext == sourceAssayContextItem.assayContext) {
-            targetAssayContext.contextName = sourceAssayContextItem.valueDisplay
-        }
-    }
-
-    public AssayContext deleteItem(AssayContextItem assayContextItem) {
-
-        if (AssayContextItem.canDeleteContextItem(assayContextItem)) {
-            AssayContext assayContext = assayContextItem.assayContext
-
-            assayContext.removeFromAssayContextItems(assayContextItem)
-            assayContextItem.delete(flush: true)
-            return assayContext
-        }
-        return null
-    }
-
-    public AssayContext createCard(Long assayId, String name, String cardSection) {
-        Assay assay = Assay.get(assayId)
-        AssayContext assayContext = new AssayContext(contextName: name, contextGroup: cardSection)
-        assay.addToAssayContexts(assayContext)
-        assayContext.save(flush: true)
-        return assayContext
     }
 
     public AssayContext updateCardName(Long assayContextId, String name) {

@@ -38,14 +38,14 @@
             <%-- Statically render every measurement details as not displayed.  Selecting nodes in tree will display one card --%>
                 <g:each in="${measures}" var="measure">
                     <div id="measure-details-${measure.id}" class="measure-detail-card" style="display: none">
-                        <h1>${measure.getDisplayLabel()}</h1>
+                        <h4>${measure.getDisplayLabel()}</h4>
 
                         <p><strong>Definition:</strong> ${measure.resultType?.description}</p>
                         <g:if test="${measure.assayContextMeasures.empty}">
                             <p>No assay contexts associated with this measure</p>
                         </g:if>
                         <g:else>
-                            <h3>Assay Contexts quick view:</h3>
+                            <h5>Assay Contexts quick view:</h5>
                             <g:each in="${measure.assayContextMeasures}" var="assayContextMeasure">
                                 <g:set var="context" value="${assayContextMeasure.assayContext}"/>
                                 <a href="#card-${context.id}">Jump to the full ${context.preferredName} context above</a>

@@ -72,7 +72,13 @@ class BardContextTransactionAwareDataSourceProxy extends TransactionAwareDataSou
      */
     private Connection setOrClearUsername(Connection connection) {
         def userDetails = grailsApplication?.mainContext?.springSecurityService?.getPrincipal();
-        String username = userDetails?.getUsername()
+        String username = null
+        if(userDetails instanceof String){
+            username = userDetails
+        }else{
+            username = userDetails?.getUsername()
+        }
+
         BardContextUtils.setBardContextUsername(connection, username)
     }
 

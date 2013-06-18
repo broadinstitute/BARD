@@ -4,6 +4,7 @@ import acl.CapPermissionService
 import bard.db.enums.ReadyForExtraction
 import bard.db.enums.ExperimentStatus
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.project.ProjectExperiment
 import bard.db.registration.Assay
@@ -27,7 +28,7 @@ class Experiment extends AbstractContextOwner {
     String description
 
     Date dateCreated
-    Date lastUpdated
+    Date lastUpdated = new Date()
     String modifiedBy
     Long id;
 
@@ -70,7 +71,7 @@ class Experiment extends AbstractContextOwner {
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
         confidenceLevel(nullable: true)
         dateCreated(nullable: false)
-        lastUpdated(nullable: true)
+        lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -82,6 +83,24 @@ class Experiment extends AbstractContextOwner {
     List getContexts() {
         return experimentContexts;
     }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return ["unclassified>":""]
+    }
+
+    @Override
+    void removeContext(AbstractContext context) {
+        removeFromExperimentContexts(context)
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        ExperimentContext context = new ExperimentContext(properties)
+        addToExperimentContexts(context)
+        return context
+    }
+
     def afterInsert() {
         Experiment.withNewSession {
             capPermissionService?.addPermission(this)

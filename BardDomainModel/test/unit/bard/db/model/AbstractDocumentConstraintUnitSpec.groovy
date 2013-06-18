@@ -138,9 +138,9 @@ abstract class AbstractDocumentConstraintUnitSpec extends Specification {
         assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
 
         where:
-        desc         | valueUnderTest | valid | errorCode
-        'null valid' | null           | true  | null
-        'date valid' | new Date()     | true  | null
+        desc             | valueUnderTest | valid | errorCode
+        'null not valid' | null           | false | 'nullable'
+        'date valid'     | new Date()     | true  | null
     }
 
 }

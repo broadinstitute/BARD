@@ -62,11 +62,10 @@ class AssayService {
      *
      */
     Assay recomputeAssayShortName(Assay assay) {
-
-
-        Assay.withSession { session ->
-            session.createSQLQuery("""BEGIN MANAGE_NAMES.UPDATE_ASSAY_SHORT_NAME('${assay.id}'); END;""").executeUpdate()
-        }
+//  DISABLING until rollback problem has been addressed
+//        Assay.withSession { session ->
+//            session.createSQLQuery("""BEGIN MANAGE_NAMES.UPDATE_ASSAY_SHORT_NAME('${assay.id}'); END;""").executeUpdate()
+//        }
         //now call the manage names stored procedure
         //then look up and return the assay
         return Assay.findById(assay.id)

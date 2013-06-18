@@ -14,8 +14,8 @@
             <h4>Editing Measures for ${assayInstance?.assayName} (ADID: ${assayInstance?.id})</h4>
         </div>
         <g:if test="${assayInstance?.id}">
-                <g:link action="show" id="${assayInstance?.id}"
-                        class="btn btn-small btn-primary">Finish Editing</g:link>
+            <g:link action="show" id="${assayInstance?.id}"
+                    class="btn btn-small btn-primary">Finish Editing</g:link>
         </g:if>
     </div>
 </div>
@@ -46,6 +46,8 @@
        data-toggle="modal">Click to add new measure at the top of the hierarchy</a>
     <r:script>
         $("#add-measure-at-top").on("click", function () {
+                    $("#measureMessage").removeClass("alert alert-error alert-success");
+                    $("#measureMessage").html("");
                     $("#add-parent-id").val("");
                     $("#relationshiptypeId").prop('disabled', 'disabled');
                 }
@@ -60,7 +62,8 @@
         </div>
 
         <div class="modal-body">
-            <g:form class="form-horizontal" name="add-measure-form" action="addMeasure">
+            <g:form class="form-horizontal" name="add-measure-form" action="editMeasure" id="${assayInstance.id}">
+                <div id="measureMessage"></div>
                 <input type="hidden" name="id" value="${assayInstance.id}"/>
 
                 <p>In the fields below, search for terms by typing and suggestions will be presented.  To make a selection, choose from the popup list that appears.</p>
@@ -103,15 +106,38 @@
         </div>
 
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn" data-dismiss="modal" id="close-measure-button" aria-hidden="true">Close</button>
             <button class="btn btn-primary" id="add-measure-button">Save</button>
         </div>
     </div>
 
     <r:script>
         $("#add-measure-button").on("click", function () {
-            $("#add-measure-form").submit()
-        })
+            data = $("#add-measure-form").serialize();
+            $.ajax
+            ({
+                url: "../addMeasure",
+                type: "POST",
+                data: data,
+                cache: false,
+                success: function (data) {
+                    $("#measureMessage").removeClass("alert alert-error alert-success");
+                    $("#measureMessage").html("");
+                    //refresh the page
+                    $("#add-measure-form").submit();
+                },
+                error: function (response, status, errorThrown) {
+                    $("#measureMessage").removeClass("alert alert-success");
+                    $("#measureMessage").addClass("alert alert-error");
+                    $("#measureMessage").html(response.responseText);
+                }
+            });
+        });
+        //force a refresh of the page so that persisted measures can be seen
+        $('#close-measure-button').on('click', function() {
+            $("#measureMessage").removeClass("alert alert-error alert-success");
+            $("#measureMessage").html("");
+        });
     </r:script>
 
     <h4>Moving Measures</h4>
@@ -168,6 +194,13 @@
                             return ["over"]
                         }
                     },
+                     onDragOver: function(node, sourceNode, hitMode) {
+                        // Prevent dropping a parent below it's own child
+                        if(node.isDescendantOf(sourceNode)){
+                          return false;
+                        }
+                        return true;
+                      },
                     onDrop: measureNodeDropped
                     },
                 children: ${measuresTreeAsJson}
@@ -192,7 +225,12 @@
             <a id="add-measure-under-id-${measure.id}" href="#saveModal" role="button" class="btn"
                data-toggle="modal">Click to add new measure under ${measure.resultType?.label}</a>
             <r:script>
-                        $("#add-measure-under-id-${measure.id}").on("click", function(){ $("#add-parent-id").val("${measure.id}") });
+                        $("#add-measure-under-id-${measure.id}").on("click", function(){
+                         $("#measureMessage").removeClass("alert alert-error alert-success");
+                         $("#measureMessage").html("");
+                        $("#add-parent-id").val("${measure.id}")
+                        });
+
             </r:script>
 
             <h4>Add association</h4>

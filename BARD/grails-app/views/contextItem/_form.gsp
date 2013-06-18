@@ -6,7 +6,7 @@
 </div>
 <g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>
 
-<g:form class="form-horizontal" action="edit">
+<g:form class="form-horizontal" action="${action.toLowerCase()}">
     <g:hiddenField name="contextOwnerId" value="${instance?.contextOwnerId}"/>
     <g:hiddenField name="contextId" value="${instance?.contextId}"/>
     <g:hiddenField name="contextClass" value="${instance?.contextClass}"/>
@@ -27,33 +27,58 @@
             <g:hiddenField class="span8" id="attributeElementId" name="attributeElementId"
                            value="${instance?.attributeElementId}" disabled="${disabledInput}"/>
             <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
-            <g:link controller="element" action="addTerm"
-                    target="proposeTerm" class="btn">Propose a new term</g:link>
+
         </div>
 
     </div>
 
     <div id="elementValueContainer" style="display: false;">
+        <g:if test="${disabledInput == false}">
+            <div class="row-fluid">
+                <div class="span6 offset2 alert alert-info">
+                    <p>This attribute expects a value from the dictionary, start typing to select a value.</p>
+                    <p>If you cannot find an existing value, please add a value to the dictionary.
+                    <g:link controller="element" action="addTerm" target="proposeTerm" class="btn">Propose a New Dictionary Term</g:link></p>
+                </div>
+            </div>
+        </g:if>
         <div class="control-group ${hasErrors(bean: instance, field: 'valueElementId', 'error')}">
+
             <label class="control-label" for="valueElementId"><g:message
                     code="contextItem.valueElementId.label"/>:</label>
 
             <div class="controls">
                 <g:hiddenField class="span8" id="valueElementId" name="valueElementId"
                                value="${instance?.valueElementId}" disabled="${disabledInput}"/>
+
                 <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
             </div>
         </div>
     </div>
 
     <div id="externalOntologyValueContainer">
+        <g:if test="${disabledInput == false}">
+            <div id="externalOntologyInfo" class="row-fluid" >
+
+            </div>
+            <div id="externalOntologySearch" class="control-group">
+                <label class="control-label" for="extValueId"><g:message code="contextItem.extValueSearch.label"/>:</label>
+                <div class="controls">
+                    <g:hiddenField
+                            class="span8" id="extValueSearch" name="extValueSearch" value="${instance?.extValueId}"
+                            />
+                </div>
+            </div>
+        </g:if>
+
+
         <div class="control-group ${hasErrors(bean: instance, field: 'extValueId', 'error')}">
             <label class="control-label" for="extValueId"><g:message
                     code="contextItem.extValueId.label"/>:</label>
 
             <div class="controls">
 
-                <g:hiddenField
+                <g:textField
                         class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}"
                         disabled="${disabledInput}"/>
                 <span class="help-inline"><g:fieldError field="extValueId" bean="${instance}"/></span>
@@ -69,8 +94,7 @@
                     </div>
                 </div>
             </g:if>
-            <label class="control-label" for="valueNum"><g:message
-                    code="contextItem.valueNum.label"/>:</label>
+            <label class="control-label" for="valueNum"><g:message code="contextItem.valueNum.label"/>:</label>
 
             <div class="control controls-row">
                 <g:select class="offset1 span2" id="qualifier" name="qualifier"
@@ -90,9 +114,12 @@
 
     </div>
     <div class="row-fluid">
-        <div class="offset1 span10">
-            <g:render template="/common/errors" model="['errors': instance?.errors?.fieldErrors.findAll{it.field in ['qualifier', 'valueNum', 'valueNumUnitId']}]"/>
-        </div>
+        <g:set var="numericFieldErrors" value="${instance?.errors?.fieldErrors.findAll{it.field in ['qualifier', 'valueNum', 'valueNumUnitId']}}" />
+        <g:if test="${numericFieldErrors}">
+            <div class="offset1 span10">
+                <g:render template="/common/errors" model="['errors': instance?.errors?.fieldErrors.findAll{it.field in ['qualifier', 'valueNum', 'valueNumUnitId']}]"/>
+            </div>
+        </g:if>
     </div>
 
     <div id="numericRangeValueContainer"
@@ -149,19 +176,37 @@
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"
                         fragment="card-${instance?.contextId}" class="btn">Back to Context</g:link>
-                <button type="submit" name="_action_edit" class="btn">Edit</button>
-                <button type="submit" name="_action_create"
-                        class="btn btn-primary focus">Add Another Item</button>
+
+                <g:set var="contextItemParams" value="${[contextItemId: instance.contextItemId, contextId: instance?.contextId, contextClass: instance?.context.simpleClassName, contextOwnerId: instance?.contextOwnerId]}"></g:set>
+                <g:link action="edit" class="btn" params="${contextItemParams}">Edit</g:link>
+                <g:link action="create" class="btn btn-primary focus" params="${contextItemParams}">Add Another Item</g:link>
             </g:if>
             <g:else>
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"
                         fragment="card-${instance?.contextId}" class="btn">Cancel</g:link>
-                <button type="submit" name="_action_${action.toLowerCase()}"
-                        class="btn btn-primary">${action}</button>
+                <button type="submit" class="btn btn-primary">${action}</button>
 
             </g:else>
         </div>
     </div>
 
+    <script id="externalOntologyIntegratedSearchTemplate" type="text/x-handlebars-template">
+        <div class="span6 offset2 alert alert-info ">
+            <p>An integrated lookup service exists for this External Ontology, start typing an identifier or some text and select a value.</p>
+            <p>This lookup service reaches <strong>outside of this application</strong> and <strong>performance can vary</strong> for a number of reasons including network conditions and the underlying service.</p>
+            <p>If the integrated search for the '{{attributeLabel}}' site doesn't meet your expectations, please search directly on the '{{attributeLabel}}'
+            site.  <a href="{{attributeExternalUrl}}" target="external_ontology_site" class="btn">Open Site</a></p>
+
+            <p>Then manually enter an External Ontology Id and a Display Value.</p>
+        </div>
+
+    </script>
+    <script id="externalOntologyNoIntegratedSearchTemplate" type="text/x-handlebars-template">
+        <div class="span6 offset2 alert alert-info ">
+            <p>An integrated lookup service for {{attributeLabel}} does not currently exist.</p>
+            <p>Please search directly on the {{attributeLabel}} site. <a href="{{attributeExternalUrl}}" target="external_ontology_site" class="btn">Open Site</a></p>
+            <p>Then manually enter an External Ontology Id and a Display Value.</p>
+        </div>
+    </script>
 </g:form>

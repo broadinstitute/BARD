@@ -8,7 +8,9 @@ import bard.db.enums.hibernate.AssayStatusEnumUserType
 import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.project.ProjectContext
 
 class Assay extends AbstractContextOwner {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -30,7 +32,7 @@ class Assay extends AbstractContextOwner {
     String modifiedBy
     // grails auto-timestamp
     Date dateCreated
-    Date lastUpdated
+    Date lastUpdated = new Date()
 
     Set<Experiment> experiments = [] as Set<Experiment>
     Set<Measure> measures = [] as Set<Measure>
@@ -59,7 +61,7 @@ class Assay extends AbstractContextOwner {
         // the ' - ' is this issue in this case
         assayType(nullable: false)
         dateCreated(nullable: false)
-        lastUpdated(nullable: true)
+        lastUpdated(nullable:false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -156,5 +158,34 @@ class Assay extends AbstractContextOwner {
 
     boolean allowsNewExperiments() {
         return (assayStatus != AssayStatus.RETIRED && assayType != AssayType.TEMPLATE && measures.size() > 0)
+    }
+
+    @Override
+    void removeContext(AbstractContext context) {
+        this.removeFromAssayContexts(context)
+    }
+
+    @Override
+    Map<String, String> getGroupDesc() {
+        return [
+                "assay protocol> assay component>":"",
+                "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
+                "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
+                "assay protocol> assay readout>":"",
+                "assay protocol> assay type>":"", // relatively small list
+                "biology> molecular interaction>":"",
+                "biology>":"",
+                "result type> item count>":"",
+                "project management> project information>":"",
+                "project management> experiment>":"",
+                "unclassified>":""
+        ]
+    }
+
+    @Override
+    AbstractContext createContext(Map properties) {
+        AssayContext context = new AssayContext(properties)
+        addToAssayContexts(context)
+        return context
     }
 }

@@ -386,12 +386,28 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         def model = controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
-        assert response.text.startsWith(responsetext)
-
+        assert response.text == "An internal server error has occurred. Please notify the BARD team"
         where:
         description                              | fromExperimentId         | toExperimentId         | responsetext
         "failed due to fromExperiment not found" | -999                     | projectExperimentTo.id | 'serviceError'
         "failed due to toExperiment not found"   | projectExperimentFrom.id | -999                   | 'serviceError'
+    }
+
+    void 'test link experiment with project fail - Bad request {#description}'() {
+        given:
+        controller.projectService = projectService
+
+        when:
+
+        def model = controller.linkExperiment(fromExperimentId, toExperimentId, project.id)
+
+        then:
+        assert response.text == "Both 'From Experiment ID' and 'To Experiment ID' are required"
+        assert response.status == HttpServletResponse.SC_BAD_REQUEST
+        where:
+        description                              | fromExperimentId         | toExperimentId
+        "failed due to fromExperiment not found" | null                     | projectExperimentTo.id
+        "failed due to toExperiment not found"   | projectExperimentFrom.id | null
     }
 
     void 'test associate experiment with project success'() {
