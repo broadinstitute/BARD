@@ -17,7 +17,7 @@
         <g:each in="${assay.descriptions}" var="description" status="stat">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${description.id}"
                                   data-toggle="manual"
                                   class="documents ${description.id}"
@@ -66,7 +66,7 @@
         <g:each in="${assay.protocols}" var="protocol">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${protocol.id}"
                                   class="documents ${protocol.id}"
                                   data-url="/BARD/document/editDocumentName"
@@ -117,7 +117,7 @@
         <g:each in="${assay.comments}" var="comment">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${comment.id}"
                                   data-server-response-id="commentsMsg"
                                   class="documents ${comment.id}"
@@ -166,7 +166,7 @@
                       model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
             <g:each in="${assay.publications}" var="publication">
                 <div class="borderlist">
-                    Publication Name: <a href="#" data-type="text"
+                    Publication Name: <a href="javascript:;" data-type="text"
                                          data-pk="${publication.id}"
                                          data-server-response-id="publicationMsg"
                                          class="documents ${publication.id}"
@@ -219,7 +219,7 @@
 
         <g:each in="${assay.externalURLs}" var="externalURL">
             <div class="borderlist">
-                External Name: <a href="${externalURL.documentContent}" data-type="text"
+                External Name: <a href="javascript:;" data-type="text"
                                   data-pk="${externalURL.id}"
                                   data-server-response-id="externalURLMsg"
                                   class="documents ${externalURL.id}"
@@ -271,7 +271,7 @@
         <g:each in="${assay.otherDocuments}" var="otherDocument">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${otherDocument.id}"
                                   data-server-response-id="otherMsg"
                                   class="documents ${otherDocument.id}"

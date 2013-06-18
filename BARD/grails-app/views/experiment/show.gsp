@@ -66,6 +66,7 @@
                             <dd>
                                 <a href="#"
                                    data-sourceCache="true"
+                                   data-toggle="manual"
                                    class="status"
                                    id="${instance?.experimentStatus?.id}"
                                    data-type="select"
@@ -73,38 +74,43 @@
                                    data-source="/BARD/experiment/experimentStatus"
                                    data-pk="${instance.id}"
                                    data-url="/BARD/experiment/editExperimentStatus"
-                                   data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</a> <i
-                                    class="icon-pencil"></i>
+                                   data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</a>
+                                <i class="icon-pencil documentPencil" title="Click to edit Status" data-id="${instance?.experimentStatus?.id}"></i>
                             </dd>
 
                             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
                             <dd>
                                 <a href="#"
+                                   data-toggle="manual"
                                    class="experimentNameY"
                                    id="nameId"
+
                                    data-type="text"
                                    data-value="${instance?.experimentName}"
                                    data-pk="${instance.id}"
                                    data-url="/BARD/experiment/editExperimentName"
                                    data-placeholder="Required"
-                                   data-original-title="Edit Experiment Name">${instance?.experimentName}</a> <i
-                                    class="icon-pencil"></i>
+                                   data-original-title="Edit Experiment Name">${instance?.experimentName}</a>
+                                <i class="icon-pencil documentPencil" title="Click to edit Name" data-id="nameId"></i>
                             </dd>
                             <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
                             <dd>
                                 <a href="#"
                                    class="description"
+                                   data-toggle="manual"
                                    id="descriptionId"
                                    data-type="text"
                                    data-value="${instance.description}"
                                    data-pk="${instance.id}"
                                    data-url="/BARD/experiment/editDescription"
                                    data-placeholder="Required"
-                                   data-original-title="Edit Description By">${instance.description}</a> <i class="icon-pencil"></i>
+                                   data-original-title="Edit Description By">${instance.description}</a>
+                                <i class="icon-pencil documentPencil" title="Click to edit Description" data-id="descriptionId"></i>
                             </dd>
                             <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
                             <dd id="huddd">
                                 <a href="#" class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
+                                   data-toggle="manual"
                                    data-url="/BARD/experiment/editHoldUntilDate"
                                    data-value="${instance.holdUntilDate}"
                                    data-original-title="Select hold until date"
@@ -114,8 +120,8 @@
                                     <g:formatDate
                                             format="MM/dd/yyyy"
                                             date="${instance.holdUntilDate}"/>
-                                </a> <i
-                                    class="icon-pencil"></i>
+                                </a>
+                                <i class="icon-pencil documentPencil" title="Click to edit hold until date" data-id="hud"></i>
                               </dd>
 
                             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
@@ -125,28 +131,29 @@
                                    data-value="${instance.runDateFrom}"
                                    data-original-title="Select run from date"
                                    data-format="YYYY-MM-DD"
+                                   data-toggle="manual"
                                    data-viewformat="MM/DD/YYYY"
                                    data-template="D / MMM / YYYY">
                                     <g:formatDate
                                             format="MM/dd/yyyy"
                                             date="${instance.runDateFrom}"/>
-                                </a> <i
-                                    class="icon-pencil"></i>
+                                </a>
+                                <i class="icon-pencil documentPencil" title="Click to edit run from date" data-id="rfd"></i>
                           </dd>
                             <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
                             <dd>
-                                <a href="#" class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
+                                <a href="javascript:;" class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
                                    data-url="/BARD/experiment/editRunToDate"
                                    data-value="${instance.runDateTo}"
                                    data-original-title="Select run to date"
+                                   data-toggle="manual"
                                    data-format="YYYY-MM-DD"
                                    data-viewformat="MM/DD/YYYY"
                                    data-template="D / MMM / YYYY">
                                     <g:formatDate
                                             format="MM/dd/yyyy"
                                             date="${instance.runDateTo}"/>
-                                </a><i
-                                    class="icon-pencil"></i>
+                                </a><i class="icon-pencil documentPencil" title="Click to edit run to date" data-id="rdt"></i>
                             </dd>
                             <dt><g:message code="default.dateCreated.label"/>:</dt>
                             <dd><g:formatDate date="${instance.dateCreated}" format="MM/dd/yyyy"/></dd>
