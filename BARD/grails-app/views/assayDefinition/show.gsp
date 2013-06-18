@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,assaysummary"/>
+    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditor,assaysummary"/>
     <meta name="layout" content="basic"/>
     <title>Assay Definition</title>
 </head>
@@ -66,7 +66,8 @@
         <li><a href="#unclassified-header"><i class="icon-chevron-right"></i>3.4 Unclassified</a></li>
 
         <li><a href="#experiments-header"><i class="icon-chevron-right"></i>4. Experiments</a></li>
-        <li><a href="#experimental-variables-header"><i class="icon-chevron-right"></i>4.1 Experimental Variables</a></li>
+        <li><a href="#experimental-variables-header"><i class="icon-chevron-right"></i>4.1 Experimental Variables</a>
+        </li>
         <li><a href="#measures-header"><i class="icon-chevron-right"></i>5. Measures</a></li>
         <li><a href="#documents-header"><i class="icon-chevron-right"></i>6. Documents</a></li>
         <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>6.1 Descriptions</a>
@@ -81,220 +82,229 @@
 </div>
 
 <div class="span9">
-    <section id="summary-header">
-        <h3>1. Overview</h3>
+<section id="summary-header">
+    <h3>1. Overview</h3>
 
-        <div class="row-fluid">
-            <div id="msg" class="alert hide"></div>
+    <div class="row-fluid">
+        <div id="msg" class="alert hide"></div>
 
-            <div id="showSummary">
-                <g:render template='editSummary' model="['assay': assayInstance]"/>
-            </div>
+        <div id="showSummary">
+            <g:render template='editSummary' model="['assay': assayInstance]"/>
         </div>
-    </section>
+    </div>
+</section>
+<br/>
+<section id="biology-header">
+
+    <h3>2. Biology <a target="dictionary"
+                      href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h3>
+
+
+    <div class="row-fluid">
+        <div id="cardHolderBiology" class="span12">
+            <g:render template="/context/biology"
+                      model="[contextOwner: assayInstance, biology: assayInstance.groupBiology(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+        </div>
+    </div>
     <br/>
-    <section id="biology-header">
 
-        <h3>2. Biology <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a></h3>
-
-
-        <div class="row-fluid">
-            <div id="cardHolderBiology" class="span12">
-                <g:render template="/context/biology"
-                          model="[contextOwner: assayInstance, biology: assayInstance.groupBiology(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
+    <div class="row-fluid">
+        <g:if test="${!uneditable}">
+            <div class="span12">
+                <g:link action="editContext" id="${assayInstance?.id}"
+                        class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
             </div>
-        </div>
-        <br/>
 
-        <div class="row-fluid">
-            <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
-                </div>
-
-            </g:if>
-        </div>
-    </section>
-    <br/>
-    <section id="assay-protocol-header">
-        <h3>3. Assay Protocol <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a></h3>
-
-        <div class="row-fluid">
-            <div id="cardHolderAssayProtocol" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayType(), subTemplate: 'show', renderEmptyGroups: false]"/>
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayFormat(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-            </div>
-        </div>
-        <br/>
-
-        <div class="row-fluid">
-            <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Asssay Protocol</g:link>
-                </div>
-
-            </g:if>
-        </div>
-    </section>
-    <br/>
-    <section id="assay-design-header">
-
-        <h4>3.1 Assay Design <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a> </h4>
-
-
-        <div class="row-fluid">
-            <div id="cardHolderAssayDesign" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-            </div>
-        </div>
-        <br/>
-
-        <div class="row-fluid">
-            <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
-                </div>
-
-            </g:if>
-        </div>
-    </section>
-    <br/>
-    <section id="assay-readout-header">
-
-        <h4>3.2 Assay Readout <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a></h4>
-
-
-        <div class="row-fluid">
-            <div id="cardHolderAssayReadout" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayReadout(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-            </div>
-        </div>
-        <br/>
-
-        <div class="row-fluid">
-            <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
-                </div>
-
-            </g:if>
-        </div>
-    </section>
-    <br/>
-    <section id="assay-components-header">
-
-        <h4>3.3 Assay Components<a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a></h4>
-
-
-        <div class="row-fluid">
-            <div id="cardHolderAssayComponents" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-            </div>
-        </div>
-        <br/>
-
-        <div class="row-fluid">
-            <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
-                </div>
-
-            </g:if>
-        </div>
-    </section>
-    <br/>
-    <section id="unclassified-header">
-        <h4>3.4 Unclassified</h4>
-        <div class="row-fluid">
-            <div id="cardHolderUnclassified" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-            </div>
-        </div>
-        <br/>
-        <g:if test="${assayInstance.groupUnclassified()}">
-            <div class="row-fluid">
-                <g:if test="${!uneditable}">
-                    <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
-                                class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
-                    </div>
-
-                </g:if>
-            </div>
         </g:if>
-    </section>
+    </div>
+</section>
+<br/>
+<section id="assay-protocol-header">
+    <h3>3. Assay Protocol <a target="dictionary"
+                             href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h3>
+
+    <div class="row-fluid">
+        <div id="cardHolderAssayProtocol" class="span12">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayType(), subTemplate: 'show', renderEmptyGroups: false]"/>
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayFormat(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+        </div>
+    </div>
     <br/>
 
-    <section id="experiments-header">
-
-        <h3>4. Experiments</h3>
-
-
-        <div class="row-fluid">
-            <g:render template="showExperiments" model="['assay': assayInstance]"/>
-        </div>
-    </section>
-    <br/>
-    <section id="experimental-variables-header">
-
-        <h4>4.1 Experimental Variables <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a></h4>
-        <div class="row-fluid">
-            <div id="cardHolderExperimentalVariables" class="span12">
-                <g:render template="/context/currentCard"
-                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
+    <div class="row-fluid">
+        <g:if test="${!uneditable}">
+            <div class="span12">
+                <g:link action="editContext" id="${assayInstance?.id}"
+                        class="btn"><i class="icon-pencil"></i> Edit Asssay Protocol</g:link>
             </div>
-        </div>
-        <br/>
-        <g:if test="${assayInstance.groupExperimentalVariables()}">
-            <div class="row-fluid">
-                <g:if test="${!uneditable}">
-                    <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
-                                class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
-                    </div>
 
-                </g:if>
-            </div>
         </g:if>
-    </section>
-    <br/>
-    <section id="measures-header">
+    </div>
+</section>
+<br/>
+<section id="assay-design-header">
 
-        <h3>5. Measures<a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-            <i class="icon-question-sign"></i></a></h3>
+    <h4>3.1 Assay Design <a target="dictionary"
+                            href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h4>
 
 
-        <div class="row-fluid">
-            <g:render template="measuresView"
-                      model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>
+    <div class="row-fluid">
+        <div id="cardHolderAssayDesign" class="span12">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
         </div>
-    </section>
+    </div>
     <br/>
-    <g:render template="assayDocuments" model="[assay: assayInstance]"/>
+
+    <div class="row-fluid">
+        <g:if test="${!uneditable}">
+            <div class="span12">
+                <g:link action="editContext" id="${assayInstance?.id}"
+                        class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
+            </div>
+
+        </g:if>
+    </div>
+</section>
+<br/>
+<section id="assay-readout-header">
+
+    <h4>3.2 Assay Readout <a target="dictionary"
+                             href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h4>
+
+
+    <div class="row-fluid">
+        <div id="cardHolderAssayReadout" class="span12">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayReadout(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+        </div>
+    </div>
+    <br/>
+
+    <div class="row-fluid">
+        <g:if test="${!uneditable}">
+            <div class="span12">
+                <g:link action="editContext" id="${assayInstance?.id}"
+                        class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
+            </div>
+
+        </g:if>
+    </div>
+</section>
+<br/>
+<section id="assay-components-header">
+
+    <h4>3.3 Assay Components<a target="dictionary"
+                               href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h4>
+
+
+    <div class="row-fluid">
+        <div id="cardHolderAssayComponents" class="span12">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+        </div>
+    </div>
+    <br/>
+
+    <div class="row-fluid">
+        <g:if test="${!uneditable}">
+            <div class="span12">
+                <g:link action="editContext" id="${assayInstance?.id}"
+                        class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
+            </div>
+
+        </g:if>
+    </div>
+</section>
+<br/>
+<section id="unclassified-header">
+    <h4>3.4 Unclassified</h4>
+
+    <div class="row-fluid">
+        <div id="cardHolderUnclassified" class="span12">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+        </div>
+    </div>
+    <br/>
+    <g:if test="${assayInstance.groupUnclassified()}">
+        <div class="row-fluid">
+            <g:if test="${!uneditable}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
+                </div>
+
+            </g:if>
+        </div>
+    </g:if>
+</section>
+<br/>
+
+<section id="experiments-header">
+
+    <h3>4. Experiments</h3>
+
+
+    <div class="row-fluid">
+        <g:render template="showExperiments" model="['assay': assayInstance]"/>
+    </div>
+</section>
+<br/>
+<section id="experimental-variables-header">
+
+    <h4>4.1 Experimental Variables <a target="dictionary"
+                                      href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h4>
+
+    <div class="row-fluid">
+        <div id="cardHolderExperimentalVariables" class="span12">
+            <g:render template="/context/currentCard"
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+        </div>
+    </div>
+    <br/>
+    <g:if test="${assayInstance.groupExperimentalVariables()}">
+        <div class="row-fluid">
+            <g:if test="${!uneditable}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
+                </div>
+
+            </g:if>
+        </div>
+    </g:if>
+</section>
+<br/>
+<section id="measures-header">
+
+    <h3>5. Measures<a target="dictionary"
+                      href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
+        <i class="icon-question-sign"></i></a></h3>
+
+
+    <div class="row-fluid">
+        <g:render template="measuresView"
+                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>
+    </div>
+</section>
+<br/>
+<g:render template="assayDocuments" model="[assay: assayInstance]"/>
 </div>
 </div>
 </div>

@@ -11,7 +11,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,projectsummary"/>
+            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,richtexteditor,projectsummary"/>
     <meta name="layout" content="basic"/>
     <title>Show Project</title>
 </head>

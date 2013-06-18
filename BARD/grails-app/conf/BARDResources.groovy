@@ -116,6 +116,7 @@ modules = {
     }
 
     richtexteditor {
+        resource url:"/css/richtexteditor.css"
         resource url: "/js/nicedit/nicEdit.js"
         resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"
