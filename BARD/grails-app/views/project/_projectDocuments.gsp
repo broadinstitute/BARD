@@ -16,7 +16,7 @@
         <g:each in="${project.descriptions}" var="description">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${description.id}"
                                   data-toggle="manual"
                                   class="documents ${description.id}"
@@ -66,7 +66,7 @@
         <g:each in="${project.protocols}" var="protocol">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${protocol.id}"
                                   class="documents ${protocol.id}"
                                   data-url="/BARD/document/editDocumentName"
@@ -102,28 +102,6 @@
                 </div>
             </div>
         </g:each>
-
-    %{--<g:render template="addDocumentLink"--}%
-    %{--model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>--}%
-    %{--<g:each in="${project.protocols}" var="protocol">--}%
-    %{--<div class="borderlist">--}%
-    %{--<a href="#" data-type="wysihtml5"--}%
-    %{--data-pk="${protocol.id}" data-rows="60"--}%
-    %{--data-inputclass="document-wysihtml5"--}%
-    %{--class="documents ${protocol.id}"--}%
-    %{--data-url="/BARD/document/editDocument"--}%
-    %{--data-documentType="${protocol.documentType.id}"--}%
-    %{--data-name="${DocumentKind.ProjectDocument}"--}%
-    %{--data-version="${protocol.version}"--}%
-    %{--data-owningEntityId="${project.id}"--}%
-    %{--data-document-name="${protocol.documentName}"--}%
-    %{--id="${protocol.id}">--}%
-    %{--<g:render template="../document/docsWithLineBreaks"--}%
-    %{--model="[documentContent: protocol.documentContent]"/>--}%
-    %{--</a>--}%
-    %{--<g:render template="deleteDocumentForm" model="[document: protocol]"/>--}%
-    %{--</div>--}%
-    %{--</g:each>--}%
     </div>
 </section>
 <section id="documents-comment-header">
@@ -139,7 +117,7 @@
         <g:each in="${project.comments}" var="comment">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${comment.id}"
                                   data-server-response-id="commentsMsg"
                                   class="documents ${comment.id}"
@@ -189,7 +167,7 @@
 
         <g:each in="${project.publications}" var="publication">
             <div class="borderlist">
-                Publication Name: <a href="#" data-type="text"
+                Publication Name: <a href="javascript:;" data-type="text"
                                      data-pk="${publication.id}"
                                      data-server-response-id="publicationMsg"
                                      class="documents ${publication.id}"
@@ -241,7 +219,7 @@
                   model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
         <g:each in="${project.externalURLs}" var="externalURL">
             <div class="borderlist">
-                External Name: <a href="${externalURL.documentContent}" data-type="text"
+                External Name: <a href="javascript:;" data-type="text"
                                   data-pk="${externalURL.id}"
                                   data-server-response-id="externalURLMsg"
                                   class="documents ${externalURL.id}"
@@ -294,7 +272,7 @@
         <g:each in="${project.otherDocuments}" var="otherDocument">
             <div class="borderlist">
                 <br/>
-                Document Name: <a href="#" data-type="text"
+                Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${otherDocument.id}"
                                   data-server-response-id="otherMsg"
                                   class="documents ${otherDocument.id}"
