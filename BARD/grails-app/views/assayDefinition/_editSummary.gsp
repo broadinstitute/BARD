@@ -49,6 +49,8 @@
                    data-placeholder="Required"
                    data-original-title="Edit Designed By">${assay?.designedBy}</a> <i class="icon-pencil"></i>
             </dd>
+            <dt>Owner:</dt>
+            <dd>${assay?.designedBy}</dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></dd>
