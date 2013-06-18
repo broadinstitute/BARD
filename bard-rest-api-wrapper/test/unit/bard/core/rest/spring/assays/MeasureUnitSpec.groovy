@@ -40,10 +40,10 @@ class MeasureUnitSpec extends Specification {
         then:
         assert measure.id==7186
         assert measure.name== "Context for percent activity"
-        List<Comp> comps = measure.comps
+        List<Annotation> comps = measure.comps
         assert comps
         assert comps.size() == 1
-        Comp comp = comps.get(0)
+        Annotation comp = comps.get(0)
         assert comp.display==".05 um"
         assert comp.entity=="assay"
         assert !comp.entityId

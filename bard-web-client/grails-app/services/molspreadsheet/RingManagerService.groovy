@@ -47,11 +47,11 @@ class RingManagerService {
                 LinkedHashMap <String,List<String>> mapForThisAssay = [:]
                 if (bardAnnotation)  {
                     String keyTerm =  "GO biological process term"
-                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.display
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.contextItems.flatten().findAll{it->it.key==keyTerm}.display
                     keyTerm =  "assay format"
-                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.value
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.contextItems.flatten().findAll{it->it.key==keyTerm}.value
                     keyTerm =  "assay type"
-                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.value
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.contextItems.flatten().findAll{it->it.key==keyTerm}.value
                 }
                 returnData[aid]  =  mapForThisAssay
             }

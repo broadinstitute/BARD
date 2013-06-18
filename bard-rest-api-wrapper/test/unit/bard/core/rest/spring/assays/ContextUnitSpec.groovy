@@ -41,10 +41,10 @@ class ContextUnitSpec extends Specification {
         then:
         assert context.id == 7186
         assert context.name == "Context for percent activity"
-        List<Comp> comps = context.comps
+        List<Annotation> comps = context.contextItems
         assert comps
         assert comps.size() == 1
-        Comp comp = comps.get(0)
+        Annotation comp = comps.get(0)
         assert comp.display == ".05 um"
         assert comp.entity == "assay"
         assert !comp.entityId

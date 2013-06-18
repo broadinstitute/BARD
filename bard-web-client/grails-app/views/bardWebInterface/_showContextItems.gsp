@@ -16,7 +16,7 @@
             </div>
         </caption>
         <tbody>
-        <g:each in="${context.getComps()}" status="i" var="contextItem">
+        <g:each in="${context.getContextItems()}" status="i" var="contextItem">
             <tr id="${contextItem.id}" class='context_item_row'>
                 <td class="attributeLabel">${contextItem.key}</td>
                 <td class="valuedLabel">

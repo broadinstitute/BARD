@@ -1,14 +1,10 @@
 package mockServices
-
-import bard.core.interfaces.AssayAdapterInterface
-import bard.core.interfaces.AssayCategory
-import bard.core.interfaces.AssayType
-import bard.core.interfaces.AssayRole
+import bard.core.interfaces.*
 import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.interfaces.EntityNamedSources
+import bard.core.rest.spring.assays.Annotation
+import bard.core.rest.spring.assays.Context
 import bard.core.rest.spring.assays.MinimumAnnotation
 import bard.core.rest.spring.util.NameDescription
-
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu
@@ -37,13 +33,12 @@ class MockAssayAdapter implements AssayAdapterInterface {
         super()
     }
 
-    public List<BardAnnotation> getAnnotations() {
-        final List<BardAnnotation> annos = new ArrayList<BardAnnotation>();
+    public BardAnnotation getAnnotations() {
         BardAnnotation annotation = new BardAnnotation()
-        annotation.key = "target"
-        annotation.value = "WEE1"
-        annos.add(annotation)
-        return annos
+        Annotation comp = new Annotation(key: "target", value: "WEE1", display: "WEE1", entity: "assay")
+        Context context = new Context(name: "Biology", contextItems: [comp])
+        annotation.contexts.add(context)
+        return annotation
     }
 
     @Override
@@ -104,6 +99,10 @@ class MockAssayAdapter implements AssayAdapterInterface {
     @Override
     AssayCategory getCategory() {
         return category ?: AssayCategory.MLPCN
+    }
+
+    String getLastUpdatedDate() {
+        return new Date().toString()
     }
 
     @Override

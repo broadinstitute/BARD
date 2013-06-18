@@ -16,9 +16,9 @@ public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
     final Double score
     final NameDescription matchingField
-    final List<BardAnnotation> annotations = []
+    final BardAnnotation annotations
 
-    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, List<BardAnnotation> annotations = []) {
+    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, BardAnnotation annotations = null) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription
@@ -95,7 +95,7 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return project.getTargets()
     }
 
-    public List<BardAnnotation> getAnnotations() {
+    public BardAnnotation getAnnotations() {
 
         return this.annotations
     }

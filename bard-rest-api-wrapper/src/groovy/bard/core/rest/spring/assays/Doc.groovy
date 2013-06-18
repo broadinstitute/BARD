@@ -12,40 +12,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 public class  Doc extends JsonUtil {
 
     @JsonProperty("id")
-    private long id;
+    long id;
     @JsonProperty("name")
-    private String name;
+    String name;
     @JsonProperty("comps")
-    private List<Comp> comps = new ArrayList<Comp>();
-
-    @JsonProperty("id")
-    public long getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonProperty("comps")
-    public List<Comp> getComps() {
-        return comps;
-    }
-
-    @JsonProperty("comps")
-    public void setComps(List<Comp> comps) {
-        this.comps = comps;
-    }
+    List<Annotation> comps = new ArrayList<Annotation>();
 
 }

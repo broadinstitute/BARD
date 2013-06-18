@@ -43,7 +43,7 @@ public interface AssayAdapterInterface {
 
     public String getSource()
 
-    public List<BardAnnotation> getAnnotations()
+    public BardAnnotation getAnnotations()
 
     public List<String> getKeggDiseaseNames()
 

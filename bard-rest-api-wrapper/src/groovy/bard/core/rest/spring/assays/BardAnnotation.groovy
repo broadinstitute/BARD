@@ -1,75 +1,52 @@
 package bard.core.rest.spring.assays;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import bard.core.rest.spring.util.JsonUtil
 
 /**
- * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
+ * A set of annotations for a BARD entity.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class BardAnnotation extends JsonUtil {
 
-    @JsonProperty("contexts")
-    private List<Context> contexts = new ArrayList<Context>();
-    @JsonProperty("measures")
-    private List<Measure> measures = new ArrayList<Measure>();
-    @JsonProperty("docs")
-    private List<Doc> docs = new ArrayList<Doc>();
+    List<Context> contexts = new ArrayList<Context>();
+    List<Measure> measures = new ArrayList<Measure>();
+    List<Doc> docs = new ArrayList<Doc>();
     @JsonProperty("misc")
-    private List<Comp> otherAnnotations = new ArrayList<Comp>();
+    List<Annotation> otherAnnotations = new ArrayList<Annotation>();
 
-    @JsonProperty("misc")
-    public List<Comp> getOtherAnnotations() {
-        return otherAnnotations;
-    }
-
-    @JsonProperty("misc")
-    public void setOtherAnnotations(List<Comp> otherAnnotations) {
-        this.otherAnnotations = otherAnnotations;
-    }
-
-    @JsonProperty("contexts")
-    public List<Context> getContexts() {
-        return contexts;
-    }
-
-    @JsonProperty("contexts")
-    public void setContexts(List<Context> contexts) {
-        this.contexts = contexts;
-    }
-
-    @JsonProperty("measures")
-    public List<Measure> getMeasures() {
-        return measures;
-    }
-
-    @JsonProperty("measures")
-    public void setMeasures(List<Measure> measures) {
-        this.measures = measures;
-    }
-
-    @JsonProperty("docs")
-    public List<Doc> getDocs() {
-        return docs;
-    }
-
-    @JsonProperty("docs")
-    public void setDocs(List<Doc> docs) {
-        this.docs = docs;
+    public List<Context> findContextsContainingKey(String keyToFind, String entity) {
+        contexts.findAll() {
+            it.contextItems.count { it.key.contains(keyToFind) && it.entity == entity } > 0
+        }
     }
 
     /**
-     * Checks if any of the annotations list actually contains some one or more non-empty context items ([Annotations] -> [Context] -> [Context items == Comp]
+     * Hook up relationships between contexts and measures.
+     */
+    public void postDeserialize() {
+        populateParentChildRelationshipsForMeasures();
+        populateContextMeasureRelationships();
+    }
+
+    private void populateParentChildRelationshipsForMeasures() {
+
+    }
+
+    private void populateContextMeasureRelationships() {
+        
+    }
+
+    /**
+     * Checks if any of the annotations list actually contains some one or more non-empty context items ([Annotations] -> [Context] -> [Context items == Annotation]
      * @param annotations
      * @return
      */
     public static Boolean areAnnotationsEmpty(List<BardAnnotation> annotations) {
         Boolean foundSomething = annotations.find {BardAnnotation annotation ->
             annotation.contexts.find {Context context ->
-                context.getComps().find()
+                context.getContextItems().find()
             }
         }
 
@@ -77,13 +54,13 @@ public class BardAnnotation extends JsonUtil {
     }
 
     /**
-     * Checks if any of the annotations list actually contains some one or more non-empty otherAnnotations items ([Annotations] -> [otherAnnotations items == Comp]
+     * Checks if any of the annotations list actually contains some one or more non-empty otherAnnotations items ([Annotations] -> [otherAnnotations items == Annotation]
      * @param annotations
      * @return
      */
     public static Boolean areOtherAnnotationsEmpty(List<BardAnnotation> annotations) {
         Boolean foundSomething = annotations.find {BardAnnotation annotation ->
-            annotation.otherAnnotations.find() //List<Comp>
+            annotation.otherAnnotations.find() //List<Annotation>
         }
 
         return foundSomething ?: false

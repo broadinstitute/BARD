@@ -1,51 +1,22 @@
 package bard.core.rest.spring.assays
 import bard.core.rest.spring.util.JsonUtil
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * TODO: Context is the same as Measure and Doc. Unify them
- * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
+ * A grouping of context items.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Context extends JsonUtil {
 
-    @JsonProperty("id")
-    private long id;
-    @JsonProperty("name")
-    private String name;
+    long id;
+    String name;
     @JsonProperty("comps")
-    private List<Comp> comps = new ArrayList<Comp>();
+    List<Annotation> contextItems = new ArrayList<Annotation>();
 
-    @JsonProperty("id")
-    public long getId() {
-        return id;
-    }
-
-    @JsonProperty("id")
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonProperty("comps")
-    public List<Comp> getComps() {
-        return comps;
-    }
-
-    @JsonProperty("comps")
-    public void setComps(List<Comp> comps) {
-        this.comps = comps;
-    }
+    @JsonIgnore
+    List<Measure> relatedMeasures = new ArrayList<Measure>()
 
     /**
      * a hack to try and split the contexts into columns of relatively equal contextItems
@@ -56,11 +27,11 @@ public class Context extends JsonUtil {
      * @return list of up to 2 lists
      */
     static List<List<Context>> splitForColumnLayout(List<Context> contexts) {
-        int totalNumContextItems = contexts.collect { it?.getComps()?.size() ?: 0 }.sum() ?: 0
+        int totalNumContextItems = contexts.collect { it?.getContextItems()?.size() ?: 0 }.sum() ?: 0
         int half = totalNumContextItems / 2
         int count = 0
         List<Context> firstColumnContexts = contexts.findAll { context ->
-            count += context.getComps().size();
+            count += context.getContextItems().size();
             count <= half
         }
         List<Context> secondColumnContexts = contexts - firstColumnContexts

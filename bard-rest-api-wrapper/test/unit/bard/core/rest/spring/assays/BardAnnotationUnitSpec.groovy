@@ -1,12 +1,8 @@
 package bard.core.rest.spring.assays
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.project.Project
-import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.util.NameDescription
 
 @Unroll
 class BardAnnotationUnitSpec extends Specification {
@@ -35,6 +31,43 @@ class BardAnnotationUnitSpec extends Specification {
                "related":null
             }
          ]
+      },
+      {
+        "id": 113970,
+        "name": "assay footprint",
+        "comps": [
+        {
+            "entityId": null,
+            "entity": "assay",
+            "source": "cap-context",
+            "id": 113970,
+            "display": "384-well plate",
+            "contextRef": "assay footprint",
+            "key": "assay footprint",
+            "value": "384-well plate",
+            "extValueId": null,
+            "url": null,
+            "displayOrder": 0,
+            "related": null
+        }]
+      },
+      {
+        "id":6986,
+        "name":"activity threshold",
+        "comps":[{
+            "entityId":null,
+            "entity":"experiment",
+            "source":"cap-context",
+            "id":6986,
+            "display":"IC50",
+            "contextRef":"activity threshold",
+            "key":"result type",
+            "value":"IC50",
+            "extValueId":null,
+            "url":null,
+            "displayOrder":0,
+            "related":null
+            }]
       }
    ],
    "measures":[
@@ -93,7 +126,7 @@ class BardAnnotationUnitSpec extends Specification {
         assert bardAnnotation.docs
         assert bardAnnotation.docs.size() == 1
         assert bardAnnotation.contexts
-        assert bardAnnotation.contexts.size() == 1
+        assert bardAnnotation.contexts.size() == 3
 
 
     }
@@ -110,7 +143,7 @@ class BardAnnotationUnitSpec extends Specification {
         'no annotations at all'    | []                                                                 | false
         'a single empty annotatin' | [new BardAnnotation()]                                             | false
         'a single empty Context'   | [new BardAnnotation(contexts: [new Context()])]                    | false
-        'a non-empty annotations'  | [new BardAnnotation(contexts: [new Context(comps: [new Comp()])])] | true
+        'a non-empty annotations'  | [new BardAnnotation(contexts: [new Context(contextItems: [new Annotation()])])] | true
     }
 
     void "test areOtherAnnotationsEmpty() #label"() {
@@ -124,7 +157,24 @@ class BardAnnotationUnitSpec extends Specification {
         label                        | annotations                                          | expectedResult
         'no otherAnnotations at all' | []                                                   | false
         'a single empty annotatin'   | [new BardAnnotation()]                               | false
-        'a non-empty annotations'    | [new BardAnnotation(otherAnnotations: [new Comp()])] | true
+        'a non-empty annotations'    | [new BardAnnotation(otherAnnotations: [new Annotation()])] | true
+    }
+
+    void "test findContextsContainingKey #label"() {
+        when:
+        final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
+        List<Context> result = bardAnnotation.findContextsContainingKey(key, entity)
+
+        then:
+        assert result.size() == expectedContextCount
+
+        where:
+        label | key | entity | expectedContextCount
+        'find footprint' | 'footprint' | 'assay' | 1
+        'find species'   | 'species'   | 'assay' | 1
+        'find "a" for assays' | 'a' | 'assay' | 2
+        'find result type for experiments' | 'result type' | 'experiment' | 1
+        'nothing found' | 'find nothing' | 'assay' | 0
     }
 }
 

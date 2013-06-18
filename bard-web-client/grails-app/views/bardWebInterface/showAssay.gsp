@@ -84,16 +84,18 @@
 
                 <div class="row-fluid">
                     <div id="cardHolderAssayProtocol" class="span12">
-                        <g:render template="/context/currentCard"
-                                  model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayType(), subTemplate: 'show', renderEmptyGroups: false]"/>
-                        <g:render template="/context/currentCard"
-                                  model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayFormat(), subTemplate: 'show', renderEmptyGroups: false]"/>
+                        <dl class="dl-horizontal dl-horizontal-wide">
+                            <dt>Assay Format:</dt>
+                            <dd>${assayAdapter?.minimumAnnotation?.assayFormat}</dd>
+                            <dt>Assay Type:</dt>
+                            <dd>${assayAdapter?.minimumAnnotation?.assayType}</dd>
+                        </dl>
                     </div>
                 </div>
 
                 <section id="assay-design-header">
                     <h4>3.1 Assay Design <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions"><i class="icon-question-sign"></i></a> </h4>
-
+`
                     <div class="row-fluid">
                         <div id="cardHolderAssayDesign" class="span12">
                             <g:render template="/context/currentCard"

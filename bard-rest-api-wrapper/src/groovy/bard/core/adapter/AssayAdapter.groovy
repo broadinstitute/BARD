@@ -12,10 +12,10 @@ public class AssayAdapter implements AssayAdapterInterface {
     final AbstractAssay assay
     final Double score
     final NameDescription matchingField
-    final List<BardAnnotation> annotations;
+    final BardAnnotation annotations;
 
 
-    public AssayAdapter(final AbstractAssay assay, final Double score = 0, final NameDescription nameDescription = null, final List<BardAnnotation> annotations = []) {
+    public AssayAdapter(final AbstractAssay assay, final Double score = 0, final NameDescription nameDescription = null, final BardAnnotation annotations = null) {
         this.assay = assay
         this.score = score
         this.matchingField = nameDescription
@@ -112,7 +112,7 @@ public class AssayAdapter implements AssayAdapterInterface {
         return assay.source
     }
 
-    public List<BardAnnotation> getAnnotations() {
+    public BardAnnotation getAnnotations() {
         return annotations
     }
 
