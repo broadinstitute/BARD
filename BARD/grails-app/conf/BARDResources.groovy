@@ -21,10 +21,6 @@ modules = {
     xeditable {
         resource url: "/js/x-editable/bootstrap-editable.js"
         resource url: "/css/x-editable/bootstrap-editable.css"
-        resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css"
-        resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"
-        resource url: "/js/x-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"
-        resource url: "/js/x-editable/inputs-ext/wysihtml5/wysihtml5.js"
         resource url: "/js/x-editable/moment.js"
         resource url: "/js/x-editable/combodate.js"
     }
@@ -116,6 +112,7 @@ modules = {
     }
 
     richtexteditor {
+        resource url:"/css/richtexteditor.css"
         resource url: "/js/nicedit/nicEdit.js"
         resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"

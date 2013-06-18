@@ -235,7 +235,7 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         then: "A valid xml document is generated and is similar to the expected document"
         String actualXml = this.writer.toString()
-        XmlTestAssertions.assertResults(results, actualXml)
+        XmlTestAssertions.assertResultsWithOverrideAttributes(results, actualXml)
         XmlTestAssertions.validate(projectSchema, actualXml)
 
         where:

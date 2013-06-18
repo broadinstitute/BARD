@@ -423,7 +423,7 @@ class EditingHelper {
         dataMap.put('version', currentVersion.toString())
         dataMap.put('modifiedBy', modifiedBy)
         dataMap.put('lastUpdated', formatter.format(lastUpdated))
-        if (shortName) {
+        if (shortName?.trim()) {
             dataMap.put("shortName", shortName)
         }
         dataMap.put("data", newValue)

@@ -21,7 +21,7 @@ class Project extends AbstractContextOwner {
     ProjectStatus projectStatus = ProjectStatus.DRAFT
 
     Date dateCreated
-    Date lastUpdated
+    Date lastUpdated = new Date()
     String modifiedBy
 
     List<ProjectContext> contexts = [] as List
@@ -54,9 +54,8 @@ class Project extends AbstractContextOwner {
         groupType(maxSize: GROUP_TYPE_MAX_SIZE, nullable: false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
         readyForExtraction(nullable: false)
-
+        lastUpdated(nullable:false)
         dateCreated(nullable: false)
-        lastUpdated(nullable: true)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
     /**
