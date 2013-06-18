@@ -332,7 +332,7 @@ class DocumentCommand extends BardCommand {
         if (this.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL ||
                 this.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION) {
             String content = this.documentContent
-            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.trim()
+            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.replaceAll("\n","")?.replaceAll("\r","")?.trim()
         }
         return this.documentContent
     }
