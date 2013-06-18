@@ -132,7 +132,11 @@ class RingManagerService {
 
                 // only if it's tested? Is this right?
                 CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
-                compoundSummaryCategorizer.addNewRecord (experimentIdAsLong, assayFormat, assayType )
+                // One or the other of   assayFormat/assayType might be null ( though not both, or else we wouldn't have been called )
+                //  Therefore substitute a nice friendly string "none" for that null string
+                compoundSummaryCategorizer.addNewRecord ( experimentIdAsLong, //assayFormat,  assayType )
+                                                          assayFormat ?: 'none',
+                                                          assayType ?: 'none' )
                 List <String> unconvertedBiologyHitIds = []
                 List <String> unconvertedBiologyMissIds = []
                 int outcome

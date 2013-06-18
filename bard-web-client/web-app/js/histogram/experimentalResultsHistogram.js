@@ -25,19 +25,22 @@ function drawHistogram(domMarker, oneHistogramsData) {
 
     // adjustable parameters
         barPaddingPercent = 12,
-        histogramBarWidth = 1,
         ticksAlongHorizontalAxis = 5,
         numberOfHorizontalGridlines = 10,
         paddingOnTopForTitle = 10,
         yLabelProportion = 1, /* implies (1-yLabelProportion is) reserved for y axis labels  */
+        minXValue = d3.min(oneHistogramsData.histogram, function (d) {return d[1];}),
+        maxXValue = d3.max(oneHistogramsData.histogram, function (d) {return d[2];}),
 
     // D3 scaling definitions
         xScale = d3.scale.linear()
-            .domain([d3.min(oneHistogramsData.histogram, function (d) {return d[1];}), d3.max(oneHistogramsData.histogram, function (d) {return d[2];})])
+            .domain([minXValue, maxXValue])
             .range([0, chart_dimensions.width]),
         yScale = d3.scale.linear()
             .domain([0, d3.max(oneHistogramsData.histogram, function (d) {return d[0];})])
             .range([chart_dimensions.height, margin.bottom]),
+        histogramBarWidth = xScale(maxXValue - minXValue) / oneHistogramsData.histogram.length,
+        adjustedHistogramBarWidth =  histogramBarWidth-((barPaddingPercent/100)*histogramBarWidth),
 
     //
     // Part 2: tools
@@ -127,8 +130,6 @@ function drawHistogram(domMarker, oneHistogramsData) {
         .call(yAxis);
 
     // Create the rectangles that make up the histogram
-    histogramBarWidth = chart_dimensions.width / oneHistogramsData.histogram.length;
-    histogramBarWidth =  histogramBarWidth-((barPaddingPercent/100)*histogramBarWidth);
     var bar = svg.selectAll("rect")
         .data(oneHistogramsData.histogram)
         .enter()
@@ -136,10 +137,16 @@ function drawHistogram(domMarker, oneHistogramsData) {
         .attr("class", "bar")
         .attr("fill", "steelblue")
         .append("rect")
-        .attr("x", function (d, i) { return xScale(d[1]);  })
-        .attr("y", function (d) { return yScale(d[0]);  })
-        .attr("width", histogramBarWidth )
-        .attr("height", function (d) { return chart_dimensions.height-yScale(d[0]);})
+        .attr("x", function (d, i) {
+            return xScale(d[1]);
+        })
+        .attr("y", function (d) {
+            return yScale(d[0]);
+        })
+        .attr("width", adjustedHistogramBarWidth )
+        .attr("height", function (d) {
+            return chart_dimensions.height-yScale(d[0]);
+        })
         .on("mouseover", tooltipHandler.respondToBarChartMouseOver)
         .on("mousemove", tooltipHandler.respondToBarChartMouseMove)
         .on("mouseout", tooltipHandler.respondToBarChartMouseOut);

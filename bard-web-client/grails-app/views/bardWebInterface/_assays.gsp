@@ -30,7 +30,7 @@
                 </th>
                 <th>Assay Format</th>
                 <th>Assay Type</th>
-                <th>Assay Readout</th>
+                <th>Detection Method Type</th>
                 <th>ADID</th>
                 <th>Assay Title</th>
                 <th>Status</th>
