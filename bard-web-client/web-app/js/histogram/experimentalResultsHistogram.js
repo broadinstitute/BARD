@@ -39,7 +39,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
         yScale = d3.scale.linear()
             .domain([0, d3.max(oneHistogramsData.histogram, function (d) {return d[0];})])
             .range([chart_dimensions.height, margin.bottom]),
-        histogramBarWidth = xScale(maxXValue - minXValue) / oneHistogramsData.histogram.length,
+        histogramBarWidth = (xScale(maxXValue) - xScale(minXValue)) / oneHistogramsData.histogram.length,
         adjustedHistogramBarWidth =  histogramBarWidth-((barPaddingPercent/100)*histogramBarWidth),
 
     //
