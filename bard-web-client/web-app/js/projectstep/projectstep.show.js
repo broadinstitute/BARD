@@ -2,7 +2,11 @@ var redraw;
 
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 window.onload = function () {
-    initFunction();
+    try {
+        initFunction();
+    }
+    catch (e) {
+    }
 };
 
 function initFunction() {
@@ -32,15 +36,15 @@ function initFunction() {
 
         //the Raphael set is obligatory, containing all you want to display
         var set = r.set().push(
-            //r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))    hsb(" + num + ", 0.75, 1)
-            r.circle(-10, -13, 10).attr({"fill":n.data.assignedcolor, "stroke-width":1}))
+                //r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))    hsb(" + num + ", 0.75, 1)
+                r.circle(-10, -13, 10).attr({"fill": n.data.assignedcolor, "stroke-width": 1}))
             .push(label);
 
         set.click(
             function click() {
                 var projectId = $('#projectIdForStep').val();
                 resetAfterClick();
-                var params = {selected:n, projectId:projectId}
+                var params = {selected: n, projectId: projectId}
                 $('#node-selection-details').html(template(params))
             }
         );
@@ -65,8 +69,8 @@ function initFunction() {
             existingColors.push(colorVal);
             aidColor[keyValues.assay] = colorVal;
         }
-        g.addNode(connectedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{link:keyValues.eid, assay:keyValues.assay,
-            ename:keyValues.ename, inCount:keyValues.incount, outCount:keyValues.outcount, aid:keyValues.aid, assignedcolor:colorVal}, render:render });
+        g.addNode(connectedNodes[i].id, { label: keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
+            ename: keyValues.ename, inCount: keyValues.incount, outCount: keyValues.outcount, aid: keyValues.aid, assignedcolor: colorVal}, render: render });
     }
 
     var isolatedNodes = graphInJSON.isolatedNodes;
@@ -74,13 +78,13 @@ function initFunction() {
         var label = r.text(0, 10, n.label);
         //the Raphael set is obligatory, containing all you want to display  #fc0
         var set = r.set().push(
-            r.circle(-10, -13, 10).attr({"fill":n.data.assignedcolor, "stroke-width":1}))
+                r.circle(-10, -13, 10).attr({"fill": n.data.assignedcolor, "stroke-width": 1}))
             .push(label);
         set.click(
             function click() {
                 var projectId = $('#projectIdForStep').val();
                 resetAfterClick();
-                var params = {selected:n, projectId:projectId}
+                var params = {selected: n, projectId: projectId}
                 $('#node-selection-details').html(template(params))
             }
         );
@@ -103,18 +107,18 @@ function initFunction() {
             existingColors.push(colorVal);
             aidColor[keyValues.assay] = colorVal;
         }
-        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{link:keyValues.eid, assay:keyValues.assay,
-            ename:keyValues.ename, aid:keyValues.aid, assignedcolor:colorVal}, render:renderIsolated});
+        gIsolated.addNode(isolatedNodes[i].id, { label: keyValues.eid + "\n" + keyValues.stage, data: {link: keyValues.eid, assay: keyValues.assay,
+            ename: keyValues.ename, aid: keyValues.aid, assignedcolor: colorVal}, render: renderIsolated});
     }
 
     var edges = graphInJSON.edges;
     for (var i = 0; i < edges.length; i++) {
-        g.addEdge(edges[i].from, edges[i].to, {directed:true, stroke:"#aaa", fill:"#56f"});
+        g.addEdge(edges[i].from, edges[i].to, {directed: true, stroke: "#aaa", fill: "#56f"});
     }
 
     /* Use our layout implementation that place nodes with no incoming edges at top, and node with outgoing edges at bottom*/
     // var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
-   // var layouter = new Graph.Layout.Spring(g);
+    // var layouter = new Graph.Layout.Spring(g);
     /* Use our layout implementation that place isolated nodes ordered by experiment id*/
     var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
     //var layouterIsolated = new Graph.Layout.Spring(gIsolated);
@@ -189,7 +193,7 @@ function getsrc() {
 function generatesvg() {
     var result;
     try {
-        result = Viz(getsrc(),"svg");
+        result = Viz(getsrc(), "svg");
         return result;
     } catch (e) {
         return inspect(e.toString());
@@ -199,17 +203,17 @@ function generatesvg() {
 function assignFillColor(selectedNodeId, assignedColor) {
     if (!selectedNodeId)
         return;
-    var thisPolygon = "#"+selectedNodeId + " polygon";
+    var thisPolygon = "#" + selectedNodeId + " polygon";
     $(thisPolygon).attr("fill", assignedColor);
 }
 
 function assignEdgeColor(selectedEdgeId, assignedColor) {
     if (!selectedEdgeId)
         return;
-    var thisPolygon = "#"+selectedEdgeId + " polygon";
+    var thisPolygon = "#" + selectedEdgeId + " polygon";
     $(thisPolygon).attr("fill", assignedColor);
     $(thisPolygon).attr("stroke", assignedColor);
-    var thisPath = "#"+selectedEdgeId + " path";
+    var thisPath = "#" + selectedEdgeId + " path";
     $(thisPath).attr("fill", assignedColor);
     $(thisPath).attr("stroke", assignedColor);
 }
@@ -225,7 +229,7 @@ function initFunction1() {
         var clickedNode = $(this).find('title').text();
         var thisId = $(this).attr("id");
 
-        var thisPolygon = "#"+thisId + " polygon";
+        var thisPolygon = "#" + thisId + " polygon";
         $(thisPolygon).attr("fill", "#00FFFF")
         var prevSelectedNode = $("#selectedNodeId").text();
 
@@ -236,7 +240,7 @@ function initFunction1() {
             if (connectedNodes[i].id == clickedNode) {
                 assignFillColor(prevSelectedNode, "none");
                 assignFillColor(thisId, "#00FFFF");
-                var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
+                var params = {selected: keyValues, projectId: projectId, selectedNodeId: thisId};
                 $('#node-selection-details').html(template(params));
             }
         }
@@ -264,7 +268,7 @@ function initFunction1() {
                 }
                 assignEdgeColor(prevSelectedEdge, "black");
                 assignEdgeColor(thisId, "#00FFFF");
-                var params = {fromNode:from, toNode:to, selectedEdgeId:thisId};
+                var params = {fromNode: from, toNode: to, selectedEdgeId: thisId};
                 $('#edge-selection-details').html(template1(params));
             }
         }
@@ -275,7 +279,7 @@ $(function () {
 
     var msie6 = $.browser == 'msie' && $.browser.version < 7;
 
-    if (!msie6) {
+    if (!msie6 && $('#placeholder').offset()) {
         var top = $('#placeholder').offset().top - parseFloat($('#placeholder').css('margin-top').replace(/auto/, 0));
 
         $(window).scroll(function (event) {
