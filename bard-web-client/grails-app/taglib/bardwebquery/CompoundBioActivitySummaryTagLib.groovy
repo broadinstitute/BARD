@@ -84,26 +84,17 @@ class CompoundBioActivitySummaryTagLib {
 
         out << "<table><tbody>"
         List sortedConcentrations = new ArrayList(attrs.concentrationSeries).sort()
+        DecimalFormat df = new DecimalFormat("0.000E0")
         sortedConcentrations.each { Double conc ->
             int i = attrs.concentrationSeries.indexOf(conc)
             //Get the intValue and reminder of the value
-            BigDecimal activity = new BigDecimal(attrs.activitySeries[i])
-            String[] activitySplit = (new DecimalFormat("#.##")).format(activity).split(/\./)
-            String activityIntValue = activitySplit[0]
-            String activityReminder = activitySplit.size() > 1 ? activitySplit[1] : '00'
-            BigDecimal concentration = new BigDecimal(attrs.concentrationSeries[i])
-            String[] concentrationSplit = (new DecimalFormat("#.##")).format(concentration).split(/\./)
-            String concentrationIntValue = concentrationSplit[0]
-            String concentrationReminder = concentrationSplit.size() > 1 ? concentrationSplit[1] : '00'
+            String activity = df.format(new BigDecimal(attrs.activitySeries[i]))
+            String concentration = df.format(new BigDecimal(attrs.concentrationSeries[i]))
 
             out << "<tr>"
-            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${activityIntValue}</small></p></td>"
-            out << "<td><p class='lineSpacing'>.</p></td>"
-            out << "<td><p class='lineSpacing' style='text-align:left;'><small>${activityReminder}</small></p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${activity}</small></p></td>"
             out << "<td><p class='lineSpacing'>@</p></td>"
-            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${concentrationIntValue}</small></p></td>"
-            out << "<td><p class='lineSpacing'>.</p></td>"
-            out << "<td><p class='lineSpacing' style='text-align:left;'><small>${concentrationReminder}</small></p></td>"
+            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${concentration}</small></p></td>"
             out << "<td><p class='lineSpacing'><small>${attrs.testConcentrationUnit}</small></p></td>"
             out << "</tr>"
 
