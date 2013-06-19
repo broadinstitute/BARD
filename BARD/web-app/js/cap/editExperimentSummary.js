@@ -28,6 +28,8 @@ $(document).ready(function () {
     $('#nameId').editable({
         inputclass: 'input-large',
         params: function (params) {
+            var dataValue = $(this).attr('data-value');
+            params.value=$.trim(dataValue);
             params.version = $('#versionId').val();
             return params;
         },
@@ -42,6 +44,8 @@ $(document).ready(function () {
     $('.description').editable({
         inputclass: 'input-large',
         params: function (params) {
+            var dataValue = $(this).attr('data-value');
+            params.value=$.trim(dataValue);
             params.version = $('#versionId').val();
             return params;
         },

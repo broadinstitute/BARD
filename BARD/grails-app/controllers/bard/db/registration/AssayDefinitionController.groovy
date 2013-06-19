@@ -72,7 +72,7 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
         } catch (Exception ee) {
             log.error(ee)

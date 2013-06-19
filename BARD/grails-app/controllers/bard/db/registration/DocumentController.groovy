@@ -68,7 +68,7 @@ class DocumentController {
                 createDocumentCommand(
                         params.documentName,
                         inlineEditableCommand.pk,
-                        inlineEditableCommand.value,
+                        inlineEditableCommand.value.trim(),
                         DocumentType.byId(params.documentType),
                         inlineEditableCommand.version,
                         inlineEditableCommand.owningEntityId,
@@ -85,7 +85,7 @@ class DocumentController {
         } else {
             DocumentCommand documentCommand =
                 createDocumentCommand(
-                        inlineEditableCommand.value,
+                        inlineEditableCommand.value.trim(),
                         inlineEditableCommand.pk,
                         params.documentName,
                         DocumentType.byId(params.documentType),
