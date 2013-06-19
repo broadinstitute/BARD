@@ -141,7 +141,7 @@
         <g:if test="${!uneditable}">
             <div class="span12">
                 <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Asssay Protocol</g:link>
+                        class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
             </div>
 
         </g:if>
