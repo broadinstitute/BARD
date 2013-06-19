@@ -241,9 +241,12 @@ class AssayDefinitionController {
                 if (params.entryUnitName) {
                     entryUnit = Element.findByLabel(params.entryUnitName)
                 }
-
-                Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-                render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
+                try {
+                    Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                    render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
+                } catch (Exception ee) { //TODO add tests
+                    render status: HttpServletResponse.SC_BAD_REQUEST, text: "${ee.message}"
+                }
 
             }
         }
