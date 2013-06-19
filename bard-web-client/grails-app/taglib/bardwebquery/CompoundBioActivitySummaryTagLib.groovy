@@ -92,9 +92,9 @@ class CompoundBioActivitySummaryTagLib {
             String concentration = df.format(new BigDecimal(attrs.concentrationSeries[i]))
 
             out << "<tr>"
-            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${activity}</small></p></td>"
+            out << "<td style='white-space: nowrap;'><p class='lineSpacing' style='text-align:right;'><small>${activity}</small></p></td>"
             out << "<td><p class='lineSpacing'>@</p></td>"
-            out << "<td><p class='lineSpacing' style='text-align:right;'><small>${concentration}</small></p></td>"
+            out << "<td style='white-space: nowrap;'><p class='lineSpacing' style='text-align:right;'><small>${concentration}</small></p></td>"
             out << "<td><p class='lineSpacing'><small>${attrs.testConcentrationUnit}</small></p></td>"
             out << "</tr>"
 

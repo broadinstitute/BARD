@@ -32,7 +32,14 @@
             <div class="span12">
                 <g:sunburstSection compoundSummary="${tableModel?.additionalProperties?.compoundSummary}"/>
 
-                <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small></h2>
+                <h2>Compound Bio Activity Summary <small>(cid: ${tableModel?.additionalProperties?.id})</small>
+                    <g:set var="smiles" value="${tableModel?.additionalProperties?.smiles}"/>
+                    <g:if test="${smiles}">
+                        <img alt="${smiles}"
+                             src="${createLink(controller: 'chemAxon', action: 'generateStructureImageFromSmiles', params: [smiles: smiles, width: 300, height: 200])}"
+                             style="min-width: ${200}px; min-height: ${133}px"/>
+                    </g:if>
+                </h2>
 
                 <g:form action="showCompoundBioActivitySummary" id="${params.id}">
                     <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>

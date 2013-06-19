@@ -651,6 +651,22 @@ class BardWebInterfaceController {
             return
         }
 
+        String smiles
+        try {
+            CompoundAdapter compoundAdapter = this.queryService.showCompound(id)
+            smiles = compoundAdapter?.structureSMILES
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            String message = "Could not find Compound with CID ${cid}"
+            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
+        }
+        catch (Exception exp) {
+            final String errorMessage = "Show compound page has encountered an error:\n${exp.message}"
+            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+                    errorMessage)
+        }
+
         try {
 
             Map<String, Integer> searchParams = handleSearchParams() //top, skip, nhits
@@ -690,6 +706,7 @@ class BardWebInterfaceController {
                 tableModel.additionalProperties.put("activityOutcome", activityOutcome)
                 tableModel.additionalProperties.put("id", id.toString())
                 tableModel.additionalProperties.put("resourceType", resourceType.name())
+                tableModel.additionalProperties.put("smiles", smiles)
                 session.'compoundSummary' = tableModel.additionalProperties?.compoundSummary
                 session.'actives' = true
                 session.'inactives' = true
@@ -723,7 +740,7 @@ class BardWebInterfaceController {
     }
 
 
-    def feedMeJson(Long id){
+    def feedMeJson(Long id) {
 
 
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
@@ -743,8 +760,8 @@ class BardWebInterfaceController {
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
             return
         }
-        if (session.'compoundSummaryPlusId'==null) {   // we aren't coming from CBAS
-            session.'compoundSummaryPlusId'=['compoundSummary':null,'id':id]
+        if (session.'compoundSummaryPlusId' == null) {   // we aren't coming from CBAS
+            session.'compoundSummaryPlusId' = ['compoundSummary': null, 'id': id]
         }
 
         int dropDown1Choice = 0
