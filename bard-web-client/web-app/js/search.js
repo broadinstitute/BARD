@@ -61,7 +61,7 @@ $(document).ready(function () {
     });
 
     //=== Handle Paging. We bind to all of the paging css classes on the anchor tag ===
-    $(document).on("click", "a.step,a.nextLink,a.prevLink", function (event) {
+    $(document).on("click", "a.step,li.next a,li.prev a", function (event) {
         event.preventDefault();	// prevent the default action behaviour to happen
         var url = $(this).attr('href');
 
