@@ -191,6 +191,7 @@ class PubchemReformatService {
                 Map<String,String> kvs = ["Replicate #": record.series?.toString(), "TID": record.tid]
 
                 // get the value for the current column (record) in the current row (pubchemRow)
+//                println("looking for pubchemRow[${record.tid}] = ${pubchemRow[record.tid]}")
                 String measureValue = pubchemRow[record.tid]
 
                 if (measureValue != null && measureValue.length() > 0)
@@ -281,11 +282,13 @@ class PubchemReformatService {
     }
 
     void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String,String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
+//        println("convertRow: ${measures.collect { it.measure.resultType}}, ${parentRow}, ${parentTid}")
         for(expMeasure in measures) {
             String resultType = expMeasure.measure.resultType.label
             String statsModifier = expMeasure.measure.statsModifier?.label
 
             List rows = map.getValues(pubchemRow, resultType, statsModifier, parentTid)
+//            println("Rows: ${rows}")
             for(row in rows) {
                 int rowNumber = writer.addRow(substanceId, parentRow, row["Replicate #"], row)
 
@@ -489,6 +492,19 @@ class PubchemReformatService {
         Collection<MeasureStub> children = [];
         Map<String,Collection<String>> contextItems = [:]
         Collection<String> contextItemColumns = []
+
+
+        @Override
+        public java.lang.String toString() {
+            return "MeasureStub{" +
+                    "resultType='" + resultType + '\'' +
+                    ", statsModifier='" + statsModifier + '\'' +
+                    ", parentChildRelationship='" + parentChildRelationship + '\'' +
+                    ", children=" + children +
+                    ", contextItems=" + contextItems +
+                    ", contextItemColumns=" + contextItemColumns +
+                    '}';
+        }
     }
 
     static class MappedStub {
@@ -499,13 +515,31 @@ class PubchemReformatService {
         Collection<MappedStub> children = [];
         Map<Element, Collection<String>> contextItems = [:]
         Collection<Element> contextItemColumns = []
+
+
+        @Override
+        public java.lang.String toString() {
+            return "MappedStub{" +
+                    "resultType=" + resultType +
+                    ", statsModifier=" + statsModifier +
+                    ", parentChildRelationship=" + parentChildRelationship +
+                    ", children=" + children +
+                    ", contextItems=" + contextItems +
+                    ", contextItemColumns=" + contextItemColumns +
+                    '}';
+        }
     }
 
     public MappedStub mapStub(MeasureStub stub) {
         MappedStub mapped = new MappedStub()
         mapped.resultType = Element.findByLabel(stub.resultType)
+        if(mapped.resultType == null) {
+            throw new RuntimeException("Could not find result type ${stub.resultType}")
+        }
         if (stub.statsModifier) {
             mapped.statsModifier = Element.findByLabel(stub.statsModifier)
+            if(mapped.statsModifier == null)
+                throw new RuntimeException("Could not find stats modifier ${stub.statsModifier}")
         }
 
         String relationship = stub.parentChildRelationship
@@ -516,9 +550,18 @@ class PubchemReformatService {
 
         for(attribute in stub.contextItems.keySet()) {
             Element attributeElement = Element.findByLabel(attribute)
+            if(attributeElement == null) {
+                throw new RuntimeException("Could not find element with label ${attribute}")
+            }
             mapped.contextItems[attributeElement] = stub.contextItems[attribute]
         }
-        mapped.contextItemColumns = stub.contextItemColumns.collect { Element.findByLabel(it) }
+        mapped.contextItemColumns = stub.contextItemColumns.collect {
+            Element e = Element.findByLabel(it)
+            if(e == null) {
+                throw new RuntimeException("Could not find element with label ${it} for contextColumn")
+            }
+            return e
+        }
 
         mapped.children = stub.children.collect {
             MappedStub mappedChild = mapStub(it)
@@ -549,7 +592,9 @@ class PubchemReformatService {
         measure.resultType = (getUniqueValue(resultTypes.collect { it.resultType } ))
         measure.statsModifier = (getUniqueValue(resultTypes.collect { it.statsModifier } ))
         measure.parentChildRelationship = getUniqueValue(resultTypes.collect { it.parentChildRelationship } )
-	measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}.collectEntries { key, value -> [key, value.collect { it.value } ]  }
+        //println("resultTypes=${resultTypes}")
+	    measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}.collectEntries { key, value -> [key, value.collect { it.value } ]  }
+        //println("contextItems=${measure.contextItems}")
         measure.contextItemColumns = resultTypes.collectMany { it.contextItemColumns.collect {x -> x.attribute} }
         return measure
     }
@@ -661,7 +706,7 @@ class PubchemReformatService {
                 measure.save(failOnError: true)
 
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-		    println("newMeasure.contextItems=${newMeasure.contextItems}")
+//		    println("newMeasure.contextItems=${newMeasure.contextItems}")
                     createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
                 }
 
