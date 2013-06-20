@@ -72,7 +72,7 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
         } catch (Exception ee) {
             log.error(ee)
@@ -241,9 +241,12 @@ class AssayDefinitionController {
                 if (params.entryUnitName) {
                     entryUnit = Element.findByLabel(params.entryUnitName)
                 }
-
-                Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-                render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
+                try {
+                    Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                    render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
+                } catch (Exception ee) { //TODO add tests
+                    render status: HttpServletResponse.SC_BAD_REQUEST, text: "${ee.message}"
+                }
 
             }
         }
@@ -423,7 +426,7 @@ class EditingHelper {
         dataMap.put('version', currentVersion.toString())
         dataMap.put('modifiedBy', modifiedBy)
         dataMap.put('lastUpdated', formatter.format(lastUpdated))
-        if (shortName) {
+        if (shortName?.trim()) {
             dataMap.put("shortName", shortName)
         }
         dataMap.put("data", newValue)

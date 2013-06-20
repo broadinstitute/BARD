@@ -28,7 +28,7 @@ class Experiment extends AbstractContextOwner {
     String description
 
     Date dateCreated
-    Date lastUpdated
+    Date lastUpdated = new Date()
     String modifiedBy
     Long id;
 
@@ -71,7 +71,7 @@ class Experiment extends AbstractContextOwner {
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
         confidenceLevel(nullable: true)
         dateCreated(nullable: false)
-        lastUpdated(nullable: true)
+        lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -83,6 +83,7 @@ class Experiment extends AbstractContextOwner {
     List getContexts() {
         return experimentContexts;
     }
+
 
     @Override
     Map<String, String> getGroupDesc() {
@@ -100,6 +101,7 @@ class Experiment extends AbstractContextOwner {
         addToExperimentContexts(context)
         return context
     }
+
     def afterInsert() {
         Experiment.withNewSession {
             capPermissionService?.addPermission(this)

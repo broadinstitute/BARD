@@ -63,6 +63,8 @@ $(document).ready(function () {
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
+            var dataValue = $(this).attr('data-value');
+            params.value=$.trim(dataValue);
             return params;
         },
         validate: function (value) {
@@ -78,6 +80,8 @@ $(document).ready(function () {
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
+            var dataValue = $(this).attr('data-value');
+            params.value=$.trim(dataValue);
             return params;
         },
         validate: function (value) {

@@ -68,7 +68,7 @@ class DocumentController {
                 createDocumentCommand(
                         params.documentName,
                         inlineEditableCommand.pk,
-                        inlineEditableCommand.value,
+                        inlineEditableCommand.value.trim(),
                         DocumentType.byId(params.documentType),
                         inlineEditableCommand.version,
                         inlineEditableCommand.owningEntityId,
@@ -85,7 +85,7 @@ class DocumentController {
         } else {
             DocumentCommand documentCommand =
                 createDocumentCommand(
-                        inlineEditableCommand.value,
+                        inlineEditableCommand.value.trim(),
                         inlineEditableCommand.pk,
                         params.documentName,
                         DocumentType.byId(params.documentType),
@@ -332,7 +332,7 @@ class DocumentCommand extends BardCommand {
         if (this.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL ||
                 this.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION) {
             String content = this.documentContent
-            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.trim()
+            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.replaceAll("\n","")?.replaceAll("\r","")?.trim()
         }
         return this.documentContent
     }

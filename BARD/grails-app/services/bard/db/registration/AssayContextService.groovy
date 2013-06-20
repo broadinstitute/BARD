@@ -187,7 +187,13 @@ class AssayContextService {
     }
 
     public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
-        Measure measure =
+        Measure measure = Measure.findByAssayAndResultTypeAndStatsModifierAndParentMeasure(assayInstance, resultType, statsModifier, parentMeasure)
+        if(measure){
+            //we need to throw an exception here
+            throw new RuntimeException("Duplicate measures cannot be added to the same assay")
+        }
+
+        measure =
             new Measure(assay: assayInstance, resultType: resultType, statsModifier: statsModifier,
                     entryUnit: entryUnit, parentMeasure: parentMeasure, parentChildRelationship: hierarchyType);
         assayInstance.addToMeasures(measure)

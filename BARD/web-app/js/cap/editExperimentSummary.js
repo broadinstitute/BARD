@@ -2,7 +2,13 @@ $(document).ready(function () {
 
     //inline editing
     $.fn.editable.defaults.mode = 'inline';
-
+    //Set up editing for button
+    $('.documentPencil').click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var dataId = $(this).attr('data-id');
+        $("#" + dataId).editable('toggle');
+    });
 
     //edit status
     $('.status').editable({
@@ -22,6 +28,8 @@ $(document).ready(function () {
     $('#nameId').editable({
         inputclass: 'input-large',
         params: function (params) {
+            var dataValue = $(this).attr('data-value');
+            params.value=$.trim(dataValue);
             params.version = $('#versionId').val();
             return params;
         },
@@ -36,6 +44,8 @@ $(document).ready(function () {
     $('.description').editable({
         inputclass: 'input-large',
         params: function (params) {
+            var dataValue = $(this).attr('data-value');
+            params.value=$.trim(dataValue);
             params.version = $('#versionId').val();
             return params;
         },
