@@ -6,6 +6,7 @@ import bard.db.dictionary.OntologyDataAccessService
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyException
 import grails.converters.JSON
+import grails.plugin.cache.Cacheable
 import org.apache.commons.lang.StringUtils
 
 class OntologyJSonController {
@@ -56,6 +57,7 @@ class OntologyJSonController {
     /**
      * @return List of elements to be used as attributes for ContextItems
      */
+    @Cacheable("contextItemAttributeDescriptors")
     def getAttributeDescriptors() {
 
         List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
@@ -111,15 +113,14 @@ class OntologyJSonController {
         }
     }
 
-    def getValueDescriptorsV2() {
-        if (params?.attributeId) {
-            List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(params.attributeId.toLong())
-            List<Map> values = descriptors.collect{   Descriptor descriptor->
-                asMapForSelect2(descriptor)
-            }
-            Map map = ['results': values]
-            render map as JSON
+    @Cacheable("contextItemValueDescriptors")
+    def getValueDescriptorsV2(Long attributeId) {
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(attributeId)
+        List<Map> values = descriptors.collect{   Descriptor descriptor->
+            asMapForSelect2(descriptor)
         }
+        Map map = ['results': values]
+        render map as JSON
     }
 
     def getAllUnits() {
