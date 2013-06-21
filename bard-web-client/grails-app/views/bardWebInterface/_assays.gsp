@@ -2,7 +2,8 @@
 <g:hiddenField name="totalAssays" id="totalAssays" value="${nhits}"/>
 <div class="row-fluid">
 <g:if test="${facets}">
-    <g:render template="facets" model="['facets': facets, 'formName': FacetFormType.AssayFacetForm]"/>
+    <g:render template="facets"
+              model="['facets': facets, 'appliedFilters': appliedFilters, 'formName': FacetFormType.AssayFacetForm]"/>
     <div class="span9">
 </g:if>
 <g:else>
