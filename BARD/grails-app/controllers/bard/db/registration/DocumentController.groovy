@@ -226,7 +226,6 @@ class DocumentCommand extends BardCommand {
             if (assayId) {
                 doc = new AssayDocument()
                 doc.assay = attemptFindById(Assay, assayId)
-
             }
             if (projectId) {
                 doc = new ProjectDocument()
