@@ -1,19 +1,21 @@
 <r:require module="dynatree"/>
 <div>
-    <div class="row-fluid">
-        <div class="span12">
-            <g:if test="${measures}">
-                <g:link action="editMeasure" id="${assayInstance?.id}"
-                        class="btn">Edit Measures</g:link>
-            </g:if>
-            <g:else>
-                <g:link action="editMeasure" id="${assayInstance?.id}"
-                        class="btn">Add Measures</g:link>
-            </g:else>
+    <g:if test="${editable == 'canedit'}">
+        <div class="row-fluid">
+            <div class="span12">
+                <g:if test="${measures}">
+                    <g:link action="editMeasure" id="${assayInstance?.id}"
+                            class="btn">Edit Measures</g:link>
+                </g:if>
+                <g:else>
+                    <g:link action="editMeasure" id="${assayInstance?.id}"
+                            class="btn">Add Measures</g:link>
+                </g:else>
+            </div>
+            <br/>
+            <br/>
         </div>
-        <br/>
-        <br/>
-    </div>
+    </g:if>
     <g:if test="${measures}">
         <div class="row-fluid">
             <div class="span6">

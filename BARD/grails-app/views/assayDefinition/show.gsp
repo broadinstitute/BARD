@@ -1,8 +1,8 @@
-<%@ page import="bard.db.registration.*" %>
+<%@ page import="org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditor,assaysummary"/>
+    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditor,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Assay Definition</title>
 </head>
@@ -89,7 +89,7 @@
         <div id="msg" class="alert hide"></div>
 
         <div id="showSummary">
-            <g:render template='editSummary' model="['assay': assayInstance]"/>
+            <g:render template='editSummary' model="['assay': assayInstance, canedit: editable]"/>
         </div>
     </div>
 </section>
@@ -112,11 +112,14 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
-            </div>
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
 
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
+
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
@@ -139,11 +142,12 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
@@ -166,11 +170,12 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
@@ -193,11 +198,12 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
@@ -220,11 +226,12 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
@@ -243,11 +250,12 @@
     <g:if test="${assayInstance.groupUnclassified()}">
         <div class="row-fluid">
             <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
-                </div>
-
+                <g:if test="${editable == 'canedit'}">
+                    <div class="span12">
+                        <g:link action="editContext" id="${assayInstance?.id}"
+                                class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
+                    </div>
+                </g:if>
             </g:if>
         </div>
     </g:if>
@@ -281,11 +289,12 @@
     <g:if test="${assayInstance.groupExperimentalVariables()}">
         <div class="row-fluid">
             <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
-                </div>
-
+                <g:if test="${editable == 'canedit'}">
+                    <div class="span12">
+                        <g:link action="editContext" id="${assayInstance?.id}"
+                                class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
+                    </div>
+                </g:if>
             </g:if>
         </div>
     </g:if>
@@ -300,11 +309,11 @@
 
     <div class="row-fluid">
         <g:render template="measuresView"
-                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>
+                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson,editable: editable]"/>
     </div>
 </section>
 <br/>
-<g:render template="assayDocuments" model="[assay: assayInstance]"/>
+<g:render template="assayDocuments" model="[assay: assayInstance, editable: editable]"/>
 </div>
 </div>
 </div>

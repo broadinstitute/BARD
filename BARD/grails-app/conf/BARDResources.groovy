@@ -85,7 +85,9 @@ modules = {
         resource url: '/js/projectstep/viz.js'
         resource url: '/js/projectstep/projectstep.css'
     }
-
+    canEditWidget{
+        resource url:"/css/caneditwidget.css"
+    }
     assaysummary {
         resource url: '/js/cap/editSummary.js'
     }
