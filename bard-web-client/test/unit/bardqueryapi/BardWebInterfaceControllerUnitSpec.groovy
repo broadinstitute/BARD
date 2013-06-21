@@ -90,7 +90,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.search()
         then:
-        1 * this.mobileService.detect(_) >> {isMobile}
+        1 * this.mobileService.detect(_) >> { isMobile }
         assert expectedStatusCode == response.status
         assert response.redirectedUrl == expectedView
         where:
@@ -112,7 +112,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.findSubstanceIds(cid)
         then:
-        _ * this.queryService.findSubstancesByCid(_) >> {sids}
+        _ * this.queryService.findSubstancesByCid(_) >> { sids }
         assert response.status == statusCode
 
         where:
@@ -129,7 +129,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.findSubstanceIds(id)
         then:
-        this.queryService.findSubstancesByCid(_) >> {throw exceptionType}
+        this.queryService.findSubstancesByCid(_) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -150,7 +150,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment()
         then:
-        this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {tableModel}
+        this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { tableModel }
         assert response.status == 200
         assert response.text.contains("Title: experimentName")
     }
@@ -162,7 +162,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         controller.showExperiment(eid, searchCommand)
         then:
-        _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
+        _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { webQueryTableModel }
         assert response.status == statusCode
 
         where:
@@ -177,7 +177,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.probe(probeId)
         then:
-        _ * this.queryService.findProbe(probeId) >> {compoundAdapter}
+        _ * this.queryService.findProbe(probeId) >> { compoundAdapter }
         assert statusCode == response.status
 
         where:
@@ -195,7 +195,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.probe(id)
         then:
-        queryService.findProbe(_) >> {throw exceptionType}
+        queryService.findProbe(_) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -210,7 +210,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showExperiment(id, new SearchCommand())
         then:
-        _ * experimentDataFactoryService.createTableModel(_, _, _, _) >> {throw exceptionType}
+        _ * experimentDataFactoryService.createTableModel(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -225,7 +225,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityForCID(_) >> {promiscuityScoreMap}
+        _ * this.queryService.findPromiscuityForCID(_) >> { promiscuityScoreMap }
         assert response.status == statusCode
 
         where:
@@ -241,7 +241,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityForCID(_) >> {throw exceptionType}
+        _ * this.queryService.findPromiscuityForCID(_) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -257,7 +257,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.promiscuity(cid)
         then:
-        _ * this.queryService.findPromiscuityForCID(_) >> {map}
+        _ * this.queryService.findPromiscuityForCID(_) >> { map }
         assert response.status == HttpServletResponse.SC_NOT_FOUND
     }
 
@@ -267,7 +267,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "searchString"]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -275,7 +275,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.top = "10"
         controller.handleAssaySearches(this.queryService, searchCommand, "user")
         then:
-        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {throw exceptionType}
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -307,13 +307,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
                 searchString: "searchString",
                 filters: searchFilters1
         ]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         controller.handleProjectSearches(this.queryService, searchCommand, Boolean.FALSE, "user")
         then:
-        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {throw exceptionType}
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -325,7 +325,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString", filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -333,7 +333,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.top = "10"
         controller.handleCompoundSearches(this.queryService, searchCommand, false, "user")
         then:
-        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {throw exceptionType}
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -347,8 +347,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         when:
         controller.showProbeList()
         then:
-        mobileService.detect(_) >> {withMobile}
-        queryService.showProbeList() >> {resultsMap}
+        mobileService.detect(_) >> { withMobile }
+        queryService.showProbeList() >> { resultsMap }
         assert response.status == 200
         assert response.text.contains(expectedView)
 
@@ -377,7 +377,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -385,7 +385,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.top = "10"
         controller.handleAssaySearches(this.queryService, searchCommand, isMobile, "user")
         then:
-        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { assayAdapterMap }
         assert response.status == statusCode
 
         where:
@@ -398,6 +398,29 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
     }
 
+    void "test handleAssaySearches with assay-status filtering #label"() {
+        given:
+        mockCommandObject(SearchCommand)
+        params.formName = FacetFormType.AssayFacetForm.toString()
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
+        controller.metaClass.getParams = {-> paramMap }
+        SearchCommand searchCommand = new SearchCommand(paramMap)
+        List foundAssayAdapters = [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")]
+
+        when:
+        params.skip = "0"
+        params.top = "10"
+        controller.handleAssaySearches(this.queryService, searchCommand, isMobile, "user")
+        then:
+        numberOfTimesCalled * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { [assayAdapters: foundAssayAdapters, facets: facets, nHits: 0, eTag: null] }
+
+        where:
+        label                | searchString | isMobile | facets                                                                                                                   | numberOfTimesCalled
+        "Draft only"         | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'Draft', value: 1)])]                                         | 1
+        "Approved  only"     | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'Approved', value: 1)])]                                      | 1
+        "Draft and Approved" | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'Draft', value: 1), new IntValue(id: 'Approved', value: 1)])] | 2
+    }
+
     void "test handle Project Searches #label"() {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.toString()
@@ -406,7 +429,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
                 searchString: searchString,
                 filters: searchFilters1
         ]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -414,7 +437,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.top = "10"
         controller.handleProjectSearches(this.queryService, searchCommand, isMobile, "user")
         then:
-        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> { projectAdapterMap }
         assert response.status == statusCode
 
         where:
@@ -430,7 +453,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
@@ -438,7 +461,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         params.top = "10"
         controller.handleCompoundSearches(this.queryService, searchCommand, isMobile, "user")
         then:
-        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> { compoundAdapterMap }
         assert response.status == statusCode
 
         where:
@@ -454,14 +477,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         controller.searchProjects(searchCommand)
         then:
-        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
-        this.mobileService.detect(_) >> {false}
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> { projectAdapterMap }
+        this.mobileService.detect(_) >> { false }
         assert response.status == statusCode
         where:
         label                 | searchString | statusCode                         | projectAdapterMap
@@ -474,13 +497,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         controller.searchCompounds(searchCommand)
         then:
-        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> { compoundAdapterMap }
         assert response.status == statusCode
         where:
         label                 | searchString | statusCode                         | compoundAdapterMap
@@ -493,13 +516,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         controller.searchAssays(searchCommand)
         then:
-        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { assayAdapterMap }
         assert response.status == statusCode
         where:
         label                 | searchString | statusCode                         | assayAdapterMap
@@ -562,7 +585,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchAssays(new SearchCommand(searchString: searchString))
         then:
-        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> {assayAdapterMap}
+        _ * this.queryService.findAssaysByTextSearch(_, _, _, _) >> { assayAdapterMap }
         and:
         response.status == statusCode
         where:
@@ -579,7 +602,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchProjects(new SearchCommand(searchString: searchString))
         then:
-        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> {projectAdapterMap}
+        _ * this.queryService.findProjectsByTextSearch(_, _, _, _) >> { projectAdapterMap }
         and:
         response.status == statusCode
         where:
@@ -596,7 +619,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchCompounds(new SearchCommand(searchString: searchString))
         then:
-        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.findCompoundsByTextSearch(_, _, _, _) >> { compoundAdapterMap }
         and:
         response.status == statusCode
         where:
@@ -620,13 +643,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, _, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _, _, _, _, _) >> { compoundAdapterMap }
         and:
         response.status == statusCode
         where:
@@ -644,13 +667,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString"]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        this.queryService.structureSearch(_, _, _, 0.90, _, _, _) >> {throw exceptionType}
+        this.queryService.structureSearch(_, _, _, 0.90, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | max  | statusCode
@@ -664,13 +687,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: "searchString", max: "max"]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        this.queryService.structureSearch(_, _, _, 0.90, _, _, _) >> {throw exceptionType}
+        this.queryService.structureSearch(_, _, _, 0.90, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                       | exceptionType   | max   | statusCode
@@ -683,13 +706,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         Map map = controller.handleStructureSearch(this.queryService, searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, _, _, _, _) >> {compoundAdapterMap}
+        _ * this.queryService.structureSearch(_, _, _, _, _, _, _) >> { compoundAdapterMap }
         and:
         assert response.status == 200
         where:
@@ -712,7 +735,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         request.method = 'GET'
         controller.searchStructures(searchCommand)
         then:
-        _ * this.queryService.structureSearch(_, _, _, 0.90, _, _, 0) >> {new RuntimeException("Error Message")}
+        _ * this.queryService.structureSearch(_, _, _, 0.90, _, _, 0) >> { new RuntimeException("Error Message") }
         and:
         response.status == HttpServletResponse.SC_BAD_REQUEST
     }
@@ -745,7 +768,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: []]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when: "We call the removeDuplicates method with the given search string"
@@ -766,13 +789,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByCapIds(_, _, _, _) >> {projectAdapterMap}
+        queryService.findProjectsByCapIds(_, _, _, _) >> { projectAdapterMap }
         and:
         response.status == statusCode
         where:
@@ -789,13 +812,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchCompoundsByIDs(searchCommand)
         then:
-        queryService.searchCompoundsByCids(_, _, _, _) >> {compoundAdapterMap}
+        queryService.searchCompoundsByCids(_, _, _, _) >> { compoundAdapterMap }
         and:
         response.status == statusCode
         where:
@@ -813,14 +836,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: filters]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
         then:
-        queryService.findAssaysByCapIds(_, _, _, _) >> {assayAdapterMap}
+        queryService.findAssaysByCapIds(_, _, _, _) >> { assayAdapterMap }
         and:
         assert response.status == statusCode
         where:
@@ -838,14 +861,14 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: "233"]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
 
         when:
         request.method = 'GET'
         controller.searchAssaysByIDs(searchCommand)
         then:
-        queryService.findAssaysByCapIds(_, _, _, _) >> {throw exceptionType}
+        queryService.findAssaysByCapIds(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -860,13 +883,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.ProjectFacetForm.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.ProjectFacetForm.toString(), searchString: "111"]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchProjectsByIDs(searchCommand)
         then:
-        queryService.findProjectsByCapIds(_, _, _, _) >> {throw exceptionType}
+        queryService.findProjectsByCapIds(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -883,13 +906,13 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.CompoundFacetForm.toString()
         Map paramMap = [formName: FacetFormType.CompoundFacetForm.toString(), searchString: searchString]
-        controller.metaClass.getParams {-> paramMap}
+        controller.metaClass.getParams {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         when:
         request.method = 'GET'
         controller.searchCompoundsByIDs(searchCommand)
         then:
-        queryService.searchCompoundsByCids(_, _, _, _) >> {throw exceptionType}
+        queryService.searchCompoundsByCids(_, _, _, _) >> { throw exceptionType }
         assert response.status == statusCode
         where:
         label                                | exceptionType                                      | statusCode
@@ -1040,8 +1063,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.showProject(pid)
 
         then:
-        queryService.showProject(_) >> {projectAdapter }
-        projectExperimentRenderService.constructGraph(_, _) >> {[:]}
+        queryService.showProject(_) >> { projectAdapter }
+        projectExperimentRenderService.constructGraph(_, _) >> { [:] }
         expectedProjectView == view
         if (pid && projectAdapter) {
             assert model.projectAdapter
@@ -1187,8 +1210,8 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         controller.handleMobile(dataModel, modelAndView)
 
         then:
-        1 * this.mobileService.detect(_) >> {isMobile}
-        (0..1) * this.mobileService.gspExists(_) >> {gspExists}
+        1 * this.mobileService.detect(_) >> { isMobile }
+        (0..1) * this.mobileService.gspExists(_) >> { gspExists }
         assert modelAndView.viewName == expectedViewName
 
         where:
@@ -1205,7 +1228,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         Boolean result = controller.isMobile()
 
         then:
-        1 * this.mobileService.detect(_) >> {isMobile}
+        1 * this.mobileService.detect(_) >> { isMobile }
         assert result == isMobile
 
         where:
@@ -1240,7 +1263,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         controller.showExperiment(eid, searchCommand)
         then:
-        _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> {webQueryTableModel}
+        _ * this.experimentDataFactoryService.createTableModel(_, _, _, _) >> { webQueryTableModel }
         assert response.status == statusCode
 
         where:
