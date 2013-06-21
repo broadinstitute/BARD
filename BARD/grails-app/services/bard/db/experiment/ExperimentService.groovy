@@ -12,24 +12,28 @@ import registration.AssayService
 class ExperimentService {
 
     AssayService assayService;
-    Experiment updateRunFromDate(final Long experimentId, final Date runDateFrom){
+
+    Experiment updateRunFromDate(final Long experimentId, final Date runDateFrom) {
         Experiment experiment = Experiment.findById(experimentId)
         experiment.runDateFrom = runDateFrom
         experiment.save(flush: true)
         return Experiment.findById(experimentId)
     }
-    Experiment updateRunToDate(final Long experimentId, final Date runDateTo){
+
+    Experiment updateRunToDate(final Long experimentId, final Date runDateTo) {
         Experiment experiment = Experiment.findById(experimentId)
         experiment.runDateTo = runDateTo
         experiment.save(flush: true)
         return Experiment.findById(experimentId)
     }
+
     Experiment updateHoldUntilDate(final Long experimentId, final Date newHoldUntilDate) {
         Experiment experiment = Experiment.findById(experimentId)
         experiment.holdUntilDate = newHoldUntilDate
         experiment.save(flush: true)
         return Experiment.findById(experimentId)
     }
+
     Experiment updateExperimentDescription(final Long experimentId, final String newExperimentDescription) {
         Experiment experiment = Experiment.findById(experimentId)
         experiment.description = newExperimentDescription
@@ -37,6 +41,7 @@ class ExperimentService {
         experiment.save(flush: true)
         return Experiment.findById(experimentId)
     }
+
     Experiment updateExperimentName(final Long experimentId, final String newExperimentName) {
         Experiment experiment = Experiment.findById(experimentId)
         experiment.experimentName = newExperimentName
@@ -131,10 +136,8 @@ class ExperimentService {
     }
 
     Experiment createNewExperiment(Assay assay, String experimentName, String description) {
-        Experiment experiment = new Experiment(assay: assay)
-        experiment.experimentName = experimentName
-        experiment.description = description
-        experiment.dateCreated = new Date()
+        Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())
+
         if (experiment.save(flush: true)) {
             populateMeasures(experiment)
         }
@@ -151,7 +154,7 @@ class ExperimentService {
         }
 
         measureToExpMeasure.values().each { ExperimentMeasure child ->
-            if (child.measure.parentMeasure != null) {
+            if (child.measure.parentMeasure) {
                 ExperimentMeasure parent = measureToExpMeasure[child.measure.parentMeasure]
                 child.parentChildRelationship = HierarchyType.SUPPORTED_BY
                 child.parent = parent
@@ -169,12 +172,12 @@ class ExperimentService {
         Assay newAssay = mapping.assay
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
 
-        for (experiment in experiments) {
+        for (Experiment experiment : experiments) {
             oldAssay.removeFromExperiments(experiment)
             newAssay.addToExperiments(experiment)
 
             // map measures over to new assay
-            for (experimentMeasure in experiment.experimentMeasures) {
+            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
                 Measure oldMeasure = experimentMeasure.measure
                 Measure newMeasure = measureOldToNew[oldMeasure]
                 assert newMeasure != null
