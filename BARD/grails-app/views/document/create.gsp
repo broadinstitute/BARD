@@ -10,7 +10,6 @@
 
 <body>
 <g:render template="/common/message"/>
-<g:render template="/common/errors" model="['errors': document?.errors?.allErrors]"/>
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="save">
