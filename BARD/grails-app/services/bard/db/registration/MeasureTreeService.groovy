@@ -1,8 +1,9 @@
 package bard.db.registration
 
+import bard.db.enums.HierarchyType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentMeasure
-import bard.db.enums.HierarchyType
+import org.springframework.security.access.prepost.PreAuthorize
 
 class MeasureTreeService {
 
@@ -31,7 +32,7 @@ class MeasureTreeService {
     public List createMeasureTree(Assay assay, boolean contextsAsChildren) {
         def roots = []
 
-        Collection rootMeasures = assay.measures.findAll { it.parentMeasure == null}
+        Collection rootMeasures = assay.measures.findAll { it.parentMeasure == null }
 
         for (measure in rootMeasures) {
             roots.add(createTreeFromMeasure(measure, contextsAsChildren))
@@ -41,10 +42,11 @@ class MeasureTreeService {
         return roots
     }
 
+    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     public List createMeasureTree(Experiment experiment, boolean contextsAsChildren) {
         def roots = []
 
-        for (m in experiment.experimentMeasures.findAll { it.parent == null}) {
+        for (m in experiment.experimentMeasures.findAll { it.parent == null }) {
             roots << createTreeFromExperimentMeasure(m, contextsAsChildren)
         }
 

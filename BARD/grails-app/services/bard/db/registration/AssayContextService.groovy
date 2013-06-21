@@ -6,6 +6,7 @@ import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import bard.db.registration.additemwizard.*
 import org.apache.commons.lang.StringUtils
+import org.springframework.security.access.prepost.PreAuthorize
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,22 +37,22 @@ class AssayContextService {
         }
         return assayContext
     }
-
-    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType) {
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType, Assay assay) {
         measure.parentChildRelationship = hierarchyType
         measure.save(flush: true)
         return measure
     }
-
-    public void associateContext(Measure measure, AssayContext context) {
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public void associateContext(Measure measure, AssayContext context, Assay assay) {
         AssayContextMeasure assayContextMeasure = new AssayContextMeasure();
         assayContextMeasure.measure = measure;
         assayContextMeasure.assayContext = context;
         measure.assayContextMeasures.add(assayContextMeasure)
         context.assayContextMeasures.add(assayContextMeasure)
     }
-
-    public boolean disassociateContext(Measure measure, AssayContext context) {
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public boolean disassociateContext(Measure measure, AssayContext context, Assay assay) {
         AssayContextMeasure found = null;
         for (assayContextMeasure in context.assayContextMeasures) {
             if (assayContextMeasure.measure == measure && assayContextMeasure.assayContext) {
@@ -185,18 +186,18 @@ class AssayContextService {
         return newAssayContextItem
 
     }
-
-    public Measure addMeasure(Assay assayInstance, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
-        Measure measure = Measure.findByAssayAndResultTypeAndStatsModifierAndParentMeasure(assayInstance, resultType, statsModifier, parentMeasure)
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public Measure addMeasure(Assay assay, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
+        Measure measure = Measure.findByAssayAndResultTypeAndStatsModifierAndParentMeasure(assay, resultType, statsModifier, parentMeasure)
         if(measure){
             //we need to throw an exception here
             throw new RuntimeException("Duplicate measures cannot be added to the same assay")
         }
 
         measure =
-            new Measure(assay: assayInstance, resultType: resultType, statsModifier: statsModifier,
+            new Measure(assay: assay, resultType: resultType, statsModifier: statsModifier,
                     entryUnit: entryUnit, parentMeasure: parentMeasure, parentChildRelationship: hierarchyType);
-        assayInstance.addToMeasures(measure)
+        assay.addToMeasures(measure)
         measure.save()
 
         return measure

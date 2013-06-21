@@ -9,8 +9,9 @@ import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.access.prepost.PreAuthorize
 
-import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -50,6 +51,9 @@ class ExperimentController {
             experiment = experimentService.updateHoldUntilDate(inlineEditableCommand.pk, holdUntilDate)
             final String updatedDateAsString = formatter.format(experiment.holdUntilDate)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -71,6 +75,9 @@ class ExperimentController {
             experiment = experimentService.updateRunFromDate(inlineEditableCommand.pk, runFromDate)
             final String updatedDateAsString = formatter.format(experiment.runDateFrom)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -92,6 +99,9 @@ class ExperimentController {
             experiment = experimentService.updateRunToDate(inlineEditableCommand.pk, runToDate)
             final String updatedDateAsString = formatter.format(experiment.runDateTo)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -109,6 +119,9 @@ class ExperimentController {
             experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.description)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -126,6 +139,9 @@ class ExperimentController {
             experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inlineEditableCommand.value)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentName)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -156,6 +172,9 @@ class ExperimentController {
             experiment = experimentService.updateExperimentStatus(inlineEditableCommand.pk, experimentStatus)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentStatus.id)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -193,6 +212,7 @@ class ExperimentController {
         }
     }
 
+    @PreAuthorize("hasPermission(#assayId, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     def save() {
         def assay = Assay.get(params.assayId)
 

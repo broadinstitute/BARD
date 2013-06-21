@@ -1,6 +1,5 @@
 package bard.db.registration
 
-import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
@@ -30,7 +29,7 @@ class AssayContextServiceUnitSpec extends Specification {
         given:
         Measure measure = Measure.build()
         when:
-        Measure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType)
+        Measure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType, null)
         then:
         assert foundMeasure
 
@@ -113,7 +112,7 @@ class AssayContextServiceUnitSpec extends Specification {
         Measure measure = Measure.build()
 
         when:
-        service.associateContext(measure, context)
+        service.associateContext(measure, context, context.assay)
 
         then:
         measure.assayContextMeasures.size() == 1
@@ -124,7 +123,7 @@ class AssayContextServiceUnitSpec extends Specification {
         link.assayContext == context
 
         when:
-        service.disassociateContext(measure, context)
+        service.disassociateContext(measure, context, context.assay)
 
         then:
         measure.assayContextMeasures.size() == 0

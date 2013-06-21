@@ -19,6 +19,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import spock.lang.IgnoreRest
 import spock.lang.Shared
+import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletResponse
 @Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
+@Unroll
 class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Shared Project project
     @Shared ProjectExperiment projectExperimentFrom
@@ -192,7 +194,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     }
 
 
-    void 'test update stage for an Experiment with null stage'() {
+    void 'test update stage for an Experiment  #desc'() {
         given:
         ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
 
@@ -201,7 +203,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         controller.updateProjectStage(inlineEditableCommand)
         then:
-        assert projectExperimentFrom1.stage.id == projectExperimentTo.stage.id
+        projectService.updateProjectStage(_, _, _) >> { return projectExperimentTo }
         assert response.text == expectedStage
         assert response.status == 200
 
@@ -218,7 +220,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         controller.updateProjectStage(inlineEditableCommand)
         then:
-        assert projectExperimentFrom.stage.id == projectExperimentTo.stage.id
+        projectService.updateProjectStage(_, _, _) >> { return projectExperimentTo }
         assert response.text == "secondary assay"
         assert response.status == 200
     }
