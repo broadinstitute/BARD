@@ -11,6 +11,7 @@ import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import spock.lang.Specification
 
@@ -29,6 +30,9 @@ import javax.servlet.http.HttpServletResponse
 class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Before
     void setup() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         controller.metaClass.mixin(EditingHelper)
 
         ExperimentService experimentService = Mock(ExperimentService)

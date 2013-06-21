@@ -8,24 +8,28 @@
 <%-- A template for showing summary for both project and assay def --%>
 <div id="cardView" class="cardView" class="row-fluid">
     <g:if test="${!uneditable}">
-        <div class="span12">
-            <g:link action="editContext" id="${contextOwner?.id}"
-                    class="btn">Edit</g:link>
-        </div>
+        <g:if test="${editable == 'canedit'}">
+            <div class="span12">
+                <g:link action="editContext" id="${contextOwner?.id}"
+                        class="btn">Edit</g:link>
+            </div>
+        </g:if>
     </g:if>
     <div class="row-fluid">
         <div id="cardHolder" class="span12">
             <g:render template="/context/biology"
-                      model="[contextOwner: contextOwner,  biology: contextOwner.groupBiology(), subTemplate: 'show', renderEmptyGroups: false]"/>
+                      model="[contextOwner: contextOwner, biology: contextOwner.groupBiology(), subTemplate: 'show', renderEmptyGroups: false]"/>
 
         </div>
+
         <div id="cardHolder" class="span12">
             <g:render template="/context/currentCard"
-        model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayType(), subTemplate: 'show', renderEmptyGroups: false]"/>
+                      model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayType(), subTemplate: 'show', renderEmptyGroups: false]"/>
             <g:render template="/context/currentCard"
                       model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayFormat(), subTemplate: 'show', renderEmptyGroups: false]"/>
 
         </div>
+
         <div id="cardHolder" class="span12">
             <g:render template="/context/currentCard"
                       model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayDesign(), subTemplate: 'show', renderEmptyGroups: false]"/>
@@ -40,7 +44,7 @@
 
         <div id="cardHolder" class="span12">
             <g:render template="/context/currentCard"
-                      model="[contextOwner: contextOwner,currentCard: contextOwner.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
+                      model="[contextOwner: contextOwner, currentCard: contextOwner.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
 
         </div>
         <g:if test="${contextOwner.groupUnclassified()}">

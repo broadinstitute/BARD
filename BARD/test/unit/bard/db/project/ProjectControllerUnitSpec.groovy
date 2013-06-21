@@ -15,6 +15,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import spock.lang.IgnoreRest
 import spock.lang.Shared
@@ -42,6 +43,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     @Before
     void setup() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         controller.metaClass.mixin(EditingHelper)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")

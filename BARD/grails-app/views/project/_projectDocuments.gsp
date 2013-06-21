@@ -1,18 +1,19 @@
 <%@ page import="bard.db.registration.DocumentKind; bard.db.enums.DocumentType" %>
+%{--TODO: Unify Assay Document and Project Document gsp--}%
 <section id="documents-header">
     <div class="page-header">
         <h3>4. Documents</h3>
     </div>
 </section>
 <section id="documents-description-header">
-    <div class="page-header">
-        <h4>4.1 Descriptions</h4>
-    </div>
+    <h4>4.1 Descriptions</h4>
 
     <div class="row-fluid">
         <div id="descriptionMsg"></div><br/>
-        <g:render template="addDocumentLink"
-                  model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
+        </g:if>
         <g:each in="${project.descriptions}" var="description">
             <div class="borderlist">
                 <br/>
@@ -30,13 +31,15 @@
                                   data-server-response-id="descriptionMsg"
                                   id="${description.id}_Name">
                 <g:fieldValue bean="${description}" field="documentName"/>
-            </a> <i class="icon-pencil documentPencil" data-id="${description.id}_Name" title="Click to edit name"></i>
+            </a> <i class="icon-pencil documentPencil ${editable}" data-id="${description.id}_Name"
+                    title="Click to edit name"></i>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 ${description.id} richtext" id="${description.id}"
+                    <g:textArea class="span10 ${description.id} richtext" id="textarea_${description.id}"
                                 name="${description.id}"
+                                data-editable="${editable}"
                                 data-documentType="${description.documentType.id}"
                                 data-documentKind="${DocumentKind.ProjectDocument}"
                                 data-version="${description.version}"
@@ -47,22 +50,23 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: description.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: description]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: description]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>
     </div>
 </section>
 <section id="documents-protocol-header">
-    <div class="page-header">
-        <h4>4.2 Protocols</h4>
-    </div>
+    <h4>4.2 Protocols</h4>
 
     <div class="row-fluid">
         <div id="protocolMsg"></div>
-
-        <g:render template="addDocumentLink"
-                  model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
+        </g:if>
         <g:each in="${project.protocols}" var="protocol">
             <div class="borderlist">
                 <br/>
@@ -82,13 +86,15 @@
                 <g:fieldValue bean="${protocol}" field="documentName"/>
 
             </a>
-                <i class="icon-pencil documentPencil" data-id="${protocol.id}_Name" title="Click to edit name"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${protocol.id}_Name"
+                   title="Click to edit name"></i>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 richtext ${protocol.id}" id="${protocol.id}"
+                    <g:textArea class="span10 richtext ${protocol.id}" id="textarea_${protocol.id}"
                                 name="${protocol.id}"
+                                data-editable="${editable}"
                                 data-documentType="${protocol.documentType.id}"
                                 data-documentKind="${DocumentKind.ProjectDocument}"
                                 data-version="${protocol.version}"
@@ -98,22 +104,23 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: protocol.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: protocol]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: protocol]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>
     </div>
 </section>
 <section id="documents-comment-header">
-    <div class="page-header">
-        <h4>4.3 Comments</h4>
-    </div>
+    <h4>4.3 Comments</h4>
 
     <div class="row-fluid">
         <div id="commentsMsg"></div>
-        <g:render template="addDocumentLink"
-                  model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
-
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
+        </g:if>
         <g:each in="${project.comments}" var="comment">
             <div class="borderlist">
                 <br/>
@@ -133,13 +140,15 @@
                 <g:fieldValue bean="${comment}" field="documentName"/>
 
             </a>
-                <i class="icon-pencil documentPencil" data-id="${comment.id}_Name" title="Click to edit name"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${comment.id}_Name"
+                   title="Click to edit name"></i>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 richtext ${comment.id}" id="${comment.id}"
+                    <g:textArea class="span10 richtext ${comment.id}" id="textarea_${comment.id}"
                                 name="${comment.id}"
+                                data-editable="${editable}"
                                 data-server-response-id="commentsMsg"
                                 data-documentType="${comment.documentType.id}"
                                 data-documentKind="${DocumentKind.ProjectDocument}"
@@ -149,22 +158,23 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: comment.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: comment]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: comment]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>
     </div>
 </section>
 <section id="documents-publication-header">
-    <div class="page-header">
-        <h4>4.4 Publications</h4>
-    </div>
+    <h4>4.4 Publications</h4>
 
     <div class="row-fluid">
         <div id="publicationMsg"></div>
-        <g:render template="addDocumentLink"
-                  model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
-
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
+        </g:if>
         <g:each in="${project.publications}" var="publication">
             <div class="borderlist">
                 Publication Name: <a href="javascript:;" data-type="text"
@@ -182,7 +192,7 @@
                                      id="${publication.id}_Name">
                 <g:fieldValue bean="${publication}" field="documentName"/>
 
-            </a> <i class="icon-pencil documentPencil" data-id="${publication.id}_Name"
+            </a> <i class="icon-pencil documentPencil ${editable}" data-id="${publication.id}_Name"
                     title="Click to edit name"></i>
                 <br/>
                 Publication URL:<a href="${publication.documentContent}" data-type="url"
@@ -201,22 +211,25 @@
                                    id="${publication.id}">
                 <g:fieldValue bean="${publication}" field="documentContent"/>
             </a>
-                <i class="icon-pencil documentPencil" data-id="${publication.id}" title="Click to edit URL"></i>
-                <g:render template="deleteDocumentForm" model="[document: publication]"/>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${publication.id}"
+                   title="Click to edit URL"></i>
+                <g:if test="${editable == 'canedit'}">
+                    <g:render template="deleteDocumentForm" model="[document: publication]"/>
+                </g:if>
             </div>
 
         </g:each>
     </div>
 </section>
 <section id="documents-urls-header">
-    <div class="page-header">
-        <h4>4.5 External URLS</h4>
-    </div>
+    <h4>4.5 External URLS</h4>
 
     <div class="row-fluid">
         <div id="externalURLMsg"></div>
-        <g:render template="addDocumentLink"
-                  model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
+        </g:if>
         <g:each in="${project.externalURLs}" var="externalURL">
             <div class="borderlist">
                 External Name: <a href="javascript:;" data-type="text"
@@ -234,7 +247,8 @@
                                   id="${externalURL.id}_Name">
                 <g:fieldValue bean="${externalURL}" field="documentName"/>
 
-            </a> <i class="icon-pencil documentPencil" data-id="${externalURL.id}_Name" title="Click to edit name"></i>
+            </a> <i class="icon-pencil documentPencil ${editable}" data-id="${externalURL.id}_Name"
+                    title="Click to edit name"></i>
                 <br/>
                 Document URL: <a href="${externalURL.documentContent}"
                                  target="externalUrl"
@@ -253,22 +267,25 @@
                                  data-document-name="${externalURL.documentName}" id="${externalURL.id}">
                 <g:fieldValue bean="${externalURL}" field="documentContent"/>
             </a>
-                <i class="icon-pencil documentPencil" data-id="${externalURL.id}" title="Click to edit name"></i>
-                <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${externalURL.id}"
+                   title="Click to edit name"></i>
+                <g:if test="${editable == 'canedit'}">
+                    <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
+                </g:if>
             </div>
         </g:each>
     </div>
 </section>
 <section id="documents-other-header">
-    <div class="page-header">
-        <h4>4.6 Others</h4>
-    </div>
+    <h4>4.6 Others</h4>
 
     <div class="row-fluid">
         <div id="otherMsg"></div>
         <br/>
-        <g:render template="addDocumentLink"
-                  model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[projectId: project.id, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
+        </g:if>
         <g:each in="${project.otherDocuments}" var="otherDocument">
             <div class="borderlist">
                 <br/>
@@ -287,14 +304,16 @@
                                   id="${otherDocument.id}_Name">
                 <g:fieldValue bean="${otherDocument}" field="documentName"/>
             </a>
-                <i class="icon-pencil documentPencil" data-id="${otherDocument.id}_Name" title="Click to edit name"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${otherDocument.id}_Name"
+                   title="Click to edit name"></i>
 
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 richtext ${otherDocument.id}" id="${otherDocument.id}"
+                    <g:textArea class="span10 richtext ${otherDocument.id}" id="textarea_${otherDocument.id}"
                                 name="${otherDocument.id}"
+                                data-editable="${editable}"
                                 data-documentType="${otherDocument.documentType.id}"
                                 data-server-response-id="otherMsg"
                                 data-documentKind="${DocumentKind.ProjectDocument}"
@@ -304,7 +323,9 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: otherDocument.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: otherDocument]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: otherDocument]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>

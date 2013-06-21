@@ -8,6 +8,7 @@ import bard.db.registration.EditingHelper
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -25,6 +26,8 @@ class ExperimentController {
 
     ExperimentService experimentService;
     MeasureTreeService measureTreeService
+    SpringSecurityService springSecurityService
+    def permissionEvaluator
 
     def create() {
         def assay = Assay.get(params.assayId)
@@ -254,8 +257,8 @@ class ExperimentController {
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
 
         JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
-
-        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
+        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, editable: editable ? 'canedit' : 'cannotedit']
     }
 }
 

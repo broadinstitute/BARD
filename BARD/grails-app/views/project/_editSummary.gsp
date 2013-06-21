@@ -19,7 +19,7 @@
                    data-pk="${project.id}"
                    data-url="/BARD/project/editProjectStatus"
                    data-original-title="Select Project Status">${project?.projectStatus?.id}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></i>
+                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></i>
              </dd>
 
             <dt><g:message code="project.name.label" default="Fix i18n"/>:</dt>
@@ -34,7 +34,7 @@
                    data-url="/BARD/project/editProjectName"
                    data-placeholder="Required"
                    data-original-title="Edit Project Name">${project?.name}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Name" data-id="nameId"></i>
+                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></i>
             </dd>
 
             <dt><g:message code="project.description.label" default="Fix i18n"/>:</dt>
@@ -50,7 +50,7 @@
                    data-url="/BARD/project/editDescription"
                    data-placeholder="Required"
                    data-original-title="Edit Description By">${project?.description}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Description" data-id="descriptionId"></i>
+                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></i>
             </dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
