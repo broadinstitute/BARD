@@ -72,6 +72,8 @@ class AssayRestService extends AbstractRestService {
         final URL url = new URL(resource)
 
         final BardAnnotation annotations = (BardAnnotation) getForObject(url.toURI(), BardAnnotation.class)
+        annotations.populateContextMeasureRelationships()
+        
         return annotations;
     }
     /**
