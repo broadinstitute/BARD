@@ -71,11 +71,14 @@ public class Context extends JsonUtil {
         int totalNumContextItems = contexts.collect { it?.getContextItems()?.size() ?: 0 }.sum() ?: 0
         int half = totalNumContextItems / 2
         int count = 0
-        List<Context> firstColumnContexts = contexts.findAll { context ->
+        def sortedContexts = contexts.sort {
+            it.contextItems.size()
+        }
+        List<Context> firstColumnContexts = sortedContexts.findAll { context ->
             count += context.getContextItems().size();
             count <= half
         }
-        List<Context> secondColumnContexts = contexts - firstColumnContexts
+        List<Context> secondColumnContexts = sortedContexts - firstColumnContexts
         def splitContexts = [firstColumnContexts, secondColumnContexts].findAll() // eliminates any empty lists
         return splitContexts
     }

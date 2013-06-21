@@ -52,6 +52,24 @@ class BardAnnotationUnitSpec extends Specification {
         }]
       },
       {
+        "id":44,
+        "name":"project lead name",
+        "comps":[{
+            "entityId":null,
+            "entity":"assay",
+            "source":"cap-context",
+            "id":44,
+            "display":null,
+            "contextRef":"project lead name",
+            "key":"project lead name",
+            "value":null,
+            "extValueId":null,
+            "url":null,
+            "displayOrder":0,
+            "related": null
+        }]
+      },
+      {
         "id":6986,
         "name":"activity threshold",
         "comps":[{
@@ -68,6 +86,24 @@ class BardAnnotationUnitSpec extends Specification {
             "displayOrder":0,
             "related": "measureRefs:2762,2763"
             }]
+      },
+      {
+        "id":99,
+        "name":"screening concentration",
+        "comps":[{
+            "entityId":null,
+            "entity":"assay",
+            "source":"cap-context",
+            "id":99,
+            "display":"0 - 6800 uM",
+            "contextRef":"screening concentration",
+            "key":"screening concentration",
+            "value":"0 - 6800 uM",
+            "extValueId":null,
+            "url":null,
+            "displayOrder":0,
+            "related": null
+        }]
       }
    ],
    "measures":[
@@ -168,14 +204,14 @@ class BardAnnotationUnitSpec extends Specification {
         assert bardAnnotation.docs
         assert bardAnnotation.docs.size() == 1
         assert bardAnnotation.contexts
-        assert bardAnnotation.contexts.size() == 3
+        assert bardAnnotation.contexts.size() == 5
 
         Measure logAC50 = bardAnnotation.measures.get(0)
         Measure AC50 = bardAnnotation.measures.get(1)
         Measure percentActivity = bardAnnotation.measures.get(2)
         Context species = bardAnnotation.contexts.get(0)
         Context footprint = bardAnnotation.contexts.get(1)
-        Context threshold = bardAnnotation.contexts.get(2)
+        Context threshold = bardAnnotation.contexts.get(3)
 
         assert logAC50.parent == AC50
         assert logAC50.children.isEmpty()
@@ -230,21 +266,52 @@ class BardAnnotationUnitSpec extends Specification {
         'a non-empty annotations'     | [new BardAnnotation(otherAnnotations: [new Annotation()])] | true
     }
 
-    void "test findContextsContainingKey #label"() {
+    void "test findAssayContextsContainingKeys #label"() {
         when:
         final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
-        List<Context> result = bardAnnotation.findContextsContainingKey(key, entity)
+        List<Context> result = bardAnnotation.findAssayContextsContainingKeys(keys)
 
         then:
         assert result.size() == expectedContextCount
 
         where:
-        label | key | entity | expectedContextCount
-        'find footprint' | 'footprint' | 'assay' | 1
-        'find species'   | 'species'   | 'assay' | 1
-        'find "a" for assays' | 'a' | 'assay' | 2
-        'find result type for experiments' | 'result type' | 'experiment' | 1
-        'nothing found' | 'find nothing' | 'assay' | 0
+        label | keys | expectedContextCount
+        'find footprint' | 'footprint' | 1
+        'find species'   | 'species' | 1
+        'find "a" for assays' | 'a' | 4
+        'make sure experiment contexts are ignored' | 'result type' | 0
+        'nothing found' | 'find nothing' | 0
+    }
+
+    void "test findAssayContextsContainingKeys with multiple args"() {
+        when:
+        final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
+        List<Context> result = bardAnnotation.findAssayContextsContainingKeys('footprint', 'species')
+
+        then:
+        assert result.size() == 2
+    }
+
+    void "test findAssayContextsForExperimentalVariables"() {
+        when:
+        final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
+        List<Context> result = bardAnnotation.findAssayContextsForExperimentalVariables()
+
+        then:
+        assert result.size() == 2
+    }
+
+    void "test invalid contextRef"() {
+        when:
+        final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
+        bardAnnotation.contexts.each { it.contextItems.each { it.related = "" }}
+        bardAnnotation.measures.each { it.comps.each { it.related = "" }}
+        bardAnnotation.measures.first().comps.first().related = "assayContextRefs:35512"
+        bardAnnotation.populateContextMeasureRelationships()
+
+        then:
+        assert bardAnnotation.measures.first().relatedContexts.isEmpty()
+
     }
 
     void "test unbalanced measure references where only context side has them"() {
@@ -259,7 +326,7 @@ class BardAnnotationUnitSpec extends Specification {
         Measure percentActivity = bardAnnotation.measures.get(2)
         Context species = bardAnnotation.contexts.get(0)
         Context footprint = bardAnnotation.contexts.get(1)
-        Context threshold = bardAnnotation.contexts.get(2)
+        Context threshold = bardAnnotation.contexts.get(3)
 
         assert logAC50.relatedContexts.isEmpty()
         assert AC50.relatedContexts.size() == 2

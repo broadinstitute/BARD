@@ -74,5 +74,20 @@ class ExperimentSearchUnitSpec extends Specification {
         assert experimentSearch.getRole() == ExperimentRole.Primary
     }
 
+    void "test groupByProjectIds"() {
+        when:
+        final ExperimentSearch experimentSearch = objectMapper.readValue(EXPERIMENT_SEARCH_JSON, ExperimentSearch.class)
+        final ExperimentSearch experimentSearch2 = objectMapper.readValue(EXPERIMENT_SEARCH_JSON, ExperimentSearch.class)
+
+        def grouping = ExperimentAbstract.groupByProjectIds([experimentSearch, experimentSearch2])
+
+        then:
+        assert grouping.keySet().size() == 1
+        assert grouping[17L]
+        assert grouping[17L].size() == 2
+        assert grouping[17L].get(0) == experimentSearch
+        assert grouping[17L].get(1) == experimentSearch2
+
+    }
 }
 

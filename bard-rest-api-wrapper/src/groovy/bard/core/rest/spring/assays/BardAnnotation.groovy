@@ -16,10 +16,36 @@ public class BardAnnotation extends JsonUtil {
     @JsonProperty("misc")
     List<Annotation> otherAnnotations = new ArrayList<Annotation>();
 
-    public List<Context> findContextsContainingKey(String keyToFind, String entity) {
-        contexts.findAll() {
-            it.contextItems.count { it.key.contains(keyToFind) && it.entity == entity } > 0
+    /**
+     * Finds all of the Contexts that have at least one Annotation with a matching key.
+     * Key's are matched using String#contains
+     *
+     * @param keysToFind one or more keys to find
+     * @return a list of Contexts
+     */
+    public List<Context> findAssayContextsContainingKeys(String... keysToFind) {
+        contexts.findAll() { Context context ->
+            context.contextItems.any { Annotation contextItem ->
+                keysToFind.any { contextItem.key.contains(it) } && contextItem.entity == "assay"
+            }
         }
+    }
+
+    public List<Context> findAssayContextsForExperimentalVariables() {
+        contexts.findAll() { Context context ->
+            context.contextItems.any { Annotation contextItem ->
+                (!contextItem.display || contextItem.key.contains("screening concentration")) && contextItem.entity == "assay"
+            }
+        }
+    }
+
+    public List<Context> findOrphanAssayContexts() {
+        List<Context> orphans = new ArrayList<Context>()
+        orphans.addAll(contexts)
+        orphans.removeAll(findAssayContextsContainingKeys('readout','detection','assay component role','assay method','assay parameter',
+                'assay format', 'assay footprint', 'biology', 'assay type'))
+        orphans.removeAll(findAssayContextsForExperimentalVariables())
+        return orphans
     }
 
     /**
@@ -36,10 +62,10 @@ public class BardAnnotation extends JsonUtil {
             }
             currMeasure.parseRelatedContextIds().each { Long contextId ->
                 Context context = contexts.find { it.id == contextId }
-                if (!currMeasure.relatedContexts.contains(context)) {
+                if (context && !currMeasure.relatedContexts.contains(context)) {
                     currMeasure.relatedContexts << context
                 }
-                if (!context.relatedMeasures.contains(currMeasure)) {
+                if (context && !context.relatedMeasures.contains(currMeasure)) {
                     context.relatedMeasures << currMeasure
                 }
             }
@@ -50,10 +76,10 @@ public class BardAnnotation extends JsonUtil {
         contexts.each { Context currContext ->
             currContext.parseRelatedMeasureIds().each { Long measureId ->
                 Measure measure = measures.find { it.id == measureId }
-                if (!currContext.relatedMeasures.contains(measure)) {
+                if (measure && !currContext.relatedMeasures.contains(measure)) {
                     currContext.relatedMeasures << measure
                 }
-                if (!measure.relatedContexts.contains(currContext)) {
+                if (measure && !measure.relatedContexts.contains(currContext)) {
                     measure.relatedContexts << currContext
                 }
             }

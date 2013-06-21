@@ -1,4 +1,6 @@
 <dl class="dl-horizontal dl-horizontal-wide">
+    <dt>Name:</dt>
+    <dd>${assayAdapter?.name}</dd>
     <dt>ADID:</dt>
     <dd>${assayAdapter?.capAssayId}</dd>
     <dt>Status:</dt>
@@ -12,8 +14,6 @@
                  alt="Approved" title="This assay has been reviewed for accuracy"/>
         </g:elseif>
     </dd>
-    <dt>Name:</dt>
-    <dd>${assayAdapter?.name}</dd>
     <dt>Short Name:</dt>
     <dd>${assayAdapter?.title}</dd>
     <dt>Designed By:</dt>
