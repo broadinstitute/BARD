@@ -48,7 +48,7 @@ class BardAnnotationUnitSpec extends Specification {
             "extValueId": null,
             "url": null,
             "displayOrder": 0,
-            "related": null
+            "related": "measureRefs:2762"
         }]
       },
       {
@@ -66,7 +66,7 @@ class BardAnnotationUnitSpec extends Specification {
             "extValueId":null,
             "url":null,
             "displayOrder":0,
-            "related":null
+            "related": "measureRefs:2762,2763"
             }]
       }
    ],
@@ -80,14 +80,54 @@ class BardAnnotationUnitSpec extends Specification {
                "entity":"assay",
                "source":"cap-measure",
                "id":2761,
-               "display":"Hill coefficient",
+               "display":"logAC50",
                "contextRef":null,
                "key":null,
-               "value":"Hill coefficient",
+               "value":"logAC50",
                "extValueId":null,
                "url":null,
                "displayOrder":0,
-               "related":""
+               "related":"|parentMeasure:2762"
+            }
+         ]
+      },
+      {
+         "id":2762,
+         "name":null,
+         "comps":[
+            {
+               "entityId":null,
+               "entity":"assay",
+               "source":"cap-measure",
+               "id":2762,
+               "display":"AC50",
+               "contextRef":null,
+               "key":null,
+               "value":"AC50",
+               "extValueId":null,
+               "url":null,
+               "displayOrder":0,
+               "related":"assayContextRefs:6986,113970|parentMeasure:2763"
+            }
+         ]
+      },
+      {
+         "id":2763,
+         "name":null,
+         "comps":[
+            {
+               "entityId":null,
+               "entity":"assay",
+               "source":"cap-measure",
+               "id":2763,
+               "display":"percent activity",
+               "contextRef":null,
+               "key":null,
+               "value":"percent activity",
+               "extValueId":null,
+               "url":null,
+               "displayOrder":0,
+               "related":"assayContextRefs:6986"
             }
          ]
       }
@@ -120,15 +160,45 @@ class BardAnnotationUnitSpec extends Specification {
     void "test serialization to AssayAnnotation"() {
         when:
         final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
+        bardAnnotation.populateContextMeasureRelationships()
+
         then:
         assert bardAnnotation.measures
-        assert bardAnnotation.measures.size() == 1
+        assert bardAnnotation.measures.size() == 3
         assert bardAnnotation.docs
         assert bardAnnotation.docs.size() == 1
         assert bardAnnotation.contexts
         assert bardAnnotation.contexts.size() == 3
 
+        Measure logAC50 = bardAnnotation.measures.get(0)
+        Measure AC50 = bardAnnotation.measures.get(1)
+        Measure percentActivity = bardAnnotation.measures.get(2)
+        Context species = bardAnnotation.contexts.get(0)
+        Context footprint = bardAnnotation.contexts.get(1)
+        Context threshold = bardAnnotation.contexts.get(2)
 
+        assert logAC50.parent == AC50
+        assert logAC50.children.isEmpty()
+        assert AC50.parent == percentActivity
+        assert AC50.children.size() == 1
+        assert AC50.children.contains(logAC50)
+        assert percentActivity.parent == null
+        assert percentActivity.children.size() == 1
+        assert percentActivity.children.contains(AC50)
+
+        assert logAC50.relatedContexts.isEmpty()
+        assert AC50.relatedContexts.size() == 2
+        assert AC50.relatedContexts.get(0) == threshold
+        assert AC50.relatedContexts.get(1) == footprint
+        assert percentActivity.relatedContexts.size() == 1
+        assert percentActivity.relatedContexts.get(0) == threshold
+
+        assert threshold.relatedMeasures.size() == 2
+        assert threshold.relatedMeasures.get(0) == AC50
+        assert threshold.relatedMeasures.get(1) == percentActivity
+        assert footprint.relatedMeasures.size() == 1
+        assert footprint.relatedMeasures.get(0) == AC50
+        assert species.relatedMeasures.isEmpty()
     }
 
     void "test areAnnotationsEmpty() #label"() {
@@ -139,11 +209,11 @@ class BardAnnotationUnitSpec extends Specification {
         assert result == expectedResult
 
         where:
-        label                      | annotations                                                        | expectedResult
-        'no annotations at all'    | []                                                                 | false
-        'a single empty annotatin' | [new BardAnnotation()]                                             | false
-        'a single empty Context'   | [new BardAnnotation(contexts: [new Context()])]                    | false
-        'a non-empty annotations'  | [new BardAnnotation(contexts: [new Context(contextItems: [new Annotation()])])] | true
+        label                       | annotations                                                        | expectedResult
+        'no annotations at all'     | []                                                                 | false
+        'a single empty annotation' | [new BardAnnotation()]                                             | false
+        'a single empty Context'    | [new BardAnnotation(contexts: [new Context()])]                    | false
+        'a non-empty annotations'   | [new BardAnnotation(contexts: [new Context(contextItems: [new Annotation()])])] | true
     }
 
     void "test areOtherAnnotationsEmpty() #label"() {
@@ -154,10 +224,10 @@ class BardAnnotationUnitSpec extends Specification {
         assert result == expectedResult
 
         where:
-        label                        | annotations                                          | expectedResult
-        'no otherAnnotations at all' | []                                                   | false
-        'a single empty annotatin'   | [new BardAnnotation()]                               | false
-        'a non-empty annotations'    | [new BardAnnotation(otherAnnotations: [new Annotation()])] | true
+        label                         | annotations                                          | expectedResult
+        'no otherAnnotations at all'  | []                                                   | false
+        'a single empty annotation'   | [new BardAnnotation()]                               | false
+        'a non-empty annotations'     | [new BardAnnotation(otherAnnotations: [new Annotation()])] | true
     }
 
     void "test findContextsContainingKey #label"() {
@@ -175,6 +245,36 @@ class BardAnnotationUnitSpec extends Specification {
         'find "a" for assays' | 'a' | 'assay' | 2
         'find result type for experiments' | 'result type' | 'experiment' | 1
         'nothing found' | 'find nothing' | 'assay' | 0
+    }
+
+    void "test unbalanced measure references where only context side has them"() {
+        when:
+        final BardAnnotation bardAnnotation = objectMapper.readValue(BARD_ANNOTATION, BardAnnotation.class)
+        bardAnnotation.measures.each { it.comps.each { it.related = "" }}
+        bardAnnotation.populateContextMeasureRelationships()
+
+        then:
+        Measure logAC50 = bardAnnotation.measures.get(0)
+        Measure AC50 = bardAnnotation.measures.get(1)
+        Measure percentActivity = bardAnnotation.measures.get(2)
+        Context species = bardAnnotation.contexts.get(0)
+        Context footprint = bardAnnotation.contexts.get(1)
+        Context threshold = bardAnnotation.contexts.get(2)
+
+        assert logAC50.relatedContexts.isEmpty()
+        assert AC50.relatedContexts.size() == 2
+        assert AC50.relatedContexts.get(0) == footprint
+        assert AC50.relatedContexts.get(1) == threshold
+        assert percentActivity.relatedContexts.size() == 1
+        assert percentActivity.relatedContexts.get(0) == threshold
+
+        assert threshold.relatedMeasures.size() == 2
+        assert threshold.relatedMeasures.get(0) == AC50
+        assert threshold.relatedMeasures.get(1) == percentActivity
+        assert footprint.relatedMeasures.size() == 1
+        assert footprint.relatedMeasures.get(0) == AC50
+        assert species.relatedMeasures.isEmpty()
+
     }
 }
 

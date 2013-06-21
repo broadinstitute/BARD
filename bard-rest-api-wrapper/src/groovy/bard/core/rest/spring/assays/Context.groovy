@@ -3,6 +3,11 @@ import bard.core.rest.spring.util.JsonUtil
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
  * A grouping of context items.
@@ -17,6 +22,42 @@ public class Context extends JsonUtil {
 
     @JsonIgnore
     List<Measure> relatedMeasures = new ArrayList<Measure>()
+
+    static final Pattern RELATED_MEASURES_PATTERN = ~/^measureRefs:([\d,]+)/
+
+    List<Long> parseRelatedMeasureIds() {
+        def measureIds = []
+        contextItems.each { Annotation contextItem ->
+            if (contextItem.related) {
+                Matcher m = RELATED_MEASURES_PATTERN.matcher(contextItem.related)
+                if (m && m.groupCount() > 0) {
+                    m.group(1).split(",").each {
+                        Long id = it as Long
+                        if (!measureIds.contains(id)) {
+                            measureIds << id
+                        }
+                    }
+                }
+            }
+        }
+        return measureIds
+    }
+
+    int hashCode() {
+        def builder = new HashCodeBuilder()
+        builder.append id
+        builder.append name
+        builder.append contextItems
+        builder.toHashCode()
+    }
+
+    boolean equals(other) {
+        def builder = new EqualsBuilder()
+        builder.append(id, other.id)
+        builder.append(name, other.name)
+        builder.append(contextItems, other.contextItems)
+        return builder.equals
+    }
 
     /**
      * a hack to try and split the contexts into columns of relatively equal contextItems

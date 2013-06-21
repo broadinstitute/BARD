@@ -25,17 +25,39 @@ public class BardAnnotation extends JsonUtil {
     /**
      * Hook up relationships between contexts and measures.
      */
-    public void postDeserialize() {
-        populateParentChildRelationshipsForMeasures();
-        populateContextMeasureRelationships();
-    }
-
-    private void populateParentChildRelationshipsForMeasures() {
-
-    }
-
-    private void populateContextMeasureRelationships() {
-        
+    public void populateContextMeasureRelationships() {
+        measures.each { Measure currMeasure ->
+            if(currMeasure.parseParentMeasureId()) {
+                Measure parentMeasure = measures.find { it.id == currMeasure.parseParentMeasureId() }
+                currMeasure.setParent(parentMeasure)
+                if (!parentMeasure.children.contains(currMeasure)) { // guard against duplicate parent ids
+                    parentMeasure.children.add(currMeasure)
+                }
+            }
+            currMeasure.parseRelatedContextIds().each { Long contextId ->
+                Context context = contexts.find { it.id == contextId }
+                if (!currMeasure.relatedContexts.contains(context)) {
+                    currMeasure.relatedContexts << context
+                }
+                if (!context.relatedMeasures.contains(currMeasure)) {
+                    context.relatedMeasures << currMeasure
+                }
+            }
+        }
+        // This second step should be unnecessary since all of the references
+        // should have been created in the previous step, but I've added it
+        // just in case there are data inconsistencies in the response.
+        contexts.each { Context currContext ->
+            currContext.parseRelatedMeasureIds().each { Long measureId ->
+                Measure measure = measures.find { it.id == measureId }
+                if (!currContext.relatedMeasures.contains(measure)) {
+                    currContext.relatedMeasures << measure
+                }
+                if (!measure.relatedContexts.contains(currContext)) {
+                    measure.relatedContexts << currContext
+                }
+            }
+        }
     }
 
     /**
