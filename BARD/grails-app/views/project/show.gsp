@@ -11,7 +11,7 @@
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,richtexteditor,projectsummary"/>
+            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,richtexteditor,projectsummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Show Project</title>
 </head>
@@ -62,7 +62,7 @@
                         </li>
                         <li><a href="#documents-other-header"><i class="icon-chevron-right"></i>4.6 Others</a></li>
                     </a></li>
-                 </ul>
+                </ul>
             </div>
 
             <div class="span9">
@@ -73,34 +73,33 @@
                     </div>
 
                     <div class="row-fluid">
-                        <g:render template='editSummary' model="['project': instance]"/>
+                        <g:render template='editSummary' model="['project': instance, canedit: editable]"/>
                     </div>
                 </section>
+                <br/>
                 <section id="contexts-header">
-                    <div class="page-header">
-                        <h3>2. Contexts</h3>
-                    </div>
+                    <h3>2. Contexts</h3>
 
                     <div class="row-fluid">
                         <g:render template="../context/show"
-                                  model="[contextOwner: instance, contexts: instance.groupContexts()]"/>
+                                  model="[contextOwner: instance, contexts: instance.groupContexts(), canedit: editable]"/>
                     </div>
                 </section>
+                <br/>
                 <section id="experiment-and-step-header">
-                    <div class="page-header">
-                        <h3>3. Experiments and steps</h3>
-                    </div>
+                    <h3>3. Experiments and steps</h3>
 
                     <div class="row-fluid">
                         <g:render template='/project/editstep'
-                                  model="['instanceId': instance.id]"/>
+                                  model="['instanceId': instance.id, canedit: editable]"/>
                         <g:render template="showstep"
                                   model="['experiments': instance.projectExperiments,
-                                          'pegraph': pexperiment, 'instanceId': instance.id]"/>
+                                          'pegraph': pexperiment, 'instanceId': instance.id, canedit: editable ]"/>
 
                     </div>
                 </section>
-                <g:render template="projectDocuments" model="[project: instance]"/>
+                <br/>
+                <g:render template="projectDocuments" model="[project: instance, canedit: editable]"/>
             </div>
         </div>
     </div>

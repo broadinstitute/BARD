@@ -11,7 +11,10 @@ import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
 import grails.validation.ValidationException
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import spock.lang.Unroll
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletResponse
 @TestFor(AssayDefinitionController)
 @Build([Assay, Element, AssayContext, AssayContextMeasure])
 @Mock([Assay, Element, AssayContext, AssayContextMeasure])
+@TestMixin(GrailsUnitTestMixin)
 @Unroll
 class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
 
@@ -32,6 +36,9 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     @Before
     void setup() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         controller.metaClass.mixin(EditingHelper)
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayContextService assayContextService = Mock(AssayContextService)

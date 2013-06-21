@@ -11,7 +11,10 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.ValidationException
 import org.apache.commons.lang.StringUtils
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
+import org.springframework.security.access.PermissionEvaluator
+import org.springframework.security.acls.domain.BasePermission
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -25,9 +28,11 @@ class AssayDefinitionController {
 
     AssayContextService assayContextService
     SpringSecurityService springSecurityService
+    def permissionEvaluator
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
     ContextService contextService
+
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -161,12 +166,11 @@ class AssayDefinitionController {
             // FIXME:  Should not use flash if we do not redirect afterwards
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
-        } else {
-            flash.message = null
-            measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         }
-
-        [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson]
+        flash.message = null
+        measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
+        [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
     }
 
     def editContext() {
@@ -420,6 +424,16 @@ class AssayDefinitionController {
 class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
+    boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
+        final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+
+        def auth = springSecurityService?.authentication
+
+        final boolean hasPermission = permissionEvaluator?.hasPermission(auth, domainInstance, BasePermission.ADMINISTRATION)
+
+        return isAdmin || hasPermission
+
+    }
 
     def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
         Map<String, String> dataMap = [:]

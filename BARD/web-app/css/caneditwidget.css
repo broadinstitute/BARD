@@ -1,0 +1,6 @@
+i.cannotedit{
+    display:none;
+}
+i.canedit{
+    display:inline-block;
+}

@@ -19,7 +19,7 @@
                    data-pk="${assay.id}"
                    data-url="/BARD/assayDefinition/editAssayStatus"
                    data-original-title="Select Assay Status">${assay?.assayStatus?.id}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Status" data-id="${assay?.assayStatus?.id}"></i>
+                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${assay?.assayStatus?.id}"></i>
             </dd>
 
             <dt><g:message code="assay.assayName.label" default="Fix i18n"/>:</dt>
@@ -34,7 +34,7 @@
                    data-url="/BARD/assayDefinition/editAssayName"
                    data-placeholder="Required"
                    data-original-title="Edit Assay Name">${assay?.assayName}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Name" data-id="nameId"></i>
+                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></i>
             </dd>
 
             <dt><g:message code="assay.assayShortName.label" default="Fix i18n"/>:</dt>
@@ -53,7 +53,7 @@
                    data-url="/BARD/assayDefinition/editDesignedBy"
                    data-placeholder="Required"
                    data-original-title="Edit Designed By">${assay?.designedBy}</a>
-                <i class="icon-pencil documentPencil" data-id="designedById" title="Click to edit designed by"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="designedById" title="Click to edit designed by"></i>
             </dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
@@ -71,7 +71,7 @@
                    data-pk="${assay.id}"
                    data-url="/BARD/assayDefinition/editAssayType"
                    data-original-title="Select Assay Type">${assay?.assayType?.id}</a>
-                <i class="icon-pencil documentPencil"  data-id="${assay?.assayType?.id}" title="Click to edit type"></i>
+                <i class="icon-pencil documentPencil ${editable}"  data-id="${assay?.assayType?.id}" title="Click to edit type"></i>
             </dd>
            <dt><g:message code="assay.assayVersion.label" default="Fix i18n"/>:</dt>
             <dd><g:fieldValue bean="${assay}" field="assayVersion"/></dd>

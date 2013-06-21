@@ -11,14 +11,16 @@
 
     <div class="row-fluid">
         <div id="descriptionMsg"></div><br/>
-
-        <g:render template="addDocumentLink"
-                  model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
+        </g:if>
         <g:each in="${assay.descriptions}" var="description" status="stat">
             <div class="borderlist">
                 <br/>
                 Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${description.id}"
+                                  data-editable="${editable}"
                                   data-toggle="manual"
                                   class="documents ${description.id}"
                                   data-url="/BARD/document/editDocumentName"
@@ -31,13 +33,15 @@
                                   data-server-response-id="descriptionMsg"
                                   id="${description.id}_Name">
                 <g:fieldValue bean="${description}" field="documentName"/>
-            </a> <i class="icon-pencil documentPencil" data-id="${description.id}_Name" title="Click to edit name"></i>
+            </a> <i class="icon-pencil documentPencil ${editable}" data-id="${description.id}_Name"
+                    title="Click to edit name"></i>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 ${description.id} richtext" id="${description.id}"
+                    <g:textArea class="span10 ${description.id} richtext" id="textarea_${description.id}"
                                 name="${description.id}"
+                                data-editable="${editable}"
                                 data-documentType="${description.documentType.id}"
                                 data-documentKind="${DocumentKind.AssayDocument}"
                                 data-version="${description.version}"
@@ -48,7 +52,9 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: description.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: description]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: description]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>
@@ -60,14 +66,16 @@
 
     <div class="row-fluid">
         <div id="protocolMsg"></div>
-
-        <g:render template="addDocumentLink"
-                  model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
+        </g:if>
         <g:each in="${assay.protocols}" var="protocol">
             <div class="borderlist">
                 <br/>
                 Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${protocol.id}"
+                                  data-editable="${editable}"
                                   class="documents ${protocol.id}"
                                   data-url="/BARD/document/editDocumentName"
                                   data-documentType="${protocol.documentType.id}"
@@ -82,13 +90,15 @@
                 <g:fieldValue bean="${protocol}" field="documentName"/>
 
             </a>
-                <i class="icon-pencil documentPencil" data-id="${protocol.id}_Name" title="Click to edit name"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${protocol.id}_Name"
+                   title="Click to edit name"></i>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 richtext ${protocol.id}" id="${protocol.id}"
+                    <g:textArea class="span10 richtext ${protocol.id}" id="textarea_${protocol.id}"
                                 name="${protocol.id}"
+                                data-editable="${editable}"
                                 data-documentType="${protocol.documentType.id}"
                                 data-documentKind="${DocumentKind.AssayDocument}"
                                 data-version="${protocol.version}"
@@ -98,7 +108,9 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: protocol.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: protocol]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: protocol]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>
@@ -111,14 +123,16 @@
 
     <div class="row-fluid">
         <div id="commentsMsg"></div>
-        <g:render template="addDocumentLink"
-                  model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
-
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
+        </g:if>
         <g:each in="${assay.comments}" var="comment">
             <div class="borderlist">
                 <br/>
                 Document Name: <a href="javascript:;" data-type="text"
                                   data-pk="${comment.id}"
+                                  data-editable="${editable}"
                                   data-server-response-id="commentsMsg"
                                   class="documents ${comment.id}"
                                   data-url="/BARD/document/editDocumentName"
@@ -133,13 +147,15 @@
                 <g:fieldValue bean="${comment}" field="documentName"/>
 
             </a>
-                <i class="icon-pencil documentPencil" data-id="${comment.id}_Name" title="Click to edit name"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${comment.id}_Name"
+                   title="Click to edit name"></i>
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 richtext ${comment.id}" id="${comment.id}"
+                    <g:textArea class="span10 richtext ${comment.id}" id="textarea_${comment.id}"
                                 name="${comment.id}"
+                                data-editable="${editable}"
                                 data-server-response-id="commentsMsg"
                                 data-documentType="${comment.documentType.id}"
                                 data-documentKind="${DocumentKind.AssayDocument}"
@@ -149,7 +165,9 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: comment.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: comment]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: comment]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>
@@ -162,8 +180,10 @@
     <div class="row-fluid">
         <div class="row-fluid">
             <div id="publicationMsg"></div>
-            <g:render template="addDocumentLink"
-                      model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
+            <g:if test="${editable == 'canedit'}">
+                <g:render template="addDocumentLink"
+                          model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
+            </g:if>
             <g:each in="${assay.publications}" var="publication">
                 <div class="borderlist">
                     Publication Name: <a href="javascript:;" data-type="text"
@@ -181,7 +201,7 @@
                                          id="${publication.id}_Name">
                     <g:fieldValue bean="${publication}" field="documentName"/>
 
-                </a> <i class="icon-pencil documentPencil" data-id="${publication.id}_Name"
+                </a> <i class="icon-pencil documentPencil ${editable}" data-id="${publication.id}_Name"
                         title="Click to edit name"></i>
                     <br/>
                     Publication URL:<a href="${publication.documentContent}" data-type="url"
@@ -200,8 +220,11 @@
                                        id="${publication.id}">
                     <g:fieldValue bean="${publication}" field="documentContent"/>
                 </a>
-                    <i class="icon-pencil documentPencil" data-id="${publication.id}" title="Click to edit URL"></i>
-                    <g:render template="deleteDocumentForm" model="[document: publication]"/>
+                    <i class="icon-pencil documentPencil ${editable}" data-id="${publication.id}"
+                       title="Click to edit URL"></i>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: publication]"/>
+                    </g:if>
                 </div>
             </g:each>
         </div>
@@ -213,10 +236,10 @@
 
     <div class="row-fluid">
         <div id="externalURLMsg"></div>
-
-        <g:render template="addDocumentLink"
-                  model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
-
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
+        </g:if>
         <g:each in="${assay.externalURLs}" var="externalURL">
             <div class="borderlist">
                 External Name: <a href="javascript:;" data-type="text"
@@ -234,7 +257,8 @@
                                   id="${externalURL.id}_Name">
                 <g:fieldValue bean="${externalURL}" field="documentName"/>
 
-            </a> <i class="icon-pencil documentPencil" data-id="${externalURL.id}_Name" title="Click to edit name"></i>
+            </a> <i class="icon-pencil documentPencil ${editable}" data-id="${externalURL.id}_Name"
+                    title="Click to edit name"></i>
                 <br/>
                 Document URL: <a href="${externalURL.documentContent}"
                                  target="externalUrl"
@@ -253,8 +277,11 @@
                                  data-document-name="${externalURL.documentName}" id="${externalURL.id}">
                 <g:fieldValue bean="${externalURL}" field="documentContent"/>
             </a>
-                <i class="icon-pencil documentPencil" data-id="${externalURL.id}" title="Click to edit name"></i>
-                <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${externalURL.id}"
+                   title="Click to edit name"></i>
+                <g:if test="${editable == 'canedit'}">
+                    <g:render template="deleteDocumentForm" model="[document: externalURL]"/>
+                </g:if>
             </div>
         </g:each>
     </div>
@@ -266,8 +293,10 @@
     <div class="row-fluid">
         <div id="otherMsg"></div>
         <br/>
-        <g:render template="addDocumentLink"
-                  model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
+        <g:if test="${editable == 'canedit'}">
+            <g:render template="addDocumentLink"
+                      model="[assayId: assay.id, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
+        </g:if>
         <g:each in="${assay.otherDocuments}" var="otherDocument">
             <div class="borderlist">
                 <br/>
@@ -286,14 +315,16 @@
                                   id="${otherDocument.id}_Name">
                 <g:fieldValue bean="${otherDocument}" field="documentName"/>
             </a>
-                <i class="icon-pencil documentPencil" data-id="${otherDocument.id}_Name" title="Click to edit name"></i>
+                <i class="icon-pencil documentPencil ${editable}" data-id="${otherDocument.id}_Name"
+                   title="Click to edit name"></i>
 
                 <br/>
                 <br/>
 
                 <div class="controls">
-                    <g:textArea class="span10 richtext ${otherDocument.id}" id="${otherDocument.id}"
+                    <g:textArea class="span10 richtext ${otherDocument.id}" id="textarea_${otherDocument.id}"
                                 name="${otherDocument.id}"
+                                data-editable="${editable}"
                                 data-documentType="${otherDocument.documentType.id}"
                                 data-server-response-id="otherMsg"
                                 data-documentKind="${DocumentKind.AssayDocument}"
@@ -303,7 +334,9 @@
                         <g:render template="../document/docsWithLineBreaks"
                                   model="[documentContent: otherDocument.documentContent]"/>
                     </g:textArea>
-                    <g:render template="deleteDocumentForm" model="[document: otherDocument]"/>
+                    <g:if test="${editable == 'canedit'}">
+                        <g:render template="deleteDocumentForm" model="[document: otherDocument]"/>
+                    </g:if>
                 </div>
             </div>
         </g:each>

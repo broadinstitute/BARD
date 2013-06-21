@@ -19,12 +19,12 @@ class CapPermissionService {
         //TODO: until we write the script to populate the new object role in the service table
         //we would use a default role so that all of our tests can pass
         //Take this out as soon as we complete https://www.pivotaltracker.com/story/show/51238251
-        Role newObjectRole = person?.newObjectRole ?: new Role(authority: "BOGUS_ROLE")
+        Role newObjectRole = person?.newObjectRole ?: new Role(authority: userName)
         //we assume that the newObjectRole should never be null. There will be a check constraint to insure that
         addPermission(domainObjectInstance, newObjectRole, BasePermission.ADMINISTRATION)
     }
 
-    protected void addPermission(domainObjectInstance, Role role, Permission permission) {
+    void addPermission(domainObjectInstance, Role role, Permission permission) {
         aclUtilService.addPermission(domainObjectInstance, role.authority, permission)
     }
 }

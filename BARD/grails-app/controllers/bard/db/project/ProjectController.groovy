@@ -10,6 +10,7 @@ import bard.db.registration.AssayContext
 import bard.db.registration.EditingHelper
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
 
@@ -23,6 +24,8 @@ class ProjectController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
     ProjectExperimentRenderService projectExperimentRenderService
     ProjectService projectService
+    SpringSecurityService springSecurityService
+    def permissionEvaluator
 
     def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -92,7 +95,9 @@ class ProjectController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
             return
         }
-        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance)]
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
+
+        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable?'canedit' : 'cannotedit']
     }
 
     def edit() {

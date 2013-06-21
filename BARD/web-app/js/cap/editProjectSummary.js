@@ -24,11 +24,13 @@ $(document).ready(function () {
 
     //Set up editing for button
     $('.documentPencil').click(function (e) {
+        alert("click")
         e.stopPropagation();
         e.preventDefault();
         var dataId = $(this).attr('data-id');
         $("#" + dataId).editable('toggle');
     });
+
 
     //edit status
     $('.status').editable({

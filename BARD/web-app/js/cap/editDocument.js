@@ -8,9 +8,12 @@
 
 
 bkLib.onDomLoaded(function () {
-    var textareas = document.getElementsByTagName("textarea");
+    var textareas = $("textarea");
     for (var i = 0; i < textareas.length; i++) {
         var currentId = textareas[i].id
+        var editableProperty = $("#" + currentId).attr('data-editable')
+
+
         new nicEditor({fullPanel: true,
             iconsPath: '/BARD/images/nicedit/nicEditorIcons.gif',
             onSave: function (content, id, instance) {
@@ -22,10 +25,17 @@ bkLib.onDomLoaded(function () {
                 var documentType = $('#' + documentId).attr('data-documentType');
                 var documentKind = $('#' + documentId).attr('data-documentKind');
                 //this is used to find the div to output success/error messages
-                var msgId =  $('#' + documentId).attr('data-server-response-id');
-                editDocument(documentId, documentKind, owningEntityId, documentContent, documentName, documentType, version,msgId)
+                var msgId = $('#' + documentId).attr('data-server-response-id');
+                var entityId = document.replace("textarea_", "");
+                editDocument(entityId, documentKind, owningEntityId, documentContent, documentName, documentType, version, msgId)
 
             } }).panelInstance(currentId);
+        if (editableProperty == 'cannotedit') {
+            //disable document editing
+            $('.nicEdit-main').attr('contenteditable','false');
+            $('.nicEdit-panel').hide();
+        }
+
     }
 });
 /**
@@ -39,9 +49,9 @@ bkLib.onDomLoaded(function () {
  * @param version
  * @param msgId
  */
-function editDocument( documentId, documentkind, owningEntityId, documentContent, documentName, documentType, version,msgId) {
+function editDocument(documentId, documentkind, owningEntityId, documentContent, documentName, documentType, version, msgId) {
     var payLoad = {
-        'pk':  documentId,
+        'pk': documentId,
         'name': documentkind,
         'owningEntityId': owningEntityId,
         'version': version,
@@ -64,7 +74,7 @@ function editDocument( documentId, documentkind, owningEntityId, documentContent
             $('.alert').html("");
             $('div').removeClass("alert alert-error alert-success");
             $('#' + msgId).addClass("alert alert-success");
-            $('#' + msgId).html("Successfully edited") ;
+            $('#' + msgId).html("Successfully edited");
         },
         error: function (response, textStatus, errorThrown) {
             //reset all div with class of alert
