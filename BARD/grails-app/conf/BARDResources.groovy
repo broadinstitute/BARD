@@ -27,16 +27,16 @@ modules = {
     bootstrapplus {
         resource url: '/css/bootstrap-plus.css'
     }
-    card{
+    card {
         resource url: '/css/card.css'
     }
     addItem {
-        dependsOn(['bootstrapplus','card'])
+        dependsOn(['bootstrapplus', 'card'])
 
         resource url: '/css/AddItemWizard.css'
     }
     contextItem {
-        dependsOn(['select2','bootstrapplus','card'])
+        dependsOn(['select2', 'bootstrapplus', 'card'])
         resource url: '/js/cap/contextItem.js'
     }
     newTerm {
@@ -63,10 +63,10 @@ modules = {
     }
 
     assayshow {
-        dependsOn(['bootstrapplus','card'])
+        dependsOn(['bootstrapplus', 'card'])
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
-        resource url:'/css/measures-dynatree.css'
+        resource url: '/css/measures-dynatree.css'
     }
 
     handlebars {
@@ -85,8 +85,8 @@ modules = {
         resource url: '/js/projectstep/viz.js'
         resource url: '/js/projectstep/projectstep.css'
     }
-    canEditWidget{
-        resource url:"/css/caneditwidget.css"
+    canEditWidget {
+        resource url: "/css/caneditwidget.css"
     }
     assaysummary {
         resource url: '/js/cap/editSummary.js'
@@ -114,7 +114,7 @@ modules = {
     }
 
     richtexteditor {
-        resource url:"/css/richtexteditor.css"
+        resource url: "/css/richtexteditor.css"
         resource url: "/js/nicedit/nicEdit.js"
         resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"

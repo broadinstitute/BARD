@@ -4,6 +4,7 @@ import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.registration.Assay
+import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
@@ -25,7 +26,8 @@ class ExperimentController {
     static final DateFormat inlineDateFormater = new SimpleDateFormat("yyyy-MM-dd")
 
 
-    ExperimentService experimentService;
+    ExperimentService experimentService
+    AssayDefinitionService assayDefinitionService
     MeasureTreeService measureTreeService
     SpringSecurityService springSecurityService
     def permissionEvaluator
@@ -53,7 +55,8 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
+            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -77,7 +80,8 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
+            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -101,7 +105,8 @@ class ExperimentController {
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
+            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -116,12 +121,12 @@ class ExperimentController {
                 conflictMessage(message)
                 return
             }
-            experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
+            experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.description)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -136,12 +141,12 @@ class ExperimentController {
                 conflictMessage(message)
                 return
             }
-            experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentName)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -174,7 +179,7 @@ class ExperimentController {
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -212,10 +217,8 @@ class ExperimentController {
         }
     }
 
-    @PreAuthorize("hasPermission(#assayId, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     def save() {
         def assay = Assay.get(params.assayId)
-
         Experiment experiment = new Experiment()
         experiment.assay = assay
         setEditFormParams(experiment)
@@ -223,6 +226,8 @@ class ExperimentController {
         if (!validateExperiment(experiment)) {
             renderCreate(assay, experiment)
         } else {
+            //this should trigger a forbidden messsage if the current user does not have privileges to create
+            //an experiment in this assay
             if (!experiment.save(flush: true)) {
                 renderCreate(assay, experiment)
             } else {

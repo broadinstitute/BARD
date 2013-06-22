@@ -39,7 +39,7 @@ class ProjectController {
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectStatus", ee)
             editErrorMessage()
@@ -54,12 +54,12 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -74,12 +74,12 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
+            project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editDescription", ee)
             editErrorMessage()
@@ -138,7 +138,7 @@ class ProjectController {
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             render 'serviceError:' + e.message
         }
@@ -154,7 +154,7 @@ class ProjectController {
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             render 'serviceError:' + e.message
         }
@@ -175,7 +175,7 @@ class ProjectController {
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             log.error(e)
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: 'An internal server error has occurred. Please notify the BARD team'
@@ -208,7 +208,7 @@ class ProjectController {
             }
             catch (AccessDeniedException ade) {
                 log.error(ade)
-                accessDeniedErrorMessage()
+                render accessDeniedErrorMessage()
             } catch (UserFixableException e) {
                 render 'serviceError:' + e.message
             } catch (Exception ee) {
@@ -254,7 +254,7 @@ class ProjectController {
             render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }

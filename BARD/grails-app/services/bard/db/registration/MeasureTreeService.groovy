@@ -42,8 +42,7 @@ class MeasureTreeService {
         return roots
     }
 
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public List createMeasureTree(Experiment experiment, boolean contextsAsChildren) {
+     public List createMeasureTree(Experiment experiment, boolean contextsAsChildren) {
         def roots = []
 
         for (m in experiment.experimentMeasures.findAll { it.parent == null }) {

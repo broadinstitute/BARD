@@ -7,30 +7,30 @@ import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Project updateProjectStatus(Long projectId, ProjectStatus newProjectStatus) {
-        Project project = Project.findById(projectId)
+    Project updateProjectStatus(Long id, ProjectStatus newProjectStatus) {
+        Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
 
         project.save(flush: true)
-        return Project.findById(projectId)
+        return Project.findById(id)
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Project updateProjectDescription(Long projectId, String newProjectDescription) {
-        Project project = Project.findById(projectId)
+    Project updateProjectDescription(Long id, String newProjectDescription) {
+        Project project = Project.findById(id)
         project.description = newProjectDescription
 
         project.save(flush: true)
-        return Project.findById(projectId)
+        return Project.findById(id)
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Project updateProjectName(Long projectId, String newProjectName) {
-        Project project = Project.findById(projectId)
+    Project updateProjectName(Long id, String newProjectName) {
+        Project project = Project.findById(id)
         project.name = newProjectName
 
         project.save(flush: true)
-        return Project.findById(projectId)
+        return Project.findById(id)
     }
 
     @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")

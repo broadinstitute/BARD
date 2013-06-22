@@ -47,7 +47,7 @@ class AssayDefinitionController {
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
             log.error(ee)
@@ -70,7 +70,7 @@ class AssayDefinitionController {
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
             log.error(ee)
@@ -91,7 +91,7 @@ class AssayDefinitionController {
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         }
         catch (Exception ee) {
             log.error(ee)
@@ -112,7 +112,7 @@ class AssayDefinitionController {
         }
         catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -220,7 +220,7 @@ class AssayDefinitionController {
     }
     //TODO: move into a service
     def deleteMeasure() {
-        def measure = Measure.get(params.measureId)
+        Measure measure = Measure.get(params.measureId)
 
         if (measure.childMeasures.size() != 0) {
             flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it has children"
@@ -228,6 +228,10 @@ class AssayDefinitionController {
             flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it is used in an experiment definition"
         } else {
             //TODO: Move this into a service so we can secure it. Pass the associated entity along
+            if (!canEdit(permissionEvaluator, springSecurityService, measure.assay)) {
+                render accessDeniedErrorMessage()
+                return
+            }
             measure.delete()
         }
 
@@ -271,7 +275,7 @@ class AssayDefinitionController {
                 }
                 catch (AccessDeniedException ade) {
                     log.error(ade)
-                    accessDeniedErrorMessage()
+                    render accessDeniedErrorMessage()
                 }
                 catch (Exception ee) { //TODO add tests
                     render status: HttpServletResponse.SC_BAD_REQUEST, text: "${ee.message}"
@@ -296,7 +300,7 @@ class AssayDefinitionController {
             }
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
             return
         }
         redirect(action: "editMeasure", id: assayContext.assay.id)
@@ -321,7 +325,7 @@ class AssayDefinitionController {
             }
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
             return
         }
         redirect(action: "editMeasure", id: params.id)
@@ -341,13 +345,12 @@ class AssayDefinitionController {
             } else {
                 flash.message = null
                 if (measure.parentMeasure) { //if this measure has no parent then do nothing
-
                     assayContextService.changeParentChildRelationship(measure, hierarchyType, measure.assay)
                 }
             }
         } catch (AccessDeniedException ade) {
             log.error(ade)
-            accessDeniedErrorMessage()
+            render accessDeniedErrorMessage()
             return
         }
         redirect(action: "editMeasure", id: params.id)
@@ -401,7 +404,7 @@ class AssayDefinitionController {
         def assayContextItem = AssayContextItem.get(assayContextItemId)
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
     }
-
+    //TODO: Add ACL
     def updateCardName(String edit_card_name, Long contextId) {
         AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
         Assay assay = assayContext.assay
@@ -413,6 +416,7 @@ class AssayDefinitionController {
      * @param contextMoveId - The context that we are moving to new group
      *
      */
+    //TODO: Add ACL
     def moveCard(String context_group, Long contextMoveId) {
         AssayContext assayContext = AssayContext.findById(contextMoveId)
         if (assayContext.contextGroup != context_group) {
@@ -430,7 +434,7 @@ class AssayDefinitionController {
         }
         render(template: "moveItemForm", model: [instance: assayInstance, assayId: assayId, itemId: itemId])
     }
-
+    //TODO: Add ACL
     def moveCardItem(Long cardId, Long assayContextItemId, Long assayId) {
         AssayContext targetAssayContext = AssayContext.findById(cardId)
         AssayContextItem source = AssayContextItem.findById(assayContextItemId)
@@ -444,7 +448,7 @@ class AssayDefinitionController {
         def assayInstance = Assay.findById(instanceId)
         render(template: "editSummary", model: [assay: assayInstance])
     }
-
+    //TODO: Add ACL
     def moveMeasureNode(Long measureId, Long parentMeasureId) {
         Measure measure = Measure.get(measureId)
         Measure parentMeasure = null
@@ -499,7 +503,7 @@ class EditingHelper {
     }
 
     def accessDeniedErrorMessage() {
-        render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
+        return [status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null]
     }
 
 }

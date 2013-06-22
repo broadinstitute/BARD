@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.db.project.*" %>
+<%@ page import="bard.db.registration.DocumentKind; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,7 +99,8 @@
                     </div>
                 </section>
                 <br/>
-                <g:render template="projectDocuments" model="[project: instance, canedit: editable]"/>
+                <g:render template="/document/documents"
+                          model="[documentKind: DocumentKind.ProjectDocument, owningEntity: instance, canedit: editable]"/>
             </div>
         </div>
     </div>

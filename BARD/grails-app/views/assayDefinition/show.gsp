@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditor,assaysummary,canEditWidget"/>
+    <r:require
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditor,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Assay Definition</title>
 </head>
@@ -309,11 +310,12 @@
 
     <div class="row-fluid">
         <g:render template="measuresView"
-                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson,editable: editable]"/>
+                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>
     </div>
 </section>
 <br/>
-<g:render template="assayDocuments" model="[assay: assayInstance, editable: editable]"/>
+<g:render template="/document/documents"
+          model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable]"/>
 </div>
 </div>
 </div>

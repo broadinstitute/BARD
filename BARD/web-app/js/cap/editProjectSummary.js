@@ -2,35 +2,13 @@ $(document).ready(function () {
 
     //inline editing
     $.fn.editable.defaults.mode = 'inline';
-
-    //set up editing for documents
-    $('.documents').editable({
-        params: function (params) {
-            var version = $(this).attr('data-version');
-            var owningEntityId = $(this).attr('data-owningEntityId');
-            params.version = version;
-            params.owningEntityId = owningEntityId;
-            params.documentName = $(this).attr('data-document-name');
-            params.documentType = $(this).attr('data-documentType');
-            return params;
-        },
-        ajaxOptions: {
-            complete: function (response, serverMessage) {
-                updateEntityVersion(response, serverMessage);
-            }
-        }
-
-    });
-
     //Set up editing for button
     $('.documentPencil').click(function (e) {
-        alert("click")
         e.stopPropagation();
         e.preventDefault();
         var dataId = $(this).attr('data-id');
         $("#" + dataId).editable('toggle');
     });
-
 
     //edit status
     $('.status').editable({
@@ -51,8 +29,6 @@ $(document).ready(function () {
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
-            var dataValue = $(this).attr('data-value');
-            params.value=$.trim(dataValue);
             return params;
         },
         validate: function (value) {
@@ -68,8 +44,6 @@ $(document).ready(function () {
         inputclass: 'input-large',
         params: function (params) {
             params.version = $('#versionId').val();
-            var dataValue = $(this).attr('data-value');
-            params.value=$.trim(dataValue);
             return params;
         },
         validate: function (value) {
@@ -119,7 +93,7 @@ function validateRequiredField(fieldName, messageHolder) {
         return false;
     }
     return true;
-};
+}
 
 function initFunction() {
     $("input#projectName").blur(function () {
