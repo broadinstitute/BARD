@@ -1,8 +1,10 @@
 <%@ page import="bard.db.registration.DocumentKind; bard.db.enums.DocumentType" %>
-%{--TODO: Unify Assay Document and Project Document gsp--}%
 <section id="documents-header">
     <div class="page-header">
         <h3>4. Documents</h3>
+        <g:if test="${editable == 'canedit'}">
+            <h5>Use the 'save icon' to persist any changes you make on the Rich Text Editor</h5>
+        </g:if>
     </div>
 </section>
 <section id="documents-description-header">
@@ -216,19 +218,19 @@
                 <g:if test="${publication.documentContent}">
                     <a href="${publication.documentContent}"
                        data-type="url"
-                          data-pk="${publication.id}"
-                          target="publicationURL"
-                          data-server-response-id="publicationMsg_${publication}"
-                          class="documents ${publication.id}"
-                          data-toggle="manual"
-                          data-url="/BARD/document/editDocument"
-                          data-documentType="${publication.documentType.id}"
-                          data-documentKind="${documentKind}"
-                          data-version="${publication.version}"
-                          data-owningEntityId="${owningEntity.id}"
-                          data-inputclass="input-xxlarge"
-                          data-document-name="${publication.documentName}"
-                          id="${publication.id}_URL">
+                       data-pk="${publication.id}"
+                       target="publicationURL"
+                       data-server-response-id="publicationMsg_${publication}"
+                       class="documents ${publication.id}"
+                       data-toggle="manual"
+                       data-url="/BARD/document/editDocument"
+                       data-documentType="${publication.documentType.id}"
+                       data-documentKind="${documentKind}"
+                       data-version="${publication.version}"
+                       data-owningEntityId="${owningEntity.id}"
+                       data-inputclass="input-xxlarge"
+                       data-document-name="${publication.documentName}"
+                       id="${publication.id}_URL">
                         <g:fieldValue bean="${publication}" field="documentContent"/>
                     </a>
                 </g:if>

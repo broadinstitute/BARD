@@ -87,7 +87,7 @@ CbipCrowd {
     applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE']
     mockUsers {
         integrationTestUser {
-            roles = ['ROLE_USER']
+            roles = ['ROLE_USER','ROLE_CURATOR','ROLE_BARD_ADMINISTRATOR']
             username = 'integrationTestUser'
             password = 'integrationTestUser'
             email = 'integrationTestUser@nowhere.com'
