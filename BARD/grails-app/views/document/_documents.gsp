@@ -12,11 +12,12 @@
 
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
-                      model="[owningEntityId: owningEntity.id,documentKind:documentKind, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
+                      model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION, label: 'Add New Description']"/>
         </g:if>
         <g:each in="${owningEntity.descriptions}" var="description">
             <div class="borderlist">
                 <br/>
+
                 <div id="descriptionMsg_${description.id}"></div><br/>
                 <b>Document Name:</b>
                 <span data-type="text"
@@ -69,11 +70,12 @@
 
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
-                      model="[owningEntityId: owningEntity.id,documentKind:documentKind, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
+                      model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_PROTOCOL, label: 'Add New Protocol']"/>
         </g:if>
         <g:each in="${owningEntity.protocols}" var="protocol">
             <div class="borderlist">
                 <br/>
+
                 <div id="protocolMsg_${protocol.id}"></div><br/>
                 <b>Document Name:</b>
                 <span data-type="text"
@@ -127,11 +129,12 @@
 
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
-                      model="[owningEntityId: owningEntity.id,documentKind:documentKind, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
+                      model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_COMMENTS, label: 'Add New Comment']"/>
         </g:if>
         <g:each in="${owningEntity.comments}" var="comment">
             <div class="borderlist">
                 <br/>
+
                 <div id="commentsMsg_${comment.id}"></div>
                 <br/>
                 <b>Document Name:</b> <span data-type="text"
@@ -184,10 +187,11 @@
 
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
-                      model="[owningEntityId: owningEntity.id, documentKind:documentKind,documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
+                      model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_PUBLICATION, label: 'Add New Publication']"/>
         </g:if>
         <g:each in="${owningEntity.publications}" var="publication">
-            <div class="borderlist"> <br/>
+            <div class="borderlist"><br/>
+
                 <div id="publicationMsg_${publication}"></div><br/>
                 <b>Publication Name:</b> <span data-type="text"
                                                data-pk="${publication.id}"
@@ -208,22 +212,44 @@
                    title="Click to edit name">
                 </a>
                 <br/>
-                <b>Publication URL:</b><span data-type="url"
-                                             data-pk="${publication.id}"
-                                             target="publicationURL"
-                                             data-server-response-id="publicationMsg_${publication}"
-                                             class="documents ${publication.id}"
-                                             data-toggle="manual"
-                                             data-url="/BARD/document/editDocument"
-                                             data-documentType="${publication.documentType.id}"
-                                             data-documentKind="${documentKind}"
-                                             data-version="${publication.version}"
-                                             data-owningEntityId="${owningEntity.id}"
-                                             data-inputclass="input-xxlarge"
-                                             data-document-name="${publication.documentName}"
-                                             id="${publication.id}_URL">
-                <g:fieldValue bean="${publication}" field="documentContent"/>
-            </span>
+                <b>Publication URL:</b>
+                <g:if test="${publication.documentContent}">
+                    <a href="${publication.documentContent}"
+                       data-type="url"
+                          data-pk="${publication.id}"
+                          target="publicationURL"
+                          data-server-response-id="publicationMsg_${publication}"
+                          class="documents ${publication.id}"
+                          data-toggle="manual"
+                          data-url="/BARD/document/editDocument"
+                          data-documentType="${publication.documentType.id}"
+                          data-documentKind="${documentKind}"
+                          data-version="${publication.version}"
+                          data-owningEntityId="${owningEntity.id}"
+                          data-inputclass="input-xxlarge"
+                          data-document-name="${publication.documentName}"
+                          id="${publication.id}_URL">
+                        <g:fieldValue bean="${publication}" field="documentContent"/>
+                    </a>
+                </g:if>
+                <g:else>
+                    <span data-type="url"
+                          data-pk="${publication.id}"
+                          target="publicationURL"
+                          data-server-response-id="publicationMsg_${publication}"
+                          class="documents ${publication.id}"
+                          data-toggle="manual"
+                          data-url="/BARD/document/editDocument"
+                          data-documentType="${publication.documentType.id}"
+                          data-documentKind="${documentKind}"
+                          data-version="${publication.version}"
+                          data-owningEntityId="${owningEntity.id}"
+                          data-inputclass="input-xxlarge"
+                          data-document-name="${publication.documentName}"
+                          id="${publication.id}_URL">
+                        <g:fieldValue bean="${publication}" field="documentContent"/>
+                    </span>
+                </g:else>
                 <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${publication.id}_URL"
                    title="Click to edit name">
                 </a>
@@ -242,11 +268,12 @@
 
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
-                      model="[owningEntityId: owningEntity.id, documentKind:documentKind,documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
+                      model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, label: 'Add New URL']"/>
         </g:if>
         <g:each in="${owningEntity.externalURLs}" var="externalURL">
             <div class="borderlist">
                 <br/>
+
                 <div id="externalURLMsg_${externalURL.id}"></div><br/>
                 <b>External Name:</b> <span data-type="text"
                                             data-pk="${externalURL.id}"
@@ -267,26 +294,49 @@
                    title="Click to edit name">
                 </a>
                 <br/>
-                <b>Document URL:</b> <span
-                    target="externalUrl"
-                    data-type="url"
-                    data-server-response-id="externalURLMsg_${externalURL.id}"
-                    data-toggle="manual"
-                    data-pk="${externalURL.id}"
-                    class="documents ${externalURL.id}"
-                    data-url="/BARD/document/editDocument"
-                    data-documentType="${externalURL.documentType.id}"
-                    data-documentKind="${documentKind}"
-                    data-version="${externalURL.version}"
-                    data-owningEntityId="${owningEntity.id}"
-                    data-inputclass="input-xxlarge"
-                    data-toggle="manual"
-                    data-document-name="${externalURL.documentName}" id="${externalURL.id}_URL">
-                <g:fieldValue bean="${externalURL}" field="documentContent"/>
-            </span>
+                <b>Document URL:</b>
+                <g:if test="${externalURL.documentContent}">
+                    <a href="${externalURL.documentContent}"
+                       target="externalUrl"
+                       data-type="url"
+                       data-server-response-id="externalURLMsg_${externalURL.id}"
+                       data-toggle="manual"
+                       data-pk="${externalURL.id}"
+                       class="documents ${externalURL.id}"
+                       data-url="/BARD/document/editDocument"
+                       data-documentType="${externalURL.documentType.id}"
+                       data-documentKind="${documentKind}"
+                       data-version="${externalURL.version}"
+                       data-owningEntityId="${owningEntity.id}"
+                       data-inputclass="input-xxlarge"
+                       data-toggle="manual"
+                       data-document-name="${externalURL.documentName}" id="${externalURL.id}_URL">
+                        <g:fieldValue bean="${externalURL}" field="documentContent"/>
+                    </a>
+                </g:if>
+                <g:else>
+                    <span
+                            target="externalUrl"
+                            data-type="url"
+                            data-server-response-id="externalURLMsg_${externalURL.id}"
+                            data-toggle="manual"
+                            data-pk="${externalURL.id}"
+                            class="documents ${externalURL.id}"
+                            data-url="/BARD/document/editDocument"
+                            data-documentType="${externalURL.documentType.id}"
+                            data-documentKind="${documentKind}"
+                            data-version="${externalURL.version}"
+                            data-owningEntityId="${owningEntity.id}"
+                            data-inputclass="input-xxlarge"
+                            data-toggle="manual"
+                            data-document-name="${externalURL.documentName}" id="${externalURL.id}_URL">
+                        <g:fieldValue bean="${externalURL}" field="documentContent"/>
+                    </span>
+                </g:else>
                 <a href="#" class="icon-pencil documentPencil ${editable}" data-id="${externalURL.id}_URL"
                    title="Click to edit name">
                 </a>
+
                 <g:if test="${editable == 'canedit'}">
                     <g:render template="/document/deleteDocumentForm" model="[document: externalURL]"/>
                 </g:if>
@@ -301,11 +351,12 @@
 
         <g:if test="${editable == 'canedit'}">
             <g:render template="/document/addDocumentLink"
-                      model="[owningEntityId: owningEntity.id,documentKind:documentKind, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
+                      model="[owningEntityId: owningEntity.id, documentKind: documentKind, documentType: DocumentType.DOCUMENT_TYPE_OTHER, label: 'Add Other']"/>
         </g:if>
         <g:each in="${owningEntity.otherDocuments}" var="otherDocument">
             <div class="borderlist">
                 <br/>
+
                 <div id="otherMsg_${otherDocument.id}"></div>
                 <br/>
                 <b>Document Name:</b>
