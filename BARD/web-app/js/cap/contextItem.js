@@ -26,44 +26,54 @@ $(document).ready(function () {
         }
     }
 
+    var attributeValueType, attributeUnitId, attributeData;
     var setupAttributeSelection = function(attributeDetailsArrivedCallback) {
-    $("#attributeElementId").select2({
-        minimumInputLength: 1,
-        allowClear: true,
-        placeholder: "Search for attribute name",
-        initSelection: function (element, callback) {
-            var id = $(element).val();
-            if (id !== "") {
-                $.ajax("/BARD/ontologyJSon/getElement", {
-                    data: {
-                        id: id
-                    },
-                    dataType: "json"
-                }).done(function (data) {
-                        callback(data);
-                        attributeDetailsArrivedCallback(data);
-                    });
-            }
-        },
-        ajax: {
-            url: "/BARD/ontologyJSon/getDescriptors",
-            dataType: 'json',
-            quietMillis: 100,
-            data: function (term) {
-                return { term: term};
-            },
-            results: function (data) {
-                return data;
-            }
-        }
-    }).on("change", function (e) {
-            // on change of the attribute, clear all value fields
-            clearAllValueFields();
-            // hide any existing error messages, will be redisplayed when user submits with new attribute
-            hideAnyErrorMessages();
-            // based on the attribute selected only show the appropriate value widgets
-            var data = $("#attributeElementId").select2("data");
+        var contCallback = function(data) {
+            // save this in variables outside this scope for later use
+            attributeValueType = data ? data.expectedValueType : '';
+            attributeUnitId = data.unitId;
+            attributeData = data;
+
             attributeDetailsArrivedCallback(data);
+        };
+
+        $("#attributeElementId").select2({
+            minimumInputLength: 1,
+            allowClear: true,
+            placeholder: "Search for attribute name",
+            initSelection: function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("/BARD/ontologyJSon/getElement", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                            callback(data);
+                            contCallback(data);
+                        });
+                }
+            },
+            ajax: {
+                url: "/BARD/ontologyJSon/getDescriptors",
+                dataType: 'json',
+                quietMillis: 100,
+                data: function (term) {
+                    return { term: term};
+                },
+                results: function (data) {
+                    return data;
+                }
+            }
+        }).on("change", function (e) {
+                // on change of the attribute, clear all value fields
+                clearAllValueFields();
+                // hide any existing error messages, will be redisplayed when user submits with new attribute
+                hideAnyErrorMessages();
+                // based on the attribute selected only show the appropriate value widgets
+                var data = $("#attributeElementId").select2("data");
+                contCallback(data);
         });
     };
 
@@ -71,7 +81,7 @@ $(document).ready(function () {
     if($("#providedWithResults").length == 0){
         setupAttributeSelection(onlyShowWidgetsBasedOnResponse)
     } else {
-
+        setupAttributeSelection(onlyShowWidgetsBasedOnResponse)
     }
     initialFocus();
 
@@ -96,7 +106,8 @@ $(document).ready(function () {
         var expectedValueType = data? data.expectedValueType: '';
         var unitId = data.unitId;
 
-        onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data)
+        updateConstraintWidgets();
+        console.log("updated")
     }
 
     function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data) {
@@ -239,8 +250,6 @@ $(document).ready(function () {
                 populateDataValueUnitId(unitsData.results, attributeUnitId);
             }
         ).done();
-
-
     }
 
     function populateDataValueUnitId(data, selectedId) {
@@ -261,26 +270,62 @@ $(document).ready(function () {
         }
     }
 
-    $("#providedWithResults").on("change", function(e){
-        if($("#providedWithResults").is(":checked")) {
-            $("#valueConstraintContainer").show()
-            $('input[name="valueConstraintType"]').enable()
+    function showWidgetsForConstraints() {
+        console.log("widget constraints");
+        if($("#valueConstraintNone").is(":checked")) {
+            console.log("no constraint");
+            onlyShowWidgetsForExpectedValueType("UNCONSTRAINED", null, null);
+        } else if($("#valueConstraintRange").is(":checked")) {
+            console.log("range constraint");
+            onlyShowWidgetsForExpectedValueType("RANGE", null, null);
+        } else if($("#valueConstraintList").is(":checked")) {
+            console.log("list constraint");
+            onlyShowWidgetsForExpectedValueType(attributeValueType, attributeUnitId, attributeData);
         } else {
-            $("#valueConstraintContainer").hide()
-            $('input[name="valueConstraintType"]').disable()
+            console.log("none checked");
         }
-    });
+    }
 
-    $('#').on('change', function(e){
-        var expectedValueType;
-        if($("#").is(':checked')) {
-            expectedValueType = "NONE"
-        } else if() {
-            expectedValueType = "RANGE"
-        } else if() {
-            onlyShowWidgetsForExpectedValueType(expectedValueType, null, null)
+    function updateConstraintWidgets() {
+        if($("#providedWithResults").is(':checked')) {
+
+            $("#valueConstraintContainer").show();
+
+            // hide/show radio buttons based on expected type
+            if(attributeValueType == "NUMERIC") {
+                $("#valueConstraintRangeContainer").show();
+            } else {
+                $("#valueConstraintRangeContainer").hide();
+            }
+
+            showWidgetsForConstraints()
+        } else {
+            $("#valueConstraintContainer").hide();
+
+            onlyShowWidgetsForExpectedValueType(attributeValueType, attributeUnitId, attributeData)
         }
+    }
+
+    // set up "Value to be provided as part of result upload" checkbox to show the radio buttons
+    // for type constraint if checked
+    $('#providedWithResults').on('change', function(e){
+        var buttons = $('input:radio[name=valueConstraintType]');
+        buttons.prop('checked', false);
+
+        if($("#providedWithResults").is(':checked')) {
+            $('#valueConstraintNone').prop('checked', true);
+        } else {
+
+        }
+
+        updateConstraintWidgets();
     })
+
+    // set up the radio buttons so that widgets are shown based on which type of constraint
+    $('input[name="valueConstraintType"]').on('change', function(e) {
+        showWidgetsForConstraints()
+    })
+
 });
 
 

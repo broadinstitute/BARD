@@ -35,7 +35,7 @@
         <div class="control-group">
             <div class="controls">
                 <label class="checkbox">
-                    <input id="providedWithResults" name="providedWithResults" type="checkbox"/>
+                    <g:checkBox disabled="${disabledInput}" id="providedWithResults" name="providedWithResults" checked="${instance.providedWithResults}"/>
                     Value to be provided as part of result upload
                 </label>
             </div>
@@ -47,15 +47,15 @@
 
                 <div class="controls">
                     <label class="radio">
-                        <input name="valueConstraintType" checked type="radio"/> Not constrained
+                        <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintNone" value="None" checked="${instance.valueConstraintType == 'None'}"/> Not constrained
                     </label>
 
                     <label class="radio">
-                        <input name="valueConstraintType" type="radio"/> Should be selected from a list of acceptable values specified below
+                        <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintList" value="List" checked="${instance.valueConstraintType == 'List'}"/> Should be selected from a list of acceptable values specified below
                     </label>
 
-                    <label class="radio">
-                        <input name="valueConstraintType" type="radio"/> Should be within range specified below
+                    <label class="radio" id="valueConstraintRangeContainer">
+                        <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintRange" value="Range" checked="${instance.valueConstraintType == 'Range'}"/> Should be within range specified below
                     </label>
                 </div>
             </div>
@@ -128,10 +128,10 @@
 
             <div class="control controls-row">
                 <g:select class="offset1 span2" id="qualifier" name="qualifier"
-                          noSelection="${['': message(code: "contextItem.qualifier.label")]}"
                           from="${instance?.constraints.qualifier.inList}"
-                          value="${instance?.qualifier}"
-                          disabled="${disabledInput}"/>
+                          value="${instance?.qualifier != null ? instance?.qualifier : '= '}"
+                          disabled="${disabledInput}"
+                          />
 
                 <g:textField class="span2" id="valueNum" name="valueNum"
                              placeholder="${message(code: "contextItem.valueNum.label")}"
@@ -157,7 +157,7 @@
         <g:if test="${disabledInput == false}">
             <div class="row-fluid">
                 <div class="span6 offset2 alert alert-info">
-                    <p>This attribute expects a numeric value, please enter an integer, decimal or scientific notation, e.g. 1, 1.0 or 1E-3</p>
+                    <p>Please enter a the min and max of the allowed range below</p>
                 </div>
             </div>
         </g:if>
