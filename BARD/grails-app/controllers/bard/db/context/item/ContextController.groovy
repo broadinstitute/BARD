@@ -26,11 +26,4 @@ class ContextController {
         render(template: "/context/list", model: [contextOwner: owner, contexts: owner.groupContexts(), subTemplate: 'edit'])
     }
 
-//    def updateCardTitle(Long src_assay_context_item_id, Long target_assay_context_id) {
-//        AssayContextItem sourceAssayContextItem = AssayContextItem.findById(src_assay_context_item_id)
-//        AssayContext targetAssayContext = AssayContext.findById(target_assay_context_id)
-//        contextService.updateContextName(targetAssayContext, sourceAssayContextItem)
-//        render(template: "/context/list", model: [contextOwner: targetAssayContext, contexts: targetAssayContext.groupContexts(), subTemplate: 'edit'])
-//    }
-
 }

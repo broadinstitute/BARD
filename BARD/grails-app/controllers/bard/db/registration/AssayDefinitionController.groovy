@@ -218,7 +218,7 @@ class AssayDefinitionController {
 
         [assayInstance: assayInstance, measuresTreeAsJson: measuresTreeAsJson]
     }
-    //TODO: move into a service
+
     def deleteMeasure() {
         Measure measure = Measure.get(params.measureId)
 
@@ -227,14 +227,12 @@ class AssayDefinitionController {
         } else if (measure.experimentMeasures.size() != 0) {
             flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it is used in an experiment definition"
         } else {
-            //TODO: Move this into a service so we can secure it. Pass the associated entity along
             if (!canEdit(permissionEvaluator, springSecurityService, measure.assay)) {
                 render accessDeniedErrorMessage()
                 return
             }
             measure.delete()
         }
-
         redirect(action: "editMeasure", id: params.id)
     }
 
@@ -404,10 +402,12 @@ class AssayDefinitionController {
         def assayContextItem = AssayContextItem.get(assayContextItemId)
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
     }
-    //TODO: Add ACL
+
     def updateCardName(String edit_card_name, Long contextId) {
-        AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
+        AssayContext assayContext = AssayContext.findById(contextId)
         Assay assay = assayContext.assay
+        assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay)
+        assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
     /**
@@ -419,6 +419,7 @@ class AssayDefinitionController {
     //TODO: Add ACL
     def moveCard(String context_group, Long contextMoveId) {
         AssayContext assayContext = AssayContext.findById(contextMoveId)
+
         if (assayContext.contextGroup != context_group) {
             assayContext.setContextGroup(context_group)
         }
@@ -438,7 +439,7 @@ class AssayDefinitionController {
     def moveCardItem(Long cardId, Long assayContextItemId, Long assayId) {
         AssayContext targetAssayContext = AssayContext.findById(cardId)
         AssayContextItem source = AssayContextItem.findById(assayContextItemId)
-        assayContextService.addItem(source, targetAssayContext)
+        assayContextService.addItem(source, targetAssayContext, targetAssayContext.assay)
         Assay assay = targetAssayContext.assay
         render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }

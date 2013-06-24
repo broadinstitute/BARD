@@ -52,7 +52,7 @@ class AssayContextServiceUnitSpec extends Specification {
         assert sourceAssayContext == draggedAssayContextItem.assayContext
 
         when:
-        service.addItem(draggedAssayContextItem, targetAssayContext)
+        service.addItem(draggedAssayContextItem, targetAssayContext, targetAssayContext.assay)
 
         then:
         assertItemAdded(targetAssayContext, draggedAssayContextItem, sizeAfterAdd, indexOfAddedItem)
@@ -73,7 +73,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
 
         when: 'it is added to the assayContext again'
-        service.addItem(assayContext.assayContextItems.first(), assayContext)
+        service.addItem(assayContext.assayContextItems.first(), assayContext, null)
 
         then: 'do nothing, particulary throw an IOOBE' // if you didn't guess the earlier code was resulting in a IOOBE
         notThrown(IndexOutOfBoundsException)
