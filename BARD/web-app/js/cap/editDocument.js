@@ -29,7 +29,6 @@ $(document).ready(function () {
     });
 
 
-//bkLib.onDomLoaded(function () {
     var textareas = $("textarea");
     for (var i = 0; i < textareas.length; i++) {
         var currentId = textareas[i].id
@@ -61,7 +60,6 @@ $(document).ready(function () {
         }
 
     }
-//});
 });
 /**
  *

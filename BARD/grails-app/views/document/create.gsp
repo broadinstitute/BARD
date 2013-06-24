@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <r:require modules="core,bootstrap,assayshow,richtexteditor"/>
+    <r:require modules="core,bootstrap,assayshow,richtexteditorForCreate"/>
     <meta name="layout" content="basic"/>
     <title>Create Assay Document</title>
 

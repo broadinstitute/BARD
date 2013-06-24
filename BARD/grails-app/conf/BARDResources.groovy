@@ -116,8 +116,15 @@ modules = {
     richtexteditor {
         resource url: "/css/richtexteditor.css"
         resource url: "/js/nicedit/nicEdit.js"
-        resource url: "/js/cap/editDocument.js"
         resource url: "/images/nicedit/nicEditorIcons.gif"
+    }
+    richtexteditorForCreate {
+        dependsOn 'richtexteditor'
+        resource url: "/js/cap/createDocument.js"
+    }
+    richtexteditorForEdit {
+        dependsOn 'richtexteditor'
+        resource url: "/js/cap/editDocument.js"
     }
     twitterBootstrapAffix {
         resource url: "/css/twitterBootstrapAffix.css"
