@@ -30,8 +30,6 @@
                 <li><a href="#documents-comment-header"><i class="icon-chevron-right"></i>6.3 Comments</a></li>
                 <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>6.4 Publications</a>
                 </li>
-                <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>6.5 External URLS</a></li>
-                <li><a href="#documents-other-header"><i class="icon-chevron-right"></i>6.6 Others</a></li>
             </ul>
         </div>
 
@@ -144,7 +142,6 @@
             </section>
 
             <g:render template="assayDocuments" model="['assayAdapter': assayAdapter]"/>
-            <g:render template="publications" model="['documents': assayAdapter.documents]"/>
 
         </div>
     </div>
