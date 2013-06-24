@@ -3,7 +3,7 @@ var redraw;
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 $(document).ready(function () {
     $.fn.editable.defaults.mode = 'inline';
-    initFunction();
+    initProjectFunction();
 });
 function refreshProjectSteps(){
     var projectId = $("#projectIdForStep").val();
@@ -19,7 +19,7 @@ function refreshProjectSteps(){
     });
 }
 
-function initFunction() {
+function initProjectFunction() {
     // a list of most distinguishable color
     var kelly = [  "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#FF00FF",
         "#FF8080", "#808080", "#FFB300", "#803E75", "#FF6800",

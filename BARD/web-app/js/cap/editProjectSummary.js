@@ -95,7 +95,7 @@ function validateRequiredField(fieldName, messageHolder) {
     return true;
 }
 
-function initFunction() {
+function initSummaryFunction() {
     $("input#projectName").blur(function () {
         var projectName = $(this).val();
         validateRequiredField(projectName, "projectNameValidation");

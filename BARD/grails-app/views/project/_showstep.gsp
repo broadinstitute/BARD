@@ -5,8 +5,8 @@
 
     <div>
         <g:if test="${editable == 'canedit'}">
-        <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
-            <button id="linkExperiment" class="btn">Link Experiments</button></div>
+            <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
+                <button id="linkExperiment" class="btn">Link Experiments</button></div>
         </g:if>
     </div>
 
@@ -79,24 +79,18 @@
             <div id="selectedNodeId" style="display: none">{{selectedNodeId}}</div>
             <strong>Experiment Stage:</strong>
             <g:if test="${editable == 'canedit'}">
-            <a href="javascript:;" data-sourceError="Error loading stages" data-sourceCache="true" class="projectStageId" id="{{selected.stageid}}"
-               data-type="select" data-value="{{selected.stage}}" data-source="/BARD/project/projectStages" data-pk="{{selected.peid}}"
-               data-url="/BARD/project/updateProjectStage" data-original-title="Select New Stage">{{selected.stage}}
-                <i class="icon-pencil"></i>
-            </a>
+                <a href="javascript:;" data-sourceError="Error loading stages" data-sourceCache="true"
+                   class="projectStageId" id="{{selected.stageid}}"
+                   data-type="select" data-value="{{selected.stage}}" data-source="/BARD/project/projectStages"
+                   data-pk="{{selected.peid}}"
+                   data-url="/BARD/project/updateProjectStage" data-original-title="Select New Stage">{{selected.stage}}
+                    <i class="icon-pencil"></i>
+                </a>
 
             </g:if>
             <g:else>
                 {{selected.stage}}
             </g:else>
-            %{--<a href="javascript:;" data-sourceError="Error loading stages" data-sourceCache="true" class="projectStageId"--}%
-               %{--id="{{selected.stageid}}" data-type="select" data-value="{{selected.stage}}"--}%
-               %{--data-toggle="manual"--}%
-               %{--data-source="/BARD/project/projectStages" data-pk="{{selected.peid}}"--}%
-               %{--data-url="/BARD/project/updateProjectStage" data-original-title="Select New Stage">{{selected.stage}}--}%
-
-            %{--</a>--}%
-            %{--<i class="icon-pencil documentPencil {{editable}}" title="Click to edit Status" data-id="{{selected.stageid}}"></i>--}%
             <br/>
             <br/>
 
