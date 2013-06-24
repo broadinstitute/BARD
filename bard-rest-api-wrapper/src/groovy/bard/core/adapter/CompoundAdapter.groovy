@@ -112,7 +112,7 @@ public class CompoundAdapter implements CompoundAdapterInterface {
      *
      * @return
      */
-    @Deprecated //use getSmiles instead
+    @Deprecated //use this.compound.getSmiles() instead
     public String getStructureSMILES() {
         return this.compound.smiles
     }

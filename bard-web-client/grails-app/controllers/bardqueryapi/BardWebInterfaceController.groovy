@@ -649,7 +649,7 @@ class BardWebInterfaceController {
         String smiles
         try {
             CompoundAdapter compoundAdapter = this.queryService.showCompound(id)
-            smiles = compoundAdapter?.smiles
+            smiles = compoundAdapter?.compound?.smiles
         }
         catch (HttpClientErrorException httpClientErrorException) {
             String message = "Could not find Compound with CID ${cid}"
