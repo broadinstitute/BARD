@@ -26,6 +26,7 @@ $(document).ready(function () {
         }
     }
 
+    var setupAttributeSelection = function(attributeDetailsArrivedCallback) {
     $("#attributeElementId").select2({
         minimumInputLength: 1,
         allowClear: true,
@@ -40,7 +41,7 @@ $(document).ready(function () {
                     dataType: "json"
                 }).done(function (data) {
                         callback(data);
-                        onlyShowWidgetsForExpectedValueType(data);
+                        attributeDetailsArrivedCallback(data);
                     });
             }
         },
@@ -62,9 +63,16 @@ $(document).ready(function () {
             hideAnyErrorMessages();
             // based on the attribute selected only show the appropriate value widgets
             var data = $("#attributeElementId").select2("data");
-            onlyShowWidgetsForExpectedValueType(data);
+            attributeDetailsArrivedCallback(data);
         });
+    };
 
+    // if this is not present, we're not allowing user to enter specifications, only values
+    if($("#providedWithResults").length == 0){
+        setupAttributeSelection(onlyShowWidgetsBasedOnResponse)
+    } else {
+
+    }
     initialFocus();
 
     function clearAllValueFields() {
@@ -83,10 +91,16 @@ $(document).ready(function () {
     function hideAllValueWidgets() {
         $("[id$=ValueContainer]").hide();
     }
-    function onlyShowWidgetsForExpectedValueType(data) {
-        hideAllValueWidgets();
+
+    function onlyShowWidgetsBasedOnResponse(data) {
         var expectedValueType = data? data.expectedValueType: '';
         var unitId = data.unitId;
+
+        onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data)
+    }
+
+    function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data) {
+        hideAllValueWidgets();
         if ('NUMERIC' === expectedValueType) {
             $('#numericValueContainer').show();
             initializeUnits(unitId);
@@ -110,6 +124,10 @@ $(document).ready(function () {
         else if ('NONE' === expectedValueType) {
             $('#noneValueContainer').show();
         }
+        else if ('RANGE' === expectedValueType) {
+            $('#numericRangeValueContainer').show();
+            potentiallyFocus("#valueMin");
+        }
         else {
             // problem
         }
@@ -124,7 +142,7 @@ $(document).ready(function () {
             source = $('#externalOntologyNoIntegratedSearchTemplate').html();
         }
         var template = Handlebars.compile(source);
-        var html = template({attributeLabel : data.text,attributeExternalUrl : data.externalUrl});
+        var html = template({attributeLabel : data.text, attributeExternalUrl : data.externalUrl});
         $("#externalOntologyInfo").html(html);
     }
 
@@ -243,6 +261,26 @@ $(document).ready(function () {
         }
     }
 
+    $("#providedWithResults").on("change", function(e){
+        if($("#providedWithResults").is(":checked")) {
+            $("#valueConstraintContainer").show()
+            $('input[name="valueConstraintType"]').enable()
+        } else {
+            $("#valueConstraintContainer").hide()
+            $('input[name="valueConstraintType"]').disable()
+        }
+    });
+
+    $('#').on('change', function(e){
+        var expectedValueType;
+        if($("#").is(':checked')) {
+            expectedValueType = "NONE"
+        } else if() {
+            expectedValueType = "RANGE"
+        } else if() {
+            onlyShowWidgetsForExpectedValueType(expectedValueType, null, null)
+        }
+    })
 });
 
 

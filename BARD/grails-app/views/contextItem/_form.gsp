@@ -29,10 +29,40 @@
             <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
 
         </div>
-
     </div>
 
-    <div id="elementValueContainer" style="display: false;">
+    <g:if test="${instance?.contextClass == 'AssayContext'}">
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <input id="providedWithResults" name="providedWithResults" type="checkbox"/>
+                    Value to be provided as part of result upload
+                </label>
+            </div>
+        </div>
+
+        <div id="valueConstraintContainer" style="display: none;">
+            How should the values be constrained when results are loaded
+            <div class="control-group">
+
+                <div class="controls">
+                    <label class="radio">
+                        <input name="valueConstraintType" checked type="radio"/> Not constrained
+                    </label>
+
+                    <label class="radio">
+                        <input name="valueConstraintType" type="radio"/> Should be selected from a list of acceptable values specified below
+                    </label>
+
+                    <label class="radio">
+                        <input name="valueConstraintType" type="radio"/> Should be within range specified below
+                    </label>
+                </div>
+            </div>
+        </div>
+    </g:if>
+
+    <div id="elementValueContainer" style="display: none;">
         <g:if test="${disabledInput == false}">
             <div class="row-fluid">
                 <div class="span6 offset2 alert alert-info">
