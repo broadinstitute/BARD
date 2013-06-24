@@ -2,6 +2,7 @@ package bard.validation.ext
 
 import bard.db.audit.BardContextUtils
 import bard.db.people.Person
+import bard.validation.extext.ExternalOntologyPerson
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory

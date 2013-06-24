@@ -1,4 +1,8 @@
-package bard.validation.ext
+package bard.validation.extext
+
+import bard.validation.ext.ExternalItem
+import bard.validation.ext.ExternalOntologyAPI
+import bard.validation.ext.ExternalOntologyException
 
 import java.net.URI;
 import java.util.Properties;
@@ -8,23 +12,13 @@ import org.apache.commons.lang.StringUtils
 import bard.db.people.Person
 import bard.validation.ext.ExternalOntologyCreator
 
-class ExternalOntologyPerson extends ExternalOntologyAPI {	
+// to see why the package name is odd, see
+// http://jira.grails.org/browse/GRAILS-9016
+
+class ExternalOntologyPerson extends ExternalOntologyAPI {
 	
 	public static String PERSON_URL = "http://www.bard.nih.gov/person#"
 	
-	public static URI PERSON_URI = new URI(PERSON_URL)
-	
-	public static class PersonCreator implements ExternalOntologyCreator {
-		@Override
-		public ExternalOntologyAPI create(URI uri, Properties props) throws ExternalOntologyException {
-			if(PERSON_URI.equals(uri))
-				return new ExternalOntologyPerson();
-			else
-				return null
-		}
-		
-	}
-
 	@Override
 	public ExternalItem findById(String id) throws ExternalOntologyException {
 		String cleanId = cleanId(id);
