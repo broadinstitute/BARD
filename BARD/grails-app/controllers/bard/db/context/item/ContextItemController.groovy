@@ -43,6 +43,7 @@ class ContextItemController {
     }
 
     def update(BasicContextItemCommand contextItemCommand) {
+        contextItemCommand.context = contextItemCommand.attemptFindContext()
         if (!contextItemCommand.update()) {
             render(view: "edit", model: [instance: contextItemCommand])
         } else {

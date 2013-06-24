@@ -107,7 +107,6 @@ $(document).ready(function () {
         var unitId = data.unitId;
 
         updateConstraintWidgets();
-        console.log("updated")
     }
 
     function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data) {
@@ -271,18 +270,13 @@ $(document).ready(function () {
     }
 
     function showWidgetsForConstraints() {
-        console.log("widget constraints");
-        if($("#valueConstraintNone").is(":checked")) {
-            console.log("no constraint");
+        if($("#valueConstraintFree").is(":checked")) {
             onlyShowWidgetsForExpectedValueType("UNCONSTRAINED", null, null);
         } else if($("#valueConstraintRange").is(":checked")) {
-            console.log("range constraint");
             onlyShowWidgetsForExpectedValueType("RANGE", null, null);
         } else if($("#valueConstraintList").is(":checked")) {
-            console.log("list constraint");
             onlyShowWidgetsForExpectedValueType(attributeValueType, attributeUnitId, attributeData);
         } else {
-            console.log("none checked");
         }
     }
 
@@ -313,7 +307,7 @@ $(document).ready(function () {
         buttons.prop('checked', false);
 
         if($("#providedWithResults").is(':checked')) {
-            $('#valueConstraintNone').prop('checked', true);
+            $('#valueConstraintFree').prop('checked', true);
         } else {
 
         }

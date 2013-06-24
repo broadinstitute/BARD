@@ -124,7 +124,6 @@ class BasicContextItemCommand extends BardCommand {
                 this.providedWithResults = false;
             } else {
                 this.valueConstraintType = assayContextItem.attributeType.name();
-                println("valueConstraintType = ${this.valueConstraintType}")
                 this.providedWithResults = true;
             }
         }
@@ -165,11 +164,9 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.valueElement = valueElement
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
-        contextItem.qualifier = qualifier
         contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
-        if(contextItem.valueNum!=null && StringUtils.isBlank(qualifier)){
-            contextItem.qualifier = '= '
-        }
+        if(contextItem.valueNum)
+            contextItem.qualifier = qualifier
         contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
         contextItem.valueMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat()
         if (valueNum || valueMin || valueMax) {

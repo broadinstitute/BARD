@@ -66,7 +66,7 @@ class ExternalOntologyPerson extends ExternalOntologyAPI {
 		ExternalItem extItem;
 		if(p){
 			String fullname = StringUtils.trimToEmpty(p.fullName)
-			String display = p.userName + (fullname != "" ? (" (" + p.fullName + ")") : "")
+			String display = (p.userName != null ? "(${p.userName}) " : "") + fullname
 			extItem = new ExternalItem(p.id.toString(), display)
 		}		
 		return extItem;
