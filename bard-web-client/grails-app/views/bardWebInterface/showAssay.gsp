@@ -140,11 +140,7 @@
 
             <section id="measures-header">
                 <h3>5. Measures<a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions"><i class="icon-question-sign"></i></a></h3>
-
-                %{--<div class="row-fluid">--}%
-                    %{--<g:render template="measuresView"--}%
-                              %{--model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>--}%
-                %{--</div>--}%
+                <g:displayMeasures measures="${assayAdapter?.annotations?.measures}" />
             </section>
 
             <g:render template="assayDocuments" model="['assayAdapter': assayAdapter]"/>

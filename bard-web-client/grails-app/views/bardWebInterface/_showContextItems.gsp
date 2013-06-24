@@ -13,6 +13,15 @@
         <caption id="${context.id}" class="assay_context">
             <div class="cardTitle">
                 <p>${context.name}</p>
+                <g:if test="${!context.relatedMeasures.isEmpty()}">
+                    <p>Measure<g:if test="${context.relatedMeasures.size() > 1}">s</g:if>:
+                        <g:each in="${context.relatedMeasures}" status="i" var="assayContextMeasure">
+                            <a href="#measures-header" class="treeNode" id="${assayContextMeasure.id}">
+                                ${assayContextMeasure.comps.first().display}
+                                <g:if test="${i < context.relatedMeasures.size() - 1}">,  </g:if></a>
+                        </g:each>
+                    </p>
+                </g:if>
             </div>
         </caption>
         <tbody>
