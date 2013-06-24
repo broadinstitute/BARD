@@ -17,8 +17,10 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
+import org.springframework.security.access.AccessDeniedException
 import spock.lang.IgnoreRest
 import spock.lang.Shared
+import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
 
@@ -33,6 +35,7 @@ import javax.servlet.http.HttpServletResponse
 @Build([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @Mock([Project, ProjectExperiment, Experiment, ProjectStep, Element, ExternalReference, StageTree])
 @TestMixin(GrailsUnitTestMixin)
+@Unroll
 class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Shared Project project
     @Shared ProjectExperiment projectExperimentFrom
@@ -87,6 +90,20 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.contentType == "text/json;charset=utf-8"
     }
 
+    void 'test edit Project Status - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.DRAFT)  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date(), projectStatus: ProjectStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.projectStatus.id)
+        when:
+        controller.editProjectStatus(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectStatus(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
     void 'test edit Project Status with errors'() {
         given:
         Project newProject = Project.build(version: 0, projectStatus: ProjectStatus.APPROVED)
@@ -122,6 +139,20 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.contentType == "text/json;charset=utf-8"
     }
 
+    void 'test edit Project Name - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Project newProject = Project.build(version: 0, name: "My Name")  //no designer
+        Project updatedProject = Project.build(name: "My New Name", version: 1, lastUpdated: new Date())
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.name)
+        when:
+        controller.editProjectName(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectName(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
     void 'test edit Project Name with errors'() {
         given:
         Project newProject = Project.build(version: 0)
@@ -154,6 +185,20 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert responseJSON.get("data").asText() == updatedProject.description
         assert responseJSON.get("lastUpdated").asText()
         assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Project Description - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Project newProject = Project.build(version: 0, name: "My Name", description: "My Description")  //no designer
+        Project updatedProject = Project.build(description: "My New Description", name: "My New Name", version: 1, lastUpdated: new Date())
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newProject.id,
+                version: newProject.version, name: newProject.name, value: updatedProject.description)
+        when:
+        controller.editDescription(inlineEditableCommand)
+        then:
+        controller.projectService.updateProjectDescription(_, _)>> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test edit Project Description with errors'() {
@@ -192,7 +237,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     }
 
 
-    void 'test update stage for an Experiment with null stage'() {
+    void 'test update stage for an Experiment  #desc'() {
         given:
         ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
 
@@ -201,10 +246,28 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         controller.updateProjectStage(inlineEditableCommand)
         then:
-        assert projectExperimentFrom1.stage.id == projectExperimentTo.stage.id
+        projectService.updateProjectStage(_, _, _) >> { return projectExperimentTo }
         assert response.text == expectedStage
         assert response.status == 200
 
+        where:
+        desc                                                  | stage  | expectedStage
+        "ProjectExperiment has null stage element ID"         | null   | "secondary assay"
+        "ProjectExperiment has stage ID that is not a number" | "name" | "secondary assay"
+    }
+
+    void 'test update stage for an Experiment  - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        ProjectExperiment projectExperimentFrom1 = ProjectExperiment.build(project: project, experiment: Experiment.build())
+
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom1.id, name: stage, value: projectExperimentTo.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        projectService.updateProjectStage(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
         where:
         desc                                                  | stage  | expectedStage
         "ProjectExperiment has null stage element ID"         | null   | "secondary assay"
@@ -218,9 +281,21 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         controller.updateProjectStage(inlineEditableCommand)
         then:
-        assert projectExperimentFrom.stage.id == projectExperimentTo.stage.id
+        projectService.updateProjectStage(_, _, _) >> { return projectExperimentTo }
         assert response.text == "secondary assay"
         assert response.status == 200
+    }
+
+    void 'test updateProjectStage change the stage - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: projectExperimentFrom.id, name: projectExperimentFrom.stage.id, value: projectExperimentTo.stage.label)
+        when:
+        controller.updateProjectStage(inlineEditableCommand)
+        then:
+        projectService.updateProjectStage(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test updateProjectStage no change in stage'() {
@@ -284,12 +359,32 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.experimentId = experimentId
         params.projectid = project.id
         controller.projectService = projectService
-        def model = controller.removeExperimentFromProject(params.experimentId, params.projectid)
+        controller.removeExperimentFromProject(params.experimentId, params.projectid)
 
         then:
         1 * projectService.removeExperimentFromProject(_, _)
         assert response.text == responsetext
 
+        where:
+        description | experimentId             | responsetext
+        "success"   | projectExperimentFrom.id | 'mock contents'
+    }
+
+    void 'test remove experiment from project -access denied'() {
+        given:
+        accessDeniedRoleMock()
+
+        views['/project/_showstep.gsp'] = 'mock contents'
+
+        when:
+        params.experimentId = experimentId
+        params.projectid = project.id
+        controller.projectService = projectService
+        controller.removeExperimentFromProject(params.experimentId, params.projectid)
+
+        then:
+        1 * projectService.removeExperimentFromProject(_, _)>> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
         where:
         description | experimentId             | responsetext
         "success"   | projectExperimentFrom.id | 'mock contents'
@@ -304,7 +399,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.removeExperimentFromProject(params.experimentId, params.projectid)
+        controller.removeExperimentFromProject(params.experimentId, params.projectid)
 
         then:
         assert response.text.startsWith(responsetext)
@@ -325,10 +420,33 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.removeEdgeFromProject(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.removeEdgeFromProject(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
         assert response.text == responsetext
+
+        where:
+        description | fromExperimentId         | toExperimentId         | responsetext
+        "success"   | projectExperimentFrom.id | projectExperimentTo.id | 'mock contents'
+    }
+
+    void 'test remove edge from project - access denied'() {
+        given:
+        accessDeniedRoleMock()
+
+        views['/project/_showstep.gsp'] = 'mock contents'
+
+        when:
+        params.fromExperimentId = fromExperimentId
+        params.toExperimentId = toExperimentId
+        params.projectid = project.id
+        controller.projectService = projectService
+
+        controller.removeEdgeFromProject(params.fromExperimentId, params.toExperimentId, params.projectid)
+
+        then:
+        projectService.removeEdgeFromProject(_, _, _)>> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
 
         where:
         description | fromExperimentId         | toExperimentId         | responsetext
@@ -345,7 +463,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.removeEdgeFromProject(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.removeEdgeFromProject(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
         assert response.text.startsWith(responsetext)
@@ -367,10 +485,34 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
         assert response.text == responsetext
+
+        where:
+        description | fromExperimentId         | toExperimentId         | responsetext
+        "success"   | projectExperimentFrom.id | projectExperimentTo.id | 'mock contents'
+    }
+
+    void 'test link experiment with project - access denied'() {
+        given:
+        accessDeniedRoleMock()
+
+        views['/project/_showstep.gsp'] = 'mock contents'
+
+        when:
+        params.fromExperimentId = fromExperimentId
+        params.toExperimentId = toExperimentId
+        params.projectid = project.id
+        controller.projectService = projectService
+
+        controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
+
+        then:
+        projectService.linkExperiment(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+
 
         where:
         description | fromExperimentId         | toExperimentId         | responsetext
@@ -387,7 +529,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
+        controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
         assert response.text == "An internal server error has occurred. Please notify the BARD team"
@@ -403,7 +545,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         when:
 
-        def model = controller.linkExperiment(fromExperimentId, toExperimentId, project.id)
+        controller.linkExperiment(fromExperimentId, toExperimentId, project.id)
 
         then:
         assert response.text == "Both 'From Experiment ID' and 'To Experiment ID' are required"
@@ -427,10 +569,31 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectId = project.id
         controller.projectService = projectService
 
-        def model = controller.associateExperimentsToProject()
+        controller.associateExperimentsToProject()
 
         then:
         assert response.text == 'mock contents'
+    }
+
+    void 'test associate experiment with project - access denied'() {
+        given:
+        accessDeniedRoleMock()
+
+        views['/project/_showstep.gsp'] = 'mock contents'
+
+        Element stage1 = Element.build()
+
+        when:
+        params.stageId = stage1.id
+        request.setParameter('selectedExperiments[]', projectExperimentFrom.experiment.id + "-experiment name")
+        params.projectId = project.id
+        controller.projectService = projectService
+
+        controller.associateExperimentsToProject()
+
+        then:
+        projectService.addExperimentToProject(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test associate experiment with project fail'() {
@@ -445,7 +608,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.associateExperimentsToProject()
+        controller.associateExperimentsToProject()
 
         then:
         assert response.text.startsWith('serviceError')
@@ -460,7 +623,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.ajaxFindAvailableExperimentByName(params.experimentName, params.projectid)
+        controller.ajaxFindAvailableExperimentByName(params.experimentName, params.projectid)
 
         then:
         assert response.text.contains(projectExperimentFrom.experiment.displayName)
@@ -478,7 +641,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.ajaxFindAvailableExperimentByAssayId(params.assayId, params.projectid)
+        controller.ajaxFindAvailableExperimentByAssayId(params.assayId, params.projectid)
 
         then:
         assert response.text.contains(ex.displayName)
@@ -496,7 +659,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.ajaxFindAvailableExperimentById(params.experimentId, params.projectid)
+        controller.ajaxFindAvailableExperimentById(params.experimentId, params.projectid)
 
         then:
         assert response.text.contains(ex.displayName)
@@ -514,7 +677,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.projectid = project.id
         controller.projectService = projectService
 
-        def model = controller.ajaxFindAvailableExperimentById(params.experimentId, params.projectid)
+        controller.ajaxFindAvailableExperimentById(params.experimentId, params.projectid)
 
         then:
         assert response.text.contains(ex.displayName)
@@ -528,7 +691,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         params.instanceId = project.id
         controller.projectService = projectService
 
-        def model = controller.showEditSummary(params.instanceId)
+        controller.showEditSummary(params.instanceId)
 
         then:
         assert response.text == 'mock editSummary page'
@@ -538,7 +701,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         params.projectId = project.id.toString()
 
-        def model = controller.findById()
+        controller.findById()
 
         then:
         assert response.redirectedUrl == "/project/show/${project.id}"
@@ -548,7 +711,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         params.projectName = project.name
 
-        def model = controller.findByName()
+        controller.findByName()
 
         then:
         assert response.redirectedUrl == "/project/show/${project.id}"
@@ -556,11 +719,11 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test findByName with multiple matches'() {
         given:
-        Project project1 = Project.build(name: project.name)
+        Project.build(name: project.name)
         when:
         params.projectName = project.name
 
-        def model = controller.findByName()
+        controller.findByName()
 
         then:
         assert view == "/project/findByName"
@@ -569,7 +732,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     void 'test getProjectNames'() {
         when:
         params.term = project.name
-        def model = controller.getProjectNames()
+        controller.getProjectNames()
 
         then:
         assert response.text.contains(project.name)

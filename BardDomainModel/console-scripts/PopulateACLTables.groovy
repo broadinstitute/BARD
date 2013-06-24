@@ -2,6 +2,7 @@ import acl.CapPermissionService
 import bard.db.experiment.Experiment
 import bard.db.project.Project
 import bard.db.people.Role
+import groovy.sql.Sql
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
@@ -18,21 +19,25 @@ Transaction tx = session.beginTransaction()
 try {
     Map<String, String> aidToTeamMap = [:]
     Map<String, String> externalReferenceMap = [:]
-    SpringSecurityUtils.reauthenticate('test', null)
+    SpringSecurityUtils.reauthenticate('integrationTestUser', null)
     def capPermissionService = ctx.capPermissionService
 
     int index = 0
-    new File("console-scripts/files/externalreference.txt").eachLine { line ->
-        if (index > 0) {
-            String[] args = line.split("\t")
-            String aid = args[2]
-            externalReferenceMap.put(aid.trim(), line)
-        }
-        ++index
 
+
+
+    //SELECT PROJECT_ID,EXPERIMENT_ID,EXT_ASSAY_REF FROM EXTERNAL_REFERENCE WHERE EXT_ASSAY_REF LIKE 'aid=%'
+    def sql = new Sql(ctx.dataSource)
+
+    sql.eachRow("SELECT PROJECT_ID,EXPERIMENT_ID,EXT_ASSAY_REF FROM EXTERNAL_REFERENCE WHERE EXT_ASSAY_REF LIKE 'aid=%'"){row ->
+        String projectId = row.PROJECT_ID
+        String experimentId = row.EXPERIMENT_ID
+        String aid = row.EXT_ASSAY_REF
+        String line = projectId?:"" + "\t" + experimentId?:"" + "\t" + aid?:""
+        externalReferenceMap.put(aid.trim(), line)
     }
-    index = 0
-
+    //Generate this file from running this query
+    //SELECT DISTINCT 'aid='||AID,'TEAM_'||UPPER(ASSAY_CENTER) AS TEAM FROM BARD_DATA_QA_DASHBOARD.VW_DASHBD_PROD_EXPERIMENT;
     new File("console-scripts/files/aid_to_team.txt").eachLine { line ->
         if (index > 0) {
             String[] args = line.split("\t")
@@ -48,7 +53,6 @@ try {
         if (aidToTeamLine) {
             String[] aidToTeamArray = aidToTeamLine.split("\t")
             assert aidToTeamArray.length == 2
-            // println aidToTeamArray[0] + ":" + aidToTeamArray[1];
             String team = aidToTeamArray[1]
             //append ROLE_ to it and then find out if it exists in the ROLE table
             //if not then add to the ROLE Table
@@ -86,58 +90,7 @@ try {
         } else {
             println("Could not find aid " + aid + " in aidToTeamMap")
         }
-        // println aidToTeam
-        // println "${key}:${value}"
-
     }
-
-    //for each line grab the experiment and the external reference
-    //then find the team from the aid file using the externalreference id
-    //if the team does not exist create it in the Role table by appending ROLE_ to it
-
-    //do the same for project
-
-    //finally for each experiment find the assay that it belongs to
-    //if the assay has not been seen then add it to the acl tables
-
-    //then finally for each experiment
-    //Now find the experiment and add it to the permissions table
-    //for each assay get the designed by name and then use it to
-    //find the newObjectRole of the Team
-//    final List<Assay> assays = Assay.list()
-//    for (Assay assay : assays) {
-//        final String designedBy = assay.designedBy
-//        if (designedBy) {
-//            final List<Role> roles = Role.findAllByDisplayName(designedBy)
-//            if (roles) {
-//                boolean existsInPersonTable = false
-//                for(Role role: roles){
-//                    //if role exist in the Person.userObjectRole then apply it and break out of loop
-//                    final List<Person> role1 = Person.findAllByNewObjectRole(role)
-//                    if(role1){
-//                        //make sure it is in the newUserObject table
-//                        Permission permission = BasePermission.ADMINISTRATION
-//                        capPermissionService.addPermission(assay, role1, permission)
-//                        existsInPersonTable = true
-//                        break;
-//                    }
-//                }
-//                if(!existsInPersonTable) {
-//                    writeToFile(assay.id,assay.name,assay.designedBy)
-//                    //write to a file and then handle separately
-//                }
-//
-//
-//            } else {
-//                writeToFile(assay.id,assay.name,assay.designedBy)
-//                //write to a file and then handle separately
-//            }
-//        } else {
-//            writeToFile(assay.id,assay.name,assay.designedBy)
-//            //write to a file and then handle separately
-//        }
-//
-//    }
 }
 catch (Exception e) {
     println(e)

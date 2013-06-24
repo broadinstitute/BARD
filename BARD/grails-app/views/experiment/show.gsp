@@ -67,7 +67,7 @@
 
             <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
             <dd>
-                <a href="#"
+                <span
                    data-sourceCache="true"
                    data-toggle="manual"
                    class="status"
@@ -77,14 +77,14 @@
                    data-source="/BARD/experiment/experimentStatus"
                    data-pk="${instance.id}"
                    data-url="/BARD/experiment/editExperimentStatus"
-                   data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</a>
-                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
-                   data-id="${instance?.experimentStatus?.id}"></i>
+                   data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
+                   data-id="${instance?.experimentStatus?.id}"></a>
             </dd>
 
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
-                <a href="#"
+                <span
                    data-toggle="manual"
                    class="experimentNameY"
                    id="nameId"
@@ -94,12 +94,12 @@
                    data-pk="${instance.id}"
                    data-url="/BARD/experiment/editExperimentName"
                    data-placeholder="Required"
-                   data-original-title="Edit Experiment Name">${instance?.experimentName}</a>
-                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></i>
+                   data-original-title="Edit Experiment Name">${instance?.experimentName}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
             </dd>
             <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
             <dd>
-                <a href="#"
+                <span
                    class="description"
                    data-toggle="manual"
                    id="descriptionId"
@@ -108,13 +108,13 @@
                    data-pk="${instance.id}"
                    data-url="/BARD/experiment/editDescription"
                    data-placeholder="Required"
-                   data-original-title="Edit Description By">${instance.description}</a>
-                <i class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
-                   data-id="descriptionId"></i>
+                   data-original-title="Edit Description By">${instance.description}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
+                   data-id="descriptionId"></a>
             </dd>
             <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
             <dd id="huddd">
-                <a href="#" class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
+                <span class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
                    data-toggle="manual"
                    data-url="/BARD/experiment/editHoldUntilDate"
                    data-value="${instance.holdUntilDate}"
@@ -125,14 +125,14 @@
                     <g:formatDate
                             format="MM/dd/yyyy"
                             date="${instance.holdUntilDate}"/>
-                </a>
-                <i class="icon-pencil documentPencil ${editable}" title="Click to edit hold until date"
-                   data-id="hud"></i>
+                </span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit hold until date"
+                   data-id="hud"></a>
             </dd>
 
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
-                <a href="#" class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
+                <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
                    data-url="/BARD/experiment/editRunFromDate"
                    data-value="${instance.runDateFrom}"
                    data-original-title="Select run from date"
@@ -143,13 +143,13 @@
                     <g:formatDate
                             format="MM/dd/yyyy"
                             date="${instance.runDateFrom}"/>
-                </a>
-                <i class="icon-pencil documentPencil ${editable}" title="Click to edit run from date"
-                   data-id="rfd"></i>
+                </span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run from date"
+                   data-id="rfd"></a>
             </dd>
             <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
             <dd>
-                <a href="javascript:;" class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
+                <span  class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
                    data-url="/BARD/experiment/editRunToDate"
                    data-value="${instance.runDateTo}"
                    data-original-title="Select run to date"
@@ -160,8 +160,8 @@
                     <g:formatDate
                             format="MM/dd/yyyy"
                             date="${instance.runDateTo}"/>
-                </a><i class="icon-pencil documentPencil ${editable}" title="Click to edit run to date"
-                       data-id="rdt"></i>
+                </span><a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run to date"
+                       data-id="rdt"></a>
             </dd>
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${instance.dateCreated}" format="MM/dd/yyyy"/></dd>

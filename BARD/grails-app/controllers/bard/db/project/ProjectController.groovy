@@ -6,17 +6,15 @@ import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
-import bard.db.registration.AssayContext
 import bard.db.registration.EditingHelper
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 @Mixin(EditingHelper)
 @Secured(['isAuthenticated()'])
@@ -38,6 +36,10 @@ class ProjectController {
             }
             project = projectService.updateProjectStatus(inlineEditableCommand.pk, projectStatus)
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.projectStatus.id)
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editProjectStatus", ee)
             editErrorMessage()
@@ -52,9 +54,12 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -69,9 +74,12 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
+            project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error("error in editDescription", ee)
             editErrorMessage()
@@ -97,7 +105,7 @@ class ProjectController {
         }
         boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
 
-        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable?'canedit' : 'cannotedit']
+        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
     }
 
     def edit() {
@@ -128,6 +136,9 @@ class ProjectController {
             projectService.removeExperimentFromProject(experiment, project)
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             render 'serviceError:' + e.message
         }
@@ -141,13 +152,16 @@ class ProjectController {
             projectService.removeEdgeFromProject(fromExperiment, toExperiment, project)
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             render 'serviceError:' + e.message
         }
     }
 
     def linkExperiment(Long fromExperimentId, Long toExperimentId, Long projectId) {
-        if(fromExperimentId == null || toExperimentId==null){
+        if (fromExperimentId == null || toExperimentId == null) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Both 'From Experiment ID' and 'To Experiment ID' are required"
             return
         }
@@ -159,9 +173,12 @@ class ProjectController {
             projectService.linkExperiment(fromExperiment, toExperiment, project)
             project = Project.findById(projectId)
             render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             log.error(e)
-            render status:HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: 'An internal server error has occurred. Please notify the BARD team'
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: 'An internal server error has occurred. Please notify the BARD team'
         }
     }
 
@@ -188,6 +205,10 @@ class ProjectController {
                     projectService.addExperimentToProject(experiment, project, element)
                     render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
                 }
+            }
+            catch (AccessDeniedException ade) {
+                log.error(ade)
+                render accessDeniedErrorMessage()
             } catch (UserFixableException e) {
                 render 'serviceError:' + e.message
             } catch (Exception ee) {
@@ -224,15 +245,16 @@ class ProjectController {
             if (originalStageElementId != newStage?.id) {//there has been a change
 
                 if (newStage) {
-                    projectExperiment.stage = newStage
-                    projectExperiment.save(flush: true)
-                    projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+                    projectExperiment = projectService.updateProjectStage(projectExperiment.project, projectExperiment, newStage)
                 } else {
                     render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
                     return
                 }
             }
             render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
@@ -269,7 +291,7 @@ class ProjectController {
             exps.add(experiment)
         render exps.collect { it.displayName } as JSON
     }
-
+    //TODO: Move into a service so we can secure it
     def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
         def instance = Project.findById(instanceId)
         instance.name = projectName

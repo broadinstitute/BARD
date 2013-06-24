@@ -6,12 +6,15 @@ import bard.db.project.Project
 import bard.db.project.ProjectDocument
 import bard.taglib.TextFormatTagLib
 import grails.buildtestdata.mixin.Build
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
-import spock.lang.IgnoreRest
+import org.springframework.security.access.PermissionEvaluator
 import spock.lang.Shared
-import spock.lang.Specification
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -25,21 +28,35 @@ import static test.TestUtils.assertFieldValidationExpectations
 @TestFor(DocumentController)
 @Build([AssayDocument, Assay, Project])
 @Mock([AssayDocument, Assay, ProjectDocument, TextFormatTagLib])
+@TestMixin(GrailsUnitTestMixin)
 @Unroll
-class DocumentControllerUnitSpec extends Specification {
+class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
     @Shared Assay assay;
     @Shared Project project;
     AssayDocument existingAssayDocument
     DocumentCommand documentCommand
 
+    void accessDeniedRoleMock() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return false
+        }
+    }
+
     @Before
     void setup() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         controller.metaClass.mixin(DocumentHelper)
+        controller.metaClass.mixin(EditingHelper)
+        controller.documentService = Mock(DocumentService)
         assay = Assay.build()
         project = Project.build()
         existingAssayDocument = AssayDocument.build(assay: assay, documentType: DocumentType.DOCUMENT_TYPE_DESCRIPTION)
         existingAssayDocument = AssayDocument.findById(existingAssayDocument.id)
         documentCommand = mockCommandObject(DocumentCommand)
+        controller.permissionEvaluator = Mock(PermissionEvaluator)
+        controller.springSecurityService = Mock(SpringSecurityService)
         assert flash.message == null
     }
 
@@ -173,6 +190,27 @@ class DocumentControllerUnitSpec extends Specification {
         assert response.text == "Field is required and must not be empty"
     }
 
+    void 'test editDocumentName - access denied error'() {
+        given:
+        accessDeniedRoleMock()
+        Long pk = existingAssayDocument.id
+        String name = DocumentKind.AssayDocument.toString()
+        String value = existingAssayDocument.documentName
+        Long version = existingAssayDocument.version
+        Long owningEntityId = existingAssayDocument.assay.id
+        params.documentName = existingAssayDocument.documentName
+        params.documentType = existingAssayDocument.documentType.id
+        params.documentKind = DocumentKind.AssayDocument.toString()
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: pk, name: name, value: value, version: version, owningEntityId: owningEntityId)
+        when:
+        controller.editDocumentName(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_FORBIDDEN
+        assert response.contentType == "text/plain;charset=utf-8"
+        assert response.text == "editing.forbidden.message"
+    }
+
     void 'test editDocumentName - success'() {
         given:
         Long pk = existingAssayDocument.id
@@ -182,6 +220,7 @@ class DocumentControllerUnitSpec extends Specification {
         Long owningEntityId = existingAssayDocument.assay.id
         params.documentName = existingAssayDocument.documentName
         params.documentType = existingAssayDocument.documentType.id
+        params.documentKind = DocumentKind.AssayDocument.toString()
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: pk, name: name, value: value, version: version, owningEntityId: owningEntityId)
         when:
@@ -210,6 +249,29 @@ class DocumentControllerUnitSpec extends Specification {
         assert response.text == "Field is required and must not be empty"
     }
 
+    void 'test editDocument - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Long pk = existingAssayDocument.id
+        String name = DocumentKind.AssayDocument.toString()
+        String value = "New Value"
+        Long version = existingAssayDocument.version
+        Long owningEntityId = existingAssayDocument.assay.id
+        params.documentName = existingAssayDocument.documentName
+        params.documentType = existingAssayDocument.documentType.id
+        params.documentKind = DocumentKind.AssayDocument.toString()
+
+        InlineEditableCommand inlineEditableCommand =
+            new InlineEditableCommand(pk: pk, name: name, value: value, version: version, owningEntityId: owningEntityId)
+        when:
+        controller.editDocument(inlineEditableCommand)
+        then:
+        assert response.status == HttpServletResponse.SC_FORBIDDEN
+        assert response.contentType == "text/plain;charset=utf-8"
+        assert response.text == "editing.forbidden.message"
+
+    }
+
     void 'test editDocument - success'() {
         given:
         Long pk = existingAssayDocument.id
@@ -219,6 +281,8 @@ class DocumentControllerUnitSpec extends Specification {
         Long owningEntityId = existingAssayDocument.assay.id
         params.documentName = existingAssayDocument.documentName
         params.documentType = existingAssayDocument.documentType.id
+        params.documentKind = DocumentKind.AssayDocument.toString()
+
         InlineEditableCommand inlineEditableCommand =
             new InlineEditableCommand(pk: pk, name: name, value: value, version: version, owningEntityId: owningEntityId)
         when:
@@ -261,6 +325,17 @@ class DocumentControllerUnitSpec extends Specification {
         model.document.assayId == assay.id
     }
 
+    void 'test create- access denied'() {
+        given:
+        accessDeniedRoleMock()
+        when:
+        documentCommand.assayId = assay.id
+        controller.create(documentCommand)
+
+        then:
+        assertAccesDeniedErrorMessage()
+    }
+
     void 'test valid save assay doc'() {
         when:
         documentCommand.assayId = assay.id
@@ -280,6 +355,21 @@ class DocumentControllerUnitSpec extends Specification {
 
     }
 
+    void 'test valid save assay doc - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        when:
+        documentCommand.assayId = assay.id
+        documentCommand.documentContent = "content"
+        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentName = "name"
+        controller.save(documentCommand)
+
+        then:
+        assertAccesDeniedErrorMessage()
+
+    }
+
     void 'test valid save proj doc'() {
         when:
         documentCommand.projectId = project.id
@@ -296,6 +386,20 @@ class DocumentControllerUnitSpec extends Specification {
         projectDocument.documentName == "name"
         projectDocument.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION
         projectDocument.documentContent == "content"
+    }
+
+    void 'test valid save proj doc - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        when:
+        documentCommand.projectId = project.id
+        documentCommand.documentContent = "content"
+        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_DESCRIPTION
+        documentCommand.documentName = "name"
+        controller.save(documentCommand)
+
+        then:
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test save Assay Not found'() {
@@ -385,7 +489,21 @@ class DocumentControllerUnitSpec extends Specification {
         controller.delete()
 
         then:
-        AssayDocument.count == 0
+        controller.documentService.deleteAssayDocument(_, _) >> {}
+        assert response.redirectedUrl.startsWith("/assayDefinition/show/")
+    }
+
+    void 'test delete - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        when:
+        params.type = "Assay"
+        params.id = existingAssayDocument.id
+        controller.delete()
+
+        then:
+        controller.documentService.deleteAssayDocument(_, _) >> {}
+        assert response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
 
     void 'test command object constraints #desc'() {

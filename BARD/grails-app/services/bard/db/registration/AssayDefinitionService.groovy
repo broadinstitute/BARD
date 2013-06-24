@@ -2,10 +2,16 @@ package bard.db.registration
 
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
 class AssayDefinitionService {
     AssayService assayService
+
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean canCreateExperiment(Assay assay) {
+        return true
+    }
 
     Assay saveNewAssay(Assay assayInstance) {
         return assayInstance.save(flush: true)
@@ -15,33 +21,37 @@ class AssayDefinitionService {
         return assayService.recomputeAssayShortName(assay)
     }
 
-    Assay updateAssayType(long assayId, AssayType assayType) {
-        Assay assay = Assay.findById(assayId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay updateAssayType(long id, AssayType assayType) {
+        Assay assay = Assay.findById(id)
         assay.assayType = assayType
         assay.save(flush: true)
-        return Assay.findById(assayId)
+        return Assay.findById(id)
     }
 
-    Assay updateAssayStatus(long assayId, AssayStatus assayStatus) {
-        Assay assay = Assay.findById(assayId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay updateAssayStatus(long id, AssayStatus assayStatus) {
+        Assay assay = Assay.findById(id)
         assay.assayStatus = assayStatus
         assay.save(flush: true)
-        return Assay.findById(assayId)
+        return Assay.findById(id)
     }
 
-    Assay updateAssayName(Long assayId, String newAssayName) {
-        Assay assay = Assay.findById(assayId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay updateAssayName(Long id, String newAssayName) {
+        Assay assay = Assay.findById(id)
         assay.assayName = newAssayName
         //validate version here
         assay.save(flush: true)
-        return Assay.findById(assayId)
+        return Assay.findById(id)
     }
 
-    Assay updateDesignedBy(long assayId, String newDesigner) {
-        Assay assay = Assay.findById(assayId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay updateDesignedBy(long id, String newDesigner) {
+        Assay assay = Assay.findById(id)
         assay.designedBy = newDesigner
         assay.save(flush: true)
-        return Assay.findById(assayId)
+        return Assay.findById(id)
     }
     /**
      * Copy an assay new a new object, including all objects owned by this assay (but excluding any experiments and documents)

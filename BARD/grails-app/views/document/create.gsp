@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <r:require modules="core,bootstrap,assayshow,richtexteditor"/>
+    <r:require modules="core,bootstrap,assayshow,richtexteditorForCreate"/>
     <meta name="layout" content="basic"/>
     <title>Create Assay Document</title>
 
@@ -10,7 +10,6 @@
 
 <body>
 <g:render template="/common/message"/>
-<g:render template="/common/errors" model="['errors': document?.errors?.allErrors]"/>
 <div class="row-fluid">
     <div class="span12">
         <g:form class="form-horizontal" action="save">

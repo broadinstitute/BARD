@@ -6,12 +6,12 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.db.project.*" %>
+<%@ page import="bard.db.registration.DocumentKind; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
     <r:require
-            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,richtexteditor,projectsummary,canEditWidget"/>
+            modules="core,bootstrap,select2,accessontology,twitterBootstrapAffix,xeditable,assayshow,projectstep,richtexteditorForEdit,projectsummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Show Project</title>
 </head>
@@ -99,7 +99,8 @@
                     </div>
                 </section>
                 <br/>
-                <g:render template="projectDocuments" model="[project: instance, canedit: editable]"/>
+                <g:render template="/document/documents"
+                          model="[documentKind: DocumentKind.ProjectDocument, owningEntity: instance, canedit: editable]"/>
             </div>
         </div>
     </div>

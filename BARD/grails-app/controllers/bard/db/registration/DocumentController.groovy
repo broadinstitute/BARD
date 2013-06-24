@@ -7,20 +7,35 @@ import bard.db.project.InlineEditableCommand
 import bard.db.project.Project
 import bard.db.project.ProjectDocument
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.springframework.security.access.PermissionEvaluator
 
 import javax.servlet.http.HttpServletResponse
 
-@Mixin(DocumentHelper)
+@Mixin([DocumentHelper, EditingHelper])
 @Secured(['isAuthenticated()'])
 class DocumentController {
     static allowedMethods = [save: "POST", update: "POST"]
 
     Map<String, Class> nameToDomain = ["Assay": AssayDocument, "Project": ProjectDocument]
-
+    DocumentService documentService
+    def permissionEvaluator
+    def springSecurityService
+    //TODO: Add ACL
     def create(DocumentCommand documentCommand) {
         documentCommand.clearErrors()
+        def entity = null
+        if (documentCommand.assayId) {
+            entity = Assay.findById(documentCommand.assayId)
+        } else if (documentCommand.projectId) {
+            entity = Project.findById(documentCommand.projectId)
+        }
+        if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
+            render accessDeniedErrorMessage()
+            return
+        }
         [document: documentCommand]
     }
 
@@ -37,10 +52,21 @@ class DocumentController {
     }
 
     def save(DocumentCommand documentCommand) {
+
         if (!documentCommand.documentType) {
             documentCommand.documentType = DocumentType.byId(params.documentType)
         }
-        documentCommand.documentContent=documentCommand.removeHtmlLineBreaks()
+        def entity = null
+        if (documentCommand.assayId) {
+            entity = Assay.findById(documentCommand.assayId)
+        } else if (documentCommand.projectId) {
+            entity = Project.findById(documentCommand.projectId)
+        }
+        if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
+            render accessDeniedErrorMessage()
+            return
+        }
+        documentCommand.documentContent = documentCommand.removeHtmlLineBreaks()
 
         Object document = documentCommand.createNewDocument()
         if (document) {
@@ -49,7 +75,13 @@ class DocumentController {
             render(view: "create", model: [document: documentCommand])
         }
     }
-
+    /**
+     * No longer used. remove method and corresponding gsp
+     * @param type
+     * @param id
+     * @return
+     */
+    @Deprecated
     def edit(String type, Long id) {
         DocumentCommand dc = new DocumentCommand()
         Class domainClass = nameToDomain[type]
@@ -64,6 +96,7 @@ class DocumentController {
         if (!inlineEditableCommand.validate()) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Field is required and must not be empty", contentType: 'text/plain', template: null
         } else {
+            DocumentKind documentKind = params.documentKind as DocumentKind
             DocumentCommand documentCommand =
                 createDocumentCommand(
                         params.documentName,
@@ -72,8 +105,22 @@ class DocumentController {
                         DocumentType.byId(params.documentType),
                         inlineEditableCommand.version,
                         inlineEditableCommand.owningEntityId,
-                        inlineEditableCommand.name as DocumentKind
+                        documentKind
                 )
+            def entity = null
+            if (DocumentKind.AssayDocument == documentKind) {
+                entity = Assay.findById(documentCommand.assayId)
+            } else if (DocumentKind.ProjectDocument == documentKind) {
+                entity = Project.findById(documentCommand.projectId)
+            }
+            if (entity) {
+                if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
+                    render accessDeniedErrorMessage()
+                    return
+                }
+            } else {
+                throw new RuntimeException("Could not find owning entity with id ${inlineEditableCommand.owningEntityId}")
+            }
             render(renderDocument(documentCommand))
         }
 
@@ -83,6 +130,7 @@ class DocumentController {
         if (!inlineEditableCommand.validate()) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: "Field is required and must not be empty", contentType: 'text/plain', template: null
         } else {
+            DocumentKind documentKind = params.documentKind as DocumentKind
             DocumentCommand documentCommand =
                 createDocumentCommand(
                         inlineEditableCommand.value.trim(),
@@ -91,13 +139,26 @@ class DocumentController {
                         DocumentType.byId(params.documentType),
                         inlineEditableCommand.version,
                         inlineEditableCommand.owningEntityId,
-                        inlineEditableCommand.name as DocumentKind
+                        documentKind
                 )
+            def entity = null
+            if (DocumentKind.AssayDocument == documentKind) {
+                entity = Assay.findById(documentCommand.assayId)
+            } else if (DocumentKind.ProjectDocument == documentKind) {
+                entity = Project.findById(documentCommand.projectId)
+            }
+            if (entity) {
+                if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
+                    render accessDeniedErrorMessage()
+                    return
+                }
+            }
             render(renderDocument(documentCommand))
         }
 
     }
-
+    //No longer used
+    @Deprecated
     def update(DocumentCommand documentCommand) {
         Object document = documentCommand.updateExistingDocument()
         if (document) {
@@ -114,7 +175,13 @@ class DocumentController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
             return
         }
-        document.delete()
+        if (document instanceof AssayDocument) {
+            documentService.deleteAssayDocument(document.assay, document)
+        } else if (document instanceof ProjectDocument) {
+            documentService.deleteProjectDocument(document.project, document)
+        } else {
+            throw new RuntimeException("UnHandled Document Type " + domainClass.toString())
+        }
         redirectToOwner(document)
     }
 }
@@ -184,6 +251,7 @@ class DocumentHelper {
 @InheritConstructors
 @Validateable
 class DocumentCommand extends BardCommand {
+
     Long assayId
     Long projectId
 
@@ -226,7 +294,6 @@ class DocumentCommand extends BardCommand {
             if (assayId) {
                 doc = new AssayDocument()
                 doc.assay = attemptFindById(Assay, assayId)
-
             }
             if (projectId) {
                 doc = new ProjectDocument()
@@ -327,12 +394,13 @@ class DocumentCommand extends BardCommand {
             throw new RuntimeException('need either a projectId or assayId to determine owner')
         }
     }
+
     String removeHtmlLineBreaks() {
 
         if (this.documentType == DocumentType.DOCUMENT_TYPE_EXTERNAL_URL ||
                 this.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION) {
             String content = this.documentContent
-            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.replaceAll("\n","")?.replaceAll("\r","")?.trim()
+            return content?.replaceAll("<div>", "")?.replaceAll("</div>", "")?.replaceAll("<br>", "")?.replaceAll("\n", "")?.replaceAll("\r", "")?.trim()
         }
         return this.documentContent
     }

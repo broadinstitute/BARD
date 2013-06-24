@@ -1,42 +1,52 @@
 package bard.db.project
 
+import bard.db.dictionary.Element
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
-import bard.db.dictionary.Element
-import bard.db.model.AbstractContext
-import bard.db.model.AbstractContextItem
-import bard.db.registration.Assay
-import bard.db.registration.AssayContext
+import org.springframework.security.access.prepost.PreAuthorize
 
 class ProjectService {
-    Project updateProjectStatus(Long projectId, ProjectStatus newProjectStatus){
-        Project project = Project.findById(projectId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Project updateProjectStatus(Long id, ProjectStatus newProjectStatus) {
+        Project project = Project.findById(id)
         project.projectStatus = newProjectStatus
 
         project.save(flush: true)
-        return Project.findById(projectId)
+        return Project.findById(id)
     }
-    Project updateProjectDescription(Long projectId, String newProjectDescription) {
-        Project project = Project.findById(projectId)
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Project updateProjectDescription(Long id, String newProjectDescription) {
+        Project project = Project.findById(id)
         project.description = newProjectDescription
 
         project.save(flush: true)
-        return Project.findById(projectId)
+        return Project.findById(id)
     }
-    Project updateProjectName(Long projectId, String newProjectName) {
-        Project project = Project.findById(projectId)
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Project updateProjectName(Long id, String newProjectName) {
+        Project project = Project.findById(id)
         project.name = newProjectName
 
         project.save(flush: true)
-        return Project.findById(projectId)
+        return Project.findById(id)
     }
 
+    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    ProjectExperiment updateProjectStage(Project project, ProjectExperiment projectExperiment, Element newStage) {
+        projectExperiment.stage = newStage
+        projectExperiment.save(flush: true)
+        return ProjectExperiment.findById(projectExperiment.id)
+
+    }
     /**
      * remove experiment from project, if experiment has context, remove them. remove all steps associated with
      * this experiment, and step contexts
      * @param experiment
      * @param project
      */
+    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void removeExperimentFromProject(Experiment experiment, Project project) {
         def projectExperiment = ProjectExperiment.findByExperimentAndProject(experiment, project)
         if (!projectExperiment) throw new UserFixableException("Can not find association between experiment " + experiment.id + " and project " + project.id)
@@ -107,6 +117,7 @@ class ProjectService {
      * @param toExperiment
      * @param project
      */
+    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Project project) {
         def fromProjectExperiment = ProjectExperiment.findByExperimentAndProject(fromExperiment, project)
         def toProjectExperiment = ProjectExperiment.findByExperimentAndProject(toExperiment, project)
@@ -123,6 +134,7 @@ class ProjectService {
      * @param experiment
      * @param project
      */
+    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void addExperimentToProject(Experiment experiment, Project project, Element stage) {
         if (isExperimentAssociatedWithProject(experiment, project))
             throw new UserFixableException("Experiement " + experiment.id + " is already associated with Project " + project.id)
@@ -142,6 +154,7 @@ class ProjectService {
      * @param toExperiment
      * @param project
      */
+    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Project project) {
         if (!fromExperiment || !toExperiment) {
             throw new UserFixableException("Either or both experiment you were trying to link does not exist in the system.")

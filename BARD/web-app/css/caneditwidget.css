@@ -1,6 +1,6 @@
-i.cannotedit{
+a.cannotedit{
     display:none;
 }
-i.canedit{
+a.canedit{
     display:inline-block;
 }
