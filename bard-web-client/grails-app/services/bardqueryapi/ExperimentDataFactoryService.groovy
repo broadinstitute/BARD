@@ -12,16 +12,16 @@ class ExperimentDataFactoryService {
             SpreadSheetInput spreadSheetInput,
             GroupByTypes groupTypes,
             List<FilterTypes> filterTypes,
+            List<SearchFilter> appliedSearchFilters,
             SearchParams searchParams
     ) {
 
         if (spreadSheetInput.eids) {
             Long experimentId = spreadSheetInput.eids.get(0)
             return queryService.showExperimentalData(experimentId, groupTypes, filterTypes, searchParams)
-        }
-        else if (spreadSheetInput.cids) {
+        } else if (spreadSheetInput.cids) {
             Long compoundId = spreadSheetInput.cids.get(0)
-            return queryService.createCompoundBioActivitySummaryDataTable(compoundId, groupTypes, filterTypes, searchParams)
+            return queryService.createCompoundBioActivitySummaryDataTable(compoundId, groupTypes, filterTypes, appliedSearchFilters, searchParams)
         }
         return null
     }

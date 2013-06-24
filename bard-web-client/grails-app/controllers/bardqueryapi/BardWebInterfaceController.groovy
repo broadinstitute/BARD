@@ -646,6 +646,8 @@ class BardWebInterfaceController {
             return
         }
 
+        final List<SearchFilter> appliedSearchFilters = searchCommand.appliedFilters ?: []
+
         String smiles
         try {
             CompoundAdapter compoundAdapter = this.queryService.showCompound(id)
@@ -692,6 +694,7 @@ class BardWebInterfaceController {
             TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     resourceType,
                     filters,
+                    appliedSearchFilters,
                     new SearchParams(top: searchParams.top, skip: searchParams.skip)
             )
 

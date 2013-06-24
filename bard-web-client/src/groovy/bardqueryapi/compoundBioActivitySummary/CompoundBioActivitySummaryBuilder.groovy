@@ -30,6 +30,7 @@ class CompoundBioActivitySummaryBuilder {
                                  List<Assay> testedAssays,
                                  List<Assay> hitAssays,
                                  List<FilterTypes> filterTypes,
+                                 List<SearchFilter> appliedSearchFilters,
                                  Map<Long, List<ExperimentSearch>> experimentsMap,
                                  List<Long> sortedKeys,
                                  Double yNormMin = null,
@@ -68,7 +69,7 @@ class CompoundBioActivitySummaryBuilder {
                 ExperimentSearch experimentSearch = experimentsMap[exptData.bardExptId].first()
                 WebQueryValue experiment = new ExperimentValue(value: experimentSearch)
 
-                List<WebQueryValue> results = convertExperimentResultsToValues(exptData, yNormMin, yNormMax)
+                List<WebQueryValue> results = convertExperimentResultsToValues(exptData, appliedSearchFilters, yNormMin, yNormMax)
 
                 //If the single-point data filter is set, remove the SP (PairValue) result-types from the list.
                 Integer resultsSizeBefore = results.size()
@@ -154,12 +155,13 @@ class CompoundBioActivitySummaryBuilder {
      * @param exptData
      * @return
      */
-    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData, Double yNormMin = null, Double yNormMax = null) {
+    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData, List<SearchFilter> appliedSearchFilters = [], Double yNormMin = null, Double yNormMax = null) {
         List<WebQueryValue> values = []
         String respClss = exptData?.resultData?.responseClass
         ResponseClassEnum responseClass = respClss ? ResponseClassEnum.toEnum(respClss) : null
 
         for (PriorityElement priorityElement in exptData?.resultData?.priorityElements) {
+//            if (appliedSearchFilters)
             switch (responseClass) {
                 case ResponseClassEnum.SP:
                     //The result-type is a single-point, key/value pair.

@@ -306,6 +306,7 @@ class QueryService implements IQueryService {
     TableModel createCompoundBioActivitySummaryDataTable(Long compoundId,
                                                          GroupByTypes groupTypes,
                                                          List<FilterTypes> filterTypes,
+                                                         List<SearchFilter> appliedSearchFilters,
                                                          SearchParams searchParams) {
         Integer top = searchParams.top
         Integer skip = searchParams.skip
@@ -400,6 +401,7 @@ class QueryService implements IQueryService {
                 testedAssays,
                 hitAssays,
                 filterTypes,
+                appliedSearchFilters,
                 experimentsMap,
                 sortedKeys,
                 experimentalDetails?.yNormMin,

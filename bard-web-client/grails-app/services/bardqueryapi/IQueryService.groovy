@@ -191,6 +191,7 @@ public interface IQueryService {
     TableModel createCompoundBioActivitySummaryDataTable(Long compoundId,
                                                          GroupByTypes groupTypes,
                                                          List<FilterTypes> filterTypes,
+                                                         List<SearchFilter> appliedSearchFilters,
                                                          SearchParams searchParams)
 
     TableModel showExperimentalData(Long experimentId,
