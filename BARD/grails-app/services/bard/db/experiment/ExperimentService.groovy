@@ -66,6 +66,7 @@ class ExperimentService {
         unused.each { ExperimentMeasure measure ->
             measure.childMeasures = new HashSet();
             measure.parent = null;
+            measure.parentChildRelationship=null
         }
 
         // start over fresh and walk through the elements in tree
