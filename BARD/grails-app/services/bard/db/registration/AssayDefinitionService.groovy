@@ -2,12 +2,30 @@ package bard.db.registration
 
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.HierarchyType
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
 class AssayDefinitionService {
     AssayService assayService
+    /**
+     * Move measure to parent
+     * @param assay
+     * @param measure
+     * @param parentMeasure
+     * @return
+     */
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void moveMeasure(Assay assay,Measure measure, Measure parentMeasure) {
 
+        measure.parentMeasure = parentMeasure
+        if (!measure.parentChildRelationship) {
+            if (parentMeasure) {
+                measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+            }
+        }
+    }
     @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     boolean canCreateExperiment(Assay assay) {
         return true

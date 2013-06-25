@@ -449,22 +449,24 @@ class AssayDefinitionController {
         def assayInstance = Assay.findById(instanceId)
         render(template: "editSummary", model: [assay: assayInstance])
     }
-    //TODO: Add ACL
+    /**
+     *
+     * @param measureId
+     * @param parentMeasureId
+     * @return
+     */
     def moveMeasureNode(Long measureId, Long parentMeasureId) {
-        Measure measure = Measure.get(measureId)
-        Measure parentMeasure = null
-        if (parentMeasureId) {
-            parentMeasure = Measure.get(parentMeasureId)
-        }
-        measure.parentMeasure = parentMeasure
-        if (!measure.parentChildRelationship) {
-            if (parentMeasure) {
-                measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+        try {
+            Measure measure = Measure.get(measureId)
+            Measure parentMeasure = null
+            if (parentMeasureId) {
+                parentMeasure = Measure.get(parentMeasureId)
             }
+            assayDefinitionService.moveMeasure(measure.assay, measure, parentMeasure)
+            render new JSONArray()
+        } catch (AccessDeniedException aee) {
+            render accessDeniedErrorMessage()
         }
-
-
-        render new JSONArray()
     }
 }
 class EditingHelper {

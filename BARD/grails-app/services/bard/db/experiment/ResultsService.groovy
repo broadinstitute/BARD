@@ -12,6 +12,7 @@ import bard.db.registration.PugService
 import bard.hibernate.AuthenticatedUserRequired
 import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.io.IOUtils
+import org.springframework.security.access.prepost.PreAuthorize
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -788,7 +789,7 @@ class ResultsService {
 
         return result
     }
-
+    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     ImportSummary importResults(Experiment experiment, InputStream input, ImportOptions options = null) {
         if (options == null) {
             options = new ImportOptions();

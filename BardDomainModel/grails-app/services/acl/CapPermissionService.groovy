@@ -3,6 +3,10 @@ package acl
 import bard.db.people.Person
 import bard.db.people.Role
 import grails.plugins.springsecurity.SpringSecurityService
+import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclClass
+import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclEntry
+import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclObjectIdentity
+import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclSid
 import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.springframework.security.acls.domain.BasePermission
 import org.springframework.security.acls.model.Permission
@@ -26,5 +30,24 @@ class CapPermissionService {
 
     void addPermission(domainObjectInstance, Role role, Permission permission) {
         aclUtilService.addPermission(domainObjectInstance, role.authority, permission)
+    }
+
+    void updateACLTablesAfterMigrations(String userName, String newObjectRole, domainObjectInstance){
+        //find the person
+        Person person = Person.findByUserName(userName)
+        Role  role = Role.findByAuthority(newObjectRole.toUpperCase())
+        if(role){
+            role = new Role(authority:newObjectRole.toUpperCase()).save(flush: true)
+        }
+        if(!person){
+
+            person = new Person(userName:userName,newObjectRole: role).save(flush: true)
+        }
+        AclClass aclClass = AclClass.findByClassName(domainObjectInstance.getClass().getName())
+
+        AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByAclClassAndObjectId(aclClass,domainObjectInstance.id)
+        AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
+        aclEntry.sid = role.authority
+        aclEntry.save(flush: true)
     }
 }
