@@ -1,12 +1,13 @@
 
 $(document).ready(function () {
     var widgetsByContainer = {
-        '#valueConstraintContainer': 'input[name="valueConstraintType"]',
-        '#elementValueContainer': '#valueElementId',
-        '#externalOntologyValueContainer':'#extValueSearch,#extValueId',
-        '#numericValueContainer': '#qualifier,#valueNum,#valueNumUnitId',
-        '#numericRangeValueContainer': '#valueMin,#valueMax',
-        '#freeTextValueContainer': '#valueDisplay'};
+        '#valueConstraintContainer': ['input[name="valueConstraintType"]'],
+        '#elementValueContainer': [null, '#valueElementId'],
+        '#externalOntologyValueContainer': ['#extValueId','#extValueSearch'],
+        '#numericValueContainer': ['#qualifier,#valueNum,#valueNumUnitId'],
+        '#numericRangeValueContainer': ['#valueMin,#valueMax']
+    //    '#freeTextValueContainer': ['#valueDisplay']
+    };
 
     var disabledInput = $("#disabledInput").attr("value") == "true";
 
@@ -112,8 +113,17 @@ $(document).ready(function () {
         var containers = $("[id$=ValueContainer]");
         containers.hide();
         containers.each( function(index, element) {
-            var selector = widgetsByContainer["#"+element.id]
-            $(selector).attr("disabled", "disabled");
+            var selectors = widgetsByContainer["#"+element.id]
+            if(selectors) {
+                var normalInputSelector = selectors[0];
+                var select2Selector = selectors[1];
+
+                if(normalInputSelector)
+                    $(normalInputSelector).attr("disabled", "disabled");
+
+                if(select2Selector)
+                    $(select2Selector).select2("enable", false);
+            }
         });
     }
 
@@ -127,8 +137,17 @@ $(document).ready(function () {
     function showWidgets(containerSelector) {
         $(containerSelector).show();
         if(!disabledInput) {
-            var inputSelector = widgetsByContainer[containerSelector];
-            $(inputSelector).removeAttr("disabled");
+            var selectors = widgetsByContainer[containerSelector];
+            if(selectors) {
+                var inputSelector = selectors[0];
+                var select2Selector = selectors[1];
+
+                if(inputSelector)
+                    $(inputSelector).removeAttr("disabled");
+
+                if(select2Selector)
+                    $(select2Selector).select2("enable", true);
+            }
         }
     }
 
