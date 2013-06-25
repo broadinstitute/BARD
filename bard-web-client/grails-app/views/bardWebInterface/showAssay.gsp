@@ -54,7 +54,11 @@
             <section id="biology-header">
                 <h3>2. Biology <a target="dictionary" href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions"><i class="icon-question-sign"></i></a></h3>
 
-                <g:render template="targets" model="['targets': assayAdapter.targets]"/>
+                <div class="row-fluid">
+                    <div class="cardView" class="row-fluid">
+                        <g:render template="listContexts" model="[contexts: assayAdapter?.annotations?.findAssayContextsContainingKeys('biology')]"/>
+                    </div>
+                </div>
 
             </section>
 

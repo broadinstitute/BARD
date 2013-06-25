@@ -131,7 +131,7 @@
                 </section>
             </g:if>
             <g:if test="${projectAdapter.targets}">
-                <g:render template="targets" model="['targets': projectAdapter.targets]"/>
+                <g:render template="biology" model="['targets': projectAdapter.targets]"/>
             </g:if>
             <g:if test="${projectAdapter.documents}">
                 <g:render template="publications" model="['documents': projectAdapter.documents]"/>

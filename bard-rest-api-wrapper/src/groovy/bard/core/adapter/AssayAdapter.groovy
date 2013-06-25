@@ -1,11 +1,9 @@
-package bard.core.adapter;
-
-
-import bard.core.rest.spring.util.Document
-import bard.core.rest.spring.util.NameDescription
-import bard.core.rest.spring.util.Target
+package bard.core.adapter
 import bard.core.interfaces.*
 import bard.core.rest.spring.assays.*
+import bard.core.rest.spring.biology.BiologyEntity
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.util.NameDescription
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class AssayAdapter implements AssayAdapterInterface {
@@ -144,29 +142,29 @@ public class AssayAdapter implements AssayAdapterInterface {
         return []
     }
 
-    public List<Target> getTargets() {
+    public List<BiologyEntity> getBiology() {
         if (assay instanceof ExpandedAssay) {
             ExpandedAssay expandedAssay = (ExpandedAssay) assay
-            return expandedAssay.getTargets()
+            return expandedAssay.getBiology()
         }
         return []
     }
 
-    public List<String> getTargetIds() {
-        List<String> targetIds = []
+    public List<String> getBiologyIds() {
+        List<String> biologyIds = []
         if (assay instanceof ExpandedAssay) {
             ExpandedAssay expandedAssay = (ExpandedAssay) assay
-            expandedAssay.targets.collect { Target target ->
-                if (target.acc) {
-                  targetIds.add(target.acc)
+            expandedAssay.biology.collect { BiologyEntity biology ->
+                if (biology.serial) {
+                  biologyIds.add(biology.serial)
                 }
             }
         }
-        if (assay instanceof Assay) {
+        else if (assay instanceof Assay) {
             Assay assay1 = (Assay) assay
-            targetIds.addAll(assay1.targetIds)
+            biologyIds.addAll(assay1.biologyIds)
         }
-        return targetIds
+        return biologyIds
     }
 
     public List<String> getDocumentIds() {

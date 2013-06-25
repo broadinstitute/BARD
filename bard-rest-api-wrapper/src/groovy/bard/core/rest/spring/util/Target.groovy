@@ -1,23 +1,14 @@
 package bard.core.rest.spring.util
-
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import org.apache.commons.lang3.builder.EqualsBuilder
-import org.apache.commons.lang3.builder.HashCodeBuilder
-import org.apache.commons.lang3.builder.ToStringBuilder
 import bard.core.rest.spring.compounds.TargetClassInfo
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * Created with IntelliJ IDEA.
- * User: jasiedu
- * Date: 11/26/12
- * Time: 10:42 AM
- * To change this template use File | Settings | File Templates.
+ * @deprecated replaced by BiologyEntity
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Deprecated
 public class Target extends JsonUtil {
 
     @JsonProperty("classes")

@@ -103,7 +103,7 @@ class RingManagerService {
         Boolean returnValue = false
         if (compoundSummary != null){
             for (Assay assay in compoundSummary.testedAssays) {
-                if (assay.targetIds?.size()  > 0)  {  // At least one assay has at least one target -- better make a sunburst
+                if (assay.biologyIds?.size()  > 0)  {  // At least one assay has at least one target -- better make a sunburst
                     returnValue = true
                     break
                 }
@@ -187,7 +187,7 @@ class RingManagerService {
         if (compoundSummary != null){
            for (Assay assay in compoundSummary.testedAssays) {
                List<String>  currentExperimentIds = assay.experimentIds
-               List<String>  currentTargets = assay.targetIds
+               List<String>  currentTargets = assay.biologyIds
                String assayFormat = assay.minimumAnnotation.assayFormat
                String assayType = assay.minimumAnnotation.assayType
                if ( (currentTargets != null)  ||

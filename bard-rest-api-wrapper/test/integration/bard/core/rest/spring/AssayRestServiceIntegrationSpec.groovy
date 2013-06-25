@@ -318,7 +318,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         final ExpandedAssay assay = this.assayRestService.getAssayById(adid)
         then: "An Assay is returned with the expected information"
         assert assay
-        final List<Target> targets = assay.getTargets()
+        final List<Target> targets = assay.getBiology()
 //        assert targets
         int counter = 0  //to count the number of classifications
         for (Target target : targets) {

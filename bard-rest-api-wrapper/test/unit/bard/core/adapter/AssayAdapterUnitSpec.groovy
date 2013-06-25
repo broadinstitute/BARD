@@ -194,9 +194,9 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.matchingField.description == nameDescription.description
         assert assayAdapter.highlight == "Matched Field: Name"
         assert assayAdapter.documentIds
-        assert assayAdapter.targetIds
+        assert assayAdapter.biologyIds
         assert !assayAdapter.documents
-        assert !assayAdapter.targets
+        assert !assayAdapter.biology
         assert assayAdapter.minimumAnnotation
     }
 
@@ -230,9 +230,9 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.matchingField.description == nameDescription.description
         assert assayAdapter.highlight == "Matched Field: Name"
         assert assayAdapter.documentIds
-        assert assayAdapter.targetIds
+        assert assayAdapter.biologyIds
         assert assayAdapter.documents
-        assert assayAdapter.targets
+        assert assayAdapter.biology
         assert assayAdapter.title
         assert assayAdapter.minimumAnnotation
     }
@@ -248,7 +248,7 @@ class AssayAdapterUnitSpec extends Specification {
         AssayAdapter assayAdapter = new AssayAdapter(assay, score, nameDescription)
         then:
         assayAdapter.getDocumentIds().size() == 2
-        assayAdapter.getTargetIds().size() == 1
+        assayAdapter.getBiologyIds().size() == 1
 
 
     }

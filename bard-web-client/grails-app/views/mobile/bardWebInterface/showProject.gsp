@@ -96,7 +96,7 @@
             </g:if>
             <g:if test="${projectAdapter.targets}">
                 <div style="text-align: left;">
-                    <g:render template="/bardWebInterface/targets" model="['targets': projectAdapter.targets]"/>
+                    <g:render template="/bardWebInterface/biology" model="['targets': projectAdapter.targets]"/>
                 </div>
             </g:if>
             <g:if test="${projectAdapter.documents}">
