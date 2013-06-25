@@ -1,7 +1,7 @@
 package bard.validation.ext
 
+import bard.validation.extext.ExternalOntologyPerson
 import grails.buildtestdata.mixin.Build
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 

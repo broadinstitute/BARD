@@ -1,11 +1,9 @@
 package bard.validation.ext
 
 import bard.db.audit.BardContextUtils
+import bard.validation.extext.ExternalOntologyPerson
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import grails.plugin.spock.IntegrationSpec
-import java.net.URI
-import java.util.List;
-
 import org.hibernate.SessionFactory;
 
 import bard.db.people.Person;

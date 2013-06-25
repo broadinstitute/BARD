@@ -13,6 +13,7 @@ import bard.db.project.ProjectService
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
+import bard.db.registration.AttributeType
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
@@ -59,6 +60,8 @@ class BasicContextItemCommand extends BardCommand {
     Long contextItemId
     Long version
     String contextClass = "ProjectContext"
+    boolean providedWithResults = false
+    String valueConstraintType
 
     Long attributeElementId
     String extValueId
@@ -79,6 +82,7 @@ class BasicContextItemCommand extends BardCommand {
     static constraints = {
         qualifier(nullable: true, inList: ['= ', '< ', '<=', '> ', '>=', '<<', '>>', '~ '])
         attributeElementId(nullable: false)
+        valueConstraintType(nullable: true, inList: ["Free", "List", "Range"])
     }
 
     BasicContextItemCommand() {}
@@ -112,6 +116,18 @@ class BasicContextItemCommand extends BardCommand {
         this.valueNum = contextItem.valueNum ? new BigDecimal(contextItem.valueNum.toString()).stripTrailingZeros() : null
         this.valueMin = contextItem.valueMin ? new BigDecimal(contextItem.valueMin.toString()).stripTrailingZeros() : null
         this.valueMax = contextItem.valueMax ? new BigDecimal(contextItem.valueMax.toString()).stripTrailingZeros() : null
+        this.valueConstraintType = null
+        if(contextItem instanceof AssayContextItem) {
+            AssayContextItem assayContextItem = contextItem
+            if(assayContextItem.attributeType == AttributeType.Fixed) {
+                this.valueConstraintType = null;
+                this.providedWithResults = false;
+            } else {
+                this.valueConstraintType = assayContextItem.attributeType.name();
+                this.providedWithResults = true;
+            }
+        }
+
         this.valueNumUnitId = contextItem.attributeElement.unit?.id
 
         this.valueDisplay = contextItem.valueDisplay
@@ -148,15 +164,21 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.valueElement = valueElement
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
-        contextItem.qualifier = qualifier
         contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
-        if(contextItem.valueNum!=null && StringUtils.isBlank(qualifier)){
-            contextItem.qualifier = '= '
-        }
+        contextItem.qualifier = qualifier
         contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
         contextItem.valueMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat()
         if (valueNum || valueMin || valueMax) {
             contextItem.valueDisplay = contextItem.deriveDisplayValue()
+        }
+        if(contextItem instanceof AssayContextItem) {
+            AssayContextItem assayContextItem = contextItem;
+
+            if(providedWithResults && valueConstraintType != null) {
+                assayContextItem.attributeType = Enum.valueOf(AttributeType, valueConstraintType)
+            } else {
+                assayContextItem.attributeType = AttributeType.Fixed;
+            }
         }
     }
 
@@ -185,7 +207,7 @@ class BasicContextItemCommand extends BardCommand {
         if (StringUtils.trimToNull(value)) {
             try {
                 convertedValue = new BigDecimal(value).stripTrailingZeros()
-                if (unit && unit.id != this.valueNumUnitId) {
+                if (unit && valueNumUnitId != null && unit.id != this.valueNumUnitId) {
                     Element fromUnit = attemptFindById(Element, valueNumUnitId)
                     UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, unit)
                     BigDecimal unitConvertedValue = unitConversion?.convert(convertedValue)
