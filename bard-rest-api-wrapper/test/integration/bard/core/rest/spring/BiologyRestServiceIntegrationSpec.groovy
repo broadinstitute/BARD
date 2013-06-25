@@ -22,7 +22,7 @@ import spock.lang.Unroll
 class BiologyRestServiceIntegrationSpec extends IntegrationSpec {
     BiologyRestService biologyRestService
     @Shared
-    List<Long> TEST_BIDS = [155, 156]
+    List<Long> TEST_BIDS = [1366, 1365]
 
 
 
