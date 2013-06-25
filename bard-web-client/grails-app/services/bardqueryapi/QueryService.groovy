@@ -555,7 +555,7 @@ class QueryService implements IQueryService {
         if (projectId) {
             final ProjectExpanded project = projectRestService.getProjectById(projectId)
             if (project) {
-                final List<BardAnnotation> annotations = [projectRestService.findAnnotations(projectId)]
+                final BardAnnotation annotations = projectRestService.findAnnotations(projectId)
                 final List<ExperimentSearch> experiments = project.experiments
                 if (experiments) {
                     experiments.sort {
