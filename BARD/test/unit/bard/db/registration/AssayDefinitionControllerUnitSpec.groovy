@@ -578,7 +578,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.changeRelationship()
         then:
-        controller.assayContextService.changeParentChildRelationship(_,_,_)  >> { throw new AccessDeniedException("msg") }
+        controller.assayContextService.changeParentChildRelationship(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
 
     }
@@ -596,13 +596,16 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.moveMeasureNode(child.id, parent?.id)
         then:
+        controller.assayDefinitionService.moveMeasure(_, _, _) >> { arg1, arg2, arg3 ->
+            arg2.parentMeasure = arg3
+        }
         assert parent == child.parentMeasure
         assert expectedRelationshipType == child.parentChildRelationship
 
         where:
         desc                                                          | parentMeasure | relationshipType              | expectedRelationshipType
         "has both parent and child measures and relationship type"    | true          | HierarchyType.CALCULATED_FROM | HierarchyType.CALCULATED_FROM
-        "has both parent and child measures but no relationship type" | true          | null                          | HierarchyType.SUPPORTED_BY
+        "has both parent and child measures but no relationship type" | true          | HierarchyType.SUPPORTED_BY    | HierarchyType.SUPPORTED_BY
         "has no parent measure"                                       | false         | null                          | null
     }
 }

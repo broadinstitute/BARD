@@ -24,20 +24,24 @@ try {
 
     int index = 0
 
+    new File("console-scripts/files/externalreference.txt").eachLine { line ->
+        if (index > 0) {
+            String[] args = line.split("\t")
+            String aid = args[2]
+            externalReferenceMap.put(aid.trim(), line)
+        }
+        ++index
 
-
-    //SELECT PROJECT_ID,EXPERIMENT_ID,EXT_ASSAY_REF FROM EXTERNAL_REFERENCE WHERE EXT_ASSAY_REF LIKE 'aid=%'
-    def sql = new Sql(ctx.dataSource)
-
-    sql.eachRow("SELECT PROJECT_ID,EXPERIMENT_ID,EXT_ASSAY_REF FROM EXTERNAL_REFERENCE WHERE EXT_ASSAY_REF LIKE 'aid=%'"){row ->
+    }
+    index = 0
+    sql.eachRow("SELECT PROJECT_ID,EXPERIMENT_ID,EXT_ASSAY_REF FROM EXTERNAL_REFERENCE WHERE EXT_ASSAY_REF LIKE 'aid=%'") { row ->
         String projectId = row.PROJECT_ID
         String experimentId = row.EXPERIMENT_ID
         String aid = row.EXT_ASSAY_REF
-        String line = projectId?:"" + "\t" + experimentId?:"" + "\t" + aid?:""
+        String line = projectId ?: "" + "\t" + experimentId ?: "" + "\t" + aid ?: ""
         externalReferenceMap.put(aid.trim(), line)
     }
     //Generate this file from running this query
-    //SELECT DISTINCT 'aid='||AID,'TEAM_'||UPPER(ASSAY_CENTER) AS TEAM FROM BARD_DATA_QA_DASHBOARD.VW_DASHBD_PROD_EXPERIMENT;
     new File("console-scripts/files/aid_to_team.txt").eachLine { line ->
         if (index > 0) {
             String[] args = line.split("\t")
@@ -61,29 +65,29 @@ try {
             if (!role) {
                 role = new Role(authority: authority).save(flush: true)
             }
-            
+
             String[] externalValuesArray = externalValuesLine.split("\t")
             assert externalValuesArray.length == 3
             String experimentId = externalValuesArray[1]
             String projectId = externalValuesArray[0]
-            
+
             if (experimentId) {
                 Experiment experiment = Experiment.findById(experimentId)
                 if (experiment) {
-                   capPermissionService.addPermission(experiment, role, BasePermission.ADMINISTRATION)
+                    capPermissionService.addPermission(experiment, role, BasePermission.ADMINISTRATION)
                 }
                 //log this
                 //assert experiment
             }
-            if(projectId){
+            if (projectId) {
                 Project project = Project.findById(projectId)
-                if(project){
-                 capPermissionService.addPermission(project, role, BasePermission.ADMINISTRATION)
+                if (project) {
+                    capPermissionService.addPermission(project, role, BasePermission.ADMINISTRATION)
                 }
             }
 
             index++;
-            if(index % 100){
+            if (index % 100) {
                 session.flush();
                 session.clear();
             }
@@ -97,6 +101,6 @@ catch (Exception e) {
     tx.rollback()
 }
 finally {
-tx.commit();
-   // tx.rollback()
+    tx.commit();
+    // tx.rollback()
 }
