@@ -4,9 +4,9 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.util.FilterTypes
+import bard.core.SearchParams
 
 public interface IQueryService {
-
 
     /**
      *
@@ -55,7 +55,7 @@ public interface IQueryService {
      */
     Map searchCompoundsByCids(final List<Long> cids, final Integer top, final Integer skip, final List<SearchFilter> searchFilters);
 
-        /**
+    /**
      *
      * @param capAssayIds
      * @param top
@@ -187,4 +187,14 @@ public interface IQueryService {
     public QueryHelperService getQueryHelperService()
 
     public CompoundAdapter findProbe(String mlNumber)
+
+    TableModel createCompoundBioActivitySummaryDataTable(Long compoundId,
+                                                         GroupByTypes groupTypes,
+                                                         List<FilterTypes> filterTypes,
+                                                         SearchParams searchParams)
+
+    TableModel showExperimentalData(Long experimentId,
+                                    GroupByTypes groupTypes,
+                                    List<FilterTypes> filterTypes,
+                                    SearchParams searchParams)
 }

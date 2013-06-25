@@ -39,7 +39,7 @@ function drawHistogram(domMarker, oneHistogramsData) {
         yScale = d3.scale.linear()
             .domain([0, d3.max(oneHistogramsData.histogram, function (d) {return d[0];})])
             .range([chart_dimensions.height, margin.bottom]),
-        histogramBarWidth = xScale(maxXValue - minXValue) / oneHistogramsData.histogram.length,
+        histogramBarWidth = (xScale(maxXValue) - xScale(minXValue)) / oneHistogramsData.histogram.length,
         adjustedHistogramBarWidth =  histogramBarWidth-((barPaddingPercent/100)*histogramBarWidth),
 
     //
@@ -136,17 +136,14 @@ function drawHistogram(domMarker, oneHistogramsData) {
         .append("g")
         .attr("class", "bar")
         .attr("fill", "steelblue")
-        .append("rect")
-        .attr("x", function (d, i) {
-            return xScale(d[1]);
-        })
-        .attr("y", function (d) {
-            return yScale(d[0]);
-        })
-        .attr("width", adjustedHistogramBarWidth )
-        .attr("height", function (d) {
-            return chart_dimensions.height-yScale(d[0]);
-        })
+        .append('svg:polyline')
+        .attr('points',function(d){
+            return (xScale(d[1])+' '+(yScale(0))+','+
+                xScale(d[1])+' '+yScale(d[0])+','+
+                xScale(d[2])+' '+yScale(d[0])+','+
+                xScale(d[2])+' '+(yScale(0))) })
+        .attr('stroke-width',2)
+        .attr("stroke", "black")
         .on("mouseover", tooltipHandler.respondToBarChartMouseOver)
         .on("mousemove", tooltipHandler.respondToBarChartMouseMove)
         .on("mouseout", tooltipHandler.respondToBarChartMouseOut);

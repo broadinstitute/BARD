@@ -75,6 +75,7 @@ public class DoseCurveImage {
         DefaultXYDataset dataset = new DefaultXYDataset();
 
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(false, true);
+        renderer.setDrawOutlines(false); //hide the X at the origin of axes.
         final XYPlot plot = new XYPlot(dataset, domainAxis, rangeAxis, renderer);
 
         addCurves(curves, dataset, renderer, plot);

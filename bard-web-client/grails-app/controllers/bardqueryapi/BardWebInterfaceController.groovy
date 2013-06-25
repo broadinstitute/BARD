@@ -103,13 +103,13 @@ class BardWebInterfaceController {
 
             //TODO: Use a command Object to bind this, most of the code below should be gone
             final List<FilterTypes> filters = []
-            Boolean normalizeYAxisFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis'}?.filterValue
+            Boolean normalizeYAxisFilter = searchCommand.filters.find { SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis' }?.filterValue
             NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
             }
 
-            Boolean activityOutcomeFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome'}?.filterValue
+            Boolean activityOutcomeFilter = searchCommand.filters.find { SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome' }?.filterValue
             ActivityOutcome activityOutcome = activityOutcomeFilter ? ActivityOutcome.ACTIVE : ActivityOutcome.ALL
             if (activityOutcome != ActivityOutcome.ACTIVE) {
                 filters.add(FilterTypes.TESTED)
@@ -119,7 +119,7 @@ class BardWebInterfaceController {
                     GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
             //If the 'Active Compound' filter was set as a default but we didn't get back any result, uncheck Active filter and search again.
             if (noFiltersFromPage && !tableModel.data) {
-                searchCommand.filters.removeAll {SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome'}
+                searchCommand.filters.removeAll { SearchFilter searchFilter -> return searchFilter.filterName == 'activity_outcome' }
                 filters.add(FilterTypes.TESTED)
                 tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                         GroupByTypes.EXPERIMENT, filters, new SearchParams(top: searchParams.top, skip: searchParams.skip))
@@ -206,8 +206,7 @@ class BardWebInterfaceController {
             if (results.status == 200) {
                 final Promiscuity promiscuity = results.promiscuityScore
                 render(template: 'promiscuity', model: [scaffolds: promiscuity.promiscuityScaffolds])
-            }
-            else { //status code of NOT OK returned. Usually CID has no promiscuity score
+            } else { //status code of NOT OK returned. Usually CID has no promiscuity score
                 log.error(results.message + getUserIpAddress(bardUtilitiesService.username))
 
                 return response.sendError(results.status,
@@ -413,8 +412,7 @@ class BardWebInterfaceController {
             final Map map = handleStructureSearch(queryService, searchCommand)
             if (map) {
                 render(template: 'compounds', model: map)
-            }
-            else {
+            } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
         }
@@ -474,8 +472,7 @@ class BardWebInterfaceController {
             final CompoundAdapter compoundAdapter = this.queryService.showCompound(compoundId)
             if (compoundAdapter) {
                 render(view: "showCompound", model: [compound: compoundAdapter, searchString: params.searchString])
-            }
-            else {
+            } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND)
             }
         }
@@ -509,8 +506,7 @@ class BardWebInterfaceController {
                         projects: assayMap.projects, searchString: params.searchString
                 ]
                 )
-            }
-            else {
+            } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Assay Id ${assayId}")
             }
         }
@@ -547,8 +543,7 @@ class BardWebInterfaceController {
 
                 render(view: "showProject", model: [projectAdapter: projectAdapter, experiments: projectMap.experiments, assays: projectMap.assays,
                         searchString: params.searchString, pegraph: projectExperimentJSON])
-            }
-            else {
+            } else {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Could not find Project Id ${projId}")
             }
         }
@@ -651,6 +646,22 @@ class BardWebInterfaceController {
             return
         }
 
+        String smiles
+        try {
+            CompoundAdapter compoundAdapter = this.queryService.showCompound(id)
+            smiles = compoundAdapter?.compound?.smiles
+        }
+        catch (HttpClientErrorException httpClientErrorException) {
+            String message = "Could not find Compound with CID ${cid}"
+            handleClientInputErrors(httpClientErrorException, message, bardUtilitiesService.username)
+        }
+        catch (Exception exp) {
+            final String errorMessage = "Show compound page has encountered an error:\n${exp.message}"
+            log.error(errorMessage + getUserIpAddress(bardUtilitiesService.username), exp)
+            return response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR.intValue(),
+                    errorMessage)
+        }
+
         try {
 
             Map<String, Integer> searchParams = handleSearchParams() //top, skip, nhits
@@ -665,12 +676,12 @@ class BardWebInterfaceController {
 
             final List<FilterTypes> filters = []
 //            filters.add(FilterTypes.TESTED)
-            Boolean normalizeYAxisFilter = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis'}?.filterValue
+            Boolean normalizeYAxisFilter = searchCommand.filters.find { SearchFilter searchFilter -> return searchFilter.filterName == 'plot_axis' }?.filterValue
             NormalizeAxis normalizeAxis = normalizeYAxisFilter ? NormalizeAxis.Y_NORM_AXIS : NormalizeAxis.Y_DENORM_AXIS
             if (normalizeAxis == NormalizeAxis.Y_DENORM_AXIS) {
                 filters.add(FilterTypes.Y_DENORM_AXIS)
             }
-            Boolean singlePointResultData = searchCommand.filters.find {SearchFilter searchFilter -> return searchFilter.filterName == 'single-point_measurement'}?.filterValue
+            Boolean singlePointResultData = searchCommand.filters.find { SearchFilter searchFilter -> return searchFilter.filterName == 'single-point_measurement' }?.filterValue
             if (singlePointResultData) {
                 filters.add(FilterTypes.SINGLE_POINT_RESULT)
             }
@@ -690,6 +701,7 @@ class BardWebInterfaceController {
                 tableModel.additionalProperties.put("activityOutcome", activityOutcome)
                 tableModel.additionalProperties.put("id", id.toString())
                 tableModel.additionalProperties.put("resourceType", resourceType.name())
+                tableModel.additionalProperties.put("smiles", smiles)
                 session.'compoundSummary' = tableModel.additionalProperties?.compoundSummary
                 session.'actives' = true
                 session.'inactives' = true
@@ -723,7 +735,7 @@ class BardWebInterfaceController {
     }
 
 
-    def feedMeJson(Long id){
+    def feedMeJson(Long id) {
 
 
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
@@ -743,8 +755,8 @@ class BardWebInterfaceController {
         if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
             return
         }
-        if (session.'compoundSummaryPlusId'==null) {   // we aren't coming from CBAS
-            session.'compoundSummaryPlusId'=['compoundSummary':null,'id':id]
+        if (session.'compoundSummaryPlusId' == null) {   // we aren't coming from CBAS
+            session.'compoundSummaryPlusId' = ['compoundSummary': null, 'id': id]
         }
 
         int dropDown1Choice = 0
@@ -873,11 +885,19 @@ class SearchHelper {
             int top = searchParams.top
             int skip = searchParams.skip
 
-            final Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
+            Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
+            Collection<Value> facets = assaysByTextSearchResultsMap.facets
+            //If the facets include parent='assay_status' and we have BOTH children 'Draft' and 'Approved', then display approved asssay as a default.
+            if (facets.find { facet -> facet.id == 'assay_status' && facet?.children*.id.contains('Approved') && facet?.children*.id.contains('Draft') }) {
+                searchFilters << new SearchFilter(filterName: 'assay_status', filterValue: 'Approved')
+                //research, this time with an assay_status='Approved' filter
+                assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
+            }
+
             String template = isMobile ? "/mobile/bardWebInterface/assays" : "assays"
             render(template: template, model: [
                     assayAdapters: assaysByTextSearchResultsMap.assayAdapters,
-                    facets: assaysByTextSearchResultsMap.facets,
+                    facets: facets,
                     nhits: assaysByTextSearchResultsMap.nHits,
                     searchString: "${searchString}",
                     appliedFilters: getAppliedFilters(searchFilters, assaysByTextSearchResultsMap.facets)])
@@ -1064,13 +1084,13 @@ class SearchHelper {
     protected List<SearchFilter> getAppliedFiltersAlreadyInFacets(List<SearchFilter> searchFilters, Collection<Value> facets) {
         List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll {
             SearchFilter filter ->
-            Value parent = facets.find {Value parent ->
-                parent.id.trim().equalsIgnoreCase(filter.filterName.trim())
-            }
-            return parent?.children?.find {
-                Value child ->
-                child.id.trim().equalsIgnoreCase(filter.filterValue.trim().replace('"', ''))
-            }
+                Value parent = facets.find { Value parent ->
+                    parent.id.trim().equalsIgnoreCase(filter.filterName.trim())
+                }
+                return parent?.children?.find {
+                    Value child ->
+                        child.id.trim().equalsIgnoreCase(filter.filterValue.trim().replace('"', ''))
+                }
         }
 
         return appliedFiltersAlreadyInFacets
@@ -1079,7 +1099,7 @@ class SearchHelper {
     protected Map<String, List<SearchFilter>> groupSearchFilters(List<SearchFilter> searchFiltersNotYetApplied) {
         Map<String, List<SearchFilter>> appliedFiltersNotInFacetsGrouped = [:]
         if (searchFiltersNotYetApplied) {
-            appliedFiltersNotInFacetsGrouped = searchFiltersNotYetApplied.groupBy { SearchFilter filter -> filter.filterName.trim()}
+            appliedFiltersNotInFacetsGrouped = searchFiltersNotYetApplied.groupBy { SearchFilter filter -> filter.filterName.trim() }
         }
 
         return appliedFiltersNotInFacetsGrouped
@@ -1089,9 +1109,9 @@ class SearchHelper {
     protected List<SearchFilter> getAppliedFiltersDisplayedOutsideFacets(List<SearchFilter> searchFiltersNotYetApplied, Collection<Value> facets) {
         List<SearchFilter> appliedFiltersDisplayedOutsideFacets = []
         if (searchFiltersNotYetApplied) {
-            appliedFiltersDisplayedOutsideFacets = searchFiltersNotYetApplied.findAll {SearchFilter filter ->
+            appliedFiltersDisplayedOutsideFacets = searchFiltersNotYetApplied.findAll { SearchFilter filter ->
                 //filter.filterName is not in any of the parents' ids
-                return !(facets.find { Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim())})
+                return !(facets.find { Value parent -> parent.id.trim().equalsIgnoreCase(filter.filterName.trim()) })
             }
         }
 
