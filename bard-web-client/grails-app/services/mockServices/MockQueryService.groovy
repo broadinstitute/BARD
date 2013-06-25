@@ -1,5 +1,6 @@
 package mockServices
 
+import bard.core.SearchParams
 import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
@@ -12,9 +13,11 @@ import bard.core.rest.spring.compounds.Promiscuity
 import bard.core.rest.spring.project.ProjectStep
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
+import bardqueryapi.GroupByTypes
 import bardqueryapi.IQueryService
 import bardqueryapi.QueryHelperService
 import bardqueryapi.SearchFilter
+import bardqueryapi.TableModel
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Shared
 import bard.core.interfaces.*
@@ -812,9 +815,9 @@ protection of diseased and normal cells, respectively. This assay will summarize
     private void constructMockExperiment() {
         MockExperiment mockedExperiment = new MockExperiment()
         mockedExperiment.bardExptId = 1904
-        mockedExperiment.capExptId=1904
-        mockedExperiment.bardAssayId=1904
-        mockedExperiment.capAssayId=1904
+        mockedExperiment.capExptId = 1904
+        mockedExperiment.bardAssayId = 1904
+        mockedExperiment.capAssayId = 1904
         mockedExperiment.type = 2
         mockedExperiment.classification = 1
         mockedExperiment.category = 0
@@ -832,7 +835,7 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
 
 
         mockedExperiment = new MockExperiment()
-        mockedExperiment.bardExptId= 2757
+        mockedExperiment.bardExptId = 2757
         mockedExperiment.type = ExperimentType.Summary.ordinal()
         mockedExperiment.classification = ExperimentRole.Primary.ordinal()
         mockedExperiment.category = ExperimentCategory.MLPCN.ordinal()
@@ -907,6 +910,21 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     @Override
     CompoundAdapter findProbe(String mlNumber) {
         return null  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    TableModel createCompoundBioActivitySummaryDataTable(Long compoundId,
+                                                         GroupByTypes groupTypes,
+                                                         List<FilterTypes> filterTypes,
+                                                         List<SearchFilter> appliedSearchFilters,
+                                                         SearchParams searchParams) { return null }
+
+    @Override
+    TableModel showExperimentalData(Long experimentId,
+                                    GroupByTypes groupTypes,
+                                    List<FilterTypes> filterTypes,
+                                    SearchParams searchParams) {
+        return null
     }
 }
 

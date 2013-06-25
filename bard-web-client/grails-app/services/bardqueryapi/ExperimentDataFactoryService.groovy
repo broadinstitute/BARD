@@ -12,7 +12,7 @@ class ExperimentDataFactoryService {
             SpreadSheetInput spreadSheetInput,
             GroupByTypes groupTypes,
             List<FilterTypes> filterTypes,
-            List<SearchFilter> appliedSearchFilters,
+            List<SearchFilter> appliedSearchFilters = null,
             SearchParams searchParams
     ) {
 

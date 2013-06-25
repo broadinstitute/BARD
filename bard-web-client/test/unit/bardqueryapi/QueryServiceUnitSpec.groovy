@@ -931,7 +931,7 @@ class QueryServiceUnitSpec extends Specification {
 
     void "test createCompoundBioActivitySummaryDataTable #label"() {
         when:
-        final TableModel tableModel = service.createCompoundBioActivitySummaryDataTable(cid, groupBy, filterTypes, new SearchParams(top: 10, skip: 0))
+        final TableModel tableModel = service.createCompoundBioActivitySummaryDataTable(cid, groupBy, filterTypes, [], new SearchParams(top: 10, skip: 0))
 
         then:
         this.compoundRestService.getSummaryForCompound(cid) >> {this.compoundSummary2}
