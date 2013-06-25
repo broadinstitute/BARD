@@ -6,6 +6,8 @@
 </div>
 <g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>
 
+<input type="hidden" id="disabledInput" value="${disabledInput}"/>
+
 <g:form class="form-horizontal" action="${action.toLowerCase()}">
     <g:hiddenField name="contextOwnerId" value="${instance?.contextOwnerId}"/>
     <g:hiddenField name="contextId" value="${instance?.contextId}"/>

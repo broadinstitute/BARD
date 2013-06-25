@@ -165,8 +165,7 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.extValueId = StringUtils.trimToNull(extValueId)
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
         contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
-        if(contextItem.valueNum)
-            contextItem.qualifier = qualifier
+        contextItem.qualifier = qualifier
         contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
         contextItem.valueMax = convertToBigDecimal('valueMax', valueMax, contextItem.attributeElement?.unit)?.toFloat()
         if (valueNum || valueMin || valueMax) {
@@ -177,7 +176,8 @@ class BasicContextItemCommand extends BardCommand {
 
             if(providedWithResults && valueConstraintType != null) {
                 assayContextItem.attributeType = Enum.valueOf(AttributeType, valueConstraintType)
-                contextItem.qualifier = null;
+            } else {
+                assayContextItem.attributeType = AttributeType.Fixed;
             }
         }
     }
@@ -207,7 +207,7 @@ class BasicContextItemCommand extends BardCommand {
         if (StringUtils.trimToNull(value)) {
             try {
                 convertedValue = new BigDecimal(value).stripTrailingZeros()
-                if (unit && unit.id != this.valueNumUnitId) {
+                if (unit && valueNumUnitId != null && unit.id != this.valueNumUnitId) {
                     Element fromUnit = attemptFindById(Element, valueNumUnitId)
                     UnitConversion unitConversion = UnitConversion.findByFromUnitAndToUnit(fromUnit, unit)
                     BigDecimal unitConvertedValue = unitConversion?.convert(convertedValue)

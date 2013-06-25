@@ -49,7 +49,6 @@ class ContextItemController {
         } else {
             render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
         }
-
     }
 
     def delete(BasicContextItemCommand basicContextItemCommand) {

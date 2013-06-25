@@ -1,5 +1,15 @@
 
 $(document).ready(function () {
+    var widgetsByContainer = {
+        '#valueConstraintContainer': 'input[name="valueConstraintType"]',
+        '#elementValueContainer': '#valueElementId',
+        '#externalOntologyValueContainer':'#extValueSearch,#extValueId',
+        '#numericValueContainer': '#qualifier,#valueNum,#valueNumUnitId',
+        '#numericRangeValueContainer': '#valueMin,#valueMax',
+        '#freeTextValueContainer': '#valueDisplay'};
+
+    var disabledInput = $("#disabledInput").attr("value") == "true";
+
     hideAllValueWidgets();
 
     // try and pick best focus
@@ -99,7 +109,12 @@ $(document).ready(function () {
     }
 
     function hideAllValueWidgets() {
-        $("[id$=ValueContainer]").hide();
+        var containers = $("[id$=ValueContainer]");
+        containers.hide();
+        containers.each( function(index, element) {
+            var selector = widgetsByContainer["#"+element.id]
+            $(selector).attr("disabled", "disabled");
+        });
     }
 
     function onlyShowWidgetsBasedOnResponse(data) {
@@ -109,33 +124,40 @@ $(document).ready(function () {
         updateConstraintWidgets();
     }
 
+    function showWidgets(containerSelector) {
+        $(containerSelector).show();
+        if(!disabledInput) {
+            var inputSelector = widgetsByContainer[containerSelector];
+            $(inputSelector).removeAttr("disabled");
+        }
+    }
+
     function onlyShowWidgetsForExpectedValueType(expectedValueType, unitId, data) {
         hideAllValueWidgets();
         if ('NUMERIC' === expectedValueType) {
-            $('#numericValueContainer').show();
+            showWidgets('#numericValueContainer');
             initializeUnits(unitId);
             potentiallyFocus("#valueNum")
-
         }
         else if ('ELEMENT' === expectedValueType) {
-            $('#elementValueContainer').show();
+            showWidgets('#elementValueContainer');
             potentiallyFocus("#valueElementId");
         }
         else if ('EXTERNAL_ONTOLOGY' === expectedValueType) {
             showExternalOntologyHelpText(data);
-            $('#externalOntologyValueContainer').show();
-            $('#freeTextValueContainer').show();
+            showWidgets('#externalOntologyValueContainer');
+            showWidgets('#freeTextValueContainer');
             potentiallyFocus("#extValueSearch");
         }
         else if ('FREE_TEXT' === expectedValueType) {
-            $('#freeTextValueContainer').show();
+            showWidgets('#freeTextValueContainer');
             potentiallyFocus("#valueDisplay");
         }
         else if ('NONE' === expectedValueType) {
-            $('#noneValueContainer').show();
+            showWidgets('#noneValueContainer');
         }
         else if ('RANGE' === expectedValueType) {
-            $('#numericRangeValueContainer').show();
+            showWidgets('#numericRangeValueContainer');
             potentiallyFocus("#valueMin");
         }
         else {
