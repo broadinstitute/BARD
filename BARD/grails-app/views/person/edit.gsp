@@ -50,14 +50,14 @@
                 <div class="control-group">
                     <label class="control-label" for="primaryGroup">Primary group</label>
                     <div class="controls">
-                        <g:select id="primaryGroup" name="primaryGroup" from="${roles}" optionValue="displayName" noSelection="${['':'']}"/>
+                        <g:select id="primaryGroup" name="primaryGroup" from="${roles}" optionKey="id" optionValue="displayName" noSelection="${['':'']}" value="${person.newObjectRole?.id}"/>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="roles">Primary group</label>
                     <div class="controls">
-                        <g:select id="roles" name="roles" from="${roles}" optionValue="displayName" multiple="${true}"/>
+                        <g:select id="roles" name="roles" from="${roles}" optionKey="id" optionValue="displayName" multiple="${true}" value="${person.roles.collect {it.id} }"/>
                     </div>
                 </div>
 

@@ -12,6 +12,7 @@ import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
 
@@ -20,6 +21,7 @@ class ContextItemController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", updatePreferredName: "POST"]
     ContextService contextService
+
     def index() {}
 
     def create(Long contextId, String contextClass, Long contextOwnerId) {
@@ -30,7 +32,7 @@ class ContextItemController {
 
     def save(BasicContextItemCommand contextItemCommand) {
         if (contextItemCommand.createNewContextItem()) {
-            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
+            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem: true])
         } else {
             render(view: "create", model: [instance: contextItemCommand])
         }
@@ -46,12 +48,12 @@ class ContextItemController {
     }
 
     def update(BasicContextItemCommand contextItemCommand) {
+        contextItemCommand.context = contextItemCommand.attemptFindContext()
         if (!contextItemCommand.update()) {
             render(view: "edit", model: [instance: contextItemCommand])
         } else {
-            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
+            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem: true])
         }
-
     }
 
     def delete(BasicContextItemCommand basicContextItemCommand) {
@@ -66,13 +68,13 @@ class ContextItemController {
             AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
             AbstractContextOwner owningContext = context.owner
             if (owningContext instanceof Assay) {
-                return contextService.updatePreferredAssayContextName((Assay) owningContext, context,command.value)
+                return contextService.updatePreferredAssayContextName((Assay) owningContext, context, command.value)
             }
             if (owningContext instanceof Experiment) {
-                return contextService.updatePreferredExperimentContextName((Experiment) owningContext, context,command.value)
+                return contextService.updatePreferredExperimentContextName((Experiment) owningContext, context, command.value)
             }
             if (owningContext instanceof Project) {
-                return contextService.updatePreferredProjectContextName((Project) owningContext, context,command.value)
+                return contextService.updatePreferredProjectContextName((Project) owningContext, context, command.value)
             }
 
             return context.preferredName
@@ -99,7 +101,13 @@ class ContextItemController {
 
             JSON jsonResponse = [data: newValue] as JSON
             render status: HttpServletResponse.SC_OK, text: jsonResponse, contentType: 'text/json', template: null
-        } catch (Exception ee) {
+        }
+        catch (AccessDeniedException ae) {
+            log.error("Access denied", ae)
+            render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
+
+        }
+        catch (Exception ee) {
             log.error("update failed", ee)
             render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
         }

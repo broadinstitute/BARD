@@ -391,7 +391,7 @@ class AssayDefinitionController {
     }
 
     def reloadCardHolder(Long assayId) {
-        def assay = Assay.get(assayId)
+         def assay = Assay.get(assayId)
         if (assay) {
             render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
         } else {

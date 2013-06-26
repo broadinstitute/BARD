@@ -59,6 +59,14 @@ $(document).ready(function () {
             $("#new_card_form").clearForm();
             $("#cardSection").val('');
             updateCardHolder(responseText)
+            $("#errorCardHolder").removeClass("alert alert-success alert-error");
+            $("#errorCardHolder").addClass("alert alert-success");
+            $("#errorCardHolder").html("Successfully created");
+        },
+        error: function (response, textStatus, errorThrown) {
+            $("#errorCardHolder").removeClass("alert alert-success alert-error");
+            $("#errorCardHolder").addClass("alert alert-error");
+            $("#errorCardHolder").html(response.responseText);
         }
     });
 
@@ -101,84 +109,6 @@ function initDnd() {
     //setupDeleteItemButton()
 };
 
-/*
-function setupDeleteCardItem(itemId, assayContextId) {
-    $("#dialog_confirm_delete_item").dialog("option", "buttons", [
-        {
-            text: "Delete",
-            class: "btn btn-danger",
-            click: function () {
-                var data = {'assay_context_item_id': itemId };
-                $.ajax({
-                    type: 'POST',
-                    url: '../deleteItemFromCard',
-                    data: data,
-                    success: function (data) {
-                        //remove error message if any
-                        $("#"+assayContextId+"_Errors").removeClass("alert alert-error");
-                        $("#"+assayContextId+"_Errors").html("")
-                        updateCardHolder(data)
-                    },
-                    error: function (request, status, error) {
-                        $("#"+assayContextId+"_Errors").addClass("alert alert-error");
-                        $("#"+assayContextId+"_Errors").html(request.responseText)
-                    }
-                });
-                $(this).dialog("close");
-            }
-        },
-        {
-            text: "Cancel",
-            class: "btn",
-            click: function () {
-                $(this).dialog("close");
-            }
-        }
-    ]);
-
-    $("#dialog_confirm_delete_item").dialog("open");
-}
-
- $(".deleteItemButton button").button({
- icons: {
- primary: "ui-icon-trash"
- },
- text: false
- }).click(function (event) {
- var itemId = $(this).attr('id');
- var assayContextId = $(this).parents("div.card").attr('id');
- $("#dialog_confirm_delete_item").dialog("option", "buttons", [
- {
- text: "Delete",
- class: "btn btn-danger",
- click: function () {
- var data = {'assay_context_item_id': itemId };
- $.ajax({
- type: 'POST',
- url: '../deleteItemFromCard',
- data: data,
- success: function (data) {
- $("div#" + assayContextId).replaceWith(data);
- initDnd();
- }
- });
- $(this).dialog("close");
- }
- },
- {
- text: "Cancel",
- class: "btn",
- click: function () {
- $(this).dialog("close");
- }
- }
- ]);
-
- $("#dialog_confirm_delete_item").dialog("open");
-
- });
-
-*/
 
 function showDeleteCardConfirmation(cardId, contextClass) {
     $("#dialog_confirm_delete_card").dialog("option", "buttons", [
@@ -193,6 +123,14 @@ function showDeleteCardConfirmation(cardId, contextClass) {
                     data: data,
                     success: function (data) {
                         updateCardHolder(data)
+                        $("#errorCardHolder").removeClass("alert alert-success alert-error");
+                        $("#errorCardHolder").addClass("alert alert-success");
+                        $("#errorCardHolder").html("Successfully deleted");
+                    },
+                    error: function (response, textStatus, errorThrown) {
+                        $("#errorCardHolder").removeClass("alert alert-success alert-error");
+                        $("#errorCardHolder").addClass("alert alert-error");
+                        $("#errorCardHolder").html(response.responseText);
                     }
                 });
                 $(this).dialog("close");
@@ -221,14 +159,14 @@ function registerAddNewCardButtons() {
         icons: {
             primary: "ui-icon-plus"
         }
-    }).each( function() {
+    }).each(function () {
             var jThis = $(this)
             var cardSection = jThis.attr("cardsection");
-            jThis.click(function(event){
+            jThis.click(function (event) {
                 $("#new_card_section").val(cardSection)
                 $("#dialog_new_card").dialog("open");
             });
-    });
+        });
 }
 
 function outputToConsole(message) {

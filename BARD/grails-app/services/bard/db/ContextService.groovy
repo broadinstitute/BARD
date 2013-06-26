@@ -20,6 +20,7 @@ class ContextService {
     @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void moveExperimentContextToNewGroup(Experiment experiment, AbstractContext context, String newContextGroup) {
         moveContextToNewGroup(context,newContextGroup)
+
     }
 
     private void moveContextToNewGroup(AbstractContext context, String newContextGroup) {
