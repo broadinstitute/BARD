@@ -8,76 +8,15 @@
 </head>
 
 <body>
-<div class="row-fluid">
-    <div class="span12 page-header">
-
-        <h1>Project: ${projectAdapter?.name}
-            <g:if test="${projectAdapter.hasProbes()}">
-                <span class="badge badge-info">Probe</span>
-            </g:if>
-            <small>(Project ID: ${projectAdapter?.capProjectId})</small></h1>
-        <g:saveToCartButton id="${projectAdapter?.id}"
-                            name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
-                            type="${querycart.QueryItemType.Project}"/>
-        <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.project}${projectAdapter?.capProjectId}"
-           title="Click To View Project In CAP" rel="tooltip">View in CAP</a>
-    </div>
-</div>
-
-<div class="row-fluid">
-    <div class="span4">
-        <dl class="dl-horizontal dl-horizontal-wide">
-            <g:if test="${projectAdapter?.getNumberOfExperiments()}">
-                <dt>Number Of Experiments:</dt>
-                <dd>
-
-                    <span class="badge badge-info">
-                        <a href="#experiments-info"
-                           style="color: white; text-decoration: underline">
-                            ${projectAdapter.getNumberOfExperiments()}
-                        </a>
-                    </span></dd>
-            </g:if>
-        </dl>
-    </div>
-
-    <div class="span8">
-        <ul class="thumbnails">
-            <g:each var="probe" in="${projectAdapter?.probes}" status="i">
-                <li class="span4">
-                    <div class="thumbnail">
-                        <g:compoundOptions cid="${probe.cid}" sid="${probe.cid}" smiles="${probe?.smiles}"
-                                           imageHeight="200" imageWidth="300"/>
-                        <div class="caption">
-                            <h3>Probe ML#: ${probe.probeId}</h3>
-                            <ul>
-                                <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a>
-                                </li>
-                                <li><g:link controller="bardWebInterface" action="showCompound"
-                                            params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
-                                <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}"
-                                       target="_blank">View CID ${probe.cid} in PubChem</a></li>
-                                <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
-                                            params="[cid: probe.cid, pid: projectAdapter.id, transpose: true]"
-                                            data-placement="top"
-                                            class="projectTooltip"
-                                            rel="tooltip"
-                                            data-original-title="">Show Experimental Details</g:link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-            </g:each>
-        </ul>
-    </div>
-</div>
-
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar" data-spy="affix">
 
-                <g:if test="${BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
+                <g:if test="${projectAdapter.hasProbes()}">
+                    <li><a href="#probe-info"><i class="icon-chevron-right"></i>Probes</a></li>
+                </g:if>
+                <g:if test="${!BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
                     <li><a href="#annotations-info"><i
                             class="icon-chevron-right"></i>Annotations</a></li>
                 </g:if>
@@ -102,11 +41,54 @@
                     </a>
                     </li>
                 </g:if>
-                <li><a href="#assays-info"><i class="icon-chevron-right"></i> Assays (${assays?.size()})</a></li>
             </ul>
         </div>
 
         <div class="span9">
+
+            <h1>Project: ${projectAdapter?.name}
+                <g:if test="${projectAdapter.hasProbes()}">
+                    <span class="badge badge-info">Probe</span>
+                </g:if>
+                <small>(Project ID: ${projectAdapter?.capProjectId})</small></h1>
+            <g:saveToCartButton id="${projectAdapter?.id}"
+                                name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
+                                type="${querycart.QueryItemType.Project}"/>
+            <a class="btn btn-mini" href="${grailsApplication.config.bard.cap.project}${projectAdapter?.capProjectId}"
+               title="Click To View Project In CAP" rel="tooltip">View in CAP</a>
+
+            <g:if test="${projectAdapter.hasProbes()}">
+                <section id="probe-info">
+                    <h3>Probes</h3>
+                    <ul class="thumbnails">
+                        <g:each var="probe" in="${projectAdapter?.probes}" status="i">
+                            <li class="span4">
+                                <div class="thumbnail">
+                                    <g:compoundOptions cid="${probe.cid}" sid="${probe.cid}" smiles="${probe?.smiles}"
+                                                       imageHeight="200" imageWidth="300"/>
+                                    <div class="caption">
+                                        <h3>Probe ML#: ${probe.probeId}</h3>
+                                        <ul>
+                                            <li><a href="${probe.url}">Download probe report from Molecular Library BookShelf</a>
+                                            </li>
+                                            <li><g:link controller="bardWebInterface" action="showCompound"
+                                                        params="[cid: probe.cid]">Show Compound Details in BARD</g:link></li>
+                                            <li><a href="http://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=${probe.cid}"
+                                                   target="_blank">View CID ${probe.cid} in PubChem</a></li>
+                                            <li><g:link controller="molSpreadSheet" action="showExperimentDetails"
+                                                        params="[cid: probe.cid, pid: projectAdapter.id, transpose: true]"
+                                                        data-placement="top"
+                                                        class="projectTooltip"
+                                                        rel="tooltip"
+                                                        data-original-title="">Show Experimental Details</g:link></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </g:each>
+                    </ul>
+                </section>
+            </g:if>
 
             <g:if test="${!projectAdapter.annotations.contexts.isEmpty()}">
                 <section id="annotations-info">
@@ -150,7 +132,7 @@
             </g:if>
             <g:if test="${experiments}">
                 <section id="experiments-info">
-                    <h2>Experiments Grouped by Assay</h2>
+                    <h3>Experiments</h3>
 
                     <g:displayExperimentsGroupedByAssay assays="${assays}" experiments="${experiments}" experimentTypes="${projectAdapter.experimentTypes}"/>
                 </section>

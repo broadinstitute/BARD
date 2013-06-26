@@ -1,5 +1,5 @@
 <%@ page import="bard.core.interfaces.ExperimentValues;" %>
-<table class="table table-striped table-bordered">
+<table class="table">
     <thead>
     <tr>
         <th rowspan="2">EID</th>
@@ -36,7 +36,7 @@
                             role = "Not Specified"
                         }
                     %>
-                    <span class="label label-info">${role}</span>
+                    ${role}
                 </td>
                 <td>${experiment.compounds}</td>
                 <td>${experiment.activeCompounds ?: 0}</td>
@@ -50,14 +50,14 @@
                         <g:link controller="bardWebInterface" action="showAssay" id="${assay.bardAssayId}"
                                 params='${ searchString ? '[searchString: ${searchString}]' : ""}'>
                             ${assay.name}</g:link>
-                        <dl class="dl-horizontal muted">
-                            <dt>Assay Format:</dt>
-                            <dd>${assay.minimumAnnotation.assayFormat}</dd>
-                            <dt>Assay Type:</dt>
-                            <dd>${assay.minimumAnnotation.assayType}</dd>
-                            <dt>Detection Method Type:</dt>
-                            <dd>${assay.minimumAnnotation.detectionMethodType}</dd>
-                        </dl>
+                        %{--<dl class="dl-horizontal muted">--}%
+                            %{--<dt>Assay Format:</dt>--}%
+                            %{--<dd>${assay.minimumAnnotation.assayFormat}</dd>--}%
+                            %{--<dt>Assay Type:</dt>--}%
+                            %{--<dd>${assay.minimumAnnotation.assayType}</dd>--}%
+                            %{--<dt>Detection Method Type:</dt>--}%
+                            %{--<dd>${assay.minimumAnnotation.detectionMethodType}</dd>--}%
+                        %{--</dl>--}%
                     </td>
                 </g:if>
             </tr>

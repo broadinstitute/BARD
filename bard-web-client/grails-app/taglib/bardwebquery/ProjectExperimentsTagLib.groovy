@@ -12,7 +12,14 @@ class ProjectExperimentsTagLib {
             exptsForAssay.sort(true) { -(it.compounds) }
             assayExperimentListMap[assay] = exptsForAssay
         }
-        List<Assay> sortedAssays = attrs.assays.sort { it.name }
+        List<Assay> sortedAssays = attrs.assays.sort { Assay assay ->
+            List<ExperimentSearch> exptList = assayExperimentListMap[assay]
+            if (exptList && exptList.first()) {
+                -(exptList.first().compounds)
+            } else {
+                0
+            }
+        }
         out << render(template: "/tagLibTemplates/projectExperiments",
                 model: [assayExperimentListMap: assayExperimentListMap, sortedAssays: sortedAssays, experimentTypes: attrs.experimentTypes])
     }
