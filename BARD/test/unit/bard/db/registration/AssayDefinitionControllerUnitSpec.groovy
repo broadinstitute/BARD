@@ -537,20 +537,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     }
 
-    void "test moveCard"() {
-        given:
-        assay = Assay.build(assayName: 'Test')
-        AssayContext context = AssayContext.build(assay: assay, contextGroup: "context_group")
-        String new_context_group = 'context_group_7'
-        when:
-        controller.moveCard(new_context_group, context.id)
-        then:
-        controller.contextService.moveAssayContextToNewGroup(_, _, _)>>{}
-
-        new_context_group == context.contextGroup
-
-    }
-
     void "test changeRelationship"() {
         given:
         def assayContextService = mockFor(AssayContextService)

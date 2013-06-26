@@ -391,7 +391,7 @@ class AssayDefinitionController {
     }
 
     def reloadCardHolder(Long assayId) {
-         def assay = Assay.get(assayId)
+        def assay = Assay.get(assayId)
         if (assay) {
             render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
         } else {
@@ -411,37 +411,6 @@ class AssayDefinitionController {
         assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay)
         assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-    /**
-     *
-     * @param context_group - The new context group
-     * @param contextMoveId - The context that we are moving to new group
-     *
-     */
-    //TODO: Add ACL
-    def moveCard(String context_group, Long contextMoveId) {
-        AssayContext assayContext = AssayContext.findById(contextMoveId)
-
-        contextService.moveAssayContextToNewGroup(assayContext.assay, assayContext, context_group)
-        Assay assay = assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
-    def showMoveItemForm(Long assayId, Long itemId) {
-        def assayInstance = Assay.get(assayId)
-        if (!assayInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), assayId])
-            return
-        }
-        render(template: "moveItemForm", model: [instance: assayInstance, assayId: assayId, itemId: itemId])
-    }
-
-    def moveCardItem(Long cardId, Long assayContextItemId, Long assayId) {
-        AssayContext targetAssayContext = AssayContext.findById(cardId)
-        AssayContextItem source = AssayContextItem.findById(assayContextItemId)
-        assayContextService.addItem(source, targetAssayContext, targetAssayContext.assay)
-        Assay assay = targetAssayContext.assay
-        render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
 

@@ -7,6 +7,7 @@ import bard.db.dictionary.UnitTree
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextService
 import bard.db.registration.AttributeType
+import grails.plugins.springsecurity.Secured
 import org.apache.commons.lang.StringUtils
 
 import java.util.regex.Matcher
@@ -186,8 +187,8 @@ class RangeValueCommand implements Serializable {
         return !hasErrors();
     }
 }
-
-
+@Deprecated
+@Secured(['ROLE_BARD_ADMINISTRATOR'])
 class AddItemWizardController {
     // the pluginManager is used to check if the Grom
     // plugin is available so we can 'Grom' development
