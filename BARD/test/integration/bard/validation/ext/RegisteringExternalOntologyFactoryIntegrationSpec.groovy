@@ -2,6 +2,7 @@ package bard.validation.ext
 
 import bard.db.audit.BardContextUtils
 import bard.validation.extext.ExternalOntologyPerson
+import bard.validation.extext.PersonCreator
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.SessionFactory;
@@ -33,7 +34,7 @@ class RegisteringExternalOntologyFactoryIntegrationSpec extends IntegrationSpec 
 		persons = Person.findAllByUserNameIlike("%ExternalOntologyPersonIntegrationSpec%")
 		
 		reoFactory = RegisteringExternalOntologyFactory.instance;
-		reoFactory.creators.add(new ExternalOntologyPerson.PersonCreator())
+		reoFactory.creators.add(new PersonCreator())
 
 		extOntologyPerson = reoFactory.getExternalOntologyAPI(ExternalOntologyPerson.PERSON_URI, null)
 	}
