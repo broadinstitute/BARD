@@ -167,6 +167,14 @@ function registerAddNewCardButtons() {
                 $("#dialog_new_card").dialog("open");
             });
         });
+
+    //add click events to buttons
+    $(".documentPencil").on("click", function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        var dataId = $(this).attr('data-id');
+        $("#" + dataId).editable('toggle');
+    });
 }
 
 function outputToConsole(message) {
