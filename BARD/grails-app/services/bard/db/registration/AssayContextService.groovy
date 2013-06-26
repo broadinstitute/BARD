@@ -137,7 +137,7 @@ class AssayContextService {
         }
     }
 
-    public createItem(AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, FixedValueCommand fixedValCmd, ListValueCommand listValCmd) {
+    private AssayContextItem createItem(AttributeCommand attributeCmd, ValueTypeCommand valTypeCmd, FixedValueCommand fixedValCmd, ListValueCommand listValCmd) {
 
         AssayContextItem newAssayContextItem = new AssayContextItem()
         Element attributeElement = Element.get(attributeCmd.attributeId)

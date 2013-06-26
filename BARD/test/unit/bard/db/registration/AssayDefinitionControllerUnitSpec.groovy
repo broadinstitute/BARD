@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -50,6 +51,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.measureTreeService = measureTreeService
         controller.assayContextService = assayContextService
         controller.assayDefinitionService = assayDefinitionService
+        controller.contextService = Mock(ContextService)
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
@@ -532,18 +534,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         then:
         controller.assayContextService.disassociateContext(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
-
-    }
-
-    void "test moveCard"() {
-        given:
-        assay = Assay.build(assayName: 'Test')
-        AssayContext context = AssayContext.build(assay: assay, contextGroup: "context_group")
-        String new_context_group = 'context_group2'
-        when:
-        controller.moveCard(new_context_group, context.id)
-        then:
-        new_context_group == context.contextGroup
 
     }
 

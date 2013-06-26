@@ -1,14 +1,18 @@
 package bard.db.context.item
 
+import bard.db.ContextService
 import bard.db.command.BardCommand
+import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import bard.db.model.AbstractContextOwner
+import bard.db.project.Project
 import bard.db.registration.Assay
-import bard.db.registration.AssayContext
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
 
@@ -16,6 +20,7 @@ import javax.servlet.http.HttpServletResponse
 class ContextItemController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", updatePreferredName: "POST"]
+    ContextService contextService
 
     def index() {}
 
@@ -27,7 +32,7 @@ class ContextItemController {
 
     def save(BasicContextItemCommand contextItemCommand) {
         if (contextItemCommand.createNewContextItem()) {
-            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
+            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem: true])
         } else {
             render(view: "create", model: [instance: contextItemCommand])
         }
@@ -47,7 +52,7 @@ class ContextItemController {
         if (!contextItemCommand.update()) {
             render(view: "edit", model: [instance: contextItemCommand])
         } else {
-            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem:true])
+            render(view: "edit", model: [instance: contextItemCommand, reviewNewItem: true])
         }
     }
 
@@ -61,7 +66,16 @@ class ContextItemController {
     def updatePreferredName(InlineUpdateCommand command) {
         attemptUpdate {
             AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
-            context.preferredName = command.value
+            AbstractContextOwner owningContext = context.owner
+            if (owningContext instanceof Assay) {
+                return contextService.updatePreferredAssayContextName((Assay) owningContext, context, command.value)
+            }
+            if (owningContext instanceof Experiment) {
+                return contextService.updatePreferredExperimentContextName((Experiment) owningContext, context, command.value)
+            }
+            if (owningContext instanceof Project) {
+                return contextService.updatePreferredProjectContextName((Project) owningContext, context, command.value)
+            }
 
             return context.preferredName
         }
@@ -69,8 +83,16 @@ class ContextItemController {
 
     def deleteContext(DeleteContextCommand command) {
         AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
-        context.getOwner().removeContext(context)
-        context.delete()
+        AbstractContextOwner owningContext = context.owner
+        if (owningContext instanceof Assay) {
+            contextService.deleteAssayContext((Assay) owningContext, context)
+        }
+        if (owningContext instanceof Experiment) {
+            contextService.deleteExperimentContext((Experiment) owningContext, context)
+        }
+        if (owningContext instanceof Project) {
+            contextService.deleteProjectContext((Project) owningContext, context)
+        }
     }
 
     private Object attemptUpdate(Closure body) {
@@ -79,7 +101,13 @@ class ContextItemController {
 
             JSON jsonResponse = [data: newValue] as JSON
             render status: HttpServletResponse.SC_OK, text: jsonResponse, contentType: 'text/json', template: null
-        } catch (Exception ee) {
+        }
+        catch (AccessDeniedException ae) {
+            log.error("Access denied", ae)
+            render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
+
+        }
+        catch (Exception ee) {
             log.error("update failed", ee)
             render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
         }

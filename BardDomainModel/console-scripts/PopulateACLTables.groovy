@@ -33,14 +33,6 @@ try {
         ++index
 
     }
-    index = 0
-    sql.eachRow("SELECT PROJECT_ID,EXPERIMENT_ID,EXT_ASSAY_REF FROM EXTERNAL_REFERENCE WHERE EXT_ASSAY_REF LIKE 'aid=%'") { row ->
-        String projectId = row.PROJECT_ID
-        String experimentId = row.EXPERIMENT_ID
-        String aid = row.EXT_ASSAY_REF
-        String line = projectId ?: "" + "\t" + experimentId ?: "" + "\t" + aid ?: ""
-        externalReferenceMap.put(aid.trim(), line)
-    }
     //Generate this file from running this query
     new File("console-scripts/files/aid_to_team.txt").eachLine { line ->
         if (index > 0) {

@@ -1,8 +1,14 @@
 package bard.db.context.item
 
 import bard.db.ContextService
+import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
+import bard.db.project.Project
+import bard.db.registration.Assay
+import org.springframework.security.access.AccessDeniedException
+
+import javax.servlet.http.HttpServletResponse
 
 class ContextController {
     ContextService contextService
@@ -11,19 +17,44 @@ class ContextController {
         if (ownerId == null) {
             throw new RuntimeException("bad instance")
         }
+        AbstractContextOwner owningContext = BasicContextItemCommand.getContextOwnerClass(contextClass).findById(ownerId)
+        try {
+            if (owningContext instanceof Assay) {
+                contextService.createAssayContext((Assay) owningContext, cardName, cardSection)
+            }
+            if (owningContext instanceof Experiment) {
+                contextService.createExperimentContext((Experiment) owningContext, cardName, cardSection)
+            }
+            if (owningContext instanceof Project) {
+                contextService.createProjectContext((Project) owningContext, cardName, cardSection)
+            }
+        } catch (AccessDeniedException ae) {
+            render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
+            return
+        }
+        render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupContexts(), subTemplate: 'edit'])
 
-        AbstractContextOwner owner = BasicContextItemCommand.getContextOwnerClass(contextClass).findById(ownerId)
-        contextService.createContext(owner, cardName, cardSection)
 
-        render(template: "/context/list", model: [contextOwner: owner, contexts: owner.groupContexts(), subTemplate: 'edit'])
     }
 
     def deleteEmptyCard(String contextClass, Long contextId) {
         AbstractContext context = BasicContextItemCommand.getContextClass(contextClass).findById(contextId)
-        AbstractContextOwner owner = context.owner
-        contextService.deleteContext(context)
-
-        render(template: "/context/list", model: [contextOwner: owner, contexts: owner.groupContexts(), subTemplate: 'edit'])
+        AbstractContextOwner owningContext = context.owner
+        try {
+            if (owningContext instanceof Assay) {
+                contextService.deleteAssayContext((Assay) owningContext, context)
+            }
+            if (owningContext instanceof Experiment) {
+                contextService.deleteExperimentContext((Experiment) owningContext, context)
+            }
+            if (owningContext instanceof Project) {
+                contextService.deleteProjectContext((Project) owningContext, context)
+            }
+        } catch (AccessDeniedException ae) {
+            render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
+            return
+        }
+        render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupContexts(), subTemplate: 'edit'])
     }
 
 }
