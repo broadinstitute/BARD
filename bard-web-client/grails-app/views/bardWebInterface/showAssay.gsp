@@ -18,8 +18,9 @@
                 <li><a href="#assay-readout-header"><i class="icon-chevron-right"></i>3.2 Assay Readout</a></li>
                 <li><a href="#assay-components-header"><i class="icon-chevron-right"></i>3.3 Assay Components
                 </a></li>
-                <li><a href="#unclassified-header"><i class="icon-chevron-right"></i>3.4 Unclassified</a></li>
-
+                <g:if test="${!assayAdapter?.annotations?.findOrphanAssayContexts()?.isEmpty()}">
+                    <li><a href="#unclassified-header"><i class="icon-chevron-right"></i>3.4 Unclassified</a></li>
+                </g:if>
                 <li><a href="#experiments-header"><i class="icon-chevron-right"></i>4. Experiments</a></li>
                 <li><a href="#experimental-variables-header"><i class="icon-chevron-right"></i>4.1 Experimental Variables</a></li>
                 <li><a href="#measures-header"><i class="icon-chevron-right"></i>5. Measures</a></li>
@@ -30,6 +31,7 @@
                 <li><a href="#documents-comment-header"><i class="icon-chevron-right"></i>6.3 Comments</a></li>
                 <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>6.4 Publications</a>
                 </li>
+                <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>6.5 External URLS</a></li>
             </ul>
         </div>
 
@@ -92,7 +94,7 @@
 
                     <div class="row-fluid">
                         <div class="cardView" class="row-fluid">
-                            <g:render template="listContexts" model="[contexts: assayAdapter?.annotations?.findAssayContextsContainingKeys('readout','detection')]"/>
+                            <g:render template="listContexts" model="[contexts: assayAdapter?.annotations?.findAssayContextsContainingKeys('readout','detection', 'wavelength')]"/>
                         </div>
                     </div>
                 </section>
@@ -107,15 +109,17 @@
                     </div>
                 </section>
 
-                <section id="unclassified-header">
-                    <h4>3.4 Unclassified</h4>
+                <g:if test="${!assayAdapter?.annotations?.findOrphanAssayContexts()?.isEmpty()}">
+                    <section id="unclassified-header">
+                        <h4>3.4 Unclassified</h4>
 
-                    <div class="row-fluid">
-                        <div class="cardView" class="row-fluid">
-                            <g:render template="listContexts" model="[contexts: assayAdapter?.annotations?.findOrphanAssayContexts()]"/>
+                        <div class="row-fluid">
+                            <div class="cardView" class="row-fluid">
+                                <g:render template="listContexts" model="[contexts: assayAdapter?.annotations?.findOrphanAssayContexts()]"/>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </g:if>
 
             </section>
 

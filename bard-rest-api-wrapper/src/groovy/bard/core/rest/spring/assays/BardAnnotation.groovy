@@ -34,7 +34,7 @@ public class BardAnnotation extends JsonUtil {
     public List<Context> findAssayContextsForExperimentalVariables() {
         contexts.findAll() { Context context ->
             context.contextItems.any { Annotation contextItem ->
-                (!contextItem.display || contextItem.key.contains("screening concentration")) && contextItem.entity == "assay"
+                (!contextItem.display || contextItem.key.contains("screening concentration") || contextItem.key.contains("project lead")) && contextItem.entity == "assay"
             }
         }
     }
@@ -43,7 +43,7 @@ public class BardAnnotation extends JsonUtil {
         List<Context> orphans = new ArrayList<Context>()
         orphans.addAll(contexts)
         orphans.removeAll(findAssayContextsContainingKeys('readout','detection','assay component role','assay method','assay parameter',
-                'assay format', 'assay footprint', 'biology', 'assay type'))
+                'assay format', 'assay footprint', 'biology', 'assay type', 'wavelength'))
         orphans.removeAll(findAssayContextsForExperimentalVariables())
         return orphans
     }
@@ -86,19 +86,21 @@ public class BardAnnotation extends JsonUtil {
         }
     }
 
+    public List<Doc> findPublications() {
+        this.docs.findAll { it.name == "Publication" }
+    }
+
+    public List<Doc> findExternalUrls() {
+        this.docs.findAll { it.name == "External URL" }
+    }
+
     /**
      * Checks if any of the annotations list actually contains some one or more non-empty context items ([Annotations] -> [Context] -> [Context items == Annotation]
      * @param annotations
      * @return
      */
-    public static Boolean areAnnotationsEmpty(List<BardAnnotation> annotations) {
-        Boolean foundSomething = annotations.find {BardAnnotation annotation ->
-            annotation.contexts.find {Context context ->
-                context.getContextItems().find()
-            }
-        }
-
-        return foundSomething ?: false
+    public static Boolean areAnnotationsEmpty(BardAnnotation annotations) {
+        return annotations.contexts.isEmpty()
     }
 
     /**
@@ -106,11 +108,7 @@ public class BardAnnotation extends JsonUtil {
      * @param annotations
      * @return
      */
-    public static Boolean areOtherAnnotationsEmpty(List<BardAnnotation> annotations) {
-        Boolean foundSomething = annotations.find {BardAnnotation annotation ->
-            annotation.otherAnnotations.find() //List<Annotation>
-        }
-
-        return foundSomething ?: false
+    public static Boolean areOtherAnnotationsEmpty(BardAnnotation annotations) {
+        return annotations.otherAnnotations.isEmpty()
     }
 }

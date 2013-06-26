@@ -162,7 +162,6 @@ class ProjectAdapterUnitSpec extends Specification {
         assert projectAdapter.targets
         assert !projectAdapter.documents
         assert projectAdapter.hasProbes()
-        assert projectAdapter.numberOfAnnotations == 0
     }
 
     void "test Expanded Project"() {

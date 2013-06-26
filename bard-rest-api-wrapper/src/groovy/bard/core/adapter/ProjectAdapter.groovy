@@ -100,10 +100,6 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return this.annotations
     }
 
-    public int getNumberOfAnnotations() {
-        return this.annotations.size()
-    }
-
     public Long getCapProjectId() {
         return project.getCapProjectId()
     }

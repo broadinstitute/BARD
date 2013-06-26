@@ -46,10 +46,20 @@
         <h4>6.4 Publications</h4>
 
         <ol>
-            <g:each in="${assayAdapter?.annotations?.docs}" var="publication">
-                <g:set var="pubInfo" value="${publication.comps.first()}"/>
-                <li><a href="${pubInfo.value}" target="_blank">${pubInfo.display}</a></li>
+            <g:each in="${assayAdapter?.annotations?.findPublications()}" var="publication">
+                <li><a href="${publication.urlValue}" target="_blank">${publication.displayString}</a></li>
             </g:each>
         </ol>
+    </section>
+
+    <section id="documents-urls-header">
+        <h4>6.5 External URLS</h4>
+
+        <ul>
+            <g:each in="${assayAdapter?.annotations?.findExternalUrls()}" var="externalUrl">
+                <li><a href="${externalUrl.urlValue}" target="_blank">${externalUrl.urlValue}</a></li>
+            </g:each>
+        </ul>
+
     </section>
 </section>

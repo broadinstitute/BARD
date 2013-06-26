@@ -22,7 +22,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
     void "test generateAccessionIdentifiers"(){
         given:
-        final List<Long> bids = [155L]
+        final List<Long> bids = [240L]
 
         when:
         List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits")
@@ -52,8 +52,8 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
         LinkedHashMap activeInactiveDataAfterConversion
-        activeInactiveDataPriorToConversion["hits"] = [155L]
-        activeInactiveDataPriorToConversion["misses"] = [156L, 157L]
+        activeInactiveDataPriorToConversion["hits"] = [240L]
+        activeInactiveDataPriorToConversion["misses"] = [724L, 738L]
 
         when:
         activeInactiveDataAfterConversion = ringManagerService.convertBiologyIdsToAscensionNumbers (activeInactiveDataPriorToConversion)
