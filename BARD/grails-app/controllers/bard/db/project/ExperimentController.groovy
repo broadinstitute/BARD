@@ -219,6 +219,11 @@ class ExperimentController {
 
     def save() {
         def assay = Assay.get(params.assayId)
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, assay)
+        if (!editable) {
+            render accessDeniedErrorMessage();
+            return
+        }
         Experiment experiment = new Experiment()
         experiment.assay = assay
         setEditFormParams(experiment)
@@ -226,8 +231,6 @@ class ExperimentController {
         if (!validateExperiment(experiment)) {
             renderCreate(assay, experiment)
         } else {
-            //this should trigger a forbidden messsage if the current user does not have privileges to create
-            //an experiment in this assay
             if (!experiment.save(flush: true)) {
                 renderCreate(assay, experiment)
             } else {

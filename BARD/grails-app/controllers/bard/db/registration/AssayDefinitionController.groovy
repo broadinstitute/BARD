@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -27,6 +28,7 @@ class AssayDefinitionController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
+    ContextService contextService
     SpringSecurityService springSecurityService
     def permissionEvaluator
     MeasureTreeService measureTreeService
@@ -420,9 +422,7 @@ class AssayDefinitionController {
     def moveCard(String context_group, Long contextMoveId) {
         AssayContext assayContext = AssayContext.findById(contextMoveId)
 
-        if (assayContext.contextGroup != context_group) {
-            assayContext.setContextGroup(context_group)
-        }
+        contextService.moveAssayContextToNewGroup(assayContext.assay, assayContext, context_group)
         Assay assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
@@ -435,7 +435,7 @@ class AssayDefinitionController {
         }
         render(template: "moveItemForm", model: [instance: assayInstance, assayId: assayId, itemId: itemId])
     }
-    //TODO: Add ACL
+
     def moveCardItem(Long cardId, Long assayContextItemId, Long assayId) {
         AssayContext targetAssayContext = AssayContext.findById(cardId)
         AssayContextItem source = AssayContextItem.findById(assayContextItemId)

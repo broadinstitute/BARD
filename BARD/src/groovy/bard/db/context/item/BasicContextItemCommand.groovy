@@ -1,11 +1,14 @@
 package bard.db.context.item
 
+import acl.CapPermissionService
 import bard.db.ContextItemService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.UnitConversion
+import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
+import bard.db.model.AbstractContextOwner
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -17,6 +20,8 @@ import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
 import org.springframework.context.MessageSource
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.acls.domain.BasePermission
 
 import java.util.regex.Pattern;
 
@@ -127,16 +132,18 @@ class BasicContextItemCommand extends BardCommand {
         boolean createSuccessful = false
         context = attemptFindById(getContextClass(this.contextClass), contextId)
         if (validate()) {
-            AbstractContextItem contextItem = getContextItemClass(this.contextClass).newInstance()
-            copyFromCmdToDomain(contextItem)
-            context.addContextItem(contextItem)
-            if (attemptSave(contextItem)) {
-                copyFromDomainToCmd(contextItem)
-
-                createSuccessful = true
+            final AbstractContextOwner owningContext = context.getOwner()
+            if (owningContext instanceof Assay) {
+               return contextItemService.createAssayContextItem((Assay)owningContext,this)
+            }
+            if (owningContext instanceof Project) {
+               return contextItemService.createProjectContextItem((Project)owningContext,this)
+            }
+            if(owningContext instanceof Experiment){
+               return contextItemService.createExperimentContextItem((Experiment)owningContext,this)
             }
         }
-        createSuccessful
+        return createSuccessful
     }
 
     void copyFromCmdToDomain(AbstractContextItem contextItem) {
@@ -150,7 +157,7 @@ class BasicContextItemCommand extends BardCommand {
         contextItem.valueDisplay = StringUtils.trimToNull(valueDisplay)
         contextItem.qualifier = qualifier
         contextItem.valueNum = convertToBigDecimal('valueNum', valueNum, contextItem.attributeElement?.unit)?.toFloat()
-        if(contextItem.valueNum!=null && StringUtils.isBlank(qualifier)){
+        if (contextItem.valueNum != null && StringUtils.isBlank(qualifier)) {
             contextItem.qualifier = '= '
         }
         contextItem.valueMin = convertToBigDecimal('valueMin', valueMin, contextItem.attributeElement?.unit)?.toFloat()
@@ -161,12 +168,26 @@ class BasicContextItemCommand extends BardCommand {
     }
 
     boolean update() {
-        return validate() && contextItemService.updateContextItem(this)
-    }
+        final AbstractContextOwner owner = this.findContext().owner
+        if (owner instanceof Assay) {
+            return validate() && contextItemService.updateAssayContextItem((Assay) owner, this)
+        } else if (owner instanceof Project) {
+            return validate() && contextItemService.updateProjectContextItem((Project) owner, this)
+        } else if (owner instanceof Experiment) {
+            return validate() && contextItemService.updateExperimentContextItem((Experiment) owner, this)
+        }
+     }
 
     boolean delete() {
-        contextItemService.delete(this)
-    }
+        final AbstractContextOwner owner = this.findContext().owner
+        if (owner instanceof Assay) {
+            return contextItemService.deleteAssayContextItem((Assay) owner, this)
+        } else if (owner instanceof Project) {
+            return contextItemService.deleteProjectContextItem((Project) owner, this)
+        } else if (owner instanceof Experiment) {
+            return contextItemService.deleteExperimentContextItem((Experiment) owner, this)
+        }
+     }
 
     AbstractContext findContext() {
         attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)
