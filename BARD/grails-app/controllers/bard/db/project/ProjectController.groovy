@@ -3,6 +3,8 @@ package bard.db.project
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.dictionary.TermCommand
+import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.Assay
@@ -12,6 +14,7 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
@@ -24,6 +27,33 @@ class ProjectController {
     ProjectService projectService
     SpringSecurityService springSecurityService
     def permissionEvaluator
+    LinkGenerator grailsLinkGenerator
+
+    def create(ProjectCommand projectCommand) {
+        if (!projectCommand) {
+            projectCommand: new ProjectCommand(status: ProjectStatus.APPROVED.id)
+        }
+        [projectCommand: projectCommand]
+    }
+
+    def save(ProjectCommand projectCommand) {
+        String errorMessage = null
+        try {
+            projectCommand.modifiedBy = springSecurityService.principal?.username
+            Project project = projectCommand.createProject()
+            if (project) {
+                //return a link to the newly created project
+                String link = grailsLinkGenerator.link(controller: 'project', action: 'show', id: project.id, absolute: true)
+                Map map = [url: link]
+                render status: HttpServletResponse.SC_OK, text: map as JSON, contentType: 'text/json', template: null
+                return
+            }
+            errorMessage = "Could not create Project"
+        } catch (Exception ee) {
+            errorMessage = ee.message
+        }
+        render status: HttpServletResponse.SC_BAD_REQUEST, text: errorMessage, contentType: 'text/plain', template: null
+    }
 
     def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -91,6 +121,17 @@ class ProjectController {
         final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
         for (ProjectStatus projectStatus : projectStatuses) {
             sorted.add(projectStatus.id)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+    }
+
+    def groupType() {
+        List<String> sorted = []
+        final Collection<ProjectGroupType> projectGroupTypes = ProjectGroupType.values()
+        for (ProjectGroupType projectGroupType : projectGroupTypes) {
+            sorted.add(projectGroupType.id)
         }
         sorted.sort()
         final JSON json = sorted as JSON
@@ -354,6 +395,42 @@ class ProjectController {
         def query = params?.term
         def projects = Project.findAllByNameIlike("%${query}%", [sort: "name", order: "asc"])
         render projects.collect { it.name } as JSON
+    }
+}
+@InheritConstructors
+@Validateable
+class ProjectCommand extends BardCommand {
+    String name
+    String modifiedBy
+    String description //the new value
+    String status = ProjectStatus.DRAFT.id
+    String groupType = ProjectGroupType.PROJECT.id
+
+    static constraints = {
+        importFrom Project, include: ["name", "description"]
+        status(blank: false, nullable: false)
+        groupType(blank: false, nullable: false)
+    }
+
+    Project createProject() {
+
+        if (validate()) {
+            Project project = new Project()
+            copyFromCmdToDomain(project)
+            project.save(flush: true)
+            return project
+        }
+        return null
+    }
+
+    void copyFromCmdToDomain(Project project) {
+        project.groupType = ProjectGroupType.byId(this.groupType)
+        project.name = this.name
+        project.modifiedBy = this.modifiedBy
+        project.description = this.description
+        project.dateCreated = new Date()
+        project.projectStatus = ProjectStatus.byId(this.status)
+
     }
 }
 @InheritConstructors
