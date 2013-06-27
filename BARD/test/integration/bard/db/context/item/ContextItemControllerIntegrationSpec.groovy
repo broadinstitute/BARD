@@ -35,6 +35,12 @@ class ContextItemControllerIntegrationSpec extends IntegrationSpec {
     void "test update number handling #desc"() {
         given:
         ProjectContextItem contextItem = ProjectContextItem.build()
+        // unclear what is going on with the build method that requires a flush
+        // after the save.
+        // if the flush does not happen, then it occurs in the service call which causes a version mismatch
+        ProjectContextItem.withSession { session ->
+            session.flush()
+        }
 
         setContextItemRelatedParams(contextItem)
 
