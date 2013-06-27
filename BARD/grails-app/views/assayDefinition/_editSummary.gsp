@@ -55,6 +55,8 @@
                    data-original-title="Edit Designed By">${assay?.designedBy}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" data-id="designedById" title="Click to edit designed by"></a>
             </dd>
+            <dt>Owner:</dt>
+            <dd>${assay?.designedBy}</dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></dd>
