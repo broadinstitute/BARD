@@ -1,8 +1,10 @@
 package bard.db.project
 
 import bard.db.enums.DocumentType
+import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.enums.ReadyForExtraction
+import bard.db.enums.hibernate.ProjectGroupTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
@@ -15,7 +17,7 @@ class Project extends AbstractContextOwner {
     private static final int GROUP_TYPE_MAX_SIZE = 20
     def capPermissionService
     String name
-    String groupType
+    ProjectGroupType groupType = ProjectGroupType.PROJECT
     String description
     ReadyForExtraction readyForExtraction = ReadyForExtraction.NOT_READY
     ProjectStatus projectStatus = ProjectStatus.DRAFT
@@ -45,16 +47,16 @@ class Project extends AbstractContextOwner {
         id(column: "PROJECT_ID", generator: "sequence", params: [sequence: 'PROJECT_ID_SEQ'])
         name(column: "PROJECT_NAME")
         readyForExtraction(type: ReadyForExtractionEnumUserType)
+        groupType(type: ProjectGroupTypeEnumUserType)
         contexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'false')
     }
 
     static constraints = {
         name(maxSize: PROJECT_NAME_MAX_SIZE, blank: false)
-        // TODO make enum
-        groupType(maxSize: GROUP_TYPE_MAX_SIZE, nullable: false, blank: false, inList: ['Project', 'Probe Report', 'Campaign', 'Panel', 'Study', 'Template'])
+        groupType(nullable: false)
         description(nullable: true, blank: false, maxSize: DESCRIPTION_MAX_SIZE)
         readyForExtraction(nullable: false)
-        lastUpdated(nullable:false)
+        lastUpdated(nullable: false)
         dateCreated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
@@ -72,6 +74,7 @@ class Project extends AbstractContextOwner {
         projectSteps.addAll(this.projectExperiments*.precedingProjectSteps)
         projectSteps.flatten()
     }
+
     List<ProjectDocument> getPublications() {
         final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<ProjectDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
@@ -89,11 +92,13 @@ class Project extends AbstractContextOwner {
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
+
     List<ProjectDocument> getDescriptions() {
         final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION } as List<ProjectDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
         return documents
     }
+
     List<ProjectDocument> getProtocols() {
         final List<ProjectDocument> documents = documents.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL } as List<ProjectDocument>
         documents.sort { p1, p2 -> p1.id.compareTo(p2.id) }
@@ -114,7 +119,7 @@ class Project extends AbstractContextOwner {
     @Override
     Map<String, String> getGroupDesc() {
         return [
-                "unclassified>":""
+                "unclassified>": ""
         ]
     }
 
@@ -124,6 +129,7 @@ class Project extends AbstractContextOwner {
         addToContexts(context)
         return context
     }
+
     def afterInsert() {
         Project.withNewSession {
             capPermissionService?.addPermission(this)

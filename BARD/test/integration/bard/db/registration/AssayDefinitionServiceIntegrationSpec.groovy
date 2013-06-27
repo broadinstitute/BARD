@@ -5,8 +5,12 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclSid
+import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.SessionFactory
 import org.junit.Before
+import org.springframework.security.acls.model.Sid
+import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 /**
@@ -21,6 +25,7 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
 
     AssayDefinitionService assayDefinitionService
     SessionFactory sessionFactory
+    AclUtilService aclUtilService
 
     @Before
     void setup() {
@@ -46,15 +51,6 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         final Assay updatedAssay = assayDefinitionService.updateAssayName(assay.id, newAssayName)
         then:
         assert newAssayName == updatedAssay.assayName
-    }
-
-    void "test update assay status"() {
-        given:
-        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: AssayStatus.DRAFT)
-        when:
-        final Assay updatedAssay = assayDefinitionService.updateAssayStatus(assay.id, AssayStatus.APPROVED)
-        then:
-        assert AssayStatus.APPROVED == updatedAssay.assayStatus
     }
 
     void "test update assay type"() {

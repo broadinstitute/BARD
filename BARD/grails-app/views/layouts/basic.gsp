@@ -39,7 +39,10 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="/BARD/project/findById">Search by Project ID</a></li>
+
                                 <li><a href="/BARD/project/findByName">Search by Project Name</a></li>
+                                <li><a href="/BARD/project/create">Create a New Project</a></li>
+
                             </ul>
                         </li>
                         <li>

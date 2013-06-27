@@ -15,7 +15,7 @@
 	<div class="row-fluid">
 	    <div class="span12">
 	    	<div class="hero-unit-v1" style="text-align:center; color: black;">
-	        	<h3>CAP - Catalog of Assay Protocols</h4>
+	        	<h3>CAP - Catalog of Assay Protocols</h3>
 	        </div>
 	    </div>
 	</div>
@@ -41,6 +41,10 @@
                 </g:link>
                 <br/><br/>
                 <a href="/BARD/assayDefinition/findById"><img src="${resource(dir: 'images', file: 'magnifyingGlassIcon.png')}" alt="Find Exiting Assay" title="Find Exiting Assay"/> Find an existing assay to edit or clone</a><br/> <br/>
+                <g:link controller="project" action="create">
+                    <img src="${resource(dir: 'images', file: 'lightBulbIcon.png')}" alt="Create New Project" title="Create New Project"/>
+                    Create a New Project
+                </g:link><br/><br/>
                 <a href="#"><img src="${resource(dir: 'images', file: 'starIcon.png')}" alt="View Favorite Assay" title="View Favorite Assay"/> View favorite assays</a><br/><br/>
                 <a href="#"><img src="${resource(dir: 'images', file: 'openBookIcon.png')}" alt="Read about assay terminology" title=" Read about assay terminology"/> Read about assay terminology in more detail</a><br/><br/>
             </p>

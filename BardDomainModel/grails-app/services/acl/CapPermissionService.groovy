@@ -31,4 +31,17 @@ class CapPermissionService {
     void addPermission(domainObjectInstance, Role role, Permission permission) {
         aclUtilService.addPermission(domainObjectInstance, role.authority, permission)
     }
+
+    void removePermission(domainObjectInstance) {
+        //find the recipient
+
+        final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectId(domainObjectInstance.id)
+        if (aclObjectIdentity) {
+            AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
+            final String recipient = aclEntry?.sid?.sid
+            if (recipient) {
+                aclUtilService.deletePermission(domainObjectInstance, recipient, BasePermission.ADMINISTRATION)
+            }
+        }
+    }
 }

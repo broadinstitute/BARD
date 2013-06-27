@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
 import bard.db.registration.AbstractInlineEditingControllerUnitSpec
@@ -11,6 +12,8 @@ import bard.db.registration.ExternalReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
+import grails.converters.JSON
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -18,7 +21,6 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -43,6 +45,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     @Shared StageTree stageTree1
     @Shared StageTree stageTree2
     ProjectService projectService
+    SpringSecurityService springSecurityService
 
     @Before
     void setup() {
@@ -50,6 +53,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
             return true
         }
         controller.metaClass.mixin(EditingHelper)
+        controller.springSecurityService = Mock(SpringSecurityService)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
@@ -68,6 +72,30 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         }
         projectService = Mock(ProjectService)
         controller.projectService = projectService
+    }
+
+
+    void 'test create Project'() {
+        given:
+        ProjectCommand projectCommand = new ProjectCommand()
+        when:
+        controller.create(projectCommand)
+        then:
+        assert !model
+    }
+
+
+    void 'test save Project #desc'() {
+
+        when:
+        controller.save(projectCommand)
+        then:
+        response.status == expectedStatus
+        where:
+        desc                       | projectCommand                                                                                                                        | expectedStatus                     | expectedMessage
+        "Full Project"             | new ProjectCommand(name: "name", description: "description", status: ProjectStatus.APPROVED.id, groupType: ProjectGroupType.PANEL.id) | HttpServletResponse.SC_OK          | [url: "http://localhost:8080/project/show/2"] as JSON
+        "Invalid Project- No name" | new ProjectCommand(description: "description", status: ProjectStatus.APPROVED.id, groupType: ProjectGroupType.PANEL.id)               | HttpServletResponse.SC_BAD_REQUEST | "Could not create Project"
+
     }
 
     void 'test edit Project Status success'() {
@@ -197,7 +225,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         when:
         controller.editDescription(inlineEditableCommand)
         then:
-        controller.projectService.updateProjectDescription(_, _)>> { throw new AccessDeniedException("msg") }
+        controller.projectService.updateProjectDescription(_, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
     }
 
@@ -383,7 +411,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.removeExperimentFromProject(params.experimentId, params.projectid)
 
         then:
-        1 * projectService.removeExperimentFromProject(_, _)>> { throw new AccessDeniedException("msg") }
+        1 * projectService.removeExperimentFromProject(_, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
         where:
         description | experimentId             | responsetext
@@ -445,7 +473,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.removeEdgeFromProject(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
-        projectService.removeEdgeFromProject(_, _, _)>> { throw new AccessDeniedException("msg") }
+        projectService.removeEdgeFromProject(_, _, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
 
         where:
