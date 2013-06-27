@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
 import grails.converters.JSON
+import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
@@ -20,7 +21,6 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -45,6 +45,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     @Shared StageTree stageTree1
     @Shared StageTree stageTree2
     ProjectService projectService
+    SpringSecurityService springSecurityService
 
     @Before
     void setup() {
@@ -52,6 +53,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
             return true
         }
         controller.metaClass.mixin(EditingHelper)
+        controller.springSecurityService = Mock(SpringSecurityService)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
