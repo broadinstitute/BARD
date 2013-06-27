@@ -36,7 +36,7 @@ class RegisteringExternalOntologyFactoryIntegrationSpec extends IntegrationSpec 
 		reoFactory = RegisteringExternalOntologyFactory.instance;
 		reoFactory.creators.add(new PersonCreator())
 
-		extOntologyPerson = reoFactory.getExternalOntologyAPI(ExternalOntologyPerson.PERSON_URI, null)
+		extOntologyPerson = reoFactory.getExternalOntologyAPI(PersonCreator.PERSON_URI, null)
 	}
 
 	def cleanup() {
@@ -54,7 +54,7 @@ class RegisteringExternalOntologyFactoryIntegrationSpec extends IntegrationSpec 
 		then:
 
 		extItem1.id == testPerson.id.toString()
-		extItem1.display == 'testuserExternalOntologyPersonIntegrationSpec1 (New ExternalOntologyPersonIntegrationSpec Test User1)'
+		extItem1.display == '(testuserExternalOntologyPersonIntegrationSpec1) New ExternalOntologyPersonIntegrationSpec Test User1'
 		extItem2 == null
 	}
 	
@@ -67,13 +67,13 @@ class RegisteringExternalOntologyFactoryIntegrationSpec extends IntegrationSpec 
 		
 		where:
 		desc                                              | expectedPersons                                                                                                                                                                                                                                                                                                               | searchTerm                                       | limit
-		"1 person"                                        | ['testuserExternalOntologyPersonIntegrationSpec5 (New ExternalOntologyPersonIntegrationSpec Test User5)']                                                                                                                                                                                                                     | 'testuserExternalOntologyPersonIntegrationSpec5' | 20
+		"1 person"                                        | ['(testuserExternalOntologyPersonIntegrationSpec5) New ExternalOntologyPersonIntegrationSpec Test User5']                                                                                                                                                                                                                     | 'testuserExternalOntologyPersonIntegrationSpec5' | 20
 		"0 person due to searchTerm no match"             | []                                                                                                                                                                                                                                                                                                                            | 'test1234ExternalOntologyPersonIntegrationSpec'  | 20
 		"0 person due to searchTerm null"                 | []                                                                                                                                                                                                                                                                                                                            | null                                             | 20
 		"0 person due to searchTerm empty"                | []                                                                                                                                                                                                                                                                                                                            | ''                                               | 20
 		"0 person due to searchTerm with multiple spaces" | []                                                                                                                                                                                                                                                                                                                            | '   '                                            | 20
-		"3 persons"                                       | ['testuserExternalOntologyPersonIntegrationSpec1 (New ExternalOntologyPersonIntegrationSpec Test User1)', 'testuserExternalOntologyPersonIntegrationSpec10 (New ExternalOntologyPersonIntegrationSpec Test User10)', 'userExternalOntologyPersonIntegrationSpec1000 (New ExternalOntologyPersonIntegrationSpec XYZ123 User)'] | 'userExternalOntologyPersonIntegrationSpec1'     | 20
-		"2 persons due to limit set to 2"                 | ['testuserExternalOntologyPersonIntegrationSpec1 (New ExternalOntologyPersonIntegrationSpec Test User1)', 'testuserExternalOntologyPersonIntegrationSpec10 (New ExternalOntologyPersonIntegrationSpec Test User10)']                                                                                                          | 'new ExternalOntologyPersonIntegrationSpec'      | 2
+		"3 persons"                                       | ['(testuserExternalOntologyPersonIntegrationSpec1) New ExternalOntologyPersonIntegrationSpec Test User1', '(testuserExternalOntologyPersonIntegrationSpec10) New ExternalOntologyPersonIntegrationSpec Test User10', '(userExternalOntologyPersonIntegrationSpec1000) New ExternalOntologyPersonIntegrationSpec XYZ123 User'] | 'userExternalOntologyPersonIntegrationSpec1'     | 20
+		"2 persons due to limit set to 2"                 | ['(testuserExternalOntologyPersonIntegrationSpec1) New ExternalOntologyPersonIntegrationSpec Test User1', '(testuserExternalOntologyPersonIntegrationSpec10) New ExternalOntologyPersonIntegrationSpec Test User10']                                                                                                          | 'new ExternalOntologyPersonIntegrationSpec'      | 2
 
 	}
 	
