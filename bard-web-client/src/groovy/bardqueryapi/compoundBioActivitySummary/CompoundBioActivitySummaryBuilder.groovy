@@ -1,5 +1,7 @@
 package bardqueryapi.compoundBioActivitySummary
 
+import bard.core.IntValue
+import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
@@ -30,6 +32,7 @@ class CompoundBioActivitySummaryBuilder {
                                  List<Assay> testedAssays,
                                  List<Assay> hitAssays,
                                  List<FilterTypes> filterTypes,
+                                 List<SearchFilter> appliedSearchFilters,
                                  Map<Long, List<ExperimentSearch>> experimentsMap,
                                  List<Long> sortedKeys,
                                  Double yNormMin = null,
@@ -42,6 +45,7 @@ class CompoundBioActivitySummaryBuilder {
         //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
         Set<ExperimentValue> experimentWithSinglePointDataOnly = []
         Set<ExperimentValue> experimentsWithoutResultData = []
+        Map<String, Integer> resultTypesMap = [:]
         for (Long resourceId in sortedKeys) {
             List<WebQueryValue> singleRowData = []
 
@@ -68,12 +72,12 @@ class CompoundBioActivitySummaryBuilder {
                 ExperimentSearch experimentSearch = experimentsMap[exptData.bardExptId].first()
                 WebQueryValue experiment = new ExperimentValue(value: experimentSearch)
 
-                List<WebQueryValue> results = convertExperimentResultsToValues(exptData, yNormMin, yNormMax)
+                List<WebQueryValue> results = convertExperimentResultsToValues(exptData, yNormMin, yNormMax, appliedSearchFilters, resultTypesMap)
 
                 //If the single-point data filter is set, remove the SP (PairValue) result-types from the list.
                 Integer resultsSizeBefore = results.size()
                 if (filterTypes.contains(FilterTypes.SINGLE_POINT_RESULT)) {
-                    results.removeAll {WebQueryValue webQueryValue -> webQueryValue instanceof PairValue}
+                    results.removeAll { WebQueryValue webQueryValue -> webQueryValue instanceof PairValue }
                 }
                 //If we don't have any results for the experiment, don't display the experiment box at all.
                 if (results) {
@@ -82,11 +86,9 @@ class CompoundBioActivitySummaryBuilder {
                     MapValue experimentBoxValue = new MapValue(value: experimentBox)
                     //Add the experimnet box to the row's list of value
                     singleRowData << experimentBoxValue
-                }
-                else if (resultsSizeBefore) {//All the results were of type SP
+                } else if (resultsSizeBefore) {//All the results were of type SP
                     experimentWithSinglePointDataOnly.add(new ExperimentValue(value: experimentSearch))
-                }
-                else {//We did't have result data at all
+                } else {//We did't have result data at all
                     experimentsWithoutResultData.add(new ExperimentValue(value: experimentSearch))
                 }
             }
@@ -99,9 +101,21 @@ class CompoundBioActivitySummaryBuilder {
 
         tableModel.additionalProperties.put('experimentWithSinglePointDataOnly', filterTypes.contains(FilterTypes.SINGLE_POINT_RESULT) ? experimentWithSinglePointDataOnly : [])
         tableModel.additionalProperties.put('experimentsWithoutResultData', experimentsWithoutResultData)
+        Collection<Value> facets = generateFacetsFromResultTypeMap(resultTypesMap)
+        tableModel.additionalProperties.put('facets', facets)
         return tableModel
     }
 
+    Collection<Value> generateFacetsFromResultTypeMap(Map<String, Integer> resultTypesMap) {
+        List<Value> children = []
+        for (String facetId in resultTypesMap.keySet().sort()) {
+            Value childFacet = new IntValue(id: facetId, value: resultTypesMap[facetId])
+            children << childFacet
+        }
+        Value parentFacet = new Value(id: 'result_type', children: children)
+
+        return [parentFacet]
+    }
 
     WebQueryValue findResourceByTypeAndId(GroupByTypes groupByType,
                                           Long resourceId,
@@ -116,7 +130,7 @@ class CompoundBioActivitySummaryBuilder {
                 List<AssayAdapter> assayAdapters
                 //For assays, we can use the testedAssays/hitAssays properties in the compoundSummary resource.
                 List<Assay> assays = filterTypes.contains(FilterTypes.TESTED) ? testedAssays : hitAssays
-                assayAdapters = assays.unique().findAll {Assay assay -> assay.id == resourceId}.collect {Assay assay -> return new AssayAdapter(assay)}
+                assayAdapters = assays.unique().findAll { Assay assay -> assay.id == resourceId }.collect { Assay assay -> return new AssayAdapter(assay) }
 
                 if (assayAdapters.size() == 1) {
                     resource = new AssayValue(value: assayAdapters.first())
@@ -152,56 +166,63 @@ class CompoundBioActivitySummaryBuilder {
      * Map an experiment (exptData) into a list of table-model 'Values'.
      * The main result data is in the experiment's priority elements.
      * @param exptData
+     * @param outcomeFacetMap a pass-through collection to generate facets that match the different priority-element types (i.e., result-types) we have in the experiment data.
      * @return
      */
-    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData, Double yNormMin = null, Double yNormMax = null) {
+    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData, Double yNormMin = null, Double yNormMax = null, List<SearchFilter> appliedSearchFilters = [], Map<String, Integer> resultTypesMap = [:]) {
         List<WebQueryValue> values = []
         String respClss = exptData?.resultData?.responseClass
         ResponseClassEnum responseClass = respClss ? ResponseClassEnum.toEnum(respClss) : null
+        //Get all the filters that apply to result-type (e.g., 'AC50', 'percent activity').
+        List<SearchFilter> resultTypeFilters = appliedSearchFilters.findAll { SearchFilter filter -> filter.filterName == 'result_type' }
 
         for (PriorityElement priorityElement in exptData?.resultData?.priorityElements) {
-            switch (responseClass) {
-                case ResponseClassEnum.SP:
-                    //The result-type is a single-point, key/value pair.
-                    PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
-                    values << pairValue
-                    break;
-                case ResponseClassEnum.CR_SER:
-                    //the result type is a curve.
-                    if (priorityElement.concentrationResponseSeries) {
-                        //Add the concentration/value series
-                        ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
-                        List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
-                        ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
-                        CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-                        Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: priorityElement.value))
-                        LinkValue dictionaryElement
-                        if (priorityElement.dictElemId) {
-                            dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
-                        }
-                        ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
-                                title: new PairValue(value: title, dictionaryElement: dictionaryElement),
-                                curveFitParameters: curveFitParameters,
-                                slope: priorityElement.getSlope(),
-                                responseUnit: concentrationResponseSeries.responseUnit,
-                                testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit,
-                                yNormMin: yNormMin,
-                                yNormMax: yNormMax)
-                        concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.responseUnit
-                        concentrationResponseSeriesValue.xAxisLabel = concentrationResponseSeriesValue.testConcentrationUnit
-                        values << concentrationResponseSeriesValue
-                    }
-                    else {//the result type is a key/value pair
+            if (!resultTypeFilters || resultTypeFilters*.filterValue?.contains(priorityElement.pubChemDisplayName)) {//only add the results that match the result-type filter(s).
+                switch (responseClass) {
+                    case ResponseClassEnum.SP:
+                        //The result-type is a single-point, key/value pair.
                         PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
                         values << pairValue
-                    }
-                    break;
-                default:
-                    log.info("Response-class not supported: ${responseClass}")
+                        break;
+                    case ResponseClassEnum.CR_SER:
+                        //the result type is a curve.
+                        if (priorityElement.concentrationResponseSeries) {
+                            //Add the concentration/value series
+                            ConcentrationResponseSeries concentrationResponseSeries = priorityElement.concentrationResponseSeries
+                            List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
+                            ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
+                            CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
+                            Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: priorityElement.value))
+                            LinkValue dictionaryElement
+                            if (priorityElement.dictElemId) {
+                                dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
+                            }
+                            ConcentrationResponseSeriesValue concentrationResponseSeriesValue = new ConcentrationResponseSeriesValue(value: doseResponsePointsMap,
+                                    title: new PairValue(value: title, dictionaryElement: dictionaryElement),
+                                    curveFitParameters: curveFitParameters,
+                                    slope: priorityElement.getSlope(),
+                                    responseUnit: concentrationResponseSeries.responseUnit,
+                                    testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit,
+                                    yNormMin: yNormMin,
+                                    yNormMax: yNormMax)
+                            concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.responseUnit
+                            concentrationResponseSeriesValue.xAxisLabel = concentrationResponseSeriesValue.testConcentrationUnit
+                            values << concentrationResponseSeriesValue
+                        } else {//the result type is a key/value pair
+                            PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
+                            values << pairValue
+                        }
+                        break;
+                    default:
+                        log.info("Response-class not supported: ${responseClass}")
+                }
+                //add the result-type to the map tally.
+                String resultTypeName = priorityElement.pubChemDisplayName
+                resultTypesMap.containsKey(resultTypeName) ? resultTypesMap[resultTypeName]++ : resultTypesMap.put(resultTypeName, 1)
             }
         }
 
-        return values.sort {WebQueryValue valueInst ->
+        return values.sort { WebQueryValue valueInst ->
             //Sort based on the WebQueryValue specific type
             switch (valueInst.class.simpleName) {
                 case ConcentrationResponseSeriesValue.class.simpleName:

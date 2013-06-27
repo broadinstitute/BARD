@@ -1,5 +1,6 @@
 package bardqueryapi.compoundBioActivitySummary
 
+import bard.core.Value
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.experiment.Activity
@@ -144,13 +145,14 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
                 testedAssays,
                 hitAssays,
                 filterTypes,
+                [],
                 experimentsMap,
                 sortedKeys,
                 -10,
                 10)
 
         then:
-        this.queryService.findProjectsByPIDs(_) >> {['projectAdapters': [new ProjectAdapter(project1)]]}
+        this.queryService.findProjectsByPIDs(_) >> { ['projectAdapters': [new ProjectAdapter(project1)]] }
 
         assert tableModel.columnHeaders.size() == 2
         assert tableModel.data.size() == expectedTableModelDataSize
@@ -177,5 +179,26 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
         label                | exptData      | expectedWebQueryValueClass
         "CR_CER result-type" | activityCrSer | ConcentrationResponseSeriesValue.class
         "SP result-type"     | activitySp    | PairValue.class
+    }
+
+    void "test generateFacetsFromResultTypeMap with an empty map"() {
+        when:
+        Collection<Value> facets = compoundBioActivitySummaryBuilder.generateFacetsFromResultTypeMap([:])
+
+        then:
+        assert facets.first().id == 'result_type'
+        assert facets.first().children.isEmpty()
+    }
+
+    void "test generateFacetsFromResultTypeMap with a few result types"() {
+        when:
+        List<Value> facets = compoundBioActivitySummaryBuilder.generateFacetsFromResultTypeMap(['AC50': 1, 'activity': 2])
+
+        then:
+        assert facets.first().id == 'result_type'
+        assert facets.first().children.toList()[0].id == 'activity'
+        assert facets.first().children.toList()[0].value == 2
+        assert facets.first().children.toList()[1].id == 'AC50'
+        assert facets.first().children.toList()[1].value == 1
     }
 }

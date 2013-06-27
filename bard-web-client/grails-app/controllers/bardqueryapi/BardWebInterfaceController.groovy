@@ -646,6 +646,8 @@ class BardWebInterfaceController {
             return
         }
 
+        final List<SearchFilter> appliedSearchFilters = searchCommand.appliedFilters ?: []
+
         String smiles
         try {
             CompoundAdapter compoundAdapter = this.queryService.showCompound(id)
@@ -692,6 +694,7 @@ class BardWebInterfaceController {
             TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     resourceType,
                     filters,
+                    appliedSearchFilters,
                     new SearchParams(top: searchParams.top, skip: searchParams.skip)
             )
 
@@ -712,6 +715,7 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
             facetValues << new Value(id: 'single-point_measurement', children: [new IntValue(id: 'Hide single-point data', value: -1)])//disable facet count
+            facetValues.addAll(tableModel.additionalProperties.facets)
 
             render(view: 'showCompoundBioActivitySummary',
                     model: [tableModel: tableModel,
