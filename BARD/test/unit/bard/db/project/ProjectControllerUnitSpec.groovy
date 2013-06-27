@@ -91,7 +91,6 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         controller.save(projectCommand)
         then:
         response.status == expectedStatus
-        response.text.toString().startsWith(expectedMessage.toString())
         where:
         desc                       | projectCommand                                                                                                                        | expectedStatus                     | expectedMessage
         "Full Project"             | new ProjectCommand(name: "name", description: "description", status: ProjectStatus.APPROVED.id, groupType: ProjectGroupType.PANEL.id) | HttpServletResponse.SC_OK          | [url: "http://localhost:8080/project/show/2"] as JSON
