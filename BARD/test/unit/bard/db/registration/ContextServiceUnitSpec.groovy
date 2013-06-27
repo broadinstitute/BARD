@@ -22,19 +22,6 @@ import spock.lang.Specification
 @Mixin(GrailsUnitTestMixin)
 class ContextServiceUnitSpec extends Specification {
 
-    def 'test createExperimentContext'() {
-        setup:
-        AbstractContextOwner owner = Experiment.build()
-
-        when:
-        AbstractContext context = service.createExperimentContext(owner, "name", "section");
-
-        then:
-        context != null
-        owner.contexts.contains(context)
-        context.contextGroup == "section"
-        context.contextName == "name"
-    }
 
     def 'test createAssayContext'() {
         setup:
@@ -81,17 +68,6 @@ class ContextServiceUnitSpec extends Specification {
 
         when:
         service.deleteProjectContext(owner,context)
-
-        then:
-        !owner.contexts.contains(context)
-    }
-    def 'test deleteExperimentContext'() {
-        setup:
-        AbstractContext context = ExperimentContext.build()
-        AbstractContextOwner owner = context.owner
-
-        when:
-        service.deleteExperimentContext(owner,context)
 
         then:
         !owner.contexts.contains(context)

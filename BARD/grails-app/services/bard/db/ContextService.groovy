@@ -10,26 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize
 class ContextService {
 
     @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveAssayContextToNewGroup(Assay assay, AbstractContext context, String newContextGroup) {
-        moveContextToNewGroup(context,newContextGroup)
-    }
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveProjectContextToNewGroup(Project project, AbstractContext context, String newContextGroup) {
-        moveContextToNewGroup(context,newContextGroup)
-    }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveExperimentContextToNewGroup(Experiment experiment, AbstractContext context, String newContextGroup) {
-        moveContextToNewGroup(context,newContextGroup)
-
-    }
-
-    private void moveContextToNewGroup(AbstractContext context, String newContextGroup) {
-        if (context.contextGroup != newContextGroup) {
-            context.setContextGroup(newContextGroup)
-        }
-     }
-
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     String updatePreferredAssayContextName(Assay assay, AbstractContext context, String preferredName) {
        return updatePreferredContextName(context,preferredName)
     }
@@ -52,11 +32,6 @@ class ContextService {
         return createContext(project, name, section)
     }
 
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    AbstractContext createExperimentContext(Experiment experiment, String name, String section) {
-        return createContext(experiment, name, section)
-    }
-
     private AbstractContext createContext(AbstractContextOwner owner, String name, String section) {
         AbstractContext context = owner.createContext(contextName: name, contextGroup: section)
         context.save(flush: true)
@@ -71,11 +46,6 @@ class ContextService {
     @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void deleteProjectContext(Project project, AbstractContext context) {
         deleteContext(project, context)
-    }
-
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void deleteExperimentContext(Experiment experiment, AbstractContext context) {
-        deleteContext(experiment, context)
     }
 
     private void deleteContext(AbstractContextOwner owner, AbstractContext context) {

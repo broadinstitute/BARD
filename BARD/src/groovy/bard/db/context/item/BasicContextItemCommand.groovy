@@ -1,6 +1,5 @@
 package bard.db.context.item
 
-import acl.CapPermissionService
 import bard.db.ContextItemService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
@@ -12,7 +11,6 @@ import bard.db.model.AbstractContextOwner
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
-import bard.db.project.ProjectService
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
 import bard.db.registration.AssayContextItem
@@ -20,11 +18,8 @@ import bard.db.registration.AttributeType
 import grails.validation.Validateable
 import grails.validation.ValidationErrors
 import org.apache.commons.lang.StringUtils
-import org.springframework.context.MessageSource
-import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.acls.domain.BasePermission
 
-import java.util.regex.Pattern;
+import java.util.regex.Pattern
 
 /**
  * Created with IntelliJ IDEA.
@@ -59,6 +54,8 @@ class BasicContextItemCommand extends BardCommand {
     AbstractContext context
     AbstractContextItem contextItem
     ContextItemService contextItemService
+
+
 
     Long contextOwnerId
     Long contextId
@@ -122,9 +119,9 @@ class BasicContextItemCommand extends BardCommand {
         this.valueMin = contextItem.valueMin ? new BigDecimal(contextItem.valueMin.toString()).stripTrailingZeros() : null
         this.valueMax = contextItem.valueMax ? new BigDecimal(contextItem.valueMax.toString()).stripTrailingZeros() : null
         this.valueConstraintType = null
-        if(contextItem instanceof AssayContextItem) {
+        if (contextItem instanceof AssayContextItem) {
             AssayContextItem assayContextItem = contextItem
-            if(assayContextItem.attributeType == AttributeType.Fixed) {
+            if (assayContextItem.attributeType == AttributeType.Fixed) {
                 this.valueConstraintType = null;
                 this.providedWithResults = false;
             } else {
@@ -150,13 +147,10 @@ class BasicContextItemCommand extends BardCommand {
         if (validate()) {
             final AbstractContextOwner owningContext = context.getOwner()
             if (owningContext instanceof Assay) {
-               return contextItemService.createAssayContextItem((Assay)owningContext,this)
+                return contextItemService.createAssayContextItem((Assay) owningContext, this)
             }
             if (owningContext instanceof Project) {
-               return contextItemService.createProjectContextItem((Project)owningContext,this)
-            }
-            if(owningContext instanceof Experiment){
-               return contextItemService.createExperimentContextItem((Experiment)owningContext,this)
+                return contextItemService.createProjectContextItem((Project) owningContext, this)
             }
         }
         return createSuccessful
@@ -181,10 +175,10 @@ class BasicContextItemCommand extends BardCommand {
         if (valueNum || valueMin || valueMax) {
             contextItem.valueDisplay = contextItem.deriveDisplayValue()
         }
-        if(contextItem instanceof AssayContextItem) {
+        if (contextItem instanceof AssayContextItem) {
             AssayContextItem assayContextItem = contextItem;
 
-            if(providedWithResults && valueConstraintType != null) {
+            if (providedWithResults && valueConstraintType != null) {
                 assayContextItem.attributeType = Enum.valueOf(AttributeType, valueConstraintType)
             } else {
                 assayContextItem.attributeType = AttributeType.Fixed;
@@ -201,7 +195,8 @@ class BasicContextItemCommand extends BardCommand {
         } else if (owner instanceof Experiment) {
             return validate() && contextItemService.updateExperimentContextItem((Experiment) owner, this)
         }
-     }
+        return false
+    }
 
     boolean delete() {
         final AbstractContextOwner owner = this.findContext().owner
@@ -212,7 +207,7 @@ class BasicContextItemCommand extends BardCommand {
         } else if (owner instanceof Experiment) {
             return contextItemService.deleteExperimentContextItem((Experiment) owner, this)
         }
-     }
+    }
 
     AbstractContext findContext() {
         attemptFindById(CONTEXT_NAME_TO_CLASS.get(this.contextClass), contextId)

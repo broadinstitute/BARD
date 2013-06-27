@@ -1,7 +1,6 @@
 package bard.db.context.item
 
 import bard.db.ContextService
-import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.project.Project
@@ -15,15 +14,14 @@ class ContextController {
 
     def createCard(String contextClass, Long ownerId, String cardName, String cardSection) {
         if (ownerId == null) {
-            throw new RuntimeException("bad instance")
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "OwnerId is required", contentType: 'text/plain', template: null)
+            return
+
         }
         AbstractContextOwner owningContext = BasicContextItemCommand.getContextOwnerClass(contextClass).findById(ownerId)
         try {
             if (owningContext instanceof Assay) {
                 contextService.createAssayContext((Assay) owningContext, cardName, cardSection)
-            }
-            if (owningContext instanceof Experiment) {
-                contextService.createExperimentContext((Experiment) owningContext, cardName, cardSection)
             }
             if (owningContext instanceof Project) {
                 contextService.createProjectContext((Project) owningContext, cardName, cardSection)
@@ -33,8 +31,6 @@ class ContextController {
             return
         }
         render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupContexts(), subTemplate: 'edit'])
-
-
     }
 
     def deleteEmptyCard(String contextClass, Long contextId) {
@@ -43,9 +39,6 @@ class ContextController {
         try {
             if (owningContext instanceof Assay) {
                 contextService.deleteAssayContext((Assay) owningContext, context)
-            }
-            if (owningContext instanceof Experiment) {
-                contextService.deleteExperimentContext((Experiment) owningContext, context)
             }
             if (owningContext instanceof Project) {
                 contextService.deleteProjectContext((Project) owningContext, context)
