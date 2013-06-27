@@ -20,12 +20,12 @@
                     <li><a href="#annotations-info"><i
                             class="icon-chevron-right"></i>Annotations</a></li>
                 </g:if>
+                <g:if test="${projectAdapter.biology}">
+                    <li><a href="#biology-info"><i
+                            class="icon-chevron-right"></i>Biology (${projectAdapter.biology.size()})</a></li>
+                </g:if>
                 <g:if test="${projectAdapter.description}">
                     <li><a href="#description-info"><i class="icon-chevron-right"></i>Description</a></li>
-                </g:if>
-                <g:if test="${projectAdapter.targets}">
-                    <li><a href="#target-info"><i
-                            class="icon-chevron-right"></i>Targets (${projectAdapter.targets.size()})</a></li>
                 </g:if>
                 <g:if test="${projectAdapter.documents}">
                     <li><a href="#publication-info"><i
@@ -46,11 +46,11 @@
 
         <div class="span9">
 
-            <h1>Project: ${projectAdapter?.name}
+            <h2>Project: ${projectAdapter?.name}
                 <g:if test="${projectAdapter.hasProbes()}">
                     <span class="badge badge-info">Probe</span>
                 </g:if>
-                <small>(Project ID: ${projectAdapter?.capProjectId})</small></h1>
+                <small>(Project ID: ${projectAdapter?.capProjectId})</small></h2>
             <g:saveToCartButton id="${projectAdapter?.id}"
                                 name="${JavaScriptUtility.cleanup(projectAdapter?.name)}"
                                 type="${querycart.QueryItemType.Project}"/>
@@ -92,37 +92,36 @@
 
             <g:if test="${!projectAdapter.annotations.contexts.isEmpty()}">
                 <section id="annotations-info">
-                    <div class="page-header">
-                        <h3>Annotations</h3>
-                    </div>
+                    <h3>Annotations</h3>
 
                     <div id="cardView" class="cardView" class="row-fluid">
                         <g:render template="listContexts" model="[contexts: projectAdapter.annotations.contexts]"/>
                     </div>
                 </section>
             </g:if>
+            <g:if test="${projectAdapter.biology}">
+                <section id="biology-info">
+                    <h3>Biology</h3>
+
+                    <g:render template="biology" model="['biology': projectAdapter.biology]"/>
+                </section>
+            </g:if>
+
             <g:if test="${projectAdapter.description}">
                 <section id="description-info">
-                    <div class="page-header">
-                        <h3>Description</h3>
-                    </div>
+                    <h3>Description</h3>
 
                     <div>
                         <g:textBlock>${projectAdapter?.description}</g:textBlock>
                     </div>
                 </section>
             </g:if>
-            <g:if test="${projectAdapter.targets}">
-                <g:render template="biology" model="['targets': projectAdapter.targets]"/>
-            </g:if>
             <g:if test="${projectAdapter.documents}">
                 <g:render template="publications" model="['documents': projectAdapter.documents]"/>
             </g:if>
             <g:if test="${pegraph}">
                 <section id="projectSteps-info">
-                    <div class="page-header">
-                        <h3>Project Steps</h3>
-                    </div>
+                    <h3>Project Steps</h3>
 
                     <div>
                         <g:render template="/projects/showstep"

@@ -1,15 +1,13 @@
-package bard.core.adapter;
-
-
+package bard.core.adapter
 import bard.core.Probe
 import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.biology.BiologyEntity
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.ProjectAbstract
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
-import bard.core.rest.spring.util.Target
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class ProjectAdapter implements ProjectAdapterInterface {
@@ -91,8 +89,8 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return []
     }
 
-    public List<Target> getTargets() {
-        return project.getTargets()
+    public List<BiologyEntity> getBiology() {
+        return project.getBiology()
     }
 
     public BardAnnotation getAnnotations() {
