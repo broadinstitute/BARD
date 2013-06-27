@@ -73,7 +73,7 @@ class ProjectExportService extends ExportAbstractService {
             attributes.put('readyForExtraction', project.readyForExtraction.getId())
         }
         if (project.groupType) {
-            attributes.put('groupType', project.groupType)
+            attributes.put('groupType', project.groupType.id)
         }
         if (project.lastUpdated) {
             final GregorianCalendar gregorianCalendar = new GregorianCalendar();
