@@ -15,6 +15,9 @@ class ElementController {
     BuildElementPathsService buildElementPathsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
+    def showTopLevelHierarchyHelp(){
+        render(view:'showTopLevelHierarchyHelp')
+    }
     def list() {
         Map parameterMap = generatePaths()
 
