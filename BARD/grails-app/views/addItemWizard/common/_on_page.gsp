@@ -201,6 +201,7 @@
             url: '../reloadCardHolder',
             data: data,
             success: function (data) {
+                alert("Sucess");
                 $("div#cardHolder").html(data);
                 initDnd();
             },

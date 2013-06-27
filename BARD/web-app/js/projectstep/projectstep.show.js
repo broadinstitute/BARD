@@ -3,7 +3,7 @@ var redraw;
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 $(document).ready(function () {
     $.fn.editable.defaults.mode = 'inline';
-    initFunction();
+    initProjectFunction();
 });
 function refreshProjectSteps(){
     var projectId = $("#projectIdForStep").val();
@@ -19,7 +19,7 @@ function refreshProjectSteps(){
     });
 }
 
-function initFunction() {
+function initProjectFunction() {
     // a list of most distinguishable color
     var kelly = [  "#0000FF", "#FF0000", "#00FF00", "#FFFF00", "#FF00FF",
         "#FF8080", "#808080", "#FFB300", "#803E75", "#FF6800",
@@ -236,6 +236,9 @@ function initFunction1() {
     var connectedNodes = graphInJSON.connectedNodes;
     var template = Handlebars.compile($("#node-selection-template1").html())
     $(".node").click(function () {
+
+        var prevSelectedEdge = $("#selectedEdgeId").text();
+        assignEdgeColor(prevSelectedEdge, "black");
         var clickedNode = $(this).find('title').text();
         var thisId = $(this).attr("id");
 
@@ -263,7 +266,10 @@ function initFunction1() {
     var template1 = Handlebars.compile($("#edge-selection-template").html());
     var edges = graphInJSON.edges;
     $(".edge").click(function () {
+        var prevSelectedNode = $("#selectedNodeId").text();
+        assignFillColor(prevSelectedNode, "none");
         var clickedEdge = $(this).find('title').text();
+
         for (var i = 0; i < edges.length; i++) {
             var found = edges[i].from + "->" + edges[i].to;
             var thisId = $(this).attr("id");

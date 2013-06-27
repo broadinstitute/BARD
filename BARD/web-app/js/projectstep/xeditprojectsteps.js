@@ -11,7 +11,7 @@ var redraw;
 $(document).ready(function () {
     $.fn.editable.defaults.mode = 'inline';
 
-    initFunction();
+    initProjectFunction();
     $('#projectStageId').editable({
         success: function (response, newValue) {
             refreshProjectSteps();

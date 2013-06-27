@@ -11,7 +11,11 @@ import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.ValidationException
 import org.apache.commons.lang.StringUtils
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.access.PermissionEvaluator
+import org.springframework.security.acls.domain.BasePermission
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -24,10 +28,12 @@ class AssayDefinitionController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
+    ContextService contextService
     SpringSecurityService springSecurityService
+    def permissionEvaluator
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
-    ContextService contextService
+
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -40,7 +46,12 @@ class AssayDefinitionController {
             }
             assay = assayDefinitionService.updateAssayType(inlineEditableCommand.pk, assayType)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayType.id)
-        } catch (Exception ee) {
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
@@ -58,7 +69,12 @@ class AssayDefinitionController {
             assay = assayDefinitionService.updateAssayStatus(inlineEditableCommand.pk, assayStatus)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayStatus.id)
 
-        } catch (Exception ee) {
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
@@ -72,9 +88,14 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
-        } catch (Exception ee) {
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        }
+        catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
         }
@@ -90,6 +111,10 @@ class AssayDefinitionController {
             }
             assay = assayDefinitionService.updateDesignedBy(inlineEditableCommand.pk, inlineEditableCommand.value)
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.designedBy)
+        }
+        catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -161,12 +186,12 @@ class AssayDefinitionController {
             // FIXME:  Should not use flash if we do not redirect afterwards
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
-        } else {
-            flash.message = null
-            measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         }
+        flash.message = null
+        measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
+        [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
 
-        [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson]
     }
 
     def editContext() {
@@ -197,16 +222,19 @@ class AssayDefinitionController {
     }
 
     def deleteMeasure() {
-        def measure = Measure.get(params.measureId)
+        Measure measure = Measure.get(params.measureId)
 
         if (measure.childMeasures.size() != 0) {
             flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it has children"
         } else if (measure.experimentMeasures.size() != 0) {
             flash.message = "Cannot delete measure \"${measure.displayLabel}\" because it is used in an experiment definition"
         } else {
+            if (!canEdit(permissionEvaluator, springSecurityService, measure.assay)) {
+                render accessDeniedErrorMessage()
+                return
+            }
             measure.delete()
         }
-
         redirect(action: "editMeasure", id: params.id)
     }
 
@@ -241,67 +269,90 @@ class AssayDefinitionController {
                 if (params.entryUnitName) {
                     entryUnit = Element.findByLabel(params.entryUnitName)
                 }
-
-                Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
-                render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
+                try {
+                    Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                    render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
+                }
+                catch (AccessDeniedException ade) {
+                    log.error(ade)
+                    render accessDeniedErrorMessage()
+                }
+                catch (Exception ee) { //TODO add tests
+                    render status: HttpServletResponse.SC_BAD_REQUEST, text: "${ee.message}"
+                }
 
             }
         }
     }
 
     def disassociateContext() {
-        def measure = Measure.get(params.measureId)
-        def context = AssayContext.get(params.assayContextId)
+        final AssayContext assayContext = AssayContext.get(params.assayContextId)
+        try {
+            final Measure measure = Measure.get(params.measureId)
 
-        if (measure == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
-        } else if (context == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
-        } else {
-            flash.message = null
-            assayContextService.disassociateContext(measure, context)
+            if (measure == null) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+            } else if (assayContext == null) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
+            } else {
+                flash.message = null
+                assayContextService.disassociateContext(measure, assayContext, assayContext.assay)
+            }
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+            return
         }
-
-        redirect(action: "editMeasure", id: context.assay.id)
+        redirect(action: "editMeasure", id: assayContext.assay.id)
     }
 
     def associateContext() {
-        def measure = Measure.get(params.measureId)
-        def context = null
-        if (params.assayContextId && 'null' != params.assayContextId) {
-            context = AssayContext.get(params.assayContextId)
+        try {
+            def measure = Measure.get(params.measureId)
+            def context = null
+            if (params.assayContextId && 'null' != params.assayContextId) {
+                context = AssayContext.get(params.assayContextId)
+            }
+
+            if (measure == null) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+            } else if (context == null) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
+            } else {
+
+                assayContextService.associateContext(measure, context, context.assay)
+                flash.message = "Measure '${measure?.displayLabel}' successfully associated to Context '${context?.contextName}'"
+            }
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+            return
         }
-
-        if (measure == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
-        } else if (context == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
-        } else {
-
-            assayContextService.associateContext(measure, context)
-            flash.message = "Measure '${measure?.displayLabel}' successfully associated to Context '${context?.contextName}'"
-        }
-
         redirect(action: "editMeasure", id: params.id)
     }
 
     def changeRelationship() {
-        def measure = Measure.get(params.measureId)
-        def parentChildRelationship = params.relationship
+        try {
+            def measure = Measure.get(params.measureId)
+            def parentChildRelationship = params.relationship
 
-        HierarchyType hierarchyType = null
-        if (StringUtils.isNotBlank(parentChildRelationship)) {
-            hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
-        }
-        if (measure == null) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
-        } else {
-            flash.message = null
-            if (measure.parentMeasure) { //if this measure has no parent then do nothing
-                assayContextService.changeParentChildRelationship(measure, hierarchyType)
+            HierarchyType hierarchyType = null
+            if (StringUtils.isNotBlank(parentChildRelationship)) {
+                hierarchyType = HierarchyType.byId(parentChildRelationship.trim())
             }
+            if (measure == null) {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'measure.label', default: 'Measure'), params.id])
+            } else {
+                flash.message = null
+                if (measure.parentMeasure) { //if this measure has no parent then do nothing
+                    assayContextService.changeParentChildRelationship(measure, hierarchyType, measure.assay)
+                }
+            }
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+            return
         }
-
         redirect(action: "editMeasure", id: params.id)
     }
 
@@ -355,40 +406,11 @@ class AssayDefinitionController {
     }
 
     def updateCardName(String edit_card_name, Long contextId) {
-        AssayContext assayContext = assayContextService.updateCardName(contextId, edit_card_name)
+        AssayContext assayContext = AssayContext.findById(contextId)
         Assay assay = assayContext.assay
+        assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay)
+        assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-    /**
-     *
-     * @param context_group - The new context group
-     * @param contextMoveId - The context that we are moving to new group
-     *
-     */
-    def moveCard(String context_group, Long contextMoveId) {
-        AssayContext assayContext = AssayContext.findById(contextMoveId)
-        if (assayContext.contextGroup != context_group) {
-            assayContext.setContextGroup(context_group)
-        }
-        Assay assay = assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
-    }
-
-    def showMoveItemForm(Long assayId, Long itemId) {
-        def assayInstance = Assay.get(assayId)
-        if (!assayInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), assayId])
-            return
-        }
-        render(template: "moveItemForm", model: [instance: assayInstance, assayId: assayId, itemId: itemId])
-    }
-
-    def moveCardItem(Long cardId, Long assayContextItemId, Long assayId) {
-        AssayContext targetAssayContext = AssayContext.findById(cardId)
-        AssayContextItem source = AssayContextItem.findById(assayContextItemId)
-        assayContextService.addItem(source, targetAssayContext)
-        Assay assay = targetAssayContext.assay
-        render(template: "../context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
 
 
@@ -396,27 +418,39 @@ class AssayDefinitionController {
         def assayInstance = Assay.findById(instanceId)
         render(template: "editSummary", model: [assay: assayInstance])
     }
-
+    /**
+     *
+     * @param measureId
+     * @param parentMeasureId
+     * @return
+     */
     def moveMeasureNode(Long measureId, Long parentMeasureId) {
-        Measure measure = Measure.get(measureId)
-        Measure parentMeasure = null
-        if (parentMeasureId) {
-            parentMeasure = Measure.get(parentMeasureId)
-        }
-        measure.parentMeasure = parentMeasure
-        if (!measure.parentChildRelationship) {
-            if (parentMeasure) {
-                measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
+        try {
+            Measure measure = Measure.get(measureId)
+            Measure parentMeasure = null
+            if (parentMeasureId) {
+                parentMeasure = Measure.get(parentMeasureId)
             }
+            assayDefinitionService.moveMeasure(measure.assay, measure, parentMeasure)
+            render new JSONArray()
+        } catch (AccessDeniedException aee) {
+            render accessDeniedErrorMessage()
         }
-
-
-        render new JSONArray()
     }
 }
 class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
+    boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
+        final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+
+        def auth = springSecurityService?.authentication
+
+        final boolean hasPermission = permissionEvaluator?.hasPermission(auth, domainInstance, BasePermission.ADMINISTRATION)
+
+        return isAdmin || hasPermission
+
+    }
 
     def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
         Map<String, String> dataMap = [:]
@@ -438,6 +472,10 @@ class EditingHelper {
 
     def editErrorMessage() {
         render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
+    }
+
+    def accessDeniedErrorMessage() {
+        return [status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null]
     }
 
 }

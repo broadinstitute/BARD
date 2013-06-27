@@ -1,8 +1,9 @@
-<%@ page import="bard.db.registration.*" %>
+<%@ page import="org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditor,assaysummary"/>
+    <r:require
+            modules="core,bootstrap,assayshow,twitterBootstrapAffix,xeditable,richtexteditorForEdit,assaysummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <title>Assay Definition</title>
 </head>
@@ -89,16 +90,14 @@
         <div id="msg" class="alert hide"></div>
 
         <div id="showSummary">
-            <g:render template='editSummary' model="['assay': assayInstance]"/>
+            <g:render template='editSummary' model="['assay': assayInstance, canedit: editable]"/>
         </div>
     </div>
 </section>
 <br/>
 <section id="biology-header">
 
-    <h3>2. Biology <a target="dictionary"
-                      href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h3>
+    <h3>2. Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h3>
 
 
     <div class="row-fluid">
@@ -112,19 +111,20 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
-            </div>
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
 
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
+
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
 <br/>
 <section id="assay-protocol-header">
-    <h3>3. Assay Protocol <a target="dictionary"
-                             href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h3>
+    <h3>3. Assay Protocol <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
         <div id="cardHolderAssayProtocol" class="span12">
@@ -139,20 +139,19 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Asssay Protocol</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
 <br/>
 <section id="assay-design-header">
 
-    <h4>3.1 Assay Design <a target="dictionary"
-                            href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h4>
+    <h4>3.1 Assay Design <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h4>
 
 
     <div class="row-fluid">
@@ -166,20 +165,19 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
 <br/>
 <section id="assay-readout-header">
 
-    <h4>3.2 Assay Readout <a target="dictionary"
-                             href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h4>
+    <h4>3.2 Assay Readout <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h4>
 
 
     <div class="row-fluid">
@@ -193,20 +191,19 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
 <br/>
 <section id="assay-components-header">
 
-    <h4>3.3 Assay Components<a target="dictionary"
-                               href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h4>
+    <h4>3.3 Assay Components <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h4>
 
 
     <div class="row-fluid">
@@ -220,11 +217,12 @@
 
     <div class="row-fluid">
         <g:if test="${!uneditable}">
-            <div class="span12">
-                <g:link action="editContext" id="${assayInstance?.id}"
-                        class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
-            </div>
-
+            <g:if test="${editable == 'canedit'}">
+                <div class="span12">
+                    <g:link action="editContext" id="${assayInstance?.id}"
+                            class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
+                </div>
+            </g:if>
         </g:if>
     </div>
 </section>
@@ -243,11 +241,12 @@
     <g:if test="${assayInstance.groupUnclassified()}">
         <div class="row-fluid">
             <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
-                </div>
-
+                <g:if test="${editable == 'canedit'}">
+                    <div class="span12">
+                        <g:link action="editContext" id="${assayInstance?.id}"
+                                class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
+                    </div>
+                </g:if>
             </g:if>
         </div>
     </g:if>
@@ -266,9 +265,7 @@
 <br/>
 <section id="experimental-variables-header">
 
-    <h4>4.1 Experimental Variables <a target="dictionary"
-                                      href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h4>
+    <h4>4.1 Experimental Variables <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h4>
 
     <div class="row-fluid">
         <div id="cardHolderExperimentalVariables" class="span12">
@@ -281,11 +278,12 @@
     <g:if test="${assayInstance.groupExperimentalVariables()}">
         <div class="row-fluid">
             <g:if test="${!uneditable}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
-                </div>
-
+                <g:if test="${editable == 'canedit'}">
+                    <div class="span12">
+                        <g:link action="editContext" id="${assayInstance?.id}"
+                                class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
+                    </div>
+                </g:if>
             </g:if>
         </div>
     </g:if>
@@ -293,18 +291,17 @@
 <br/>
 <section id="measures-header">
 
-    <h3>5. Measures<a target="dictionary"
-                      href="https://github.com/broadinstitute/BARD/wiki/BARD-hierarchy-top-level-concept-definitions">
-        <i class="icon-question-sign"></i></a></h3>
+    <h3>5. Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i class="icon-question-sign"></i></g:link></h3>
 
 
     <div class="row-fluid">
         <g:render template="measuresView"
-                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson]"/>
+                  model="['measures': assayInstance.measures, 'measureTreeAsJson': measureTreeAsJson, editable: editable]"/>
     </div>
 </section>
 <br/>
-<g:render template="assayDocuments" model="[assay: assayInstance]"/>
+<g:render template="/document/documents"
+          model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable]"/>
 </div>
 </div>
 </div>

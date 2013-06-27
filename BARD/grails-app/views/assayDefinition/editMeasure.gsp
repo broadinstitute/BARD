@@ -134,7 +134,7 @@
             });
         });
         //force a refresh of the page so that persisted measures can be seen
-        $('#close-measure-button').on('click', function() {
+        $('#close-measure-button').on('click', function () {
             $("#measureMessage").removeClass("alert alert-error alert-success");
             $("#measureMessage").html("");
         });
@@ -159,8 +159,12 @@
                         measureId: sourceNode.data.key,
                         parentMeasureId: parentMeasureId
 
-                    },
-                    function(data, textStatus) {
+                    }).
+                    success(function(data, textStatus) {
+
+                         $("#measureMessage").removeClass("alert alert-error alert-success");
+                         $("#measureMessage").removeClass("alert alert-success");
+                         $("#measureMessage").html("Move successful");
                          var title = sourceNode.data.title;
                          var indexOfLeftParen = title.indexOf("(") ;
                          if (indexOfLeftParen != 0) {
@@ -170,9 +174,12 @@
                          }
                           sourceNode.move(node, hitMode);
                         //refresh the node
-                    }
-                )
-            }
+                    }).error(function(response, textStatus, errorThrown) {
+                    $("#measureMessage").removeClass("alert alert-error alert-success");
+
+                        $("#measureMessage").addClass("alert alert-error");
+                        $("#measureMessage").html("Error during move." + response.responseText);
+                    });
 
             $("#measure-tree").dynatree({
                 onActivate: function(node) {

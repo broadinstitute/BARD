@@ -1,7 +1,7 @@
 package bard.validation.ext
 
+import bard.validation.extext.ExternalOntologyPerson
 import grails.buildtestdata.mixin.Build
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -39,8 +39,8 @@ class ExternalOntologyPersonUnitSpec extends Specification {
 
 		where:
 		desc                                        		     | itemDisplay			  | username   		| fullName
-		"Return concatenation of username and fullname"			 | 'user500 (User 500)'	  | 'user500'      	| 'User 500'
-		"Return username since fullname is null"			     | 'user500'	          | 'user500'      	| null
+		"Return concatenation of username and fullname"			 | '(user500) User 500'	  | 'user500'      	| 'User 500'
+		"Return username since fullname is null"			     | '(user500)'	          | 'user500'      	| null
 
     }
 

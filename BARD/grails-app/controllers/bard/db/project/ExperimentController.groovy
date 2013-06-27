@@ -4,12 +4,15 @@ import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.registration.Assay
+import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.access.prepost.PreAuthorize
 
-import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -23,8 +26,11 @@ class ExperimentController {
     static final DateFormat inlineDateFormater = new SimpleDateFormat("yyyy-MM-dd")
 
 
-    ExperimentService experimentService;
+    ExperimentService experimentService
+    AssayDefinitionService assayDefinitionService
     MeasureTreeService measureTreeService
+    SpringSecurityService springSecurityService
+    def permissionEvaluator
 
     def create() {
         def assay = Assay.get(params.assayId)
@@ -47,6 +53,10 @@ class ExperimentController {
             experiment = experimentService.updateHoldUntilDate(inlineEditableCommand.pk, holdUntilDate)
             final String updatedDateAsString = formatter.format(experiment.holdUntilDate)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -68,6 +78,10 @@ class ExperimentController {
             experiment = experimentService.updateRunFromDate(inlineEditableCommand.pk, runFromDate)
             final String updatedDateAsString = formatter.format(experiment.runDateFrom)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -89,6 +103,10 @@ class ExperimentController {
             experiment = experimentService.updateRunToDate(inlineEditableCommand.pk, runToDate)
             final String updatedDateAsString = formatter.format(experiment.runDateTo)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, updatedDateAsString)
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+            return
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -103,9 +121,12 @@ class ExperimentController {
                 conflictMessage(message)
                 return
             }
-            experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inlineEditableCommand.value)
+            experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.description)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -120,9 +141,12 @@ class ExperimentController {
                 conflictMessage(message)
                 return
             }
-            experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inlineEditableCommand.value)
+            experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentName)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -153,6 +177,9 @@ class ExperimentController {
             experiment = experimentService.updateExperimentStatus(inlineEditableCommand.pk, experimentStatus)
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentStatus.id)
 
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
         } catch (Exception ee) {
             log.error(ee)
             editErrorMessage()
@@ -182,7 +209,6 @@ class ExperimentController {
 
     def update() {
         def experiment = Experiment.get(params.id)
-        setEditFormParams(experiment)
         experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
         if (!experiment.save(flush: true)) {
             renderEdit(experiment, experiment.assay)
@@ -193,7 +219,11 @@ class ExperimentController {
 
     def save() {
         def assay = Assay.get(params.assayId)
-
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, assay)
+        if (!editable) {
+            render accessDeniedErrorMessage();
+            return
+        }
         Experiment experiment = new Experiment()
         experiment.assay = assay
         setEditFormParams(experiment)
@@ -255,8 +285,8 @@ class ExperimentController {
         JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
 
         JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
-
-        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
+        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, editable: editable ? 'canedit' : 'cannotedit']
     }
 }
 

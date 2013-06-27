@@ -1,10 +1,11 @@
 import bard.db.dictionary.OntologyDataAccessService
+import bard.validation.extext.PersonCreator
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.context.ApplicationContext
 import org.springframework.web.context.support.WebApplicationContextUtils
-import bard.validation.ext.ExternalOntologyPerson
+import bard.validation.extext.ExternalOntologyPerson
 import bard.validation.ext.ExternalOntologyFactory
-import bard.validation.ext.ExternalOntologyPerson
+import bard.validation.extext.ExternalOntologyPerson
 
 class BootStrap {
     OntologyDataAccessService ontologyDataAccessService
@@ -21,7 +22,7 @@ class BootStrap {
 
     void loadPersonOntology(){
         try {
-            externalOntologyFactory.getCreators().add(new ExternalOntologyPerson.PersonCreator())
+            externalOntologyFactory.getCreators().add(new PersonCreator())
         } catch (Exception ee) {
             log.error(ee)
         }

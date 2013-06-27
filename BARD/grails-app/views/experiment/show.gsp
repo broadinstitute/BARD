@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary"/>
+    <r:require modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>Show Experiment</title>
@@ -33,9 +33,12 @@
 </g:if>
 
 <g:if test="${instance?.id}">
-<p>
-    <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
-</p>
+<g:if test="${editable == 'canedit'}">
+    <p>
+        <g:link action="edit" id="${instance.id}" class="btn">Edit</g:link>
+    </p>
+</g:if>
+
 
 <div class="container-fluid">
 <div class="row-fluid">
@@ -48,171 +51,176 @@
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
 <div class="span9">
-    <section id="summary-header">
-        <div class="page-header">
-            <h3>1. Overview</h3>
-        </div>
+<section id="summary-header">
+    <div class="page-header">
+        <h3>1. Overview</h3>
+    </div>
 
-        <div class="row-fluid">
-            <dl class="dl-horizontal">
-                <dt><g:message code="experiment.id.label" default="EID"/>:</dt>
-                <dd>${instance?.id}</dd>
-                <dt>Assay Definition</dt><dd><g:link controller="assayDefinition" action="show"
-                                                     id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
+    <div class="row-fluid">
+        <dl class="dl-horizontal">
+            <dt><g:message code="experiment.id.label" default="EID"/>:</dt>
+            <dd>${instance?.id}</dd>
+            <dt>Assay Definition</dt><dd><g:link controller="assayDefinition" action="show"
+                                                 id="${instance.assay.id}">${instance.assay.name}</g:link>&nbsp;</dd>
 
 
 
-                <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
-                <dd>
-                    <a href="#"
-                       data-sourceCache="true"
-                       data-toggle="manual"
-                       class="status"
-                       id="${instance?.experimentStatus?.id}"
-                       data-type="select"
-                       data-value="${instance?.experimentStatus?.id}"
-                       data-source="/BARD/experiment/experimentStatus"
-                       data-pk="${instance.id}"
-                       data-url="/BARD/experiment/editExperimentStatus"
-                       data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</a>
-                    <i class="icon-pencil documentPencil" title="Click to edit Status"
-                       data-id="${instance?.experimentStatus?.id}"></i>
-                </dd>
+            <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
+            <dd>
+                <span
+                   data-sourceCache="true"
+                   data-toggle="manual"
+                   class="status"
+                   id="${instance?.experimentStatus?.id}"
+                   data-type="select"
+                   data-value="${instance?.experimentStatus?.id}"
+                   data-source="/BARD/experiment/experimentStatus"
+                   data-pk="${instance.id}"
+                   data-url="/BARD/experiment/editExperimentStatus"
+                   data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
+                   data-id="${instance?.experimentStatus?.id}"></a>
+            </dd>
 
-                <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
-                <dd>
-                    <a href="#"
-                       class="experimentName"
-                       data-toggle="manual"
-                       class="experimentNameY"
-                       id="nameId"
-                       data-type="text"
-                       data-value="${instance?.experimentName}"
-                       data-pk="${instance.id}"
-                       data-url="/BARD/experiment/editExperimentName"
-                       data-placeholder="Required"
-                       data-original-title="Edit Experiment Name">${instance?.experimentName}</a>
-                    <i class="icon-pencil documentPencil" title="Click to edit Name" data-id="nameId"></i>
-                </dd>
-                <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
-                <dd>
-                    <a href="#"
-                       class="description"
-                       data-toggle="manual"
-                       id="descriptionId"
-                       data-type="text"
-                       data-value="${instance.description}"
-                       data-pk="${instance.id}"
-                       data-url="/BARD/experiment/editDescription"
-                       data-placeholder="Required"
-                       data-original-title="Edit Description By">${instance.description}</a>
-                    <i class="icon-pencil documentPencil" title="Click to edit Description" data-id="descriptionId"></i>
-                </dd>
-                <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
-                <dd id="huddd">
-                    <a href="#" class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
-                       data-toggle="manual"
-                       data-url="/BARD/experiment/editHoldUntilDate"
-                       data-value="${instance.holdUntilDate}"
-                       data-original-title="Select hold until date"
-                       data-format="YYYY-MM-DD"
-                       data-viewformat="MM/DD/YYYY"
-                       data-template="D / MMM / YYYY">
-                        <g:formatDate
-                                format="MM/dd/yyyy"
-                                date="${instance.holdUntilDate}"/>
-                    </a>
-                    <i class="icon-pencil documentPencil" title="Click to edit hold until date" data-id="hud"></i>
-                </dd>
+            <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
+            <dd>
+                <span
+                   data-toggle="manual"
+                   class="experimentNameY"
+                   id="nameId"
 
-                <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
-                <dd>
-                    <a href="#" class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
-                       data-url="/BARD/experiment/editRunFromDate"
-                       data-value="${instance.runDateFrom}"
-                       data-original-title="Select run from date"
-                       data-format="YYYY-MM-DD"
-                       data-toggle="manual"
-                       data-viewformat="MM/DD/YYYY"
-                       data-template="D / MMM / YYYY">
-                        <g:formatDate
-                                format="MM/dd/yyyy"
-                                date="${instance.runDateFrom}"/>
-                    </a>
-                    <i class="icon-pencil documentPencil" title="Click to edit run from date" data-id="rfd"></i>
-                </dd>
-                <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
-                <dd>
-                    <a href="javascript:;" class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
-                       data-url="/BARD/experiment/editRunToDate"
-                       data-value="${instance.runDateTo}"
-                       data-original-title="Select run to date"
-                       data-toggle="manual"
-                       data-format="YYYY-MM-DD"
-                       data-viewformat="MM/DD/YYYY"
-                       data-template="D / MMM / YYYY">
-                        <g:formatDate
-                                format="MM/dd/yyyy"
-                                date="${instance.runDateTo}"/>
-                    </a><i class="icon-pencil documentPencil" title="Click to edit run to date" data-id="rdt"></i>
-                </dd>
-                <dt><g:message code="default.dateCreated.label"/>:</dt>
-                <dd><g:formatDate date="${instance.dateCreated}" format="MM/dd/yyyy"/></dd>
+                   data-type="text"
+                   data-value="${instance?.experimentName}"
+                   data-pk="${instance.id}"
+                   data-url="/BARD/experiment/editExperimentName"
+                   data-placeholder="Required"
+                   data-original-title="Edit Experiment Name">${instance?.experimentName}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
+            </dd>
+            <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
+            <dd>
+                <span
+                   class="description"
+                   data-toggle="manual"
+                   id="descriptionId"
+                   data-type="text"
+                   data-value="${instance.description}"
+                   data-pk="${instance.id}"
+                   data-url="/BARD/experiment/editDescription"
+                   data-placeholder="Required"
+                   data-original-title="Edit Description By">${instance.description}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
+                   data-id="descriptionId"></a>
+            </dd>
+            <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
+            <dd id="huddd">
+                <span class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
+                   data-toggle="manual"
+                   data-url="/BARD/experiment/editHoldUntilDate"
+                   data-value="${instance.holdUntilDate}"
+                   data-original-title="Select hold until date"
+                   data-format="YYYY-MM-DD"
+                   data-viewformat="MM/DD/YYYY"
+                   data-template="D / MMM / YYYY">
+                    <g:formatDate
+                            format="MM/dd/yyyy"
+                            date="${instance.holdUntilDate}"/>
+                </span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit hold until date"
+                   data-id="hud"></a>
+            </dd>
 
-                <dt><g:message code="default.lastUpdated.label"/>:</dt>
-                <dd id="lastUpdatedId"><g:formatDate date="${instance.lastUpdated}"
-                                                     format="MM/dd/yyyy"/></dd>
+            <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
+            <dd>
+                <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
+                   data-url="/BARD/experiment/editRunFromDate"
+                   data-value="${instance.runDateFrom}"
+                   data-original-title="Select run from date"
+                   data-format="YYYY-MM-DD"
+                   data-toggle="manual"
+                   data-viewformat="MM/DD/YYYY"
+                   data-template="D / MMM / YYYY">
+                    <g:formatDate
+                            format="MM/dd/yyyy"
+                            date="${instance.runDateFrom}"/>
+                </span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run from date"
+                   data-id="rfd"></a>
+            </dd>
+            <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
+            <dd>
+                <span  class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
+                   data-url="/BARD/experiment/editRunToDate"
+                   data-value="${instance.runDateTo}"
+                   data-original-title="Select run to date"
+                   data-toggle="manual"
+                   data-format="YYYY-MM-DD"
+                   data-viewformat="MM/DD/YYYY"
+                   data-template="D / MMM / YYYY">
+                    <g:formatDate
+                            format="MM/dd/yyyy"
+                            date="${instance.runDateTo}"/>
+                </span><a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run to date"
+                       data-id="rdt"></a>
+            </dd>
+            <dt><g:message code="default.dateCreated.label"/>:</dt>
+            <dd><g:formatDate date="${instance.dateCreated}" format="MM/dd/yyyy"/></dd>
 
-                <dt><g:message code="default.modifiedBy.label"/>:</dt>
-                <dd id="modifiedById"><g:fieldValue bean="${instance}" field="modifiedBy"/></dd>
-            </dl>
+            <dt><g:message code="default.lastUpdated.label"/>:</dt>
+            <dd id="lastUpdatedId"><g:formatDate date="${instance.lastUpdated}"
+                                                 format="MM/dd/yyyy"/></dd>
 
-            <p>External references</p>
-            <ul>
-                <g:each in="${instance.externalReferences}" var="xRef">
-                    <li>
-                        <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
-                           target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
-                    </li>
-                </g:each>
-            </ul>
+            <dt><g:message code="default.modifiedBy.label"/>:</dt>
+            <dd id="modifiedById"><g:fieldValue bean="${instance}" field="modifiedBy"/></dd>
+        </dl>
 
-            <p>Referenced by projects:</p>
-            <ul>
-                <g:each in="${instance.projectExperiments}" var="projectExperiment">
-                    <li><g:link controller="project" action="show"
-                                id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
-                </g:each>
-            </ul>
+        <p>External references</p>
+        <ul>
+            <g:each in="${instance.externalReferences}" var="xRef">
+                <li>
+                    <a href="${xRef.externalSystem.systemUrl}${xRef.extAssayRef}"
+                       target="_blank">${xRef.externalSystem.systemName} ${xRef.extAssayRef}</a>
+                </li>
+            </g:each>
+        </ul>
 
-            <g:link controller="results" action="configureTemplate"
-                    params="${[experimentId: instance.id]}"
-                    class="btn">Download a template</g:link>
+        <p>Referenced by projects:</p>
+        <ul>
+            <g:each in="${instance.projectExperiments}" var="projectExperiment">
+                <li><g:link controller="project" action="show"
+                            id="${projectExperiment.project.id}">${projectExperiment.project.name}</g:link></li>
+            </g:each>
+        </ul>
+
+        <g:link controller="results" action="configureTemplate"
+                params="${[experimentId: instance.id]}"
+                class="btn">Download a template</g:link>
+        <g:if test="${editable == 'canedit'}">
             <a href="#uploadResultsModal" role="button" class="btn"
                data-toggle="modal">Upload results</a>
-            <%-- Dialog for uploading results --%>
-            <div id="uploadResultsModal" class="modal fade" tabindex="-1" role="dialog"
-                 aria-labelledby="uploadResultsModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <h3 id="uploadResultsModalLabel">Upload Results</h3>
-                </div>
+        </g:if>
+    <%-- Dialog for uploading results --%>
+        <div id="uploadResultsModal" class="modal fade" tabindex="-1" role="dialog"
+             aria-labelledby="uploadResultsModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <h3 id="uploadResultsModalLabel">Upload Results</h3>
+            </div>
 
-                <div class="modal-body">
-                    <form method="POST" enctype="multipart/form-data"
-                          action="${createLink(action: "uploadResults", controller: "results")}"
-                          id="uploadResultsForm">
-                        <p>Uploading results will replace any results already stored for this experiment.</p>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data"
+                      action="${createLink(action: "uploadResults", controller: "results")}"
+                      id="uploadResultsForm">
+                    <p>Uploading results will replace any results already stored for this experiment.</p>
 
-                        <p>Select a file to upload</p>
-                        <input type="hidden" name="experimentId" value="${instance.id}">
-                        <input type="file" name="resultsFile">
-                    </form>
-                </div>
+                    <p>Select a file to upload</p>
+                    <input type="hidden" name="experimentId" value="${instance.id}">
+                    <input type="file" name="resultsFile">
+                </form>
+            </div>
 
-                <div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                    <button class="btn btn-primary" id="uploadResultsButton">Upload</button>
-                </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                <button class="btn btn-primary" id="uploadResultsButton">Upload</button>
             </div>
 
             <r:script>
@@ -222,29 +230,34 @@
             </r:script>
         </div>
     </section>
+    <br/>
     <section id="contexts-header">
-        <div class="page-header">
-            <h3>2. Contexts</h3>
-        </div>
-
+        <h3>2. Contexts</h3>
         <div class="row-fluid">
             <g:render template="../context/show"
                       model="[contextOwner: instance, contexts: instance.groupContexts(), uneditable: true]"/>
         </div>
     </section>
+    <br/>
     <section id="measures-header">
-        <div class="page-header">
+
             <h3>3. Measures</h3>
-        </div>
 
         <div class="row-fluid">
             <div id="measure-tree"></div>
             <r:script>
-                            $("#measure-tree").dynatree({
-                                children: ${measuresAsJsonTree} })
+            $("#measure-tree").dynatree({children: ${measuresAsJsonTree} })
             </r:script>
         </div>
     </section>
+
+        <r:script>
+            $("#uploadResultsButton").on("click", function () {
+                $("#uploadResultsForm").submit();
+            })
+        </r:script>
+    </div>
+</section>
 </div>
 </div>
 </div>

@@ -1,5 +1,6 @@
 package bard.validation.ext
 
+import bard.validation.extext.ExternalOntologyPerson
 import edu.scripps.fl.entrez.EUtilsWeb
 import grails.plugin.spock.IntegrationSpec
 import spock.lang.Ignore

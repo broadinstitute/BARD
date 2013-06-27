@@ -2,26 +2,6 @@ $(document).ready(function () {
 
     //inline editing
     $.fn.editable.defaults.mode = 'inline';
-
-    //set up editing for documents
-    $('.documents').editable({
-        params: function (params) {
-            var version = $(this).attr('data-version');
-            var owningEntityId = $(this).attr('data-owningEntityId');
-            params.version = version;
-            params.owningEntityId = owningEntityId;
-            params.documentName = $(this).attr('data-document-name');
-            params.documentType = $(this).attr('data-documentType');
-            return params;
-        },
-        ajaxOptions: {
-            complete: function (response, serverMessage) {
-                updateEntityVersion(response, serverMessage);
-            }
-        }
-
-    });
-
     //Set up editing for button
     $('.documentPencil').click(function (e) {
         e.stopPropagation();
@@ -113,9 +93,9 @@ function validateRequiredField(fieldName, messageHolder) {
         return false;
     }
     return true;
-};
+}
 
-function initFunction() {
+function initSummaryFunction() {
     $("input#projectName").blur(function () {
         var projectName = $(this).val();
         validateRequiredField(projectName, "projectNameValidation");

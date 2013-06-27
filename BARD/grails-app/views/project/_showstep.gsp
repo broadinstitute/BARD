@@ -4,8 +4,10 @@
     <div id="stepGraph" style="display: none">${pegraph}</div>
 
     <div>
-        <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
-            <button id="linkExperiment" class="btn">Link Experiments</button></div>
+        <g:if test="${editable == 'canedit'}">
+            <div class="span12"><button id="addExperimentToProject" class="btn">Add Experiment</button>
+                <button id="linkExperiment" class="btn">Link Experiments</button></div>
+        </g:if>
     </div>
 
     <div id="serviceResponse" style="display: none"></div>
@@ -25,30 +27,36 @@
         </div>
         <br/>
         <br/>
+
         <div id="edge-selection-details">
             Click on an edge connecting experiments to see the details here.
         </div>
 
         <script id="node-selection-template" type="text/x-handlebars-template">
-            <strong>Experiment ID:  </strong>
+            <strong>Experiment ID:</strong>
             <a href='/BARD/experiment/show/{{selected.data.link}}'>{{selected.data.link}}</a>
-            <a href="#" onclick="deleteItem({{selected.data.link}}, ${instanceId});return false;"
-               style="font-family:arial;color:red;font-size:10px;"><i
-                    class="icon-trash"></i>Remove from Project</a>
+            <g:if test="${editable == 'canedit'}">
+                <a href="#" onclick="deleteItem({{selected.data.link}}, ${instanceId});return false;"
+                   style="font-family:arial;color:red;font-size:10px;"><i
+                        class="icon-trash"></i>Remove from Project</a>
+            </g:if>
             <br/>
             <br/>
 
-            <strong>Experiment Name:  </strong>
+            <strong>Experiment Name:</strong>
+
             <div>{{selected.data.ename}}</div>
             <br/>
 
-            <strong>Assay Definition ID:  </strong><a href="/BARD/assayDefinition/show/{{selected.data.assay}}" id="assaylink"
-                                 target="_blank">{{selected.data.assay}}</a>
+            <strong>Assay Definition ID:</strong><a href="/BARD/assayDefinition/show/{{selected.data.assay}}"
+                                                    id="assaylink"
+                                                    target="_blank">{{selected.data.assay}}</a>
             <br/>
             <br/>
 
-            <strong>Pubchem AID:  </strong> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.data.aid}}"
-                             id="aidlink" target="_blank">{{selected.data.aid}}</a>
+            <strong>Pubchem AID:</strong> <a
+                href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.data.aid}}"
+                id="aidlink" target="_blank">{{selected.data.aid}}</a>
         </script>
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
@@ -58,40 +66,57 @@
             <div id="selectedEdgeFromId">{{fromNode}}</div>
 
             <div id="selectedEdgeToId">{{toNode}}</div>
-            <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
-               style="font-family:arial;color:red;font-size:10px;">
-                <i class="icon-trash"></i>
-                Remove from Project
-            </a>
+            <g:if test="${editable == 'canedit'}">
+                <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
+                   style="font-family:arial;color:red;font-size:10px;">
+                    <i class="icon-trash"></i>
+                    Remove from Project
+                </a>
+            </g:if>
         </script>
         <script id="node-selection-template1" type="text/x-handlebars-template">
 
             <div id="selectedNodeId" style="display: none">{{selectedNodeId}}</div>
-            <strong>Experiment Stage:  </strong>
-             <a href="#" data-sourceError="Error loading stages" data-sourceCache="true" class="projectStageId" id="{{selected.stageid}}" data-type="select" data-value="{{selected.stage}}" data-source="/BARD/project/projectStages" data-pk="{{selected.peid}}" data-url="/BARD/project/updateProjectStage" data-original-title="Select New Stage">{{selected.stage}}</a>
-            <i class="icon-pencil"></i>
+            <strong>Experiment Stage:</strong>
+            <g:if test="${editable == 'canedit'}">
+                <a href="javascript:;" data-sourceError="Error loading stages" data-sourceCache="true"
+                   class="projectStageId" id="{{selected.stageid}}"
+                   data-type="select" data-value="{{selected.stage}}" data-source="/BARD/project/projectStages"
+                   data-pk="{{selected.peid}}"
+                   data-url="/BARD/project/updateProjectStage" data-original-title="Select New Stage">{{selected.stage}}
+                    <i class="icon-pencil"></i>
+                </a>
+
+            </g:if>
+            <g:else>
+                {{selected.stage}}
+            </g:else>
             <br/>
             <br/>
 
-            <strong>Experiment ID:  </strong>
+            <strong>Experiment ID:</strong>
             <a href='/BARD/experiment/show/{{selected.eid}}'>{{selected.eid}}</a>
-            <a href="#" onclick="deleteItem({{selected.eid}}, ${instanceId});return false;"
-               style="font-family:arial;color:red;font-size:10px;"><i
-                    class="icon-trash"></i>Remove from Project</a>
+            <g:if test="${editable == 'canedit'}">
+                <a href="#" onclick="deleteItem({{selected.eid}}, ${instanceId});return false;"
+                   style="font-family:arial;color:red;font-size:10px;"><i
+                        class="icon-trash"></i>Remove from Project</a>
+            </g:if>
             <br/>
             <br/>
 
-            <strong>Experiment Name:  </strong>
+            <strong>Experiment Name:</strong>
+
             <div>{{selected.ename}}</div>
             <br/>
 
-            <strong>Assay Definition ID:  </strong> <a href="/BARD/assayDefinition/show/{{selected.assay}}" id="assaylink1"
-                              target="_blank">{{selected.assay}}</a>
+            <strong>Assay Definition ID:</strong> <a href="/BARD/assayDefinition/show/{{selected.assay}}"
+                                                     id="assaylink1"
+                                                     target="_blank">{{selected.assay}}</a>
             <br/>
             <br/>
 
-            <strong>PubChem AID:  </strong> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}"
-                                     id="aidlink1" target="_blank">{{selected.aid}}</a>
+            <strong>PubChem AID:</strong> <a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.aid}}"
+                                             id="aidlink1" target="_blank">{{selected.aid}}</a>
         </script>
 
     </div>

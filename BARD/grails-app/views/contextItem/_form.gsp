@@ -6,6 +6,8 @@
 </div>
 <g:set var="disabledInput" value="${reviewNewItem ? true : false}"/>
 
+<input type="hidden" id="disabledInput" value="${disabledInput}"/>
+
 <g:form class="form-horizontal" action="${action.toLowerCase()}">
     <g:hiddenField name="contextOwnerId" value="${instance?.contextOwnerId}"/>
     <g:hiddenField name="contextId" value="${instance?.contextId}"/>
@@ -29,10 +31,41 @@
             <span class="help-inline"><g:fieldError field="attributeElementId" bean="${instance}"/></span>
 
         </div>
-
     </div>
 
-    <div id="elementValueContainer" style="display: false;">
+    <g:if test="${instance?.contextClass == 'AssayContext'}">
+        <div class="control-group">
+            <div class="controls">
+                <label class="checkbox">
+                    <g:checkBox disabled="${disabledInput}" id="providedWithResults" name="providedWithResults" checked="${instance.providedWithResults}"/>
+                    Value to be provided as part of result upload
+                </label>
+            </div>
+        </div>
+
+        <div id="valueConstraintContainer" style="display: none;">
+            How should the values be constrained when results are loaded
+            <div class="control-group ${hasErrors(bean: instance, field: 'valueConstraintType', 'error')}">
+
+                <div class="controls">
+                    <label class="radio">
+                        <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintFree" value="Free" checked="${instance.valueConstraintType == 'Free'}"/> Not constrained
+                    </label>
+
+                    <label class="radio">
+                        <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintList" value="List" checked="${instance.valueConstraintType == 'List'}"/> Should be selected from a list of acceptable values specified below
+                    </label>
+
+                    <label class="radio" id="valueConstraintRangeContainer">
+                        <g:radio disabled="${disabledInput}" name="valueConstraintType" id="valueConstraintRange" value="Range" checked="${instance.valueConstraintType == 'Range'}"/> Should be within range specified below
+                    </label>
+                </div>
+                <span class="help-inline"><g:fieldError field="valueConstraintType" bean="${instance}"/></span>
+            </div>
+        </div>
+    </g:if>
+
+    <div id="elementValueContainer" style="display: none;">
         <g:if test="${disabledInput == false}">
             <div class="row-fluid">
                 <div class="span6 offset2 alert alert-info">
@@ -48,7 +81,7 @@
                     code="contextItem.valueElementId.label"/>:</label>
 
             <div class="controls">
-                <g:hiddenField class="span8" id="valueElementId" name="valueElementId"
+                <g:hiddenField class="span8 valueField" id="valueElementId" name="valueElementId"
                                value="${instance?.valueElementId}" disabled="${disabledInput}"/>
 
                 <span class="help-inline"><g:fieldError field="valueElementId" bean="${instance}"/></span>
@@ -65,7 +98,7 @@
                 <label class="control-label" for="extValueId"><g:message code="contextItem.extValueSearch.label"/>:</label>
                 <div class="controls">
                     <g:hiddenField
-                            class="span8" id="extValueSearch" name="extValueSearch" value="${instance?.extValueId}"
+                            class="span8 valueField" id="extValueSearch" name="extValueSearch" value="${instance?.extValueId}"
                             />
                 </div>
             </div>
@@ -79,7 +112,7 @@
             <div class="controls">
 
                 <g:textField
-                        class="span8" id="extValueId" name="extValueId" value="${instance?.extValueId}"
+                        class="span8 valueField" id="extValueId" name="extValueId" value="${instance?.extValueId}"
                         disabled="${disabledInput}"/>
                 <span class="help-inline"><g:fieldError field="extValueId" bean="${instance}"/></span>
             </div>
@@ -97,17 +130,17 @@
             <label class="control-label" for="valueNum"><g:message code="contextItem.valueNum.label"/>:</label>
 
             <div class="control controls-row">
-                <g:select class="offset1 span2" id="qualifier" name="qualifier"
-                          noSelection="${['': message(code: "contextItem.qualifier.label")]}"
+                <g:select class="offset1 span2 valueField" id="qualifier" name="qualifier"
                           from="${instance?.constraints.qualifier.inList}"
-                          value="${instance?.qualifier}"
-                          disabled="${disabledInput}"/>
+                          value="${instance?.qualifier != null ? instance?.qualifier : '= '}"
+                          disabled="${disabledInput}"
+                          />
 
-                <g:textField class="span2" id="valueNum" name="valueNum"
+                <g:textField class="span2 valueField" id="valueNum" name="valueNum"
                              placeholder="${message(code: "contextItem.valueNum.label")}"
                              value="${instance?.valueNum}" disabled="${disabledInput}"/>
 
-                <g:textField class="span2" id="valueNumUnitId" name="valueNumUnitId"
+                <g:textField class="span2 valueField" id="valueNumUnitId" name="valueNumUnitId"
                              value="${instance?.valueNumUnitId}"
                              disabled="${disabledInput}"/>
             </div>
@@ -127,7 +160,7 @@
         <g:if test="${disabledInput == false}">
             <div class="row-fluid">
                 <div class="span6 offset2 alert alert-info">
-                    <p>This attribute expects a numeric value, please enter an integer, decimal or scientific notation, e.g. 1, 1.0 or 1E-3</p>
+                    <p>Please enter a the min and max of the allowed range below</p>
                 </div>
             </div>
         </g:if>
@@ -136,11 +169,11 @@
             <label class="control-label"><g:message code="contextItem.range.label"/>:</label>
 
             <div class="control controls-row">
-                <g:textField class="offset1 span2" id="valueMin" name="valueMin"
+                <g:textField class="offset1 span2 valueField" id="valueMin" name="valueMin"
                              placeholder="${message(code: "contextItem.valueMin.label")}" value="${instance?.valueMin}"
                              disabled="${disabledInput}"/>
                 <span class="span1">TO</span>
-                <g:textField class="span2" id="valueMax" name="valueMax"
+                <g:textField class="span2 valueField" id="valueMax" name="valueMax"
                              placeholder="${message(code: "contextItem.valueMax.label")}" value="${instance?.valueMax}"
                              disabled="${disabledInput}"/>
             </div>
@@ -153,7 +186,7 @@
                     code="contextItem.valueDisplay.label"/>:</label>
 
             <div class="controls">
-                <g:textField class="span8" id="valueDisplay" name="valueDisplay"
+                <g:textField class="span8 valueField" id="valueDisplay" name="valueDisplay"
                              value="${instance?.valueDisplay}"
                              disabled="${disabledInput}"/>
                 <span class="help-inline"><g:fieldError field="valueDisplay" bean="${instance}"/></span>

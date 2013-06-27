@@ -1,6 +1,5 @@
 package bard.db.registration
 
-import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
@@ -30,7 +29,7 @@ class AssayContextServiceUnitSpec extends Specification {
         given:
         Measure measure = Measure.build()
         when:
-        Measure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType)
+        Measure foundMeasure = service.changeParentChildRelationship(measure, hierarchyType, null)
         then:
         assert foundMeasure
 
@@ -53,7 +52,7 @@ class AssayContextServiceUnitSpec extends Specification {
         assert sourceAssayContext == draggedAssayContextItem.assayContext
 
         when:
-        service.addItem(draggedAssayContextItem, targetAssayContext)
+        service.addItem(draggedAssayContextItem, targetAssayContext, targetAssayContext.assay)
 
         then:
         assertItemAdded(targetAssayContext, draggedAssayContextItem, sizeAfterAdd, indexOfAddedItem)
@@ -74,7 +73,7 @@ class AssayContextServiceUnitSpec extends Specification {
 
 
         when: 'it is added to the assayContext again'
-        service.addItem(assayContext.assayContextItems.first(), assayContext)
+        service.addItem(assayContext.assayContextItems.first(), assayContext, null)
 
         then: 'do nothing, particulary throw an IOOBE' // if you didn't guess the earlier code was resulting in a IOOBE
         notThrown(IndexOutOfBoundsException)
@@ -113,7 +112,7 @@ class AssayContextServiceUnitSpec extends Specification {
         Measure measure = Measure.build()
 
         when:
-        service.associateContext(measure, context)
+        service.associateContext(measure, context, context.assay)
 
         then:
         measure.assayContextMeasures.size() == 1
@@ -124,7 +123,7 @@ class AssayContextServiceUnitSpec extends Specification {
         link.assayContext == context
 
         when:
-        service.disassociateContext(measure, context)
+        service.disassociateContext(measure, context, context.assay)
 
         then:
         measure.assayContextMeasures.size() == 0

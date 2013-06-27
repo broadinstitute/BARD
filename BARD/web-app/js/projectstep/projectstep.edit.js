@@ -77,10 +77,10 @@ $(document).ready(function () {
         findExperimentInput(selected, allValues);
     });
 
-    initEditFunction();
+    initProjectEditFunction();
 });
 
-function initEditFunction() {
+function initProjectEditFunction() {
     $('#ajaxProgress')
         .hide()  // hide it initially
         .ajaxStart(function () {
@@ -238,8 +238,8 @@ function handleSuccess(data) {
     }
     else {
         $("#showstep").html(data);
-        initFunction();
-        initEditFunction();
+        initProjectFunction();
+        initProjectEditFunction();
         clearAvailableExperiment();
     }
     $("#serviceResponse").show()

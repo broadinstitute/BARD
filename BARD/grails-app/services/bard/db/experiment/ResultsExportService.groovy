@@ -1,6 +1,7 @@
 package bard.db.experiment
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 
 import java.util.zip.GZIPOutputStream
 
@@ -9,6 +10,12 @@ class ResultsExportService {
     ArchivePathService archivePathService
 
     ObjectMapper mapper = new ObjectMapper()
+    ObjectMapper prettyPrintMapper
+
+    public ResultsExportService() {
+        prettyPrintMapper = new ObjectMapper()
+        prettyPrintMapper.enable(SerializationFeature.INDENT_OUTPUT);
+    }
 
     JsonResultContextItem contextItemAsJson(ResultContextItem item) {
         return new JsonResultContextItem(itemId: item.id,
@@ -64,6 +71,11 @@ class ResultsExportService {
         writer.write(mapper.writeValueAsString(substanceResults));
 
         writer.write("\n\n");
+    }
+
+    String resultsToPrettyPrintString(Long sid, List<Result> results) {
+        JsonSubstanceResults substanceResults = transformToJson(sid, results)
+        return prettyPrintMapper.writeValueAsString(substanceResults)
     }
 
 

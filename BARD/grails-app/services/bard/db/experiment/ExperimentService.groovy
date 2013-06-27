@@ -1,57 +1,63 @@
 package bard.db.experiment
 
 import bard.db.enums.ExperimentStatus
+import bard.db.enums.HierarchyType
 import bard.db.registration.Assay
 import bard.db.registration.Measure
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
-import bard.db.enums.HierarchyType
-import org.apache.commons.lang.StringUtils
+import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
 class ExperimentService {
 
     AssayService assayService;
-    Experiment updateRunFromDate(final Long experimentId, final Date runDateFrom){
-        Experiment experiment = Experiment.findById(experimentId)
+    @PreAuthorize("hasPermission(#id, ' bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateRunFromDate(final Long id, final Date runDateFrom) {
+        Experiment experiment = Experiment.findById(id)
         experiment.runDateFrom = runDateFrom
         experiment.save(flush: true)
-        return Experiment.findById(experimentId)
+        return Experiment.findById(id)
     }
-    Experiment updateRunToDate(final Long experimentId, final Date runDateTo){
-        Experiment experiment = Experiment.findById(experimentId)
+    @PreAuthorize("hasPermission(#id, ' bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateRunToDate(final Long id, final Date runDateTo) {
+        Experiment experiment = Experiment.findById(id)
         experiment.runDateTo = runDateTo
         experiment.save(flush: true)
-        return Experiment.findById(experimentId)
+        return Experiment.findById(id)
     }
-    Experiment updateHoldUntilDate(final Long experimentId, final Date newHoldUntilDate) {
-        Experiment experiment = Experiment.findById(experimentId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateHoldUntilDate(final Long id, final Date newHoldUntilDate) {
+        Experiment experiment = Experiment.findById(id)
         experiment.holdUntilDate = newHoldUntilDate
         experiment.save(flush: true)
-        return Experiment.findById(experimentId)
+        return Experiment.findById(id)
     }
-    Experiment updateExperimentDescription(final Long experimentId, final String newExperimentDescription) {
-        Experiment experiment = Experiment.findById(experimentId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateExperimentDescription(final Long id, final String newExperimentDescription) {
+        Experiment experiment = Experiment.findById(id)
         experiment.description = newExperimentDescription
 
         experiment.save(flush: true)
-        return Experiment.findById(experimentId)
+        return Experiment.findById(id)
     }
-    Experiment updateExperimentName(final Long experimentId, final String newExperimentName) {
-        Experiment experiment = Experiment.findById(experimentId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateExperimentName(final Long id, final String newExperimentName) {
+        Experiment experiment = Experiment.findById(id)
         experiment.experimentName = newExperimentName
         //validate version here
         experiment.save(flush: true)
-        return Experiment.findById(experimentId)
+        return Experiment.findById(id)
     }
-
-    Experiment updateExperimentStatus(final Long experimentId, final ExperimentStatus experimentStatus) {
-        Experiment experiment = Experiment.findById(experimentId)
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment updateExperimentStatus(final Long id, final ExperimentStatus experimentStatus) {
+        Experiment experiment = Experiment.findById(id)
         experiment.experimentStatus = experimentStatus
         experiment.save(flush: true)
-        return Experiment.findById(experimentId)
+        return Experiment.findById(id)
     }
-
+    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void updateMeasures(Experiment experiment, JSONArray edges) {
         // populate map with ids as strings
         Map byId = [:]
@@ -66,6 +72,7 @@ class ExperimentService {
         unused.each { ExperimentMeasure measure ->
             measure.childMeasures = new HashSet();
             measure.parent = null;
+            measure.parentChildRelationship=null
         }
 
         // start over fresh and walk through the elements in tree
@@ -129,12 +136,10 @@ class ExperimentService {
 
         println("Added ${experiment.experimentMeasures.size()} measures to tree")
     }
-
+    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment createNewExperiment(Assay assay, String experimentName, String description) {
-        Experiment experiment = new Experiment(assay: assay)
-        experiment.experimentName = experimentName
-        experiment.description = description
-        experiment.dateCreated = new Date()
+        Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())
+
         if (experiment.save(flush: true)) {
             populateMeasures(experiment)
         }
@@ -151,7 +156,7 @@ class ExperimentService {
         }
 
         measureToExpMeasure.values().each { ExperimentMeasure child ->
-            if (child.measure.parentMeasure != null) {
+            if (child.measure.parentMeasure) {
                 ExperimentMeasure parent = measureToExpMeasure[child.measure.parentMeasure]
                 child.parentChildRelationship = HierarchyType.SUPPORTED_BY
                 child.parent = parent
@@ -160,7 +165,7 @@ class ExperimentService {
 
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
     }
-
+    //TODO: This is only used by data mig. do we need to secure this?
     void splitExperimentsFromAssay(List<Experiment> experiments) {
         Assay oldAssay = experiments.first().assay
 
@@ -169,12 +174,12 @@ class ExperimentService {
         Assay newAssay = mapping.assay
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
 
-        for (experiment in experiments) {
+        for (Experiment experiment : experiments) {
             oldAssay.removeFromExperiments(experiment)
             newAssay.addToExperiments(experiment)
 
             // map measures over to new assay
-            for (experimentMeasure in experiment.experimentMeasures) {
+            for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
                 Measure oldMeasure = experimentMeasure.measure
                 Measure newMeasure = measureOldToNew[oldMeasure]
                 assert newMeasure != null

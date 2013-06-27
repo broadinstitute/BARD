@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -11,9 +12,13 @@ import grails.buildtestdata.mixin.Build
 import grails.plugins.springsecurity.SpringSecurityService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
 import grails.validation.ValidationException
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
+import org.springframework.security.access.AccessDeniedException
 import spock.lang.Unroll
 
 import javax.servlet.http.HttpServletResponse
@@ -23,15 +28,21 @@ import javax.servlet.http.HttpServletResponse
 
 
 @TestFor(AssayDefinitionController)
-@Build([Assay, Element, AssayContext, AssayContextMeasure])
-@Mock([Assay, Element, AssayContext, AssayContextMeasure])
+@Build([Assay, Element, AssayContext, AssayContextMeasure, Measure])
+@Mock([Assay, Element, AssayContext, AssayContextMeasure, Measure])
+@TestMixin(GrailsUnitTestMixin)
 @Unroll
 class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec {
 
     Assay assay
 
+
+
     @Before
     void setup() {
+        SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
+            return true
+        }
         controller.metaClass.mixin(EditingHelper)
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayContextService assayContextService = Mock(AssayContextService)
@@ -40,6 +51,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         controller.measureTreeService = measureTreeService
         controller.assayContextService = assayContextService
         controller.assayDefinitionService = assayDefinitionService
+        controller.contextService = Mock(ContextService)
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
@@ -63,6 +75,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("lastUpdated").asText()
         assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Assay Type access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Assay newAssay = Assay.build(version: 0, assayType: AssayType.TEMPLATE)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayType: AssayType.REGULAR)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayType.id)
+        when:
+        controller.editAssayType(inlineEditableCommand)
+        then:
+        controller.assayDefinitionService.updateAssayType(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test edit Assay Type with errors'() {
@@ -97,6 +123,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("lastUpdated").asText()
         assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit Assay Status access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Assay newAssay = Assay.build(version: 0, assayStatus: AssayStatus.DRAFT)  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer", assayStatus: AssayStatus.APPROVED)
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayStatus.id)
+        when:
+        controller.editAssayStatus(inlineEditableCommand)
+        then:
+        controller.assayDefinitionService.updateAssayStatus(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test edit Assay Status with errors'() {
@@ -134,6 +174,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert response.contentType == "text/json;charset=utf-8"
     }
 
+    void 'test edit Assay Name - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Assay newAssay = Assay.build(version: 0, assayName: "My Name")  //no designer
+        Assay updatedAssay = Assay.build(assayName: "My New Name", version: 1, lastUpdated: new Date(), designedBy: "Designer")
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.assayName)
+        when:
+        controller.editAssayName(inlineEditableCommand)
+        then:
+        controller.assayDefinitionService.updateAssayName(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
     void 'test edit Assay Name with errors'() {
         given:
         Assay newAssay = Assay.build(version: 0)
@@ -166,6 +220,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert responseJSON.get("lastUpdated").asText()
         assert responseJSON.get("shortName").asText()
         assert response.contentType == "text/json;charset=utf-8"
+    }
+
+    void 'test edit DesignedBy -access denied'() {
+        given:
+        accessDeniedRoleMock()
+        Assay newAssay = Assay.build(version: 0)  //no designer
+        Assay updatedAssay = Assay.build(version: 1, lastUpdated: new Date(), designedBy: "Designer")
+        InlineEditableCommand inlineEditableCommand = new InlineEditableCommand(pk: newAssay.id,
+                version: newAssay.version, name: newAssay.assayName, value: updatedAssay.designedBy)
+        when:
+        controller.editDesignedBy(inlineEditableCommand)
+        then:
+        controller.assayDefinitionService.updateDesignedBy(_, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test edit optimistic lock failure'() {
@@ -295,6 +363,26 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         notThrown(Exception.class)
     }
 
+    void 'test add measure - access denied'() {
+        given:
+        accessDeniedRoleMock()
+        when:
+        mockDomain(Element)
+        Element resultType = Element.build()
+        Element statistic = Element.build()
+        Element.saveAll([resultType, statistic])
+
+        params.id = assay.id
+        params.resultTypeId = resultType.id
+        params.statisticId = statistic.id
+        Measure newMeasure = Measure.build()
+        controller.addMeasure()
+
+        then:
+        controller.assayContextService.addMeasure(_, _, _, _, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+    }
+
     void 'test add measure Fail'() {
         when:
         params.id = assay.id
@@ -304,7 +392,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         assert response.text == "Result Type is Required!"
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
 
-     }
+    }
 
     void 'test delete measure with #desc'() {
         when:
@@ -330,6 +418,20 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         desc       | hasChild | beforeExpectedCount | afterExpectedCount
         "a child"  | true     | 2                   | 2
         "no child" | false    | 1                   | 0
+    }
+
+
+    void 'test delete measure - access denied #desc'() {
+        given:
+        accessDeniedRoleMock()
+        def measure = Measure.build(assay: assay)
+        params.id = assay.id
+        params.measureId = measure.id
+        when:
+        controller.deleteMeasure()
+
+        then:
+        assertAccesDeniedErrorMessage()
     }
 
     void 'test associate context'() {
@@ -360,7 +462,28 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         notThrown(Exception.class)
     }
 
+
+    void 'test associate context - access denied'() {
+        given:
+        accessDeniedRoleMock()
+
+        assay = Assay.build(assayName: 'Test')
+        def context = AssayContext.build(assay: assay)
+        def measure = Measure.build(assay: assay)
+        params.id = assay.id
+        params.measureId = measure.id
+        params.assayContextId = context.id
+        when:
+        controller.associateContext()
+
+        then:
+        controller.assayContextService.associateContext(_, _, _) >> { throw new AccessDeniedException("msg") }
+
+        assertAccesDeniedErrorMessage()
+    }
+
     void 'test disassociate context'() {
+
         when:
         assay = Assay.build(assayName: 'Test')
         AssayContext context = AssayContext.build(assay: assay)
@@ -390,15 +513,27 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         notThrown(Exception.class)
     }
 
-    void "test moveCard"() {
+
+    void 'test disassociate context - access denied'() {
+
         given:
+        accessDeniedRoleMock()
         assay = Assay.build(assayName: 'Test')
-        AssayContext context = AssayContext.build(assay: assay, contextGroup: "context_group")
-        String new_context_group = 'context_group2'
+        AssayContext context = AssayContext.build(assay: assay)
+        Measure measure = Measure.build(assay: assay)
+        def contextMeasure = AssayContextMeasure.build(measure: measure, assayContext: context)
+        context.addToAssayContextMeasures(contextMeasure)
+        measure.addToAssayContextMeasures(contextMeasure)
+
+        params.id = assay.id
+        params.measureId = measure.id
+        params.assayContextId = context.id
         when:
-        controller.moveCard(new_context_group, context.id)
+        controller.disassociateContext()
+
         then:
-        new_context_group == context.contextGroup
+        controller.assayContextService.disassociateContext(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
 
     }
 
@@ -421,6 +556,22 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     }
 
+    void "test changeRelationship - access denied"() {
+        given:
+        accessDeniedRoleMock()
+        assay = Assay.build(assayName: 'Test')
+        Measure parent = Measure.build(assay: assay)
+        Measure child = Measure.build(assay: assay, parentMeasure: parent)
+        child.parentChildRelationship = HierarchyType.CALCULATED_FROM
+        params.measureId = child.id
+        params.relationship = HierarchyType.SUPPORTED_BY.getId()
+        when:
+        controller.changeRelationship()
+        then:
+        controller.assayContextService.changeParentChildRelationship(_, _, _) >> { throw new AccessDeniedException("msg") }
+        assertAccesDeniedErrorMessage()
+
+    }
 
 
     void 'test move measure #desc'() {
@@ -435,13 +586,16 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         when:
         controller.moveMeasureNode(child.id, parent?.id)
         then:
+        controller.assayDefinitionService.moveMeasure(_, _, _) >> { arg1, arg2, arg3 ->
+            arg2.parentMeasure = arg3
+        }
         assert parent == child.parentMeasure
         assert expectedRelationshipType == child.parentChildRelationship
 
         where:
         desc                                                          | parentMeasure | relationshipType              | expectedRelationshipType
         "has both parent and child measures and relationship type"    | true          | HierarchyType.CALCULATED_FROM | HierarchyType.CALCULATED_FROM
-        "has both parent and child measures but no relationship type" | true          | null                          | HierarchyType.SUPPORTED_BY
+        "has both parent and child measures but no relationship type" | true          | HierarchyType.SUPPORTED_BY    | HierarchyType.SUPPORTED_BY
         "has no parent measure"                                       | false         | null                          | null
     }
 }

@@ -8,7 +8,7 @@
 
             <dt><g:message code="project.projectStatus.label" default="Status"/>:</dt>
             <dd>
-                <a href="#"
+                <span
                    data-sourceCache="true"
                    class="status ${project?.projectStatus?.id}"
                    data-toggle="manual"
@@ -18,13 +18,13 @@
                    data-source="/BARD/project/projectStatus"
                    data-pk="${project.id}"
                    data-url="/BARD/project/editProjectStatus"
-                   data-original-title="Select Project Status">${project?.projectStatus?.id}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></i>
+                   data-original-title="Select Project Status">${project?.projectStatus?.id}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status" data-id="${project?.projectStatus?.id}"></a>
              </dd>
 
             <dt><g:message code="project.name.label" default="Fix i18n"/>:</dt>
             <dd>
-                <a href="#"
+                <span
                    class="projectName"
                    id="nameId"
                    data-toggle="manual"
@@ -33,13 +33,13 @@
                    data-pk="${project.id}"
                    data-url="/BARD/project/editProjectName"
                    data-placeholder="Required"
-                   data-original-title="Edit Project Name">${project?.name}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Name" data-id="nameId"></i>
+                   data-original-title="Edit Project Name">${project?.name}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
             </dd>
 
             <dt><g:message code="project.description.label" default="Fix i18n"/>:</dt>
             <dd>
-                <a href="#"
+                <span
                    class="description"
                    id="descriptionId"
                    data-type="text"
@@ -49,8 +49,8 @@
                    data-pk="${project.id}"
                    data-url="/BARD/project/editDescription"
                    data-placeholder="Required"
-                   data-original-title="Edit Description By">${project?.description}</a>
-                <i class="icon-pencil documentPencil" title="Click to edit Description" data-id="descriptionId"></i>
+                   data-original-title="Edit Description By">${project?.description}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
             </dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
