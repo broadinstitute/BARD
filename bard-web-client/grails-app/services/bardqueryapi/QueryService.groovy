@@ -6,6 +6,7 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.helper.CapService
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
@@ -34,6 +35,7 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
+    CapService capService
 
     //========================================================== Free Text Searches ================================
 
@@ -319,8 +321,7 @@ class QueryService implements IQueryService {
         if (filterTypes.contains(FilterTypes.TESTED)) {
             //Get all tested assays and exptData
             experimentalData = compoundSummary.testedExptdata
-        }
-        else {
+        } else {
             //Get only the hits
             experimentalData = compoundSummary.hitExptdata
         }
@@ -334,8 +335,8 @@ class QueryService implements IQueryService {
         Map<Long, List<Activity>> groupedByExperimentalData = [:]
         switch (groupTypes) {
             case GroupByTypes.ASSAY:
-                experimentalData.each {Activity exptData ->
-                    exptData.bardAssayId.each {Long id ->
+                experimentalData.each { Activity exptData ->
+                    exptData.bardAssayId.each { Long id ->
                         if (groupedByExperimentalData.containsKey(id)) {
                             groupedByExperimentalData[id] << exptData
                         } else {
@@ -345,8 +346,8 @@ class QueryService implements IQueryService {
                 }
                 break;
             case GroupByTypes.PROJECT:
-                experimentalData.each {Activity exptData ->
-                    exptData.bardProjId.each {Long id ->
+                experimentalData.each { Activity exptData ->
+                    exptData.bardProjId.each { Long id ->
                         if (groupedByExperimentalData.containsKey(id)) {
                             groupedByExperimentalData[id] << exptData
                         } else {
@@ -371,7 +372,7 @@ class QueryService implements IQueryService {
             ExperimentSearchResult experimentSearchResult = this.experimentRestService.searchExperimentsByIds(eids)
             List<ExperimentSearch> experiments = experimentSearchResult.experiments
             //Create a map of experiment-id to experiment; please note that values in this map are Arraylists with one element in each.
-            experimentsMap = experiments.groupBy {ExperimentSearch experiment -> experiment.bardExptId}
+            experimentsMap = experiments.groupBy { ExperimentSearch experiment -> experiment.bardExptId }
         }
         catch (Exception exp) {
             log.error("Could not find BARD experiment IDs: ${eids}")
@@ -380,7 +381,7 @@ class QueryService implements IQueryService {
         //Sort the experiments in the map based on their confidenceLevel. This should give a higher priority, for example,
         // for confirmatory assays (dose-curve) over primary assay (single-point).
         //First sort all the elements (experiment's activities) in each key-set based on the experiment's confidence level
-        groupedByExperimentalData.values().each {List<Activity> exptDataList ->
+        groupedByExperimentalData.values().each { List<Activity> exptDataList ->
             exptDataList.sort { Activity lExptData, Activity rExptData ->
                 Long lConfidenceLevel = experimentsMap[lExptData.bardExptId]?.first()?.confidenceLevel ?: 0
                 Long rConfidenceLevel = experimentsMap[rExptData.bardExptId]?.first()?.confidenceLevel ?: 0
@@ -643,5 +644,40 @@ class QueryService implements IQueryService {
             return new CompoundAdapter(compound)
         }
         return null
+    }
+
+    @Override
+    List<Map> getPathsForAssayFormat(String endNode) {
+        return getPathsForType('assayFormat', endNode)
+    }
+
+    @Override
+    List<Map> getPathsForAssayType(String endNode) {
+        return getPathsForType('assayType', endNode)
+    }
+
+    @Override
+    List<Map> getPathsForBiologicalProcess(String endNode) {
+        return getPathsForType('biologicalProcess', endNode)
+    }
+
+    Map getPathsForType(String type, String endNode) {
+        Map dictionaryElementPaths = this.capService.getDictionaryElementPaths()
+        List<String> paths = dictionaryElementPaths[type] ?: []
+        String startingNode = type.replaceAll(/[A-Z]/, { (' ' + it[0]).toLowerCase() }) //convert assayType --> 'assay type'
+        String foundPath = paths.find { it.endsWith(endNode + '/') }
+        if (!foundPath) {
+            return [:]
+        }
+        String[] foundPathSplit = foundPath.split('/')
+        Integer startingNodeIndex = foundPathSplit.findIndexOf { it == startingNode } // e.g., find 'assay format' in '/BARD/assay protocol/assay format/biochemical format/nucleic acid format/'
+        if (startingNodeIndex < 0) {
+            return [:]
+        }
+        Map pathsForType = [:]
+        for (Integer i in startingNodeIndex..(foundPathSplit.size() - 1)) {
+            pathsForType.put(foundPathSplit[i], foundPathSplit[startingNodeIndex..i].join('/'))
+        }
+        return pathsForType
     }
 }

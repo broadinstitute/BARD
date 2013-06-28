@@ -42,7 +42,10 @@ public interface RestApiConstants {
     //relative path to the assays resource
     final String ASSAYS_RESOURCE = "/assays";
 
-    //relative path to the assays resource
+    //relative path to the elements resource
+    final String ELEMENT_RESOURCE = "/element";
+
+    //relative path to the dictionary resource
     final String DICTIONARY_RESOURCE = "/cap/dictionary";
     //relative path to the projects resource
     final String PROJECTS_RESOURCE = "/projects";
