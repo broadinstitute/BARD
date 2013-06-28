@@ -359,7 +359,6 @@ class AssayDefinitionController {
     def findById() {
         if (params.assayId && params.assayId.isLong()) {
             def assayInstance = Assay.findById(params.assayId.toLong())
-            log.debug "Find assay by id"
             if (assayInstance?.id)
                 redirect(action: "show", id: assayInstance.id)
             else
