@@ -68,12 +68,12 @@ class ProjectResultUnitSpec extends Specification {
     {
         "docs": [
             {
-                "proj_id": "172",
+                "projectId": "172",
                 "name": "Probe Development Summary of Inhibitors of the Human Apurinic/apyrimidinic Endonuclease 1 (APE1)",
                 "highlight": null
             },
             {
-                "proj_id": "245",
+                "projectId": "245",
                 "name": "Summary of the probe development effort to identify inhibitors of AddAB recombination protein complex",
                 "highlight": null
             }

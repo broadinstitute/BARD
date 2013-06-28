@@ -98,14 +98,14 @@ class ProjectUnitSpec extends Specification {
         assert !project.getGrantNo()
         assert !project.getDeposited()
         assert !project.getUpdated()
-        assert project.getKegg_disease_names()
-        assert project.getKegg_disease_cat()
+        assert !project.getKegg_disease_names()
+        assert !project.getKegg_disease_cat()
         assert !project.getBiology().isEmpty()
         assert project.getAids()
         assert project.getEids()
         assert project.experimentCount == 3
-        assert project.probes
-        assert project.probeIds
+        assert !project.probes
+        assert !project.probeIds
         assert project.getResourcePath() == "/projects/3"
         assert !project.getAk_dict_label()
         assert !project.getAv_dict_label()
@@ -120,7 +120,7 @@ class ProjectUnitSpec extends Specification {
         assert publications
         final Long document = publications.get(0)
         assert document
-        assert project.hasProbes()
+        assert !project.hasProbes()
     }
 
     void "test has Probes #label"() {

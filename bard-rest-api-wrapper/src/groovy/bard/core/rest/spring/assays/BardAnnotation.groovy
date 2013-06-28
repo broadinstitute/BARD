@@ -100,7 +100,10 @@ public class BardAnnotation extends JsonUtil {
      * @return
      */
     public static Boolean areAnnotationsEmpty(BardAnnotation annotations) {
-        return annotations.contexts.isEmpty()
+        if (annotations && annotations.contexts) {
+            return annotations.contexts.isEmpty()
+        }
+        return true
     }
 
     /**
@@ -109,6 +112,9 @@ public class BardAnnotation extends JsonUtil {
      * @return
      */
     public static Boolean areOtherAnnotationsEmpty(BardAnnotation annotations) {
-        return annotations.otherAnnotations.isEmpty()
+        if (annotations && annotations.otherAnnotations) {
+            return annotations.otherAnnotations.isEmpty()
+        }
+        return true
     }
 }

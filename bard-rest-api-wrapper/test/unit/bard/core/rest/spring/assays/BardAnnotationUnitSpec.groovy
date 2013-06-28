@@ -246,10 +246,10 @@ class BardAnnotationUnitSpec extends Specification {
 
         where:
         label                       | annotations                                                        | expectedResult
-        'no annotations at all'     | []                                                                 | false
-        'a single empty annotation' | [new BardAnnotation()]                                             | false
-        'a single empty Context'    | [new BardAnnotation(contexts: [new Context()])]                    | false
-        'a non-empty annotations'   | [new BardAnnotation(contexts: [new Context(contextItems: [new Annotation()])])] | true
+        'no annotations at all'     | null                                                                 | true
+        'a single empty annotation' | new BardAnnotation()                                             | true
+        'a single empty Context'    | new BardAnnotation(contexts: [new Context()])                   | false // we want to see these
+        'a non-empty annotations'   | new BardAnnotation(contexts: [new Context(contextItems: [new Annotation()])]) | false
     }
 
     void "test areOtherAnnotationsEmpty() #label"() {
@@ -261,9 +261,9 @@ class BardAnnotationUnitSpec extends Specification {
 
         where:
         label                         | annotations                                          | expectedResult
-        'no otherAnnotations at all'  | []                                                   | false
-        'a single empty annotation'   | [new BardAnnotation()]                               | false
-        'a non-empty annotations'     | [new BardAnnotation(otherAnnotations: [new Annotation()])] | true
+        'no otherAnnotations at all'  | null                                                 | true
+        'a single empty annotation'   | new BardAnnotation()                              | true
+        'a non-empty annotations'     | new BardAnnotation(otherAnnotations: [new Annotation()]) | false
     }
 
     void "test findAssayContextsContainingKeys #label"() {

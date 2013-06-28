@@ -52,7 +52,7 @@ class CompUnitSpec extends Specification {
 
     void "test splitForColumnLayout: #label"() {
         when:
-        List<List<Annotation>> result = Annotation.splitForColumnLayout(comps)
+        List<List<Annotation>> result = Annotation.splitForColumnLayout(contextItems)
 
         then:
         assert result == expectedResult
