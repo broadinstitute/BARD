@@ -22,7 +22,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
     void "test generateAccessionIdentifiers"(){
         given:
-        final List<Long> bids = [240L]
+        final List<Long> bids = [724L]
 
         when:
         List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits")

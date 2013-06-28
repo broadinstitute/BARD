@@ -11,7 +11,7 @@ class ProjectExperimentsTagLibSpec extends Specification {
 
     void "test displayExperimentsGroupedByAssay"() {
         given:
-        def template = '<g:displayExperimentsGroupedByAssay assays="${assays}" experiments="${experiments} experimentTypes="${experimentTypes}"/>'
+        def template = '<g:displayExperimentsGroupedByAssay assays="${assays}" experiments="${experiments}" experimentTypes="${experimentTypes}"/>'
         Assay assay1 = new Assay(name: "Assay1", bardAssayId: 1)
         ExperimentSearch experiment1 = new ExperimentSearch(name: "Experiment1", bardExptId: 1, bardAssayId: 1, compounds: 5)
         ExperimentSearch experiment2 = new ExperimentSearch(name: "Experiment2", bardExptId: 2, bardAssayId: 1, compounds: 500000)
@@ -26,9 +26,10 @@ class ProjectExperimentsTagLibSpec extends Specification {
 
         when:
         String actualResults = applyTemplate(template, [assays: assays, experiments: experiments, experimentTypes: experimentTypes])
+        String trimmedResults = actualResults.stripMargin().replaceAll("\\n","").replaceAll(">\\s+",">").replaceAll("\\s+<","<")
 
         then:
-        assert actualResults == ''
+        assert trimmedResults.contains('<td><a href="/bardWebInterface/showExperiment/2">Experiment2</a></td><td>Not Specified</td><td>500000</td><td>0</td><td rowspan="2"><a href="/bardWebInterface/showAssay/1">0</a></td><td rowspan="2"><a href="/bardWebInterface/showAssay/1">Assay1</a></td></tr>')
 
     }
 }

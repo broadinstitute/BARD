@@ -28,8 +28,7 @@ public class ProjectAbstract extends JsonUtil {
     List<String> probeIds = new ArrayList<String>();
     long experimentCount;
     String resourcePath;
-    @JsonProperty("targets")
-    List<BiologyEntity> biology = new ArrayList<BiologyEntity>();
+    List<BiologyEntity> targets = new ArrayList<BiologyEntity>();
 
     // These seem to be deprecated
     String gobp_id;
@@ -56,6 +55,12 @@ public class ProjectAbstract extends JsonUtil {
     @JsonProperty("projectId")
     public void setProjId(long projId) {
         this.bardProjectId = projId;
+    }
+
+    // Note that keeping a targets property is a work-around for an issue with the way that ProjectRestService de-serializes the response
+    // from a post of project ids using a type cast instead of Jackson.
+    public List<BiologyEntity> getBiology() {
+        return this.targets
     }
 
     public boolean hasProbes() {
