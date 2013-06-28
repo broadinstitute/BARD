@@ -1,5 +1,4 @@
 import bard.db.project.ProjectContextItem
-import bard.db.registration.AssayContextItem
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 
 /**
@@ -24,8 +23,7 @@ if(!dir.exists()){
 }
 String outputFile =  dirLocation + "/project_context_items_validation.txt"
 FileWriter fileWriter = new FileWriter(outputFile, false)
-fileWriter.write("List of ProjectContextItems that don't pass validation: \n\n")
-fileWriter.flush()
+
 writeToFile = {message ->
     fileWriter.write(message + "\n")
     fileWriter.flush()
@@ -36,19 +34,20 @@ println("Retrieving ProjectContextItems...")
 List<ProjectContextItem> projectContextItems = ProjectContextItem.list()
 println("Ready to process ${projectContextItems.size()} of Project Context Items in BARD")
 writeToFile("# of Project Context Items in BARD: ${projectContextItems.size()}")
+writeToFile("List of ProjectContextItems that don't pass validation: \n")
+writeToFile("Project ID\tProjectContextItem ID\tError(s)")
 
 int itemsWithErrors = 0;
 println("Detecting ProjectContextItems with errors...")
 projectContextItems.each { ProjectContextItem item ->
     if (!item.validate()) {
-        writeToFile("Project [ID: ${item.context.projectId}] ProjectContextItem [ID: ${item.id}]-> # of Errors: [${item.errors.errorCount}]")
         itemsWithErrors++
         item.errors.allErrors.each{
-            writeToFile(it.toString())
+            writeToFile("${item.context.projectId}\t${item.id}\t${it.getCode()}")
         }
     }
 }
-writeToFile("# of ProjectContextItems with Errors: ${itemsWithErrors}")
+writeToFile("\n# of ProjectContextItems with Errors: ${itemsWithErrors}")
 println("Processing has finished. Output file: " + outputFile)
 println("# of ProjectContextItems with Errors: ${itemsWithErrors}")
 fileWriter.close()

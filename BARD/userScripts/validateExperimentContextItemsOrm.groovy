@@ -35,15 +35,16 @@ println("Retrieving ExperimentContextItems...")
 List<ExperimentContextItem> experimentContextItems = ExperimentContextItem.list()
 println("Ready to process ${experimentContextItems.size()} of Experiment Context Items in BARD")
 writeToFile("# of Experiment Context Items in BARD: ${experimentContextItems.size()}")
+writeToFile("List of ExperimentContextItems that don't pass validation: \n")
+writeToFile("Experiment ID\tExperimentContextItem ID\tError(s)")
 
 int itemsWithErrors = 0;
 println("Detecting ExperimentContextItems with errors...")
 experimentContextItems.each { ExperimentContextItem item ->
     if (!item.validate()) {
-        writeToFile("Experiment [ID: ${item.experimentContext.experimentId}] ExperimentContextItem [ID: ${item.id}]-> # of Errors: [${item.errors.errorCount}]")
         itemsWithErrors++
         item.errors.allErrors.each{
-            writeToFile(it.toString())
+            writeToFile("${item.experimentContext.experimentId}\t${item.id}\t${it.getCode()}")
         }
     }
 }
