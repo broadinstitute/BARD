@@ -46,10 +46,9 @@
     <div class="row-fluid">
 	    <div class="span12">
 	    	<div class="bs-docs" style="padding: 20px 20px 20px;">
-	        	<g:form action="findById" class="form-inline">	
-	        		<label class="control-label" for="assayId">Enter Assay Definition ID:</label>
-	        		<g:textField name="assayId" autofocus="true"/>
-	        		<span class="help-inline">${hasErrors(bean: personInstance, field: 'assayId', 'error')}</span>														
+	        	<g:form action="findById" class="form-inline">
+                    <input type="text" size="50" id="assayId" name='assayId' value="${params.assayName}" autofocus="true" placeholder="Enter Assay Definition ID" class="input-large search-query">
+	        		<span class="help-inline">${hasErrors(bean: assayInstance, field: 'id', 'error')}</span>
 					<g:submitButton name="search" value="Search" class="btn btn-primary"/>
 				</g:form>
 	        </div>

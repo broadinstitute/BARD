@@ -3,7 +3,7 @@
 <div class="row-fluid">
 <div id="accordion-foo" class="span12 accordion">
 
-<g:if test="${experiment.experimentName == null}">
+<g:if test="${experiment.experimentName == null || experiment.errors}">
     <div class="accordion-group">
         <div class="accordion-heading">
             <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
@@ -20,7 +20,7 @@
                     <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
                                               id="${assay.id}">${assay.name}</g:link></dd>
 
-                    <dt>Experiment Name</dt>
+                    <dt>Name</dt>
                     <dd>
                         <input class="input-xxlarge" type="text" name="experimentName"
                                value="${fieldValue(bean: experiment, field: "experimentName")}"/>
@@ -32,9 +32,15 @@
                 </dd>
 
                     <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
-                    <dd><g:select id="experimentStatus" name="experimentStatus"
+                    <dd>
+                        <g:select id="experimentStatus" name='experimentStatus' value="${person?.type?.id}"
                                   from="${bard.db.enums.ExperimentStatus.values()}"
-                                  value="${experiment?.experimentStatus}"/></dd>
+                                  optionValue="id"></g:select>
+
+                        %{--<g:select id="experimentStatus" name="experimentStatus"--}%
+                                  %{--from="${bard.db.enums.ExperimentStatus.values()}"--}%
+                                  %{--value="${experiment?.experimentStatus}"/>--}%
+                    </dd>
 
                     <dt>Hold until date</dt><dd>
                     <input type="text" class="input-small date-selection" name="holdUntilDate"
