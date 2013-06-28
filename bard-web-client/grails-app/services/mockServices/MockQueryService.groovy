@@ -926,6 +926,22 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
                                     SearchParams searchParams) {
         return null
     }
+
+    @Override
+    List<Map> getPathsForAssayFormat(String endNode) {
+        return null
+    }
+
+    @Override
+    List<Map> getPathsForAssayType(String endNode) {
+        return null
+    }
+
+    @Override
+    List<Map> getPathsForBiologicalProcess(String endNode) {
+        return null
+    }
+
 }
 
 

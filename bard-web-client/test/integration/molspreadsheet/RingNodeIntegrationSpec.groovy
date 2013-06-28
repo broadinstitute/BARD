@@ -52,11 +52,16 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
         LinkedHashMap activeInactiveDataAfterConversion
-        activeInactiveDataPriorToConversion["hits"] = [240L]
-        activeInactiveDataPriorToConversion["misses"] = [724L, 738L]
+        activeInactiveDataPriorToConversion["hits"] = [1366L]
+        activeInactiveDataPriorToConversion["misses"] = [982L]
 
         when:
-        activeInactiveDataAfterConversion = ringManagerService.convertBiologyIdsToAscensionNumbers (activeInactiveDataPriorToConversion)
+        try {
+            activeInactiveDataAfterConversion = ringManagerService.convertBiologyIdsToAscensionNumbers (activeInactiveDataPriorToConversion)
+        } catch (Exception e)  {
+            e.printStackTrace()
+        }
+
 
         then:
         activeInactiveDataAfterConversion["hits"].size ()   > 0
@@ -311,20 +316,6 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         activeInactiveData ["hits"].size ()    > 0
         activeInactiveData ["misses"].size ()   > 0
     }
-
-
-
-    void "test class data exists for this compound where the answer is true"(){
-        given:
-        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompoundFROM_PREVIOUS_VERSION(0L)
-
-        when:
-        Boolean classDataExists = ringManagerService.classDataExistsForThisCompound(compoundSummary)
-
-        then:
-        classDataExists
-    }
-
 
     /**
      * For now use dummy routine to pull back real data from v12 of the API
