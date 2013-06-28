@@ -91,7 +91,9 @@ modules = {
     assaysummary {
         resource url: '/js/cap/editSummary.js'
     }
-
+    createProject{
+        resource url: '/js/cap/createProject.js'
+    }
     projectsummary {
         dependsOn('card')
         resource url: '/js/cap/editProjectSummary.js'

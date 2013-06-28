@@ -79,7 +79,11 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
                     }
                     break
                 case AttributeType.Free:
-                    freeTypeConstraints(errors)
+                    if (attributeElement.expectedValueType in [ExpectedValueType.NUMERIC, ExpectedValueType.FREE_TEXT]) {
+                        freeTypeConstraints(errors)
+                    } else {
+                        errors.reject('assayContextItem.invalid.attributeTypeAndAttributeExpectedValueCombo')
+                    }
                     break
                 default:
                     throw new RuntimeException("Unknown attributeType: $attributeType")

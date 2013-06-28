@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.BardIntegrationSpec
+import bard.db.enums.ProjectGroupType
 import bard.db.enums.ReadyForExtraction
 import grails.plugin.spock.IntegrationSpec
 import org.junit.Before
@@ -67,18 +68,15 @@ class ProjectConstraintIntegrationSpec extends BardIntegrationSpec {
         }
 
         where:
-        desc          | valueUnderTest | valid | errorCode
-        'null '       | null           | false | 'nullable'
-        'blank value' | ''             | false | 'blank'
-        'blank value' | '  '           | false | 'blank'
-        'not in list' | 'Foo'          | false | 'not.inList'
+        desc          | valueUnderTest                | valid | errorCode
+        'null '       | null                          | false | 'nullable'
+        'valid value' | ProjectGroupType.PANEL        | true  | null
+        'valid value' | ProjectGroupType.CAMPAIGN     | true  | null
+        'valid value' | ProjectGroupType.PROBE_REPORT | true  | null
+        'valid value' | ProjectGroupType.PROJECT      | true  | null
+        'valid value' | ProjectGroupType.STUDY        | true  | null
+        'valid value' | ProjectGroupType.TEMPLATE     | true  | null
 
-        'valid value' | 'Project'      | true  | null
-        'valid value' | 'Probe Report' | true  | null
-        'valid value' | 'Campaign'     | true  | null
-        'valid value' | 'Panel'        | true  | null
-        'valid value' | 'Study'        | true  | null
-        'valid value' | 'Template'     | true  | null
     }
 
     void "test description constraints #desc description: '#valueUnderTest'"() {

@@ -945,11 +945,11 @@ class ResultsService {
 
         resultsExportService.dumpFromList(exportFilename, results)
 
-        addExperimentFileToDb(experiment, originalFilename, exportFilename)
+        addExperimentFileToDb(experiment, originalFilename, exportFilename, errors.substanceCount)
     }
 
-    private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename) {
-        ExperimentFile file = new ExperimentFile(experiment: experiment, originalFile: originalFilename, exportFile: exportFilename, dateCreated: new Date(), submissionVersion: experiment.experimentFiles.size())
+    private addExperimentFileToDb(Experiment experiment, String originalFilename, String exportFilename, long substanceCount) {
+        ExperimentFile file = new ExperimentFile(experiment: experiment, originalFile: originalFilename, exportFile: exportFilename, dateCreated: new Date(), submissionVersion: experiment.experimentFiles.size(), substanceCount: substanceCount)
         file.save(failOnError: true)
         experiment.experimentFiles.add(file)
     }
