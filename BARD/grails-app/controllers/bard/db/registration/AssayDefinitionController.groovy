@@ -5,6 +5,8 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
+import bard.db.model.AbstractContext
+import bard.db.model.AbstractContextOwner
 import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
@@ -194,16 +196,17 @@ class AssayDefinitionController {
 
     }
 
-    def editContext() {
-        def assayInstance = Assay.get(params.id)
+    def editContext(Long id, String groupBySection) {
+        def assayInstance = Assay.get(id)
 
         if (!assayInstance) {
             // FIXME:  Should not use flash if we do not redirect afterwards
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         }
+        AbstractContextOwner.ContextGroup contextGroup =assayInstance.groupBySection(groupBySection?.decodeURL())
 
-        [assayInstance: assayInstance]
+        [assayInstance: assayInstance, contexts:[contextGroup]]
     }
 
     def editMeasure() {
