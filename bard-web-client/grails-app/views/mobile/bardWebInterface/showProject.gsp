@@ -25,22 +25,6 @@
 
     <div data-role="content" style="text-align: center; margin: 0 auto;">
         <div>
-            <dl>
-                <g:if test="${projectAdapter?.getNumberOfExperiments()}">
-                    <dt style="float: left;">Number Of Experiments:</dt>
-                    <dd style="text-align: left; padding-left: 10px; margin-left: 10px;">
-
-                        <span class="badge badge-info">
-                            <a href="#experiments-info"
-                               style="color: white; text-decoration: underline">
-                                ${projectAdapter.getNumberOfExperiments()}
-                            </a>
-                        </span></dd>
-                </g:if>
-            </dl>
-        </div>
-
-        <div>
             <ul class="thumbnails">
                 <g:each var="probe" in="${projectAdapter?.probes}" status="i">
                     <li>
@@ -72,100 +56,38 @@
         </div>
 
         <div>
-            <g:if test="${BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
-                <section id="annotations-info" style="text-align: left;">
-                    <div>
-                        <h4>Annotations</h4>
-                    </div>
-
-                    <div id="cardView" class="cardView" class="row-fluid">
-                        <g:render template="listContexts" model="[annotations: projectAdapter.annotations]"/>
-                    </div>
-                </section>
-            </g:if>
             <g:if test="${projectAdapter.description}">
                 <section id="description-info" style="text-align: left;">
-                    <div>
-                        <h4>Description</h4>
-                    </div>
+                    <h4>Description</h4>
 
-                    <div>
-                        <g:textBlock>${projectAdapter?.description}</g:textBlock>
+                    <g:textBlock>${projectAdapter?.description}</g:textBlock>
+                </section>
+            </g:if>
+            <g:if test="${!BardAnnotation.areAnnotationsEmpty(projectAdapter.annotations)}">
+                <section id="annotations-info" style="text-align: left;">
+                    <h4>Annotations</h4>
+
+                    <div id="cardView" class="cardView" class="row-fluid">
+                        <g:render template="listContexts" model="[contexts: projectAdapter.annotations.contexts]"/>
                     </div>
                 </section>
             </g:if>
-            <g:if test="${projectAdapter.targets}">
-                <div style="text-align: left;">
-                    <g:render template="/bardWebInterface/biology" model="['targets': projectAdapter.targets]"/>
-                </div>
+            <g:if test="${projectAdapter?.biology}">
+                <section id="biology-info" style="text-align: left;">
+                    <h4>Biology</h4>
+                    <g:render template="/bardWebInterface/biology" model="['biology': projectAdapter?.biology]"/>
+                </section>
+            </g:if>
+            <g:if test="${experiments}">
+                <section id="experiments-info" style="text-align: left;">
+                    <h4>Experiments</h4>
+                    <g:displayExperimentsGroupedByAssay assays="${assays}" experiments="${experiments}" experimentTypes="${projectAdapter.experimentTypes}"/>
+                </section>
             </g:if>
             <g:if test="${projectAdapter.documents}">
                 <g:render template="publications" model="['documents': projectAdapter.documents]"/>
             </g:if>
 
-            <g:if test="${experiments}">
-                <section id="experiments-info" style="text-align: left;">
-                    <div class="page-header">
-                        <h4>Experiments</h4>
-                    </div>
-
-                    <div>
-                        <g:render template="experiments"
-                                  model="['experiments': experiments, showAssaySummary: false, experimentTypes: projectAdapter.experimentTypes]"/>
-                    </div>
-                </section>
-            </g:if>
-
-            <section id="assays-info" style="text-align: left;">
-                <div>
-                    <h4>Assays</h4>
-                </div>
-
-                <div>
-                    <g:each var="assay" in="${assays}" status="i">
-                        <div>
-                            <p>
-                                <g:if test="${searchString}">
-                                    <g:link controller="bardWebInterface" action="showAssay" id="${assay.id}"
-                                            params='[searchString: "${searchString}"]'>${assay.name}
-                                        <g:if test="${assay.assayStatus == 'Witnessed'}">
-                                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                                                 alt="Witnessed" title="Witnessed"/>
-                                        </g:if>
-                                        <g:if test="${assay.assayStatus == 'Measures Done' || assay.assayStatus == 'Annotations Done'}">
-                                            <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
-                                                 alt="Measures or Annotations Done"
-                                                 title="Measures or Annotations Done"/>
-                                        </g:if>
-                                        <g:if test="${assay.assayStatus == 'Draft' || assay.assayStatus == 'Retired'}">
-                                            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                                                 alt="Draft or Retired" title="Draft or Retired"/>
-                                        </g:if>
-                                    </g:link>
-                                </g:if>
-                                <g:else>
-                                    <g:link controller="bardWebInterface" action="showAssay"
-                                            id="${assay.id}">${assay.name}
-                                        <g:if test="${assay.assayStatus == 'Witnessed'}">
-                                            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
-                                                 alt="Witnessed" title="Witnessed"/>
-                                        </g:if>
-                                        <g:if test="${assay.assayStatus == 'Measures Done' || assay.assayStatus == 'Annotations Done'}">
-                                            <img src="${resource(dir: 'images', file: 'measures_annotations_done.png')}"
-                                                 alt="Measures or Annotations Done"
-                                                 title="Measures or Annotations Done"/>
-                                        </g:if>
-                                        <g:if test="${assay.assayStatus == 'Draft' || assay.assayStatus == 'Retired'}">
-                                            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
-                                                 alt="Draft or Retired" title="Draft or Retired"/>
-                                        </g:if>
-                                    </g:link>
-                                </g:else>
-                            </p>
-                        </div>
-                    </g:each>
-                </div>
-            </section>
         </div>
     </div>
 </div>

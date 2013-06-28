@@ -64,7 +64,7 @@
         </div>
 
         <div>
-            <g:if test="${BardAnnotation.areAnnotationsEmpty(assayAdapter.annotations)}">
+            <g:if test="${!BardAnnotation.areAnnotationsEmpty(assayAdapter.annotations)}">
                 <section id="assay-bio-info" style="text-align: left;">
                     <div>
                         <h3>Assay and Biology Details</h3>
@@ -72,14 +72,14 @@
 
                     <div id="cardView" class="cardView" style="display: inline-block;">
                         <g:render template="/bardWebInterface/listContexts"
-                                  model="[annotations: assayAdapter.annotations]"/>
+                                  model="[contexts: assayAdapter.annotations.contexts]"/>
                     </div>
 
                 </section>
             </g:if>
 
-            <g:if test="${assayAdapter.targets}">
-                <g:render template="targets" model="['targets': assayAdapter.targets]"/>
+            <g:if test="${assayAdapter.biology}">
+                <g:render template="biology" model="['targets': assayAdapter.biology]"/>
             </g:if>
             <section id="document-info" style="text-align: left;">
                 <div class="page-header">
