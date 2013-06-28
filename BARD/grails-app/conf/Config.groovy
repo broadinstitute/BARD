@@ -36,7 +36,6 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
 // What URL patterns should be processed by the resources plugin
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
 
-
 // The default codec used to encode data with ${}
 grails.views.default.codec = "none" // none, html, base64
 grails.views.gsp.encoding = "UTF-8"
@@ -125,10 +124,7 @@ grails {
             useBasicAuth = true
             basic.realmName = 'CAP'
             filterChain.chainMap = [
-//                    '/bardWebInterface/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-//                    '/chemAxon/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-//                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-//                    '/doseResponseCurve/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
             ]
         }
@@ -146,7 +142,7 @@ CbipCrowd {
     applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR"]
     mockUsers {
         integrationTestUser {
-            roles = ['ROLE_USER','ROLE_CURATOR']
+            roles = ['ROLE_USER', 'ROLE_CURATOR']
             username = 'integrationTestUser'
             password = 'integrationTestUser'
             email = 'integrationTestUser@nowhere.com'
