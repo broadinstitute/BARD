@@ -16,6 +16,10 @@ databaseChangeLog = {
         sqlFile(path: "${migrationsDir}/iteration_028/01-clean-up-person-constraints.sql", stripComments: true)
     }
 
+    changeSet(author: "pmontgom", id: "iteration-028/02-add-substance-count", dbms: "oracle", context: "standard") {
+        sqlFile(path: "${migrationsDir}/iteration_028/02-add-substance-count.sql", stripComments: true)
+    }
+
     changeSet(author: "pmontgom", id: "iteration-028/03-populate-person-groups", dbms: "oracle", context: "production-data-update") {
         grailsChange {
             change {

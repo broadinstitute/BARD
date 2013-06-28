@@ -156,6 +156,12 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         summary.resultsCreated == 11
         summary.resultAnnotations == 31
 
+        when:
+        ExperimentFile file = ExperimentFile.findByExperiment(experiment)
+
+        then:
+        file != null
+        file.substanceCount == 1
 // disabled writing to DB
 //        when:
 //        List<Result> results = Result.findAllByExperiment(experiment)

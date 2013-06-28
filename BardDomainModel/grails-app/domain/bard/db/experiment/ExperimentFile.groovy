@@ -7,6 +7,7 @@ class ExperimentFile {
     Long submissionVersion
     String originalFile;
     String exportFile;
+    Long substanceCount;
 
     Date dateCreated
     Date lastUpdated
