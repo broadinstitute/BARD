@@ -4,6 +4,7 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
+import bard.core.helper.CapService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.assays.ExpandedAssay
@@ -37,6 +38,7 @@ class QueryServiceUnitSpec extends Specification {
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
     SubstanceRestService substanceRestService
+    CapService capService
     @Shared ExpandedAssayResult expandedAssayResult = new ExpandedAssayResult()
     @Shared CompoundResult compoundResult = new CompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
@@ -290,6 +292,25 @@ class QueryServiceUnitSpec extends Specification {
 }
     """
 
+    final Map ELEMENT_PATHS_MAP = ['biologicalProcess': ['/BARD External Ontology/biological process/',
+            '/BARD External Ontology/biological process/GO biological process term/',
+            '/BARD External Ontology/biological process/GO cellular function/',
+            '/BARD External Ontology/biological process/NCBI BioSystems term/',
+            '/BARD External Ontology/biological process/cell death/'],
+            'assayFormat': ['/BARD/assay protocol/assay format/',
+                    '/BARD/assay protocol/assay format/biochemical format/',
+                    '/BARD/assay protocol/assay format/biochemical format/nucleic acid format/',
+                    '/BARD/assay protocol/assay format/biochemical format/protein format/',
+                    '/BARD/assay protocol/assay format/biochemical format/protein format/protein complex format/',
+                    '/BARD/assay protocol/assay format/biochemical format/protein format/single protein format/',
+                    '/BARD/assay protocol/assay format/cell-based format/'],
+            'assayType': ['/BARD/assay protocol/assay type/',
+                    '/BARD/assay protocol/assay type/assay mode/in vitro/',
+                    '/BARD/assay protocol/assay type/assay mode/in vivo/',
+                    '/BARD/assay protocol/assay type/assay mode/pharmacologic mode/',
+                    '/BARD/assay protocol/assay type/assay mode/pharmacologic mode/allosteric/']
+    ]
+
     void setup() {
         compoundRestService = Mock(CompoundRestService)
         projectRestService = Mock(ProjectRestService)
@@ -297,6 +318,7 @@ class QueryServiceUnitSpec extends Specification {
         experimentRestService = Mock(ExperimentRestService)
         substanceRestService = Mock(SubstanceRestService)
         queryHelperService = Mock(QueryHelperService)
+        capService = Mock(CapService)
 
         service.queryHelperService = queryHelperService
         service.assayRestService = assayRestService
@@ -304,7 +326,8 @@ class QueryServiceUnitSpec extends Specification {
         service.projectRestService = projectRestService
         service.substanceRestService = substanceRestService
         service.experimentRestService = experimentRestService
-        this.compoundSummary2= objectMapper.readValue(COMPOUND_SUMMARY, CompoundSummary.class)
+        service.capService = capService
+        this.compoundSummary2 = objectMapper.readValue(COMPOUND_SUMMARY, CompoundSummary.class)
     }
 
     void "test getSummaryForCompound"() {
@@ -313,7 +336,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         CompoundSummary compoundSummary = service.getSummaryForCompound(cid)
         then:
-        1 * compoundRestService.getSummaryForCompound(cid) >> {new CompoundSummary(nhit: 2)}
+        1 * compoundRestService.getSummaryForCompound(cid) >> { new CompoundSummary(nhit: 2) }
         assert compoundSummary
 
     }
@@ -328,7 +351,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map resultsMap = service.findExperimentDataById(experimentId, top, skip, [bard.core.util.FilterTypes.TESTED])
         then:
-        experimentRestService.getExperimentById(_) >> {null}
+        experimentRestService.getExperimentById(_) >> { null }
         and:
         assert resultsMap
         assert resultsMap.experiment == null
@@ -345,7 +368,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         List<Long> sids = service.findSubstancesByCid(cid)
         then:
-        substanceRestService.findSubstancesByCid(cid) >> {foundSIDS}
+        substanceRestService.findSubstancesByCid(cid) >> { foundSIDS }
         assert sids.size() == expectedSIDS.size()
         assert sids.size() == foundSIDS.size()
 
@@ -368,7 +391,7 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a CID and the showCompound method is called"
         CompoundAdapter compoundAdapter = service.showCompound(compoundId)
         then: "The CompoundDocument is called"
-        this.compoundRestService.getCompoundById(_) >> {compound}
+        this.compoundRestService.getCompoundById(_) >> { compound }
         if (compound) {
             assert compoundAdapter
             assert compoundAdapter.compound
@@ -394,9 +417,9 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map foundProjectAdapterMap = service.showProject(projectId)
         then:
-        projectRestService.getProjectById(_) >> {project}
-        projectRestService.findExperimentsByProjectId(_) >> {[]}
-        projectRestService.findAssaysByProjectId(_) >> {assays}
+        projectRestService.getProjectById(_) >> { project }
+        projectRestService.findExperimentsByProjectId(_) >> { [] }
+        projectRestService.findAssaysByProjectId(_) >> { assays }
         assert foundProjectAdapterMap
         ProjectAdapter foundProjectAdapter = foundProjectAdapterMap.projectAdapter
         assert foundProjectAdapter
@@ -423,9 +446,9 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a project ID and the showProject method is called"
         Map foundProjectAdapterMap = service.showProject(projectId)
         then: "The ProjectSearchResult document is displayed"
-        projectRestService.getProjectById(_) >> {project}
-        projectRestService.findExperimentsByProjectId(_) >> {experiments}
-        projectRestService.findAssaysByProjectId(_) >> {assays}
+        projectRestService.getProjectById(_) >> { project }
+        projectRestService.findExperimentsByProjectId(_) >> { experiments }
+        projectRestService.findAssaysByProjectId(_) >> { assays }
 
         if (project) {
             assert foundProjectAdapterMap
@@ -453,7 +476,7 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a assay ID and the showAssay method is called"
         Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
-        numberOfExceptedCalls * assayRestService.getAssayById(_) >> {expandedAssay}
+        numberOfExceptedCalls * assayRestService.getAssayById(_) >> { expandedAssay }
         numberOfExceptedCalls * assayRestService.findAnnotations(_)
         assert foundAssayMap
         assert foundAssayMap.assayAdapter
@@ -473,7 +496,7 @@ class QueryServiceUnitSpec extends Specification {
         when: "Client enters a assay ID and the showAssay method is called"
         Map foundAssayMap = service.showAssay(assayId)
         then: "The Assay document is displayed"
-        0 * assayRestService.getAssayById(_) >> {expandedAssay}
+        0 * assayRestService.getAssayById(_) >> { expandedAssay }
         assert !foundAssayMap
 
         where:
@@ -485,7 +508,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findCompoundsByCIDs([2, 3])
         then:
-        1 * compoundRestService.searchCompoundsByIds(_) >> {null}
+        1 * compoundRestService.searchCompoundsByIds(_) >> { null }
         and:
         assert responseMap
         assert responseMap.nHits == 0
@@ -502,7 +525,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findCompoundsByCIDs(cids)
         then:
-        expectedNumberOfCalls * compoundRestService.searchCompoundsByIds(_) >> {compoundResult}
+        expectedNumberOfCalls * compoundRestService.searchCompoundsByIds(_) >> { compoundResult }
         and:
         assert responseMap
         assert responseMap.nHits == expectedNumberOfHits
@@ -526,8 +549,8 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findAssaysByADIDs(assayIds)
         then:
-        queryHelperService.assaysToAdapters(_, _) >> {assayAdapters}
-        expectedNumberOfCalls * assayRestService.searchAssaysByIds(_) >> {expandedAssayResult}
+        queryHelperService.assaysToAdapters(_, _) >> { assayAdapters }
+        expectedNumberOfCalls * assayRestService.searchAssaysByIds(_) >> { expandedAssayResult }
         and:
         assert responseMap
         assert responseMap.nHits == expectedNumberOfHits
@@ -549,7 +572,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findAssaysByADIDs([2, 3])
         then:
-        1 * assayRestService.searchAssaysByIds(_) >> {null}
+        1 * assayRestService.searchAssaysByIds(_) >> { null }
         and:
         assert responseMap
         assert responseMap.nHits == 0
@@ -565,7 +588,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findProjectsByPIDs([2, 3])
         then:
-        1 * projectRestService.searchProjectsByIds(_) >> {null}
+        1 * projectRestService.searchProjectsByIds(_) >> { null }
         and:
         assert responseMap
         assert responseMap.nHits == 0
@@ -582,8 +605,8 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map responseMap = service.findProjectsByPIDs(projectIds)
         then:
-        queryHelperService.projectsToAdapters(_) >> {projectAdapters}
-        expectedNumberOfCalls * projectRestService.searchProjectsByIds(_) >> {projectResult}
+        queryHelperService.projectsToAdapters(_) >> { projectAdapters }
+        expectedNumberOfCalls * projectRestService.searchProjectsByIds(_) >> { projectResult }
         and:
         assert responseMap
         assert responseMap.nHits == expectedNumberOfHits
@@ -602,8 +625,8 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.showProbeList()
         then:
-        compoundRestService.findCompoundsByETag(_) >> {new CompoundResult(compounds: [new Compound()])}
-        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter()]}
+        compoundRestService.findCompoundsByETag(_) >> { new CompoundResult(compounds: [new Compound()]) }
+        queryHelperService.compoundsToAdapters(_) >> { [new CompoundAdapter()] }
         assert map
 
     }
@@ -617,7 +640,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         service.structureSearch(smiles, structureSearchParamsType, [], 90, 10, 0, 10)
         then:
-        compoundRestService.structureSearch(_) >> {expandedCompoundResult}
+        compoundRestService.structureSearch(_) >> { expandedCompoundResult }
 
         where:
         label                    | structureSearchParamsType                 | smiles
@@ -637,7 +660,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         final Map searchResults = service.structureSearch("", StructureSearchParams.Type.Substructure)
         then:
-        _ * compoundRestService.structureSearch(_, _) >> {compoundResult}
+        _ * compoundRestService.structureSearch(_, _) >> { compoundResult }
         assert searchResults.nHits == -1
         assert searchResults.compoundAdapters.isEmpty()
         assert searchResults.facets.isEmpty()
@@ -655,8 +678,8 @@ class QueryServiceUnitSpec extends Specification {
         when:
         service.structureSearch(smiles, structureSearchParamsType, searchFilters)
         then:
-        queryHelperService.convertSearchFiltersToFilters(_) >> {filters}
-        compoundRestService.structureSearch(_) >> {compoundResult}
+        queryHelperService.convertSearchFiltersToFilters(_) >> { filters }
+        compoundRestService.structureSearch(_) >> { compoundResult }
 
         where:
         label                    | structureSearchParamsType                 | smiles
@@ -677,12 +700,12 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findCompoundsByTextSearch(searchString, 10, 0, [])
         then:
-        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.startStopWatch() >> { sw }
         queryHelperService.stopStopWatch(_, _) >> {}
-        compoundRestService.findCompoundsByFreeTextSearch(_) >> {compoundResult}
-        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
-        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(compound1)]}
+        compoundRestService.findCompoundsByFreeTextSearch(_) >> { compoundResult }
+        queryHelperService.stripCustomStringFromSearchString(_) >> { "stuff" }
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString) }
+        queryHelperService.compoundsToAdapters(_) >> { [new CompoundAdapter(compound1)] }
         assert map == foundMap
         where:
         searchString         | foundMap
@@ -702,9 +725,9 @@ class QueryServiceUnitSpec extends Specification {
         Map map = service.searchCompoundsByCids(cids, 10, 0, [])
         then:
 
-        compoundRestService.searchCompoundsByCids(_, _) >> {compoundResult}
-        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
-        queryHelperService.compoundsToAdapters(_) >> {compoundAdapter}
+        compoundRestService.searchCompoundsByCids(_, _) >> { compoundResult }
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("") }
+        queryHelperService.compoundsToAdapters(_) >> { compoundAdapter }
         assert map.compoundAdapters.size() == foundMap.compoundAdapters.size()
         where:
         label                | cids      | foundMap            | compoundAdapter
@@ -723,12 +746,12 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findCompoundsByTextSearch(searchString)
         then:
-        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.startStopWatch() >> { sw }
         queryHelperService.stopStopWatch(_, _) >> {}
-        compoundRestService.findCompoundsByFreeTextSearch(_) >> {compoundResult}
-        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
-        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        queryHelperService.compoundsToAdapters(_) >> {[new CompoundAdapter(compound1)]}
+        compoundRestService.findCompoundsByFreeTextSearch(_) >> { compoundResult }
+        queryHelperService.stripCustomStringFromSearchString(_) >> { "stuff" }
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString) }
+        queryHelperService.compoundsToAdapters(_) >> { [new CompoundAdapter(compound1)] }
         assert map == foundMap
         where:
         searchString         | foundMap
@@ -747,12 +770,12 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findAssaysByTextSearch(searchString)
         then:
-        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.startStopWatch() >> { sw }
         queryHelperService.stopStopWatch(_, _) >> {}
-        assayRestService.findAssaysByFreeTextSearch(_) >> {assayResult}
-        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
-        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        queryHelperService.assaysToAdapters(_) >> {assayAdapter}
+        assayRestService.findAssaysByFreeTextSearch(_) >> { assayResult }
+        queryHelperService.stripCustomStringFromSearchString(_) >> { "stuff" }
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString) }
+        queryHelperService.assaysToAdapters(_) >> { assayAdapter }
         assert map.assayAdapters.size() == foundMap.assayAdapters.size()
         where:
         searchString         | foundMap         | assayAdapter
@@ -771,9 +794,9 @@ class QueryServiceUnitSpec extends Specification {
         Map map = service.findAssaysByCapIds(capIds, 10, 0, [])
         then:
 
-        assayRestService.searchAssaysByCapIds(_, _) >> {assayResult}
-        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
-        queryHelperService.assaysToAdapters(_) >> {[assayAdapter]}
+        assayRestService.searchAssaysByCapIds(_, _) >> { assayResult }
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("") }
+        queryHelperService.assaysToAdapters(_) >> { [assayAdapter] }
         assert map.assayAdapters.size() == foundMap.assayAdapters.size()
         where:
         label                | capIds    | foundMap         | assayAdapter
@@ -792,12 +815,12 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findAssaysByTextSearch(searchString, 10, 0, [])
         then:
-        queryHelperService.startStopWatch() >> {sw}
+        queryHelperService.startStopWatch() >> { sw }
         queryHelperService.stopStopWatch(_, _) >> {}
-        assayRestService.findAssaysByFreeTextSearch(_) >> {assayResult}
-        queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
-        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        queryHelperService.assaysToAdapters(_) >> {[assayAdapter]}
+        assayRestService.findAssaysByFreeTextSearch(_) >> { assayResult }
+        queryHelperService.stripCustomStringFromSearchString(_) >> { "stuff" }
+        queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString) }
+        queryHelperService.assaysToAdapters(_) >> { [assayAdapter] }
         assert map.assayAdapters.size() == foundMap.assayAdapters.size()
         where:
         searchString         | foundMap         | assayAdapter
@@ -816,12 +839,12 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findProjectsByTextSearch(searchString, 10, 0, [])
         then:
-        _ * queryHelperService.startStopWatch() >> {sw}
+        _ * queryHelperService.startStopWatch() >> { sw }
         _ * queryHelperService.stopStopWatch(_, _) >> {}
-        _ * projectRestService.findProjectsByFreeTextSearch(_) >> {projectResult}
-        _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
-        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
+        _ * projectRestService.findProjectsByFreeTextSearch(_) >> { projectResult }
+        _ * queryHelperService.stripCustomStringFromSearchString(_) >> { "stuff" }
+        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString) }
+        _ * queryHelperService.projectsToAdapters(_) >> { projectAdapter }
         assert map.projectAdapters.size() == foundMap.projectAdapters.size()
         where:
         searchString         | foundMap           | projectAdapter
@@ -838,9 +861,9 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findProjectsByCapIds(capIds, 10, 0, [])
         then:
-        _ * projectRestService.searchProjectsByCapIds(_, _) >> {projectResult}
-        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("")}
-        _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
+        _ * projectRestService.searchProjectsByCapIds(_, _) >> { projectResult }
+        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams("") }
+        _ * queryHelperService.projectsToAdapters(_) >> { projectAdapter }
         assert map.projectAdapters.size() == foundMap.projectAdapters.size()
         where:
         label               | capIds    | foundMap           | projectAdapter
@@ -858,12 +881,12 @@ class QueryServiceUnitSpec extends Specification {
         when:
         Map map = service.findProjectsByTextSearch(searchString)
         then:
-        _ * queryHelperService.startStopWatch() >> {sw}
+        _ * queryHelperService.startStopWatch() >> { sw }
         _ * queryHelperService.stopStopWatch(_, _) >> {}
-        _ * projectRestService.findProjectsByFreeTextSearch(_) >> {projectResult}
-        _ * queryHelperService.stripCustomStringFromSearchString(_) >> {"stuff"}
-        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString)}
-        _ * queryHelperService.projectsToAdapters(_) >> {projectAdapter}
+        _ * projectRestService.findProjectsByFreeTextSearch(_) >> { projectResult }
+        _ * queryHelperService.stripCustomStringFromSearchString(_) >> { "stuff" }
+        _ * queryHelperService.constructSearchParams(_, _, _, _) >> { new SearchParams(searchString) }
+        _ * queryHelperService.projectsToAdapters(_) >> { projectAdapter }
         assert map.projectAdapters.size() == foundMap.projectAdapters.size()
         where:
         searchString         | foundMap           | projectAdapter
@@ -880,8 +903,8 @@ class QueryServiceUnitSpec extends Specification {
         when:
         List list = service.autoComplete("Some Search String")
         then:
-        assayRestService.suggest(_) >> {map}
-        queryHelperService.autoComplete(_, _) >> {[map]}
+        assayRestService.suggest(_) >> { map }
+        queryHelperService.autoComplete(_, _) >> { [map] }
         assert list
     }
     /**
@@ -899,7 +922,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         final Map promiscuityMap = service.findPromiscuityForCID(cid)
         then:
-        compoundRestService.findPromiscuityForCompound(_) >> {promiscuity}
+        compoundRestService.findPromiscuityForCompound(_) >> { promiscuity }
 
         assert promiscuityMap.status == expectedStatus
         assert promiscuityMap.message == expectedMessage
@@ -916,7 +939,7 @@ class QueryServiceUnitSpec extends Specification {
         when:
         final Map promiscuityScoreMap = service.findPromiscuityScoreForCID(cid)
         then:
-        compoundRestService.findPromiscuityScoreForCompound(_) >> {promiscuityScore}
+        compoundRestService.findPromiscuityScoreForCompound(_) >> { promiscuityScore }
 
         assert promiscuityScoreMap.status == expectedStatus
         assert promiscuityScoreMap.message == expectedMessage
@@ -934,11 +957,11 @@ class QueryServiceUnitSpec extends Specification {
         final TableModel tableModel = service.createCompoundBioActivitySummaryDataTable(cid, groupBy, filterTypes, [], new SearchParams(top: 10, skip: 0))
 
         then:
-        this.compoundRestService.getSummaryForCompound(cid) >> {this.compoundSummary2}
-        this.experimentRestService.searchExperimentsByIds(_) >> {new ExperimentSearchResult(experiments: [new ExperimentSearch(bardExptId: 1L), new ExperimentSearch(bardExptId: 2L)])}
-        this.projectRestService.searchProjectsByIds(_) >> {new ProjectResult(projects: [new Project(bardProjectId: 1L), new Project(bardProjectId: 2L)])}
+        this.compoundRestService.getSummaryForCompound(cid) >> { this.compoundSummary2 }
+        this.experimentRestService.searchExperimentsByIds(_) >> { new ExperimentSearchResult(experiments: [new ExperimentSearch(bardExptId: 1L), new ExperimentSearch(bardExptId: 2L)]) }
+        this.projectRestService.searchProjectsByIds(_) >> { new ProjectResult(projects: [new Project(bardProjectId: 1L), new Project(bardProjectId: 2L)]) }
         this.queryHelperService.projectsToAdapters(_) >>> [[new ProjectAdapter(project2)], [new ProjectAdapter(project3)]]
-        this.compoundRestService.getSummaryForCompound(_) >> {this.compoundSummary2}
+        this.compoundRestService.getSummaryForCompound(_) >> { this.compoundSummary2 }
 
         assert tableModel.columnHeaders.size() == 2
         assert tableModel.data.size() == expectedTableModelDataSize
@@ -951,4 +974,26 @@ class QueryServiceUnitSpec extends Specification {
         "group-by project, tested"       | 1234 | GroupByTypes.PROJECT | [FilterTypes.TESTED] | 2                          | ProjectValue
         "group-by project, actives-pnly" | 1234 | GroupByTypes.PROJECT | []                   | 1                          | ProjectValue
     }
+
+    void "test getPathsForType #label"() {
+        when:
+        final Map result = service.getPathsForType(type, endNode)
+
+        then:
+        this.capService.getDictionaryElementPaths() >> { this.ELEMENT_PATHS_MAP }
+
+        assert result[endNode] == expectedResultPath
+
+        where:
+        label                                                                 | type                | endNode                      | expectedResultSize | expectedResultPath
+        'with assayFormat type and Protein Format end-node'                   | 'assayFormat'       | 'protein format'             | 3                  | 'assay format/biochemical format/protein format'
+        'with assayFormat type and Assay Format end-node'                     | 'assayFormat'       | 'assay format'               | 1                  | 'assay format'
+        'with assayType type and In Vivo end-node'                            | 'assayType'         | 'in vivo'                    | 2                  | 'assay type/assay mode/in vivo'
+        'with assayType type and Assay Type end-node'                         | 'assayType'         | 'assay type'                 | 1                  | 'assay type'
+        'with biologicalProcess type and GO Biological Process Term end-node' | 'biologicalProcess' | 'GO biological process term' | 2                  | 'biological process/GO biological process term'
+        'with biologicalProcess type and Biological Process end-node'         | 'biologicalProcess' | 'biological process'         | 1                  | 'biological process'
+        'with non-existing end-node'                                          | 'assayFormat'       | 'non-existing-end-node'      | 0                  | null
+        'with the wrong type'                                                 | 'theWrongType'      | 'protein format'             | 0                  | null
+    }
+
 }
