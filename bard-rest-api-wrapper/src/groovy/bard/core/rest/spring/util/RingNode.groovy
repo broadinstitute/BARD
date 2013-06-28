@@ -14,6 +14,7 @@ class RingNode {
     List <RingNode> children = []
     List <String> actives = []
     List <String> inactives = []
+    List <String> assays = []
     //
     String ID = ""
     String description = ""
@@ -311,33 +312,6 @@ class RingNode {
         stringBuilder.toString()
 
     }
-//    public String handleColors(){
-//        StringBuilder stringBuilder = new StringBuilder()
-//        stringBuilder << """
-//                    function colorArcFill( d ) {
-//                        return colorByActivity(d)
-//                    }
-//
-//                    var s = d3.scale.linear()
-//                            .domain([0,1])
-//                            .interpolate(d3.interpolateRgb)
-//                            .range(["#ff0000", "#00ff00"])
-//
-//                    function colorByActivity(d){
-//                        var returnValue = new String ();
-//                        if (d.ac!=undefined) {
-//                            var actives = parseInt(d.ac);
-//                            var inactives = parseInt(d.inac);
-//                            var prop = actives / (actives +inactives) ;
-//                            returnValue = s(prop);
-//                        } else {
-//                            returnValue = "#FF00FF";
-//                        }
-//                        return returnValue;
-//                    }""".toString()
-//        stringBuilder.toString()
-//
-//    }
 
 
     public String deriveColors(List <String> namesThatGetColors, int maximumNumberOfColors) {
@@ -415,8 +389,9 @@ class RingNode {
         stringBuilder << "{"
         // start things out, and write the name
         stringBuilder <<  "\"name\":\"${name}\""
-        stringBuilder <<  ", \"ac\":\"${actives.size()}\""
-        stringBuilder <<  ", \"inac\":\"${inactives.size()}\""
+        stringBuilder <<  ", \"assays\":[${assays.join(',')}]"
+//        stringBuilder <<  ", \"ac\":\"${actives.size()}\""
+//        stringBuilder <<  ", \"inac\":\"${inactives.size()}\""
         // size or children – not both
         if ( children.size()>0 ) {
             stringBuilder <<  ", \"children\": [\n"

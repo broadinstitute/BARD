@@ -1,5 +1,4 @@
 package molspreadsheet
-
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -20,6 +19,16 @@ public class LinkedVisHierData {
     private final String shortSpaceUnit = '     '
     private final String mediumSpaceUnit = '      '
     private final String longSpaceUnit = '       '
+
+    private String section1  = null
+    private String section2  = null
+    private String section3  = null
+    private String section4  = null
+
+    public String  externallyProvidedBiologicalProcessTree =  null
+    public String externallyProvidedAssayFormatTree =  null
+    public String externallyProvidedProteinTargetTree =  null
+    public String externallyProvidedAssayTypeTree =  null
 
     private final String addQuotes( String incomingString )  {
         return  "\"${incomingString}\""
@@ -126,17 +135,39 @@ public class LinkedVisHierData {
         public final String writeHierarchySection() {
             StringBuilder stringBuilder = new StringBuilder()
             stringBuilder << openGroup << endOfLine
-            stringBuilder << individualHierarchySection(0, 'Graph', '{}') <<
-                    comma << endOfLine
-            stringBuilder << individualHierarchySection(1, 'Tree', '{'+addQuotes('struct')+colonUnit+assayFormatTree.toString() +'}') <<
-                    comma << endOfLine
-            stringBuilder << individualHierarchySection(2, 'Tree', '{'+addQuotes('struct')+colonUnit+proteinTargetTree.toString() +'}') <<
-                    comma << endOfLine
-            stringBuilder << individualHierarchySection(3, 'Tree', '{}')
+            if (externallyProvidedBiologicalProcessTree != null) {
+                stringBuilder << individualHierarchySection(0, 'Graph', '{'+addQuotes('struct')+colonUnit+externallyProvidedBiologicalProcessTree.toString() +'}') <<
+                        comma << endOfLine
+            } else {
+                stringBuilder << individualHierarchySection(0, 'Graph', '{}') <<
+                        comma << endOfLine
+            }
+            if (externallyProvidedAssayFormatTree != null) {
+                stringBuilder << individualHierarchySection(1, 'Tree', '{'+addQuotes('struct')+colonUnit+externallyProvidedAssayFormatTree.toString() +'}') <<
+                        comma << endOfLine
+            } else {
+                stringBuilder << individualHierarchySection(1, 'Tree', '{'+addQuotes('struct')+colonUnit+assayFormatTree.toString() +'}') <<
+                        comma << endOfLine
+            }
+            if (externallyProvidedProteinTargetTree != null) {
+                stringBuilder << individualHierarchySection(2, 'Tree', '{'+addQuotes('struct')+colonUnit+externallyProvidedProteinTargetTree.toString() +'}') <<
+                        comma << endOfLine
+            } else {
+                stringBuilder << individualHierarchySection(2, 'Tree', '{'+addQuotes('struct')+colonUnit+proteinTargetTree.toString() +'}') <<
+                        comma << endOfLine
+            }
+            if (externallyProvidedAssayTypeTree != null) {
+                stringBuilder << individualHierarchySection(3, 'Tree', '{'+addQuotes('struct')+colonUnit+externallyProvidedAssayTypeTree.toString() +'}')
+            } else {
+                stringBuilder << individualHierarchySection(3, 'Tree', '{}')
+            }
+
             stringBuilder << closeGroup
             return stringBuilder.toString()
         }
     }
+
+
 
 
 
@@ -303,16 +334,63 @@ public class LinkedVisHierData {
     public final String createCombinedListing() {
         StringBuilder stringBuilder = new StringBuilder()
         stringBuilder << openObject << endOfLine
-        stringBuilder << addQuotes('Category') << colonUnit << createCategorySection() << comma << endOfLine
-        stringBuilder << addQuotes('Hierarchy') << colonUnit << createHierarchySection() << comma << endOfLine
-        stringBuilder << addQuotes('Assays') << colonUnit << createAssaysSection() << comma << endOfLine
-        stringBuilder << addQuotes('AssayCross') << colonUnit << createAssayCrossSection() << endOfLine
+        stringBuilder << addQuotes('Category') << colonUnit << (section1 ?: createCategorySection()) << comma << endOfLine
+        stringBuilder << addQuotes('Hierarchy') << colonUnit << (section2 ?:  createHierarchySection()) << comma << endOfLine
+        stringBuilder << addQuotes('Assays') << colonUnit <<  (section3 ?: createAssaysSection()) << comma << endOfLine
+        stringBuilder << addQuotes('AssayCross') << colonUnit <<  (section4 ?: createAssayCrossSection()) << endOfLine
+        stringBuilder << closeObject
+        return stringBuilder.toString()
+    }
+
+
+    public final String createCombinedListing( String categorySection,
+            String hierarchySection,
+            String assaySection,
+            String assayCrossSection
+    ) {
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder << openObject << endOfLine
+        if (categorySection != null)  {
+            stringBuilder << addQuotes('Category') << colonUnit << categorySection << comma << endOfLine
+        }  else {
+            stringBuilder << addQuotes('Category') << colonUnit << createCategorySection() << comma << endOfLine
+        }
+
+        if (hierarchySection != null)  {
+            stringBuilder << addQuotes('Hierarchy') << colonUnit << hierarchySection << comma << endOfLine
+        }  else {
+            stringBuilder << addQuotes('Hierarchy') << colonUnit << createHierarchySection() << comma << endOfLine
+        }
+
+        if (assaySection != null)  {
+            stringBuilder << addQuotes('Assays') << colonUnit << assaySection << comma << endOfLine
+        }  else {
+            stringBuilder << addQuotes('Assays') << colonUnit << createAssaysSection() << comma << endOfLine
+        }
+
+        if (assayCrossSection != null)  {
+            stringBuilder << addQuotes('AssayCross') << colonUnit << assayCrossSection << endOfLine
+        }  else {
+            stringBuilder << addQuotes('AssayCross') << colonUnit << createAssayCrossSection() << endOfLine
+        }
+
         stringBuilder << closeObject
         return stringBuilder.toString()
     }
 
 
 
-    public LinkedVisHierData() {}
+    public LinkedVisHierData(String section1,String section2,String section3,String section4) {
+        this.section1 = section1
+        this.section2 = section2
+        this.section3 = section3
+        this.section4 = section4
+    }
+    public LinkedVisHierData() {
+        this.section1 = null
+        this.section2 = null
+        this.section3 = null
+        this.section4 = null
+    }
 
 }

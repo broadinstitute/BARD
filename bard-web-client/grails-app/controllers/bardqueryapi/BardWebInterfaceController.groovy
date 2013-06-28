@@ -1,5 +1,4 @@
 package bardqueryapi
-
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
@@ -8,17 +7,20 @@ import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.Promiscuity
+import bard.core.rest.spring.util.RingNode
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
+import molspreadsheet.CompoundSummaryCategorizer
+import molspreadsheet.LinkedVisHierData
 import molspreadsheet.MolecularSpreadSheetService
+import molspreadsheet.RingManagerService
 import org.apache.commons.lang.StringUtils
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
-
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
@@ -43,6 +45,7 @@ class BardWebInterfaceController {
     ExperimentRestService experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
     ProjectExperimentRenderService projectExperimentRenderService
+    RingManagerService ringManagerService
     List<SearchFilter> filters = []
 
     //An AfterInterceptor to handle mobile-view routing.
@@ -751,6 +754,39 @@ class BardWebInterfaceController {
 
         LinkedHashMap<String, Object> compoundSummaryPlusId = session.'compoundSummaryPlusId'
         render compoundSummaryPlusId["CompoundSummaryCategorizer"].toString()
+    }
+
+
+    def linkedData(Long id) {
+        if (isHTTPBadRequest(id, 'Compound ID is a required Field', bardUtilitiesService.username)) {
+            return
+        }
+
+           def  compoundSummaryPlusId = [:]
+           def  ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (id, true, true, compoundSummaryPlusId )
+//            root =   ringnodeAndCrossLinks ["RingNode"]
+//            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+//        }else {
+//            ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
+//            root =   ringnodeAndCrossLinks ["RingNode"]
+//            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+
+
+
+
+//        LinkedHashMap<String, Object>  compoundSummaryPlusId,Long cid
+ //       LinkedVisHierData linkedVisHierData = ringManagerService.generateLinkedData (compoundSummaryPlusId, id)
+
+        CompoundSummaryCategorizer compoundSummaryCategorizer =  ringnodeAndCrossLinks ["CompoundSummaryCategorizer"]
+        LinkedVisHierData linkedVisHierData = new LinkedVisHierData(null,null,compoundSummaryCategorizer.createLinkedDataAssaySection(),compoundSummaryCategorizer.createLinkedDataCrossAssaySection())
+        linkedVisHierData.externallyProvidedProteinTargetTree =  ringnodeAndCrossLinks ["RingNode"]
+        RingNode ringNode =  ringnodeAndCrossLinks ["RingNode"]
+        compoundSummaryCategorizer.treeAssayLinker (ringNode)
+        linkedVisHierData.externallyProvidedProteinTargetTree = '['+ringNode.toString()+']'
+        String assaysSectionJson =  linkedVisHierData.createCombinedListing()
+
+//        String assaysSectionJson = linkedVisHierData.createCombinedListing()
+        render (assaysSectionJson)
     }
 
 

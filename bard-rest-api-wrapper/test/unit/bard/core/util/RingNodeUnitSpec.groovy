@@ -233,9 +233,6 @@ class RingNodeUnitSpec extends Specification{
         (!ringNode.toStringNoText().contains("AA"))
         ringNode.toString().find(/FLINA[^\n]+/).find(/size\":\d/).find(/\d/) == '1'
         ringNode.toStringNoText().find(/FLINA[^\n]+/) == null
-        ringNode.toString().find(/FLINA[^\n]+/).find(/ac\":\"\d/).find(/\d/) == '0'
-        ringNode.toString().find(/FLINA[^\n]+/).find(/inac\":\"\d/).find(/\d/) == '0'
-
 
     }
 

@@ -71,7 +71,7 @@ var TooltipHandler = function ()  {
 
 
 
-function createASunburst(width, height, padding, duration, colorScale, domSelector, cid) {
+function createASunburst(width, height, padding, duration, colorScale, domSelector, cid, widgetIndex) {
 
     var tooltipHandler  = new TooltipHandler ();
     var colorManagementRoutines = new ColorManagementRoutines(colorScale);
@@ -159,7 +159,8 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
 
     var partition = d3.layout.partition()
         .value(function (d) {
-            return d.size;
+            return linkedVizData.adjustedPartitionSize(d);
+//                        return d.size;
         });
 
     var arc = d3.svg.arc()
@@ -258,8 +259,9 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         }
     }
 
+    var hierarchyData = linkedVizData.filteredHierarchyData(widgetIndex);
 
-    var path = svg.datum($data[0]).selectAll("path")
+    var path = svg.datum(hierarchyData).selectAll("path")
         .data(partition.nodes)
         .enter().append("path")
         .attr("d", arc)
@@ -278,12 +280,13 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         .on("mouseout",tooltipHandler.mouseOut );
 
 
-    var text = svg.datum($data[0]).selectAll("text").data(partition.nodes);
-
+    var text = svg.datum(hierarchyData).selectAll("text").data(partition.nodes);
 
     // Interpolate the scales!
     function click(d) {
         adjustSunburstCursor(d);
+        linkedVizData.adjustMembershipBasedOnSunburstClick (d.name, d, d.treeid);
+        linkedVizData.resetRootForHierarchy (d, d.treeid) ;
         path.transition()
             .duration(duration)
             .attrTween("d", sunburstAnimation.arcTween(d));
@@ -371,7 +374,3 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
             .style('opacity', '0');
     })();
 }
-
-
-
-

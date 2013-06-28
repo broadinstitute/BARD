@@ -1,8 +1,8 @@
 package molspreadsheet
 
+import bard.core.rest.spring.util.RingNode
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
-
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -29,8 +29,6 @@ class CompoundSummaryCategorizer {
     public CompoundSummaryCategorizer() {
 
     }
-
-
 
 
     /***
@@ -74,11 +72,11 @@ class CompoundSummaryCategorizer {
         deriveArbitraryIndex (proteinTargetMap,proteinTargets)
     }
 
-    public addNewRecord (long eid, String assayFormat, String assayType ) {
+    public addNewRecord (long eid, String assayFormat, String assayType, String assayName, String assayCapId  ) {
         if (totalContents.keySet().contains(eid)) {
             log.warn("Duplicate data coming from the backend. Repeated experiment ID =: '${eid}'")
         }  else {
-            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType )
+            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, assayName, assayCapId )
         }
 
     }
@@ -131,6 +129,94 @@ class CompoundSummaryCategorizer {
     }
 
 
+
+
+    public String createLinkedDataAssaySection (){
+        List<Long> experimentIds = totalContents.keySet().toList().sort()
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder << "[\n"
+        int numberOfElements =  totalContents.size()
+        int loopingCount = 0
+        for (Long currentEid in experimentIds) {
+            SingleEidSummary singleEidSummary = totalContents[currentEid]
+            stringBuilder << "    {\n"
+            stringBuilder << "        \"AssayIdx\": \"${loopingCount}\",\n"
+            stringBuilder << "        \"AssayName\": \"${singleEidSummary.getAssayName()}\",\n"
+            if (singleEidSummary.outcome==2){
+                stringBuilder << "        \"AssayAc\": 0,\n"
+                stringBuilder << "        \"AssayIn\": 1,\n"
+            } else {
+                stringBuilder << "        \"AssayAc\": 1,\n"
+                stringBuilder << "        \"AssayIn\": 0,\n"
+            }
+            stringBuilder << "        \"AssayId\": \"${singleEidSummary.getAssayCapId()}\"\n"
+            stringBuilder << "    }\n"
+            if ((++loopingCount) < numberOfElements) {
+                stringBuilder << ","
+            }
+            stringBuilder << "\n"
+        }
+        stringBuilder << "]\n"
+        return stringBuilder.toString()
+    }
+
+
+
+    public String createLinkedDataCrossAssaySection (){
+        List<Long> experimentIds = totalContents.keySet().toList().sort()
+        StringBuilder stringBuilder = new StringBuilder()
+        stringBuilder << "[\n"
+        int numberOfElements =  totalContents.size()
+        int loopingCount = 0
+        for (Long currentEid in experimentIds) {
+            SingleEidSummary singleEidSummary = totalContents[currentEid]
+            stringBuilder << "    {\n"
+            stringBuilder << "        \"AssayRef\": \"${loopingCount}\",\n"
+            stringBuilder << "        \"data\": {\n"
+            stringBuilder << "            \"0\" : \"${singleEidSummary.getGoString()}\",\n"
+            stringBuilder << "            \"1\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
+            stringBuilder << "            \"2\" : \"${singleEidSummary.getAssayTypeString()}\",\n"
+            stringBuilder << "            \"3\" : \"${singleEidSummary.getTargetString()}\"\n"
+            stringBuilder << "        }"
+            stringBuilder << "    }\n"
+            if ((++loopingCount) < numberOfElements) {
+                stringBuilder << ","
+            }
+            stringBuilder << "\n"
+        }
+        stringBuilder << "]\n"
+        return stringBuilder.toString()
+    }
+
+   public RingNode treeAssayLinker(RingNode ringNode) {
+       List <String> namesToMatch  = []
+       List<Long> allKeys=this.totalContents*.key.toList().sort()
+       for (Long singleKey in allKeys) {
+           namesToMatch << this.totalContents[singleKey].proteinTargetsIndexList
+       }
+       return descendAndLink ( ringNode,namesToMatch )
+   }
+
+
+    /**
+     * Perform a recursive descent. In this case we are forming a list of everybody who is a
+     * parent below the given node.
+     * @param root
+     * @param everyParent
+     */
+    private void descendAndLink (RingNode root,List <String> namesToMatch )   {
+        if ((root.children == null) || (root.children.size() == 0)) {
+            return
+        } else {
+ //           root.assays <<  namesToMatch.indexOf(root.name)
+            for (RingNode oneKid in root.children){
+                descendAndLink (oneKid,namesToMatch)
+            }
+        }
+
+    }
+
+
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder()
         stringBuilder << "[\n"
@@ -165,12 +251,16 @@ class CompoundSummaryCategorizer {
         List<Integer>  proteinTargetsIndexList = []
         List<Long> unconvertedBiologyObjects = []
         int outcome = 0
+        String assayName
+        String assayCapId
 
 
-        public SingleEidSummary(long eid, String assayFormat, String assayType) {
+        public SingleEidSummary(long eid, String assayFormat, String assayType, String assayName,String assayCapId) {
             this.eid =  eid
             this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
             this.assayTypeIndex = deriveAssayTypeIndex (assayType)
+            this.assayName =  assayName
+            this.assayCapId = assayCapId
         }
 
 

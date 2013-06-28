@@ -236,6 +236,591 @@
 
 
 <script>
+    var assay = {};
+    var assayIndex = {};
+    var linkedVizData = (function (){
+        var validator = {
+
+            // all available checks
+            types: {},
+
+            // error messages in the current
+            // validation session
+            messages: [],
+
+            // current validation config
+            // name: validation type
+            config: {},
+
+            // the interface method
+            // `data` is key => value pairs
+            validate: function (data) {
+
+                var i, msg, type, checker, result_ok;
+
+                // reset all messages
+                this.messages = [];
+
+                for (i in data) {
+
+                    if (data.hasOwnProperty(i)) {
+
+                        type = this.config[i];
+                        checker = this.types[type];
+
+                        if (!type) {
+                            continue; // no need to validate
+                        }
+                        if (!checker) { // uh-oh
+                            throw {
+                                name: "ValidationError",
+                                message: "No handler to validate type " + type
+                            };
+                        }
+
+                        result_ok = checker.validate(data[i]);
+                        if (!result_ok) {
+                            msg = "Invalid value for *" + i + "*, " + checker.instructions;
+                            this.messages.push(msg);
+                        }
+                    }
+                }
+                return this.hasErrors();
+            },
+
+            // helper
+            hasErrors: function () {
+                return this.messages.length !== 0;
+            }
+        };
+
+
+
+        validator.types.isNonEmpty = {
+            validate: function (value) {
+                return !!value;
+            },
+            instructions: "the value cannot be empty"
+        };
+
+        validator.types.isNumber = {
+            validate: function (value) {
+                return !isNaN(Number(value));
+            },
+            instructions: "the value can only be a valid number, e.g. 1, 3.14 or 2010"
+        };
+
+        validator.types.isAlphaNum = {
+            validate: function (value) {
+                return !String(value).replace(/[a-z0-9]/ig, "").length;
+            },
+            instructions: "the value can only contain characters and numbers, no special symbols"
+        };
+        // make sure that every element inside the category group passes some basic tests
+        validator.types.categoryCheck = {
+            validate: function (value) {
+                var returnVal = true;
+                if (value.length!=4) {
+                    returnVal = false;
+                }
+                if (returnVal){
+                    for (var loopCount = 0;loopCount < value.length ; loopCount++  ) {
+                        if (returnVal) { returnVal =  !isNaN(Number(value[loopCount].CatIdx));  }
+                        if (returnVal) { returnVal =  !String(value[loopCount].CatName).replace(/[a-z0-9\s]/ig, "").length;  }
+                        if (returnVal) { returnVal =  !String(value[loopCount].CatDescr).replace(/[a-z0-9\s]/ig, "").length;  }
+                        if (returnVal) { returnVal =  !String(value[loopCount].CatIdentity).replace(/[a-z0-9_]/ig, "").length;  }
+                    }
+                }
+                return returnVal;
+            },
+            instructions: "failed core category check"
+        };
+        // make sure that every element inside the hierarchy group passes some basic tests
+        validator.types.hierarchyCheck = {
+            validate: function (value) {
+                var returnVal = true;
+                if (value.length!=4) {
+                    returnVal = false;
+                }
+                if (returnVal){
+                    for (var loopCount = 0;loopCount < value.length ; loopCount++  ) {
+                        if (returnVal) { returnVal =  !isNaN(Number(value[loopCount].CatRef));  }
+                        if (returnVal) { returnVal =  ((value[loopCount].HierType==='Graph') ||
+                                (value[loopCount].HierType==='Tree'));  }
+                    }
+                }
+                return returnVal;
+            },
+            instructions: "failed core hierarchy check"
+        };
+        // make sure that every element inside the hierarchy group passes some basic tests
+        validator.types.assayCheck = {
+            validate: function (value) {
+                var returnVal = true;
+
+                if (returnVal){
+                    for (var loopCount = 0;loopCount < value.length ; loopCount++  ) {
+                        if (returnVal) { returnVal =  !isNaN(Number(value[loopCount].AssayIdx));  }
+                        if (returnVal) {
+                            var  currentAssayIdx = Number(value[loopCount].AssayIdx);
+                            returnVal = (assayIdList.indexOf(currentAssayIdx)<0);
+                            if (!returnVal) {
+                                additionalErrorInfo += ('repeated assay IDX='+currentAssayIdx);
+                            } else {
+                                assayIdList.push(currentAssayIdx);
+                            }
+                        }
+                        if (returnVal) { returnVal =  !String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:\-\[\]\,\.]/ig, "").length;
+                            if (!returnVal) {additionalErrorInfo += ('undesirable character='+String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:\-\[\]\,\.]/ig, ""));}}
+                        if (!returnVal) alert(value[loopCount].AssayName);
+                        if (returnVal) { returnVal =  !isNaN(Number(value[loopCount].AssayId));  }
+                        if (!returnVal)  {
+                            break;
+                        }
+
+                    }
+
+                }
+                return returnVal;
+            },
+            instructions: "failed core assay check"
+        };
+        // make sure that every element inside the hierarchy group passes some basic tests
+        validator.types.assayCrossCheck = {
+            validate: function (value) {
+                var returnVal = true;
+                if (returnVal){
+                    for (var loopCount = 0;loopCount < value.length ; loopCount++  ) {
+                        if (returnVal) {
+                            var assayReferenceNumber = Number(value[loopCount].AssayRef);
+                            returnVal =  !isNaN(assayReferenceNumber);
+                            if (assayIdList.indexOf(assayReferenceNumber) < 0) {
+                                returnVal = false;
+                            }
+                        }
+                        if (!returnVal)  {
+                            break;
+                        }
+
+                    }
+
+                }
+                return returnVal;
+            },
+            instructions: "failed core assay check"
+        };
+
+
+
+
+        validator.config = {
+            Category: 'categoryCheck',
+            Hierarchy: 'hierarchyCheck',
+            Assays: 'assayCheck',
+            AssayCross: 'assayCrossCheck'
+        };
+
+        var linkedData = {},
+
+                additionalErrorInfo = "",
+
+                assayIdList = [],
+
+                parseData = function (incomingData)  {
+                    linkedData =  incomingData;
+                },
+                numberOfWidgets = function ()  {
+                    return linkedData.Category.length;
+                },
+                validateLinkedData = function ()  {
+                    var returnVal = true;
+                    validator.validate(linkedData);
+                    if (validator.hasErrors()) {
+                        returnVal = false;
+                        var errorMessageReport =  validator.messages.join("\n");
+                        console.log(errorMessageReport);
+                        alert (errorMessageReport) ;
+                    }
+                    return returnVal;
+                },
+
+                appendConditionalStatusFields = function ()  {
+                    var returnVal = true;
+                    // Make a way to keep track of which elements of been selected as part of the drill down, sunburst visualization
+                    for (var loopCount = 0;loopCount < linkedData.Hierarchy.length ; loopCount++  ) {
+                        var hierarchyPointer =  linkedData.Hierarchy[loopCount];
+                        if (hierarchyPointer.HierType === 'Tree') {
+                            hierarchyPointer.Structure['rootName']='/';
+                            if ( (!(hierarchyPointer.Structure===undefined))&&
+                                    (!(hierarchyPointer.Structure.struct===undefined))&&
+                                    (hierarchyPointer.Structure.struct.length>0))
+                                addAMembershipIndicator(hierarchyPointer.Structure.struct[0],loopCount);
+                        } else if (hierarchyPointer.HierType === 'Graph') {
+                            hierarchyPointer.Structure['rootName']='/';
+                        }
+                    }
+                    // Make a way to keep track of which elements have been selected through the cross-linking, pie-based selection mechanism
+                    for (var loopCount = 0;loopCount < linkedData.AssayCross.length ; loopCount++  ) {
+                        var AssayCrossPointer =  linkedData.AssayCross[loopCount];
+                        AssayCrossPointer ["AssaySelected"]  = 1;
+                    }
+                    return returnVal;
+                },
+                findAssayId = function (assayRef)  {
+                    // new way, which may be more robust
+                    var listOfAllAssayIdxs = [];
+                    for (var i=0 ; i<linkedData.Assays.length ; i++) {
+                        listOfAllAssayIdxs.push (linkedData.Assays[i].AssayIdx);
+                    }
+                    var indexOfMatch = listOfAllAssayIdxs.indexOf(assayRef);
+                    if  (!(indexOfMatch === -1)) {
+                        return linkedData.Assays[indexOfMatch].AssayId;
+                    }  else {
+                        return -1;
+                    }
+                    //old way, which seemed to basically work
+                    //return linkedData.Assays[assayRef].AssayId;
+                },
+                retrieveLinkedData = function ()  {
+                    var developingAssayList = [];
+                    var weHaveDataToDisplay = false;
+                    if (!(linkedData.AssayCross ===null)) {
+                        var totalNumberOfAssayCrosses = linkedData.AssayCross.length;
+                        for (var i = 0; i < totalNumberOfAssayCrosses; i++){
+                            if (linkedData.AssayCross[i] != null){
+                                weHaveDataToDisplay = true;
+                                break;
+                            }
+                        }
+                        if (weHaveDataToDisplay)  {
+                            for (var i = 0; i < totalNumberOfAssayCrosses; i++){
+                                var assayCross = linkedData.AssayCross[i];
+                                if (assayCross != null){
+                                    developingAssayList.push({
+                                        index: assayCross.AssayRef,
+                                        assayId: findAssayId(assayCross.AssayRef),
+                                        GO_biological_process_term: assayCross.data[0],
+                                        assay_format: assayCross.data[1],
+                                        assay_type: assayCross.data[2],
+                                        protein_target: assayCross.data[3]
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    return  developingAssayList;
+                },
+
+
+                retrieveCurrentHierarchicalData = function (datatypeIndex)  {
+                    var returnValue = {}; // this will be the current node in the tree
+                    var currentRootName  =  linkedData.Hierarchy[datatypeIndex].Structure.rootName;
+                    var currentRootNode  =  linkedData.Hierarchy[datatypeIndex].Structure.struct;
+                    returnValue =  findNodeInTreeByName (currentRootNode[0],currentRootName);
+                    if (returnValue=== undefined)  {
+                        alert(' problem: could not find node named '+ currentRootName+'.')
+                    } else {
+                        return returnValue;
+                    }
+                },
+
+        // Recursive descent: We do this one at the beginning to add both a membership
+        //  indicator ( which gets set on an off pending on what the user clicks ) and
+        //  a tree identifier ( since we have multiple sunburst trees and we need to be
+        //  able to tell them apart in the click handler )
+                addAMembershipIndicator  = function (currentNode, treeIdentifier)  {
+                    if (!(currentNode.children === undefined)) {
+                        for (var i = 0; i < currentNode.children.length; i++) {
+                            addAMembershipIndicator(currentNode.children[i],treeIdentifier);
+                            currentNode["member"] = 1;
+                            currentNode["treeid"] = treeIdentifier;
+                        }
+                    }  else {
+                        currentNode["member"] = 1;
+                        currentNode["treeid"] = treeIdentifier;
+                    }
+                },
+
+        // Recursive descent: set the membership of every node at or below the current node
+        //  to 'value'
+                setMembershipIndicatorToValue  = function (currentNode,value)  {
+                    if (!(currentNode.children === undefined)) {
+                        for (var i = 0; i < currentNode.children.length; i++) {
+                            setMembershipIndicatorToValue(currentNode.children[i], value);
+                            currentNode.member = value;
+                        }
+                    }  else {
+                        currentNode.member = value;
+                    }
+                },
+                findNodeInTreeByName = function (currentNode,nameWeAreLookingFor)  {
+                    if (currentNode.name === nameWeAreLookingFor) {
+                        return   currentNode;
+                    }
+                    if (!(currentNode.children === undefined)) {
+                        for (var i = 0; i < currentNode.children.length; i++) {
+                            var currentAttempt = findNodeInTreeByName(currentNode.children[i],nameWeAreLookingFor);
+                            if ( (!( currentAttempt===undefined))&&
+                                    ( currentAttempt.name === nameWeAreLookingFor) )  {
+                                return  currentAttempt;
+                            }
+//                          setTimeout("findNodeInTreeByName("+currentNode+","+nameWeAreLookingFor+")",1);
+                        }
+                    }
+                },
+                accumulatingAssays,
+                getAssaysForActivatedNodes  = function (currentNode)  {
+                    if (!(currentNode.children === undefined)) {
+                        for (var i = 0; i < currentNode.children.length; i++) {
+                            getAssaysForActivatedNodes(currentNode.children[i]);
+                            if (currentNode.member === 1) {
+                                if (!(currentNode.assays === undefined))  {
+                                    accumulatingAssays = accumulatingAssays.concat(currentNode.assays);
+                                }
+                            }
+                        }
+                    }  else {
+                        if (currentNode.member === 1) {
+                            if (!(currentNode.assays === undefined))  {
+                                accumulatingAssays = accumulatingAssays.concat(currentNode.assays);
+                            }
+                        }
+                    }
+                },
+
+        // Recursive descent: find a node by name
+                generateUniqueListOfActivatedAssays  = function (hierarchyId){
+                    accumulatingAssays = Array();
+                    getAssaysForActivatedNodes(linkedData.Hierarchy[hierarchyId].Structure.struct [0]);
+                    var uniqueArray = [];
+                    if (accumulatingAssays.length > 0) {
+                        accumulatingAssays.sort();
+                        uniqueArray = accumulatingAssays.filter(function(elem, pos) {
+                            return accumulatingAssays.indexOf(elem) == pos;
+                        })
+                    }
+                    return uniqueArray;
+                },
+
+                adjustMembershipBasedOnSunburstClick  = function (nodeName,possibleNode,hierarchyId)   {
+                    // This is where we mark things as clicked!
+                    var retrievedNode =   findNodeInTreeByName (linkedData.Hierarchy[hierarchyId].Structure.struct [0],nodeName);
+                    // First set the whole tree membership to off
+                    setMembershipIndicatorToValue(linkedData.Hierarchy[hierarchyId].Structure.struct [0],0);
+                    // Now set the selected subtree to on
+                    setMembershipIndicatorToValue(retrievedNode,1);
+                    // Now we need a list of all the nodes that are turned on
+                    var activatedAssayList = generateUniqueListOfActivatedAssays(hierarchyId);
+                    assayIndex.filterFunction(function(d){return (activatedAssayList.indexOf(d)>-1);});
+                    dc.redrawAll();
+                    return activatedAssayList;
+                },
+                filteredHierarchyData = function (hierarchyId)   {
+                    var originalTree = retrieveCurrentHierarchicalData(hierarchyId);
+                    var listOfActiveAssays = retrieveListOfActiveAssays ();
+                    var revisedTree = copyThisTree (originalTree,listOfActiveAssays);
+                    var activeInactiveCounts = {active: 0, inactive: 0};
+                    updateActiveInactiveCounts (revisedTree, activeInactiveCounts);
+                    return revisedTree;
+                },
+                cleanupOriginalHierarchyData = function (hierarchyId)   {
+                    var originalTree = retrieveCurrentHierarchicalData(hierarchyId);
+                    var listOfActiveAssays = retrieveListOfActiveAssays ();
+                    var activeInactiveCounts = {active: 0, inactive: 0};
+                    updateActiveInactiveCounts (originalTree, activeInactiveCounts);
+                    return originalTree;
+                },
+
+                updateActiveInactiveCounts  = function (currentNode,activeInactiveCounts)  {
+                    if (!(currentNode.children === undefined)) {
+                        // first go through all the children, and add up everything we get
+                        for (var i = 0; i < currentNode.children.length; i++) {
+                            var newActiveInactiveCount = updateActiveInactiveCounts(currentNode.children[i],{active: 0, inactive: 0});
+                            activeInactiveCounts.active += newActiveInactiveCount.active;
+                            activeInactiveCounts.inactive += newActiveInactiveCount.inactive;
+                        }
+                        // now add in anything directly associated with this node
+                        if ((!(currentNode.assays === undefined)) &&
+                                (currentNode.assays.length > 0)){
+                            for (var i = 0; i < currentNode.assays.length; i++){
+                                var assayAssociatedWithThisNode = currentNode.assays[i];// assayref, so treat as index
+                                activeInactiveCounts.active += linkedData.Assays[assayAssociatedWithThisNode].AssayAc;
+                                activeInactiveCounts.inactive += linkedData.Assays[assayAssociatedWithThisNode].AssayIn;
+                            }
+                        }
+                        // we have the numbers we wanted. Store them in the tree, and then passed on to the caller
+                        currentNode.ac = activeInactiveCounts.active;
+                        currentNode.inac = activeInactiveCounts.inactive;
+                        currentNode.size =  activeInactiveCounts.active+activeInactiveCounts.inactive;
+                        return activeInactiveCounts;
+                    }  else {
+                        if ((!(currentNode.assays === undefined)) &&
+                                (currentNode.assays.length > 0)){
+                            for (var i = 0; i < currentNode.assays.length; i++){
+                                var assayAssociatedWithThisNode = currentNode.assays[i];// assayref, so treat as index
+                                activeInactiveCounts.active = activeInactiveCounts.active + linkedData.Assays[assayAssociatedWithThisNode].AssayAc;
+                                activeInactiveCounts.inactive = activeInactiveCounts.inactive + linkedData.Assays[assayAssociatedWithThisNode].AssayIn;
+                            }
+                        }
+                        currentNode.ac = activeInactiveCounts.active;
+                        currentNode.inac = activeInactiveCounts.inactive;
+                        currentNode.size =  activeInactiveCounts.active+activeInactiveCounts.inactive;
+                        return activeInactiveCounts;
+                    }
+                },
+                copyThisTree  = function (currentNode,listOfActiveAssays)  {
+                    if (!(currentNode.children === undefined)) {
+                        var newNodeWithKids = {};
+                        newNodeWithKids["name"] =  currentNode.name;
+                        newNodeWithKids["member"] =   currentNode.member;
+                        newNodeWithKids["treeid"] =  currentNode.treeid;
+                        if (!(currentNode.assays === undefined)) {
+                            newNodeWithKids["assays"] = [];
+                            for (var i = 0; i < currentNode.assays.length; i++){
+                                // only copy in an assay if it is known to be active
+                                var assayPreviouslyAssociatedWithThisNode = currentNode.assays[i];
+                                if (listOfActiveAssays.indexOf(assayPreviouslyAssociatedWithThisNode) > -1){
+                                    newNodeWithKids["assays"].push(assayPreviouslyAssociatedWithThisNode);
+                                }
+                            }
+                        }
+                        newNodeWithKids["ac"] =  currentNode.ac;
+                        newNodeWithKids["inac"] =   currentNode.inac;
+                        newNodeWithKids["children"] = [];
+                        for (var i = 0; i < currentNode.children.length; i++) {
+                            if (youOrAnyOfYourChildrenWorthSaving(currentNode.children[i],listOfActiveAssays)) {
+                                newNodeWithKids["children"].push(copyThisTree(currentNode.children[i],listOfActiveAssays));
+                            }
+                        }
+                        // special case. If none of your kids were worth saving then add a size parameter.  You might perhaps
+                        //  be a valuable node, my friend, even if all your children are worthless.
+                        if (newNodeWithKids.children.length==0) {
+                            newNodeWithKids["size"] = currentNode.ac+currentNode.inac;
+                        }
+                        return newNodeWithKids;
+                    }  else {
+                        var newNode = {};
+                        newNode["name"] =  currentNode.name;
+                        newNode["member"] =   currentNode.member;
+                        newNode["treeid"] =  currentNode.treeid;
+                        if (!(currentNode.assays === undefined)) {
+                            newNode["assays"] = [];
+                            for (var i = 0; i < currentNode.assays.length; i++){
+                                // only copy in an assay if it is known to be active
+                                var assayPreviouslyAssociatedWithThisNode = currentNode.assays[i];
+                                if (listOfActiveAssays.indexOf(assayPreviouslyAssociatedWithThisNode) > -1){
+                                    newNode["assays"].push(assayPreviouslyAssociatedWithThisNode);
+                                }
+
+                            }
+                        }
+                        newNode["ac"] =  currentNode.ac;
+                        newNode["inac"] =  currentNode.inac;
+                        newNode["size"] =  currentNode.size;
+                        return newNode;
+                    }
+                },
+                youOrAnyOfYourChildrenWorthSaving  = function(currentNode,thoseWorthSaving){
+                    var worthSaving = false;
+                    if (thoseWorthSaving.length>0){
+                        if (!(currentNode.assays === undefined)) {
+                            for (var j = 0; j < currentNode.assays.length; j++){
+                                if(thoseWorthSaving.indexOf(currentNode.assays[j])>-1){
+                                    worthSaving = true;
+                                    return worthSaving;
+                                }
+                            }
+                        }
+                        if (!(currentNode.children === undefined)) {
+                            for (var j = 0; j < currentNode.children.length; j++) {
+                                for (var i = 0; i < currentNode.children.length; i++) {
+                                    worthSaving = youOrAnyOfYourChildrenWorthSaving(currentNode.children[i], thoseWorthSaving);
+                                    if (worthSaving)  {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return worthSaving;
+                },
+                adjustedPartitionSize = function(d){
+                    return d.size;
+                },
+                retrieveListOfActiveAssays = function (){
+                    var listOfAssayCrossObjects =  assayIndex.top(1000);
+                    var listOfAssayRef = [];
+                    for (var i = 0; i < listOfAssayCrossObjects.length; i++ )  {
+                        listOfAssayRef.push(listOfAssayCrossObjects[i].index);
+                    }
+                    return listOfAssayRef;
+                },
+                resetRootForHierarchy = function (currentNode,hierarchyId){
+                    var hierarchyOfChoice = linkedData.Hierarchy[hierarchyId];
+                    if (!(hierarchyOfChoice.Structure === undefined)) {
+                        // We want to actually the parent of the currently selected node. It isn't always trivial to find your parent, but we can try...
+                        var potentialParent = parentIdentificationTool (hierarchyOfChoice.Structure.struct [0],currentNode);
+                        if (!(potentialParent ===null)) {   // We found the parent, make the assignment
+                            hierarchyOfChoice.Structure.rootName = potentialParent.name;
+                        } else {    // Could not find the parent, stick with the existing node.  This should only happen if they picked the root.
+                            hierarchyOfChoice.Structure.rootName = currentNode.name;
+                        }
+
+                    }
+                },
+                extendedHierarchyDataExists = function (hierarchyId){
+                    var hierarchyOfChoice = linkedData.Hierarchy[hierarchyId];
+                    return (!(hierarchyOfChoice.Structure.struct === undefined));
+                },
+        // It is certainly a bother to identify a node's parent if you don't have a parent pointer. The code below starts at the root
+        //  and recursively descends until it finds the node that is the parent of the nodeThatIsTheBasisForOurSearch
+                parentIdentificationTool  = function(currentNode,nodeThatIsTheBasisForOurSearch){
+                    if (!(currentNode === undefined)) {
+                        // If you have children then you might be the one
+                        if  (!(currentNode.children === undefined)){
+                            // Are you the parent we are searching for?
+                            for (var i = 0; i < currentNode.children.length; i++) {
+                                var child =  currentNode.children [i];
+                                if (!(child === undefined)) {
+                                    if (child.name === nodeThatIsTheBasisForOurSearch.name) {
+                                        return currentNode;
+                                    }
+                                }
+                            }
+                            //  You want the parent we want exactly, but maybe one of your kids is the one
+                            for (var i = 0; i < currentNode.children.length; i++) {
+                                var child =  currentNode.children [i];
+                                if (!(child === undefined)) {
+                                    var potentialParent = parentIdentificationTool (child,nodeThatIsTheBasisForOurSearch);
+                                    if (!(potentialParent === null)) {
+                                        return  potentialParent;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return(null);
+                }
+//                ,
+//         provideAListOfEveryoneWhoIsnotPointingAtTheirRoot = '
+
+
+        return {
+            parseData:parseData,
+            appendConditionalStatusFields:appendConditionalStatusFields,
+            validateLinkedData:validateLinkedData,
+            numberOfWidgets: numberOfWidgets,
+            retrieveCurrentHierarchicalData:retrieveCurrentHierarchicalData,
+            retrieveLinkedData:retrieveLinkedData,
+            adjustMembershipBasedOnSunburstClick:adjustMembershipBasedOnSunburstClick,
+            filteredHierarchyData:filteredHierarchyData,
+            adjustedPartitionSize:adjustedPartitionSize,
+            resetRootForHierarchy:resetRootForHierarchy,
+            cleanupOriginalHierarchyData:cleanupOriginalHierarchyData,
+            extendedHierarchyDataExists:extendedHierarchyDataExists
+        }
+
+    }());
 
 
 
@@ -269,41 +854,41 @@
                 displayWidgetY = 320, // expanded widget Y location.
                 displayWidgetWidth = 1000, // expanded widget Y width.
                 displayWidgetHeight = 1000, // expanded widget Y height.
-                bigPie = (displayWidgetWidth/2)-displayWidgetX, // size of pie in display mode
+                bigPie = (displayWidgetWidth / 2) - displayWidgetX, // size of pie in display mode
 
         //  I need to have a color for every possible pie slice. Since the color map is largely arbitrary, d3 does not
         //   seem to provide An easy way to say "please give me another color unlike when you've given me before".  Note
         //   that the colors I want are not _entirely_ arbitrary because really light colors don't seem to look good in
         //   a pie chart filled with brighter colors, so I can't simply use randomizing function with a seed
-        colors = [ '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
-            '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
-            '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
-            '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
-            '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
-            '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
-            '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
-            '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
-            '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
-            '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
-            '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
-            '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
-            '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
-            '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
-            '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
-            '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+                colors = [ '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
+                    '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
+                    '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
+                    '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+                    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+                    '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
+                    '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
+                    '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
+                    '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+                    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+                    '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
+                    '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
+                    '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
+                    '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+                    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf',
+                    '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#8c6d31', '#bd9e39',
+                    '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
+                    '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
+                    '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
+                    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 
         // below are some names and text strings
-                piename = ['a0', 'a1', 'a2', 'a3'], // internal names for the widgets
+        piename = ['a0', 'a1', 'a2', 'a3'], // internal names for the widgets
                 textForExpandingButton = 'click to expand', // text on button to expand to full display
                 textForContractingButton = 'click to contract', //text on button to contract unexpended widget
 
-        //  This next set of variables are only for convenience.  They are derived strictly from those above,
-        //   and they are consumed below in preference to those above.  The idea was to conceptually simplify
-        //   some of the variables above and to those that describe either compressed or uncompressed widgets.
+            //  This next set of variables are only for convenience.  They are derived strictly from those above,
+            //   and they are consumed below in preference to those above.  The idea was to conceptually simplify
+            //   some of the variables above and to those that describe either compressed or uncompressed widgets.
                 compressedPos = [
                     {'x': margin.left + ((widgetWidth + widgetSpacing) * 0), 'y': 10},
                     {'x': margin.left + ((widgetWidth + widgetSpacing) * 1), 'y': 10},
@@ -316,16 +901,16 @@
                     {'x': (widgetWidth * 2) + (quarterWidgetWidth * 3), 'y': 10}
                 ],
 
-        //  dc vars
-        maximumRowsInTable = 150,
+            //  dc vars
+                maximumRowsInTable = 150,
 
 
-        //-------widgetPosition------
-        // JavaScript module. This portion of the code allows us to keep track of which widgets are expanded
-        // and which remain in their original positions. There are a functions that allow you to ask the constructor
-        // about its status ( examples:  isAnyWidgetExpanded() returns a Boolean to tell you if anything's expanded,
-        // while expandedWidget () returns a number to tell you which widget has been expanded.
-        //---------------------------
+            //-------widgetPosition------
+            // JavaScript module. This portion of the code allows us to keep track of which widgets are expanded
+            // and which remain in their original positions. There are a functions that allow you to ask the constructor
+            // about its status ( examples:  isAnyWidgetExpanded() returns a Boolean to tell you if anything's expanded,
+            // while expandedWidget () returns a number to tell you which widget has been expanded.
+            //---------------------------
                 widgetPosition = (function () {
                     // private property
                     var currentWidgetPosition = { 'up': [0, 1, 2, 3],
@@ -400,97 +985,122 @@
 
         var displayManipulator = (function () {
             var rememberClickEffectors = [],
-            disableAllPieClickEffectors = function () {
-                for (var widgetCounter = 0; widgetCounter< totalWidgetNumber;widgetCounter++){
-                    rememberClickEffectors [widgetCounter]  =   d3.selectAll('#a'+widgetCounter+'-chart>svg>g>.pie-slice>path').on('click');
-                    d3.selectAll('#a'+widgetCounter+'-chart>svg>g>.pie-slice>path').on('click',null);
-                }
-            },
-            reenableAllPieClickEffectors = function () {
-                if (rememberClickEffectors === undefined)  {
-                    alert(' JavaScript error--an attempt was made to reenableAllPieClickEffectors before originally disabling those ClickEffectors');
-                }  else {
-                    for (var widgetCounter = 0; widgetCounter< totalWidgetNumber;widgetCounter++){
-                        d3.selectAll('#a'+widgetCounter+'-chart>svg>g>.pie-slice>path').on('click',rememberClickEffectors [widgetCounter]);
-                    }
-                }
-             } ,
-            eraseAnyOrphanedTooltips = function (){
-                var orphanedTooltips = d3.selectAll('.toolTextAppearance');
-                if (!(orphanedTooltips === undefined)) {
-                    orphanedTooltips.style('opacity', 0);
-                }
-            },
+                    disableAllPieClickEffectors = function () {
+                        for (var widgetCounter = 0; widgetCounter < totalWidgetNumber; widgetCounter++) {
+                            rememberClickEffectors [widgetCounter] = d3.selectAll('#a' + widgetCounter + '-chart>svg>g>.pie-slice>path').on('click');
+                            d3.selectAll('#a' + widgetCounter + '-chart>svg>g>.pie-slice>path').on('click', null);
+                        }
+                    },
+                    reenableAllPieClickEffectors = function () {
+                        if (rememberClickEffectors === undefined) {
+                            alert(' JavaScript error--an attempt was made to reenableAllPieClickEffectors before originally disabling those ClickEffectors');
+                        } else {
+                            for (var widgetCounter = 0; widgetCounter < totalWidgetNumber; widgetCounter++) {
+                                d3.selectAll('#a' + widgetCounter + '-chart>svg>g>.pie-slice>path').on('click', rememberClickEffectors [widgetCounter]);
+                            }
+                        }
+                    } ,
+                    eraseAnyOrphanedTooltips = function () {
+                        var orphanedTooltips = d3.selectAll('.toolTextAppearance');
+                        if (!(orphanedTooltips === undefined)) {
+                            orphanedTooltips.style('opacity', 0);
+                        }
+                    },
+                    cleanUpAnyGraphicsWeAreDoneWith = function () {
+                        var potentialOrphanedGraphics = d3.select('div#sunburstdiv>svg');
+                        if ((!(potentialOrphanedGraphics === null))&&
+                                (!(potentialOrphanedGraphics[0] === null))&&
+                                (!(potentialOrphanedGraphics[0][0] === null)))       {
+                            potentialOrphanedGraphics.remove();
+                        }
+
+                        var potentialOrphanedLegend = d3.select('div#sunburstlegend');
+                        if ((!(potentialOrphanedLegend === null))&&
+                                (!(potentialOrphanedLegend[0] === null))&&
+                                (!(potentialOrphanedLegend[0][0] === null))) {
+                            potentialOrphanedLegend.remove();
+                        }
+                    },
+                    createAResetButtonIfWeSwitchedARoot = function () {
+                        // Instead of looking to see which widget is closing let's just check them all, and create a reset button
+                        // whenever the root is not equal to the user-specified Global parent
+                        for( var i=0 ; i<X ; i++ ) {
+
+                        }
+                    },
 
             // convenience routine for adding a pie chart
-            addPieChart = function (crossFilterVariable, id, key, colors, localPieChartWidth, localPieChartRadius, localInnerRadius) {
-                var dimensionVariable = crossFilterVariable.dimension(function (d) {
-                    return d[key];
-                }),
-                dimensionVariableGroup = dimensionVariable.group().reduceSum(function (d) {
-                    return 1;
-                }),
-                displayDataGroup = function (d) {
-                    var returnValue =  d.data.key.toString() + " (" + d.data.value+")";
-                    returnValue = returnValue.replace("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", "[GO]");
-                    returnValue = returnValue.replace("http://www.ncbi.nlm.nih.gov/gquery/?term=", "[NCBI]");
-                    return returnValue;
-                };
+                    addPieChart = function (crossFilterVariable, id, key, colors, localPieChartWidth, localPieChartRadius, localInnerRadius) {
+                        var dimensionVariable = crossFilterVariable.dimension(function (d) {
+                                    return d[key];
+                                }),
+                                dimensionVariableGroup = dimensionVariable.group().reduceSum(function (d) {
+                                    return 1;
+                                }),
+                                displayDataGroup = function (d) {
+                                    var returnValue = d.data.key.toString() + " (" + d.data.value + ")";
+                                    returnValue = returnValue.replace("http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=", "[GO]");
+                                    returnValue = returnValue.replace("http://www.ncbi.nlm.nih.gov/gquery/?term=", "[NCBI]");
+                                    return returnValue;
+                                };
 
 
-                return dc.pieChart("#" + id)
-                        .width(localPieChartWidth)
-                        .height(localPieChartWidth)
-                        .transitionDuration(200)
-                        .radius(localPieChartRadius)
-                        .innerRadius(localInnerRadius)
-                        .dimension(dimensionVariable)
-                        .group(dimensionVariableGroup)
-                        .colors(colors)
-                        .label(displayDataGroup);
-            },
+                        return dc.pieChart("#" + id)
+                                .width(localPieChartWidth)
+                                .height(localPieChartWidth)
+                                .transitionDuration(200)
+                                .radius(localPieChartRadius)
+                                .innerRadius(localInnerRadius)
+                                .dimension(dimensionVariable)
+                                .group(dimensionVariableGroup)
+                                .colors(colors)
+                                .label(displayDataGroup);
+                    },
 
 
-            addDcTable = function (crossFilterVariable, id, key) {
-                var dimensionVariable = crossFilterVariable.dimension(function (d) {
-                            return d[key];
-                        }),
-                dimensionVariableGroup = function (d) {
-                    return "";
-                },
-                dimensionVariableGroupTotal = function (d) {
-                        return dimensionVariable.groupAll();
-                } ;
+                    addDcTable = function (crossFilterVariable, id, key) {
+                        var dimensionVariable = crossFilterVariable.dimension(function (d) {
+                                    return d[key];
+                                }),
+                                dimensionVariableGroup = function (d) {
+                                    return "";
+                                },
+                                dimensionVariableGroupTotal = function (d) {
+                                    return dimensionVariable.groupAll();
+                                };
 
-                var theTable = dc.dataTable("#" + id)
-                        .dimension(dimensionVariable)
-                        .group(dimensionVariableGroup)
-                        .size(maximumRowsInTable)
-                        .columns([
-                            function (d) {
-                                return d.GO_biological_process_term;
-                            },
-                            function (d) {
-                                return d.assay_format;
-                            },
-                            function (d) {
-                                return d.protein_target;
-                            },
-                            function (d) {
-                                return d.assay_type;
-                            }
-                        ])
-                        .order(d3.ascending)
-                        .sortBy(function (d) {
-                            return d.GO_biological_process_term;
-                        });
-//                        This datecount  function below doesn't seem to work for me. What's wrong?
-//                        dc.dataCount("#data-count")
-//                                .dimension(dimensionVariable)
-//                                .group(dimensionVariableGroupTotal);
+                        var theTable = dc.dataTable("#" + id)
+                                .dimension(dimensionVariable)
+                                .group(dimensionVariableGroup)
+                                .size(maximumRowsInTable)
+                                .columns([
+                                    function (d) {
+                                        return d.GO_biological_process_term;
+                                    },
+                                    function (d) {
+                                        return d.assay_format;
+                                    },
+                                    function (d) {
+                                        return d.protein_target;
+                                    },
+                                    function (d) {
+                                        return d.assay_type;
+                                    },
+                                    function(d) {
+                                        return d.assayId;
+                                    }
+                                ])
+                                .order(d3.ascending)
+                                .sortBy(function (d) {
+                                    return d.GO_biological_process_term;
+                                });
+                        //                        This datecount  function below doesn't seem to work for me. What's wrong?
+                        //                        dc.dataCount("#data-count")
+                        //                                .dimension(dimensionVariable)
+                        //                                .group(dimensionVariableGroupTotal);
 
-                return  theTable;
-            },
+                        return  theTable;
+                    },
 
 
                     expandDataAreaForAllPieCharts = function (pieChartHolderElement) {
@@ -501,12 +1111,12 @@
                     moveDataTableOutOfTheWay = function (dataTable) {
                         dataTable.transition()
                                 .duration(500)
-                                .style("top", 50+displayWidgetY + displayWidgetHeight + "px");  // Extra spaces for 'click to contract' button
+                                .style("top", 50 + displayWidgetY + displayWidgetHeight + "px");  // Extra spaces for 'click to contract' button
                     },
 
                     moveDataTableBackToItsOriginalPosition = function (dataTable) {
                         dataTable.transition()
-                                .delay (1000)
+                                .delay(1000)
                                 .duration(500)
                                 .style("top", "300px");  // Extra spaces for 'click to contract' button
                     },
@@ -537,22 +1147,22 @@
                         shiftBackgroundWidgets(background3, expandedPos[2].x);
 
                         //   Turn off the text label based on click event for background widgets
-                        background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
-                        background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
-                        background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','none');
+                        background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                        background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                        background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
 
                         //  Turn off the expander button, since the user needs to contract the expanded
                         //  widget before they try to expand the new one. It would be nice to click that
                         //  button for them, but D three does not support that sort of activation is you are
                         //  using bound data. I should probably connect to those data dynamically to get around
                         //  this problem.
-                        background1.selectAll('.expandButton').style('pointer-events','none').style('opacity',0.5);
-                        background2.selectAll('.expandButton').style('pointer-events','none').style('opacity',0.5);
-                        background3.selectAll('.expandButton').style('pointer-events','none').style('opacity',0.5);
+                        background1.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+                        background2.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+                        background3.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
 
                         origButton
                                 .text(textForContractingButton)
-                                .attr('class','contractButton')
+                                .attr('class', 'contractButton')
                                 .transition()
                                 .delay(1000)
                                 .duration(500)
@@ -576,28 +1186,28 @@
                         shiftBackgroundWidgets(background1, background1.data()[0].orig.coords.x);
                         shiftBackgroundWidgets(background2, background2.data()[0].orig.coords.x);
                         shiftBackgroundWidgets(background3, background3.data()[0].orig.coords.x);
-                        background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
-                        background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
-                        background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events','auto');
+                        background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                        background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                        background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
                         //  Turn back on the expander buttons
                         //  widget before they try to expand the new one. It would be nice to click that
                         //  button for them, but D three does not support that sort of activation is you are
                         //  using bound data. I should probably connect to those data dynamically to get around
                         //  this problem.
-                        background1.selectAll('.expandButton').style('pointer-events','auto').style('opacity',1);
-                        background2.selectAll('.expandButton').style('pointer-events','auto').style('opacity',1);
-                        background3.selectAll('.expandButton').style('pointer-events','auto').style('opacity',1);
+                        background1.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
+                        background2.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
+                        background3.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
 
                         var x = origButton
                                 .text(textForExpandingButton)
-                                .attr('class','expandButton')
+                                .attr('class', 'expandButton')
                                 .transition()
                                 .delay(1000)
                                 .duration(500)
                                 .style('opacity', 1);
                     },
 
-                    expandGraphicsArea = function (graphicsTarget,graphicsTitle) {
+                    expandGraphicsArea = function (graphicsTarget, graphicsTitle) {
 
                         var bigarc = d3.svg.arc()
                                 .innerRadius(innerRadiusWhenExpanded)
@@ -605,7 +1215,7 @@
 
                         graphicsTarget
                                 .attr('width', displayWidgetWidth)
-                                .attr('height', displayWidgetHeight+50); // Extra room for the 'click to contract' button
+                                .attr('height', displayWidgetHeight + 50); // Extra room for the 'click to contract' button
 
                         graphicsTarget
                                 .select('g')
@@ -620,10 +1230,10 @@
                                 .attr("d", bigarc)
                                 .attr("transform", "translate(368,375)");    // We need use explicit numbers here, not variables. This would be something to fix
 
-                        graphicsTitle.attr('class','expandedGraphTitle');
+                        graphicsTitle.attr('class', 'expandedGraphTitle');
                     },
 
-                    contractGraphicsArea = function (graphicsTarget,graphicsTitle) {
+                    contractGraphicsArea = function (graphicsTarget, graphicsTitle) {
 
                         var arc = d3.svg.arc()
                                 .innerRadius(innerRadius)
@@ -648,7 +1258,7 @@
                                 .attr("d", arc)
                                 .attr("transform", "translate(0,0)");
 
-                        graphicsTitle.attr('class','graphTitle');
+                        graphicsTitle.attr('class', 'graphTitle');
 
                     },
                     removeTheSun = function () {
@@ -659,81 +1269,97 @@
                                 .style('opacity', '0')
                     }
 
-                    swapAPieForTheSun = function (pieDiv,sunburstContainer,expandedButtonNum,callbackToExpandOrContractOnButtonClick) {
-                        pieDiv.style('pointer-events', 'none')
-                                .transition()
-                                .delay(1000)
-                                .duration(500)
-                                .style('opacity', '0');
-                        sunburstContainer.style('pointer-events', null)
-                                .transition()
-                                .delay(1000)
-                                .duration(500)
-                                .style('opacity', '1');
-                        d3.select('#sunburstContractor')
-                            // This next step gets a little bit ugly.  What we want to do is make the
-                            // Sunburst disappear, and then have the pie charts rearrange themselves like always.
-                            // Unfortunately D3 does not provide a standardized way to execute a click ( thereby
-                            // Initiating the associated callback ) if you have data associated with your object,
-                            // Which we most certainly do. Therefore I have to mix up my own copy of the data
-                            // that the callback routine for one of the pie charts would receive, and then explicitly
-                            // execute the callback method. There has to be a better way to get the desired effect,
-                            // though for what it's worth this approach is fully functional ( just butt-ugly, that's all)
-                                 .on('click', function (d) {
-                                    sunburstContainer.style('pointer-events', 'none')
-                                            .style('opacity', '0');
-                                    pieDiv.style('pointer-events', null)
-                                            .style('opacity', '1');
-                                    var molecularStructure = d3.selectAll('.molstruct')
-                                            .style('opacity', '0');
-                                    var substituteData = {    index: expandedButtonNum,
-                                        orig: {
-                                            coords: {
-                                                x: compressedPos[expandedButtonNum].x,
-                                                y: compressedPos[expandedButtonNum].y },
-                                            size: {
-                                                width: widgetWidthWithoutSpacing,
-                                                height: widgetHeightWithTitle }
-                                        },
-                                        display: {
-                                            coords: {
-                                                x: displayWidgetX,
-                                                y: displayWidgetY },
-                                            size: {
-                                                width: displayWidgetWidth,
-                                                height: displayWidgetHeight }
-                                        }
-                                    }
-                                     callbackToExpandOrContractOnButtonClick(substituteData,expandedButtonNum);
-                                });
-                        var molecularStructure = d3.selectAll('.molstruct')
-                                .transition()
-                                .delay(1000)
-                                .duration(500)
-                                .style('opacity', '1');
+            swapAPieForTheSun = function (pieDiv, sunburstContainer, expandedButtonNum, callbackToExpandOrContractOnButtonClick) {
+                pieDiv.style('pointer-events', 'none')
+                        .transition()
+                        .delay(1000)
+                        .duration(500)
+                        .style('opacity', '0');
+                sunburstContainer.style('pointer-events', null)
+                        .transition()
+                        .delay(1000)
+                        .duration(500)
+                        .style('opacity', '1');
+                if (linkedVizData.retrieveCurrentHierarchicalData(expandedButtonNum).children !== undefined) {
+                    createASunburst( 1000, 1000,5,1000,continuousColorScale,'div#sunburstdiv', 672376, expandedButtonNum );
+                    createALegend(120, 200,100,continuousColorScale,'div#legendGoesHere',minimumValue, maximumValue);
+                    d3.selectAll('#suburst_container').style('pointer-events', null);
+                } else {
+                    d3.select('div#sunburstdiv')
+                            .append('div')
+                            .attr("width", 1000)
+                            .attr("height", 1000 )
+                            .style("padding-top", '200px' )
+                            .style("text-align", 'center' )
+                            .append("h1")
+                            .html("No off-embargo assay data are  available for this compound." +
+                                    "Please either choose a different compound, or else come" +
+                                    " back later when more assay data may have accumulated.");
+                }
+                d3.select('#sunburstContractor')
+                    // This next step gets a little bit ugly.  What we want to do is make the
+                    // Sunburst disappear, and then have the pie charts rearrange themselves like always.
+                    // Unfortunately D3 does not provide a standardized way to execute a click ( thereby
+                    // Initiating the associated callback ) if you have data associated with your object,
+                    // Which we most certainly do. Therefore I have to mix up my own copy of the data
+                    // that the callback routine for one of the pie charts would receive, and then explicitly
+                    // execute the callback method. There has to be a better way to get the desired effect,
+                    // though for what it's worth this approach is fully functional ( just butt-ugly, that's all)
+                        .on('click', function (d) {
+                            sunburstContainer.style('pointer-events', 'none')
+                                    .style('opacity', '0');
+                            pieDiv.style('pointer-events', null)
+                                    .style('opacity', '1');
+                            var molecularStructure = d3.selectAll('.molstruct')
+                                    .style('opacity', '0');
+                            var substituteData = {    index: expandedButtonNum,
+                                orig: {
+                                    coords: {
+                                        x: compressedPos[expandedButtonNum].x,
+                                        y: compressedPos[expandedButtonNum].y },
+                                    size: {
+                                        width: widgetWidthWithoutSpacing,
+                                        height: widgetHeightWithTitle }
+                                },
+                                display: {
+                                    coords: {
+                                        x: displayWidgetX,
+                                        y: displayWidgetY },
+                                    size: {
+                                        width: displayWidgetWidth,
+                                        height: displayWidgetHeight }
+                                }
+                            }
+                            callbackToExpandOrContractOnButtonClick(substituteData, expandedButtonNum);
+                        });
+                var molecularStructure = d3.selectAll('.molstruct')
+                        .transition()
+                        .delay(1000)
+                        .duration(500)
+                        .style('opacity', '1');
 
-                    };
+            };
 
             // end var
 
             // Public API for this module
             return {
-                disableAllPieClickEffectors:disableAllPieClickEffectors,
-                reenableAllPieClickEffectors:reenableAllPieClickEffectors,
-                eraseAnyOrphanedTooltips:eraseAnyOrphanedTooltips,
-                contractGraphicsArea:contractGraphicsArea,
-                expandGraphicsArea:expandGraphicsArea,
-                resetOneAndResettleThree:resetOneAndResettleThree,
-                spotlightOneAndBackgroundThree:spotlightOneAndBackgroundThree,
-                expandDataAreaForAllPieCharts:expandDataAreaForAllPieCharts,
-                moveDataTableOutOfTheWay:moveDataTableOutOfTheWay,
-                moveDataTableBackToItsOriginalPosition:moveDataTableBackToItsOriginalPosition,
-                addDcTable:addDcTable,
-                addPieChart:addPieChart,
-                swapAPieForTheSun:swapAPieForTheSun
+                disableAllPieClickEffectors: disableAllPieClickEffectors,
+                reenableAllPieClickEffectors: reenableAllPieClickEffectors,
+                eraseAnyOrphanedTooltips: eraseAnyOrphanedTooltips,
+                cleanUpAnyGraphicsWeAreDoneWith: cleanUpAnyGraphicsWeAreDoneWith,
+                contractGraphicsArea: contractGraphicsArea,
+                expandGraphicsArea: expandGraphicsArea,
+                resetOneAndResettleThree: resetOneAndResettleThree,
+                spotlightOneAndBackgroundThree: spotlightOneAndBackgroundThree,
+                expandDataAreaForAllPieCharts: expandDataAreaForAllPieCharts,
+                moveDataTableOutOfTheWay: moveDataTableOutOfTheWay,
+                moveDataTableBackToItsOriginalPosition: moveDataTableBackToItsOriginalPosition,
+                addDcTable: addDcTable,
+                addPieChart: addPieChart,
+                swapAPieForTheSun: swapAPieForTheSun
             };
         }() );
-
 
         //
         //   Get the data and make the plots using dc.js.  Use this as an opportunity to encapsulate any methods that are
@@ -741,29 +1367,111 @@
         //
         var generateLinkedPies = (function () {
 
+
+            var buttondata = [
+                {    index: 0,
+                    orig: {
+                        coords: {
+                            x: compressedPos[0].x,
+                            y: compressedPos[0].y },
+                        size: {
+                            width: widgetWidthWithoutSpacing,
+                            height: widgetHeightWithTitle }
+                    },
+                    display: {
+                        coords: {
+                            x: displayWidgetX,
+                            y: displayWidgetY },
+                        size: {
+                            width: displayWidgetWidth,
+                            height: displayWidgetHeight }
+                    }
+                },
+                {    index: 1,
+                    orig: {
+                        coords: {
+                            x: compressedPos[1].x,
+                            y: compressedPos[1].y },
+                        size: {
+                            width: widgetWidthWithoutSpacing,
+                            height: widgetHeightWithTitle }
+                    },
+                    display: {
+                        coords: {
+                            x: displayWidgetX,
+                            y: displayWidgetY },
+                        size: {
+                            width: displayWidgetWidth,
+                            height: displayWidgetHeight }
+                    }
+                },
+                {    index: 2,
+                    orig: {
+                        coords: {
+                            x: compressedPos[2].x,
+                            y: compressedPos[2].y },
+                        size: {
+                            width: widgetWidthWithoutSpacing,
+                            height: widgetHeightWithTitle }
+                    },
+                    display: {
+                        coords: {
+                            x: displayWidgetX,
+                            y: displayWidgetY },
+                        size: {
+                            width: displayWidgetWidth,
+                            height: displayWidgetHeight }
+                    }
+                },
+                {   index: 3,
+                    orig: {
+                        coords: {
+                            x: compressedPos[3].x,
+                            y: compressedPos[3].y },
+                        size: {
+                            width: widgetWidthWithoutSpacing,
+                            height: widgetHeightWithTitle }
+                    },
+                    display: {
+                        coords: {
+                            x: displayWidgetX,
+                            y: displayWidgetY },
+                        size: {
+                            width: displayWidgetWidth,
+                            height: displayWidgetHeight }
+                    }
+                }
+            ];
+
+
             // Private method used to pull the data in from the remote site
-            var readInData = function (incoming) {
+//            var readInData = function (incoming) {
+//
+//                        var processedAssays = {}; // Use for de-duplication
+//                        var developingAssayList = []; // This will be the return value
+//
+//                        incoming.forEach(function (d, i) {
+//
+//                            // de-duplication step
+//                            if (processedAssays[d.assayId] !== true) {
+//                                processedAssays[d.assayId] = true;
+//
+//                                developingAssayList.push({
+//                                    index: i,
+//                                    assayId: d.assayId,
+//                                    GO_biological_process_term: d.data.GO_biological_process_term,
+//                                    assay_format: d.data.assay_format,
+//                                    assay_type: d.data.assay_type,
+//                                    protein_target: d.data.protein_target
+//                                });
+//                            }
+//                        });
+//                        return  developingAssayList;
+//                    },
+            var readInData = function () {
 
-                        var processedAssays = {}; // Use for de-duplication
-                        var developingAssayList = []; // This will be the return value
+                        return    linkedVizData.retrieveLinkedData();
 
-                        incoming.forEach(function (d, i) {
-
-                            // de-duplication step
-                            if (processedAssays[d.assayId] !== true) {
-                                processedAssays[d.assayId] = true;
-
-                                developingAssayList.push({
-                                    index: i,
-                                    assayId: d.assayId,
-                                    GO_biological_process_term: d.data.GO_biological_process_term,
-                                    assay_format: d.data.assay_format,
-                                    assay_type: d.data.assay_type,
-                                    protein_target: d.data.protein_target
-                                });
-                            }
-                        });
-                        return  developingAssayList;
                     },
 
 
@@ -771,7 +1479,7 @@
                     handleExpandOrContractClick = function (d, x) {
                         // we better decide whether where you want to expand or contract
                         var origButton = d3.select('#expbutton' + d.index)
-                                .style('opacity', 0),
+                                        .style('opacity', 0),
                                 expandedWidget,
                                 unexpandedWidget,
                                 expandContractButton;
@@ -789,11 +1497,11 @@
                                     d3.select('#a' + unexpandedWidget[2]),
                                     origButton,
                                     expandedPos);
-                            expandContractButton = d3.select('#a' + expandedWidget+'-chart>.graphTitle')
-                            displayManipulator.expandGraphicsArea( d3.select('#a' + expandedWidget).select('.pieChart>svg'),
-                                                                   expandContractButton );
-                            if (expandContractButton.text() === 'Protein target'){
-                                displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget),d3.selectAll('#suburst_container'),expandedWidget,handleExpandOrContractClick);
+                            expandContractButton = d3.select('#a' + expandedWidget + '-chart>.graphTitle')
+                            displayManipulator.expandGraphicsArea(d3.select('#a' + expandedWidget).select('.pieChart>svg'),
+                                    expandContractButton);
+                            if (linkedVizData.extendedHierarchyDataExists(expandedWidget)){
+                                displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget), d3.selectAll('#suburst_container'), expandedWidget, handleExpandOrContractClick);
                             }
 
                         }
@@ -801,8 +1509,8 @@
                         else if (widgetPosition.expandedWidget() == d.index) {
                             expandedWidget = widgetPosition.expandedWidget();
                             unexpandedWidget = widgetPosition.unexpandedWidgets();
-                            displayManipulator.contractGraphicsArea( d3.select('#a' + x).select('.pieChart>svg'),
-                                                                     d3.select('#a' + expandedWidget+'-chart>.expandedGraphTitle'));
+                            displayManipulator.contractGraphicsArea(d3.select('#a' + x).select('.pieChart>svg'),
+                                    d3.select('#a' + expandedWidget + '-chart>.expandedGraphTitle'));
                             displayManipulator.resetOneAndResettleThree(d, d3.select('#a' + expandedWidget),
                                     d3.select('#a' + unexpandedWidget[0]),
                                     d3.select('#a' + unexpandedWidget[1]),
@@ -813,6 +1521,7 @@
                             displayManipulator.moveDataTableBackToItsOriginalPosition(d3.select('#data-table'));
                             displayManipulator.reenableAllPieClickEffectors();
                             displayManipulator.eraseAnyOrphanedTooltips();
+                            displayManipulator.cleanUpAnyGraphicsWeAreDoneWith();
                         }
 
                     },
@@ -833,137 +1542,72 @@
                         sunburstContainer.append("div")
                                 .text(textForContractingButton)
                                 .attr('class', 'contractButton')
-                                .attr('id','sunburstContractor')
+                                .attr('id', 'sunburstContractor')
                                 .data(buttondata);
+
+                    },
+
+                    verifyLinkedData = function () {
+                        console.log('hi ho');
+                        d3.json("/bardwebclient/bardWebInterface/linkedData/${cid}", function (incomingData) {
+                            // create an empty list, Just in case we get null data
+                            linkedVizData.parseData(incomingData);
+                            if (!linkedVizData.validateLinkedData()){
+                                console.log(' we have trouble with incoming linked data');
+                                throw new Exception ('bad data');
+                            }  else {
+                                linkedVizData.appendConditionalStatusFields()
+                            }
+                            presentLinkedData();
+                            linkedVizData.cleanupOriginalHierarchyData(2);
+                        });// d3.json
+
+                    },
+
+
+                    presentLinkedData = function () {
+                        // create an empty list, Just in case we get null data
+                        var assays = [];
+
+                        // Clean up the data.  De-dup, and assign
+                        assays = readInData();
+
+                        // Create the crossfilter for the relevant dimensions and groups.
+                        assay = crossfilter(assays);
+
+                        // Build everything were going to display
+                        allDataDcTable = displayManipulator.addDcTable(assay, 'data-table', 'assayId');
+                        biologicalProcessPieChart = displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius);
+                        assayFormatPieChart = displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius);
+                        assayIdDimensionPieChart = displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius);
+                        assayTypePieChart = displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius);
+
+                        assayIndex = assay.dimension(function (d) {
+                            return d['index'];
+                        });
+
+                        // We should be ready, display it
+                        dc.renderAll();
+
+                        // Finally, attach some data along with buttons and callbacks to the pie charts we've built
+                        attachButtonsToThePieContainers('.pieChartContainer', handleExpandOrContractClick, buttondata, d3.selectAll('#suburst_container'));
+
 
                     };
 
-
-            //   A fairly high-level method, used to call the other calls that get everything launched.
-            prepareThePies = function () {
-
-                //
-                // the following data structure defines where everything sits on the page. It is attached
-                //  to the data, and so it gets passed around to various callbacks. If you want to adjust
-                // how this page looks, You'll probably need to change the values held below in  buttondata.
-                //
-                var buttondata = [
-                    {    index: 0,
-                        orig: {
-                            coords: {
-                                x: compressedPos[0].x,
-                                y: compressedPos[0].y },
-                            size: {
-                                width: widgetWidthWithoutSpacing,
-                                height: widgetHeightWithTitle }
-                        },
-                        display: {
-                            coords: {
-                                x: displayWidgetX,
-                                y: displayWidgetY },
-                            size: {
-                                width: displayWidgetWidth,
-                                height: displayWidgetHeight }
-                        }
-                    },
-                    {    index: 1,
-                        orig: {
-                            coords: {
-                                x: compressedPos[1].x,
-                                y: compressedPos[1].y },
-                            size: {
-                                width: widgetWidthWithoutSpacing,
-                                height: widgetHeightWithTitle }
-                        },
-                        display: {
-                            coords: {
-                                x: displayWidgetX,
-                                y: displayWidgetY },
-                            size: {
-                                width: displayWidgetWidth,
-                                height: displayWidgetHeight }
-                        }
-                    },
-                    {    index: 2,
-                        orig: {
-                            coords: {
-                                x: compressedPos[2].x,
-                                y: compressedPos[2].y },
-                            size: {
-                                width: widgetWidthWithoutSpacing,
-                                height: widgetHeightWithTitle }
-                        },
-                        display: {
-                            coords: {
-                                x: displayWidgetX,
-                                y: displayWidgetY },
-                            size: {
-                                width: displayWidgetWidth,
-                                height: displayWidgetHeight }
-                        }
-                    },
-                    {   index: 3,
-                        orig: {
-                            coords: {
-                                x: compressedPos[3].x,
-                                y: compressedPos[3].y },
-                            size: {
-                                width: widgetWidthWithoutSpacing,
-                                height: widgetHeightWithTitle }
-                        },
-                        display: {
-                            coords: {
-                                x: displayWidgetX,
-                                y: displayWidgetY },
-                            size: {
-                                width: displayWidgetWidth,
-                                height: displayWidgetHeight }
-                        }
-                    }
-                ];
-
-                // Retrieve the data do whatever we want to do with it
-                d3.json("/bardwebclient/bardWebInterface/feedMeJson/${cid}", function (incomingData) {
-
-                    // create an empty list, Just in case we get null data
-                    var assays = [];
-
-                    // Clean up the data.  De-dup, and assign
-                    assays = readInData(incomingData);
-
-                    // Create the crossfilter for the relevant dimensions and groups.
-                    assay = crossfilter(assays);
-
-                    // Build everything were going to display
-                    allDataDcTable = displayManipulator.addDcTable(assay, 'data-table', 'assayId');
-                    biologicalProcessPieChart = displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius);
-                    assayFormatPieChart = displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius);
-                    assayIdDimensionPieChart = displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius);
-                    assayTypePieChart = displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius);
-
-                    // We should be ready, display it
-                    dc.renderAll();
-
-                    // Finally, attach some data along with buttons and callbacks to the pie charts we've built
-                    attachButtonsToThePieContainers('.pieChartContainer', handleExpandOrContractClick, buttondata,  d3.selectAll('#suburst_container'));
-
-
-                });// d3.json
-            }; //prepareThePies
             return {
-                prepareThePies: prepareThePies
+                verifyLinkedData: verifyLinkedData,
+                presentLinkedData: presentLinkedData
             }
-        }())//,
+        }())
 
 
         // **********************************************************
         // The highest level call.  Everything starts from here.
         // **********************************************************
-        generateLinkedPies.prepareThePies();
-
+        generateLinkedPies.verifyLinkedData();  //
 
     }());
-
 </script>
 
 
@@ -1053,6 +1697,22 @@
 
 <div id="widthTest" class="legendLine"></div>
 
+
+<script>
+    //        var $data = [{"name":"/", "ac":"0", "inac":"0", "children": [
+    //                     ...
+    var minimumValue=0;
+    var maximumValue=1;
+
+    var continuousColorScale = d3.scale.linear()
+            .domain([0, 1])
+            .interpolate(d3.interpolateRgb)
+            .range(["#deffd9", "#74c476"]);
+
+</script>
+this is
+
+
 <div id="suburst_container" class="container-fluid" style="position:absolute; left: 10px; top: 1000px;">
     <div class="row-fluid">
         <div class="span6">
@@ -1070,17 +1730,21 @@
 
     </div>
 
-    <g:bigSunburstData compoundSummaryPlusId="${compoundSummaryPlusId}" cid="${cid}"/>
+    %{--<g:bigSunburstData compoundSummaryPlusId="${compoundSummaryPlusId}" cid="${cid}"/>--}%
 
     <div class="row-fluid">
         <div class="span9 pull-left">
-            <g:bigSunburstSection compoundSummaryPlusId="${compoundSummaryPlusId}" cid="${cid}"/>
+
+            <div id="sunburstdiv">
+                %{--// Sunburst goes here!--}%
+            </div>
+
         </div>
 
         <div class="span3" style="padding-top: 50px;  height: 600px;">
             <div style="float:right;">
                 <div id="legendGoesHere"></div>
-               <g:sunburstLegend/>
+               %{--<g:sunburstLegend/>--}%
             </div>
 
             <div style="text-align: center; vertical-align: bottom;">

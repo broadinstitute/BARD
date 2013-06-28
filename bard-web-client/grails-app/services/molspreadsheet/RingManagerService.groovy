@@ -118,7 +118,9 @@ class RingManagerService {
                                                  CompoundSummary compoundSummary,
                                                  LinkedHashMap<String, Object> returnValue,
                                                  String assayFormat,
-                                                 String assayType )  {
+                                                 String assayType,
+                                                 String assayName,
+                                                 String capAssayId )  {
         for (String currentExperimentId in currentExperimentIds) {
             Long  experimentIdAsLong
             try {
@@ -134,9 +136,11 @@ class RingManagerService {
                 CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
                 // One or the other of   assayFormat/assayType might be null ( though not both, or else we wouldn't have been called )
                 //  Therefore substitute a nice friendly string "none" for that null string
-                compoundSummaryCategorizer.addNewRecord ( experimentIdAsLong, //assayFormat,  assayType )
+                compoundSummaryCategorizer.addNewRecord ( experimentIdAsLong,
                                                           assayFormat ?: 'none',
-                                                          assayType ?: 'none' )
+                                                          assayType ?: 'none',
+                                                          assayName,
+                                                          capAssayId)
                 List <String> unconvertedBiologyHitIds = []
                 List <String> unconvertedBiologyMissIds = []
                 int outcome
@@ -161,8 +165,109 @@ class RingManagerService {
     }
 
 
+//
+//    public class AssayAggregator{
+//        List <AssaySectionParts> assaySectionPartsList = []
+//
+//        void add(List<String>  currentTargets,
+//                 List<String>  currentExperimentIds,
+//                 CompoundSummary compoundSummary,
+//                 String assayName,
+//                 int  capAssayId,
+//                 String assayFormat,
+//                 String assayType) {
+//            for (String currentExperimentId in currentExperimentIds) {
+//                Long  experimentIdAsLong
+//                try {
+//                    experimentIdAsLong = Long.parseLong(currentExperimentId)
+//                } catch (NumberFormatException nfe) {
+//                    log.warn("Error in response data from REST API. Expected experiment ID as a long but received: '${currentExperimentId}'")
+//                    return
+//                }
+//                List<Activity> testedExperimentList = compoundSummary.getTestedExptdata().findAll {Activity activity -> activity.bardExptId == experimentIdAsLong}
+//                if (testedExperimentList?.size() > 0)   {
+//
+//                    // only if it's tested
+//                    CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
+//                    // One or the other of   assayFormat/assayType might be null ( though not both, or else we wouldn't have been called )
+//                    //  Therefore substitute a nice friendly string "none" for that null string
+//                    compoundSummaryCategorizer.addNewRecord ( experimentIdAsLong, //assayFormat,  assayType )
+//                            assayFormat ?: 'none',
+//                            assayType ?: 'none' )
+//                    List <String> unconvertedBiologyHitIds = []
+//                    List <String> unconvertedBiologyMissIds = []
+//                    int outcome
+//                    for (Activity testedExperiment in testedExperimentList)   {
+//                        outcome = testedExperiment.outcome
+//                        if (testedExperiment.outcome==2) {  // It's a hit!  Save all targets!
+//                            for (String oneTarget in currentTargets) {
+//                                unconvertedBiologyHitIds << oneTarget
+//                                returnValue ["hits"] <<  oneTarget
+//                            }
+//                        }  else { // It's a miss.  Save all the targets to a different list.
+//                            for (String oneTarget in currentTargets) {
+//                                returnValue ["misses"] <<  oneTarget
+//                                unconvertedBiologyMissIds << oneTarget
+//
+//                            }
+//                        }
+//                    }
+//                    compoundSummaryCategorizer.updateOutcome(experimentIdAsLong,outcome,unconvertedBiologyHitIds,unconvertedBiologyMissIds)
+//                }
+//            }
+//
+//        }
+//
+//
+//    }
+
+//    public class AssaySectionParts{
+//        int assayIndex
+//        String assayName
+//        int numberAssaysActive
+//        int numberAssaysInactive
+//        int assayCapId
+//        String biologicalProcess
+//        String assayFormat
+//        String assayType
+//        String assayTarget
+//    }
 
 
+
+//
+//    LinkedHashMap<String, Object> retrieveLinkedDataFromCompoundSummary (CompoundSummary compoundSummary){
+//        LinkedVisHierData linkedVisHierData = new  LinkedVisHierData ();
+//        LinkedHashMap<String, List <String>> returnValue = [:]
+//
+////        returnValue ["hits"]  = []
+////        returnValue ["misses"]  = []
+////        returnValue ["compoundSummaryCategorizer"]  = new CompoundSummaryCategorizer()
+//        List <AssaySectionParts> assaySectionPartsList = []
+//        if (compoundSummary != null){
+//            for (Assay assay in compoundSummary.testedAssays) {
+//                List<String>  currentExperimentIds = assay.experimentIds
+//                List<String>  currentTargets = assay.targetIds
+//                String assayName = assay.name
+//                int  capAssayId =  assay.name
+//                String assayFormat = assay.minimumAnnotation.assayFormat
+//                String assayType = assay.minimumAnnotation.assayType
+//                if ( (currentTargets != null)  ||
+//                        (assayFormat != null) ||
+//                        (assayType != null)){  // If one of the values we care about is non-null then retrieve everything we can find
+//                    retrievedTargetsAndBiologicalProcesses ( currentTargets,
+//                            currentExperimentIds,
+//                            compoundSummary,
+//                            returnValue,
+//                            assayFormat,
+//                            assayType )
+//
+//                }
+//            }
+//
+//        }
+//        return returnValue
+//    }
 
 
 
@@ -190,6 +295,8 @@ class RingManagerService {
                List<String>  currentTargets = assay.targetIds
                String assayFormat = assay.minimumAnnotation.assayFormat
                String assayType = assay.minimumAnnotation.assayType
+               String assayName = assay.name
+               String capAssayId =  assay.capAssayId
                if ( (currentTargets != null)  ||
                     (assayFormat != null) ||
                     (assayType != null)){  // If one of the values we care about is non-null then retrieve everything we can find
@@ -198,7 +305,9 @@ class RingManagerService {
                                                             compoundSummary,
                                                             returnValue,
                                                             assayFormat,
-                                                            assayType )
+                                                            assayType,
+                                                            assayName,
+                                                            capAssayId)
 
                }
              }
@@ -218,6 +327,46 @@ class RingManagerService {
     """.toString()
         stringBuilder.toString()
     }
+
+
+
+    void generateLinkedData (LinkedHashMap<String, Object>  compoundSummaryPlusId,Long cid) {
+//    Boolean includeHits = true // session."actives"
+//    Boolean includeNonHits = true // session."inactives"
+//    int typeOfColoring = session."colorOption"  ?: 3
+//    LinkedHashMap<String, Object>  compoundSummaryPlusId  = attrs.'compoundSummaryPlusId'
+    // We may have an existing compound summary.  If we do, and if the ID matches the request
+    // we've been given then use the existing data. Otherwise use the 'cid' we've been passed
+    // and look up the data manually.
+    LinkedHashMap<String,Object>  ringnodeAndCrossLinks
+    RingNode root
+    if ( ( compoundSummaryPlusId == null ) ||
+    ( compoundSummaryPlusId.'compoundSummary' == null )  ||
+    ( compoundSummaryPlusId.'id' == null )  ||
+    ( compoundSummaryPlusId.'id' != attrs.'cid' ) )  {
+        // For now let's get the data explicitly so that we are sure were getting the right compound.
+        ringnodeAndCrossLinks   =   convertCompoundIntoSunburstById (cid, true, true, compoundSummaryPlusId )
+        root =   ringnodeAndCrossLinks ["RingNode"]
+        compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+    }else {
+        ringnodeAndCrossLinks   =   convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
+        root =   ringnodeAndCrossLinks ["RingNode"]
+        compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+
+    }
+//
+//
+//    LinkedHashMap extremeValues = root.determineColorMappingRange()
+//    out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]
+//    out << "\n"
+//    out << "var minimumValue=${extremeValues["minimumValue"].toString()};\n"
+//    out << "var maximumValue=${extremeValues["maximumValue"].toString()};\n"
+//    out << ringManagerService.colorMappingOnPage ( extremeValues["minimumValue"].toString(),extremeValues["maximumValue"].toString( ) )// js array mapping values to colors
+    }
+
+
+
+
 
 
 
@@ -319,7 +468,7 @@ class RingManagerService {
      * @param whichSubset
      * @return
      */
-    private List <String> generateAccessionIdentifiers(List<String>  unconvertedValues,String whichSubset)   {
+    private List <String> generateAccessionIdentifiers(List<String>  unconvertedValues,String whichSubset,LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber)   {
         final List<String> targets = []
         List <String> returnValues = []
 
@@ -339,6 +488,13 @@ class RingManagerService {
             // processes, as opposed to proteins, start with the suffix GO. Remove those, since they are relevant to the Sunburst
             //As well, check to make sure that whatever comes back really has the format of a UNIPROT accession number
             returnValues=  biologyEntityList*.extId.findAll{!(it==~/^GO.*/)}.findAll{it==~/([A-N,R-Z][0-9][A-Z][A-Z,0-9][A-Z,0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z,0-9][A-Z,0-9][0-9])/}
+            // We have a list of ascension numbers. Use these to draw out the map we want
+            for (String ascensionNumber in returnValues ) {
+                BiologyEntity biologyEntity = biologyEntityList.find{it.extId == ascensionNumber}
+                if (!(mapBiologyIdToProteinAscensionNumber.containsValue(ascensionNumber))){
+                    mapBiologyIdToProteinAscensionNumber[biologyEntity.getEntityId()]=ascensionNumber
+                }
+            }
         }
         returnValues
     }
@@ -392,27 +548,30 @@ class RingManagerService {
      * @param unconvertedValues
      * @return
      */
-    private LinkedHashMap convertBiologyIdsToAscensionNumbers (LinkedHashMap unconvertedValues)  {
+    private LinkedHashMap convertBiologyIdsToAscensionNumbers (LinkedHashMap unconvertedValues,LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber)  {
         LinkedHashMap convertedValues  = [:]
         // first will convert the hits
-        convertedValues["hits"]  =  generateAccessionIdentifiers(unconvertedValues["hits"],"hits")
+        convertedValues["hits"]  =  generateAccessionIdentifiers(unconvertedValues["hits"],"hits",mapBiologyIdToProteinAscensionNumber)
         // now add those assays that did not hit for this compound
-        convertedValues["misses"]  =  generateAccessionIdentifiers(unconvertedValues["misses"],"misses")
+        convertedValues["misses"]  =  generateAccessionIdentifiers(unconvertedValues["misses"],"misses",mapBiologyIdToProteinAscensionNumber)
 
         return  convertedValues
     }
 
 
 
+    public LinkedVisHierData  convertCompoundSummaryIntoLinkedData (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
 
+    }
 
 
     public  LinkedHashMap<String, Object>  convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
         LinkedHashMap<String, Object> returnValue = [:]
+        LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber = [:]
         LinkedHashMap activeInactiveDataPriorToConversion = retrieveActiveInactiveDataFromCompound(compoundSummary)
         generateAccessionIdentifiers(activeInactiveDataPriorToConversion["compoundSummaryCategorizer"])
         returnValue ["CompoundSummaryCategorizer"]  =  activeInactiveDataPriorToConversion["compoundSummaryCategorizer"]
-        LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion)
+        LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion,mapBiologyIdToProteinAscensionNumber)
         final List<String> targets = []
         if (includeHits) {
             activeInactiveData["hits"].each {targets <<  it }
