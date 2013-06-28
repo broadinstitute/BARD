@@ -26,7 +26,9 @@
     <input type="hidden" name="assayId" value="${assay.id}"/>
 
     <p>
+        <g:link controller="assayDefinition" action="show" id="${assay.id}"  class="btn">Cancel</g:link>
         <input type="submit" class="btn btn-primary" value="Create"/>
+
     </p>
     
     <g:hasErrors bean="${experiment}">

@@ -53,14 +53,6 @@
                           data-original-title="Select Project Status"></span>
                 </dd>
 
-                %{--<dt>* <g:message code="project.groupType.label" default="Fix i18n"/>:</dt>--}%
-                %{--<dd>--}%
-                    %{--<span class="projectForm"--}%
-                          %{--id="groupTypeId"--}%
-                          %{--data-value="${projectCommand.groupType}" data-type="select" data-source="/BARD/project/groupType" data-name="groupType"--}%
-                          %{--data-original-title="Select Project Group Type"></span>--}%
-                %{--</dd>--}%
-
                 <dt>* <g:message code="project.name.label" default="Fix i18n"/>:</dt>
                 <dd>
                     <span  class="projectForm" id="nameId"

@@ -164,7 +164,8 @@ class ProjectController {
     def reloadProjectSteps(Long projectId) {
         try {
             Project project = Project.findById(projectId)
-            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+            boolean editable = canEdit(permissionEvaluator, springSecurityService, project)
+            render(template: "showstep", model: [experiments: project.projectExperiments, editable: editable ? 'canedit' : 'cannotedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (Exception e) {
             render 'serviceError:' + e.message
         }
@@ -176,7 +177,7 @@ class ProjectController {
         try {
             projectService.removeExperimentFromProject(experiment, project)
             project = Project.findById(projectId)
-            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+            render(template: "showstep", model: [experiments: project.projectExperiments, editable:'canedit',pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
@@ -192,7 +193,7 @@ class ProjectController {
         try {
             projectService.removeEdgeFromProject(fromExperiment, toExperiment, project)
             project = Project.findById(projectId)
-            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+            render(template: "showstep", model: [experiments: project.projectExperiments, editable:'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
@@ -213,7 +214,7 @@ class ProjectController {
         try {
             projectService.linkExperiment(fromExperiment, toExperiment, project)
             project = Project.findById(projectId)
-            render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+            render(template: "showstep", model: [experiments: project.projectExperiments, editable:'canedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (AccessDeniedException ade) {
             log.error(ade)
             render accessDeniedErrorMessage()
@@ -244,7 +245,7 @@ class ProjectController {
                     def experimentId = experimentDisplayName.split("-")[0]
                     def experiment = Experiment.findById(experimentId)
                     projectService.addExperimentToProject(experiment, project, element)
-                    render(template: "showstep", model: [experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
+                    render(template: "showstep", model: [editable:'canedit',experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
                 }
             }
             catch (AccessDeniedException ade) {
