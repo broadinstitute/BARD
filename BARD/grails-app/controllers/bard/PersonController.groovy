@@ -9,7 +9,7 @@ class PersonController {
     def index() { redirect action: "list" }
 
     def list() {
-        return [people: Person.all, roles: Role.all]
+        return [people: Person.all, roles: Role.all, userName:params.userName, fullName:params.fullName,emailAddress:params.emailAddress]
     }
 
     def edit() {

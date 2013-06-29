@@ -115,7 +115,7 @@ grails.project.dependency.resolution = {
 
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
-
+grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
     html('html') {

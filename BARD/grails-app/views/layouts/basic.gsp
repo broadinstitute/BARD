@@ -22,6 +22,22 @@
                     </a>
                     <ul class="nav">
                         <li><a href="/BARD">CAP</a></li>
+                        <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    Admin
+                                    <b class="caret"></b>
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li class="controller"><g:link
+                                            controller="register">Register New BARD User in CROWD</g:link></li>
+                                    <li class="controller"><g:link controller="register"
+                                                                   action="listUsersAndGroups">List BARD Users in CROWD</g:link></li>
+                                </ul>
+
+                            </li>
+                        </sec:ifAnyGranted>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Assay Definitions
@@ -51,8 +67,8 @@
                     </ul>
                     <sec:ifLoggedIn>
                         <g:form class="navbar-form pull-right" name="logoutForm" controller="logout">
-                             <span
-                                style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
+                            <span
+                                    style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
                             <button type="submit" class="btn btn-primary">Logout</button>
                         </g:form>
                     </sec:ifLoggedIn>
@@ -72,8 +88,8 @@
     <div class="row-fluid">
         <div class="span12">
             <div class="spinner-container">
-            <div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"
-                                                                                            default="Loading&hellip;"/></div>
+                <div id="spinner" class="spinner" style="display:none; color: blue;"><g:message code="spinner.alt"
+                                                                                                default="Loading&hellip;"/></div>
             </div>
             <g:layoutBody/>
         </div>

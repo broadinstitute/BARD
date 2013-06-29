@@ -28,9 +28,9 @@
             <h3>Add new user</h3>
             <g:form action="save" class="form-inline">
                 <input type="submit" value="Add user" class="btn btn-primary">
-                <input type="text" placeholder="Username" name="userName">
-                <input type="text" placeholder="Full name" name="userName">
-                <input type="text" placeholder="Email address" name="emailAddress">
+                <input type="text" placeholder="Username" name="userName" value="${params.userName}">
+                <input type="text" placeholder="Full name" name="fullName" value="${params.fullName}">
+                <input type="text" placeholder="Email address" name="emailAddress" value="${params.email}">
                 Primary group: <g:select name="primaryGroup" from="${roles}" optionValue="displayName"  noSelection="${['':'']}"/>
             </g:form>
 
