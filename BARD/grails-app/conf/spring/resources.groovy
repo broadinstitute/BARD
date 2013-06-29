@@ -1,5 +1,6 @@
 import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
+import grails.util.Environment
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 
 // Place your Spring DSL code here
@@ -30,30 +31,38 @@ beans = {
     }
     hibernateEventListeners(HibernateEventListeners) {
         listenerMap = [
-                'flush' : readyForExtractFlushListener,
+                'flush': readyForExtractFlushListener,
                 'post-insert': readyForExtractFlushListener,
                 'post-update': readyForExtractFlushListener,
                 'pre-insert': modifiedByListener,
                 'pre-update': modifiedByListener,
         ]
     }
-    inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService){
-        grailsApplication = application
-    }
+
+
     bardAuthorizationProviderService(bard.auth.BardAuthorizationProviderService) {// beans here
         crowdClient = ref('crowdClient')
         grailsApplication = application
     }
-//    crowdAuthenticationProvider(org.broadinstitute.cbip.crowd.CrowdAuthenticationProviderService) {// beans here
-//        crowdClient = ref('crowdClient')
-//        grailsApplication = application
-//    }
-    userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService){
-        crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService')]
+    //if production then eliminate the mock user because it is a security hole in production
+
+    switch (Environment.current) {
+        case Environment.PRODUCTION:
+            userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
+                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService')]
+            }
+            break
+        default:
+            inMemMapAuthenticationProviderService(org.broadinstitute.cbip.crowd.noServer.MockCrowdAuthenticationProviderService) {
+                grailsApplication = application
+            }
+            userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
+                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService')]
+            }
     }
 
-    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory){ bean ->
-                bean.factoryMethod = "getInstance"
+    def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
+        bean.factoryMethod = "getInstance"
     }
 
 }
