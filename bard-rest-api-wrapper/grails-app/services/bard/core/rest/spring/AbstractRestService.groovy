@@ -33,7 +33,7 @@ abstract class AbstractRestService {
      * @throws UnsupportedEncodingException
      */
     protected String buildSuggestQuery(SuggestParams params) throws UnsupportedEncodingException {
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(getResourceContext()).

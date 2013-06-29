@@ -93,7 +93,7 @@ class CompoundRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.COMPOUNDS_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -105,7 +105,7 @@ class CompoundRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.COMPOUNDS_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

@@ -8,6 +8,7 @@ import bard.core.util.FilterTypes
 import grails.test.mixin.TestFor
 import org.springframework.http.HttpHeaders
 import org.springframework.web.client.RestTemplate
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.core.rest.spring.experiment.*
@@ -17,11 +18,12 @@ import bard.core.rest.spring.experiment.*
 class ExperimentRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     LoggerService loggerService
+    @Shared
+    ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: "http://ncgc" )
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
         service.externalUrlDTO = externalUrlDTO
 
         this.loggerService = Mock(LoggerService)

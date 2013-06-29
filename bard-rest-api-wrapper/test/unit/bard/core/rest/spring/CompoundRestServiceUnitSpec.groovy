@@ -14,6 +14,7 @@ import grails.test.mixin.TestFor
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.RestTemplate
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -29,13 +30,14 @@ class CompoundRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     ExecutorService executorService
     LoggerService loggerService
+    @Shared
+    ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: "http://ncgc" )
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         this.executorService = Mock(ExecutorService)
         service.executorService = this.executorService
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
         service.externalUrlDTO = externalUrlDTO
 
         this.loggerService = Mock(LoggerService)

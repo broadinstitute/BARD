@@ -46,7 +46,7 @@ class BiologyRestService  extends AbstractRestService  {
     public String getSearchResource() {
         // Not relevant for our purposes right now
         final String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -58,7 +58,7 @@ class BiologyRestService  extends AbstractRestService  {
     @Override
     public String getResource() {
         final String resourceName = getResourceContext()
-        return (new StringBuilder(externalUrlDTO.baseUrl).
+        return (new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH)).
                 toString();

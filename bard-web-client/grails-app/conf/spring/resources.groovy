@@ -14,10 +14,12 @@ import bardqueryapi.BardLoginController
 beans = {
     String ncgcBaseURL = grailsApplication.config.ncgc.server.root.url
     String badApplePromiscuityUrl = grailsApplication.config.promiscuity.badapple.url
+    String bardCapUrl = grailsApplication.config.bard.cap.home
 
     externalUrlDTO(ExternalUrlDTO) {
-        baseUrl = ncgcBaseURL
+        ncgcUrl = ncgcBaseURL
         promiscuityUrl = badApplePromiscuityUrl
+        capUrl = bardCapUrl
     }
 
     restTemplate(RestTemplate)

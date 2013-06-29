@@ -17,7 +17,6 @@ public class CapService extends AbstractRestService {
     @Cacheable(value = 'elementHierarchyPaths')
     public Map getDictionaryElementPaths() {
         String basicAuthHash = grailsApplication.config.bard.cap.basicAuthenticationHash
-        this.externalUrlDTO.baseUrl = grailsApplication.config.bard.cap.home
         final URL url = new URL(resource.toString())
         try {
             SSLTrustManager.enableSSL()//enable SSL so we can call the data export API
@@ -60,7 +59,7 @@ public class CapService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.capUrl).
                 append(resourceName).
                 append('/list').
                 toString();
