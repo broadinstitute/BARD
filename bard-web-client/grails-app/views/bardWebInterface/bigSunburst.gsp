@@ -1687,10 +1687,11 @@
 <table id="data-table" class="table table-hover dc-data-table"  style="position:absolute; left: 0px; top: 300px;">
     <thead>
     <tr class="header">
-        <th style='width: 25%' class="data-table-th">Biological process</th>
-        <th style='width: 25%' class="data-table-th">Assay format</th>
-        <th style='width: 25%' class="data-table-th">Proteins target</th>
-        <th style='width: 25%' class="data-table-th">Assay type</th>
+        <th style='width: 23%' class="data-table-th">Biological process</th>
+        <th style='width: 23%' class="data-table-th">Assay format</th>
+        <th style='width: 23%' class="data-table-th">Proteins target</th>
+        <th style='width: 23%' class="data-table-th">Assay type</th>
+        <th style='width: 8%' class="data-table-th">ID</th>
     </tr>
     </thead>
 </table>
@@ -1710,7 +1711,6 @@
             .range(["#deffd9", "#74c476"]);
 
 </script>
-this is
 
 
 <div id="suburst_container" class="container-fluid" style="position:absolute; left: 10px; top: 1000px;">

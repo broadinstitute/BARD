@@ -161,7 +161,10 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         .value(function (d) {
             return linkedVizData.adjustedPartitionSize(d);
 //                        return d.size;
-        });
+        }).sort(function(a,b){
+                return d3.descending(a.name, b.name);
+            })
+        ;
 
     var arc = d3.svg.arc()
         .startAngle(function (d) {
@@ -280,7 +283,9 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         .on("mouseout",tooltipHandler.mouseOut );
 
 
-    var text = svg.datum(hierarchyData).selectAll("text").data(partition.nodes);
+    var text = svg.datum(hierarchyData)
+        .selectAll("text")
+        .data(partition.nodes);
 
     // Interpolate the scales!
     function click(d) {

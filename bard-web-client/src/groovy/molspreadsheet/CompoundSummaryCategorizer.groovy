@@ -173,16 +173,16 @@ class CompoundSummaryCategorizer {
         for (Long currentEid in experimentIds) {
             SingleEidSummary singleEidSummary = totalContents[currentEid]
             stringBuilder << "    {\n"
-            stringBuilder << "        \"AssayIdx\": \"${loopingCount}\",\n"
+            stringBuilder << "        \"AssayIdx\": ${loopingCount},\n"
             stringBuilder << "        \"AssayName\": \"${singleEidSummary.getAssayName()}\",\n"
             if (singleEidSummary.outcome==2){
-                stringBuilder << "        \"AssayAc\": 0,\n"
-                stringBuilder << "        \"AssayIn\": 1,\n"
-            } else {
                 stringBuilder << "        \"AssayAc\": 1,\n"
                 stringBuilder << "        \"AssayIn\": 0,\n"
+            } else {
+                stringBuilder << "        \"AssayAc\": 0,\n"
+                stringBuilder << "        \"AssayIn\": 1,\n"
             }
-            stringBuilder << "        \"AssayId\": \"${singleEidSummary.getAssayCapId()}\"\n"
+            stringBuilder << "        \"AssayId\": ${singleEidSummary.getAssayCapId()}\n"
             stringBuilder << "    }\n"
             if ((++loopingCount) < numberOfElements) {
                 stringBuilder << ","
