@@ -72,5 +72,11 @@ beans = {
     sunburstRestService(SunburstRestService){
         sunburstCacheService = ref('sunburstCacheService')
     }
+    capRestService(CapRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+        grailsApplication = grailsApplication
+    }
 }
 

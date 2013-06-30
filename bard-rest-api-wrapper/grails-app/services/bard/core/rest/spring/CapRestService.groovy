@@ -1,4 +1,4 @@
-package bard.core.helper
+package bard.core.rest.spring
 
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.AbstractRestService
@@ -8,7 +8,7 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 
-public class CapService extends AbstractRestService {
+public class CapRestService extends AbstractRestService {
 
     def transactional = false
     def grailsApplication

@@ -1,12 +1,8 @@
-package bard.core.rest.helper
+package bard.core.rest.spring
 
-import bard.core.SearchParams
-import bard.core.helper.CapService
-import bard.core.rest.spring.*
-import bard.core.rest.spring.assays.Assay
-import bard.core.rest.spring.experiment.*
+import bard.core.rest.helper.RESTTestHelper
+import bard.core.rest.spring.CapRestService
 import grails.plugin.spock.IntegrationSpec
-import spock.lang.Shared
 import spock.lang.Unroll
 
 /**
@@ -14,13 +10,13 @@ import spock.lang.Unroll
  */
 @Mixin(RESTTestHelper)
 @Unroll
-class CapServiceIntegrationSpec extends IntegrationSpec {
-    CapService capService
+class CapRestServiceIntegrationSpec extends IntegrationSpec {
+    CapRestService capRestService
 
 
     void "test getDictionaryElementPaths"() {
         when:
-        final Map elementPaths = this.capService.getDictionaryElementPaths()
+        final Map elementPaths = this.capRestService.getDictionaryElementPaths()
 
         then:
         elementPaths.assayType.contains('/BARD/assay protocol/assay type/')
