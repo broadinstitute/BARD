@@ -146,6 +146,37 @@
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3F8EB5), color-stop(100%,#1D76A0)); /* webkit */
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3F8EB5', endColorstr='#1D76A0',GradientType=0 );
     }
+    .drill{
+        float: left;
+        border: 1px solid #5d9046;
+        background: #67AA25;
+        color: #fff;
+        font-family: Arial, Helvetica, Sans-Serif;
+        text-decoration: none;
+        width: 100px;
+        font-size: 10px;
+        font-weight: bold;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        right: 0px;
+        bottom: 0px;
+        text-align: center;
+        display: block;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        text-shadow: 1px 1px 1px #666;
+        -moz-box-shadow: 0 1px 3px #111;
+        -webkit-box-shadow: 0 1px 3px #111;
+        box-shadow: 0 1px 3px #111;
+        background: #3F8EB5; /* old browsers */
+        background: -moz-linear-gradient(top, #3F8EB5 0%, #1D76A0 100%); /* firefox */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3F8EB5), color-stop(100%,#1D76A0)); /* webkit */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3F8EB5', endColorstr='#1D76A0',GradientType=0 );
+    }
+
     .contractButton{
         position:absolute;
         float: right;
