@@ -67,6 +67,12 @@ beans = {
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')
     }
+    capRestService(CapRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+        grailsApplication = grailsApplication
+    }
     switch (GrailsUtil.environment) {
         case "offline":
             queryService(MockQueryService) {
@@ -81,6 +87,7 @@ beans = {
                 assayRestService = ref('assayRestService')
                 substanceRestService = ref('substanceRestService')
                 experimentRestService = ref('experimentRestService')
+                capRestService = ref('capRestService')
             }
             eTagsService(ETagsService) {
                 compoundRestService = ref('compoundRestService')

@@ -4,7 +4,7 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.helper.CapService
+import bard.core.rest.spring.CapRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.assays.ExpandedAssay
@@ -38,7 +38,7 @@ class QueryServiceUnitSpec extends Specification {
     ProjectRestService projectRestService
     ExperimentRestService experimentRestService
     SubstanceRestService substanceRestService
-    CapService capService
+    CapRestService capRestService
     @Shared ExpandedAssayResult expandedAssayResult = new ExpandedAssayResult()
     @Shared CompoundResult compoundResult = new CompoundResult()
     @Shared ExpandedAssay expandedAssay1 = new ExpandedAssay()
@@ -318,7 +318,7 @@ class QueryServiceUnitSpec extends Specification {
         experimentRestService = Mock(ExperimentRestService)
         substanceRestService = Mock(SubstanceRestService)
         queryHelperService = Mock(QueryHelperService)
-        capService = Mock(CapService)
+        capRestService = Mock(CapRestService)
 
         service.queryHelperService = queryHelperService
         service.assayRestService = assayRestService
@@ -326,7 +326,7 @@ class QueryServiceUnitSpec extends Specification {
         service.projectRestService = projectRestService
         service.substanceRestService = substanceRestService
         service.experimentRestService = experimentRestService
-        service.capService = capService
+        service.capRestService = capRestService
         this.compoundSummary2 = objectMapper.readValue(COMPOUND_SUMMARY, CompoundSummary.class)
     }
 
@@ -980,7 +980,7 @@ class QueryServiceUnitSpec extends Specification {
         final Map result = service.getPathsForType(type, endNode)
 
         then:
-        this.capService.getDictionaryElementPaths() >> { this.ELEMENT_PATHS_MAP }
+        this.capRestService.getDictionaryElementPaths() >> { this.ELEMENT_PATHS_MAP }
 
         assert result[endNode] == expectedResultPath
 

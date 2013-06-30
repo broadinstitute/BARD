@@ -199,9 +199,9 @@ public interface IQueryService {
                                     List<FilterTypes> filterTypes,
                                     SearchParams searchParams)
 
-    List<Map> getPathsForAssayFormat(String endNode)
+    Map getPathsForAssayFormat(String endNode)
 
-    List<Map> getPathsForAssayType(String endNode)
+    Map getPathsForAssayType(String endNode)
 
-    List<Map> getPathsForBiologicalProcess(String endNode)
+    Map getPathsForBiologicalProcess(String endNode)
 }
