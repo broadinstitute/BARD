@@ -928,17 +928,17 @@ Screening Center: NIH Chemical Genomics Center [NCGC]'''
     }
 
     @Override
-    List<Map> getPathsForAssayFormat(String endNode) {
+    Map getPathsForAssayFormat(String endNode) {
         return null
     }
 
     @Override
-    List<Map> getPathsForAssayType(String endNode) {
+    Map getPathsForAssayType(String endNode) {
         return null
     }
 
     @Override
-    List<Map> getPathsForBiologicalProcess(String endNode) {
+    Map getPathsForBiologicalProcess(String endNode) {
         return null
     }
 

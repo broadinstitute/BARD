@@ -323,8 +323,8 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert projectAdapterMap.facets
         assert projectAdapterMap.nHits > 0
         where:
-        label                | searchString         | skip | top | filters
-        "dna repair"         | "\"Scavenger\""      | 0    | 10  | []
+        label                | searchString                  | skip | top | filters
+        "dna repair"         | "\"Scavenger\""               | 0    | 10  | []
         "biological process" | "kegg_disease_cat:\"Cancer\"" | 0    | 10  | []
     }
 
@@ -359,5 +359,22 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         label        | pids
         "Single PID" | [PIDS.get(0)]
         //"Search with a list of project ids" | PIDS
+    }
+
+    void "test #methodName #label"() {
+        when: ""
+        final Map paths = queryService."${methodName}"(endNode)
+
+        then:
+        assert paths[endNode] == expectedPath
+
+        where:
+        methodName                     | label                         | endNode                | expectedPath
+        'getPathsForAssayFormat'       | "with 'protein format'"       | 'protein format'       | 'assay format/biochemical format/protein format'
+        'getPathsForAssayFormat'       | "with 'assay format'"         | 'assay format'         | 'assay format'
+        'getPathsForAssayType'         | "with 'in vitro'"             | 'in vitro'             | 'assay type/assay mode/in vitro'
+        'getPathsForAssayType'         | "with 'assay type'"           | 'assay type'           | 'assay type'
+        'getPathsForBiologicalProcess' | "with 'NCBI BioSystems term'" | 'NCBI BioSystems term' | 'biological process/NCBI BioSystems term'
+        'getPathsForBiologicalProcess' | "with 'biological process'"   | 'biological process'   | 'biological process'
     }
 }

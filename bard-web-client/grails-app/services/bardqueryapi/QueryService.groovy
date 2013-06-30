@@ -6,7 +6,7 @@ import bard.core.Value
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.helper.CapService
+import bard.core.rest.spring.CapRestService
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.experiment.ExperimentData
 import bard.core.rest.spring.experiment.ExperimentSearch
@@ -35,7 +35,7 @@ class QueryService implements IQueryService {
     ProjectRestService projectRestService
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
-    CapService capService
+    CapRestService capRestService
 
     //========================================================== Free Text Searches ================================
 
@@ -647,22 +647,22 @@ class QueryService implements IQueryService {
     }
 
     @Override
-    List<Map> getPathsForAssayFormat(String endNode) {
+    Map getPathsForAssayFormat(String endNode) {
         return getPathsForType('assayFormat', endNode)
     }
 
     @Override
-    List<Map> getPathsForAssayType(String endNode) {
+    Map getPathsForAssayType(String endNode) {
         return getPathsForType('assayType', endNode)
     }
 
     @Override
-    List<Map> getPathsForBiologicalProcess(String endNode) {
+    Map getPathsForBiologicalProcess(String endNode) {
         return getPathsForType('biologicalProcess', endNode)
     }
 
     Map getPathsForType(String type, String endNode) {
-        Map dictionaryElementPaths = this.capService.getDictionaryElementPaths()
+        Map dictionaryElementPaths = this.capRestService.getDictionaryElementPaths()
         List<String> paths = dictionaryElementPaths[type] ?: []
         String startingNode = type.replaceAll(/[A-Z]/, { (' ' + it[0]).toLowerCase() }) //convert assayType --> 'assay type'
         String foundPath = paths.find { it.endsWith(endNode + '/') }
