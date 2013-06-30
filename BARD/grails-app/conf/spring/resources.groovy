@@ -1,10 +1,13 @@
 import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
+import bard.person.RoleEditorRegistrar
 import grails.util.Environment
 import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 
 // Place your Spring DSL code here
 beans = {
+
+    customPropertyEditorRegistrar(RoleEditorRegistrar)
     clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
         username = grailsApplication.config.CbipCrowd.application.username
         password = grailsApplication.config.CbipCrowd.application.password

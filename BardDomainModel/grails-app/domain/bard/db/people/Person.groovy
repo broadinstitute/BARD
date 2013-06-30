@@ -24,6 +24,7 @@ class Person {
         userName(column: 'USERNAME')
         newObjectRole(column: 'NEW_OBJECT_ROLE')
     }
+    static transients = ["rolesAsList"]
 
     static constraints = {
         userName(blank: false, maxSize: NAME_MAX_SIZE)
@@ -40,5 +41,12 @@ class Person {
         PersonRole.withTransaction {  //see http://jira.grails.org/browse/GRAILS-8450
             return PersonRole.findAllByPerson(this).collect { it.role } as Set
         }
+    }
+    String getRolesAsList(){
+        List<String> displayNames = []
+        for(Role role:getRoles()){
+            displayNames.add(role.displayName)
+        }
+        return displayNames.join(",")
     }
 }

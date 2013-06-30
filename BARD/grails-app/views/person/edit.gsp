@@ -25,39 +25,48 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <g:form action="update" class="form-horizontal" id="${person.id}">
+            <g:form action="update" class="form-horizontal" id="${personCommand.username}">
+                <g:hiddenField name="version" value="${personCommand.version}"/>
                 <div class="control-group">
                     <label class="control-label" for="userName">Username</label>
                     <div class="controls">
-                        <g:textField id="userName" name="userName" value="${person.userName}"/>
+                        <g:textField id="userName" name="username" value="${personCommand.username}" readonly="true"/>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="fullName">Full name</label>
                     <div class="controls">
-                        <g:textField id="fullName" name="fullName" value="${person.fullName}"/>
+                        <g:textField id="fullName" name="displayName" value="${personCommand.displayName}"/>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="emailAddress">Email</label>
                     <div class="controls">
-                        <g:textField id="emailAddress" name="emailAddress" value="${person.emailAddress}"/>
+                        <input type="email" id="emailAddress" name="email" value="${personCommand.email}"/>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="primaryGroup">Primary group</label>
                     <div class="controls">
-                        <g:select id="primaryGroup" name="primaryGroup" from="${roles}" optionKey="id" optionValue="displayName" noSelection="${['':'']}" value="${person.newObjectRole?.id}"/>
+                        <g:select required="" id="primaryGroup" name="primaryGroup.id" from="${bard.db.people.Role.list()}"
+                                  optionKey="id"
+                                  optionValue="displayName" noSelection="${['': '']}"
+                                  value="${personCommand?.primaryGroup?.id}"/>
                     </div>
                 </div>
 
                 <div class="control-group">
                     <label class="control-label" for="roles">Primary group</label>
                     <div class="controls">
-                        <g:select id="roles" name="roles" from="${roles}" optionKey="id" optionValue="displayName" multiple="${true}" value="${person.roles.collect {it.id} }"/>
+                        <g:select id="roles"  size="${bard.db.people.Role.list().size()}"
+                                  name="roles" from="${bard.db.people.Role.list()}"
+                                  multiple="multiple"
+                                  optionKey="id"
+                                  optionValue="displayName"
+                                  value="${personCommand?.roles?.collect{it?.id}}"/>
                     </div>
                 </div>
 

@@ -31,9 +31,11 @@
 
                                 <ul class="dropdown-menu">
                                     <li class="controller"><g:link
-                                            controller="register">Register New BARD User in CROWD</g:link></li>
+                                            controller="register">Register New BARD User</g:link></li>
                                     <li class="controller"><g:link controller="register"
-                                                                   action="listUsersAndGroups">List BARD Users in CROWD</g:link></li>
+                                                                   action="listUsersAndGroups">List CROWD Users</g:link></li>
+                                    <li class="controller"><g:link controller="person"
+                                                                   action="list">List Person Table</g:link></li>
                                 </ul>
 
                             </li>

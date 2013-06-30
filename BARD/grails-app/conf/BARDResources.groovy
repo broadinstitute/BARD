@@ -47,6 +47,9 @@ modules = {
     datatables {
         resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
     }
+    grailspagination{
+        resource url:'/css/grailspagination.css'
+    }
     dynatree {
         dependsOn 'jquery, jquery-ui'
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'

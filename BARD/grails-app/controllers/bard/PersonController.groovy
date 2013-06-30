@@ -1,35 +1,163 @@
 package bard
 
+import bard.db.command.BardCommand
 import bard.db.people.Person
+import bard.db.people.PersonRole
 import bard.db.people.Role
 import grails.plugins.springsecurity.Secured
+import grails.plugins.springsecurity.SpringSecurityService
+import grails.validation.Validateable
+import groovy.transform.InheritConstructors
 
 @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
 class PersonController {
     def index() { redirect action: "list" }
 
     def list() {
-        return [people: Person.all, roles: Role.all, userName:params.userName, fullName:params.fullName,emailAddress:params.emailAddress]
+        final List<Person> people = []
+        params.max = Math.min(params.max ? params.int('max') : 100, 200)
+        people.addAll(Person.list(params))
+        return [people: people, roles: Role.all, peopleTotal: Person.count(), personCommand: new PersonCommand()]
     }
 
     def edit() {
         Person person = Person.get(params.id)
-        return [person: person, roles: Role.all]
+        PersonCommand personCommand = new PersonCommand(person)
+        return [person: person, roles: Role.all, personCommand: personCommand]
     }
 
-    def save() {
-        Person person = new Person()
-        person.properties["userName", "fullName", "emailAddress"] = params
-        person.save()
+    def save(PersonCommand personCommand) {
+        if (!personCommand.validate()) {
+            flash.message = "Person not successfully added. Try again"
+            redirect action: "list"
+            return
+        }
 
+        final Person person = personCommand.createNewPerson()
+        if (!person) {
+            flash.message = "Person not successfully added. Try again"
+        }else{
+            flash.message = "Person successfully added"
+        }
         redirect action: "list"
     }
 
-    def update() {
-        Person person = Person.get(params.id)
-        person.properties["userName", "fullName", "emailAddress"] = params
-        person.save()
-
+    def update(PersonCommand personCommand) {
+        if (personCommand.updateExistingPerson()) {
+            flash.message = "Successfully edited object"
+        } else {
+            flash.message = "Could not edit object"
+        }
         redirect action: "list"
+    }
+}
+@InheritConstructors
+@Validateable
+class PersonCommand extends BardCommand {
+    String username
+    String email
+    String displayName
+    Role primaryGroup
+    List<Role> roles = []
+    Long version
+
+    SpringSecurityService springSecurityService
+
+    PersonCommand() {}
+
+    PersonCommand(Person person) {
+        copyFromDomainToCmd(person)
+    }
+
+    static constraints = {
+        username blank: false, nullable: false, validator: { value, command ->
+            if (value) {
+                if (Person.findByUserName(value)) {
+                    return 'registerCommand.username.unique'
+                }
+            }
+        }
+        email blank: false, nullable: false, email: true, validator: { value, command ->
+            if (value) {
+                if (Person.findByEmailAddress(value)) {
+                    return 'registerCommand.email.unique'
+                }
+            }
+        }
+        displayName blank: false, nullable: false
+        primaryGroup nullable: false
+    }
+
+    Person createNewPerson() {
+        Person personToReturn = null
+        if (validate()) {
+            Person person = new Person()
+            copyFromCmdToDomain(person)
+            if (attemptSave(person)) {
+                personToReturn = person
+                //insert roles
+                addPersonRoles(person)
+            }
+        }
+        return personToReturn
+    }
+
+    void addPersonRoles(Person person) {
+        if (!PersonRole.findAllByPersonAndRole(person, this.primaryGroup)) {
+            PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
+        }
+        for (Role role : this.roles) {
+            if (role != primaryGroup) {
+                PersonRole.create(person, role, springSecurityService.principal?.username, true)
+            }
+        }
+    }
+
+    Person updateExistingPerson() {
+        Person person = Person.findByUserName(this.username)
+        if (!person) {
+            throw new RuntimeException("Could not find Person with user name ${username}")
+        }
+
+        if (this.version?.longValue() != person.version?.longValue()) {
+            throw new RuntimeException("Optimistic lock error")
+        } else {
+            copyFromCmdToDomain(person)
+            person = person.save(flush: true)
+            //delete all the roles,then add them again
+            final List<PersonRole> existingPersonRoles = PersonRole.findAllByPerson(person)
+            roles.add(this.primaryGroup)
+
+            for (PersonRole personRole : existingPersonRoles) {
+                if (roles.contains(personRole.role)) {
+                    roles.removeAll(personRole.role)
+                }
+            }
+            if (roles) {
+                addPersonRoles(person)
+            }
+            //   person = Person.findByUserName(this.username)
+
+
+        }
+
+
+        return person
+    }
+
+    void copyFromCmdToDomain(Person person) {
+        person.userName = this.username
+        person.emailAddress = this.email
+        person.fullName = this.displayName
+        person.newObjectRole = primaryGroup
+    }
+
+    void copyFromDomainToCmd(Person person) {
+        this.username = person.userName
+        this.email = person.emailAddress
+        this.displayName = person.fullName
+        this.primaryGroup = person.newObjectRole
+        this.roles = person.roles as List<Role>
+        this.version = person.version
     }
 }

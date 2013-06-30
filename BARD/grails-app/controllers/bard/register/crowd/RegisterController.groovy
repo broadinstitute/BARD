@@ -1,5 +1,9 @@
 package bard.register.crowd
 
+import bard.db.command.BardCommand
+import bard.db.people.Person
+import bard.db.people.PersonRole
+import bard.db.people.Role
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import register.crowd.CrowdGroupMembership
@@ -10,7 +14,6 @@ import register.crowd.CrowdRegistrationUser
 @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
 class RegisterController {
     static defaultAction = 'index'
-    SpringSecurityService springSecurityService
     // override default value from base class
     static allowedMethods = [register: 'POST']
     CrowdRegisterUserService crowdRegisterUserService
@@ -31,23 +34,32 @@ class RegisterController {
     }
 
     def register(RegisterCommand registerCommand) {
-        if (registerCommand.hasErrors()) {
+
+        if (!registerCommand.validate()) {
             render view: 'index', model: [registerCommand: registerCommand]
             return
         }
-        CrowdRegistrationUser registrationUser =
-            new CrowdRegistrationUser(email: registerCommand.email,
-                    name: registerCommand.username,
-                    password: new CrowdPassword(value: registerCommand.password),
-                    first_name: registerCommand.firstName, last_name: registerCommand.lastName,
-                    display_name: registerCommand.displayName, active: true)
+        Person person = registerCommand.createNewPerson()
+        if (person) {
+            CrowdRegistrationUser registrationUser =
+                new CrowdRegistrationUser(email: registerCommand.email,
+                        name: registerCommand.username,
+                        password: new CrowdPassword(value: registerCommand.password),
+                        first_name: registerCommand.firstName, last_name: registerCommand.lastName,
+                        display_name: registerCommand.displayName, active: true)
 
-        this.crowdRegisterUserService.registerUser(registrationUser)
-        flash.message = "Add User to the CAP database and assign them a Primary Group"
-        redirect(controller: "person", action: "list", params: [userName: registerCommand.username, fullName: registerCommand.displayName, email: registerCommand.email])
+            crowdRegisterUserService.registerUser(registrationUser)
+            //add to role table
+            //add to db
+            flash.message = "Successfully added to database"
+        } else {
+            flash.message = "Failed to create user"
+        }
+
+        redirect(controller: "person", action: "list")
     }
 }
-class RegisterCommand {
+class RegisterCommand extends BardCommand {
 
     String username
     String email
@@ -56,7 +68,10 @@ class RegisterCommand {
     String firstName
     String lastName
     String displayName
+    Role primaryGroup
+
     CrowdRegisterUserService crowdRegisterUserService
+    SpringSecurityService springSecurityService
 
     static constraints = {
         username blank: false, nullable: false, validator: { value, command ->
@@ -71,6 +86,11 @@ class RegisterCommand {
                 if (command.crowdRegisterUserService.findUserByEmail(value)) {
                     return 'registerCommand.email.unique'
                 }
+            }
+        }
+        primaryGroup nullable: false, validator: { value, command ->
+            if (!Role.findByAuthority(value?.authority)) {
+                return "Role with id ${value.authority} does not exist"
             }
         }
         password blank: false, nullable: false, validator: passwordValidator
@@ -112,6 +132,29 @@ class RegisterCommand {
         if (command.password != command.password2) {
             return 'command.password2.error.mismatch'
         }
+    }
+
+    Person createNewPerson() {
+        Person personToReturn = null
+        if (validate()) {
+            Person person = new Person()
+            copyFromCmdToDomain(person)
+            if (attemptSave(person)) {
+                personToReturn = person
+                if (!PersonRole.findByPersonAndRole(person, person.newObjectRole)) {
+                    PersonRole.create(person, person.newObjectRole, springSecurityService.principal?.username, true)
+                }
+            }
+
+        }
+        return personToReturn
+    }
+
+    void copyFromCmdToDomain(Person person) {
+        person.userName = this.username
+        person.emailAddress = this.email
+        person.fullName = this.displayName
+        person.newObjectRole = primaryGroup
     }
 
 }
