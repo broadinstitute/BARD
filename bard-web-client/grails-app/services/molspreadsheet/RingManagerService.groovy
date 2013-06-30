@@ -492,7 +492,7 @@ class RingManagerService {
             for (String ascensionNumber in returnValues ) {
                 BiologyEntity biologyEntity = biologyEntityList.find{it.extId == ascensionNumber}
                 if (!(mapBiologyIdToProteinAscensionNumber.containsValue(ascensionNumber))){
-                    mapBiologyIdToProteinAscensionNumber[biologyEntity.getEntityId()]=ascensionNumber
+                    mapBiologyIdToProteinAscensionNumber[biologyEntity.getSerial()]=ascensionNumber
                 }
             }
         }
@@ -564,13 +564,32 @@ class RingManagerService {
 
     }
 
+    // need the last part of the last line
+     public String extractLowestLevelTargetClass (List<String> hierarchyDescription) {
+         String returnValue = ""
+         if ((hierarchyDescription != null) &&
+             (hierarchyDescription.size()>0)){
+             String theLineWeWant = hierarchyDescription[hierarchyDescription.size()-1]
+             if (theLineWeWant != null) {
+                 String[]  tokens =  theLineWeWant.split('\\\\')
+                 if (tokens.length>0) {
+                     returnValue=tokens[tokens.length-1]
+                 }
+             }
+          }
+         return returnValue
+     }
+
+
+
 
     public  LinkedHashMap<String, Object>  convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
         LinkedHashMap<String, Object> returnValue = [:]
         LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber = [:]
+        LinkedHashMap<String, String> mapAccessionNumberToTargetClassName = [:]
         LinkedHashMap activeInactiveDataPriorToConversion = retrieveActiveInactiveDataFromCompound(compoundSummary)
         generateAccessionIdentifiers(activeInactiveDataPriorToConversion["compoundSummaryCategorizer"])
-        returnValue ["CompoundSummaryCategorizer"]  =  activeInactiveDataPriorToConversion["compoundSummaryCategorizer"]
+        CompoundSummaryCategorizer  compoundSummaryCategorizer =  activeInactiveDataPriorToConversion["compoundSummaryCategorizer"]
         LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion,mapBiologyIdToProteinAscensionNumber)
         final List<String> targets = []
         if (includeHits) {
@@ -588,10 +607,15 @@ class RingManagerService {
                 temporaryValue = sunburstCacheService.getTargetClassInfo(k)
                 if ((temporaryValue != null) &&
                     (temporaryValue.size() > 0)) {
+                    if (!(mapAccessionNumberToTargetClassName.containsKey(k))){
+                        mapAccessionNumberToTargetClassName[k] =  extractLowestLevelTargetClass(temporaryValue)
+                    }
                     accumulatedMaps<<temporaryValue
                 }
             }
         }
+        compoundSummaryCategorizer.backPopulateTargetNames( mapBiologyIdToProteinAscensionNumber, mapAccessionNumberToTargetClassName)
+        returnValue ["CompoundSummaryCategorizer"] = compoundSummaryCategorizer
         returnValue ["RingNode"]  =   ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
         returnValue
     }

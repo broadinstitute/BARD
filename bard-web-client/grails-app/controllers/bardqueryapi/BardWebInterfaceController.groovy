@@ -783,9 +783,9 @@ class BardWebInterfaceController {
         RingNode ringNode =  ringnodeAndCrossLinks ["RingNode"]
         compoundSummaryCategorizer.treeAssayLinker (ringNode)
         linkedVisHierData.externallyProvidedProteinTargetTree = '['+ringNode.toString()+']'
-        String assaysSectionJson =  linkedVisHierData.createCombinedListing()
-
-//        String assaysSectionJson = linkedVisHierData.createCombinedListing()
+//        String assaysSectionJson =  linkedVisHierData.createCombinedListing()
+    //    linkedVisHierData = new LinkedVisHierData()
+        String assaysSectionJson = linkedVisHierData.createCombinedListing()
         render (assaysSectionJson)
     }
 

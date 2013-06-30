@@ -30,6 +30,39 @@ class CompoundSummaryCategorizer {
 
     }
 
+    /***
+     * Now we know the names of all of those targets we accumulated earlier. Insert the names, so that we can display them
+     * when asked.
+     * @param mapBiologyIdToProteinAscensionNumber
+     * @param mapAccessionNumberToTargetClassName
+     * @return
+     */
+    public void backPopulateTargetNames( LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber,
+                                        LinkedHashMap<String, String> mapAccessionNumberToTargetClassName)  {
+        if ( ( totalContents != null) &&
+             ( mapBiologyIdToProteinAscensionNumber != null)  &&
+             ( mapAccessionNumberToTargetClassName != null)) {
+            totalContents.each{key,value->
+                SingleEidSummary singleEidSummary = totalContents [key]
+                if ((singleEidSummary.unconvertedBiologyObjects!=null) &&
+                        (singleEidSummary.unconvertedBiologyObjects.size()>0)) {
+                    for (Long biologyId in singleEidSummary.unconvertedBiologyObjects) {
+                        if (mapBiologyIdToProteinAscensionNumber.containsKey(biologyId)) {
+                            String accessionNumber =  mapBiologyIdToProteinAscensionNumber[biologyId]
+                            if (mapAccessionNumberToTargetClassName.containsKey(accessionNumber)) {
+                                singleEidSummary.proteinTargetClassList<< mapAccessionNumberToTargetClassName [accessionNumber]
+                            }
+                        }
+                    }
+
+                }
+        }
+    }
+    }
+
+
+
+
 
     /***
      * store a key in a map with a unique value as an index
@@ -171,7 +204,7 @@ class CompoundSummaryCategorizer {
         for (Long currentEid in experimentIds) {
             SingleEidSummary singleEidSummary = totalContents[currentEid]
             stringBuilder << "    {\n"
-            stringBuilder << "        \"AssayRef\": \"${loopingCount}\",\n"
+            stringBuilder << "        \"AssayRef\": ${loopingCount},\n"
             stringBuilder << "        \"data\": {\n"
             stringBuilder << "            \"0\" : \"${singleEidSummary.getGoString()}\",\n"
             stringBuilder << "            \"1\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
@@ -189,12 +222,29 @@ class CompoundSummaryCategorizer {
     }
 
    public RingNode treeAssayLinker(RingNode ringNode) {
-       List <String> namesToMatch  = []
        List<Long> allKeys=this.totalContents*.key.toList().sort()
+       // First we make a map from every assay index to its protein class name
+       Integer assayIndexCounter = 0
+       LinkedHashMap<Integer,String> mapAssayIndexToProteinClassName = [:]
        for (Long singleKey in allKeys) {
-           namesToMatch << this.totalContents[singleKey].proteinTargetsIndexList
+           if (this.totalContents[singleKey].proteinTargetClassList.size()>0){
+               mapAssayIndexToProteinClassName[assayIndexCounter] =  this.totalContents[singleKey].proteinTargetClassList[0]
+           } else {
+               mapAssayIndexToProteinClassName[assayIndexCounter] =  "none"
+           }
+           assayIndexCounter++
        }
-       return descendAndLink ( ringNode,namesToMatch )
+       // now invert the list, so that for each unique name we have all the assay counters associated with it
+       LinkedHashMap<String,List <Integer>> mapProteinClassNameToAssayIndex = [:]
+       for (Integer singleKey in mapAssayIndexToProteinClassName.keySet()) {
+           String className = mapAssayIndexToProteinClassName [singleKey]
+           if (mapProteinClassNameToAssayIndex.containsKey(className)) {
+               mapProteinClassNameToAssayIndex[className] <<  singleKey
+           } else {
+               mapProteinClassNameToAssayIndex[className] = [singleKey]
+           }
+       }
+       return descendAndLink ( ringNode,mapProteinClassNameToAssayIndex )
    }
 
 
@@ -204,13 +254,17 @@ class CompoundSummaryCategorizer {
      * @param root
      * @param everyParent
      */
-    private void descendAndLink (RingNode root,List <String> namesToMatch )   {
-        if ((root.children == null) || (root.children.size() == 0)) {
+    private void descendAndLink (RingNode root,LinkedHashMap<String,List <Integer>> mapProteinClassNameToAssayIndex )   {
+        if (root== null) {
             return
         } else {
- //           root.assays <<  namesToMatch.indexOf(root.name)
+            if (mapProteinClassNameToAssayIndex.containsKey(root.name)) {
+                root.assays = mapProteinClassNameToAssayIndex[root.name]
+            }  else {
+                root.assays = []
+            }
             for (RingNode oneKid in root.children){
-                descendAndLink (oneKid,namesToMatch)
+                descendAndLink (oneKid,mapProteinClassNameToAssayIndex)
             }
         }
 
@@ -250,6 +304,7 @@ class CompoundSummaryCategorizer {
         List<Integer> biologicalProcessIndexList = []
         List<Integer>  proteinTargetsIndexList = []
         List<Long> unconvertedBiologyObjects = []
+        List <String> proteinTargetClassList = []
         int outcome = 0
         String assayName
         String assayCapId
@@ -281,15 +336,18 @@ class CompoundSummaryCategorizer {
 
         public String getTargetString() {
             String returnValue = 'none'
-            if (proteinTargetsIndexList.size() > 0){
-                int firstProteinTargetsIndex = proteinTargetsIndexList [0]
-                String proteinTarget = proteinTargetMap.find{it.value==firstProteinTargetsIndex}.key
-                if (proteinTarget != null){
-                    returnValue =  proteinTarget
-                }  else {
-                    returnValue = 'disappeared'
-                }
+            if (proteinTargetClassList.size() > 0){
+                returnValue =  proteinTargetClassList[0]
             }
+//            if (proteinTargetsIndexList.size() > 0){
+//                int firstProteinTargetsIndex = proteinTargetsIndexList [0]
+//                String proteinTarget = proteinTargetMap.find{it.value==firstProteinTargetsIndex}.key
+//                if (proteinTarget != null){
+//                    returnValue =  proteinTarget
+//                }  else {
+//                    returnValue = 'disappeared'
+//                }
+//            }
             returnValue
         }
 
