@@ -10,7 +10,7 @@ public class Assay extends AbstractAssay {
     @JsonProperty("documents")
     List<String> documentIds = new ArrayList<String>();
     @JsonProperty("targets")
-    List<String> targetIds = new ArrayList<String>();
+    List<String> biologyIds = new ArrayList<String>();
     @JsonProperty("experiments")
     List<String> experimentIds = new ArrayList<String>();
     @JsonProperty("projects")

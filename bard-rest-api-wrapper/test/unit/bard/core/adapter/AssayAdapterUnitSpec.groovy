@@ -55,23 +55,7 @@ class AssayAdapterUnitSpec extends Specification {
           }
        ],
        "targets":[
-          {
-             "acc":"P98170",
-             "name":"E3 ubiquitin-protein ligase XIAP",
-             "description":null,
-             "status":"Reviewed",
-             "geneId":331,
-             "taxId":9606,
-             "resourcePath":"/targets/accession/P98170"
-          },
-           {
-             "name":"E3 ubiquitin-protein ligase XIAP",
-             "description":null,
-             "status":"Reviewed",
-             "geneId":331,
-             "taxId":9606,
-             "resourcePath":"/targets/accession/P98170"
-          }
+       {"biology":"GENE","entityId":600,"name":"http://www.ncbi.nlm.nih.gov/gquery/?term=157266296","entity":"assay","extId":"157266296","extRef":null,"dictLabel":"GenBank ID","dictId":881,"serial":735,"updated":null,"resourcePath":"/biology/735"}
        ],
        "kegg_disease_names":[
           "Other well-defined immunodeficiency syndromes, including the following eight diseases:Wiskott-Aldrich syndrome",
@@ -123,7 +107,7 @@ class AssayAdapterUnitSpec extends Specification {
            ],
            "targets":
            [
-               "P18054"
+               720
            ],
            "experiments":
            [
@@ -194,9 +178,9 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.matchingField.description == nameDescription.description
         assert assayAdapter.highlight == "Matched Field: Name"
         assert assayAdapter.documentIds
-        assert assayAdapter.targetIds
+        assert assayAdapter.biologyIds
         assert !assayAdapter.documents
-        assert !assayAdapter.targets
+        assert !assayAdapter.biology
         assert assayAdapter.minimumAnnotation
     }
 
@@ -230,9 +214,9 @@ class AssayAdapterUnitSpec extends Specification {
         assert assayAdapter.matchingField.description == nameDescription.description
         assert assayAdapter.highlight == "Matched Field: Name"
         assert assayAdapter.documentIds
-        assert assayAdapter.targetIds
+        assert assayAdapter.biologyIds
         assert assayAdapter.documents
-        assert assayAdapter.targets
+        assert assayAdapter.biology
         assert assayAdapter.title
         assert assayAdapter.minimumAnnotation
     }
@@ -248,7 +232,7 @@ class AssayAdapterUnitSpec extends Specification {
         AssayAdapter assayAdapter = new AssayAdapter(assay, score, nameDescription)
         then:
         assayAdapter.getDocumentIds().size() == 2
-        assayAdapter.getTargetIds().size() == 1
+        assayAdapter.getBiologyIds().size() == 1
 
 
     }

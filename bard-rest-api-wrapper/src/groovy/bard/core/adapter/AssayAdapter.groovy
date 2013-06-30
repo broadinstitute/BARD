@@ -1,21 +1,19 @@
-package bard.core.adapter;
-
-
-import bard.core.rest.spring.util.Document
-import bard.core.rest.spring.util.NameDescription
-import bard.core.rest.spring.util.Target
+package bard.core.adapter
 import bard.core.interfaces.*
 import bard.core.rest.spring.assays.*
+import bard.core.rest.spring.biology.BiologyEntity
+import bard.core.rest.spring.util.Document
+import bard.core.rest.spring.util.NameDescription
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class AssayAdapter implements AssayAdapterInterface {
     final AbstractAssay assay
     final Double score
     final NameDescription matchingField
-    final List<BardAnnotation> annotations;
+    final BardAnnotation annotations;
 
 
-    public AssayAdapter(final AbstractAssay assay, final Double score = 0, final NameDescription nameDescription = null, final List<BardAnnotation> annotations = []) {
+    public AssayAdapter(final AbstractAssay assay, final Double score = 0, final NameDescription nameDescription = null, final BardAnnotation annotations = null) {
         this.assay = assay
         this.score = score
         this.matchingField = nameDescription
@@ -84,6 +82,10 @@ public class AssayAdapter implements AssayAdapterInterface {
         return AssayCategory.valueOf(assay.category.intValue())
     }
 
+    public String getLastUpdatedDate() {
+        return assay.updated
+    }
+
     public String getDescription() {
         return assay.description
     }
@@ -108,7 +110,7 @@ public class AssayAdapter implements AssayAdapterInterface {
         return assay.source
     }
 
-    public List<BardAnnotation> getAnnotations() {
+    public BardAnnotation getAnnotations() {
         return annotations
     }
 
@@ -140,29 +142,29 @@ public class AssayAdapter implements AssayAdapterInterface {
         return []
     }
 
-    public List<Target> getTargets() {
+    public List<BiologyEntity> getBiology() {
         if (assay instanceof ExpandedAssay) {
             ExpandedAssay expandedAssay = (ExpandedAssay) assay
-            return expandedAssay.getTargets()
+            return expandedAssay.getBiology()
         }
         return []
     }
 
-    public List<String> getTargetIds() {
-        List<String> targetIds = []
+    public List<String> getBiologyIds() {
+        List<String> biologyIds = []
         if (assay instanceof ExpandedAssay) {
             ExpandedAssay expandedAssay = (ExpandedAssay) assay
-            expandedAssay.targets.collect { Target target ->
-                if (target.acc) {
-                  targetIds.add(target.acc)
+            expandedAssay.biology.collect { BiologyEntity biology ->
+                if (biology.serial) {
+                  biologyIds.add(biology.serial)
                 }
             }
         }
-        if (assay instanceof Assay) {
+        else if (assay instanceof Assay) {
             Assay assay1 = (Assay) assay
-            targetIds.addAll(assay1.targetIds)
+            biologyIds.addAll(assay1.biologyIds)
         }
-        return targetIds
+        return biologyIds
     }
 
     public List<String> getDocumentIds() {

@@ -1,26 +1,27 @@
 package bard.core.rest.spring
-
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.helper.LoggerService
 import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.assays.*
 import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import bard.core.rest.spring.assays.*
 
 @Unroll
 @TestFor(AssayRestService)
 class AssayRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     LoggerService loggerService
+    @Shared
+    ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: "http://ncgc" )
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
         service.externalUrlDTO = externalUrlDTO
 
         this.loggerService = Mock(LoggerService)

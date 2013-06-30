@@ -19,7 +19,7 @@ public interface ProjectAdapterInterface {
 
     public Integer getNumberOfExperiments();
 
-    public List<BardAnnotation> getAnnotations();
+    public BardAnnotation getAnnotations();
 
     public String getExperimentType(Long experimentId);
     public Map<Long, String> getExperimentTypes();

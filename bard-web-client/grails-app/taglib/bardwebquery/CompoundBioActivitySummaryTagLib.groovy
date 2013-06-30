@@ -13,8 +13,8 @@ class CompoundBioActivitySummaryTagLib {
 
         out << generateShortNameHTML(attrs.assayAdapter?.title, attrs.assayAdapter?.bardAssayId, attrs.assayAdapter?.capAssayId, 'showAssay')
         out << "<p><b>Designed by:</b>${attrs.assayAdapter?.designedBy}</p>"
-        List<BiologyEntity> biologyEntities = biologyRestService.convertBiologyId(attrs.assayAdapter?.targetIds as List<Long>)
-        String targets = biologyEntities.collect {BiologyEntity biologyEntity ->
+        List<BiologyEntity> biologyEntities = biologyRestService.convertBiologyId(attrs.assayAdapter?.biologyIds as List<Long>)
+        String biology = biologyEntities.collect {BiologyEntity biologyEntity ->
             switch (biologyEntity.biology) {
                 case 'PROCESS':
                     return "${biologyEntity.name} [${biologyEntity.biology.toLowerCase()}: <a href='http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=${biologyEntity.extId}'>${biologyEntity.extId}</a>]"
@@ -26,7 +26,7 @@ class CompoundBioActivitySummaryTagLib {
                     return "${biologyEntity.name} [${biologyEntity.biology.toLowerCase()}: ${biologyEntity.extId}]"
             }
         }.join(', ')
-        out << "<p><b>Targets:</b> ${targets}</p>"
+        out << "<p><b>Biology:</b> ${biology}</p>"
     }
 
     def projectDescription = { attrs, body ->

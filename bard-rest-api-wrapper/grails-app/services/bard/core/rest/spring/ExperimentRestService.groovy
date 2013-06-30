@@ -92,7 +92,7 @@ class ExperimentRestService extends AbstractRestService {
 
     String buildURLToExperimentHistogramData(final Long eid) {
         final StringBuilder resource =
-            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPERIMENTS_RESOURCE)
+            new StringBuilder(this.externalUrlDTO.ncgcUrl).append(RestApiConstants.EXPERIMENTS_RESOURCE)
 
         resource.append(RestApiConstants.FORWARD_SLASH).append(eid).append(RestApiConstants.RESULT_TYPES)
           .append(RestApiConstants.QUESTION_MARK).append(RestApiConstants.EXPAND_TRUE).append(RestApiConstants.AMPERSAND)
@@ -104,7 +104,7 @@ class ExperimentRestService extends AbstractRestService {
 
     String buildURLToExperimentData(final SearchParams searchParams) {
         final StringBuilder resource =
-            new StringBuilder(this.externalUrlDTO.baseUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
+            new StringBuilder(this.externalUrlDTO.ncgcUrl).append(RestApiConstants.EXPTDATA_RESOURCE)
 
         if (searchParams.getTop()) {
             resource.append(RestApiConstants.QUESTION_MARK)
@@ -122,7 +122,7 @@ class ExperimentRestService extends AbstractRestService {
 
     String buildURLToExptDataByIds(final SearchParams searchParams) {
         final StringBuilder resource =
-            new StringBuilder(this.externalUrlDTO.baseUrl).
+            new StringBuilder(this.externalUrlDTO.ncgcUrl).
                     append(RestApiConstants.EXPTDATA_RESOURCE).
                     append(RestApiConstants.EXPTDATABYIDS_RESOURCE)
 
@@ -296,7 +296,7 @@ class ExperimentRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         final String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -308,7 +308,7 @@ class ExperimentRestService extends AbstractRestService {
     @Override
     public String getResource() {
         final String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

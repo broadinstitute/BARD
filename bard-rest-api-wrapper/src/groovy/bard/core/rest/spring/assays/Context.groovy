@@ -1,50 +1,62 @@
 package bard.core.rest.spring.assays
 import bard.core.rest.spring.util.JsonUtil
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.apache.commons.lang.builder.EqualsBuilder
+import org.apache.commons.lang.builder.HashCodeBuilder
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 /**
- * TODO: Context is the same as Measure and Doc. Unify them
- * Serialized usually from an ID search or contained in an expanded element (e.g Experiment)
+ * A grouping of context items.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Context extends JsonUtil {
 
-    @JsonProperty("id")
-    private long id;
-    @JsonProperty("name")
-    private String name;
+    long id;
+    String name;
     @JsonProperty("comps")
-    private List<Comp> comps = new ArrayList<Comp>();
+    List<Annotation> contextItems = new ArrayList<Annotation>();
 
-    @JsonProperty("id")
-    public long getId() {
-        return id;
+    @JsonIgnore
+    List<Measure> relatedMeasures = new ArrayList<Measure>()
+
+    static final Pattern RELATED_MEASURES_PATTERN = ~/^measureRefs:([\d,]+)/
+
+    List<Long> parseRelatedMeasureIds() {
+        def measureIds = []
+        contextItems.each { Annotation contextItem ->
+            if (contextItem.related) {
+                Matcher m = RELATED_MEASURES_PATTERN.matcher(contextItem.related)
+                if (m && m.groupCount() > 0) {
+                    m.group(1).split(",").each {
+                        Long id = it as Long
+                        if (!measureIds.contains(id)) {
+                            measureIds << id
+                        }
+                    }
+                }
+            }
+        }
+        return measureIds
     }
 
-    @JsonProperty("id")
-    public void setId(long id) {
-        this.id = id;
+    int hashCode() {
+        def builder = new HashCodeBuilder()
+        builder.append id
+        builder.append name
+        builder.append contextItems
+        builder.toHashCode()
     }
 
-    @JsonProperty("name")
-    public String getName() {
-        return name;
-    }
-
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonProperty("comps")
-    public List<Comp> getComps() {
-        return comps;
-    }
-
-    @JsonProperty("comps")
-    public void setComps(List<Comp> comps) {
-        this.comps = comps;
+    boolean equals(other) {
+        def builder = new EqualsBuilder()
+        builder.append(id, other.id)
+        builder.append(name, other.name)
+        builder.append(contextItems, other.contextItems)
+        return builder.equals
     }
 
     /**
@@ -56,14 +68,17 @@ public class Context extends JsonUtil {
      * @return list of up to 2 lists
      */
     static List<List<Context>> splitForColumnLayout(List<Context> contexts) {
-        int totalNumContextItems = contexts.collect { it?.getComps()?.size() ?: 0 }.sum() ?: 0
+        int totalNumContextItems = contexts.collect { it?.getContextItems()?.size() ?: 0 }.sum() ?: 0
         int half = totalNumContextItems / 2
         int count = 0
-        List<Context> firstColumnContexts = contexts.findAll { context ->
-            count += context.getComps().size();
+        def sortedContexts = contexts.sort {
+            it.contextItems.size()
+        }
+        List<Context> firstColumnContexts = sortedContexts.findAll { context ->
+            count += context.getContextItems().size();
             count <= half
         }
-        List<Context> secondColumnContexts = contexts - firstColumnContexts
+        List<Context> secondColumnContexts = sortedContexts - firstColumnContexts
         def splitContexts = [firstColumnContexts, secondColumnContexts].findAll() // eliminates any empty lists
         return splitContexts
     }

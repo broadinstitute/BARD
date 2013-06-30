@@ -1,11 +1,7 @@
 package mockServices
-
-import bard.core.interfaces.ProjectAdapterInterface
-import bard.core.Value
 import bard.core.Probe
+import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.assays.BardAnnotation
-import bard.core.interfaces.EntityNamedSources
-
 /**
  * Created with IntelliJ IDEA.
  * User: jasiedu
@@ -17,10 +13,8 @@ class MockProjectAdapter implements ProjectAdapterInterface {
     Long id
     String name
     String description
-    String grantNumber
-    String labName
     Integer numExperiments
-    Collection<Value> annotations = []
+    BardAnnotation annotations = null
 
     @Override
     String getHighlight() {
@@ -49,16 +43,6 @@ class MockProjectAdapter implements ProjectAdapterInterface {
     }
 
     @Override
-    String getGrantNumber() {
-        return grantNumber ?: "GI2"  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    String getLaboratoryName() {
-        return labName ?: "Broad" //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     List<Probe> getProbes() {
         return [new Probe(2, "ML18", "http://bard.org", "CCC", 1, 2),
                 new Probe(28, "ML20", "http://bard.org", "CCCC", 2,2)]  //To change body of implemented methods use File | Settings | File Templates.
@@ -70,16 +54,8 @@ class MockProjectAdapter implements ProjectAdapterInterface {
     }
 
     @Override
-    List<BardAnnotation> getAnnotations() {
-        if (!annotations) {
-            this.annotations = new ArrayList<BardAnnotation>();
-//            final Map<String, String> terms = getDictionaryTerms()
-//            for (String key : terms.keySet()) {
-//                Value value = new bard.core.StringValue(DataSource.DEFAULT, key, terms.get(key))
-//                this.annotations.add(value)
-//            }
-        }
-        return annotations//To change body of implemented methods use File | Settings | File Templates.
+    BardAnnotation getAnnotations() {
+        return annotations
     }
 
     @Override
@@ -92,17 +68,4 @@ class MockProjectAdapter implements ProjectAdapterInterface {
         return null  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    @Override
-    Map<String, String> getDictionaryTerms() {
-        return ["grant number": "X01 MH083262-01", "laboratory name": "NCGC", "protein": "gi|92096784|gb|AAI14949.1|Microtubule-associated protein tau [Homo sapiens]"]
-    }
-
-    @Override
-    Map<String, List<String>> getKeggAnnotations() {
-        Map<String, List<String>> annos = new HashMap<String, List<String>>()
-        annos.put(EntityNamedSources.KEGGDiseaseCategoryAnnotationSource, ["Amyotrophic lateral sclerosis (ALS)", "Lou Gehrig's disease", "Progressive supranuclear palsy (PSP)"])
-        annos.put(EntityNamedSources.KEGGDiseaseNameAnnotationSource, ["Neurodegenerative disease", "Neurodegenerative disease", "Neurodegenerative disease"])
-        return annos;
-
-    }
 }

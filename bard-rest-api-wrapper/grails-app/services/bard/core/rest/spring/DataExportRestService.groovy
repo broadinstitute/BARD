@@ -44,7 +44,7 @@ public class DataExportRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.capUrl).
                 append(resourceName).
                 toString();
     }

@@ -147,7 +147,7 @@ class AssayUnitSpec extends Specification {
         assert !assay.getKegg_disease_names()
         assert !assay.getKegg_disease_cat()
         assert assay.getDocumentIds()
-        assert assay.getTargetIds()
+        assert assay.getBiologyIds()
         assert assay.getAssayId() == 0
         assert assay.getResourcePath() == "/assays/17"
     }

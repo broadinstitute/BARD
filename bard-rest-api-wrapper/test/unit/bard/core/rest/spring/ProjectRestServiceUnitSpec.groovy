@@ -11,6 +11,7 @@ import bard.core.rest.spring.project.ProjectStep
 import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
 import org.springframework.web.client.RestTemplate
+import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -19,11 +20,12 @@ import spock.lang.Unroll
 class ProjectRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     LoggerService loggerService
+    @Shared
+    ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: "http://ncgc" )
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         service.restTemplate = this.restTemplate
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
         service.externalUrlDTO = externalUrlDTO
 
         this.loggerService = Mock(LoggerService)

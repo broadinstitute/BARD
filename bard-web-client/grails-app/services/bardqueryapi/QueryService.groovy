@@ -543,7 +543,7 @@ class QueryService implements IQueryService {
             ExpandedAssay assay = assayRestService.getAssayById(assayId)
             List<ExperimentSearch> experiments = assay.experiments
             final List<Project> projects = assay.projects
-            final List<BardAnnotation> annotations = [assayRestService.findAnnotations(assayId)]
+            final BardAnnotation annotations = assayRestService.findAnnotations(assayId)
             final AssayAdapter assayAdapter = new AssayAdapter(assay, 0, null, annotations)
             return [assayAdapter: assayAdapter, experiments: experiments, projects: projects]
         }
@@ -558,7 +558,7 @@ class QueryService implements IQueryService {
         if (projectId) {
             final ProjectExpanded project = projectRestService.getProjectById(projectId)
             if (project) {
-                final List<BardAnnotation> annotations = [projectRestService.findAnnotations(projectId)]
+                final BardAnnotation annotations = projectRestService.findAnnotations(projectId)
                 final List<ExperimentSearch> experiments = project.experiments
                 if (experiments) {
                     experiments.sort {

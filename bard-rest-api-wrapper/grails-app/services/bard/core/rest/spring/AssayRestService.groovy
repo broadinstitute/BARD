@@ -72,6 +72,8 @@ class AssayRestService extends AbstractRestService {
         final URL url = new URL(resource)
 
         final BardAnnotation annotations = (BardAnnotation) getForObject(url.toURI(), BardAnnotation.class)
+        annotations.populateContextMeasureRelationships()
+
         return annotations;
     }
     /**
@@ -141,7 +143,7 @@ class AssayRestService extends AbstractRestService {
     @Override
     public String getSearchResource() {
         String resourceName = RestApiConstants.ASSAYS_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(RestApiConstants.FORWARD_SLASH).
                 append(RestApiConstants.SEARCH).
                 append(resourceName).
@@ -153,7 +155,7 @@ class AssayRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = RestApiConstants.ASSAYS_RESOURCE
-        return new StringBuilder(externalUrlDTO.baseUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(resourceName).
                 append(RestApiConstants.FORWARD_SLASH).
                 toString();

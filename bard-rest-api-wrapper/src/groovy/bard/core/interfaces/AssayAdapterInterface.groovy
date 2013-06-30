@@ -29,6 +29,8 @@ public interface AssayAdapterInterface {
 
     public AssayCategory getCategory()
 
+    public String getLastUpdatedDate()
+
     public String getDescription()
 
     public Long getId()
@@ -41,7 +43,7 @@ public interface AssayAdapterInterface {
 
     public String getSource()
 
-    public List<BardAnnotation> getAnnotations()
+    public BardAnnotation getAnnotations()
 
     public List<String> getKeggDiseaseNames()
 

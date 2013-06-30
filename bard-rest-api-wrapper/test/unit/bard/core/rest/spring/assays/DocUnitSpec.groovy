@@ -40,10 +40,10 @@ class DocUnitSpec extends Specification {
         then:
         assert doc.id==18225
         assert doc.name== "External URL"
-        List<Comp> comps = doc.comps
+        List<Annotation> comps = doc.comps
         assert comps
         assert comps.size() == 1
-        Comp comp = comps.get(0)
+        Annotation comp = comps.get(0)
         assert comp.display=="External Database Link"
         assert comp.entity=="assay"
         assert !comp.entityId

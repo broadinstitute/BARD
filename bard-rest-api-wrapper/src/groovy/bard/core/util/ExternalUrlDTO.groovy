@@ -8,10 +8,19 @@ package bard.core.util
  * To change this template use File | Settings | File Templates.
  */
 class ExternalUrlDTO {
-    String baseUrl
+    String ncgcUrl
     String promiscuityUrl
+    String capUrl
 
     ExternalUrlDTO(){
 
+    }
+
+    public String getNcgcUrl() {
+        return this.ncgcUrl
+    }
+
+    public void setNcgcUrl(String baseUrl) {
+        this.ncgcUrl = baseUrl
     }
 }

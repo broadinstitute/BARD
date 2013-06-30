@@ -1,24 +1,22 @@
-package bard.core.adapter;
-
-
+package bard.core.adapter
 import bard.core.Probe
 import bard.core.interfaces.ProjectAdapterInterface
 import bard.core.rest.spring.assays.BardAnnotation
+import bard.core.rest.spring.biology.BiologyEntity
 import bard.core.rest.spring.compounds.Compound
 import bard.core.rest.spring.project.ProjectAbstract
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.NameDescription
-import bard.core.rest.spring.util.Target
 import bard.core.util.MatchedTermsToHumanReadableLabelsMapper
 
 public class ProjectAdapter implements ProjectAdapterInterface {
     final ProjectAbstract project
     final Double score
     final NameDescription matchingField
-    final List<BardAnnotation> annotations = []
+    final BardAnnotation annotations
 
-    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, List<BardAnnotation> annotations = []) {
+    public ProjectAdapter(ProjectAbstract project, Double score = 0, NameDescription nameDescription = null, BardAnnotation annotations = null) {
         this.project = project
         this.score = score
         this.matchingField = nameDescription
@@ -91,17 +89,13 @@ public class ProjectAdapter implements ProjectAdapterInterface {
         return []
     }
 
-    public List<Target> getTargets() {
-        return project.getTargets()
+    public List<BiologyEntity> getBiology() {
+        return project.getBiology()
     }
 
-    public List<BardAnnotation> getAnnotations() {
+    public BardAnnotation getAnnotations() {
 
         return this.annotations
-    }
-
-    public int getNumberOfAnnotations() {
-        return this.annotations.size()
     }
 
     public Long getCapProjectId() {

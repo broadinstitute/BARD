@@ -47,11 +47,11 @@ class RingManagerService {
                 LinkedHashMap <String,List<String>> mapForThisAssay = [:]
                 if (bardAnnotation)  {
                     String keyTerm =  "GO biological process term"
-                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.display
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.contextItems.flatten().findAll{it->it.key==keyTerm}.display
                     keyTerm =  "assay format"
-                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.value
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.contextItems.flatten().findAll{it->it.key==keyTerm}.value
                     keyTerm =  "assay type"
-                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.comps.flatten().findAll{it->it.key==keyTerm}.value
+                    mapForThisAssay [keyTerm.replaceAll(/\s/,"_")] =  bardAnnotation.contexts*.contextItems.flatten().findAll{it->it.key==keyTerm}.value
                 }
                 returnData[aid]  =  mapForThisAssay
             }
@@ -103,7 +103,7 @@ class RingManagerService {
         Boolean returnValue = false
         if (compoundSummary != null){
             for (Assay assay in compoundSummary.testedAssays) {
-                if (assay.targetIds?.size()  > 0)  {  // At least one assay has at least one target -- better make a sunburst
+                if (assay.biologyIds?.size()  > 0)  {  // At least one assay has at least one target -- better make a sunburst
                     returnValue = true
                     break
                 }
@@ -292,7 +292,7 @@ class RingManagerService {
         if (compoundSummary != null){
            for (Assay assay in compoundSummary.testedAssays) {
                List<String>  currentExperimentIds = assay.experimentIds
-               List<String>  currentTargets = assay.targetIds
+               List<String>  currentTargets = assay.biologyIds
                String assayFormat = assay.minimumAnnotation.assayFormat
                String assayType = assay.minimumAnnotation.assayType
                String assayName = assay.name

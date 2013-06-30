@@ -1,32 +1,27 @@
 package bard.core.rest.spring
-
+import bard.core.helper.LoggerService
+import bard.core.interfaces.RestApiConstants
+import bard.core.rest.spring.util.CapDictionary
+import bard.core.rest.spring.util.Node
+import bard.core.util.ExternalUrlDTO
 import grails.test.mixin.TestFor
-
 import org.springframework.web.client.RestTemplate
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import bard.core.rest.spring.util.CapDictionary
-
-import bard.core.rest.spring.util.Node
-import bard.core.helper.LoggerService
-import bard.core.interfaces.RestApiConstants
-import bard.core.util.ExternalUrlDTO
 
 @Unroll
 @TestFor(DataExportRestService)
 class DataExportRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     LoggerService loggerService
-    final String baseUrl ="http://ncgc"
-
+    String capUrl ="http://cap"
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         this.loggerService = Mock(LoggerService)
         service.restTemplate = this.restTemplate
         service.loggerService = loggerService
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple",baseUrl: "http://ncgc" )
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: "http://ncgc", capUrl: capUrl )
         service.externalUrlDTO = externalUrlDTO
 
     }
@@ -66,7 +61,7 @@ class DataExportRestServiceUnitSpec extends Specification {
         when:
         String resource = service.getResource()
         then:
-        assert baseUrl + RestApiConstants.DICTIONARY_RESOURCE ==  resource
+        assert capUrl + RestApiConstants.DICTIONARY_RESOURCE ==  resource
 
     }
 }

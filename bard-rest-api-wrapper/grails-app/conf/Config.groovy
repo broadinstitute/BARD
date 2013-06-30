@@ -19,6 +19,7 @@ grails.cache.config = {
 }
 ncgc.server.root.url = "http://bard.nih.gov/api/v17"
 promiscuity.badapple.url = "${ncgc.server.root.url}/plugins/badapple/prom/cid/"
+bard.cap.home = "http://localhost:8081/BARD/"
 
 log4j = {
 

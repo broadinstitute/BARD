@@ -1,44 +1,30 @@
 <dl class="dl-horizontal dl-horizontal-wide">
-    <g:if test="${assayAdapter.assayTypeString}">
-        <dt>Assay Type:</dt>
-        <dd>${assayAdapter.assayTypeString}</dd>
-    </g:if>
-    <g:if test="${assayAdapter.designedBy}">
-        <dt>Designed By:</dt>
-        <dd>${assayAdapter.designedBy}</dd>
-    </g:if>
-    <g:each in="${assayAdapter?.annotations[0]?.contexts?.collectMany { it.comps }?.unique{ it.key + it.display }?.sort{it.key}}" var="annotation">
-        <g:if test="${annotation.key == 'assay type'}">
-            <dt>Assay Annotation Type:</dt>
-            <dd>${annotation.display}</dd>
+    <dt>Name:</dt>
+    <dd>${assayAdapter?.name}</dd>
+    <dt>ADID:</dt>
+    <dd>${assayAdapter?.capAssayId}</dd>
+    <dt>Status:</dt>
+    <dd>${assayAdapter?.assayStatus}
+        <g:if test="${assayAdapter.assayStatus == 'Draft'}">
+            <img src="${resource(dir: 'images', file: 'draft_retired.png')}"
+                 alt="Draft" title="Warning this assay definition has not yet been reviewed for accuracy"/>
         </g:if>
-        <g:if test="${annotation.key == 'assay format'}">
-            <dt>Assay Format:</dt>
-            <dd>${annotation.display}</dd>
-        </g:if>
-        <g:if test="${annotation.key == 'detection method type'}">
-            <dt>Detection Method:</dt>
-            <dd>${annotation.display}</dd>
-        </g:if>
-        <g:if test="${annotation.key == 'detection instrument name'}">
-            <dt>Detection Instrument:</dt>
-            <dd>${annotation.display}</dd>
-        </g:if>
-        <g:if test="${annotation.key == 'assay footprint'}">
-            <dt>Assay Footprint:</dt>
-            <dd>${annotation.display}</dd>
-        </g:if>
-    </g:each>
-    <g:if test="${assayAdapter?.source}">
-        <dt>Assay Designer:</dt>
-        <dd>${assayAdapter.source}</dd>
-    </g:if>
-    <g:if test="${assayAdapter?.aid}">
-        <dt>PubChem AID:</dt>
-        <dd><a href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid=${assayAdapter.aid}" target="_blank">
-            <img src="${resource(dir: 'images', file: 'pubchem.png')}" alt="PubChem"/>
-            ${assayAdapter.aid}
-        </a>
-        </dd>
-    </g:if>
+        <g:elseif test="${assayAdapter.assayStatus == 'Approved' || assayAdapter.assayStatus == 'Witnessed'}">
+            <img src="${resource(dir: 'images', file: 'witnessed.png')}"
+                 alt="Approved" title="This assay has been reviewed for accuracy"/>
+        </g:elseif>
+    </dd>
+    <dt>Short Name:</dt>
+    <dd>${assayAdapter?.title}</dd>
+    <dt>Designed By:</dt>
+    <dd>${assayAdapter?.designedBy}</dd>
+    <dt>Definition Type:</dt>
+    <dd>${assayAdapter?.assayTypeString}</dd>
+    <dt>Last Updated:</dt>
+    <dd>${assayAdapter?.lastUpdatedDate}</dd>
 </dl>
+
+%{--TODO: Ask NCGC to add the following fields to the REST JSON--}%
+%{--Date Created:--}%
+%{--Version:--}%
+%{--Modified By:--}%

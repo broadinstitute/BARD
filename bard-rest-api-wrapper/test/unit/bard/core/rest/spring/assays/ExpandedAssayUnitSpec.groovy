@@ -86,7 +86,7 @@ class ExpandedAssayUnitSpec extends Specification {
         assert expandedAssay.getKegg_disease_names() == ["a", "b"]
         assert expandedAssay.getKegg_disease_cat() == ["a"]
         assert !expandedAssay.getDocuments()?.isEmpty()
-        assert expandedAssay.getTargets()
+        assert expandedAssay.getBiology()
         assert expandedAssay.getMinimumAnnotation()
         assert expandedAssay.getMinimumAnnotation().getAssayFormat() == "cell-based format"
         assert expandedAssay.getAssayId() == 0
