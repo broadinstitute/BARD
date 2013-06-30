@@ -110,11 +110,11 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay")
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay")
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay")
-        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay")
-        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay")
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null)
         compoundSummaryCategorizer.updateOutcome(123L,2,[26],[])
         compoundSummaryCategorizer.updateOutcome(456L,1,[],[])
         compoundSummaryCategorizer.updateOutcome(666L,1,[146, 145],[])

@@ -25,7 +25,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         final List<Long> bids = [724L]
 
         when:
-        List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits")
+        List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits", [:])
 
         then:
         accessionIdentifiers.size()  > 0
@@ -57,7 +57,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
         when:
         try {
-            activeInactiveDataAfterConversion = ringManagerService.convertBiologyIdsToAscensionNumbers (activeInactiveDataPriorToConversion)
+            activeInactiveDataAfterConversion = ringManagerService.convertBiologyIdsToAscensionNumbers (activeInactiveDataPriorToConversion,[:])
         } catch (Exception e)  {
             e.printStackTrace()
         }
