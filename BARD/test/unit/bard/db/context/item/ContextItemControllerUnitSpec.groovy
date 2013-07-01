@@ -211,13 +211,18 @@ class ContextItemControllerUnitSpec extends Specification {
     void "test delete"() {
         given:
         ProjectContext projectContext = ProjectContext.build()
-        ProjectContextItem contextItem = ProjectContextItem.build(context: projectContext)
+        ProjectContextItem contextItem = ProjectContextItem.build(context:projectContext)
 
-        BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand(context: projectContext, contextItem: contextItem, contextId: projectContext.id, contextItemId: contextItem.id)
-        basicContextItemCommand.contextItemService = Mock(ContextItemService)
+        BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand(
+                contextOwnerId: projectContext.owner.id,
+                context:projectContext,
+                contextId: projectContext.id,
+                contextItem: contextItem,
+                contextItemId: contextItem.id)
+        basicContextItemCommand.contextItemService=Mock(ContextItemService)
         when:
         controller.delete(basicContextItemCommand)
         then:
-        assert response.redirectedUrl.startsWith("/project/editContext#")
+        assert response.redirectedUrl == "/project/editContext/${projectContext.owner.id}?groupBySection=Unclassified"
     }
 }
