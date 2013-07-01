@@ -19,7 +19,7 @@ abstract class AbstractContextOwner {
         List<AbstractContext> value;
     }
 
-    abstract Map<String, String> kk();
+    abstract Map<String, String> getGroupDesc();
 
     List<String> groupContextKeys() {
         return new ArrayList<String>(groupDesc.keySet())
