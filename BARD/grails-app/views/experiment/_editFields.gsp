@@ -1,85 +1,65 @@
 <%@ page import="bard.db.enums.HierarchyType;java.text.SimpleDateFormat" %>
 
 <div class="row-fluid">
-<div id="accordion-foo" class="span12 accordion">
+<div id="foo" class="span12">
 
 <g:if test="${experiment.experimentName == null || experiment.errors}">
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
-               data-target="#target-contexts-info">
-                <i class="icon-chevron-down"></i>
-                Summary
-            </a>
-        </div>
 
-        <div class="accordion-body in collapse">
-            <div class="accordion-inner">
-                <dl class="dl-horizontal">
+    <h3>Summary</h3>
 
-                    <dt>Assay</dt><dd><g:link controller="assayDefinition" action="show"
-                                              id="${assay.id}">${assay.name}</g:link></dd>
+    <dl class="dl-horizontal">
 
-                    <dt>Name</dt>
-                    <dd>
-                        <input class="input-xxlarge" type="text" name="experimentName"
-                               value="${fieldValue(bean: experiment, field: "experimentName")}"/>
-                    </dd>
+        <dt>Assay:</dt><dd><g:link controller="assayDefinition" action="show"
+                                   id="${assay.id}">${assay.name}</g:link></dd>
 
-                    <dt>Description</dt><dd>
-                    <input class="input-xxlarge" type="text" name="description"
-                           value="${fieldValue(bean: experiment, field: "description")}"/>
-                </dd>
+        <dt>Name:</dt>
+        <dd>
+            <input class="input-xxlarge" type="text" name="experimentName"
+                   value="${fieldValue(bean: experiment, field: "experimentName")}"/>
+        </dd>
 
-                    <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
-                    <dd>
-                        <g:select id="experimentStatus" name='experimentStatus' value="${person?.type?.id}"
-                                  from="${bard.db.enums.ExperimentStatus.values()}"
-                                  optionValue="id"></g:select>
+        <dt>Description:</dt><dd>
+        <input class="input-xxlarge" type="text" name="description"
+               value="${fieldValue(bean: experiment, field: "description")}"/>
+    </dd>
 
-                        %{--<g:select id="experimentStatus" name="experimentStatus"--}%
-                                  %{--from="${bard.db.enums.ExperimentStatus.values()}"--}%
-                                  %{--value="${experiment?.experimentStatus}"/>--}%
-                    </dd>
+        <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
+        <dd>
+            <g:select id="experimentStatus" name='experimentStatus' value="${person?.type?.id}"
+                      from="${bard.db.enums.ExperimentStatus.values()}"
+                      optionValue="id"></g:select>
+        </dd>
 
-                    <dt>Hold until date</dt><dd>
-                    <input type="text" class="input-small date-selection" name="holdUntilDate"
-                           value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
-                    (No more then 1 year from today)
-                </dd>
+        <dt>Hold until Date:</dt><dd>
+        <input type="text" class="input-large date-selection" name="holdUntilDate" readonly="readonly"
+               placeholder="Click to select hold until date"
+               value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
+        (No more than 1 year from today)
+    </dd>
 
-                    <dt>Run Date From</dt><dd>
-                    <input type="text" class="input-small date-selection" name="runDateFrom"
-                           value="${experiment.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateFrom) : experiment.runDateFrom}"/>
-                </dd>
+        <dt>Run Date From:</dt><dd>
+        <input type="text" class="input-large date-selection" name="runDateFrom" readonly="readonly"
+               placeholder="Click to select from date"
+               value="${experiment.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateFrom) : experiment.runDateFrom}"/>
+    </dd>
 
-                    <dt>Run Date To</dt><dd>
-                    <input type="text" class="input-small date-selection" name="runDateTo"
-                           value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
-                </dd>
-                </dl>
+        <dt>Run Date To:</dt><dd>
+        <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click to select to date"
+               readonly="readonly"
+               value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
+    </dd>
+    </dl>
 
-                <r:script>
-                    $(".date-selection").datepicker()
-                </r:script>
-
-            </div>
-        </div>
-    </div>
+    <r:script>
+        $('.date-selection').datepicker({
+            format: 'MM/dd/yyyy'
+        });
+    </r:script>
 </g:if>
-<div class="accordion-group">
-<div class="accordion-heading">
-    <a href="#contexts-header" class="accordion-toggle" data-toggle="collapse"
-       data-target="#target-contexts-info">
-        <i class="icon-chevron-down"></i>
 
-        <h3>Measures</h3>
-    </a>
-</div>
+<h3>Measures</h3>
 
 <r:require module="dynatree"/>
-<div class="accordion-body in collapse">
-<div class="accordion-inner">
 <input type="hidden" name="measureIds" id="measureIds">
 
 <div class="row-fluid">
@@ -301,7 +281,4 @@
                 })
 </r:script>
 </div>
-</div>
-</div>
-</div>    <!-- End accordion -->
 </div>

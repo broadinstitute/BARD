@@ -36,7 +36,6 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
 // What URL patterns should be processed by the resources plugin
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
 
-
 // The default codec used to encode data with ${}
 grails.views.default.codec = "none" // none, html, base64
 grails.views.gsp.encoding = "UTF-8"
@@ -110,7 +109,17 @@ bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 rememberme.key = 'bard_cap_crowd_remember_me'
 rememberme.cookieName = 'bard_cap_crowd_remember_me_cookie'
 
-grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+//Use inMemMap provider only in non-production settings
+switch (Environment.current) {
+    case Environment.PRODUCTION:
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+
+        break
+    default:
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+
+}
+
 grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
 grails.plugins.springsecurity.rememberMe.key = rememberme.key
 grails {
@@ -139,12 +148,13 @@ grails.plugins.springsecurity.useSessionFixationPrevention = true
 
 CbipCrowd {
     application.url = 'https://crowd.somewhere.com/crowd/'
+    register.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
     applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR"]
     mockUsers {
         integrationTestUser {
-            roles = ['ROLE_USER','ROLE_CURATOR','ROLE_BARD_ADMINISTRATOR']
+            roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
             username = 'integrationTestUser'
             password = 'integrationTestUser'
             email = 'integrationTestUser@nowhere.com'
@@ -177,12 +187,10 @@ if (appName) {
         if (new File(primaryFullName).exists()) {
             println "Overriding Config.groovy with $primaryFullName"
             grails.config.locations << "file:$primaryFullName"
-        }
-        else if (new File(secondaryFullName).exists()) {
+        } else if (new File(secondaryFullName).exists()) {
             println "Overriding Config.groovy with $secondaryFullName"
             grails.config.locations << "file:$secondaryFullName"
-        }
-        else {
+        } else {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }

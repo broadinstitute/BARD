@@ -15,8 +15,7 @@ SpringSecurityUtils.reauthenticate('integrationTestUser', null)
 println("Initializing output file...")
 String outputFile =  "assay_context_items_validation.txt"
 FileWriter fileWriter = new FileWriter(outputFile, false)
-fileWriter.write("List of AssayContextItems that don't pass validation: \n\n")
-fileWriter.flush()
+
 writeToFile = {message ->
     fileWriter.write(message + "\n")
     fileWriter.flush()
@@ -27,15 +26,16 @@ println("Retrieving AssayContextItems...")
 List<AssayContextItem> assayContextItems = AssayContextItem.list()
 println("Ready to process ${assayContextItems.size()} of Assay Context Items in BARD")
 writeToFile("# of Assay Context Items in BARD: ${assayContextItems.size()}")
+writeToFile("List of AssayContextItems that don't pass validation: \n")
+writeToFile("Assay ID\tAssayContextItem ID\tError(s)")
 
 int itemsWithErrors = 0;
 println("Detecting AssayContextItems with errors...")
 assayContextItems.each { AssayContextItem item ->
     if (!item.validate()) {
-        writeToFile("Assay [ID: ${item.assayContext.assayId}] AssayContextItem [ID: ${item.id}]-> # of Errors: [${item.errors.errorCount}]")
         itemsWithErrors++
         item.errors.allErrors.each{
-            writeToFile(it.toString())
+            writeToFile("${item.assayContext.assayId}\t${item.id}\t${it.getCode()}")
         }
     }
 }
