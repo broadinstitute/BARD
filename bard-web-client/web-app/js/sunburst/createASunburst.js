@@ -262,6 +262,39 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         }
     }
 
+
+    var markDrillDown = function (drillDownName,d,treeNumber){
+        var currentContainer = d3.select('#sunburstdiv_empty');
+        var drillDownId =  'drilldownBut'+treeNumber;
+        var drillDownLabel =  currentContainer.select ('#'+drillDownId);
+        if (!(drillDownLabel.empty())) { // there is already a label for this node
+            if (drillDownName === '/') {   // we are in the root remove the name
+                drillDownLabel.remove ();
+            } else {
+                drillDownLabel.text(drillDownName);
+            }
+        } else {
+            if (!(drillDownName === '/')) {   // we only need a node if we are outside of the root
+                var resetDrillDownName = '/';
+                var originalD = d;
+                var originalTreeId =  d.treeid;
+                currentContainer.append('div')
+                    .text(drillDownName)
+                    .attr('id',drillDownId)
+                    .attr('class','drill')
+                    .on('click',function(d){
+                        var drillDownLabel =  currentContainer.select ('#'+drillDownId);
+                        linkedVizData.adjustMembershipBasedOnSunburstClick (resetDrillDownName, originalD,originalTreeId);
+                        linkedVizData.resetDerivedHierarchyRouteToOriginalRoot (originalTreeId) ;
+                        drillDownLabel.remove ();
+                    });
+            }
+
+        }
+    }
+
+
+
     var hierarchyData = linkedVizData.filteredHierarchyData(widgetIndex);
 
     var path = svg.datum(hierarchyData).selectAll("path")
@@ -290,6 +323,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
     // Interpolate the scales!
     function click(d) {
         adjustSunburstCursor(d);
+//        markDrillDown (d.name,d, d.treeid);
         linkedVizData.adjustMembershipBasedOnSunburstClick (d.name, d, d.treeid);
         linkedVizData.resetRootForHierarchy (d, d.treeid) ;
         path.transition()

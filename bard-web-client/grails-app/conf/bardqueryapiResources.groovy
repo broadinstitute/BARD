@@ -131,6 +131,7 @@ modules = {
     sunburst {
         dependsOn 'bootstrap,jquery,d3Library'
 
+        resource url: "js/sunburst/linkedVis.js"
         resource url: "js/sunburst/createALegend.js"
         resource url: "js/sunburst/createASunburst.js"
         resource url: "css/sunburst.css"
