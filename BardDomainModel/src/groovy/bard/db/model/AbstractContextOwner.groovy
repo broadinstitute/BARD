@@ -33,23 +33,37 @@ abstract class AbstractContextOwner {
     final static String SECTION_ASSAY_READOUT = "Assay Readout"
     final static String SECTION_ASSAY_COMPONENTS = "Assay Components"
     final static String SECTION_EXPERIMENTAL_VARIABLES = "Experimental Variables"
-    final static String SECTION_UNCLASSIFIED = "Unclassified>"
+    final static String SECTION_UNCLASSIFIED = "Unclassified"
 
     final static Map<String, List<String>> SECTION_NAME_MAP = [
-            (SECTION_BIOLOGY): [SECTION_BIOLOGY,"biology>", "biology> molecular interaction>"],
-            (SECTION_ASSAY_PROTOCOL): [SECTION_ASSAY_PROTOCOL,"assay protocol> assay type>","assay protocol> assay format>"],
-            (SECTION_ASSAY_DESIGN): [SECTION_ASSAY_DESIGN,"assay protocol> assay design>"],
-            (SECTION_ASSAY_READOUT): [SECTION_ASSAY_READOUT,"assay protocol> assay readout>"],
-            (SECTION_ASSAY_COMPONENTS):[SECTION_ASSAY_COMPONENTS,"assay protocol> assay component>"],
+            (SECTION_BIOLOGY): [SECTION_BIOLOGY, "biology>", "biology> molecular interaction>"],
+            (SECTION_ASSAY_PROTOCOL): [SECTION_ASSAY_PROTOCOL, "assay protocol> assay type>", "assay protocol> assay format>"],
+            (SECTION_ASSAY_DESIGN): [SECTION_ASSAY_DESIGN, "assay protocol> assay design>"],
+            (SECTION_ASSAY_READOUT): [SECTION_ASSAY_READOUT, "assay protocol> assay readout>"],
+            (SECTION_ASSAY_COMPONENTS): [SECTION_ASSAY_COMPONENTS, "assay protocol> assay component>"],
             (SECTION_EXPERIMENTAL_VARIABLES): [SECTION_EXPERIMENTAL_VARIABLES, "project management> project information>", "project management> experiment>"],
-            (SECTION_UNCLASSIFIED): [SECTION_UNCLASSIFIED,"unclassified>"]
+            (SECTION_UNCLASSIFIED): [SECTION_UNCLASSIFIED, "unclassified>"]
     ]
 
-    ContextGroup groupBySection(String section){
+    /**
+     *
+     * @param value a contextGroup value
+     * @return the section key the contextGroup falls within
+     */
+    String getSectionKeyForContextGroup(String value) {
+        String sectionKey =  SECTION_UNCLASSIFIED
+        def entry =    SECTION_NAME_MAP.find { it.value.contains(value?.trim()) }
+        if(entry){
+            sectionKey = entry.key
+        }
+        return sectionKey
+    }
+
+    ContextGroup groupBySection(String section) {
         List<AbstractContext> values = []
-        if(SECTION_NAME_MAP.containsKey(section)){
+        if (SECTION_NAME_MAP.containsKey(section)) {
             for (ContextGroup contextGroup : groupContexts()) {
-                for(String contextGroupPath in SECTION_NAME_MAP.get(section)){
+                for (String contextGroupPath in SECTION_NAME_MAP.get(section)) {
                     if (contextGroup.key.equalsIgnoreCase(contextGroupPath)) {
                         values.addAll(contextGroup.value)
                     }
@@ -59,6 +73,7 @@ abstract class AbstractContextOwner {
         }
         return null
     }
+
     ContextGroup groupUnclassified() {
         groupBySection(SECTION_UNCLASSIFIED)
     }
@@ -90,10 +105,10 @@ abstract class AbstractContextOwner {
     ContextGroup groupExperimentalVariables() {
         groupBySection(SECTION_EXPERIMENTAL_VARIABLES)
     }
+
     ContextGroup groupAssayProtocol() {
         groupBySection(SECTION_ASSAY_PROTOCOL)
     }
-
 
     /**
      * Create a map where all the assayContexts are grouped a common root in the ontology hierarchy based on a prefered
@@ -110,8 +125,8 @@ abstract class AbstractContextOwner {
             return contextGroup.toLowerCase().trim()
         }
         final List<ContextGroup> contextGroupList = []
-        mapByPath.each{ k, v ->
-                contextGroupList.add(new ContextGroup(key: k, description: "", value: v))
+        mapByPath.each { k, v ->
+            contextGroupList.add(new ContextGroup(key: k, description: "", value: v))
         }
         return contextGroupList
     }

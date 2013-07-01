@@ -84,7 +84,8 @@ class ContextItemController {
 
         basicContextItemCommand.delete()
 
-        redirect(controller: basicContextItemCommand.ownerController, action: "editContext", id: basicContextItemCommand.contextOwnerId, fragment: "card-${basicContextItemCommand.contextId}")
+        redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
+                params: [id:basicContextItemCommand.contextOwnerId, groupBySection: basicContextItemCommand.context?.getSectionKey()])
     }
 
     def updatePreferredName(InlineUpdateCommand command) {

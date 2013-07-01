@@ -64,6 +64,15 @@ abstract class AbstractContext {
         return preferredDescriptor
     }
 
+    /**
+     * get the SectionKey based on the contextGroup
+     * @return
+     */
+    String getSectionKey(){
+        String sectionKey = owner.getSectionKeyForContextGroup(contextGroup)
+        return sectionKey
+    }
+
     String getPreferredName() {
         String preferredName = 'undefined'
         if (StringUtils.isNotBlank(this.contextName)) {

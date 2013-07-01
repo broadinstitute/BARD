@@ -98,7 +98,7 @@ class ContextItemService {
     private boolean delete(BasicContextItemCommand basicContextItemCommand) {
         boolean deleteSuccessful = false
         basicContextItemCommand.with {
-            AbstractContext context = basicContextItemCommand.findContext()
+            context = basicContextItemCommand.findContext()
             if (context) {
                 AbstractContextOwner owner = context.owner
                 AbstractContextItem contextItem = context.contextItems.find { it.id == contextItemId }

@@ -93,7 +93,7 @@
                             <g:if test="${editable == 'canedit'}">
                                 <div class="span12">
                                     <g:link action="editContext" id="${instance?.id}"  params="[groupBySection: AbstractContextOwner.SECTION_UNCLASSIFIED.encodeAsURL()]"
-                                            class="btn"><i class="icon-pencil"></i> Edit</g:link>
+                                            class="btn"><i class="icon-pencil"></i>Edit Contexts</g:link>
                                 </div>
                             </g:if>
                         </g:if>
