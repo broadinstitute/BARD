@@ -26,6 +26,9 @@
                             numAssays="${compound.numberOfAssays}"/>
         <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
                 style="float: right;">Bio-activity Summary</g:link>
+        <g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
+                style="float: right;">Linked Data Visualization</g:link>
+
     </div>
 </div>
 

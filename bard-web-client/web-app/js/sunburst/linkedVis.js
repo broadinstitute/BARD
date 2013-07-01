@@ -130,8 +130,8 @@ var linkedVizData = (function (){
                             assayIdList.push(currentAssayIdx);
                         }
                     }
-                    if (returnVal) { returnVal =  !String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:\-\[\]\,\.]/ig, "").length;
-                        if (!returnVal) {additionalErrorInfo += ('undesirable character='+String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:\-\[\]\,\.]/ig, ""));}}
+                    if (returnVal) { returnVal =  !String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:;\-\[\]\,\.]/ig, "").length;
+                        if (!returnVal) {additionalErrorInfo += ('undesirable character='+String(value[loopCount].AssayName).replace(/[a-z0-9\s\'\(\)\/_:;\-\[\]\,\.]/ig, ""));}}
                     if (!returnVal) alert(value[loopCount].AssayName);
                     if (returnVal) { returnVal =  !isNaN(Number(value[loopCount].AssayId));  }
                     if (!returnVal)  {
