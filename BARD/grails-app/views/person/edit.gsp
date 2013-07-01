@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="roles">Primary group</label>
+                    <label class="control-label" for="roles">Roles</label>
                     <div class="controls">
                         <g:select id="roles"  size="${bard.db.people.Role.list().size()}"
                                   name="roles" from="${bard.db.people.Role.list()}"
