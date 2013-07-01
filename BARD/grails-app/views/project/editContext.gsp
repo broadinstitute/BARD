@@ -12,7 +12,7 @@
     <div class="span12">
         <div class="well well-small">
             <div class="pull-left">
-                <h4>Edit ${instance?.getDomainClass()?.getNaturalName()} (${instance?.id}) Context</h4>
+                <h4>Edit ${instance?.getDomainClass()?.getNaturalName()} (${instance?.id}) Contexts</h4>
             </div>
             <g:if test="${instance?.id}">
                 <div class="pull-right">
@@ -42,7 +42,7 @@
         <div class="row-fluid">
             <div class="accordion-inner">
                 <g:render template="../context/edit"
-                          model="[contextOwner: instance, contexts: instance?.groupContexts()]"/>
+                          model="[contextOwner: instance, contexts: contexts]"/>
             </div>
 
         </div>

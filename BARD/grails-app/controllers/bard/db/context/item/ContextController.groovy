@@ -4,7 +4,9 @@ import bard.db.ContextService
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.project.Project
+import bard.db.project.ProjectController
 import bard.db.registration.Assay
+import bard.db.registration.AssayDefinitionController
 import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
@@ -30,10 +32,10 @@ class ContextController {
             render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
             return
         }
-        render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupContexts(), subTemplate: 'edit'])
+        render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupBySection(cardSection), subTemplate: 'edit'])
     }
 
-    def deleteEmptyCard(String contextClass, Long contextId) {
+    def deleteEmptyCard(String contextClass, Long contextId, String section) {
         AbstractContext context = BasicContextItemCommand.getContextClass(contextClass).findById(contextId)
         AbstractContextOwner owningContext = context.owner
         try {
@@ -47,7 +49,9 @@ class ContextController {
             render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
             return
         }
-        render(template: "/context/list", model: [contextOwner: owningContext, contexts: owningContext.groupContexts(), subTemplate: 'edit'])
+        String controller = contextClass == 'AssayContext' ? AssayDefinitionController.simpleName : ProjectController.simpleName
+        controller = controller.replaceAll('Controller', '')
+        redirect(controller: controller, action: 'editContext', params: [groupBySection: section, 'id': owningContext.id])
     }
 
 }

@@ -5,6 +5,7 @@ import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
+import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
 import grails.converters.JSON
@@ -97,8 +98,8 @@ class ProjectController {
         render text: json, contentType: 'text/json', template: null
     }
 
-    def show() {
-        def projectInstance = Project.get(params.id)
+    def show(Long id) {
+        def projectInstance = Project.get(id)
         if (!projectInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), params.id])
             return
@@ -302,14 +303,15 @@ class ProjectController {
         render(template: "summaryDetail", model: [project: instance])
     }
 
-    def editContext(Long id) {
+    def editContext(Long id,String groupBySection) {
         Project instance = Project.get(id)
         if (!instance) {
             // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), instanceId])
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), id])
             return
         }
-        [instance: instance]
+        AbstractContextOwner.ContextGroup contextGroup =instance.groupBySection(groupBySection?.decodeURL())
+        [instance: instance, contexts : [contextGroup]]
     }
 
     def showEditSummary(Long instanceId) {
