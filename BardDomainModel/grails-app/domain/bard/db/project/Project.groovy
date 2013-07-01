@@ -112,13 +112,6 @@ class Project extends AbstractContextOwner {
     }
 
     @Override
-    Map<String, String> getGroupDesc() {
-        return [
-                "unclassified>":""
-        ]
-    }
-
-    @Override
     AbstractContext createContext(Map properties) {
         ProjectContext context = new ProjectContext(properties)
         addToContexts(context)

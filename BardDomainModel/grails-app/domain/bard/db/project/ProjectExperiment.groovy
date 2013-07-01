@@ -60,11 +60,6 @@ class ProjectExperiment extends AbstractContextOwner{
     }
 
     @Override
-    Map<String, String> getGroupDesc() {
-        return ["unclassified":""]
-    }
-
-    @Override
     AbstractContext createContext(Map properties) {
         ProjectExperimentContext context = new ProjectExperimentContext(properties)
         addToProjectExperimentContexts(context)

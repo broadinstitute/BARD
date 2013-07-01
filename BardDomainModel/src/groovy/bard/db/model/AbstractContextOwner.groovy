@@ -19,12 +19,6 @@ abstract class AbstractContextOwner {
         List<AbstractContext> value;
     }
 
-    abstract Map<String, String> getGroupDesc();
-
-    List<String> groupContextKeys() {
-        return new ArrayList<String>(groupDesc.keySet())
-    }
-
     final static String SECTION_BIOLOGY = "Biology"
     final static String SECTION_ASSAY_PROTOCOL = "Assay Protocol"
     final static String SECTION_ASSAY_TYPE = "assay protocol> assay type>"
