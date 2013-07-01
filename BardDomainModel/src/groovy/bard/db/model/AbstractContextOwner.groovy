@@ -21,8 +21,6 @@ abstract class AbstractContextOwner {
 
     final static String SECTION_BIOLOGY = "Biology"
     final static String SECTION_ASSAY_PROTOCOL = "Assay Protocol"
-    final static String SECTION_ASSAY_TYPE = "assay protocol> assay type>"
-    final static String SECTION_ASSAY_FORMAT = "assay protocol> assay format>"
     final static String SECTION_ASSAY_DESIGN = "Assay Design"
     final static String SECTION_ASSAY_READOUT = "Assay Readout"
     final static String SECTION_ASSAY_COMPONENTS = "Assay Components"
@@ -54,7 +52,7 @@ abstract class AbstractContextOwner {
     }
 
     ContextGroup groupBySection(String section) {
-        List<AbstractContext> values = []
+        final List<AbstractContext> values = []
         if (SECTION_NAME_MAP.containsKey(section)) {
             for (ContextGroup contextGroup : groupContexts()) {
                 for (String contextGroupPath in SECTION_NAME_MAP.get(section)) {
@@ -65,19 +63,11 @@ abstract class AbstractContextOwner {
             }
             return new ContextGroup(key: section, description: section, value: values)
         }
-        return null
+        return new ContextGroup(key:SECTION_UNCLASSIFIED , description: SECTION_UNCLASSIFIED, value: values)
     }
 
     ContextGroup groupUnclassified() {
         groupBySection(SECTION_UNCLASSIFIED)
-    }
-
-    ContextGroup groupAssayType() {
-        groupBySection(SECTION_ASSAY_TYPE)
-    }
-
-    ContextGroup groupAssayFormat() {
-        groupBySection(SECTION_ASSAY_FORMAT)
     }
 
     ContextGroup groupAssayDesign() {

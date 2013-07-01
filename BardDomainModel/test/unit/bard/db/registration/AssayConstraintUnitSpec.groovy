@@ -297,6 +297,29 @@ class AssayConstraintUnitSpec extends Specification {
         ['c', 'B', 'a'] | ['a', 'B', 'c']
     }
 
+    void "test groupBySection('#section')"() {
+        when:
+        ContextGroup contextGroup = domainInstance.groupBySection(section)
+
+        then:
+        contextGroup.key == expectedSection
+        contextGroup.description == expectedSection
+
+        where:
+        section                        | expectedSection
+        SECTION_BIOLOGY                | SECTION_BIOLOGY
+        SECTION_ASSAY_PROTOCOL         | SECTION_ASSAY_PROTOCOL
+        SECTION_ASSAY_DESIGN           | SECTION_ASSAY_DESIGN
+        SECTION_ASSAY_READOUT          | SECTION_ASSAY_READOUT
+        SECTION_ASSAY_COMPONENTS       | SECTION_ASSAY_COMPONENTS
+        SECTION_EXPERIMENTAL_VARIABLES | SECTION_EXPERIMENTAL_VARIABLES
+        SECTION_UNCLASSIFIED           | SECTION_UNCLASSIFIED
+        ''                             | SECTION_UNCLASSIFIED
+        ' '                            | SECTION_UNCLASSIFIED
+        'someUnknownSection'           | SECTION_UNCLASSIFIED
+        null                           | SECTION_UNCLASSIFIED
+    }
+
     void "test getSectionKeyForContextGroup #desc "() {
 
         when:
