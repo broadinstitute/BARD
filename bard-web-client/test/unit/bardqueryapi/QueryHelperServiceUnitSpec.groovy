@@ -4,7 +4,7 @@ import bard.core.SearchParams
 import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.assays.Assay
 import bard.core.rest.spring.assays.AssayResult
 import bard.core.rest.spring.compounds.Compound
@@ -70,16 +70,16 @@ class QueryHelperServiceUnitSpec extends Specification {
     void "test extractExperimentDetails with activities #label"() {
         given:
         final Node dictionaryElement = new Node(elementId: dictElemId, label: display, description: description)
-        DataExportRestService dataExportRestService = Mock(DataExportRestService)
+        DictionaryRestService dictionaryRestService = Mock(DictionaryRestService)
         Dummy d = new Dummy()
-        d.dataExportRestService = dataExportRestService
+        d.dictionaryRestService = dictionaryRestService
         priorityElement.dummy = d
         List<Activity> activities = [new Activity(resultData: new ResultData(responseClass: "CR_SER",
                 priorityElements: [priorityElement]))]
         when:
         Map map = service.extractExperimentDetails(activities, normalizeYAxis)
         then:
-        d.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        d.dictionaryRestService.findDictionaryElementById(_) >> {dictionaryElement}
         assert expectedMap == map
 
         where:

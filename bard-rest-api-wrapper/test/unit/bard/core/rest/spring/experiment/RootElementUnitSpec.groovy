@@ -1,13 +1,12 @@
 package bard.core.rest.spring.experiment
 
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import org.springframework.mock.web.MockServletContext
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
-import grails.test.mixin.Mock
+
 import javax.servlet.ServletContext
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
@@ -56,12 +55,12 @@ class RootElementUnitSpec extends Specification {
   '''
     ServletContext servletContext
     GrailsWebApplicationContext ctx
-    DataExportRestService dataExportRestService
+    DictionaryRestService dictionaryRestService
     void setup() {
         servletContext = Mock(ServletContext)
         ServletContextHolder.metaClass.static.getServletContext = {servletContext}
         ctx = Mock()
-         dataExportRestService =  Mock(DataExportRestService)
+         dictionaryRestService =  Mock(DictionaryRestService)
     }
 
     void cleanup() {
@@ -74,7 +73,7 @@ class RootElementUnitSpec extends Specification {
         final RootElement rootElement = objectMapper.readValue(ROOT_ELEMENT, RootElement.class)
         then:
         servletContext.getAttribute(_)>>{ctx}
-        ctx.dataExportRestService()>>{dataExportRestService}
+        ctx.dictionaryRestService()>>{dictionaryRestService}
 
         assert rootElement
         assert rootElement.pubChemDisplayName== "Outcome"
@@ -89,7 +88,7 @@ class RootElementUnitSpec extends Specification {
         final RootElement rootElement = objectMapper.readValue(ROOT_ELEMENTS_WITH_CHILD_NODES, RootElement.class)
         then:
         servletContext.getAttribute(_)>>{ctx}
-        ctx.dataExportRestService()>>{dataExportRestService}
+        ctx.dictionaryRestService()>>{dictionaryRestService}
 
         assert rootElement
         assert rootElement.pubChemDisplayName=="AvgGluFoldShift"

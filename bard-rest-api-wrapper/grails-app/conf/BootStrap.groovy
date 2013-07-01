@@ -1,9 +1,9 @@
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.SunburstRestService
 
 class BootStrap {
     def grailsApplication
-    DataExportRestService dataExportRestService
+    DictionaryRestService dictionaryRestService
     SunburstRestService sunburstRestService
 
     def init = { servletContext ->
@@ -17,7 +17,7 @@ class BootStrap {
 
     void loadCapDictionary() {
         try {
-            dataExportRestService.getDictionary()
+            dictionaryRestService.getDictionary()
         } catch (Exception ee) {
             log.error(ee)
         }

@@ -1,6 +1,6 @@
 package bard.rest.api.wrapper
 
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 /**
  * We introduce this Domain class so that we can get our hands
  * on the dataExportRest Service, allowing classes in src/groovy to use it
@@ -8,8 +8,8 @@ import bard.core.rest.spring.DataExportRestService
  * The alternative was to inject the application context into the src/groovy classes
  */
 class Dummy {
-    DataExportRestService dataExportRestService
-    static transients = ['dataExportRestService']
+    DictionaryRestService dictionaryRestService
+    static transients = ['dictionaryRestService']
 
 
     static constraints = {

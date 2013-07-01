@@ -1,16 +1,16 @@
 package bardqueryapi
 
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.util.CapDictionary
 import grails.plugins.springsecurity.Secured
 
 @Secured(['isAuthenticated()'])
 class DictionaryTermsController {
-    DataExportRestService dataExportRestService
+    DictionaryRestService dictionaryRestService
 
 
     def dictionaryTerms() {
-        final CapDictionary capDictionary = dataExportRestService.getDictionary()
+        final CapDictionary capDictionary = dictionaryRestService.getDictionary()
         render view: "dictionaryTerms", model: [capDictionary: capDictionary]
     }
 }

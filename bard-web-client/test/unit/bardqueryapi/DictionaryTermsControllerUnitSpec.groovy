@@ -1,12 +1,9 @@
 package bardqueryapi
 
-import static org.junit.Assert.*
-
 import grails.test.mixin.*
 import grails.test.mixin.support.*
-import org.junit.*
 import spock.lang.Unroll
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.util.CapDictionary
 import spock.lang.Specification
 
@@ -21,12 +18,12 @@ class DictionaryTermsControllerUnitSpec extends Specification {
 
     void dictionaryTerms() {
         given:
-        DataExportRestService dataExportRestService = Mock(DataExportRestService)
-        controller.dataExportRestService = dataExportRestService
+        DictionaryRestService dictionaryRestService = Mock(DictionaryRestService)
+        controller.dictionaryRestService = dictionaryRestService
         when:
         controller.dictionaryTerms()
         then:
-        dataExportRestService.getDictionary() >> {new CapDictionary()}
+        dictionaryRestService.getDictionary() >> {new CapDictionary()}
         assert "/dictionaryTerms/dictionaryTerms" == view
     }
 }

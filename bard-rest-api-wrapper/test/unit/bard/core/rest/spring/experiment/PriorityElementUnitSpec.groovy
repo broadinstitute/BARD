@@ -6,7 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import javax.servlet.ServletContext
 import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 @Unroll
@@ -153,12 +153,12 @@ class PriorityElementUnitSpec extends Specification {
 '''
     ServletContext servletContext
     GrailsWebApplicationContext ctx
-    DataExportRestService dataExportRestService
+    DictionaryRestService dictionaryRestService
     void setup() {
         servletContext = Mock(ServletContext)
         ServletContextHolder.metaClass.static.getServletContext = {servletContext}
         ctx = Mock(GrailsWebApplicationContext)
-        dataExportRestService =  Mock(DataExportRestService)
+        dictionaryRestService =  Mock(DictionaryRestService)
     }
 
     void cleanup() {
@@ -172,7 +172,7 @@ class PriorityElementUnitSpec extends Specification {
         PriorityElement priorityElement = objectMapper.readValue(currentJSON, PriorityElement.class)
         then:
         servletContext.getAttribute(_)>>{ctx}
-        ctx.dataExportRestService()>>{dataExportRestService}
+        ctx.dictionaryRestService()>>{dictionaryRestService}
 
         assert priorityElement
         assert !priorityElement.primaryElements
