@@ -63,19 +63,20 @@
             <div id="selectedEdgeId" style="display: none">{{selectedEdgeId}}</div>
             <strong>Selected Edge</strong>
 
-            <div id="selectedEdgeFromId">{{fromNode}}</div>
-
-            <div id="selectedEdgeToId">{{toNode}}</div>
-            <g:if test="${editable == 'canedit'}">
+            <table><tr>
+            <td><div id="selectedEdgeFromId">{{fromNode}}</div> </td>
+             <td> - </td>
+            <td><div id="selectedEdgeToId">{{toNode}}</div></td>
+            <td><g:if test="${editable == 'canedit'}">
                 <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
                    style="font-family:arial;color:red;font-size:10px;">
                     <i class="icon-trash"></i>
                     Remove from Project
                 </a>
-            </g:if>
+            </g:if></td>
+            </tr></table>
         </script>
         <script id="node-selection-template1" type="text/x-handlebars-template">
-
             <div id="selectedNodeId" style="display: none">{{selectedNodeId}}</div>
             <strong>Experiment Stage:</strong>
             <g:if test="${editable == 'canedit'}">

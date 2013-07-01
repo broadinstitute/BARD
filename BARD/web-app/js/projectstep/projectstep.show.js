@@ -36,7 +36,7 @@ function initProjectFunction() {
 
     var existingColors = new Array();
     var aidColor = {};
-    var template = Handlebars.compile($("#node-selection-template").html())
+    var template = Handlebars.compile($("#node-selection-template1").html())
 
     var g = new Graph();
     var gIsolated = new Graph();
@@ -54,7 +54,7 @@ function initProjectFunction() {
             function click() {
                 var projectId = $('#projectIdForStep').val();
                 resetAfterClick();
-                var params = {selected:n, projectId:projectId}
+                var params = {selected:n.data, projectId:projectId, selectedNodeId:n}
                 $('#node-selection-details').html(template(params))
             }
         );
@@ -94,7 +94,7 @@ function initProjectFunction() {
             function click() {
                 var projectId = $('#projectIdForStep').val();
                 resetAfterClick();
-                var params = {selected:n, projectId:projectId}
+                var params = {selected:n.data, projectId:projectId}
                 $('#node-selection-details').html(template(params))
             }
         );
@@ -117,7 +117,7 @@ function initProjectFunction() {
             existingColors.push(colorVal);
             aidColor[keyValues.assay] = colorVal;
         }
-        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{link:keyValues.eid, assay:keyValues.assay,
+        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{eid:keyValues.eid, stage:keyValues.stage, assay:keyValues.assay,
             ename:keyValues.ename, aid:keyValues.aid, assignedcolor:colorVal}, render:renderIsolated});
     }
 
