@@ -22,6 +22,7 @@
                     </a>
                     <ul class="nav">
                         <li><a href="/BARD">CAP</a></li>
+                        <g:if env="Production">
                         <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -30,16 +31,17 @@
                                 </a>
 
                                 <ul class="dropdown-menu">
-                                    <li class="controller"><g:link
-                                            controller="register">Register New BARD User</g:link></li>
+                                     <li class="controller"><g:link
+                                            controller="register">Register External BARD User</g:link></li>
                                     <li class="controller"><g:link controller="register"
-                                                                   action="listUsersAndGroups">List CROWD Users</g:link></li>
+                                                                   action="listUsersAndGroups">List External BARD Users</g:link></li>
                                     <li class="controller"><g:link controller="person"
                                                                    action="list">List Person Table</g:link></li>
                                 </ul>
 
                             </li>
                         </sec:ifAnyGranted>
+                        </g:if>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Assay Definitions

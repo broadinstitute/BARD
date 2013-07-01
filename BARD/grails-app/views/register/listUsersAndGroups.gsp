@@ -3,41 +3,42 @@
 <head>
     <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
-    <title>Users and Groups In CROWD</title>
+    <title>External Users and Groups In CROWD</title>
 </head>
 
 <body>
-
-<g:if test="${flash.message}">
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="ui-widget">
-                <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-                    <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-                        <strong>${flash.message}</strong>
+<sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
+    <g:if test="${flash.message}">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="ui-widget">
+                    <div class="ui-state-error ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+                        <p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+                            <strong>${flash.message}</strong>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</g:if>
+    </g:if>
 
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
 
-            <h3>Existing users in Crowd</h3>
-            <table>
-                <tr><th>User Name</th></tr>
-                <g:each in="${groupMembership.users}" var="currentUser">
-                    <tr>
-                        <td>${currentUser.name}</td>
-                    </tr>
-                </g:each>
-            </table>
+                <h3>External BARD users in Crowd</h3>
+                <table>
+                    <tr><th>User Name</th></tr>
+                    <g:each in="${groupMembership.users}" var="currentUser">
+                        <tr>
+                            <td>${currentUser.name}</td>
+                        </tr>
+                    </g:each>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 
-</body>
+    </body>
+</sec:ifAnyGranted>
 </html>
 
