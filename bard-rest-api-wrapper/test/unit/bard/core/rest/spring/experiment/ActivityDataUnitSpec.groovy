@@ -1,6 +1,6 @@
 package bard.core.rest.spring.experiment
 
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.util.Node
 import bard.rest.api.wrapper.Dummy
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -35,13 +35,13 @@ class ActivityDataUnitSpec extends Specification {
 
    }
    '''
-    DataExportRestService dataExportRestService = Mock(DataExportRestService)
+    DictionaryRestService dictionaryRestService = Mock(DictionaryRestService)
 
 
     void "test JSON #label"() {
         given:
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         when:
         ActivityData activityData = objectMapper.readValue(JSON_DATA, ActivityData.class)
         activityData.dummy = dummy
@@ -69,7 +69,7 @@ class ActivityDataUnitSpec extends Specification {
         ActivityData activityData = new ActivityData(testConcentration: testConcentration, responseUnit: responseUnit, qualifier: qualifier, testConcentrationUnit: "um")
         activityData.metaClass.getDictionaryLabel = {dictionaryLabel}
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         activityData.dummy = dummy
         when:
         final String display = activityData.toDisplay()
@@ -93,13 +93,13 @@ class ActivityDataUnitSpec extends Specification {
         given:
         ActivityData activityData = new ActivityData(dictElemId: dictElemId, pubChemDisplayName: "pubChem")
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         activityData.dummy = dummy
         when:
         final String foundDescription = activityData.getDictionaryDescription()
 
         then:
-        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        expectedNumExecutions * dummy.dictionaryRestService.findDictionaryElementById(_) >> {dictionaryElement}
         assert expectedDescription == foundDescription
         where:
         label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
@@ -113,13 +113,13 @@ class ActivityDataUnitSpec extends Specification {
         given:
         ActivityData activityData = new ActivityData(dictElemId: dictElemId, pubChemDisplayName: "pubChem")
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         activityData.dummy = dummy
         when:
         final String foundLabel = activityData.getDictionaryLabel()
 
         then:
-        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        expectedNumExecutions * dummy.dictionaryRestService.findDictionaryElementById(_) >> {dictionaryElement}
         assert expectedLabel == foundLabel
         where:
         label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions

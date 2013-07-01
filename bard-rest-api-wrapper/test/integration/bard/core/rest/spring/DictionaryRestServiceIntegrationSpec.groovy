@@ -6,13 +6,13 @@ import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 
 @Unroll
-class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
-    DataExportRestService dataExportRestService
+class DictionaryRestServiceIntegrationSpec extends IntegrationSpec {
+    DictionaryRestService dictionaryRestService
 
 
     void "getDictionary #label"() {
         when:
-        CapDictionary capDictionary = dataExportRestService.getDictionary()
+        CapDictionary capDictionary = dictionaryRestService.getDictionary()
         then:
          assert capDictionary.getDictionaryElementMap().isEmpty()  == isEmpty
         where:
@@ -23,7 +23,7 @@ class DataExportRestServiceIntegrationSpec extends IntegrationSpec {
     }
     void "Dictionary #label"() {
         when:
-        final Node dictionaryElement = dataExportRestService.findDictionaryElementById(dictionaryId)
+        final Node dictionaryElement = dictionaryRestService.findDictionaryElementById(dictionaryId)
         then:
         assert dictionaryElement
         assert dictionaryElement.elementId == dictionaryId

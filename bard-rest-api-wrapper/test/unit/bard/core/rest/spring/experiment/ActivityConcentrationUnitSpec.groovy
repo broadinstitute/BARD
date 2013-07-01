@@ -5,7 +5,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.rest.api.wrapper.Dummy
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 
 @Unroll
 class ActivityConcentrationUnitSpec extends Specification {
@@ -168,12 +168,12 @@ class ActivityConcentrationUnitSpec extends Specification {
        }
     }
 '''
-    DataExportRestService dataExportRestService = Mock(DataExportRestService)
+    DictionaryRestService dictionaryRestService = Mock(DictionaryRestService)
 
     void "test #label"() {
         given:
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         when:
         ActivityConcentration activityConcentration = objectMapper.readValue(JSON_DATA, ActivityConcentration.class)
         activityConcentration.dummy = dummy

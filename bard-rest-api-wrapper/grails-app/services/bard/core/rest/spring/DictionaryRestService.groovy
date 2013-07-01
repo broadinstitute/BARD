@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Cacheable
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.util.Node
 
-public class DataExportRestService extends AbstractRestService {
+public class DictionaryRestService extends AbstractRestService {
 
     def transactional=false
 
@@ -44,7 +44,7 @@ public class DataExportRestService extends AbstractRestService {
     @Override
     public String getResource() {
         String resourceName = getResourceContext()
-        return new StringBuilder(externalUrlDTO.capUrl).
+        return new StringBuilder(externalUrlDTO.ncgcUrl).
                 append(resourceName).
                 toString();
     }

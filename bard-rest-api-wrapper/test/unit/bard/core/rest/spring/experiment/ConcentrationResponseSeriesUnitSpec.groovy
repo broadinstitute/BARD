@@ -5,7 +5,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import bard.rest.api.wrapper.Dummy
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import bard.core.rest.spring.util.Node
 
 @Unroll
@@ -52,13 +52,13 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
     }
     '''
 
-    DataExportRestService dataExportRestService = Mock(DataExportRestService)
+    DictionaryRestService dictionaryRestService = Mock(DictionaryRestService)
 
 
     void "test JSON #label"() {
         given:
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         when:
         ConcentrationResponseSeries concentrationResponseSeries = objectMapper.readValue(JSON_DATA, ConcentrationResponseSeries.class)
         concentrationResponseSeries.dummy = dummy
@@ -96,13 +96,13 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         given:
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(dictElemId: dictElemId, responseUnit: "pubChem")
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         concentrationResponseSeries.dummy = dummy
         when:
         final String foundDescription = concentrationResponseSeries.getDictionaryDescription()
 
         then:
-        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        expectedNumExecutions * dummy.dictionaryRestService.findDictionaryElementById(_) >> {dictionaryElement}
         assert expectedDescription == foundDescription
         where:
         label                                     | dictElemId | dictionaryElement                           | expectedDescription | expectedNumExecutions
@@ -116,13 +116,13 @@ class ConcentrationResponseSeriesUnitSpec extends Specification {
         given:
         ConcentrationResponseSeries concentrationResponseSeries = new ConcentrationResponseSeries(dictElemId: dictElemId)
         Dummy dummy = new Dummy()
-        dummy.dataExportRestService = dataExportRestService
+        dummy.dictionaryRestService = dictionaryRestService
         concentrationResponseSeries.dummy = dummy
         when:
         final String foundLabel = concentrationResponseSeries.getDictionaryLabel()
 
         then:
-        expectedNumExecutions * dummy.dataExportRestService.findDictionaryElementById(_) >> {dictionaryElement}
+        expectedNumExecutions * dummy.dictionaryRestService.findDictionaryElementById(_) >> {dictionaryElement}
         assert expectedLabel == foundLabel
         where:
         label                                     | dictElemId | dictionaryElement                     | expectedLabel | expectedNumExecutions

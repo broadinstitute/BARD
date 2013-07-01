@@ -52,7 +52,7 @@ beans = {
         loggerService = ref('loggerService')
     }
 
-    dataExportRestService(DataExportRestService) {
+    dictionaryRestService(DictionaryRestService) {
         externalUrlDTO = ref('externalUrlDTO')
         restTemplate = ref('restTemplate')
         loggerService = ref('loggerService')

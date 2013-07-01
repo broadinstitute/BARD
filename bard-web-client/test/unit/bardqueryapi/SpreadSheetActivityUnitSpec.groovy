@@ -9,7 +9,7 @@ import bard.core.rest.spring.experiment.ConcentrationResponseSeries
 import molspreadsheet.MolSpreadSheetColSubHeader
 import javax.servlet.ServletContext
 import org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext
-import bard.core.rest.spring.DataExportRestService
+import bard.core.rest.spring.DictionaryRestService
 import org.codehaus.groovy.grails.web.context.ServletContextHolder
 
 
@@ -21,14 +21,14 @@ class SpreadSheetActivityUnitSpec extends Specification {
 
     ServletContext servletContext
     GrailsWebApplicationContext ctx
-    DataExportRestService dataExportRestService
+    DictionaryRestService dictionaryRestService
     void setup() {
         servletContext = Mock(ServletContext)
         ServletContextHolder.metaClass.static.getServletContext = {servletContext}
         ctx = Mock()
-        dataExportRestService =  Mock(DataExportRestService)
+        dictionaryRestService =  Mock(DictionaryRestService)
         servletContext.getAttribute(_)>>{ctx}
-        ctx.dataExportRestService()>>{dataExportRestService}
+        ctx.dictionaryRestService()>>{dictionaryRestService}
     }
 
     void cleanup() {

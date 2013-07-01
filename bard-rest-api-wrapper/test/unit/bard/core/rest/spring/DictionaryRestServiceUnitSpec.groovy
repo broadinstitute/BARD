@@ -10,18 +10,19 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 @Unroll
-@TestFor(DataExportRestService)
-class DataExportRestServiceUnitSpec extends Specification {
+@TestFor(DictionaryRestService)
+class DictionaryRestServiceUnitSpec extends Specification {
     RestTemplate restTemplate
     LoggerService loggerService
     String capUrl ="http://cap"
+    String ncgcUrl ="http://ncgc"
 
     void setup() {
         this.restTemplate = Mock(RestTemplate)
         this.loggerService = Mock(LoggerService)
         service.restTemplate = this.restTemplate
         service.loggerService = loggerService
-        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: "http://ncgc", capUrl: capUrl )
+        ExternalUrlDTO externalUrlDTO = new ExternalUrlDTO(promiscuityUrl:"badapple", ncgcUrl: ncgcUrl, capUrl: capUrl )
         service.externalUrlDTO = externalUrlDTO
 
     }
@@ -61,7 +62,7 @@ class DataExportRestServiceUnitSpec extends Specification {
         when:
         String resource = service.getResource()
         then:
-        assert capUrl + RestApiConstants.DICTIONARY_RESOURCE ==  resource
+        assert ncgcUrl + RestApiConstants.DICTIONARY_RESOURCE ==  resource
 
     }
 }
