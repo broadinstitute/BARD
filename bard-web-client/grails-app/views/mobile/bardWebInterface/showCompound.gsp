@@ -29,6 +29,8 @@
 <div data-role="content" style="text-align: center; margin: 0 auto;">
 <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
         style="float: right;">Bio-activity Summary</g:link>
+<g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
+        style="float: right;">Linked Data Visualization</g:link>
 <div style="text-align: center;">
 <table>
 <tr>

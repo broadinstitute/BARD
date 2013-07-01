@@ -48,6 +48,10 @@
                     <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary"
                             id="${cid}">Bio-activity Summary</g:link>
                 </li>
+                <li>
+                <g:link controller="bardWebInterface" action="bigSunburst"
+                        id="${cid}">Linked Data Visualization</g:link>
+                </li>
             </ul>
         </span>
     </div>
