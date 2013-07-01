@@ -32,32 +32,6 @@
             Click on an edge connecting experiments to see the details here.
         </div>
 
-        <script id="node-selection-template" type="text/x-handlebars-template">
-            <strong>Experiment ID:</strong>
-            <a href='/BARD/experiment/show/{{selected.data.link}}'>{{selected.data.link}}</a>
-            <g:if test="${editable == 'canedit'}">
-                <a href="#" onclick="deleteItem({{selected.data.link}}, ${instanceId});return false;"
-                   style="font-family:arial;color:red;font-size:10px;"><i
-                        class="icon-trash"></i>Remove from Project</a>
-            </g:if>
-            <br/>
-            <br/>
-
-            <strong>Experiment Name:</strong>
-
-            <div>{{selected.data.ename}}</div>
-            <br/>
-
-            <strong>Assay Definition ID:</strong><a href="/BARD/assayDefinition/show/{{selected.data.assay}}"
-                                                    id="assaylink"
-                                                    target="_blank">{{selected.data.assay}}</a>
-            <br/>
-            <br/>
-
-            <strong>Pubchem AID:</strong> <a
-                href="http://pubchem.ncbi.nlm.nih.gov/assay/assay.cgi?aid={{selected.data.aid}}"
-                id="aidlink" target="_blank">{{selected.data.aid}}</a>
-        </script>
 
         <script id="edge-selection-template" type="text/x-handlebars-template">
             <div id="selectedEdgeId" style="display: none">{{selectedEdgeId}}</div>
@@ -76,7 +50,7 @@
             </g:if></td>
             </tr></table>
         </script>
-        <script id="node-selection-template1" type="text/x-handlebars-template">
+        <script id="node-selection-template" type="text/x-handlebars-template">
             <div id="selectedNodeId" style="display: none">{{selectedNodeId}}</div>
             <strong>Experiment Stage:</strong>
             <g:if test="${editable == 'canedit'}">
