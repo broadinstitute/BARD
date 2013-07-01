@@ -264,7 +264,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
 
 
     var markDrillDown = function (drillDownName,d,treeNumber){
-        var currentContainer = d3.select('#sunburstdiv_empty');
+        var currentContainer = d3.select('#a4');
         var drillDownId =  'drilldownBut'+treeNumber;
         var drillDownLabel =  currentContainer.select ('#'+drillDownId);
         if (!(drillDownLabel.empty())) { // there is already a label for this node
@@ -275,18 +275,37 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
             }
         } else {
             if (!(drillDownName === '/')) {   // we only need a node if we are outside of the root
+                //  We have at least one drill down in place. Make sure that people can reset it.
                 var resetDrillDownName = '/';
                 var originalD = d;
                 var originalTreeId =  d.treeid;
+                // Add some explanation, as long as it doesn't exist already
+                var drillLabel = d3.select('.drillLabel');
+                if (drillLabel.empty ()) {
+                    currentContainer.append('div')
+                        .text("Click below to reset drilldown")
+                        .attr('id','drillLabel')
+                        .attr('class','drillLabel')
+                        .style('opacity', 0.5);
+                }
                 currentContainer.append('div')
                     .text(drillDownName)
                     .attr('id',drillDownId)
                     .attr('class','drill')
+                    .style('pointer-events', 'none')
                     .on('click',function(d){
                         var drillDownLabel =  currentContainer.select ('#'+drillDownId);
                         linkedVizData.adjustMembershipBasedOnSunburstClick (resetDrillDownName, originalD,originalTreeId);
                         linkedVizData.resetDerivedHierarchyRouteToOriginalRoot (originalTreeId) ;
                         drillDownLabel.remove ();
+                        // Did we remove the last drill down? If so then remove the label as well
+                        var anyRemainingDrillDownLabels =  currentContainer.selectAll ('drill');
+                        if(anyRemainingDrillDownLabels.empty()) {
+                            var drillLabelExplanation = d3.select('.drillLabel');
+                            if (!(drillLabelExplanation.empty ())) {
+                                drillLabelExplanation.remove () ;
+                            }
+                        }
                     });
             }
 
@@ -323,7 +342,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
     // Interpolate the scales!
     function click(d) {
         adjustSunburstCursor(d);
-//        markDrillDown (d.name,d, d.treeid);
+        markDrillDown (d.name,d, d.treeid);
         linkedVizData.adjustMembershipBasedOnSunburstClick (d.name, d, d.treeid);
         linkedVizData.resetRootForHierarchy (d, d.treeid) ;
         path.transition()

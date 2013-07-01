@@ -529,13 +529,12 @@ var linkedVizData = (function (){
             }
         },
         resetDerivedHierarchyRouteToOriginalRoot= function (hierarchyId) {
-            resetRootForHierarchy(hierarchyOfChoice.Structure.struct [0],hierarchyId);
+            resetRootForHierarchy(linkedData.Hierarchy[hierarchyId].Structure.struct [0],hierarchyId);
         },
         extendedHierarchyDataExists = function (hierarchyId){
             var hierarchyOfChoice = linkedData.Hierarchy[hierarchyId];
             return (!(hierarchyOfChoice.Structure.struct === undefined));
-        },
-    // It is certainly a bother to identify a node's parent if you don't have a parent pointer. The code below starts at the root
+        }    // It is certainly a bother to identify a node's parent if you don't have a parent pointer. The code below starts at the root
     //  and recursively descends until it finds the node that is the parent of the nodeThatIsTheBasisForOurSearch
         parentIdentificationTool  = function(currentNode,nodeThatIsTheBasisForOurSearch){
             if (!(currentNode === undefined)) {

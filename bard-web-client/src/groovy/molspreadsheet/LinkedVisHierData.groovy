@@ -146,8 +146,11 @@ public class LinkedVisHierData {
                 stringBuilder << individualHierarchySection(1, 'Tree', '{'+addQuotes('struct')+colonUnit+externallyProvidedAssayFormatTree.toString() +'}') <<
                         comma << endOfLine
             } else {
-                stringBuilder << individualHierarchySection(1, 'Tree', '{'+addQuotes('struct')+colonUnit+assayFormatTree.toString() +'}') <<
+                stringBuilder << individualHierarchySection(1, 'Tree', '{}') <<
                         comma << endOfLine
+                // We don't need these test data right now
+//                stringBuilder << individualHierarchySection(1, 'Tree', '{'+addQuotes('struct')+colonUnit+assayFormatTree.toString() +'}') <<
+//                        comma << endOfLine
             }
             if (externallyProvidedProteinTargetTree != null) {
                 stringBuilder << individualHierarchySection(2, 'Tree', '{'+addQuotes('struct')+colonUnit+externallyProvidedProteinTargetTree.toString() +'}') <<

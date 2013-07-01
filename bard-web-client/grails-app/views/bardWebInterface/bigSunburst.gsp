@@ -382,6 +382,12 @@
 
 
                     spotlightOneAndBackgroundThree = function (d, spotlight, background1, background2, background3, origButton, expandedPos) {
+                        // turn off the reset buttons, which are off when we are extended
+                        var drillDownButtons = d3.selectAll('.drill');
+                        if (!(drillDownButtons.empty())){
+                            drillDownButtons.style('pointer-events', 'none');
+                        }
+
                         // first handle the spotlight element and then the three backup singers
                         spotlight
                                 .style('padding-left', 10 + "px")
@@ -410,6 +416,13 @@
                         background1.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
                         background2.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
                         background3.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+
+
+                        // If there is a drill down explanation then fade it  out
+                        var drillLabelExplanation = d3.select('.drillLabel');
+                        if (!(drillLabelExplanation.empty ())) {
+                            drillLabelExplanation.style('opacity', 1); ;
+                        }
 
                         origButton
                                 .text(textForContractingButton)
@@ -445,9 +458,28 @@
                         //  button for them, but D three does not support that sort of activation is you are
                         //  using bound data. I should probably connect to those data dynamically to get around
                         //  this problem.
-                        background1.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
-                        background2.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
-                        background3.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
+                        var dataSetNumber=parseInt(background1.attr('id').match(/\d/));
+                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber)))  {
+                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                        } else {
+                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                        }
+                        dataSetNumber=parseInt(background2.attr('id').match(/\d/));
+                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber)))  {
+                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                        } else {
+                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                        }
+                        dataSetNumber=parseInt(background3.attr('id').match(/\d/));
+                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber)))  {
+                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                        } else {
+                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                        }
+
+//                        background1.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
+//                        background2.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
+//                        background3.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
 
                         var x = origButton
                                 .text(textForExpandingButton)
@@ -456,6 +488,15 @@
                                 .delay(1000)
                                 .duration(500)
                                 .style('opacity', 1);
+                        // turn back on the reset buttons, which are off when we are extended
+                        var drillDownButtons = d3.selectAll('.drill');
+                        if (!(drillDownButtons.empty())){
+                            drillDownButtons.style('pointer-events', 'auto');
+                            var drillLabelExplanation = d3.select('.drillLabel');
+                            if (!(drillLabelExplanation.empty ())) {
+                                drillLabelExplanation.style('opacity', 1); ;
+                            }
+                        }
                     },
 
                     expandGraphicsArea = function (graphicsTarget, graphicsTitle) {
@@ -696,29 +737,6 @@
 
 
             // Private method used to pull the data in from the remote site
-//            var readInData = function (incoming) {
-//
-//                        var processedAssays = {}; // Use for de-duplication
-//                        var developingAssayList = []; // This will be the return value
-//
-//                        incoming.forEach(function (d, i) {
-//
-//                            // de-duplication step
-//                            if (processedAssays[d.assayId] !== true) {
-//                                processedAssays[d.assayId] = true;
-//
-//                                developingAssayList.push({
-//                                    index: i,
-//                                    assayId: d.assayId,
-//                                    GO_biological_process_term: d.data.GO_biological_process_term,
-//                                    assay_format: d.data.assay_format,
-//                                    assay_type: d.data.assay_type,
-//                                    protein_target: d.data.protein_target
-//                                });
-//                            }
-//                        });
-//                        return  developingAssayList;
-//                    },
             var readInData = function () {
 
                         return    linkedVizData.retrieveLinkedData();
@@ -788,6 +806,24 @@
                                     return 'expbutton' + d.index;
                                 })
                                 .on('click', callbackToExpandOrContractOnButtonClick);
+
+                        // deactivate button if we have no data
+                        for ( var i=0 ; i<4 ; i++ ) {
+                            if (!(linkedVizData.extendedHierarchyDataExists(i))) {
+                                var expandedButton = d3.select('#expbutton'+i);
+                                if (!(expandedButton.empty())) {
+                                    expandedButton.style('pointer-events', 'none').style('opacity', 0.5);
+                                }
+
+                            } else {
+                                var expandedButton = d3.select('#expbutton'+i);
+                                if (!(expandedButton.empty())) {
+                                    expandedButton.style('pointer-events', 'auto').style('opacity', 1);
+                                }
+
+                            }
+                        }
+
 
                         // Add a button for causing misunderstood disappear
                         sunburstContainer.append("div")
@@ -917,8 +953,10 @@
             </div>
 
         </div>
+        <div id = "a4"  class = "resetDrillButtons" style="left: 1090px; top: 10px; width: 260px; height: 300px;">
+        </div>
 
-    </div>
+</div>
 
 
      %{--I will leave off the following section until I can figure out how to make data count work--}%
