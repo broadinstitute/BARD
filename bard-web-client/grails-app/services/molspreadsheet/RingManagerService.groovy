@@ -11,6 +11,7 @@ import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
 import bard.core.rest.spring.experiment.Activity
 import bard.core.rest.spring.util.RingNode
+import bardqueryapi.QueryService
 import groovy.json.JsonBuilder
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
@@ -20,6 +21,7 @@ class RingManagerService {
     SunburstCacheService sunburstCacheService
     AssayRestService assayRestService
     BiologyRestService biologyRestService
+    QueryService queryService
 
     static Logger log
     static {
@@ -462,6 +464,43 @@ class RingManagerService {
         return  rootRingNode
     }
 
+
+
+
+
+
+    public ringNodeFactoryShortForm ( List<String> pathList ) {
+        RingNode rootRingNode = new RingNode("/")
+        if (pathList?.size()  > 0){
+            LinkedHashMap<String, RingNode> ringNodeMgr = [:]
+            ringNodeMgr["/"] = rootRingNode
+            for (String onePath in pathList) {
+                RingNode currentRingNode = ringNodeMgr["/"]
+                List<String> pathElements = onePath.split("/")
+                for (String onePathElements in pathElements) {
+                    String terminalElement = pathElements.last()
+                    if (onePathElements?.size()>0) {
+                        // is this piece of path in the tree already? If not then add it, otherwise boost the reference count of the existing element
+                        if (ringNodeMgr.containsKey(onePathElements)) {
+                            currentRingNode =  ringNodeMgr[onePathElements]
+                            if (terminalElement == onePathElements) {  // don't repeatedly count an element which is serving only to mark our place in the tree
+                                currentRingNode.size += 1
+                            }
+                        }  else {
+                            ringNodeMgr[onePathElements] = new RingNode (terminalElement)
+                            currentRingNode.children << ringNodeMgr[onePathElements]
+                        }
+                    }
+                }
+
+            }
+        }
+        return  rootRingNode
+    }
+
+
+
+
     /***
      *
      * @param unconvertedValues
@@ -582,6 +621,55 @@ class RingManagerService {
 
 
 
+    public enum FieldOfInterest {
+        ASSAY_TYPE,
+        ASSAY_FORMAT
+    }
+
+
+
+
+    public List <String> generateListOfPaths (CompoundSummaryCategorizer compoundSummaryCategorizer, FieldOfInterest fieldOfInterest)  {
+        List <String> returnValue = []
+        for (Long aidKeys in compoundSummaryCategorizer.totalContents.keySet()) {
+            CompoundSummaryCategorizer.SingleEidSummary singleEidSummary =  compoundSummaryCategorizer.totalContents [aidKeys]
+            if (singleEidSummary != null) {
+                Map returnFromPathService
+                if (fieldOfInterest == FieldOfInterest.ASSAY_FORMAT) {
+                    String field = singleEidSummary.getAssayFormatString();
+                    if ((field != null)  &&
+                            (field.size() > 0)) {
+                        returnFromPathService = queryService.getPathsForAssayFormat (field)
+                    }
+                } else if (fieldOfInterest == FieldOfInterest.ASSAY_TYPE) {
+                    String field = singleEidSummary.getAssayTypeString();
+                    if ((field != null)  &&
+                            (field.size() > 0)) {
+                        returnFromPathService = queryService.getPathsForAssayType (field)
+                    }
+
+                }
+                if ((returnFromPathService != null)  &&
+                    (returnFromPathService.size() > 0)){
+                    returnFromPathService.each{key,value ->
+                        returnValue<<value
+                    }
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public  LinkedHashMap<String, Object>  convertCompoundSummaryIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
         LinkedHashMap<String, Object> returnValue = [:]
@@ -590,6 +678,8 @@ class RingManagerService {
         LinkedHashMap activeInactiveDataPriorToConversion = retrieveActiveInactiveDataFromCompound(compoundSummary)
         generateAccessionIdentifiers(activeInactiveDataPriorToConversion["compoundSummaryCategorizer"])
         CompoundSummaryCategorizer  compoundSummaryCategorizer =  activeInactiveDataPriorToConversion["compoundSummaryCategorizer"]
+        List <String> listOfAssayFormats = generateListOfPaths( compoundSummaryCategorizer, FieldOfInterest.ASSAY_FORMAT)
+        List <String> listOfAssayTypes = generateListOfPaths( compoundSummaryCategorizer, FieldOfInterest.ASSAY_TYPE)
         LinkedHashMap activeInactiveData = convertBiologyIdsToAscensionNumbers(activeInactiveDataPriorToConversion,mapBiologyIdToProteinAscensionNumber)
         final List<String> targets = []
         if (includeHits) {
@@ -617,6 +707,9 @@ class RingManagerService {
         compoundSummaryCategorizer.backPopulateTargetNames( mapBiologyIdToProteinAscensionNumber, mapAccessionNumberToTargetClassName)
         returnValue ["CompoundSummaryCategorizer"] = compoundSummaryCategorizer
         returnValue ["RingNode"]  =   ringNodeFactory(accumulatedMaps.flatten(),activeInactiveData )
+        returnValue ["AssayFormatRingNode"]  =   ringNodeFactoryShortForm(listOfAssayFormats)
+        returnValue ["AssayTypeRingNode"]  =   ringNodeFactoryShortForm(listOfAssayTypes)
+
         returnValue
     }
 

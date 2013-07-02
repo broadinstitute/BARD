@@ -1,5 +1,4 @@
 package molspreadsheet
-
 import bard.core.rest.spring.util.RingNode
 import org.apache.log4j.Level
 import org.apache.log4j.Logger
@@ -24,11 +23,14 @@ class CompoundSummaryCategorizer {
         log.setLevel(Level.ERROR)
     }
 
-
-
     public CompoundSummaryCategorizer() {
 
     }
+
+
+
+
+
 
     /***
      * Now we know the names of all of those targets we accumulated earlier. Insert the names, so that we can display them
@@ -246,6 +248,72 @@ class CompoundSummaryCategorizer {
        }
        return descendAndLink ( ringNode,mapProteinClassNameToAssayIndex )
    }
+
+
+
+
+
+    public RingNode treeAssayFormatLinker(RingNode ringNode) {
+        List<Long> allKeys=this.totalContents*.key.toList().sort()
+        // First we make a map from every assay index to its protein class name
+        Integer assayIndexCounter = 0
+        LinkedHashMap<Integer,String> mapAssayIndexToAssayFormatName = [:]
+        for (Long singleKey in allKeys) {
+            String assayFormatString = this.totalContents[singleKey].getAssayFormatString();
+            if ((assayFormatString != null) &&
+                    (assayFormatString.size() > 0))    {
+                mapAssayIndexToAssayFormatName[assayIndexCounter] =  assayFormatString
+            } else {
+                mapAssayIndexToAssayFormatName[assayIndexCounter] =  "none"
+            }
+            assayIndexCounter++
+        }
+        // now invert the list, so that for each unique name we have all the assay counters associated with it
+        LinkedHashMap<String,List <Integer>> mapAssayFormatToAssayIndex = [:]
+        for (Integer singleKey in mapAssayIndexToAssayFormatName.keySet()) {
+            String className = mapAssayIndexToAssayFormatName [singleKey]
+            if (mapAssayFormatToAssayIndex.containsKey(className)) {
+                mapAssayFormatToAssayIndex[className] <<  singleKey
+            } else {
+                mapAssayFormatToAssayIndex[className] = [singleKey]
+            }
+        }
+        return descendAndLink ( ringNode,mapAssayFormatToAssayIndex )
+    }
+
+
+
+    public RingNode treeAssayTypeLinker(RingNode ringNode) {
+        List<Long> allKeys=this.totalContents*.key.toList().sort()
+        // First we make a map from every assay index to its protein class name
+        Integer assayIndexCounter = 0
+        LinkedHashMap<Integer,String> mapAssayIndexToAssayTypeName = [:]
+        for (Long singleKey in allKeys) {
+            String assayTypeString = this.totalContents[singleKey].getAssayTypeString();
+            if ((assayTypeString != null) &&
+                    (assayTypeString.size() > 0))    {
+                mapAssayIndexToAssayTypeName[assayIndexCounter] =  assayTypeString
+            } else {
+                mapAssayIndexToAssayTypeName[assayIndexCounter] =  "none"
+            }
+            assayIndexCounter++
+        }
+        // now invert the list, so that for each unique name we have all the assay counters associated with it
+        LinkedHashMap<String,List <Integer>> mapAssayTypeToAssayIndex = [:]
+        for (Integer singleKey in mapAssayIndexToAssayTypeName.keySet()) {
+            String className = mapAssayIndexToAssayTypeName [singleKey]
+            if (mapAssayTypeToAssayIndex.containsKey(className)) {
+                mapAssayTypeToAssayIndex[className] <<  singleKey
+            } else {
+                mapAssayTypeToAssayIndex[className] = [singleKey]
+            }
+        }
+        return descendAndLink ( ringNode,mapAssayTypeToAssayIndex )
+    }
+
+
+
+
 
 
     /**

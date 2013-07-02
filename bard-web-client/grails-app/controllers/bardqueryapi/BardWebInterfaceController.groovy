@@ -781,10 +781,14 @@ class BardWebInterfaceController {
         LinkedVisHierData linkedVisHierData = new LinkedVisHierData(null,null,compoundSummaryCategorizer.createLinkedDataAssaySection(),compoundSummaryCategorizer.createLinkedDataCrossAssaySection())
         linkedVisHierData.externallyProvidedProteinTargetTree =  ringnodeAndCrossLinks ["RingNode"]
         RingNode ringNode =  ringnodeAndCrossLinks ["RingNode"]
+        RingNode assayFormatRingNode =  ringnodeAndCrossLinks ["AssayFormatRingNode"]
+        RingNode assayTypeRingNode =  ringnodeAndCrossLinks ["AssayTypeRingNode"]
         compoundSummaryCategorizer.treeAssayLinker (ringNode)
+        compoundSummaryCategorizer.treeAssayFormatLinker (assayFormatRingNode)
+        compoundSummaryCategorizer.treeAssayTypeLinker (assayTypeRingNode)
         linkedVisHierData.externallyProvidedProteinTargetTree = '['+ringNode.toString()+']'
-//        String assaysSectionJson =  linkedVisHierData.createCombinedListing()
-    //    linkedVisHierData = new LinkedVisHierData()
+        linkedVisHierData.externallyProvidedAssayFormatTree = '['+assayFormatRingNode.toString()+']'
+        linkedVisHierData.externallyProvidedAssayTypeTree  = '['+assayTypeRingNode.toString()+']'
         String assaysSectionJson = linkedVisHierData.createCombinedListing()
         render (assaysSectionJson)
     }
