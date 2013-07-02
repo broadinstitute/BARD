@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.db.registration.DocumentKind; bard.db.project.*" %>
+<%@ page import="bard.db.model.AbstractContextOwner; bard.db.registration.DocumentKind; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,8 +81,22 @@
                     <h3>2. Contexts</h3>
 
                     <div class="row-fluid">
-                        <g:render template="../context/show"
-                                  model="[contextOwner: instance, contexts: instance.groupContexts(), canedit: editable]"/>
+                        <div id="cardHolderAssayComponents" class="span12">
+                            <g:render template="/context/currentCard"
+                                      model="[contextOwner: instance, currentCard: instance.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row-fluid">
+                        <g:if test="${!uneditable}">
+                            <g:if test="${editable == 'canedit'}">
+                                <div class="span12">
+                                    <g:link action="editContext" id="${instance?.id}"  params="[groupBySection: AbstractContextOwner.SECTION_UNCLASSIFIED.encodeAsURL()]"
+                                            class="btn"><i class="icon-pencil"></i>Edit Contexts</g:link>
+                                </div>
+                            </g:if>
+                        </g:if>
                     </div>
                 </section>
                 <br/>

@@ -10,6 +10,7 @@ import org.junit.Before
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static bard.db.model.AbstractContextOwner.*
 import static bard.db.registration.Assay.*
 import static test.TestUtils.assertFieldValidationExpectations
 import static test.TestUtils.createString
@@ -294,6 +295,63 @@ class AssayConstraintUnitSpec extends Specification {
         ['b', 'a']      | ['a', 'b']
         ['B', 'a']      | ['a', 'B']
         ['c', 'B', 'a'] | ['a', 'B', 'c']
+    }
+
+    void "test groupBySection('#section')"() {
+        when:
+        ContextGroup contextGroup = domainInstance.groupBySection(section)
+
+        then:
+        contextGroup.key == expectedSection
+        contextGroup.description == expectedSection
+
+        where:
+        section                        | expectedSection
+        SECTION_BIOLOGY                | SECTION_BIOLOGY
+        SECTION_ASSAY_PROTOCOL         | SECTION_ASSAY_PROTOCOL
+        SECTION_ASSAY_DESIGN           | SECTION_ASSAY_DESIGN
+        SECTION_ASSAY_READOUT          | SECTION_ASSAY_READOUT
+        SECTION_ASSAY_COMPONENTS       | SECTION_ASSAY_COMPONENTS
+        SECTION_EXPERIMENTAL_VARIABLES | SECTION_EXPERIMENTAL_VARIABLES
+        SECTION_UNCLASSIFIED           | SECTION_UNCLASSIFIED
+        ''                             | SECTION_UNCLASSIFIED
+        ' '                            | SECTION_UNCLASSIFIED
+        'someUnknownSection'           | SECTION_UNCLASSIFIED
+        null                           | SECTION_UNCLASSIFIED
+    }
+
+    void "test getSectionKeyForContextGroup #desc "() {
+
+        when:
+        String actualKey = domainInstance.getSectionKeyForContextGroup(value)
+
+        then:
+        actualKey == expectedKey
+
+        where:
+        desc                     | value                                      | expectedKey
+        "biology"                | 'Biology'                                  | SECTION_BIOLOGY
+        "biology"                | 'biology>'                                 | SECTION_BIOLOGY
+        "biology"                | 'biology> molecular interaction>'          | SECTION_BIOLOGY
+        "Assay Protocol"         | 'Assay Protocol'                           | SECTION_ASSAY_PROTOCOL
+        "Assay Protocol"         | 'assay protocol> assay type>'              | SECTION_ASSAY_PROTOCOL
+        "Assay Protocol"         | 'assay protocol> assay format>'            | SECTION_ASSAY_PROTOCOL
+        "Assay Design"           | 'Assay Design'                             | SECTION_ASSAY_DESIGN
+        "Assay Design"           | 'assay protocol> assay design>'            | SECTION_ASSAY_DESIGN
+        "Assay Readout"          | 'Assay Readout'                            | SECTION_ASSAY_READOUT
+        "Assay Readout"          | 'assay protocol> assay readout>'           | SECTION_ASSAY_READOUT
+        "Assay Components"       | 'Assay Components'                         | SECTION_ASSAY_COMPONENTS
+        "Assay Components"       | 'assay protocol> assay component>'         | SECTION_ASSAY_COMPONENTS
+        "Experimental Variables" | 'Experimental Variables'                   | SECTION_EXPERIMENTAL_VARIABLES
+        "Experimental Variables" | 'project management> project information>' | SECTION_EXPERIMENTAL_VARIABLES
+        "Experimental Variables" | 'project management> experiment>'          | SECTION_EXPERIMENTAL_VARIABLES
+        "Unclassified"           | 'Unclassified'                             | SECTION_UNCLASSIFIED
+        "Unclassified"           | 'unclassified>'                            | SECTION_UNCLASSIFIED
+        "Unclassified"           | ''                                         | SECTION_UNCLASSIFIED
+        "Unclassified"           | 'some unknown string'                      | SECTION_UNCLASSIFIED
+        "Unclassified"           | null                                       | SECTION_UNCLASSIFIED
+
+
     }
 
 }

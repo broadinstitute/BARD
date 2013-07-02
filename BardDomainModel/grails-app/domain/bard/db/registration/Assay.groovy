@@ -166,23 +166,6 @@ class Assay extends AbstractContextOwner {
     }
 
     @Override
-    Map<String, String> getGroupDesc() {
-        return [
-                "assay protocol> assay component>":"",
-                "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
-                "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
-                "assay protocol> assay readout>":"",
-                "assay protocol> assay type>":"", // relatively small list
-                "biology> molecular interaction>":"",
-                "biology>":"",
-                "result type> item count>":"",
-                "project management> project information>":"",
-                "project management> experiment>":"",
-                "unclassified>":""
-        ]
-    }
-
-    @Override
     AbstractContext createContext(Map properties) {
         AssayContext context = new AssayContext(properties)
         addToAssayContexts(context)

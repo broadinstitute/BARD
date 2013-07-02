@@ -110,13 +110,13 @@ function initDnd() {
 };
 
 
-function showDeleteCardConfirmation(cardId, contextClass) {
+function showDeleteCardConfirmation(cardId, contextClass,section) {
     $("#dialog_confirm_delete_card").dialog("option", "buttons", [
         {
             text: "Delete",
             class: "btn btn-danger",
             click: function () {
-                var data = {'contextClass': contextClass, 'contextId': cardId };
+                var data = {'contextClass': contextClass, 'contextId': cardId, 'section':section };
                 $.ajax({
                     type: 'POST',
                     url: '../../context/deleteEmptyCard',

@@ -1,6 +1,5 @@
 package bard.db.model
 
-import bard.db.dictionary.Descriptor
 import bard.db.registration.AssayContext
 
 /**
@@ -20,121 +19,79 @@ abstract class AbstractContextOwner {
         List<AbstractContext> value;
     }
 
-    abstract Map<String,String> getGroupDesc();
+    final static String SECTION_BIOLOGY = "Biology"
+    final static String SECTION_ASSAY_PROTOCOL = "Assay Protocol"
+    final static String SECTION_ASSAY_DESIGN = "Assay Design"
+    final static String SECTION_ASSAY_READOUT = "Assay Readout"
+    final static String SECTION_ASSAY_COMPONENTS = "Assay Components"
+    final static String SECTION_EXPERIMENTAL_VARIABLES = "Experimental Variables"
+    final static String SECTION_UNCLASSIFIED = "Unclassified"
 
-    List<String> groupContextKeys(){
-       return new ArrayList<String>(groupDesc.keySet())
+    final static Map<String, List<String>> SECTION_NAME_MAP = [
+            (SECTION_BIOLOGY): [SECTION_BIOLOGY, "biology>", "biology> molecular interaction>"],
+            (SECTION_ASSAY_PROTOCOL): [SECTION_ASSAY_PROTOCOL, "assay protocol> assay type>", "assay protocol> assay format>"],
+            (SECTION_ASSAY_DESIGN): [SECTION_ASSAY_DESIGN, "assay protocol> assay design>"],
+            (SECTION_ASSAY_READOUT): [SECTION_ASSAY_READOUT, "assay protocol> assay readout>"],
+            (SECTION_ASSAY_COMPONENTS): [SECTION_ASSAY_COMPONENTS, "assay protocol> assay component>"],
+            (SECTION_EXPERIMENTAL_VARIABLES): [SECTION_EXPERIMENTAL_VARIABLES, "project management> project information>", "project management> experiment>"],
+            (SECTION_UNCLASSIFIED): [SECTION_UNCLASSIFIED, "unclassified>"]
+    ]
+
+    /**
+     *
+     * @param value a contextGroup value
+     * @return the section key the contextGroup falls within
+     */
+    String getSectionKeyForContextGroup(String value) {
+        String sectionKey =  SECTION_UNCLASSIFIED
+        def entry =    SECTION_NAME_MAP.find { it.value.contains(value?.trim()) }
+        if(entry){
+            sectionKey = entry.key
+        }
+        return sectionKey
+    }
+
+    ContextGroup groupBySection(String section) {
+        final List<AbstractContext> values = []
+        if (SECTION_NAME_MAP.containsKey(section)) {
+            for (ContextGroup contextGroup : groupContexts()) {
+                for (String contextGroupPath in SECTION_NAME_MAP.get(section)) {
+                    if (contextGroup.key.equalsIgnoreCase(contextGroupPath)) {
+                        values.addAll(contextGroup.value)
+                    }
+                }
+            }
+            return new ContextGroup(key: section, description: section, value: values)
+        }
+        return new ContextGroup(key:SECTION_UNCLASSIFIED , description: SECTION_UNCLASSIFIED, value: values)
     }
 
     ContextGroup groupUnclassified() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("unclassified>")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'unclassified', description: '', value: values)
-        }
-        return null
-    }
-
-    ContextGroup groupAssayType() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("assay protocol> assay type>")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'assay type', description: '', value: values)
-        }
-        return null
-    }
-
-    ContextGroup groupAssayFormat() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("assay protocol> assay format>")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'assay format', description: '', value: values)
-        }
-        return null
+        groupBySection(SECTION_UNCLASSIFIED)
     }
 
     ContextGroup groupAssayDesign() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("assay protocol> assay design>")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'Assay Design', description: '', value: values)
-        }
-        return null
+        groupBySection(SECTION_ASSAY_DESIGN)
     }
 
     ContextGroup groupAssayReadout() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("assay protocol> assay readout>")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'Assay Readout', description: '', value: values)
-        }
-        return null
+        groupBySection(SECTION_ASSAY_READOUT)
     }
 
     ContextGroup groupAssayComponents() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("assay protocol> assay component>")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'Assay Components', description: '', value: values)
-        }
-        return null
+        groupBySection(SECTION_ASSAY_COMPONENTS)
     }
 
     ContextGroup groupBiology() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("biology")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'Biology', description: '', value: values)
-        }
-        return null
+        groupBySection(SECTION_BIOLOGY)
     }
+
     ContextGroup groupExperimentalVariables() {
-        List<AbstractContext> values = []
-        final List<ContextGroup> contexts = groupContexts()
-        for (ContextGroup contextGroup : contexts) {
-            if (contextGroup.key.startsWith("project management")) {
-                values.addAll(contextGroup.value)
-            }
-        }
-        if (values) {
-            return new ContextGroup(key: 'Experimental Variables', description: '', value: values)
-        }
-        return null
+        groupBySection(SECTION_EXPERIMENTAL_VARIABLES)
+    }
+
+    ContextGroup groupAssayProtocol() {
+        groupBySection(SECTION_ASSAY_PROTOCOL)
     }
 
     /**
@@ -151,33 +108,11 @@ abstract class AbstractContextOwner {
             }
             return contextGroup.toLowerCase().trim()
         }
-
-        /* These ten groups are what is currently in the database for groups.  In the future, we'd like to move these group
-           definitions out of this code and someplace where the RDM or some end users can maintain it.
-        */
-//        def groupDesc = [
-//                "assay protocol> assay component>":"",
-//                "assay protocol> assay design>":"", // Assay method, detection method.  Kind of an overlap with assay readout
-//                "assay protocol> assay format>":"",  // tiny number of values.  One card at most under this.
-//                "assay protocol> assay readout>":"",
-//                "assay protocol> assay type>":"", // relatively small list
-//                "biology> molecular interaction>":"",
-//                "biology>":"",
-//                "result type> item count>":"",
-//                "project management> project information>":"",
-//                "project management> experiment>":"",
-//                "unclassified>":""
-//        ]
-
-        mapByPath.keySet().each { if (!groupDesc.containsKey(it)) groupDesc.put(it, "") }
-
-        return (groupDesc.keySet() as List).collect {
-            def group = mapByPath.get(it)
-            if (group == null)
-                group = []
-
-            return new ContextGroup(key: it, description: groupDesc.get(it), value: group)
+        final List<ContextGroup> contextGroupList = []
+        mapByPath.each { k, v ->
+            contextGroupList.add(new ContextGroup(key: k, description: "", value: v))
         }
+        return contextGroupList
     }
 
     /**

@@ -84,12 +84,6 @@ class Experiment extends AbstractContextOwner {
         return experimentContexts;
     }
 
-
-    @Override
-    Map<String, String> getGroupDesc() {
-        return ["unclassified>":""]
-    }
-
     @Override
     void removeContext(AbstractContext context) {
         removeFromExperimentContexts(context)

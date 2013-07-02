@@ -28,9 +28,10 @@
                                 params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
                                 class="icon-plus"></i></g:link>
                         <g:if test="${context.contextItems.size() == 0}">
-                            <a class="btn btn-info btn-mini" href="#" title="Delete card"
-                               onclick="showDeleteCardConfirmation(${context.id}, '${context.simpleClassName}');
-                               return false;"><i class="icon-trash"></i></a>
+                            <g:link class="btn btn btn-info btn-mini" title="Delete Card" controller="context"
+                                    action="deleteEmptyCard"
+                                    params="[contextClass:context?.class?.simpleName,contextId: context?.id, section: cardSection]" ><i
+                                    class="icon-trash"></i></g:link>
                         </g:if>
                     </div>
                 </div>
