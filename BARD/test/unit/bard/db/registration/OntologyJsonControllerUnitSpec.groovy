@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.dictionary.BardDescriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import bard.db.enums.ExpectedValueType
@@ -21,8 +22,8 @@ import spock.lang.Unroll
  * To change this template use File | Settings | File Templates.
  */
 @TestFor(OntologyJSonController)
-@Build(Element)
-@Mock(Element)
+@Build([Element, BardDescriptor])
+@Mock([Element, BardDescriptor])
 @Unroll
 class OntologyJsonControllerUnitSpec extends Specification {
 
@@ -81,6 +82,52 @@ class OntologyJsonControllerUnitSpec extends Specification {
         desc                | serviceReturnValue                                                             | expectedMap
         'no elements found' | { [] }                                                                         | [results: []]
         '1 element found'   | { [Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)] } | [results: [[id: '1', text: 'l1', expectedValueType: ExpectedValueType.NUMERIC, hasIntegratedSearch: false, externalUrl: null, unitId: null]]]
+    }
+
+    void "test getAttributeDescriptors #desc"() {
+        given:
+
+        controller.params.term = "someTerm"
+        TestDataConfigurationHolder.reset()
+
+        when: 'we look for items'
+        controller.getAttributeDescriptors()
+        final String resultJson = controller.response.contentAsString
+
+        then: 'we serialize items as JSON'
+        1 * ontologyDataAccessService.getDescriptorsForAttributes() >> { serviceReturnValue.call() }
+        println(resultJson)
+        Map resultMap = new JsonSlurper().parseText(resultJson)
+        println(resultMap)
+        resultMap.toString() == expectedMap.toString()
+
+        where:
+        desc                | serviceReturnValue                                                                                                                    | expectedMap
+        'no BardDescriptors found' | { [] }                                                                                                                                | [results: []]
+        '1 BardDescriptor found'   | { [BardDescriptor.build([fullPath: 'somePath', element: Element.build(label: 'l1', expectedValueType: ExpectedValueType.NUMERIC)])] } | [results: [[id: '1', text: 'somePath', expectedValueType: ExpectedValueType.NUMERIC, hasIntegratedSearch: false, externalUrl: null, unitId: null]]]
+    }
+
+    void "test getValueDescriptorsV2 #desc"() {
+        given:
+
+        controller.params.attributeId = 1L
+        TestDataConfigurationHolder.reset()
+
+        when: 'we look for items'
+        controller.getValueDescriptorsV2()
+        final String resultJson = controller.response.contentAsString
+
+        then: 'we serialize items as JSON'
+        1 * ontologyDataAccessService.getDescriptorsForValues(_ as Long) >> { serviceReturnValue.call() }
+        println(resultJson)
+        Map resultMap = new JsonSlurper().parseText(resultJson)
+        println(resultMap)
+        resultMap.toString() == expectedMap.toString()
+
+        where:
+        desc                | serviceReturnValue                               | expectedMap
+        'no BardDescriptors found' | { [] }                                           | [results: []]
+        '1 BardDescriptor found'   | { [BardDescriptor.build(fullPath: 'somePath')] } | [results: [[id: '1', text: 'somePath']]]
     }
 
     void "test findExternalItemsByTerm #desc "() {

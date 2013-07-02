@@ -1,10 +1,12 @@
 package bard.db.registration
 
+import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
 import bard.db.dictionary.OntologyDataAccessService
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyException
 import grails.converters.JSON
+import grails.plugin.cache.Cacheable
 import org.apache.commons.lang.StringUtils
 
 class OntologyJSonController {
@@ -39,7 +41,9 @@ class OntologyJSonController {
 
         render asMapForSelect2(element) as JSON
     }
-
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     */
     def getDescriptors() {
         if (params?.term) {
             List<Element> elements = ontologyDataAccessService.getElementsForAttributes(params.term)
@@ -50,11 +54,25 @@ class OntologyJSonController {
             render map as JSON
         }
     }
+    /**
+     * @return List of elements to be used as attributes for ContextItems
+     */
+    @Cacheable("contextItemAttributeDescriptors")
+    def getAttributeDescriptors() {
+
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForAttributes()
+        List<Map> attributes = descriptors.collect { Descriptor descriptor ->
+            asMapForSelect2(descriptor)
+        }
+        Map map = ['results': attributes]
+        render map as JSON
+
+    }
 
     private Map asMapForSelect2(Element element) {
         boolean hasIntegratedSearch = false;
         if (StringUtils.isNotBlank(element.externalURL)) {
-            hasIntegratedSearch = ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
+            hasIntegratedSearch = true//ontologyDataAccessService.externalOntologyHasIntegratedSearch(element.externalURL)
         }
         [
                 "id": element.id,
@@ -64,6 +82,16 @@ class OntologyJSonController {
                 "externalUrl": element.externalURL,
                 "hasIntegratedSearch": hasIntegratedSearch
         ]
+    }
+
+    private Map asMapForSelect2(Descriptor descriptor) {
+        boolean hasIntegratedSearch = false;
+        if (StringUtils.isNotBlank(descriptor.externalURL)) {
+            hasIntegratedSearch = true // ontologyDataAccessService.externalOntologyHasIntegratedSearch(descriptor.externalURL)
+        }
+        Map map = asMapForSelect2(descriptor.element)
+        map.put('fullPath', descriptor.fullPath)
+        return map
     }
 
     def getValueDescriptors() {
@@ -83,6 +111,16 @@ class OntologyJSonController {
             }
             render attributes as JSON
         }
+    }
+
+    @Cacheable("contextItemValueDescriptors")
+    def getValueDescriptorsV2(Long attributeId) {
+        List<Descriptor> descriptors = ontologyDataAccessService.getDescriptorsForValues(attributeId)
+        List<Map> values = descriptors.collect{   Descriptor descriptor->
+            asMapForSelect2(descriptor)
+        }
+        Map map = ['results': values]
+        render map as JSON
     }
 
     def getAllUnits() {

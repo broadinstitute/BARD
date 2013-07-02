@@ -162,6 +162,15 @@ CbipCrowd {
     }
 }
 
+grails.cache.config = {
+   cache {
+      name 'contextItemAttributeDescriptors'
+   }
+   cache {
+      name 'contextItemValueDescriptors'
+   }
+}
+
 /**
  * Loads external config files from the .grails subfolder in the user's home directory
  * Home directory in Windows is usually: C:\Users\<username>\.grails

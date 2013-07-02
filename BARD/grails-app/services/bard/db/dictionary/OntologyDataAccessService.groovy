@@ -1,10 +1,13 @@
 package bard.db.dictionary
 
+import bard.db.enums.ExpectedValueType
 import bard.validation.ext.ExternalItem
 import bard.validation.ext.ExternalOntologyAPI
 import bard.validation.ext.ExternalOntologyException
 import bard.validation.ext.ExternalOntologyFactory
 import groovy.transform.TypeChecked
+import org.apache.commons.lang3.StringUtils
+import org.grails.datastore.mapping.query.api.Criteria
 import org.hibernate.Query
 import org.hibernate.Session
 import org.springframework.util.Assert
@@ -99,7 +102,30 @@ class OntologyDataAccessService {
         return elements.findAll { it.label != null && it.label.toLowerCase().contains(label.toLowerCase()) }
     }
 
-
+    /**
+     * @return Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
+     */
+    public List<Descriptor> getDescriptorsForAttributes() {
+        getDescriptorsForAttributes(null)
+    }
+    /**
+     * @param startOfFullPath you can specify a portion of the fullpath like biology,project management,
+     * @return Selecting all the Bard Tree descriptors that represent elements that aren't Retired or have an expectedValueType of none
+     */
+    public List<Descriptor> getDescriptorsForAttributes(String startOfFullPath) {
+        final Criteria c = BardDescriptor.createCriteria()
+        final List<Descriptor> results = c.list([readOnly: true]) {
+            like("fullPath", "BARD> ${StringUtils.trimToEmpty(startOfFullPath)}%")
+            element {
+                and {
+                    ne("elementStatus", ElementStatus.Retired)
+                    ne("expectedValueType", ExpectedValueType.NONE)
+                }
+            }
+            order("fullPath")
+        }
+        results
+    }
 
     public List<Element> getElementsForAttributes(String term) {
         List<Element> results = []
@@ -159,6 +185,34 @@ class OntologyDataAccessService {
             query.addEntity(Element)
             query.setLong("ancestorElementId", elementId)
             query.setString('term', "%${trimLowerCaseEscapeForLike(term)}%")
+            query.setString('elementStatus', ElementStatus.Retired.name())
+            query.setReadOnly(true)
+            results = query.list()
+        }
+        return results
+    }
+    /**
+     *
+     * @param elementId given an element which represents and attribute for a contextItem
+     * @return  a  list of  Descriptors containing all reasonable dictionary values that are descendants
+     */
+    public List<Descriptor> getDescriptorsForValues(Long elementId){
+        List<Descriptor> results = []
+        BardDescriptor.withSession { Session session ->
+            Query query = session.createSQLQuery("""
+                select bt.*
+                from bard_tree ancestor
+                    join bard_tree bt on substr(bt.full_path, 0, length(ancestor.full_path)) = ancestor.full_path
+                    join element e on e.ELEMENT_ID = bt.ELEMENT_ID
+                where ancestor.ELEMENT_ID =  :ancestorElementId
+                    and e.ELEMENT_ID != ancestor.ELEMENT_ID
+                    and e.EXPECTED_VALUE_TYPE in ( :allowedExpectedValueTypes )
+                    and e.ELEMENT_STATUS != :elementStatus
+                order by lower(bt.FULL_PATH)
+            """)
+            query.addEntity(BardDescriptor)
+            query.setLong("ancestorElementId", elementId)
+            query.setParameterList("allowedExpectedValueTypes" , [ExpectedValueType.NONE.id, ExpectedValueType.ELEMENT.id])
             query.setString('elementStatus', ElementStatus.Retired.name())
             query.setReadOnly(true)
             results = query.list()
