@@ -20,6 +20,7 @@ class ExperimentDataFactoryService {
             Long experimentId = spreadSheetInput.eids.get(0)
             return queryService.showExperimentalData(experimentId, groupTypes, filterTypes, searchParams)
         } else if (spreadSheetInput.cids) {
+            Long compoundId = spreadSheetInput.cids.get(0)
             return queryService.createCompoundBioActivitySummaryDataTable(compoundId, groupTypes, filterTypes, appliedSearchFilters, searchParams)
         }
         return null
