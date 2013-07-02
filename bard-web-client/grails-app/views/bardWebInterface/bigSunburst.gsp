@@ -381,12 +381,63 @@
                     },
 
 
-                    spotlightOneAndBackgroundThree = function (d, spotlight, background1, background2, background3, origButton, expandedPos) {
-                        // turn off the reset buttons, which are off when we are extended
+                    // buttons are supplied to allow the user to reset their hierarchy drill down, but the buttons only work
+                    // from the pie mode
+                    deactivateDrillDownResetButtons = function () {
+
+                        // turn off the reset buttons, and they are deactivated when the Sunburst is visible
                         var drillDownButtons = d3.selectAll('.drill');
                         if (!(drillDownButtons.empty())){
-                            drillDownButtons.style('pointer-events', 'none');
+                            drillDownButtons.style('pointer-events', 'none')
+                                            .style('opacity', 0.5)
+                                            .style('cursor','pointer');
                         }
+
+                        // If there is a drill down explanation then fade it  out
+                        var drillLabelExplanation = d3.select('.drillLabel');
+                        if (!(drillLabelExplanation.empty ())) {
+                            drillLabelExplanation.style('opacity', 0.5);
+                        }
+
+                    },
+
+                    // buttons are supplied to allow the user to reset their hierarchy drill down. These were deactivated when a sunburst
+                    //   was displayed, but they need to be reactivated again when we get back to pie mode
+                    activateDrillDownResetButtons = function () {
+
+                        // do we have any drill down reset buttons to deal with
+                        var drillDownResetButtonsExist = false;
+                        var drillDownButtons = d3.selectAll('.drill');
+                        if (!(drillDownButtons.empty())){
+
+                            drillDownResetButtonsExist = true;
+                            drillDownButtons.style('pointer-events', 'auto')
+                                            .style('opacity', 1)
+                                            .style('cursor','pointer');
+
+                        }
+
+                        var drillLabelExplanation = d3.select('.drillLabel');
+                        if (!(drillLabelExplanation.empty ())) {
+                            // we have an explanation line
+
+                            if (drillDownResetButtonsExist){   // if buttons exist
+                                drillLabelExplanation.style('opacity', 1); ;
+                            }  else {    // if no buttons exist
+                                // this should never happen ( an explanation exists without any buttons ), but
+                                // but if it should happen somehow then let's clean it up
+                                drillLabelExplanation.remove();
+                            }
+
+                        }
+
+
+                    },
+
+
+                    spotlightOneAndBackgroundThree = function (d, spotlight, background1, background2, background3, origButton, expandedPos) {
+
+                        deactivateDrillDownResetButtons () ;
 
                         // first handle the spotlight element and then the three backup singers
                         spotlight
@@ -417,12 +468,6 @@
                         background2.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
                         background3.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
 
-
-                        // If there is a drill down explanation then fade it  out
-                        var drillLabelExplanation = d3.select('.drillLabel');
-                        if (!(drillLabelExplanation.empty ())) {
-                            drillLabelExplanation.style('opacity', 1); ;
-                        }
 
                         origButton
                                 .text(textForContractingButton)
@@ -488,16 +533,10 @@
                                 .delay(1000)
                                 .duration(500)
                                 .style('opacity', 1);
-                        // turn back on the reset buttons, which are off when we are extended
-                        var drillDownButtons = d3.selectAll('.drill');
-                        if (!(drillDownButtons.empty())){
-                            drillDownButtons.style('pointer-events', 'auto');
-                            var drillLabelExplanation = d3.select('.drillLabel');
-                            if (!(drillLabelExplanation.empty ())) {
-                                drillLabelExplanation.style('opacity', 1); ;
-                            }
-                        }
-                    },
+
+                        // turn back on this reset buttons
+                        activateDrillDownResetButtons ();
+                     },
 
                     expandGraphicsArea = function (graphicsTarget, graphicsTitle) {
 

@@ -283,7 +283,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
                 var drillLabel = d3.select('.drillLabel');
                 if (drillLabel.empty ()) {
                     currentContainer.append('div')
-                        .text("Click below to reset drilldown")
+                        .text('Click below to reset drilldown')
                         .attr('id','drillLabel')
                         .attr('class','drillLabel')
                         .style('opacity', 0.5);
@@ -293,13 +293,14 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
                     .attr('id',drillDownId)
                     .attr('class','drill')
                     .style('pointer-events', 'none')
+                    .style('opacity', 0.5)
                     .on('click',function(d){
                         var drillDownLabel =  currentContainer.select ('#'+drillDownId);
                         linkedVizData.adjustMembershipBasedOnSunburstClick (resetDrillDownName, originalD,originalTreeId);
                         linkedVizData.resetDerivedHierarchyRouteToOriginalRoot (originalTreeId) ;
                         drillDownLabel.remove ();
                         // Did we remove the last drill down? If so then remove the label as well
-                        var anyRemainingDrillDownLabels =  currentContainer.selectAll ('drill');
+                        var anyRemainingDrillDownLabels =  currentContainer.selectAll ('.drill');
                         if(anyRemainingDrillDownLabels.empty()) {
                             var drillLabelExplanation = d3.select('.drillLabel');
                             if (!(drillLabelExplanation.empty ())) {

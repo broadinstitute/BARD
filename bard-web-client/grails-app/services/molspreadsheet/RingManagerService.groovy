@@ -631,31 +631,37 @@ class RingManagerService {
 
     public List <String> generateListOfPaths (CompoundSummaryCategorizer compoundSummaryCategorizer, FieldOfInterest fieldOfInterest)  {
         List <String> returnValue = []
-        for (Long aidKeys in compoundSummaryCategorizer.totalContents.keySet()) {
-            CompoundSummaryCategorizer.SingleEidSummary singleEidSummary =  compoundSummaryCategorizer.totalContents [aidKeys]
-            if (singleEidSummary != null) {
-                Map returnFromPathService
-                if (fieldOfInterest == FieldOfInterest.ASSAY_FORMAT) {
-                    String field = singleEidSummary.getAssayFormatString();
-                    if ((field != null)  &&
-                            (field.size() > 0)) {
-                        returnFromPathService = queryService.getPathsForAssayFormat (field)
-                    }
-                } else if (fieldOfInterest == FieldOfInterest.ASSAY_TYPE) {
-                    String field = singleEidSummary.getAssayTypeString();
-                    if ((field != null)  &&
-                            (field.size() > 0)) {
-                        returnFromPathService = queryService.getPathsForAssayType (field)
-                    }
+        try {
+            for (Long aidKeys in compoundSummaryCategorizer.totalContents.keySet()) {
+                CompoundSummaryCategorizer.SingleEidSummary singleEidSummary =  compoundSummaryCategorizer.totalContents [aidKeys]
+                if (singleEidSummary != null) {
+                    Map returnFromPathService
+                    if (fieldOfInterest == FieldOfInterest.ASSAY_FORMAT) {
+                        String field = singleEidSummary.getAssayFormatString();
+                        if ((field != null)  &&
+                                (field.size() > 0)) {
+                            returnFromPathService = queryService.getPathsForAssayFormat (field)
+                        }
+                    } else if (fieldOfInterest == FieldOfInterest.ASSAY_TYPE) {
+                        String field = singleEidSummary.getAssayTypeString();
+                        if ((field != null)  &&
+                                (field.size() > 0)) {
+                            returnFromPathService = queryService.getPathsForAssayType (field)
+                        }
 
-                }
-                if ((returnFromPathService != null)  &&
-                    (returnFromPathService.size() > 0)){
-                    returnFromPathService.each{key,value ->
-                        returnValue<<value
+                    }
+                    if ((returnFromPathService != null)  &&
+                            (returnFromPathService.size() > 0)){
+                        returnFromPathService.each{key,value ->
+                            returnValue<<value
+                        }
                     }
                 }
             }
+
+        }   catch ( Exception exception )  {
+            exception.printStackTrace()
+            log.error("ERROR: Problems with assay format/type service")
         }
         return returnValue
     }
