@@ -10,12 +10,12 @@ import registration.AssayService
 class DocumentService {
 
 
-    @PreAuthorize("hasPermission(#assay, admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void deleteAssayDocument(Assay assay, AssayDocument assayDocument) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void deleteAssayDocument(Long id, AssayDocument assayDocument) {
        assayDocument.delete()
     }
-    @PreAuthorize("hasPermission(#project, admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void deleteProjectDocument(Project project, ProjectDocument projectDocument) {
+    @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void deleteProjectDocument(Long id, ProjectDocument projectDocument) {
         projectDocument.delete()
     }
 }

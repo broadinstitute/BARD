@@ -23,7 +23,7 @@ class DocumentController {
     DocumentService documentService
     def permissionEvaluator
     def springSecurityService
-    //TODO: Add ACL
+
     def create(DocumentCommand documentCommand) {
         documentCommand.clearErrors()
         def entity = null
@@ -176,9 +176,9 @@ class DocumentController {
             return
         }
         if (document instanceof AssayDocument) {
-            documentService.deleteAssayDocument(document.assay, document)
+            documentService.deleteAssayDocument(document.assay.id, document)
         } else if (document instanceof ProjectDocument) {
-            documentService.deleteProjectDocument(document.project, document)
+            documentService.deleteProjectDocument(document.project.id, document)
         } else {
             throw new RuntimeException("UnHandled Document Type " + domainClass.toString())
         }

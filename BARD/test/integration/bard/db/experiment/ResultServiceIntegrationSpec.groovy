@@ -149,7 +149,7 @@ class ResultServiceIntegrationSpec extends IntegrationSpec {
         InputStream inputStream = ResultServiceIntegrationSpec.getClassLoader().getResourceAsStream("bard/db/experiment/result-deposition-input.txt")
         assert inputStream != null
         inputStream = transformStream(inputStream, ["<EXPERIMENT_ID>": experiment.id, "<SUBSTANCE_ID>": substance.id])
-        ResultsService.ImportSummary summary = resultsService.importResults(experiment, inputStream)
+        ResultsService.ImportSummary summary = resultsService.importResults(experiment.id, inputStream)
 
         then:
         !summary.hasErrors()

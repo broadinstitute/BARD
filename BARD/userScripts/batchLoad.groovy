@@ -56,7 +56,7 @@ for (aid in aids) {
     def capFile = "/Users/pmontgom/data/pubchem-conversion/CARS-603-converted/exp-${aid}-${ref.experiment.id}.csv"
     pubchemReformatService.convert(ref.experiment.id, pubchemFile, capFile)
 
-    ResultsService.ImportSummary results = resultsService.importResults(ref.experiment, new FileInputStream(capFile))
+    ResultsService.ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile))
     log("errors: ${results.errors.size()}")
     for(e in results.errors) {
         log("\t${e}")

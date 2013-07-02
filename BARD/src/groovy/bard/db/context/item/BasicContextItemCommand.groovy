@@ -147,10 +147,10 @@ class BasicContextItemCommand extends BardCommand {
         if (validate()) {
             final AbstractContextOwner owningContext = context.getOwner()
             if (owningContext instanceof Assay) {
-                return contextItemService.createAssayContextItem((Assay) owningContext, this)
+                return contextItemService.createAssayContextItem(((Assay) owningContext).id, this)
             }
             if (owningContext instanceof Project) {
-                return contextItemService.createProjectContextItem((Project) owningContext, this)
+                return contextItemService.createProjectContextItem(((Project) owningContext).id, this)
             }
         }
         return createSuccessful
@@ -189,11 +189,11 @@ class BasicContextItemCommand extends BardCommand {
     boolean update() {
         final AbstractContextOwner owner = this.findContext().owner
         if (owner instanceof Assay) {
-            return validate() && contextItemService.updateAssayContextItem((Assay) owner, this)
+            return validate() && contextItemService.updateAssayContextItem(((Assay) owner).id, this)
         } else if (owner instanceof Project) {
-            return validate() && contextItemService.updateProjectContextItem((Project) owner, this)
+            return validate() && contextItemService.updateProjectContextItem(((Project) owner).id,this)
         } else if (owner instanceof Experiment) {
-            return validate() && contextItemService.updateExperimentContextItem((Experiment) owner, this)
+            return validate() && contextItemService.updateExperimentContextItem(((Experiment) owner).id, this)
         }
         return false
     }
@@ -201,11 +201,11 @@ class BasicContextItemCommand extends BardCommand {
     boolean delete() {
         final AbstractContextOwner owner = this.findContext().owner
         if (owner instanceof Assay) {
-            return contextItemService.deleteAssayContextItem((Assay) owner, this)
+            return contextItemService.deleteAssayContextItem(((Assay) owner).id,owner, this)
         } else if (owner instanceof Project) {
-            return contextItemService.deleteProjectContextItem((Project) owner, this)
+            return contextItemService.deleteProjectContextItem(((Project) owner).id, owner, this)
         } else if (owner instanceof Experiment) {
-            return contextItemService.deleteExperimentContextItem((Experiment) owner, this)
+            return contextItemService.deleteExperimentContextItem(((Experiment) owner).id,owner, this)
         }
     }
 

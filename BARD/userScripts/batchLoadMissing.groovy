@@ -116,7 +116,7 @@ recreateMeasuresAndLoad = { aid ->
     ResultsService.ImportOptions options = new ResultsService.ImportOptions()
     options.validateSubstances = false
     options.writeResultsToDb = false
-    ResultsService.ImportSummary results = resultsService.importResults(ref.experiment, new FileInputStream(capFile), options)
+    ResultsService.ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile), options)
     log("errors from loading ${aid}: ${results.errors.size()}")
     for(e in results.errors) {
         log("\t${e}")

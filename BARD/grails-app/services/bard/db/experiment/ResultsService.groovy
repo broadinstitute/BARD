@@ -789,12 +789,12 @@ class ResultsService {
 
         return result
     }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    ImportSummary importResults(Experiment experiment, InputStream input, ImportOptions options = null) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    ImportSummary importResults(Long id, InputStream input, ImportOptions options = null) {
         if (options == null) {
             options = new ImportOptions();
         }
-
+        Experiment experiment = Experiment.findById(id)
         String originalFilename = archivePathService.constructUploadResultPath(experiment)
         String exportFilename = archivePathService.constructExportResultPath(experiment)
         File archivedFile = archivePathService.prepareForWriting(originalFilename)

@@ -340,8 +340,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         params.statisticId = statistic.id
         Measure newMeasure = Measure.build()
         def assayContextService = mockFor(AssayContextService)
-        assayContextService.demand.addMeasure(1) { assayInstance, parentMeasure, rt, sm, entryUnit, hierarchyType ->
-            assert assayInstance == assay
+        assayContextService.demand.addMeasure(1) { assayInstance , parentMeasure, rt, sm, entryUnit, hierarchyType ->
+            assert assayInstance == assay.id
             assert parentMeasure == null
             assert rt == resultType
             assert sm == statistic

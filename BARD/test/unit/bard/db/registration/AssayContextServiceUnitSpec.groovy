@@ -52,7 +52,7 @@ class AssayContextServiceUnitSpec extends Specification {
         assert sourceAssayContext == draggedAssayContextItem.assayContext
 
         when:
-        service.addItem(draggedAssayContextItem, targetAssayContext, targetAssayContext.assay)
+        service.addItem(draggedAssayContextItem, targetAssayContext, targetAssayContext.assay.id)
 
         then:
         assertItemAdded(targetAssayContext, draggedAssayContextItem, sizeAfterAdd, indexOfAddedItem)
@@ -112,7 +112,7 @@ class AssayContextServiceUnitSpec extends Specification {
         Measure measure = Measure.build()
 
         when:
-        service.associateContext(measure, context, context.assay)
+        service.associateContext(measure, context, context.assay.id)
 
         then:
         measure.assayContextMeasures.size() == 1
@@ -123,7 +123,7 @@ class AssayContextServiceUnitSpec extends Specification {
         link.assayContext == context
 
         when:
-        service.disassociateContext(measure, context, context.assay)
+        service.disassociateContext(measure, context, context.assay.id)
 
         then:
         measure.assayContextMeasures.size() == 0
