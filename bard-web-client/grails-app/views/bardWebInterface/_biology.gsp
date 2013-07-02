@@ -7,7 +7,7 @@
     <tbody>
         <g:each in="${biology}" var="biologyEntry">
             <tr>
-                <td>${biologyEntry.biology.toLowerCase()}</td>
+                <td>${biologyEntry?.biology?.toLowerCase()}</td>
                 <td>${biologyEntry.dictLabel}</td>
                 <td>
                     <g:if test="${biologyEntry.dictLabel == "UniProt accession number"}">
