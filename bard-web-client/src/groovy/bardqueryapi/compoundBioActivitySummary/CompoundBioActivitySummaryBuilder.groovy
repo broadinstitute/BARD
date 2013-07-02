@@ -39,7 +39,7 @@ class CompoundBioActivitySummaryBuilder {
                                  Double yNormMax = null) {
 
         TableModel tableModel = new TableModel()
-        //Setup the headers
+        //Set up the headers
         tableModel.columnHeaders = [new StringValue(value: "${groupByType == GroupByTypes.ASSAY ? 'Assay Definition' : 'Project'}"), new StringValue(value: 'Experiments')]
 
         //Create a list rows, each row represents a collection of experiments grouped by a resource (assay or project)
@@ -169,7 +169,11 @@ class CompoundBioActivitySummaryBuilder {
      * @param outcomeFacetMap a pass-through collection to generate facets that match the different priority-element types (i.e., result-types) we have in the experiment data.
      * @return
      */
-    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData, Double yNormMin = null, Double yNormMax = null, List<SearchFilter> appliedSearchFilters = [], Map<String, Integer> resultTypesMap = [:]) {
+    static List<WebQueryValue> convertExperimentResultsToValues(Activity exptData,
+                                                                Double yNormMin = null,
+                                                                Double yNormMax = null,
+                                                                List<SearchFilter> appliedSearchFilters = [],
+                                                                Map<String, Integer> resultTypesMap = [:]) {
         List<WebQueryValue> values = []
         String respClss = exptData?.resultData?.responseClass
         ResponseClassEnum responseClass = respClss ? ResponseClassEnum.toEnum(respClss) : null
@@ -215,6 +219,7 @@ class CompoundBioActivitySummaryBuilder {
                         break;
                     default:
                         log.info("Response-class not supported: ${responseClass}")
+                        continue
                 }
                 //add the result-type to the map tally.
                 String resultTypeName = priorityElement.pubChemDisplayName

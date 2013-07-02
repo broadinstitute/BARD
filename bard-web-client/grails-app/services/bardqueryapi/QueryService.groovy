@@ -395,7 +395,7 @@ class QueryService implements IQueryService {
             return rExperiment?.confidenceLevel <=> lExperiment?.confidenceLevel
         }
 
-
+        //Build the table
         CompoundBioActivitySummaryBuilder compoundBioActivitySummaryBuilder = new CompoundBioActivitySummaryBuilder(this)
         TableModel tableModel = compoundBioActivitySummaryBuilder.buildModel(groupTypes,
                 groupedByExperimentalData,

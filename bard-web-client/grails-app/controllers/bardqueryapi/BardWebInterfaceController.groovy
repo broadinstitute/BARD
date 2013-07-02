@@ -693,6 +693,7 @@ class BardWebInterfaceController {
 
             ActivityOutcome activityOutcome = ActivityOutcome.ACTIVE
 
+            //Create the table-model
             GroupByTypes resourceType = params.groupByType ? params.groupByType as GroupByTypes : GroupByTypes.ASSAY
             TableModel tableModel = experimentDataFactoryService.createTableModel(spreadSheetInput,
                     resourceType,
@@ -718,6 +719,7 @@ class BardWebInterfaceController {
             queryService.findFiltersInSearchBox(searchFilters, searchCommand.searchString)
             List facetValues = [new Value(id: 'plot_axis', children: [new IntValue(id: 'Normalize Y-Axis', value: -1)])]//disable facet count
             facetValues << new Value(id: 'single-point_measurement', children: [new IntValue(id: 'Hide single-point data', value: -1)])//disable facet count
+            //Add all the result-type facets
             facetValues.addAll(tableModel?.additionalProperties?.facets ?: [])
 
             render(view: 'showCompoundBioActivitySummary',
