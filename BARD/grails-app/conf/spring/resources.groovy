@@ -1,3 +1,4 @@
+import acl.CapPermissionService
 import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
 import bard.person.RoleEditorRegistrar
@@ -63,7 +64,10 @@ beans = {
                 crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService')]
             }
     }
-
+    capPermissionService(CapPermissionService) {
+        aclUtilService = ref("aclUtilService")
+        springSecurityService = ref("springSecurityService")
+    }
     def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
         bean.factoryMethod = "getInstance"
     }

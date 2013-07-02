@@ -13,15 +13,7 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 SpringSecurityUtils.reauthenticate('integrationTestUser', null)
 
 println("Initializing output file...")
-String dirLocation = "C:\\BardData"
-File dir = new File(dirLocation)
-if(!dir.exists()){
-    if(dir.mkdir())
-        println("Output directory created")
-    else
-        println("Failed to create directory for output file")
-}
-String outputFile =  dirLocation + "/assay_context_items_validation.txt"
+String outputFile =  "assay_context_items_validation.txt"
 FileWriter fileWriter = new FileWriter(outputFile, false)
 
 writeToFile = {message ->
