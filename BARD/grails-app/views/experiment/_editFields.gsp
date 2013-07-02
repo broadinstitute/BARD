@@ -31,28 +31,30 @@
         </dd>
 
         <dt>Hold until Date:</dt><dd>
-        <input type="text" class="input-large date-selection" name="holdUntilDate" readonly="readonly"
-               placeholder="Click to select hold until date"
+        <input type="text" class="input-large date-selection" name="holdUntilDate"
+               placeholder="Click icon to select date"
                value="${experiment.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.holdUntilDate) : experiment.holdUntilDate}"/>
         (No more than 1 year from today)
     </dd>
 
         <dt>Run Date From:</dt><dd>
-        <input type="text" class="input-large date-selection" name="runDateFrom" readonly="readonly"
-               placeholder="Click to select from date"
+        <input type="text" class="input-large date-selection" name="runDateFrom"
+               placeholder="Click icon to select date"
                value="${experiment.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateFrom) : experiment.runDateFrom}"/>
     </dd>
 
         <dt>Run Date To:</dt><dd>
-        <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click to select to date"
-               readonly="readonly"
+        <input type="text" class="input-large date-selection" name="runDateTo"  placeholder="Click icon to select date"
                value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
     </dd>
     </dl>
 
     <r:script>
-        $('.date-selection').datepicker({
-            format: 'MM/dd/yyyy'
+         $('.date-selection').datepicker({
+            format: 'MM/dd/yyyy',
+            showOn: "button",
+            buttonImage: "../images/calendar.gif",
+            buttonImageOnly: true
         });
     </r:script>
 </g:if>
