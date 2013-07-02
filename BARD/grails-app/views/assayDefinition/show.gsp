@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
+<%@ page import="bard.db.model.AbstractContextOwner; org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -114,7 +114,7 @@
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
 
-                    <g:link action="editContext" id="${assayInstance?.id}"
+                    <g:link action="editContext" id="${assayInstance?.id}" params="[groupBySection: AbstractContextOwner.SECTION_BIOLOGY.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
 
                 </div>
@@ -129,10 +129,7 @@
     <div class="row-fluid">
         <div id="cardHolderAssayProtocol" class="span12">
             <g:render template="/context/currentCard"
-                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayType(), subTemplate: 'show', renderEmptyGroups: false]"/>
-            <g:render template="/context/currentCard"
-                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayFormat(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
+                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayProtocol(), subTemplate: 'show', renderEmptyGroups: false]"/>
         </div>
     </div>
     <br/>
@@ -141,7 +138,7 @@
         <g:if test="${!uneditable}">
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
+                    <g:link action="editContext" id="${assayInstance?.id}"  params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_PROTOCOL.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
                 </div>
             </g:if>
@@ -167,7 +164,7 @@
         <g:if test="${!uneditable}">
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
+                    <g:link action="editContext" id="${assayInstance?.id}" params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_DESIGN.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
                 </div>
             </g:if>
@@ -193,7 +190,7 @@
         <g:if test="${!uneditable}">
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
+                    <g:link action="editContext" id="${assayInstance?.id}" params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_READOUT.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
                 </div>
             </g:if>
@@ -219,7 +216,7 @@
         <g:if test="${!uneditable}">
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
+                    <g:link action="editContext" id="${assayInstance?.id}"  params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_COMPONENTS.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
                 </div>
             </g:if>
@@ -243,7 +240,7 @@
             <g:if test="${!uneditable}">
                 <g:if test="${editable == 'canedit'}">
                     <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
+                        <g:link action="editContext" id="${assayInstance?.id}" params="[groupBySection: AbstractContextOwner.getSECTION_UNCLASSIFIED().encodeAsURL()]"
                                 class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
                     </div>
                 </g:if>
@@ -280,7 +277,7 @@
             <g:if test="${!uneditable}">
                 <g:if test="${editable == 'canedit'}">
                     <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
+                        <g:link action="editContext" id="${assayInstance?.id}" params="[groupBySection: AbstractContextOwner.SECTION_EXPERIMENTAL_VARIABLES.encodeAsURL()]"
                                 class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
                     </div>
                 </g:if>

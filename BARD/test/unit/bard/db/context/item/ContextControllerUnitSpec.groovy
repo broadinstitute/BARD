@@ -120,7 +120,7 @@ class ContextControllerUnitSpec extends Specification {
         ProjectContext projectContext = ProjectContext.build()
         String contextClass = "ProjectContext"
         when:
-        controller.deleteEmptyCard(contextClass, projectContext.id)
+        controller.deleteEmptyCard(contextClass, projectContext.id, 'Unclassified')
         then:
         controller.contextService.deleteProjectContext(_,_, _) >> { throw new AccessDeniedException("some message") }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
@@ -129,13 +129,12 @@ class ContextControllerUnitSpec extends Specification {
 
     }
 
-
     void 'test deleteEmptyCard For Assay-UnAuthorized'() {
         given:
         AssayContext assayContext = AssayContext.build()
         String contextClass = "AssayContext"
         when:
-        controller.deleteEmptyCard(contextClass, assayContext.id)
+        controller.deleteEmptyCard(contextClass, assayContext.id, 'Unclassified')
         then:
         controller.contextService.deleteAssayContext(_,_, _) >> { throw new AccessDeniedException("some message") }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
@@ -148,12 +147,11 @@ class ContextControllerUnitSpec extends Specification {
         given:
         ProjectContext projectContext = ProjectContext.build()
         String contextClass = "ProjectContext"
-        views['/context/_list.gsp'] = 'mock contents'
         when:
-        controller.deleteEmptyCard(contextClass, projectContext.id)
+        controller.deleteEmptyCard(contextClass, projectContext.id, 'Unclassified')
         then:
-        assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "mock contents"
+        assert response.status == HttpServletResponse.SC_FOUND
+        assert response.redirectUrl == '/project/editContext/1?groupBySection=Unclassified'
     }
 
     void 'test deleteEmptyCard- AssayContext Success'() {
@@ -162,10 +160,10 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "AssayContext"
         views['/context/_list.gsp'] = 'mock contents'
         when:
-        controller.deleteEmptyCard(contextClass, assayContext.id)
+        controller.deleteEmptyCard(contextClass, assayContext.id, 'Unclassified')
         then:
-        assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "mock contents"
+        assert response.status == HttpServletResponse.SC_FOUND
+        assert response.redirectUrl == "/assayDefinition/editContext/1?groupBySection=Unclassified"
     }
 
 }

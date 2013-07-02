@@ -12,9 +12,6 @@
                 </div>
                 <g:render template="../contextItem/${subTemplate}GroupHeader"
                           model="[contextOwner: contextOwner, cardSection: entry.key]"/>
-                <p>
-                    ${entry.description}
-                </p>
 
                 <div class="row-fluid">
                     <g:each in="${contextOwner.splitForColumnLayout(entry.value)}" var="contextColumnList">

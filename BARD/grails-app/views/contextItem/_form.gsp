@@ -205,19 +205,22 @@
     <div class="control-group">
         <div class="controls">
 
+            <g:set var="contextItemParams" value="${[contextItemId: instance.contextItemId, contextId: instance?.contextId,
+                                                     contextClass: instance?.context.simpleClassName, contextOwnerId: instance?.contextOwnerId,
+                                                     groupBySection: instance?.context?.getSectionKey()?.encodeAsURL()]}"></g:set>
             <g:if test="${reviewNewItem}">
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"
-                        fragment="card-${instance?.contextId}" class="btn">Back to Context</g:link>
-
-                <g:set var="contextItemParams" value="${[contextItemId: instance.contextItemId, contextId: instance?.contextId, contextClass: instance?.context.simpleClassName, contextOwnerId: instance?.contextOwnerId]}"></g:set>
+                        params="${contextItemParams}"
+                        class="btn">Back to Context</g:link>
                 <g:link action="edit" class="btn" params="${contextItemParams}">Edit</g:link>
                 <g:link action="create" class="btn btn-primary focus" params="${contextItemParams}">Add Another Item</g:link>
             </g:if>
             <g:else>
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"
-                        fragment="card-${instance?.contextId}" class="btn">Cancel</g:link>
+                        params="${contextItemParams}"
+                        class="btn">Cancel</g:link>
                 <button type="submit" class="btn btn-primary">${action}</button>
 
             </g:else>

@@ -38,29 +38,10 @@
 
 <g:if test="${assayInstance?.id}">
     <div class="row-fluid">
-        <div class="row-fluid">
-            <div id="accordion-foo" class="span12 accordion">
-
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a href="#contexts-header" id="contexts-header" class="accordion-toggle" data-toggle="collapse"
-                           data-target="#target-contexts-info">
-                            <i class="icon-chevron-down"></i>
-                            Contexts
-                        </a>
-                    </div>
-
-                    <div id="target-contexts-info" class="accordion-body in collapse">
-                        <div class="accordion-inner">
-                            <g:render template="../context/edit"
-                                      model="[contextOwner: assayInstance, contexts: assayInstance?.groupContexts()]"/>
-                        </div>
-                    </div>
-                </div>
-
-            </div>    <!-- End accordion -->
+        <div id="target-contexts-info">
+            <g:render template="../context/edit"
+                      model="[contextOwner: assayInstance, contexts: contexts]"/>
         </div>
-
     </div>
 </g:if>
 
