@@ -93,13 +93,13 @@ class ContextItemController {
             AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
             AbstractContextOwner owningContext = context.owner
             if (owningContext instanceof Assay) {
-                return contextService.updatePreferredAssayContextName((Assay) owningContext, context, command.value)
+                return contextService.updatePreferredAssayContextName(((Assay) owningContext).id, context, command.value)
             }
             if (owningContext instanceof Experiment) {
-                return contextService.updatePreferredExperimentContextName((Experiment) owningContext, context, command.value)
+                return contextService.updatePreferredExperimentContextName(((Experiment) owningContext).id, context, command.value)
             }
             if (owningContext instanceof Project) {
-                return contextService.updatePreferredProjectContextName((Project) owningContext, context, command.value)
+                return contextService.updatePreferredProjectContextName(((Project) owningContext).id, context, command.value)
             }
 
             return context.preferredName
@@ -110,10 +110,10 @@ class ContextItemController {
         AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
         AbstractContextOwner owningContext = context.owner
         if (owningContext instanceof Assay) {
-            contextService.deleteAssayContext((Assay) owningContext, context)
+            contextService.deleteAssayContext(((Assay) owningContext).id,owningContext, context)
         }
         if (owningContext instanceof Project) {
-            contextService.deleteProjectContext((Project) owningContext, context)
+            contextService.deleteProjectContext(((Project)owningContext).id,owningContext, context)
         }
     }
 

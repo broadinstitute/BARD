@@ -16,8 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize
  * To change this template use File | Settings | File Templates.
  */
 class AssayContextService {
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext, Assay assay) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public AssayContext addItem(AssayContextItem sourceItem, AssayContext targetAssayContext, Long id) {
         if (sourceItem && sourceItem.assayContext != targetAssayContext) {
             return addItem(targetAssayContext.assayContextItems.size(), sourceItem, targetAssayContext)
         }
@@ -36,30 +37,34 @@ class AssayContextService {
         targetAssayContext.assayContextItems.add(index, sourceItem)
         return targetAssayContext
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public AssayContext updateCardName(Long assayContextId, String name, Assay assay) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public AssayContext updateCardName(Long assayContextId, String name, Long id) {
         AssayContext assayContext = AssayContext.get(assayContextId)
         if (assayContext && assayContext.contextName != name) {
             assayContext.contextName = name
         }
         return assayContext
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType, Assay assay) {
+
+    @PreAuthorize("hasPermission(#id,'bard.db.registration.Assay',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public Measure changeParentChildRelationship(Measure measure, HierarchyType hierarchyType, Long id) {
         measure.parentChildRelationship = hierarchyType
         measure.save(flush: true)
         return measure
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public void associateContext(Measure measure, AssayContext context, Assay assay) {
+
+    @PreAuthorize("hasPermission(#id,'bard.db.registration.Assay',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public void associateContext(Measure measure, AssayContext context, Long id) {
         AssayContextMeasure assayContextMeasure = new AssayContextMeasure();
         assayContextMeasure.measure = measure;
         assayContextMeasure.assayContext = context;
         measure.assayContextMeasures.add(assayContextMeasure)
         context.assayContextMeasures.add(assayContextMeasure)
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public boolean disassociateContext(Measure measure, AssayContext context, Assay assay) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public boolean disassociateContext(Measure measure, AssayContext context, Long id) {
         AssayContextMeasure found = null;
         for (assayContextMeasure in context.assayContextMeasures) {
             if (assayContextMeasure.measure == measure && assayContextMeasure.assayContext) {
@@ -193,10 +198,12 @@ class AssayContextService {
         return newAssayContextItem
 
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    public Measure addMeasure(Assay assay, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    public Measure addMeasure(Long id, Measure parentMeasure, Element resultType, Element statsModifier, Element entryUnit, HierarchyType hierarchyType) {
+        Assay assay = Assay.findById(id)
         Measure measure = Measure.findByAssayAndResultTypeAndStatsModifierAndParentMeasure(assay, resultType, statsModifier, parentMeasure)
-        if(measure){
+        if (measure) {
             //we need to throw an exception here
             throw new RuntimeException("Duplicate measures cannot be added to the same assay")
         }

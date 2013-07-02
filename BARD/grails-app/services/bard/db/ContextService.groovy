@@ -9,27 +9,29 @@ import org.springframework.security.access.prepost.PreAuthorize
 
 class ContextService {
 
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    String updatePreferredAssayContextName(Assay assay, AbstractContext context, String preferredName) {
-       return updatePreferredContextName(context,preferredName)
-    }
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    String updatePreferredProjectContextName(Project project, AbstractContext context, String preferredName) {
-        return updatePreferredContextName(context,preferredName)
-    }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    String updatePreferredExperimentContextName(Experiment experiment, AbstractContext context, String preferredName) {
-        return updatePreferredContextName(context,preferredName)
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    String updatePreferredAssayContextName(Long id, AbstractContext context, String preferredName) {
+        return updatePreferredContextName(context, preferredName)
     }
 
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    AbstractContext createAssayContext(Assay assay, String name, String section) {
-        return createContext(assay, name, section)
+    @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    String updatePreferredProjectContextName(Long id, AbstractContext context, String preferredName) {
+        return updatePreferredContextName(context, preferredName)
     }
 
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    AbstractContext createProjectContext(Project project, String name, String section) {
-        return createContext(project, name, section)
+    @PreAuthorize("hasPermission(#id,'bard.db.experiment.Experiment',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    String updatePreferredExperimentContextName(Long id, AbstractContext context, String preferredName) {
+        return updatePreferredContextName(context, preferredName)
+    }
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    AbstractContext createAssayContext(Long id, AbstractContextOwner owningContext, String name, String section) {
+        return createContext(owningContext, name, section)
+    }
+
+    @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    AbstractContext createProjectContext(Long id, AbstractContextOwner owningContext, String name, String section) {
+        return createContext(owningContext, name, section)
     }
 
     private AbstractContext createContext(AbstractContextOwner owner, String name, String section) {
@@ -38,14 +40,14 @@ class ContextService {
         return context
     }
 
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void deleteAssayContext(Assay assay, AbstractContext context) {
-        deleteContext(assay, context)
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void deleteAssayContext(Long id, AbstractContextOwner owner, AbstractContext context) {
+        deleteContext(owner, context)
     }
 
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void deleteProjectContext(Project project, AbstractContext context) {
-        deleteContext(project, context)
+    @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void deleteProjectContext(Long id, AbstractContextOwner owner, AbstractContext context) {
+        deleteContext(owner, context)
     }
 
     private void deleteContext(AbstractContextOwner owner, AbstractContext context) {

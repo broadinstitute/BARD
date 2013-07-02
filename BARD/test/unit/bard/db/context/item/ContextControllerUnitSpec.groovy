@@ -57,7 +57,7 @@ class ContextControllerUnitSpec extends Specification {
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
         then:
-        controller.contextService.createProjectContext(_, _, _) >> { throw new AccessDeniedException("some message") }
+        controller.contextService.createProjectContext(_, _, _,_) >> { throw new AccessDeniedException("some message") }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
         assert response.text == "editing.forbidden.message"
         assert !model
@@ -75,7 +75,7 @@ class ContextControllerUnitSpec extends Specification {
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
         then:
-        controller.contextService.createAssayContext(_, _, _) >> { throw new AccessDeniedException("some message") }
+        controller.contextService.createAssayContext(_,_, _, _) >> { throw new AccessDeniedException("some message") }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
         assert response.text == "editing.forbidden.message"
         assert !model
@@ -122,7 +122,7 @@ class ContextControllerUnitSpec extends Specification {
         when:
         controller.deleteEmptyCard(contextClass, projectContext.id, 'Unclassified')
         then:
-        controller.contextService.deleteProjectContext(_, _) >> { throw new AccessDeniedException("some message") }
+        controller.contextService.deleteProjectContext(_,_, _) >> { throw new AccessDeniedException("some message") }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
         assert response.text == "editing.forbidden.message"
         assert !model
@@ -136,7 +136,7 @@ class ContextControllerUnitSpec extends Specification {
         when:
         controller.deleteEmptyCard(contextClass, assayContext.id, 'Unclassified')
         then:
-        controller.contextService.deleteAssayContext(_, _) >> { throw new AccessDeniedException("some message") }
+        controller.contextService.deleteAssayContext(_,_, _) >> { throw new AccessDeniedException("some message") }
         assert response.status == HttpServletResponse.SC_FORBIDDEN
         assert response.text == "editing.forbidden.message"
         assert !model

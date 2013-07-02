@@ -13,20 +13,23 @@ import registration.AssayService
 class ExperimentService {
 
     AssayService assayService;
-    @PreAuthorize("hasPermission(#id, ' bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateRunFromDate(final Long id, final Date runDateFrom) {
         Experiment experiment = Experiment.findById(id)
         experiment.runDateFrom = runDateFrom
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
-    @PreAuthorize("hasPermission(#id, ' bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateRunToDate(final Long id, final Date runDateTo) {
         Experiment experiment = Experiment.findById(id)
         experiment.runDateTo = runDateTo
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateHoldUntilDate(final Long id, final Date newHoldUntilDate) {
         Experiment experiment = Experiment.findById(id)
@@ -34,6 +37,7 @@ class ExperimentService {
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateExperimentDescription(final Long id, final String newExperimentDescription) {
         Experiment experiment = Experiment.findById(id)
@@ -42,6 +46,7 @@ class ExperimentService {
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateExperimentName(final Long id, final String newExperimentName) {
         Experiment experiment = Experiment.findById(id)
@@ -50,6 +55,7 @@ class ExperimentService {
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
+
     @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     Experiment updateExperimentStatus(final Long id, final ExperimentStatus experimentStatus) {
         Experiment experiment = Experiment.findById(id)
@@ -57,8 +63,10 @@ class ExperimentService {
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void updateMeasures(Experiment experiment, JSONArray edges) {
+
+    @PreAuthorize("hasPermission(#experimentId, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void updateMeasures(Long experimentId, JSONArray edges) {
+        Experiment experiment = Experiment.findById(experimentId)
         // populate map with ids as strings
         Map byId = [:]
         experiment.experimentMeasures.each {
@@ -72,7 +80,7 @@ class ExperimentService {
         unused.each { ExperimentMeasure measure ->
             measure.childMeasures = new HashSet();
             measure.parent = null;
-            measure.parentChildRelationship=null
+            measure.parentChildRelationship = null
         }
 
         // start over fresh and walk through the elements in tree
@@ -136,8 +144,10 @@ class ExperimentService {
 
         println("Added ${experiment.experimentMeasures.size()} measures to tree")
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    Experiment createNewExperiment(Assay assay, String experimentName, String description) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Experiment createNewExperiment(Long id, String experimentName, String description) {
+        Assay assay = Assay.findById(id)
         Experiment experiment = new Experiment(assay: assay, experimentName: experimentName, description: description, dateCreated: new Date())
 
         if (experiment.save(flush: true)) {

@@ -58,40 +58,51 @@ class ContextItemService {
         }
         return createSuccessful
     }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean createExperimentContextItem(Experiment experiment,BasicContextItemCommand basicContextItemCommand) {
+
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean createExperimentContextItem(Long id, BasicContextItemCommand basicContextItemCommand) {
         return createContextItem(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean createAssayContextItem(Assay assay,BasicContextItemCommand basicContextItemCommand) {
+
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean createAssayContextItem(Long id, BasicContextItemCommand basicContextItemCommand) {
         return createContextItem(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean createProjectContextItem(Project project,BasicContextItemCommand basicContextItemCommand) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean createProjectContextItem(Long id, BasicContextItemCommand basicContextItemCommand) {
         return createContextItem(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean updateExperimentContextItem(Experiment experiment,BasicContextItemCommand basicContextItemCommand) {
-       return updateContextItem(basicContextItemCommand)
-    }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean updateAssayContextItem(Assay assay,BasicContextItemCommand basicContextItemCommand) {
+
+    @PreAuthorize("hasPermission(#id,'bard.db.experiment.Experiment',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean updateExperimentContextItem(Long id, BasicContextItemCommand basicContextItemCommand) {
         return updateContextItem(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean updateProjectContextItem(Project project,BasicContextItemCommand basicContextItemCommand) {
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean updateAssayContextItem(Long id, BasicContextItemCommand basicContextItemCommand) {
         return updateContextItem(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean deleteAssayContextItem(Assay assay,BasicContextItemCommand basicContextItemCommand) {
+
+    @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean updateProjectContextItem(Long id, BasicContextItemCommand basicContextItemCommand) {
+        return updateContextItem(basicContextItemCommand)
+    }
+
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean deleteAssayContextItem(Long id, AbstractContextOwner owner, BasicContextItemCommand basicContextItemCommand) {
         return delete(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean deleteProjectContextItem(Project project,BasicContextItemCommand basicContextItemCommand) {
+
+    @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean deleteProjectContextItem(Long id, AbstractContextOwner owner, BasicContextItemCommand basicContextItemCommand) {
         return delete(basicContextItemCommand)
     }
-    @PreAuthorize("hasPermission(#experiment,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean deleteExperimentContextItem(Experiment experiment,BasicContextItemCommand basicContextItemCommand) {
+
+    @PreAuthorize("hasPermission(#id,'bard.db.experiment.Experiment',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    boolean deleteExperimentContextItem(Long id, AbstractContextOwner owner, BasicContextItemCommand basicContextItemCommand) {
         return delete(basicContextItemCommand)
     }
 

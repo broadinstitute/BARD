@@ -16,8 +16,8 @@ class AssayDefinitionService {
      * @param parentMeasure
      * @return
      */
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveMeasure(Assay assay,Measure measure, Measure parentMeasure) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void moveMeasure(Long id,Measure measure, Measure parentMeasure) {
 
         measure.parentMeasure = parentMeasure
         if (!measure.parentChildRelationship) {
@@ -25,10 +25,6 @@ class AssayDefinitionService {
                 measure.parentChildRelationship = HierarchyType.SUPPORTED_BY
             }
         }
-    }
-    @PreAuthorize("hasPermission(#assay,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    boolean canCreateExperiment(Assay assay) {
-        return true
     }
 
     Assay saveNewAssay(Assay assayInstance) {

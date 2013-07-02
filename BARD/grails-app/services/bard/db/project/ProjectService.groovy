@@ -33,8 +33,8 @@ class ProjectService {
         return Project.findById(id)
     }
 
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    ProjectExperiment updateProjectStage(Project project, ProjectExperiment projectExperiment, Element newStage) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    ProjectExperiment updateProjectStage(Long id, ProjectExperiment projectExperiment, Element newStage) {
         projectExperiment.stage = newStage
         projectExperiment.save(flush: true)
         return ProjectExperiment.findById(projectExperiment.id)
@@ -46,8 +46,9 @@ class ProjectService {
      * @param experiment
      * @param project
      */
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void removeExperimentFromProject(Experiment experiment, Project project) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void removeExperimentFromProject(Experiment experiment, Long id) {
+        Project project = Project.findById(id)
         def projectExperiment = ProjectExperiment.findByExperimentAndProject(experiment, project)
         if (!projectExperiment) throw new UserFixableException("Can not find association between experiment " + experiment.id + " and project " + project.id)
 
@@ -117,8 +118,9 @@ class ProjectService {
      * @param toExperiment
      * @param project
      */
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment, Project project) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void removeEdgeFromProject(Experiment fromExperiment, Experiment toExperiment,Long id) {
+        Project project = Project.findById(id)
         def fromProjectExperiment = ProjectExperiment.findByExperimentAndProject(fromExperiment, project)
         def toProjectExperiment = ProjectExperiment.findByExperimentAndProject(toExperiment, project)
         if (!fromProjectExperiment || !toProjectExperiment)
@@ -134,8 +136,9 @@ class ProjectService {
      * @param experiment
      * @param project
      */
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void addExperimentToProject(Experiment experiment, Project project, Element stage) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void addExperimentToProject(Experiment experiment, Long id, Element stage) {
+        Project project = Project.findById(id)
         if (isExperimentAssociatedWithProject(experiment, project))
             throw new UserFixableException("Experiement " + experiment.id + " is already associated with Project " + project.id)
 
@@ -154,14 +157,15 @@ class ProjectService {
      * @param toExperiment
      * @param project
      */
-    @PreAuthorize("hasPermission(#project,admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Project project) {
+    @PreAuthorize("hasPermission(#id, 'bard.db.project.Project', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void linkExperiment(Experiment fromExperiment, Experiment toExperiment, Long id) {
         if (!fromExperiment || !toExperiment) {
             throw new UserFixableException("Either or both experiment you were trying to link does not exist in the system.")
         }
         if (fromExperiment.id == toExperiment.id) {
             throw new UserFixableException("Link between same experiments is not allowed.")
         }
+        Project project = Project.findById(id)
         if (!isExperimentAssociatedWithProject(fromExperiment, project) ||
                 !isExperimentAssociatedWithProject(toExperiment, project))
             throw new UserFixableException("Experiment " + fromExperiment.id + " or experiment " + toExperiment.id + " is not associated with project " + project.id)

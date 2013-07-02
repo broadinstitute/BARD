@@ -23,10 +23,10 @@ class ContextController {
         AbstractContextOwner owningContext = BasicContextItemCommand.getContextOwnerClass(contextClass).findById(ownerId)
         try {
             if (owningContext instanceof Assay) {
-                contextService.createAssayContext((Assay) owningContext, cardName, cardSection)
+                contextService.createAssayContext(((Assay) owningContext).id, owningContext, cardName, cardSection)
             }
             if (owningContext instanceof Project) {
-                contextService.createProjectContext((Project) owningContext, cardName, cardSection)
+                contextService.createProjectContext(((Project) owningContext).id, owningContext,cardName, cardSection)
             }
         } catch (AccessDeniedException ae) {
             render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)
@@ -40,10 +40,10 @@ class ContextController {
         AbstractContextOwner owningContext = context.owner
         try {
             if (owningContext instanceof Assay) {
-                contextService.deleteAssayContext((Assay) owningContext, context)
+                contextService.deleteAssayContext(((Assay) owningContext).id,owningContext,context)
             }
             if (owningContext instanceof Project) {
-                contextService.deleteProjectContext((Project) owningContext, context)
+                contextService.deleteProjectContext(((Project) owningContext).id,owningContext, context)
             }
         } catch (AccessDeniedException ae) {
             render(status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null)

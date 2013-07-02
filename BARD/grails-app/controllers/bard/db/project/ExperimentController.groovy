@@ -209,7 +209,7 @@ class ExperimentController {
 
     def update() {
         def experiment = Experiment.get(params.id)
-        experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
+        experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
         if (!experiment.save(flush: true)) {
             renderEdit(experiment, experiment.assay)
         } else {
@@ -234,7 +234,7 @@ class ExperimentController {
             if (!experiment.save(flush: true)) {
                 renderCreate(assay, experiment)
             } else {
-                experimentService.updateMeasures(experiment, JSON.parse(params.experimentTree))
+                experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
                 redirect(action: "show", id: experiment.id)
             }
         }

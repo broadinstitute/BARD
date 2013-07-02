@@ -17,7 +17,7 @@ ResultsService resultsService = ctx.resultsService
 assert resultsService != null
 Experiment experiment = Experiment.get(experimentId)
 assert experiment != null
-    ResultsService.ImportSummary results = resultsService.importResults(experiment, new FileInputStream(experimentFile))
+    ResultsService.ImportSummary results = resultsService.importResults(experiment.id, new FileInputStream(experimentFile))
     println("errors: ${results.errors.size()}")
     for(e in results.errors) {
         println("\t${e}")

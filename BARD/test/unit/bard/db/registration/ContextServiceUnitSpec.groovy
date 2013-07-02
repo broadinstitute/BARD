@@ -25,10 +25,10 @@ class ContextServiceUnitSpec extends Specification {
 
     def 'test createAssayContext'() {
         setup:
-        AbstractContextOwner owner = Assay.build()
+        Assay owner = Assay.build()
 
         when:
-        AbstractContext context = service.createAssayContext(owner, "name", "section");
+        AbstractContext context = service.createAssayContext(owner.id,owner, "name", "section");
 
         then:
         context != null
@@ -39,10 +39,10 @@ class ContextServiceUnitSpec extends Specification {
 
     def 'test createProjectContext'() {
         setup:
-        AbstractContextOwner owner = Project.build()
+        Project owner = Project.build()
 
         when:
-        AbstractContext context = service.createProjectContext(owner, "name", "section");
+        AbstractContext context = service.createProjectContext(owner.id,owner, "name", "section");
 
         then:
         context != null
@@ -53,10 +53,10 @@ class ContextServiceUnitSpec extends Specification {
     def 'test deleteAssayContext'() {
         setup:
         AbstractContext context = AssayContext.build()
-        AbstractContextOwner owner = context.owner
+        Assay owner = context.owner
 
         when:
-        service.deleteAssayContext(owner,context)
+        service.deleteAssayContext(owner.id,owner,context)
 
         then:
         !owner.contexts.contains(context)
@@ -64,10 +64,10 @@ class ContextServiceUnitSpec extends Specification {
     def 'test deleteProjectContext'() {
         setup:
         AbstractContext context = ProjectContext.build()
-        AbstractContextOwner owner = context.owner
+        Project owner = (Project)context.owner
 
         when:
-        service.deleteProjectContext(owner,context)
+        service.deleteProjectContext(owner.id,owner,context)
 
         then:
         !owner.contexts.contains(context)

@@ -273,7 +273,7 @@ class AssayDefinitionController {
                     entryUnit = Element.findByLabel(params.entryUnitName)
                 }
                 try {
-                    Measure newMeasure = assayContextService.addMeasure(assayInstance, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
+                    Measure newMeasure = assayContextService.addMeasure(assayInstance.id, parentMeasure, resultType, statsModifier, entryUnit, hierarchyType)
                     render status: HttpServletResponse.SC_OK, text: "Successfully added measure " + newMeasure.displayLabel
                 }
                 catch (AccessDeniedException ade) {
@@ -299,7 +299,7 @@ class AssayDefinitionController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.id])
             } else {
                 flash.message = null
-                assayContextService.disassociateContext(measure, assayContext, assayContext.assay)
+                assayContextService.disassociateContext(measure, assayContext, assayContext.assay.id)
             }
         } catch (AccessDeniedException ade) {
             log.error(ade)
@@ -323,7 +323,7 @@ class AssayDefinitionController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayContext.label', default: 'AssayContext'), params.assayContextId])
             } else {
 
-                assayContextService.associateContext(measure, context, context.assay)
+                assayContextService.associateContext(measure, context, context.assay.id)
                 flash.message = "Measure '${measure?.displayLabel}' successfully associated to Context '${context?.contextName}'"
             }
         } catch (AccessDeniedException ade) {
@@ -348,7 +348,7 @@ class AssayDefinitionController {
             } else {
                 flash.message = null
                 if (measure.parentMeasure) { //if this measure has no parent then do nothing
-                    assayContextService.changeParentChildRelationship(measure, hierarchyType, measure.assay)
+                    assayContextService.changeParentChildRelationship(measure, hierarchyType, measure.assay.id)
                 }
             }
         } catch (AccessDeniedException ade) {
@@ -410,7 +410,7 @@ class AssayDefinitionController {
     def updateCardName(String edit_card_name, Long contextId) {
         AssayContext assayContext = AssayContext.findById(contextId)
         Assay assay = assayContext.assay
-        assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay)
+        assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay.id)
         assay = assayContext.assay
         render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
     }
@@ -433,7 +433,7 @@ class AssayDefinitionController {
             if (parentMeasureId) {
                 parentMeasure = Measure.get(parentMeasureId)
             }
-            assayDefinitionService.moveMeasure(measure.assay, measure, parentMeasure)
+            assayDefinitionService.moveMeasure(measure.assay.id, measure, parentMeasure)
             render new JSONArray()
         } catch (AccessDeniedException aee) {
             render accessDeniedErrorMessage()
