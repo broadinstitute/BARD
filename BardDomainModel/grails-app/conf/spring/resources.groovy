@@ -14,7 +14,7 @@ beans = {
     switch (Environment.current) {
         case Environment.PRODUCTION:
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('bardAuthorizationProviderService')]
+                crowdAuthenticationProviders = [ref('crowdAuthenticationProvider')]
             }
             break
         default:
@@ -22,8 +22,9 @@ beans = {
                 grailsApplication = application
             }
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
-                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService')]
+                crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('crowdAuthenticationProvider')]
             }
+
     }
     capPermissionService(CapPermissionService) {
         aclUtilService = ref("aclUtilService")
