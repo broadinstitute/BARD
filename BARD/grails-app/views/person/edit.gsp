@@ -87,7 +87,7 @@
             </div>
         </div>
     </div>
-
-    </body>
 </sec:ifAnyGranted>
+    </body>
+
 </html>
