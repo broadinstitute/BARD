@@ -544,6 +544,10 @@
                                 .innerRadius(innerRadiusWhenExpanded)
                                 .outerRadius(bigPie);
 
+                        var nullarc = d3.svg.arc()
+                                .innerRadius(innerRadiusWhenExpanded)
+                                .outerRadius(innerRadiusWhenExpanded+1);
+
                         graphicsTarget
                                 .attr('width', displayWidgetWidth)
                                 .attr('height', displayWidgetHeight + 50); // Extra room for the 'click to contract' button
@@ -558,7 +562,7 @@
                                 .select('path')
                                 .transition()
                                 .duration(1500)
-                                .attr("d", bigarc)
+                                .attr("d", bigarc)  // pie size easily adjusted here
                                 .attr("transform", "translate(368,375)");    // We need use explicit numbers here, not variables. This would be something to fix
 
                         graphicsTitle.attr('class', 'expandedGraphTitle');

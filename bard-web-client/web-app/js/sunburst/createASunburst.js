@@ -73,9 +73,9 @@ var TooltipHandler = function ()  {
 
 function createASunburst(width, height, padding, duration, colorScale, domSelector, cid, widgetIndex) {
 
-    var tooltipHandler  = new TooltipHandler ();
-    var colorManagementRoutines = new ColorManagementRoutines(colorScale);
-    var radius = Math.min(width, height) / 2;
+    var tooltipHandler  = new TooltipHandler (),
+     colorManagementRoutines = new ColorManagementRoutines(colorScale),
+     radius = Math.min(width, height) / 2;
 
 
     var SunburstAnimation = function ()  {
@@ -160,11 +160,16 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
     var partition = d3.layout.partition()
         .value(function (d) {
             return linkedVizData.adjustedPartitionSize(d);
-//                        return d.size;
         }).sort(function(a,b){
                 return d3.descending(a.name, b.name);
             })
         ;
+    var outerRadius = function (d) {
+        return Math.max(0, y(d.y + d.dy));
+    } ;
+    var innerRadius = function (d) {
+        return Math.max(0, y(d.y));
+    };
 
     var arc = d3.svg.arc()
         .startAngle(function (d) {
@@ -173,12 +178,8 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         .endAngle(function (d) {
             return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx)));
         })
-        .innerRadius(function (d) {
-            return Math.max(0, y(d.y));
-        })
-        .outerRadius(function (d) {
-            return Math.max(0, y(d.y + d.dy));
-        });
+        .innerRadius(innerRadius)
+        .outerRadius(outerRadius);
 
     // Method local to createASunburst to keep track of our depth
     var createIdForNode = function (incomingName) {
