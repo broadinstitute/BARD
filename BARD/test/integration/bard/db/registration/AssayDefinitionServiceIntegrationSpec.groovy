@@ -62,12 +62,12 @@ class AssayDefinitionServiceIntegrationSpec extends IntegrationSpec {
         assert AssayType.TEMPLATE == updatedAssay.assayType
     }
 
-    void "test save new Assay"() {
-        given:
-        final Assay assay = Assay.build(assayName: 'assayName40', assayType: AssayType.PANEL_GROUP)
-        when:
-        final Assay updatedAssay = assayDefinitionService.saveNewAssay(assay)
-        then:
-        assert AssayType.PANEL_GROUP == updatedAssay.assayType
-    }
+//    void "test save new Assay"() {
+//        given:
+//        final Assay assay = Assay.build(assayName: 'assayName40', assayType: AssayType.PANEL_GROUP)
+//        when:
+//        final Assay updatedAssay = assayDefinitionService.saveNewAssay(assay)
+//        then:
+//        assert AssayType.PANEL_GROUP == updatedAssay.assayType
+//    }
 }

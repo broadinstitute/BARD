@@ -7,17 +7,16 @@ import bard.db.project.InlineEditableCommand
 import bard.db.project.Project
 import bard.db.project.ProjectDocument
 import grails.plugins.springsecurity.Secured
-import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import groovy.transform.InheritConstructors
-import org.springframework.security.access.PermissionEvaluator
+import org.springframework.security.access.AccessDeniedException
 
 import javax.servlet.http.HttpServletResponse
 
 @Mixin([DocumentHelper, EditingHelper])
 @Secured(['isAuthenticated()'])
 class DocumentController {
-    static allowedMethods = [save: "POST", update: "POST"]
+    static allowedMethods = [save: "POST"]
 
     Map<String, Class> nameToDomain = ["Assay": AssayDocument, "Project": ProjectDocument]
     DocumentService documentService
@@ -37,18 +36,6 @@ class DocumentController {
             return
         }
         [document: documentCommand]
-    }
-
-    def redirectToOwner(document) {
-        if (document.getOwner() instanceof Assay) {
-            Assay assay = document.getOwner()
-            redirect(controller: "assayDefinition", action: "show", id: assay.id, fragment: "document-${document.id}")
-        } else if (document.getOwner() instanceof Project) {
-            Project project = document.getOwner()
-            redirect(controller: "project", action: "show", id: project.id, fragment: "document-${document.id}")
-        } else {
-            throw new RuntimeException("document owner ${document.getOwner} is neither an assay nor project")
-        }
     }
 
     def save(DocumentCommand documentCommand) {
@@ -81,16 +68,16 @@ class DocumentController {
      * @param id
      * @return
      */
-    @Deprecated
-    def edit(String type, Long id) {
-        DocumentCommand dc = new DocumentCommand()
-        Class domainClass = nameToDomain[type]
-        if (domainClass == null) {
-            throw new RuntimeException("Not a valid value ${domainClass}")
-        }
-        dc.populateWithExistingDocument(domainClass, id)
-        [document: dc]
-    }
+//    @Deprecated
+//    def edit(String type, Long id) {
+//        DocumentCommand dc = new DocumentCommand()
+//        Class domainClass = nameToDomain[type]
+//        if (domainClass == null) {
+//            throw new RuntimeException("Not a valid value ${domainClass}")
+//        }
+//        dc.populateWithExistingDocument(domainClass, id)
+//        [document: dc]
+//    }
 
     def editDocument(InlineEditableCommand inlineEditableCommand) {
         if (!inlineEditableCommand.validate()) {
@@ -158,15 +145,15 @@ class DocumentController {
 
     }
     //No longer used
-    @Deprecated
-    def update(DocumentCommand documentCommand) {
-        Object document = documentCommand.updateExistingDocument()
-        if (document) {
-            redirectToOwner(document)
-        } else {
-            render(view: "edit", model: [document: documentCommand])
-        }
-    }
+    // @Deprecated
+//    def update(DocumentCommand documentCommand) {
+//        Object document = documentCommand.updateExistingDocument()
+//        if (document) {
+//            redirectToOwner(document)
+//        } else {
+//            render(view: "edit", model: [document: documentCommand])
+//        }
+//    }
 
     def delete(String type, Long id) {
         Class domainClass = nameToDomain[type]
@@ -175,14 +162,30 @@ class DocumentController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assayDocument.label', default: 'AssayDocument'), params.id])
             return
         }
-        if (document instanceof AssayDocument) {
-            documentService.deleteAssayDocument(document.assay.id, document)
-        } else if (document instanceof ProjectDocument) {
-            documentService.deleteProjectDocument(document.project.id, document)
-        } else {
-            throw new RuntimeException("UnHandled Document Type " + domainClass.toString())
+        try {
+            if (document instanceof AssayDocument) {
+                documentService.deleteAssayDocument(document.assay.id, document)
+            } else if (document instanceof ProjectDocument) {
+                documentService.deleteProjectDocument(document.project.id, document)
+            } else {
+                throw new RuntimeException("UnHandled Document Type " + domainClass.toString())
+            }
+        } catch (AccessDeniedException ade) {
+            render accessDeniedErrorMessage()
         }
         redirectToOwner(document)
+    }
+
+    private def redirectToOwner(document) {
+        if (document.getOwner() instanceof Assay) {
+            Assay assay = document.getOwner()
+            redirect(controller: "assayDefinition", action: "show", id: assay.id, fragment: "document-${document.id}")
+        } else if (document.getOwner() instanceof Project) {
+            Project project = document.getOwner()
+            redirect(controller: "project", action: "show", id: project.id, fragment: "document-${document.id}")
+        } else {
+            throw new RuntimeException("document owner ${document.getOwner} is neither an assay nor project")
+        }
     }
 }
 

@@ -30,6 +30,8 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
         multipartForm: 'multipart/form-data'
 ]
 
+//Default server url
+grails.serverURL = "http://localhost:8081/"
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 
@@ -68,7 +70,6 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
     }
 }
 
@@ -136,6 +137,9 @@ grails {
             filterChain.chainMap = [
 //                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
             ]
         }
@@ -151,13 +155,37 @@ CbipCrowd {
     register.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR"]
+    applicationSpecificRoles = ['ROLE_TEAM_A', 'ROLE_TEAM_B', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR"]
     mockUsers {
         integrationTestUser {
             roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
             username = 'integrationTestUser'
             password = 'integrationTestUser'
             email = 'integrationTestUser@nowhere.com'
+        }
+        curator {
+            roles = ['ROLE_CURATOR']
+            username = 'curator'
+            password = 'curator'
+            email = 'curator@nowhere.com'
+        }
+        teamA_1 {
+            roles = ['ROLE_TEAM_A']
+            username = 'teamA_1'
+            password = 'teamA_1'
+            email = 'team1@nowhere.com'
+        }
+        teamA_2 {
+            roles = ['ROLE_TEAM_A']
+            username = 'teamA_2'
+            password = 'teamA_2'
+            email = 'teamA2@nowhere.com'
+        }
+        teamB_1 {
+            roles = ['ROLE_TEAM_B']
+            username = 'teamB_1'
+            password = 'teamB_2'
+            email = 'team2@nowhere.com'
         }
     }
 }

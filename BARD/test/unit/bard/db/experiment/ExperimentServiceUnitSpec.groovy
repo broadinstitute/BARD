@@ -76,31 +76,4 @@ public class ExperimentServiceUnitSpec extends Specification {
         then:
         assert newExperimentName == updatedExperiment.experimentName
     }
-
-//    void "test update assay name"() {
-//        given:
-//        final Assay assay = Assay.build(assayName: 'assayName20', assayStatus: AssayStatus.DRAFT)
-//        final String newAssayName = "New Assay Name"
-//        when:
-//        final Assay updatedAssay = service.updateAssayName(assay.id, newAssayName)
-//        then:
-//        assert newAssayName == updatedAssay.assayName
-//    }
-//    void "test update assay status"() {
-//        given:
-//        final Assay assay = Assay.build(assayName: 'assayName10', assayStatus: AssayStatus.DRAFT)
-//        when:
-//        final Assay updatedAssay = service.updateAssayStatus(assay.id, AssayStatus.APPROVED)
-//        then:
-//        assert AssayStatus.APPROVED == updatedAssay.assayStatus
-//    }
-//    void "test update assay type"() {
-//        given:
-//        final Assay assay = Assay.build(assayName: 'assayName10', assayType: AssayType.PANEL_GROUP)
-//        when:
-//        final Assay updatedAssay = service.updateAssayType(assay.id, AssayType.TEMPLATE)
-//        then:
-//        assert AssayType.TEMPLATE == updatedAssay.assayType
-//    }
-
 }

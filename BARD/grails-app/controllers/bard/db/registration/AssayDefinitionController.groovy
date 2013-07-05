@@ -5,7 +5,6 @@ import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
-import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
@@ -27,7 +26,7 @@ import java.text.SimpleDateFormat
 @Secured(['isAuthenticated()'])
 class AssayDefinitionController {
 
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST", associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
+    static allowedMethods = [associateContext: "POST", disassociateContext: "POST", deleteMeasure: "POST", addMeasure: "POST"]
 
     AssayContextService assayContextService
     ContextService contextService
@@ -147,12 +146,10 @@ class AssayDefinitionController {
     }
 
     def index() {
-        redirect(action: "description", params: params)
+        redirect(action: "findById")
     }
 
-    def description() {
-        [assayInstance: new Assay(params)]
-    }
+
 
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
@@ -168,17 +165,17 @@ class AssayDefinitionController {
         render(view: "show", model: [assayInstance: assay, measureTreeAsJson: measureTreeAsJson])
     }
 
-    def save() {
-
-        def assayInstance = new Assay(params)
-        Assay savedAssay = assayDefinitionService.saveNewAssay(assayInstance)
-        if (!savedAssay) {
-            render(view: "description", model: [assayInstance: assayInstance])
-            return
-        }
-        flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), savedAssay.id])
-        redirect(action: "show", id: savedAssay.id)
-    }
+//    def save() {
+//
+//        def assayInstance = new Assay(params)
+//        Assay savedAssay = assayDefinitionService.saveNewAssay(assayInstance)
+//        if (!savedAssay) {
+//            redirect(action: "findById")
+//            return
+//        }
+//        flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), savedAssay.id])
+//        redirect(action: "show", id: savedAssay.id)
+//    }
 
     def show() {
         def assayInstance = Assay.get(params.id)
@@ -204,9 +201,9 @@ class AssayDefinitionController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         }
-        AbstractContextOwner.ContextGroup contextGroup =assayInstance.groupBySection(groupBySection?.decodeURL())
+        AbstractContextOwner.ContextGroup contextGroup = assayInstance.groupBySection(groupBySection?.decodeURL())
 
-        [assayInstance: assayInstance, contexts:[contextGroup]]
+        [assayInstance: assayInstance, contexts: [contextGroup]]
     }
 
     def editMeasure() {
@@ -401,25 +398,29 @@ class AssayDefinitionController {
             return
         }
     }
-
+    //cannot find anywhere that it is used
+    @Deprecated
     def launchEditItemInCard(Long assayContextId, Long assayContextItemId) {
         def assayContextItem = AssayContextItem.get(assayContextItemId)
         render(template: "editItemForm", model: [assayContextItem: assayContextItem, assayContextId: assayContextId])
     }
-
+    //cannot find anywhere that it is used
     def updateCardName(String edit_card_name, Long contextId) {
-        AssayContext assayContext = AssayContext.findById(contextId)
-        Assay assay = assayContext.assay
-        assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay.id)
-        assay = assayContext.assay
-        render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+        try {
+            AssayContext assayContext = AssayContext.findById(contextId)
+            Assay assay = assayContext.assay
+            assayContext = assayContextService.updateCardName(contextId, edit_card_name, assay.id)
+            assay = assayContext.assay
+            render(template: "/context/list", model: [contextOwner: assay, contexts: assay.groupContexts(), subTemplate: 'edit'])
+        } catch (AccessDeniedException aee) {
+            render accessDeniedErrorMessage()
+        }
     }
 
-
-    def showEditSummary(Long instanceId) {
-        def assayInstance = Assay.findById(instanceId)
-        render(template: "editSummary", model: [assay: assayInstance])
-    }
+//    def showEditSummary(Long instanceId) {
+//        def assayInstance = Assay.findById(instanceId)
+//        render(template: "editSummary", model: [assay: assayInstance])
+//    }
     /**
      *
      * @param measureId
@@ -444,11 +445,13 @@ class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
     boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
+
+        Class<?> clazz = org.springframework.util.ClassUtils.getUserClass(domainInstance.getClass());
         final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
 
         def auth = springSecurityService?.authentication
 
-        final boolean hasPermission = permissionEvaluator?.hasPermission(auth, domainInstance, BasePermission.ADMINISTRATION)
+        final boolean hasPermission = permissionEvaluator?.hasPermission(auth, domainInstance.id, clazz.name, BasePermission.ADMINISTRATION)
 
         return isAdmin || hasPermission
 

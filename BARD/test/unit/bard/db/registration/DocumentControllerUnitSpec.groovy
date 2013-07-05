@@ -428,58 +428,34 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         model.document.errors.hasErrors()
         assertFieldValidationExpectations(model.document, 'documentName', false, 'nullable')
     }
-
-    void 'test edit no documentId'() {
-        when:
-        params.type = "Assay"
-        params.documentId = null
-        def model = controller.edit()
-
-        then:
-        model.document.errors.getAllErrors().collect { it.codes }.flatten().contains('default.not.found.message')
-    }
-
-    void 'test edit'() {
-        when:
-        params.type = "Assay"
-        params.id = existingAssayDocument.id
-        def model = controller.edit()
-
-        then:
-        model.document.documentId == existingAssayDocument.id
-        model.document.documentName == existingAssayDocument.documentName
-        model.document.documentType == existingAssayDocument.documentType
-        model.document.documentContent == existingAssayDocument.documentContent
-    }
-
-    void 'test update succeed'() {
-        when:
-
-        assert existingAssayDocument.validate()
-        documentCommand.assayId = assay.id
-        documentCommand.version = existingAssayDocument.version
-        documentCommand.documentId = existingAssayDocument.id
-        documentCommand.documentContent = "new content"
-        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_OTHER
-        documentCommand.documentName = "new name"
-        controller.update(documentCommand)
-
-        then:
-        response.redirectedUrl == "/assayDefinition/show/${assay.id}#document-${existingAssayDocument.id}"
-        existingAssayDocument.documentContent == "new content"
-        existingAssayDocument.documentName == "new name"
-        existingAssayDocument.documentType == DocumentType.DOCUMENT_TYPE_OTHER
-    }
-
-    void 'test update fail doc not found'() {
-        when:
-        documentCommand.documentId = -1
-        documentCommand.assayId = assay.id
-        controller.update(documentCommand)
-
-        then:
-        model.document.hasErrors()
-    }
+//    void 'test update succeed'() {
+//        when:
+//
+//        assert existingAssayDocument.validate()
+//        documentCommand.assayId = assay.id
+//        documentCommand.version = existingAssayDocument.version
+//        documentCommand.documentId = existingAssayDocument.id
+//        documentCommand.documentContent = "new content"
+//        documentCommand.documentType = DocumentType.DOCUMENT_TYPE_OTHER
+//        documentCommand.documentName = "new name"
+//        controller.update(documentCommand)
+//
+//        then:
+//        response.redirectedUrl == "/assayDefinition/show/${assay.id}#document-${existingAssayDocument.id}"
+//        existingAssayDocument.documentContent == "new content"
+//        existingAssayDocument.documentName == "new name"
+//        existingAssayDocument.documentType == DocumentType.DOCUMENT_TYPE_OTHER
+//    }
+//
+//    void 'test update fail doc not found'() {
+//        when:
+//        documentCommand.documentId = -1
+//        documentCommand.assayId = assay.id
+//        controller.update(documentCommand)
+//
+//        then:
+//        model.document.hasErrors()
+//    }
 
     void 'test delete'() {
 

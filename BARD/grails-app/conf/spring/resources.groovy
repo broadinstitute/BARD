@@ -9,6 +9,7 @@ import org.codehaus.groovy.grails.orm.hibernate.HibernateEventListeners
 beans = {
 
     customPropertyEditorRegistrar(RoleEditorRegistrar)
+
     clientBasicAuth(wslite.http.auth.HTTPBasicAuthorization) {
         username = grailsApplication.config.CbipCrowd.application.username
         password = grailsApplication.config.CbipCrowd.application.password
@@ -52,6 +53,7 @@ beans = {
 
     switch (Environment.current) {
         case Environment.PRODUCTION:
+            //don't use in memory map in production
             userDetailsService(org.broadinstitute.cbip.crowd.MultiProviderUserDetailsService) {
                 crowdAuthenticationProviders = [ref('bardAuthorizationProviderService')]
             }
@@ -64,6 +66,7 @@ beans = {
                 crowdAuthenticationProviders = [ref('inMemMapAuthenticationProviderService'), ref('bardAuthorizationProviderService')]
             }
     }
+
     capPermissionService(CapPermissionService) {
         aclUtilService = ref("aclUtilService")
         springSecurityService = ref("springSecurityService")

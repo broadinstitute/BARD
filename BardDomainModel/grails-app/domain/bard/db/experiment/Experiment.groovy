@@ -27,7 +27,7 @@ class Experiment extends AbstractContextOwner {
 
     String description
 
-    Date dateCreated
+    Date dateCreated = new Date()
     Date lastUpdated = new Date()
     String modifiedBy
     Long id;

@@ -22,7 +22,7 @@ import spock.lang.Specification
 @Mock([Assay, Measure, Experiment,ExperimentMeasure,AssayContext,AssayContextMeasure, AssayContextItem, AssayDocument])
 @TestMixin(ServiceUnitTestMixin)
 @TestFor(ExperimentService)
-class ExperimentServiceSpec  extends Specification {
+class ExperimentServiceUnitSpec extends Specification {
     @Before
     void setup() {
 

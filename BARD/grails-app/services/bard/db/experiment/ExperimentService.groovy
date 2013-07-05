@@ -63,7 +63,7 @@ class ExperimentService {
         experiment.save(flush: true)
         return Experiment.findById(id)
     }
-
+    //TODO: This method is too long. Need to refactor
     @PreAuthorize("hasPermission(#experimentId, 'bard.db.experiment.Experiment', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void updateMeasures(Long experimentId, JSONArray edges) {
         Experiment experiment = Experiment.findById(experimentId)

@@ -109,6 +109,7 @@ grails.project.dependency.resolution = {
         test(":spock:0.7") {
             exclude "spock-grails-support"
         }
+        //compile ':functional-spock:0.6'
         // provided  scope
     }
 }
@@ -116,6 +117,7 @@ grails.project.dependency.resolution = {
 // making the domain plugin an in-place plugin
 grails.plugin.location.'bard-domain-model' = "../BardDomainModel"
 grails.plugin.location.'crowd-user-registration' = "../crowdUserRegistration"
+grails.plugin.location.'functional-spock'="../functional-spock"
 codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
 codenarc.reports = {
     html('html') {

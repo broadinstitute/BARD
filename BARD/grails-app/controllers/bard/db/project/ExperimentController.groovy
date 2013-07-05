@@ -11,7 +11,6 @@ import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
 import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.access.prepost.PreAuthorize
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -34,8 +33,51 @@ class ExperimentController {
 
     def create() {
         def assay = Assay.get(params.assayId)
+        render renderEditFieldsForView("create", new Experiment(), assay);
+        // renderCreate(assay, new Experiment())
+    }
 
-        renderCreate(assay, new Experiment())
+    def edit() {
+        def experiment = Experiment.get(params.id)
+
+        // renderEdit(experiment, experiment.assay)
+        render renderEditFieldsForView("edit", experiment, experiment.assay);
+    }
+
+//    def renderEdit(Experiment experiment, Assay assay) {
+//        render renderEditFieldsForView("edit", experiment, assay);
+//       // renderEditFieldsView("edit", experiment, assay);
+//    }
+
+//    def renderCreate(Assay assay, Experiment experiment) {
+//        renderEditFieldsView("create", experiment, assay);
+//    }
+
+
+    def experimentStatus() {
+        List<String> sorted = []
+        final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
+        for (ExperimentStatus experimentStatus : experimentStatuses) {
+            sorted.add(experimentStatus.id)
+        }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
+
+    }
+
+    def show() {
+        def experimentInstance = Experiment.get(params.id)
+        if (!experimentInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
+            return
+        }
+
+        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
+
+        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
+        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, editable: editable ? 'canedit' : 'cannotedit']
     }
 
     def editHoldUntilDate(InlineEditableCommand inlineEditableCommand) {
@@ -153,17 +195,7 @@ class ExperimentController {
         }
     }
 
-    def experimentStatus() {
-        List<String> sorted = []
-        final Collection<ExperimentStatus> experimentStatuses = ExperimentStatus.values()
-        for (ExperimentStatus experimentStatus : experimentStatuses) {
-            sorted.add(experimentStatus.id)
-        }
-        sorted.sort()
-        final JSON json = sorted as JSON
-        render text: json, contentType: 'text/json', template: null
 
-    }
 
     def editExperimentStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -186,37 +218,6 @@ class ExperimentController {
         }
     }
 
-    def edit() {
-        def experiment = Experiment.get(params.id)
-
-        renderEdit(experiment, experiment.assay)
-    }
-
-    def renderEdit(Experiment experiment, Assay assay) {
-        renderEditFieldsView("edit", experiment, assay);
-    }
-
-    def renderCreate(Assay assay, Experiment experiment) {
-        renderEditFieldsView("create", experiment, assay);
-    }
-
-    def renderEditFieldsView(String viewName, Experiment experiment, Assay assay) {
-        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
-
-        render(view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree])
-    }
-
-    def update() {
-        def experiment = Experiment.get(params.id)
-        experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
-        if (!experiment.save(flush: true)) {
-            renderEdit(experiment, experiment.assay)
-        } else {
-            redirect(action: "show", id: experiment.id)
-        }
-    }
-
     def save() {
         def assay = Assay.get(params.assayId)
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assay)
@@ -229,10 +230,12 @@ class ExperimentController {
         setEditFormParams(experiment)
         experiment.dateCreated = new Date()
         if (!validateExperiment(experiment)) {
-            renderCreate(assay, experiment)
+            render renderEditFieldsForView("create", experiment, assay);
+            // renderCreate(assay, experiment)
         } else {
             if (!experiment.save(flush: true)) {
-                renderCreate(assay, experiment)
+                render renderEditFieldsForView("create", experiment, assay);
+                //renderCreate(assay, experiment)
             } else {
                 experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
                 redirect(action: "show", id: experiment.id)
@@ -240,6 +243,37 @@ class ExperimentController {
         }
     }
 
+    def update() {
+        def experiment = Experiment.get(params.id)
+        try {
+             experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
+        } catch (AccessDeniedException ade) {
+            log.error("Access denied on update measure", ade)
+            render accessDeniedErrorMessage()
+            return
+        }
+        if (!experiment.save(flush: true)) {
+            // renderEdit(experiment, experiment.assay)
+            render renderEditFieldsForView("edit", experiment, experiment.assay);
+        } else {
+            redirect(action: "show", id: experiment.id)
+        }
+    }
+
+
+
+    private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {
+        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
+        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
+
+        return [view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]]
+    }
+//    def renderEditFieldsView(String viewName, Experiment experiment, Assay assay) {
+//        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
+//        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
+//
+//        render(view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree])
+//    }
     private boolean validateExperiment(Experiment experiment) {
         println "Validating Experiment dates"
 
@@ -275,18 +309,6 @@ class ExperimentController {
 
     }
 
-    def show() {
-        def experimentInstance = Experiment.get(params.id)
-        if (!experimentInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), params.id])
-            return
-        }
 
-        JSON measuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance, false))
-
-        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
-        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, editable: editable ? 'canedit' : 'cannotedit']
-    }
 }
 
