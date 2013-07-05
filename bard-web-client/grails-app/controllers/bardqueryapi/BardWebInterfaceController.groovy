@@ -6,8 +6,8 @@ import bard.core.adapter.AssayAdapter
 import bard.core.adapter.CompoundAdapter
 import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
-import bard.core.rest.spring.util.RingNode
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import grails.converters.JSON
@@ -709,6 +709,7 @@ class BardWebInterfaceController {
                 tableModel.additionalProperties.put("id", id.toString())
                 tableModel.additionalProperties.put("resourceType", resourceType.name())
                 tableModel.additionalProperties.put("smiles", smiles)
+//                session.'cid' =  id.toString()
                 session.'compoundSummary' = tableModel.additionalProperties?.compoundSummary
                 session.'actives' = true
                 session.'inactives' = true
@@ -764,33 +765,26 @@ class BardWebInterfaceController {
             return
         }
 
-           def  compoundSummaryPlusId = [:]
-           def  ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (id, true, true, compoundSummaryPlusId )
-//            root =   ringnodeAndCrossLinks ["RingNode"]
-//            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
-//        }else {
-//            ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
-//            root =   ringnodeAndCrossLinks ["RingNode"]
-//            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+        Map ringnodeAndCrossLinks = [:]
 
-
-
-
-//        LinkedHashMap<String, Object>  compoundSummaryPlusId,Long cid
- //       LinkedVisHierData linkedVisHierData = ringManagerService.generateLinkedData (compoundSummaryPlusId, id)
+        // let's see if we can avoid retrieving the compound summary from the server, because that's slow. Round-trip or not, however,
+        //   we need to fill out  ringnodeAndCrossLinks, since that is used by the rest of the routine
+        if ((session.'compoundSummary') &&
+            (session.'cid')  &&
+            (id.toString() == session.'cid'.toString())) {
+                ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburst (session.'compoundSummary' as CompoundSummary, true, true)
+            }  else { // we need to explicitly retrieve the information for this ID
+                Map compoundSummaryPlusId = [:]
+                ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (id, true, true, compoundSummaryPlusId )
+                // having gone to the trouble of retrieving the compound summary why not save it in case we (or someone else) needs it later?
+                session.'compoundSummary' = compoundSummaryPlusId.'compoundSummary'
+                session.'cid' = compoundSummaryPlusId.'id'
+            }
 
         CompoundSummaryCategorizer compoundSummaryCategorizer =  ringnodeAndCrossLinks ["CompoundSummaryCategorizer"]
-        LinkedVisHierData linkedVisHierData = new LinkedVisHierData(null,null,compoundSummaryCategorizer.createLinkedDataAssaySection(),compoundSummaryCategorizer.createLinkedDataCrossAssaySection())
-        linkedVisHierData.externallyProvidedProteinTargetTree =  ringnodeAndCrossLinks ["RingNode"]
-        RingNode ringNode =  ringnodeAndCrossLinks ["RingNode"]
-        RingNode assayFormatRingNode =  ringnodeAndCrossLinks ["AssayFormatRingNode"]
-        RingNode assayTypeRingNode =  ringnodeAndCrossLinks ["AssayTypeRingNode"]
-        compoundSummaryCategorizer.treeAssayLinker (ringNode)
-        compoundSummaryCategorizer.treeAssayFormatLinker (assayFormatRingNode)
-        compoundSummaryCategorizer.treeAssayTypeLinker (assayTypeRingNode)
-        linkedVisHierData.externallyProvidedProteinTargetTree = '['+ringNode.toString()+']'
-        linkedVisHierData.externallyProvidedAssayFormatTree = '['+assayFormatRingNode.toString()+']'
-        linkedVisHierData.externallyProvidedAssayTypeTree  = '['+assayTypeRingNode.toString()+']'
+        LinkedVisHierData linkedVisHierData = compoundSummaryCategorizer.linkedVisHierDataFactory (ringnodeAndCrossLinks ["RingNode"],
+                ringnodeAndCrossLinks ["AssayFormatRingNode"],
+                ringnodeAndCrossLinks ["AssayTypeRingNode"])
         String assaysSectionJson = linkedVisHierData.createCombinedListing()
         render (assaysSectionJson)
     }

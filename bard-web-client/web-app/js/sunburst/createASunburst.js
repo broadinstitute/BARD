@@ -263,12 +263,21 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         }
     }
 
-
+    /***
+     * When a user clicks on a segment of the expanded sunburst (thus 'zooming in' on a portion of the underlying data hierarchy)
+     *  we need to provide a reset button so that they can later zoom back out. They won't need this button right away, since
+     *  they could zoom back out by clicking on the Sunburst as long as it is expanded. After their current Sunburst is
+     *  contracted, however, then they will need this button.
+     *
+     * @param drillDownName
+     * @param d
+     * @param treeNumber
+     */
     var markDrillDown = function (drillDownName,d,treeNumber){
-        var currentContainer = d3.select('#a4');
+        var currentContainer = d3.select('#a4');// where to put the buttons
         var drillDownId =  'drilldownBut'+treeNumber;
         var drillDownLabel =  currentContainer.select ('#'+drillDownId);
-        if (!(drillDownLabel.empty())) { // there is already a label for this node
+        if (!(drillDownLabel.empty())) { // there is already a button to contract this node
             if (drillDownName === '/') {   // we are in the root remove the name
                 drillDownLabel.remove ();
             } else {
@@ -296,6 +305,8 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
                     .style('pointer-events', 'none')
                     .style('opacity', 0.5)
                     .on('click',function(d){
+                        // the code below is executed when the user clicks the button ( thus requesting that
+                        //  the system undo the zoom in performed by the code above).
                         var drillDownLabel =  currentContainer.select ('#'+drillDownId);
                         linkedVizData.adjustMembershipBasedOnSunburstClick (resetDrillDownName, originalD,originalTreeId);
                         linkedVizData.resetDerivedHierarchyRouteToOriginalRoot (originalTreeId) ;
