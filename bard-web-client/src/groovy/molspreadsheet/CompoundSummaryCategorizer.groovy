@@ -41,7 +41,7 @@ class CompoundSummaryCategorizer {
      */
     public void backPopulateTargetNames( LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber,
                                         LinkedHashMap<String, String> mapAccessionNumberToTargetClassName)  {
-        if ( ( totalContents != null) &&
+        if ( ( totalContents != null) &&  // totalContents != null is strictly a self consistency check -- should never be false.
              ( mapBiologyIdToProteinAscensionNumber != null)  &&
              ( mapAccessionNumberToTargetClassName != null)) {
             totalContents.each{key,value->
@@ -62,7 +62,25 @@ class CompoundSummaryCategorizer {
     }
     }
 
-
+    /***
+     * Put together the different pieces necessary to instantiate a LinkedVisHierData.   Once completed, the LinkedVisHierData
+     * data structure is all you need to build the Linked Hierarchy Visualization.
+     *
+     * @param proteinClassRingNode
+     * @param assayFormatRingNode
+     * @param assayTypeRingNode
+     * @return
+     */
+    LinkedVisHierData linkedVisHierDataFactory(RingNode proteinClassRingNode,RingNode assayFormatRingNode,RingNode assayTypeRingNode )  {
+        LinkedVisHierData linkedVisHierData = new LinkedVisHierData(null,null,createLinkedDataAssaySection(),createLinkedDataCrossAssaySection())
+        treeAssayLinker (proteinClassRingNode)
+        treeAssayFormatLinker (assayFormatRingNode)
+        treeAssayTypeLinker (assayTypeRingNode)
+        linkedVisHierData.externallyProvidedProteinTargetTree = '['+proteinClassRingNode.toString()+']'
+        linkedVisHierData.externallyProvidedAssayFormatTree = '['+assayFormatRingNode.toString()+']'
+        linkedVisHierData.externallyProvidedAssayTypeTree  = '['+assayTypeRingNode.toString()+']'
+        return  linkedVisHierData
+    }
 
 
 
@@ -123,7 +141,7 @@ class CompoundSummaryCategorizer {
         }  else {
             SingleEidSummary singleEidSummary = totalContents[eid]
             int proteinTargetIndex = deriveProteinTargetIndex (proteinTarget)
-            if (!singleEidSummary.proteinTargetsIndexList.contains(proteinTargetIndex))
+            if (!singleEidSummary.proteinTargetsIndexList.contains(proteinTargetIndex))// Strictly a self consistency check -- should never be false.
                 singleEidSummary.proteinTargetsIndexList <<  proteinTargetIndex
         }
 
@@ -136,7 +154,7 @@ class CompoundSummaryCategorizer {
         }  else {
             SingleEidSummary singleEidSummary = totalContents[eid]
             int biologicalProcessIndex = deriveBiologicalProcessIndex (biologicalProcess)
-            if (!singleEidSummary.biologicalProcessIndexList.contains(biologicalProcessIndex))
+            if (!singleEidSummary.biologicalProcessIndexList.contains(biologicalProcessIndex))// Strictly a self consistency check -- should never be false.
                 singleEidSummary.biologicalProcessIndexList <<  biologicalProcessIndex
         }
 
@@ -223,6 +241,22 @@ class CompoundSummaryCategorizer {
         return stringBuilder.toString()
     }
 
+
+
+    /***
+     * This method goes back into a rotein class tree that has been otherwise fully formed and maps protein class
+     * the nodes to particular assays. The mapping is done on the basis of a name match.
+     * To simplify the handling of multiple matches this process is handled in three steps:
+     * 1) First identify every assay format That we will be matching against. Put these in a map
+     * 2) Second, take that map and invert it, so that we end up with unique names matched against
+     * lists of assay numbers
+     * 3) Finally take our hierarchical data structure and recursively descend, assigning to each node
+     * as we go the lists we had previously developed in step two
+     *
+     * @param ringNode
+     * @return
+     */
+
    public RingNode treeAssayLinker(RingNode ringNode) {
        List<Long> allKeys=this.totalContents*.key.toList().sort()
        // First we make a map from every assay index to its protein class name
@@ -249,10 +283,19 @@ class CompoundSummaryCategorizer {
        return descendAndLink ( ringNode,mapProteinClassNameToAssayIndex )
    }
 
-
-
-
-
+    /***
+     * This method goes back into an assay format tree that has been otherwise fully formed and maps
+     * the nodes to particular assays. The mapping is done on the basis of a name match.
+     * To simplify the handling of multiple matches this process is handled in three steps:
+     * 1) First identify every assay format That we will be matching against. Put these in a map
+     * 2) Second, take that map and invert it, so that we end up with unique names matched against
+     * lists of assay numbers
+     * 3) Finally take our hierarchical data structure and recursively descend, assigning to each node
+     * as we go the lists we had previously developed in step two
+     *
+     * @param ringNode
+     * @return
+     */
     public RingNode treeAssayFormatLinker(RingNode ringNode) {
         List<Long> allKeys=this.totalContents*.key.toList().sort()
         // First we make a map from every assay index to its protein class name
@@ -283,6 +326,19 @@ class CompoundSummaryCategorizer {
 
 
 
+    /***
+     * This method goes back into an assay Type tree that has been otherwise fully formed and maps
+     * the nodes to particular assays. The mapping is done on the basis of a name match.
+     * To simplify the handling of multiple matches this process is handled in three steps:
+     * 1) First identify every assay format That we will be matching against. Put these in a map
+     * 2) Second, take that map and invert it, so that we end up with unique names matched against
+     * lists of assay numbers
+     * 3) Finally take our hierarchical data structure and recursively descend, assigning to each node
+     * as we go the lists we had previously developed in step two
+     *
+     * @param ringNode
+     * @return
+     */
     public RingNode treeAssayTypeLinker(RingNode ringNode) {
         List<Long> allKeys=this.totalContents*.key.toList().sort()
         // First we make a map from every assay index to its protein class name
