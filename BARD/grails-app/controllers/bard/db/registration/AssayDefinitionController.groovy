@@ -445,13 +445,15 @@ class EditingHelper {
 
     boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
         final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+        if(isAdmin){
+            return true
+        }
 
         def auth = springSecurityService?.authentication
 
-        final boolean hasPermission = permissionEvaluator?.hasPermission(auth, domainInstance, BasePermission.ADMINISTRATION)
+        Class<?> clazz = org.springframework.util.ClassUtils.getUserClass(domainInstance.getClass());
 
-        return isAdmin || hasPermission
-
+        return permissionEvaluator?.hasPermission(auth, domainInstance.id,clazz.name,BasePermission.ADMINISTRATION)
     }
 
     def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
