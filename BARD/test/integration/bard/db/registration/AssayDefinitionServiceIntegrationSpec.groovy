@@ -5,12 +5,9 @@ import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclSid
 import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.hibernate.SessionFactory
 import org.junit.Before
-import org.springframework.security.acls.model.Sid
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 /**

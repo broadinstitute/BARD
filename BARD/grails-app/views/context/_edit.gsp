@@ -30,7 +30,7 @@
                 </div>
             </div>
             <input type="hidden" id="new_card_section" name="cardSection" value=""/>
-            <input type="hidden" name="ownerId" value="${contextOwner.id}"/>
+            <input type="hidden" name="ownerId" value="${contextOwner?.id}"/>
             <input type="hidden" name="contextClass" value="${contextOwner instanceof Assay ? 'AssayContext' : 'ProjectContext'}"/>
         </form>
     </div>

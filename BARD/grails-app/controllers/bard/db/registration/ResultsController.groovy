@@ -75,7 +75,7 @@ class ResultsController {
         Experiment experiment = Experiment.get(params.experimentId)
         MultipartFile f = request.getFile('resultsFile')
 
-        ResultsService.ImportSummary summary = resultsService.importResults(experiment.id, f.inputStream)
+        ResultsService.ImportSummary summary = resultsService.importRxesults(experiment.id, f.inputStream)
 
         [summary: summary, experiment: experiment]
     }

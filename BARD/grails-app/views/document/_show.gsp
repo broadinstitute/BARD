@@ -1,7 +1,7 @@
 <%@ page import="bard.db.enums.DocumentType" %>
 <dl class="dl-horizontal">
-    <div id="document-${document.id}">
-        <g:form action="delete" controller="document" id="${document.id}" onsubmit="confirm('Are you sure you wish to delete the document?')">
+    <div id="document-${document?.id}">
+        <g:form action="delete" controller="document" id="${document?.id}" onsubmit="confirm('Are you sure you wish to delete the document?')">
             %{--<g:link action="edit" controller="document" class="btn btn-primary" id="${document.id}">Edit</g:link>--}%
             %{--<input type="submit" value="Delete" class="btn btn-primary">--}%
         </g:form>
@@ -11,13 +11,13 @@
 
     <dt><g:message code="document.content.label" default="Content:"/></dt>
     <dd>
-        <g:if test="${document.documentType in [DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, DocumentType.DOCUMENT_TYPE_PUBLICATION]}">
-            <a href="${document.documentContent}">
+        <g:if test="${document?.documentType in [DocumentType.DOCUMENT_TYPE_EXTERNAL_URL, DocumentType.DOCUMENT_TYPE_PUBLICATION]}">
+            <a href="${document?.documentContent}">
                 <g:fieldValue bean="${document}" field="documentContent"/>
             </a>
         </g:if>
         <g:else>
-            <g:renderWithBreaks text="${document.documentContent}"/>
+            <g:renderWithBreaks text="${document?.documentContent}"/>
         </g:else>
     </dd>
 </dl>

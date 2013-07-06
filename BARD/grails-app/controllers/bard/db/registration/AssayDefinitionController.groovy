@@ -446,7 +446,6 @@ class EditingHelper {
 
     boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
 
-        Class<?> clazz = org.springframework.util.ClassUtils.getUserClass(domainInstance.getClass());
         final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
         if(isAdmin){
             return true

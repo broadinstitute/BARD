@@ -21,6 +21,7 @@ import grails.test.mixin.support.GrailsUnitTestMixin
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 
@@ -632,13 +633,14 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         when:
         params.stageId = stage1.id
-        request.setParameter('selectedExperiments[]', projectExperimentFrom.experiment.id + "-experiment name")
-        params.projectid = project.id
+        request.setParameter('selectedExperiments[]', "200-experiment name")
+        params.projectId = project.id
         controller.projectService = projectService
 
         controller.associateExperimentsToProject()
 
         then:
+        println(response.text)
         assert response.text.startsWith('serviceError')
     }
 
@@ -711,19 +713,19 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text.contains(ex.displayName)
     }
 
-    void 'test showEditSummary'() {
-        given:
-        views['/project/_editSummary.gsp'] = 'mock editSummary page'
-
-        when:
-        params.instanceId = project.id
-        controller.projectService = projectService
-
-        controller.showEditSummary(params.instanceId)
-
-        then:
-        assert response.text == 'mock editSummary page'
-    }
+//    void 'test showEditSummary'() {
+//        given:
+//        views['/project/_editSummary.gsp'] = 'mock editSummary page'
+//
+//        when:
+//        params.instanceId = project.id
+//        controller.projectService = projectService
+//
+//        controller.showEditSummary(params.instanceId)
+//
+//        then:
+//        assert response.text == 'mock editSummary page'
+//    }
 
     void 'test findById'() {
         when:

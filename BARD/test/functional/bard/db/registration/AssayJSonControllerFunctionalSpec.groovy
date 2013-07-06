@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
 @Unroll
 class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
 
-    static final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "BARD/assayJSon/"
+    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "assayJSon/"
     @Shared
     Map assayData
 
@@ -44,19 +44,19 @@ class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
         })
     }     // run before the first feature method
     def cleanupSpec() {
-        if (assayData?.ids) {
-            def sql = Sql.newInstance(dburl, dbusername,
-                    dbpassword, driverClassName)
-            sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
-            for (Long id : assayData.ids) {
-                sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${id}")
-            }
+
+        def sql = Sql.newInstance(dburl, dbusername,
+                dbpassword, driverClassName)
+        sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
+        for (Long id : assayData.ids) {
+            sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${id}")
         }
+
     }
 
     def 'test index #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"index", team, teamPassword)
+        RESTClient client = getRestClient(baseUrl, "index", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -73,7 +73,7 @@ class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test getNames #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"", team, teamPassword)
+        RESTClient client = getRestClient(baseUrl, "", team, teamPassword)
 
         when:
         final Response response = client.get(path: '/getNames', query: [term: assayData.shortName, include_entities: true])

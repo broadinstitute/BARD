@@ -31,7 +31,7 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
 ]
 
 //Default server url
-grails.serverURL = "http://localhost:8081/"
+tests.server.url = "http://localhost:8081/BARD/"
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 
@@ -136,7 +136,11 @@ grails {
             basic.realmName = 'CAP'
             filterChain.chainMap = [
 //                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                    '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                     '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',

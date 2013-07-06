@@ -2,15 +2,15 @@ package bard.db.dictionary
 
 import bard.db.audit.BardContextUtils
 import bard.db.dictionary.ElementStatus as ES
-import static bard.db.enums.ExpectedValueType.*
 import grails.plugin.spock.IntegrationSpec
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.Session
 import org.hibernate.SessionFactory
-import spock.lang.IgnoreRest
 import spock.lang.Unroll
 
 import static bard.db.dictionary.ElementStatus.*
+import static bard.db.enums.ExpectedValueType.NONE
+import static bard.db.enums.ExpectedValueType.NUMERIC
 
 /**
  * Created with IntelliJ IDEA.

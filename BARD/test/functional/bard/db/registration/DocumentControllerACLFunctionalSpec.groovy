@@ -30,11 +30,14 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "BARD/document/"
+    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "document/"
 
     @Shared
     Map documentData
-
+    @Shared
+    List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
+    @Shared
+    List<Long> projectIdList = []
 
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
@@ -66,7 +69,8 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             //create assay context
             return [assayId: assay.id, projectId: project.id, assayDocumentId: assayDocument.id, projectDocumentId: projectDocument.id]
         })
-
+        assayIdList.add(documentData.assayId)
+        projectIdList.add(documentData.projectId)
 
     }     // run before the first feature method
     def cleanupSpec() {
@@ -80,7 +84,8 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         sql.execute("DELETE FROM PROJECT_DOCUMENT WHERE PROJECT_ID=${documentData.projectId}")
         sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${documentData.assayId}")
         sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${documentData.assayId}")
-        sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${documentData.projectId}")
+        sql.execute("DELETE FROM PROJECT WHERE PROJECT_ID=${documentData.projectId}")
+
 
     }
 
@@ -98,6 +103,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
             return [projectId: project.id, projectDocumentId: projectDocument.id]
         })
+
     }
 
     Map createAssayDocument() {

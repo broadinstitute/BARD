@@ -34,11 +34,13 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "BARD/experiment/"
+    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "experiment/"
 
     @Shared
     Map experimentData
 
+    @Shared
+    List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
 
     def setupSpec() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
@@ -63,19 +65,33 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
             Experiment experiment = Experiment.build(assay: assay).save(flush: true)
             return [id: experiment.id, experimentName: experiment.experimentName, assayName: assay.assayName, assayId: assay.id]
         })
+        assayIdList.add(experimentData.assayId)
 
 
     }     // run before the first feature method
     def cleanupSpec() {
-        if (experimentData?.id) {
-            Sql sql = Sql.newInstance(dburl, dbusername,
-                    dbpassword, driverClassName)
-            sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
 
+        Sql sql = Sql.newInstance(dburl, dbusername,
+                dbpassword, driverClassName)
+        sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
+        if (experimentData?.id) {
             sql.execute("DELETE FROM EXPRMT_CONTEXT WHERE EXPERIMENT_ID=${experimentData.id}")
             sql.execute("DELETE FROM EXPRMT_MEASURE WHERE EXPERIMENT_ID=${experimentData.id}")
             sql.execute("DELETE FROM EXPERIMENT WHERE EXPERIMENT_ID=${experimentData.id}")
         }
+
+        for (Long assayId : assayIdList) {
+
+            sql.eachRow('select ASSAY_CONTEXT_ID from ASSAY_CONTEXT WHERE ASSAY_ID=:currentAssayId', [currentAssayId: assayId]) { row ->
+                sql.execute("DELETE FROM ASSAY_CONTEXT_ITEM WHERE ASSAY_CONTEXT_ID=${row.ASSAY_CONTEXT_ID}")
+            }
+
+            sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
+            sql.execute("DELETE FROM MEASURE WHERE ASSAY_ID=${assayId}")
+            sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
+        }
+
+
     }
 
     def 'test create #desc'() {
@@ -536,8 +552,9 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         "User B cannot Edit"  | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
         "CURATOR cannot Edit" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
     }
+
     private Map getCurrentExperimentProperties() {
-        long id = (Long)experimentData.id
+        long id = (Long) experimentData.id
         Map currentDataMap = (Map) remote.exec({
             Experiment experiment = Experiment.findById(id)
             return [experimentName: experiment.experimentName, version: experiment.version, experimentStatus: experiment.experimentStatus.id]

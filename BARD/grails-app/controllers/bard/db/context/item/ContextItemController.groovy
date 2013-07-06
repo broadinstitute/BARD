@@ -93,29 +93,19 @@ class ContextItemController {
             AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
             AbstractContextOwner owningContext = context.owner
             if (owningContext instanceof Assay) {
-                return contextService.updatePreferredAssayContextName(((Assay) owningContext).id, context, command.value)
+                return contextService.updatePreferredAssayContextName(owningContext.id, context, command.value)
             }
             if (owningContext instanceof Experiment) {
-                return contextService.updatePreferredExperimentContextName(((Experiment) owningContext).id, context, command.value)
+                return contextService.updatePreferredExperimentContextName(owningContext.id, context, command.value)
             }
             if (owningContext instanceof Project) {
-                return contextService.updatePreferredProjectContextName(((Project) owningContext).id, context, command.value)
+                return contextService.updatePreferredProjectContextName(owningContext.id, context, command.value)
             }
 
             return context.preferredName
         }
     }
-    //This does not seem to be called from anywhere
-    def deleteContext(DeleteContextCommand command) {
-        AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
-        AbstractContextOwner owningContext = context.owner
-        if (owningContext instanceof Assay) {
-            contextService.deleteAssayContext(((Assay) owningContext).id,owningContext, context)
-        }
-        if (owningContext instanceof Project) {
-            contextService.deleteProjectContext(((Project)owningContext).id,owningContext, context)
-        }
-    }
+
 
     private Object attemptUpdate(Closure body) {
         try {

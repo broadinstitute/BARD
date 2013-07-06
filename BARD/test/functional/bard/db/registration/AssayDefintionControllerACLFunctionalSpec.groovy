@@ -34,10 +34,12 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL } + "BARD/assayDefinition/"
+    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "assayDefinition/"
 
     @Shared
     Map assayData
+    @Shared
+    List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
 
 
     def setupSpec() {
@@ -89,6 +91,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             return [id: assay.id, assayName: assay.assayName, assayContextId: context.id,
                     measureId: childMeasure.id, parentMeasureId: parentMeasure.id]
         })
+        assayIdList.add(assayData.id)
 
 
     }     // run before the first feature method
