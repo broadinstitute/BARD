@@ -11,19 +11,30 @@ import groovy.transform.InheritConstructors
 
 @Secured(["hasRole('ROLE_BARD_ADMINISTRATOR')"])
 class PersonController {
-    def index() { redirect action: "list" }
+    def index() {
+        redirect action: "list"
+    }
 
     def list() {
         final List<Person> people = []
         params.max = Math.min(params.max ? params.int('max') : 100, 200)
         people.addAll(Person.list(params))
-        return [people: people, roles: Role.all, peopleTotal: Person.count(), personCommand: new PersonCommand()]
+        return [
+                people: people, roles: Role.all,
+                peopleTotal: Person.count(),
+                personCommand: new PersonCommand()
+        ]
     }
 
     def edit() {
         Person person = Person.get(params.id)
         PersonCommand personCommand = new PersonCommand(person)
-        return [person: person, roles: Role.all, personCommand: personCommand]
+        return
+        [
+                person: person,
+                roles: Role.all,
+                personCommand: personCommand
+        ]
     }
 
     def save(PersonCommand personCommand) {
@@ -36,7 +47,7 @@ class PersonController {
         final Person person = personCommand.createNewPerson()
         if (!person) {
             flash.message = "Person not successfully added. Try again"
-        }else{
+        } else {
             flash.message = "Person successfully added"
         }
         redirect action: "list"
@@ -70,20 +81,22 @@ class PersonCommand extends BardCommand {
     }
 
     static constraints = {
-        username blank: false, nullable: false, validator: { value, command ->
-            if (value) {
-                if (Person.findByUserName(value)) {
-                    return 'registerCommand.username.unique'
+        username blank: false, nullable: false,
+                validator: { value, command ->
+                    if (value) {
+                        if (Person.findByUserName(value)) {
+                            return 'registerCommand.username.unique'
+                        }
+                    }
                 }
-            }
-        }
-        email blank: false, nullable: false, email: true, validator: { value, command ->
-            if (value) {
-                if (Person.findByEmailAddress(value)) {
-                    return 'registerCommand.email.unique'
+        email blank: false, nullable: false, email: true,
+                validator: { value, command ->
+                    if (value) {
+                        if (Person.findByEmailAddress(value)) {
+                            return 'registerCommand.email.unique'
+                        }
+                    }
                 }
-            }
-        }
         displayName blank: false, nullable: false
         primaryGroup nullable: false
     }
@@ -108,7 +121,7 @@ class PersonCommand extends BardCommand {
         }
         for (Role role : this.roles) {
             if (role != primaryGroup) {
-                PersonRole.create(person, role, springSecurityService.principal?.username, true)
+                PersonRole.create(person, Role.findByAuthority(role.authority), springSecurityService.principal?.username, true)
             }
         }
     }
@@ -124,24 +137,15 @@ class PersonCommand extends BardCommand {
         } else {
             copyFromCmdToDomain(person)
             person = person.save(flush: true)
-            //delete all the roles,then add them again
-            final List<PersonRole> existingPersonRoles = PersonRole.findAllByPerson(person)
-            roles.add(this.primaryGroup)
 
-            for (PersonRole personRole : existingPersonRoles) {
-                if (roles.contains(personRole.role)) {
-                    roles.removeAll(personRole.role)
-                }
-            }
+            roles.add(this.primaryGroup)
+            //delete all the roles,then add them again
+            PersonRole.removeAll(person)
+            person = person.save(flush: true)
             if (roles) {
                 addPersonRoles(person)
             }
-            //   person = Person.findByUserName(this.username)
-
-
         }
-
-
         return person
     }
 
@@ -149,7 +153,7 @@ class PersonCommand extends BardCommand {
         person.userName = this.username
         person.emailAddress = this.email
         person.fullName = this.displayName
-        person.newObjectRole = primaryGroup
+        person.newObjectRole = Role.findByAuthority(primaryGroup.authority)
     }
 
     void copyFromDomainToCmd(Person person) {
