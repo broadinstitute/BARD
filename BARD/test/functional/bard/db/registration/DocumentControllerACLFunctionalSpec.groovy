@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "document/"
+    static final String controllerUrl = baseUrl + "document/"
 
     @Shared
     Map documentData
@@ -127,7 +127,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map currentData = (Map) createProjectDocument()
         long projectDocumentId = currentData.projectDocumentId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -146,7 +146,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Map currentData = (Map) createProjectDocument()
         long projectDocumentId = currentData.projectDocumentId
 
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
 
         when:
         client.post() {
@@ -166,7 +166,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map currentData = (Map) createAssayDocument()
         long assayDocumentId = currentData.assayDocumentId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -185,7 +185,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Map currentData = (Map) createAssayDocument()
         long assayDocumentId = currentData.assayDocumentId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
 
         when:
         response = client.post() {
@@ -205,7 +205,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test create Project Document #desc'() {
         given:
         long projectId = documentData.projectId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -223,7 +223,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test create Project Document #forbidden'() {
         given:
         long projectId = documentData.projectId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
 
         when:
         client.post() {
@@ -243,7 +243,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test save Project Document #desc'() {
         given:
         long projectId = documentData.projectId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -261,7 +261,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test save Project Document #forbidden'() {
         given:
         long projectId = documentData.projectId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
 
         when:
         client.post() {
@@ -283,7 +283,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map projectDocumentProperties = getCurrentProjectDocumentProperties()
         long projectId = documentData.projectId
         long projectDocumentId = documentData.projectDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocumentName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocumentName", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -305,7 +305,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map projectDocumentProperties = getCurrentProjectDocumentProperties()
         long projectId = documentData.projectId
         long projectDocumentId = documentData.projectDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocumentName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocumentName", team, teamPassword)
 
         when:
         client.post() {
@@ -330,7 +330,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map projectDocumentProperties = getCurrentProjectDocumentProperties()
         long projectId = documentData.projectId
         long projectDocumentId = documentData.projectDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocument", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocument", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -352,7 +352,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map projectDocumentProperties = getCurrentProjectDocumentProperties()
         long projectId = documentData.projectId
         long projectDocumentId = documentData.projectDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocument", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocument", team, teamPassword)
 
         when:
         client.post() {
@@ -375,7 +375,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test create Assay Document #desc'() {
         given:
         long assayId = documentData.assayId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -393,7 +393,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test create Assay Document #forbidden'() {
         given:
         long assayId = documentData.assayId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
 
         when:
         client.post() {
@@ -413,7 +413,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test save Assay Document #desc'() {
         given:
         long assayId = documentData.assayId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -431,7 +431,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test save Assay Document #forbidden'() {
         given:
         long assayId = documentData.assayId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
 
         when:
         client.post() {
@@ -453,7 +453,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map assayDocumentProperties = getCurrentAssayDocumentProperties()
         long assayId = documentData.assayId
         long assayDocumentId = documentData.assayDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocument", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocument", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -476,7 +476,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map assayDocumentProperties = getCurrentAssayDocumentProperties()
         long assayId = documentData.assayId
         long assayDocumentId = documentData.assayDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocument", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocument", team, teamPassword)
 
         when:
         client.post() {
@@ -500,7 +500,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map assayDocumentProperties = getCurrentAssayDocumentProperties()
         long assayId = documentData.assayId
         long assayDocumentId = documentData.assayDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocumentName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocumentName", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -522,7 +522,7 @@ class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         final Map assayDocumentProperties = getCurrentAssayDocumentProperties()
         long assayId = documentData.assayId
         long assayDocumentId = documentData.assayDocumentId
-        RESTClient client = getRestClient(baseUrl, "editDocumentName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDocumentName", team, teamPassword)
 
         when:
         client.post() {

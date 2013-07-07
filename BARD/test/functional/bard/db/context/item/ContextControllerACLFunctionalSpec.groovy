@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "context/"
+    static final String controllerUrl = baseUrl +  "context/"
 
     @Shared
     Map contextData
@@ -73,7 +73,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         String contextClass = 'AssayContext'
         String section = "biology"
-        RESTClient client = getRestClient(baseUrl, "deleteEmptyCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "deleteEmptyCard", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -95,7 +95,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         String contextClass = 'ProjectContext'
         String section = "biology"
-        RESTClient client = getRestClient(baseUrl, "deleteEmptyCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "deleteEmptyCard", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -117,7 +117,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         String contextClass = 'AssayContext'
         String section = "biology"
-        RESTClient client = getRestClient(baseUrl, "deleteEmptyCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "deleteEmptyCard", team, teamPassword)
 
         when:
         response = client.post() {
@@ -141,7 +141,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         String contextClass = 'ProjectContext'
         String section = "biology"
-        RESTClient client = getRestClient(baseUrl, "deleteEmptyCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "deleteEmptyCard", team, teamPassword)
 
         when:
         response = client.post() {
@@ -164,7 +164,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         String contextClass = "ProjectContext"
         String cardName = "My Card Name"
         String cardSection = "Biology"
-        RESTClient client = getRestClient(baseUrl, "createCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "createCard", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -184,7 +184,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         String contextClass = "ProjectContext"
         String cardName = "My Card Name"
         String cardSection = "Biology"
-        RESTClient client = getRestClient(baseUrl, "createCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "createCard", team, teamPassword)
 
         when:
         client.post() {
@@ -203,7 +203,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def "test create Assay Context Card #desc"() {
         given:
-        RESTClient client = getRestClient(baseUrl, "createCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "createCard", team, teamPassword)
         String contextClass = "AssayContext"
         Long ownerId = contextData.assayId
         String cardName = "My Card Name"
@@ -223,7 +223,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test create Assay Context Card #forbidden'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "createCard", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "createCard", team, teamPassword)
         String contextClass = "AssayContext"
         Long ownerId = contextData.assayId
         String cardName = "My Card Name"

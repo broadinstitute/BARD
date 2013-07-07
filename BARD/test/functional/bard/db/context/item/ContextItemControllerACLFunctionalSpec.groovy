@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "contextItem/"
+    static final String controllerUrl = baseUrl + "contextItem/"
 
     @Shared
     Map contextItemData
@@ -127,7 +127,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
 
     def 'test index #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "index", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "index", team, teamPassword)
 
         when:
         client.get()
@@ -145,7 +145,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
 
     def 'test edit Assay Context Item #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
         String contextClass = "AssayContext"
         Long contextItemId = contextItemData.assayContextItemId
         when:
@@ -165,7 +165,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
 
     def 'test edit Project Context Item #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
         String contextClass = "ProjectContext"
         Long contextItemId = contextItemData.projectContextItemId
         when:
@@ -188,7 +188,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         Long contextId = contextItemData.assayContextId
         String contextClass = "AssayContext"
         Long contextOwnerId = contextItemData.assayId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
         when:
         def response = client.post() {
             urlenc contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId
@@ -268,7 +268,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "ProjectContext"
         Long contextOwnerId = currentItem.projectId
         Long contextItemId = currentItem.projectContextItemId
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
         when:
         def response = client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -290,7 +290,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "ProjectContext"
         Long contextOwnerId = currentItem.assayId
         Long contextItemId = currentItem.projectContextItemId
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
         when:
         response = client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -317,7 +317,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "AssayContext"
         Long contextOwnerId = currentItem.assayId
         Long contextItemId = currentItem.assayContextItemId
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
         when:
         def response = client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -339,7 +339,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "AssayContext"
         Long contextOwnerId = currentItem.assayId
         Long contextItemId = currentItem.assayContextItemId
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
         when:
         response = client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -366,7 +366,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "ProjectContext"
         Long contextOwnerId = currentItem.projectId
         Long contextItemId = currentItem.projectContextItemId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
         when:
         def response = client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -388,7 +388,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "ProjectContext"
         Long contextOwnerId = currentItem.assayId
         Long contextItemId = currentItem.projectContextItemId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
         when:
         client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -415,7 +415,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "AssayContext"
         Long contextOwnerId = currentItem.assayId
         Long contextItemId = currentItem.assayContextItemId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
         when:
         def response = client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -437,7 +437,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         String contextClass = "AssayContext"
         Long contextOwnerId = currentItem.assayId
         Long contextItemId = currentItem.assayContextItemId
-        RESTClient client = getRestClient(baseUrl, "delete", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "delete", team, teamPassword)
         when:
         client.post() {
             urlenc attributeElementId: currentItem.attributeElementId, contextItemId: contextItemId, contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId, version: currentItem.version
@@ -461,7 +461,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         final Map currentItem = createAssayContextItem()
         Long contextId = currentItem.contextId
         String contextClass = "AssayContext"
-        RESTClient client = getRestClient(baseUrl, "updatePreferredName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         client.post() {
             urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
@@ -483,7 +483,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         final Map currentItem = createProjectContextItem()
         Long contextId = currentItem.contextId
         String contextClass = "ProjectContext"
-        RESTClient client = getRestClient(baseUrl, "updatePreferredName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         def response = client.post() {
             urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
@@ -502,7 +502,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         final Map currentItem = createProjectContextItem()
         Long contextId = currentItem.contextId
         String contextClass = "ProjectContext"
-        RESTClient client = getRestClient(baseUrl, "updatePreferredName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         client.post() {
             urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
@@ -523,7 +523,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         final Map currentItem = createAssayContextItem()
         Long contextId = currentItem.contextId
         String contextClass = "AssayContext"
-        RESTClient client = getRestClient(baseUrl, "updatePreferredName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         def response = client.post() {
             urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
@@ -545,7 +545,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         Long contextId = contextItemData.assayContextId
         String contextClass = "AssayContext"
         Long contextOwnerId = contextItemData.assayId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
         when:
 
         client.post() {
@@ -567,7 +567,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         Long contextId = contextItemData.projectContextId
         String contextClass = "ProjectContext"
         Long contextOwnerId = contextItemData.projectId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
         when:
         def response = client.post() {
             urlenc contextClass: contextClass, contextOwnerId: contextOwnerId, contextId: contextId
@@ -586,7 +586,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         Long contextId = contextItemData.projectContextId
         String contextClass = "ProjectContext"
         Long contextOwnerId = contextItemData.projectId
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
         when:
 
         client.post() {
@@ -608,7 +608,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         Long contextId = contextItemData.projectContextId
         String contextClass = "ProjectContext"
         Long contextOwnerId = contextItemData.projectId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
 
         client.post() {
@@ -630,7 +630,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         Long contextId = contextItemData.assayContextId
         String contextClass = "AssayContext"
         Long contextOwnerId = contextItemData.assayId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
 
         client.post() {
@@ -655,7 +655,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
 
         String contextClass = "AssayContext"
 
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
 
         Response response = client.post() {
@@ -679,7 +679,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         def valueNum = 0.1234567
 
         String contextClass = "ProjectContext"
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
 
         Response response = client.post() {

@@ -31,7 +31,10 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
 ]
 
 //Default server url
-tests.server.url = "http://localhost:8081/BARD/"
+
+
+server.port = System.properties.getProperty('server.port') ?: 8081
+grails.serverURL = "http://localhost:${server.port}/BARD/"
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 

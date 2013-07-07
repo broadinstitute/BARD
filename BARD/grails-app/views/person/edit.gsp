@@ -25,13 +25,13 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span12">
-                <g:form action="update" class="form-horizontal" id="${personCommand.username}">
-                    <g:hiddenField name="version" value="${personCommand.version}"/>
+                <g:form action="update" class="form-horizontal" id="${personCommand?.username}">
+                    <g:hiddenField name="version" value="${personCommand?.version}"/>
                     <div class="control-group">
                         <label class="control-label" for="userName">Username</label>
 
                         <div class="controls">
-                            <g:textField id="userName" name="username" value="${personCommand.username}"
+                            <g:textField id="userName" name="username" value="${personCommand?.username}"
                                          readonly="true"/>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                         <label class="control-label" for="fullName">Full name</label>
 
                         <div class="controls">
-                            <g:textField id="fullName" name="displayName" value="${personCommand.displayName}"/>
+                            <g:textField id="fullName" name="displayName" value="${personCommand?.displayName}"/>
                         </div>
                     </div>
 
@@ -48,7 +48,7 @@
                         <label class="control-label" for="emailAddress">Email</label>
 
                         <div class="controls">
-                            <input type="email" id="emailAddress" name="email" value="${personCommand.email}"/>
+                            <input type="email" id="emailAddress" name="email" value="${personCommand?.email}"/>
                         </div>
                     </div>
 
@@ -88,6 +88,6 @@
         </div>
     </div>
 </sec:ifAnyGranted>
-    </body>
+</body>
 
 </html>

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "element/"
+    static final String controllerUrl = baseUrl +  "element/"
 
     @Shared
     Map elementData
@@ -101,7 +101,7 @@ class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test edit #desc - forbidden'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
 
         when:
         client.get()
@@ -118,7 +118,7 @@ class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test edit #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -132,7 +132,7 @@ class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test update #desc - forbidden'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
 
         when:
         client.post() {
@@ -152,7 +152,7 @@ class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test update #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
         String newPathString = "a/b/c"
         when:
         final Response response = client.post() {
@@ -168,7 +168,7 @@ class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test list #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "list", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "list", team, teamPassword)
 
         when:
         final Response response = client.get()

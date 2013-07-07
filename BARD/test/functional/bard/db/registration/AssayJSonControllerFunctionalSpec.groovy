@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
 @Unroll
 class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
 
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "assayJSon/"
+    static final String controllerUrl = baseUrl +  "assayJSon/"
     @Shared
     Map assayData
 
@@ -56,7 +56,7 @@ class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test index #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "index", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "index", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -73,7 +73,7 @@ class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test getNames #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "", team, teamPassword)
 
         when:
         final Response response = client.get(path: '/getNames', query: [term: assayData.shortName, include_entities: true])

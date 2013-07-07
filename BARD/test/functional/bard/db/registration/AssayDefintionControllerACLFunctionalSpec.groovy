@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "assayDefinition/"
+    static final String controllerUrl = baseUrl +  "assayDefinition/"
 
     @Shared
     Map assayData
@@ -109,7 +109,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test index #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"index", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"index", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -126,7 +126,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test reloadCardHolder #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"", team, teamPassword)
 
         when:
         final Response response = client.get(path: '/reloadCardHolder', query: [assayId: assayData.id, include_entities: true])
@@ -144,7 +144,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test show #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"show/${assayData.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"show/${assayData.id}", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -169,7 +169,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test editMeasure #desc'() {
         given:
         long assayId = assayData.id
-        RESTClient client = getRestClient(baseUrl,"editMeasure/${assayId}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editMeasure/${assayId}", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -195,7 +195,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long assayId = assayData.id
         String sectionKey = AbstractContextOwner.SECTION_BIOLOGY
-        RESTClient client = getRestClient(baseUrl,"editContext", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editContext", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -219,7 +219,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test findById #desc'() {
         given:
 
-        RESTClient client = getRestClient(baseUrl,"findById/${assayData.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"findById/${assayData.id}", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -239,7 +239,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test cloneAssay #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"cloneAssay/${assayData.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"cloneAssay/${assayData.id}", team, teamPassword)
         when:
         final Response response = client.get()
 
@@ -259,7 +259,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test assayTypes #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"assayTypes", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"assayTypes", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -281,7 +281,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test assayStatus #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"assayStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"assayStatus", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -304,7 +304,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test findByName #desc'() {
         given:
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"findByName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"findByName", team, teamPassword)
         String assayName = currentDataMap.assayName
         when:
 
@@ -330,7 +330,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editDesignedBy", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editDesignedBy", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldDesignedBy = currentDataMap.designedBy
@@ -356,7 +356,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test associate context #desc'() {
         given:
         long id = assayData.id
-        RESTClient client = getRestClient(baseUrl,"associateContext", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"associateContext", team, teamPassword)
         long measureId = assayData.measureId
         long assayContextId = assayData.assayContextId
         when:
@@ -378,7 +378,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test associate context #forbidden'() {
         given:
         long id = assayData.id
-        RESTClient client = getRestClient(baseUrl,"associateContext", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"associateContext", team, teamPassword)
         long measureId = assayData.measureId
         long assayContextId = assayData.assayContextId
         when:
@@ -400,7 +400,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test disassociateContext context #desc'() {
         given:
         long id = assayData.id
-        RESTClient client = getRestClient(baseUrl,"disassociateContext", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"disassociateContext", team, teamPassword)
         long measureId = assayData.measureId
         long assayContextId = assayData.assayContextId
         when:
@@ -422,7 +422,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test disassociateContext context #forbidden'() {
         given:
         long id = assayData.id
-        RESTClient client = getRestClient(baseUrl,"disassociateContext", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"disassociateContext", team, teamPassword)
         long measureId = assayData.measureId
         long assayContextId = assayData.assayContextId
         when:
@@ -444,7 +444,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test change Relationship context #desc'() {
         given:
         long id = assayData.id
-        RESTClient client = getRestClient(baseUrl,"changeRelationship", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"changeRelationship", team, teamPassword)
         long measureId = assayData.measureId
         when:
         def response = client.post() {
@@ -465,7 +465,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test change Relationship context #forbidden'() {
         given:
         long id = assayData.id
-        RESTClient client = getRestClient(baseUrl,"changeRelationship", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"changeRelationship", team, teamPassword)
         long measureId = assayData.measureId
         when:
 
@@ -487,7 +487,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editDesignedBy", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editDesignedBy", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldDesignedBy = currentDataMap.designedBy
@@ -513,7 +513,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editAssayName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editAssayName", team, teamPassword)
 
 
         Long version = currentDataMap.version
@@ -539,7 +539,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editAssayName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editAssayName", team, teamPassword)
 
 
         Long version = currentDataMap.version
@@ -565,7 +565,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editAssayStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editAssayStatus", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldAssayStatus = currentDataMap.assayStatus
@@ -596,7 +596,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editAssayStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editAssayStatus", team, teamPassword)
         Long version = currentDataMap.version
         String oldAssayStatus = currentDataMap.assayStatus
         String newAssayStatus = null
@@ -625,7 +625,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
 
-        RESTClient client = getRestClient(baseUrl,"editAssayType", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editAssayType", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldAssayType = currentDataMap.assayType
@@ -655,7 +655,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         long id = assayData.id
         Map currentDataMap = getCurrentAssayProperties()
-        RESTClient client = getRestClient(baseUrl,"editAssayType", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"editAssayType", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldAssayType = currentDataMap.assayType
@@ -684,7 +684,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test updateCardName - unauthorized #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"updateCardName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"updateCardName", team, teamPassword)
         long assayContextId = assayData.assayContextId
 
         when:
@@ -704,7 +704,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
 
     def 'test updateCardName #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl,"updateCardName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"updateCardName", team, teamPassword)
         long assayContextId = assayData.assayContextId
 
         when:
@@ -736,7 +736,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             return resultTypeElement.id
         })
         String parentChildRelationship = HierarchyType.SUPPORTED_BY.id
-        RESTClient client = getRestClient(baseUrl,"addMeasure", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"addMeasure", team, teamPassword)
         long id = assayData.id
 
         when:
@@ -768,7 +768,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             return resultTypeElement.id
         })
         String parentChildRelationship = HierarchyType.SUPPORTED_BY.id
-        RESTClient client = getRestClient(baseUrl,"addMeasure", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"addMeasure", team, teamPassword)
         long id = assayData.id
         when:
         def response = client.post() {
@@ -788,7 +788,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         Long measureId = assayData.measureId
         Long parentMeasureId = assayData.parentMeasureId
-        RESTClient client = getRestClient(baseUrl,"moveMeasureNode", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"moveMeasureNode", team, teamPassword)
         long id = assayData.id
 
         when:
@@ -810,7 +810,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
         given:
         Long measureId = assayData.measureId
         Long parentMeasureId = assayData.parentMeasureId
-        RESTClient client = getRestClient(baseUrl,"moveMeasureNode", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"moveMeasureNode", team, teamPassword)
         long id = assayData.id
 
         when:
@@ -829,7 +829,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test delete Measure - unauthorized #desc'() {
         given:
         Long measureId = assayData.measureId
-        RESTClient client = getRestClient(baseUrl,"deleteMeasure", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"deleteMeasure", team, teamPassword)
         long id = assayData.id
 
         when:
@@ -869,7 +869,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
             assay.addToMeasures(measure)
             return measure.id
         })
-        RESTClient client = getRestClient(baseUrl,"deleteMeasure", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl,"deleteMeasure", team, teamPassword)
         when:
         def response = client.post() {
             urlenc measureId: measureId, id: id

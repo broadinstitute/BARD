@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "project/"
+    static final String controllerUrl = baseUrl +  "project/"
 
     @Shared
     Map projectData
@@ -105,7 +105,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test create #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -128,7 +128,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         String description = "Some Description"
         String status = ProjectStatus.DRAFT.id
         String groupType = ProjectGroupType.PROJECT.id
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
         Response response = client.post() {
             urlenc name: name, description: description, status: status, groupType: groupType
@@ -153,7 +153,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long pk = projectData.id
         String newStatus = ProjectStatus.APPROVED.id
         Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(baseUrl, "editProjectStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
         when:
         Response response = client.post() {
             urlenc pk: pk, version: version, value: newStatus
@@ -178,7 +178,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long pk = projectData.id
         String value = ProjectStatus.APPROVED.id
         Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(baseUrl, "editProjectStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editProjectStatus", team, teamPassword)
         when:
         client.post() {
             urlenc pk: pk, version: version, value: value
@@ -197,7 +197,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long pk = projectData.id
         String newName = ProjectStatus.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(baseUrl, "editProjectName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editProjectName", team, teamPassword)
         when:
         Response response = client.post() {
             urlenc pk: pk, version: version, value: newName
@@ -222,7 +222,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long pk = projectData.id
         String newName = ProjectStatus.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(baseUrl, "editProjectName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editProjectName", team, teamPassword)
         when:
         client.post() {
             urlenc pk: pk, version: version, value: newName
@@ -242,7 +242,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long pk = projectData.id
         String newDescription = ProjectStatus.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(baseUrl, "editDescription", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
         when:
         Response response = client.post() {
             urlenc pk: pk, version: version, value: newDescription
@@ -267,7 +267,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long pk = projectData.id
         String newDescription = ProjectStatus.APPROVED.id + team
         Long version = getCurrentProjectProperties().version
-        RESTClient client = getRestClient(baseUrl, "editDescription", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
         when:
         client.post() {
             urlenc pk: pk, version: version, value: newDescription
@@ -283,7 +283,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test projectNames #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "getProjectNames", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "getProjectNames", team, teamPassword)
         String projectName = projectData.name
         when:
 
@@ -306,7 +306,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test projectStatus #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "projectStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "projectStatus", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -327,7 +327,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test projectStages #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "projectStages", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "projectStages", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -348,7 +348,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test groupType #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "groupType", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "groupType", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -369,7 +369,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test show #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "show/${projectData.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "show/${projectData.id}", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -391,7 +391,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test edit #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
         Long projectId = projectData.id
         when:
         def response = client.post() {
@@ -415,7 +415,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test findByName #desc'() {
         given:
         Map currentDataMap = getCurrentProjectProperties()
-        RESTClient client = getRestClient(baseUrl, "findByName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "findByName", team, teamPassword)
         String name = currentDataMap.name
         when:
 
@@ -442,7 +442,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test findById #desc'() {
         given:
 
-        RESTClient client = getRestClient(baseUrl, "findById/${projectData.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "findById/${projectData.id}", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -463,7 +463,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test reload project steps #desc'() {
         given:
         Map m = buildProjectExperiments()
-        RESTClient client = getRestClient(baseUrl, "reloadProjectSteps", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "reloadProjectSteps", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -488,7 +488,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test update Project Stage #desc'() {
         given:
         Map m = buildProjectExperiments()
-        RESTClient client = getRestClient(baseUrl, "updateProjectStage", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "updateProjectStage", team, teamPassword)
         String value = "secondary assay"
         Long projectExperimentId = m.peFromId
         when:
@@ -511,7 +511,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test remove Experiment From Project #desc'() {
         given:
         Map m = buildProjectExperiments()
-        RESTClient client = getRestClient(baseUrl, "removeExperimentFromProject", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "removeExperimentFromProject", team, teamPassword)
         when:
         def response = client.post() {
             urlenc experimentId: m.eFromId, projectId: m.projectId
@@ -532,7 +532,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test remove Experiment From Project #desc forbidden'() {
         given:
         Map m = buildProjectExperiments()
-        RESTClient client = getRestClient(baseUrl, "removeExperimentFromProject", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "removeExperimentFromProject", team, teamPassword)
         when:
         client.post() {
             urlenc experimentId: m.eFromId, projectId: m.projectId
@@ -558,7 +558,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long toExperimentId = m.eToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(baseUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
         when:
         client.post() {
             urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
@@ -584,7 +584,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long toExperimentId = m.eToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(baseUrl, "linkExperiment", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "linkExperiment", team, teamPassword)
         when:
         def response = client.post() {
             urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
@@ -609,7 +609,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long toExperimentId = m.eToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(baseUrl, "removeEdgeFromProject", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "removeEdgeFromProject", team, teamPassword)
         when:
         def response = client.post() {
             urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
@@ -634,7 +634,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Long toExperimentId = m.eToId
         Long projectId = m.projectId
 
-        RESTClient client = getRestClient(baseUrl, "removeEdgeFromProject", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "removeEdgeFromProject", team, teamPassword)
         when:
         client.post() {
             urlenc fromExperimentId: fromExperimentId, toExperimentId: toExperimentId, projectId: projectId
@@ -654,7 +654,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test update Project Stage #desc forbidden'() {
         given:
         Map m = buildProjectExperiments()
-        RESTClient client = getRestClient(baseUrl, "updateProjectStage", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "updateProjectStage", team, teamPassword)
         String value = "secondary assay"
         Long projectExperimentId = m.peFromId
         when:
@@ -677,7 +677,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         given:
         String selectedExperiments = createUnAssociatedExperiment()
-        RESTClient client = getRestClient(baseUrl, "associateExperimentsToProject", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "associateExperimentsToProject", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -699,7 +699,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
         given:
         String selectedExperiments = createUnAssociatedExperiment()
-        RESTClient client = getRestClient(baseUrl, "associateExperimentsToProject", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "associateExperimentsToProject", team, teamPassword)
         when:
         client.post() {
             urlenc projectId: projectData.id, 'selectedExperiments[]': selectedExperiments
@@ -720,7 +720,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test show edit summary #desc'() {
         given:
         Long id = projectData.id
-        RESTClient client = getRestClient(baseUrl, "showEditSummary", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "showEditSummary", team, teamPassword)
         when:
         Response response = client.post() {
             urlenc instanceId: id
@@ -740,7 +740,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         given:
         Long id = projectData.id
         String groupBySection = "Some Section"
-        RESTClient client = getRestClient(baseUrl, "editContext", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
         when:
         Response response = client.post() {
             urlenc id: id, groupBySection: groupBySection
@@ -759,7 +759,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Summary #desc'() {
 
         given:
-        RESTClient client = getRestClient(baseUrl, "editSummary", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editSummary", team, teamPassword)
 
         when:
         def response = client.post() {
@@ -780,7 +780,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit Summary #desc forbidden'() {
 
         given:
-        RESTClient client = getRestClient(baseUrl, "editSummary", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editSummary", team, teamPassword)
         when:
         client.post() {
             urlenc instanceId: projectData.id, projectName: "My New Name", description: "My Description", projectStatus: ProjectStatus.DRAFT

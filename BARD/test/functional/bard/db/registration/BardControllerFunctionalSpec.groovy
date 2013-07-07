@@ -4,18 +4,12 @@ import bard.db.people.Person
 import bard.db.people.PersonRole
 import bard.db.people.Role
 import grails.plugin.remotecontrol.RemoteControl
-import groovy.sql.Sql
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 import wslite.http.auth.HTTPBasicAuthorization
-import wslite.json.JSONArray
 import wslite.rest.RESTClient
-import wslite.rest.Response
-
-import javax.servlet.http.HttpServletResponse
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,12 +29,9 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 abstract class BardControllerFunctionalSpec extends Specification {
-    //TODO:Following should come from an external properties file
     static RemoteControl remote = new RemoteControl()
 
-    //TODO:Following should come from an external properties file
-
-
+    static final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
     static final String TEAM_A_1_USERNAME = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.teamA_1.username }
     static final String TEAM_A_1_EMAIL = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.teamA_1.email }
     static final String TEAM_A_1_ROLE = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.teamA_1.roles.get(0) }
@@ -99,7 +90,7 @@ abstract class BardControllerFunctionalSpec extends Specification {
             Person person = Person.findByUserName(teamuserName)
             Role role = Role.findByAuthority(teamRole)
             if (!role) {
-                role = Role.build(authority: teamRole).save(flush: true)
+                role = Role.build(authority: teamRole, displayName:teamRole).save(flush: true)
             }
             if (!person) {
                 person = Person.build(userName: teamuserName, emailAddress: teamEmail,

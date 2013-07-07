@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "experiment/"
+    static final String controllerUrl = baseUrl+ "experiment/"
 
     @Shared
     Map experimentData
@@ -96,7 +96,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
 
     def 'test create #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "create", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "create", team, teamPassword)
         Long assayId = experimentData.assayId
         when:
         def response = client.post() {
@@ -115,7 +115,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
 
     def 'test edit #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
         Long id = experimentData.id
         when:
         def response = client.post() {
@@ -134,7 +134,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
 
     def 'test experimentStatus #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "experimentStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "experimentStatus", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -155,7 +155,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
 
     def 'test show #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "show", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "show", team, teamPassword)
         Long id = experimentData.id
         when:
         def response = client.post() {
@@ -177,7 +177,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editHoldUntilDate", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editHoldUntilDate", team, teamPassword)
 
         Long version = currentDataMap.version
         String newholdUntilDate = ExperimentController.inlineDateFormater.format(new Date())
@@ -200,7 +200,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editHoldUntilDate", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editHoldUntilDate", team, teamPassword)
 
         Long version = currentDataMap.version
         String newholdUntilDate = ExperimentController.inlineDateFormater.format(new Date())
@@ -225,7 +225,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editRunFromDate", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editRunFromDate", team, teamPassword)
 
         Long version = currentDataMap.version
         String newRunFromDate = ExperimentController.inlineDateFormater.format(new Date())
@@ -248,7 +248,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editRunFromDate", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editRunFromDate", team, teamPassword)
 
         Long version = currentDataMap.version
         String newRunFromDate = ExperimentController.inlineDateFormater.format(new Date())
@@ -274,7 +274,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editRunToDate", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editRunToDate", team, teamPassword)
 
         Long version = currentDataMap.version
         String newRunToDate = ExperimentController.inlineDateFormater.format(new Date())
@@ -297,7 +297,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editRunToDate", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editRunToDate", team, teamPassword)
 
         Long version = currentDataMap.version
         String newRunToDate = ExperimentController.inlineDateFormater.format(new Date())
@@ -322,7 +322,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editDescription", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
 
         Long version = currentDataMap.version
         String newDescription = "Some Description"
@@ -345,7 +345,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editDescription", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editDescription", team, teamPassword)
 
         Long version = currentDataMap.version
         String newDescription = "Some Description"
@@ -370,7 +370,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editExperimentName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editExperimentName", team, teamPassword)
 
         Long version = currentDataMap.version
         String newExperimentName = "Some Name"
@@ -393,7 +393,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editExperimentName", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editExperimentName", team, teamPassword)
 
         Long version = currentDataMap.version
         String newExperimentName = "Some Name"
@@ -418,7 +418,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editExperimentStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editExperimentStatus", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldExperimentStatus = currentDataMap.experimentStatus
@@ -449,7 +449,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
         given:
         long id = experimentData.id
         Map currentDataMap = getCurrentExperimentProperties()
-        RESTClient client = getRestClient(baseUrl, "editExperimentStatus", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "editExperimentStatus", team, teamPassword)
 
         Long version = currentDataMap.version
         String oldExperimentStatus = currentDataMap.experimentStatus
@@ -477,7 +477,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
     def 'test save #desc'() {
         given:
         long assayId = experimentData.assayId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
 
         when:
 
@@ -498,7 +498,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
     def 'test save - unauthorized #desc'() {
         given:
         long assayId = experimentData.assayId
-        RESTClient client = getRestClient(baseUrl, "save", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
         when:
         client.post() {
             urlenc assayId: assayId
@@ -516,7 +516,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
     def 'test update #desc'() {
         given:
         long id = experimentData.id
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
 
         when:
 
@@ -538,7 +538,7 @@ class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec
     def 'test update - unauthorized #desc'() {
         given:
         long id = experimentData.id
-        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
         when:
         client.post() {
             urlenc id: id, experimentTree: "[]"

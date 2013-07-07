@@ -1,7 +1,9 @@
 package bard.db
 
 import bard.db.people.Person
+import bard.db.people.Role
 import bard.db.registration.BardControllerFunctionalSpec
+import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Shared
 import spock.lang.Unroll
@@ -20,24 +22,129 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class PersonControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String baseUrl = remote { ctx.grailsApplication.config.tests.server.url } + "person/"
+    static final String controllerUrl = baseUrl+ "person/"
     @Shared
     Map personId
+    @Shared
+    List<String> personUserNames = []
 
     def setupSpec() {
         String reauthenticateWithUser = ADMIN_USERNAME
+        String adminRole = ADMIN_ROLE
         createTeamsInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
 
         personId = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
             Person person = Person.findByUserName(reauthenticateWithUser)
-            return [id: person.id]
+            Role role = Role.findByAuthority(adminRole)
+            return [id: person.id, roleId: role.id]
         })
+    }
+
+    def cleanupSpec() {
+
+        Sql sql = Sql.newInstance(dburl, dbusername,
+                dbpassword, driverClassName)
+        sql.call("{call bard_context.set_username(?)}", [ADMIN_USERNAME])
+
+        for (String username : personUserNames) {
+            sql.eachRow('select PERSON_ID from PERSON WHERE USERNAME=:CURRENT_USER_NAME', [CURRENT_USER_NAME: username]) { row ->
+                sql.execute("DELETE FROM PERSON_ROLE WHERE PERSON_ID=${row.PERSON_ID}")
+            }
+            sql.execute("DELETE FROM PERSON WHERE USERNAME=${username}")
+        }
+    }
+
+    def 'test save #desc - forbidden'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
+        String username = "Some_userName_${System.currentTimeMillis()}"
+        String email = "abc@email.com"
+        String displayName = "Some Display Name"
+        Long roleId = personId.roleId
+        when:
+        client.post() {
+            urlenc username: username, email: email, displayName: displayName, primaryGroup: roleId
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc           | team              | teamPassword      | expectedHttpResponse
+        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+
+    }
+
+
+    def 'test update #desc - forbidden'() {
+        given:
+        Map m = getCurrentPersonProperties()
+        String username = m.usename
+        String email = m.email
+        String displayName = m.displayName
+        Long primaryGroup = m.newObjectRoleId
+        Long version = m.version
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
+
+        when:
+        client.post() {
+            urlenc username: username, email: email, displayName: displayName, primaryGroup: primaryGroup, version: version
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc           | team              | teamPassword      | expectedHttpResponse
+        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+
+    }
+
+
+    def 'test update #desc'() {
+        given:
+        Map m = getCurrentPersonProperties()
+        String username = m.username
+        String email = m.email
+        String displayName = m.displayName
+        Long primaryGroup = m.newObjectRoleId
+        Long version = m.version
+        RESTClient client = getRestClient(controllerUrl, "update", team, teamPassword)
+
+        when:
+        final Response response = client.post() {
+            urlenc username: username, email: email, displayName: displayName, primaryGroup: primaryGroup, version: version
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc    | team           | teamPassword   | expectedHttpResponse
+        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
+    }
+
+    def 'test save #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "save", team, teamPassword)
+        String username = "Some_userName_${System.currentTimeMillis()}"
+        String email = "${username}@gmail.com"
+        String displayName = "Some Display Name"
+        Long roleId = personId.roleId
+        personUserNames.add(username)
+        when:
+        final Response response = client.post() {
+            urlenc username: username, email: email, displayName: displayName, primaryGroup: roleId
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc    | team           | teamPassword   | expectedHttpResponse
+        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
     }
 
     def 'test edit #desc - forbidden'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit/${personId.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit/${personId.id}", team, teamPassword)
 
         when:
         client.get()
@@ -51,9 +158,10 @@ class PersonControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     }
 
+
     def 'test edit #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "edit/${personId.id}", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "edit/${personId.id}", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -64,9 +172,38 @@ class PersonControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
         "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
     }
 
+    def 'test index #desc - forbidden'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "index", team, teamPassword)
+
+        when:
+        client.get()
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc           | team              | teamPassword      | expectedHttpResponse
+        "User A_1"     | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User Curator" | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+
+    }
+
+    def 'test index #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "index", team, teamPassword)
+
+        when:
+        final Response response = client.get()
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc    | team           | teamPassword   | expectedHttpResponse
+        "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND
+    }
+
     def 'test list #desc - forbidden'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "list", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "list", team, teamPassword)
 
         when:
         client.get()
@@ -82,7 +219,7 @@ class PersonControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
 
     def 'test list #desc'() {
         given:
-        RESTClient client = getRestClient(baseUrl, "list", team, teamPassword)
+        RESTClient client = getRestClient(controllerUrl, "list", team, teamPassword)
 
         when:
         final Response response = client.get()
@@ -93,52 +230,13 @@ class PersonControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
         "ADMIN" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK
     }
 
-//    def 'test update #desc - forbidden'() {
-//        given:
-//        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
-//
-//        when:
-//        client.post() {
-//            urlenc elementHierarchyIdList: "3", elementId: "2", newPathString: "newPathString"
-//        }
-//        then:
-//        def ex = thrown(RESTClientException)
-//        assert ex.response.statusCode == expectedHttpResponse
-//        where:
-//        desc       | team              | teamPassword      | expectedHttpResponse
-//        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-//        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-//        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FORBIDDEN
-//
-//    }
-//
-//
-//    def 'test update #desc'() {
-//        given:
-//        RESTClient client = getRestClient(baseUrl, "update", team, teamPassword)
-//        String newPathString = "a/b/c"
-//        when:
-//        final Response response = client.post() {
-//            urlenc elementHierarchyIdList: "0", elementId: "0", newPathString: newPathString
-//        }
-//        then:
-//        assert response.statusCode == expectedHttpResponse
-//        where:
-//        desc      | team             | teamPassword     | expectedHttpResponse
-//        "CURATOR" | CURATOR_USERNAME | CURATOR_PASSWORD | HttpServletResponse.SC_OK
-//        "ADMIN"   | ADMIN_USERNAME   | ADMIN_PASSWORD   | HttpServletResponse.SC_OK
-//    }
-
-    // run before the first feature method
-    def cleanupSpec() {
-
-//        Sql sql = Sql.newInstance(dburl, dbusername,
-//                dbpassword, driverClassName)
-//        sql.call("{call bard_context.set_username(?)}", [CURATOR_USERNAME])
-//        for (Long elementId : elementIdList) {
-//            sql.execute("DELETE FROM ELEMENT_HIERARCHY WHERE PARENT_ELEMENT_ID=${elementId} OR CHILD_ELEMENT_ID=${elementId}")
-//            sql.execute("DELETE FROM ELEMENT WHERE ELEMENT_ID=${elementId}")
-//        }
+    private Map getCurrentPersonProperties() {
+        long id = personId.id
+        Map currentDataMap = (Map) remote.exec({
+            Person person = Person.findById(id)
+            return [username: person.userName, version: person.version, email: person.emailAddress, newObjectRoleId: person.newObjectRole.id]
+        })
+        return currentDataMap
     }
 
 }
