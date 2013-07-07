@@ -32,10 +32,14 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl +  "context/"
+    static final String controllerUrl = baseUrl + "context/"
 
     @Shared
     Map contextData
+    @Shared
+    List projectIdList = []
+    @Shared
+    List assayIdList = []
 
 
     def setupSpec() {
@@ -62,7 +66,8 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             //create assay context
             return [assayId: assay.id, projectId: project.id]
         })
-
+        assayIdList.add(contextData.assayId)
+        projectIdList.add(contextData.projectId)
 
     }     // run before the first feature method
 
@@ -246,7 +251,7 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     Map createProjectContext() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
-        return remote.exec({
+        Map m = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
             Project project = Project.build(name: "Some Project Name2").save(flush: true)
             ProjectContext context = ProjectContext.build(project: project, contextName: "alpha").save(flush: true)
@@ -254,13 +259,14 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
             return [projectId: project.id, projectContextId: context.id]
         })
+        projectIdList.add(m.projectId)
+        return m
     }
 
     Map createAssayContext() {
         String reauthenticateWithUser = TEAM_A_1_USERNAME
-        Long assayId = contextData.assayId
 
-        return remote.exec({
+        Map m = (Map) remote.exec({
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
             Assay assay = Assay.build(assayName: "Assay Name202").save(flush: true)
             AssayContext context = AssayContext.build(assay: assay, contextName: "alpha").save(flush: true)
@@ -268,6 +274,9 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             //create assay context
             return [id: assay.id, assayContextId: context.id]
         })
+
+        assayIdList.add(m.id)
+        return m
     }
 
     // run before the first feature method
@@ -277,10 +286,15 @@ class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
                 dbpassword, driverClassName)
         sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
 
-        sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${contextData.assayId}")
-        sql.execute("DELETE FROM PROJECT_CONTEXT WHERE PROJECT_ID=${contextData.projectId}")
-        sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${contextData.assayId}")
-        sql.execute("DELETE FROM PROJECT WHERE PROJECT_ID=${contextData.projectId}")
+        for (Long assayId : assayIdList) {
+            sql.execute("DELETE FROM ASSAY_CONTEXT WHERE ASSAY_ID=${assayId}")
+            sql.execute("DELETE FROM ASSAY WHERE ASSAY_ID=${assayId}")
+        }
+        for (Long projectId : projectIdList) {
+            sql.execute("DELETE FROM PROJECT_CONTEXT WHERE PROJECT_ID=${projectId}")
+            sql.execute("DELETE FROM PROJECT WHERE PROJECT_ID=${projectId}")
+
+        }
 
     }
 

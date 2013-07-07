@@ -92,10 +92,13 @@ class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
                 eh1a.childElement.parentHierarchies.add(eh2a)
                 element4.childHierarchies.add(eh2a)
             }
-            return [element1Id: element1.id, element2Id: element2.id]
+            return [element1Id: element1.id, element2Id: element2.id, element3Id:element3.id, element4Id: element4.id]
         })
 
-
+        elementIdList.add(elementData.element1Id)
+        elementIdList.add(elementData.element2Id)
+        elementIdList.add(elementData.element3Id)
+        elementIdList.add(elementData.element4Id)
     }
 
 

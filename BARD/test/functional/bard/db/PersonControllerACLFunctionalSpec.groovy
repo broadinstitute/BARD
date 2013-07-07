@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class PersonControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
+class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     static final String controllerUrl = baseUrl+ "person/"
     @Shared
     Map personId

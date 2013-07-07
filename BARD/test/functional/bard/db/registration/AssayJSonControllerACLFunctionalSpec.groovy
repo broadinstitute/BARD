@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse
  *
  */
 @Unroll
-class AssayJSonControllerFunctionalSpec extends BardControllerFunctionalSpec {
+class AssayJSonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
     static final String controllerUrl = baseUrl +  "assayJSon/"
     @Shared

@@ -1,6 +1,7 @@
 package bard.db.project
 
 import bard.db.dictionary.Element
+import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -8,6 +9,7 @@ import bard.db.registration.BardControllerFunctionalSpec
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.json.JSONObject
@@ -35,7 +37,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl +  "project/"
+    static final String controllerUrl = baseUrl + "project/"
 
     @Shared
     Map projectData
@@ -67,6 +69,10 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
             Project project = Project.build(name: "Some Name").save(flush: true)
 
+            if (!StageTree.findAll()) {
+                StageTree.build().save(flush: true)
+            }
+
             //create assay context
             return [id: project.id, name: project.name]
         })
@@ -78,6 +84,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         Sql sql = Sql.newInstance(dburl, dbusername,
                 dbpassword, driverClassName)
         sql.call("{call bard_context.set_username(?)}", [TEAM_A_1_USERNAME])
+
+        sql.execute("DELETE FROM STAGE_TREE")
 
         for (Long assayId : assayIdList) {
 
@@ -324,6 +332,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
+
 
     def 'test projectStages #desc'() {
         given:
@@ -828,8 +837,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             if (!toElement) {
                 toElement = Element.build(label: elementToLabel).save(flush: true)
             }
-            // StageTree stageTree1 = StageTree.build(element: fromElement).save(flush: true)
-            //  StageTree stageTree2 = StageTree.build(element: toElement).save(flush: true)
+            StageTree stageTree1 = StageTree.build(element: fromElement).save(flush: true)
+            StageTree stageTree2 = StageTree.build(element: toElement).save(flush: true)
 
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
@@ -864,8 +873,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             if (!toElement) {
                 toElement = Element.build(label: elementToLabel).save(flush: true)
             }
-            // StageTree stageTree1 = StageTree.build(element: fromElement).save(flush: true)
-            //  StageTree stageTree2 = StageTree.build(element: toElement).save(flush: true)
+            StageTree stageTree1 = StageTree.build(element: fromElement).save(flush: true)
+            StageTree stageTree2 = StageTree.build(element: toElement).save(flush: true)
 
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
