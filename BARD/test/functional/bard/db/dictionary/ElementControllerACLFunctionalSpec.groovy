@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse
  * To change this template use File | Settings | File Templates.
  */
 @Unroll
-class ElementControllerRoleFunctionalSpec extends BardControllerFunctionalSpec {
+class ElementControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     static final String controllerUrl = baseUrl +  "element/"
 
     @Shared
