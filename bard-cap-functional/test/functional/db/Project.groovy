@@ -1,40 +1,42 @@
 package db
 
-class Assay extends DatabaseConnectivity {
+import common.ProjectQueries;
+
+class Project extends DatabaseConnectivity {
 
 	/**
-	 * @param assayId
-	 * @return assay summary information
+	 * @param projectId
+	 * @return project summary information
 	 */
-	Map<String, String> getAssaySummaryById(def assayId) {
-		def assaySummaryInfo = [:]
-		def sql = getSql()
-		sql.eachRow(ASSAY_SUMMARY_BYID, [assayId]) { row ->
-			assaySummaryInfo = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
+	public static def getProjectSummaryById(def projectId) {
+		def projectSummaryInfo = [:]
+		def sql = DatabaseConnectivity.getSql()
+		sql.eachRow(ProjectQueries.PROJECT_SUMMARY_BYID, [projectId]) {
+			projectSummaryInfo = it.toRowResult()
 		}
-		return assaySummaryInfo
+		return projectSummaryInfo
 	}
 	/**
-	 * @param assayName
-	 * @return assay summary information 
+	 * @param projectName
+	 * @return project summary information 
 	 */
-	Map<String, String> getAssaySummaryByName(def assayName) {
-		def assaySummaryInfo = [:]
+	def getProjectSummaryByName(def projectName) {
+		def projectSummaryInfo = [:]
 		def sql = getSql()
-		sql.eachRow(ASSAY_SUMMARY_BYNAME, [assayName]) { row ->
-			assaySummaryInfo = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
+		sql.eachRow(PROJECT_SUMMARY_BYNAME, [projectName]) { row ->
+			projectSummaryInfo = ['projectId': row.pid, 'projectName':row.pname, 'projectVersion':row.pversion, 'projectGroup':row.pgroup, 'projectStatus':row.pstatus, 'projectReady': row.ready, 'projectDescription':row.pdesc]
 		}
-		return assaySummaryInfo
+		return projectSummaryInfo
 	}
 	/**
 	 * @param searchStr
 	 * @return searched result count
 	 */
-	def getAssaySearchCount(def searchStr) {
+	def getProjectSearchCount(def searchStr) {
 		def searchResultCount
 		def sql = getSql()
-		sql.eachRow(ASSAY_SEARCH_NAME_STR, ['%'+searchStr+'%']){ row->
-			searchResultCount = 	row.Count
+		sql.eachRow(PROJECT_SEARCH_COUNT, ['%'+searchStr+'%']){ row->
+			searchResultCount = 	row.pcount
 		}
 		return searchResultCount
 	}
@@ -57,11 +59,11 @@ class Assay extends DatabaseConnectivity {
 	 * @param contextName
 	 * @return list of assay context items present in a specific assay context card
 	 */
-	List<String> getAssayContextItem(def assayId, def contextGroup, def contextName) {
+	public static def getProjectContextItem(def projectId, def contextName) {
 		def contextITemMap = [:]
 		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow(ASSAY_CONTEXT_ITEMS, [assayId, contextGroup, contextName]) { row ->
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextName]) { row ->
 			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay]
 			contextItemsList.add(contextITemMap)
 		}
@@ -103,5 +105,21 @@ class Assay extends DatabaseConnectivity {
 			associatedContextMeasureMap = ['measure':row.measure, 'context':row.context]
 		}
 		return associatedContextMeasureMap
+	}
+
+	/**
+	 * @param assayId
+	 * @param measureName
+	 * @return measures associated with contexts
+	 */
+	public static def getProjectDocuments(def projectId, def documentType) {
+		//def documentMap = [:]
+		def documentList = []
+		def sql = getSql()
+		sql.eachRow(ProjectQueries.PROJECT_DOCUMENT, [projectId, documentType]) { row ->
+			documentList.add(row.Name)
+			//documentList.add(documentMap)
+		}
+		return documentList
 	}
 }

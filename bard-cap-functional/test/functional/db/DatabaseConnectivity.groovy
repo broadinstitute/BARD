@@ -1,24 +1,44 @@
 package db
 
+import grails.plugin.remotecontrol.RemoteControl
 import groovy.sql.Sql
-import javax.sql.DataSource
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import groovyx.remote.RemoteControlException;
+
+import java.sql.SQLRecoverableException
+
+import oracle.net.ns.NetException
+
+import org.springframework.beans.factory.BeanCreationException
+
+import common.Constants
 
 class DatabaseConnectivity{
-	def _url = ConfigurationHolder.config.dataSource.url
-	def _username = ConfigurationHolder.config.dataSource.username
-	def _password = ConfigurationHolder.config.dataSource.password
-	def _driver = ConfigurationHolder.config.dataSource.driverClassName
-	def getSql = {
+	static def dataSource = getDatasource()
+	static def _url = dataSource.url
+	static def _username = dataSource.username
+	static def _password = dataSource.password
+	static def _driver = dataSource.driver
+
+	public static def getSql = {
 		Sql.newInstance(_url, _username, _password, _driver)
 	}
 
+	static def getDatasource(){
+		def dbDatasource
 
-	/*	def getSql = {
-	 Sql.newInstance("jdbc:oracle:thin:@vmbarddev:1521:barddev",
-	 "bard_qa_cap",
-	 "Ze3eqe2T",
-	 "oracle.jdbc.OracleDriver")
-	 }
-	 */
+		RemoteControl remote = new RemoteControl()
+		def applicationURL = remote { ctx.grailsApplication.config.grails.serverURL }
+//		def resultURL = applicationURL.substring(applicationURL.indexOf("//")+Constants.index_2, applicationURL.indexOf('.'))
+		if(applicationURL.indexOf("qa") > -1){
+			dbDatasource = Constants.qaDatasource
+		}else if(applicationURL.indexOf("dev") > -1){
+			dbDatasource = Constants.devDatasource
+		}
+		//		if(resultURL.equalsIgnoreCase(Constants.dbInstance.qa)){
+		//			dbDatasource = Constants.qaDatasource
+		//		}else if(resultURL.equalsIgnoreCase(Constants.dbInstance.dev)){
+		//			dbDatasource = Constants.devDatasource
+		//		}
+		return dbDatasource
+	}
 }

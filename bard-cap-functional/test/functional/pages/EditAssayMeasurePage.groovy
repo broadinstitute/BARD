@@ -4,8 +4,8 @@ import java.util.Map;
 import geb.Page
 import geb.Module
 import geb.navigator.Navigator
-import modules.SelectToContainerModule
-import modules.SelectInputModule
+import modules.SelectToDropModule
+import modules.SelectChoicePopupModule
 import modules.SelectResultPopListModule
 import modules.CardsHolderModule
 
@@ -23,10 +23,10 @@ class EditAssayMeasurePage extends Page{
 
 		measuresHolder(wait: true) { $("ul.dynatree-container").find("li") }
 		addMeasureForm { $("form#add-measure-form") }
-		selectResultTye { module SelectToContainerModule, $("div#s2id_resultTypeId") }
-		selectStatistics { module SelectToContainerModule, $("div#s2id_statisticId") }
+		selectResultTye { module SelectToDropModule, $("div#s2id_resultTypeId") }
+		selectStatistics { module SelectToDropModule, $("div#s2id_statisticId") }
 		measureDetail { module MeasureDetailsModule }
-		enterInput { module SelectInputModule }
+		enterInput { module SelectChoicePopupModule }
 		resultPopulated { module SelectResultPopListModule, $("div.select2-drop.select2-drop-active") }
 		footerBtns { $("div.modal-footer").find("button") }
 	}

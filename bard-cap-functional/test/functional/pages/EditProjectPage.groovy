@@ -1,8 +1,8 @@
 package pages
 
-import geb.Module;
+import geb.Module
 import geb.Page
-import pages.ViewProjectDefinitionPage
+import modules.BardCapHeaderModule
 
 class EditProjectPage extends Page{
 	static url=""
@@ -15,12 +15,12 @@ class EditProjectPage extends Page{
 		associateExpriment { module AssociateExperimentModule }
 		exprimentCanvas { module ExprimentCanvasModule, $("div#canvasIsolated") }
 		linkExpriment { module LinkExperimentModule }
-		editProjectSummary { module EditSummaryModule }
-		projectSummary { module SummaryModule, $("div#summaryDetailSection") }
+		//editProjectSummary { module EditSummaryModule }
+		//projectSummary { module SummaryModule, $("div#summaryDetailSection") }
 	}
 }
 
-class EditSummaryModule extends Module {
+/*class EditSummaryModule extends Module {
 	static content = {
 		
 		titleBar { $("span#ui-dialog-title-dialog_edit_project_summary") }
@@ -31,7 +31,7 @@ class EditSummaryModule extends Module {
 		updateBtn { formCon.parent().find("button", type:"button", text:"Update Summary") }
 		cancelBtn { formCon.parent().find("button", type:"button", text:"Cancel") }
 	}
-}
+}*/
 
 
 class AssociateExperimentModule extends Module {
