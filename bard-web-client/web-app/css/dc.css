@@ -1,10 +1,11 @@
-c-chart {
+dc-chart {
     float: left;
 }
 
 .dc-chart rect.bar {
     stroke: none;
     fill: steelblue;
+    cursor: pointer;
 }
 
 .dc-chart rect.bar:hover {
@@ -32,24 +33,27 @@ c-chart {
 }
 
 .dc-chart .pie-slice {
-    fill: white;
-    font-size: 12px;
+    fill: black;
     cursor: pointer;
-}
+    font-family:Verdana;
+    font-size: 8pt;
+    font-weight: bold;
+    }
 
 .dc-chart .pie-slice :hover{
     fill-opacity: .8;
 }
 
 .dc-chart .selected path{
-    stroke-width: 0;
+    stroke-width: 3;
     stroke: #ccc;
     fill-opacity: 1;
 }
 
 .dc-chart .deselected path{
-    strok: none;
+    stroke : none;
     fill-opacity: .5;
+    fill: #ccc;
 }
 
 .dc-chart .axis path, .axis line {
@@ -60,6 +64,13 @@ c-chart {
 
 .dc-chart .axis text {
     font: 10px sans-serif;
+}
+
+.dc-chart .grid-line {
+    fill: none;
+    stroke: #ccc;
+    opacity: .5;
+    shape-rendering: crispEdges;
 }
 
 .dc-chart .grid-line line {
@@ -139,13 +150,13 @@ c-chart {
 }
 
 .dc-chart .selected circle {
-    stroke-width: 0;
+    stroke-width: 3;
     stroke: #ccc;
     fill-opacity: 1;
 }
 
 .dc-chart .deselected circle {
-    strok: none;
+    stroke: none;
     fill-opacity: .5;
     fill: #ccc;
 }
@@ -207,4 +218,29 @@ c-chart {
 .dc-chart g.debug rect{
     fill: blue;
     fill-opacity: .2;
+}
+
+.dc-chart g.row rect {
+    fill-opacity: 0.8;
+    cursor: pointer;
+}
+
+.dc-chart g.row rect:hover {
+    fill-opacity: 0.6;
+}
+
+.dc-chart g.row text {
+    fill: white;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.dc-chart g text {
+    /* Makes it so the user can't accidentally click and select text that is meant as a label only */
+    -webkit-user-select: none; /* Chrome/Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10 */
+    -o-user-select: none;
+    user-select: none;
+    pointer-events: none;
 }

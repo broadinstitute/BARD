@@ -62,17 +62,14 @@
 <body>
 <r:layoutResources/>
 
-
-
-
-
-
-
-
-
 <script>
-    var assay = {};
-    var assayIndex = {};
+    var assay = {},
+    assayIndex = {},
+    biologicalProcessPieChart,
+    assayFormatPieChart,
+    assayIdDimensionPieChart,
+    assayTypePieChart;
+
 
 
     var linkedVisualizationModule = (function () {
@@ -259,15 +256,15 @@
                     },
                     cleanUpAnyGraphicsWeAreDoneWith = function () {
                         var potentialOrphanedGraphics = d3.select('div#sunburstdiv>svg');
-                        if ((!(potentialOrphanedGraphics === null))&&
-                                (!(potentialOrphanedGraphics[0] === null))&&
-                                (!(potentialOrphanedGraphics[0][0] === null)))       {
+                        if ((!(potentialOrphanedGraphics === null)) &&
+                                (!(potentialOrphanedGraphics[0] === null)) &&
+                                (!(potentialOrphanedGraphics[0][0] === null))) {
                             potentialOrphanedGraphics.remove();
                         }
 
                         var potentialOrphanedLegend = d3.select('div#sunburstlegend');
-                        if ((!(potentialOrphanedLegend === null))&&
-                                (!(potentialOrphanedLegend[0] === null))&&
+                        if ((!(potentialOrphanedLegend === null)) &&
+                                (!(potentialOrphanedLegend[0] === null)) &&
                                 (!(potentialOrphanedLegend[0][0] === null))) {
                             potentialOrphanedLegend.remove();
                         }
@@ -275,7 +272,7 @@
                     createAResetButtonIfWeSwitchedARoot = function () {
                         // Instead of looking to see which widget is closing let's just check them all, and create a reset button
                         // whenever the root is not equal to the user-specified Global parent
-                        for( var i=0 ; i<X ; i++ ) {
+                        for (var i = 0; i < X; i++) {
 
                         }
                     },
@@ -305,7 +302,8 @@
                                 .dimension(dimensionVariable)
                                 .group(dimensionVariableGroup)
                                 .colors(colors)
-                                .label(displayDataGroup);
+                                .label(displayDataGroup)
+                                .renderTitle(true);
                     },
 
 
@@ -337,7 +335,7 @@
                                     function (d) {
                                         return d.assay_type;
                                     },
-                                    function(d) {
+                                    function (d) {
                                         return d.assayId;
                                     }
                                 ])
@@ -381,49 +379,50 @@
                     },
 
 
-                    // buttons are supplied to allow the user to reset their hierarchy drill down, but the buttons only work
-                    // from the pie mode
+            // buttons are supplied to allow the user to reset their hierarchy drill down, but the buttons only work
+            // from the pie mode
                     deactivateDrillDownResetButtons = function () {
 
                         // turn off the reset buttons, and they are deactivated when the Sunburst is visible
                         var drillDownButtons = d3.selectAll('.drill');
-                        if (!(drillDownButtons.empty())){
+                        if (!(drillDownButtons.empty())) {
                             drillDownButtons.style('pointer-events', 'none')
-                                            .style('opacity', 0.5)
-                                            .style('cursor','pointer');
+                                    .style('opacity', 0.5)
+                                    .style('cursor', 'pointer');
                         }
 
                         // If there is a drill down explanation then fade it  out
                         var drillLabelExplanation = d3.select('.drillLabel');
-                        if (!(drillLabelExplanation.empty ())) {
+                        if (!(drillLabelExplanation.empty())) {
                             drillLabelExplanation.style('opacity', 0.5);
                         }
 
                     },
 
-                    // buttons are supplied to allow the user to reset their hierarchy drill down. These were deactivated when a sunburst
-                    //   was displayed, but they need to be reactivated again when we get back to pie mode
+            // buttons are supplied to allow the user to reset their hierarchy drill down. These were deactivated when a sunburst
+            //   was displayed, but they need to be reactivated again when we get back to pie mode
                     activateDrillDownResetButtons = function () {
 
                         // do we have any drill down reset buttons to deal with
                         var drillDownResetButtonsExist = false;
                         var drillDownButtons = d3.selectAll('.drill');
-                        if (!(drillDownButtons.empty())){
+                        if (!(drillDownButtons.empty())) {
 
                             drillDownResetButtonsExist = true;
                             drillDownButtons.style('pointer-events', 'auto')
-                                            .style('opacity', 1)
-                                            .style('cursor','pointer');
+                                    .style('opacity', 1)
+                                    .style('cursor', 'pointer');
 
                         }
 
                         var drillLabelExplanation = d3.select('.drillLabel');
-                        if (!(drillLabelExplanation.empty ())) {
+                        if (!(drillLabelExplanation.empty())) {
                             // we have an explanation line
 
-                            if (drillDownResetButtonsExist){   // if buttons exist
-                                drillLabelExplanation.style('opacity', 1); ;
-                            }  else {    // if no buttons exist
+                            if (drillDownResetButtonsExist) {   // if buttons exist
+                                drillLabelExplanation.style('opacity', 1);
+                                ;
+                            } else {    // if no buttons exist
                                 // this should never happen ( an explanation exists without any buttons ), but
                                 // but if it should happen somehow then let's clean it up
                                 drillLabelExplanation.remove();
@@ -437,7 +436,7 @@
 
                     spotlightOneAndBackgroundThree = function (d, spotlight, background1, background2, background3, origButton, expandedPos) {
 
-                        deactivateDrillDownResetButtons () ;
+                        deactivateDrillDownResetButtons();
 
                         // first handle the spotlight element and then the three backup singers
                         spotlight
@@ -503,23 +502,23 @@
                         //  button for them, but D three does not support that sort of activation is you are
                         //  using bound data. I should probably connect to those data dynamically to get around
                         //  this problem.
-                        var dataSetNumber=parseInt(background1.attr('id').match(/\d/));
-                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber)))  {
-                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                        var dataSetNumber = parseInt(background1.attr('id').match(/\d/));
+                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber))) {
+                            d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
                         } else {
-                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                            d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
                         }
-                        dataSetNumber=parseInt(background2.attr('id').match(/\d/));
-                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber)))  {
-                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                        dataSetNumber = parseInt(background2.attr('id').match(/\d/));
+                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber))) {
+                            d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
                         } else {
-                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                            d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
                         }
-                        dataSetNumber=parseInt(background3.attr('id').match(/\d/));
-                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber)))  {
-                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                        dataSetNumber = parseInt(background3.attr('id').match(/\d/));
+                        if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber))) {
+                            d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
                         } else {
-                            d3.select('#expbutton'+dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                            d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
                         }
 
 //                        background1.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
@@ -535,8 +534,11 @@
                                 .style('opacity', 1);
 
                         // turn back on this reset buttons
-                        activateDrillDownResetButtons ();
-                     },
+                        activateDrillDownResetButtons();
+
+                        // Set some style attributes that must be adjusted dynamically
+                        tidyUpDisplay () ;
+                    },
 
                     expandGraphicsArea = function (graphicsTarget, graphicsTitle) {
 
@@ -546,7 +548,7 @@
 
                         var nullarc = d3.svg.arc()
                                 .innerRadius(innerRadiusWhenExpanded)
-                                .outerRadius(innerRadiusWhenExpanded+1);
+                                .outerRadius(innerRadiusWhenExpanded + 1);
 
                         graphicsTarget
                                 .attr('width', displayWidgetWidth)
@@ -602,78 +604,84 @@
                                 .delay(0)
                                 .duration(500)
                                 .style('opacity', '0')
-                    }
+                    },
 
-            swapAPieForTheSun = function (pieDiv, sunburstContainer, expandedButtonNum, callbackToExpandOrContractOnButtonClick) {
-                pieDiv.style('pointer-events', 'none')
-                        .transition()
-                        .delay(1000)
-                        .duration(500)
-                        .style('opacity', '0');
-                sunburstContainer.style('pointer-events', null)
-                        .transition()
-                        .delay(1000)
-                        .duration(500)
-                        .style('opacity', '1');
-                if (linkedVizData.retrieveCurrentHierarchicalData(expandedButtonNum).children !== undefined) {
-                    createASunburst( 1000, 1000,5,1000,continuousColorScale,'div#sunburstdiv', 672376, expandedButtonNum );
-                    createALegend(120, 200,100,continuousColorScale,'div#legendGoesHere',minimumValue, maximumValue);
-                    d3.selectAll('#suburst_container').style('pointer-events', null);
-                } else {
-                    d3.select('div#sunburstdiv')
-                            .append('div')
-                            .attr("width", 1000)
-                            .attr("height", 1000 )
-                            .style("padding-top", '200px' )
-                            .style("text-align", 'center' )
-                            .append("h1")
-                            .html("No off-embargo assay data are  available for this compound." +
-                                    "Please either choose a different compound, or else come" +
-                                    " back later when more assay data may have accumulated.");
-                }
-                d3.select('#sunburstContractor')
-                    // This next step gets a little bit ugly.  What we want to do is make the
-                    // Sunburst disappear, and then have the pie charts rearrange themselves like always.
-                    // Unfortunately D3 does not provide a standardized way to execute a click ( thereby
-                    // Initiating the associated callback ) if you have data associated with your object,
-                    // Which we most certainly do. Therefore I have to mix up my own copy of the data
-                    // that the callback routine for one of the pie charts would receive, and then explicitly
-                    // execute the callback method. There has to be a better way to get the desired effect,
-                    // though for what it's worth this approach is fully functional ( just butt-ugly, that's all)
-                        .on('click', function (d) {
-                            sunburstContainer.style('pointer-events', 'none')
-                                    .style('opacity', '0');
-                            pieDiv.style('pointer-events', null)
-                                    .style('opacity', '1');
-                            var molecularStructure = d3.selectAll('.molstruct')
-                                    .style('opacity', '0');
-                            var substituteData = {    index: expandedButtonNum,
-                                orig: {
-                                    coords: {
-                                        x: compressedPos[expandedButtonNum].x,
-                                        y: compressedPos[expandedButtonNum].y },
-                                    size: {
-                                        width: widgetWidthWithoutSpacing,
-                                        height: widgetHeightWithTitle }
-                                },
-                                display: {
-                                    coords: {
-                                        x: displayWidgetX,
-                                        y: displayWidgetY },
-                                    size: {
-                                        width: displayWidgetWidth,
-                                        height: displayWidgetHeight }
-                                }
-                            }
-                            callbackToExpandOrContractOnButtonClick(substituteData, expandedButtonNum);
-                        });
-                var molecularStructure = d3.selectAll('.molstruct')
-                        .transition()
-                        .delay(1000)
-                        .duration(500)
-                        .style('opacity', '1');
+                    // We have to make a few changes to the display dynamically since we don't have complete control over the DC code
+                    tidyUpDisplay = function () {
+                        dc.renderAll();
+                    },
 
-            };
+
+                    swapAPieForTheSun = function (pieDiv, sunburstContainer, expandedButtonNum, callbackToExpandOrContractOnButtonClick) {
+                        pieDiv.style('pointer-events', 'none')
+                                .transition()
+                                .delay(1000)
+                                .duration(500)
+                                .style('opacity', '0');
+                        sunburstContainer.style('pointer-events', null)
+                                .transition()
+                                .delay(1000)
+                                .duration(500)
+                                .style('opacity', '1');
+                        if (linkedVizData.retrieveCurrentHierarchicalData(expandedButtonNum).children !== undefined) {
+                            createASunburst(1000, 1000, 5, 1000, continuousColorScale, 'div#sunburstdiv', 672376, expandedButtonNum);
+                            createALegend(120, 200, 100, continuousColorScale, 'div#legendGoesHere', minimumValue, maximumValue);
+                            d3.selectAll('#suburst_container').style('pointer-events', null);
+                        } else {
+                            d3.select('div#sunburstdiv')
+                                    .append('div')
+                                    .attr("width", 1000)
+                                    .attr("height", 1000)
+                                    .style("padding-top", '200px')
+                                    .style("text-align", 'center')
+                                    .append("h1")
+                                    .html("No off-embargo assay data are  available for this compound." +
+                                            "Please either choose a different compound, or else come" +
+                                            " back later when more assay data may have accumulated.");
+                        }
+                        d3.select('#sunburstContractor')
+                            // This next step gets a little bit ugly.  What we want to do is make the
+                            // Sunburst disappear, and then have the pie charts rearrange themselves like always.
+                            // Unfortunately D3 does not provide a standardized way to execute a click ( thereby
+                            // Initiating the associated callback ) if you have data associated with your object,
+                            // Which we most certainly do. Therefore I have to mix up my own copy of the data
+                            // that the callback routine for one of the pie charts would receive, and then explicitly
+                            // execute the callback method. There has to be a better way to get the desired effect,
+                            // though for what it's worth this approach is fully functional ( just butt-ugly, that's all)
+                                .on('click', function (d) {
+                                    sunburstContainer.style('pointer-events', 'none')
+                                            .style('opacity', '0');
+                                    pieDiv.style('pointer-events', null)
+                                            .style('opacity', '1');
+                                    var molecularStructure = d3.selectAll('.molstruct')
+                                            .style('opacity', '0');
+                                    var substituteData = {    index: expandedButtonNum,
+                                        orig: {
+                                            coords: {
+                                                x: compressedPos[expandedButtonNum].x,
+                                                y: compressedPos[expandedButtonNum].y },
+                                            size: {
+                                                width: widgetWidthWithoutSpacing,
+                                                height: widgetHeightWithTitle }
+                                        },
+                                        display: {
+                                            coords: {
+                                                x: displayWidgetX,
+                                                y: displayWidgetY },
+                                            size: {
+                                                width: displayWidgetWidth,
+                                                height: displayWidgetHeight }
+                                        }
+                                    }
+                                    callbackToExpandOrContractOnButtonClick(substituteData, expandedButtonNum);
+                                });
+                        var molecularStructure = d3.selectAll('.molstruct')
+                                .transition()
+                                .delay(1000)
+                                .duration(500)
+                                .style('opacity', '1');
+
+                    };
 
             // end var
 
@@ -692,7 +700,8 @@
                 moveDataTableBackToItsOriginalPosition: moveDataTableBackToItsOriginalPosition,
                 addDcTable: addDcTable,
                 addPieChart: addPieChart,
-                swapAPieForTheSun: swapAPieForTheSun
+                swapAPieForTheSun: swapAPieForTheSun,
+                tidyUpDisplay:tidyUpDisplay
             };
         }() );
 

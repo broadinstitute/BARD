@@ -70,7 +70,7 @@ class SunburstHandlerTagLib {
     def sunburstSection = { attrs, body ->
             out << """
     <div >"""
-        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right;">Linked Data<br/>Visualization</a>
+        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right;">Linked Hierarchy<br/>Visualization</a>
     </div>""".toString()
 //        }
     }
