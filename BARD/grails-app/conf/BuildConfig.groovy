@@ -97,6 +97,7 @@ grails.project.dependency.resolution = {
             exclude 'grails-webflow'
         }
         compile(":spring-security-acl:1.1.1")
+        compile ":remote-control:1.4"
 
         // runtime scope
         runtime ":jquery:1.7.1"
@@ -105,7 +106,6 @@ grails.project.dependency.resolution = {
 
         // test scope
         test ":geb:0.7.2"
-        test ":remote-control:1.4"
         test(":spock:0.7") {
             exclude "spock-grails-support"
         }
