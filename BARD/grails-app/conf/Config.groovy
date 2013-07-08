@@ -30,11 +30,6 @@ grails.mime.types = [html: ['text/html', 'application/xhtml+xml'],
         multipartForm: 'multipart/form-data'
 ]
 
-//Default server url
-
-
-server.port = System.properties.getProperty('server.port') ?: 8081
-grails.serverURL = "http://localhost:${server.port}/BARD/"
 // URL Mapping Cache Max Size, defaults to 5000
 //grails.urlmapping.cache.maxsize = 1000
 
