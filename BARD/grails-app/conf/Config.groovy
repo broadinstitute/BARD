@@ -73,13 +73,6 @@ environments {
 
 // log4j configuration
 log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
-
     error 'org.codehaus.groovy.grails.web.servlet',  //  controllers
             'org.codehaus.groovy.grails.web.pages', //  GSP
             'org.codehaus.groovy.grails.web.sitemesh', //  layouts
@@ -108,45 +101,61 @@ bard.services.resultService.archivePath = System.getProperty("java.io.tmpdir")
 rememberme.key = 'bard_cap_crowd_remember_me'
 rememberme.cookieName = 'bard_cap_crowd_remember_me_cookie'
 
-//Use inMemMap provider only in non-production settings
+grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
+grails.plugins.springsecurity.rememberMe.key = rememberme.key
+
 switch (Environment.current) {
     case Environment.PRODUCTION:
         grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
 
-        break
+        grails {
+            plugins {
+                springsecurity {
+                    controllerAnnotations.staticRules = [
+                            '/console/**': ['ROLE_CONSOLE_USER']
+                    ]
+                    ipRestrictions = [
+                            '/console/**': '127.0.0.1'
+                    ]
+                    useBasicAuth = true
+                    basic.realmName = 'CAP'
+                    filterChain.chainMap = [
+                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+                    ]
+                }
+            }
+        }
+        break;
     default:
         grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
-
-}
-
-grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
-grails.plugins.springsecurity.rememberMe.key = rememberme.key
-grails {
-    plugins {
-        springsecurity {
-            controllerAnnotations.staticRules = [
-                    '/console/**': ['ROLE_CONSOLE_USER']
-            ]
-            ipRestrictions = [
-                    '/console/**': '127.0.0.1'
-            ]
-            useBasicAuth = true
-            basic.realmName = 'CAP'
-            filterChain.chainMap = [
-//                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-            ]
+        grails {
+            plugins {
+                springsecurity {
+                    controllerAnnotations.staticRules = [
+                            '/console/**': ['ROLE_CONSOLE_USER']
+                    ]
+                    ipRestrictions = [
+                            '/console/**': '127.0.0.1'
+                    ]
+                    useBasicAuth = true
+                    basic.realmName = 'CAP'
+                    filterChain.chainMap = [
+                            '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+                    ]
+                }
+            }
         }
-    }
 }
+
 //prevent session fixation attacks
 grails.plugins.springsecurity.useSessionFixationPrevention = true
 
