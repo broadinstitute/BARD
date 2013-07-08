@@ -36,4 +36,20 @@ class SunburstHandlerTagLibUnitSpec extends Specification {
     }
 
 
+
+//    void "test prepMacroSunburst "() {
+//        given:
+//        def tagLibraryParameters = [:]
+//        compoundSummaryPlusId.'id' =
+//
+//        when:
+//        String results = this.tagLib.prepMacroSunburst([compoundSummaryPlusId:[:]])
+//        then:
+//        results.contains("createALegend")
+//        results.contains("legendGoesHere")
+//    }
+//
+
+
+
 }
