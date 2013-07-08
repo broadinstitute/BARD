@@ -15,8 +15,8 @@ class ViewAssayDefinitionPage extends Page{
 	static content = {
 		viewAssayDefinition {$("div", class:"pull-left").find("h4").text()}
 		adId {$("div#target-summary-info").find("dd").text()}
-		editAssayCotextBtn { $("a.btn.btn-primary", text:"Edit") }  // Edit asssay context btn
-		editAssayMeasureBtn { $("a.btn.btn-small.btn-info", text:"Edit Measures") } // Edit Measure btn
+		editAssayCotextBtn { $("a.btn", text:"Edit") }  // Edit asssay context btn
+		editAssayMeasureBtn { $("a.btn", text:"Edit Measures") } // Edit Measure btn
 		cardHolder {$("table.table.table-hover")}
 		editSummaryBtn { $("button#editSummaryButton") }
 		cardHolders { module CardsHolderModule, $("div.roundedBorder.card-group.assay-protocol--assay-component-") }
@@ -24,6 +24,8 @@ class ViewAssayDefinitionPage extends Page{
 		assaySummary { module SummaryModule, $("div#summaryDetailSection") }
 		editAssaySummary { module EditSummaryModule, $("form#editSummaryForm") }
 		dialogButtonset { module DialogButtonsSetModule, $("div.ui-dialog-buttonset") }
+		
+		addDocumentBtn { $("div#target-documents-info").find("a", text: "Add new document")}
 	}
 
 	def editSummay(def name, def assayStatus, def designedBy){
@@ -32,8 +34,8 @@ class ViewAssayDefinitionPage extends Page{
 		editAssaySummary.ddValue(1).value("")
 		editAssaySummary.ddValue(1).value(name)
 		editAssaySummary.ddSelect(3).value(assayStatus)
-		editAssaySummary.ddValue(4).value("")
-		editAssaySummary.ddValue(4).value(designedBy)
+		editAssaySummary.ddValue(5).value("")
+		editAssaySummary.ddValue(5).value(designedBy)
 		assert dialogButtonset.button[0]
 		assert dialogButtonset.button[1]
 		dialogButtonset.button[0].click()

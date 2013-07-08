@@ -1,8 +1,8 @@
 package pages
 
 import geb.Page
-import modules.SelectToContainerModule
-import modules.SelectInputModule
+import modules.SelectToDropModule
+import modules.SelectChoicePopupModule
 import modules.SelectResultPopListModule
 import modules.CardsHolderModule
 import geb.Module
@@ -27,7 +27,7 @@ class EditAssayContextPage extends Page{
 		cardHolders { module CardsHolderModule, $("div.roundedBorder.card-group.assay-protocol--assay-component-") }
 		moveAssayCardItem { module MoveCardItemsModule }
 		itemWizard { module AddItemWizardModule, $("form#AddItemWizard") }
-		selectToSearch { module SelectInputModule}
+		selectToSearch { module SelectChoicePopupModule}
 		selectResult { module SelectResultPopListModule }
 	}
 
@@ -86,7 +86,7 @@ class EditAssayContextPage extends Page{
 	def deletAssayCard(def cardName){
 		assert isCardPresent(cardName)
 		cardHolders.cardMenu(cardName).click()
-		cardHolders.cardDDMenu[3].click()
+		cardHolders.cardDDMenu[4].click()
 		waitFor { deleteAssayCards.deleteBtn }
 		deleteAssayCards.deleteBtn.click()
 	}
@@ -179,7 +179,7 @@ class EditAssayContextPage extends Page{
 		def resultMap = [:]
 		if(isContextItem(card))
 			cardHolders.cardItems(card).each{
-				resultMap = ['attributeLabel':it.find("td")[0].text(), 'valueDisplay':it.find("td")[1].text()]
+				resultMap = ['attributeLabel':it.find("td")[1].text(), 'valueDisplay':it.find("td")[2].text()]
 				resultList.add(resultMap)
 			}
 		return resultList
@@ -228,9 +228,9 @@ class MoveCardItemsModule extends Module {
 
 class AddItemWizardModule extends Module {
 	static content = {
-		selectAttrib { module SelectToContainerModule, $("div#s2id_attributeId") }
-		selectValue { module SelectToContainerModule, $("div#s2id_valueId") }
-		selectValueUnit { module SelectToContainerModule, $("div#s2id_valueUnitId") }
+		selectAttrib { module SelectToDropModule, $("div#s2id_attributeId") }
+		selectValue { module SelectToDropModule, $("div#s2id_valueId") }
+		selectValueUnit { module SelectToDropModule, $("div#s2id_valueUnitId") }
 		naviBtns { $("div.navigation")}
 		nextBtn { naviBtns.find("input", name:"next") }
 		cancelBtn { naviBtns.find("input", name:"cancel") }

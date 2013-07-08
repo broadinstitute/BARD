@@ -1,7 +1,7 @@
 package pages
 
 import geb.Page
-import modules.SearchFieldsModule
+//import modules.SearchFieldsModule
 
 class FindAssayByIdPage extends Page {
 	def FIND_ASSAY_FIELD = "assayId"

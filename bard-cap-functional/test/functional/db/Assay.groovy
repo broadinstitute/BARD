@@ -1,10 +1,6 @@
 package db
 
-import java.util.Map;
-import db.DatabaseConnectivity
-import db.CapQueries;
-
-class Assay extends DatabaseConnectivity implements CapQueries{
+class Assay extends DatabaseConnectivity {
 
 	/**
 	 * @param assayId

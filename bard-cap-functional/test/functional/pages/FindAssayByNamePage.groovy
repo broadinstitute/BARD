@@ -2,7 +2,7 @@ package pages
 
 import geb.Page
 import modules.SearchResultTableModule
-import modules.SearchFieldsModule
+//import modules.SearchFieldsModule
 import modules.AutocompleteResultModule
 import pages.HomePage
 import geb.Module
@@ -14,7 +14,6 @@ class FindAssayByNamePage extends CapFunctionalPage {
 		$("div.hero-unit-v1").find("h4").text() ==~ "Search assay by name"
 	}
 
-
 	static content = {
 		assayResultAccordian { $("div#results_accordion").find("h3") }
 		resultHolderTable { moduleList SearchResultTableModule, $("table.gridtable tr").tail() }
@@ -23,6 +22,6 @@ class FindAssayByNamePage extends CapFunctionalPage {
 		capHeaders { module BardCapHeaderModule }
 		autocompleteItems { moduleList AutocompleteResultModule,  $("li.ui-menu-item")}
 	}
-	
+
 
 }

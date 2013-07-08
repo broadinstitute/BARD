@@ -1,9 +1,14 @@
 dataSource {
 	pooled = true
-	driverClassName = "oracle.jdbc.OracleDriver"
-	url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
-	username = "bard_qa_cap"
-	password = "Ze3eqe2T"
+//	driverClassName = "oracle.jdbc.OracleDriver"
+//	url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+//	username = "bard_qa_cap"
+//	password = "Ze3eqe2T"
+	
+//	driverClassName = "oracle.jdbc.OracleDriver"
+//	url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+//	username = "bard_dev"
+//	password = "prEWr9safra8ahu"
 }
 hibernate {
 	cache.use_second_level_cache = true
@@ -19,8 +24,8 @@ environments {
 			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
 			driverClassName = "oracle.jdbc.OracleDriver"
 			url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
-			username = "bard_qa_cap"
-			password = "Ze3eqe2T"
+			username = "bard_dev"
+			password = "prEWr9safra8ahu"
 		}
 	}
 	test {
@@ -32,6 +37,12 @@ environments {
 			url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
 			username = "bard_qa_cap"
 			password = "Ze3eqe2T"
+			
+//			dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
+//			driverClassName = "oracle.jdbc.OracleDriver"
+//			url = "jdbc:oracle:thin:@vmbarddev:1521:barddev"
+//			username = "bard_dev"
+//			password = "prEWr9safra8ahu"
 		}
 	}
 	production {
