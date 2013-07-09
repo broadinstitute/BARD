@@ -3,7 +3,7 @@ package bard.core.rest.spring
 import bard.core.interfaces.RestApiConstants
 import bard.core.rest.spring.AbstractRestService
 import bard.core.util.SSLTrustManager
-import clover.org.apache.commons.lang.StringUtils
+import org.apache.commons.lang.StringUtils
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders

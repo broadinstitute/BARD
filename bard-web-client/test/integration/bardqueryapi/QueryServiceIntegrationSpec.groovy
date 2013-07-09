@@ -369,12 +369,12 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         assert paths[endNode] == expectedPath
 
         where:
-        methodName                     | label                         | endNode                | expectedPath
-        'getPathsForAssayFormat'       | "with 'protein format'"       | 'protein format'       | 'assay format/biochemical format/protein format'
-        'getPathsForAssayFormat'       | "with 'assay format'"         | 'assay format'         | 'assay format'
-        'getPathsForAssayType'         | "with 'in vitro'"             | 'in vitro'             | 'assay type/assay mode/in vitro'
-        'getPathsForAssayType'         | "with 'assay type'"           | 'assay type'           | 'assay type'
-        'getPathsForBiologicalProcess' | "with 'NCBI BioSystems term'" | 'NCBI BioSystems term' | 'biological process/NCBI BioSystems term'
-        'getPathsForBiologicalProcess' | "with 'biological process'"   | 'biological process'   | 'biological process'
+        methodName                     | label                       | endNode              | expectedPath
+        'getPathsForAssayFormat'       | "with 'protein format'"     | 'protein format'     | 'assay format/biochemical format/protein format'
+        'getPathsForAssayFormat'       | "with 'assay format'"       | 'assay format'       | 'assay format'
+        'getPathsForAssayType'         | "with 'in vitro'"           | 'in vitro'           | 'assay type/assay mode/in vitro'
+        'getPathsForAssayType'         | "with 'assay type'"         | 'assay type'         | 'assay type'
+        'getPathsForBiologicalProcess' | "with 'DNA repair'"         | 'DNA repair'         | 'biological_process/cellular process/cellular metabolic process/cellular macromolecule metabolic process/DNA metabolic process/DNA repair'
+        'getPathsForBiologicalProcess' | "with 'biological_process'" | 'biological_process' | 'biological_process'
     }
 }

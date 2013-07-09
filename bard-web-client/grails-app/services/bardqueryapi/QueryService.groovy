@@ -22,6 +22,8 @@ import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
 import bard.core.rest.spring.experiment.ExperimentSearchResult
+import org.broadinstitute.ontology.GOOntologyService
+import org.springframework.cache.annotation.Cacheable
 
 class QueryService implements IQueryService {
     final static String PROBE_ETAG_ID = 'bee2c650dca19d5f'
@@ -36,6 +38,7 @@ class QueryService implements IQueryService {
     SubstanceRestService substanceRestService
     ExperimentRestService experimentRestService
     CapRestService capRestService
+    GOOntologyService goOntologyService
 
     //========================================================== Free Text Searches ================================
 
@@ -657,8 +660,22 @@ class QueryService implements IQueryService {
     }
 
     @Override
+    @Cacheable(value = 'goOntologyPaths')
     Map getPathsForBiologicalProcess(String endNode) {
-        return getPathsForType('biologicalProcess', endNode)
+        List<String> paths = goOntologyService.getGOHierarchicalPathsByLabel(endNode)
+        //Sort primarily based on the distance of the node from the root (the shorter, the more generic the biological process is)
+        // and secondarily (if two nodes are equally distanced from the root) based on their string representation.
+        //This is required to get a consistent sorting.
+        String shortestPath = paths.unique().sort { String lpath, String rpath ->
+            Integer lpathSplitSize = lpath.split('/').size()
+            Integer rpathSplitSize = rpath.split('/').size()
+            if (lpathSplitSize != rpathSplitSize) {
+                return lpathSplitSize <=> rpathSplitSize
+            } else {
+                return lpath <=> rpath
+            }
+        }.first()
+        return buildPathMap(shortestPath, 'biological_process')
     }
 
     Map getPathsForType(String type, String endNode) {
@@ -669,7 +686,11 @@ class QueryService implements IQueryService {
         if (!foundPath) {
             return [:]
         }
-        String[] foundPathSplit = foundPath.split('/')
+        return buildPathMap(foundPath, startingNode)
+    }
+
+    private Map buildPathMap(String path, String startingNode) {
+        String[] foundPathSplit = path.split('/')
         Integer startingNodeIndex = foundPathSplit.findIndexOf { it == startingNode } // e.g., find 'assay format' in '/BARD/assay protocol/assay format/biochemical format/nucleic acid format/'
         if (startingNodeIndex < 0) {
             return [:]
