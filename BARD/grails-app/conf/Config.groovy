@@ -128,6 +128,7 @@ switch (Environment.current) {
         }
         break;
     default:
+        //use basic auth and in memory security services in no-production environments
         grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
         grails {
             plugins {

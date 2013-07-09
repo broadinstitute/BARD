@@ -67,10 +67,17 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         projectData = (Map) remote.exec({
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
-            Project project = Project.build(name: "Some Name").save(flush: true)
+            Project project = Project.build(name: "Some Name2").save(flush: true)
 
             if (!StageTree.findAll()) {
-                StageTree.build().save(flush: true)
+                final List<Element> all = Element.findAll()
+                if (all) {
+                    Element element = all.get(0)
+                    StageTree.build(element: element).save(flush: true)
+                } else {
+
+                    StageTree.build().save(flush: true)
+                }
             }
 
             //create assay context
@@ -333,7 +340,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK
     }
 
-
+    @IgnoreRest
     def 'test projectStages #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "projectStages", team, teamPassword)
@@ -837,16 +844,31 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             if (!toElement) {
                 toElement = Element.build(label: elementToLabel).save(flush: true)
             }
-            StageTree stageTree1 = StageTree.build(element: fromElement).save(flush: true)
-            StageTree stageTree2 = StageTree.build(element: toElement).save(flush: true)
+
+
+            if (!StageTree.findByElement(fromElement)) {
+                StageTree.build(element: fromElement).save(flush: true)
+            }
+
+
+            if (!StageTree.findByElement(toElement)) {
+                StageTree.build(element: toElement).save(flush: true)
+            }
 
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
+            ProjectExperiment projectExperimentFrom = ProjectExperiment.findByProjectAndExperiment(project, experimentFrom)
+            if (!projectExperimentFrom) {
+                projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
-            ProjectExperiment projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
-            ProjectExperiment projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+            }
 
+            ProjectExperiment projectExperimentTo = ProjectExperiment.findByProjectAndExperiment(project, experimentTo)
 
+            if (!projectExperimentTo) {
+                ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+
+            }
             return [peFromId: projectExperimentFrom.id, peToId: projectExperimentTo.id, eFromId: experimentFrom.id, eToId: experimentTo.id, projectId: project.id]
         })
         projectIdList.add(m.projectId)
@@ -873,18 +895,43 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             if (!toElement) {
                 toElement = Element.build(label: elementToLabel).save(flush: true)
             }
-            StageTree stageTree1 = StageTree.build(element: fromElement).save(flush: true)
-            StageTree stageTree2 = StageTree.build(element: toElement).save(flush: true)
+            if (!StageTree.findByElement(fromElement)) {
+                StageTree.build(element: fromElement).save(flush: true)
+            }
+
+
+            if (!StageTree.findByElement(toElement)) {
+                StageTree.build(element: toElement).save(flush: true)
+            }
 
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
 
-            ProjectExperiment projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
-            ProjectExperiment projectExperimentTo = ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+            ProjectExperiment projectExperimentFrom = ProjectExperiment.findByProjectAndExperiment(project, experimentFrom)
+            if (!projectExperimentFrom) {
+                projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
-            ProjectStep projectStep = ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo).save(flush: true)
-            projectExperimentFrom.addToFollowingProjectSteps(projectStep)
-            projectExperimentTo.addToPrecedingProjectSteps(projectStep)
+            }
+
+            ProjectExperiment projectExperimentTo = ProjectExperiment.findByProjectAndExperiment(project, experimentTo)
+
+            if (!projectExperimentTo) {
+                ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
+
+            }
+
+
+            ProjectStep projectStep = ProjectStep.findByPreviousProjectExperimentAndNextProjectExperiment(projectExperimentFrom, projectExperimentTo)
+            if (!projectStep) {
+                projectStep = ProjectStep.build(previousProjectExperiment: projectExperimentFrom, nextProjectExperiment: projectExperimentTo).save(flush: true)
+            }
+
+            if (!ProjectExperiment.findByFollowingProjectSteps([projectStep] as Set)) {
+                projectExperimentFrom.addToFollowingProjectSteps(projectStep)
+            }
+            if (!ProjectExperiment.findByPrecedingProjectSteps([projectStep] as Set)) {
+                projectExperimentTo.addToPrecedingProjectSteps(projectStep)
+            }
 
             projectExperimentFrom.save(flush: true)
             projectExperimentTo.save(flush: true)
