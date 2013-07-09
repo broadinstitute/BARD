@@ -100,7 +100,7 @@ grails.project.dependency.resolution = {
         compile ":mail:1.0.1"
         compile ":greenmail:1.3.3"
         compile ":cache:1.0.1"
-
+        compile ":ontology:0.0.1"
         // runtime scope
         runtime ":hibernate:$grailsVersion"
         runtime ":jquery:1.7.1"
