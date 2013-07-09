@@ -663,7 +663,18 @@ class QueryService implements IQueryService {
     @Cacheable(value = 'goOntologyPaths')
     Map getPathsForBiologicalProcess(String endNode) {
         List<String> paths = goOntologyService.getGOHierarchicalPathsByLabel(endNode)
-        String shortestPath = paths.unique().sort {String path -> path.split('/').size()}.first()
+        //Sort primarily based on the distance of the node from the root (the shorter, the more generic the biological process is)
+        // and secondarily (if two nodes are equally distanced from the root) based on their string representation.
+        //This is required to get a consistent sorting.
+        String shortestPath = paths.unique().sort { String lpath, String rpath ->
+            Integer lpathSplitSize = lpath.split('/').size()
+            Integer rpathSplitSize = rpath.split('/').size()
+            if (lpathSplitSize != rpathSplitSize) {
+                return lpathSplitSize <=> rpathSplitSize
+            } else {
+                return lpath <=> rpath
+            }
+        }.first()
         return buildPathMap(shortestPath, 'biological_process')
     }
 

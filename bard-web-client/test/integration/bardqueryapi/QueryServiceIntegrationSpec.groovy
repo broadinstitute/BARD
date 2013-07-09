@@ -374,7 +374,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         'getPathsForAssayFormat'       | "with 'assay format'"       | 'assay format'       | 'assay format'
         'getPathsForAssayType'         | "with 'in vitro'"           | 'in vitro'           | 'assay type/assay mode/in vitro'
         'getPathsForAssayType'         | "with 'assay type'"         | 'assay type'         | 'assay type'
-        'getPathsForBiologicalProcess' | "with 'DNA repair'"         | 'DNA repair'         | 'biological_process/response to stimulus/response to stress/cellular response to stress/response to DNA damage stimulus/DNA repair'
+        'getPathsForBiologicalProcess' | "with 'DNA repair'"         | 'DNA repair'         | 'biological_process/cellular process/cellular metabolic process/cellular macromolecule metabolic process/DNA metabolic process/DNA repair'
         'getPathsForBiologicalProcess' | "with 'biological_process'" | 'biological_process' | 'biological_process'
     }
 }
