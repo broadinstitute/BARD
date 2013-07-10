@@ -160,6 +160,7 @@ class AssayDefinitionController {
             assay = Assay.get(id)
             flash.message = "Cannot clone assay definition with id \"${id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
 
+            log.error("Clone assay failed", ee);
         }
         JSON measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assay, false))
         render(view: "show", model: [assayInstance: assay, measureTreeAsJson: measureTreeAsJson])

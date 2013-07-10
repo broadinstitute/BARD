@@ -51,11 +51,10 @@ class AssayService {
         assignParentMeasures(assay, measureOldToNew)
 
         cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
-        newAssay.save(flush: true)
+        newAssay.save(flush: true, failOnError: true)
         //now call the manage names stored procedure
         //then look up and return the assay
         return Assay.findById(newAssay.id)
-
     }
 
     /**
@@ -68,7 +67,8 @@ class AssayService {
 //        }
         //now call the manage names stored procedure
         //then look up and return the assay
-        return Assay.findById(assay.id)
+//        return Assay.findById(assay.id)
+        return assay
     }
 
     Assay cloneAssayOnly(Assay assay,
