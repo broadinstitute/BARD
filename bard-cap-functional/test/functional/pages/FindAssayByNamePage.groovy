@@ -7,7 +7,7 @@ import modules.AutocompleteResultModule
 import pages.HomePage
 import geb.Module
 
-class FindAssayByNamePage extends CapFunctionalPage {
+class FindAssayByNamePage extends CommonFunctionalPage {
 	def FIND_ASSAY_FIELD = "assayName"
 	static url = "assayDefinition/findByName/"
 	static at = {

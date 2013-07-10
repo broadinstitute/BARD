@@ -4,7 +4,7 @@ import pages.HomePage
 import pages.ViewAssayDefinitionPage
 import pages.FindAssayByIdPage
 import pages.EditAssayContextPage
-import pages.CapFunctionalPage
+import pages.CommonFunctionalPage
 import pages.ScaffoldPage
 import spock.lang.Ignore;
 import spock.lang.Shared;

@@ -2,6 +2,7 @@ package scenarios
 import base.BardFunctionalSpec;
 import pages.HomePage
 import pages.LoginPage
+import spock.lang.Ignore;
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,6 +11,7 @@ import pages.LoginPage
  * Time: 10:40 AM
  * To change this template use File | Settings | File Templates.
  */
+@Ignore
 class LoginFunctionalSpec extends BardFunctionalSpec {
     String invalidUserName = "baduser"
     String invalidPassword = "badpassword"

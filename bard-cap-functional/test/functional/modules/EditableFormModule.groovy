@@ -13,6 +13,6 @@ class EditableFormModule extends Module {
 		cancelButton(wait: true, required: false) { editableButtons.find("button", type:"button")}
 		selectInput(wait: true, required: false) { editableInput.find(".input-medium")}
 		inputField(wait: true, required: false) { editableInput.find("input", type:"text")}
-		errorMessage(wait: true, required: false) { editableform.find("div.editable-error-block.help-block") }
+//		errorMessage(wait: true, required: false) { editableform.find("div.editable-error-block.help-block") }
 	}
 }

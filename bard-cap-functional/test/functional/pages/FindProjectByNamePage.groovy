@@ -10,7 +10,7 @@ import pages.HomePage
 import geb.Module
 import geb.navigator.Navigator;
 
-class FindProjectByNamePage extends CapFunctionalPage {
+class FindProjectByNamePage extends CommonFunctionalPage {
 	def FIND_PROJECT_FIELD = "projectName"
 	static url = "project/findByName/"
 	static at = {

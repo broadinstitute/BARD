@@ -110,21 +110,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
 			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.size() < uiContentsAfterAdd.size()
+		assert dbContents.size() < dbContentsAfterAdd.size()
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Add with Free Text Type"(){
@@ -198,21 +196,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
 			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.size() < uiContentsAfterAdd.size()
+		assert dbContents.size() < dbContentsAfterAdd.size()
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Add with Numeric Value Type"(){
@@ -286,20 +282,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
 			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
+
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.size() < uiContentsAfterAdd.size()
+		assert dbContents.size() < dbContentsAfterAdd.size()
+		assert uiContents.sort() == dbContents.sort()
 
 	}
 
@@ -374,21 +369,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
 			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.size() < uiContentsAfterAdd.size()
+		assert dbContents.size() < dbContentsAfterAdd.size()
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Add with External Ontology Type not using Intergratged Search"(){
@@ -462,21 +455,19 @@ class ProjectContextSpec extends BardFunctionalSpec {
 			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
 			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.size() < uiContentsAfterAdd.size()
+		assert dbContents.size() < dbContentsAfterAdd.size()
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Add with Element Type having Element field empty"(){
@@ -592,7 +583,7 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert dbContentsAfterAdd.size() == dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 	}
-	
+
 	def "Test Project Context Item Add with Free Text Type having Display Value empty"(){
 		when:"At View Project Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -840,19 +831,17 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Edit with Free Text Type"(){
@@ -931,19 +920,17 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Edit with Numeric Value Type"(){
@@ -1022,19 +1009,17 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Edit with External Ontology Type having no Intergration search"(){
@@ -1113,19 +1098,17 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Edit with External Ontology Type having Intergration search"(){
@@ -1204,19 +1187,17 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
-
-			and:"Navigating to View Project Page"
-			finishEditing.buttonPrimary.click()
-
-			when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
-			at ViewProjectDefinitionPage
-			uiContentsAfterDelete = getUIContextItems(Constants.contextCard)
-			dbContentsAfterDelete = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
-
-			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
+		and:"Navigating to View Project Page"
+		finishEditing.buttonPrimary.click()
 
+		when:"At VIew Project Page, Fetching Contexts Info from UI and DB for validation"
+		at ViewProjectDefinitionPage
+		def uiContents = getUIContextItems(Constants.contextCard)
+		def dbContents = Project.getProjectContextItem(testData.ProjectID,Constants.contextCard)
+
+		then:"Verifying Context Info with UI & DB"
+		assert uiContents.sort() == dbContents.sort()
 	}
 
 	def "Test Project Context Item Delete with External Ontology Type"(){

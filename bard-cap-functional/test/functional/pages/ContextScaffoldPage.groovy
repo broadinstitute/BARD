@@ -1,9 +1,11 @@
 package pages
 
+import common.Constants;
+
 import geb.Page
 import modules.CardsHolderModule
 
-class ContextScaffoldPage extends Page {
+class ContextScaffoldPage extends CommonFunctionalPage {
     static content = {
 		cardTable{ contextTitle -> module CardsHolderModule, $("div.card.roundedBorder.card-table-container").find("table.table.table-hover"), contextCard:contextTitle }
     }
@@ -50,4 +52,10 @@ class ContextScaffoldPage extends Page {
 		}
 		return found
 	}
+	/**
+	 * Method is used to validate the inline error messages when fields are left blank/empty then it ensure that validation error message is appear or not
+	 * @param editForm
+	 * @param condition
+	 * @return either true or false based on the scenario
+	 */	
 }

@@ -8,6 +8,7 @@ import modules.ButtonsModule
 import modules.DocumentSectionModule
 import modules.EditIconModule
 import modules.EditableFormModule
+import modules.ErrorInlineModule;
 import modules.LoadingModule
 import modules.SummaryModule
 
@@ -25,100 +26,48 @@ class ViewProjectDefinitionPage extends ContextScaffoldPage{
 		capHeaders { module BardCapHeaderModule }
 		experimentBtns { module ExperimentBtnsModule }
 		viewprojectSummary { module SummaryModule, summaryHeader }
-		projectSummaryStatusEdit {module EditIconModule, viewprojectSummary.ddValue[Constants.index_1] }
-		projectSummaryNameEdit {module EditIconModule, viewprojectSummary.ddValue[Constants.index_2] }
-		projectSummaryDescriptionEdit {module EditIconModule, viewprojectSummary.ddValue[Constants.index_3] }
-		formLoading { module LoadingModule}
+		projectSummaryEdit {index -> module EditIconModule, viewprojectSummary.ddValue[index] }
 		editableForm { module EditableFormModule }
-
+		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
-
 	}
 
-	def editSummay(ProjectSummaryEdit edit, def editValue){
+	def editSummary(def indexValue, def editValue, def editCombo=false){
 		def errorMessage = "Required and cannot be empty"
-		switch(edit){
-			case ProjectSummaryEdit.STATUS:
-				try{
-					assert projectSummaryStatusEdit.editIconPencil
-					projectSummaryStatusEdit.editIconPencil.click()
-					waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.editableFormLoading.displayed }
-					assert editableForm.selectInput
-					assert editableForm.submitButton
-					assert editableForm.cancelButton
-					editableForm.selectInput.value(editValue)
-					editableForm.submitButton.click()
-					waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
-					!editableForm.selectInput
-					!editableForm.submitButton
-					!editableForm.cancelButton
-
-				}catch(RequiredPageContentNotPresent c){
-				}catch(IllegalArgumentException e){
-				}catch(WaitTimeoutException w){
-				}
-				break;
-			case ProjectSummaryEdit.NAME:
-				try{
-					assert projectSummaryNameEdit.editIconPencil
-					projectSummaryNameEdit.editIconPencil.click()
-					waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.editableFormLoading.displayed }
-					assert editableForm.inputField
-					assert editableForm.submitButton
-					assert editableForm.cancelButton
-					if(editValue==""){
-						editableForm.inputField.value("")
-						editableForm.inputField.value(editValue)
-						editableForm.submitButton.click()
-						waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ editableForm.errorMessage }
-						assert editableForm.errorMessage.text() == errorMessage
-						editableForm.cancelButton.click()
-					}else{
-						editableForm.inputField.value("")
-						editableForm.inputField.value(editValue)
-						editableForm.submitButton.click()
-					}
-					waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
-					!editableForm.inputField
-					!editableForm.submitButton
-					!editableForm.cancelButton
-
-				}catch(RequiredPageContentNotPresent c){
-				}catch(IllegalArgumentException e){
-				}catch(WaitTimeoutException w){
-				}
-				break;
-			case ProjectSummaryEdit.DESCRIPTION:
-				try{
-					assert projectSummaryDescriptionEdit.editIconPencil
-					projectSummaryDescriptionEdit.editIconPencil.click()
-					waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.editableFormLoading.displayed }
-					assert editableForm.inputField
-					assert editableForm.submitButton
-					assert editableForm.cancelButton
-					if(editValue==""){
-						editableForm.inputField.value("")
-						editableForm.inputField.value(editValue)
-						editableForm.submitButton.click()
-						waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ editableForm.errorMessage }
-						assert editableForm.errorMessage.text() == errorMessage
-						editableForm.cancelButton.click()
-					}else{
-						editableForm.inputField.value("")
-						editableForm.inputField.value(editValue)
-						editableForm.submitButton.click()
-					}
-					waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
-					!editableForm.inputField
-					!editableForm.submitButton
-					!editableForm.cancelButton
-
-				}catch(RequiredPageContentNotPresent c){
-				}catch(IllegalArgumentException e){
-				}catch(WaitTimeoutException w){
-				}
-				break;
+		assert projectSummaryEdit(indexValue).editIconPencil
+		projectSummaryEdit(indexValue).editIconPencil.click()
+		ajaxRequestCompleted()
+		assert editableForm.submitButton
+		assert editableForm.cancelButton
+		if(editCombo){
+			selectingComboValue(editValue)
+		}else{
+			if(editValue==""){
+				fillInputField(editValue)
+				validationError(controlError.helpBlock, errorMessage)
+				editableForm.cancelButton.click()
+			}else{
+				fillInputField(editValue)
+			}
 		}
+		ajaxRequestCompleted()
+		!editableForm.selectInput
+		!editableForm.submitButton
+		!editableForm.cancelButton
+		!editableForm.selectInput
+	}
+
+	def fillInputField(def editValue){
+		assert editableForm.inputField
+		assert editableForm.submitButton
+		editableForm.inputField.value("")
+		editableForm.inputField.value(editValue)
+		editableForm.submitButton.click()
+	}
+	def selectingComboValue(def editValue){
+		assert editableForm.selectInput
+		editableForm.selectInput.value(editValue)
+		editableForm.submitButton.click()
 	}
 
 	Map<String, String> getUISummaryInfo(){
@@ -139,31 +88,23 @@ class ViewProjectDefinitionPage extends ContextScaffoldPage{
 		document.addNewDocument.iconPlus.click()
 	}
 
-	def editDocument(def document, def editForm, def docName, def editValue){
+	def editDocument(def document, def docName, def editValue){
 		def errorMessage = "Field is required and must not be empty"
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).editIconPencil
 			document.documentContents(docName).editIconPencil.click()
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
-			assert editForm.inputField
-			assert editForm.submitButton
-			assert editForm.cancelButton
+			ajaxRequestCompleted()
 			if(editValue==""){
-				editForm.inputField.value("")
-				editForm.inputField.value(editValue)
-				editForm.submitButton.click()
-				waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ editForm.errorMessage }
-				assert editForm.errorMessage.text() == errorMessage
-				editForm.cancelButton.click()
+				fillInputField(editValue)
+				validationError(controlError.helpBlock, errorMessage)
+				editableForm.cancelButton.click()
 			}else{
-				editForm.inputField.value("")
-				editForm.inputField.value(editValue)
-				editForm.submitButton.click()
+				fillInputField(editValue)
 			}
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
-			!editForm.inputField
-			!editForm.submitButton
-			!editForm.cancelButton
+			ajaxRequestCompleted()
+			!editableForm.inputField
+			!editableForm.submitButton
+			!editableForm.cancelButton
 		}
 	}
 
@@ -171,7 +112,7 @@ class ViewProjectDefinitionPage extends ContextScaffoldPage{
 		if(isDocument(document, docName)){
 			assert document.documentContents(docName).iconTrash
 			withConfirm { document.documentContents(docName).iconTrash.click() }
-			waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
+			ajaxRequestCompleted()
 		}
 	}
 
@@ -193,9 +134,6 @@ class ViewProjectDefinitionPage extends ContextScaffoldPage{
 		return uiDocuments
 	}
 
-	String documentSection(def docType){
-		return docType+":"
-	}
 }
 
 class ExperimentBtnsModule extends Module {

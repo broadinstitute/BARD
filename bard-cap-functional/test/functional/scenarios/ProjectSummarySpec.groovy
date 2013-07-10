@@ -48,7 +48,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Edit/Update Summary Status"
-		editSummay(ProjectSummaryEdit.STATUS, testData.ProjectStatus)
+		editSummary(1, testData.ProjectStatus, true)
 
 		when:"Status is Updated, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -77,8 +77,8 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Edit/Update Summary Name"
-		editSummay(ProjectSummaryEdit.NAME, projectNameEdited)
-
+		editSummary(2, projectNameEdited)
+		
 		when:"Summary Name is Updated, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
 		uiSummary = getUISummaryInfo()
@@ -91,7 +91,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Revert Edit/Update Summary Name"
-		editSummay(ProjectSummaryEdit.NAME, projectNameOriginal)
+		editSummary(2, projectNameOriginal)
 
 		when:"Summary Name is reverted, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -118,7 +118,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Edit/Update Summary Description"
-		editSummay(ProjectSummaryEdit.NAME, "")
+		editSummary(2, "")
 
 		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -147,7 +147,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Edit/Update Summary Description"
-		editSummay(ProjectSummaryEdit.DESCRIPTION, projectDescriptionEdited)
+		editSummary(3, projectDescriptionEdited)
 
 		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -161,7 +161,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Revert Edit/Update Summary Description"
-		editSummay(ProjectSummaryEdit.DESCRIPTION, projectDescriptionOriginal)
+		editSummary(3, projectDescriptionOriginal)
 
 		when:"Summary Description is reverted, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -188,7 +188,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Edit/Update Summary Description"
-		editSummay(ProjectSummaryEdit.DESCRIPTION, "")
+		editSummary(3, "")
 
 		when:"Summary Description is Updated, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage
@@ -200,6 +200,5 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.Description.equalsIgnoreCase(dbSummary.Description.toString())
 		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
-
 	}
 }
