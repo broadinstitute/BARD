@@ -22,6 +22,7 @@ import bard.core.rest.spring.*
 import bard.core.rest.spring.assays.*
 import bard.core.rest.spring.compounds.*
 import bard.core.rest.spring.experiment.ExperimentSearchResult
+import org.apache.commons.lang3.StringUtils
 import org.broadinstitute.ontology.GOOntologyService
 import org.springframework.cache.annotation.Cacheable
 
@@ -661,21 +662,24 @@ class QueryService implements IQueryService {
 
     @Override
     @Cacheable(value = 'goOntologyPaths')
-    Map getPathsForBiologicalProcess(String endNode) {
+    List<String> getPathsForBiologicalProcess(String endNode) {
         List<String> paths = goOntologyService.getGOHierarchicalPathsByLabel(endNode)
         //Sort primarily based on the distance of the node from the root (the shorter, the more generic the biological process is)
         // and secondarily (if two nodes are equally distanced from the root) based on their string representation.
         //This is required to get a consistent sorting.
-        String shortestPath = paths.unique().sort { String lpath, String rpath ->
-            Integer lpathSplitSize = lpath.split('/').size()
-            Integer rpathSplitSize = rpath.split('/').size()
-            if (lpathSplitSize != rpathSplitSize) {
-                return lpathSplitSize <=> rpathSplitSize
-            } else {
-                return lpath <=> rpath
-            }
-        }.first()
-        return buildPathMap(shortestPath, 'biological_process')
+//        String shortestPath = paths.unique().sort { String lpath, String rpath ->
+//            Integer lpathSplitSize = lpath.split('/').size()
+//            Integer rpathSplitSize = rpath.split('/').size()
+//            if (lpathSplitSize != rpathSplitSize) {
+//                return lpathSplitSize <=> rpathSplitSize
+//            } else {
+//                return lpath <=> rpath
+//            }
+//        }.first()
+//        return buildPathMap(shortestPath, 'biological_process')
+        return paths.unique().collect {String path ->
+            path - StringUtils.substringBefore(path, 'biological_process')
+        }
     }
 
     Map getPathsForType(String type, String endNode) {

@@ -203,5 +203,5 @@ public interface IQueryService {
 
     Map getPathsForAssayType(String endNode)
 
-    Map getPathsForBiologicalProcess(String endNode)
+    List<String> getPathsForBiologicalProcess(String endNode)
 }
