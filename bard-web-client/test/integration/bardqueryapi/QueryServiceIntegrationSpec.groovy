@@ -361,7 +361,7 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         //"Search with a list of project ids" | PIDS
     }
 
-    void "test #methodName #label"() {
+    void "test assay-format and assay-type in #methodName #label"() {
         when: ""
         final Map paths = queryService."${methodName}"(endNode)
 
@@ -374,7 +374,18 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         'getPathsForAssayFormat'       | "with 'assay format'"       | 'assay format'       | 'assay format'
         'getPathsForAssayType'         | "with 'in vitro'"           | 'in vitro'           | 'assay type/assay mode/in vitro'
         'getPathsForAssayType'         | "with 'assay type'"         | 'assay type'         | 'assay type'
-        'getPathsForBiologicalProcess' | "with 'DNA repair'"         | 'DNA repair'         | 'biological_process/cellular process/cellular metabolic process/cellular macromolecule metabolic process/DNA metabolic process/DNA repair'
+    }
+
+    void "test biology process in #methodName #label"() {
+        when: ""
+        final List paths = queryService."${methodName}"(endNode)
+
+        then:
+        assert paths.first() == expectedPath
+
+        where:
+        methodName                     | label                       | endNode              | expectedPath
+        'getPathsForBiologicalProcess' | "with 'DNA repair'"         | 'DNA repair'         | 'biological_process/response to stimulus/cellular response to stimulus/cellular response to stress/response to DNA damage stimulus/DNA repair'
         'getPathsForBiologicalProcess' | "with 'biological_process'" | 'biological_process' | 'biological_process'
     }
 }
