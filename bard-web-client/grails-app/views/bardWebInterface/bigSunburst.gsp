@@ -336,7 +336,7 @@
                                         return d.assay_type;
                                     },
                                     function (d) {
-                                        return d.assayId;
+                                        return "<a href='/bardwebclient/bardWebInterface/showAssay/"+d.assayBId+"'>"+d.assayId+"</a>";
                                     }
                                 ])
                                 .order(d3.ascending)
