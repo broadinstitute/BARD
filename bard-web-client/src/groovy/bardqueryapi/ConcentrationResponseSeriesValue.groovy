@@ -23,6 +23,7 @@ class ConcentrationResponseSeriesValue implements WebQueryValue {
     Double slope
     String responseUnit
     String testConcentrationUnit
+    String qualifier
     Double yNormMin
     Double yNormMax
     String yAxisLabel

@@ -207,6 +207,7 @@ class CompoundBioActivitySummaryBuilder {
                                     slope: priorityElement.getSlope(),
                                     responseUnit: concentrationResponseSeries.responseUnit,
                                     testConcentrationUnit: concentrationResponseSeries.testConcentrationUnit,
+                                    qualifier: priorityElement.qualifier,
                                     yNormMin: yNormMin,
                                     yNormMax: yNormMax)
                             concentrationResponseSeriesValue.yAxisLabel = concentrationResponseSeriesValue.responseUnit
