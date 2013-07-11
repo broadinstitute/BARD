@@ -1,5 +1,11 @@
 var redraw;
 
+/**
+ * This is the js to display graph. During the development process, I have tried using several different js framework to achieve the goal.
+ * Currently, isolated nodes are rendered with RaphaelJS library.
+ * Connected nodes are rendered with viz framework.
+ * I may change to use same framework to display both later based on more feedback of using this.
+ */
 /* only do all this when document has finished loading (needed for RaphaelJS) */
 $(document).ready(function () {
     $.fn.editable.defaults.mode = 'inline';
@@ -9,14 +15,14 @@ function refreshProjectSteps(){
     var projectId = $("#projectIdForStep").val();
     var inputdata = {'projectId':projectId};
     $.ajax
-    ({
-        url:"../reloadProjectSteps",
-        data:inputdata,
-        cache:false,
-        success:function(data) {
-            handleSuccess(data)
-        }
-    });
+        ({
+            url:"../reloadProjectSteps",
+            data:inputdata,
+            cache:false,
+            success:function(data) {
+                handleSuccess(data)
+            }
+        });
 }
 
 function initProjectFunction() {
@@ -38,50 +44,10 @@ function initProjectFunction() {
     var aidColor = {};
     var template = Handlebars.compile($("#node-selection-template").html())
 
-    var g = new Graph();
     var gIsolated = new Graph();
 
-    var render = function (r, n) {
-        var label = r.text(0, 10, n.label);
-
-        //the Raphael set is obligatory, containing all you want to display
-        var set = r.set().push(
-            //r.rect(-10, -13, 10, 10).attr({"fill":"#fc0", "stroke-width":1/*, r : "9px"*/}))    hsb(" + num + ", 0.75, 1)
-            r.circle(-10, -13, 10).attr({"fill":n.data.assignedcolor, "stroke-width":1}))
-            .push(label);
-
-        set.click(
-            function click() {
-                var projectId = $('#projectIdForStep').val();
-                resetAfterClick();
-                var params = {selected:n, projectId:projectId}
-                $('#node-selection-details').html(template(params))
-            }
-        );
-        return set;
-    };
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
-
-    for (var i = 0; i < connectedNodes.length; i++) {
-        var keyValues = connectedNodes[i].keyValues;
-        var colorVal = "";
-        if (keyValues.assay in aidColor)
-            colorVal = aidColor[keyValues.assay];
-        else {
-            if (countUsedColor < kelly.length) {
-                colorVal = kelly[countUsedColor];
-                countUsedColor++;
-            }
-            else {
-                colorVal = color1.get(true);
-            }
-            existingColors.push(colorVal);
-            aidColor[keyValues.assay] = colorVal;
-        }
-        g.addNode(connectedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{link:keyValues.eid, assay:keyValues.assay,
-            ename:keyValues.ename, inCount:keyValues.incount, outCount:keyValues.outcount, aid:keyValues.aid, assignedcolor:colorVal}, render:render });
-    }
 
     var isolatedNodes = graphInJSON.isolatedNodes;
     var renderIsolated = function (r, n) {
@@ -94,7 +60,7 @@ function initProjectFunction() {
             function click() {
                 var projectId = $('#projectIdForStep').val();
                 resetAfterClick();
-                var params = {selected:n, projectId:projectId}
+                var params = {selected:n.data, projectId:projectId}
                 $('#node-selection-details').html(template(params))
             }
         );
@@ -117,21 +83,12 @@ function initProjectFunction() {
             existingColors.push(colorVal);
             aidColor[keyValues.assay] = colorVal;
         }
-        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{link:keyValues.eid, assay:keyValues.assay,
+        gIsolated.addNode(isolatedNodes[i].id, { label:keyValues.eid + "\n" + keyValues.stage, data:{eid:keyValues.eid, stage:keyValues.stage, assay:keyValues.assay,
             ename:keyValues.ename, aid:keyValues.aid, assignedcolor:colorVal}, render:renderIsolated});
     }
 
-    var edges = graphInJSON.edges;
-    for (var i = 0; i < edges.length; i++) {
-        g.addEdge(edges[i].from, edges[i].to, {directed:true, stroke:"#aaa", fill:"#56f"});
-    }
-
-    /* Use our layout implementation that place nodes with no incoming edges at top, and node with outgoing edges at bottom*/
-    // var layouter = new Graph.Layout.OrderedLevel(g, nodeid_sort(g));
-   // var layouter = new Graph.Layout.Spring(g);
     /* Use our layout implementation that place isolated nodes ordered by experiment id*/
     var layouterIsolated = new Graph.Layout.Isolated(gIsolated, nodeid_sort(gIsolated));
-    //var layouterIsolated = new Graph.Layout.Spring(gIsolated);
 
     /* draw the graph using the RaphaelJS draw implementation */
     var totalHeight = 600
@@ -147,13 +104,9 @@ function initProjectFunction() {
         isolatedHeight = totalHeight - connectedHeight
     }
 
-
-    // var renderer = new Graph.Renderer.Raphael('canvas', g, 800, connectedHeight);
     var rendererIsolated = new Graph.Renderer.Raphael('canvasIsolated', gIsolated, 800, isolatedHeight);
 
     redraw = function () {
-//        layouter.layout();
-//        renderer.draw();
         layouterIsolated.layout();
         rendererIsolated.draw();
         initFunction1();
@@ -234,7 +187,7 @@ function initFunction1() {
     $(".graph").find(graphtitle).text("experiment relationships");
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
-    var template = Handlebars.compile($("#node-selection-template1").html())
+    var template = Handlebars.compile($("#node-selection-template").html())
     $(".node").click(function () {
 
         var prevSelectedEdge = $("#selectedEdgeId").text();
