@@ -34,6 +34,7 @@
                                         slope="${result.slope}"
                                         responseUnit="${result.responseUnit}"
                                         testConcentrationUnit="${result.testConcentrationUnit}"
+                                        qualifier="${result.qualifier}"
                                         yNormMin="${result.yNormMin}"
                                         yNormMax="${result.yNormMax}"
                                         yAxisLabel="${result.yAxisLabel}"

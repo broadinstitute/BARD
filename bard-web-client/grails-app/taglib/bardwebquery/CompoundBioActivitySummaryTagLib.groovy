@@ -68,7 +68,11 @@ class CompoundBioActivitySummaryTagLib {
             out << "<a href=\"${attrs?.title?.dictionaryElement.value}\" target=\"datadictionary\">"
             out << "<i class=\"icon-question-sign\"></i></a>"
         }
-        out << ": ${attrs?.title?.value?.right?.value ?: ''}</b></p>"
+        out << ": "
+        out << "${attrs?.qualifier ?: ''}"
+        out << "${attrs?.title?.value?.right?.value ?: ''}"
+        out << "${attrs?.testConcentrationUnit ?: ''}"
+        out << "</b></p>"
         out << "<p class='lineSpacing'>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
         out << "<p class='lineSpacing'>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
         out << "<p class='lineSpacing'>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"

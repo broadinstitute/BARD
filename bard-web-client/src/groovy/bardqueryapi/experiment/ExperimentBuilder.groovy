@@ -65,7 +65,7 @@ class ExperimentBuilder {
                 new StructureValue(
                         cid: cid,
                         sid: sid,
-                        smiles: compoundAdapter?.structureSMILES,
+                        smiles: compoundAdapter?.compound?.smiles,
                         name: compoundAdapter?.name,
                         numActive: compoundAdapter?.numberOfActiveAssays,
                         numAssays: compoundAdapter?.numberOfAssays
