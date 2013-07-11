@@ -20,6 +20,7 @@ abstract class Descriptor<T extends Descriptor> {
 
     T parent
     Element element
+
     ElementStatus elementStatus = ElementStatus.Pending
 
     String label
@@ -31,6 +32,7 @@ abstract class Descriptor<T extends Descriptor> {
     String synonyms
     String externalURL
     Element unit
+
 
     static constraints = {
 

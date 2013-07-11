@@ -10,6 +10,10 @@ package bard.db.dictionary
 class BardDescriptor extends Descriptor<BardDescriptor> {
     public static String ROOT_PREFIX = "BARD> "
 
+    Set<BardDescriptor> children = [] as Set<BardDescriptor>
+
+    static hasMany = [children: BardDescriptor]
+
     static mapping = {
         table('BARD_TREE')
         id(column: 'NODE_ID', generator: 'assigned')
