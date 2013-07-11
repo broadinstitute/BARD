@@ -1,5 +1,6 @@
 package molspreadsheet
 
+import bard.core.util.ExperimentalValueUnitUtil
 import org.slf4j.LoggerFactory
 import bard.core.util.ExperimentalValueUtil
 
@@ -34,6 +35,14 @@ class HillCurveValueHolder {
     }
 
 
+    void setQualifier (MolSpreadSheetCellType molSpreadSheetCellType)  {
+        if (molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric)  {
+            qualifier = ">"
+        } else if (molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)  {
+            qualifier = "<"
+        }
+    }
+
     @Override
     public String toString() {
         String returnValue = "Missing data qualifier"
@@ -52,7 +61,8 @@ class HillCurveValueHolder {
         }
 
         if (numericalReturnValue != Double.NaN)  {
-            returnValue  = new ExperimentalValueUtil(numericalReturnValue)
+//            returnValue  = numericalReturnValue as String
+            returnValue  = new ExperimentalValueUtil(numericalReturnValue,ExperimentalValueUnitUtil.Micromolar,ExperimentalValueUnitUtil.Micromolar)
         } else {
             returnValue  = '--'
         }
@@ -61,7 +71,7 @@ class HillCurveValueHolder {
             return returnValue
         }
         else {
-            return qualifier+returnValue
+            return qualifier+" "+returnValue
         }
     }
 

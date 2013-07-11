@@ -120,6 +120,17 @@ class MolSpreadSheetCell {
                 if (priorityElement.hasChildElements()) {
                     molSpreadSheetCell.spreadSheetActivityStorage.childElements = priorityElement.childElements
                 }
+                // Try to pick a value that we can use to identify the units of the displayed value. We will choose from three possibilities
+                //  in descending order of priority
+                String activityUnit = ""
+                if (molSpreadSheetCell.spreadSheetActivityStorage.responseUnit) {
+                    activityUnit = molSpreadSheetCell.spreadSheetActivityStorage.responseUnit
+                }  else if (priorityElement.testConcentrationUnit) {
+                    activityUnit = priorityElement.testConcentrationUnit
+                } else if (priorityElement.concentrationResponseSeries) {
+                    activityUnit = priorityElement.concentrationResponseSeries.testConcentrationUnit
+                }
+
                 // Gather up the curve values if they exist
                 HillCurveValueHolder hillCurveValueHolder
                 if (priorityElement.value == null) {
@@ -132,6 +143,7 @@ class MolSpreadSheetCell {
                     molSpreadSheetCell.spreadSheetActivityStorage.dictionaryDescription = priorityElement.getDictionaryDescription() ?: ''
                     molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel = priorityElement.getDictionaryLabel() ?: ''
                     molSpreadSheetCell.spreadSheetActivityStorage.dictionaryId = priorityElement.getDictElemId() ?: 0
+                    String
                     if (priorityElement.concentrationResponseSeries?.curveFitParameters) {
                         CurveFitParameters curveFitParameters = priorityElement.concentrationResponseSeries.curveFitParameters
                         hillCurveValueHolder = new HillCurveValueHolder(
@@ -139,6 +151,7 @@ class MolSpreadSheetCell {
                                 s0: curveFitParameters.s0,
                                 sInf: curveFitParameters.sInf,
                                 slope: value,
+                                qualifier: molSpreadSheetCell.molSpreadSheetCellType,
                                 coef: curveFitParameters.hillCoef,
                                 conc: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.testConcentration,
                                 response: priorityElement.concentrationResponseSeries.concentrationResponsePoints*.value,
@@ -148,7 +161,9 @@ class MolSpreadSheetCell {
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
                     }
                 }
+                hillCurveValueHolder.qualifier = molSpreadSheetCell.molSpreadSheetCellType
                 hillCurveValueHolder.subColumnIndex = 0 //this.spreadSheetActivityStorage.columnNames.indexOf(identifierString) //this field can be removed
+                molSpreadSheetCell.spreadSheetActivityStorage.setResponseUnit(activityUnit)
                 molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
                 molSpreadSheetCell.spreadSheetActivityStorage.qualifier = molSpreadSheetCell.molSpreadSheetCellType
                 counter++
@@ -194,7 +209,16 @@ class MolSpreadSheetCell {
                 if (priorityElement.hasChildElements()) {
                     this.spreadSheetActivityStorage.childElements = priorityElement.childElements
                 }
-                // Gather up the curve values if they exist
+                // We need to capture the units, which might show up in various parts of the tree
+                String activityUnit
+                if (this.spreadSheetActivityStorage.responseUnit) {
+                    activityUnit = this.spreadSheetActivityStorage.responseUnit
+                }  else if (priorityElement.testConcentrationUnit) {
+                    activityUnit = priorityElement.testConcentrationUnit
+                } else if (priorityElement.concentrationResponseSeries) {
+                    activityUnit = priorityElement.concentrationResponseSeries.responseUnit
+                }
+                    // Gather up the curve values if they exist
                 HillCurveValueHolder hillCurveValueHolder
                 if (priorityElement.value == null) {
                     hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: Double.NaN)
@@ -223,6 +247,7 @@ class MolSpreadSheetCell {
                     }
                 }
                 hillCurveValueHolder.subColumnIndex = this.spreadSheetActivityStorage.columnNames.indexOf(identifierString)
+                this.spreadSheetActivityStorage.setResponseUnit(activityUnit)
                 this.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
                 this.spreadSheetActivityStorage.qualifier = this.molSpreadSheetCellType
                 counter++
