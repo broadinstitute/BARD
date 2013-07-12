@@ -73,7 +73,6 @@ beans = {
         loggerService = ref('loggerService')
         grailsApplication = grailsApplication
     }
-    goOntologyService(org.broadinstitute.ontology.GOOntologyService) {}
     switch (GrailsUtil.environment) {
         case "offline":
             queryService(MockQueryService) {
@@ -89,7 +88,6 @@ beans = {
                 substanceRestService = ref('substanceRestService')
                 experimentRestService = ref('experimentRestService')
                 capRestService = ref('capRestService')
-                goOntologyService = ref('goOntologyService')
             }
             eTagsService(ETagsService) {
                 compoundRestService = ref('compoundRestService')

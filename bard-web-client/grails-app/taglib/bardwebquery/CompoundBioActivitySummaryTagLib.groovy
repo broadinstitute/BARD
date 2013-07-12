@@ -47,9 +47,9 @@ class CompoundBioActivitySummaryTagLib {
                     controller: 'doseResponseCurve',
                     action: 'doseResponseCurve',
                     params: [
+                            slope: attrs?.slope, // We could have also made that Math.pow(10, attrs?.curveFitParameters?.logEc50). Since attrs.slope is actually the AC50/EC50/IC50 (concentration) value, this should work as well.
                             sinf: attrs?.curveFitParameters?.sInf,
                             s0: attrs?.curveFitParameters?.s0,
-                            slope: attrs?.slope,
                             hillSlope: attrs?.curveFitParameters?.hillCoef,
                             concentrations: attrs.concentrationSeries,
                             activities: attrs.activitySeries,
@@ -75,7 +75,8 @@ class CompoundBioActivitySummaryTagLib {
         out << "</b></p>"
         out << "<p class='lineSpacing'>sinf: ${attrs?.curveFitParameters?.sInf ?: ''}</p>"
         out << "<p class='lineSpacing'>s0: ${attrs?.curveFitParameters?.s0 ?: ''}</p>"
-        out << "<p class='lineSpacing'>hillSlope: ${attrs?.curveFitParameters?.hillCoef ?: ''}</p>"
+        out << "<p class='lineSpacing'>hillSlope: ${attrs?.curveFitParameters?.hillCoef?.round(4) ?: ''}</p>"
+        out << "<p class='lineSpacing'>logEc50: ${attrs?.curveFitParameters?.logEc50?.round(4) ?: ''}</p>"
     }
 
     def curveValues = { attrs, body ->

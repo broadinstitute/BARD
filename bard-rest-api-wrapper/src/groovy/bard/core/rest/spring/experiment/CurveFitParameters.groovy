@@ -15,54 +15,54 @@ import bard.core.rest.spring.util.JsonUtil
 public class CurveFitParameters extends JsonUtil {
 
     @JsonProperty("s0")
-    private double s0;
+    private Double s0;
     @JsonProperty("sInf")
-    private double sInf;
+    private Double sInf;
     @JsonProperty("hillCoef")
-    private double hillCoef;
+    private Double hillCoef;
 
     //TODO: this is dynamic, for now lets assume it is not
     //we should get the list of possible values
     @JsonProperty("logEc50")
-    private double logEc50;
+    private Double logEc50;
 
     @JsonProperty("s0")
-    public double getS0() {
+    public Double getS0() {
         return s0;
     }
 
     @JsonProperty("s0")
-    public void setS0(double s0) {
+    public void setS0(Double s0) {
         this.s0 = s0;
     }
 
     @JsonProperty("sInf")
-    public double getSInf() {
+    public Double getSInf() {
         return sInf;
     }
 
     @JsonProperty("sInf")
-    public void setSInf(double sInf) {
+    public void setSInf(Double sInf) {
         this.sInf = sInf;
     }
 
     @JsonProperty("hillCoef")
-    public double getHillCoef() {
+    public Double getHillCoef() {
         return hillCoef;
     }
 
     @JsonProperty("hillCoef")
-    public void setHillCoef(double hillCoef) {
+    public void setHillCoef(Double hillCoef) {
         this.hillCoef = hillCoef;
     }
 
     @JsonProperty("logEc50")
-    public double getLogEc50() {
+    public Double getLogEc50() {
         return logEc50;
     }
 
     @JsonProperty("logEc50")
-    public void setLogEc50(double logEc50) {
+    public void setLogEc50(Double logEc50) {
         this.logEc50 = logEc50;
     }
 }
