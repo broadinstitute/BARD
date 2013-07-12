@@ -161,7 +161,7 @@ class MolSpreadSheetCell {
                         hillCurveValueHolder = new HillCurveValueHolder(identifier: identifierString, slope: value)
                     }
                 }
-                hillCurveValueHolder.qualifier = molSpreadSheetCell.molSpreadSheetCellType
+                hillCurveValueHolder.setQualifier(molSpreadSheetCell.molSpreadSheetCellType as MolSpreadSheetCellType)
                 hillCurveValueHolder.subColumnIndex = 0 //this.spreadSheetActivityStorage.columnNames.indexOf(identifierString) //this field can be removed
                 molSpreadSheetCell.spreadSheetActivityStorage.setResponseUnit(activityUnit)
                 molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList << hillCurveValueHolder
