@@ -3,7 +3,6 @@ package bard.db.project
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
-import bard.db.dictionary.TermCommand
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -226,24 +225,19 @@ class ProjectController {
 
     def associateExperimentsToProject() {
         // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
-        def param1 = request.getParameterValues('selectedExperiments[]')
-        def projectId = params['projectId']
-        def project = Project.findById(projectId)
-        def stageId = params['stageId']
-        def element = Element.findById(stageId)
-        // get rid of duplicated selection if there is any
-        Set<String> selectedExperiments = new HashSet<String>()
+        Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]')  as Set<String>
+        Long projectId = params.getLong('projectId')
+        Project project = Project.findById(projectId)
+        Long stageId = params.getLong('stageId')
+        Element element = Element.findById(stageId)
 
-        param1.each {
-            selectedExperiments.add(it)
-        }
         if (selectedExperiments.isEmpty()) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Experiment must be selected'
         } else {
             try {
                 selectedExperiments?.each { String experimentDisplayName ->
-                    def experimentId = experimentDisplayName.split("-")[0]
-                    def experiment = Experiment.findById(experimentId)
+                    String experimentId = experimentDisplayName.split("-")[0]
+                    Experiment experiment = Experiment.findById(experimentId as Long)
                     projectService.addExperimentToProject(experiment, projectId, element)
                     render(template: "showstep", model: [editable: 'canedit', experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
                 }
