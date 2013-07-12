@@ -43,12 +43,9 @@ try {
         }
     }
     //Now Use sql to find the entities that have no acl
+    tx.commit()
 }
 catch (Exception e) {
     e.printStackTrace()
     tx.rollback()
-}
-finally {
-    tx.commit();
-    // tx.rollback()
 }
