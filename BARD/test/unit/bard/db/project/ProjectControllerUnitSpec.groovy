@@ -586,20 +586,19 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test associate experiment with project success'() {
         given:
-        projectService.addExperimentToProject(_, _, _) >> {}
         views['/project/_showstep.gsp'] = 'mock contents'
-
         Element stage1 = Element.build()
 
         when:
-        params.stageId = stage1.id
+        params.stageId = stage1.id.toString()
         request.setParameter('selectedExperiments[]', projectExperimentFrom.experiment.id + "-experiment name")
-        params.projectId = project.id
+        params.projectId = project.id.toString()
         controller.projectService = projectService
-
         controller.associateExperimentsToProject()
 
         then:
+        1 * projectService.addExperimentToProject(projectExperimentFrom.experiment, project.id, stage1) >> {}
+        0 * projectService.addExperimentToProject(_,_,_) >> {}
         assert response.text == 'mock contents'
     }
 

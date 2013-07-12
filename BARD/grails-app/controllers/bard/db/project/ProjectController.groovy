@@ -226,17 +226,13 @@ class ProjectController {
 
     def associateExperimentsToProject() {
         // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
-        def param1 = request.getParameterValues('selectedExperiments[]')
-        def projectId = params['projectId']
+        Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]')  as Set<String>
+        Long projectId = params.getLong('projectId')
         def project = Project.findById(projectId)
-        def stageId = params['stageId']
+        Long stageId = params.getLong('stageId')
         def element = Element.findById(stageId)
         // get rid of duplicated selection if there is any
-        Set<String> selectedExperiments = new HashSet<String>()
 
-        param1.each {
-            selectedExperiments.add(it)
-        }
         if (selectedExperiments.isEmpty()) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Experiment must be selected'
         } else {
