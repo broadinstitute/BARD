@@ -375,17 +375,4 @@ class QueryServiceIntegrationSpec extends IntegrationSpec {
         'getPathsForAssayType'         | "with 'in vitro'"           | 'in vitro'           | 'assay type/assay mode/in vitro'
         'getPathsForAssayType'         | "with 'assay type'"         | 'assay type'         | 'assay type'
     }
-
-    void "test biology process in #methodName #label"() {
-        when: ""
-        final List paths = queryService."${methodName}"(endNode)
-
-        then:
-        assert paths.first() == expectedPath
-
-        where:
-        methodName                     | label                       | endNode              | expectedPath
-        'getPathsForBiologicalProcess' | "with 'DNA repair'"         | 'DNA repair'         | 'biological_process/response to stimulus/cellular response to stimulus/cellular response to stress/response to DNA damage stimulus/DNA repair'
-        'getPathsForBiologicalProcess' | "with 'biological_process'" | 'biological_process' | 'biological_process'
-    }
 }

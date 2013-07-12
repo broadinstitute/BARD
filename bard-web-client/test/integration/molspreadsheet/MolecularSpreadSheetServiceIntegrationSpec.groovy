@@ -29,7 +29,7 @@ class MolecularSpreadSheetServiceIntegrationSpec extends IntegrationSpec {
     ShoppingCartService shoppingCartService
     RingManagerService ringManagerService
     @Shared
-    List<Long> TEST_EIDS = [2, 3]
+    List<Long> TEST_EIDS = [625, 3]
     @Shared
     List<Long> TEST_ADIDS = [25, 26]
     @Shared
