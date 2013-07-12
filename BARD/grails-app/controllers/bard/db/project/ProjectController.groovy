@@ -219,7 +219,7 @@ class ProjectController {
             render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             log.error(e)
-            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: 'An internal server error has occurred. Please notify the BARD team'
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
 

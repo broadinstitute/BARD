@@ -384,18 +384,18 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
-        params.experimentId = experimentId
+        params.experimentId = { experimentId }.call()
         params.projectid = project.id
         controller.projectService = projectService
-        controller.removeExperimentFromProject(params.experimentId, params.projectid)
+        controller.removeExperimentFromProject(params.experimentId.call(), params.projectid)
 
         then:
         1 * projectService.removeExperimentFromProject(_, _)
         assert response.text == responsetext
 
         where:
-        description | experimentId             | responsetext
-        "success"   | projectExperimentFrom.id | 'mock contents'
+        description | experimentId                 | responsetext
+        "success"   | { projectExperimentFrom.id } | 'mock contents'
     }
 
     void 'test remove experiment from project -access denied'() {
@@ -405,7 +405,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
-        params.experimentId = experimentId
+        params.experimentId = experimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
         controller.removeExperimentFromProject(params.experimentId, params.projectid)
@@ -413,9 +413,10 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         then:
         1 * projectService.removeExperimentFromProject(_, _) >> { throw new AccessDeniedException("msg") }
         assertAccesDeniedErrorMessage()
+
         where:
-        description | experimentId             | responsetext
-        "success"   | projectExperimentFrom.id | 'mock contents'
+        description | experimentId                 | responsetext
+        "success"   | { projectExperimentFrom.id } | 'mock contents'
     }
 
     void 'test remove experiment from project fail {#description}'() {
@@ -443,8 +444,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
-        params.fromExperimentId = fromExperimentId
-        params.toExperimentId = toExperimentId
+        params.fromExperimentId = fromExperimentId.call()
+        params.toExperimentId = toExperimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
 
@@ -454,8 +455,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text == responsetext
 
         where:
-        description | fromExperimentId         | toExperimentId         | responsetext
-        "success"   | projectExperimentFrom.id | projectExperimentTo.id | 'mock contents'
+        description | fromExperimentId             | toExperimentId             | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
     void 'test remove edge from project - access denied'() {
@@ -465,8 +466,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
-        params.fromExperimentId = fromExperimentId
-        params.toExperimentId = toExperimentId
+        params.fromExperimentId = fromExperimentId.call()
+        params.toExperimentId = toExperimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
 
@@ -477,8 +478,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assertAccesDeniedErrorMessage()
 
         where:
-        description | fromExperimentId         | toExperimentId         | responsetext
-        "success"   | projectExperimentFrom.id | projectExperimentTo.id | 'mock contents'
+        description | fromExperimentId             | toExperimentId             | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
     void 'test remove edge from project fail {#description}'() {
@@ -486,8 +487,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         projectService.removeEdgeFromProject(_, _, _) >> { throw new UserFixableException() }
 
         when:
-        params.fromExperimentId = fromExperimentId
-        params.toExperimentId = toExperimentId
+        params.fromExperimentId = fromExperimentId.call()
+        params.toExperimentId = toExperimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
 
@@ -497,9 +498,9 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text.startsWith(responsetext)
 
         where:
-        description                              | fromExperimentId         | toExperimentId         | responsetext
-        "failed due to fromExperiment not found" | -999                     | projectExperimentTo.id | 'serviceError'
-        "failed due to toExperiment not found"   | projectExperimentFrom.id | -999                   | 'serviceError'
+        description                              | fromExperimentId             | toExperimentId             | responsetext
+        "failed due to fromExperiment not found" | { -999 }                     | { projectExperimentTo.id } | 'serviceError'
+        "failed due to toExperiment not found"   | { projectExperimentFrom.id } | { -999 }                   | 'serviceError'
     }
 
     void 'test link experiment with project success'() {
@@ -508,8 +509,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
-        params.fromExperimentId = fromExperimentId
-        params.toExperimentId = toExperimentId
+        params.fromExperimentId = fromExperimentId.call()
+        params.toExperimentId = toExperimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
 
@@ -519,8 +520,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         assert response.text == responsetext
 
         where:
-        description | fromExperimentId         | toExperimentId         | responsetext
-        "success"   | projectExperimentFrom.id | projectExperimentTo.id | 'mock contents'
+        description | fromExperimentId             | toExperimentId             | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
 
     void 'test link experiment with project - access denied'() {
@@ -530,8 +531,8 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         views['/project/_showstep.gsp'] = 'mock contents'
 
         when:
-        params.fromExperimentId = fromExperimentId
-        params.toExperimentId = toExperimentId
+        params.fromExperimentId = fromExperimentId.call()
+        params.toExperimentId = toExperimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
 
@@ -543,28 +544,29 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
 
         where:
-        description | fromExperimentId         | toExperimentId         | responsetext
-        "success"   | projectExperimentFrom.id | projectExperimentTo.id | 'mock contents'
+        description | fromExperimentId             | toExperimentId             | responsetext
+        "success"   | { projectExperimentFrom.id } | { projectExperimentTo.id } | 'mock contents'
     }
+
 
     void 'test link experiment with project fail {#description}'() {
         given:
-        projectService.linkExperiment(_, _, _) >> { throw new UserFixableException() }
+        projectService.linkExperiment(_, _, _) >> { throw new UserFixableException('serviceError') }
 
         when:
-        params.fromExperimentId = fromExperimentId
-        params.toExperimentId = toExperimentId
+        params.fromExperimentId = fromExperimentId.call()
+        params.toExperimentId = toExperimentId.call()
         params.projectid = project.id
         controller.projectService = projectService
 
         controller.linkExperiment(params.fromExperimentId, params.toExperimentId, params.projectid)
 
         then:
-        assert response.text == "An internal server error has occurred. Please notify the BARD team"
+        assert response?.text == 'serviceError'
         where:
-        description                              | fromExperimentId         | toExperimentId         | responsetext
-        "failed due to fromExperiment not found" | -999                     | projectExperimentTo.id | 'serviceError'
-        "failed due to toExperiment not found"   | projectExperimentFrom.id | -999                   | 'serviceError'
+        description                              | fromExperimentId             | toExperimentId
+        "failed due to fromExperiment not found" | { -999L }                    | { projectExperimentTo.id }
+        "failed due to toExperiment not found"   | { projectExperimentFrom.id } | { -999L }
     }
 
     void 'test link experiment with project fail - Bad request {#description}'() {
@@ -573,15 +575,15 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         when:
 
-        controller.linkExperiment(fromExperimentId, toExperimentId, project.id)
+        controller.linkExperiment(fromExperimentId.call(), toExperimentId.call(), project.id)
 
         then:
         assert response.text == "Both 'From Experiment ID' and 'To Experiment ID' are required"
         assert response.status == HttpServletResponse.SC_BAD_REQUEST
         where:
-        description                              | fromExperimentId         | toExperimentId
-        "failed due to fromExperiment not found" | null                     | projectExperimentTo.id
-        "failed due to toExperiment not found"   | projectExperimentFrom.id | null
+        description                              | fromExperimentId             | toExperimentId
+        "failed due to fromExperiment not found" | { null }                     | { projectExperimentTo.id }
+        "failed due to toExperiment not found"   | { projectExperimentFrom.id } | { null }
     }
 
     void 'test associate experiment with project success'() {
@@ -598,7 +600,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
         then:
         1 * projectService.addExperimentToProject(projectExperimentFrom.experiment, project.id, stage1) >> {}
-        0 * projectService.addExperimentToProject(_,_,_) >> {}
+        0 * projectService.addExperimentToProject(_, _, _) >> {}
         assert response.text == 'mock contents'
     }
 
