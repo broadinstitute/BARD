@@ -50,7 +50,7 @@
                 </li>
                 <li>
                 <g:link controller="bardWebInterface" action="bigSunburst"
-                        id="${cid}">Linked Data Visualization</g:link>
+                        id="${cid}">Linked Hierarchy Visualization</g:link>
                 </li>
             </ul>
         </span>

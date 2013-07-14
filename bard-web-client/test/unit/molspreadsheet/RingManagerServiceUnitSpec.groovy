@@ -1,5 +1,7 @@
 package molspreadsheet
 
+import bard.core.rest.spring.BiologyRestService
+import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.compounds.CompoundSummary
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.test.mixin.TestFor
@@ -8,23 +10,31 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 /**
- *   These are the tags that are used to build the different cells within a molecular spreadsheet.  The same methods
- *   can be used in both the transposed and un-transposed version of the spreadsheet.
+ * Created with IntelliJ IDEA.
+ * User: balexand
+ * Date: 7/5/13
+ * Time: 1:56 PM
+ * To change this template use File | Settings | File Templates.
  */
-@TestFor(SunburstHandlerTagLib)
 @Unroll
-class SunburstHandlerTagLibUnitSpec extends Specification {
+@TestFor(RingManagerService)
+class RingManagerServiceUnitSpec extends Specification{
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
+    RingManagerService ringManagerService
+    CompoundRestService compoundRestService
+    BiologyRestService biologyRestService
     CompoundSummary compoundSummary
+
 
     void setup() {
         compoundSummary = objectMapper.readValue(COMPOUND_SUMMARY, CompoundSummary.class)
+        this.ringManagerService = Mock(RingManagerService)
+        this.compoundRestService = Mock(CompoundRestService)
+        this.biologyRestService = Mock(BiologyRestService)
+//        service.gen   ringManagerService = ringManagerService
     }
 
-    void tearDown() {
-
-    }
     public static final String COMPOUND_SUMMARY = '''
     {
        "testedExptdata":
@@ -450,36 +460,45 @@ class SunburstHandlerTagLibUnitSpec extends Specification {
     '''
 
 
-    void "test sunburstSection"() {
-        when:
-        String results = this.tagLib.sunburstSection()
-        then:
-        results.contains("sunburstdiv_bigwin")
-    }
-
-    void "test sunburstLegend "() {
-        when:
-        String results = this.tagLib.sunburstLegend()
-        then:
-        results.contains("createALegend")
-        results.contains("legendGoesHere")
-    }
-
-
-
-    // I need to get this working...
-//    void "test prepMacroSunburst"() {
+//    void "Test convertCompoundIntoSunburst" () {
+//        given:
+//        final int a = 1
+//
 //        when:
-//        LinkedHashMap<String, Object>  compoundSummaryPlusId = [:]
-//        compoundSummaryPlusId["id"] = "16760208"
-//        compoundSummaryPlusId["compoundSummary"] = compoundSummary
-//        String results = this.tagLib.prepMacroSunburst ([compoundSummaryPlusId:compoundSummaryPlusId,cid:"16760208"])
+//        LinkedHashMap<String,Object> sunburst  =  service.convertCompoundIntoSunburst(compoundSummary, true, true )
+//
 //        then:
-//        results
+//        assert true
 //    }
 
-
-
+//    /***
+//     * degenerate case
+//     */
+//    void "Test Degenerate generateLinkedData"() {
+//        given:
+//        LinkedHashMap<String, Object> compoundSummaryPlusId = null
+//
+//        when:
+//        service.generateLinkedData(compoundSummaryPlusId, 47L)
+//
+//        then:
+//        assert true
+//    }
+//
+//
+//    void "Test generateLinkedData"() {
+//        given:
+//        LinkedHashMap<String, Object> compoundSummaryPlusId = [:]
+//        compoundSummaryPlusId['id'] = "16760208"
+//        compoundSummaryPlusId['compoundSummary'] = compoundSummary
+//        when:
+//        service.generateLinkedData(compoundSummaryPlusId, 47L)
+//
+//        then:
+//        assert true
+//    }
+//
+//
 
 
 }

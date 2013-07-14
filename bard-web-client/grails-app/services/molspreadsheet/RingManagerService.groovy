@@ -122,7 +122,8 @@ class RingManagerService {
                                                  String assayFormat,
                                                  String assayType,
                                                  String assayName,
-                                                 String capAssayId )  {
+                                                 String capAssayId,
+                                                 String bardAssayId )  {
         for (String currentExperimentId in currentExperimentIds) {
             Long  experimentIdAsLong
             try {
@@ -142,7 +143,8 @@ class RingManagerService {
                                                           assayFormat ?: 'none',
                                                           assayType ?: 'none',
                                                           assayName,
-                                                          capAssayId)
+                                                          capAssayId,
+                                                          bardAssayId)
                 List <String> unconvertedBiologyHitIds = []
                 List <String> unconvertedBiologyMissIds = []
                 int outcome
@@ -167,109 +169,6 @@ class RingManagerService {
     }
 
 
-//
-//    public class AssayAggregator{
-//        List <AssaySectionParts> assaySectionPartsList = []
-//
-//        void add(List<String>  currentTargets,
-//                 List<String>  currentExperimentIds,
-//                 CompoundSummary compoundSummary,
-//                 String assayName,
-//                 int  capAssayId,
-//                 String assayFormat,
-//                 String assayType) {
-//            for (String currentExperimentId in currentExperimentIds) {
-//                Long  experimentIdAsLong
-//                try {
-//                    experimentIdAsLong = Long.parseLong(currentExperimentId)
-//                } catch (NumberFormatException nfe) {
-//                    log.warn("Error in response data from REST API. Expected experiment ID as a long but received: '${currentExperimentId}'")
-//                    return
-//                }
-//                List<Activity> testedExperimentList = compoundSummary.getTestedExptdata().findAll {Activity activity -> activity.bardExptId == experimentIdAsLong}
-//                if (testedExperimentList?.size() > 0)   {
-//
-//                    // only if it's tested
-//                    CompoundSummaryCategorizer compoundSummaryCategorizer = returnValue["compoundSummaryCategorizer"]
-//                    // One or the other of   assayFormat/assayType might be null ( though not both, or else we wouldn't have been called )
-//                    //  Therefore substitute a nice friendly string "none" for that null string
-//                    compoundSummaryCategorizer.addNewRecord ( experimentIdAsLong, //assayFormat,  assayType )
-//                            assayFormat ?: 'none',
-//                            assayType ?: 'none' )
-//                    List <String> unconvertedBiologyHitIds = []
-//                    List <String> unconvertedBiologyMissIds = []
-//                    int outcome
-//                    for (Activity testedExperiment in testedExperimentList)   {
-//                        outcome = testedExperiment.outcome
-//                        if (testedExperiment.outcome==2) {  // It's a hit!  Save all targets!
-//                            for (String oneTarget in currentTargets) {
-//                                unconvertedBiologyHitIds << oneTarget
-//                                returnValue ["hits"] <<  oneTarget
-//                            }
-//                        }  else { // It's a miss.  Save all the targets to a different list.
-//                            for (String oneTarget in currentTargets) {
-//                                returnValue ["misses"] <<  oneTarget
-//                                unconvertedBiologyMissIds << oneTarget
-//
-//                            }
-//                        }
-//                    }
-//                    compoundSummaryCategorizer.updateOutcome(experimentIdAsLong,outcome,unconvertedBiologyHitIds,unconvertedBiologyMissIds)
-//                }
-//            }
-//
-//        }
-//
-//
-//    }
-
-//    public class AssaySectionParts{
-//        int assayIndex
-//        String assayName
-//        int numberAssaysActive
-//        int numberAssaysInactive
-//        int assayCapId
-//        String biologicalProcess
-//        String assayFormat
-//        String assayType
-//        String assayTarget
-//    }
-
-
-
-//
-//    LinkedHashMap<String, Object> retrieveLinkedDataFromCompoundSummary (CompoundSummary compoundSummary){
-//        LinkedVisHierData linkedVisHierData = new  LinkedVisHierData ();
-//        LinkedHashMap<String, List <String>> returnValue = [:]
-//
-////        returnValue ["hits"]  = []
-////        returnValue ["misses"]  = []
-////        returnValue ["compoundSummaryCategorizer"]  = new CompoundSummaryCategorizer()
-//        List <AssaySectionParts> assaySectionPartsList = []
-//        if (compoundSummary != null){
-//            for (Assay assay in compoundSummary.testedAssays) {
-//                List<String>  currentExperimentIds = assay.experimentIds
-//                List<String>  currentTargets = assay.targetIds
-//                String assayName = assay.name
-//                int  capAssayId =  assay.name
-//                String assayFormat = assay.minimumAnnotation.assayFormat
-//                String assayType = assay.minimumAnnotation.assayType
-//                if ( (currentTargets != null)  ||
-//                        (assayFormat != null) ||
-//                        (assayType != null)){  // If one of the values we care about is non-null then retrieve everything we can find
-//                    retrievedTargetsAndBiologicalProcesses ( currentTargets,
-//                            currentExperimentIds,
-//                            compoundSummary,
-//                            returnValue,
-//                            assayFormat,
-//                            assayType )
-//
-//                }
-//            }
-//
-//        }
-//        return returnValue
-//    }
 
 
 
@@ -299,6 +198,7 @@ class RingManagerService {
                String assayType = assay.minimumAnnotation.assayType
                String assayName = assay.name
                String capAssayId =  assay.capAssayId
+               String bardAssayId =  assay.bardAssayId
                if ( (currentTargets != null)  ||
                     (assayFormat != null) ||
                     (assayType != null)){  // If one of the values we care about is non-null then retrieve everything we can find
@@ -309,7 +209,8 @@ class RingManagerService {
                                                             assayFormat,
                                                             assayType,
                                                             assayName,
-                                                            capAssayId)
+                                                            capAssayId,
+                                                            bardAssayId)
 
                }
              }
@@ -331,42 +232,30 @@ class RingManagerService {
     }
 
 
-
-    void generateLinkedData (LinkedHashMap<String, Object>  compoundSummaryPlusId,Long cid) {
-//    Boolean includeHits = true // session."actives"
-//    Boolean includeNonHits = true // session."inactives"
-//    int typeOfColoring = session."colorOption"  ?: 3
-//    LinkedHashMap<String, Object>  compoundSummaryPlusId  = attrs.'compoundSummaryPlusId'
-    // We may have an existing compound summary.  If we do, and if the ID matches the request
-    // we've been given then use the existing data. Otherwise use the 'cid' we've been passed
-    // and look up the data manually.
-    LinkedHashMap<String,Object>  ringnodeAndCrossLinks
-    RingNode root
-    if ( ( compoundSummaryPlusId == null ) ||
-    ( compoundSummaryPlusId.'compoundSummary' == null )  ||
-    ( compoundSummaryPlusId.'id' == null )  ||
-    ( compoundSummaryPlusId.'id' != attrs.'cid' ) )  {
-        // For now let's get the data explicitly so that we are sure were getting the right compound.
-        ringnodeAndCrossLinks   =   convertCompoundIntoSunburstById (cid, true, true, compoundSummaryPlusId )
-        root =   ringnodeAndCrossLinks ["RingNode"]
-        compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
-    }else {
-        ringnodeAndCrossLinks   =   convertCompoundIntoSunburst (compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits )
-        root =   ringnodeAndCrossLinks ["RingNode"]
-        compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
-
-    }
+//
+//    void generateLinkedData(LinkedHashMap<String, Object> compoundSummaryPlusId, Long cid) {
+//        // We may have an existing compound summary.  If we do, and if the ID matches the request
+//        // we've been given then use the existing data. Otherwise use the 'cid' we've been passed
+//        // and look up the data manually.
+//        LinkedHashMap<String, Object> ringnodeAndCrossLinks
+//        RingNode root
+//        if ((compoundSummaryPlusId == null) ||
+//                (compoundSummaryPlusId.'compoundSummary' == null) ||
+//                (compoundSummaryPlusId.'id' == null) ||
+//                (compoundSummaryPlusId.'id' != attrs.'cid')) {
+//            // For now let's get the data explicitly so that we are sure were getting the right compound.
+//            ringnodeAndCrossLinks = convertCompoundIntoSunburstById(cid, true, true, compoundSummaryPlusId)
+//            root = ringnodeAndCrossLinks["RingNode"]
+//            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+//        } else {
+//            ringnodeAndCrossLinks = convertCompoundIntoSunburst(compoundSummaryPlusId.'compoundSummary', includeHits, includeNonHits)
+//            root = ringnodeAndCrossLinks["RingNode"]
+//            compoundSummaryPlusId["CompoundSummaryCategorizer"] = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+//
+//        }
+//    }
 //
 //
-//    LinkedHashMap extremeValues = root.determineColorMappingRange()
-//    out << ringManagerService.writeRingTree(root,true,typeOfColoring) // writes $data = [...]
-//    out << "\n"
-//    out << "var minimumValue=${extremeValues["minimumValue"].toString()};\n"
-//    out << "var maximumValue=${extremeValues["maximumValue"].toString()};\n"
-//    out << ringManagerService.colorMappingOnPage ( extremeValues["minimumValue"].toString(),extremeValues["maximumValue"].toString( ) )// js array mapping values to colors
-    }
-
-
 
 
 
@@ -599,10 +488,6 @@ class RingManagerService {
 
 
 
-    public LinkedVisHierData  convertCompoundSummaryIntoLinkedData (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
-
-    }
-
     // need the last part of the last line
      public String extractLowestLevelTargetClass (List<String> hierarchyDescription) {
          String returnValue = ""
@@ -720,14 +605,16 @@ class RingManagerService {
     }
 
     /**
-     * Here's a wrapper routine in case someone wants to start with a CID as opposed to a fully constructed CompoundSummary
+     * Here's a wrapper routine in case someone wants to start with a CID as opposed to a fully constructed CompoundSummary. Gather up
+     * the compoundSummary from the server, storage in a handy structure (which we can stash in the session), and then call
+     * convertCompoundIntoSunburst to perform the work of actually analyzing the data.
+     *
      * @param cid
      * @param includeHits
      * @param includeNonHits
      * @return
      */
     public  LinkedHashMap<String,Object> convertCompoundIntoSunburstById (Long cid, Boolean includeHits, Boolean includeNonHits, LinkedHashMap<String,Object> mapToHoldCompoundSummary = [:]){
-        // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
         CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
         mapToHoldCompoundSummary.'id' = cid
         mapToHoldCompoundSummary.'compoundSummary' = compoundSummary
@@ -735,11 +622,16 @@ class RingManagerService {
         return ringNodeAndCrossLinks
     }
 
-
-
+    /***
+     * After we have made the round-trip to the server, come here to process those data into the linked data structures required by
+     * the linked data visualization
+     *
+     * @param compoundSummary
+     * @param includeHits
+     * @param includeNonHits
+     * @return
+     */
     public  LinkedHashMap<String,Object>  convertCompoundIntoSunburst (CompoundSummary compoundSummary, Boolean includeHits, Boolean includeNonHits ){
-        // Since we have no real data, I'll pull from previous versions.  When the situation changes and comment the line below
-//        CompoundSummary compoundSummary = compoundRestService.getSummaryForCompound(cid)
         return convertCompoundSummaryIntoSunburst ( compoundSummary,  includeHits,  includeNonHits )
     }
 

@@ -1,6 +1,6 @@
 <%@ page import="bardqueryapi.JavaScriptUtility" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Compound : ${compound?.name} : PubChem CID ${compound.pubChemCID}</title>
@@ -24,10 +24,10 @@
                             smiles="${compound.getStructureSMILES()}"
                             numActive="${compound.numberOfActiveAssays}"
                             numAssays="${compound.numberOfAssays}"/>
-        <g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
-                style="float: right;">Bio-activity Summary</g:link>
-        <g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
-                style="float: right;">Linked Data Visualization</g:link>
+        <span style="padding-left: 30px; padding-right: 10px; float: right;"><g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
+        >Linked Hierarchy Visualization</g:link></span>
+        <span style="padding-left: 30px; padding-right: 30px; float: right;"><g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
+                >Bio-activity Summary</g:link></span>
 
     </div>
 </div>

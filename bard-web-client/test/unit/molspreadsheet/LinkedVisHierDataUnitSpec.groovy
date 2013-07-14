@@ -30,7 +30,6 @@ class LinkedVisHierDataUnitSpec  extends Specification {
         when:
         LinkedVisHierData linkedVisHierData = new LinkedVisHierData()
         String categorySectionJson =  linkedVisHierData.createCategorySection()
-//        println  categorySectionJson
 
         then:
         def userJson = new JsonSlurper().parseText(categorySectionJson )
@@ -67,7 +66,6 @@ class LinkedVisHierDataUnitSpec  extends Specification {
         when:
         LinkedVisHierData linkedVisHierData = new LinkedVisHierData()
         String assaysSectionJson =  linkedVisHierData.createAssayCrossSection()
-//        println  assaysSectionJson
 
         then:
         def userJson = new JsonSlurper().parseText(assaysSectionJson )
@@ -86,6 +84,24 @@ class LinkedVisHierDataUnitSpec  extends Specification {
         then:
         def userJson = new JsonSlurper().parseText(assaysSectionJson )
         assert  userJson.getClass().name == 'java.util.HashMap'
+    }
+
+
+
+
+    void "test  Failing indexUniquenessCheck   "() {
+        when:
+        LinkedVisHierData linkedVisHierData = new LinkedVisHierData()
+        int proposedNewIndex  = 2
+        List accumulatingIndex = [1, 2, 3]
+
+        then:
+        try {
+            linkedVisHierData.indexUniquenessCheck(proposedNewIndex,accumulatingIndex,"test-section")
+            assert(false)
+        } catch(Exception e)   {
+            assert(true)
+        }
     }
 
 

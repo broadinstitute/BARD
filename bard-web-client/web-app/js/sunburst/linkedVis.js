@@ -259,6 +259,7 @@ var linkedVizData = (function (){
                             developingAssayList.push({
                                 index: assayCross.AssayRef,
                                 assayId: findAssayId(assayCross.AssayRef),
+                                assayBId: assayCross.AssayBId,
                                 GO_biological_process_term: assayCross.data[0],
                                 assay_format: assayCross.data[1],
                                 assay_type: assayCross.data[2],

@@ -1,4 +1,8 @@
 package molspreadsheet
+
+import org.apache.log4j.Level
+import org.apache.log4j.Logger
+
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -34,8 +38,19 @@ public class LinkedVisHierData {
         return  "\"${incomingString}\""
     }
 
+
+
+    static Logger log
+    static {
+        this.log = Logger.getLogger(RingManagerService.class)
+        log.setLevel(Level.ERROR)
+    }
+
+
+
     private final void  indexUniquenessCheck (int proposedNewIndex,List accumulatingIndex, String sectionName) {
-        if  (accumulatingIndex.contains() ) {
+        if  (accumulatingIndex.contains(proposedNewIndex) ) {
+            log.error("Catastrophic error.  proposedNewIndex=${proposedNewIndex}, accumulatingIndex=${accumulatingIndex}, sectionName=${sectionName}")
             throw Exception (' Stopped the show. Duplicated index = ${} section ${sectionName}')
         }
     }
@@ -341,42 +356,6 @@ public class LinkedVisHierData {
         stringBuilder << addQuotes('Hierarchy') << colonUnit << (section2 ?:  createHierarchySection()) << comma << endOfLine
         stringBuilder << addQuotes('Assays') << colonUnit <<  (section3 ?: createAssaysSection()) << comma << endOfLine
         stringBuilder << addQuotes('AssayCross') << colonUnit <<  (section4 ?: createAssayCrossSection()) << endOfLine
-        stringBuilder << closeObject
-        return stringBuilder.toString()
-    }
-
-
-    public final String createCombinedListing( String categorySection,
-            String hierarchySection,
-            String assaySection,
-            String assayCrossSection
-    ) {
-        StringBuilder stringBuilder = new StringBuilder()
-        stringBuilder << openObject << endOfLine
-        if (categorySection != null)  {
-            stringBuilder << addQuotes('Category') << colonUnit << categorySection << comma << endOfLine
-        }  else {
-            stringBuilder << addQuotes('Category') << colonUnit << createCategorySection() << comma << endOfLine
-        }
-
-        if (hierarchySection != null)  {
-            stringBuilder << addQuotes('Hierarchy') << colonUnit << hierarchySection << comma << endOfLine
-        }  else {
-            stringBuilder << addQuotes('Hierarchy') << colonUnit << createHierarchySection() << comma << endOfLine
-        }
-
-        if (assaySection != null)  {
-            stringBuilder << addQuotes('Assays') << colonUnit << assaySection << comma << endOfLine
-        }  else {
-            stringBuilder << addQuotes('Assays') << colonUnit << createAssaysSection() << comma << endOfLine
-        }
-
-        if (assayCrossSection != null)  {
-            stringBuilder << addQuotes('AssayCross') << colonUnit << assayCrossSection << endOfLine
-        }  else {
-            stringBuilder << addQuotes('AssayCross') << colonUnit << createAssayCrossSection() << endOfLine
-        }
-
         stringBuilder << closeObject
         return stringBuilder.toString()
     }
