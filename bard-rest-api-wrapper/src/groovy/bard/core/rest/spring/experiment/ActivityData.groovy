@@ -51,6 +51,22 @@ public class ActivityData extends JsonUtil {
     public String toDisplay() {
         //look up the element in the CAP
         String displayName = getDictionaryLabel()
+
+
+        //  begin WORK AROUND ALERT
+        //  WORK AROUND ALERT
+        //
+        // TODO: OK, the right way to do this would be to use the display name we got from the dictionary label.  HOWEVER, we currently ( July 12, 2013)
+        //  have some discrepancies between the dictionary IDs we want to use and the strings that more accurately reflect the desired values. Therefore
+        //  for the time being let's say that IF the pubChemDisplayName has anything in it then we will prefer it over the dictionary label
+        if ((pubChemDisplayName != null) && (pubChemDisplayName.length()> 0))  {
+            displayName =   pubChemDisplayName
+        }
+        //
+        //  WORK AROUND ALERT
+        //  end WORK AROUND ALERT
+
+
         final StringBuilder stringBuilder = new StringBuilder()
         if ("Score" != displayName && "Activity_Score" != displayName && "Outcome" != displayName && "PubChem activity score" != displayName) {
             stringBuilder.append(displayName ? displayName + " : " : '')

@@ -85,6 +85,28 @@ class ExperimentalValueUtil {
         }
     }
 
+
+    public ExperimentalValueUtil(BigDecimal value,
+                                 ExperimentalValueUnitUtil initialExperimentalValueUnit,
+                                 ExperimentalValueUnitUtil finalExperimentalValueUnit) {
+        this.value = value ?: 0.0
+        this.experimentalValueUnit = initialExperimentalValueUnit
+        if (this.experimentalValueUnit == null) {
+            this.experimentalValueUnit = ExperimentalValueUnitUtil.unknown
+        }
+        this.insistOnOutputUnits = finalExperimentalValueUnit
+        if (this.insistOnOutputUnits == null) {
+            this.insistOnOutputUnits = ExperimentalValueUnitUtil.unknown
+        }
+        this.experimentalValueType = ExperimentalValueTypeUtil.numeric
+        this.activity = true
+        if (this.value < 0) {
+            this.value = 0 - this.value
+            valueNegative = true
+        }
+        this.printUnits = false
+    }
+
     /**
      *  ExperimentalValue ctor
      * @param value
