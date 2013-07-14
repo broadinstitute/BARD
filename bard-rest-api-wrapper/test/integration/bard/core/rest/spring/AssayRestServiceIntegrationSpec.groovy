@@ -282,7 +282,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
         //now apply filters with detection_method_type="fluorescence intensity" and  Assay component role="target cell"
         final List<String[]> filters = new ArrayList<String[]>();
         filters.add(["detection_method_type", "\"fluorescence intensity\""] as String[])
-        filters.add(["assay_component_role", "\"target cell\""] as String[])
+        filters.add(["target_name", "\"cholesterol import\""] as String[])
 
         searchParamsFilters.setFilters(filters);
         when:

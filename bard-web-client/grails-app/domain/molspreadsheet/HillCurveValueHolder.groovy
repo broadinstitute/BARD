@@ -1,8 +1,8 @@
 package molspreadsheet
 
 import bard.core.util.ExperimentalValueUnitUtil
-import org.slf4j.LoggerFactory
 import bard.core.util.ExperimentalValueUtil
+import org.slf4j.LoggerFactory
 
 class HillCurveValueHolder {
 
@@ -35,13 +35,25 @@ class HillCurveValueHolder {
     }
 
 
+    void setIdentifier(String identifier) {
+        this.identifier =  identifier
+    }
+
+
+
     void setQualifier (MolSpreadSheetCellType molSpreadSheetCellType)  {
         if (molSpreadSheetCellType == MolSpreadSheetCellType.greaterThanNumeric)  {
             qualifier = ">"
-        } else if (molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)  {
+        }  else if (molSpreadSheetCellType == MolSpreadSheetCellType.lessThanNumeric)  {
             qualifier = "<"
         }
     }
+
+
+    void setQualifier (String qualifier)  {
+        this.qualifier = qualifier
+    }
+
 
     @Override
     public String toString() {
@@ -61,8 +73,7 @@ class HillCurveValueHolder {
         }
 
         if (numericalReturnValue != Double.NaN)  {
-//            returnValue  = numericalReturnValue as String
-            returnValue  = new ExperimentalValueUtil(numericalReturnValue,ExperimentalValueUnitUtil.Micromolar,ExperimentalValueUnitUtil.Micromolar)
+            returnValue  = new ExperimentalValueUtil(numericalReturnValue,ExperimentalValueUnitUtil.Micromolar, ExperimentalValueUnitUtil.Micromolar)
         } else {
             returnValue  = '--'
         }

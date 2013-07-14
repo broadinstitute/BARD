@@ -84,7 +84,7 @@ class HillCurveValueHolderUnitSpec extends Specification{
 
         then:
         assertNotNull hillCurveValueHolder
-        assert hillCurveValueHolder.toString() ==  returnValue
+        assert hillCurveValueHolder.toString().trim() ==  returnValue
 
         where:
         slope       |   response    |   returnValue
