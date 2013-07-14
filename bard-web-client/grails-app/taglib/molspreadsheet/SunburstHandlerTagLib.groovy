@@ -68,39 +68,16 @@ class SunburstHandlerTagLib {
 
 
     def sunburstSection = { attrs, body ->
-//        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
             out << """
     <div >"""
-//        <div id="sunburstdiv">
-//           <script>""".toString()
-//            out <<   g.makeMicroSunburst(attrs, body)
-//            out << """
-//           </script>
-//           """
-//        out <<   g.makeMicroSunburst(attrs, body)
-//        out << """
-//        </div>
-        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right;">Linked Data<br/>Visualization</a>
+        out << """<a  href="#" id="sunburstdiv_bigwin"  style="float: right;">Linked Hierarchy<br/>Visualization</a>
     </div>""".toString()
 //        }
     }
 
 
-//
-//    def bigSunburstData = { attrs, body ->
-////        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
-//        out << """
-//            <script>""".toString()
-//        out <<   g.prepMacroSunburst(attrs, body)
-//        out << """
-//           </script>
-//           """
-////        }
-//    }
-//
 
     def bigSunburstSection = { attrs, body ->
-//        if (ringManagerService.classDataExistsForThisCompound(attrs.compoundSummary)) {
         out << """
         <div id="sunburstdiv">
             """

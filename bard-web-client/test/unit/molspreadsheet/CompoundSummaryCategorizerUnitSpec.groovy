@@ -162,11 +162,11 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null,null)
         compoundSummaryCategorizer.updateOutcome(123L,2,[26],[])
         compoundSummaryCategorizer.updateOutcome(456L,1,[],[])
         compoundSummaryCategorizer.updateOutcome(666L,1,[146, 145],[])
@@ -232,8 +232,8 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(7L,"", "", "", "")
-        compoundSummaryCategorizer.addNewRecord(7L,"", "", "", "")
+        compoundSummaryCategorizer.addNewRecord(7L,"", "", "", "", "")
+        compoundSummaryCategorizer.addNewRecord(7L,"", "", "", "", "")
 
         then: "Should equal the expected"
         assert (compoundSummaryCategorizer.totalContents.size() == 1)
@@ -245,11 +245,11 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null,null)
 
         compoundSummaryCategorizer.combineInNewProteinTargetValue (7L,"")  // err1 -- unknown eid
         compoundSummaryCategorizer.combineInNewProteinTargetValue (123L,"")
@@ -266,11 +266,11 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null,null)
 
         compoundSummaryCategorizer.combineInNewBiologicalProcessValue  (7L,"")  // err1 -- unknown eid
         compoundSummaryCategorizer.combineInNewBiologicalProcessValue  (123L,"")
@@ -287,11 +287,11 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(667L,"biochemical format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(789L,"single protein format","direct enzyme activity assay",null,null,null)
 
         compoundSummaryCategorizer.updateOutcome   (7L,1,["2"] as ArrayList,["4"] as ArrayList)
         compoundSummaryCategorizer.updateOutcome   (123L,1,["3"] as ArrayList,["4"] as ArrayList)
@@ -309,7 +309,7 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
         String linkedDataAssay  = compoundSummaryCategorizer.createLinkedDataAssaySection()
 
         then: "Should give us some output"
@@ -326,7 +326,7 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
         String linkedDataAssay  = compoundSummaryCategorizer.createLinkedDataCrossAssaySection ()
 
         then: "Should give us some output"
@@ -353,9 +353,9 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
 
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
 
         compoundSummaryCategorizer.updateOutcome(123L,2,["4"],["5","6"])
         LinkedHashMap<Long, String> mapBiologyIdToProteinAscensionNumber = [:]
@@ -401,9 +401,9 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
 
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
 
         compoundSummaryCategorizer.updateOutcome(123L,2,["4"],["5","6"])
         compoundSummaryCategorizer.treeAssayFormatLinker(ringNode3)
@@ -439,9 +439,9 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
 
 
         when:
-        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null)
-        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null)
+        compoundSummaryCategorizer.addNewRecord(123L,"cell-based format","transporter assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(456L,"biochemical format","protein-small molecule interaction assay",null,null,null)
+        compoundSummaryCategorizer.addNewRecord(666L,"biochemical format","protein-small molecule interaction assay",null,null,null)
 
         compoundSummaryCategorizer.updateOutcome(123L,2,["4"],["5","6"])
         compoundSummaryCategorizer.treeAssayTypeLinker(ringNode3)
@@ -457,6 +457,41 @@ class CompoundSummaryCategorizerUnitSpec  extends Specification {
         }
 
     }
+
+
+
+
+
+    void "test addNewRecord "() {
+        given:
+        CompoundSummaryCategorizer compoundSummaryCategorizer = new  CompoundSummaryCategorizer ()
+        long eid  = 47L
+        String assayFormat =  "assayFormat"
+        String assayType =  "assayType"
+        String assayName =  "assayName"
+        String assayCapId =  "48L"
+        String bardAssayId =  "49L"
+
+
+        when:
+        compoundSummaryCategorizer.addNewRecord(eid,  assayFormat,  assayType,  assayName,  assayCapId,  bardAssayId)
+        compoundSummaryCategorizer.addNewRecord(eid,  assayFormat,  assayType,  assayName,  assayCapId,  bardAssayId)
+
+        then:
+        compoundSummaryCategorizer.totalContents.size() == 1
+        compoundSummaryCategorizer.totalContents[eid].getClass().getSimpleName() == 'SingleEidSummary'
+        compoundSummaryCategorizer.totalContents[eid].eid ==  eid
+        compoundSummaryCategorizer.totalContents[eid].getAssayFormatString() ==   assayFormat
+        compoundSummaryCategorizer.totalContents[eid].getAssayTypeString() ==  assayType
+        compoundSummaryCategorizer.totalContents[eid].getAssayName() ==  assayName
+        compoundSummaryCategorizer.totalContents[eid].getAssayCapId() == assayCapId
+        compoundSummaryCategorizer.totalContents[eid].getAssayBardId() == bardAssayId
+
+    }
+
+
+
+
 
     /***
      * corner case

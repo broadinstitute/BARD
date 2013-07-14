@@ -125,11 +125,11 @@ class CompoundSummaryCategorizer {
         deriveArbitraryIndex (proteinTargetMap,proteinTargets)
     }
 
-    public addNewRecord (long eid, String assayFormat, String assayType, String assayName, String assayCapId  ) {
+    public addNewRecord (long eid, String assayFormat, String assayType, String assayName, String assayCapId, String bardAssayId  ) {
         if (totalContents.keySet().contains(eid)) {
             log.warn("Duplicate data coming from the backend. Repeated experiment ID =: '${eid}'")
         }  else {
-            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, assayName, assayCapId )
+            totalContents[eid] = new SingleEidSummary( eid,  assayFormat,  assayType, assayName, assayCapId, bardAssayId )
         }
 
     }
@@ -225,6 +225,7 @@ class CompoundSummaryCategorizer {
             SingleEidSummary singleEidSummary = totalContents[currentEid]
             stringBuilder << "    {\n"
             stringBuilder << "        \"AssayRef\": ${loopingCount},\n"
+            stringBuilder << "        \"AssayBId\": ${singleEidSummary.getAssayBardId()},\n"
             stringBuilder << "        \"data\": {\n"
             stringBuilder << "            \"0\" : \"${singleEidSummary.getGoString()}\",\n"
             stringBuilder << "            \"1\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
@@ -404,11 +405,12 @@ class CompoundSummaryCategorizer {
             SingleEidSummary singleEidSummary = totalContents[currentEid]
             stringBuilder << "    {\n"
             stringBuilder << "        \"assayId\": \"${currentEid}\",\n"
+            stringBuilder << "        \"assayBId\" : \"${singleEidSummary.getAssayBardId()}\"\n"
             stringBuilder << "        \"data\": {\n"
             stringBuilder << "            \"GO_biological_process_term\" : \"${singleEidSummary.getGoString()}\",\n"
             stringBuilder << "            \"assay_format\" : \"${singleEidSummary.getAssayFormatString()}\",\n"
             stringBuilder << "            \"assay_type\" : \"${singleEidSummary.getAssayTypeString()}\",\n"
-            stringBuilder << "            \"protein_target\" : \"${singleEidSummary.getTargetString()}\"\n"
+            stringBuilder << "            \"protein_target\" : \"${singleEidSummary.getTargetString()}\",\n"
             stringBuilder << "        }"
             stringBuilder << "    }\n"
             if ((++loopingCount) < numberOfElements) {
@@ -432,14 +434,16 @@ class CompoundSummaryCategorizer {
         int outcome = 0
         String assayName
         String assayCapId
+        String assayBardId
 
 
-        public SingleEidSummary(long eid, String assayFormat, String assayType, String assayName,String assayCapId) {
+        public SingleEidSummary(long eid, String assayFormat, String assayType, String assayName,String assayCapId, String assayBardId ) {
             this.eid =  eid
             this.assayFormatIndex = deriveAssayFormatIndex (assayFormat)
             this.assayTypeIndex = deriveAssayTypeIndex (assayType)
             this.assayName =  assayName
             this.assayCapId = assayCapId
+            this.assayBardId = assayBardId
         }
 
 

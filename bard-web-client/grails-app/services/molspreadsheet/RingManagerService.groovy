@@ -122,7 +122,8 @@ class RingManagerService {
                                                  String assayFormat,
                                                  String assayType,
                                                  String assayName,
-                                                 String capAssayId )  {
+                                                 String capAssayId,
+                                                 String bardAssayId )  {
         for (String currentExperimentId in currentExperimentIds) {
             Long  experimentIdAsLong
             try {
@@ -142,7 +143,8 @@ class RingManagerService {
                                                           assayFormat ?: 'none',
                                                           assayType ?: 'none',
                                                           assayName,
-                                                          capAssayId)
+                                                          capAssayId,
+                                                          bardAssayId)
                 List <String> unconvertedBiologyHitIds = []
                 List <String> unconvertedBiologyMissIds = []
                 int outcome
@@ -196,6 +198,7 @@ class RingManagerService {
                String assayType = assay.minimumAnnotation.assayType
                String assayName = assay.name
                String capAssayId =  assay.capAssayId
+               String bardAssayId =  assay.bardAssayId
                if ( (currentTargets != null)  ||
                     (assayFormat != null) ||
                     (assayType != null)){  // If one of the values we care about is non-null then retrieve everything we can find
@@ -206,7 +209,8 @@ class RingManagerService {
                                                             assayFormat,
                                                             assayType,
                                                             assayName,
-                                                            capAssayId)
+                                                            capAssayId,
+                                                            bardAssayId)
 
                }
              }
