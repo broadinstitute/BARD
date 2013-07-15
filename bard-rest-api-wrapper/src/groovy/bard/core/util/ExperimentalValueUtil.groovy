@@ -27,9 +27,9 @@ class ExperimentalValueUtil {
      * @param activity
      */
     public ExperimentalValueUtil(BigDecimal value,
-                             ExperimentalValueUnitUtil experimentalValueUnit,
-                             ExperimentalValueTypeUtil experimentalValueType,
-                             Boolean activity = true) {
+                                 ExperimentalValueUnitUtil experimentalValueUnit,
+                                 ExperimentalValueTypeUtil experimentalValueType,
+                                 Boolean activity = true) {
         this.value = value ?: 0.0
         this.experimentalValueUnit = experimentalValueUnit
         if (this.experimentalValueUnit == null) {
@@ -43,38 +43,13 @@ class ExperimentalValueUtil {
         }
     }
 
-
-    public ExperimentalValueUtil(BigDecimal value,
-                                 ExperimentalValueUnitUtil initialExperimentalValueUnit,
-                                 ExperimentalValueUnitUtil finalExperimentalValueUnit) {
-        this.value = value ?: 0.0
-        this.experimentalValueUnit = initialExperimentalValueUnit
-        if (this.experimentalValueUnit == null) {
-            this.experimentalValueUnit = ExperimentalValueUnitUtil.unknown
-        }
-        this.insistOnOutputUnits  = finalExperimentalValueUnit
-        if (this.insistOnOutputUnits == null) {
-            this.insistOnOutputUnits = ExperimentalValueUnitUtil.unknown
-        }
-        this.experimentalValueType = ExperimentalValueTypeUtil.numeric
-        this.activity = true
-        if (this.value < 0) {
-            this.value = 0 - this.value
-            valueNegative = true
-        }
-        this.printUnits = false
-    }
-
-
-
-
     /**
      *  ExperimentalValue ctor
      * @param value
      * @param printUnits
      */
     public ExperimentalValueUtil(BigDecimal value,
-                             Boolean printUnits) {
+                                 Boolean printUnits) {
         this.value = value
         this.experimentalValueUnit = ExperimentalValueUnitUtil.Molar
         this.experimentalValueType = ExperimentalValueTypeUtil.numeric
