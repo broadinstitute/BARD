@@ -23,8 +23,17 @@ class DoseResponseCurveController {
             if (drcCurveCommand) {
                 drcCurveCommand.width = width
                 drcCurveCommand.height = height
+                //Remove zero-concentrations since this causes log(conc) to be negative-infinity and creates an empty plot.
+                List<Double> concList = drcCurveCommand.concentrations.collect()
+                concList.eachWithIndex { Double conc, int i ->
+                    if (!conc) {
+                        drcCurveCommand.concentrations.remove(i)
+                        drcCurveCommand.activities.remove(i)
+                    }
+                }
+
                 byte[] bytes
-                if (drcCurveCommand.curves?.size()>0){
+                if (drcCurveCommand.curves?.size() > 0) {
                     bytes = this.doseCurveRenderingService.createDoseCurves(drcCurveCommand)
                 } else {
                     bytes = this.doseCurveRenderingService.createDoseCurve(drcCurveCommand)

@@ -65,13 +65,13 @@ class DoseCurveImageUnitSpec extends Specification {
         List<Double> y = [new Double(1000), new Double(2000)]
 
         //set up the valid and invalid arrays
-        def validX = new double[x.size()];
-        def validY = new double[x.size()];
-        def invalidX = new double[y.size()];
-        def invalidY = new double[y.size()];
+        List<Double> validX = [];
+        List<Double> validY = [];
+        List<Double> invalidX = [];
+        List<Double> invalidY = [];
 
         when:
-        DoseCurveImage.aggregateValidAndInvalidPoints(isValid, x, y, validX as double[], validY as double[], invalidX as double[], invalidY as double[])
+        DoseCurveImage.aggregateValidAndInvalidPoints(isValid, x, y, validX, validY, invalidX, invalidY)
         then: "We expect that the first value in each array has a number greater than zero, while the second value must equal zero"
         //assert that the first values are greater than zero
         assert invalidY[0] > 0
@@ -80,10 +80,10 @@ class DoseCurveImageUnitSpec extends Specification {
         assert validX[0] > 0
 
         //assert that the second value in each array is zero
-        assert invalidY[1] == 0
-        assert invalidX[1] == 0
-        assert validY[1] == 0
-        assert validX[1] == 0
+        assert invalidY[0] == 2000.0
+        assert invalidX[0] == Math.log10(2000.0)
+        assert validY[0] == 1000.0
+        assert validX[0] == Math.log10(1000.0)
     }
     /**
      *

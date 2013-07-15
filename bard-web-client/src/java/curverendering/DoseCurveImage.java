@@ -56,8 +56,8 @@ public class DoseCurveImage {
             List<Double> x = drc.getConcentrations();
             List<Double> y = drc.getActivities();
             List<Boolean> isValid = drc.getIsValid();
-            if ((x!=null)&&(y!=null))  {
-                drc.getCurveParameters();
+            if ((x != null) && (y != null)) {
+//                drc.getCurveParameters();
                 addCurve(name, dataset, renderer, plot, x, y, isValid, drc.getCurveParameters(), drc.getColor());
             }
 
@@ -91,20 +91,21 @@ public class DoseCurveImage {
     }
 
 
-    public static void aggregateValidAndInvalidPoints(List<Boolean> isValid, List<Double> x, List<Double> y, double validX[], double validY[], double invalidX[], double invalidY[]) {
-        int validCount = 0;
-        int invalidCount = 0;
+    public static void aggregateValidAndInvalidPoints(List<Boolean> isValid, List<Double> x, List<Double> y, List<Double> validXs, List<Double> validYs, List<Double> invalidXs, List<Double> invalidYs) {
 
         for (int i = 0; i < y.size(); i++) {
-            double nx = Math.log10(x.get(i));
+            Double nx = Math.log10(x.get(i));
+            if (nx == Double.NEGATIVE_INFINITY) {
+//                x.remove(i);
+//                y.remove(i);
+                continue;
+            }
             if (isValid.get(i)) {
-                validX[validCount] = nx;
-                validY[validCount] = y.get(i);
-                validCount++;
+                validXs.add(nx);
+                validYs.add(y.get(i));
             } else {
-                invalidX[invalidCount] = nx;
-                invalidY[invalidCount] = y.get(i);
-                invalidCount++;
+                invalidXs.add(nx);
+                invalidYs.add(y.get(i));
             }
         }
     }
@@ -188,27 +189,40 @@ public class DoseCurveImage {
 
     private static void addCurve(String name, DefaultXYDataset dataset, XYLineAndShapeRenderer renderer, XYPlot plot, List<Double> x,
                                  List<Double> y, List<Boolean> isValid, CurveParameters curveParameters, Color curveColor) {
-        double validX[] = new double[x.size()];
-        double validY[] = new double[x.size()];
-        double invalidX[] = new double[y.size()];
-        double invalidY[] = new double[y.size()];
+        List<Double> validXs = new ArrayList<Double>();
+        List<Double> validYs = new ArrayList<Double>();
+        List<Double> invalidXs = new ArrayList<Double>();
+        List<Double> invalidYs = new ArrayList<Double>();
 
-        aggregateValidAndInvalidPoints(isValid, x, y, validX, validY, invalidX, invalidY);
+        aggregateValidAndInvalidPoints(isValid, x, y, validXs, validYs, invalidXs, invalidYs);
 
         // add the data and rendering for the valid points
         int seriesIndex = dataset.getSeriesCount();
-        dataset.addSeries(name, new double[][]{Arrays.copyOf(validX, validX.length), Arrays.copyOf(validY, validY.length)});
+        dataset.addSeries(name, new double[][]{convertListDoubleToDoublePrimitiveArray(validXs), convertListDoubleToDoublePrimitiveArray(validYs)});
         setRenderingSeriesForValidPoints(renderer, seriesIndex, curveColor);
 
         // add the data and rendering for the invalid points
-        seriesIndex = dataset.getSeriesCount();
-        dataset.addSeries(name + " masked", new double[][]{Arrays.copyOf(invalidX, invalidX.length), Arrays.copyOf(invalidY, invalidY.length)});
-        setRenderingSeriesForInValidPoints(renderer, seriesIndex);
+        if (invalidXs.size() > 0) {
+            seriesIndex = dataset.getSeriesCount();
+            dataset.addSeries(name + " masked", new double[][]{convertListDoubleToDoublePrimitiveArray(invalidXs), convertListDoubleToDoublePrimitiveArray(invalidYs)});
+            setRenderingSeriesForInValidPoints(renderer, seriesIndex);
+        }
 
         // add the fitted curve (if possible)
-        addFittedCurve(name, dataset, renderer, curveParameters, curveColor, validX);
+        addFittedCurve(name, dataset, renderer, curveParameters, curveColor, convertListDoubleToDoublePrimitiveArray(validXs));
         // add confidence bounds
         addConfidenceBounds(curveParameters, curveColor, plot);
+    }
+
+    public static double[] convertListDoubleToDoublePrimitiveArray(List<Double> doubleList) {
+        double[] doubles = new double[doubleList.size()];
+        int i = 0;
+
+        for (Double d : doubleList) {
+            doubles[i++] = d;
+        }
+
+        return doubles;
     }
 
     public static void addConfidenceBounds(CurveParameters curveParameters, Color curveColor, XYPlot plot) {
@@ -400,16 +414,16 @@ public class DoseCurveImage {
                 curves.put(colorIndex + ":" + drc.getCurveParameters().getResultTime().toString(), drc);
                 ++colorIndex;
             }
-            Bounds bounds = derivedDefaultBounds( drcs,  xNormMin,  xNormMax, yNormMin, yNormMax);
+            Bounds bounds = derivedDefaultBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax);
             return DoseCurveImage.createChart(curves, bounds, Color.BLACK, xAxisLabel, yAxisLabel);
         }
         return null;
     }
 
-    /***
+    /**
      * We need to derive bounds, but also allow for curves that contain no elements.  Hopefully all the curves we get back from the backend
      * will at one point contain real data but as of now they don't, which was leading our old pathway through the code to crash.
-     *
+     * <p/>
      * Another special case: if we are given both a maximum and a minimum then don't regenerate those numbers ( we're assuming the caller
      * had a reason to set those numbers explicitly).  If instead the numbers are both null then we'll need to step through and find the bounds
      * across all the curves we've been given.
@@ -464,10 +478,10 @@ public class DoseCurveImage {
             }
 
         }
-        if ((xNormMin != null) && (xNormMax != null) &&(yNormMin != null) && (yNormMax != null)){
+        if ((xNormMin != null) && (xNormMax != null) && (yNormMin != null) && (yNormMax != null)) {
             return (findBounds(drcs, xNormMin, xNormMax, yNormMin, yNormMax)); // this routine doesn't do too well with null values
         } else {
-            return new Bounds(-1d,1d,-1d,1d);// This is our emergency exit.  This way we won't thrown exception, but we have no data so there's no curve we can possibly display either.
+            return new Bounds(-1d, 1d, -1d, 1d);// This is our emergency exit.  This way we won't thrown exception, but we have no data so there's no curve we can possibly display either.
         }
 
     }
