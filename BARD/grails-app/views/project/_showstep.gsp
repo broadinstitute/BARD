@@ -38,16 +38,16 @@
             <strong>Selected Edge</strong>
 
             <table><tr>
-            <td><div id="selectedEdgeFromId">{{fromNode}}</div> </td>
-             <td> - </td>
-            <td><div id="selectedEdgeToId">{{toNode}}</div></td>
-            <td><g:if test="${editable == 'canedit'}">
-                <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
-                   style="font-family:arial;color:red;font-size:10px;">
-                    <i class="icon-trash"></i>
-                    Remove from Project
-                </a>
-            </g:if></td>
+                <td><div id="selectedEdgeFromId">{{fromNode}}</div> </td>
+                <td> - </td>
+                <td><div id="selectedEdgeToId">{{toNode}}</div></td>
+                <td><g:if test="${editable == 'canedit'}">
+                    <a href="#" onclick="deleteEdge({{fromNode}},{{toNode}},${instanceId});return false;"
+                       style="font-family:arial;color:red;font-size:10px;">
+                        <i class="icon-trash"></i>
+                        Remove from Project
+                    </a>
+                </g:if></td>
             </tr></table>
         </script>
         <script id="node-selection-template" type="text/x-handlebars-template">

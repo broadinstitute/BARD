@@ -123,19 +123,6 @@ class ProjectController {
         render projects.collect { it.name } as JSON
     }
 
-    def projectStages() {
-        List<String> sorted = []
-        final Collection<StageTree> stageTrees = StageTree.findAll()
-        for (StageTree stageTree : stageTrees) {
-            sorted.add(stageTree.label)
-        }
-        sorted.sort()
-        final JSON json = sorted as JSON
-        render text: json, contentType: 'text/json', template: null
-    }
-
-
-
     def projectStatus() {
         List<String> sorted = []
         final Collection<ProjectStatus> projectStatuses = ProjectStatus.values()
@@ -215,7 +202,6 @@ class ProjectController {
         }
     }
 
-
     def reloadProjectSteps(Long projectId) {
         try {
             Project project = Project.findById(projectId)
@@ -223,37 +209,6 @@ class ProjectController {
             render(template: "showstep", model: [experiments: project.projectExperiments, editable: editable ? 'canedit' : 'cannotedit', pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
         } catch (Exception e) {
             render 'serviceError:' + e.message
-        }
-    }
-
-    def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
-        //pass in the project experiment
-        try {
-            ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
-
-            //x-editable will not send a new value only when the original is different from the selected
-            //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL
-            Long originalStageElementId = null
-            if (inlineEditableCommand?.name?.isNumber()) {
-                originalStageElementId = new Long(inlineEditableCommand.name)
-            }
-            Element newStage = Element.findByLabel(inlineEditableCommand.value)
-
-            if (originalStageElementId != newStage?.id) {//there has been a change
-
-                if (newStage) {
-                    projectExperiment = projectService.updateProjectStage(projectExperiment.project.id, projectExperiment, newStage)
-                } else {
-                    render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
-                    return
-                }
-            }
-            render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
-        } catch (AccessDeniedException ade) {
-            log.error(ade)
-            render accessDeniedErrorMessage()
-        } catch (Exception ee) {
-            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
     }
 
@@ -305,31 +260,26 @@ class ProjectController {
             render accessDeniedErrorMessage()
         } catch (UserFixableException e) {
             log.error(e)
-            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: 'An internal server error has occurred. Please notify the BARD team'
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: e.message
         }
     }
 
     def associateExperimentsToProject() {
-        // get all values regardless - none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
-        def param1 = request.getParameterValues('selectedExperiments[]')
-        def projectId = params.projectId
-        def project = Project.findById(projectId)
-        def stageId = params['stageId']
-        def element = Element.findById(stageId)
-        // get rid of duplicated selection if there is any
-        Set<String> selectedExperiments = new HashSet<String>()
+        // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
+        Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]')  as Set<String>
+        Long projectId = params.getLong('projectId')
+        Project project = Project.findById(projectId)
+        Long stageId = params.getLong('stageId')
+        Element element = Element.findById(stageId)
 
-        param1.each {
-            selectedExperiments.add(it)
-        }
         if (selectedExperiments.isEmpty()) {
             render status: HttpServletResponse.SC_BAD_REQUEST, text: 'Experiment must be selected'
         } else {
             try {
                 selectedExperiments?.each { String experimentDisplayName ->
-                    def experimentId = experimentDisplayName.split("-")[0]
-                    def experiment = Experiment.findById(experimentId)
-                    projectService.addExperimentToProject(experiment, new Long(projectId), element)
+                    String experimentId = experimentDisplayName.split("-")[0]
+                    Experiment experiment = Experiment.findById(experimentId as Long)
+                    projectService.addExperimentToProject(experiment, projectId, element)
                     render(template: "showstep", model: [editable: 'canedit', experiments: project.projectExperiments, pegraph: projectExperimentRenderService.contructGraph(project), instanceId: project.id])
                 }
             }
@@ -345,30 +295,46 @@ class ProjectController {
         }
     }
 
-    def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
-        Project projectInstance = Project.findById(instanceId)
-        boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
-        if (editable) {
-            projectInstance.name = projectName
-            projectInstance.description = description
-            projectInstance.projectStatus = Enum.valueOf(ProjectStatus, projectStatus);
-            projectInstance.save(flush: true)
-            projectInstance = Project.findById(instanceId)
-            render(template: "summaryDetail", model: [project: projectInstance])
-        } else {
-            render accessDeniedErrorMessage()
+    def projectStages() {
+        List<String> sorted = []
+        final Collection<StageTree> stageTrees = StageTree.findAll()
+        for (StageTree stageTree : stageTrees) {
+            sorted.add(stageTree.label)
         }
+        sorted.sort()
+        final JSON json = sorted as JSON
+        render text: json, contentType: 'text/json', template: null
     }
 
-    def editContext(Long id, String groupBySection) {
-        Project instance = Project.get(id)
-        if (!instance) {
-            // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), id])
-            return
+    def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
+        //pass in the project experiment
+        try {
+            ProjectExperiment projectExperiment = ProjectExperiment.findById(inlineEditableCommand.pk)
+
+            //x-editable will not send a new value only when the original is different from the selected
+            //but we still add this piece of defensive code anyway just so it still works if someone hacks the URL
+            Long originalStageElementId = null
+            if (inlineEditableCommand?.name?.isNumber()) {
+                originalStageElementId = new Long(inlineEditableCommand.name)
+            }
+            Element newStage = Element.findByLabel(inlineEditableCommand.value)
+
+            if (originalStageElementId != newStage?.id) {//there has been a change
+
+                if (newStage) {
+                    projectExperiment = projectService.updateProjectStage(projectExperiment.project.id, projectExperiment, newStage)
+                } else {
+                    render status: 404, text: "Could not find stage with label ${inlineEditableCommand.value}", contentType: 'text/plain', template: null
+                    return
+                }
+            }
+            render text: "${projectExperiment.stage.label}", contentType: 'text/plain', template: null
+        } catch (AccessDeniedException ade) {
+            log.error(ade)
+            render accessDeniedErrorMessage()
+        } catch (Exception ee) {
+            render status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: "An internal Server error happend while you were performing this task. Contact the BARD team to help resove this issue", contentType: 'text/plain', template: null
         }
-        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
-        [instance: instance, contexts: [contextGroup]]
     }
 
     def showEditSummary(Long instanceId) {

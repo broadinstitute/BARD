@@ -15,14 +15,14 @@ function refreshProjectSteps(){
     var projectId = $("#projectIdForStep").val();
     var inputdata = {'projectId':projectId};
     $.ajax
-    ({
-        url:"../reloadProjectSteps",
-        data:inputdata,
-        cache:false,
-        success:function(data) {
-            handleSuccess(data)
-        }
-    });
+        ({
+            url:"../reloadProjectSteps",
+            data:inputdata,
+            cache:false,
+            success:function(data) {
+                handleSuccess(data)
+            }
+        });
 }
 
 function initProjectFunction() {
