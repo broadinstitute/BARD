@@ -49,7 +49,7 @@ class PersonControllerIntegrationSpec extends IntegrationSpec {
         model.personCommand.primaryGroup == null
 
         and: 'verify the view'
-        controller.modelAndView.viewName == '/person/list'
+        controller.modelAndView.viewName.endsWith('list')
     }
 
     void "test edit verify model contents and view"() {
@@ -75,7 +75,7 @@ class PersonControllerIntegrationSpec extends IntegrationSpec {
         model.personCommand.primaryGroup == person.newObjectRole
 
         and: 'verify the view'
-        controller.modelAndView.viewName == '/person/edit'
+        controller.modelAndView.viewName.endsWith('edit')
     }
 
     void "test edit person desc: #desc"() {
@@ -86,7 +86,7 @@ class PersonControllerIntegrationSpec extends IntegrationSpec {
         controller.edit()
 
         then: 'verify model contents'
-        controller.response.redirectUrl == '/person/list'
+        controller.response.redirectUrl.endsWith('list')
         controller.flash.message == "Person not found. Try again"
 
         where:
