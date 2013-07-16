@@ -38,15 +38,17 @@
 
         <script>
             /* Retrieve JSON data to build a histogram */
-            d3.json("/bardwebclient/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function(error,dataFromServer) {
-                if (!(dataFromServer===undefined)){
-                      for ( var i = 0; i < dataFromServer.length; i++)  {
-                          if (!(dataFromServer[i]===undefined)) {
-                              drawHistogram(d3.select('#histogramHere'),dataFromServer[i]);
-                          }
+            window.onload=function(){
+                d3.json("/bardwebclient/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function(error,dataFromServer) {
+                    if (!(dataFromServer===undefined)){
+                        for ( var i = 0; i < dataFromServer.length; i++)  {
+                            if (!(dataFromServer[i]===undefined)) {
+                                drawHistogram(d3.select('#histogramHere'),dataFromServer[i]);
+                            }
+                        }
                     }
-                }
-            });
+                });
+            }
         </script>
 
         <div class="row-fluid ">
