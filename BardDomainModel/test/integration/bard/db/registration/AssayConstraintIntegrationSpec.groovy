@@ -4,6 +4,7 @@ import bard.db.BardIntegrationSpec
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ReadyForExtraction
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -21,6 +22,7 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
 
     @Before
     void doSetup() {
+        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
         domainInstance = Assay.buildWithoutSave()
     }
 
@@ -47,7 +49,7 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'valid value'    | AssayStatus.RETIRED  | true  | null
     }
 
-    void "test assayShortName constraints #desc assayShortName: "() {
+    void "test assayShortName constraints #desc value: '#valueUnderTest'"() {
 
         final String field = 'assayShortName'
 
@@ -68,7 +70,7 @@ class AssayConstraintIntegrationSpec extends BardIntegrationSpec {
         'null not valid'   | null                                        | false | 'nullable'
         'too long'         | createString(ASSAY_SHORT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
 
-        'blank valid'      | ''                                          | true  | null
+//        'blank valid'      | ''                                          | false  | null // fails as oracle treats '' same as null
         'blank valid'      | '   '                                       | true  | null
         'exactly at limit' | createString(ASSAY_SHORT_NAME_MAX_SIZE)     | true  | null
     }
