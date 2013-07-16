@@ -108,9 +108,9 @@ class Project extends DatabaseConnectivity {
 	}
 
 	/**
-	 * @param assayId
-	 * @param measureName
-	 * @return measures associated with contexts
+	 * @param projectId
+	 * @param documentType
+	 * @return documents list associated with specific document type
 	 */
 	public static def getProjectDocuments(def projectId, def documentType) {
 		//def documentMap = [:]

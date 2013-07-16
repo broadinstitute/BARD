@@ -76,6 +76,14 @@ environments {
 	}
 }
 
+mockUsers {
+	integrationTestUser {
+		roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
+		username = 'integrationTestUser'
+		password = 'integrationTestUser'
+		email = 'integrationTestUser@nowhere.com'
+	}
+}
 // log4j configuration
 log4j = {
 	// Example of changing the log pattern for the default console appender:
@@ -105,30 +113,30 @@ log4j = {
  * dataExport-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
  */
 if (appName) {
-    grails.config.locations = []
+	grails.config.locations = []
 
-    // If the developer specifies a directory for the external config files at the command line, use it.
-    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
-    // Otherwise, look for these files in the user's home .grails/projectdb directory
-    // If there are no external config files in either location, don't override anything in this Config.groovy
-    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
-    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
+	// If the developer specifies a directory for the external config files at the command line, use it.
+	// This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
+	// Otherwise, look for these files in the user's home .grails/projectdb directory
+	// If there are no external config files in either location, don't override anything in this Config.groovy
+	String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+	String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
 
-    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
-    fileNames.each { fileName ->
-        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
-        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
+	List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+	fileNames.each { fileName ->
+		String primaryFullName = "${primaryOverrideDirName}/${fileName}"
+		String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
 
-        if (new File(primaryFullName).exists()) {
-            println "Overriding Config.groovy with $primaryFullName"
-            grails.config.locations << "file:$primaryFullName"
-        }
-        else if (new File(secondaryFullName).exists()) {
-            println "Overriding Config.groovy with $secondaryFullName"
-            grails.config.locations << "file:$secondaryFullName"
-        }
-        else {
-            println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
-        }
-    }
+		if (new File(primaryFullName).exists()) {
+			println "Overriding Config.groovy with $primaryFullName"
+			grails.config.locations << "file:$primaryFullName"
+		}
+		else if (new File(secondaryFullName).exists()) {
+			println "Overriding Config.groovy with $secondaryFullName"
+			grails.config.locations << "file:$secondaryFullName"
+		}
+		else {
+			println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
+		}
+	}
 }

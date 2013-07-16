@@ -1,19 +1,22 @@
 package db
 
+import common.AssayQueries;
+
 class Assay extends DatabaseConnectivity {
 
 	/**
 	 * @param assayId
 	 * @return assay summary information
 	 */
-	Map<String, String> getAssaySummaryById(def assayId) {
+	public static def getAssaySummaryById(def assayId) {
 		def assaySummaryInfo = [:]
-		def sql = getSql()
-		sql.eachRow(ASSAY_SUMMARY_BYID, [assayId]) { row ->
-			assaySummaryInfo = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
+		def sql = DatabaseConnectivity.getSql()
+		sql.eachRow(AssayQueries.ASSAY_SUMMARY_BYID, [assayId]) {
+			assaySummaryInfo = it.toRowResult()
 		}
 		return assaySummaryInfo
 	}
+	
 	/**
 	 * @param assayName
 	 * @return assay summary information 
@@ -103,5 +106,21 @@ class Assay extends DatabaseConnectivity {
 			associatedContextMeasureMap = ['measure':row.measure, 'context':row.context]
 		}
 		return associatedContextMeasureMap
+	}
+	/**
+	 * 
+	 * @param assayId
+	 * @param documentType
+	 * @return documents list associated with specific document type
+	 */
+	public static def getAssayDocuments(def assayId, def documentType) {
+		//def documentMap = [:]
+		def documentList = []
+		def sql = getSql()
+		sql.eachRow(AssayQueries.ASSAY_DOCUMENT, [assayId, documentType]) { row ->
+			documentList.add(row.Name)
+			//documentList.add(documentMap)
+		}
+		return documentList
 	}
 }

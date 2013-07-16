@@ -8,7 +8,7 @@ class Constants {
 	enum DocumentAs{ CONTENTS, URL}
 	enum NavigateTo { ASSAY_BY_ID, ASSAY_BY_NAME, PROJECT_BY_ID, PROJECT_BY_NAME }
 	enum SearchBy { ASSAY_ID, ASSAY_NAME, PROJECT_ID, PROJECT_NAME }
-	enum ProjectSummaryEdit { STATUS, NAME, DESCRIPTION }
+//	enum ProjectSummaryEdit { STATUS, NAME, DESCRIPTION }
 
 	// constants
 	final static int WAIT_INTERVAL = 15;

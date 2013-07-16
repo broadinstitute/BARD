@@ -20,20 +20,6 @@ class EditProjectPage extends Page{
 	}
 }
 
-/*class EditSummaryModule extends Module {
-	static content = {
-		
-		titleBar { $("span#ui-dialog-title-dialog_edit_project_summary") }
-		editSummaryForm { $("form#editSummaryForm") }
-		projNameField { editSummaryForm.find("input#projectName") }
-		projDescField { editSummaryForm.find("input#description") }
-		formCon { $("div#dialog_edit_project_summary") }
-		updateBtn { formCon.parent().find("button", type:"button", text:"Update Summary") }
-		cancelBtn { formCon.parent().find("button", type:"button", text:"Cancel") }
-	}
-}*/
-
-
 class AssociateExperimentModule extends Module {
 	static content = {
 		titleBar { $("span#ui-dialog-title-dialog_add_experiment_step") }

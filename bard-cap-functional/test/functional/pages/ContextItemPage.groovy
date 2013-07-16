@@ -13,7 +13,7 @@ import common.Constants
 import common.Constants.ContextItem
 import common.Constants.ExpectedValueType
 
-class ContextItemPage extends ContextScaffoldPage{
+class ContextItemPage extends CapScaffoldPage{
 	static url=""
 	//	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Add a New Item") } }
 	static content = {
@@ -44,7 +44,7 @@ class ContextItemPage extends ContextScaffoldPage{
 			if(add){
 				attributeFromDictionary.label.click()
 				attributeFromDictionary.selectChoice.click()
-				fillContextItemForm(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
+				selectAutoChoiceValue(attributeFromDictionary, selectToDrop, inputData.AttributeFromDictionary)
 			}
 			switch(valueType){
 				case ExpectedValueType.ELEMENT:
@@ -54,7 +54,7 @@ class ContextItemPage extends ContextScaffoldPage{
 							valueFromDictionary.selectClose.click()
 						}
 						valueFromDictionary.selectChoice.click()
-						fillContextItemForm(valueFromDictionary, selectToDrop, inputData.ValueFromDictionary)
+						selectAutoChoiceValue(valueFromDictionary, selectToDrop, inputData.ValueFromDictionary)
 					}else{
 						valueFromDictionary.label.click()
 					}
@@ -82,7 +82,7 @@ class ContextItemPage extends ContextScaffoldPage{
 								integratedSearch.selectClose.click()
 							}
 							integratedSearch.selectChoice.click()
-							fillContextItemForm(integratedSearch, selectToDrop, inputData.IntegratedSearch)
+							selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.IntegratedSearch)
 						}else{
 							integratedSearch.label.click()
 						}
@@ -166,7 +166,7 @@ class ContextItemPage extends ContextScaffoldPage{
 		}
 		return false
 	}
-	def fillContextItemForm(def element1, def element2,  def inputValue){
+	def selectAutoChoiceValue(def element1, def element2,  def inputValue){
 		element1.selectChoice.click()
 		int index = 0
 		element1.searchInput.value(inputValue)

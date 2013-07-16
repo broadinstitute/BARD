@@ -8,7 +8,7 @@ import modules.LoadingModule
 import common.Constants
 import common.Constants.ContextItem
 
-class EditContextPage extends ContextScaffoldPage{
+class EditContextPage extends CapScaffoldPage{
 	final static SLEEP_INTERVAL = 2000
 	static url=""
 	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Edit Project") }

@@ -11,9 +11,8 @@ public class CommonFunctionalPage extends Page {
 	static at = {}
 	static content = {
 		formLoading { module LoadingModule }
-	
 	}
-	
+
 	boolean isAutocompleteListOk(element, condition){
 		if(element){
 			element.each { elementValue ->
@@ -23,7 +22,7 @@ public class CommonFunctionalPage extends Page {
 			}
 		}
 	}
-	
+
 	boolean validationError(def element, def condition){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element }
 		if(element){
@@ -34,8 +33,9 @@ public class CommonFunctionalPage extends Page {
 		}
 		return false
 	}
-	
+
 	boolean ajaxRequestCompleted(){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ !formLoading.loading.displayed }
 	}
+
 }
