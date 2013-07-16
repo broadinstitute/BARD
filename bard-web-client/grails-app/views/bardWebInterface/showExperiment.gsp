@@ -4,8 +4,7 @@
 <head>
     <meta name="layout" content="logoSearchCartAndFooter"/>
     <title>BARD : Experiment Result : ${tableModel.additionalProperties.capExptId}</title>
-    <r:require modules="experimentData, bootstrap, compoundOptions, cbas,histogram"/>
-    <script src="../../js/sunburst/d3.min.js"></script>
+    <r:require modules="experimentData, histogram, bootstrap, compoundOptions, cbas"/>
 
 </head>
 

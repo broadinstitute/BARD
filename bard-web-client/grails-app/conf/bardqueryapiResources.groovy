@@ -36,9 +36,11 @@ modules = {
         resource url: "/js/handlebars-1.0.rc.2/handlebars.js"
     }
     d3Library {
-        resource url: "js/sunburst/d3.min.js"
-        resource url: "js/sunburst/dc.js"
-        resource url: "js/sunburst/crossfilter.js"
+        resource url: "js/lib/d3.min.js"
+    }
+    dcLibrary {
+        resource url: "js/lib/dc.js"
+        resource url: "js/lib/crossfilter.js"
         resource url: "css/dc.css"
     }
     projectstep {
@@ -129,7 +131,7 @@ modules = {
         resource url: "css/cbas.css"
     }
     sunburst {
-        dependsOn 'bootstrap,jquery,d3Library'
+        dependsOn 'bootstrap,jquery,d3Library,dcLibrary'
 
         resource url: "js/sunburst/linkedVis.js"
         resource url: "js/sunburst/createALegend.js"
