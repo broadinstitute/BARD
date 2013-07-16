@@ -72,10 +72,10 @@ class AssayConstraintUnitSpec extends Specification {
         where:
         desc               | valueUnderTest                              | valid | errorCode
         'null not valid'   | null                                        | false | 'nullable'
-        'blank not valid'  | ''                                          | false | 'blank'
-        'blank not valid'  | '   '                                       | false | 'blank'
-
         'too long'         | createString(ASSAY_SHORT_NAME_MAX_SIZE + 1) | false | 'maxSize.exceeded'
+
+        'blank valid'      | ''                                          | true  | null
+        'blank valid'      | '   '                                       | true  | null
         'exactly at limit' | createString(ASSAY_SHORT_NAME_MAX_SIZE)     | true  | null
     }
 
