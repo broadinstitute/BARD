@@ -184,6 +184,7 @@ class CompoundBioActivitySummaryBuilder {
             if (!resultTypeFilters || resultTypeFilters*.filterValue?.contains(priorityElement.pubChemDisplayName)) {//only add the results that match the result-type filter(s).
                 switch (responseClass) {
                     case ResponseClassEnum.SP:
+                    case ResponseClassEnum.CR_NO_SER:
                         //The result-type is a single-point, key/value pair.
                         PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
                         values << pairValue
