@@ -61,7 +61,7 @@ function initProjectFunction() {
                 var projectId = $('#projectIdForStep').val();
                 resetAfterClick();
                 var params = {selected:n.data, projectId:projectId}
-                $('#node-selection-details').html(template(params))
+                $('#selection-details').html(template(params))
             }
         );
         return set;
@@ -140,7 +140,7 @@ function getsrc() {
     var graphInJSON = $.parseJSON($('#stepGraph').html());
     var connectedNodes = graphInJSON.connectedNodes;
 
-    var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18];node[shape=polygon,sides=4,fontsize=8];";
+    var textgraph = "digraph {graph[fontname=\"Helvetica-Oblique\",fontsize=18];node[shape=polygon,sides=4,fontsize=8,style=\"filled\",fillcolor=\"white\"];";
     for (var i = 0; i < connectedNodes.length; i++) {
         var keyValues = connectedNodes[i].keyValues;
         textgraph = textgraph + connectedNodes[i].id + "[color=salmon2,label=\"" + keyValues.eid + " " + keyValues.stage + "\"" + "];";
@@ -204,10 +204,10 @@ function initFunction1() {
         for (var i = 0; i < connectedNodes.length; i++) {
             var keyValues = connectedNodes[i].keyValues;
             if (connectedNodes[i].id == clickedNode) {
-                assignFillColor(prevSelectedNode, "none");
+                assignFillColor(prevSelectedNode, "white");
                 assignFillColor(thisId, "#00FFFF");
                 var params = {selected:keyValues, projectId:projectId, selectedNodeId:thisId};
-                $('#node-selection-details').html(template(params));
+                $('#selection-details').html(template(params));
             }
         }
         $('.projectStageId').editable({
@@ -220,7 +220,7 @@ function initFunction1() {
     var edges = graphInJSON.edges;
     $(".edge").click(function () {
         var prevSelectedNode = $("#selectedNodeId").text();
-        assignFillColor(prevSelectedNode, "none");
+        assignFillColor(prevSelectedNode, "white");
         var clickedEdge = $(this).find('title').text();
 
         for (var i = 0; i < edges.length; i++) {
@@ -243,7 +243,7 @@ function initFunction1() {
                 assignEdgeColor(prevSelectedEdge, "black");
                 assignEdgeColor(thisId, "#00FFFF");
                 var params = {fromNode:from, toNode:to, selectedEdgeId:thisId};
-                $('#edge-selection-details').html(template1(params));
+                $('#selection-details').html(template1(params));
             }
         }
     });

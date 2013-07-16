@@ -135,4 +135,9 @@ modules = {
         resource url: "/css/twitterBootstrapAffix.css"
         resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
     }
+    zyngaScroller {
+        resource url: "/js/zynga-scroller-a44d7c2/Animate.js"
+        resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
+        resource url: "/js/zynga-scroller-a44d7c2/render.js"
+    }
 }
