@@ -12,11 +12,12 @@ import common.Constants.NavigateTo
 import common.Constants.SearchBy
 
 import db.Assay
-
+//Updated
 //@Stepwise
 class AssayDocumentSpec extends BardFunctionalSpec {
 
 	def testData = TestDataReader.getTestData()
+	
 
 	def setup() {
 		logInSomeUser()
