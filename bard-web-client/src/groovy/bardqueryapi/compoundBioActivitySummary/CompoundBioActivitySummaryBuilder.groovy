@@ -184,7 +184,7 @@ class CompoundBioActivitySummaryBuilder {
             if (!resultTypeFilters || resultTypeFilters*.filterValue?.contains(priorityElement.pubChemDisplayName)) {//only add the results that match the result-type filter(s).
                 switch (responseClass) {
                     case ResponseClassEnum.SP:
-                    case ResponseClassEnum.CR_NO_SER:
+                    case ResponseClassEnum.CR_NO_SER: //CR_NO_SER has an EC50 result type but without the concentration points.
                         //The result-type is a single-point, key/value pair.
                         PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
                         values << pairValue
@@ -197,7 +197,7 @@ class CompoundBioActivitySummaryBuilder {
                             List<ConcentrationResponsePoint> concentrationResponsePoints = concentrationResponseSeries.concentrationResponsePoints
                             ActivityConcentrationMap doseResponsePointsMap = ConcentrationResponseSeries.toDoseResponsePoints(concentrationResponsePoints)
                             CurveFitParameters curveFitParameters = concentrationResponseSeries.curveFitParameters
-                            Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: priorityElement.value))
+                            Pair<StringValue, StringValue> title = new ImmutablePair<StringValue, StringValue>(new StringValue(value: priorityElement.dictionaryLabel), new StringValue(value: "${priorityElement.qualifier ?: ''} ${priorityElement.value}"))
                             LinkValue dictionaryElement
                             if (priorityElement.dictElemId) {
                                 dictionaryElement = new LinkValue(value: "/bardwebclient/dictionaryTerms/#${priorityElement.dictElemId}")
@@ -251,7 +251,7 @@ class CompoundBioActivitySummaryBuilder {
     }
 
     static PairValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
-        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, priorityElement.value)
+        Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, "${priorityElement.qualifier ?: ''} ${priorityElement.value}")
         LinkValue dictionaryElement
 
         if (priorityElement.dictElemId) {
