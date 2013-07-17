@@ -36,7 +36,7 @@ grails.project.dependency.resolution = {
         compile "org.grails:grails-webflow:$grailsVersion"
         compile "org.apache.httpcomponents:httpclient:4.2.3"
 
-        compile "bard:external-validation:20130612"
+        compile "bard:external-validation:20130717"
 
 
         // runtime scope
