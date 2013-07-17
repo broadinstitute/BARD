@@ -155,6 +155,8 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 			term = queryGenerator(term);
 			int chunk = limit > 0 & chunkSize > limit ? limit : chunkSize;
 			List<Long> ids = (List<Long>) eutils.getIds(term, database, new ArrayList<Long>(), chunk, limit);
+			if( ids.size() == 0 )
+				return Collections.EMPTY_LIST;
 			Document doc = eutils.getSummariesAsDocument(ids, database);
 			return processSummaries(doc);
 
@@ -163,11 +165,23 @@ public class ExternalOntologyNCBI extends ExternalOntologyAPI {
 		}
 	}
 
+	@Override
+	public String queryGenerator(String term) {
+		term = StringUtils.defaultString(term);
+		term = term.replaceAll("^\\s+", "");
+		if( ! term.endsWith("*"))
+			term += "*";
+		return term;
+	}
+	
+
 	/**
 	 * URL of specific NCBI Entrez Database
 	 */
 	@Override
 	public String getExternalURL(String id) {
+		if( "taxonomy".equals(database) )
+			return String.format("http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s", id);
 		return String.format("http://www.ncbi.nlm.nih.gov/%s/%s", database, id);
 	}
 

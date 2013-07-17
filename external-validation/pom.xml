@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bard</groupId>
 	<artifactId>external-validation</artifactId>
-	<version>20130508</version>
+	<version>20130717</version>
 	<distributionManagement>
 		<repository>
 			<id>bard-repo.broadinstitute.org</id>
@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>edu.scripps</groupId>
 			<artifactId>eutils-java</artifactId>
-			<version>20130328</version>
+			<version>20130520</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -97,6 +97,17 @@
 			<groupId>org.ccil.cowan.tagsoup</groupId>
 			<artifactId>tagsoup</artifactId>
 			<version>1.2.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ontocat</groupId>
+			<artifactId>ontocat</artifactId>
+			<version>0.9.9.1</version>
+		</dependency>
+		<dependency> <!-- required by ontocat -->
+			<groupId>owlapi</groupId>
+			<artifactId>owlapi</artifactId>
+			<version>3.2.2</version>
 		</dependency>
 	</dependencies>
 </project>

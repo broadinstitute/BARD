@@ -30,6 +30,7 @@ public class RegisteringExternalOntologyFactory implements ExternalOntologyFacto
 		getCreators().add(new ExternalOntologyGOGeneProduct.GOCreator(GOUtil.getEBIDataSource()));
 		getCreators().add(new ExternalOntologyUniprot.UniprotCreator());
 		getCreators().add(new ExternalOntologyATCC.ATCCCreator());
+		getCreators().add(new ExternalOntologyDisease.DiseaseCreator());
 	}
 
 	private List<ExternalOntologyCreator> creators = new LinkedList<ExternalOntologyCreator>();
