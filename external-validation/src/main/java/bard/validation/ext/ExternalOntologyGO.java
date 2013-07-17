@@ -66,14 +66,15 @@ public class ExternalOntologyGO extends ExternalOntologyAPI {
 			String type = null;
 			if (subtree == null)
 				type = TYPE_BIOLOGICAL_PROCESS;
-
-			String sub = subtree.get(0);
-			if (TYPE_MOLECULAR_FUNCTION.equals(sub))
-				type = TYPE_MOLECULAR_FUNCTION;
-			else if (TYPE_CELLULAR_COMPONENT.equals(sub))
-				type = TYPE_CELLULAR_COMPONENT;
-			else if (TYPE_BIOLOGICAL_PROCESS.equals(sub))
-				type = TYPE_BIOLOGICAL_PROCESS;
+			else {
+				String sub = subtree.get(0);
+				if (TYPE_MOLECULAR_FUNCTION.equals(sub))
+					type = TYPE_MOLECULAR_FUNCTION;
+				else if (TYPE_CELLULAR_COMPONENT.equals(sub))
+					type = TYPE_CELLULAR_COMPONENT;
+				else if (TYPE_BIOLOGICAL_PROCESS.equals(sub))
+					type = TYPE_BIOLOGICAL_PROCESS;
+			}
 
 			if( type == null )
 				return null;
