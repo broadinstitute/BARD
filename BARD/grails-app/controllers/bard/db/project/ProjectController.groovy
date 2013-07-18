@@ -266,7 +266,7 @@ class ProjectController {
 
     def associateExperimentsToProject() {
         // get all values regardless none, single, or multiple, ajax seemed serialized array and passed [] at the end of the param name.
-        Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]')  as Set<String>
+        Set<String> selectedExperiments = request.getParameterValues('selectedExperiments[]') as Set<String>
         Long projectId = params.getLong('projectId')
         Project project = Project.findById(projectId)
         Long stageId = params.getLong('stageId')
@@ -295,6 +295,21 @@ class ProjectController {
         }
     }
 
+    def editSummary(Long instanceId, String projectName, String description, String projectStatus) {
+        Project projectInstance = Project.findById(instanceId)
+        boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
+        if (editable) {
+            projectInstance.name = projectName
+            projectInstance.description = description
+            projectInstance.projectStatus = Enum.valueOf(ProjectStatus, projectStatus);
+            projectInstance.save(flush: true)
+            projectInstance = Project.findById(instanceId)
+            render(template: "summaryDetail", model: [project: projectInstance])
+        } else {
+            render accessDeniedErrorMessage()
+        }
+    }
+
     def projectStages() {
         List<String> sorted = []
         final Collection<StageTree> stageTrees = StageTree.findAll()
@@ -304,6 +319,18 @@ class ProjectController {
         sorted.sort()
         final JSON json = sorted as JSON
         render text: json, contentType: 'text/json', template: null
+    }
+
+    def editContext(Long id, String groupBySection) {
+        Project instance = Project.get(id)
+        if (!instance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'project.label', default: 'Project'), id])
+            return
+
+        }
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
+        [instance: instance, contexts: [contextGroup]]
     }
 
     def updateProjectStage(InlineEditableCommand inlineEditableCommand) {
@@ -341,6 +368,7 @@ class ProjectController {
         def instance = Project.findById(instanceId)
         render(template: "editSummary", model: [project: instance])
     }
+
     def ajaxFindAvailableExperimentByName(String experimentName, Long projectId) {
         List<Experiment> experiments = Experiment.findAllByExperimentNameIlike("%${experimentName}%")
         Project project = Project.findById(projectId)
@@ -375,6 +403,7 @@ class ProjectController {
 
 
 }
+
 @InheritConstructors
 @Validateable
 class ProjectCommand extends BardCommand {
