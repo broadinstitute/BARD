@@ -108,33 +108,55 @@ switch (Environment.current) {
     case Environment.PRODUCTION:
         grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
 
-        break
-    default:
-        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
-
-}
-
-grails.plugins.springsecurity.rememberMe.cookieName = rememberme.cookieName
-grails.plugins.springsecurity.rememberMe.key = rememberme.key
-grails {
-    plugins {
-        springsecurity {
-            controllerAnnotations.staticRules = [
-                    '/console/**': ['ROLE_CONSOLE_USER']
-            ]
-            ipRestrictions = [
-                    '/console/**': '127.0.0.1'
-            ]
-            useBasicAuth = true
-            basic.realmName = 'CAP'
-            filterChain.chainMap = [
-//                    '/dictionaryTerms/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
-                    '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
-            ]
+        grails {
+            plugins {
+                springsecurity {
+                    controllerAnnotations.staticRules = [
+                            '/console/**': ['ROLE_CONSOLE_USER']
+                    ]
+                    ipRestrictions = [
+                            '/console/**': '127.0.0.1'
+                    ]
+                    useBasicAuth = true
+                    basic.realmName = 'CAP'
+                    filterChain.chainMap = [
+                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+                    ]
+                }
+            }
         }
-    }
+        break;
+    default:
+        //use basic auth and in memory security services in no-production environments
+        grails.plugins.springsecurity.providerNames = ['bardAuthorizationProviderService', 'inMemMapAuthenticationProviderService', 'anonymousAuthenticationProvider', 'rememberMeAuthenticationProvider']
+        grails {
+            plugins {
+                springsecurity {
+                    controllerAnnotations.staticRules = [
+                            '/console/**': ['ROLE_CONSOLE_USER']
+                    ]
+                    ipRestrictions = [
+                            '/console/**': '127.0.0.1'
+                    ]
+                    useBasicAuth = true
+                    basic.realmName = 'CAP'
+                    filterChain.chainMap = [
+                            '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
+                    ]
+                }
+            }
+        }
 }
+
 //prevent session fixation attacks
 grails.plugins.springsecurity.useSessionFixationPrevention = true
 
@@ -145,7 +167,7 @@ CbipCrowd {
     register.url = 'https://crowd.somewhere.com/crowd/'
     application.username = 'bard'
     application.password = 'ChangeMe'
-    applicationSpecificRoles = ['ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
+    applicationSpecificRoles = ['ROLE_TEAM_A', 'ROLE_TEAM_B', 'ROLE_USER', 'ROLE_CONSOLE_USER', 'ROLE_NO_ROLE', 'ROLE_CURATOR', 'CURATOR', "ROLE_BARD_ADMINISTRATOR", "ROLE_TEAM_BROAD"]
     mockUsers {
         integrationTestUser {
             roles = ['ROLE_USER', 'ROLE_CURATOR', 'ROLE_BARD_ADMINISTRATOR']
