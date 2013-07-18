@@ -21,7 +21,7 @@ class ViewProjectDefinitionPage extends CapScaffoldPage{
 		addExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Add Experiment" }
 		linkExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Link Experiments" }
 		addLinkExperiment { module AddLinkExperimentModule }
-		projectContextEdit { module ButtonsModule, contextHeader, buttonName:"Edit Contexts" }
+		projectContextEdit { module EditIconModule, contextHeader}
 		experimentBtns { module ExperimentBtnsModule }
 	}
 
@@ -51,7 +51,7 @@ class ViewProjectDefinitionPage extends CapScaffoldPage{
 	}
 	
 	def navigateToEditContextPage(){
-		assert projectContextEdit.button
-		projectContextEdit.button.click()
+		assert projectContextEdit.iconPencil
+		projectContextEdit.iconPencil.click()
 	}
 }

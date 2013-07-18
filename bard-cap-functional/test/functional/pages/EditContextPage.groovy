@@ -11,12 +11,12 @@ import common.Constants.ContextItem
 class EditContextPage extends CapScaffoldPage{
 	final static SLEEP_INTERVAL = 2000
 	static url=""
-	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Edit Project") }
+	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { $("h4").text().contains("Edit") }
 	}
 	def itemName
 	static content = {
 		finishEditing(wait: true) { module ButtonsModule, $("div.well.well-small"), buttonName:"Finish Editing" }
-		cardTable{ contextTitle -> module CardsHolderModule, $("div#Unclassified").find("table.table.table-hover"), contextCard:contextTitle }
+		cardTable{ contextTitle -> module CardsHolderModule, $("div.roundedBorder.card-group").find("table.table.table-hover"), contextCard:contextTitle }
 		formLoading { module LoadingModule}
 	}
 

@@ -2,10 +2,8 @@ package base
 
 import geb.spock.GebReportingSpec
 import grails.plugin.remotecontrol.RemoteControl
-import pages.EditAssayContextPage
 import pages.HomePage
 import pages.LoginPage
-import pages.ViewAssayDefinitionPage
 import spock.lang.Shared
 /**
  * Created by GGTS.

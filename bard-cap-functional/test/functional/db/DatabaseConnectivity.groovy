@@ -28,17 +28,11 @@ class DatabaseConnectivity{
 
 		RemoteControl remote = new RemoteControl()
 		def applicationURL = remote { ctx.grailsApplication.config.grails.serverURL }
-//		def resultURL = applicationURL.substring(applicationURL.indexOf("//")+Constants.index_2, applicationURL.indexOf('.'))
 		if(applicationURL.indexOf("qa") > -1){
 			dbDatasource = Constants.qaDatasource
 		}else if(applicationURL.indexOf("dev") > -1){
 			dbDatasource = Constants.devDatasource
 		}
-		//		if(resultURL.equalsIgnoreCase(Constants.dbInstance.qa)){
-		//			dbDatasource = Constants.qaDatasource
-		//		}else if(resultURL.equalsIgnoreCase(Constants.dbInstance.dev)){
-		//			dbDatasource = Constants.devDatasource
-		//		}
 		return dbDatasource
 	}
 }

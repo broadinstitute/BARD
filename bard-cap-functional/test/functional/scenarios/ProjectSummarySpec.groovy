@@ -88,7 +88,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Project.getProjectSummaryById(testData.ProjectID)
 		def nameOriginal = uiSummary.Name
-		def nameEdited = projectNameOriginal+Constants.edited
+		def nameEdited = nameOriginal+Constants.edited
 
 		then:"Verify Summary Name before edit on UI & DB"
 		assert uiSummary.Name.equalsIgnoreCase(dbSummary.Name)
@@ -110,7 +110,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
 		and:"Revert Edit/Update Summary Name"
-		editSummary(nameIndex, projectNameOriginal)
+		editSummary(nameIndex, nameOriginal)
 
 		when:"Summary Name is reverted, Fetch Summary info on UI and DB for validation"
 		at ViewProjectDefinitionPage

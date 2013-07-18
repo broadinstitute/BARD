@@ -7,7 +7,7 @@ class CardsHolderModule extends Module {
 	def contextCard
 	static content = {
 		cardsTitle(required: false) { $("div.cardTitle") }
-		contextTitle(required: false) { $("div.cardTitle", text:contextCard) }
+		contextTitle(required: false) { $("div.cardTitle", text:contains(contextCard)) }
 		addContextItem(required: false) { module EditIconModule, contextTitle.parent().find("div.btn-group") }
 		itemRows(required: false) { contextTitle.parent().next("tbody") }
 		contextItemRows(required: false) { itemRows.find("tr") }

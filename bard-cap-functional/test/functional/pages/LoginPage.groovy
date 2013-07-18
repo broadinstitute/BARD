@@ -1,6 +1,6 @@
 package pages
 
-import grails.plugin.remotecontrol.RemoteControl;
+import grails.plugin.remotecontrol.RemoteControl
 
 /**
  * Created by IntelliJ IDEA.
