@@ -10,7 +10,6 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
  * To change this template use File | Settings | File Templates.
  */
 
-SpringSecurityUtils.reauthenticate('integrationTestUser', null)
 
 println("Initializing output file...")
 String dirLocation = "C:\\BardData"
