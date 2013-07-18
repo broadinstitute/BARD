@@ -824,40 +824,21 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             final String elementFromLabel = "primary assay"
             final String elementToLabel = "secondary assay"
 
-            Element fromElement = Element.findByLabel(elementFromLabel)
-            if (!fromElement) {
-                fromElement = Element.build(label: elementFromLabel).save(flush: true)
-            }
+            final Element fromElement = Element.findByLabel(elementFromLabel) ?: Element.build(label: elementFromLabel).save(flush: true)
+            final Element toElement = Element.findByLabel(elementToLabel) ?: Element.build(label: elementToLabel).save(flush: true)
 
-            Element toElement = Element.findByLabel(elementToLabel)
-            if (!toElement) {
-                toElement = Element.build(label: elementToLabel).save(flush: true)
-            }
-
-
-            if (!StageTree.findByElement(fromElement)) {
-                StageTree.build(element: fromElement).save(flush: true)
-            }
-
-
-            if (!StageTree.findByElement(toElement)) {
-                StageTree.build(element: toElement).save(flush: true)
-            }
+            StageTree.findByElement(fromElement) ?: StageTree.build(element: fromElement).save(flush: true)
+            StageTree.findByElement(toElement) ?: StageTree.build(element: toElement).save(flush: true)
 
             Experiment experimentFrom = Experiment.build().save(flush: true)
             Experiment experimentTo = Experiment.build().save(flush: true)
-            ProjectExperiment projectExperimentFrom = ProjectExperiment.findByProjectAndExperiment(project, experimentFrom)
-            if (!projectExperimentFrom) {
-                projectExperimentFrom = ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
-            }
+            final ProjectExperiment projectExperimentFrom = ProjectExperiment.findByProjectAndExperiment(project, experimentFrom) ?:
+                ProjectExperiment.build(project: project, experiment: experimentFrom, stage: fromElement).save(flush: true)
 
-            ProjectExperiment projectExperimentTo = ProjectExperiment.findByProjectAndExperiment(project, experimentTo)
-
-            if (!projectExperimentTo) {
+            final ProjectExperiment projectExperimentTo = ProjectExperiment.findByProjectAndExperiment(project, experimentTo) ?:
                 ProjectExperiment.build(project: project, experiment: experimentTo, stage: toElement).save(flush: true)
 
-            }
             return [peFromId: projectExperimentFrom.id, peToId: projectExperimentTo.id, eFromId: experimentFrom.id, eToId: experimentTo.id, projectId: project.id]
         })
         projectIdList.add(m.projectId)
