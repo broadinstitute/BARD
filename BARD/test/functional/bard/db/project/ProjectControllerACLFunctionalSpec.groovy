@@ -68,17 +68,8 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
             //Build assay as TEAM_A
             SpringSecurityUtils.reauthenticate(reauthenticateWithUser, null)
             Project project = Project.build(name: "Some Name2").save(flush: true)
-
-            if (!StageTree.findAll()) {
-                final List<Element> all = Element.findAll()
-                if (all) {
-                    Element element = all.get(0)
-                    StageTree.build(element: element).save(flush: true)
-                } else {
-
-                    StageTree.build().save(flush: true)
-                }
-            }
+            Element element = Element.findByLabel('ProjectControllerACLFunctionalSpec')?:Element.build(label: 'ProjectControllerACLFunctionalSpec')
+            StageTree.build(element:element).save(flush: true)
 
             //create assay context
             return [id: project.id, name: project.name]
