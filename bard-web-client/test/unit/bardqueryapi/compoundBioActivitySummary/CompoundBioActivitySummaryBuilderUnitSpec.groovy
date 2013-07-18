@@ -178,7 +178,7 @@ class CompoundBioActivitySummaryBuilderUnitSpec extends Specification {
         where:
         label                | exptData      | expectedWebQueryValueClass
         "CR_CER result-type" | activityCrSer | ConcentrationResponseSeriesValue.class
-        "SP result-type"     | activitySp    | PairValue.class
+        "SP result-type"     | activitySp    | ListValue.class
     }
 
     void "test generateFacetsFromResultTypeMap with an empty map"() {

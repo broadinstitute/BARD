@@ -77,7 +77,7 @@ class CompoundBioActivitySummaryBuilder {
                 //If the single-point data filter is set, remove the SP (PairValue) result-types from the list.
                 Integer resultsSizeBefore = results.size()
                 if (filterTypes.contains(FilterTypes.SINGLE_POINT_RESULT)) {
-                    results.removeAll { WebQueryValue webQueryValue -> webQueryValue instanceof PairValue }
+                    results.removeAll { WebQueryValue webQueryValue -> webQueryValue instanceof PairValue || (webQueryValue instanceof ListValue && webQueryValue.value.any { it instanceof PairValue }) }
                 }
                 //If we don't have any results for the experiment, don't display the experiment box at all.
                 if (results) {
@@ -185,8 +185,9 @@ class CompoundBioActivitySummaryBuilder {
                 switch (responseClass) {
                     case ResponseClassEnum.SP:
                     case ResponseClassEnum.CR_NO_SER: //CR_NO_SER has an EC50 result type but without the concentration points.
+                    case ResponseClassEnum.MULTCONC: //MULTCONC has a list of pair/value result type and the tested concentration.
                         //The result-type is a single-point, key/value pair.
-                        PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
+                        WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
                         values << pairValue
                         break;
                     case ResponseClassEnum.CR_SER:
@@ -215,9 +216,13 @@ class CompoundBioActivitySummaryBuilder {
                             concentrationResponseSeriesValue.xAxisLabel = concentrationResponseSeriesValue.testConcentrationUnit
                             values << concentrationResponseSeriesValue
                         } else {//the result type is a key/value pair
-                            PairValue pairValue = createPairValueFromPriorityElement(priorityElement)
+                            WebQueryValue pairValue = createPairValueFromPriorityElement(priorityElement)
                             values << pairValue
                         }
+                        break;
+                    case ResponseClassEnum.MULTCONC:
+                        //Multiple concentrations but no curve has been fitted.
+
                         break;
                     default:
                         log.info("Response-class not supported: ${responseClass}")
@@ -250,7 +255,7 @@ class CompoundBioActivitySummaryBuilder {
         }
     }
 
-    static PairValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
+    static WebQueryValue createPairValueFromPriorityElement(PriorityElement priorityElement) {
         Pair<String, String> pair = new ImmutablePair<String, String>(priorityElement.dictionaryLabel, "${priorityElement.qualifier ?: ''} ${priorityElement.value}")
         LinkValue dictionaryElement
 
@@ -259,6 +264,13 @@ class CompoundBioActivitySummaryBuilder {
         }
 
         PairValue pairValue = new PairValue(value: pair, dictionaryElement: dictionaryElement)
+
+        //if the priority-element also has test-concentration and unit, return a ListValue with an additional conc/unit pair.
+        if (priorityElement.testConcentration) {
+            Pair<String, String> concentrationUnitPair = new ImmutablePair<String, String>("Tested concentration: ${priorityElement.testConcentration}", priorityElement.testConcentrationUnit)
+            PairValue concentrationUnitPairValue = new PairValue(value: concentrationUnitPair)
+            return new ListValue(value: [pairValue, concentrationUnitPairValue])
+        }
         return pairValue
     }
 }

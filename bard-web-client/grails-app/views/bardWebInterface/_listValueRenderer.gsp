@@ -64,9 +64,8 @@
                                             <i class="icon-question-sign"></i>
                                         </a>
                                     </g:if>
-                                </b></p>
-
-                                <p><small>${pair.right ?: 'No data available'}</small></p>
+                                    :</b>
+                                    <small>${pair.right ?: 'No data available'}</small></p>
                             </td>
                         </tr>
                     </table>
@@ -75,6 +74,20 @@
                 <g:elseif test="${result instanceof bardqueryapi.StringValue}">
                     <p class="lineSpacing"><b><small>${result}</small></b></p>
                 </g:elseif>
+            %{--Call the list-rendering recursively--}%
+                <g:elseif test="${result instanceof bardqueryapi.ListValue}">
+                    <td class="cbasOutterTableCell">
+                        <g:set var="results" value="${result.value}"/>
+                        <g:set var="resultSize" value="${results?.size()}"/>
+                        <table>
+                            <tbody>
+                            <g:render template="listValueRenderer"
+                                      model="[resultSize: resultSize, results: results, landscapeLayout: null, innerBorder: null]"/>
+                            </tbody>
+                        </table>
+                    </td>
+                </g:elseif>
+
             </div>
         </td>
         <g:if test="${!landscapeLayout}">

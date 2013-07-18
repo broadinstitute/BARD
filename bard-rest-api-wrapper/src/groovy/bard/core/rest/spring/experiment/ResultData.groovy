@@ -117,7 +117,7 @@ enum ResponseClassEnum {
     CR_SER("Concentration Response", true),
     CR_NO_SER("Probable Concentration Response but no Series", true),
     UNCLASS("Unclassified", false),
-    MULTCONC("Multiple Test Concentrations", false)
+    MULTCONC("Multiple Test Concentrations", true)
 
     final String description
     final boolean isMapped
