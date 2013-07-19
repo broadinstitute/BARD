@@ -131,3 +131,7 @@ table.table td.deleteItemButton {
     list-style-position: inside;
     padding-left: 1em;
 }
+
+tr.validation-failed {
+    background-color: #FFD5D5;
+}

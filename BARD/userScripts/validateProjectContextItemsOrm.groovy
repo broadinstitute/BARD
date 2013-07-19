@@ -10,8 +10,6 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
  */
 
 
-SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-
 println("Initializing output file...")
 String dirLocation = "C:\\BardData"
 File dir = new File(dirLocation)

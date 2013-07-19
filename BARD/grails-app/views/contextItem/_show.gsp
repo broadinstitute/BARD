@@ -25,7 +25,7 @@
         </caption>
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">
-            <tr id="${contextItem.id}" class="context_item_row ${highlightedItemId==contextItem.id?'warning':''}">
+            <tr id="${contextItem.id}" class="context_item_row ${highlightedItemId==contextItem.id?'warning':''} ${(contextItem.validate())?'':'validation-failed'}">
                 <td>
                     <g:if test="${contextItem.hasProperty("attributeType")}">
                         <g:if test="${contextItem.attributeType == AttributeType.List || contextItem.attributeType == AttributeType.Free || contextItem.attributeType == AttributeType.Range }">

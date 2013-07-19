@@ -10,8 +10,6 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
  * To change this template use File | Settings | File Templates.
  */
 
-SpringSecurityUtils.reauthenticate('integrationTestUser', null)
-
 println("Initializing output file...")
 String outputFile =  "assay_context_items_validation.txt"
 FileWriter fileWriter = new FileWriter(outputFile, false)
