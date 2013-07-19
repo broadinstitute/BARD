@@ -59,13 +59,6 @@
  	vertical-align:middle;
 }
 
-.cardMenu {
-	float:left;
- 	width:20%;
- 	text-align:right;
- 	vertical-align:middle;
-}
-
 /* Used to prevent a form from changing the layout around the form */
 form.no-padding {
     margin-bottom: 0px;

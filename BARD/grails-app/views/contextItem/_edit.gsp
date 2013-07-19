@@ -20,26 +20,23 @@
                                    controller="contextItem" params="${[contextClass: context.simpleClassName]}"/>
             </div>
 
-            <div class="cardMenu">
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
-                                action="create"
-                                params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
-                                class="icon-plus"></i></g:link>
-                        <g:if test="${context.contextItems.size() == 0}">
-                            <g:link class="btn btn btn-info btn-mini" title="Delete Card" controller="context"
-                                    action="deleteEmptyCard"
-                                    params="[contextClass:context?.class?.simpleName,contextId: context?.id, section: cardSection]" ><i
-                                    class="icon-trash"></i></g:link>
-                        </g:if>
-                    </div>
-                </div>
+            <div class="btn-group pull-right">
+                <g:link class="btn btn btn-info btn-mini" title="Add item" controller="contextItem"
+                        action="create"
+                        params="${[contextId: context?.id, contextClass: context?.class?.simpleName, contextOwnerId: context?.owner?.id]}"><i
+                        class="icon-plus"></i></g:link>
+                <g:if test="${context.contextItems.size() == 0}">
+                    <g:link class="btn btn btn-info btn-mini" title="Delete Card" controller="context"
+                            action="deleteEmptyCard"
+                            params="[contextClass: context?.class?.simpleName, contextId: context?.id, section: cardSection]"><i
+                            class="icon-trash"></i></g:link>
+                </g:if>
             </div>
+
         </caption>
         <tbody>
         <g:each in="${context.contextItems}" status="i" var="contextItem">
-            <tr id="${contextItem.id}" class='context_item_row ${(contextItem.validate())?'':'validation-failed'}'>
+            <tr id="${contextItem.id}" class='context_item_row ${(contextItem.validate()) ? '' : 'validation-failed'}'>
                 <td>
                     <g:if test="${contextItem.hasProperty("attributeType")}">
                         <g:if test="${contextItem.attributeType == AttributeType.List || contextItem.attributeType == AttributeType.Free || contextItem.attributeType == AttributeType.Range}">
