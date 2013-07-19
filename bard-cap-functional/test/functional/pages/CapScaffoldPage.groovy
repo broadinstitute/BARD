@@ -28,7 +28,6 @@ class CapScaffoldPage extends CommonFunctionalPage {
 				cardTable(card).contextItemRows.each{
 					resultMap = ['attributeLabel':it.find("td")[1].text(), 'valueDisplay':it.find("td")[2].text()==""?"null":it.find("td")[2].text()]
 					contextItems.add(resultMap)
-					System.out.println("println context items rows "+it.find("td")[2].text())
 				}
 			}
 		return contextItems
@@ -37,7 +36,6 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		boolean found = false
 		if(isContext(cardName)){
 			if(cardTable(cardName).contextItemRows){
-				System.out.println("printing the cards rows: " + cardTable(cardName).contextItemRows.size())
 				found = true
 			}
 		}
@@ -48,7 +46,6 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		if(cardTable){
 			cardTable.cardsTitle.each{ cards ->
 				if(cards.text().contains(cardName)){
-					System.out.println("printing cards text: "+ cards.text())
 					found = true
 				}
 			}

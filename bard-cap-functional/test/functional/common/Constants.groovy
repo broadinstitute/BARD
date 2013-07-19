@@ -11,7 +11,7 @@ class Constants {
 
 	// constants
 	final static int WAIT_INTERVAL = 15;
-	final static int R_INTERVAL = 3;
+	final static int R_INTERVAL = 0.5;
 	final static String edited = "-Edited";
 	final static String IS_EMPTY = "Empty";
 	final static String contextCard = "project management";

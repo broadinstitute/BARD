@@ -168,9 +168,9 @@ class ContextItemPage extends CapScaffoldPage{
 	def isExternalOntologyType(def inputData, def ci, def integration){
 		if(integration){
 			if(inputData.IntegratedSearch != ""){
-				integratedSearch.label.click()
-				externalOntologyId.value("")
-				displayValue.value("")
+//				integratedSearch.label.click()
+//				externalOntologyId.value("")
+//				displayValue.value("")
 				selectAutoChoiceValue(integratedSearch, selectToDrop, inputData.IntegratedSearch)
 				addOrUpdate(ci)
 				navigateBackToContext()
@@ -234,8 +234,13 @@ class ContextItemPage extends CapScaffoldPage{
 		}
 		int index = 0
 		element1.searchInput.value(inputValue)
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { element2.searchResult[index].text() != "Searching..." && element2.searchResult[index].text() != "Please enter 1 more characters"}
+//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { element2.searchResult[index].text() != "Searching..." && element2.searchResult[index].text() != "Please enter 1 more characters"}
+//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !element2.searchNoResult }
+//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !element2.searchResultSearching }
+		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { element2.searchResult != null }
+//		System.out.println(element2.searchResult.text())
 		element2.searchResult[index].click()
-		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !formLoading.loading.displayed }
+//		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !formLoading.loading.displayed }
+		ajaxRequestCompleted()
 	}
 }

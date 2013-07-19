@@ -3,7 +3,7 @@ package pages
 import geb.Page
 import geb.navigator.Navigator
 
-class ScaffoldPage extends Page {
+class ScaffoldPage extends CommonFunctionalPage {
     static content = {
         heading { $("h1") }
     }
