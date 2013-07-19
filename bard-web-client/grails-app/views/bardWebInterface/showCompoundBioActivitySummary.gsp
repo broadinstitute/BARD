@@ -27,7 +27,7 @@
 <body>
 
 <div class="row-fluid">
-    <g:if test="${tableModel?.data}">
+    <g:if test="${tableModel?.data || tableModel?.additionalProperties?.'experimentWithSinglePointDataOnly'}">
         <div class="row-fluid">
             <div class="span12">
                 <g:sunburstSection compoundSummary="${tableModel?.additionalProperties?.compoundSummary}"/>
@@ -61,6 +61,7 @@
                       model="['facets': facets, 'formName': FacetFormType.CompoundBioActivitySummaryForm]"/>
             <g:hiddenField name="compoundId" id='compoundId' value="${params?.id}"/>
 
+
             <div class="span9">
                 <div>
                     <g:if test="${tableModel.additionalProperties.activityOutcome == ActivityOutcome.ACTIVE}">
@@ -74,31 +75,32 @@
                     <g:if test="${tableModel.additionalProperties?.experimentWithSinglePointDataOnly?.size()}">
                         <p class="text-info"><i
                                 class="icon-info-sign"></i><span>Please note:</span>
-                            <span>there are
+                            <span>there is/are
                             <g:generateLinksList
                                     controller="bardWebInterface"
                                     action="showExperiment"
                                     ids="${tableModel.additionalProperties.experimentWithSinglePointDataOnly*.value*.bardExptId}"/>
-                            experiment with single-point data only</span>
+                            experiment(s) with single-point data only</span>
                         </p>
                     </g:if>
                     <g:if test="${tableModel.additionalProperties.experimentsWithoutResultData?.size()}">
                         <p class="text-info"><i
                                 class="icon-info-sign"></i><span>Please note:</span>
-                            <span>there are
+                            <span>there is/are
                             <g:generateLinksList
                                     controller="bardWebInterface"
                                     action="showExperiment"
                                     ids="${tableModel.additionalProperties.experimentsWithoutResultData*.value*.bardExptId}"/>
-                            experiment with no data</span>
+                            experiment(s) with no data</span>
                         </p>
                     </g:if>
                 </div>
-
-                <div id="compoundBioActivitySummaryDiv">
-                    <g:render template="experimentResultRenderer"
-                              model="[tableModel: tableModel, landscapeLayout: false, innerBorder: true]"/>
-                </div>
+                <g:if test="${tableModel?.data}">
+                    <div id="compoundBioActivitySummaryDiv">
+                        <g:render template="experimentResultRenderer"
+                                  model="[tableModel: tableModel, landscapeLayout: false, innerBorder: true]"/>
+                    </div>
+                </g:if>
             </div>
         </div>
     </g:if>
