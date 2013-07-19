@@ -14,11 +14,19 @@
               model="['facets': facets, 'formName': FacetFormType.ExperimentFacetForm, 'total': tableModel.additionalProperties?.total]"/>
     <g:hiddenField name="experimentId" id='experimentId' value="${params?.id}"/>
 
-    <div class="span9">
+<div class="span9">
+    <g:if test="${tableModel?.data}">
         <div id="experimentalResults">
-            <g:render template='experimentResultData' model='[tableModel: tableModel, innerBorder: true, totalNumOfCmpds: totalNumOfCmpds]'/>
+            <g:render template='experimentResultData'
+                      model='[tableModel: tableModel, innerBorder: true, totalNumOfCmpds: totalNumOfCmpds]'/>
         </div>
-    </div>
+        </div>
+    </g:if>
+    <g:else>
+        <p class="text-info"><i
+                class="icon-warning-sign"></i> No information found for this experiment ${tableModel?.additionalProperties?.id}
+        </p>
+    </g:else>
 </div>
 </body>
 </html>
