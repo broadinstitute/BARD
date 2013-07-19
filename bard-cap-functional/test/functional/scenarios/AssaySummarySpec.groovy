@@ -46,7 +46,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Assay.getAssaySummaryById(testData.AssayId)
 		def statusOriginal = uiSummary.Status
-		def statusEdited = "Regular"
+		def statusEdited = "Approved"
 
 		then:"Verify Summary Status before edit on UI & DB"
 		assert uiSummary.Status.equalsIgnoreCase(dbSummary.Status)
@@ -235,7 +235,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 		at ViewAssayDefinitionPage
 		def uiSummary = getUISummaryInfo()
 		def dbSummary = Assay.getAssaySummaryById(testData.AssayId)
-		def definitionTypeOriginal = uiSummary.Status
+		def definitionTypeOriginal = uiSummary.DefinitionType
 		def definitionTypeEdited = "Template"
 
 		then:"Verify Summary Definition Type before edit on UI & DB"

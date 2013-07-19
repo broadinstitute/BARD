@@ -1,6 +1,7 @@
 package pages
 
 import geb.Page
+import modules.EditIconModule
 
 import common.Constants
 
@@ -9,14 +10,16 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){$("h4").text().contains("View Assay Definition")}}
 
 	static content = {
-		//		editAssayCotextBtn { $("a.btn", text:"Edit") }  // Edit asssay context btn
 		//		editAssayMeasureBtn { $("a.btn", text:"Edit Measures") } // Edit Measure btn
-		//		cardHolder {$("table.table.table-hover")}
-		//		cardHolders { module CardsHolderModule, $("div.roundedBorder.card-group.assay-protocol--assay-component-") }
-		//		dialogButtonset { module DialogButtonsSetModule, $("div.ui-dialog-buttonset") }
+		header { sectionName -> $("#"+sectionName+"-header") }
+		editContext {sectionName -> module EditIconModule, header(sectionName) }
 	}
 
-	def getUIContexts(){
+	def navigateToEditContext(def section){
+		editContext(section).iconPencil.click()
+	}
+	
+	/*def getUIContexts(){
 		def uiContexts = []
 		if(cardHolders.cardTable.find("caption")){
 			cardHolders.cardTable.find("caption").each{ contextName ->
@@ -25,7 +28,7 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 			}
 		}
 		return uiContexts
-	}
+	}*/
 
 	Map<String, String> getUIAssociatedMeasure(def cardName){
 		def contextMeasure = [:]

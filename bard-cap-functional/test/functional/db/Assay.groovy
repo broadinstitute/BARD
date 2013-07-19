@@ -60,12 +60,12 @@ class Assay extends DatabaseConnectivity {
 	 * @param contextName
 	 * @return list of assay context items present in a specific assay context card
 	 */
-	List<String> getAssayContextItem(def assayId, def contextGroup, def contextName) {
+	public static def getAssayContextItem(def assayId, def contextGroup, def contextName) {
 		def contextITemMap = [:]
 		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow(ASSAY_CONTEXT_ITEMS, [assayId, contextGroup, contextName]) { row ->
-			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay]
+		sql.eachRow(AssayQueries.ASSAY_CONTEXT_ITEMS, [assayId, contextGroup, contextName]) { row ->
+			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay.toString()]
 			contextItemsList.add(contextITemMap)
 		}
 		return contextItemsList
