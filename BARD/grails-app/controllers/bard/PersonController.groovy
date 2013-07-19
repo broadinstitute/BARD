@@ -19,22 +19,20 @@ class PersonController {
         final List<Person> people = []
         params.max = Math.min(params.max ? params.int('max') : 100, 200)
         people.addAll(Person.list(params))
-        return [
-                people: people, roles: Role.all,
-                peopleTotal: Person.count(),
-                personCommand: new PersonCommand()
-        ]
+        render(view: 'list', model: [people: people, roles: Role.all, peopleTotal: Person.count(), personCommand: new PersonCommand()])
     }
 
     def edit() {
-        Person person = Person.get(params.id)
-        PersonCommand personCommand = new PersonCommand(person)
-        return
-        [
-                person: person,
-                roles: Role.all,
-                personCommand: personCommand
-        ]
+        Person person = Person.findById(params.id)
+        if(person){
+            PersonCommand personCommand = new PersonCommand(person)
+            render(view: 'edit', model: [person: person, roles: Role.all, personCommand: personCommand])
+        }
+        else{
+            flash.message = "Person not found. Try again"
+            redirect action: "list"
+            return
+        }
     }
 
     def save(PersonCommand personCommand) {
