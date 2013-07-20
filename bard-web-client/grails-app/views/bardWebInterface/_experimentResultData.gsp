@@ -38,7 +38,7 @@
 
     <script>
         /* Retrieve JSON data to build a histogram */
-        window.onload = function () {
+        $(document).ready( function () {
             d3.json("/bardwebclient/bardWebInterface/retrieveExperimentResultsSummary/${tableModel?.additionalProperties?.bardExptId}", function (error, dataFromServer) {
                 if (!(dataFromServer === undefined)) {
                     for (var i = 0; i < dataFromServer.length; i++) {
@@ -48,7 +48,7 @@
                     }
                 }
             });
-        }
+        });
     </script>
 
     <div class="row-fluid ">

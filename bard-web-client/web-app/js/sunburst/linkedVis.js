@@ -372,7 +372,7 @@ var linkedVizData = (function (){
             setMembershipIndicatorToValue(retrievedNode,1);
             // Now we need a list of all the nodes that are turned on
             var activatedAssayList = generateUniqueListOfActivatedAssays(hierarchyId);
-            assayIndex.filterFunction(function(d){return (activatedAssayList.indexOf(d)>-1);});
+            sharedStructures.getAssayIndex().filterFunction(function(d){return (activatedAssayList.indexOf(d)>-1);});
             dc.redrawAll();
             return activatedAssayList;
         },
@@ -509,7 +509,7 @@ var linkedVizData = (function (){
             return d.size;
         },
         retrieveListOfActiveAssays = function (){
-            var listOfAssayCrossObjects =  assayIndex.top(1000);
+            var listOfAssayCrossObjects = sharedStructures.getAssayIndex().top(1000);
             var listOfAssayRef = [];
             for (var i = 0; i < listOfAssayCrossObjects.length; i++ )  {
                 listOfAssayRef.push(listOfAssayCrossObjects[i].index);

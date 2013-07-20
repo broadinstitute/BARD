@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon">
 
     <script>
-        window.onload = function () {
+        $(document).ready(function () {
             $('#activity').change(function () {
                 if (this.value == "1") {
                     location.href = "./bigSunburst?actives=t&inactives=f";
@@ -39,22 +39,8 @@
                     location.href = "./bigSunburst?colorOption=3";
                 }
             });
-        }
+        });
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 </head>
@@ -63,16 +49,95 @@
 <r:layoutResources/>
 
 <script>
-    var assay = {},
-    assayIndex = {},
-    biologicalProcessPieChart,
-    assayFormatPieChart,
-    assayIdDimensionPieChart,
-    assayTypePieChart;
+
+
+    var sharedStructures = (function () {
+        var
+                assayIndex = {},
+                biologicalProcessPieChart,
+                assayFormatPieChart,
+                assayIdDimensionPieChart,
+                assayTypePieChart,
+                allDataDcTable,
+
+                // standard setters.   We need to save these variables
+                setBiologicalProcessPieChart = function (localBiologicalProcessPieChart) {
+                    biologicalProcessPieChart = localBiologicalProcessPieChart;
+                },
+                setAssayFormatPieChart = function (localAssayFormatPieChart) {
+                    assayFormatPieChart = localAssayFormatPieChart;
+                },
+                setAssayIdDimensionPieChart = function (localAssayIdDimensionPieChart) {
+                    assayIdDimensionPieChart = localAssayIdDimensionPieChart;
+                },
+                setAssayTypePieChart = function (localAssayTypePieChart) {
+                    assayTypePieChart = localAssayTypePieChart;
+                },
+                setAllDataDcTable = function (localAllDataDcTable) {
+                    allDataDcTable = localAllDataDcTable;
+                },
+
+
+                // reset these variables. These methods are called from the reset button above the pie chart managed by DC.js
+                resetBiologicalProcessPieChart = function () {
+                    biologicalProcessPieChart.filterAll();
+                    dc.redrawAll();
+                },
+                resetAssayFormatPieChart = function () {
+                    assayFormatPieChart.filterAll();
+                    dc.redrawAll();
+                },
+                resetAssayIdDimensionPieChart = function () {
+                    assayIdDimensionPieChart.filterAll();
+                    dc.redrawAll();
+                },
+                resetAssayTypePieChart = function () {
+                    assayTypePieChart.filterAll();
+                    dc.redrawAll();
+                },
+
+                // these are our cross filter variables.
+                setAssay = function (localAssay) {
+                    assay = localAssay;
+                },
+
+                // these are our cross filter variables.
+                setAssayIndex = function (localAssayIndex) {
+                    assayIndex = localAssayIndex;
+                },
+                getAssayIndex = function () {
+                    return assayIndex;
+                } ;
+
+
+        return {
+
+            setBiologicalProcessPieChart: setBiologicalProcessPieChart,
+            resetBiologicalProcessPieChart:resetBiologicalProcessPieChart,
+
+            setAssayFormatPieChart: setAssayFormatPieChart,
+            resetAssayFormatPieChart:resetAssayFormatPieChart,
+
+            setAssayIdDimensionPieChart: setAssayIdDimensionPieChart,
+            resetAssayIdDimensionPieChart:resetAssayIdDimensionPieChart,
+
+            setAssayTypePieChart: setAssayTypePieChart,
+            resetAssayTypePieChart:resetAssayTypePieChart,
+
+            setAllDataDcTable:setAllDataDcTable,  //no reset needed – table is read only
+
+            getAssayIndex: getAssayIndex,
+            setAssayIndex: setAssayIndex,
+
+            setAssay:setAssay
+
+        };
+    }());  // sharedStructures
 
 
 
-    var linkedVisualizationModule = (function () {
+
+        var linkedVisualizationModule = (function () {
         //
         //  Variables to describe the layout of the whole page, with special attention
         //   to the unexpanded widgets
@@ -228,7 +293,7 @@
                     };
 
 
-                }());
+                }()); // widgetPosition
 
 
         var displayManipulator = (function () {
@@ -336,7 +401,7 @@
                                         return d.assay_type;
                                     },
                                     function (d) {
-                                        return "<a href='/bardwebclient/bardWebInterface/showAssay/"+d.assayBId+"'>"+d.assayId+"</a>";
+                                        return "<a href='/bardwebclient/bardWebInterface/showAssay/" + d.assayBId + "'>" + d.assayId + "</a>";
                                     }
                                 ])
                                 .order(d3.ascending)
@@ -521,9 +586,6 @@
                             d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
                         }
 
-//                        background1.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
-//                        background2.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
-//                        background3.selectAll('.expandButton').style('pointer-events', 'auto').style('opacity', 1);
 
                         var x = origButton
                                 .text(textForExpandingButton)
@@ -537,7 +599,7 @@
                         activateDrillDownResetButtons();
 
                         // Set some style attributes that must be adjusted dynamically
-                        tidyUpDisplay () ;
+                        tidyUpDisplay();
                     },
 
                     expandGraphicsArea = function (graphicsTarget, graphicsTitle) {
@@ -606,7 +668,7 @@
                                 .style('opacity', '0')
                     },
 
-                    // We have to make a few changes to the display dynamically since we don't have complete control over the DC code
+            // We have to make a few changes to the display dynamically since we don't have complete control over the DC code
                     tidyUpDisplay = function () {
                         dc.renderAll();
                     },
@@ -701,9 +763,9 @@
                 addDcTable: addDcTable,
                 addPieChart: addPieChart,
                 swapAPieForTheSun: swapAPieForTheSun,
-                tidyUpDisplay:tidyUpDisplay
+                tidyUpDisplay: tidyUpDisplay
             };
-        }() );
+        }() );  //displayManipulator
 
         //
         //   Get the data and make the plots using dc.js.  Use this as an opportunity to encapsulate any methods that are
@@ -821,7 +883,7 @@
                             expandContractButton = d3.select('#a' + expandedWidget + '-chart>.graphTitle')
                             displayManipulator.expandGraphicsArea(d3.select('#a' + expandedWidget).select('.pieChart>svg'),
                                     expandContractButton);
-                            if (linkedVizData.extendedHierarchyDataExists(expandedWidget)){
+                            if (linkedVizData.extendedHierarchyDataExists(expandedWidget)) {
                                 displayManipulator.swapAPieForTheSun(d3.select('#a' + expandedWidget), d3.selectAll('#suburst_container'), expandedWidget, handleExpandOrContractClick);
                             }
 
@@ -860,15 +922,15 @@
                                 .on('click', callbackToExpandOrContractOnButtonClick);
 
                         // deactivate button if we have no data
-                        for ( var i=0 ; i<4 ; i++ ) {
+                        for (var i = 0; i < 4; i++) {
                             if (!(linkedVizData.extendedHierarchyDataExists(i))) {
-                                var expandedButton = d3.select('#expbutton'+i);
+                                var expandedButton = d3.select('#expbutton' + i);
                                 if (!(expandedButton.empty())) {
                                     expandedButton.style('pointer-events', 'none').style('opacity', 0.5);
                                 }
 
                             } else {
-                                var expandedButton = d3.select('#expbutton'+i);
+                                var expandedButton = d3.select('#expbutton' + i);
                                 if (!(expandedButton.empty())) {
                                     expandedButton.style('pointer-events', 'auto').style('opacity', 1);
                                 }
@@ -891,10 +953,10 @@
                         d3.json("/bardwebclient/bardWebInterface/linkedData/${cid}", function (incomingData) {
                             // create an empty list, Just in case we get null data
                             linkedVizData.parseData(incomingData);
-                            if (!linkedVizData.validateLinkedData()){
+                            if (!linkedVizData.validateLinkedData()) {
                                 console.log(' we have trouble with incoming linked data');
-                                throw new Exception ('bad data');
-                            }  else {
+                                throw new Exception('bad data');
+                            } else {
                                 linkedVizData.appendConditionalStatusFields()
                             }
                             presentLinkedData();
@@ -912,18 +974,18 @@
                         assays = readInData();
 
                         // Create the crossfilter for the relevant dimensions and groups.
-                        assay = crossfilter(assays);
+                        sharedStructures.setAssay( crossfilter(assays) );
 
                         // Build everything were going to display
-                        allDataDcTable = displayManipulator.addDcTable(assay, 'data-table', 'assayId');
-                        biologicalProcessPieChart = displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius);
-                        assayFormatPieChart = displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius);
-                        assayIdDimensionPieChart = displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius);
-                        assayTypePieChart = displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius);
+                        sharedStructures.setAllDataDcTable(displayManipulator.addDcTable(assay, 'data-table', 'assayId'));
+                        sharedStructures.setBiologicalProcessPieChart (displayManipulator.addPieChart(assay, 'a0-chart', 'GO_biological_process_term', colors, pieChartWidth, pieChartRadius, innerRadius));
+                        sharedStructures.setAssayFormatPieChart (displayManipulator.addPieChart(assay, 'a1-chart', 'assay_format', colors, pieChartWidth, pieChartRadius, innerRadius));
+                        sharedStructures.setAssayIdDimensionPieChart (displayManipulator.addPieChart(assay, 'a2-chart', 'protein_target', colors, pieChartWidth, pieChartRadius, innerRadius));
+                        sharedStructures.setAssayTypePieChart (displayManipulator.addPieChart(assay, 'a3-chart', 'assay_type', colors, pieChartWidth, pieChartRadius, innerRadius));
 
-                        assayIndex = assay.dimension(function (d) {
+                        sharedStructures.setAssayIndex( assay.dimension(function (d) {
                             return d['index'];
-                        });
+                        }));
 
                         // We should be ready, display it
                         dc.renderAll();
@@ -938,7 +1000,7 @@
                 verifyLinkedData: verifyLinkedData,
                 presentLinkedData: presentLinkedData
             }
-        }())
+        }()); // generateLinkedPies
 
 
         // **********************************************************
@@ -969,7 +1031,7 @@
         <div id = "a0"  class = "pieChartContainer" style="left: 10px; top: 10px; width: 260px;  height: 300px;">
             <div id="a0-chart" class="pieChart">
                 <span class="graphTitle">Biological process</span>
-                <a class="reset" href="javascript:biologicalProcessPieChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+                <a class="reset" href="javascript:sharedStructures.resetBiologicalProcessPieChart();" style="display: none;">reset</a>
                 <span class="reset" style="display: none;"></span>
                 <div class = "clearfix"></div>
             </div>
@@ -979,7 +1041,7 @@
         <div id = "a1"  class = "pieChartContainer" style="left: 280px; top: 10px; width: 260px; height: 300px;">
             <div id="a1-chart" class="pieChart">
                 <span class="graphTitle">Assay format</span>
-                <a class="reset" href="javascript:assayFormatPieChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+                <a class="reset" href="javascript:sharedStructures.resetAssayFormatPieChart();" style="display: none;">reset</a>
                 <span class="reset" style="display: none;"></span>
                 <div class = "clearfix"></div>
             </div>
@@ -989,7 +1051,7 @@
         <div id = "a2"  class = "pieChartContainer" style="left: 550px; top: 10px;  width: 260px; height: 300px;">
             <div id="a2-chart" class="pieChart">
                 <span class="graphTitle">Protein target</span>
-                <a class="reset" href="javascript:assayIdDimensionPieChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+                <a class="reset" href="javascript:sharedStructures.resetAssayIdDimensionPieChart();" style="display: none;">reset</a>
                 <span class="reset" style="display: none;"></span>
                 <div class = "clearfix"></div>
             </div>
@@ -999,7 +1061,7 @@
         <div id = "a3"  class = "pieChartContainer" style="left: 820px; top: 10px; width: 260px; height: 300px;">
             <div id="a3-chart" class="pieChart">
                 <span class="graphTitle">Assay type</span>
-                <a class="reset" href="javascript:assayTypePieChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
+                <a class="reset" href="javascript:sharedStructures.resetAssayTypePieChart();" style="display: none;">reset</a>
                 <span class="reset" style="display: none;"></span>
                 <div class = "clearfix"></div>
             </div>
@@ -1020,10 +1082,6 @@
 
 </div>
 
-
-
-
-%{--</script>--}%
 
 <table id="data-table" class="table table-hover dc-data-table"  style="position:absolute; left: 0px; top: 300px;">
     <thead>
@@ -1086,25 +1144,6 @@
             <div style="float:right;">
                 <div id="legendGoesHere"></div>
                %{--<g:sunburstLegend/>--}%
-            </div>
-
-            <div style="text-align: center; vertical-align: bottom;">
-
-                <select id="coloringOptions" style="visibility: hidden">
-                    <option value="1"
-                            <g:if test="${dropDown2Choice == 1}">selected</g:if>>Color by activity</option>
-                    <option value="2"
-                            <g:if test="${dropDown2Choice == 2}">selected</g:if>>Split classes by activity</option>
-                    <option value="3" <g:if test="${dropDown2Choice == 3}">selected</g:if>>Color by class</option>
-                </select>
-                <div  style="padding-top: 320px;"></div>
-                <select id="activity" style="visibility: hidden">
-                        <option value="1" <g:if test="${dropDown1Choice == 1}">selected</g:if>>Active only</option>
-                        <option value="2" <g:if test="${dropDown1Choice == 2}">selected</g:if>>Inactive only</option>
-                        <option value="3"
-                                <g:if test="${dropDown1Choice == 3}">selected</g:if>>Active and Inactive</option>
-                </select>
-
             </div>
 
         </div>
