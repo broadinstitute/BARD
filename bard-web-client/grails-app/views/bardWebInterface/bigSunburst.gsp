@@ -120,9 +120,6 @@
     <div class="row-fluid">
         <div class="span6">
 
-            %{--<a href="${createLink(controller: 'BardWebInterface', action: 'index')}">--}%
-                %{--<img src="${resource(dir: 'images', file: 'bard_logo_med.png')}" alt="BioAssay Research Database"/>--}%
-            %{--</a>--}%
 
         </div>
 
@@ -147,7 +144,7 @@
         <div class="span3" style="padding-top: 50px;  height: 600px;">
             <div style="float:right;">
                 <div id="legendGoesHere"></div>
-               %{--<g:sunburstLegend/>--}%
+
             </div>
 
         </div>

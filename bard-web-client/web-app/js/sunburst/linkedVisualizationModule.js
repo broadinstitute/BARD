@@ -548,7 +548,7 @@ var linkedVisualizationModule = (function () {
                     .duration(500)
                     .style('opacity', '1');
                 if (linkedVizData.retrieveCurrentHierarchicalData(expandedButtonNum).children !== undefined) {
-                    createASunburst(1000, 1000, 5, 1000, continuousColorScale, 'div#sunburstdiv', 672376, expandedButtonNum);
+                    createASunburst(1000, 1000, 5, 1000, continuousColorScale, 'div#sunburstdiv', linkedVizData.cid(), expandedButtonNum);
                     createALegend(120, 200, 100, continuousColorScale, 'div#legendGoesHere', minimumValue, maximumValue);
                     d3.selectAll('#suburst_container').style('pointer-events', null);
                 } else {
@@ -811,7 +811,7 @@ var linkedVisualizationModule = (function () {
             },
 
             verifyLinkedData = function (cid) {
-                console.log('hi ho');
+                console.log('beginning Linked Hierarchy with cid = '+cid+'.');
                 d3.json("/bardwebclient/bardWebInterface/linkedData/"+cid, function (incomingData) {
                     // create an empty list, Just in case we get null data
                     linkedVizData.parseData(incomingData);
@@ -819,7 +819,8 @@ var linkedVisualizationModule = (function () {
                         console.log(' we have trouble with incoming linked data');
                         throw new Exception('bad data');
                     } else {
-                        linkedVizData.appendConditionalStatusFields()
+                        linkedVizData.cid(cid);
+                        linkedVizData.appendConditionalStatusFields();
                     }
                     presentLinkedData();
                     linkedVizData.cleanupOriginalHierarchyData(2);

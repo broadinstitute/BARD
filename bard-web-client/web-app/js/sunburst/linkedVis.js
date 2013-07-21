@@ -1,4 +1,13 @@
 var linkedVizData = (function (){
+
+
+    /***
+     * First we have code that attempts to validate the data we receive before going any further.  This code
+     * is built around abstract definitions that are later received various implementations in accordance
+     * with the 'Strategy' pattern.
+     *
+     * @type {{types: {}, messages: Array, config: {}, validate: Function, hasErrors: Function}}
+     */
     var validator = {
 
         // all available checks
@@ -180,7 +189,17 @@ var linkedVizData = (function (){
         AssayCross: 'assayCrossCheck'
     };
 
+
+    /***
+     * Below find an assortment of data types and methods that everybody else calls upon.  'linkedData', for example,
+     * is one of the highest level data structures, which is filled with incoming data and then  later drawn upon by
+     * methods far and wide.
+     *
+     * @type {{}}
+     */
     var linkedData = {},
+
+        cidHolder = 0,
 
         additionalErrorInfo = "",
 
@@ -189,9 +208,11 @@ var linkedVizData = (function (){
         parseData = function (incomingData)  {
             linkedData =  incomingData;
         },
+
         numberOfWidgets = function ()  {
             return linkedData.Category.length;
         },
+
         validateLinkedData = function ()  {
             var returnVal = true;
             validator.validate(linkedData);
@@ -202,6 +223,13 @@ var linkedVizData = (function (){
                 alert (errorMessageReport) ;
             }
             return returnVal;
+        },
+
+        // try this more flexible 'getter is your setter' pattern
+        cid  = function ( _x ) {
+             if (!arguments.length) return cidHolder;
+            cidHolder = _x;
+            return this;
         },
 
         appendConditionalStatusFields = function ()  {
@@ -564,12 +592,12 @@ var linkedVizData = (function (){
             }
             return(null);
         }
-//                ,
-//         provideAListOfEveryoneWhoIsnotPointingAtTheirRoot = '
+
 
 
     return {
         parseData:parseData,
+        cid:cid,
         appendConditionalStatusFields:appendConditionalStatusFields,
         validateLinkedData:validateLinkedData,
         numberOfWidgets: numberOfWidgets,
