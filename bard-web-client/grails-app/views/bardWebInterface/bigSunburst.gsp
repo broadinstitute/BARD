@@ -22,7 +22,7 @@
 <script>
 
     $(document).ready(function () {
-        linkedVisualizationModule.buildLinkedHierarchiesVisualization(${cid});
+        linkedVisualizationModule(${cid});
     });
 
 

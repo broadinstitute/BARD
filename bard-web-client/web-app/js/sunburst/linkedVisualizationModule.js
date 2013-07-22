@@ -874,11 +874,10 @@ var linkedVisualizationModule = (function () {
     }
 
 
-
-    return {
-        buildLinkedHierarchiesVisualization:buildLinkedHierarchiesVisualization
-    }
-
+    /***
+     * We only want to return one thing from this top-level module to simplify the calling
+     */
+    return buildLinkedHierarchiesVisualization;
 
 }());  // linkedVisualizationModule
 
