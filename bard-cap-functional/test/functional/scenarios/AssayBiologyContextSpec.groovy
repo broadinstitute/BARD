@@ -16,7 +16,7 @@ import common.Constants.SearchBy
 
 import db.Assay
 
-// This change is done by Syed.
+// This change is done by Syed. Update 2
 class AssayBiologyContextSpec extends BardFunctionalSpec {
 	def testData = TestDataReader.getTestData()
 	def section = "biology"
