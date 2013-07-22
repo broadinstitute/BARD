@@ -1,19 +1,16 @@
 package bard.core.rest.spring
-
 import bard.core.SearchParams
 import bard.core.SuggestParams
 import bard.core.rest.helper.RESTTestHelper
 import bard.core.rest.spring.project.Project
 import bard.core.rest.spring.project.ProjectExpanded
 import bard.core.rest.spring.project.ProjectResult
-import bard.core.rest.spring.util.Document
 import bard.core.rest.spring.util.Facet
 import grails.plugin.spock.IntegrationSpec
 import org.springframework.web.client.HttpClientErrorException
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Unroll
-import spock.lang.Ignore
-
 /**
  * Tests for ProjectRestService
  */
@@ -298,7 +295,7 @@ class ProjectRestServiceIntegrationSpec extends IntegrationSpec {
         assertProjects(projectSearchResult.projects, false)
         where:
         label                               | pids
-        "Search with a list of project ids" | [129, 102, 100]
+        "Search with a list of project ids" | [907, 120, 121]
     }
     /**
      *
