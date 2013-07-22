@@ -20,6 +20,7 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
 	}
 
+	
 	def getUIContextItems(def card){
 		def contextItems = []
 		def resultMap = [:]

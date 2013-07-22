@@ -18,17 +18,20 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 	def navigateToEditContext(def section){
 		editContext(section).iconPencil.click()
 	}
-	
-	/*def getUIContexts(){
-		def uiContexts = []
-		if(cardHolders.cardTable.find("caption")){
-			cardHolders.cardTable.find("caption").each{ contextName ->
-				def contexts = contextName.find("div.cardTitle").find("p")[0].text()
-				uiContexts.add(contexts)
+
+	def getUIContexts(def sectionName){
+		def contexts = []
+		if(header(sectionName).find(".cardTitle")){
+			header(sectionName).find(".cardTitle").each{ cards ->
+				if(cards.find("p")[0].text()){
+					contexts.add(cards.find("p")[0].text())
+				}else{
+					contexts.add(cards.text())
+				}
 			}
 		}
-		return uiContexts
-	}*/
+		return contexts
+	}
 
 	Map<String, String> getUIAssociatedMeasure(def cardName){
 		def contextMeasure = [:]

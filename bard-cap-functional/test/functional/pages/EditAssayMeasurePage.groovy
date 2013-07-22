@@ -6,7 +6,7 @@ import geb.Module
 import geb.navigator.Navigator
 import modules.SelectToDropModule
 import modules.SelectChoicePopupModule
-import modules.SelectResultPopListModule
+import modules.AddContextCardModule
 import modules.CardsHolderModule
 
 class EditAssayMeasurePage extends Page{
@@ -27,7 +27,7 @@ class EditAssayMeasurePage extends Page{
 		selectStatistics { module SelectToDropModule, $("div#s2id_statisticId") }
 		measureDetail { module MeasureDetailsModule }
 		enterInput { module SelectChoicePopupModule }
-		resultPopulated { module SelectResultPopListModule, $("div.select2-drop.select2-drop-active") }
+		resultPopulated { module AddContextCardModule, $("div.select2-drop.select2-drop-active") }
 		footerBtns { $("div.modal-footer").find("button") }
 	}
 

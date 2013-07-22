@@ -1,6 +1,7 @@
 package pages
 
 import geb.Page
+import modules.AddContextCardModule;
 import modules.ButtonsModule
 import modules.CardsHolderModule
 import modules.LoadingModule
@@ -16,7 +17,10 @@ class EditContextPage extends CapScaffoldPage{
 	def itemName
 	static content = {
 		finishEditing(wait: true) { module ButtonsModule, $("div.well.well-small"), buttonName:"Finish Editing" }
-		cardTable{ contextTitle -> module CardsHolderModule, $("div.roundedBorder.card-group").find("table.table.table-hover"), contextCard:contextTitle }
+		cardGroup { $("div.roundedBorder.card-group") }
+		cardTable{ contextTitle -> module CardsHolderModule, cardGroup.find("table.table.table-hover"), contextCard:contextTitle }
+		addNewCardBtn { cardGroup.find("button.btn.add-card-button")}
+		addContextCard { module AddContextCardModule }
 		formLoading { module LoadingModule}
 	}
 
@@ -38,4 +42,16 @@ class EditContextPage extends CapScaffoldPage{
 		}
 	}
 	
+	def addNewContextCard(def contextName){
+		addNewCardBtn.click()
+		assert addContextCard.inputCardName
+		assert addContextCard.saveBtn.buttonSubmitPrimary
+		addContextCard.inputCardName.value(cardName)
+		addContextCard.saveBtn.buttonSubmitPrimary.click()
+		ajaxRequestCompleted()
+	}
+	def deleteContext(def contextName){
+		if(isContextCardNotEmpty(contextName))
+		withConfirm {cardTable(contextName).addContextItem.iconTrash.click()}
+	}
 }

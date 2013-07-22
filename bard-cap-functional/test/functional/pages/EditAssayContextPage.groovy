@@ -3,7 +3,7 @@ package pages
 import geb.Page
 import modules.SelectToDropModule
 import modules.SelectChoicePopupModule
-import modules.SelectResultPopListModule
+import modules.AddContextCardModule
 import modules.CardsHolderModule
 import geb.Module
 import geb.navigator.Navigator
@@ -28,7 +28,7 @@ class EditAssayContextPage extends Page{
 		moveAssayCardItem { module MoveCardItemsModule }
 		itemWizard { module AddItemWizardModule, $("form#AddItemWizard") }
 		selectToSearch { module SelectChoicePopupModule}
-		selectResult { module SelectResultPopListModule }
+		selectResult { module AddContextCardModule }
 	}
 
 	def addNewContextCard(def cardName){
