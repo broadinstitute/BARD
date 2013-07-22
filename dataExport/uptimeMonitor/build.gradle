@@ -1,0 +1,35 @@
+apply plugin: "groovy"
+apply plugin: "idea"
+
+repositories {
+    maven {
+        url 'http://bard-repo.broadinstitute.org:8081/artifactory/bard-virtual-repo'
+    }
+}
+test {
+    systemProperties = System.getProperties()
+    outputs.upToDateWhen { false }
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:1.8.6"
+    testCompile "org.spockframework:spock-core:0.6-groovy-1.8"
+    testCompile "junit:junit:4.9"
+    testCompile "xmlunit:xmlunit:1.3"
+    testCompile "javax.servlet:servlet-api:2.5"
+    testCompile 'com.github.groovy-wslite:groovy-wslite:0.7.0'
+}
+
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+    main = 'groovy.ui.Console'
+    classpath = sourceSets.main.runtimeClasspath
+}
+task createDirs << {
+    sourceSets*.allSource.srcDirs*.each { dir ->
+        ant.touch(file: new File(dir, '.gitignore'), mkdirs: true)
+    }
+    sourceSets*.resources.srcDirs*.each { dir ->
+        ant.touch(file: new File(dir, '.gitignore'), mkdirs: true)
+    }
+}
