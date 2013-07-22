@@ -20,6 +20,9 @@ dependencies {
     testCompile 'com.github.groovy-wslite:groovy-wslite:0.7.0'
 }
 
+task wrapper(type: Wrapper) {
+        gradleVersion = '1.6'
+}
 
 task(console, dependsOn: 'classes', type: JavaExec) {
     main = 'groovy.ui.Console'
