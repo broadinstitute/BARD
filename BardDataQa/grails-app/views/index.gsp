@@ -28,6 +28,10 @@
             <td>AID's in MAAS</td>
             <td><g:link controller="aidSpreadsheet" action="index">List AID's and the spreadsheets and datasets they are in</g:link></td>
         </tr>
+        <tr>
+            <td>QA Status of Projects</td>
+            <td><g:link controller="projectStatus" action="index">List, modify, change QA status of projects</g:link></td>
+        </tr>
     </table>
 </body>
 </html>

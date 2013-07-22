@@ -9,10 +9,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-  <title></title>
+  <title>List of possible QA statuses</title>
 </head>
 <body>
+<h1>List of possible QA statuses</h1>
 <table border="1" cellpadding="10" cellspacing="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>version in database</th>
+    </tr>
     <g:each in="${qaStatusList}" var="qaStatus">
         <tr>
             <td>${qaStatus.id}</td>
