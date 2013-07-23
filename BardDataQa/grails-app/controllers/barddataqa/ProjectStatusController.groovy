@@ -5,7 +5,8 @@ class ProjectStatusController {
     ProjectStatusService projectStatusService
 
     def index() {
-        [projectStatusList: ProjectStatus.withCriteria({order("id")}), qaStatusList:  QaStatus.withCriteria({order("id")})]
+        List<ProjectStatus> projectStatusList = projectStatusService.retrieveAllProjectStatusWithMetaInfoSorted()
+        [projectStatusList: projectStatusList, qaStatusList:  QaStatus.withCriteria({order("id")})]
     }
 
     def create(ProjectStatusCommand projectStatusCommand) {

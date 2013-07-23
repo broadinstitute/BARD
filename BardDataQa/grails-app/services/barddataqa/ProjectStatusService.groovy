@@ -11,6 +11,14 @@ class ProjectStatusService {
 select count(*) from bard_cap_prod.project where project_id = :$projectIdParam
 """
 
+    private static final String projectNameAndLabNameQueryString = """
+select pci.value_display, p.project_name from bard_cap_prod.project p
+  left join bard_cap_prod.project_context pc on pc.project_id = p.project_id
+  left join bard_cap_prod.project_context_item pci on pci.project_context_id = pc.project_context_id and pci.attribute_id = 559
+  where p.project_id = :$projectIdParam
+"""
+
+
     String createNew(ProjectStatusCommand projectStatusCommand) {
         ProjectStatus alreadyExistsProjectStatus = ProjectStatus.findById(projectStatusCommand.projectId)
 
@@ -47,5 +55,43 @@ select count(*) from bard_cap_prod.project where project_id = :$projectIdParam
         Integer count = (Integer)query.list().get(0)
 
         return (1 == count)
+    }
+
+    void addProjectNameAndLabName(ProjectStatus projectStatus) {
+        SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(projectNameAndLabNameQueryString)
+        query.setLong(projectIdParam, projectStatus.id)
+
+        List result = query.list()
+
+        if (result.size() > 0) {
+            Object[] row = (Object[])query.list().get(0)
+
+            projectStatus.laboratoryName = row[0]
+            projectStatus.projectName = row[1]
+        }
+    }
+
+    List<ProjectStatus> retrieveAllProjectStatusWithMetaInfoSorted() {
+        List<ProjectStatus> result = ProjectStatus.findAll()
+
+        for (ProjectStatus projectStatus : result) {
+            addProjectNameAndLabName(projectStatus)
+        }
+
+        Collections.sort(result, new LabNameIdComparator())
+
+        return result
+    }
+
+    static class LabNameIdComparator implements Comparator<ProjectStatus> {
+        int compare(ProjectStatus o1, ProjectStatus o2) {
+            final int labNameCompare = o1.laboratoryName.compareTo(o2.laboratoryName)
+
+            if (labNameCompare == 0) {
+                return o1.id.compareTo(o2.id)
+            } else {
+                return labNameCompare
+            }
+        }
     }
 }

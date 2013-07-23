@@ -18,6 +18,8 @@
         <th>Project ID</th>
         <th>QA Status of Project</th>
         <th>New QA Status</th>
+        <th>Project Name</th>
+        <th>Laboratory Name</th>
     </tr>
 
     <g:each in="${projectStatusList}" var="projectStatus">
@@ -31,6 +33,8 @@
                               value="${projectStatus.qaStatus.id}" onchange="document.forms['changeStatusForm${projectStatus.id}'].submit()"/>
                 </g:form>
             </td>
+            <td>${projectStatus?.projectName}</td>
+            <td>${projectStatus?.laboratoryName}</td>
         </tr>
     </g:each>
 </table>

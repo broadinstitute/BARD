@@ -4,6 +4,10 @@ class ProjectStatus {
 
     QaStatus qaStatus
 
+    String projectName
+
+    String laboratoryName
+
     ProjectStatus (Long id, QaStatus qaStatus) {
         this.id = id
         this.qaStatus = qaStatus
@@ -15,4 +19,8 @@ class ProjectStatus {
     static mapping = {
         id generator: 'assigned'
     }
+
+    static transients = ['projectName', 'laboratoryName']
 }
+
+
