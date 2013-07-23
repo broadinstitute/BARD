@@ -73,7 +73,7 @@ abstract class AbstractContextItem<T extends AbstractContext> {
         if (valueElement) {
             result = valueElement.label
         } else if (valueNum != null) {
-            result = [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation].findAll().join(' ')
+            result = [qualifier?.trim(), valueNum, attributeElement.unit?.abbreviation ?: attributeElement.unit?.label].findAll().join(' ')
         } else if (valueMin != null || valueMax != null) {
             result = [valueMin, valueMax].findAll().join(' - ')
         }
