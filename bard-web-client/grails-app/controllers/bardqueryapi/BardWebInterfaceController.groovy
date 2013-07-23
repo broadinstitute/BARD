@@ -1,4 +1,5 @@
 package bardqueryapi
+
 import bard.core.IntValue
 import bard.core.SearchParams
 import bard.core.Value
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
 import javax.servlet.http.HttpServletResponse
+
 /**
  *
  * TODO: Refactor into individual classes. Class is too big. We need to have different controllers for each entityß
@@ -770,23 +772,23 @@ class BardWebInterfaceController {
         // let's see if we can avoid retrieving the compound summary from the server, because that's slow. Round-trip or not, however,
         //   we need to fill out  ringnodeAndCrossLinks, since that is used by the rest of the routine
         if ((session.'compoundSummary') &&
-            (session.'cid')  &&
-            (id.toString() == session.'cid'.toString())) {
-                ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburst (session.'compoundSummary' as CompoundSummary, true, true)
-            }  else { // we need to explicitly retrieve the information for this ID
-                Map compoundSummaryPlusId = [:]
-                ringnodeAndCrossLinks   =   ringManagerService.convertCompoundIntoSunburstById (id, true, true, compoundSummaryPlusId )
-                // having gone to the trouble of retrieving the compound summary why not save it in case we (or someone else) needs it later?
-                session.'compoundSummary' = compoundSummaryPlusId.'compoundSummary'
-                session.'cid' = compoundSummaryPlusId.'id'
-            }
+                (session.'cid') &&
+                (id.toString() == session.'cid'.toString())) {
+            ringnodeAndCrossLinks = ringManagerService.convertCompoundIntoSunburst(session.'compoundSummary' as CompoundSummary, true, true)
+        } else { // we need to explicitly retrieve the information for this ID
+            Map compoundSummaryPlusId = [:]
+            ringnodeAndCrossLinks = ringManagerService.convertCompoundIntoSunburstById(id, true, true, compoundSummaryPlusId)
+            // having gone to the trouble of retrieving the compound summary why not save it in case we (or someone else) needs it later?
+            session.'compoundSummary' = compoundSummaryPlusId.'compoundSummary'
+            session.'cid' = compoundSummaryPlusId.'id'
+        }
 
-        CompoundSummaryCategorizer compoundSummaryCategorizer =  ringnodeAndCrossLinks ["CompoundSummaryCategorizer"]
-        LinkedVisHierData linkedVisHierData = compoundSummaryCategorizer.linkedVisHierDataFactory (ringnodeAndCrossLinks ["RingNode"],
-                ringnodeAndCrossLinks ["AssayFormatRingNode"],
-                ringnodeAndCrossLinks ["AssayTypeRingNode"])
+        CompoundSummaryCategorizer compoundSummaryCategorizer = ringnodeAndCrossLinks["CompoundSummaryCategorizer"]
+        LinkedVisHierData linkedVisHierData = compoundSummaryCategorizer.linkedVisHierDataFactory(ringnodeAndCrossLinks["RingNode"],
+                ringnodeAndCrossLinks["AssayFormatRingNode"],
+                ringnodeAndCrossLinks["AssayTypeRingNode"])
         String assaysSectionJson = linkedVisHierData.createCombinedListing()
-        render (assaysSectionJson)
+        render(assaysSectionJson)
     }
 
 
@@ -927,11 +929,14 @@ class SearchHelper {
 
             Map assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
             Collection<Value> facets = assaysByTextSearchResultsMap.facets
-            //If the facets include parent='assay_status' and we have BOTH children 'Draft' and 'Approved', then display approved asssay as a default.
-            if (facets.find { facet -> facet.id == 'assay_status' && facet?.children*.id.contains('Approved') && facet?.children*.id.contains('Draft') }) {
-                searchFilters << new SearchFilter(filterName: 'assay_status', filterValue: 'Approved')
-                //research, this time with an assay_status='Approved' filter
-                assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
+            //If the facets include parent='assay_status' and we have BOTH children 'draft' and 'approved', then display only approved assays as a default.
+            //Only check if this is the first time the page is loading, meaning no filters have been set by the user.
+            if (!searchCommand.filters) {
+                if (facets.find { facet -> facet.id == 'assay_status' && facet?.children*.id.contains('approved') && facet?.children*.id.contains('draft') }) {
+                    searchFilters << new SearchFilter(filterName: 'assay_status', filterValue: 'approved')
+                    //research, this time with an assay_status='approved' filter
+                    assaysByTextSearchResultsMap = queryService.findAssaysByTextSearch(searchString, top, skip, searchFilters)
+                }
             }
 
             String template = isMobile ? "/mobile/bardWebInterface/assays" : "assays"
