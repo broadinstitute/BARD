@@ -402,7 +402,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
         given:
         mockCommandObject(SearchCommand)
         params.formName = FacetFormType.AssayFacetForm.toString()
-        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: searchFilters1]
+        Map paramMap = [formName: FacetFormType.AssayFacetForm.toString(), searchString: searchString, filters: null]
         controller.metaClass.getParams = {-> paramMap }
         SearchCommand searchCommand = new SearchCommand(paramMap)
         List foundAssayAdapters = [buildAssayAdapter(1234, "assay1"), buildAssayAdapter(1234, "assay2")]
@@ -416,9 +416,9 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         where:
         label                | searchString | isMobile | facets                                                                                                                   | numberOfTimesCalled
-        "Draft only"         | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'Draft', value: 1)])]                                         | 1
-        "Approved  only"     | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'Approved', value: 1)])]                                      | 1
-        "Draft and Approved" | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'Draft', value: 1), new IntValue(id: 'Approved', value: 1)])] | 2
+        "Draft only"         | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'draft', value: 1)])]                                         | 1
+        "Approved  only"     | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'dpproved', value: 1)])]                                      | 1
+        "Draft and Approved" | "Not empty"  | false    | [new Value(id: 'assay_status', children: [new IntValue(id: 'draft', value: 1), new IntValue(id: 'approved', value: 1)])] | 2
     }
 
     void "test handle Project Searches #label"() {
