@@ -98,6 +98,7 @@ grails.project.dependency.resolution = {
         }
         compile(":spring-security-acl:1.1.1")
         compile ":remote-control:1.4"
+        compile ":google-analytics:2.0"
 
         // runtime scope
         runtime ":jquery:1.7.1"

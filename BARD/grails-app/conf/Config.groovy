@@ -61,6 +61,9 @@ grails.exceptionresolver.params.exclude = ['password']
 // enable query caching by default
 grails.hibernate.cache.queries = true
 
+// web property id for google analytics account
+google.analytics.webPropertyID = "UA-37532975-1"
+
 // set per-environment serverURL stem for creating absolute links
 environments {
     development {
