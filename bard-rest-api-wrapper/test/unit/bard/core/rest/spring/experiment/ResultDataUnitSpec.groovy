@@ -510,11 +510,11 @@ class ResultDataUnitSpec extends Specification {
 
         where:
         label                   | respClassEnum               | hasPlot | responseClass | currentJSON                                                                 | hasChildElements | isMapped | outcome
-        "CR_NO_SER"             | ResponseClassEnum.CR_NO_SER | false   | "CR_NO_SER"   | CR_NO_SER_bid_573_aid_2802_no_P_C_mapping_JSON                              | false            | false    | active
+        "CR_NO_SER"             | ResponseClassEnum.CR_NO_SER | false   | "CR_NO_SER"   | CR_NO_SER_bid_573_aid_2802_no_P_C_mapping_JSON                              | false            | true    | active
         "CR_SER"                | ResponseClassEnum.CR_SER    | true    | "CR_SER"      | CR_SER_bid_1998_aid_998_good_structure_5_hill_params_JSON                   | false            | true     | active
         "CR_SER_WITH_QUALIFIER" | ResponseClassEnum.CR_SER    | true    | "CR_SER"      | CR_SER_bid_27_aid_2173_good_CR_with_qualifier_JSON                          | false            | true     | active
-        "MULTCONC_SMALL"        | ResponseClassEnum.MULTCONC  | false   | "MULTCONC"    | MULTCONC_smaller_bid_2466_aid_504674_flat_resp_JSON                         | false            | false    | active
-        "MULTCONC_BIG"          | ResponseClassEnum.MULTCONC  | false   | "MULTCONC"    | MULTCONC_bid_3992_aid_504898_flat_resp_JSON                                 | false            | false    | active
+        "MULTCONC_SMALL"        | ResponseClassEnum.MULTCONC  | false   | "MULTCONC"    | MULTCONC_smaller_bid_2466_aid_504674_flat_resp_JSON                         | false            | true    | active
+        "MULTCONC_BIG"          | ResponseClassEnum.MULTCONC  | false   | "MULTCONC"    | MULTCONC_bid_3992_aid_504898_flat_resp_JSON                                 | false            | true    | active
         "UNCLASS"               | ResponseClassEnum.UNCLASS   | false   | "UNCLASS"     | UNCLASS_bid_2819_aid_2373_no_annot_JSON                                     | true             | false    | active
         "SP"                    | ResponseClassEnum.SP        | false   | "SP"          | SP_bid_4567_aid_844255_single_point_with_no_element_nesting_available_JSON  | false            | true     | active
         "SP_NO_NESTING"         | ResponseClassEnum.SP        | false   | "SP"          | SP_bid_4020_aid_463170_simple_fold_change_average_with_element_nesting_JSON | true             | true     | inactive

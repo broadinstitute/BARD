@@ -75,10 +75,10 @@ class MolSpreadSheetCellUnitSpec extends Specification {
         then:
         molSpreadSheetCell.spreadSheetActivityStorage
         molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList.size() == 4
-        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].toString()=="--"
-        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[1].toString()=="--"
-        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[2].toString()=="12.3"
-        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[3].toString()=="43.2"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[0].toString().trim()=="--"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[1].toString().trim()=="--"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[2].toString().trim()=="12.3"
+        molSpreadSheetCell.spreadSheetActivityStorage.hillCurveValueHolderList[3].toString().trim()=="43.2"
         molSpreadSheetCell.spreadSheetActivityStorage.dictionaryLabel == ''
     }
 

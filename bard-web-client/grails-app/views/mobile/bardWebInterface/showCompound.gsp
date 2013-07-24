@@ -27,10 +27,10 @@
 </div>
 
 <div data-role="content" style="text-align: center; margin: 0 auto;">
-<g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
-        style="float: right;">Bio-activity Summary</g:link>
-<g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
-        style="float: right;">Linked Data Visualization</g:link>
+<span style="padding:10px"></span><g:link controller="bardWebInterface" action="showCompoundBioActivitySummary" id="${compound.pubChemCID}"
+        style="float: right;">Bio-activity Summary</g:link></span>
+<span style="padding:10px"><g:link controller="bardWebInterface" action="bigSunburst" id="${compound.pubChemCID}"
+        style="float: right;">Linked Hierarchy Visualization</g:link></span>
 <div style="text-align: center;">
 <table>
 <tr>

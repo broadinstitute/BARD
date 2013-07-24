@@ -41,7 +41,7 @@ class CompoundBioActivitySummaryTagLib {
 
     def curvePlot = { attrs, body ->
 
-        out << """<img alt="curve here" title="title here"
+        out << """<img alt="${attrs?.title}" title="${attrs?.title}"
                     src="${
             createLink(
                     controller: 'doseResponseCurve',
@@ -69,7 +69,6 @@ class CompoundBioActivitySummaryTagLib {
             out << "<i class=\"icon-question-sign\"></i></a>"
         }
         out << ": "
-        out << "${attrs?.qualifier ?: ''}"
         out << "${attrs?.title?.value?.right?.value ?: ''}"
         out << "${attrs?.testConcentrationUnit ?: ''}"
         out << "</b></p>"
