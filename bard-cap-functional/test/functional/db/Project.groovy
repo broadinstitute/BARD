@@ -41,72 +41,35 @@ class Project extends DatabaseConnectivity {
 		return searchResultCount
 	}
 	/**
-	 * @param assayId
+	 * @param projectId
 	 * @param contextGroup
-	 * @return list of assay context cards of sepecific group
+	 * @return list of project context cards of specific group
 	 */
-	List<String> getAssayContext(def assayId, def contextGroup) {
-		def contextCardsList = []
+	public static def getProjectContext(def contextGroup, def projectId) {
+		def contextCards = []
 		def sql = getSql()
-		sql.eachRow(ASSAY_CONTEXT_CARDS, [assayId, contextGroup]) { row ->
-			contextCardsList.add(row.CName)
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXTS, [projectId, contextGroup]) { row ->
+			contextCards.add(row.ContextName)
 		}
-		return contextCardsList
+		return contextCards
 	}
 	/**
-	 * @param assayId
+	 * @param projectId
 	 * @param contextGroup
 	 * @param contextName
-	 * @return list of assay context items present in a specific assay context card
+	 * @return list of project context items present in a specific project context card
 	 */
-	public static def getProjectContextItem(def projectId, def contextName) {
+	public static def getProjectContextItem(def projectId, def contextGroup, def contextName) {
 		def contextITemMap = [:]
 		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextName]) { row ->
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextGroup, contextName]) { row ->
 			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay]
 			contextItemsList.add(contextITemMap)
 		}
 		return contextItemsList
 	}
-	/**
-	 * @param assayId
-	 * @return measure added in a specific assay
-	 */
-	def getMeasureAdded(def assayId) {
-		def assayMeasures
-		def sql = getSql()
-		sql.eachRow(ASSAY_MEASURE, [assayId]) { row ->
-			assayMeasures = row.measure+" ("+row.label+")"
-		}
-		return assayMeasures
-	}
-	/**
-	 * @param assayId
-	 * @return list of assay measures
-	 */
-	List<String> getAssayMeasures(def assayId) {
-		def assayMeasuresList = []
-		def sql = getSql()
-		sql.eachRow(ASSAY_MEASURES_LIST, [assayId]) { row ->
-			assayMeasuresList.add(row.measure)
-		}
-		return assayMeasuresList
-	}
-	/**
-	 * @param assayId
-	 * @param measureName
-	 * @return measures associated with contexts 
-	 */
-	Map<String, String> getContextMeasures(def assayId, def measureName) {
-		def associatedContextMeasureMap = [:]
-		def sql = getSql()
-		sql.eachRow(ASSAY_ASSOCIATED_MEASURE_CONTEXT, [assayId, measureName]) { row ->
-			associatedContextMeasureMap = ['measure':row.measure, 'context':row.context]
-		}
-		return associatedContextMeasureMap
-	}
-
+		
 	/**
 	 * @param projectId
 	 * @param documentType

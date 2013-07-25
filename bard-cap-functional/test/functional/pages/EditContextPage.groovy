@@ -1,13 +1,11 @@
 package pages
 
-import geb.Page
-import modules.AddContextCardModule;
+import modules.AddContextCardModule
 import modules.ButtonsModule
 import modules.CardsHolderModule
 import modules.LoadingModule
 
 import common.Constants
-import common.Constants.ContextItem
 
 class EditContextPage extends CapScaffoldPage{
 	final static SLEEP_INTERVAL = 2000
@@ -17,41 +15,66 @@ class EditContextPage extends CapScaffoldPage{
 	def itemName
 	static content = {
 		finishEditing(wait: true) { module ButtonsModule, $("div.well.well-small"), buttonName:"Finish Editing" }
-		cardGroup { $("div.roundedBorder.card-group") }
-		cardTable{ contextTitle -> module CardsHolderModule, cardGroup.find("table.table.table-hover"), contextCard:contextTitle }
-		addNewCardBtn { cardGroup.find("button.btn.add-card-button")}
+		addNewCardBtn { groupId -> cardContainer(groupId).find("button.btn.add-card-button") }
 		addContextCard { module AddContextCardModule }
 		formLoading { module LoadingModule}
+		
+		cardContainer { groupName -> $("div.roundedBorder.card-group."+groupName) }
+		contextTable { groupName -> cardContainer(groupName).find("table.table.table-hover")}
+		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
 	}
 
-	def navigateToAddEditDeleteContextItemPage(ContextItem ci, def contextName, def ... contextItemName){
-		assert cardTable(contextName).contextTitle
-		assert cardTable(contextName).addContextItem.iconPlus
-		switch(ci){
-			case ContextItem.ADD:
-				cardTable(contextName).addContextItem.iconPlus.click()
-				break;
-			case ContextItem.UPDATE:
-				assert cardTable(contextName).editContextItem(contextItemName).iconPencil
-				cardTable(contextName).editContextItem(contextItemName).iconPencil.click()
-				break;
-			case ContextItem.DELETE:
-				assert cardTable(contextName).deleteContextItem(contextItemName).iconTrash
-				withConfirm { cardTable(contextName).deleteContextItem(contextItemName).iconTrash.click() }
-				break;
-		}
+	def navigateToAddContextItem(def cardGroup, def contextName){
+		assert cardTable(cardGroup, contextName).contextTitle
+		assert cardTable(cardGroup, contextName).contextBtnGroup.iconPlus
+		cardTable(cardGroup, contextName).contextBtnGroup.iconPlus.click()
 	}
-	
-	def addNewContextCard(def contextName){
-		addNewCardBtn.click()
+
+	def navigateToUpdateContextItem(def cardGroup, def contextName, def contextItemName){
+		assert cardTable(cardGroup, contextName).contextTitle
+		assert cardTable(cardGroup, contextName).editContextItem(contextItemName).iconPencil
+		cardTable(cardGroup, contextName).editContextItem(contextItemName).iconPencil.click()
+
+	}
+	def deleteContextItem(def cardGroup, def contextName, def contextItemName){
+		assert cardTable(cardGroup, contextName).contextTitle
+		assert cardTable(cardGroup, contextName).deleteContextItem(contextItemName).iconTrash
+		withConfirm { cardTable(cardGroup, contextName).deleteContextItem(contextItemName).iconTrash.click() }
+	}
+	def cleanUpContext(def cardGroup, def contextName){
+		assert cardTable(cardGroup, contextName).contextTitle
+		assert cardTable(cardGroup, contextName).deleteAllItems.iconTrash
+		withConfirm { cardTable(cardGroup, contextName).deleteAllItems.iconTrash.click() }
+	}
+
+	def addNewContextCard(def groupId, def contextName){
+		addNewCardBtn(groupId).click()
 		assert addContextCard.inputCardName
 		assert addContextCard.saveBtn.buttonSubmitPrimary
-		addContextCard.inputCardName.value(cardName)
+		addContextCard.inputCardName.value(contextName)
 		addContextCard.saveBtn.buttonSubmitPrimary.click()
 		ajaxRequestCompleted()
 	}
-	def deleteContext(def contextName){
-		if(isContextCardNotEmpty(contextName))
-		withConfirm {cardTable(contextName).addContextItem.iconTrash.click()}
+
+	def deleteContext(def cardGroup, def contextName){
+		if(isContextCardNotEmpty(cardGroup, contextName)){
+			while(isContextCardNotEmpty(cardGroup, contextName)){
+				cleanUpContext(cardGroup,contextName)
+				ajaxRequestCompleted()
+			}
+			withConfirm {cardTable(cardGroup, contextName).contextBtnGroup.iconTrash.click()}
+		}else{
+			withConfirm {cardTable(cardGroup, contextName).contextBtnGroup.iconTrash.click()}
+		}
+	}
+
+	def editContext(def cardGroup, def contextName, def editedValue){
+		if(!isContextCardNotEmpty(cardGroup, contextName)){
+			cardTable(cardGroup, contextName).editContext.editIconPencil.click()
+			assert editableForm.buttons.iconOk
+			assert editableForm.buttons.iconRemove
+			fillInputField(editedValue)
+			ajaxRequestCompleted()
+		}
 	}
 }

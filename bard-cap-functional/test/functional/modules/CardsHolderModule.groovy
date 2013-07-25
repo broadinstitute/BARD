@@ -8,14 +8,17 @@ class CardsHolderModule extends Module {
 	static content = {
 		cardsTitle(required: false) { $("div.cardTitle") }
 		contextTitle(required: false) { $("div.cardTitle", text:contains(contextCard)) }
-		addContextItem(required: false) { module EditIconModule, contextTitle.parent().find("div.btn-group") }
+		editContext(required: false) { module EditIconModule, contextTitle } 
+		contextBtnGroup(required: false) { module EditIconModule, contextTitle.parent().find("div.btn-group") }
 		itemRows(required: false) { contextTitle.parent().next("tbody") }
 		contextItemRows(required: false) { itemRows.find("tr") }
 		attributeLabel(required: false) { contextItem -> itemRows.find("td.attributeLabel", text:contextItem) }
 		valueDisplay(required: false) { contextItem -> itemRows.find("td.valuedLabel", text:contextItem) }
 		buttonGroup(required: false) { contextItem -> attributeLabel(contextItem).parent().find("div.btn-group") }
+		buttonToolBar(required: false) { contextItemRows.find("div.btn-group") }
 		deleteContextItem(required: false) { contextItem -> module EditIconModule, buttonGroup(contextItem) }
 		editContextItem(required: false) { contextItem -> module EditIconModule, buttonGroup(contextItem) }
+		deleteAllItems(required: false) { module EditIconModule, buttonToolBar }
 		
 	}
 }

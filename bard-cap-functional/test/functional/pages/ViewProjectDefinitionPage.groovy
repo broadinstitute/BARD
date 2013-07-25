@@ -16,12 +16,12 @@ class ViewProjectDefinitionPage extends CapScaffoldPage{
 	static at = { waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){	$("h4").text().contains("View Project")} }
 
 	static content = {
-		contextHeader { $("#contexts-header") }
+//		contextHeader { $("#contexts-header") }
 		experimentHeader { $("#experiment-and-step-header") }
 		addExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Add Experiment" }
 		linkExperimentBtn { module ButtonsModule, experimentHeader, buttonName:"Link Experiments" }
 		addLinkExperiment { module AddLinkExperimentModule }
-		projectContextEdit { module EditIconModule, contextHeader}
+//		projectContextEdit { module EditIconModule, contextHeader}
 		experimentBtns { module ExperimentBtnsModule }
 	}
 
@@ -50,8 +50,8 @@ class ViewProjectDefinitionPage extends CapScaffoldPage{
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL) { !formLoading.loading.displayed }
 	}
 	
-	def navigateToEditContextPage(){
-		assert projectContextEdit.iconPencil
-		projectContextEdit.iconPencil.click()
-	}
+//	def navigateToEditContextPage(){
+//		assert projectContextEdit.iconPencil
+//		projectContextEdit.iconPencil.click()
+//	}
 }
