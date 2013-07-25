@@ -21,7 +21,8 @@ public class Facet extends JsonUtil {
     @JsonProperty("counts")
     private Counts counts;
 
-    public static final Map<String, FacetToValueTranslationDTO> FACET_TO_VALUE_TRANSLATION_MAP = ['assay_component_role': new FacetToValueTranslationDTO(label: 'assay_component_role', displayOrder: 0), //hiding 'assay_component_role'
+    public static final Map<String, FacetToValueTranslationDTO> FACET_TO_VALUE_TRANSLATION_MAP = [
+            'assay_component_role': new FacetToValueTranslationDTO(label: 'assay_component_role', displayOrder: 0), //hiding 'assay_component_role'
             'assay_format': new FacetToValueTranslationDTO(label: 'assay_format', displayOrder: 1), //display 'assay_format' at the top
             'assay_type': new FacetToValueTranslationDTO(label: 'assay_type', displayOrder: 2), //display 'assay_type' 2nd
             'detection_method_type': new FacetToValueTranslationDTO(label: 'detection_method_type', displayOrder: 3), //display 'detection_method_type' 3rd

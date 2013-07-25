@@ -121,15 +121,15 @@ public class MetaData extends JsonUtil {
         }
         //Sort any two values based on the their displayOrder child (Value), if they have one.
         return values.sort { Value lhs, Value rhs ->
-            Integer lhsDisplayOrder = lhs.children.find { Value child -> child.id == 'displayOrder' }?.value
-            Integer rhsDisplayOrder = rhs.children.find { Value child -> child.id == 'displayOrder' }?.value
-            if (lhsDisplayOrder && rhsDisplayOrder) {
+            String lhsDisplayOrder = lhs.children.find { Value child -> child.id == 'displayOrder' }?.value.toString()
+            String rhsDisplayOrder = rhs.children.find { Value child -> child.id == 'displayOrder' }?.value.toString()
+            if (lhsDisplayOrder?.isNumber() && rhsDisplayOrder?.isNumber()) {
                 return lhsDisplayOrder <=> rhsDisplayOrder
-            } else if (lhsDisplayOrder || rhsDisplayOrder) {//if one has a displayOder but the other one doesn't, return the one with the displayOrder as first.
-                if (lhsDisplayOrder) {
-                    return 1
-                } else {
+            } else if (lhsDisplayOrder?.isNumber() || rhsDisplayOrder?.isNumber()) {//if one has a displayOder but the other one doesn't, return the one with the displayOrder as first.
+                if (lhsDisplayOrder?.isNumber()) {
                     return -1
+                } else {
+                    return 1
                 }
             }
             //If neither has a displayOrder, sort alphabetically by value's label.
