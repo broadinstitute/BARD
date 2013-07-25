@@ -1,4 +1,4 @@
-<%@ page import="bardqueryapi.FacetFormType; bard.core.Value; bardqueryapi.SearchFilter" %>
+<%@ page import="bard.core.rest.spring.util.Facet; bardqueryapi.FacetFormType; bard.core.Value; bardqueryapi.SearchFilter" %>
 <div class="span3">
     <g:if test="${facets}">
         <div class="facets">
@@ -39,22 +39,27 @@
                             <h3>${parentFacet.id.replaceAll("_", " ").toLowerCase().capitalize()}</h3>
                             <g:set var="childSize" value="${parentFacet.children.size()}"/>
                             <g:each in="${parentFacet.children}" var="childFacet" status="counter">
-                                <g:if test="${counter == 4 && childSize > 5}">
-                                    <div id="${parentFacet.id}_${formName.toString()}" style="display: none;">
-                                </g:if>
-                                <g:if test="${childFacet.id}">
-                                    <label class="checkbox">
-                                        <g:set var="checked"
-                                               value="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id))) }}"/>
-                                        <g:checkBox name="filters[${childIndex}].filterValue" value="${childFacet.id}"
-                                                    checked="${checked}"
-                                                    class="${formName}_Chk"/> ${childFacet.id}${childFacet.value >= 0 ? " (${childFacet.value})" : ""}
-                                    </label>
-                                    <g:hiddenField name="filters[${childIndex}].filterName" value="${parentFacet.id}"/>
-                                    <g:set var="childIndex" value="${childIndex + 1}"/>
-                                </g:if>
-                                <g:if test="${counter >= 4 && childSize > 5 && counter == childSize - 1}">
-                                    </div>
+                                %{--Ignore the 'displayOder' facet--}%
+                                <g:if test="${childFacet.id != 'displayOrder'}">
+                                    <g:if test="${counter == 4 && childSize > 5}">
+                                        <div id="${parentFacet.id}_${formName.toString()}" style="display: none;">
+                                    </g:if>
+                                    <g:if test="${childFacet.id}">
+                                        <label class="checkbox">
+                                            <g:set var="checked"
+                                                   value="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(Facet.VALUE_TO_FACET_TRANSLATION_MAP[parentFacet.id.trim()] ?: parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id))) }}"/>
+                                            <g:checkBox name="filters[${childIndex}].filterValue"
+                                                        value="${childFacet.id}"
+                                                        checked="${checked}"
+                                                        class="${formName}_Chk"/> ${childFacet.id}${childFacet.value >= 0 ? " (${childFacet.value})" : ""}
+                                        </label>
+                                        <g:hiddenField name="filters[${childIndex}].filterName"
+                                                       value="${parentFacet.id}"/>
+                                        <g:set var="childIndex" value="${childIndex + 1}"/>
+                                    </g:if>
+                                    <g:if test="${counter >= 4 && childSize > 5 && counter == childSize - 1}">
+                                        </div>
+                                    </g:if>
                                 </g:if>
                             </g:each>
                             <g:if test="${childSize > 5}">
@@ -62,7 +67,7 @@
                             </g:if>
 
                         %{--Add all the filters that were selected in the preceding search but didn't come back in the facets--}%
-                            <g:each in="${appliedFilters?.appliedFiltersNotInFacetsGrouped?.get(parentFacet.id) ?: []}"
+                            <g:each in="${appliedFilters?.appliedFiltersNotInFacetsGrouped?.get(Facet.VALUE_TO_FACET_TRANSLATION_MAP[parentFacet.id.trim()] ?: parentFacet.id.trim()) ?: []}"
                                     var="filter">
                                 <label class="checkbox">
                                     <g:checkBox name="filters[${childIndex}].filterValue" value="${filter.filterValue}"
