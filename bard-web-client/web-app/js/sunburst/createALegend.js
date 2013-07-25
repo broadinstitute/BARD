@@ -1,4 +1,11 @@
-var createALegend = function (legendWidth, legendHeight, numberOfDivisions, colorScale, domSelector, minimumValue, maximumValue) {
+var createALegend = function (legendWidth,
+                              legendHeight,
+                              numberOfDivisions,
+                              colorScale,
+                              domSelector,
+                              minimumValue,
+                              maximumValue) {
+
     var  numberOfTics = 10,
         dynamicRange = maximumValue - minimumValue;
 
@@ -11,7 +18,7 @@ var createALegend = function (legendWidth, legendHeight, numberOfDivisions, colo
         .attr("class", "legendHolder")
         .html('<br />Color assignment:<br /> x = active / <br />(active + inactive)');
 
-    rootLegendHolder.append('hr')
+   rootLegendHolder.append('hr')
         .attr("width", '100%')
         .attr("color", '#000');
 
@@ -22,7 +29,7 @@ var createALegend = function (legendWidth, legendHeight, numberOfDivisions, colo
         rootLegendHolder.append('div')
             .attr('class', 'legendExplanation')
             .html('Dynamic range is 0.   All arcs had value <strong>'+maximumValue+'</strong> and the color scheme is therefore constant.');
-    }
+    };
 
 
     var nonzeroDynamicRange = function (numberOfTics,rootLegendHolder,legendWidth,legendHeight,colorScale,numberOfDivisions) {
@@ -64,15 +71,21 @@ var createALegend = function (legendWidth, legendHeight, numberOfDivisions, colo
                 else
                     return '';
             });
-    }
+    };
 
     // Finally build the rest of the legends depending on whether the dynamic range
     //  is 0 or nonzero
     if (dynamicRange === 0) {
-        zeroDynamicRange(rootLegendHolder,maximumValue);
-
+        zeroDynamicRange(rootLegendHolder,
+                         maximumValue);
     } else {
-        nonzeroDynamicRange (numberOfTics,rootLegendHolder,legendWidth,legendHeight,colorScale,numberOfDivisions);
-
+        nonzeroDynamicRange ( numberOfTics,
+                              rootLegendHolder,
+                              legendWidth,
+                              legendHeight,
+                              colorScale,
+                              numberOfDivisions );
     }
+
+    return rootLegendHolder;
 }
