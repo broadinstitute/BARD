@@ -337,4 +337,46 @@ class BuildElementPathsServiceSpec extends Specification {
         exception.nextTopElementHierarchy == eh0
     }
 
+    void "test does not contained retired element"() {
+        setup:
+        ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        eh0.childElement.elementStatus = ElementStatus.Retired
+
+        when:
+        Set<ElementAndFullPath> result = service.buildAll()
+
+        then:
+        result != null
+        result.size() == 1
+        result.iterator().next().element.equals(eh0.parentElement)
+    }
+
+    void "test contains retired element()"() {
+        setup:
+        ElementHierarchy eh0 = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+        eh0.childElement.elementStatus = ElementStatus.Retired
+        BuildElementPathsService retiredService = new BuildElementPathsService("subClassOf", "/", true)
+
+        when:
+        Set<ElementAndFullPath> result = retiredService.buildAll()
+        assert result != null
+        assert result.size() == 2
+
+        ElementAndFullPath parentPath = null
+        ElementAndFullPath childPath = null
+        for (ElementAndFullPath eafp : result) {
+            if (eafp.element.equals(eh0.parentElement)) {
+                parentPath = eafp
+            } else if (eafp.element.equals(eh0.childElement)) {
+                childPath = eafp
+            }
+        }
+
+
+        then:
+        parentPath != null
+        parentPath.path.size() == 0
+        childPath != null
+        childPath.path.size() == 1
+    }
 }

@@ -13,19 +13,24 @@
 </head>
 
 <body>
-<g:each in="${list}" var="elementAndPath">
-    <g:form name="elementEditForm" url="[controller: 'element', action: 'update']">
-        <g:textField name="newPathString" value="${elementAndPath.toString()}" size="${maxPathLength}"/>
-        <sec:ifAnyGranted roles="ROLE_CURATOR">
-            <g:submitButton name="submitButtonName" value="Do it!"/>
-        </sec:ifAnyGranted>
-        <br/>
+<sec:ifAnyGranted roles="ROLE_CURATOR">
+    <h1>Edit BARD Ontology</h1>
+    <table>
+        <g:each in="${list}" var="elementAndPath">
+            <tr>
+                <g:form name="elementEditForm" url="[controller: 'element', action: 'update']">
+                    <td>
+                        <g:textField name="newPathString" value="${elementAndPath}" size="${maxPathLength}"/>
+                    </td>
 
-        <g:hiddenField name="elementId" value="${elementAndPath.element.id}"/>
-        <g:each in="${elementAndPath.path}" status="index" var="elementHierarchy">
-            <g:hiddenField name="elementHierarchyIdList[${index}]" value="${elementHierarchy.id}"/>
+                    <g:hiddenField name="elementId" value="${elementAndPath.element.id}"/>
+                    <g:each in="${elementAndPath.path}" status="index" var="elementHierarchy">
+                        <g:hiddenField name="elementHierarchyIdList[${index}]" value="${elementHierarchy.id}"/>
+                    </g:each>
+                </g:form>
+            </tr>
         </g:each>
-    </g:form>
-</g:each>
+    </table>
+</sec:ifAnyGranted>
 </body>
 </html>

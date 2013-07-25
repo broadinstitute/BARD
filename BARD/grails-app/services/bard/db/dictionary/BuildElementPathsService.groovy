@@ -11,13 +11,19 @@ class BuildElementPathsService {
 
     final String pathDelimeter
 
+    final boolean includeRetiredElements
+
     /**
      * @param relationshipType    specify the relationshipType to be used when querying ElementHierarchy
      * @param pathDelimeter       delimeter to be used to separate elements within a path string
+     * @param includeRetiredElements    flag indicating whether the paths should be built including elements that
+     *                                  have status of Retired
      */
-    public BuildElementPathsService(String relationshipType = "subClassOf", String pathDelimeter = "/") {
+    public BuildElementPathsService(String relationshipType = "subClassOf", String pathDelimeter = "/",
+                                    boolean includeRetiredElements = false) {
         this.relationshipType = relationshipType
         this.pathDelimeter = pathDelimeter
+        this.includeRetiredElements = includeRetiredElements
     }
 
     /**
@@ -62,6 +68,24 @@ class BuildElementPathsService {
         List<Element> elementList = Element.findAll()
         for (Element element : elementList) {
             result.addAll(build(element))
+        }
+
+        if (! includeRetiredElements) {
+            Iterator<ElementAndFullPath> iter = result.iterator()
+            while (iter.hasNext()) {
+                ElementAndFullPath elementAndFullPath = iter.next()
+
+                if (elementAndFullPath.element.elementStatus.equals(ElementStatus.Retired)) {
+                    iter.remove()
+                } else {
+                    for (ElementHierarchy eh : elementAndFullPath.path) {
+                        if (eh.parentElement.elementStatus.equals(ElementStatus.Retired)) {
+                            iter.remove()
+                            break
+                        }
+                    }
+                }
+            }
         }
 
         return result
