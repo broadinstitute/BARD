@@ -31,16 +31,16 @@ public class Facet extends JsonUtil {
             'biology': new FacetToValueTranslationDTO(label: 'biology', displayOrder: 0), //hide 'biology'
             'target_name_process': new FacetToValueTranslationDTO(label: 'biological_process', displayOrder: 5), //rename 'target_name_process' to 'biological process'
             'target_name_protein': new FacetToValueTranslationDTO(label: 'target_protein', displayOrder: 6), //rename 'target_name_protein' to 'target protein'
-            'target_name_gene': new FacetToValueTranslationDTO(label: 'target_gene', displayOrder: 7), //rename 'target_name_gene' to 'target_gene'
-            'class_name': new FacetToValueTranslationDTO(label: 'panther_db_protein_class', displayOrder: 8) //rename 'class_name' to 'panther_DB_protein_class'
+            'target_name_gene': new FacetToValueTranslationDTO(label: 'target_gene', displayOrder: 7) //rename 'target_name_gene' to 'target_gene'
+//            'class_name': new FacetToValueTranslationDTO(label: 'panther_db_protein_class', displayOrder: 8) //rename 'class_name' to 'panther_DB_protein_class'
     ]
 
     public static final Map<String, String> VALUE_TO_FACET_TRANSLATION_MAP = [
             'kegg_disease_category': 'kegg_disease_cat',
             'biological_process': 'target_name_process',
             'target_protein': 'target_name_protein',
-            'target_gene': 'target_name_gene',
-            'panther_db_protein_class': 'class_name'
+            'target_gene': 'target_name_gene'
+//            'panther_db_protein_class': 'class_name'
     ]
 
     @JsonProperty("counts")
