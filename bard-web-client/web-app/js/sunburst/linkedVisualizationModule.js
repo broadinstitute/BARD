@@ -549,7 +549,9 @@ var linkedVisualizationModule = (function () {
                     .style('opacity', '1');
                 if (linkedVizData.retrieveCurrentHierarchicalData(expandedButtonNum).children !== undefined) {
                     createASunburst(1000, 1000, 5, 1000, continuousColorScale, 'div#sunburstdiv', linkedVizData.cid(), expandedButtonNum);
-                    createALegend(120, 200, 100, continuousColorScale, 'div#legendGoesHere', minimumValue, maximumValue);
+                    var minMaxHolder = linkedVizData.findMinimumAndMaximumRatiosForColoring(linkedVizData.filteredHierarchyData(expandedButtonNum));
+                    createALegend(120, 200, 100, continuousColorScale, 'div#legendGoesHere', minMaxHolder.minimum, minMaxHolder.maximum);
+//                    createALegend(120, 200, 100, continuousColorScale, 'div#legendGoesHere', 0, 1);
                     d3.selectAll('#suburst_container').style('pointer-events', null);
                 } else {
                     d3.select('div#sunburstdiv')
