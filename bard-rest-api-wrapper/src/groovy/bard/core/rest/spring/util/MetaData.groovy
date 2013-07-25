@@ -114,12 +114,27 @@ public class MetaData extends JsonUtil {
     Collection<Value> facetsToValues() {
         Collection<Value> values = []
         for (Facet facet : this.facets) {
-            Value value = facet.toValue()
+            Value value = facet.toValueWithTranslation()
             if (value) {
                 values.add(value)
             }
         }
-        return values.sort();
+        //Sort any two values based on the their displayOrder child (Value), if they have one.
+        return values.sort { Value lhs, Value rhs ->
+            Integer lhsDisplayOrder = lhs.children.find { Value child -> child.id == 'displayOrder' }?.value
+            Integer rhsDisplayOrder = rhs.children.find { Value child -> child.id == 'displayOrder' }?.value
+            if (lhsDisplayOrder && rhsDisplayOrder) {
+                return lhsDisplayOrder <=> rhsDisplayOrder
+            } else if (lhsDisplayOrder || rhsDisplayOrder) {//if one has a displayOder but the other one doesn't, return the one with the displayOrder as first.
+                if (lhsDisplayOrder) {
+                    return 1
+                } else {
+                    return -1
+                }
+            }
+            //If neither has a displayOrder, sort alphabetically by value's label.
+            return lhs.id <=> rhs.id
+        }
     }
 
 }
