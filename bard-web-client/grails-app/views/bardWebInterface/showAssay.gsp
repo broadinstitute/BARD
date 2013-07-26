@@ -32,6 +32,9 @@
                 <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>6.4 Publications</a>
                 </li>
                 <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>6.5 External URLS</a></li>
+                <li>Search external sites for related:
+                    <g:render template="externalSearchLinks" model="[contexts: assayAdapter.annotations.contexts]"/>
+                </li>
             </ul>
         </div>
 
