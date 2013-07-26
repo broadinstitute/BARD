@@ -4,7 +4,7 @@
     <r:require modules="core,bootstrap"/>
     <meta name="layout" content="basic"/>
     <link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap-plus.css')}" type="text/css">
-    <title>BARD: Catalog of Assay Protocols</title>
+    <title>CAP - Catalog of Assay Protocols</title>
 </head>
 
 <body>
@@ -17,15 +17,22 @@
     </div>
 </div>
 
+
+
 <div class="row-fluid">
+    <a href="http://www.neuinfo.org/">
+        <img src="http://neuinfo.org/images/registered-with-nif.png" alt="Registered with NIF" width="125" height="40" style="border:none;" />
+    </a>
+
     <div class="span8 offset2">
         <p>CAP allows you to define assays, which can subsequently be used to upload data into the BioAssay Research Database (BARD).
         There are several ways you can create a new assay: <br/>
-            You may wish to create a new assay from scratch.<br/>
-            You can find an existing assay to clone and then modify**  <br/>
-            You may wish to view favorite assays that you previously created or found, to clone and modify** <br/> <br/>
-
-            You might find it helpful to [read about assay terminology in more detail] <br/><br/>
+        <ul>
+            <li>You may wish to create a new assay from scratch.</li>
+            <li>You can find an existing assay to clone and then modify**</li>
+            <li>You may wish to view favorite assays that you previously created or found, to clone and modify**</li>
+        </ul>
+        You might find it helpful to [read about assay terminology in more detail] <br/><br/>
 
             ** If you find an existing assay that matches your experiment, no need to clone and modify and create a new assay!
             You can proceed to upload data against it immediately. <br/>
