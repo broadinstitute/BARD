@@ -379,4 +379,110 @@ class BuildElementPathsServiceSpec extends Specification {
         childPath != null
         childPath.path.size() == 1
     }
+
+    void "test findDictionaries"() {
+        setup:
+        Element dict = Element.build();
+        dict.id = BuildElementPathsService.bardDictionaryElementId
+        dict.save()
+        ElementHierarchy eh0 = buildElementHierarchy(dict, Element.build(), "fake")
+        buildElementHierarchy(Element.build(), Element.build(), "fake")
+
+        when:
+        Set<Element> result = BuildElementPathsService.findDictionaries(dict)
+
+        then:
+        result != null
+        result.size() == 1
+        result.iterator().next().equals(eh0.childElement)
+    }
+
+    void "test findDictionaryHierarchiesToExclude"() {
+        setup:
+        Element dict = Element.build();
+        dict.id = BuildElementPathsService.bardDictionaryElementId
+        dict.save()
+
+        ElementHierarchy eh0 = buildElementHierarchy(dict, Element.build(), "fake")
+        buildElementHierarchy(Element.build(), eh0.childElement, "fake")
+
+        Set<Element> dictionaries = BuildElementPathsService.findDictionaries(dict)
+
+        when:
+        Set<ElementHierarchy> result = BuildElementPathsService.findDictionaryHierarchiesToExclude(dict, dictionaries)
+
+        then:
+        assert result != null
+        assert result.size() == 1
+        println(result)
+    }
+
+    void "test removeInvalidDictionaryPaths"() {
+        Element dict = Element.build(id: BuildElementPathsService.bardDictionaryElementId);
+        dict.label = "Dictionaries"
+        dict.save()
+
+        ElementHierarchy eh0 = buildElementHierarchy(dict, Element.build(label: "example dictionary"), service.relationshipType)
+
+        ElementHierarchy dictEntryEh =
+            buildElementHierarchy(eh0.childElement, Element.build(label: "example dictionary element"), service.relationshipType)
+
+        ElementHierarchy coreEh = buildElementHierarchy(Element.build(label: "core"), eh0.childElement, service.relationshipType)
+
+        BuildElementPathsService dictService = new BuildElementPathsService()
+
+        Set<ElementAndFullPath> eafpSet = new HashSet<ElementAndFullPath>()
+
+        ElementAndFullPath keeper = new ElementAndFullPath()
+        keeper.element = dictEntryEh.childElement
+        keeper.path.add(eh0)
+        keeper.path.add(dictEntryEh)
+        println(keeper)
+        eafpSet.add(keeper)
+
+        ElementAndFullPath toBeRemoved = new ElementAndFullPath()
+        toBeRemoved.element = dictEntryEh.childElement
+        toBeRemoved.path.add(coreEh)
+        toBeRemoved.path.add(dictEntryEh)
+        println(toBeRemoved)
+        eafpSet.add(toBeRemoved)
+
+        when:
+        dictService.removeInvalidDictionaryPaths(eafpSet)
+
+        then:
+        assert eafpSet.size() == 1
+        eafpSet.iterator().next().equals(keeper)
+    }
+
+    void "test buildAll with excluded dictionary paths"() {
+        setup:
+        Element dict = Element.build(id: BuildElementPathsService.bardDictionaryElementId);
+        dict.label = "Dictionaries"
+        dict.save()
+
+        ElementHierarchy eh0 = buildElementHierarchy(dict, Element.build(label: "example dictionary"), service.relationshipType)
+
+        ElementHierarchy dictEntryEh =
+            buildElementHierarchy(eh0.childElement, Element.build(label: "example dictionary element"), service.relationshipType)
+
+        buildElementHierarchy(Element.build(label: "core"), eh0.childElement, service.relationshipType)
+
+        BuildElementPathsService dictService = new BuildElementPathsService()
+
+        when:
+        Set<ElementAndFullPath> result = dictService.buildAll()
+
+        then:
+        int dictEntryCount = 0
+        for (ElementAndFullPath eafp : result) {
+            if (eafp.element.equals(dictEntryEh.childElement)) {
+                dictEntryCount++
+            }
+
+            println(eafp)
+        }
+        assert 1 == dictEntryCount
+
+    }
 }

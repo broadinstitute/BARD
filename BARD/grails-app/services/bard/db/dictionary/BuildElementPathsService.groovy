@@ -13,6 +13,12 @@ class BuildElementPathsService {
 
     final boolean includeRetiredElements
 
+    final static Long bardDictionaryElementId = 893
+
+    Set<ElementHierarchy> dictionaryHierarchiesToExclude
+
+    Set<Element> dictionarySet
+
     /**
      * @param relationshipType    specify the relationshipType to be used when querying ElementHierarchy
      * @param pathDelimeter       delimeter to be used to separate elements within a path string
@@ -24,7 +30,28 @@ class BuildElementPathsService {
         this.relationshipType = relationshipType
         this.pathDelimeter = pathDelimeter
         this.includeRetiredElements = includeRetiredElements
+
+        dictionarySet = null
+        dictionaryHierarchiesToExclude = null
     }
+
+    void initializeDictionarySetsIfNeeded() {
+        if (null == dictionarySet) {
+            Element dictionaryRoot = Element.findById(bardDictionaryElementId)
+            if (dictionaryRoot) {
+                //retrieve all element hierarchy to reduce database round trips
+                ElementHierarchy.findAll()
+
+                dictionarySet = findDictionaries(dictionaryRoot)
+                dictionaryHierarchiesToExclude = findDictionaryHierarchiesToExclude(dictionaryRoot, dictionarySet)
+            } else {
+                dictionarySet = new HashSet<Element>()
+                dictionaryHierarchiesToExclude = new HashSet<ElementHierarchy>()
+            }
+        }
+    }
+
+
 
     /**
      * create a list of all the full paths (possible paths through the ElementHierarchy graph) for all the elements in
@@ -64,10 +91,22 @@ class BuildElementPathsService {
 
         //retrieve all element hierarchy to reduce database round trips
         ElementHierarchy.findAll()
+        initializeDictionarySetsIfNeeded()
 
         List<Element> elementList = Element.findAll()
         for (Element element : elementList) {
-            result.addAll(build(element))
+            Set<ElementAndFullPath> elementAndFullPathSet = build(element)
+
+            //if this is an element of dictionary
+            boolean isDictionaryChild = false
+            for (ElementHierarchy childHierarchy : element.childHierarchies) {
+                isDictionaryChild = isDictionaryChild || dictionarySet.contains(childHierarchy.parentElement)
+            }
+            if (isDictionaryChild) {
+                removeInvalidDictionaryPaths(elementAndFullPathSet)
+            }
+
+            result.addAll(elementAndFullPathSet)
         }
 
         if (! includeRetiredElements) {
@@ -90,6 +129,7 @@ class BuildElementPathsService {
 
         return result
     }
+
     /**
      * Display all of the paths as a csv String
      *
@@ -98,6 +138,8 @@ class BuildElementPathsService {
      * @return
      */
     String buildSinglePath(final Element element){
+        initializeDictionarySetsIfNeeded()
+
         Set<ElementAndFullPath> paths = build(element)
         List<String> pathMessage = []
         for(ElementAndFullPath elementAndFullPath: paths){
@@ -122,7 +164,9 @@ class BuildElementPathsService {
      * @return
      * @throws BuildElementPathsServiceLoopInPathException
      */
-    Set<ElementAndFullPath> build(Element element) throws BuildElementPathsServiceLoopInPathException {
+    Set<ElementAndFullPath> build(Element element)
+            throws BuildElementPathsServiceLoopInPathException {
+
         Set<ElementAndFullPath> result = new HashSet<ElementAndFullPath>()
 
         Set<ElementHierarchy> elementHierarchySet = buildSetThatMatchRelationship(element.childHierarchies)
@@ -214,6 +258,56 @@ class BuildElementPathsService {
         return result
     }
 
+
+    void removeInvalidDictionaryPaths(Set<ElementAndFullPath> elementAndFullPathSet) {
+        Iterator<ElementAndFullPath> iterator = elementAndFullPathSet.iterator()
+
+        while (iterator.hasNext()) {
+            ElementAndFullPath elementAndFullPath = iterator.next()
+
+            ListIterator<ElementHierarchy> elementHierarchyIterator = elementAndFullPath.path.listIterator(elementAndFullPath.path.size())
+            boolean found = false
+            while (! found && elementHierarchyIterator.hasPrevious()) {
+                if (dictionaryHierarchiesToExclude.contains(elementHierarchyIterator.previous())) {
+                    iterator.remove()
+                    found = true
+                }
+            }
+        }
+    }
+
+    static Set<ElementHierarchy> findDictionaryHierarchiesToExclude(Element dictionaryRoot, Set<Element> dictionaries) {
+        Set<ElementHierarchy> result = new HashSet<ElementHierarchy>()
+
+//        result.addAll(ElementHierarchy.withCriteria({
+//            inList("childElement", dictionaries)
+//            not {
+//                eq("parentElement", dictionaryRoot)
+//            }
+//        }))
+
+        for (Element dictionary : dictionaries) {
+            for (ElementHierarchy childHierarchy : dictionary.childHierarchies) {
+                if (! childHierarchy.parentElement.equals(dictionaryRoot)) {
+                    result.add(childHierarchy)
+                }
+            }
+        }
+
+
+        return result
+    }
+
+    static Set<Element> findDictionaries(Element dictionaryRoot) {
+        Set<Element> result = new HashSet<Element>()
+
+        for (ElementHierarchy dictionaryHierarchy : dictionaryRoot.parentHierarchies) {
+            result.add(dictionaryHierarchy.childElement)
+        }
+
+        return result
+    }
+
     private class PathAndElementHierarchyPair {
         ElementHierarchy elementHierarchy
         ElementAndFullPath elementAndFullPath
@@ -223,6 +317,15 @@ class BuildElementPathsService {
 class BuildElementPathsServiceLoopInPathException extends Exception {
     ElementHierarchy nextTopElementHierarchy
     ElementAndFullPath elementAndFullPath
+}
+
+class DictionariesAndCores {
+    final List<ElementAndFullPathListAndMaxPathLength> dictionaryList
+    final ElementAndFullPathListAndMaxPathLength core
+
+    DictionariesAndCores() {
+        dictionaryList = new LinkedList<ElementAndFullPathListAndMaxPathLength>()
+    }
 }
 
 class ElementAndFullPathListAndMaxPathLength {
