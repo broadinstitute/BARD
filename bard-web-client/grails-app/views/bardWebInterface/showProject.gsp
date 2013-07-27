@@ -41,10 +41,6 @@
                     </a>
                     </li>
                 </g:if>
-
-                <li>External links:
-                    <g:render template="externalSearchLinks" model="[contexts: projectAdapter.annotations.contexts]"/>
-                </li>
             </ul>
         </div>
 
