@@ -53,11 +53,6 @@ class PubchemImportService {
             throw new RuntimeException("Exception while creating measures", ex)
         }
 
-        // recreating measures
-        //ExternalReference.withSession { session ->
-        //    session.flush()
-        //    session.clear()
-        //}
         ref = ExternalReference.findByExtAssayRef("aid=${aid}")
 
         def pubchemFile = "${pubchemFileDir}/${aid}.csv"
@@ -78,16 +73,16 @@ class PubchemImportService {
         options.writeResultsToDb = false
         options.skipExperimentContexts = true
         ResultsService.ImportSummary results = resultsService.importResults(ref.experiment.id, new FileInputStream(capFile), options)
-        log.error("errors from loading ${aid}: ${results.errors.size()}")
+        log.info("errors from loading ${aid}: ${results.errors.size()}")
         for(e in results.errors) {
-            log.error("\t${e}")
+            log.info("\t${e}")
         }
 
         if(results.errors.size() > 0) {
             log.error("failed to load: ${aid}")
         } else {
-            log.error("successfully loaded: ${aid}")
-            log.error("imported: ${results.resultsCreated} results")
+            log.info("successfully loaded: ${aid}")
+            log.info("imported: ${results.resultsCreated} results")
         }
 
         return results;
