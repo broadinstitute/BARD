@@ -13,10 +13,12 @@ import bard.db.registration.ExternalReference
 import bard.db.registration.Measure
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.hibernate.classic.Session
 import org.hibernate.jdbc.Work
 
 import java.sql.Connection
+import java.sql.DriverManager
 import java.sql.SQLException
 import java.util.regex.Pattern
 
@@ -30,13 +32,15 @@ import java.util.regex.Pattern
 class PubchemReformatService {
     static final int SCREENING_CONCENTRATION_ID = 971;
 
+    GrailsApplication grailsApplication;
+
     static class MissingColumnsException extends RuntimeException {
         MissingColumnsException(String s) {
             super(s)
         }
     }
 
-    final static Map<String,String> pubchemOutcomeTranslation = new HashMap();
+    final static Map<String, String> pubchemOutcomeTranslation = new HashMap();
     static {
         pubchemOutcomeTranslation.put("1", "Inactive");
         pubchemOutcomeTranslation.put("2", "Active");
@@ -64,7 +68,7 @@ class PubchemReformatService {
         String qualifierTid
 
         Set<ResultMapContextColumn> contextItemColumns = [] as Set;
-        Map<String,String> staticContextItems = [:];
+        Map<String, String> staticContextItems = [:];
 
         @Override
         public String toString() {
@@ -90,32 +94,32 @@ class PubchemReformatService {
         int columnCount;
         Map<String, Integer> nameToIndex = [:];
 
-        CapCsvWriter(Long experimentId, Map<String,String> experimentContextItems, List<String> dynamicColumns, Writer rawWriter) {
+        CapCsvWriter(Long experimentId, Map<String, String> experimentContextItems, List<String> dynamicColumns, Writer rawWriter) {
             writer = new CSVWriter(rawWriter)
             columnCount = dynamicColumns.size()
-            for(int i=0;i<columnCount;i++) {
+            for (int i = 0; i < columnCount; i++) {
                 nameToIndex.put(dynamicColumns[i], i)
             }
 
-            writer.writeNext(["","Experiment ID",experimentId.toString()].toArray(new String[0]))
+            writer.writeNext(["", "Experiment ID", experimentId.toString()].toArray(new String[0]))
             experimentContextItems.each { k, v ->
-                writer.writeNext(["",k,v].toArray(new String[0]))
+                writer.writeNext(["", k, v].toArray(new String[0]))
             }
             writer.writeNext([].toArray(new String[0]))
-            List header = ["Row #","Substance","Replicate #","Parent Row #"]
+            List header = ["Row #", "Substance", "Replicate #", "Parent Row #"]
             header.addAll(dynamicColumns)
             writer.writeNext(header.toArray(new String[0]))
         }
 
-        int addRow(Long substanceId, Integer parentRow, String replicate, Map<String,String> row) {
+        int addRow(Long substanceId, Integer parentRow, String replicate, Map<String, String> row) {
             rowCount++;
             int rowNumber = rowCount;
 
             List<String> cols = new ArrayList()
-            for(int i=0;i<columnCount;i++)
+            for (int i = 0; i < columnCount; i++)
                 cols.add("")
 
-            row.each{ k, v ->
+            row.each { k, v ->
                 if (v != null && !(v instanceof String)) {
                     throw new RuntimeException("${k} -> ${v} but has class ${v.getClass()}")
                 }
@@ -143,23 +147,23 @@ class PubchemReformatService {
         Collection<String> tids;
         Collection<ResultMapRecord> allRecords;
 
-        public ResultMap(String aid, Collection<ResultMapRecord> rs, Set tids=null) {
+        public ResultMap(String aid, Collection<ResultMapRecord> rs, Set tids = null) {
             this.aid = aid;
             records = rs.groupBy { makeLabel(it.resultType, it.statsModifier) }
-            recordsByParentTid = rs.groupBy {it.parentTid}
-            
-            if(tids == null) {
-            tids = [] as Set
-            rs.each {
-                tids.add(it.tid)
-                tids.add(it.qualifierTid)
-                it.contextItemColumns.each {
+            recordsByParentTid = rs.groupBy { it.parentTid }
+
+            if (tids == null) {
+                tids = [] as Set
+                rs.each {
                     tids.add(it.tid)
                     tids.add(it.qualifierTid)
+                    it.contextItemColumns.each {
+                        tids.add(it.tid)
+                        tids.add(it.qualifierTid)
+                    }
                 }
             }
-            }
-	    this.tids = tids
+            this.tids = tids
 
             allRecords = new ArrayList(rs);
             allRecords.sort { Integer.parseInt(it.tid) }
@@ -170,7 +174,7 @@ class PubchemReformatService {
         }
 
         public int getNumberOfCustomColumns() {
-            return (allRecords.findAll {it.tid > 0}).size()
+            return (allRecords.findAll { it.tid > 0 }).size()
         }
 
         public boolean hasTid(String tid) {
@@ -180,24 +184,23 @@ class PubchemReformatService {
         /**
          * construct a list of CAP result rows for the given resultType, statsModifier and the parentTid
          */
-        List<Map<String,String>> getValues(Map<String,String> pubchemRow, String resultType, String statsModifier, String parentTid) {
-            List<Map<String,String>> rows = []
+        List<Map<String, String>> getValues(Map<String, String> pubchemRow, String resultType, String statsModifier, String parentTid) {
+            List<Map<String, String>> rows = []
             String label = makeLabel(resultType, statsModifier)
             Collection<ResultMapRecord> records = records.get(label).findAll { it.parentTid == parentTid }
 
             // each record represents a column in the pubchem file
             // loop through all the child columns of the given parent (parentTid)
-            for(record in records) {
-                Map<String,String> kvs = ["Replicate #": record.series?.toString(), "TID": record.tid]
+            for (record in records) {
+                Map<String, String> kvs = ["Replicate #": record.series?.toString(), "TID": record.tid]
 
                 // get the value for the current column (record) in the current row (pubchemRow)
 //                println("looking for pubchemRow[${record.tid}] = ${pubchemRow[record.tid]}")
                 String measureValue = pubchemRow[record.tid]
 
-                if (measureValue != null && measureValue.length() > 0)
-                {
+                if (measureValue != null && measureValue.length() > 0) {
                     if (record.qualifierTid != null) {
-                        measureValue = pubchemRow[record.qualifierTid]+measureValue
+                        measureValue = pubchemRow[record.qualifierTid] + measureValue
                     }
                     kvs[label] = measureValue
                     addContextValues(pubchemRow, record, kvs)
@@ -209,12 +212,12 @@ class PubchemReformatService {
             return rows
         }
 
-        void addContextValues(Map<String,String> pubchemRow,ResultMapRecord record, Map<String,String> kvs) {
-            for(staticItem in record.staticContextItems.entrySet()) {
+        void addContextValues(Map<String, String> pubchemRow, ResultMapRecord record, Map<String, String> kvs) {
+            for (staticItem in record.staticContextItems.entrySet()) {
                 kvs[staticItem.key] = staticItem.value
             }
 
-            for(columnItem in record.contextItemColumns) {
+            for (columnItem in record.contextItemColumns) {
                 String value = pubchemRow[columnItem.tid]
                 if (columnItem.qualifierTid != null) {
                     value = pubchemRow[columnItem.qualifierTid] + value;
@@ -237,7 +240,7 @@ class PubchemReformatService {
         return resultType
     }
 
-    boolean memoizedHasNonBlankChild(Map<String,String> pubchemRow, ResultMap map, String tid, Map cache, Set seen) {
+    boolean memoizedHasNonBlankChild(Map<String, String> pubchemRow, ResultMap map, String tid, Map cache, Set seen) {
         if (cache.containsKey(tid)) {
             return cache[tid];
         }
@@ -251,7 +254,7 @@ class PubchemReformatService {
         if (!StringUtils.isBlank(pubchemRow[tid])) {
             found = true;
         } else {
-            for(record in map.getChildRecords(tid)) {
+            for (record in map.getChildRecords(tid)) {
                 if (memoizedHasNonBlankChild(pubchemRow, map, record.tid, cache, seen)) {
                     found = true;
                     break;
@@ -266,30 +269,30 @@ class PubchemReformatService {
     /**
      * modify the pubchemRow to include a NA for all elements that are blank _BUT_ there is a non-blank child
      */
-    void naMissingValues(Map<String,String> pubchemRow, ResultMap map) {
+    void naMissingValues(Map<String, String> pubchemRow, ResultMap map) {
         List needsNa = []
         Map cache = [:]
-        map.getTids().each {tid ->
+        map.getTids().each { tid ->
             def v = pubchemRow[tid]
             if (StringUtils.isBlank(v) && memoizedHasNonBlankChild(pubchemRow, map, tid, cache, new HashSet())) {
                 needsNa.add(tid)
             }
         }
 
-        for(key in needsNa) {
+        for (key in needsNa) {
             pubchemRow[key] = "NA"
         }
     }
 
-    void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String,String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
-//        println("convertRow: ${measures.collect { it.measure.resultType}}, ${parentRow}, ${parentTid}")
-        for(expMeasure in measures) {
+    void convertRow(Collection<ExperimentMeasure> measures, Long substanceId, Map<String, String> pubchemRow, ResultMap map, CapCsvWriter writer, Integer parentRow, String parentTid) {
+        //println("convertRow: ${measures.collect { it.measure.resultType.label } }, ${parentRow}, ${parentTid}")
+        for (expMeasure in measures) {
             String resultType = expMeasure.measure.resultType.label
             String statsModifier = expMeasure.measure.statsModifier?.label
 
             List rows = map.getValues(pubchemRow, resultType, statsModifier, parentTid)
 //            println("Rows: ${rows}")
-            for(row in rows) {
+            for (row in rows) {
                 int rowNumber = writer.addRow(substanceId, parentRow, row["Replicate #"], row)
 
                 convertRow(expMeasure.childMeasures, substanceId, pubchemRow, map, writer, rowNumber, row["TID"])
@@ -305,7 +308,7 @@ class PubchemReformatService {
             colNames.add(makeLabel(it.measure.resultType.label, it.measure.statsModifier?.label))
             // add context items
             it.measure.assayContextMeasures.each {
-                it.assayContext.assayContextItems.findAll { it.attributeType != AttributeType.Fixed } .each {
+                it.assayContext.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.each {
                     colNames.add(it.attributeElement.label)
                 }
             }
@@ -319,13 +322,13 @@ class PubchemReformatService {
      */
     public ResultMap convertToResultMap(String aid, List rows) {
         Map byTid = [:]
-        List<ResultMapRecord>  records = [];
+        List<ResultMapRecord> records = [];
         Set<String> unusedTids = new HashSet();
         Set<String> tids = new HashSet()
 
         // Keep track which TIDs we've used for something
-        for(row in rows) {
-	    tids.add(row.TID.toString())
+        for (row in rows) {
+            tids.add(row.TID.toString())
             unusedTids.add(row.TID.toString())
 
             if (row.EXCLUDED_POINTS_SERIES_NO != null || row.CONTEXTITEM == "do not import") {
@@ -335,11 +338,11 @@ class PubchemReformatService {
         }
 
         // first pass: create all the items for result types
-        for(row in rows) {
+        for (row in rows) {
             if (row.RESULTTYPE != null) {
-                if( !( row.CONTEXTTID == null || row.CONTEXTTID == row.TID) ) { 
-			throw new RuntimeException("aid=${aid} tid=${row.TID} appears to be both a result type and a context item")
-		}
+                if (!(row.CONTEXTTID == null || row.CONTEXTTID == row.TID)) {
+                    throw new RuntimeException("aid=${aid} tid=${row.TID} appears to be both a result type and a context item")
+                }
                 ResultMapRecord record = new ResultMapRecord(series: row.SERIESNO,
                         tid: row.TID,
                         parentTid: row.PARENTTID?.toString(),
@@ -368,10 +371,10 @@ class PubchemReformatService {
         }
 
         //second pass: associate context columns to rows
-        for(row in rows) {
+        for (row in rows) {
             if (row.CONTEXTTID != null && row.TID != row.CONTEXTTID) {
                 assert row.RESULTTYPE == null
-                ResultMapContextColumn col = new ResultMapContextColumn( attribute: row.CONTEXTITEM, tid: row.TID, qualifierTid: row.QUALIFIERTID)
+                ResultMapContextColumn col = new ResultMapContextColumn(attribute: row.CONTEXTITEM, tid: row.TID, qualifierTid: row.QUALIFIERTID)
                 ResultMapRecord record = byTid[row.CONTEXTTID.toString()]
                 record.contextItemColumns.add(col)
 
@@ -385,14 +388,15 @@ class PubchemReformatService {
             throw new MissingColumnsException("Did not know what to do with columns with tids: ${unusedTids}")
         }
 
-	// now, finally, drop any context items for which we only have one result type.  Reason being that the transfer_result_map will
-	// create these as "fixed", so don't bother to write these context items into the new file.
-	def byLabel = records.groupBy { "${it.parentTid} ${makeLabel(it.resultType, it.statsModifier)} ${it.series}" }
-	byLabel.entrySet().findAll { it.value.size() == 1 } . each {
-		it.value[0].staticContextItems.clear()
-	}
+        // now, finally, drop any context items for which we only have one result type.  Reason being that the transfer_result_map will
+        // create these as "fixed", so don't bother to write these context items into the new file.
+        def byLabel = records.groupBy { "${it.parentTid} ${makeLabel(it.resultType, it.statsModifier)} ${it.series}" }
+        byLabel.entrySet().findAll { it.value.size() == 1 }.each {
+            it.value[0].staticContextItems.clear()
+        }
 
         ResultMap map = new ResultMap(aid, records, tids)
+        //println("map: ${map}")
         return map;
     }
 
@@ -405,15 +409,20 @@ class PubchemReformatService {
     }
 
     public ResultMap loadMap(Long aid) {
-        ResultMap map;
-        Experiment.withSession { Session session ->
-            session.doWork(new Work() {
-                void execute(Connection connection) throws SQLException {
-                    map = loadMap(connection, aid);
-                }
-            })
+        // the authoritative result map is in a different schema -- and we shouldn't
+        // be making this call often, so just create/destroy the connection on each call
+        String connectString = grailsApplication.config.bard.resultMapJdbcUrl
+        if (connectString == null) {
+            throw new RuntimeException("connectString bard.resultMapJdbcUrl is null")
         }
-        return map;
+
+        Connection connection = DriverManager.getConnection(connectString, grailsApplication.config.bard.resultMapUsername, grailsApplication.config.bard.resultMapPassword)
+        try {
+            ResultMap map = loadMap(connection, aid);
+            return map;
+        } finally {
+            connection.close();
+        }
     }
 
     public Map convertPubchemRowToMap(List<String> row, List<String> header) {
@@ -429,13 +438,13 @@ class PubchemReformatService {
         Map pubchemRow = [:]
         pubchemRow["-1"] = outcome
         pubchemRow["0"] = activity
-        for(int i=0;i<header.size();i++) {
+        for (int i = 0; i < header.size(); i++) {
             pubchemRow[header[i]] = row[i]
         }
         return pubchemRow;
     }
 
-    public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map){
+    public void convert(Experiment experiment, String pubchemFilename, String outputFilename, ResultMap map) {
         if (!map.hasTid("0"))
             throw new RuntimeException("Missing pubchem score from result map of ${map.aid}")
 
@@ -455,14 +464,20 @@ class PubchemReformatService {
 
         List<String> header = reader.readNext()
         Pattern numberPattern = Pattern.compile("\\d+")
-        for(int i=0;i<header.size();i++) {
+        for (int i = 0; i < header.size(); i++) {
             if (numberPattern.matcher(header[i]).matches() && !map.hasTid(header[i])) {
                 throw new MissingColumnsException("Result map of ${map.aid} missing tid ${header[i]}")
             }
         }
 
         Collection<ExperimentMeasure> rootMeasures = experiment.experimentMeasures.findAll { it.parent == null }
-        while(true) {
+
+//        println("----------------------------")
+//        println("all measures: ${experiment.experimentMeasures.size()}")
+//        for(m in rootMeasures)
+//            println("measure ${m.measure.resultType.label} children: ${m.childMeasures.collect {it.measure.resultType.label}}")
+
+        while (true) {
             List<String> row = reader.readNext()
             if (row == null)
                 break
@@ -477,9 +492,9 @@ class PubchemReformatService {
         writer.close()
     }
 
-    void convert(Long expId, String pubchemFilename, String outputFilename)  {
+    void convert(Long expId, String pubchemFilename, String outputFilename) {
         Experiment experiment = Experiment.get(expId)
-        ExternalReference ref = experiment.getExternalReferences().find {it.externalSystem.systemName == "PubChem"}
+        ExternalReference ref = experiment.getExternalReferences().find { it.externalSystem.systemName == "PubChem" }
         Long aid = Long.parseLong(ref.extAssayRef.replace("aid=", ""));
         ResultMap map = loadMap(aid)
         convert(experiment, pubchemFilename, outputFilename, map)
@@ -490,7 +505,7 @@ class PubchemReformatService {
         String statsModifier
         String parentChildRelationship;
         Collection<MeasureStub> children = [];
-        Map<String,Collection<String>> contextItems = [:]
+        Map<String, Collection<String>> contextItems = [:]
         Collection<String> contextItemColumns = []
 
 
@@ -533,31 +548,31 @@ class PubchemReformatService {
     public MappedStub mapStub(MeasureStub stub) {
         MappedStub mapped = new MappedStub()
         mapped.resultType = Element.findByLabel(stub.resultType)
-        if(mapped.resultType == null) {
+        if (mapped.resultType == null) {
             throw new RuntimeException("Could not find result type ${stub.resultType}")
         }
         if (stub.statsModifier) {
             mapped.statsModifier = Element.findByLabel(stub.statsModifier)
-            if(mapped.statsModifier == null)
+            if (mapped.statsModifier == null)
                 throw new RuntimeException("Could not find stats modifier ${stub.statsModifier}")
         }
 
         String relationship = stub.parentChildRelationship
-        if(relationship != null && relationship.toLowerCase() == "derives")
+        if (relationship != null && relationship.toLowerCase() == "derives")
             mapped.parentChildRelationship = HierarchyType.CALCULATED_FROM
         else
             mapped.parentChildRelationship = HierarchyType.SUPPORTED_BY
 
-        for(attribute in stub.contextItems.keySet()) {
+        for (attribute in stub.contextItems.keySet()) {
             Element attributeElement = Element.findByLabel(attribute)
-            if(attributeElement == null) {
+            if (attributeElement == null) {
                 throw new RuntimeException("Could not find element with label ${attribute}")
             }
             mapped.contextItems[attributeElement] = stub.contextItems[attribute]
         }
         mapped.contextItemColumns = stub.contextItemColumns.collect {
             Element e = Element.findByLabel(it)
-            if(e == null) {
+            if (e == null) {
                 throw new RuntimeException("Could not find element with label ${it} for contextColumn")
             }
             return e
@@ -589,28 +604,28 @@ class PubchemReformatService {
 
     MeasureStub createMeasure(Collection<ResultMapRecord> resultTypes) {
         MeasureStub measure = new MeasureStub()
-        measure.resultType = (getUniqueValue(resultTypes.collect { it.resultType } ))
-        measure.statsModifier = (getUniqueValue(resultTypes.collect { it.statsModifier } ))
-        measure.parentChildRelationship = getUniqueValue(resultTypes.collect { it.parentChildRelationship } )
+        measure.resultType = (getUniqueValue(resultTypes.collect { it.resultType }))
+        measure.statsModifier = (getUniqueValue(resultTypes.collect { it.statsModifier }))
+        measure.parentChildRelationship = getUniqueValue(resultTypes.collect { it.parentChildRelationship })
         //println("resultTypes=${resultTypes}")
-	    measure.contextItems = resultTypes.collectMany {it.staticContextItems.entrySet()}.groupBy {it.key}.collectEntries { key, value -> [key, value.collect { it.value } ]  }
+        measure.contextItems = resultTypes.collectMany { it.staticContextItems.entrySet() }.groupBy { it.key }.collectEntries { key, value -> [key, value.collect { it.value }] }
         //println("contextItems=${measure.contextItems}")
-        measure.contextItemColumns = resultTypes.collectMany { it.contextItemColumns.collect {x -> x.attribute} }
+        measure.contextItemColumns = resultTypes.collectMany { it.contextItemColumns.collect { x -> x.attribute } }
         return measure
     }
 
     Collection<MeasureAndParents> getChildMeasures(ResultMap resultMap, Collection<String> parentTids) {
         Collection<ResultMapRecord> childResultTypes = resultMap.allRecords.findAll { parentTids.contains(it.parentTid) }
-        Map uniqueResultTypes = childResultTypes.groupBy {[it.resultType, it.statsModifier]}
+        Map uniqueResultTypes = childResultTypes.groupBy { [it.resultType, it.statsModifier] }
         Collection<MeasureAndParents> children = uniqueResultTypes.values().collect { Collection<ResultMapRecord> records ->
-            new MeasureAndParents(measure: createMeasure(records), tids: records.collect { it.tid } )
+            new MeasureAndParents(measure: createMeasure(records), tids: records.collect { it.tid })
         }
         return children;
     }
 
     void addChildMeasures(ResultMap resultMap, Collection<MeasureStub> childrenDest, Collection<ResultMapRecord> children) {
         children.each { MeasureAndParents measureAndParents ->
-            childrenDest.add( measureAndParents.measure )
+            childrenDest.add(measureAndParents.measure)
             Collection<ResultMapRecord> nextChildren = getChildMeasures(resultMap, measureAndParents.tids)
             addChildMeasures(resultMap, measureAndParents.measure.children, nextChildren)
         }
@@ -641,31 +656,41 @@ class PubchemReformatService {
     // recreate experiment measures on an already existing experiment/assay (Given a ResultMap)
     void recreateMeasures(Experiment experiment, ResultMap resultMap) {
         Collection<MappedStub> newMeasures = createMeasures(resultMap).collect { mapStub(it) }
+        for(m in newMeasures)
+        //println("newMeasure: ${m.resultType.label} children: ${m.children.collect {it.resultType.label} }")
         recreateMeasures(experiment, newMeasures)
     }
 
     // recreate experiment measures on an already existing experiment/assay
     void recreateMeasures(Experiment experiment, Collection<MappedStub> newMeasures) {
         Assay assay = experiment.assay
-        Map<String,Measure> measureByKey = [:]
-        for(measure in assay.measures) {
+        Map<String, Measure> measureByKey = [:]
+        for (measure in assay.measures) {
             measureByKey[makeMeasureKey(measure)] = measure
+            //println("existing measure: ${measure.resultType.label}")
         }
+
 
         // first, make sure all of the measures we want exist
         verifyOrCreateMeasures(newMeasures, measureByKey, assay)
 
+        ExperimentMeasure.withSession { s -> s.flush() }
+
         // delete all existing experiment measures
-        for(ExperimentMeasure experimentMeasure in new ArrayList(experiment.experimentMeasures)) {
+        for (ExperimentMeasure experimentMeasure in new ArrayList(experiment.experimentMeasures)) {
             experiment.removeFromExperimentMeasures(experimentMeasure)
             experimentMeasure.delete()
         }
+
+        ExperimentMeasure.withSession { s -> s.flush() }
 
         // now, create the experiment measures anew
         createExperimentMeasures(experiment, measureByKey, newMeasures, null)
     }
 
-     private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, Measure> measureByKey, Assay assay) {
+    private void verifyOrCreateMeasures(Collection<MappedStub> newMeasures, LinkedHashMap<String, Measure> measureByKey, Assay assay) {
+        //println("verifyOrCreate: ${newMeasures.collect { [it.resultType.label, it.statsModifier?.label] } }")
+
         for (newMeasure in newMeasures) {
             String newMeasureKey = makeMeasureKey(newMeasure)
 
@@ -675,30 +700,31 @@ class PubchemReformatService {
             if (measureByKey.containsKey(newMeasureKey)) {
                 Measure existingMeasure = measureByKey[newMeasureKey]
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-			if (existingMeasure.assayContextMeasures.size() == 0) {
-	                    createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, existingMeasure)
-			} else {
-				boolean found = false;
-				for(acm in existingMeasure.assayContextMeasures) {
-                                    AssayContext context = acm.assayContext;
-                                    if(isContextCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns, context)) {
-                                         found = true;
-                                         break;
-                                    }
-				}
-				if(!found) {
-					throw new RuntimeException("Could not find context that contained ${(elementKeys + newMeasure.contextItemColumns).collect{it.label}} for ${existingMeasure.displayLabel}")
-				}
-			} 
+                    if (existingMeasure.assayContextMeasures.size() == 0) {
+                        createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, existingMeasure)
+                    } else {
+                        boolean found = false;
+                        for (acm in existingMeasure.assayContextMeasures) {
+                            AssayContext context = acm.assayContext;
+                            if (isContextCompatible(existingMeasure, elementKeys + newMeasure.contextItemColumns, context)) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            throw new RuntimeException("Could not find context that contained ${(elementKeys + newMeasure.contextItemColumns).collect { it.label }} for ${existingMeasure.displayLabel}")
+                        }
+                    }
                 }
             } else {
+                //println("creating new measure for ${newMeasure.resultType.label}")
                 // create a new measure on this assay
                 Measure measure = new Measure()
                 assay.addToMeasures(measure)
                 measure.statsModifier = newMeasure.statsModifier
                 measure.resultType = newMeasure.resultType
 
-                if(newMeasure.parent != null) {
+                if (newMeasure.parent != null) {
                     measure.parentMeasure = measureByKey[makeMeasureKey(newMeasure.parent)]
                     measure.parentChildRelationship = newMeasure.parentChildRelationship
                 }
@@ -706,7 +732,6 @@ class PubchemReformatService {
                 measure.save(failOnError: true)
 
                 if (elementKeys.size() > 0 || newMeasure.contextItemColumns.size() > 0) {
-//		    println("newMeasure.contextItems=${newMeasure.contextItems}")
                     createAssayContextForResultType(assay, elementKeys, newMeasure.contextItems, newMeasure.contextItemColumns, measure)
                 }
 
@@ -717,13 +742,13 @@ class PubchemReformatService {
         }
     }
 
-    void createExperimentMeasures(Experiment experiment, Map<String,Measure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
-        for(newMeasure in newMeasures) {
+    void createExperimentMeasures(Experiment experiment, Map<String, Measure> measureByKey, Collection<MappedStub> newMeasures, ExperimentMeasure parentExperimentMeasure) {
+        for (newMeasure in newMeasures) {
             ExperimentMeasure experimentMeasure = new ExperimentMeasure(dateCreated: new Date())
             experimentMeasure.measure = measureByKey[makeMeasureKey(newMeasure)]
-            if(parentExperimentMeasure != null) {
+            if (parentExperimentMeasure != null) {
                 experimentMeasure.parentChildRelationship = newMeasure.parentChildRelationship
-                experimentMeasure.parent = parentExperimentMeasure
+                parentExperimentMeasure.addToChildMeasures(experimentMeasure)
             }
 
             experiment.addToExperimentMeasures(experimentMeasure)
@@ -735,21 +760,21 @@ class PubchemReformatService {
     }
 
     boolean isContextCompatible(Measure existingMeasure, Collection<Element> attributes, AssayContext context) {
-       Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
-       if (!nonfixedAttributes.containsAll(attributes)) {
+        Set<Element> nonfixedAttributes = context.assayContextItems.findAll { it.attributeType != AttributeType.Fixed }.collect(new HashSet()) { it.attributeElement }
+        if (!nonfixedAttributes.containsAll(attributes)) {
 //            throw new RuntimeException("Context \"${context.contextName}\" for measure ${existingMeasure} did not contain all non-fixed attributes: ${nonfixedAttributes} != ${attributes}")
-		return false;
+            return false;
         }
-	return true;
+        return true;
     }
 
-    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element,Collection<String>> attributeValues, Collection<Element>freeAttributes, Measure measure) {
+    void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, Measure measure) {
         AssayContext context = new AssayContext()
         context.contextName = "annotations for ${measure.resultType.label}";
         context.contextGroup = "project management> experiment>";
 
-        for(attribute in attributeKeys) {
-            if(attribute.id == SCREENING_CONCENTRATION_ID) {
+        for (attribute in attributeKeys) {
+            if (attribute.id == SCREENING_CONCENTRATION_ID) {
                 // handle screening concentration as a special case:  Collapse all the values to a range instead a list
                 float maxConcentration = Collections.max(attributeValues[attribute].collect { Float.parseFloat(it) }) * 10
 
@@ -761,7 +786,7 @@ class PubchemReformatService {
 
                 context.addToAssayContextItems(item)
             } else {
-                for(value in attributeValues[attribute]) {
+                for (value in attributeValues[attribute]) {
                     AssayContextItem item = new AssayContextItem();
                     item.attributeType = AttributeType.List
                     item.attributeElement = attribute
@@ -773,7 +798,7 @@ class PubchemReformatService {
             }
         }
 
-        for(freeAttribute in freeAttributes) {
+        for (freeAttribute in freeAttributes) {
             AssayContextItem item = new AssayContextItem();
             item.attributeType = AttributeType.Free
             item.attributeElement = freeAttribute
@@ -782,17 +807,17 @@ class PubchemReformatService {
 
         assay.addToAssayContexts(context)
 
-	context.save(failOnError: true)
+        context.save(failOnError: true)
 
         AssayContextMeasure assayContextMeasure = new AssayContextMeasure()
         context.addToAssayContextMeasures(assayContextMeasure)
         measure.addToAssayContextMeasures(assayContextMeasure)
-	assayContextMeasure.save(failOnError: true)
+        assayContextMeasure.save(failOnError: true)
     }
 
     public void assignValue(AssayContextItem item, String value) {
         // if term is an external identifier
-        if(item.attributeElement.externalURL != null) {
+        if (item.attributeElement.externalURL != null) {
             item.extValueId = value
         } else {
             // try parsing as a number
@@ -801,7 +826,7 @@ class PubchemReformatService {
                 item.valueNum = Float.parseFloat(value)
                 item.qualifier = "= "
                 populatedValueNum = true
-            } catch(NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
             }
 
             // if that doesn't work, look it up as a dictionary element
