@@ -8,6 +8,10 @@ class ProjectStatus {
 
     String laboratoryName
 
+    String notes
+
+    Set<ProjectStatusJiraIssue> jiraIssueSet
+
     ProjectStatus (Long id, QaStatus qaStatus) {
         this.id = id
         this.qaStatus = qaStatus
@@ -21,6 +25,14 @@ class ProjectStatus {
     }
 
     static transients = ['projectName', 'laboratoryName']
+
+    static hasMany = [
+            jiraIssueSet: ProjectStatusJiraIssue
+    ]
+
+    static mappedBy = [
+            jiraIssueSet: "projectStatus"
+    ]
 }
 
 

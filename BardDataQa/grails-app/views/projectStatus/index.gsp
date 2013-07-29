@@ -20,6 +20,9 @@
         <th>New QA Status</th>
         <th>Project Name</th>
         <th>Laboratory Name</th>
+        <th width="140">related JIRA issues</th>
+        <th>notes</th>
+        <th>edit notes</th>
     </tr>
 
     <g:each in="${projectStatusList}" var="projectStatus">
@@ -33,8 +36,31 @@
                               value="${projectStatus.qaStatus.id}" onchange="document.forms['changeStatusForm${projectStatus.id}'].submit()"/>
                 </g:form>
             </td>
-            <td>${projectStatus?.projectName}</td>
-            <td>${projectStatus?.laboratoryName}</td>
+            <td>${projectStatus.projectName?.toString()}</td>
+            <td>${projectStatus.laboratoryName?.toString()}</td>
+            <td>
+                <g:form name="editJiraIssuesForm${projectStatus.id}" url="[controller: 'projectStatus', action: 'updateJiraIssues']">
+                    <g:hiddenField name="projectId" value="${projectStatus.id}"/>
+                    Select JIRA issues to delete:<br/>
+                    <g:each in="${projectStatus.jiraIssueSet}" var="jiraIssue" status="i">
+                        ${jiraIssue.jiraIssueId}
+                        <g:checkBox name="deleteJiraIssueList" value="${jiraIssue.id}" checked="${false}"/>
+                        <br/>
+                    </g:each>
+                    <br/>
+                    JIRA issue to add:
+                    <g:textField name="addJiraIssue" size="20"/>
+                    <g:submitButton id="editJiraIssueSubmitButton" name="Submit"/>
+                </g:form>
+            </td>
+            <td>${projectStatus.notes?.replace("\n","<br/>")}</td>
+            <td>
+                <g:form name="editNotesForm${projectStatus.id}" url="[controller: 'projectStatus', action: 'update']">
+                    <g:hiddenField name="projectId" value="${projectStatus.id}"/>
+                    <g:textArea name="projectStatusNotes" rows="10" cols="40" value="${projectStatus?.notes}"/>
+                    <g:submitButton id="editNotesSubmitButton" name="Submit"/>
+                </g:form>
+            </td>
         </tr>
     </g:each>
 </table>

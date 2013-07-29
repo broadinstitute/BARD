@@ -45,7 +45,40 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
 
         projectStatus.qaStatus = qaStatus
 
+        projectStatus.notes = projectStatusCommand.projectStatusNotes
+
         projectStatus.save()
+    }
+
+    void updateJiraIssues(JiraIssueCommand jiraIssueCommand) {
+        if (jiraIssueCommand.addJiraIssue ||
+                (jiraIssueCommand.deleteJiraIssueList && jiraIssueCommand.deleteJiraIssueList.size() > 0)) {
+
+            ProjectStatus projectStatus = ProjectStatus.findById(jiraIssueCommand.projectId)
+
+            if (jiraIssueCommand.addJiraIssue) {
+                ProjectStatusJiraIssue projectStatusJiraIssue = new ProjectStatusJiraIssue()
+                projectStatusJiraIssue.projectStatus = projectStatus
+                projectStatusJiraIssue.jiraIssueId = jiraIssueCommand.addJiraIssue
+                projectStatus.jiraIssueSet.add(projectStatusJiraIssue)
+
+                projectStatusJiraIssue.save()
+            }
+
+            if (jiraIssueCommand.deleteJiraIssueList && jiraIssueCommand.deleteJiraIssueList.size() > 0) {
+                Iterator<ProjectStatusJiraIssue> iter = projectStatus.jiraIssueSet.iterator()
+                while(iter.hasNext()) {
+                    ProjectStatusJiraIssue current = iter.next()
+
+                    if (jiraIssueCommand.deleteJiraIssueList.contains(current.id)) {
+                        iter.remove()
+                        current.delete()
+                    }
+                }
+            }
+
+            projectStatus.save()
+        }
     }
 
     boolean projectIdExistsInCapProduction(Long projectId) {
