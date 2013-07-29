@@ -1800,5 +1800,4 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
 	}
-
 }
