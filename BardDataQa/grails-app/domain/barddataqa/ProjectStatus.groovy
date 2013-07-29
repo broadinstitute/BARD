@@ -18,6 +18,7 @@ class ProjectStatus {
     }
 
     static constraints = {
+        notes(nullable: true)
     }
 
     static mapping = {
