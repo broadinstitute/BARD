@@ -9,8 +9,8 @@ class ProjectStatusController {
         [projectStatusList: projectStatusList, qaStatusList:  QaStatus.withCriteria({order("id")})]
     }
 
-    def create(ProjectStatusCommand projectStatusCommand) {
-        String errorMessage = projectStatusService.createNew(projectStatusCommand)
+    def create(Long projectId, Long qaStatusId) {
+        String errorMessage = projectStatusService.createNew(projectId, qaStatusId)
 
         if (errorMessage != null) {
             render(errorMessage)
@@ -19,13 +19,16 @@ class ProjectStatusController {
         }
     }
 
-    def update(ProjectStatusCommand projectStatusCommand) {
-        if (projectStatusCommand.projectStatusNotes != null
-                && projectStatusCommand.projectStatusNotes.length() > 4000) {
+    def updateStatus(Long projectId, Long qaStatusId) {
+        projectStatusService.updateQaStatus(projectId, qaStatusId)
+        redirect(action: 'index')
+    }
 
-            render("notes section must be 400 characters or less, it currently is:  ${projectStatusCommand.projectStatusNotes.length()}")
+    def updateNotes(Long projectId, String notes) {
+        if (notes.length() > 4000) {
+            render("notes section must be 400 characters or less, it currently is:  ${notes.length()}")
         } else {
-            projectStatusService.updateExisting(projectStatusCommand)
+            projectStatusService.updateNotes(projectId, notes)
             redirect(action: 'index')
         }
     }
@@ -39,16 +42,6 @@ class ProjectStatusController {
         }
     }
 }
-
-
-class ProjectStatusCommand {
-    Long projectId
-
-    Long qaStatusId
-
-    String projectStatusNotes
-}
-
 
 class JiraIssueCommand {
     Long projectId
