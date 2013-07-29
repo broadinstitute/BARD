@@ -265,13 +265,8 @@ class BuildElementPathsService {
         while (iterator.hasNext()) {
             ElementAndFullPath elementAndFullPath = iterator.next()
 
-            ListIterator<ElementHierarchy> elementHierarchyIterator = elementAndFullPath.path.listIterator(elementAndFullPath.path.size())
-            boolean found = false
-            while (! found && elementHierarchyIterator.hasPrevious()) {
-                if (dictionaryHierarchiesToExclude.contains(elementHierarchyIterator.previous())) {
-                    iterator.remove()
-                    found = true
-                }
+            if (elementAndFullPath.path.get(0).parentElement.id != bardDictionaryElementId) {
+                iterator.remove()
             }
         }
     }
