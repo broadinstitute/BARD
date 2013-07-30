@@ -16,7 +16,7 @@ $(document).ready(function () {
     // try and pick best focus
     function initialFocus() {
         if ($("#attributeElementId").is(':disabled')) {
-            $('button.btn-primary').focus();
+            $('.btn-primary').focus();
         }
         else if (!$("#attributeElementId").val()) {
             $("#attributeElementId").select2("open");

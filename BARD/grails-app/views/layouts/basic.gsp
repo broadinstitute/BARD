@@ -73,13 +73,13 @@
                         <g:form class="navbar-form pull-right" name="logoutForm" controller="logout">
                             <span
                                     style="color: white; font-weight: bold;">Logged in as: <sec:username/></span>&nbsp;&nbsp;
-                            <button type="submit" class="btn btn-primary">Logout</button>
+                            <button type="submit" class="btn">Logout</button>
                         </g:form>
                     </sec:ifLoggedIn>
                     <sec:ifNotLoggedIn>
                         <g:form class="navbar-form pull-right" name="loginForm" controller="login">
                             Not logged in&nbsp;&nbsp;
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn">Login</button>
                         </g:form>
                     </sec:ifNotLoggedIn>
                 </div>
