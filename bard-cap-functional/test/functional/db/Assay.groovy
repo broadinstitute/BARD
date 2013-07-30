@@ -18,26 +18,26 @@ class Assay extends DatabaseConnectivity {
 	}
 	
 	/**
-	 * @param assayName
-	 * @return assay summary information 
+	 * @param searchQuery
+	 * @return assay searched results, only ids are returned 
 	 */
-	Map<String, String> getAssaySummaryByName(def assayName) {
-		def assaySummaryInfo = [:]
+	public static def getAssaySearchResults(def searchQuery) {
+		def searchResult = []
 		def sql = getSql()
-		sql.eachRow(ASSAY_SUMMARY_BYNAME, [assayName]) { row ->
-			assaySummaryInfo = ['assayId': row.adid, 'assayName':row.name, 'shortName':row.sName, 'assayVersion':row.aVersion, 'assayType':row.aType, 'assayStatus':row.status, 'designedBy': row.designedBy]
+		sql.eachRow(AssayQueries.ASSAY_SEARCH_RSULTS, ['%'+searchQuery+'%']){ row->
+			searchResult.add(row.AID.toString())
 		}
-		return assaySummaryInfo
+		return searchResult
 	}
 	/**
-	 * @param searchStr
+	 * @param searchQuery
 	 * @return searched result count
 	 */
-	def getAssaySearchCount(def searchStr) {
+	public static def getAssaySearchCount(def searchQuery) {
 		def searchResultCount
 		def sql = getSql()
-		sql.eachRow(ASSAY_SEARCH_NAME_STR, ['%'+searchStr+'%']){ row->
-			searchResultCount = 	row.Count
+		sql.eachRow(AssayQueries.ASSAY_SEARCH_COUNT, ['%'+searchQuery+'%']){ row->
+			searchResultCount = row.AssayCount
 		}
 		return searchResultCount
 	}

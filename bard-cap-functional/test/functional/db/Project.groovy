@@ -16,29 +16,30 @@ class Project extends DatabaseConnectivity {
 		}
 		return projectSummaryInfo
 	}
+	
 	/**
-	 * @param projectName
-	 * @return project summary information 
-	 */
-	def getProjectSummaryByName(def projectName) {
-		def projectSummaryInfo = [:]
-		def sql = getSql()
-		sql.eachRow(PROJECT_SUMMARY_BYNAME, [projectName]) { row ->
-			projectSummaryInfo = ['projectId': row.pid, 'projectName':row.pname, 'projectVersion':row.pversion, 'projectGroup':row.pgroup, 'projectStatus':row.pstatus, 'projectReady': row.ready, 'projectDescription':row.pdesc]
-		}
-		return projectSummaryInfo
-	}
-	/**
-	 * @param searchStr
+	 * @param searchQuery
 	 * @return searched result count
 	 */
-	def getProjectSearchCount(def searchStr) {
+	public static def getProjectSearchCount(def searchQuery) {
 		def searchResultCount
 		def sql = getSql()
-		sql.eachRow(PROJECT_SEARCH_COUNT, ['%'+searchStr+'%']){ row->
-			searchResultCount = 	row.pcount
+		sql.eachRow(ProjectQueries.PROJECT_SEARCH_COUNT, ['%'+searchQuery+'%']){ row->
+			searchResultCount = row.ProjectCount
 		}
 		return searchResultCount
+	}
+	/**
+	 * @param searchQuery
+	 * @return searched result
+	 */
+	public static def getProjectSearchResults(def searchQuery) {
+		def searchResult = []
+		def sql = getSql()
+		sql.eachRow(ProjectQueries.PROJECT_SEARCH_RSULTS, ['%'+searchQuery+'%']){ row->
+			searchResult.add(row.PID.toString())
+		}
+		return searchResult
 	}
 	/**
 	 * @param projectId
