@@ -19,35 +19,46 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
 """
 
 
-    String createNew(ProjectStatusCommand projectStatusCommand) {
-        ProjectStatus alreadyExistsProjectStatus = ProjectStatus.findById(projectStatusCommand.projectId)
+    String createNew(Long projectId, Long qaStatusId) {
+        ProjectStatus alreadyExistsProjectStatus = ProjectStatus.findById(projectId)
 
         if (alreadyExistsProjectStatus != null) {
-            return "Project Status already exists for project ID ${projectStatusCommand.projectId}"
+            return "Project Status already exists for project ID ${projectId}"
         } else {
-            if (projectIdExistsInCapProduction(projectStatusCommand.projectId)) {
-                QaStatus qaStatus = QaStatus.findById(projectStatusCommand.qaStatusId)
+            if (projectIdExistsInCapProduction(projectId)) {
+                QaStatus qaStatus = QaStatus.findById(qaStatusId)
 
-                ProjectStatus projectStatus = new ProjectStatus(projectStatusCommand.projectId, qaStatus)
+                ProjectStatus projectStatus = new ProjectStatus(projectId, qaStatus)
                 projectStatus.save()
 
-                return null
+                if (!projectStatus.save()) {
+                    StringBuilder builder = new StringBuilder()
+                    projectStatus.errors.each {builder.append(it).append("  <br/>")}
+                } else {
+                    return null
+                }
             } else {
-                return "Project does not exist in CAP - ID:  ${projectStatusCommand.projectId}"
+                return "Project does not exist in CAP - ID:  ${projectId}"
             }
         }
     }
 
-    void updateExisting(ProjectStatusCommand projectStatusCommand) {
-        ProjectStatus projectStatus = ProjectStatus.findById(projectStatusCommand.projectId)
+    void updateQaStatus(Long projectId, Long qaStatusId) {
+        ProjectStatus projectStatus = ProjectStatus.findById(projectId)
 
-        QaStatus qaStatus = QaStatus.findById(projectStatusCommand.qaStatusId)
+        QaStatus qaStatus = QaStatus.findById(qaStatusId)
 
         projectStatus.qaStatus = qaStatus
 
-        projectStatus.notes = projectStatusCommand.projectStatusNotes
+        saveAndPrintErrorMessagesIfNeeded(projectStatus)
+    }
 
-        projectStatus.save()
+    void updateNotes(Long projectId, String notes) {
+        ProjectStatus projectStatus = ProjectStatus.findById(projectId)
+
+        projectStatus.notes = notes
+
+        saveAndPrintErrorMessagesIfNeeded(projectStatus)
     }
 
     void updateJiraIssues(JiraIssueCommand jiraIssueCommand) {
@@ -63,6 +74,10 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
                 projectStatus.jiraIssueSet.add(projectStatusJiraIssue)
 
                 projectStatusJiraIssue.save()
+
+                if (!projectStatusJiraIssue.save()) {
+                    projectStatusJiraIssue.errors.each {println(it)}
+                }
             }
 
             if (jiraIssueCommand.deleteJiraIssueList && jiraIssueCommand.deleteJiraIssueList.size() > 0) {
@@ -77,7 +92,7 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
                 }
             }
 
-            projectStatus.save()
+            saveAndPrintErrorMessagesIfNeeded(projectStatus)
         }
     }
 
@@ -114,6 +129,13 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
         Collections.sort(result, new LabNameIdComparator())
 
         return result
+    }
+
+    static String saveAndPrintErrorMessagesIfNeeded(ProjectStatus projectStatus) {
+        projectStatus.save()
+        if (!projectStatus.save()) {
+            projectStatus.errors.each {println(it)}
+        }
     }
 
     static class LabNameIdComparator implements Comparator<ProjectStatus> {
