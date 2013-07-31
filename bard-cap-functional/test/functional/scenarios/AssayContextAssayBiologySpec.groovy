@@ -7,7 +7,7 @@ import pages.ViewAssayDefinitionPage
 import common.Constants.NavigateTo
 import common.Constants.SearchBy
 
-class AssayContextBiologySpec extends AssayBaseContextSpec{
+class AssayContextAssayBiologySpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "biology"
