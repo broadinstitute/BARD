@@ -1,6 +1,7 @@
 package common
 
 class TestDataReader {
+	
 	public static def getTestData(){
 		def testData = [:]
 		Properties props = new Properties()
