@@ -75,6 +75,7 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
         given: "User is logged in to the system"
         to LoginPage
         logInNoValidation(validUserName, validPassword)
+        at HomePage
         assert isLoggedInAsUser(validUserName)
 
         when: "User clicks the 'Log Out' link"
