@@ -83,6 +83,7 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
         logout()
 
         then: "The user should be logged out of the system"
+        at HomePage
         assert !isLoggedIn()
     }
 }
