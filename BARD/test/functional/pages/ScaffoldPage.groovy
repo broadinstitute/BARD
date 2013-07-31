@@ -9,7 +9,7 @@ class ScaffoldPage extends Page {
     }
 
     def logout() {
-        def logoutLink = $("button.btn.btn-primary", text:"Logout")
+        def logoutLink = $("button.btn", text:"Logout")
         assert logoutLink
         def firstLink = logoutLink[0]
         firstLink.click();
