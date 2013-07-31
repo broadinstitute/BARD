@@ -129,6 +129,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"Edting Context"
 		if(!isContext(editContextGroup, contextCard)){
 			addNewContextCard(editContextGroup, contextCard)
+			waitFor { isContext(editContextGroup, contextCard) }
 			editContext(editContextGroup, contextCard, editedContext)
 		}else{
 			editContext(editContextGroup, contextCard, editedContext)
@@ -142,8 +143,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		def dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Navigating to View Assay Page"
@@ -155,8 +154,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
-		assert dbContentsAfterAdd.size() > dbContentsBefore.size()
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
 
 		and:"Cleaning up Context Items"
@@ -170,8 +167,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 			def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId)
 
 			then:"Verifying Context Info with UI & DB"
-			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
-			assert dbContentsAfterDelete.size() < dbContentsAfterAdd.size()
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
 		}
 		and:"Navigating to View Assay Page"
@@ -183,8 +178,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		def dbContents = Assay.getAssayContext(dbContextGroup, testData.AssayId)
 
 		then:"Verifying Context Info with UI & DB"
-		assert uiContents.size() < uiContentsAfterAdd.size()
-		assert dbContents.size() < dbContentsAfterAdd.size()
 		assert uiContents.sort() == dbContents.sort()
 	}
 

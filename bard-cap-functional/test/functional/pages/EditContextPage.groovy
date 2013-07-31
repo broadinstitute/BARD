@@ -18,7 +18,7 @@ class EditContextPage extends CapScaffoldPage{
 		addNewCardBtn { groupId -> cardContainer(groupId).find("button.btn.add-card-button") }
 		addContextCard { module AddContextCardModule }
 		formLoading { module LoadingModule}
-		
+
 		cardContainer { groupName -> $("div.roundedBorder.card-group."+groupName) }
 		contextTable { groupName -> cardContainer(groupName).find("table.table.table-hover")}
 		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
@@ -69,12 +69,15 @@ class EditContextPage extends CapScaffoldPage{
 	}
 
 	def editContext(def cardGroup, def contextName, def editedValue){
-		if(!isContextCardNotEmpty(cardGroup, contextName)){
-			cardTable(cardGroup, contextName).editContext.editIconPencil.click()
-			assert editableForm.buttons.iconOk
-			assert editableForm.buttons.iconRemove
-			fillInputField(editedValue)
-			ajaxRequestCompleted()
+		if(isContext(cardGroup, contextName)){
+			if(!isContextCardNotEmpty(cardGroup, contextName)){
+				assert cardTable(cardGroup, contextName).editContext
+				cardTable(cardGroup, contextName).editContext.editIconPencil.click()
+				assert editableForm.buttons.iconOk
+				assert editableForm.buttons.iconRemove
+				fillInputField(editedValue)
+				ajaxRequestCompleted()
+			}
 		}
 	}
 }
