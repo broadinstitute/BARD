@@ -21,7 +21,7 @@ class ScaffoldPage extends Page {
     }
 
     boolean isLoggedInAsUser(String username) {
-        if(checkFor($("form#loginForm"), "Not logged in")) { return false }
+        if($("form#loginForm")) { return false }   // no one is logged in if this element is present
         return (checkFor($("form#logoutForm"), "Logged in as") && checkFor($("form#logoutForm"), "$username"))
     }
 
