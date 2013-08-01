@@ -9,6 +9,7 @@ import bard.core.adapter.ProjectAdapter
 import bard.core.rest.spring.ExperimentRestService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.Promiscuity
+import bard.core.rest.spring.util.Facet
 import bard.core.rest.spring.util.StructureSearchParams
 import bard.core.util.FilterTypes
 import grails.converters.JSON
@@ -1130,7 +1131,8 @@ class SearchHelper {
         List<SearchFilter> appliedFiltersAlreadyInFacets = searchFilters.findAll {
             SearchFilter filter ->
                 Value parent = facets.find { Value parent ->
-                    parent.id.trim().equalsIgnoreCase(filter.filterName.trim())
+                    String parentLabelAfterTranslation = Facet.VALUE_TO_FACET_TRANSLATION_MAP[parent.id.trim()] ?: parent.id.trim()
+                    return parentLabelAfterTranslation.equalsIgnoreCase(filter.filterName.trim())
                 }
                 return parent?.children?.find {
                     Value child ->

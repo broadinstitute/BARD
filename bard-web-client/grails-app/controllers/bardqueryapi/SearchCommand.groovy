@@ -1,5 +1,6 @@
 package bardqueryapi
 
+import bard.core.rest.spring.util.Facet
 import org.apache.commons.collections.FactoryUtils
 import org.apache.commons.collections.ListUtils
 
@@ -24,7 +25,15 @@ class SearchCommand {
      * @return {@link SearchFilter}'s
      */
     List<SearchFilter> getAppliedFilters() {
-        filters.findAll {SearchFilter filter ->  filter.filterValue}
+        List<SearchFilter> appliedFilters = filters.findAll { SearchFilter filter -> filter.filterValue }
+        //Get back the original facet names as were received from the REST API, before translating them to a more friendly filter names.
+        //We need back the original names since these are the filter names and values the REST API is expecting to get in its search resource.
+        //Use a reverse-mapping to obtain the translation back from filter the facet.
+        for (SearchFilter filter in appliedFilters) {
+            filter.filterName = Facet.VALUE_TO_FACET_TRANSLATION_MAP[filter.filterName] ?: filter.filterName
+        }
+
+        return appliedFilters
     }
 
     void setSearchString(String searchString) {

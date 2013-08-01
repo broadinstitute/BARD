@@ -66,7 +66,7 @@ public class SearchResult extends JsonUtil {
     public Collection<Value> getFacetsToValues() {
         final MetaData metaData = getMetaData()
         if (metaData) {
-            return metaData.facetsToValues().sort()
+            return metaData.facetsToValues()
         }
         return []
     }
