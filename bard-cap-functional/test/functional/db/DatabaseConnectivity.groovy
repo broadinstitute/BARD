@@ -2,13 +2,6 @@ package db
 
 import grails.plugin.remotecontrol.RemoteControl
 import groovy.sql.Sql
-import groovyx.remote.RemoteControlException;
-
-import java.sql.SQLRecoverableException
-
-import oracle.net.ns.NetException
-
-import org.springframework.beans.factory.BeanCreationException
 
 import common.Constants
 

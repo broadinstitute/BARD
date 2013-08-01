@@ -9,7 +9,7 @@ class ScaffoldPage extends Page {
     }
 
     def logout() {
-        def logoutLink = $("button.btn.btn-primary", text:"Logout")
+        def logoutLink = $("button.btn", text:"Logout")
         assert logoutLink
         def firstLink = logoutLink[0]
         firstLink.click();
@@ -21,7 +21,8 @@ class ScaffoldPage extends Page {
     }
 
     boolean isLoggedInAsUser(String username) {
-        checkFor($(id: "logoutForm"), "Logged in as") && checkFor($(id: "logoutForm"), "$username")
+        if($("form#loginForm")) { return false }   // no one is logged in if this element is present
+        return (checkFor($("form#logoutForm"), "Logged in as") && checkFor($("form#logoutForm"), "$username"))
     }
 
     boolean checkFor(Navigator element, String condition) {

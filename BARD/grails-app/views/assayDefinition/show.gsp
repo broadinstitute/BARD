@@ -315,7 +315,7 @@
 </section>
 <br/>
 <g:render template="/document/documents"
-          model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable]"/>
+          model="[documentKind: DocumentKind.AssayDocument, owningEntity: assayInstance, canedit: editable, sectionNumber: '6.']"/>
 </div>
 </div>
 </div>

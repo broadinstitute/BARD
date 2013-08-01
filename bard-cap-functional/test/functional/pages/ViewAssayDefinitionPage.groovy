@@ -11,24 +11,7 @@ class ViewAssayDefinitionPage extends CapScaffoldPage{
 
 	static content = {
 		//		editAssayMeasureBtn { $("a.btn", text:"Edit Measures") } // Edit Measure btn
-		header { sectionName -> $("#"+sectionName+"-header") }
-		editContext {sectionName -> module EditIconModule, header(sectionName) }
 	}
-
-	def navigateToEditContext(def section){
-		editContext(section).iconPencil.click()
-	}
-	
-	/*def getUIContexts(){
-		def uiContexts = []
-		if(cardHolders.cardTable.find("caption")){
-			cardHolders.cardTable.find("caption").each{ contextName ->
-				def contexts = contextName.find("div.cardTitle").find("p")[0].text()
-				uiContexts.add(contexts)
-			}
-		}
-		return uiContexts
-	}*/
 
 	Map<String, String> getUIAssociatedMeasure(def cardName){
 		def contextMeasure = [:]

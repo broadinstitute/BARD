@@ -16,97 +16,61 @@ class Project extends DatabaseConnectivity {
 		}
 		return projectSummaryInfo
 	}
+	
 	/**
-	 * @param projectName
-	 * @return project summary information 
-	 */
-	def getProjectSummaryByName(def projectName) {
-		def projectSummaryInfo = [:]
-		def sql = getSql()
-		sql.eachRow(PROJECT_SUMMARY_BYNAME, [projectName]) { row ->
-			projectSummaryInfo = ['projectId': row.pid, 'projectName':row.pname, 'projectVersion':row.pversion, 'projectGroup':row.pgroup, 'projectStatus':row.pstatus, 'projectReady': row.ready, 'projectDescription':row.pdesc]
-		}
-		return projectSummaryInfo
-	}
-	/**
-	 * @param searchStr
+	 * @param searchQuery
 	 * @return searched result count
 	 */
-	def getProjectSearchCount(def searchStr) {
+	public static def getProjectSearchCount(def searchQuery) {
 		def searchResultCount
 		def sql = getSql()
-		sql.eachRow(PROJECT_SEARCH_COUNT, ['%'+searchStr+'%']){ row->
-			searchResultCount = 	row.pcount
+		sql.eachRow(ProjectQueries.PROJECT_SEARCH_COUNT, ['%'+searchQuery+'%']){ row->
+			searchResultCount = row.ProjectCount
 		}
 		return searchResultCount
 	}
 	/**
-	 * @param assayId
-	 * @param contextGroup
-	 * @return list of assay context cards of sepecific group
+	 * @param searchQuery
+	 * @return searched result
 	 */
-	List<String> getAssayContext(def assayId, def contextGroup) {
-		def contextCardsList = []
+	public static def getProjectSearchResults(def searchQuery) {
+		def searchResult = []
 		def sql = getSql()
-		sql.eachRow(ASSAY_CONTEXT_CARDS, [assayId, contextGroup]) { row ->
-			contextCardsList.add(row.CName)
+		sql.eachRow(ProjectQueries.PROJECT_SEARCH_RSULTS, ['%'+searchQuery+'%']){ row->
+			searchResult.add(row.PID.toString())
 		}
-		return contextCardsList
+		return searchResult
 	}
 	/**
-	 * @param assayId
+	 * @param projectId
+	 * @param contextGroup
+	 * @return list of project context cards of specific group
+	 */
+	public static def getProjectContext(def contextGroup, def projectId) {
+		def contextCards = []
+		def sql = getSql()
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXTS, [projectId, contextGroup]) { row ->
+			contextCards.add(row.ContextName)
+		}
+		return contextCards
+	}
+	/**
+	 * @param projectId
 	 * @param contextGroup
 	 * @param contextName
-	 * @return list of assay context items present in a specific assay context card
+	 * @return list of project context items present in a specific project context card
 	 */
-	public static def getProjectContextItem(def projectId, def contextName) {
+	public static def getProjectContextItem(def projectId, def contextGroup, def contextName) {
 		def contextITemMap = [:]
 		def contextItemsList = []
 		def sql = getSql()
-		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextName]) { row ->
+		sql.eachRow(ProjectQueries.PROJECT_CONTEXT_ITEMS, [projectId, contextGroup, contextName]) { row ->
 			contextITemMap = ['attributeLabel':row.AttributeLabel, 'valueDisplay':row.ValueDisplay]
 			contextItemsList.add(contextITemMap)
 		}
 		return contextItemsList
 	}
-	/**
-	 * @param assayId
-	 * @return measure added in a specific assay
-	 */
-	def getMeasureAdded(def assayId) {
-		def assayMeasures
-		def sql = getSql()
-		sql.eachRow(ASSAY_MEASURE, [assayId]) { row ->
-			assayMeasures = row.measure+" ("+row.label+")"
-		}
-		return assayMeasures
-	}
-	/**
-	 * @param assayId
-	 * @return list of assay measures
-	 */
-	List<String> getAssayMeasures(def assayId) {
-		def assayMeasuresList = []
-		def sql = getSql()
-		sql.eachRow(ASSAY_MEASURES_LIST, [assayId]) { row ->
-			assayMeasuresList.add(row.measure)
-		}
-		return assayMeasuresList
-	}
-	/**
-	 * @param assayId
-	 * @param measureName
-	 * @return measures associated with contexts 
-	 */
-	Map<String, String> getContextMeasures(def assayId, def measureName) {
-		def associatedContextMeasureMap = [:]
-		def sql = getSql()
-		sql.eachRow(ASSAY_ASSOCIATED_MEASURE_CONTEXT, [assayId, measureName]) { row ->
-			associatedContextMeasureMap = ['measure':row.measure, 'context':row.context]
-		}
-		return associatedContextMeasureMap
-	}
-
+		
 	/**
 	 * @param projectId
 	 * @param documentType

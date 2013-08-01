@@ -25,7 +25,7 @@ public class CommonFunctionalPage extends Page {
 		formLoading { module LoadingModule }
 		navigationMenu { module BardCapHeaderModule, $("ul.nav") }
 	}
-
+/*
 	boolean isAutocompleteListOk(element, condition){
 		if(element){
 			element.each { elementValue ->
@@ -35,7 +35,7 @@ public class CommonFunctionalPage extends Page {
 			}
 		}
 	}
-
+*/
 	boolean validationError(def element, def condition){
 		waitFor(Constants.WAIT_INTERVAL, Constants.R_INTERVAL){ element }
 		if(element){
