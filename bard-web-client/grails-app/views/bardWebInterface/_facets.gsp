@@ -37,17 +37,20 @@
                     <g:if test="${parentFacet.children.find { Value child -> child.id == 'displayOrder' }?.value != 0}">
                         <fieldset>
                             <h3>${parentFacet.id.replaceAll("_", " ").toLowerCase().capitalize()}</h3>
-                            <g:set var="childSize" value="${parentFacet.children.size()}"/>
-                            <g:each in="${parentFacet.children}" var="childFacet" status="counter">
-                                %{--Ignore the 'displayOder' facet--}%
+                            <g:set var="counter" value="${1}"/>
+                            <g:set var="hasHiddenFacets" value="${false}"/>
+                            <g:each in="${parentFacet.children}" var="childFacet">
+                            %{--Ignore the 'displayOder' facet--}%
                                 <g:if test="${childFacet.id != 'displayOrder'}">
-                                    <g:if test="${counter == 4 && childSize > 5}">
+                                    <g:if test="${counter++ > 4 && !hasHiddenFacets}">
                                         <div id="${parentFacet.id}_${formName.toString()}" style="display: none;">
+                                        <g:set var="hasHiddenFacets" value="${true}"/>
                                     </g:if>
                                     <g:if test="${childFacet.id}">
                                         <label class="checkbox">
                                             <g:set var="checked"
-                                                   value="${appliedFilters?.searchFilters?.find { SearchFilter filter -> ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(Facet.VALUE_TO_FACET_TRANSLATION_MAP[parentFacet.id.trim()] ?: parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id))) }}"/>
+                                                   value="${appliedFilters?.searchFilters?.find { SearchFilter filter ->
+                                                       ((filter.filterName.trim().replace('"', '').equalsIgnoreCase(Facet.VALUE_TO_FACET_TRANSLATION_MAP[parentFacet.id.trim()] ?: parentFacet.id.trim())) && (filter.filterValue.trim().replace('"', '').equalsIgnoreCase(childFacet.id))) }}"/>
                                             <g:checkBox name="filters[${childIndex}].filterValue"
                                                         value="${childFacet.id}"
                                                         checked="${checked}"
@@ -57,12 +60,10 @@
                                                        value="${parentFacet.id}"/>
                                         <g:set var="childIndex" value="${childIndex + 1}"/>
                                     </g:if>
-                                    <g:if test="${counter >= 4 && childSize > 5 && counter == childSize - 1}">
-                                        </div>
-                                    </g:if>
                                 </g:if>
                             </g:each>
-                            <g:if test="${childSize > 5}">
+                            <g:if test="${hasHiddenFacets}">
+                                </div>
                                 <a href="#" class='facetDiv' div_id="${parentFacet.id}_${formName.toString()}">More</a>
                             </g:if>
 
