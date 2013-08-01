@@ -12,6 +12,8 @@ class ProjectStatus {
 
     Set<ProjectStatusJiraIssue> jiraIssueSet
 
+    Double queueOrder
+
     ProjectStatus (Long id, QaStatus qaStatus) {
         this.id = id
         this.qaStatus = qaStatus
@@ -19,6 +21,7 @@ class ProjectStatus {
 
     static constraints = {
         notes(nullable: true)
+        queueOrder(nullable: true)
     }
 
     static mapping = {

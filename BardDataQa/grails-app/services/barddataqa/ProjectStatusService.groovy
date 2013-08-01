@@ -96,6 +96,24 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
         }
     }
 
+    String updateQueueOrder(Long projectId, String queueOrderString) {
+        ProjectStatus projectStatus = ProjectStatus.findById(projectId)
+
+        queueOrderString = queueOrderString.trim()
+
+        if (queueOrderString != null && ! queueOrderString.equals("")) {
+            if (queueOrderString.isNumber()) {
+                projectStatus.queueOrder = Double.valueOf(queueOrderString)
+            } else {
+                return "Entered queue order for project ID ${projectId} is not a number. Entered value:  $queueOrderString"
+            }
+        } else {
+            projectStatus.queueOrder = null
+        }
+
+        saveAndPrintErrorMessagesIfNeeded(projectStatus)
+    }
+
     boolean projectIdExistsInCapProduction(Long projectId) {
         SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(projectIdExistsInCapProductionQueryString)
         query.setLong(projectIdParam, projectId)
@@ -126,26 +144,45 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
             addProjectNameAndLabName(projectStatus)
         }
 
-        Collections.sort(result, new LabNameIdComparator())
+        Collections.sort(result, new ProjectStatusComparator())
 
         return result
     }
 
-    static String saveAndPrintErrorMessagesIfNeeded(ProjectStatus projectStatus) {
+    static void saveAndPrintErrorMessagesIfNeeded(ProjectStatus projectStatus) {
         projectStatus.save()
         if (!projectStatus.save()) {
             projectStatus.errors.each {println(it)}
         }
     }
 
-    static class LabNameIdComparator implements Comparator<ProjectStatus> {
+    static class ProjectStatusComparator implements Comparator<ProjectStatus> {
         int compare(ProjectStatus o1, ProjectStatus o2) {
-            final int labNameCompare = o1.laboratoryName.compareTo(o2.laboratoryName)
 
-            if (labNameCompare == 0) {
-                return o1.id.compareTo(o2.id)
+            if ((null == o1.queueOrder && null == o2.queueOrder) || o1.queueOrder.equals(o2.queueOrder)) {
+                if (o1.laboratoryName != null && o2.laboratoryName != null) {
+                    final int labNameCompare = o1.laboratoryName.compareTo(o2.laboratoryName)
+
+                    if (labNameCompare == 0) {
+                        return o1.id.compareTo(o2.id)
+                    } else {
+                        return labNameCompare
+                    }
+                } else {
+                    if (o1.laboratoryName != null) {
+                        return -1
+                    } else if (o2.laboratoryName != null) {
+                        return 1
+                    } else {
+                        return o1.id.compareTo(o2.id)
+                    }
+                }
             } else {
-                return labNameCompare
+                if (o1.queueOrder != null && o2.queueOrder != null) {
+                    return o1.queueOrder.compareTo(o2.queueOrder)
+                } else {
+                    return o1.queueOrder != null ? -1 : 1
+                }
             }
         }
     }

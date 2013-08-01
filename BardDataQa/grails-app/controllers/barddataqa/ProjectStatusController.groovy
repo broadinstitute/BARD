@@ -41,6 +41,11 @@ class ProjectStatusController {
             redirect(action: 'index')
         }
     }
+
+    def updateQueueOrder(Long projectId, String queueOrderString) {
+        projectStatusService.updateQueueOrder(projectId, queueOrderString)
+        redirect(action: 'index')
+    }
 }
 
 class JiraIssueCommand {
