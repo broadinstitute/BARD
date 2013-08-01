@@ -114,7 +114,7 @@
                 </section>
                 <br/>
                 <g:render template="/document/documents"
-                          model="[documentKind: DocumentKind.ProjectDocument, owningEntity: instance, canedit: editable]"/>
+                          model="[documentKind: DocumentKind.ProjectDocument, owningEntity: instance, canedit: editable , sectionNumber: '4.']"/>
             </div>
         </div>
     </div>

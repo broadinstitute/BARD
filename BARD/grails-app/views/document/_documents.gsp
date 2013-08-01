@@ -1,14 +1,15 @@
 <%@ page import="bard.db.registration.DocumentKind; bard.db.enums.DocumentType" %>
+
 <section id="documents-header">
     <div class="page-header">
-        <h3>4. Documents</h3>
+        <h3>${sectionNumber} Documents</h3>
         <g:if test="${editable == 'canedit'}">
             <h5>Use the 'save icon' to persist any changes you make on the Rich Text Editor</h5>
         </g:if>
     </div>
 </section>
 <section id="documents-description-header">
-    <h4>4.1 Descriptions</h4>
+    <h4>${sectionNumber}1 Descriptions</h4>
 
     <div class="row-fluid">
 
@@ -66,7 +67,7 @@
     </div>
 </section>
 <section id="documents-protocol-header">
-    <h4>4.2 Protocols</h4>
+    <h4>${sectionNumber}2 Protocols</h4>
 
     <div class="row-fluid">
 
@@ -125,7 +126,7 @@
     </div>
 </section>
 <section id="documents-comment-header">
-    <h4>4.3 Comments</h4>
+    <h4>${sectionNumber}3 Comments</h4>
 
     <div class="row-fluid">
 
@@ -183,7 +184,7 @@
     </div>
 </section>
 <section id="documents-publication-header">
-    <h4>4.4 Publications</h4>
+    <h4>${sectionNumber}4 Publications</h4>
 
     <div class="row-fluid">
 
@@ -264,7 +265,7 @@
     </div>
 </section>
 <section id="documents-urls-header">
-    <h4>4.5 External URLS</h4>
+    <h4>${sectionNumber}5 External URLS</h4>
 
     <div class="row-fluid">
 
@@ -347,7 +348,7 @@
     </div>
 </section>
 <section id="documents-other-header">
-    <h4>4.6 Others</h4>
+    <h4>${sectionNumber}6 Others</h4>
 
     <div class="row-fluid">
 
