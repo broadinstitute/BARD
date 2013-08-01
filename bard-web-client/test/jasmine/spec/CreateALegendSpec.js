@@ -15,7 +15,7 @@ describe("Testing createALegend.js", function () {
             d3SubstituteMock.text =  (function () {return d3SubstituteMock;});
             spyOn(d3,'select').andCallFake(function (){return d3SubstituteMock;});
             var myLegend =  createALegend (100, 100, 4,colorMock,domSelectorMock, 1, 2);
-            expect (true)  ;
+            expect (!(myLegend === undefined)).toBeTruthy()  ;
        });
     });
 
