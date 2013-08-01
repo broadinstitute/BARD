@@ -44,7 +44,7 @@ class ProjectController {
             Project project = projectCommand.createProject()
             if (project) {
                 //return a link to the newly created project
-                String link = grailsLinkGenerator.link(controller: 'project', action: 'show', id: project.id, absolute: true)
+                String link = grailsLinkGenerator.link(controller: 'project', action: 'show', id: project.id, absolute: false)
                 Map map = [url: link]
                 render status: HttpServletResponse.SC_OK, text: map as JSON, contentType: 'text/json', template: null
                 return
