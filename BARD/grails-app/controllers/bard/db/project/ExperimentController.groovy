@@ -3,32 +3,33 @@ package bard.db.project
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
+import bard.db.experiment.PubchemImportService
+import bard.db.experiment.ResultsService
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
+import bard.db.registration.ExternalReference
 import bard.db.registration.MeasureTreeService
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.access.AccessDeniedException
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-class ExperimentCommand implements Serializable {
 
-
-}
 @Mixin([EditingHelper])
 @Secured(['isAuthenticated()'])
 class ExperimentController {
     static final DateFormat inlineDateFormater = new SimpleDateFormat("yyyy-MM-dd")
 
-
     ExperimentService experimentService
     AssayDefinitionService assayDefinitionService
     MeasureTreeService measureTreeService
     SpringSecurityService springSecurityService
+    PubchemImportService pubchemImportService
     def permissionEvaluator
 
     def create() {
@@ -77,7 +78,12 @@ class ExperimentController {
 
         JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
-        [instance: experimentInstance, measuresAsJsonTree: measuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree, editable: editable ? 'canedit' : 'cannotedit']
+        boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+        [instance: experimentInstance,
+                measuresAsJsonTree: measuresAsJsonTree,
+                assayMeasuresAsJsonTree: assayMeasuresAsJsonTree,
+                editable: editable ? 'canedit' : 'cannotedit',
+                isAdmin: isAdmin]
     }
 
     def editHoldUntilDate(InlineEditableCommand inlineEditableCommand) {
@@ -260,7 +266,15 @@ class ExperimentController {
         }
     }
 
+    def reloadResults() {
+        def experiment = Experiment.get(params.id)
+        ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
+        def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
+        ResultsService.ImportSummary results = pubchemImportService.recreateMeasuresAndLoad(true, aid)
+
+        return [experiment: experiment, results: results]
+    }
 
     private Map renderEditFieldsForView(String viewName, Experiment experiment, Assay assay) {
         JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
@@ -305,8 +319,6 @@ class ExperimentController {
         experiment.holdUntilDate = params.holdUntilDate ? new SimpleDateFormat("MM/dd/yyyy").parse(params.holdUntilDate) : null
         experiment.runDateFrom = params.runDateFrom ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateFrom) : null
         experiment.runDateTo = params.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").parse(params.runDateTo) : null
-
-
     }
 
 

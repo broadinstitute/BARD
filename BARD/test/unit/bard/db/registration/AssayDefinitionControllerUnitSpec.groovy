@@ -36,8 +36,6 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     Assay assay
 
-
-
     @Before
     void setup() {
         SpringSecurityUtils.metaClass.'static'.ifAnyGranted = { String role ->
@@ -270,8 +268,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         then:
         controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { return newAssay }
         controller.assayDefinitionService.recomputeAssayShortName(_) >> { return newAssay }
-        assert view == "/assayDefinition/show"
-        assert model.assayInstance == newAssay
+        assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
 
     void 'test clone assay fail'() {
@@ -282,7 +279,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         then:
         controller.assayDefinitionService.cloneAssayForEditing(_, _) >> { throw new ValidationException("message", new GrailsMockErrors(assay)) }
         assert flash.message == "Cannot clone assay definition with id \"${assay.id}\" probably because of data migration issues. Please email the BARD team at bard-users@broadinstitute.org to fix this assay"
-        assert view == "/assayDefinition/show"
+        assert controller.response.redirectedUrl.startsWith("/assayDefinition/show/")
     }
 
     void 'test show'() {

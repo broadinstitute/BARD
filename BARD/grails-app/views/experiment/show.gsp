@@ -199,6 +199,11 @@
             <a href="#uploadResultsModal" role="button" class="btn"
                data-toggle="modal">Upload results</a>
         </g:if>
+
+        <g:if test="${editable == 'canedit'}">
+            <g:link action="reloadResults" class="btn" id="${instance.id}">Reload Results from Pubchem</g:link>
+        </g:if>
+
     <%-- Dialog for uploading results --%>
         <div id="uploadResultsModal" class="modal fade" tabindex="-1" role="dialog"
              aria-labelledby="uploadResultsModalLabel" aria-hidden="true">
@@ -241,8 +246,7 @@
     <br/>
     <section id="measures-header">
 
-            <h3>3. Measures</h3>
-
+    <h3>3. Measures</h3>
         <div class="row-fluid">
             <div id="measure-tree"></div>
             <r:script>

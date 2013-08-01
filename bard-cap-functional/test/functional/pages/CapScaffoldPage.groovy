@@ -14,37 +14,59 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		summaryEdit {index -> module EditIconModule, viewSummary.ddValue[index] }
 		editableForm { module EditableFormModule }
 		viewSummary { module SummaryModule, summaryHeader }
-		cardContainer { $("div.card.roundedBorder.card-table-container").find("table.table.table-hover") }
-		cardTable{ contextTitle -> module CardsHolderModule, cardContainer, contextCard:contextTitle }
+		
+		cardContainer { groupName -> $("div", id:groupName) }
+		contextTable { groupName -> cardContainer(groupName).find("table.table.table-hover")}
+		cardTable{ groupName, contextTitle -> module CardsHolderModule, contextTable(groupName), contextCard:contextTitle }
+		contextCards{ groupName -> module CardsHolderModule, cardContainer(groupName) }
 		controlError { module ErrorInlineModule }
 		documentHeaders{ docType -> module DocumentSectionModule, documentType:docType }
+		
+		header { sectionName -> $("#"+sectionName+"-header") }
+		editContext {sectionName -> module EditIconModule, header(sectionName) }
 	}
-
-	def getUIContextItems(def card){
+	def navigateToEditContext(def section){
+		editContext(section).iconPencil.click()
+	}
+	def getUIContexts(def cardGroup){
+		def contexts = []
+		if(contextCards(cardGroup).cardsTitle){
+			contextCards(cardGroup).cardsTitle.each{ cards ->
+				if(cards.find("p")[0].text()){
+					contexts.add(cards.find("p")[0].text())
+				}else{
+					contexts.add(cards.text())
+				}
+			}
+		}
+		return contexts
+	}
+	
+	def getUIContextItems(def cardGroup, def card){
 		def contextItems = []
 		def resultMap = [:]
-		if(isContextCardNotEmpty(card))
-			if(cardTable(card).contextItemRows){
-				cardTable(card).contextItemRows.each{
+		if(isContextCardNotEmpty(cardGroup, card))
+			if(cardTable(cardGroup, card).contextItemRows){
+				cardTable(cardGroup, card).contextItemRows.each{
 					resultMap = ['attributeLabel':it.find("td")[1].text(), 'valueDisplay':it.find("td")[2].text()==""?"null":it.find("td")[2].text()]
 					contextItems.add(resultMap)
 				}
 			}
 		return contextItems
 	}
-	boolean isContextCardNotEmpty(def cardName){
+	boolean isContextCardNotEmpty(def cardGroup, def cardName){
 		boolean found = false
-		if(isContext(cardName)){
-			if(cardTable(cardName).contextItemRows){
+		if(isContext(cardGroup, cardName)){
+			if(cardTable(cardGroup, cardName).contextItemRows){
 				found = true
 			}
 		}
 		return found
 	}
-	boolean isContext(def cardName){
+	boolean isContext(def cardGroup, def cardName){
 		boolean found = false
-		if(cardTable){
-			cardTable.cardsTitle.each{ cards ->
+		if(contextCards(cardGroup)){
+			contextCards(cardGroup).cardsTitle.each{ cards ->
 				if(cards.text().contains(cardName)){
 					found = true
 				}
@@ -52,10 +74,10 @@ class CapScaffoldPage extends CommonFunctionalPage {
 		}
 		return found
 	}
-	boolean isContextItem(def context, contextItem){
+	boolean isContextItem(def cardGroup, def context, contextItem){
 		boolean found = false
-		if(isContext(context)){
-			if(cardTable(context).attributeLabel(contextItem)){
+		if(isContext(cardGroup, context)){
+			if(cardTable(cardGroup, context).attributeLabel(contextItem)){
 				found = true
 			}
 		}

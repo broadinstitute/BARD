@@ -1,6 +1,5 @@
 package pages
 
-import geb.Page
 import modules.ButtonsModule
 import modules.CardsHolderModule
 import modules.ErrorInlineModule

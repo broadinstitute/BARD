@@ -149,8 +149,6 @@ class AssayDefinitionController {
         redirect(action: "findById")
     }
 
-
-
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
         try {
@@ -162,8 +160,7 @@ class AssayDefinitionController {
 
             log.error("Clone assay failed", ee);
         }
-        JSON measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assay, false))
-        render(view: "show", model: [assayInstance: assay, measureTreeAsJson: measureTreeAsJson])
+        redirect(action: "show", id: assay.id)
     }
 
 //    def save() {
@@ -182,16 +179,16 @@ class AssayDefinitionController {
         def assayInstance = Assay.get(params.id)
         JSON measureTreeAsJson = null
 
+        def messageStr = null;
         if (!assayInstance) {
-            // FIXME:  Should not use flash if we do not redirect afterwards
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
-            return
+            messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            return [message: messageStr]
         }
-        flash.message = null
+
         measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
-        [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
 
+        return [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
     }
 
     def editContext(Long id, String groupBySection) {

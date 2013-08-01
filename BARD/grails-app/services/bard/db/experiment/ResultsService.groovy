@@ -26,7 +26,7 @@ import org.apache.commons.lang.StringUtils;
 class ResultsService {
 
     // the number of lines to show the user after upload completes
-    static int LINES_TO_SHOW_USER = 10;
+    static int LINES_TO_SHOW_USER = 20;
 
     static String NUMBER_PATTERN_STRING = "[+-]?[0-9]+(\\.[0-9]*)?([Ee][+-]?[0-9]+)?"
 
