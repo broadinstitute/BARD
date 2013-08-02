@@ -1,6 +1,6 @@
 /**
  * Created with IntelliJ IDEA.
- * User: xiaorong
+ * User: jasiedu
  * Date: 2/7/13
  * Time: 11:48 AM
  * To change this template use File | Settings | File Templates.
@@ -91,9 +91,10 @@ function editDocument(documentId, documentKind, owningEntityId, documentContent,
         success: function (data, textStatus, response) {
             var version = response.getResponseHeader("version");
             var entityId = response.getResponseHeader("entityId");
-            $('#' + documentId).attr('data-version', version);
+
+            $('#textarea_' + documentId).attr('data-version', version);
             //also update the version on the document name
-            $('#' + documentId + "_Name").attr('data-version', version);
+            $("#" + documentId + "_Name").attr('data-version', version);
             //document saved message
             //remove all previous errors and then add this
             $('.alert').html("");
@@ -144,3 +145,4 @@ function initDocumentFunction() {
         $("#projectNameValidation").html("");
     });
 }
+
