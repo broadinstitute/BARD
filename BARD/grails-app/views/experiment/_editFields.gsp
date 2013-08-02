@@ -53,7 +53,7 @@
          $('.date-selection').datepicker({
             format: 'MM/dd/yyyy',
             showOn: "button",
-            buttonImage: "../images/calendar.gif",
+            buttonImage: "../../images/calendar.gif",
             buttonImageOnly: true
         });
     </r:script>
