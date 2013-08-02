@@ -52,8 +52,8 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
         LinkedHashMap activeInactiveDataAfterConversion
-        activeInactiveDataPriorToConversion["hits"] = [868L]
-        activeInactiveDataPriorToConversion["misses"] = [872L]
+        activeInactiveDataPriorToConversion["hits"] = [948L]
+        activeInactiveDataPriorToConversion["misses"] = [959L]
 
         when:
         try {

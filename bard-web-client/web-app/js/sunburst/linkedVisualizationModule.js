@@ -1,4 +1,3 @@
-
 var linkedVisualizationModule = (function () {
     //
     //  Variables to describe the layout of the whole page, with special attention
@@ -11,14 +10,14 @@ var linkedVisualizationModule = (function () {
         margin = {top: 30, right: 20, bottom: 30, left: 10},  // boundaries of displayable area
         width = grandWidth - margin.left - margin.right, // displayable width
         height = widgetHeight - margin.top - margin.bottom, // displayable height
-        widgetWidth = grandWidth / totalWidgetNumber,   // each individual widget width
+        widgetWidth = 25,//grandWidth / totalWidgetNumber,   // each individual widget width
         quarterWidgetWidth = widgetWidth / 4,   // useful spacer
         allowThisMuchExtraSpaceInWidgetForATitle = 30, // the title in your widget
-        widgetWidthWithoutSpacing = widgetWidth - (widgetSpacing * 0.5),
+        widgetWidthWithoutSpacing = 24,//widgetWidth - (widgetSpacing * 0.5),
         widgetHeightWithTitle = widgetHeight + allowThisMuchExtraSpaceInWidgetForATitle, // final widget width
 
     // We have to explicitly pass in the size of the pie charts, so describe those here
-        pieChartWidth = widgetWidth - 13,  // how wide is the pie chart
+        pieChartWidth = 250,// widgetWidth - 13,  // how wide is the pie chart
         pieChartRadius = pieChartWidth / 2, // pie chart reuse
         innerRadius = 30, // open circle in pie
         innerRadiusWhenExpanded = 100, // open circle in pie
@@ -54,38 +53,124 @@ var linkedVisualizationModule = (function () {
             '#e7ba52', '#e7cb94', '#843c39', '#ad494a', '#d6616b', '#e7969c', '#7b4173', '#a55194', '#ce6dbd', '#de9ed6',
             '#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5',
             '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5',
-            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+            '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
+        blueColors = [
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF',
+            '#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#393b79', '#5254a3', '#6b6ecf', '#9c9ede', '#17becf', '#9edae5', '#1f77b4', '#aec7e8', '#B4FCFF','#82B6FA', '#00FFFF'],
+
+
+        reddishColors = [
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500',
+            '#e6550d', '#fd8d3c', '#fdae6b', '#fdd0a2', '#ad494a', '#d6616b', '#e7969c', '#ff7f0e', '#d62728', '#ff9896', '#EF6546','#E6933C', '#FFA500'],
+
+        greenishColors = [
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100',
+            '#31a354', '#74c476', '#a1d99b', '#c7e9c0', '#637939', '#8ca252', '#b5cf6b', '#cedb9c', '#2ca02c', '#98df8a', '#EDDA74','#00E100'],
+
+
+        brownishColors = [
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74',
+            '#8c6d31', '#bd9e39', '#e7ba52', '#e7cb94', '#bcbd22', '#dbdb8d', '#bcbd22', '#fdd0a2', '#F7E47E','#FFFFA6', '#CFBC56','#EDDA74'],
+
+
 
     // below are some names and text strings
-    piename = ['a0', 'a1', 'a2', 'a3'], // internal names for the widgets
-        textForExpandingButton = 'click to expand', // text on button to expand to full display
+        piename = ['a0', 'a1', 'a2', 'a3'], // internal names for the widgets
+        textForExpandingButton = 'Drill down', // text on button to expand to full display
         textForContractingButton = 'click to contract', //text on button to contract unexpended widget
 
-        //  This next set of variables are only for convenience.  They are derived strictly from those above,
-        //   and they are consumed below in preference to those above.  The idea was to conceptually simplify
-        //   some of the variables above and to those that describe either compressed or uncompressed widgets.
+    //  This next set of variables are only for convenience.  They are derived strictly from those above,
+    //   and they are consumed below in preference to those above.  The idea was to conceptually simplify
+    //   some of the variables above and to those that describe either compressed or uncompressed widgets.
+//               compressedPos = [
+//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 0), 'y': 10},
+//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 1), 'y': 10},
+//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 2), 'y': 10},
+//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 3), 'y': 10}
+//               ],
+//               expandedPos = [
+//                   {'x': (widgetWidth * 0) + (quarterWidgetWidth * 1), 'y': 10},
+//                   {'x': (widgetWidth * 1) + (quarterWidgetWidth * 2), 'y': 10},
+//                   {'x': (widgetWidth * 2) + (quarterWidgetWidth * 3), 'y': 10}
+//               ],
         compressedPos = [
-            {'x': margin.left + ((widgetWidth + widgetSpacing) * 0), 'y': 10},
-            {'x': margin.left + ((widgetWidth + widgetSpacing) * 1), 'y': 10},
-            {'x': margin.left + ((widgetWidth + widgetSpacing) * 2), 'y': 10},
-            {'x': margin.left + ((widgetWidth + widgetSpacing) * 3), 'y': 10}
+            {'x': '0.5', 'y': 10},
+            {'x': '25.5', 'y': 10},
+            {'x': '50.5', 'y': 10},
+            {'x': '75.5', 'y': 10}
         ],
         expandedPos = [
-            {'x': (widgetWidth * 0) + (quarterWidgetWidth * 1), 'y': 10},
-            {'x': (widgetWidth * 1) + (quarterWidgetWidth * 2), 'y': 10},
-            {'x': (widgetWidth * 2) + (quarterWidgetWidth * 3), 'y': 10}
+            {'x': '6', 'y': 10},
+            {'x': '37', 'y': 10},
+            {'x': '69', 'y': 10}
         ],
 
-        //  dc vars
+    //  dc vars
         maximumRowsInTable = 150,
 
 
-        //-------widgetPosition------
-        // JavaScript module. This portion of the code allows us to keep track of which widgets are expanded
-        // and which remain in their original positions. There are a functions that allow you to ask the constructor
-        // about its status ( examples:  isAnyWidgetExpanded() returns a Boolean to tell you if anything's expanded,
-        // while expandedWidget () returns a number to tell you which widget has been expanded.
-        //---------------------------
+    //-------widgetPosition------
+    // JavaScript module. This portion of the code allows us to keep track of which widgets are expanded
+    // and which remain in their original positions. There are a functions that allow you to ask the constructor
+    // about its status ( examples:  isAnyWidgetExpanded() returns a Boolean to tell you if anything's expanded,
+    // while expandedWidget () returns a number to tell you which widget has been expanded.
+    //---------------------------
         widgetPosition = (function () {
             // private property
             var currentWidgetPosition = { 'up': [0, 1, 2, 3],
@@ -219,6 +304,22 @@ var linkedVisualizationModule = (function () {
                         return returnValue;
                     };
 
+                var colorSet = {};
+                switch(id){
+                    case 'a0-chart':
+                        colorSet=blueColors;
+                        break;
+                    case 'a1-chart':
+                        colorSet=greenishColors ;
+                        break;
+                    case 'a2-chart':
+                        colorSet=reddishColors ;
+                        break;
+                    case 'a3-chart':
+                        colorSet=brownishColors ;
+                        break;
+                    default:;
+                }
 
                 return dc.pieChart("#" + id)
                     .width(localPieChartWidth)
@@ -228,7 +329,7 @@ var linkedVisualizationModule = (function () {
                     .innerRadius(localInnerRadius)
                     .dimension(dimensionVariable)
                     .group(dimensionVariableGroup)
-                    .colors(colors)
+                    .colors(colorSet)
                     .label(displayDataGroup)
                     .renderTitle(true);
             },
@@ -285,13 +386,15 @@ var linkedVisualizationModule = (function () {
 
 
             moveDataTableOutOfTheWay = function (dataTable) {
-                dataTable.transition()
+                dataTable
+                    .transition()
                     .duration(500)
                     .style("top", 50 + displayWidgetY + displayWidgetHeight + "px");  // Extra spaces for 'click to contract' button
             },
 
             moveDataTableBackToItsOriginalPosition = function (dataTable) {
-                dataTable.transition()
+                dataTable
+                    .transition()
                     .delay(1000)
                     .duration(500)
                     .style("top", "300px");  // Extra spaces for 'click to contract' button
@@ -302,7 +405,7 @@ var linkedVisualizationModule = (function () {
                 domDescription
                     .transition()
                     .duration(1000)
-                    .style("left", horizontalPosition + "px");
+                    .style("left", horizontalPosition + "%");
             },
 
 
@@ -361,91 +464,123 @@ var linkedVisualizationModule = (function () {
             },
 
 
-            spotlightOneAndBackgroundThree = function (d, spotlight, background1, background2, background3, origButton, expandedPos) {
+            spotlightOneAndBackgroundThree = function (index, spotlight, backgroundIndex1, backgroundIndex2, backgroundIndex3, origButton, expandedPos) {
 
                 deactivateDrillDownResetButtons();
 
+
+                var widgetsGoHere = sharedStructures.widgetsGoHere();
                 // first handle the spotlight element and then the three backup singers
+                // movedown
                 spotlight
-                    .style('padding-left', 10 + "px")
                     .transition()
                     .duration(200)
-                    .style("top", d.display.coords.y + "px")
+                    .style("top", widgetsGoHere[index].display.coords.y + "px");
+
+                // moveover
+                spotlight
                     .transition()
-                    .duration(400)
-                    .style("left", d.display.coords.x + "px")
-                    .style('height', d.display.size.height + "px")
-                    .style('width', d.display.size.width + "px");
-                shiftBackgroundWidgets(background1, expandedPos[0].x);
-                shiftBackgroundWidgets(background2, expandedPos[1].x);
-                shiftBackgroundWidgets(background3, expandedPos[2].x);
+                    .delay(200)
+                    .duration(200)
+                    //    .style("left", d.display.coords.x + "%");
+                    .style("left", "10px");
+
+                spotlight
+                    .transition()
+                    .delay(400)
+                    .duration(200)
+                    .style('height', widgetsGoHere[index].display.size.height + "px")
+                    .style('max-width', widgetsGoHere[index].display.size.width + "px")
+                    .style('width', '100%');
+                shiftBackgroundWidgets(d3.select('#a' +backgroundIndex1), expandedPos[0].x);
+                shiftBackgroundWidgets(d3.select('#a' +backgroundIndex2), expandedPos[1].x);
+                shiftBackgroundWidgets(d3.select('#a' +backgroundIndex3), expandedPos[2].x);
 
                 //   Turn off the text label based on click event for background widgets
-                background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
-                background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
-                background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                d3.select('#a' +backgroundIndex1).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                d3.select('#a' +backgroundIndex2).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
+                d3.select('#a' +backgroundIndex3).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'none');
 
                 //  Turn off the expander button, since the user needs to contract the expanded
                 //  widget before they try to expand the new one. It would be nice to click that
                 //  button for them, but D three does not support that sort of activation is you are
                 //  using bound data. I should probably connect to those data dynamically to get around
                 //  this problem.
-                background1.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
-                background2.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
-                background3.selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#a' +backgroundIndex1).selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#a' +backgroundIndex2).selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#a' +backgroundIndex3).selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
 
-
-                origButton
-                    .text(textForContractingButton)
-                    .attr('class', 'contractButton')
-                    .transition()
-                    .delay(1000)
-                    .duration(500)
+                d3.select('#sunburstContractor')
                     .style('opacity', 1);
+//                       if (!contractingButtonDiv.empty ()) {
+//                           contractingButtonDiv.style('opacity', 1);
+//                       } else {
+//                           contractingButtonDiv.append('div')
+//                                   .attr('class', 'contractButton')
+//                                   .attr('id', 'hierarchyContractor')
+//                                   .transition()
+//                                   .delay(1000)
+//                                   .duration(500)
+//                                   .style('opacity', 1);
+//                       }
+//                       origButton
+//                               .text(textForContractingButton)
+//                               .attr('class', 'contractButton')
+//                               .transition()
+//                               .delay(1000)
+//                               .duration(500)
+//                               .style('opacity', 1);
             },
 
-            resetOneAndResettleThree = function (d, spotlight, background1, background2, background3, origButton, expandedPos) {
-                // first handle the spotlight element and then the three backup singers
-                spotlight.transition()
-                    .duration(500)
-                    .style('height', d.orig.size.height + "px")
-                    .style('width', d.orig.size.width + "px")
-                    .style('padding-left', '5px')
-                    .transition()
-                    .duration(500)
-                    .style("left", d.orig.coords.x + "px")
-                    .transition()
-                    .duration(500)
-                    .style("top", d.orig.coords.y + "px");
+            resetOneAndResettleThree = function (index, spotlight, backgroundIndex1, backgroundIndex2, backgroundIndex3, origButton, expandedPos) {
 
-                shiftBackgroundWidgets(background1, background1.data()[0].orig.coords.x);
-                shiftBackgroundWidgets(background2, background2.data()[0].orig.coords.x);
-                shiftBackgroundWidgets(background3, background3.data()[0].orig.coords.x);
-                background1.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
-                background2.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
-                background3.selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                var widgetsGoHere = sharedStructures.widgetsGoHere();
+
+                //shrink
+                spotlight.transition()
+                    .duration(400)
+                    .style('height', widgetsGoHere[index].orig.size.height + "px")
+                    .style('width', widgetsGoHere[index].orig.size.width + "%")
+                    .style('padding-left', '5px');
+
+                //move back to your original X position
+                spotlight.transition()
+                    .delay(400)
+                    .duration(200)
+                    .style("left", widgetsGoHere[index].orig.coords.x + "%");
+
+                //move back to your original Y position
+                spotlight.transition()
+                    .delay(600)
+                    .duration(400)
+                    .style("top", widgetsGoHere[index].orig.coords.y + "px");
+
+
+                shiftBackgroundWidgets(d3.select('#a'+backgroundIndex1), widgetsGoHere[backgroundIndex1].orig.coords.x);
+                shiftBackgroundWidgets(d3.select('#a'+backgroundIndex2), widgetsGoHere[backgroundIndex2].orig.coords.x);
+                shiftBackgroundWidgets(d3.select('#a'+backgroundIndex3), widgetsGoHere[backgroundIndex3].orig.coords.x);
+                d3.select('#a'+backgroundIndex1).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                d3.select('#a'+backgroundIndex2).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
+                d3.select('#a'+backgroundIndex3).selectAll('.pieChart>svg>g>.pie-slice').style('pointer-events', 'auto');
                 //  Turn back on the expander buttons
                 //  widget before they try to expand the new one. It would be nice to click that
                 //  button for them, but D three does not support that sort of activation is you are
                 //  using bound data. I should probably connect to those data dynamically to get around
                 //  this problem.
-                var dataSetNumber = parseInt(background1.attr('id').match(/\d/));
-                if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber))) {
-                    d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                if (!(linkedVizData.extendedHierarchyDataExists(backgroundIndex1))) {
+                    d3.select('#expbutton' + backgroundIndex1).style('pointer-events', 'none').style('opacity', 0.5);
                 } else {
-                    d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                    d3.select('#expbutton' + backgroundIndex1).style('pointer-events', 'auto').style('opacity', 1);
                 }
-                dataSetNumber = parseInt(background2.attr('id').match(/\d/));
-                if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber))) {
-                    d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                if (!(linkedVizData.extendedHierarchyDataExists(backgroundIndex2))) {
+                    d3.select('#expbutton' + backgroundIndex2).style('pointer-events', 'none').style('opacity', 0.5);
                 } else {
-                    d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                    d3.select('#expbutton' + backgroundIndex2).style('pointer-events', 'auto').style('opacity', 1);
                 }
-                dataSetNumber = parseInt(background3.attr('id').match(/\d/));
-                if (!(linkedVizData.extendedHierarchyDataExists(dataSetNumber))) {
-                    d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'none').style('opacity', 0.5);
+                if (!(linkedVizData.extendedHierarchyDataExists(backgroundIndex3))) {
+                    d3.select('#expbutton' + backgroundIndex3).style('pointer-events', 'none').style('opacity', 0.5);
                 } else {
-                    d3.select('#expbutton' + dataSetNumber).style('pointer-events', 'auto').style('opacity', 1);
+                    d3.select('#expbutton' + backgroundIndex3).style('pointer-events', 'auto').style('opacity', 1);
                 }
 
 
@@ -566,40 +701,14 @@ var linkedVisualizationModule = (function () {
                             " back later when more assay data may have accumulated.");
                 }
                 d3.select('#sunburstContractor')
-                    // This next step gets a little bit ugly.  What we want to do is make the
-                    // Sunburst disappear, and then have the pie charts rearrange themselves like always.
-                    // Unfortunately D3 does not provide a standardized way to execute a click ( thereby
-                    // Initiating the associated callback ) if you have data associated with your object,
-                    // Which we most certainly do. Therefore I have to mix up my own copy of the data
-                    // that the callback routine for one of the pie charts would receive, and then explicitly
-                    // execute the callback method. There has to be a better way to get the desired effect,
-                    // though for what it's worth this approach is fully functional ( just butt-ugly, that's all)
                     .on('click', function (d) {
                         sunburstContainer.style('pointer-events', 'none')
                             .style('opacity', '0');
                         pieDiv.style('pointer-events', null)
                             .style('opacity', '1');
-                        var molecularStructure = d3.selectAll('.molstruct')
+                        d3.selectAll('.molstruct')
                             .style('opacity', '0');
-                        var substituteData = {    index: expandedButtonNum,
-                            orig: {
-                                coords: {
-                                    x: compressedPos[expandedButtonNum].x,
-                                    y: compressedPos[expandedButtonNum].y },
-                                size: {
-                                    width: widgetWidthWithoutSpacing,
-                                    height: widgetHeightWithTitle }
-                            },
-                            display: {
-                                coords: {
-                                    x: displayWidgetX,
-                                    y: displayWidgetY },
-                                size: {
-                                    width: displayWidgetWidth,
-                                    height: displayWidgetHeight }
-                            }
-                        }
-                        callbackToExpandOrContractOnButtonClick(substituteData, expandedButtonNum);
+                        callbackToExpandOrContractOnButtonClick({    index: expandedButtonNum }, expandedButtonNum);
                     });
                 var molecularStructure = d3.selectAll('.molstruct')
                     .transition()
@@ -639,79 +748,10 @@ var linkedVisualizationModule = (function () {
 
 
         var buttondata = [
-            {    index: 0,
-                orig: {
-                    coords: {
-                        x: compressedPos[0].x,
-                        y: compressedPos[0].y },
-                    size: {
-                        width: widgetWidthWithoutSpacing,
-                        height: widgetHeightWithTitle }
-                },
-                display: {
-                    coords: {
-                        x: displayWidgetX,
-                        y: displayWidgetY },
-                    size: {
-                        width: displayWidgetWidth,
-                        height: displayWidgetHeight }
-                }
-            },
-            {    index: 1,
-                orig: {
-                    coords: {
-                        x: compressedPos[1].x,
-                        y: compressedPos[1].y },
-                    size: {
-                        width: widgetWidthWithoutSpacing,
-                        height: widgetHeightWithTitle }
-                },
-                display: {
-                    coords: {
-                        x: displayWidgetX,
-                        y: displayWidgetY },
-                    size: {
-                        width: displayWidgetWidth,
-                        height: displayWidgetHeight }
-                }
-            },
-            {    index: 2,
-                orig: {
-                    coords: {
-                        x: compressedPos[2].x,
-                        y: compressedPos[2].y },
-                    size: {
-                        width: widgetWidthWithoutSpacing,
-                        height: widgetHeightWithTitle }
-                },
-                display: {
-                    coords: {
-                        x: displayWidgetX,
-                        y: displayWidgetY },
-                    size: {
-                        width: displayWidgetWidth,
-                        height: displayWidgetHeight }
-                }
-            },
-            {   index: 3,
-                orig: {
-                    coords: {
-                        x: compressedPos[3].x,
-                        y: compressedPos[3].y },
-                    size: {
-                        width: widgetWidthWithoutSpacing,
-                        height: widgetHeightWithTitle }
-                },
-                display: {
-                    coords: {
-                        x: displayWidgetX,
-                        y: displayWidgetY },
-                    size: {
-                        width: displayWidgetWidth,
-                        height: displayWidgetHeight }
-                }
-            }
-        ];
+            { index: 0 },
+            { index: 1 },
+            { index: 2 },
+            { index: 3 }]  ;
 
 
         // Private method used to pull the data in from the remote site
@@ -720,6 +760,18 @@ var linkedVisualizationModule = (function () {
                 return    linkedVizData.retrieveLinkedData();
 
             },
+
+            /***
+             *  This method has nothing to do with the Sunburst itself. Instead we are simply  removing
+             *  the 'we are still loading' spinner so that users might see the display.
+             *               *
+             */
+         removeTheLoadingSpinner = function (spinnerId) {
+            var onScreenSpinnerElement = d3.select(spinnerId);
+            if (!(onScreenSpinnerElement.empty ()))   {
+                onScreenSpinnerElement.style ('opacity', 0) ;
+            }
+        },
 
 
         // Our main button handler callback
@@ -738,10 +790,10 @@ var linkedVisualizationModule = (function () {
                     widgetPosition.expandThisWidget(d.index);
                     expandedWidget = widgetPosition.expandedWidget();
                     unexpandedWidget = widgetPosition.unexpandedWidgets();
-                    displayManipulator.spotlightOneAndBackgroundThree(d, d3.select('#a' + expandedWidget),
-                        d3.select('#a' + unexpandedWidget[0]),
-                        d3.select('#a' + unexpandedWidget[1]),
-                        d3.select('#a' + unexpandedWidget[2]),
+                    displayManipulator.spotlightOneAndBackgroundThree(d.index, d3.select('#a' + expandedWidget),
+                        unexpandedWidget[0],
+                        unexpandedWidget[1],
+                        unexpandedWidget[2],
                         origButton,
                         expandedPos);
                     expandContractButton = d3.select('#a' + expandedWidget + '-chart>.graphTitle')
@@ -758,10 +810,10 @@ var linkedVisualizationModule = (function () {
                     unexpandedWidget = widgetPosition.unexpandedWidgets();
                     displayManipulator.contractGraphicsArea(d3.select('#a' + x).select('.pieChart>svg'),
                         d3.select('#a' + expandedWidget + '-chart>.expandedGraphTitle'));
-                    displayManipulator.resetOneAndResettleThree(d, d3.select('#a' + expandedWidget),
-                        d3.select('#a' + unexpandedWidget[0]),
-                        d3.select('#a' + unexpandedWidget[1]),
-                        d3.select('#a' + unexpandedWidget[2]),
+                    displayManipulator.resetOneAndResettleThree(d.index, d3.select('#a' + expandedWidget),
+                        unexpandedWidget[0],
+                        unexpandedWidget[1],
+                        unexpandedWidget[2],
                         origButton,
                         expandedPos);
                     widgetPosition.unexpandAllWidgets();
@@ -802,13 +854,9 @@ var linkedVisualizationModule = (function () {
                     }
                 }
 
-
-                // Add a button for causing misunderstood disappear
-                sunburstContainer.append("div")
+                sunburstContainer.select('#sunburstContractor')
                     .text(textForContractingButton)
-                    .attr('class', 'contractButton')
-                    .attr('id', 'sunburstContractor')
-                    .data(buttondata);
+                    .style('opacity','0');
 
             },
 
@@ -826,6 +874,8 @@ var linkedVisualizationModule = (function () {
                     }
                     presentLinkedData();
                     linkedVizData.cleanupOriginalHierarchyData(2);
+                    removeTheLoadingSpinner ( '#still_loading' );
+
                 });// d3.json
 
             },
@@ -856,7 +906,7 @@ var linkedVisualizationModule = (function () {
                 dc.renderAll();
 
                 // Finally, attach some data along with buttons and callbacks to the pie charts we've built
-                attachButtonsToThePieContainers('.pieChartContainer', handleExpandOrContractClick, buttondata, d3.selectAll('#suburst_container'));
+                attachButtonsToThePieContainers('.columnsAssociatedWithPies', handleExpandOrContractClick, buttondata, d3.selectAll('#suburst_container'));
 
 
             };
@@ -882,4 +932,3 @@ var linkedVisualizationModule = (function () {
     return buildLinkedHierarchiesVisualization;
 
 }());  // linkedVisualizationModule
-

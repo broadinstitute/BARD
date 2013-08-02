@@ -1,3 +1,4 @@
+
 var ColorManagementRoutines = function (colorScale) {
 
     // Safety trick for constructors
@@ -74,8 +75,8 @@ var TooltipHandler = function ()  {
 function createASunburst(width, height, padding, duration, colorScale, domSelector, cid, widgetIndex) {
 
     var tooltipHandler  = new TooltipHandler (),
-     colorManagementRoutines = new ColorManagementRoutines(colorScale),
-     radius = Math.min(width, height) / 2;
+        colorManagementRoutines = new ColorManagementRoutines(colorScale),
+        radius = Math.min(width, height) / 2;
 
 
     var SunburstAnimation = function ()  {
@@ -158,9 +159,9 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
 
 
     var partition = d3.layout.partition()
-        .value(function (d) {
-            return linkedVizData.adjustedPartitionSize(d);
-        }).sort(function(a,b){
+            .value(function (d) {
+                return linkedVizData.adjustedPartitionSize(d);
+            }).sort(function(a,b){
                 return d3.descending(a.name, b.name);
             })
         ;
@@ -445,3 +446,4 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
             .style('opacity', '0');
     })();
 }
+

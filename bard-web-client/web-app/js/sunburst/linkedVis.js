@@ -398,7 +398,7 @@ var linkedVizData = (function () {
          * return value that will then be used by the routine that does the recursive descent,
          * namely findMinimumAndMaximumRatiosByWalkingTheTree.
          */
-         findMinimumAndMaximumRatiosForColoring = function (currentNode) {
+            findMinimumAndMaximumRatiosForColoring = function (currentNode) {
             var returnValue = {
                 minimum: undefined,
                 maximum: undefined
@@ -742,4 +742,3 @@ var linkedVizData = (function () {
     }
 
 }());
-

@@ -18,7 +18,7 @@ var createALegend = function (legendWidth,
         .attr("class", "legendHolder")
         .html('<br />Color assignment:<br /> x = active / <br />(active + inactive)');
 
-   rootLegendHolder.append('hr')
+    rootLegendHolder.append('hr')
         .attr("width", '100%')
         .attr("color", '#000');
 
@@ -26,9 +26,15 @@ var createALegend = function (legendWidth,
     // Define a few private methods that we will use later
     //
     var zeroDynamicRange = function (rootLegendHolder,maximumValue) {
+        var  valueAdjustedForPrecision =  0;
+        if (!(maximumValue === undefined) &&
+            ((typeof maximumValue) ==='number')) {
+            valueAdjustedForPrecision =  maximumValue.toPrecision(3);
+        }
+
         rootLegendHolder.append('div')
             .attr('class', 'legendExplanation')
-            .html('Dynamic range is 0.   All arcs had value <strong>'+maximumValue+'</strong> and the color scheme is therefore constant.');
+            .html('Dynamic range is 0.   All arcs had value <strong>'+valueAdjustedForPrecision+'</strong> and the color scheme is therefore constant.');
     };
 
 
@@ -77,14 +83,14 @@ var createALegend = function (legendWidth,
     //  is 0 or nonzero
     if (dynamicRange === 0) {
         zeroDynamicRange(rootLegendHolder,
-                         maximumValue);
+            maximumValue);
     } else {
         nonzeroDynamicRange ( numberOfTics,
-                              rootLegendHolder,
-                              legendWidth,
-                              legendHeight,
-                              colorScale,
-                              numberOfDivisions );
+            rootLegendHolder,
+            legendWidth,
+            legendHeight,
+            colorScale,
+            numberOfDivisions );
     }
 
     return rootLegendHolder;
