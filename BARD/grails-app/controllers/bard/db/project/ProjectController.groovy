@@ -85,7 +85,18 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Project.PROJECT_NAME_MAX_SIZE, inputValue.length())
+            if(maxSizeMessage){
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            project = projectService.updateProjectName(inlineEditableCommand.pk, inputValue)
+
+            if(project?.hasErrors()){
+                throw new Exception("Error while editing Project Name")
+            }
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
@@ -105,7 +116,19 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Project.DESCRIPTION_MAX_SIZE, inputValue.length())
+            if(maxSizeMessage){
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
             project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            if(project?.hasErrors()){
+                throw new Exception("Error while editing Project Description")
+            }
+
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
