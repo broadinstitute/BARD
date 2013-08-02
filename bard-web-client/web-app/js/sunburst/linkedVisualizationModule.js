@@ -1,4 +1,36 @@
+/***
+ * The purpose of this module is to perform the physical manipulations of the objects you see on the screen. As
+ * an example:
+ *   1) one of the pies drops down, moves over, and then is replaced by Sunburst/graph
+ *   2) the other pies move over to fill the available space
+ *   3) the table of assays moves out of the way
+ *   4) and meanwhile data structures are updated so that we can keep track of what happened
+ *  these are the sort of things this module handles.  Because of this focus, this module needs
+ *  to hold a large number of variables that describe the screen ( margins, pie chart radius,
+ *  that sort of thing ) though notably there is also one other big structure in a different module
+ *  ( the sharedStructures module ) called 'widgetsGoHere' that you will need to manipulate in order
+ *  to completely change where things go on the screen.
+ *
+ *  From an outside API perspective this module is really simple. It contains exactly one
+ *  externally visible function (namely buildLinkedHierarchiesVisualization) which is the
+ *  high level entrance for building the whole visualization. Internally the code is organized
+ *  into a series of four distinct modules:
+ *      1) variable definitions,
+ *      2) the  widgetPosition module, which allows us to keep track of who is expanded and who's not
+ *      without constantly querying the DOM
+ *      3) the displayManipulator, which is the meat of the functionality, moving things around
+ *      and bringing in Sunburst as needed
+ *      4) and finally generateLinkedPies, which calls dc.js, gathers the data, and otherwise acts
+ *      as the executive controller for the larger module.
+ *  For the record, the modules roughly follow the Stephen Stefanov module pattern as set forth
+ *  in his excellent book, 'JavaScript Patterns'.
+ *
+ */
+
+
+
 var linkedVisualizationModule = (function () {
+
     //
     //  Variables to describe the layout of the whole page, with special attention
     //   to the unexpanded widgets
@@ -138,17 +170,6 @@ var linkedVisualizationModule = (function () {
     //  This next set of variables are only for convenience.  They are derived strictly from those above,
     //   and they are consumed below in preference to those above.  The idea was to conceptually simplify
     //   some of the variables above and to those that describe either compressed or uncompressed widgets.
-//               compressedPos = [
-//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 0), 'y': 10},
-//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 1), 'y': 10},
-//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 2), 'y': 10},
-//                   {'x': margin.left + ((widgetWidth + widgetSpacing) * 3), 'y': 10}
-//               ],
-//               expandedPos = [
-//                   {'x': (widgetWidth * 0) + (quarterWidgetWidth * 1), 'y': 10},
-//                   {'x': (widgetWidth * 1) + (quarterWidgetWidth * 2), 'y': 10},
-//                   {'x': (widgetWidth * 2) + (quarterWidgetWidth * 3), 'y': 10}
-//               ],
         compressedPos = [
             {'x': '0.5', 'y': 10},
             {'x': '25.5', 'y': 10},
@@ -506,30 +527,12 @@ var linkedVisualizationModule = (function () {
                 //  button for them, but D three does not support that sort of activation is you are
                 //  using bound data. I should probably connect to those data dynamically to get around
                 //  this problem.
-                d3.select('#a' +backgroundIndex1).selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
-                d3.select('#a' +backgroundIndex2).selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
-                d3.select('#a' +backgroundIndex3).selectAll('.expandButton').style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#expbutton' +backgroundIndex1).style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#expbutton' +backgroundIndex2).style('pointer-events', 'none').style('opacity', 0.5);
+                d3.select('#expbutton' +backgroundIndex3).style('pointer-events', 'none').style('opacity', 0.5);
 
                 d3.select('#sunburstContractor')
                     .style('opacity', 1);
-//                       if (!contractingButtonDiv.empty ()) {
-//                           contractingButtonDiv.style('opacity', 1);
-//                       } else {
-//                           contractingButtonDiv.append('div')
-//                                   .attr('class', 'contractButton')
-//                                   .attr('id', 'hierarchyContractor')
-//                                   .transition()
-//                                   .delay(1000)
-//                                   .duration(500)
-//                                   .style('opacity', 1);
-//                       }
-//                       origButton
-//                               .text(textForContractingButton)
-//                               .attr('class', 'contractButton')
-//                               .transition()
-//                               .delay(1000)
-//                               .duration(500)
-//                               .style('opacity', 1);
             },
 
             resetOneAndResettleThree = function (index, spotlight, backgroundIndex1, backgroundIndex2, backgroundIndex3, origButton, expandedPos) {

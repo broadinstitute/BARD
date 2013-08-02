@@ -298,17 +298,71 @@ describe("Testing linkedVis.js", function () {
 
 
 
-    describe('legend test -- range non-zero', function () {
+    describe('data manipulation module', function () {
 
-        it('Make it through a realistic data set test', function () {
+        it('Make it through loading a realistic data set test', function () {
 
             expect (linkedVizData.validateLinkedData).toBeDefined()  ;
             linkedVizData.parseData(fakeData);
-            linkedVizData.validateLinkedData();
+            expect(linkedVizData.validateLinkedData()).toBe(true);
         });
     });
 
+
+    describe('test the number of widgets counter', function () {
+
+        it('tests count of faked data looks for result', function () {
+
+            expect (linkedVizData.numberOfWidgets()).toBe(4);
+
+        });
+    });
+
+
+    describe('test the number of widgets counter', function () {
+
+        it('tests known count of faked data', function () {
+
+            expect (linkedVizData.retrieveLinkedData().length).toBe(16);
+
+        });
+    });
+
+
+
+    describe('test ability to dynamically determine if hierarchy data exists', function () {
+
+        it('tests faked data, where data type 0 has no hierarchy but datatype 1 does', function () {
+
+            expect (linkedVizData.extendedHierarchyDataExists(0)).toBe(false);
+            expect (linkedVizData.extendedHierarchyDataExists(1)).toBe(true);
+
+
+        });
+    });
+
+
+
+    describe('test CID value getter and setter', function () {
+
+        it('should start with zero, set to a new value, and then remember it', function () {
+
+            expect (linkedVizData.cid()).toBe(0);
+            linkedVizData.cid(47);
+            expect (linkedVizData.cid()).not.toBe(0);
+            expect (linkedVizData.cid()).toBe(47);
+
+        });
+    });
+
+
+
+
 });
+
+
+
+
 
 
 

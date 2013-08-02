@@ -1,3 +1,37 @@
+/***
+ *  This code is used to create the sunburst, so it gets called repeatedly ( every time you need to make a new sunburst)
+ *  from the higher-level portions of the Linked Hierarchy code.
+ *
+ *  This was some of the early d3 code that I wrote and I guess it shows. Instead of having modules that
+ *  encapsulate modules, instead I use high-level functions that encapsulate series of statements. We still
+ *  avoid any of the great evil of global variables, but I no longer think this approach is as maintainable
+ *  as the nested modules that characterize the majority of the remainder of the Linked Hierarchies implementation.
+ *  Note also that I use basic JavaScript constructors here instead of the JavaScript modules which are by their
+ *  nature only executed once, and which provide a clean way to identify internal methods, externally visible methods,
+ *  and dependencies.
+ *
+ *  Note also that the exceedingly nifty sunburst drill down ( with its attendant animation) is implemented in this
+ *  section of the code.  Credit has to be given to Jason Davies for figuring out the intricacies of this implementation.
+ *  My zooming in/out code borrows quite shamelessly from his.  Look up the "Coffee Flavour Wheel" Which is widely
+ *  available on the net and you'll see where I drew those aspects of the code from.
+ *
+ */
+
+
+
+
+
+
+/***
+ * The color management routines are used to a color to the different arcs within a sunburst based on the ratio
+ * of active to inactive assays that tested the compound. This is meant to be a singleton,, so it is implemented
+ * as a JavaScript constructor.  Note the little trick from JavaScript ninja (" Secrets of a JavaScript Ninja",
+ * John Resig, 2013) that ensures that the singleton is never implemented more than once.
+ * @param colorScale
+ * @returns {ColorManagementRoutines}
+ * @constructor
+ */
+
 
 var ColorManagementRoutines = function (colorScale) {
 
@@ -27,6 +61,15 @@ var ColorManagementRoutines = function (colorScale) {
     };
 };
 
+
+/***
+ *  The tooltip handlor is Also meant as a singleton for a single HTML page, So again we use Resig's trick from
+ *  JavaScript ninja. Note also, however, that in later code I've come to prefer the JavaScript module pattern
+ *  promoted by Stefanov (JavaScript Patterns, 2010), so maybe I'll come back and update this code at some point.
+ *
+ * @returns {TooltipHandler}
+ * @constructor
+ */
 
 var TooltipHandler = function ()  {
     // Safety trick for constructors
@@ -69,8 +112,17 @@ var TooltipHandler = function ()  {
 };
 
 
-
-
+/***
+ *  createASunburst makes one sunburst each time it is called
+ * @param width
+ * @param height
+ * @param padding
+ * @param duration
+ * @param colorScale
+ * @param domSelector
+ * @param cid
+ * @param widgetIndex
+ */
 
 function createASunburst(width, height, padding, duration, colorScale, domSelector, cid, widgetIndex) {
 

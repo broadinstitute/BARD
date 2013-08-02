@@ -1,3 +1,61 @@
+/***
+ *  This module is concerned primarily with reading in, validating, and manipulating the data. This module
+ *  presents a fair number of methods to the world, and through these routines takes on the burden of
+ *  performing the real down and dirty data manipulations. If someday you need to add a new routine
+ *  that performs a recursive descent through the data tree and performs some complicated analysis/manipulations
+ *  along the way, this module is the place to put it.
+ *
+ *  As far is the internal structure of the code goes, there are two major sections to the code:
+ *
+ *  Validation:
+ *
+ *  The first one is the smaller
+ *  of the two sections, and it is called 'Validator'.  This function brings together The code necessary to check the data
+ *  after we get it from the backend, and to validate that we can really work with. The structure is built around
+ *  the GOF strategy pattern, using the idea that we can hold the actual validations in separate methods while
+ *  repeatedly cycling through the same infrastructure that manages the running of those validations. There are four
+ *  sections to the data, and four major validation routines ( one for each).  As well there are a number of
+ *  lower level validation routines, and rooms/structure for more. If/when it comes time to check the data at a more
+ *  fine-grained level, this is the place to put code of that sort.
+ *
+ *  One particular note – Keep an eye out for problems in the 'assayCheck' validation routine. One of the tests
+ *  this method performs is to use a regular expression to make sure that no funky characters from assay names
+ *  make their way into our data structures. The danger, of course, is that if an assay name comes along with
+ *  a character we've never seen before then this validator is going to flunk it. You should see the results of
+ *  that failing test both in an alert that will go to the users screen ( displaying the name of the offending assay)
+ *  and in messages sent to the users JavaScript console. If you see these symptoms then you may need to expand
+ *  the regular expression to include a new character (or alternatively fix the funky assay name in the database ).
+ *
+ *  LinkedData:
+ *
+ *  This module contains the data analysis routines depended upon by the rest of the visualization. In some sense
+ *  this is the heart and soul of the whole visualization package, with lots of gory recursive dissents,  exhaustive
+ *  and aborted,  tail and head recursion and all the other topics you know and love from second-year computer science.
+ *  At their core, the basic idea is that the visualization is performing two different types of data filtering; we have
+ *  a linear list of assays, and then some number of recursive trees that hold pointers into that linear list. So if
+ *  the user clicks on a pie and thereby restricts the linear data set, then when we need to build out a hierarchical
+ *  representation (a sunburst) then Whole branches of the tree may be excluded from consideration. The alternative type
+ *  of filtering occurs if the user clicks on a sunburst and thereby implicitly excludes all the data on the other branches
+ *  from consideration, which of course has to be represented in the pies.  This back and forth between the two types
+ *  of structures, linear and hierarchical, is what gives the visualization is power. It is also, of course, the portion
+ *  of the code that is the most complicated in some comp. sci. sense. In some other sense though this part of the code is simply
+ *  reflecting tree theory and is pretty far removed from the DOM and d3, and practically speaking that's where all the
+ *  detail and the HTML/CSS idiosyncrasies live, so from that perspective this portion of the code is actually much simpler.
+ *
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
 var linkedVizData = (function () {
 
 
