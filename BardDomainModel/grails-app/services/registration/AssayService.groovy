@@ -43,15 +43,16 @@ class AssayService {
         if (newAssay.assayType == AssayType.TEMPLATE) { //convert templates to regular
             newAssay.assayType = AssayType.REGULAR
         }
-        newAssay.save(flush: true)
+        newAssay.save(flush: true, validate: false)
 
-        Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay)
+        Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         // clone all measures
         Map<Measure, Measure> measureOldToNew = cloneMeasures(assay, newAssay)
         assignParentMeasures(assay, measureOldToNew)
 
         cloneContextsMeasures(assay, assayContextOldToNew, measureOldToNew)
-        newAssay.save(flush: true, failOnError: true)
+        newAssay.save(flush: true, failOnError: true, validate: false)
+
         //now call the manage names stored procedure
         //then look up and return the assay
         return Assay.findById(newAssay.id)
@@ -95,14 +96,20 @@ class AssayService {
         )
     }
 
-    Map<AssayContext, AssayContext> cloneContexts(Assay assay, Assay newAssay) {
+    Map<AssayContext, AssayContext> cloneContexts(Assay assay, Assay newAssay, boolean validate) {
         Map<AssayContext, AssayContext> assayContextOldToNew = [:]
 
         for (context in assay.assayContexts) {
             AssayContext newContext = context.clone(newAssay)
             assayContextOldToNew[context] = newContext
 
-            newContext.save(failOnError: true)
+            newContext.save(failOnError: true, validate: validate)
+
+            // this shouldn't be necessary, but it appears that if you save, bypassing validating, any invalid items
+            // were not actually getting written to the db (even though they _would_ get an ID assigned)
+            for(item in newContext.contextItems) {
+                item.save(failOnError: true, validate: validate)
+            }
         }
         return assayContextOldToNew
     }
