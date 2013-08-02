@@ -2062,3 +2062,4 @@ Zinc sulfate	1523
 zone diameter	1026
 z-prime factor	628
 Z-score	977
+Roche LightCycler480 retired3	1853
