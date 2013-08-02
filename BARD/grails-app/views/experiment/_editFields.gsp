@@ -2,15 +2,16 @@
 
 <div class="row-fluid">
 <div id="foo" class="span12">
-
+<h1>Create Experiment for ADID: ${assay.id}</h1>
+<h2><g:link controller="assayDefinition" action="show"
+            id="${assay.id}">${assay.name}</g:link></h2>
 <g:if test="${experiment.experimentName == null || experiment.errors}">
 
     <h3>Summary</h3>
 
     <dl class="dl-horizontal">
 
-        <dt>Assay:</dt><dd><g:link controller="assayDefinition" action="show"
-                                   id="${assay.id}">${assay.name}</g:link></dd>
+
 
         <dt>Name:</dt>
         <dd>
