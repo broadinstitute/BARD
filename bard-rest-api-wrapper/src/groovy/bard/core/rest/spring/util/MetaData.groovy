@@ -124,7 +124,7 @@ public class MetaData extends JsonUtil {
             String lhsDisplayOrder = lhs.children.find { Value child -> child.id == 'displayOrder' }?.value.toString()
             String rhsDisplayOrder = rhs.children.find { Value child -> child.id == 'displayOrder' }?.value.toString()
             if (lhsDisplayOrder?.isNumber() && rhsDisplayOrder?.isNumber()) {
-                return lhsDisplayOrder <=> rhsDisplayOrder
+                return lhsDisplayOrder.toInteger() <=> rhsDisplayOrder.toInteger()
             } else if (lhsDisplayOrder?.isNumber() || rhsDisplayOrder?.isNumber()) {//if one has a displayOder but the other one doesn't, return the one with the displayOrder as first.
                 if (lhsDisplayOrder?.isNumber()) {
                     return -1
