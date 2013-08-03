@@ -1,7 +1,6 @@
 package bard.db.registration
 
 import bard.db.ContextService
-import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -11,16 +10,13 @@ import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
-import grails.validation.Validateable
 import grails.validation.ValidationException
-import groovy.transform.InheritConstructors
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.acls.domain.BasePermission
-import org.springframework.validation.FieldError
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -39,6 +35,29 @@ class AssayDefinitionController {
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
 
+    def assayComparisonReport() {
+
+    }
+
+    def generateAssayComparisonReport(final Long assayOneId, final Long assayTwoId) {
+        if (assayOneId == null || assayTwoId == null) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Please enter valid assay ids in both text boxes")
+            return
+        }
+
+        Assay assayOne = Assay.findById(assayOneId)
+        if (!assayOne) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "ADID: ${assayOneId} does not exist")
+            return
+        }
+        Assay assayTwo = Assay.findById(assayTwoId)
+        if (!assayTwo) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "ADID: ${assayTwoId} does not exist")
+            return
+        }
+        final Map reportMap = assayDefinitionService.generateAssayComparisonReport(assayOne, assayTwo)
+        render(template: "generateAssayCompareReport", model: reportMap)
+    }
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -96,13 +115,13 @@ class AssayDefinitionController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Assay.ASSAY_NAME_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inputValue)
-            if(assay?.hasErrors()){
-               throw new Exception("Error while editing assay Name")
+            if (assay?.hasErrors()) {
+                throw new Exception("Error while editing assay Name")
             }
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
         }
@@ -127,12 +146,12 @@ class AssayDefinitionController {
 
             final String inputValue = inlineEditableCommand.value.trim()
             String maxSizeMessage = validateInputSize(Assay.DESIGNED_BY_MAX_SIZE, inputValue.length())
-            if(maxSizeMessage){
+            if (maxSizeMessage) {
                 editExceedsLimitErrorMessage(maxSizeMessage)
                 return
             }
             assay = assayDefinitionService.updateDesignedBy(inlineEditableCommand.pk, inputValue)
-            if(assay?.hasErrors()){
+            if (assay?.hasErrors()) {
                 throw new Exception("Error while editing Assay designed by")
             }
 
@@ -188,17 +207,6 @@ class AssayDefinitionController {
         redirect(action: "show", id: assay.id)
     }
 
-//    def save() {
-//
-//        def assayInstance = new Assay(params)
-//        Assay savedAssay = assayDefinitionService.saveNewAssay(assayInstance)
-//        if (!savedAssay) {
-//            redirect(action: "findById")
-//            return
-//        }
-//        flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), savedAssay.id])
-//        redirect(action: "show", id: savedAssay.id)
-//    }
 
     def show() {
         def assayInstance = Assay.get(params.id)
@@ -468,15 +476,16 @@ class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
     String validateInputSize(int maxSize, int currentSize) {
-        if(currentSize > maxSize){
+        if (currentSize > maxSize) {
             return "Length of input must not exceed ${maxSize} characters, but you entered ${currentSize} characters"
         }
         return null
     }
+
     boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
 
         final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
-        if(isAdmin){
+        if (isAdmin) {
             return true
         }
 
@@ -484,7 +493,7 @@ class EditingHelper {
 
         Class<?> clazz = org.springframework.util.ClassUtils.getUserClass(domainInstance.getClass());
 
-        return permissionEvaluator?.hasPermission(auth, domainInstance.id,clazz.name,BasePermission.ADMINISTRATION)
+        return permissionEvaluator?.hasPermission(auth, domainInstance.id, clazz.name, BasePermission.ADMINISTRATION)
     }
 
     def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
@@ -508,6 +517,7 @@ class EditingHelper {
     def editErrorMessage() {
         render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
     }
+
     def editExceedsLimitErrorMessage(String message) {
         render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
 

@@ -5,6 +5,8 @@ import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.apache.commons.collections.CollectionUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -16,7 +18,7 @@ import spock.lang.Unroll
  * Time: 11:30 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay,AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @TestFor(AssayContextService)
 @Unroll
@@ -38,6 +40,49 @@ class AssayContextServiceUnitSpec extends Specification {
         "Hierarchy Type ${HierarchyType.CALCULATED_FROM}" | HierarchyType.CALCULATED_FROM
         "Hierarchy Type ${HierarchyType.SUPPORTED_BY}"    | HierarchyType.SUPPORTED_BY
         ""                                                | null
+
+    }
+
+    void printMe(AssayContextItem contextItem) {
+
+    }
+
+
+    void "test addItemToEndOfListY #desc"() {
+        given: 'an a'
+
+        AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
+        AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
+        sourceAssayContext.addToAssayContextItems(AssayContextItem.build())
+        // AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
+        //   assert sourceAssayContext.assayContextItems.size() == 1
+        // assert sourceAssayContext == draggedAssayContextItem.assayContext
+
+        when:
+        Collection c = CollectionUtils.subtract(targetAssayContext.assayContextItems, sourceAssayContext.assayContextItems)
+        Collection d = CollectionUtils.subtract(sourceAssayContext.assayContextItems, targetAssayContext.assayContextItems)
+        //service.addItem(draggedAssayContextItem, targetAssayContext, targetAssayContext.assay.id)
+
+        then:
+        println("target: " + targetAssayContext.assayContextItems)
+        println("source: " + sourceAssayContext.assayContextItems)
+
+        println("target->source " + c)
+        for (AssayContextItem a : c) {
+            printMe(a)
+        }
+        println("source->target " + d)
+        for (AssayContextItem a : d) {
+            printMe(a)
+        }
+
+        //assertItemAdded(targetAssayContext, draggedAssayContextItem, sizeAfterAdd, indexOfAddedItem)
+
+        where:
+        desc                            | numberOfExistingContextItems | indexOfAddedItem | sizeAfterAdd
+        'add item to empty list'        | 0                            | 0                | 1
+        'add item to list with 1 item'  | 1                            | 1                | 2
+        'add item to list with 2 items' | 2                            | 2                | 3
 
     }
 
