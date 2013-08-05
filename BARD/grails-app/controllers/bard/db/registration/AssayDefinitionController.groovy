@@ -35,6 +35,29 @@ class AssayDefinitionController {
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
 
+    def assayComparisonReport() {
+
+    }
+
+    def generateAssayComparisonReport(final Long assayOneId, final Long assayTwoId) {
+        if (assayOneId == null || assayTwoId == null) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "Please enter valid assay ids in both text boxes")
+            return
+        }
+
+        Assay assayOne = Assay.findById(assayOneId)
+        if (!assayOne) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "ADID: ${assayOneId} does not exist")
+            return
+        }
+        Assay assayTwo = Assay.findById(assayTwoId)
+        if (!assayTwo) {
+            render(status: HttpServletResponse.SC_BAD_REQUEST, text: "ADID: ${assayTwoId} does not exist")
+            return
+        }
+        final Map reportMap = assayDefinitionService.generateAssayComparisonReport(assayOne, assayTwo)
+        render(template: "generateAssayCompareReport", model: reportMap)
+    }
 
     def editAssayType(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -89,7 +112,17 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Assay.ASSAY_NAME_MAX_SIZE, inputValue.length())
+            if (maxSizeMessage) {
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            assay = assayDefinitionService.updateAssayName(inlineEditableCommand.pk, inputValue)
+            if (assay?.hasErrors()) {
+                throw new Exception("Error while editing assay Name")
+            }
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.assayName)
         }
         catch (AccessDeniedException ade) {
@@ -110,7 +143,18 @@ class AssayDefinitionController {
                 conflictMessage(message)
                 return
             }
-            assay = assayDefinitionService.updateDesignedBy(inlineEditableCommand.pk, inlineEditableCommand.value)
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Assay.DESIGNED_BY_MAX_SIZE, inputValue.length())
+            if (maxSizeMessage) {
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            assay = assayDefinitionService.updateDesignedBy(inlineEditableCommand.pk, inputValue)
+            if (assay?.hasErrors()) {
+                throw new Exception("Error while editing Assay designed by")
+            }
+
             generateAndRenderJSONResponse(assay.version, assay.modifiedBy, assay.assayShortName, assay.lastUpdated, assay.designedBy)
         }
         catch (AccessDeniedException ade) {
@@ -164,17 +208,6 @@ class AssayDefinitionController {
         redirect(action: "show", id: assay.id)
     }
 
-//    def save() {
-//
-//        def assayInstance = new Assay(params)
-//        Assay savedAssay = assayDefinitionService.saveNewAssay(assayInstance)
-//        if (!savedAssay) {
-//            redirect(action: "findById")
-//            return
-//        }
-//        flash.message = message(code: 'default.created.message', args: [message(code: 'assay.label', default: 'Assay'), savedAssay.id])
-//        redirect(action: "show", id: savedAssay.id)
-//    }
 
     def show() {
         def assayInstance = Assay.get(params.id)
@@ -453,10 +486,17 @@ class AssayDefinitionController {
 class EditingHelper {
     static final DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy")
 
+    String validateInputSize(int maxSize, int currentSize) {
+        if (currentSize > maxSize) {
+            return "Length of input must not exceed ${maxSize} characters, but you entered ${currentSize} characters"
+        }
+        return null
+    }
+
     boolean canEdit(PermissionEvaluator permissionEvaluator, SpringSecurityService springSecurityService, domainInstance) {
 
         final boolean isAdmin = SpringSecurityUtils?.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
-        if(isAdmin){
+        if (isAdmin) {
             return true
         }
 
@@ -464,7 +504,7 @@ class EditingHelper {
 
         Class<?> clazz = org.springframework.util.ClassUtils.getUserClass(domainInstance.getClass());
 
-        return permissionEvaluator?.hasPermission(auth, domainInstance.id,clazz.name,BasePermission.ADMINISTRATION)
+        return permissionEvaluator?.hasPermission(auth, domainInstance.id, clazz.name, BasePermission.ADMINISTRATION)
     }
 
     def generateAndRenderJSONResponse(Long currentVersion, String modifiedBy, String shortName, Date lastUpdated, final String newValue) {
@@ -487,6 +527,11 @@ class EditingHelper {
 
     def editErrorMessage() {
         render(status: HttpServletResponse.SC_INTERNAL_SERVER_ERROR, text: message(code: 'editing.error.message'), contentType: 'text/plain', template: null)
+    }
+
+    def editExceedsLimitErrorMessage(String message) {
+        render(status: HttpServletResponse.SC_BAD_REQUEST, text: message, contentType: 'text/plain', template: null)
+
     }
 
     def accessDeniedErrorMessage() {

@@ -12,6 +12,7 @@ modules = {
             resource id: 'bootstrap-css', url: '/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
         }
     }
+
     core {
         dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
         resource url: '/css/datatables/demo_table_jui.css'
@@ -134,5 +135,9 @@ modules = {
     twitterBootstrapAffix {
         resource url: "/css/twitterBootstrapAffix.css"
         resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
+    }
+    assaycompare{
+        dependsOn 'core,bootstrap,bootstrapplus,card'
+        resource url:'/js/cap/assaycompare.js'
     }
 }

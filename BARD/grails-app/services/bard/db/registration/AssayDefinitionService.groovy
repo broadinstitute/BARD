@@ -1,14 +1,34 @@
 package bard.db.registration
 
+import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
-import org.codehaus.groovy.grails.web.json.JSONArray
+import org.apache.commons.collections.CollectionUtils
 import org.springframework.security.access.prepost.PreAuthorize
 import registration.AssayService
 
 class AssayDefinitionService {
     AssayService assayService
+
+
+    Map generateAssayComparisonReport(final Assay assayOne, final Assay assayTwo) {
+        final List<ContextItemDTO> assayOneContextItems = ContextItemDTO.toContextItemDTOs(assayOne.assayContextItems)
+        final List<ContextItemDTO> assayTwoContextItems = ContextItemDTO.toContextItemDTOs(assayTwo.assayContextItems)
+
+        Collection<ContextItemDTO> exclusiveToAssayOne = CollectionUtils.subtract(assayOneContextItems, assayTwoContextItems)
+        Collection<ContextItemDTO> exclusiveToAssayTwo = CollectionUtils.subtract(assayTwoContextItems, assayOneContextItems)
+
+        return [
+                exclusiveToAssayOne: ContextItemDTO.buildCardMap(exclusiveToAssayOne),
+                exclusiveToAssayTwo: ContextItemDTO.buildCardMap(exclusiveToAssayTwo),
+                assayOneName: assayOne.assayName,
+                assayOneADID: assayOne.id,
+                assayTwoName: assayTwo.assayName,
+                assayTwoADID: assayTwo.id
+        ]
+    }
+
     /**
      * Move measure to parent
      * @param assay
@@ -17,7 +37,7 @@ class AssayDefinitionService {
      * @return
      */
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    void moveMeasure(Long id,Measure measure, Measure parentMeasure) {
+    void moveMeasure(Long id, Measure measure, Measure parentMeasure) {
 
         measure.parentMeasure = parentMeasure
         if (!measure.parentChildRelationship) {
