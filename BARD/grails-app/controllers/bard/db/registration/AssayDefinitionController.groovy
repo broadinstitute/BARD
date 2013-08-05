@@ -204,6 +204,7 @@ class AssayDefinitionController {
 
             log.error("Clone assay failed", ee);
         }
+
         redirect(action: "show", id: assay.id)
     }
 
@@ -211,6 +212,16 @@ class AssayDefinitionController {
     def show() {
         def assayInstance = Assay.get(params.id)
         JSON measureTreeAsJson = null
+
+        // sanity check the context items
+        for(context in assayInstance.assayContexts) {
+            assert context.id != null
+            for(item in context.contextItems) {
+                if(item?.id == null) {
+                    throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
+                }
+            }
+        }
 
         def messageStr = null;
         if (!assayInstance) {
