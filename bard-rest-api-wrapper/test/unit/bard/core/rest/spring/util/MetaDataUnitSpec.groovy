@@ -115,7 +115,7 @@ class MetaDataUnitSpec extends Specification {
         assert facetValues.get(0).id == 'target_name'
         assert facetValues.get(1).id == 'assay_format'
         assert facetValues.get(2).id == 'assay_type'
-        assert facetValues.get(3).id == 'class_name'
+        assert facetValues.get(3).id == 'panther_db_protein_class'
     }
 
 }
