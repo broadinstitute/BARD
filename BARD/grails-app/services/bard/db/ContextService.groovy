@@ -34,6 +34,11 @@ class ContextService {
         return createContext(owningContext, name, section)
     }
 
+    @PreAuthorize("hasPermission(#id,'bard.db.experiment.Experiment',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    AbstractContext createExperimentContext(Long id, AbstractContextOwner owningContext, String name, String section) {
+        return createContext(owningContext, name, section)
+    }
+
     private AbstractContext createContext(AbstractContextOwner owner, String name, String section) {
         AbstractContext context = owner.createContext(contextName: name, contextGroup: section)
         context.save(flush: true)
@@ -47,6 +52,11 @@ class ContextService {
 
     @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
     void deleteProjectContext(Long id, AbstractContextOwner owner, AbstractContext context) {
+        deleteContext(owner, context)
+    }
+
+    @PreAuthorize("hasPermission(#id,'bard.db.experiment.Experiment',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    void deleteExperimentContext(Long id, AbstractContextOwner owner, AbstractContext context) {
         deleteContext(owner, context)
     }
 

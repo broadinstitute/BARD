@@ -1,4 +1,4 @@
-<%@ page import="bard.db.project.*" %>
+<%@ page import="bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,16 +68,16 @@
             <dt><g:message code="experiment.experimentStatus.label" default="Status"/>:</dt>
             <dd>
                 <span
-                   data-sourceCache="true"
-                   data-toggle="manual"
-                   class="status"
-                   id="${instance?.experimentStatus?.id}"
-                   data-type="select"
-                   data-value="${instance?.experimentStatus?.id}"
-                   data-source="/BARD/experiment/experimentStatus"
-                   data-pk="${instance.id}"
-                   data-url="/BARD/experiment/editExperimentStatus"
-                   data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
+                        data-sourceCache="true"
+                        data-toggle="manual"
+                        class="status"
+                        id="${instance?.experimentStatus?.id}"
+                        data-type="select"
+                        data-value="${instance?.experimentStatus?.id}"
+                        data-source="/BARD/experiment/experimentStatus"
+                        data-pk="${instance.id}"
+                        data-url="/BARD/experiment/editExperimentStatus"
+                        data-original-title="Select Experiment Status">${instance?.experimentStatus?.id}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Status"
                    data-id="${instance?.experimentStatus?.id}"></a>
             </dd>
@@ -85,43 +85,44 @@
             <dt><g:message code="experiment.experimentName.label" default="Name"/>:</dt>
             <dd>
                 <span
-                   data-toggle="manual"
-                   class="experimentNameY"
-                   id="nameId"
+                        data-toggle="manual"
+                        class="experimentNameY"
+                        id="nameId"
 
-                   data-type="text"
-                   data-value="${instance?.experimentName}"
-                   data-pk="${instance.id}"
-                   data-url="/BARD/experiment/editExperimentName"
-                   data-placeholder="Required"
-                   data-original-title="Edit Experiment Name">${instance?.experimentName}</span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name" data-id="nameId"></a>
+                        data-type="text"
+                        data-value="${instance?.experimentName}"
+                        data-pk="${instance.id}"
+                        data-url="/BARD/experiment/editExperimentName"
+                        data-placeholder="Required"
+                        data-original-title="Edit Experiment Name">${instance?.experimentName}</span>
+                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Name"
+                   data-id="nameId"></a>
             </dd>
             <dt><g:message code="experiment.description.label" default="Description"/>:</dt>
             <dd>
                 <span
-                   class="description"
-                   data-toggle="manual"
-                   id="descriptionId"
-                   data-type="text"
-                   data-value="${instance.description}"
-                   data-pk="${instance.id}"
-                   data-url="/BARD/experiment/editDescription"
-                   data-placeholder="Required"
-                   data-original-title="Edit Description By">${instance.description}</span>
+                        class="description"
+                        data-toggle="manual"
+                        id="descriptionId"
+                        data-type="text"
+                        data-value="${instance.description}"
+                        data-pk="${instance.id}"
+                        data-url="/BARD/experiment/editDescription"
+                        data-placeholder="Required"
+                        data-original-title="Edit Description By">${instance.description}</span>
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
                    data-id="descriptionId"></a>
             </dd>
             <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
             <dd id="huddd">
                 <span class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
-                   data-toggle="manual"
-                   data-url="/BARD/experiment/editHoldUntilDate"
-                   data-value="${instance.holdUntilDate}"
-                   data-original-title="Select hold until date"
-                   data-format="YYYY-MM-DD"
-                   data-viewformat="MM/DD/YYYY"
-                   data-template="D / MMM / YYYY">
+                      data-toggle="manual"
+                      data-url="/BARD/experiment/editHoldUntilDate"
+                      data-value="${instance.holdUntilDate}"
+                      data-original-title="Select hold until date"
+                      data-format="YYYY-MM-DD"
+                      data-viewformat="MM/DD/YYYY"
+                      data-template="D / MMM / YYYY">
                     <g:formatDate
                             format="MM/dd/yyyy"
                             date="${instance.holdUntilDate}"/>
@@ -133,13 +134,13 @@
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
                 <span class="rfddate" id="rfd" data-type="combodate" data-pk="${instance.id}"
-                   data-url="/BARD/experiment/editRunFromDate"
-                   data-value="${instance.runDateFrom}"
-                   data-original-title="Select run from date"
-                   data-format="YYYY-MM-DD"
-                   data-toggle="manual"
-                   data-viewformat="MM/DD/YYYY"
-                   data-template="D / MMM / YYYY">
+                      data-url="/BARD/experiment/editRunFromDate"
+                      data-value="${instance.runDateFrom}"
+                      data-original-title="Select run from date"
+                      data-format="YYYY-MM-DD"
+                      data-toggle="manual"
+                      data-viewformat="MM/DD/YYYY"
+                      data-template="D / MMM / YYYY">
                     <g:formatDate
                             format="MM/dd/yyyy"
                             date="${instance.runDateFrom}"/>
@@ -149,19 +150,19 @@
             </dd>
             <dt><g:message code="experiment.runtodate.label" default="Run Date to"/>:</dt>
             <dd>
-                <span  class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
-                   data-url="/BARD/experiment/editRunToDate"
-                   data-value="${instance.runDateTo}"
-                   data-original-title="Select run to date"
-                   data-toggle="manual"
-                   data-format="YYYY-MM-DD"
-                   data-viewformat="MM/DD/YYYY"
-                   data-template="D / MMM / YYYY">
+                <span class="rdtdate" id="rdt" data-type="combodate" data-pk="${instance.id}"
+                      data-url="/BARD/experiment/editRunToDate"
+                      data-value="${instance.runDateTo}"
+                      data-original-title="Select run to date"
+                      data-toggle="manual"
+                      data-format="YYYY-MM-DD"
+                      data-viewformat="MM/DD/YYYY"
+                      data-template="D / MMM / YYYY">
                     <g:formatDate
                             format="MM/dd/yyyy"
                             date="${instance.runDateTo}"/>
                 </span><a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit run to date"
-                       data-id="rdt"></a>
+                          data-id="rdt"></a>
             </dd>
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${instance.dateCreated}" format="MM/dd/yyyy"/></dd>
@@ -234,33 +235,48 @@
                 })
             </r:script>
         </div>
-    </section>
+</section>
+<br/>
+<section id="contexts-header">
+    <h3>2. Contexts</h3>
+
+    <div class="row-fluid">
+        <g:render template="../context/show"
+                  model="[contextOwner: instance, contexts: instance.groupContexts(), uneditable: true]"/>
+    </div>
     <br/>
-    <section id="contexts-header">
-        <h3>2. Contexts</h3>
-        <div class="row-fluid">
-            <g:render template="../context/show"
-                      model="[contextOwner: instance, contexts: instance.groupContexts(), uneditable: true]"/>
-        </div>
-    </section>
-    <br/>
-    <section id="measures-header">
+
+    <div class="row-fluid">
+        <g:if test="${!uneditable || true}">
+            <g:if test="${editable == 'canedit' || true}">
+                <div class="span12">
+                    <g:link action="editContext" id="${instance?.id}"
+                            params="[groupBySection: AbstractContextOwner.SECTION_UNCLASSIFIED.encodeAsURL()]"
+                            class="btn"><i class="icon-pencil"></i>Edit Contexts</g:link>
+                </div>
+            </g:if>
+        </g:if>
+    </div>
+</section>
+<br/>
+<section id="measures-header">
 
     <h3>3. Measures</h3>
-        <div class="row-fluid">
-            <div id="measure-tree"></div>
-            <r:script>
-            $("#measure-tree").dynatree({children: ${measuresAsJsonTree} })
-            </r:script>
-        </div>
-    </section>
 
+    <div class="row-fluid">
+        <div id="measure-tree"></div>
         <r:script>
-            $("#uploadResultsButton").on("click", function () {
-                $("#uploadResultsForm").submit();
-            })
+            $("#measure-tree").dynatree({children: ${measuresAsJsonTree} })
         </r:script>
     </div>
+</section>
+
+<r:script>
+    $("#uploadResultsButton").on("click", function () {
+        $("#uploadResultsForm").submit();
+    })
+</r:script>
+</div>
 </section>
 </div>
 </div>
