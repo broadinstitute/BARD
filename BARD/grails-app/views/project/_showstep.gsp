@@ -17,7 +17,7 @@
     <div id="ajaxProgress" style="color:#5bb75b">Please wait ...</div>
 
     <div id="canvas-container" style="overflow: hidden; cursor: default ; border: 2px dotted black">
-        <div id="canvas"></div>
+        <div id="canvas"><p>Click and drag on background to pan in graph</p></div>
     </div>
 
     <r:script>
@@ -165,7 +165,6 @@
         });
     </r:script>
 
-    <div id="canvasIsolated"></div>
 
     <div id="nicedisplay"></div>
 
