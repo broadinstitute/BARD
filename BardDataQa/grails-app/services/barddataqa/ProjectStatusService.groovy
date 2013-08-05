@@ -16,6 +16,7 @@ select pci.value_display, p.project_name from bard_cap_prod.project p
   left join bard_cap_prod.project_context pc on pc.project_id = p.project_id
   left join bard_cap_prod.project_context_item pci on pci.project_context_id = pc.project_context_id and pci.attribute_id = 559
   where p.project_id = :$projectIdParam
+  order by pci.value_display
 """
 
 
