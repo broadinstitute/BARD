@@ -80,7 +80,7 @@ class ElementAndFullPathUnitSpec extends Specification {
         ElementHierarchy eh1 = ElementHierarchy.build()
         Element element = Element.build()
 
-        ElementAndFullPath elementAndFullPath = new ElementAndFullPath()
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(eh1.childElement)
         elementAndFullPath.path.add(eh0)
         elementAndFullPath.path.add(eh1)
 
@@ -89,7 +89,7 @@ class ElementAndFullPathUnitSpec extends Specification {
         boolean expectFalse = elementAndFullPath.pathContainsElement(element)
 
         then:
-        true == expectTrue
-        false == expectFalse
+        assert expectTrue
+        assert ! expectFalse
     }
 }
