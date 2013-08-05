@@ -12,9 +12,9 @@ import bard.db.registration.ExternalReference
 
 class Experiment extends AbstractContextOwner {
 
-    private static final int EXPERIMENT_NAME_MAX_SIZE = 1000
+    public static final int EXPERIMENT_NAME_MAX_SIZE = 1000
     private static final int MODIFIED_BY_MAX_SIZE = 40
-    private static final int DESCRIPTION_MAX_SIZE = 1000
+    public static final int DESCRIPTION_MAX_SIZE = 1000
     def capPermissionService
     String experimentName
     ExperimentStatus experimentStatus = ExperimentStatus.DRAFT

@@ -23,24 +23,24 @@
                     <ul class="nav">
                         <li><a href="/BARD">CAP</a></li>
                         <g:if env="Production">
-                        <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    Admin
-                                    <b class="caret"></b>
-                                </a>
+                            <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        Admin
+                                        <b class="caret"></b>
+                                    </a>
 
-                                <ul class="dropdown-menu">
-                                     <li class="controller"><g:link
-                                            controller="register">Register External BARD User</g:link></li>
-                                    <li class="controller"><g:link controller="register"
-                                                                   action="listUsersAndGroups">List External BARD Users</g:link></li>
-                                    <li class="controller"><g:link controller="person"
-                                                                   action="list">List Person Table</g:link></li>
-                                </ul>
+                                    <ul class="dropdown-menu">
+                                        <li class="controller"><g:link
+                                                controller="register">Register External BARD User</g:link></li>
+                                        <li class="controller"><g:link controller="register"
+                                                                       action="listUsersAndGroups">List External BARD Users</g:link></li>
+                                        <li class="controller"><g:link controller="person"
+                                                                       action="list">List Person Table</g:link></li>
+                                    </ul>
 
-                            </li>
-                        </sec:ifAnyGranted>
+                                </li>
+                            </sec:ifAnyGranted>
                         </g:if>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -50,6 +50,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="/BARD/assayDefinition/findById">Search by Assay Definition ID</a></li>
                                 <li><a href="/BARD/assayDefinition/findByName">Search by Assay Definition Name</a></li>
+                                <li><a href="/BARD/assayDefinition/assayComparisonReport">Compare Assays</a></li>
                             </ul>
                         </li>
                         <li class="dropdown">

@@ -15,6 +15,9 @@ class ElementController {
     BuildElementPathsService buildElementPathsService
     ModifyElementAndHierarchyService modifyElementAndHierarchyService
 
+    def index(){
+        redirect(uri:'/')
+    }
     def showTopLevelHierarchyHelp(){
         render(view:'showTopLevelHierarchyHelp')
     }
