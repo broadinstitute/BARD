@@ -1,3 +1,4 @@
+<g:render template="/layouts/templates/handleOldBrowsers" />
 <!DOCTYPE html>
 <html>
 <head>
