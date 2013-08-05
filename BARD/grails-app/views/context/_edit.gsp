@@ -13,7 +13,8 @@
 <div id="cardView" class="cardView" class="row-fluid">
 
     <div class="row-fluid">
-        <g:render template="/context/list" model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'edit', renderEmptyGroups: true]"/>
+        <g:render template="/context/list"
+                  model="[contextOwner: contextOwner, contexts: contexts, subTemplate: 'edit', renderEmptyGroups: true]"/>
     </div>
 
     <r:script>
@@ -31,7 +32,7 @@
             </div>
             <input type="hidden" id="new_card_section" name="cardSection" value=""/>
             <input type="hidden" name="ownerId" value="${contextOwner?.id}"/>
-            <input type="hidden" name="contextClass" value="${contextOwner instanceof Assay ? 'AssayContext' : 'ProjectContext'}"/>
+            <input type="hidden" name="contextClass" value="${contextOwner.class.simpleName + 'Context'}"/>
         </form>
     </div>
 

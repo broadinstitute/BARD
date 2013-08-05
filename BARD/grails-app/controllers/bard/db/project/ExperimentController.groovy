@@ -5,6 +5,7 @@ import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.experiment.PubchemImportService
 import bard.db.experiment.ResultsService
+import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
@@ -234,6 +235,18 @@ class ExperimentController {
             log.error(ee)
             editErrorMessage()
         }
+    }
+
+    def editContext(Long id, String groupBySection) {
+        Experiment instance = Experiment.get(id)
+        if (!instance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), id])
+            return
+
+        }
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
+        render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
     }
 
     def save() {
