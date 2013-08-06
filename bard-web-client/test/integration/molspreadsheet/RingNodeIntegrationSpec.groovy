@@ -49,7 +49,6 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-    @IgnoreRest
     void "test convertBiologyIdsToAscensionNumbers"(){
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
