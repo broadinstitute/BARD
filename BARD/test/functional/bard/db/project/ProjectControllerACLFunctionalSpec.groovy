@@ -9,6 +9,7 @@ import bard.db.registration.BardControllerFunctionalSpec
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.json.JSONObject
@@ -392,29 +393,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | true
         "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | true
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
-    }
-
-    def 'test edit #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
-        Long projectId = projectData.id
-        when:
-        def response = client.post() {
-            urlenc id: projectId
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse      | buttonExist
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | true
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK | false
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | true
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | true
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
-
     }
 
     def 'test findByName #desc'() {
