@@ -4,9 +4,11 @@ import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
+import grails.converters.JSON
 import grails.plugin.spock.IntegrationSpec
 import bard.core.rest.spring.util.RingNode
 import groovy.json.JsonBuilder
+import spock.lang.IgnoreRest
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,13 +49,15 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-
     void "test convertBiologyIdsToAscensionNumbers"(){
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
         LinkedHashMap activeInactiveDataAfterConversion
-        activeInactiveDataPriorToConversion["hits"] = [948L]
-        activeInactiveDataPriorToConversion["misses"] = [959L]
+        String ncgcBaseURL = applicationContext.getBean("grailsApplication").config.ncgc.server.root.url
+        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology/types/protein?top=10", String.class)
+        def resultJSON = JSON.parse(result)
+        activeInactiveDataPriorToConversion["hits"] = [(resultJSON[0] - '/biology/').toLong()]
+        activeInactiveDataPriorToConversion["misses"] = [(resultJSON[1] - '/biology/').toLong()]
 
         when:
         try {
@@ -156,9 +160,9 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
             }
         }
 
-    then:
-       accumulatedMaps.size() == targets.size()
-       accumulatedMaps.flatten().size() == 0
+        then:
+        accumulatedMaps.size() == targets.size()
+        accumulatedMaps.flatten().size() == 0
     }
 
 
@@ -177,7 +181,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
             }
         }
 
-            then:
+        then:
         accumulatedMaps.size() == targets.size()
         accumulatedMaps.get(0).size() > 0
         accumulatedMaps.flatten().size() > 0
@@ -290,7 +294,7 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
             }
         }
         RingNode root = ringManagerService.ringNodeFactory( accumulatedMaps.flatten() as List<TargetClassInfo>,
-                                                            ['hits':["Q14145","Q16236"],'misses':["Q61009"]])
+                ['hits':["Q14145","Q16236"],'misses':["Q61009"]])
         then:
         root.toString().contains("nucleic acid binding")
         root.toString().find(/nucleic acid[^\n]+/).find(/size\":\d/).find(/\d/) == '2'
