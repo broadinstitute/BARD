@@ -4,9 +4,11 @@ import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
+import grails.converters.JSON
 import grails.plugin.spock.IntegrationSpec
 import bard.core.rest.spring.util.RingNode
 import groovy.json.JsonBuilder
+import spock.lang.IgnoreRest
 
 /**
  * Created with IntelliJ IDEA.
@@ -47,13 +49,16 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
 
 
-
+    @IgnoreRest
     void "test convertBiologyIdsToAscensionNumbers"(){
         given:
         LinkedHashMap activeInactiveDataPriorToConversion = [:]
         LinkedHashMap activeInactiveDataAfterConversion
-        activeInactiveDataPriorToConversion["hits"] = [868L]
-        activeInactiveDataPriorToConversion["misses"] = [872L]
+        String ncgcBaseURL = applicationContext.getBean("grailsApplication").config.ncgc.server.root.url
+        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology/types/protein?top=10", String.class)
+        def resultJSON = JSON.parse(result)
+        activeInactiveDataPriorToConversion["hits"] = [(resultJSON[0] - '/biology/').toLong()]
+        activeInactiveDataPriorToConversion["misses"] = [(resultJSON[1] - '/biology/').toLong()]
 
         when:
         try {
