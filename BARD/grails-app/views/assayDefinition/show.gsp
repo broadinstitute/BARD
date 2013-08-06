@@ -110,7 +110,7 @@
 
 <div class="span9">
 <section id="summary-header">
-    <h3>1. Overview</h3>
+    <h3 class="sect">Overview</h3>
 
     <div class="row-fluid">
         <div id="msg" class="alert hide"></div>
@@ -123,7 +123,7 @@
 <br/>
 <section id="biology-header">
 
-    <h3>2. Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+    <h3 class="sect">Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
             class="icon-question-sign"></i></g:link></h3>
 
 
@@ -152,7 +152,7 @@
 </section>
 <br/>
 <section id="assay-protocol-header">
-    <h3>3. Assay Protocol <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+    <h3 class="sect">Assay Protocol <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
             class="icon-question-sign"></i></g:link></h3>
 
     <div class="row-fluid">
@@ -178,7 +178,7 @@
 <br/>
 <section id="assay-design-header">
 
-    <h4>3.1 Assay Design <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+    <h4 class="subsect">Assay Design <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
             class="icon-question-sign"></i></g:link></h4>
 
 
@@ -202,133 +202,135 @@
             </g:if>
         </g:if>
     </div>
-</section>
-<br/>
-<section id="assay-readout-header">
+    <section id="assay-readout-header">
 
-    <h4>3.2 Assay Readout <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h4>
+        <h4 class="subsect">Assay Readout <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+                class="icon-question-sign"></i></g:link></h4>
 
 
-    <div class="row-fluid">
-        <div id="cardHolderAssayReadout" class="span12">
-            <g:render template="/context/currentCard"
-                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayReadout(), subTemplate: 'show', renderEmptyGroups: false]"/>
+        <div class="row-fluid">
+            <div id="cardHolderAssayReadout" class="span12">
+                <g:render template="/context/currentCard"
+                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayReadout(), subTemplate: 'show', renderEmptyGroups: false]"/>
 
+            </div>
         </div>
-    </div>
-    <br/>
+        <br/>
 
-    <div class="row-fluid">
-        <g:if test="${!uneditable}">
-            <g:if test="${editable == 'canedit'}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_READOUT.encodeAsURL()]"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
-                </div>
-            </g:if>
-        </g:if>
-    </div>
-</section>
-<br/>
-<section id="assay-components-header">
-
-    <h4>3.3 Assay Components <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
-            class="icon-question-sign"></i></g:link></h4>
-
-
-    <div class="row-fluid">
-        <div id="cardHolderAssayComponents" class="span12">
-            <g:render template="/context/currentCard"
-                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-        </div>
-    </div>
-    <br/>
-
-    <div class="row-fluid">
-        <g:if test="${!uneditable}">
-            <g:if test="${editable == 'canedit'}">
-                <div class="span12">
-                    <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_COMPONENTS.encodeAsURL()]"
-                            class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
-                </div>
-            </g:if>
-        </g:if>
-    </div>
-</section>
-<br/>
-<section id="unclassified-header">
-    <h4>3.4 Unclassified</h4>
-
-    <div class="row-fluid">
-        <div id="cardHolderUnclassified" class="span12">
-            <g:render template="/context/currentCard"
-                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-        </div>
-    </div>
-    <br/>
-    <g:if test="${assayInstance.groupUnclassified()}">
         <div class="row-fluid">
             <g:if test="${!uneditable}">
                 <g:if test="${editable == 'canedit'}">
                     <div class="span12">
                         <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: AbstractContextOwner.getSECTION_UNCLASSIFIED().encodeAsURL()]"
-                                class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
+                                params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_READOUT.encodeAsURL()]"
+                                class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
                     </div>
                 </g:if>
             </g:if>
         </div>
-    </g:if>
+    </section>
+    <br/>
+    <section id="assay-components-header">
+
+        <h4 class="subsect">Assay Components <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+                class="icon-question-sign"></i></g:link></h4>
+
+
+        <div class="row-fluid">
+            <div id="cardHolderAssayComponents" class="span12">
+                <g:render template="/context/currentCard"
+                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupAssayComponents(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+            </div>
+        </div>
+        <br/>
+
+        <div class="row-fluid">
+            <g:if test="${!uneditable}">
+                <g:if test="${editable == 'canedit'}">
+                    <div class="span12">
+                        <g:link action="editContext" id="${assayInstance?.id}"
+                                params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_COMPONENTS.encodeAsURL()]"
+                                class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
+                    </div>
+                </g:if>
+            </g:if>
+        </div>
+    </section>
+    <br/>
+    <section id="unclassified-header">
+        <h4 class="subsect">Unclassified</h4>
+
+        <div class="row-fluid">
+            <div id="cardHolderUnclassified" class="span12">
+                <g:render template="/context/currentCard"
+                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupUnclassified(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+            </div>
+        </div>
+        <br/>
+        <g:if test="${assayInstance.groupUnclassified()}">
+            <div class="row-fluid">
+                <g:if test="${!uneditable}">
+                    <g:if test="${editable == 'canedit'}">
+                        <div class="span12">
+                            <g:link action="editContext" id="${assayInstance?.id}"
+                                    params="[groupBySection: AbstractContextOwner.getSECTION_UNCLASSIFIED().encodeAsURL()]"
+                                    class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
+                        </div>
+                    </g:if>
+                </g:if>
+            </div>
+        </g:if>
+    </section>
+    <br/>
 </section>
 <br/>
 
+
 <section id="experiments-header">
 
-    <h3>4. Experiments</h3>
+    <h3 class="sect">Experiments</h3>
 
 
     <div class="row-fluid">
         <g:render template="showExperiments" model="['assay': assayInstance]"/>
     </div>
+    <section id="experimental-variables-header">
+
+        <h4 class="subsect">Experimental Variables <g:link target="dictionary" controller="element"
+                                           action="showTopLevelHierarchyHelp"><i
+                    class="icon-question-sign"></i></g:link></h4>
+
+        <div class="row-fluid">
+            <div id="cardHolderExperimentalVariables" class="span12">
+                <g:render template="/context/currentCard"
+                          model="[contextOwner: assayInstance, currentCard: assayInstance.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false]"/>
+
+            </div>
+        </div>
+        <br/>
+        <g:if test="${assayInstance.groupExperimentalVariables()}">
+            <div class="row-fluid">
+                <g:if test="${!uneditable}">
+                    <g:if test="${editable == 'canedit'}">
+                        <div class="span12">
+                            <g:link action="editContext" id="${assayInstance?.id}"
+                                    params="[groupBySection: AbstractContextOwner.SECTION_EXPERIMENTAL_VARIABLES.encodeAsURL()]"
+                                    class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
+                        </div>
+                    </g:if>
+                </g:if>
+            </div>
+        </g:if>
+    </section>
 </section>
 <br/>
-<section id="experimental-variables-header">
 
-    <h4>4.1 Experimental Variables <g:link target="dictionary" controller="element"
-                                           action="showTopLevelHierarchyHelp"><i
-                class="icon-question-sign"></i></g:link></h4>
-
-    <div class="row-fluid">
-        <div id="cardHolderExperimentalVariables" class="span12">
-            <g:render template="/context/currentCard"
-                      model="[contextOwner: assayInstance, currentCard: assayInstance.groupExperimentalVariables(), subTemplate: 'show', renderEmptyGroups: false]"/>
-
-        </div>
-    </div>
-    <br/>
-    <g:if test="${assayInstance.groupExperimentalVariables()}">
-        <div class="row-fluid">
-            <g:if test="${!uneditable}">
-                <g:if test="${editable == 'canedit'}">
-                    <div class="span12">
-                        <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: AbstractContextOwner.SECTION_EXPERIMENTAL_VARIABLES.encodeAsURL()]"
-                                class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
-                    </div>
-                </g:if>
-            </g:if>
-        </div>
-    </g:if>
-</section>
 <br/>
 <section id="measures-header">
 
-    <h3>5. Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
+    <h3 class="sect">Measures<g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i
             class="icon-question-sign"></i></g:link></h3>
 
 

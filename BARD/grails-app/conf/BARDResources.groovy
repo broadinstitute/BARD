@@ -71,7 +71,7 @@ modules = {
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
-        resource url: '/css/show-assay.css'
+        resource url: '/css/sectioncounter.css'
     }
 
     handlebars {

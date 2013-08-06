@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget"/>
+    <r:require modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,assayshow"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>Show Experiment</title>
@@ -42,18 +42,18 @@
 
 <div class="container-fluid">
 <div class="row-fluid">
-<div class="span3 bs-docs-sidebar">
+<div class="span3 bs-docs-sidebar heading-numbering">
     <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
-        <li><a href="#summary-header"><i class="icon-chevron-right"></i>1. Overview</a></li>
-        <li><a href="#contexts-header"><i class="icon-chevron-right"></i>2. Contexts</a></li>
-        <li><a href="#measures-header"><i class="icon-chevron-right"></i>3. Measures</a></li>
+        <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
+        <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
+        <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
     </ul>
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
 <div class="span9">
 <section id="summary-header">
     <div class="page-header">
-        <h3>1. Overview</h3>
+        <h3 class="sect">Overview</h3>
     </div>
 
     <div class="row-fluid">
@@ -238,7 +238,7 @@
 </section>
 <br/>
 <section id="contexts-header">
-    <h3>2. Contexts</h3>
+    <h3 class="sect">Contexts</h3>
 
     <div class="row-fluid">
         <g:render template="../context/show"
@@ -252,7 +252,7 @@
                 <div class="span12">
                     <g:link action="editContext" id="${instance?.id}"
                             params="[groupBySection: AbstractContextOwner.SECTION_UNCLASSIFIED.encodeAsURL()]"
-                            class="btn"><i class="icon-pencil"></i>Edit Contexts</g:link>
+                            class="btn"><i class="icon-pencil"></i> Edit Contexts</g:link>
                 </div>
             </g:if>
         </g:if>
@@ -261,7 +261,7 @@
 <br/>
 <section id="measures-header">
 
-    <h3>3. Measures</h3>
+    <h3 class="sect">Measures</h3>
 
     <div class="row-fluid">
         <div id="measure-tree"></div>
