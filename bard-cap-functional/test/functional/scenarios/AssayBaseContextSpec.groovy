@@ -23,12 +23,13 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 	def cardGroup
 	def editContextGroup
 	def dbContextGroup
+	def oldGroup
 
 	def "Test Assay Context Card Add"(){
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		def uiContentsBefore = getUIContexts(cardGroup)
-		def dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
@@ -40,7 +41,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		uiContentsBefore = getUIContexts(editContextGroup)
-		dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
@@ -54,7 +55,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"Context is added, Fetching Contexts Info from UI and DB for validation"
 		def uiContentsAfterAdd = getUIContexts(editContextGroup)
-		def dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
@@ -67,7 +68,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		uiContentsAfterAdd = getUIContexts(cardGroup)
-		dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.size() > uiContentsBefore.size()
@@ -82,7 +83,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 			when:"Context is cleaned up, Fetching Contexts Info from UI and DB for validation"
 			def uiContentsAfterDelete = getUIContexts(editContextGroup)
-			def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+			def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.size() < uiContentsAfterAdd.size()
@@ -95,7 +96,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At VIew Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		def uiContents = getUIContexts(cardGroup)
-		def dbContents = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContents = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContents.size() < uiContentsAfterAdd.size()
@@ -108,7 +109,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		at ViewAssayDefinitionPage
 		def editedContext = contextCard+Constants.edited
 		def uiContentsBefore = getUIContexts(cardGroup)
-		def dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
@@ -120,7 +121,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		uiContentsBefore = getUIContexts(editContextGroup)
-		dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
@@ -140,7 +141,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"Context is edited, Fetching Contexts Info from UI and DB for validation"
 		def uiContentsAfterAdd = getUIContexts(editContextGroup)
-		def dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
@@ -151,7 +152,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		uiContentsAfterAdd = getUIContexts(cardGroup)
-		dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		dbContentsAfterAdd = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterAdd.sort() == dbContentsAfterAdd.sort()
@@ -164,7 +165,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 			when:"Context is cleaned up, Fetching Contexts Info from UI and DB for validation"
 			def uiContentsAfterDelete = getUIContexts(editContextGroup)
-			def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+			def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 			then:"Verifying Context Info with UI & DB"
 			assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
@@ -175,7 +176,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At VIew Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		def uiContents = getUIContexts(cardGroup)
-		def dbContents = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContents = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContents.sort() == dbContents.sort()
@@ -185,7 +186,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		def uiContentsBefore = getUIContexts(cardGroup)
-		def dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
@@ -197,7 +198,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At Edit Assay Context Page, Fetching Contexts Info from UI and DB for validation"
 		at EditContextPage
 		uiContentsBefore = getUIContexts(editContextGroup)
-		dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		dbContentsBefore = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsBefore.size() == dbContentsBefore.size()
@@ -220,7 +221,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		when:"Context is deleted, Fetching Contexts Info from UI and DB for validation"
 		def uiContentsAfterDelete = getUIContexts(editContextGroup)
-		def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		def dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
@@ -231,7 +232,7 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		when:"At View Assay Page, Fetching Contexts Info from UI and DB for validation"
 		at ViewAssayDefinitionPage
 		uiContentsAfterDelete = getUIContexts(cardGroup)
-		dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId)
+		dbContentsAfterDelete = Assay.getAssayContext(dbContextGroup, testData.AssayId,  oldGroup)
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
@@ -701,7 +702,6 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
 	}
-
 
 	def "Test Assay Context Item Add with Element Type having Element field empty"(){
 		def contextItem = Constants.ValueType_Element.AttributeFromDictionary
@@ -1793,4 +1793,5 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
 	}
+	
 }

@@ -14,6 +14,7 @@ class AssayContextAssayBiologySpec extends AssayBaseContextSpec{
 		cardGroup = "cardHolderBiology"
 		editContextGroup = "Biology"
 		dbContextGroup = "Biology"
+		oldGroup = "biology>"
 
 		logInSomeUser()
 

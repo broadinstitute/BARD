@@ -14,7 +14,8 @@ class AssayContextAssayReadoutSpec extends AssayBaseContextSpec{
 		cardGroup = "cardHolderAssayReadout"
 		editContextGroup = "Assay-Readout"
 		dbContextGroup = "Assay Readout"
-
+		oldGroup = "assay protocol> assay readout>"
+		
 		logInSomeUser()
 
 		when: "User is at Home page, Navigating to Search Assay By Id page"

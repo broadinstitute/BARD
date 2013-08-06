@@ -14,7 +14,8 @@ class AssayContextAssayComponentsSpec extends AssayBaseContextSpec{
 		cardGroup = "cardHolderAssayComponents"
 		editContextGroup = "Assay-Components"
 		dbContextGroup = "Assay Components"
-
+		oldGroup = "assay protocol> assay component>"
+		
 		logInSomeUser()
 
 		when: "User is at Home page, Navigating to Search Assay By Id page"

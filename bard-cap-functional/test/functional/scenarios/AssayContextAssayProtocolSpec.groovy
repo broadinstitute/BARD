@@ -7,14 +7,15 @@ import pages.ViewAssayDefinitionPage
 import common.Constants.NavigateTo
 import common.Constants.SearchBy
 
-class AssayContextProtocolSpec extends AssayBaseContextSpec{
+class AssayContextAssayProtocolSpec extends AssayBaseContextSpec{
 	@Override
 	def setup() {
 		section = "assay-protocol"
 		cardGroup = "cardHolderAssayProtocol"
 		editContextGroup = "Assay-Protocol"
 		dbContextGroup = "Assay Protocol"
-
+		oldGroup = "assay protocol> assay format>"
+		
 		logInSomeUser()
 
 		when: "User is at Home page, Navigating to Search Assay By Id page"
