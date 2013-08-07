@@ -7,7 +7,7 @@
         </caption>
         <tbody>
         <g:each in="${contextItemDTOs}" status="i" var="contextItemDTO">
-            <tr id="${contextItemDTO.contextItemId}" class="context_item_row">
+            <tr id="${contextItemDTO.contextItemId}" class='context_item_row ${(contextItemDTO.isExclusiveToCard) ? 'validation-failed' : ''}'>
                 <td class="attributeLabel">${contextItemDTO.label}</td>
                 <td class="valuedLabel">${contextItemDTO.valueDisplay}</td>
             </tr>
