@@ -132,6 +132,6 @@ table.table td.deleteItemButton {
     padding-left: 1em;
 }
 
-td.validation-failed {
+tr.validation-failed {
     background-color: #FFD5D5;
 }
