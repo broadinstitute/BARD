@@ -120,6 +120,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContents.size() < uiContentsAfterAdd.size()
 		assert dbContents.size() < dbContentsAfterAdd.size()
 		assert uiContents.sort() == dbContents.sort()
+		
+		report "ProjectContextCardAdd"
 	}
 
 	def "Test Project Context Card Edit"(){
@@ -205,6 +207,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		assert uiContents.size() < uiContentsAfterAdd.size()
 		assert dbContents.size() < dbContentsAfterAdd.size()
 		assert uiContents.sort() == dbContents.sort()
+		
+		report "ProjectContextCardEdit"
 	}
 
 	def "Test Project Context Card Delete"(){
@@ -261,6 +265,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
+		
+		report "ProjectContextCardDelete"
 	}
 
 	def "Test Project Context Item Add with Element Type"(){
@@ -354,6 +360,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithElementType"
 	}
 
 	def "Test Project Context Item Add with Free Text Type"(){
@@ -447,6 +455,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithFreeTextType"
 	}
 
 	def "Test Project Context Item Add with Numeric Value Type"(){
@@ -540,6 +550,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithNumericValueType"
 	}
 
 	def "Test Project Context Item Add with External Ontology Type using Intergratged Search"(){
@@ -633,6 +645,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithExternalOntologyTypewithIntegratedSearch"
 	}
 
 	def "Test Project Context Item Add with External Ontology Type not using Intergratged Search"(){
@@ -726,6 +740,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithExternalOntolgyTypewithoutIntegratedSearch"
 	}
 	
 
@@ -791,6 +807,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithElementTypeEmpty"
 	}
 
 	def "Test Project Context Item Add with Element Type having Element value empty"(){
@@ -855,6 +873,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithElementTypeValueEmpty"
 	}
 
 	def "Test Project Context Item Add with Free Text Type having Display Value empty"(){
@@ -919,6 +939,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithFreeTextTypeEmpty"
 	}
 
 	def "Test Project Context Item Add with Numeric Value Type having Numeric Value empty"(){
@@ -983,6 +1005,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithNumericValueTypeEmpty"
 	}
 
 	def "Test Project Context Item Add with External Ontology Type having Ontology values empty"(){
@@ -1047,6 +1071,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemAddwithExternalOntologyTypeEmpty"
 	}
 
 	def "Test Project Context Item Edit with Element Type"(){
@@ -1146,6 +1172,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemEditwithElementType"
 	}
 
 	def "Test Project Context Item Edit with Free Text Type"(){
@@ -1244,6 +1272,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemEditwithFreeTextType"
 	}
 
 	def "Test Project Context Item Edit with Numeric Value Type"(){
@@ -1342,6 +1372,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemEditwithNumericValueType"
 	}
 
 	def "Test Project Context Item Edit with External Ontology Type having no Intergration search"(){
@@ -1440,6 +1472,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemEditwithExternalOntologyTypewithoutIntegratedSearch"
 	}
 
 	def "Test Project Context Item Edit with External Ontology Type having Intergration search"(){
@@ -1538,6 +1572,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemEditwithExternalOntolgoyTypewithIntegratedSearch"
 	}
 
 	def "Test Project Context Item Delete with External Ontology Type"(){
@@ -1608,6 +1644,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemDeletewithExternalOntologyType"
 	}
 
 	def "Test Project Context Item Delete with Numeric Value Type"(){
@@ -1678,6 +1716,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemDeletewithNumericValueType"
 	}
 
 	def "Test Project Context Item Delete with Free Text Type"(){
@@ -1748,6 +1788,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemDeletewithFreeTextType"
 	}
 
 	def "Test Project Context Item Delete with Element Type"(){
@@ -1818,6 +1860,8 @@ class ProjectContextSpec extends BardFunctionalSpec {
 		and:"At View Project Definition Page"
 		at ViewProjectDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "ProjectContextItemDeletewithElementType"
 	}
 
 }

@@ -42,6 +42,8 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
 		}
 		!loginForm.j_username
 		!loginForm.j_password
+		
+		report "LoginwithInvalidUsername"
 	}
 
 	def "Test login with invalid password"() {
@@ -60,6 +62,8 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
 		}
 		!loginForm.j_username
 		!loginForm.j_password
+		
+		report "LoginwithInvalidPassword"
 	}
 
 	def "Test login with valid credentials"() {
@@ -73,6 +77,8 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
 		then: "The system should display a message stating that the user is logged in"
 		at HomePage
 		assert isLoggedInAsUser(validUserName)
+		
+		report "LoginwithValidCredentials"
 	}
 
 	def "Test logout"() {
@@ -87,5 +93,7 @@ class LoginFunctionalSpec extends BardFunctionalSpec {
 
 		then: "The user should be logged out of the system"
 		assert !isLoggedIn()
+		
+		report "Logout"
 	}
 }

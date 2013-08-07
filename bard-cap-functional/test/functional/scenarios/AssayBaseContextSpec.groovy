@@ -1,6 +1,5 @@
 package scenarios
 
-import pages.CapSearchPage
 import pages.ContextItemPage
 import pages.EditContextPage
 import pages.HomePage
@@ -11,8 +10,6 @@ import common.Constants
 import common.TestDataReader
 import common.Constants.ContextItem
 import common.Constants.ExpectedValueType
-import common.Constants.NavigateTo
-import common.Constants.SearchBy
 
 import db.Assay
 
@@ -102,6 +99,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		assert uiContents.size() < uiContentsAfterAdd.size()
 		assert dbContents.size() < dbContentsAfterAdd.size()
 		assert uiContents.sort() == dbContents.sort()
+		
+		report "AssayContextCardAdd"
 	}
 
 	def "Test Assay Context Card Edit"(){
@@ -180,6 +179,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContents.sort() == dbContents.sort()
+		
+		report "AssayContextCardEdit"
 	}
 
 	def "Test Assay Context Card Delete"(){
@@ -236,6 +237,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 
 		then:"Verifying Context Info with UI & DB"
 		assert uiContentsAfterDelete.sort() == dbContentsAfterDelete.sort()
+		
+		report "AssayContextCardDelete"
 	}
 
 	def "Test Assay Context Item Add with Element Type"(){
@@ -329,6 +332,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithElementType"
 	}
 
 	def "Test Assay Context Item Add with Free Text Type"(){
@@ -422,6 +427,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithFreeTextType"
 	}
 
 	def "Test Assay Context Item Add with Numeric Value Type"(){
@@ -515,6 +522,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithNumericValueType"
 	}
 
 	def "Test Assay Context Item Add with External Ontology Type using Intergratged Search"(){
@@ -608,6 +617,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithExternalOntologyUsingIntegratedSearchType"
 	}
 
 	def "Test Assay Context Item Add with External Ontology Type not using Intergratged Search"(){
@@ -701,6 +712,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithExternalOntologywithoutIntegratedSearchType"
 	}
 
 	def "Test Assay Context Item Add with Element Type having Element field empty"(){
@@ -765,6 +778,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithElementTypeEmpty"
 	}
 
 	def "Test Assay Context Item Add with Element Type having Element value empty"(){
@@ -829,6 +844,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithElementTypeValueEmpty"
 	}
 
 	def "Test Assay Context Item Add with Free Text Type having Display Value empty"(){
@@ -893,6 +910,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithFreeTextTypeEmpty"
 	}
 
 	def "Test Assay Context Item Add with Numeric Value Type having Numeric Value empty"(){
@@ -957,6 +976,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithNumericValueTypeEmpty"
 	}
 
 	def "Test Assay Context Item Add with External Ontology Type having Ontology values empty"(){
@@ -1021,6 +1042,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemAddwithExternalOntologyTypeEmpty"
 	}
 
 	def "Test Assay Context Item Edit with Element Type"(){
@@ -1120,6 +1143,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemEditwithElementType"
 	}
 
 	def "Test Assay Context Item Edit with Free Text Type"(){
@@ -1218,6 +1243,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemEditwithFreeTextType"
 	}
 
 	def "Test Assay Context Item Edit with Numeric Value Type"(){
@@ -1316,6 +1343,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemEditwithNumericValueType"
 	}
 
 	def "Test Assay Context Item Edit with External Ontology Type having no Intergration search"(){
@@ -1414,6 +1443,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemEditwithExternalOntologyTypewithoutIntegratedSearch"
 	}
 
 	def "Test Assay Context Item Edit with External Ontology Type having Intergration search"(){
@@ -1512,6 +1543,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemEditwithExternalOntologyTypewithIntegratedSearch"
 	}
 
 	def "Test Assay Context Item Delete with External Ontology Type"(){
@@ -1582,6 +1615,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemDeletewithExternalOntologyType"
 	}
 
 	def "Test Assay Context Item Delete with Numeric Value Type"(){
@@ -1652,6 +1687,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemDeletewithNumericValueType"
 	}
 
 	def "Test Assay Context Item Delete with Free Text Type"(){
@@ -1722,6 +1759,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemDeletewithFreeTextType"
 	}
 
 	def "Test Assay Context Item Delete with Element Type"(){
@@ -1792,6 +1831,8 @@ abstract class AssayBaseContextSpec extends BardFunctionalSpec {
 		and:"At View Assay Definition Page"
 		at ViewAssayDefinitionPage
 		assert !isContext(cardGroup, contextCard)
+		
+		report "AssayContextItemDeletewithElementType"
 	}
 	
 }

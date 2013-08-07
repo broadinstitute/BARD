@@ -82,6 +82,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		
+		report "ProjectDocumentAddDescription"
 	}
 
 	def "Test Project Document Add of type Protocol"(){
@@ -129,6 +131,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddProtocol"
 	}
 
 	def "Test Project Document Add of type Comments"(){
@@ -176,6 +179,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddComment"
 	}
 
 	def "Test Project Document Add of type Publications"(){
@@ -223,6 +227,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddPublication"
 	}
 
 	def "Test Project Document Add of type External URLS"(){
@@ -270,6 +275,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddExternalURL"
 	}
 
 	def "Test Project Document Add of type Others"(){
@@ -317,6 +323,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddOther"
 	}
 
 
@@ -363,6 +370,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddDescriptionEmpty"
 	}
 
 	def "Test Project Document Add of type Protocol with empty value"(){
@@ -408,6 +416,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddProtocolEmpty"
 	}
 
 	def "Test Project Document Add of type Comments with empty value"(){
@@ -453,6 +462,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddCommentsEmpty"
 	}
 
 	def "Test Project Document Add of type Publications with empty value"(){
@@ -498,6 +508,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddPublicationEmpty"
 	}
 
 	def "Test Project Document Add of type External URLS with empty value"(){
@@ -543,6 +554,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddExternalURLEmpty"
 	}
 
 	def "Test Project Document Add of type Others with empty value"(){
@@ -588,6 +600,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() < uiDocumetnsAfter.size()
 			assert dbDocumentsAfterDelete.size() < dbDocumentsAfter.size()
 		}
+		report "ProjectDocumentAddOtherEmpty"
 	}
 
 	def "Test Project Document Edit of type Description"(){
@@ -636,6 +649,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditDescription"
 	}
 
 	def "Test Project Document Edit of type Protocol"(){
@@ -684,6 +698,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditProtocol"
 	}
 
 	def "Test Project Document Edit of type Comments"(){
@@ -732,6 +747,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditComments"
 	}
 
 	def "Test Project Document Edit of type Publications"(){
@@ -780,6 +796,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditPublication"
 	}
 
 	def "Test Project Document Edit of type External URLS"(){
@@ -827,6 +844,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditExternalURL"
 	}
 
 	def "Test Project Document Edit of type Others"(){
@@ -874,6 +892,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditOther"
 	}
 
 	def "Test Project Document Edit of type Description with empty name value"(){
@@ -922,6 +941,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditDescriptionEmpty"
 	}
 
 	def "Test Project Document Edit of type Protocol with empty name value"(){
@@ -970,6 +990,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditProtocolEmpty"
 	}
 
 	def "Test Project Document Edit of type Comments with empty name value"(){
@@ -1018,6 +1039,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditCommentsEmpty"
 	}
 
 	def "Test Project Document Edit of type Publications with empty name value"(){
@@ -1066,6 +1088,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditPublicationEmpty"
 	}
 
 	def "Test Project Document Edit of type External URLS with empty name value"(){
@@ -1113,6 +1136,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditExternalURLEmpty"
 	}
 
 	def "Test Project Document Edit of type Others with empty name value"(){
@@ -1160,6 +1184,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 			assert uiDocumetnsAfterDelete.size() == dbDocumentsAfterDelete.size()
 			assert uiDocumetnsAfterDelete.sort() == dbDocumentsAfterDelete.sort()
 		}
+		report "ProjectDocumentEditOtherEmpty"
 	}
 
 
@@ -1196,6 +1221,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
+		
+		report "ProjectDocumentDeleteDescription"
 	}
 
 	def "Test Project Document Delete of type Protocol"(){
@@ -1231,6 +1258,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
+		
+		report "ProjectDocumentDeleteProtocol"
 	}
 
 	def "Test Project Document Delete of type Comments"(){
@@ -1266,6 +1295,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
+		
+		report "ProjectDocumentDeleteComments"
 	}
 
 	def "Test Project Document Delete of type Publications"(){
@@ -1301,6 +1332,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
+		
+		report "ProjectDocumentDeletePublicaiton"
 	}
 
 	def "Test Project Document Delete of type External URLS"(){
@@ -1336,6 +1369,7 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
 
+		report "ProjectDocumentDeleteExternalURL"
 	}
 
 	def "Test Project Document Delete of type Others"(){
@@ -1370,6 +1404,8 @@ class ProjectDocumentSpec extends BardFunctionalSpec {
 		and:"Verifying Document Info with UI & DB"
 		assert uiDocumetnsAfter.size() == dbDocumentsAfter.size()
 		assert uiDocumetnsAfter.sort() == dbDocumentsAfter.sort()
+		
+		report "ProjectDocumentDeleteOther"
 	}
 
 }

@@ -79,7 +79,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryStatus"
+		report "ProjectSummaryStatus"
 	}
 
 	def "Test Project Summary Name Edit"() {
@@ -123,7 +123,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryName"
+		report "ProjectSummaryName"
 	}
 
 	def "Test Project Summary Name Edit with empty value"() {
@@ -152,7 +152,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
-		report "SummaryNameEmpty"
+		report "ProjectSummaryNameEmpty"
 	}
 
 	def "Test Project Summary Description Edit"() {
@@ -196,7 +196,7 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryDescription"
+		report "ProjectSummaryDescription"
 	}
 
 	def "Test Project Summary Description Edit with empty value"() {
@@ -225,6 +225,6 @@ class ProjectSummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryDescriptionEmpty"
+		report "ProjectSummaryDescriptionEmpty"
 	}
 }

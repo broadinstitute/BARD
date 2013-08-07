@@ -81,7 +81,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryStatus"
+		report "AssaySummaryStatus"
 	}
 
 	def "Test Assay Summary Name Edit"() {
@@ -125,7 +125,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryName"
+		report "AssaySummaryName"
 	}
 
 	def "Test Assay Summary Name Edit with empty value"() {
@@ -154,7 +154,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryNameEmpty"
+		report "AssaySummaryNameEmpty"
 	}
 
 	def "Test Assay Summary Designed By Edit"() {
@@ -198,7 +198,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 		
-		report "SummaryDesignedBy"
+		report "AssaySummaryDesignedBy"
 	}
 
 	def "Test Assay Summary Designed By Edit with empty value"() {
@@ -271,7 +271,7 @@ class AssaySummarySpec extends BardFunctionalSpec {
 //		assert uiSummary.LastUpdated.equalsIgnoreCase(dbSummary.LastUpdated)
 //		assert uiSummary.ModifiedBy.equalsIgnoreCase(dbSummary.ModifiedBy)
 
-		report "SummaryDefinitionType"
+		report "AssaySummaryDefinitionType"
 	}
 
 }
