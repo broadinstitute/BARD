@@ -12,6 +12,7 @@ modules = {
             resource id: 'bootstrap-css', url: '/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
         }
     }
+
     core {
         dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
         resource url: '/css/datatables/demo_table_jui.css'
@@ -70,6 +71,7 @@ modules = {
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
+        resource url: '/css/sectioncounter.css'
     }
 
     handlebars {
@@ -134,5 +136,9 @@ modules = {
     twitterBootstrapAffix {
         resource url: "/css/twitterBootstrapAffix.css"
         resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
+    }
+    assaycompare{
+        dependsOn 'core,bootstrap,bootstrapplus,card'
+        resource url:'/js/cap/assaycompare.js'
     }
 }

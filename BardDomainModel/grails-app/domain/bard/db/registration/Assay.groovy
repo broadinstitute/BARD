@@ -16,7 +16,7 @@ import bard.db.project.ProjectContext
 class Assay extends AbstractContextOwner {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
-    private static final int DESIGNED_BY_MAX_SIZE = 100
+    public static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 

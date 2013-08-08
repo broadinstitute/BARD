@@ -1,0 +1,12 @@
+.heading-numbering ul {
+    counter-reset: section;
+}
+
+.heading-numbering li a {
+    display: block
+}
+
+.heading-numbering li a:before {
+    content: counters(section, ".") " ";
+    counter-increment: section;
+}

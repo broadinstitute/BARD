@@ -298,7 +298,7 @@ class BuildElementPathsServiceSpec extends Specification {
         ElementHierarchy eh2 = buildElementHierarchy(eh1.childElement, eh0.parentElement, service.relationshipType)
         assert eh0.parentElement == eh2.childElement
 
-        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: eh2.childElement)
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(eh2.childElement)
         elementAndFullPath.path.add(eh2)
 
 
@@ -317,7 +317,7 @@ class BuildElementPathsServiceSpec extends Specification {
         ElementHierarchy eh2 = buildElementHierarchy(eh1.childElement, eh0.parentElement, service.relationshipType)
         assert eh0.parentElement == eh2.childElement
 
-        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: eh2.childElement)
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(eh2.childElement)
         elementAndFullPath.path.add(eh2)
 
 
@@ -380,42 +380,8 @@ class BuildElementPathsServiceSpec extends Specification {
         childPath.path.size() == 1
     }
 
-    void "test findDictionaries"() {
-        setup:
-        Element dict = Element.build();
-        dict.id = BuildElementPathsService.bardDictionaryElementId
-        dict.save()
-        ElementHierarchy eh0 = buildElementHierarchy(dict, Element.build(), "fake")
-        buildElementHierarchy(Element.build(), Element.build(), "fake")
 
-        when:
-        Set<Element> result = BuildElementPathsService.findDictionaries(dict)
 
-        then:
-        result != null
-        result.size() == 1
-        result.iterator().next().equals(eh0.childElement)
-    }
-
-    void "test findDictionaryHierarchiesToExclude"() {
-        setup:
-        Element dict = Element.build();
-        dict.id = BuildElementPathsService.bardDictionaryElementId
-        dict.save()
-
-        ElementHierarchy eh0 = buildElementHierarchy(dict, Element.build(), "fake")
-        buildElementHierarchy(Element.build(), eh0.childElement, "fake")
-
-        Set<Element> dictionaries = BuildElementPathsService.findDictionaries(dict)
-
-        when:
-        Set<ElementHierarchy> result = BuildElementPathsService.findDictionaryHierarchiesToExclude(dict, dictionaries)
-
-        then:
-        assert result != null
-        assert result.size() == 1
-        println(result)
-    }
 
     void "test removeInvalidDictionaryPaths"() {
         Element dict = Element.build(id: BuildElementPathsService.bardDictionaryElementId);
@@ -429,26 +395,22 @@ class BuildElementPathsServiceSpec extends Specification {
 
         ElementHierarchy coreEh = buildElementHierarchy(Element.build(label: "core"), eh0.childElement, service.relationshipType)
 
-        BuildElementPathsService dictService = new BuildElementPathsService()
-
         Set<ElementAndFullPath> eafpSet = new HashSet<ElementAndFullPath>()
 
-        ElementAndFullPath keeper = new ElementAndFullPath()
-        keeper.element = dictEntryEh.childElement
+        ElementAndFullPath keeper = new ElementAndFullPath(dictEntryEh.childElement)
         keeper.path.add(eh0)
         keeper.path.add(dictEntryEh)
         println(keeper)
         eafpSet.add(keeper)
 
-        ElementAndFullPath toBeRemoved = new ElementAndFullPath()
-        toBeRemoved.element = dictEntryEh.childElement
+        ElementAndFullPath toBeRemoved = new ElementAndFullPath(dictEntryEh.childElement)
         toBeRemoved.path.add(coreEh)
         toBeRemoved.path.add(dictEntryEh)
         println(toBeRemoved)
         eafpSet.add(toBeRemoved)
 
         when:
-        dictService.removeInvalidDictionaryPaths(eafpSet)
+        service.removeUnwantedDictionaryPaths(eafpSet)
 
         then:
         assert eafpSet.size() == 1
@@ -457,7 +419,7 @@ class BuildElementPathsServiceSpec extends Specification {
 
     void "test buildAll with excluded dictionary paths"() {
         setup:
-        Element dict = Element.build(id: BuildElementPathsService.bardDictionaryElementId);
+        Element dict = Element.build(id: BuildElementPathsService.bardDictionaryElementId)
         dict.label = "Dictionaries"
         dict.save()
 
@@ -468,10 +430,8 @@ class BuildElementPathsServiceSpec extends Specification {
 
         buildElementHierarchy(Element.build(label: "core"), eh0.childElement, service.relationshipType)
 
-        BuildElementPathsService dictService = new BuildElementPathsService()
-
         when:
-        Set<ElementAndFullPath> result = dictService.buildAll()
+        Set<ElementAndFullPath> result = service.buildAll()
 
         then:
         int dictEntryCount = 0
@@ -484,5 +444,136 @@ class BuildElementPathsServiceSpec extends Specification {
         }
         assert 1 == dictEntryCount
 
+    }
+
+    void "test isDictionaryChild empty path / root element"() {
+        setup:
+        ElementAndFullPath eafp = new ElementAndFullPath(Element.build())
+
+        Set<ElementAndFullPath> pathSet = new HashSet<ElementAndFullPath>()
+        pathSet.add(eafp)
+
+        when:
+        boolean result = BuildElementPathsService.isDictionaryChild(pathSet)
+
+        then:
+        assert ! result
+    }
+
+    void "test isDictionaryChild true"() {
+        setup:
+        Set<ElementAndFullPath> pathWith2Set = new HashSet<ElementAndFullPath>()
+        Set<ElementAndFullPath> pathWith1Set = new HashSet<ElementAndFullPath>()
+
+        Element dict = Element.build(id: BuildElementPathsService.bardDictionaryElementId)
+
+        ElementHierarchy eh = buildElementHierarchy(dict, Element.build(), service.relationshipType)
+
+        ElementAndFullPath eafp = new ElementAndFullPath(eh.childElement)
+        eafp.path.add(eh)
+        pathWith2Set.add(eafp)
+        pathWith1Set.add(eafp)
+
+        eh = buildElementHierarchy(Element.build(), eh.childElement, service.relationshipType)
+        eafp = new ElementAndFullPath(eh.childElement)
+        eafp.path.add(eh)
+        pathWith2Set.add(eafp)
+
+        when:
+        boolean resultWith2 = BuildElementPathsService.isDictionaryChild(pathWith2Set)
+        boolean resultWith1 = BuildElementPathsService.isDictionaryChild(pathWith1Set)
+
+        then:
+        assert resultWith2
+        assert resultWith1
+    }
+
+    void "test isDictionaryChild false"() {
+        setup:
+        Set<ElementAndFullPath> pathWith2Set = new HashSet<ElementAndFullPath>()
+        Set<ElementAndFullPath> pathWith1Set = new HashSet<ElementAndFullPath>()
+
+        ElementHierarchy eh = buildElementHierarchy(Element.build(), Element.build(), service.relationshipType)
+
+        ElementAndFullPath eafp = new ElementAndFullPath(eh.childElement)
+        eafp.path.add(eh)
+        pathWith2Set.add(eafp)
+        pathWith1Set.add(eafp)
+
+        eh = buildElementHierarchy(Element.build(), eh.childElement, service.relationshipType)
+        eafp = new ElementAndFullPath(eh.childElement)
+        eafp.path.add(eh)
+        pathWith2Set.add(eafp)
+
+        when:
+        boolean resultWith2 = BuildElementPathsService.isDictionaryChild(pathWith2Set)
+        boolean resultWith1 = BuildElementPathsService.isDictionaryChild(pathWith1Set)
+
+        then:
+        assert ! resultWith2
+        assert ! resultWith1
+    }
+
+    void "test removeRetiredElementsAndAnyPathsTheyAreIn retired element"() {
+        setup:
+        Set<ElementAndFullPath> pathSet = new HashSet<ElementAndFullPath>()
+
+        Element retired = Element.build()
+        retired.elementStatus = ElementStatus.Retired
+
+        //this should be removed because the element itself is retired
+        pathSet.add(new ElementAndFullPath(retired))
+
+        //these should be kept
+        Set<ElementAndFullPath> keepSet = new HashSet<ElementAndFullPath>()
+        ElementAndFullPath eafp = new ElementAndFullPath(Element.build())
+        pathSet.add(eafp)
+        keepSet.add(eafp)
+        eafp = new ElementAndFullPath(Element.build())
+        pathSet.add(eafp)
+        keepSet.add(eafp)
+
+        when:
+        BuildElementPathsService.removeRetiredElementsAndAnyPathsTheyAreIn(pathSet)
+
+        then:
+        assert pathSet.size() == keepSet.size()
+        assert pathSet.containsAll(keepSet)
+    }
+
+    void "test removeRetiredElementsAndAnyPathsTheyAreIn retired element in path"() {
+        setup:
+        Set<ElementAndFullPath> pathSet = new HashSet<ElementAndFullPath>()
+
+        Element retired = Element.build()
+        retired.elementStatus = ElementStatus.Retired
+
+        //this one should be removed because there is a retired element in the path (at the root)
+        ElementAndFullPath eafp = new ElementAndFullPath(Element.build())
+        ElementHierarchy retiredParentHierarchy = buildElementHierarchy(retired, eafp.element, service.relationshipType)
+        eafp.path.add(retiredParentHierarchy)
+        pathSet.add(eafp)
+
+        //this one should also be removed because there is a retired element in the path (middle)
+        eafp = new ElementAndFullPath(retiredParentHierarchy.childElement)
+        eafp.path.add(buildElementHierarchy(Element.build(), retired, service.relationshipType))
+        eafp.path.add(retiredParentHierarchy)
+        pathSet.add(eafp)
+
+        //these should be kept
+        Set<ElementAndFullPath> keepSet = new HashSet<ElementAndFullPath>()
+        eafp = new ElementAndFullPath(Element.build())
+        pathSet.add(eafp)
+        keepSet.add(eafp)
+        eafp = new ElementAndFullPath(Element.build())
+        pathSet.add(eafp)
+        keepSet.add(eafp)
+
+        when:
+        BuildElementPathsService.removeRetiredElementsAndAnyPathsTheyAreIn(pathSet)
+
+        then:
+        assert pathSet.size() == keepSet.size()
+        assert pathSet.containsAll(keepSet)
     }
 }

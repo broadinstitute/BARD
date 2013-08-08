@@ -19,14 +19,15 @@ public class ElementAndFullPath {
      */
     List<ElementHierarchy> path
 
-    public ElementAndFullPath(String pathDelimeter = "/") {
+    public ElementAndFullPath(Element element, String pathDelimeter = "/") {
+        this.element = element
         this.pathDelimeter = pathDelimeter
 
         path = new LinkedList<ElementHierarchy>()
     }
 
     public ElementAndFullPath copy() {
-        ElementAndFullPath copy = new ElementAndFullPath(element: element, pathDelimeter: pathDelimeter)
+        ElementAndFullPath copy = new ElementAndFullPath(element, pathDelimeter)
 
         copy.path.addAll(path)
 
