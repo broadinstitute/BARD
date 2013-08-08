@@ -1,10 +1,17 @@
 package bard.db.experiment
 
 import bard.db.dictionary.Descriptor
+import bard.db.dictionary.Element
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
+import bard.db.registration.Assay
+import bard.db.registration.AssayContext
+import bard.db.registration.AssayContextItem
+import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.apache.commons.lang.StringUtils
+import spock.lang.Unroll
 
 /**
  * Created with IntelliJ IDEA.
@@ -95,5 +102,10 @@ class ExperimentContext extends AbstractContext {
     @Override
     void addContextItem(AbstractContextItem item) {
         this.addToExperimentContextItems(item)
+    }
+
+    @Override
+    Class<? extends AbstractContextItem> getItemSubClass() {
+        return ExperimentContextItem
     }
 }

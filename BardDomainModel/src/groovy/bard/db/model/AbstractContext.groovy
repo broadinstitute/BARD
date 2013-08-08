@@ -1,6 +1,8 @@
 package bard.db.model
 
 import bard.db.dictionary.Descriptor
+import bard.db.dictionary.Element
+import bard.db.registration.AssayContextItem
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -10,7 +12,7 @@ import org.apache.commons.lang.StringUtils
  * Time: 11:33 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractContext {
+abstract class AbstractContext{
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int CONTEXT_GROUP_MAX_SIZE = 256
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -24,6 +26,10 @@ abstract class AbstractContext {
             'assay component type': 'label', 'detection': 'detection method',
             'assay readout': 'assay readout', 'wavelength': 'fluorescence/luminescence',
             'number': 'result detail']
+
+
+    private static final String BIOLOGY_LABEL = 'biology'
+    private static final String PROBE_REPORT_LABEL = 'probe report'
 
     String contextName
     String contextGroup
@@ -41,7 +47,7 @@ abstract class AbstractContext {
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
-    static transients = ["preferredName"]
+    static transients = ["preferredName", 'contextType', 'itemSubClass']
 
     /**
      *
@@ -102,4 +108,28 @@ abstract class AbstractContext {
     abstract String getSimpleClassName()
 
     abstract void addContextItem(AbstractContextItem item);
+
+    /**
+     *
+     * @return an Element that represents a defining Attribute and currently serves to classify this context as pertaining to a particular type.
+     * Not many of these are defined at this point, only biology and probe report
+     */
+    Element getContextType(){
+        final Element biology = Element.findByLabel(BIOLOGY_LABEL)
+        final Element probeReport = Element.findByLabel(PROBE_REPORT_LABEL)
+        if(getContextItems().find{AbstractContextItem item-> item.attributeElement == biology}){
+            return biology
+        }
+        else if ( getContextItems().find{AbstractContextItem item-> item.attributeElement == probeReport}){
+            return probeReport
+        }
+        else {
+            return null
+        }
+    }
+
+    /**
+     * @return the SubClass of the Item this Context is expecting
+     */
+    abstract Class<? extends AbstractContextItem> getItemSubClass()
 }
