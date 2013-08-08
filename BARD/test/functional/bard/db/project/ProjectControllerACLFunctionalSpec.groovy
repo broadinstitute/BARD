@@ -9,7 +9,6 @@ import bard.db.registration.BardControllerFunctionalSpec
 import groovy.sql.Sql
 import org.apache.commons.lang3.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
-import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.json.JSONObject
