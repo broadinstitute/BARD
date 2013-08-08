@@ -112,6 +112,7 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
                    data-id="descriptionId"></a>
             </dd>
+            <dt>Owner:</dt><dd>${experimentOwner}</dd>
             <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
             <dd id="huddd">
                 <span class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"

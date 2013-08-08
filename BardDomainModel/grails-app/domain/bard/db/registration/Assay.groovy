@@ -1,5 +1,6 @@
 package bard.db.registration
 
+//import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.DocumentType
@@ -19,7 +20,7 @@ class Assay extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
-    // def aclUtilService
+//    def aclUtilService
     def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
@@ -80,6 +81,12 @@ class Assay extends AbstractContextOwner {
             capPermissionService?.addPermission(this)
         }
     }
+	
+	String getOwner(assay){
+		Assay.withNewSession {
+			return capPermissionService?.getOwner(this)
+		}
+	}
 
     List<AssayDocument> getPublications() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>

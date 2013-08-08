@@ -105,9 +105,8 @@
 
     <div class="row-fluid">
         <div id="msg" class="alert hide"></div>
-
         <div id="showSummary">
-            <g:render template='editSummary' model="['assay': assayInstance, canedit: editable]"/>
+            <g:render template='editSummary' model="['assay': assayInstance, canedit: editable, assayOwner: assayOwner]"/>
         </div>
     </div>
 </section>

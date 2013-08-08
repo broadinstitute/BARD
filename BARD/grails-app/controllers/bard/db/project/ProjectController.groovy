@@ -1,5 +1,6 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
@@ -29,6 +30,7 @@ class ProjectController {
     SpringSecurityService springSecurityService
     def permissionEvaluator
     LinkGenerator grailsLinkGenerator
+    CapPermissionService capPermissionService
 
     def create(ProjectCommand projectCommand) {
         if (!projectCommand) {
@@ -152,8 +154,9 @@ class ProjectController {
             return
         }
         boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
+        String owner = capPermissionService.getOwner(projectInstance)
 
-        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
+        [instance: projectInstance, projectOwner: owner, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
     }
 
     def edit() {

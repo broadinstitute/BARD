@@ -40,23 +40,8 @@
             <dt><g:message code="assay.assayShortName.label" default="Fix i18n"/>:</dt>
             <dd id="shortNameId"><g:fieldValue bean="${assay}" field="assayShortName"/></dd>
 
-
-            <dt><g:message code="assay.designedBy.label" default="Fix i18n"/>:</dt>
-            <dd>
-                <span
-                   class="designedBy"
-                   id="designedById"
-                   data-toggle="manual"
-                   data-type="text"
-                   data-value="${assay?.designedBy}"
-                   data-pk="${assay.id}"
-                   data-url="/BARD/assayDefinition/editDesignedBy"
-                   data-placeholder="Required"
-                   data-original-title="Edit Designed By">${assay?.designedBy}</span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" data-id="designedById" title="Click to edit designed by"></a>
-            </dd>
             <dt>Owner:</dt>
-            <dd>${assay?.designedBy}</dd>
+            <dd>${assayOwner}</dd>
 
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${assay.dateCreated}" format="MM/dd/yyyy"/></dd>

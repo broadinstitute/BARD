@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="row-fluid">
-                        <g:render template='editSummary' model="['project': instance, canedit: editable]"/>
+                        <g:render template='editSummary' model="['project': instance, canedit: editable, projectOwner: projectOwner]"/>
                     </div>
                 </section>
                 <br/>
