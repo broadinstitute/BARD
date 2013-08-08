@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse
 @TestFor(ContextController)
 @Build([ProjectContext, AssayContext, ExperimentContext])
 @TestMixin(GrailsUnitTestMixin)
-@Mock([InPlaceEditTagLib])
+@Mock([InPlaceEditTagLib, ProjectContext, AssayContext, ExperimentContext])
 @Unroll
 class ContextControllerUnitSpec extends Specification {
 

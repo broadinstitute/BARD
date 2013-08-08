@@ -179,6 +179,7 @@ class ProjectController {
         [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
     }
 
+    @Deprecated //this method is not used anymore. The editing is now done from the SHOW page.
     def edit() {
         def projectInstance = Project.get(params.id)
 

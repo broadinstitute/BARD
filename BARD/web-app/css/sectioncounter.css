@@ -1,0 +1,28 @@
+.heading-numbering ul {
+    counter-reset: section;
+}
+
+.heading-numbering li a {
+    display: block
+}
+
+.heading-numbering li a:before {
+    content: counters(section, ".") ". ";
+    counter-increment: section;
+}
+body {
+    counter-reset: sect;
+}
+h3.sect {
+    counter-reset: subsection;
+    counter-increment: sect;
+}
+h3.sect:before {
+    content: counter(sect)". ";
+}
+h4.subsect {
+    counter-increment: subsection;
+}
+h4.subsect:before {
+    content: counter(sect)"." counter(subsection)" ";
+}
