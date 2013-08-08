@@ -1,10 +1,12 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.experiment.PubchemImportService
 import bard.db.experiment.ResultsService
+import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
@@ -31,6 +33,7 @@ class ExperimentController {
     SpringSecurityService springSecurityService
     PubchemImportService pubchemImportService
     def permissionEvaluator
+    CapPermissionService capPermissionService
 
     def create() {
         def assay = Assay.get(params.assayId)
@@ -68,7 +71,9 @@ class ExperimentController {
         JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+        String owner = capPermissionService.getOwner(experimentInstance)
         [instance: experimentInstance,
+                experimentOwner: owner,
                 measuresAsJsonTree: measuresAsJsonTree,
                 assayMeasuresAsJsonTree: assayMeasuresAsJsonTree,
                 editable: editable ? 'canedit' : 'cannotedit',
@@ -234,6 +239,18 @@ class ExperimentController {
             log.error(ee)
             editErrorMessage()
         }
+    }
+
+    def editContext(Long id, String groupBySection) {
+        Experiment instance = Experiment.get(id)
+        if (!instance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), id])
+            return
+
+        }
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
+        render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
     }
 
     def save() {

@@ -43,42 +43,40 @@
 <g:if test="${instance?.id}">
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span3 bs-docs-sidebar">
+            <div class="span3 bs-docs-sidebar heading-numbering">
                 <ul class="nav nav-list bs-docs-sidenav twitterBootstrapAffixNavBar">
-                    <li><a href="#summary-header"><i class="icon-chevron-right"></i>1. Overview</a></li>
-                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>2. Contexts</a></li>
-                    <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>3. Experiments and steps
-                        <li><a href="#documents-header"><i class="icon-chevron-right"></i>4. Documents</a></li>
-                        <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>4.1 Descriptions
-                        </a>
-                        </li>
-                        <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>4.2 Protocols</a>
-                        </li>
-                        <li><a href="#documents-comment-header"><i class="icon-chevron-right"></i>4.3 Comments</a></li>
-                        <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>4.4 Publications
-                        </a>
-                        </li>
-                        <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>4.5 External URLS</a>
-                        </li>
-                        <li><a href="#documents-other-header"><i class="icon-chevron-right"></i>4.6 Others</a></li>
-                    </a></li>
+                    <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
+                    <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
+                    <li><a href="#experiment-and-step-header"><i class="icon-chevron-right"></i>Experiments and steps</a></li>
+                    <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
+                        <ul class="nav nav-list">
+                            <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
+                            </li>
+                            <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>Protocols</a></li>
+                            <li><a href="#documents-comment-header"><i class="icon-chevron-right"></i>Comments</a></li>
+                            <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>Publications</a>
+                            </li>
+                            <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>External URLS</a></li>
+                            <li><a href="#documents-other-header"><i class="icon-chevron-right"></i>Others</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
 
             <div class="span9">
                 <section id="summary-header">
                     <div class="page-header">
-                        <h3>1. Overview</h3>
+                        <h3 class="sect">Overview</h3>
 
                     </div>
 
                     <div class="row-fluid">
-                        <g:render template='editSummary' model="['project': instance, canedit: editable]"/>
+                        <g:render template='editSummary' model="['project': instance, canedit: editable, projectOwner: projectOwner]"/>
                     </div>
                 </section>
                 <br/>
                 <section id="contexts-header">
-                    <h3>2. Contexts</h3>
+                    <h3 class="sect">Contexts</h3>
 
                     <div class="row-fluid">
                         <div id="cardHolderAssayComponents" class="span12">
@@ -101,7 +99,7 @@
                 </section>
                 <br/>
                 <section id="experiment-and-step-header">
-                    <h3>3. Experiments and steps</h3>
+                    <h3 class="sect">Experiments and steps</h3>
 
                     <div class="row-fluid">
                         <g:render template='/project/editstep'
@@ -114,7 +112,7 @@
                 </section>
                 <br/>
                 <g:render template="/document/documents"
-                          model="[documentKind: DocumentKind.ProjectDocument, owningEntity: instance, canedit: editable , sectionNumber: '4.']"/>
+                          model="[documentKind: DocumentKind.ProjectDocument, owningEntity: instance, canedit: editable]"/>
             </div>
         </div>
     </div>

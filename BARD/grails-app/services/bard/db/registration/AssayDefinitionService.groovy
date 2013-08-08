@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import bard.db.context.item.ContextDTO
 import bard.db.context.item.ContextItemDTO
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
@@ -13,15 +14,31 @@ class AssayDefinitionService {
 
 
     Map generateAssayComparisonReport(final Assay assayOne, final Assay assayTwo) {
+
+        //get all assay context items in AssayOne
         final List<ContextItemDTO> assayOneContextItems = ContextItemDTO.toContextItemDTOs(assayOne.assayContextItems)
+
+        //get all assay context items in AssayTwo
         final List<ContextItemDTO> assayTwoContextItems = ContextItemDTO.toContextItemDTOs(assayTwo.assayContextItems)
 
+        //Subtract 2 from 1 to get assay context items exclusive to 1
         Collection<ContextItemDTO> exclusiveToAssayOne = CollectionUtils.subtract(assayOneContextItems, assayTwoContextItems)
+
+        //Subtract 1 from 2 to get assay context items exclusive to 2
         Collection<ContextItemDTO> exclusiveToAssayTwo = CollectionUtils.subtract(assayTwoContextItems, assayOneContextItems)
 
+        //Reconstruct the cards containing the exclusive items for each assay
+        final SortedMap<ContextDTO, List<ContextItemDTO>> cardMapForAssayOne = ContextItemDTO.buildCardMap(exclusiveToAssayOne)
+
+        //for each context that has exclusive items, add back all of the context items
+        ContextItemDTO.addCommonItemsToEachCard(cardMapForAssayOne)
+        //for each one, get the context id and then find all the context items and mark as exclusive
+        final SortedMap<ContextDTO, List<ContextItemDTO>> cardMapForAssayTwo = ContextItemDTO.buildCardMap(exclusiveToAssayTwo)
+        ContextItemDTO.addCommonItemsToEachCard(cardMapForAssayTwo)
+
         return [
-                exclusiveToAssayOne: ContextItemDTO.buildCardMap(exclusiveToAssayOne),
-                exclusiveToAssayTwo: ContextItemDTO.buildCardMap(exclusiveToAssayTwo),
+                exclusiveToAssayOne: cardMapForAssayOne,
+                exclusiveToAssayTwo: cardMapForAssayTwo,
                 assayOneName: assayOne.assayName,
                 assayOneADID: assayOne.id,
                 assayTwoName: assayTwo.assayName,

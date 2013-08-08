@@ -15,10 +15,6 @@ class BuildElementPathsService {
 
     final static Long bardDictionaryElementId = 893
 
-    Set<ElementHierarchy> dictionaryHierarchiesToExclude
-
-    Set<Element> dictionarySet
-
     /**
      * @param relationshipType    specify the relationshipType to be used when querying ElementHierarchy
      * @param pathDelimeter       delimeter to be used to separate elements within a path string
@@ -30,27 +26,7 @@ class BuildElementPathsService {
         this.relationshipType = relationshipType
         this.pathDelimeter = pathDelimeter
         this.includeRetiredElements = includeRetiredElements
-
-        dictionarySet = null
-        dictionaryHierarchiesToExclude = null
     }
-
-    void initializeDictionarySetsIfNeeded() {
-        if (null == dictionarySet) {
-            Element dictionaryRoot = Element.findById(bardDictionaryElementId)
-            if (dictionaryRoot) {
-                //retrieve all element hierarchy to reduce database round trips
-                ElementHierarchy.findAll()
-
-                dictionarySet = findDictionaries(dictionaryRoot)
-                dictionaryHierarchiesToExclude = findDictionaryHierarchiesToExclude(dictionaryRoot, dictionarySet)
-            } else {
-                dictionarySet = new HashSet<Element>()
-                dictionaryHierarchiesToExclude = new HashSet<ElementHierarchy>()
-            }
-        }
-    }
-
 
 
     /**
@@ -91,43 +67,53 @@ class BuildElementPathsService {
 
         //retrieve all element hierarchy to reduce database round trips
         ElementHierarchy.findAll()
-        initializeDictionarySetsIfNeeded()
 
         List<Element> elementList = Element.findAll()
         for (Element element : elementList) {
             Set<ElementAndFullPath> elementAndFullPathSet = build(element)
 
-            //if this is an element of dictionary
-            boolean isDictionaryChild = false
-            for (ElementHierarchy childHierarchy : element.childHierarchies) {
-                isDictionaryChild = isDictionaryChild || dictionarySet.contains(childHierarchy.parentElement)
-            }
-            if (isDictionaryChild) {
-                removeInvalidDictionaryPaths(elementAndFullPathSet)
+            if (isDictionaryChild(elementAndFullPathSet)) {
+                removeUnwantedDictionaryPaths(elementAndFullPathSet)
             }
 
             result.addAll(elementAndFullPathSet)
         }
 
         if (! includeRetiredElements) {
-            Iterator<ElementAndFullPath> iter = result.iterator()
-            while (iter.hasNext()) {
-                ElementAndFullPath elementAndFullPath = iter.next()
+            removeRetiredElementsAndAnyPathsTheyAreIn(result)
+        }
 
-                if (elementAndFullPath.element.elementStatus.equals(ElementStatus.Retired)) {
-                    iter.remove()
-                } else {
-                    for (ElementHierarchy eh : elementAndFullPath.path) {
-                        if (eh.parentElement.elementStatus.equals(ElementStatus.Retired)) {
-                            iter.remove()
-                            break
-                        }
+        return result
+    }
+
+    static void removeRetiredElementsAndAnyPathsTheyAreIn(Set<ElementAndFullPath> elementAndFullPathSet) {
+        Iterator<ElementAndFullPath> iter = elementAndFullPathSet.iterator()
+        while (iter.hasNext()) {
+            ElementAndFullPath elementAndFullPath = iter.next()
+
+            if (elementAndFullPath.element.elementStatus.equals(ElementStatus.Retired)) {
+                iter.remove()
+            } else {
+                for (ElementHierarchy eh : elementAndFullPath.path) {
+                    if (eh.parentElement.elementStatus.equals(ElementStatus.Retired)) {
+                        iter.remove()
+                        break
                     }
                 }
             }
         }
+    }
 
-        return result
+    static boolean isDictionaryChild(Set<ElementAndFullPath> elementAndFullPathSet) {
+        for (ElementAndFullPath elementAndFullPath : elementAndFullPathSet) {
+            if (elementAndFullPath.path.size() > 0 &&
+                    bardDictionaryElementId == elementAndFullPath.path.get(0).parentElement.id) {
+
+                return true
+            }
+        }
+
+        return false
     }
 
     /**
@@ -138,8 +124,6 @@ class BuildElementPathsService {
      * @return
      */
     String buildSinglePath(final Element element){
-        initializeDictionarySetsIfNeeded()
-
         Set<ElementAndFullPath> paths = build(element)
         List<String> pathMessage = []
         for(ElementAndFullPath elementAndFullPath: paths){
@@ -171,7 +155,7 @@ class BuildElementPathsService {
 
         Set<ElementHierarchy> elementHierarchySet = buildSetThatMatchRelationship(element.childHierarchies)
 
-        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element: element, pathDelimeter: pathDelimeter)
+        ElementAndFullPath elementAndFullPath = new ElementAndFullPath(element, pathDelimeter)
         result.add(elementAndFullPath)
 
         if (elementHierarchySet.size() > 0) {
@@ -259,7 +243,7 @@ class BuildElementPathsService {
     }
 
 
-    void removeInvalidDictionaryPaths(Set<ElementAndFullPath> elementAndFullPathSet) {
+    void removeUnwantedDictionaryPaths(Set<ElementAndFullPath> elementAndFullPathSet) {
         Iterator<ElementAndFullPath> iterator = elementAndFullPathSet.iterator()
 
         while (iterator.hasNext()) {
@@ -271,37 +255,6 @@ class BuildElementPathsService {
         }
     }
 
-    static Set<ElementHierarchy> findDictionaryHierarchiesToExclude(Element dictionaryRoot, Set<Element> dictionaries) {
-        Set<ElementHierarchy> result = new HashSet<ElementHierarchy>()
-
-//        result.addAll(ElementHierarchy.withCriteria({
-//            inList("childElement", dictionaries)
-//            not {
-//                eq("parentElement", dictionaryRoot)
-//            }
-//        }))
-
-        for (Element dictionary : dictionaries) {
-            for (ElementHierarchy childHierarchy : dictionary.childHierarchies) {
-                if (! childHierarchy.parentElement.equals(dictionaryRoot)) {
-                    result.add(childHierarchy)
-                }
-            }
-        }
-
-
-        return result
-    }
-
-    static Set<Element> findDictionaries(Element dictionaryRoot) {
-        Set<Element> result = new HashSet<Element>()
-
-        for (ElementHierarchy dictionaryHierarchy : dictionaryRoot.parentHierarchies) {
-            result.add(dictionaryHierarchy.childElement)
-        }
-
-        return result
-    }
 
     private class PathAndElementHierarchyPair {
         ElementHierarchy elementHierarchy

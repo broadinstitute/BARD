@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
@@ -17,6 +18,7 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.acls.domain.BasePermission
+import org.grails.plugins.springsecurity.service.acl.AclUtilService
 
 import javax.servlet.http.HttpServletResponse
 import java.text.DateFormat
@@ -34,6 +36,7 @@ class AssayDefinitionController {
     def permissionEvaluator
     MeasureTreeService measureTreeService
     AssayDefinitionService assayDefinitionService
+    CapPermissionService capPermissionService
 
     def assayComparisonReport() {
 
@@ -223,16 +226,15 @@ class AssayDefinitionController {
             }
         }
 
-        def messageStr = null;
         if (!assayInstance) {
-            messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
+            def messageStr = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return [message: messageStr]
         }
 
         measureTreeAsJson = new JSON(measureTreeService.createMeasureTree(assayInstance, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assayInstance)
-
-        return [assayInstance: assayInstance, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
+        String owner = capPermissionService.getOwner(assayInstance)
+        return [assayInstance: assayInstance, assayOwner: owner, measureTreeAsJson: measureTreeAsJson, editable: editable ? 'canedit' : 'cannotedit']
     }
 
     def editContext(Long id, String groupBySection) {
