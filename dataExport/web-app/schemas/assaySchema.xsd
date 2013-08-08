@@ -113,11 +113,8 @@ application/vnd.bard.cap+xml;type=assay</xs:documentation>
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
                         <xs:enumeration value="Draft"/>
-                        <xs:enumeration value="Witnessed"/>
-                        <xs:enumeration value="Measures Done"/>
-                        <xs:enumeration value="Annotations Done"/>
+                        <xs:enumeration value="Approved"/>
                         <xs:enumeration value="Retired"/>
-                        <xs:enumeration value="Finished"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
