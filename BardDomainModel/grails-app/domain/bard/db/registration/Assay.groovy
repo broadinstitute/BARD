@@ -8,10 +8,13 @@ import bard.db.enums.hibernate.AssayStatusEnumUserType
 import bard.db.enums.hibernate.AssayTypeEnumUserType
 import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
+import bard.db.guidance.Guidance
+import bard.db.guidance.GuidanceReporter
+import bard.db.guidance.assay.AssayBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 
-class Assay extends AbstractContextOwner {
+class Assay extends AbstractContextOwner implements GuidanceReporter{
     public static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
     public static final int DESIGNED_BY_MAX_SIZE = 100
@@ -185,5 +188,12 @@ class Assay extends AbstractContextOwner {
         AssayContext context = new AssayContext(properties)
         addToAssayContexts(context)
         return context
+    }
+
+    @Override
+    List<Guidance> getGuidance() {
+        final List<Guidance> guidances = []
+        guidances.addAll(new AssayBiologyGuidanceRule(this).getGuidance())
+        return guidances
     }
 }
