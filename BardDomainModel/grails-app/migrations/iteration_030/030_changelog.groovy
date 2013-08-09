@@ -4,6 +4,7 @@ import bard.db.enums.DocumentType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentDocument
 import bard.db.registration.Assay
+import bard.db.registration.AssayDocument
 import grails.plugins.springsecurity.SpringSecurityService
 import org.apache.commons.lang3.time.StopWatch
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
@@ -62,41 +63,6 @@ databaseChangeLog = {
                             """)
             }
         }
-
-        grailsChange {
-            change {
-                SpringSecurityService springSecurityService = ctx.getBean("springSecurityService")
-                SpringSecurityUtils.doWithAuth("gwalzer") {
-                    StopWatch sw = new StopWatch()
-                    sw.start()
-                    println("started copying documents from experiment back to assays")
-
-                    Assay.list().each { Assay assay ->
-                        //find an experiment that has all three document types: description, protocol and comments
-                        Experiment experiment = assay.experiments.find { Experiment exp ->
-                            List<DocumentType> experimentDocumentTypes = exp.documents*.documentType
-                            return experimentDocumentTypes.containsAll([DocumentType.DOCUMENT_TYPE_DESCRIPTION, DocumentType.DOCUMENT_TYPE_PROTOCOL, DocumentType.DOCUMENT_TYPE_COMMENTS])
-                        }
-
-                        //if such experiment exist, use its documents to populate the assay documents
-                        if (experiment) {
-
-                        }
-                    }
-//                    project.save(failOnError: true)
-//                    println("inserted project ${project.code}")
-
-                    ctx.getBean('sessionFactory').currentSession.flush()
-                    sw.stop()
-                    println("finished processing flush() duration: ${sw}")
-//                    def count = Project.count()
-//                    println("project count : ${count}")
-                }
-                rollback
-                confirm 'moved documents from assays to experiments'
-            }
-        }
-        connection.rollback()
     }
 }
 
