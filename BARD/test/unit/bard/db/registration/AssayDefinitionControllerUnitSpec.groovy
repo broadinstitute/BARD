@@ -20,6 +20,7 @@ import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
 import spock.lang.Unroll
+import acl.CapPermissionService
 
 import javax.servlet.http.HttpServletResponse
 
@@ -45,11 +46,13 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayContextService assayContextService = Mock(AssayContextService)
         AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
+        CapPermissionService capPermissionService  = Mock(CapPermissionService)
         controller.springSecurityService = Mock(SpringSecurityService)
         controller.measureTreeService = measureTreeService
         controller.assayContextService = assayContextService
         controller.assayDefinitionService = assayDefinitionService
         controller.contextService = Mock(ContextService)
+        controller.capPermissionService = capPermissionService
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }

@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
@@ -37,6 +38,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
 
         ExperimentService experimentService = Mock(ExperimentService)
         AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
+        controller.capPermissionService = Mock(CapPermissionService)
         controller.experimentService = experimentService
         controller.assayDefinitionService = assayDefinitionService
     }

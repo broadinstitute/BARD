@@ -1,5 +1,6 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectGroupType
@@ -55,6 +56,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         }
         controller.metaClass.mixin(EditingHelper)
         controller.springSecurityService = Mock(SpringSecurityService)
+        controller.capPermissionService = Mock(CapPermissionService)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
