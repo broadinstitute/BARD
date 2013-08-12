@@ -227,7 +227,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         controller.editDocumentName(inlineEditableCommand)
         then:
         assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "\n<p>${value}</p>\n"
+        assert response.text == "${System.getProperty("line.separator")}<p>${value}</p>${System.getProperty("line.separator")}"
         assert response.headers("version").get(0) == "1"
         assert response.headers("entityId").get(0) == existingAssayDocument.id.toString()
     }
@@ -289,7 +289,7 @@ class DocumentControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec
         controller.editDocument(inlineEditableCommand)
         then:
         assert response.status == HttpServletResponse.SC_OK
-        assert response.text == "\n<p>${value}</p>\n"
+        assert response.text == "${System.getProperty("line.separator")}<p>${value}</p>${System.getProperty("line.separator")}"
         assert response.headers("version").get(0) == "1"
         assert response.headers("entityId").get(0) == existingAssayDocument.id.toString()
     }

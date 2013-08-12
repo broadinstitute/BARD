@@ -1,11 +1,13 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import bard.db.project.InlineEditableCommand
+import bard.db.project.ProjectExperimentRenderService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -284,6 +286,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test show'() {
         given:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
         controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
@@ -291,6 +295,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         def model = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
         model.assayInstance == assay
     }
 
@@ -315,6 +320,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test editMeasure'() {
         given:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
         controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
@@ -322,6 +329,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         def model = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
         model.assayInstance == assay
     }
 
