@@ -45,7 +45,7 @@ abstract class AbstractDocument {
      */
     private static void validContentUrl(Object val, Object self, Errors errors){
         if ([DocumentType.DOCUMENT_TYPE_PUBLICATION, DocumentType.DOCUMENT_TYPE_EXTERNAL_URL].contains(self.documentType)) {
-            if (StringUtils.isNotBlank(val) && BooleanUtils.isFalse(new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES).isValid(val))) {
+            if (StringUtils.isNotBlank(val) && BooleanUtils.isFalse(new UrlValidator().isValid(val))) {
                 String field = 'documentContent'
                 errors.rejectValue(field, 'document.invalid.url.message', [field, self.documentType.id] as Object[], "Valid URL expected for ${self.documentType.id}")
             }

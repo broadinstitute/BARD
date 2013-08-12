@@ -13,7 +13,7 @@ databaseChangeLog = {
     String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
     File migrationsDir = new File(bardDomainModelMigrationsDir)
 
-    changeSet(author: "gwalzer", id: "iteration-030/01-move-assay-documents-to-experiment", dbms: "oracle", context: "standard") {
+    changeSet(author: "gwalzer", id: "iteration-030/01-create-experiment-document-table", dbms: "oracle", context: "standard") {
 
         //Set the username in context
         grailsChange {
