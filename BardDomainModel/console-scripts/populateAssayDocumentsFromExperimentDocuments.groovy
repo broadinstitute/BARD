@@ -48,46 +48,72 @@ Assay.withTransaction { TransactionStatus status ->
             }
             //else, try to take as many documents as possible from the assay's experiments
             else {
+                println("couldn't find a single experiment with description, protocol and comments to copy to the assay. Searching within separate experiments (ADID=${assay.id})")
                 descriptionDoc = assay.experiments*.documents.flatten().find { ExperimentDocument experimentDocument ->
-                    return experimentDocument.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION
+                    if (experimentDocument.documentType == DocumentType.DOCUMENT_TYPE_DESCRIPTION) {
+                        AssayDocument assayDescriptionDoc = new AssayDocument(experimentDocument.properties)
+                        assayDescriptionDoc.assay = assay
+                        assayDescriptionDoc.lastUpdated = experimentDocument.lastUpdated ?: new Date()
+                        return assayDescriptionDoc.validate()
+                    }
+                    return false
                 }
                 protocolDoc = assay.experiments*.documents.flatten().find { ExperimentDocument experimentDocument ->
-                    return experimentDocument.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL
+                    if (experimentDocument.documentType == DocumentType.DOCUMENT_TYPE_PROTOCOL) {
+                        AssayDocument assayProtocolDoc = new AssayDocument(experimentDocument.properties)
+                        assayProtocolDoc.assay = assay
+                        assayProtocolDoc.lastUpdated = experimentDocument.lastUpdated ?: new Date()
+                        return assayProtocolDoc.validate()
+                    }
+                    return false
                 }
                 commentsDoc = assay.experiments*.documents.flatten().find { ExperimentDocument experimentDocument ->
-                    return experimentDocument.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS
+                    if (experimentDocument.documentType == DocumentType.DOCUMENT_TYPE_COMMENTS) {
+                        AssayDocument assayCommentsDoc = new AssayDocument(experimentDocument.properties)
+                        assayCommentsDoc.assay = assay
+                        assayCommentsDoc.lastUpdated = experimentDocument.lastUpdated ?: new Date()
+                        return assayCommentsDoc.validate()
+                    }
+                    return false
                 }
             }
 
             Boolean assayChanged = false
+            AssayDocument assayDescriptionDoc, assayProtocolDoc, assayCommentsDoc
             if (descriptionDoc) {
-                AssayDocument assayDescriptionDoc = new AssayDocument(descriptionDoc.properties)
+                assayDescriptionDoc = new AssayDocument(descriptionDoc.properties)
                 assayDescriptionDoc.lastUpdated = descriptionDoc.lastUpdated ?: new Date()
+                assay.addToAssayDocuments(assayDescriptionDoc)
                 assayChanged = true
                 assayDescriptions++
-//                println("for ADID=${assay.id} we found a new Descriptoin document: ${assayDescriptionDoc.dump()}\n")
+//                println("\tDescriptoin document: ${assayDescriptionDoc.id}")
             }
             if (protocolDoc) {
-                AssayDocument assayProtocolDoc = new AssayDocument(protocolDoc.properties)
+                assayProtocolDoc = new AssayDocument(protocolDoc.properties)
                 assayProtocolDoc.lastUpdated = protocolDoc.lastUpdated ?: new Date()
                 assay.addToAssayDocuments(assayProtocolDoc)
                 assayChanged = true
                 assayProtocols++
-//                println("for ADID=${assay.id} we found a new Protocol document: ${assayProtocolDoc.dump()}\n")
+//                println("\tProtocol document: ${assayProtocolDoc.id}")
             }
             if (commentsDoc) {
-                AssayDocument assayCommentsDoc = new AssayDocument(commentsDoc.properties)
+                assayCommentsDoc = new AssayDocument(commentsDoc.properties)
                 assayCommentsDoc.lastUpdated = commentsDoc.lastUpdated ?: new Date()
                 assay.addToAssayDocuments(assayCommentsDoc)
                 assayChanged = true
                 assayComments++
-//                println("for ADID=${assay.id} we found a new Comments document: ${assayCommentsDoc.dump()}\n")
+//                println("\tComments document: ${assayCommentsDoc.id}")
             }
             if (assayChanged) {
-                assay.save(failOnError: true)
+                assay.save(failOnError: true, flush: true)
                 assaysUpdated++
+                println("ADID=${assay?.id}" +
+                        "\tDescriptoin document: ${assayDescriptionDoc?.id}" +
+                        "\tProtocol document: ${assayProtocolDoc?.id}" +
+                        "\tComments document: ${assayCommentsDoc?.id}" +
+                        "\tProgress: ${progress++}/${totalAssays}")
             }
-            println("Progress: ${progress++}/${totalAssays}")
+//            println("Progress: ${progress++}/${totalAssays}")
         }
 
         ctx.getBean('sessionFactory').currentSession.flush()
