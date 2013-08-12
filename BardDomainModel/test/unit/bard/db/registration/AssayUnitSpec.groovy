@@ -8,6 +8,8 @@ import grails.test.mixin.Mock
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import static bard.db.guidance.assay.AssayBiologyGuidanceRule.*
+
 /**
  * Created with IntelliJ IDEA.
  * User: pmontgom
@@ -50,6 +52,7 @@ class AssayUnitSpec extends Specification {
                 assay.addToAssayContexts(assayContext)
                 final Element attribute = Element.findByLabel(map.label) ?: Element.build(map)
                 assayContext.addContextItem(AssayContextItem.build(attributeElement: attribute))
+
             }
         }
 
@@ -61,7 +64,7 @@ class AssayUnitSpec extends Specification {
 
         where:
         desc                     | attributeElementMaps                         | expectedGuidanceMessages
-        'biology required'       | { null }                                     | ['All assays should have at least 1 Context that defines the biology.']
+        'biology required'       | { null }                                     | [ONE_BIOLOGY_ATTRIBUTE_REQUIRED]
         'biology required'       | { [[label: 'biology']] }                     | []
         'more than 1 biology ok' | { [[label: 'biology'], [label: 'biology']] } | []
 

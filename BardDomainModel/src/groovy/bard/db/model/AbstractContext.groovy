@@ -2,7 +2,11 @@ package bard.db.model
 
 import bard.db.dictionary.Descriptor
 import bard.db.dictionary.Element
-import bard.db.registration.AssayContextItem
+import bard.db.guidance.Guidance
+import bard.db.guidance.GuidanceReporter
+import bard.db.guidance.context.BiologyShouldHaveOneSupportingReferencePerContextRule
+import bard.db.guidance.context.OneBiologyAttributePerContextRule
+import bard.db.guidance.context.item.ValidBiologyValueGuidanceRule
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -12,7 +16,7 @@ import org.apache.commons.lang.StringUtils
  * Time: 11:33 AM
  * To change this template use File | Settings | File Templates.
  */
-abstract class AbstractContext{
+abstract class AbstractContext implements GuidanceReporter{
     private static final int CONTEXT_NAME_MAX_SIZE = 128
     private static final int CONTEXT_GROUP_MAX_SIZE = 256
     private static final int MODIFIED_BY_MAX_SIZE = 40
@@ -132,4 +136,13 @@ abstract class AbstractContext{
      * @return the SubClass of the Item this Context is expecting
      */
     abstract Class<? extends AbstractContextItem> getItemSubClass()
+
+    @Override
+    List<Guidance> getGuidance() {
+        List<Guidance> guidanceList = []
+        guidanceList.add(new OneBiologyAttributePerContextRule(this).getGuidance())
+        guidanceList.add(new ValidBiologyValueGuidanceRule(this).getGuidance())
+        guidanceList.add(new BiologyShouldHaveOneSupportingReferencePerContextRule(this).getGuidance())
+        guidanceList.flatten()
+    }
 }
