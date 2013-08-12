@@ -113,24 +113,8 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
                    data-id="descriptionId"></a>
             </dd>
+
             <dt>Owner:</dt><dd>${experimentOwner}</dd>
-            <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
-            <dd id="huddd">
-                <span class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
-                      data-toggle="manual"
-                      data-url="/BARD/experiment/editHoldUntilDate"
-                      data-value="${instance.holdUntilDate}"
-                      data-original-title="Select hold until date"
-                      data-format="YYYY-MM-DD"
-                      data-viewformat="MM/DD/YYYY"
-                      data-template="D / MMM / YYYY">
-                    <g:formatDate
-                            format="MM/dd/yyyy"
-                            date="${instance.holdUntilDate}"/>
-                </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit hold until date"
-                   data-id="hud"></a>
-            </dd>
 
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
