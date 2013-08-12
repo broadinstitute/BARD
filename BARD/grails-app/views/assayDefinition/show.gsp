@@ -120,6 +120,7 @@
     </div>
 </section>
 <br/>
+<g:render template="/common/guidance" model="[guidanceList: assayInstance.guidance]" />
 <section id="biology-header">
 
     <h3 class="sect">Biology <g:link target="dictionary" controller="element" action="showTopLevelHierarchyHelp"><i

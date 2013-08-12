@@ -48,8 +48,8 @@ class BiologyShouldHaveOneSupportingReferencePerContextRule implements GuidanceR
     ]
 
 
-    private static final String BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG = "When a context has biology defined as a 'biological process', one other item in the text should reference one of these terms ( ${BIOLOGICAL_PROCESS_TERMS.join(',')} )."
-    private static final String MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG = "When a context has biology defined as a something that can be considered a molecular target,  one other item in the text should reference one of these terms ( ${MOLECULAR_TARGET_TERMS.join(',')} )."
+    private static final String BIOLOGICAL_PROCESS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG = "When a context has biology defined as a 'biological process', there should be one other item that references one of the following terms ( ${BIOLOGICAL_PROCESS_TERMS.join(',')} )."
+    private static final String MOLECULAR_TARGETS_SHOULD_HAVE_ONE_BIOLOGICAL_PROCESS_TERM_MSG =  "When a context has biology defined as a something that can be considered a molecular target,  there should one other item that references one of the following terms ( ${MOLECULAR_TARGET_TERMS.join(',')} )."
 
     AbstractContext context
 
