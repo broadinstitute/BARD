@@ -2,6 +2,8 @@ package bard.db.registration
 
 import bard.db.command.BardCommand
 import bard.db.enums.DocumentType
+import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentDocument
 import bard.db.model.AbstractDocument
 import bard.db.project.InlineEditableCommand
 import bard.db.project.Project
@@ -18,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
 class DocumentController {
     static allowedMethods = [save: "POST"]
 
-    Map<String, Class> nameToDomain = ["Assay": AssayDocument, "Project": ProjectDocument]
+    Map<String, Class> nameToDomain = ["Assay": AssayDocument, "Project": ProjectDocument, "Experiment": ExperimentDocument]
     DocumentService documentService
     def permissionEvaluator
     def springSecurityService
@@ -30,6 +32,8 @@ class DocumentController {
             entity = Assay.findById(documentCommand.assayId)
         } else if (documentCommand.projectId) {
             entity = Project.findById(documentCommand.projectId)
+        } else if (documentCommand.experimentId) {
+            entity = Experiment.findById(documentCommand.experimentId)
         }
         if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
             render accessDeniedErrorMessage()
@@ -48,6 +52,8 @@ class DocumentController {
             entity = Assay.findById(documentCommand.assayId)
         } else if (documentCommand.projectId) {
             entity = Project.findById(documentCommand.projectId)
+        } else if (documentCommand.experimentId) {
+            entity = Experiment.findById(documentCommand.experimentId)
         }
         if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
             render accessDeniedErrorMessage()
@@ -99,6 +105,8 @@ class DocumentController {
                 entity = Assay.findById(documentCommand.assayId)
             } else if (DocumentKind.ProjectDocument == documentKind) {
                 entity = Project.findById(documentCommand.projectId)
+            } else if (DocumentKind.ExperimentDocument == documentKind) {
+                entity = Experiment.findById(documentCommand.experimentId)
             }
             if (entity) {
                 if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
@@ -133,6 +141,8 @@ class DocumentController {
                 entity = Assay.findById(documentCommand.assayId)
             } else if (DocumentKind.ProjectDocument == documentKind) {
                 entity = Project.findById(documentCommand.projectId)
+            } else if (DocumentKind.ExperimentDocument == documentKind) {
+                entity = Experiment.findById(documentCommand.experimentId)
             }
             if (entity) {
                 if (!canEdit(permissionEvaluator, springSecurityService, entity)) {
@@ -167,6 +177,8 @@ class DocumentController {
                 documentService.deleteAssayDocument(document.assay.id, document)
             } else if (document instanceof ProjectDocument) {
                 documentService.deleteProjectDocument(document.project.id, document)
+            } else if (document instanceof ExperimentDocument) {
+                documentService.deleteExperimentDocument(document.experiment.id, document)
             } else {
                 throw new RuntimeException("UnHandled Document Type " + domainClass.toString())
             }
@@ -183,8 +195,11 @@ class DocumentController {
         } else if (document.getOwner() instanceof Project) {
             Project project = document.getOwner()
             redirect(controller: "project", action: "show", id: project.id, fragment: "document-${document.id}")
+        } else if (document.getOwner() instanceof Experiment) {
+            Experiment experiment = document.getOwner()
+            redirect(controller: "experiment", action: "show", id: experiment.id, fragment: "document-${document.id}")
         } else {
-            throw new RuntimeException("document owner ${document.getOwner} is neither an assay nor project")
+            throw new RuntimeException("document owner ${document.getOwner} is neither an assay, project or experiment")
         }
     }
 }
@@ -233,11 +248,15 @@ class DocumentHelper {
                                           final DocumentKind currentDocumentKind) {
         Long assayId = null
         Long projectId = null
+        Long experimentId = null
         if (DocumentKind.AssayDocument == currentDocumentKind) {
             assayId = owningEntityId
         }
         if (DocumentKind.ProjectDocument == currentDocumentKind) {
             projectId = owningEntityId
+        }
+        if (DocumentKind.ExperimentDocument == currentDocumentKind) {
+            experimentId = owningEntityId
         }
 
         return new DocumentCommand(
@@ -247,7 +266,8 @@ class DocumentHelper {
                 documentType: documentType,
                 version: version,
                 assayId: assayId,
-                projectId: projectId
+                projectId: projectId,
+                experimentId: experimentId
         )
     }
 }
@@ -257,6 +277,7 @@ class DocumentCommand extends BardCommand {
 
     Long assayId
     Long projectId
+    Long experimentId
 
     Long documentId
     Long version
@@ -274,9 +295,10 @@ class DocumentCommand extends BardCommand {
         importFrom(AssayDocument, exclude: ['dateCreated', 'lastUpdated', 'modifiedBy'])
         assayId(nullable: true)
         projectId(nullable: true)
+        experimentId(nullable: true)
         ownerController(nullable: false, blank: false)
         documentId(nullable: true, validator: { val, self, errors ->
-            if (self.assayId == null && self.documentId == null && self.projectId == null) {
+            if (self.assayId == null && self.documentId == null && self.projectId == null && self.experimentId == null) {
                 errors.rejectValue('documentId', 'nullable')
                 return false
             }
@@ -302,6 +324,10 @@ class DocumentCommand extends BardCommand {
                 doc = new ProjectDocument()
                 doc.project = attemptFindById(Project, projectId)
             }
+            if (experimentId) {
+                doc = new ExperimentDocument()
+                doc.experiment = attemptFindById(Experiment, experimentId)
+            }
             copyFromCmdToDomain(doc)
             if (attemptSave(doc)) {
                 documentToReturn = doc
@@ -324,8 +350,10 @@ class DocumentCommand extends BardCommand {
                 document = attemptFindById(AssayDocument, documentId)
             } else if (projectId != null) {
                 document = attemptFindById(ProjectDocument, documentId)
+            } else if (experimentId != null) {
+                document = attemptFindById(ExperimentDocument, documentId)
             } else {
-                throw new RuntimeException("Neither assayId nor projectId was provided")
+                throw new RuntimeException("Neither assayId, projectId or experimentId was provided")
             }
 
             if (document) {
@@ -364,6 +392,9 @@ class DocumentCommand extends BardCommand {
         if (document instanceof ProjectDocument) {
             this.projectId = document.project.id
         }
+        if (document instanceof ExperimentDocument) {
+            this.experimentId = document.experiment.id
+        }
         this.documentId = document.id
         for (String field in PROPS_FROM_DOMAIN_TO_CMD) {
             this[(field)] = document[(field)]
@@ -380,8 +411,10 @@ class DocumentCommand extends BardCommand {
             return projectId
         } else if (assayId) {
             return assayId
+        } else if (experimentId) {
+            return experimentId
         } else {
-            throw new RuntimeException('need either a projectId or assayId to determine ownerId')
+            throw new RuntimeException('need either a projectId, assayId or experimentId to determine ownerId')
         }
     }
     /**
@@ -393,8 +426,10 @@ class DocumentCommand extends BardCommand {
             return 'project'
         } else if (assayId) {
             return 'assayDefinition'
+        } else if (experimentId) {
+            return 'experiment'
         } else {
-            throw new RuntimeException('need either a projectId or assayId to determine owner')
+            throw new RuntimeException('need either a projectId, assayId or experimentId to determine owner')
         }
     }
 
@@ -410,5 +445,6 @@ class DocumentCommand extends BardCommand {
 }
 enum DocumentKind {
     AssayDocument,
-    ProjectDocument
+    ProjectDocument,
+    ExperimentDocument
 }

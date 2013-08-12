@@ -16,6 +16,7 @@
         <g:form class="form-horizontal" action="update">
             <g:hiddenField name="assayId" value="${document?.assayId}"/>
             <g:hiddenField name="projectId" value="${document?.projectId}"/>
+            <g:hiddenField name="experimentId" value="${document?.experimentId}"/>
 
             <g:hiddenField name="documentId" value="${document?.documentId}"/>
             <g:hiddenField name="version" value="${document?.version}"/>
