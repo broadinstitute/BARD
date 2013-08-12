@@ -371,11 +371,19 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     }
 
     void 'test show'() {
+        given:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
+        ProjectExperimentRenderService projectExperimentRenderService = Mock(ProjectExperimentRenderService)
+        controller.projectExperimentRenderService = projectExperimentRenderService
+
         when:
         params.id = project.id
         def model = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
+        projectExperimentRenderService.contructGraph(project) >> { new JSON() }
         model.instance == project
         model.pexperiment != null
     }
