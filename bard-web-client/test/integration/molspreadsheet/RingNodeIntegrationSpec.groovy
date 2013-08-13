@@ -24,7 +24,10 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
 
     void "test generateAccessionIdentifiers"(){
         given:
-        final List<Long> bids = [868L]
+        String ncgcBaseURL = applicationContext.getBean("grailsApplication").config.ncgc.server.root.url
+        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology?top=10", String.class)
+        def resultJSON = JSON.parse(result)
+        final List<Long> bids = [(resultJSON.collection[0] - '/biology/').toLong()]
 
         when:
         List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits", [:])
