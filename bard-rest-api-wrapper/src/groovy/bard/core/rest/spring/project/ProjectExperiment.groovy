@@ -52,6 +52,8 @@ public class ProjectExperiment {
     private Object source;
     @JsonProperty("grantNo")
     private Object grantNo;
+    @JsonProperty("status")
+    private Object status;
     @JsonProperty("deposited")
     private Object deposited;
     @JsonProperty("updated")
@@ -241,6 +243,16 @@ public class ProjectExperiment {
     @JsonProperty("grantNo")
     public void setGrantNo(Object grantNo) {
         this.grantNo = grantNo;
+    }
+
+    @JsonProperty("status")
+    public Object getStatus() {
+        return status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(Object status) {
+        this.status = status;
     }
 
     @JsonProperty("deposited")
