@@ -40,4 +40,9 @@ class ProjectExperimentContext extends AbstractContext{
     void addContextItem(AbstractContextItem item) {
         this.addToContextItems(item)
     }
+
+    @Override
+    Class<? extends AbstractContextItem> getItemSubClass() {
+        return ProjectExperimentContextItem
+    }
 }

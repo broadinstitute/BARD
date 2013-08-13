@@ -1,5 +1,6 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
 import bard.db.enums.ProjectGroupType
@@ -55,6 +56,7 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
         }
         controller.metaClass.mixin(EditingHelper)
         controller.springSecurityService = Mock(SpringSecurityService)
+        controller.capPermissionService = Mock(CapPermissionService)
         project = Project.build()
         Element element1 = Element.build(label: "primary assay")
         Element element2 = Element.build(label: "secondary assay")
@@ -369,11 +371,19 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
     }
 
     void 'test show'() {
+        given:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
+        ProjectExperimentRenderService projectExperimentRenderService = Mock(ProjectExperimentRenderService)
+        controller.projectExperimentRenderService = projectExperimentRenderService
+
         when:
         params.id = project.id
         def model = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
+        projectExperimentRenderService.contructGraph(project) >> { new JSON() }
         model.instance == project
         model.pexperiment != null
     }

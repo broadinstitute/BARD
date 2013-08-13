@@ -40,4 +40,9 @@ class ProjectContext extends AbstractContext{
     void addContextItem(AbstractContextItem item) {
         addToContextItems(item)
     }
+
+    @Override
+    Class<? extends AbstractContextItem> getItemSubClass() {
+        return ProjectContextItem
+    }
 }

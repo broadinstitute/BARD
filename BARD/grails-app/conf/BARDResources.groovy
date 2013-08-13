@@ -48,8 +48,8 @@ modules = {
     datatables {
         resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
     }
-    grailspagination{
-        resource url:'/css/grailspagination.css'
+    grailspagination {
+        resource url: '/css/grailspagination.css'
     }
     dynatree {
         dependsOn 'jquery, jquery-ui'
@@ -67,10 +67,13 @@ modules = {
     }
 
     assayshow {
-        dependsOn(['bootstrapplus', 'card'])
+        dependsOn(['bootstrapplus', 'card', 'sectionCounter'])
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
+    }
+
+    sectionCounter {
         resource url: '/css/sectioncounter.css'
     }
 
@@ -96,7 +99,7 @@ modules = {
     assaysummary {
         resource url: '/js/cap/editSummary.js'
     }
-    createProject{
+    createProject {
         resource url: '/js/cap/createProject.js'
     }
     projectsummary {
@@ -137,8 +140,8 @@ modules = {
         resource url: "/css/twitterBootstrapAffix.css"
         resource url: "/js/jquery-ui-bootstrap/bootstrap/js/twitterBootstrapAffix.js"
     }
-    assaycompare{
+    assaycompare {
         dependsOn 'core,bootstrap,bootstrapplus,card'
-        resource url:'/js/cap/assaycompare.js'
+        resource url: '/js/cap/assaycompare.js'
     }
 }

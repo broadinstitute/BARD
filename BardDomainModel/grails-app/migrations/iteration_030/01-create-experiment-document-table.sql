@@ -1,0 +1,41 @@
+CREATE SEQUENCE EXPERIMENT_DOCUMENT_ID_SEQ
+START WITH 1
+INCREMENT BY 1
+NOMINVALUE
+MAXVALUE 2147483648
+NOCYCLE
+CACHE 2
+NOORDER;
+
+--
+-- TABLE: EXPERIMENT_DOCUMENT
+--
+
+CREATE TABLE EXPERIMENT_DOCUMENT (
+  Experiment_document_ID NUMBER(19, 0)                      NOT NULL,
+  EXPERIMENT_ID          NUMBER(19, 0)                      NOT NULL,
+  Document_Name          VARCHAR2(500)                      NOT NULL,
+  DOCUMENT_TYPE          VARCHAR2(20) DEFAULT 'Description' NOT NULL
+    CONSTRAINT CK_EXPERIMENT_DOCUMENT_TYPE CHECK (Document_Type IN
+                                                  ('Description', 'Protocol', 'Comments', 'Paper', 'External URL', 'Other')),
+  DOCUMENT_CONTENT       CLOB DEFAULT EMPTY_CLOB(),
+  VERSION                NUMBER(38, 0) DEFAULT 0            NOT NULL,
+  Date_Created           TIMESTAMP(6) DEFAULT sysdate       NOT NULL,
+  Last_Updated           TIMESTAMP(6),
+  MODIFIED_BY            VARCHAR2(40),
+  CONSTRAINT PK_Experiment_document PRIMARY KEY (Experiment_document_ID)
+);
+
+--
+-- INDEX: FK_EXPERIMENT_DOCUMENT_EXPERIMENT
+--
+
+CREATE INDEX IDX_EXP_DOC_EXP_ID ON EXPERIMENT_DOCUMENT (EXPERIMENT_ID);
+
+--
+-- TABLE: EXPERIMENT_DOCUMENT
+--
+
+ALTER TABLE EXPERIMENT_DOCUMENT ADD CONSTRAINT FK_Exp_doc_exp
+FOREIGN KEY (EXPERIMENT_ID)
+REFERENCES EXPERIMENT (EXPERIMENT_ID);

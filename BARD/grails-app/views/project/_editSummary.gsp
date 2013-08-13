@@ -53,6 +53,7 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description" data-id="descriptionId"></a>
             </dd>
 
+            <dt>Owner:</dt><dd>${projectOwner}</dd>
             <dt><g:message code="default.dateCreated.label"/>:</dt>
             <dd><g:formatDate date="${project.dateCreated}" format="MM/dd/yyyy"/></dd>
             <dt><g:message code="default.lastUpdated.label"/>:</dt>

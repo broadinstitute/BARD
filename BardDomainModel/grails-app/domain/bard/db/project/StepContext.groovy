@@ -44,6 +44,11 @@ class StepContext extends AbstractContext {
 
     @Override
     void addContextItem(AbstractContextItem item) {
-        this.addContextItem(item)
+        this.addToStepContextItems(item)
+    }
+
+    @Override
+    Class<? extends AbstractContextItem> getItemSubClass() {
+        return StepContextItem
     }
 }

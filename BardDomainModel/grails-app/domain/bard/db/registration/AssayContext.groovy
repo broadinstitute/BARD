@@ -63,4 +63,9 @@ class AssayContext extends AbstractContext {
     void addContextItem(AbstractContextItem item) {
         this.addToAssayContextItems(item)
     }
+
+    @Override
+    Class<? extends AbstractContextItem> getItemSubClass() {
+        return AssayContextItem
+    }
 }

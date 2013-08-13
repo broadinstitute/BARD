@@ -1,8 +1,9 @@
-<%@ page import="bard.db.model.AbstractContextOwner; bard.db.project.*" %>
+<%@ page import="bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <r:require modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,assayshow"/>
+    <r:require
+            modules="core,bootstrap,twitterBootstrapAffix,dynatree,xeditable,experimentsummary,canEditWidget,richtexteditorForEdit, sectionCounter, card"/>
     <meta name="layout" content="basic"/>
     <r:external file="css/bootstrap-plus.css"/>
     <title>Show Experiment</title>
@@ -47,6 +48,18 @@
         <li><a href="#summary-header"><i class="icon-chevron-right"></i>Overview</a></li>
         <li><a href="#contexts-header"><i class="icon-chevron-right"></i>Contexts</a></li>
         <li><a href="#measures-header"><i class="icon-chevron-right"></i>Measures</a></li>
+        <li><a href="#documents-header"><i class="icon-chevron-right"></i>Documents</a>
+            <ul class="nav nav-list">
+                <li><a href="#documents-description-header"><i class="icon-chevron-right"></i>Descriptions</a>
+                </li>
+                <li><a href="#documents-protocol-header"><i class="icon-chevron-right"></i>Protocols</a></li>
+                <li><a href="#documents-comment-header"><i class="icon-chevron-right"></i>Comments</a></li>
+                <li><a href="#documents-publication-header"><i class="icon-chevron-right"></i>Publications</a>
+                </li>
+                <li><a href="#documents-urls-header"><i class="icon-chevron-right"></i>External URLS</a></li>
+                <li><a href="#documents-other-header"><i class="icon-chevron-right"></i>Others</a></li>
+            </ul>
+        </li>
     </ul>
 </div>
 <g:hiddenField name="version" id="versionId" value="${instance.version}"/>
@@ -113,23 +126,8 @@
                 <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit Description"
                    data-id="descriptionId"></a>
             </dd>
-            <dt><g:message code="experiment.holduntil.label" default="Hold until"/>:</dt>
-            <dd id="huddd">
-                <span class="huddate" id="hud" data-type="combodate" data-pk="${instance.id}"
-                      data-toggle="manual"
-                      data-url="/BARD/experiment/editHoldUntilDate"
-                      data-value="${instance.holdUntilDate}"
-                      data-original-title="Select hold until date"
-                      data-format="YYYY-MM-DD"
-                      data-viewformat="MM/DD/YYYY"
-                      data-template="D / MMM / YYYY">
-                    <g:formatDate
-                            format="MM/dd/yyyy"
-                            date="${instance.holdUntilDate}"/>
-                </span>
-                <a href="#" class="icon-pencil documentPencil ${editable}" title="Click to edit hold until date"
-                   data-id="hud"></a>
-            </dd>
+
+            <dt>Owner:</dt><dd>${experimentOwner}</dd>
 
             <dt><g:message code="experiment.runfromdate.label" default="Run Date from"/>:</dt>
             <dd>
@@ -270,6 +268,10 @@
         </r:script>
     </div>
 </section>
+
+
+<g:render template="/document/documents"
+          model="[documentKind: DocumentKind.ExperimentDocument, owningEntity: instance, canedit: editable, sectionNumber: '4.']"/>
 
 <r:script>
     $("#uploadResultsButton").on("click", function () {

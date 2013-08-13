@@ -10,7 +10,10 @@ import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclObjectIdentity
 import org.codehaus.groovy.grails.plugins.springsecurity.acl.AclSid
 import org.grails.plugins.springsecurity.service.acl.AclUtilService
 import org.springframework.security.acls.domain.BasePermission
+import org.springframework.security.acls.model.NotFoundException
 import org.springframework.security.acls.model.Permission
+import org.springframework.security.acls.model.Sid
+import org.springframework.security.acls.model.AccessControlEntry
 
 class CapPermissionService  implements CapPermissionInterface{
 
@@ -45,4 +48,28 @@ class CapPermissionService  implements CapPermissionInterface{
             }
         }
     }
+	
+	String getOwner(domainObjectInstance){
+        String owner = "none"
+        try{
+            final AclObjectIdentity aclObjectIdentity = AclObjectIdentity.findByObjectId(domainObjectInstance.id)
+            if (aclObjectIdentity) {
+                AclEntry aclEntry = AclEntry.findByAclObjectIdentity(aclObjectIdentity)
+                AclSid aclSid = aclEntry?.sid
+                if(aclSid){
+                    if(!aclSid.principal)  {
+                        Role role = Role.findByAuthority(aclSid.sid)
+                        owner = role?.displayName
+                    }
+                    else{
+                        owner = aclSid.sid
+                    }
+                }
+            }
+        }
+        catch(NotFoundException nfe)  {
+
+        }
+		return owner
+	}
 }

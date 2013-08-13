@@ -10,7 +10,6 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
-import bard.db.project.ProjectContext
 
 class Assay extends AbstractContextOwner {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
@@ -18,6 +17,7 @@ class Assay extends AbstractContextOwner {
     public static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
+
 
     /**
      This transient variable determines whether context items should be fully validated or not
@@ -28,7 +28,7 @@ class Assay extends AbstractContextOwner {
      */
     boolean fullyValidateContextItems = true
 
-    // def aclUtilService
+
     def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
@@ -89,6 +89,12 @@ class Assay extends AbstractContextOwner {
             capPermissionService?.addPermission(this)
         }
     }
+	
+	String getOwner(assay){
+		Assay.withNewSession {
+			return capPermissionService?.getOwner(this)
+		}
+	}
 
     List<AssayDocument> getPublications() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>

@@ -22,6 +22,7 @@
                     </a>
                     <ul class="nav">
                         <li><a href="/BARD">CAP</a></li>
+
                             <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -44,6 +45,7 @@
 
                                 </li>
                             </sec:ifAnyGranted>
+
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Assay Definitions
