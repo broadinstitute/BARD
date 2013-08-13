@@ -77,7 +77,7 @@
                 <br/>
                 <section id="contexts-header">
                     <h3 class="sect">Contexts</h3>
-
+                    <g:render template="/common/guidance" model="[guidanceList:instance.guidance]" />
                     <div class="row-fluid">
                         <div id="cardHolderAssayComponents" class="span12">
                             <g:render template="/context/currentCard"

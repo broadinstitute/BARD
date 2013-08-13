@@ -8,7 +8,7 @@ import grails.test.mixin.Mock
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static bard.db.guidance.assay.AssayBiologyGuidanceRule.*
+import static bard.db.guidance.assay.MinimumOfOneBiologyGuidanceRule.*
 
 /**
  * Created with IntelliJ IDEA.

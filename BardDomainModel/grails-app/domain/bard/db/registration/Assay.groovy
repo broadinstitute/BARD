@@ -10,7 +10,7 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.guidance.Guidance
 import bard.db.guidance.GuidanceReporter
-import bard.db.guidance.assay.AssayBiologyGuidanceRule
+import bard.db.guidance.assay.MinimumOfOneBiologyGuidanceRule
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
 
@@ -192,8 +192,8 @@ class Assay extends AbstractContextOwner implements GuidanceReporter{
 
     @Override
     List<Guidance> getGuidance() {
-        final List<Guidance> guidances = []
-        guidances.addAll(new AssayBiologyGuidanceRule(this).getGuidance())
-        return guidances
+        final List<Guidance> guidanceList = []
+        guidanceList.addAll(new MinimumOfOneBiologyGuidanceRule(this).getGuidance())
+        guidanceList
     }
 }
