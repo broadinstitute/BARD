@@ -13,6 +13,9 @@ class AssayContext extends AbstractContext {
 
     Assay assay
 
+
+
+
     List<AssayContextItem> assayContextItems = []
     Set<AssayContextMeasure> assayContextMeasures = [] as Set
 

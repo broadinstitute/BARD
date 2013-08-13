@@ -11,6 +11,7 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     AttributeType attributeType = AttributeType.Fixed
     AssayContext assayContext
 
+
     static belongsTo = [assayContext: AssayContext]
 
     static mapping = {
@@ -65,6 +66,10 @@ class AssayContextItem extends AbstractContextItem<AssayContext> {
     @Override
     @TypeChecked
     protected void valueValidation(Errors errors) {
+        //Do not validate context items if this is false
+        if(!this?.assayContext?.assay?.fullyValidateContextItems){
+           return
+        }
         if (attributeElement) {
             switch (attributeType) {
                 case AttributeType.Fixed: // so with Fixed and List all the standard validations apply

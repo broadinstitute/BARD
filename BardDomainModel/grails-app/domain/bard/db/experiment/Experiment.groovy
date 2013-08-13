@@ -44,8 +44,15 @@ class Experiment extends AbstractContextOwner {
     // this is needed to change the value to anything except "Ready"
     boolean disableUpdateReadyForExtraction = false
 
-    static transients = ['disableUpdateReadyForExtraction']
+    static transients = ['experimentContextItems','disableUpdateReadyForExtraction']
 
+    List<ExperimentContextItem> getExperimentContextItems() {
+        Set<ExperimentContextItem> experimentContextItems = new HashSet<ExperimentContextItem>()
+        for (ExperimentContext experimentContext : this.experimentContexts) {
+            experimentContextItems.addAll(experimentContext.experimentContextItems)
+        }
+        return experimentContextItems as List<ExperimentContextItem>
+    }
     static hasMany = [experimentContexts: ExperimentContext,
             experimentMeasures: ExperimentMeasure,
             externalReferences: ExternalReference,

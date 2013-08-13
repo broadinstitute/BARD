@@ -43,48 +43,6 @@ class AssayContextServiceUnitSpec extends Specification {
 
     }
 
-    void printMe(AssayContextItem contextItem) {
-
-    }
-
-
-    void "test addItemToEndOfListY #desc"() {
-        given: 'an a'
-
-        AssayContext targetAssayContext = AssayContext.build(assayContextItems: createAssayContextItem(numberOfExistingContextItems))
-        AssayContext sourceAssayContext = AssayContext.build(contextName: ORIGINAL_CONTEXT_NAME)
-        sourceAssayContext.addToAssayContextItems(AssayContextItem.build())
-        // AssayContextItem draggedAssayContextItem = sourceAssayContext.assayContextItems.first()
-        //   assert sourceAssayContext.assayContextItems.size() == 1
-        // assert sourceAssayContext == draggedAssayContextItem.assayContext
-
-        when:
-        Collection c = CollectionUtils.subtract(targetAssayContext.assayContextItems, sourceAssayContext.assayContextItems)
-        Collection d = CollectionUtils.subtract(sourceAssayContext.assayContextItems, targetAssayContext.assayContextItems)
-        //service.addItem(draggedAssayContextItem, targetAssayContext, targetAssayContext.assay.id)
-
-        then:
-        println("target: " + targetAssayContext.assayContextItems)
-        println("source: " + sourceAssayContext.assayContextItems)
-
-        println("target->source " + c)
-        for (AssayContextItem a : c) {
-            printMe(a)
-        }
-        println("source->target " + d)
-        for (AssayContextItem a : d) {
-            printMe(a)
-        }
-
-        //assertItemAdded(targetAssayContext, draggedAssayContextItem, sizeAfterAdd, indexOfAddedItem)
-
-        where:
-        desc                            | numberOfExistingContextItems | indexOfAddedItem | sizeAfterAdd
-        'add item to empty list'        | 0                            | 0                | 1
-        'add item to list with 1 item'  | 1                            | 1                | 2
-        'add item to list with 2 items' | 2                            | 2                | 3
-
-    }
 
     void "test addItemToEndOfList #desc"() {
         given: 'an a'

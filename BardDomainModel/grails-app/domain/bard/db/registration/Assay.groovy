@@ -19,6 +19,15 @@ class Assay extends AbstractContextOwner {
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
+    /**
+     This transient variable determines whether context items should be fully validated or not
+     This is a short term fix, until we implement the Guidance work, that Dan is working on
+     By default this is set to true and it is only used in  bard.db.registration.AssayContextItem#valueValidation(Errors errors)
+     This is not in the assayContextItem class because we would have to set it for every single context item that we do not want to validate.
+     Keeping it here means that it is located in one place.
+     */
+    boolean fullyValidateContextItems = true
+
     // def aclUtilService
     def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
@@ -61,7 +70,7 @@ class Assay extends AbstractContextOwner {
         // the ' - ' is this issue in this case
         assayType(nullable: false)
         dateCreated(nullable: false)
-        lastUpdated(nullable:false)
+        lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -73,7 +82,7 @@ class Assay extends AbstractContextOwner {
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
-    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
+    static transients = ['fullyValidateContextItems','assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
 
     def afterInsert() {
         Assay.withNewSession {

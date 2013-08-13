@@ -22,7 +22,6 @@
                     </a>
                     <ul class="nav">
                         <li><a href="/BARD">CAP</a></li>
-                        <g:if env="Production">
                             <sec:ifAnyGranted roles="ROLE_BARD_ADMINISTRATOR">
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -37,11 +36,14 @@
                                                                        action="listUsersAndGroups">List External BARD Users</g:link></li>
                                         <li class="controller"><g:link controller="person"
                                                                        action="list">List Person Table</g:link></li>
+                                        <li class="controller"><g:link controller="mergeAssayDefinition"
+                                                                       action="show">Merge Assays</g:link></li>
+                                        <li class="controller"><g:link controller="assayDefinition"
+                                                                       action="assayComparisonReport">Compare Assays</g:link></li>
                                     </ul>
 
                                 </li>
                             </sec:ifAnyGranted>
-                        </g:if>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 Assay Definitions
