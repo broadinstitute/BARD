@@ -25,6 +25,8 @@ class ProbeAnnotation extends JsonUtil {
     private String display;
     @JsonProperty("contextRef")
     private String contextRef;
+    @JsonProperty("contextGroup")
+    private String contextGroup;
     @JsonProperty("key")
     private String key;
     @JsonProperty("value")
@@ -96,6 +98,16 @@ class ProbeAnnotation extends JsonUtil {
     @JsonProperty("contextRef")
     public void setContextRef(String contextRef) {
         this.contextRef = contextRef;
+    }
+
+    @JsonProperty("contextGroup")
+    public String getContextGroup() {
+        return contextGroup;
+    }
+
+    @JsonProperty("contextGroup")
+    public void setContextGroup(String contextGroup) {
+        this.contextGroup = contextGroup;
     }
 
     @JsonProperty("key")

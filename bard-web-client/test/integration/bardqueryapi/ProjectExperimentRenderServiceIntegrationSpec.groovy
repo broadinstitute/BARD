@@ -9,8 +9,7 @@ class ProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
 
     ProjectExperimentRenderService projectExperimentRenderService
 
-    @Ignore
-    void "test constructGraph"() {
+    void "test constructGraph #label"() {
 
         when:
         final Map result = projectExperimentRenderService.constructGraph(pid)
@@ -22,15 +21,16 @@ class ProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
         assert result.isolatedNodes.size() >= 0
 
         where:
-        label                 | pid
-        "With few nodes"      | 1944
-        "With a lot of nodes" | 1963
+        label                   | pid
+        "With few nodes"        | 3
+        "With a lot of nodes"   | 2
+        "With our flag project" | 75
     }
     /**
      * This PID should have isolated nodes, but the REST API does not yet support Isolated nodes
      */
     @Ignore
-    void "test constructGraphWithSomeIsolatedNodes"() {
+    void "test constructGraphWithSomeIsolatedNodes #label"() {
 
         when:
         final Map result = projectExperimentRenderService.constructGraph(pid)
