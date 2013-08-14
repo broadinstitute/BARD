@@ -61,7 +61,7 @@ class MergeAssayDefinitionController {
 
         }
         catch (Exception ee) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "mergeValidationError", model: [errorMessage: ee.message])
+            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "mergeValidationError", model: [errorMessage: ee?.message])
         }
     }
 }

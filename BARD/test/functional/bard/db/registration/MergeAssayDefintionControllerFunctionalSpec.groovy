@@ -5,6 +5,7 @@ import bard.db.enums.HierarchyType
 import bard.db.experiment.Experiment
 import groovy.sql.Sql
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Unroll
 import wslite.rest.RESTClient
@@ -172,38 +173,76 @@ class MergeAssayDefintionControllerFunctionalSpec extends BardControllerFunction
     }
 
 
+
+
+    def 'test confirm mergeAssays - exceptions #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "confirmMerge", team, teamPassword)
+
+        when:
+        client.post() {
+            urlenc targetAssayId: assayId, sourceAssayIds: assayToMerge.toString(), assayIdType: assayIdType?.toString()
+        }
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc                     | team           | teamPassword   | expectedHttpResponse               | assayId            | assayToMerge       | assayIdType
+        "No Assay Id Type"       | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_BAD_REQUEST | assayIdList.get(0) | assayIdList.get(1) | null
+        "No Assay To Merge"      | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_BAD_REQUEST | assayIdList.get(0) | null               | AssayIdType.AID
+        "No Assay To Merge Into" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_BAD_REQUEST | null               | assayIdList.get(1) | AssayIdType.ADID
+
+    }
+
+    def 'test confirm mergeAssays - forbidden  #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "confirmMerge", team, teamPassword)
+
+        when:
+        client.get()
+        then:
+        def ex = thrown(RESTClientException)
+        assert ex.response.statusCode == expectedHttpResponse
+        where:
+        desc       | team              | teamPassword      | expectedHttpResponse
+        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FORBIDDEN
+        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
+
+
+    }
+
+    def 'test confirm mergeAssays #desc'() {
+        given:
+        RESTClient client = getRestClient(controllerUrl, "confirmMerge", team, teamPassword)
+
+        when:
+        def response = client.post() {
+            urlenc targetAssayId: assayId, sourceAssayIds: assayToMerge, assayIdType: assayIdType?.toString()
+        }
+        then:
+        assert response.statusCode == expectedHttpResponse
+        where:
+        desc          | team           | teamPassword   | expectedHttpResponse      | assayId            | assayToMerge       | assayIdType
+        "Valid Assay" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK | assayIdList.get(0) | assayIdList.get(1) | AssayIdType.ADID.toString()
+
+    }
+
+
     def 'test mergeAssays #desc'() {
         given:
         RESTClient client = getRestClient(controllerUrl, "mergeAssays", team, teamPassword)
 
         when:
         def response = client.post() {
-            urlenc assayIdToKeep: assayId, assayIdsToMerge: assayToMerge, assayIdTypeString: assayIdType?.toString()
+            urlenc targetAssayId: assayId, sourceAssayIds: assayToMerge
         }
         then:
         assert response.statusCode == expectedHttpResponse
         where:
-        desc          | team           | teamPassword   | expectedHttpResponse         | assayId            | assayToMerge       | assayIdType
-        "Valid Assay" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND | assayIdList.get(0) | assayIdList.get(1) | AssayIdType.ADID.toString()
-
-    }
-
-
-    def 'test mergeAssays - exceptions #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "mergeAssays", team, teamPassword)
-
-        when:
-        def response = client.post() {
-            urlenc assayIdToKeep: assayId, assayIdsToMerge: assayToMerge, assayIdTypeString: assayIdType?.toString()
-        }
-        then:
-        assert response.statusCode == expectedHttpResponse
-        where:
-        desc                     | team           | teamPassword   | expectedHttpResponse         | assayId            | assayToMerge       | assayIdType
-        "No Assay Id Type"       | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND | assayIdList.get(0) | assayIdList.get(1) | null
-        "No Assay To Merge"      | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND | assayIdList.get(0) | null               | AssayIdType.AID
-        "No Assay To Merge Into" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND | null               | assayIdList.get(1) | AssayIdType.ADID
+        desc          | team           | teamPassword   | expectedHttpResponse      | assayId            | assayToMerge
+        "Valid Assay" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_OK | assayIdList.get(0) | [assayIdList.get(1)]
 
     }
 
@@ -222,27 +261,6 @@ class MergeAssayDefintionControllerFunctionalSpec extends BardControllerFunction
         "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_FORBIDDEN
         "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_FORBIDDEN
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_FORBIDDEN
-
-
     }
-
-//    @IgnoreRest
-//    def "test merge assay definition"() {
-//        given:
-//        RESTClient client = getRestClient(controllerUrl, "mergeAssays", team, teamPassword)
-//
-//        when:
-//        def response = client.post() {
-//            urlenc assayIdToKeep: assayId, assayIdsToMerge: assayToMerge, assayIdTypeString: assayIdType?.toString()
-//        }
-//        then:
-//        assert response.statusCode == expectedHttpResponse
-//        println response
-//        where:
-//        desc          | team           | teamPassword   | expectedHttpResponse         | assayId | assayToMerge | assayIdType
-//        "Valid Assay" | ADMIN_USERNAME | ADMIN_PASSWORD | HttpServletResponse.SC_FOUND | 3333    | 3335         | AssayIdType.ADID.toString()
-//
-//
-//    }
 
 }
