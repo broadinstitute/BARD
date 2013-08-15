@@ -110,13 +110,13 @@ function initDnd() {
 };
 
 
-function showDeleteCardConfirmation(cardId, contextClass,section) {
+function showDeleteCardConfirmation(cardId, contextClass, section) {
     $("#dialog_confirm_delete_card").dialog("option", "buttons", [
         {
             text: "Delete",
             class: "btn btn-danger",
             click: function () {
-                var data = {'contextClass': contextClass, 'contextId': cardId, 'section':section };
+                var data = {'contextClass': contextClass, 'contextId': cardId, 'section': section };
                 $.ajax({
                     type: 'POST',
                     url: '../../context/deleteEmptyCard',
@@ -169,7 +169,7 @@ function registerAddNewCardButtons() {
         });
 
     //add click events to buttons
-    $(".documentPencil").on("click", function(e){
+    $(".documentPencil").on("click", function (e) {
         e.stopPropagation();
         e.preventDefault();
         var dataId = $(this).attr('data-id');

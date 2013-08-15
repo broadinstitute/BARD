@@ -6,6 +6,7 @@ import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
+import bard.db.project.InlineEditableCommand
 import bard.db.project.Project
 import bard.db.registration.Assay
 import bard.db.registration.EditingHelper
@@ -88,21 +89,28 @@ class ContextItemController {
                 params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.getSectionKey()])
     }
 
-    def updatePreferredName(InlineUpdateCommand command) {
-        attemptUpdate {
+    def updatePreferredName(InlineEditableCommand inlineEditableCommand) {
+     attemptUpdate {
+         InlineUpdateCommand command = new InlineUpdateCommand(inlineEditableCommand)
             AbstractContext context = BasicContextItemCommand.getContextClass(command.contextClass).findById(command.id)
             AbstractContextOwner owningContext = context.owner
             if (owningContext instanceof Assay) {
-                return contextService.updatePreferredAssayContextName(owningContext.id, context, command.value)
+                final String name = contextService.updatePreferredAssayContextName(owningContext.id, context, command.value)
+                render(status: HttpServletResponse.SC_OK, text: name, contentType: 'text/plain', template: null)
+                return
             }
             if (owningContext instanceof Experiment) {
-                return contextService.updatePreferredExperimentContextName(owningContext.id, context, command.value)
+                String name= contextService.updatePreferredExperimentContextName(owningContext.id, context, command.value)
+                render(status: HttpServletResponse.SC_OK, text: name, contentType: 'text/plain', template: null)
+                return
             }
             if (owningContext instanceof Project) {
-                return contextService.updatePreferredProjectContextName(owningContext.id, context, command.value)
+                String name= contextService.updatePreferredProjectContextName(owningContext.id, context, command.value)
+                render(status: HttpServletResponse.SC_OK, text: name, contentType: 'text/plain', template: null)
+                return
             }
 
-            return context.preferredName
+           render(status: HttpServletResponse.SC_BAD_REQUEST, text: context.preferredName, contentType: 'text/plain', template: null)
         }
     }
 
@@ -133,6 +141,12 @@ class InlineUpdateCommand extends BardCommand {
     String contextClass
     String value //the new value
 
+    InlineUpdateCommand(){}
+    InlineUpdateCommand(InlineEditableCommand inlineEditableCommand){
+        id = inlineEditableCommand.pk
+        contextClass=inlineEditableCommand.name
+        value = inlineEditableCommand.value
+    }
     static constraints = {
         id(blank: false, nullable: false)
         contextClass(blank: false, nullable: false, inList: ["AssayContext", "ProjectContext"])
