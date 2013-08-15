@@ -464,7 +464,8 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         client.post() {
-            urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
+            urlenc name: contextClass, pk: contextId, value: "My New Context Name"
+
         }
 
         then:
@@ -486,7 +487,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
+            urlenc name: contextClass, pk: contextId, value: "My New Context Name"
         }
         then:
         assert response.statusCode == expectedHttpResponse
@@ -505,7 +506,7 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         client.post() {
-            urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
+            urlenc name: contextClass, pk: contextId, value: "My New Context Name"
         }
 
         then:
@@ -526,7 +527,9 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
         RESTClient client = getRestClient(controllerUrl, "updatePreferredName", team, teamPassword)
         when:
         def response = client.post() {
-            urlenc contextClass: contextClass, id: contextId, value: "My New Context Name"
+
+
+            urlenc name: contextClass, pk: contextId, value: "My New Context Name"
         }
         then:
         assert response.statusCode == expectedHttpResponse
