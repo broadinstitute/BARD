@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE BBDS.RESULT_COUNT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_COUNT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ASSAY_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXPERIMENT_REF&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_TYPE_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MIN_VALUE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MAX_VALUE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROJECT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE BBDS.RESULT_COUNT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_COUNT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXPERIMENT_REF&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_TYPE_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROJECT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ASSAY_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)</TT><BR><TT>)</TT><BR><TT>LOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -80,49 +80,49 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_24ea8638d8034905be34f616c9b3bda0">SUBSTANCE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_cf33ea0dad6b4422b4e8c547621f099d">VALUE_MAX_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_ca7803d20f5d41e4a3ebafee21d8d7c1">ASSAY_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_73967002d4b04ce3a94fa01ad832526d">VALUE_MIN_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_8896082007ef446a98a195a79e2d331e">EXPERIMENT_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_d9e38856594148b48e2c0b49ffa2ccc7">EXPERIMENT_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_d2ac24d19ce14ef8b0bbb7615258620a">RESULT_TYPE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_8986fb387ebd4cea8bbbf9f9f27d3cb0">RESULT_TYPE_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_3b0dd76228574cb295be9ce74dfd7e0a">MIN_VALUE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_18aba7c2b0e94deb990d4934365df535">SUBSTANCE_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_39bffb0ad81445b38de360c6aac444e3">MAX_VALUE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_66ee84ea2af244ce8a9b58390a094f44">PROJECT_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_63be00270abe4655affcd5a31e2797c1">PROJECT_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_de90c4cf4dde477d9935588eaad426aa_Attr.htm#Attr_0389ae4c8a5d464ca130aff198f343ad">ASSAY_REF</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -173,7 +173,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_9a537e8f49884a31b3d25762fbafb40b">FK_RSLT_CNT_ASSY</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ASSAY_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -185,7 +185,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_a2c93a4aa0c141d4b2353bda47a3eb2b">FK_RSLT_CNT_EXPRMNT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">EXPERIMENT_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -197,7 +197,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_5448e1d44056410ba83b89a29dbff8d0">FK_RSLT_CNT_PRJCT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PROJECT_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -209,7 +209,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_fa34951047b54663a06087a26acb2813">FK_RSLT_CNT_RSLT_TYP</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">RESULT_TYPE_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -221,7 +221,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_8a6edb6a73004477896fd7179c1d68b9">FK_RSLT_CNT_SBSTNCE</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">SUBSTANCE_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -233,7 +233,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_063df2f40eee40c6954a9aee4ce70bf6">FK_RSLT_CNT_VL_MAX</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VALUE_MAX_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
@@ -245,7 +245,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Submodel_1962a744f24c4feb8167d6b0131284a8_Rel.htm#Rel_ccd48bde423247b38e8ab74a8f75651b">FK_RSLT_CNT_VL_MIN</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VALUE_MIN_REF&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>

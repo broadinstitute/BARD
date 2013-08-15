@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE BBDS.RESULT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_HIERARCHY_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_NUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_DISPLAY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SCREENING_CONCENTRATION_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANNOTATION_SET_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp TIME_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_TYPE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PERSON_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXPERIMENT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROJECT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp QUALIFIER_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ASSAY_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp BIOLOGY_TARGET_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOAD_DATE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DATE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_RESULT PRIMARY KEY (RESULT_REF) DISABLE NOVALIDATE</TT><BR><TT>)</TT><BR><TT>NOLOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE BBDS.RESULT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_NUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MAX&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(30, 15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_DISPLAY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_HIERARCHY_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_NUM_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp VALUE_MIN_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SCREENING_CONCENTRATION_REF&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp TIME_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp RESULT_TYPE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PERSON_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTANCE_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EXPERIMENT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROJECT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp QUALIFIER_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ASSAY_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp BIOLOGY_TARGET_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp LOAD_DATE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp DATE,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REPLICATE_NO&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(5, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANNOTATION_SET_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT PK_RESULT PRIMARY KEY (RESULT_REF) DISABLE NOVALIDATE</TT><BR><TT>)</TT><BR><TT>NOLOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -80,9 +80,9 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_6f0ad69a47554faea134e4f8d5aa9422">RESULT_HIERARCHY_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_f280bf6829c240e6aa208d5aaef706b5">VALUE_MAX_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -115,105 +115,91 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_d40e8c48a54349b18c3ac2fd16d58b6c">VALUE_MAX_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_859ac6ddd2ff4d96bab613a527e88fc4">RESULT_HIERARCHY_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_25286004e43a4d7ab87edbdbda12d2e9">VALUE_NUM_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_f360fe73b84044db8ee6b0b36e528988">VALUE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_fc16f16967bd4fb78c83e38b2d541253">VALUE_MIN_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_781d67f9974c4f549ed3a5a9c57ca89f">VALUE_MIN_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_ac329d9f60ea4a6392b8fe8d1610b9f0">SCREENING_CONCENTRATION_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_b2215c3d3c5d4ae59776d5f414091861">SCREENING_CONCENTRATION_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_b4fd084c1f21402f89026b04e7b6f00a">TIME_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_dc9e74ef10194d5eab9c6528e2ab5743">UNIT_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_8e666e9810004afaa38bd2740335b562">RESULT_TYPE_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_d51816f107c9499b84b36f9acc0d9541">ANNOTATION_SET_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_5f949df5bae243b18f5ed6e105068c89">PERSON_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_28640d75611142c79eae9e4f7d3bd723">TIME_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_e582617cf6c7429d860b7bb831a3ae5f">SUBSTANCE_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_9d44a60118ec482a9baeda9d236480c0">RESULT_TYPE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_b825fb454aa248419c894c79b7c8499b">EXPERIMENT_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_e5b6a9a771274c83a998e2becefd0579">PERSON_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_867b60fdfbef42a0aac6d764b6063b0b">PROJECT_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_2e004df72e204eabbd1f327db90b8f4a">SUBSTANCE_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_db9aac1885b84239bf314623910498ec">QUALIFIER_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_5ee1d03f49f147d18eef42502f1d94bf">EXPERIMENT_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_9c423186b2e74da9b83453ba9a1354cd">ASSAY_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_8dbcce95d89b4ac7b322c995f0262879">PROJECT_REF</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_319f3dc252164a48a181a2c4950ac4a6">QUALIFIER_REF</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_b14895ec892743838262322130a92ee6">ASSAY_REF</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_72807e1cf1544627854800f8cd6c7815">BIOLOGY_TARGET_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_41794069ea1c4f1ea24ca8a45bccf192">BIOLOGY_TARGET_REF</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -223,6 +209,27 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_fa85e0904f474c5c9e733a4e9a7d795d">LOAD_DATE</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">DATE&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_60334b37c5614b7391ed74584c63cf02">REPLICATE_NO</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(5, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_5b56c4d77c5a4de8ae8f15341c70e763">UNIT_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_d006447af5de472196f383252e114989_Attr.htm#Attr_77ec9d0af6f74f0c8838749833ff54f8">ANNOTATION_SET_REF</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -424,7 +431,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Current Row Count&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">25982114&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">115794112&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Growth&nbsp;</FONT></TD>

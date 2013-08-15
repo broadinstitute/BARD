@@ -35,7 +35,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Owner&nbsp;</FONT></B></TD>
-<TD><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD><FONT SIZE=2 FACE="Arial">BBDS&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
@@ -51,7 +51,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE ANNOTATION_CONTEXT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANNOTATION_SET_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONTEXT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(10, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp analyte&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "artificial regulatory region"&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "absorbance wavelength"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay format"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay readout"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "alternative confirmatory assay"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component concentration"&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANTIBODY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component concentration "&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "measurement timing"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "measurement type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay pH"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "readout content"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay control role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "readout signal direction"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay definition role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "readout type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay reagent name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay temperature"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay kit name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay footprint"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay phase"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "binding assessment method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection instrument name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection method type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biological component type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "species name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "small-molecule name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp buffer&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "calculated value"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "ATCC cell name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cell modification time"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "organism genetic modification"&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "binding interaction"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "concentration throughput"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biochemical format"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "DNA vector"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "counter-screening assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "gene form"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MACROMOLECULE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "regulatory region"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cultured organism"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein form"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein preparation method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "commercial vendor"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein purity"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cell-culture component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "concentration-point number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp DMSO&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "DNA construct"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "culture medium"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp dye&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "culture serum"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp BIOLOGY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biological process"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "molecular interaction"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "enzyme modulation"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO molecular function"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "excitation wavelength"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "expressed protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "fluorescence method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "fluorescence resonance energy "&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GenBank ID"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "gene Entrez GI"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "gene overexpression by stable "&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "electrical sensor"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "perturbagen delivery method"&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "emission wavelength"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "perturbagen purity"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "enzyme activity assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "genetic modification method"&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "result detail"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "enzyme reaction time"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay provider name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "incubation temperature"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "project lead name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "label-free method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "ligand function"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "intended mode-of-action"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "activity threshold"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "curve-fit specification"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "media component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "membrane potential measurement"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "gene overexpression by transie"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "microelectrode measurement"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "gene-expression detection meth"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp microplate&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "modified protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO biological process term"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "modulator role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO gene-product ID"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "molecular interaction assessme"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "small-molecule collection name"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "mutated protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "incubation time"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "not green coffee bean"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "other cell name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "perturbagen incubation time"&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "result type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "COMMENT"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "luminescence method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "excluded points"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein Entrez GI"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "material entity biologics and "&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "number of replicates"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "measured component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "number of points"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "QC analyst"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "curve-fit class"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein-protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "instrument manufacturer name"&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "radioactive label"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay readout name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "ratio unit"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "redistribution determination m"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp reference&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "screening concentration"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "mutated gene"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cultured cell name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "pharmacokinetic assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "promoter gene"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein format"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "PubChem CID"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "radiometry method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "repetition throughput"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "repetition-point number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REPORTER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "reporter-gene method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "screening concentration (molar"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "second messenger redistributio"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "selectivity assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "signal decrease"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "signal increase"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "signal transduction assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STAIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "subject role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTRATE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "substrate incubation time"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "time unit"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "transfection method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "UniProt accession number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "viability measurement method"&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "z-prime factor"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT ANNOTATION_CONTEXT_PK PRIMARY KEY (ANNOTATION_SET_REF, CONTEXT_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>NOLOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE BBDS.ANNOTATION_CONTEXT(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONTEXT_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp ANNOTATION_SET_REF&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp NUMBER(19, 0)&nbsp&nbsp&nbsp&nbsp NOT NULL,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp analyte&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "alternative assay component"&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "absorbance wavelength"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay format"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "alternative assay type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay readout"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "amino acid substitution"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component concentration"&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "omponent concentration (%/vol)"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "mponent concentration (%/mass)"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay component type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "oncentration (cells/container)"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "t concentration (cells/volume)"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "measurement timing"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "omponent concentration (molar)"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "component concentration (W/V)"&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "measurement type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay pH"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "readout content"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay control role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "readout signal direction"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay definition role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "readout type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay reagent name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay temperature"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay kit name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay footprint"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay phase"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection instrument name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection method type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biological component type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "species name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biological component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp buffer&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "calculated value"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "ATCC cell name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "blank percent cv"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "organism genetic modification"&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "concentration throughput"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biochemical format"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "counter-screening assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp MACROMOLECULE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "regulatory region"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cell count"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cultured organism"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein form"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "commercial vendor"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cell-culture component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "concentration-point number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp DMSO&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "DNA construct"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "culture medium"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cultured cell"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp BIOLOGY&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "biological process"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "molecular interaction"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO molecular function"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "excitation wavelength"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "expressed protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "detection role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "fluorescence method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GenBank ID"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "gene Entrez GI"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "electrical sensor"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "emission wavelength"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp EC50&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "enzyme activity assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "result detail"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "HT-1080"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp dye&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay provider name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "incubation temperature"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "project lead name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "label-free method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "ligand function"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "fluorescence intensity"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "activity threshold"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "curve-fit specification"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "media component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp GENE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "microelectrode measurement"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp microplate&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "ne-expression detection method"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "curve-fit model"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO biological process term"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO cellular component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "modulator role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "GO gene-product ID"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "mutated protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "incubation time"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp IC50&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "number of wells"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "result type"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "COMMENT"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "luminescence method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "excluded points"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein Entrez GI"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "low-signal control"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "number of replicates"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "measured component"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "number of points"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "QC analyst"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "curve-fit class"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein-protein"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "instrument manufacturer name"&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "Mesh term"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "radioactive label"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "assay readout name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp reference&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "screening concentration"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "mutated gene"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "cultured cell name"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "pharmacokinetic assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "NCBI accession number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein format"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "normalized to control"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "PubChem CID"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "radiometry method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "repetition throughput"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "repetition-point number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REPORTER&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "percent inhibition"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "reporter-gene method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "percent remaining"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "creening concentration (molar)"&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "signal decrease"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "probe identifier"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "signal increase"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "signal transduction assay"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PROTEIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp STAIN&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "subject role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp SUBSTRATE&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "time unit"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "transfection method"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "protein-small molecule"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "UniProt accession number"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "PubChem activity score"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp UNIT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "viability measurement method"&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "z-prime factor"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "reagent role"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp "thermal shift"&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR2(500),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT ANNOTATION_CONTEXT_PK PRIMARY KEY (CONTEXT_REF, ANNOTATION_SET_REF)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp USING INDEX</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp LOGGING</TT><BR><TT>)</TT><BR><TT>NOLOGGING</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -73,16 +73,16 @@
 <TD VALIGN=TOP  WIDTH=46% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Definition&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_564f47a57952439c842eab94c41ff79e">ANNOTATION_SET_REF</A><img src="../Support/Gif/pk.gif" alt="(PK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_a8932f6bcc8c4864a64d1562d845a7ed">CONTEXT_REF</A><img src="../Support/Gif/pk.gif" alt="(PK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_a8932f6bcc8c4864a64d1562d845a7ed">CONTEXT_REF</A><img src="../Support/Gif/pk.gif" alt="(PK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_91bd0dfa7e2940f7a7a25fae7e553546">ANNOTATION_SET_REF</A><img src="../Support/Gif/pk.gif" alt="(PK)">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(10, 0)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NUMBER(19, 0)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
@@ -101,7 +101,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_bf5b102c4429422abd9ce2f85c0c44c3">artificial regulatory region</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_bf5b102c4429422abd9ce2f85c0c44c3">alternative assay component</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -122,6 +122,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_9e6b7e9facb349e5b59feaaa2b4072f4">alternative assay type</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_2eda25adb6024fdabd44973e104b7108">assay readout</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -129,7 +136,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_8e31116493494cbea5a9c478c8b5f2fe">alternative confirmatory assay</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_bb0571d1f1ab4639a1240fddbe9d24bf">amino acid substitution</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -150,7 +157,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_4f9967bd6e6f47a58f41bcac390ea019">ANTIBODY</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_4f9967bd6e6f47a58f41bcac390ea019">omponent concentration (%/vol)</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -158,6 +165,13 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_18f37d687c964bd688e4591aedf82a13">assay component name</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_d307a31367d24f3692de66dc65759fc8">mponent concentration (%/mass)</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -178,6 +192,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_fc7e75930a204be59c306ecd07cdfe8c">oncentration (cells/container)</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_9827abcf27e64ecebbeff33e9b19528b">assay method</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -185,7 +206,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c05a6e9fb41a4b3f9d6fd2b2220a20ac">assay component concentration </A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_441b6eecbb3142918357a18fe8c15a4c">t concentration (cells/volume)</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -193,6 +214,20 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_b0a22b92178c42499dfbf171b73402e7">measurement timing</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_62559886a70b4021a7ece184d758722f">omponent concentration (molar)</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c3db1da0c6f34641babf0db930a09ce4">component concentration (W/V)</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -283,13 +318,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_13ae0323ca1545498179f7eac613e0ab">binding assessment method</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c500ae65b3054f9889410645d988a099">detection instrument name</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -318,7 +346,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_d7ba6d436457448e80cb6e8505619794">small-molecule name</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_d7ba6d436457448e80cb6e8505619794">biological component</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -346,7 +374,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_5c98b0092c304aa8a3d6cfa167ae7f81">cell modification time</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_5c98b0092c304aa8a3d6cfa167ae7f81">blank percent cv</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -354,13 +382,6 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_b668f8485e7c4d8ab3910bb92a5dbbc0">organism genetic modification</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_e0ceacbfbff042699bef32a4b91b8640">binding interaction</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -381,21 +402,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_0d48db24f9134eaababfcf88a6bc9703">DNA vector</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_438f52f3e1d444f4b73a57b744e5c745">counter-screening assay</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_9e54271fab69428d96ebbd4afe596c8a">gene form</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -416,6 +423,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_f39c2445bb2146c2a2b1f8e545671e1a">cell count</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_43e6fdb2a076464db707f6e7cc6c3b7a">cultured organism</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -430,21 +444,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_96c34e83ff684f5ca111785e59af1406">protein preparation method</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_5c59b2ce058e46c2864c190ab7889d4b">commercial vendor</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_316892bb92334f78af448f1d5c348eb8">protein purity</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -486,14 +486,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_9d0181c3a4b74901acd1dcb16d2ee773">dye</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_cdc683ba68184d2790dd05ba375ffc37">culture serum</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_24cdd3c71f224de4aa045b3fe7195068">cultured cell</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -521,13 +514,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_93283ddcd09945beb988c6b0d20e6a32">enzyme modulation</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_e8603a295ca546308f394dfcd4c3c0cb">GO molecular function</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -549,6 +535,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_103c8262d26842cfa84bb90b01946f70">detection method</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_ae3d8f8d1ab5474cba18a7b65ef15d53">detection role</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -557,13 +550,6 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_4065858df58e4dc58f828eb5af0beb40">fluorescence method</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_e5dafc9e600340f8991e38050850ba3c">fluorescence resonance energy </A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -584,21 +570,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_e4a8b6c9582e48d49dfe278c11c3e75b">gene overexpression by stable </A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_587ee1c563b34779946df11235f6e9a8">electrical sensor</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_d707ad2a8c4f491dbf98abdd56174183">perturbagen delivery method</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -612,7 +584,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_b263773083c64e9da65a9ab952577508">perturbagen purity</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_a70979c491224a24b032c3956f743eaf">EC50</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -626,13 +598,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_8a7971bf64dd4c669aa83cf59048d6de">genetic modification method</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_053a43d5c5f54c5c9c9421aae6e9709e">result detail</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -640,7 +605,14 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_64d95759b98244c49d12011393a7933d">enzyme reaction time</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_64d95759b98244c49d12011393a7933d">HT-1080</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_5d4922a7db7f426787b123b2c08d0dd2">dye</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -682,7 +654,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_1ff12bfddd8443ed948ff73391cd49ad">intended mode-of-action</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_f38982b2d38f4b039f7e34ce27788e8a">fluorescence intensity</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -710,14 +682,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_b751045a54f842309952ea5bb55d3649">membrane potential measurement</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_34212be2f54b4690a636610dfd1e3b21">gene overexpression by transie</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_853e5a8b58a44284b8d802afef91410d">GENE</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -731,13 +696,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_e50d9632900741718e446ebc3b0d4ff0">gene-expression detection meth</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_ea49131773e74c6ab0a0a29234e47a6e">microplate</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -745,7 +703,14 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_246f6da07d844a8aadf1f231f893ff63">modified protein</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c75e0e4f615d4505bf1d4cc0484c19c6">ne-expression detection method</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_246f6da07d844a8aadf1f231f893ff63">curve-fit model</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -753,6 +718,13 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_900f5889779349cda81b1a8134c42931">GO biological process term</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_763a7221e6d545219cc58c0b7d26ebd9">GO cellular component</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -773,20 +745,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_53b72ad8583d4e61a71af407022f416e">molecular interaction assessme</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_a1cd83d110314ab2b7eb0f2a0472fddb">small-molecule collection name</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_8620a7ca7d0c49a08cf07c46a7d7e83c">mutated protein</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -801,21 +759,14 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_a4d5919677284243bb727b1cf16c61ab">not green coffee bean</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_861a96168da4484cb93310731a3cd0f8">IC50</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_f2ec00604920431dab729d86ea544e91">other cell name</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_139c308a5ac74d20a5b818cabdbe6e38">perturbagen incubation time</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_139c308a5ac74d20a5b818cabdbe6e38">number of wells</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -857,7 +808,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_53e18295b24a49f2be953c7311c97b90">material entity biologics and </A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c92331ed4e7a41219042116f24f63bba">low-signal control</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -913,6 +864,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_11ddcf96270a46bcbdd0377e72376a72">Mesh term</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_4613feb4c4534145a632a8f5b95532c4">radioactive label</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -921,20 +879,6 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_515c8fd8c5ea4690b3991c107d029685">assay readout name</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_afadaf9a70254a1289a7b2701280cbe9">ratio unit</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_f2f38f75a3944e6ebf44feede31291b2">redistribution determination m</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -976,7 +920,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_ae20ce24777c44c683475caef51f9d44">promoter gene</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_d756931bc1704540a1d70d261775fe29">NCBI accession number</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -984,6 +928,13 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_1ced937921d8416c93a32356074e544c">protein format</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_b67c346ed4f748a38af54c10f46940f1">normalized to control</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -1025,6 +976,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_bfd0d24070ee4cfeab27986825d1b3bd">percent inhibition</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c26d76482a8e4a9c8320bbe7014417ea">reporter-gene method</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -1032,21 +990,14 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_7c51081a39a142ab819ea0b303ca1164">screening concentration (molar</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_5c46e048de2747b6a10640c45cf02edb">percent remaining</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_4eddc0c8d7624042b62c58c2dffe9a52">second messenger redistributio</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_3266fae13bc34607a6514b8105ab8e5c">selectivity assay</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_7c51081a39a142ab819ea0b303ca1164">creening concentration (molar)</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -1054,6 +1005,13 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_29be720fdcca4c248e7bfd915a671aed">signal decrease</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_4c1d5b5e1108447f95a2ba74608a7327">probe identifier</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -1068,6 +1026,13 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_f95f36b4f8f04ab7a6bdab3a077bdc2b">signal transduction assay</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_dac0479c8fb9439e84ec2b4413faab11">PROTEIN</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -1095,13 +1060,6 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_abfd7c0ba0e843b6bae83a3c6c24d896">substrate incubation time</A>&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
-</TR>
-<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c1a199c83afe47c5baf622558f97dee4">time unit</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
@@ -1116,7 +1074,21 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
 <TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_c63ae8ab9001477b8365aba8dc68e333">protein-small molecule</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_8c5b2a92be9e4d3eb34fb78c199a7baa">UniProt accession number</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_177c1a7f34694017aaf0a8f6deae38ac">PubChem activity score</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
@@ -1143,6 +1115,20 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_f2e3c33ea43a4a438a0b5ce29ba3457e">reagent role</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl_65b830e1d239484c8202099ca4321c88_Attr.htm#Attr_230f8878b5d7446f96cf10d440eff2fe">thermal shift</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">VARCHAR2(500)&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
@@ -1159,7 +1145,7 @@
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ANNOTATION_CONTEXT_PK&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">PrimaryKey&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">ANNOTATION_SET_REF, CONTEXT_REF&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">CONTEXT_REF, ANNOTATION_SET_REF&nbsp;</FONT></TD>
 </TR>
 </TABLE>
 <P>
@@ -1341,7 +1327,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Current Row Count&nbsp;</FONT></TD>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">132000&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">177907&nbsp;</FONT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Growth&nbsp;</FONT></TD>
@@ -1414,7 +1400,7 @@
 <TD VALIGN=TOP  WIDTH=27% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">Bound Attachments&nbsp;</FONT></B></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A><BR><A HREF = ./Tbl_ad054b7c8a9544f2825f3522ddbd972d.htm>Annotation_Context</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_46773ed6f5c645139ed7462a09c16df7.htm>Logical</A><BR><A HREF = ./Tbl_ad054b7c8a9544f2825f3522ddbd972d.htm>BBDS.Annotation_Context</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
@@ -1428,7 +1414,7 @@
 <TD VALIGN=TOP ><FONT SIZE=2 COLOR="LightGrey" FACE="Arial">&nbsp;</FONT></TD>
 </TR>
 <TR>
-<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)<BR><A HREF = ./Tbl_65b830e1d239484c8202099ca4321c88.htm>ANNOTATION_CONTEXT</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = ./Model_cef2299ff03d462d9ab5ecfe517d4903.htm>Warehouse</A> (Oracle)<BR><A HREF = ./Tbl_65b830e1d239484c8202099ca4321c88.htm>BBDS.ANNOTATION_CONTEXT</A>&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
