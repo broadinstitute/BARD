@@ -1,4 +1,4 @@
-<%@ page import="bard.db.model.AbstractContextOwner; org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
+<%@ page import="bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; org.springframework.security.acls.domain.BasePermission; bard.db.registration.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -141,7 +141,7 @@
                 <div class="span12">
 
                     <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: AbstractContextOwner.SECTION_BIOLOGY.encodeAsURL()]"
+                            params="[groupBySection: ContextType.BIOLOGY.id.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Biology</g:link>
 
                 </div>
@@ -167,7 +167,7 @@
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
                     <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_PROTOCOL.encodeAsURL()]"
+                            params="[groupBySection: ContextType.ASSAY_PROTOCOL.id.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Assay Protocol</g:link>
                 </div>
             </g:if>
@@ -195,7 +195,7 @@
             <g:if test="${editable == 'canedit'}">
                 <div class="span12">
                     <g:link action="editContext" id="${assayInstance?.id}"
-                            params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_DESIGN.encodeAsURL()]"
+                            params="[groupBySection: ContextType.ASSAY_DESIGN.id.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Assay Design</g:link>
                 </div>
             </g:if>
@@ -221,7 +221,7 @@
                 <g:if test="${editable == 'canedit'}">
                     <div class="span12">
                         <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_READOUT.encodeAsURL()]"
+                                params="[groupBySection: ContextType.ASSAY_READOUT.id.encodeAsURL()]"
                                 class="btn"><i class="icon-pencil"></i> Edit Assay Readout</g:link>
                     </div>
                 </g:if>
@@ -249,7 +249,7 @@
                 <g:if test="${editable == 'canedit'}">
                     <div class="span12">
                         <g:link action="editContext" id="${assayInstance?.id}"
-                                params="[groupBySection: AbstractContextOwner.SECTION_ASSAY_COMPONENTS.encodeAsURL()]"
+                                params="[groupBySection: ContextType.ASSAY_COMPONENTS.id.encodeAsURL()]"
                                 class="btn"><i class="icon-pencil"></i> Edit Assay Component</g:link>
                     </div>
                 </g:if>
@@ -274,7 +274,7 @@
                     <g:if test="${editable == 'canedit'}">
                         <div class="span12">
                             <g:link action="editContext" id="${assayInstance?.id}"
-                                    params="[groupBySection: AbstractContextOwner.getSECTION_UNCLASSIFIED().encodeAsURL()]"
+                                    params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
                                     class="btn"><i class="icon-pencil"></i> Edit Unclassified</g:link>
                         </div>
                     </g:if>
@@ -315,7 +315,7 @@
                     <g:if test="${editable == 'canedit'}">
                         <div class="span12">
                             <g:link action="editContext" id="${assayInstance?.id}"
-                                    params="[groupBySection: AbstractContextOwner.SECTION_EXPERIMENTAL_VARIABLES.encodeAsURL()]"
+                                    params="[groupBySection: ContextType.EXPERIMENT.id.encodeAsURL()]"
                                     class="btn"><i class="icon-pencil"></i> Edit Experimental Variables</g:link>
                         </div>
                     </g:if>

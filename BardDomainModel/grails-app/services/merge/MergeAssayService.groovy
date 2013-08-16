@@ -96,7 +96,7 @@ class MergeAssayService {
                 assayContextItemNotInKeep++
                 // At the point we should be able to find a corresponding context
                 AssayContext context = assayWillKeep.assayContexts.find {
-                    item.assayContext.contextName == it.contextName && item.assayContext.contextGroup == it.contextGroup
+                    item.assayContext.contextName == it.contextName && item.assayContext.contextType == it.contextType
                 }
                 if (!context) {
                     // Add assay context to assay that will be kept if there is no one exist
@@ -136,9 +136,9 @@ class MergeAssayService {
 
     private void createExperimentContextAndItem(AssayContext assayContext, String modifiedBy) {
         for (Experiment experiment : assayContext.assay.experiments) {
-            def foundExperimentContext = experiment.experimentContexts.find { it?.contextName == assayContext.contextName && it?.contextGroup == assayContext.contextGroup }
+            def foundExperimentContext = experiment.experimentContexts.find { it?.contextName == assayContext.contextName && it?.contextType == assayContext.contextType }
             if (!foundExperimentContext) {
-                foundExperimentContext = new ExperimentContext(contextName: assayContext?.contextName, contextGroup: assayContext?.contextGroup, experiment: experiment)
+                foundExperimentContext = new ExperimentContext(contextName: assayContext?.contextName, contextType: assayContext?.contextType, experiment: experiment)
                 experiment.addToExperimentContexts(foundExperimentContext)
                 foundExperimentContext.experiment = experiment
                 foundExperimentContext.modifiedBy = modifiedBy + "-addedFromACI-${assayContext.id}"

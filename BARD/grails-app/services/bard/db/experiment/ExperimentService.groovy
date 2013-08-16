@@ -175,6 +175,7 @@ class ExperimentService {
 
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
     }
+
     //TODO: This is only used by data mig. do we need to secure this?
     void splitExperimentsFromAssay(List<Experiment> experiments) {
         Assay oldAssay = experiments.first().assay

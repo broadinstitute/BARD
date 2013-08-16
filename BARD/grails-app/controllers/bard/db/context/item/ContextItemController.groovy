@@ -86,7 +86,7 @@ class ContextItemController {
         basicContextItemCommand.delete()
 
         redirect(controller: basicContextItemCommand.ownerController, action: "editContext",
-                params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.getSectionKey()])
+                params: [id:basicContextItemCommand.contextOwnerId,groupBySection: basicContextItemCommand.context?.contextType.id])
     }
 
     def updatePreferredName(InlineEditableCommand inlineEditableCommand) {

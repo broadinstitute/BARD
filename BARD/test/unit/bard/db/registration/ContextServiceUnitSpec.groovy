@@ -1,6 +1,7 @@
 package bard.db.registration
 
 import bard.db.ContextService
+import bard.db.enums.ContextType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.model.AbstractContext
@@ -28,12 +29,12 @@ class ContextServiceUnitSpec extends Specification {
         Assay owner = Assay.build()
 
         when:
-        AbstractContext context = service.createAssayContext(owner.id,owner, "name", "section");
+        AbstractContext context = service.createAssayContext(owner.id,owner, "name", ContextType.BIOLOGY);
 
         then:
         context != null
         owner.contexts.contains(context)
-        context.contextGroup == "section"
+        context.contextType == ContextType.BIOLOGY
         context.contextName == "name"
     }
 
@@ -42,14 +43,15 @@ class ContextServiceUnitSpec extends Specification {
         Project owner = Project.build()
 
         when:
-        AbstractContext context = service.createProjectContext(owner.id,owner, "name", "section");
+        AbstractContext context = service.createProjectContext(owner.id,owner, "name", ContextType.UNCLASSIFIED);
 
         then:
         context != null
         owner.contexts.contains(context)
-        context.contextGroup == "section"
+        context.contextType == ContextType.UNCLASSIFIED
         context.contextName == "name"
     }
+
     def 'test deleteAssayContext'() {
         setup:
         AbstractContext context = AssayContext.build()
@@ -61,6 +63,7 @@ class ContextServiceUnitSpec extends Specification {
         then:
         !owner.contexts.contains(context)
     }
+
     def 'test deleteProjectContext'() {
         setup:
         AbstractContext context = ProjectContext.build()

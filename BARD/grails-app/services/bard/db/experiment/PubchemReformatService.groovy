@@ -3,6 +3,7 @@ package bard.db.experiment
 import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
@@ -771,7 +772,7 @@ class PubchemReformatService {
     void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, Measure measure) {
         AssayContext context = new AssayContext()
         context.contextName = "annotations for ${measure.resultType.label}";
-        context.contextGroup = "project management> experiment>";
+        context.contextType = ContextType.EXPERIMENT
 
         for (attribute in attributeKeys) {
             if (attribute.id == SCREENING_CONCENTRATION_ID) {

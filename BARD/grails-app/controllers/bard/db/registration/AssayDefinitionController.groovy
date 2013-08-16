@@ -5,6 +5,7 @@ import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.model.AbstractContextOwner
 import bard.db.project.InlineEditableCommand
@@ -245,7 +246,7 @@ class AssayDefinitionController {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'assay.label', default: 'Assay'), params.id])
             return
         }
-        AbstractContextOwner.ContextGroup contextGroup = assayInstance.groupBySection(groupBySection?.decodeURL())
+        AbstractContextOwner.ContextGroup contextGroup = assayInstance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
 
         [assayInstance: assayInstance, contexts: [contextGroup]]
     }
