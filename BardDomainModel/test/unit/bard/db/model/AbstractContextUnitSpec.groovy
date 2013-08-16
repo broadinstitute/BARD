@@ -32,7 +32,7 @@ abstract class AbstractContextUnitSpec<T extends AbstractContext> extends Specif
         }
 
         then:
-        domainInstance.getContextType()?.label == expectedContextTypeLabel
+        domainInstance.getDataExportContextType()?.label == expectedContextTypeLabel
 
 
         where:
