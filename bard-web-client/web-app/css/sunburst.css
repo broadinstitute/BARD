@@ -116,41 +116,6 @@ body{
 }
 
 
-.data-table-th {
-    background: #146D8F;
-    color: #FFFFFF;
-    font-weight: 600;
-    font-size: 160%;
-    text-align: left;
-}
-
-table#data-table td, th  {
-    text-align: left;
-    margin: 0;
-    outline: 0 none;
-    list-style: none;
-    border-spacing: 0px;
-    border-bottom: 1px solid #6C6C6C;
-    font-family: 'Open Sans';
-    font-size: 18px;
-    font-weight: bold;
-    max-height: 20px;
-    width: 97px;
-}
-
-table#data-table tr:nth-child(odd) {
-    background: #e1e1e1;
-}
-
-table#data-table tr:nth-child(even) {
-    background: #FFF;
-}
-
-
-table#data-table tr:hover {
-    background-color: #a3a3a3;
-}
-
 table{
     clear: both;
     /*display: block;*/
