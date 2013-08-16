@@ -106,7 +106,7 @@
     </g:if>
     <g:else>
         <p class="text-info"><i
-                class="icon-warning-sign"></i> No Bio-activity information found for this compound ${tableModel?.additionalProperties?.id}
+                class="icon-warning-sign"></i> None of the assays that tested this compound demonstrated any activity ${tableModel?.additionalProperties?.id}
         </p>
     </g:else>
 </div>
