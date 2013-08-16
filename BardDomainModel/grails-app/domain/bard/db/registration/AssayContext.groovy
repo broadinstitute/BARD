@@ -43,7 +43,7 @@ class AssayContext extends AbstractContext {
     }
 
     public AssayContext clone(Assay newOwner) {
-        AssayContext newContext = new AssayContext(contextName: contextName, contextGroup: contextGroup);
+        AssayContext newContext = new AssayContext(contextName: contextName, contextType: contextType);
 
         for(item in assayContextItems) {
             item.clone(newContext)

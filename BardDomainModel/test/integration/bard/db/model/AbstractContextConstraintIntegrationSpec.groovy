@@ -2,6 +2,7 @@ package bard.db.model
 
 import bard.db.BardIntegrationSpec
 import bard.db.audit.BardContextUtils
+import bard.db.enums.ContextType
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.SessionFactory
 import org.junit.After
@@ -55,8 +56,8 @@ abstract class AbstractContextConstraintIntegrationSpec extends BardIntegrationS
 
     }
 
-    void "test contextGroup constraints #desc contextGroup: '#valueUnderTest'"() {
-        final String field = 'contextGroup'
+    void "test contextType constraints #desc: '#valueUnderTest'"() {
+        final String field = 'contextType'
 
         when: 'a value is set for the field under test'
         domainInstance[(field)] = valueUnderTest
@@ -67,13 +68,8 @@ abstract class AbstractContextConstraintIntegrationSpec extends BardIntegrationS
 
         where:
         desc               | valueUnderTest                           | valid | errorCode
-        'too long'         | createString(CONTEXT_GROUP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank not valid'  | ''                                       | false | 'blank'
-        'blank not valid'  | '   '                                    | false | 'blank'
-
-        'null valid'       | null                                     | true  | null
-        'exactly at limit' | createString(CONTEXT_GROUP_MAX_SIZE)     | true  | null
-
+        'null invalid'     | null                                     | false | 'nullable'
+        'not null'         | ContextType.BIOLOGY                      | true  | null
     }
 
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {

@@ -207,7 +207,7 @@
 
             <g:set var="contextItemParams" value="${[contextItemId: instance.contextItemId, contextId: instance?.contextId,
                                                      contextClass: instance?.context.simpleClassName, contextOwnerId: instance?.contextOwnerId,
-                                                     groupBySection: instance?.context?.getSectionKey()?.encodeAsURL()]}"></g:set>
+                                                     groupBySection: instance?.context?.getContextType()?.id?.encodeAsURL()]}"></g:set>
             <g:if test="${reviewNewItem}">
                 <g:link controller="${instance?.ownerController}" action="editContext"
                         id="${instance?.contextOwnerId}"

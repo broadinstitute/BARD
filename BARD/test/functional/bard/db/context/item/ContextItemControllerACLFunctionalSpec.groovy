@@ -1,6 +1,7 @@
 package bard.db.context.item
 
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -219,11 +220,11 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
 
             Assay assay = Assay.build().save(flush: true)
 
-            AssayContext context = AssayContext.build(contextGroup: "Biology", assay: assay, contextName: "alpha2" + System.currentTimeMillis()).save(flush: true)
+            AssayContext context = AssayContext.build(contextType: ContextType.BIOLOGY, assay: assay, contextName: "alpha2" + System.currentTimeMillis()).save(flush: true)
 
             AssayContextItem assayContextItem = AssayContextItem.build(assayContext: context, attributeElement: element).save(flush: true)
 
-            return [contextGroup: context.contextGroup, version: assayContextItem.version, assayId: assay.id,
+            return [contextType: context.contextType, version: assayContextItem.version, assayId: assay.id,
                     assayContextItemId: assayContextItem.id, attributeElementId: attributeElementId, contextId: context.id]
         })
 
@@ -247,11 +248,11 @@ class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpe
 
             Project project = Project.build().save(flush: true)
 
-            ProjectContext context = ProjectContext.build(contextGroup: "Biology", project: project, contextName: "alpha22" + System.currentTimeMillis()).save(flush: true)
+            ProjectContext context = ProjectContext.build(contextType: ContextType.BIOLOGY, project: project, contextName: "alpha22" + System.currentTimeMillis()).save(flush: true)
 
             ProjectContextItem projectContextItem = ProjectContextItem.build(context: context, attributeElement: element).save(flush: true)
 
-            return [contextGroup: context.contextGroup, version: projectContextItem.version, projectId: project.id,
+            return [contextType: context.contextType, version: projectContextItem.version, projectId: project.id,
                     projectContextItemId: projectContextItem.id, attributeElementId: attributeElementId, contextId: context.id]
         })
 

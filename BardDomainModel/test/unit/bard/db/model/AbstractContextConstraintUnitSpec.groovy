@@ -50,32 +50,6 @@ abstract class AbstractContextConstraintUnitSpec extends Specification {
 
     }
 
-    void "test contextGroup constraints #desc contextGroup: '#valueUnderTest'"() {
-        final String field = 'contextGroup'
-
-        when: 'a value is set for the field under test'
-        domainInstance[(field)] = valueUnderTest
-        domainInstance.validate()
-
-        then: 'verify valid or invalid for expected reason'
-        assertFieldValidationExpectations(domainInstance, field, valid, errorCode)
-
-        and: 'verify the domain can be persisted to the db'
-        if (valid) {
-            domainInstance == domainInstance.save(flush: true)
-        }
-
-        where:
-        desc               | valueUnderTest                           | valid | errorCode
-        'too long'         | createString(CONTEXT_GROUP_MAX_SIZE + 1) | false | 'maxSize.exceeded'
-        'blank not valid'  | ''                                       | false | 'blank'
-        'blank not valid'  | '   '                                    | false | 'blank'
-
-        'null valid'       | null                                     | true  | null
-        'exactly at limit' | createString(CONTEXT_GROUP_MAX_SIZE)     | true  | null
-
-    }
-
     void "test modifiedBy constraints #desc modifiedBy: '#valueUnderTest'"() {
 
         final String field = 'modifiedBy'
