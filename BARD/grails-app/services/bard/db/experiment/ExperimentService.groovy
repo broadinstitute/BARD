@@ -175,18 +175,42 @@ class ExperimentService {
 
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
     }
-    //TODO: This is only used by data mig. do we need to secure this?
-    void splitExperimentsFromAssay(List<Experiment> experiments) {
-        Assay oldAssay = experiments.first().assay
+
+    void validateExperimentsToMerge(Assay oldAssay, List<Experiment> experiments) {
+        List<String> errorMessages = []
+        for (Experiment experiment : experiments) {
+            if (experiment.assay != oldAssay) {
+                errorMessages.add("Experiment EID: ${experiment.id} , does not belong to Assay ADID: ${oldAssay.id}")
+            }
+        }
+        if (errorMessages) {
+            throw new RuntimeException(StringUtils.join(errorMessages, ","))
+        }
+    }
+
+    @PreAuthorize("hasPermission(#assayId, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay splitExperimentsFromAssay(Long assayId, List<Experiment> experiments) {
+        Assay oldAssay = Assay.findById(assayId)
+
+        validateExperimentsToMerge(oldAssay, experiments)
+
+        return splitExperiments(oldAssay, experiments)
+    }
+
+    private Assay splitExperiments(Assay oldAssay, List<Experiment> experiments) {
 
         def mapping = assayService.cloneAssay(oldAssay)
 
         Assay newAssay = mapping.assay
+        newAssay.fullyValidateContextItems=false
+        Assay savedAssay = newAssay.save(flush: true)
+        savedAssay.fullyValidateContextItems=false
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
+
 
         for (Experiment experiment : experiments) {
             oldAssay.removeFromExperiments(experiment)
-            newAssay.addToExperiments(experiment)
+            savedAssay.addToExperiments(experiment)
 
             // map measures over to new assay
             for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
@@ -198,5 +222,9 @@ class ExperimentService {
                 newMeasure.addToExperimentMeasures(experimentMeasure)
             }
         }
+        oldAssay.save(flush: true)
+
+        savedAssay = savedAssay.save(flush: true)
+        return Assay.findById(savedAssay.id)
     }
 }
