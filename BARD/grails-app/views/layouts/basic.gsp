@@ -41,6 +41,8 @@
                                                                        action="show">Merge Assays</g:link></li>
                                         <li class="controller"><g:link controller="assayDefinition"
                                                                        action="assayComparisonReport">Compare Assays</g:link></li>
+                                        <li class="controller"><g:link controller="splitAssayDefinition"
+                                                                       action="show">Split Assays</g:link></li>
                                     </ul>
 
                                 </li>

@@ -118,7 +118,7 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext newContext = newAssay.assayContexts.first()
         newContext != context
         newContext.contextName == context.contextName
-        newContext.contextGroup == context.contextGroup
+        newContext.contextType == context.contextType
 
         // test assay context items are good
         AssayContextItem newContextItem = newContext.assayContextItems.first()
@@ -176,7 +176,7 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext newContext = newAssay.assayContexts.first()
         newContext != context
         newContext.contextName == context.contextName
-        newContext.contextGroup == context.contextGroup
+        newContext.contextType == context.contextType
 
         // test assay context items are good
         AssayContextItem newContextItem = newContext.assayContextItems.first()

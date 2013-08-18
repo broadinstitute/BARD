@@ -125,6 +125,7 @@ switch (Environment.current) {
                     filterChain.chainMap = [
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
                     ]
                 }
@@ -149,6 +150,7 @@ switch (Environment.current) {
                             '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/project/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/context/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/contextItem/**': 'JOINED_FILTERS,-exceptionTranslationFilter',

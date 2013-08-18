@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.model.AbstractContextOwner
 import groovy.sql.Sql
@@ -194,7 +195,7 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test editContext #desc'() {
         given:
         long assayId = assayData.id
-        String sectionKey = AbstractContextOwner.SECTION_BIOLOGY
+        String sectionKey = ContextType.BIOLOGY.id
         RESTClient client = getRestClient(controllerUrl,"editContext", team, teamPassword)
 
         when:

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="bard.db.model.AbstractContextOwner; bard.db.registration.DocumentKind; bard.db.project.*" %>
+<%@ page import="bard.db.enums.ContextType; bard.db.model.AbstractContextOwner; bard.db.registration.DocumentKind; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,7 +90,7 @@
                         <g:if test="${!uneditable}">
                             <g:if test="${editable == 'canedit'}">
                                 <div class="span12">
-                                    <g:link action="editContext" id="${instance?.id}"  params="[groupBySection: AbstractContextOwner.SECTION_UNCLASSIFIED.encodeAsURL()]"
+                                    <g:link action="editContext" id="${instance?.id}"  params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
                                             class="btn"><i class="icon-pencil"></i>Edit Contexts</g:link>
                                 </div>
                             </g:if>

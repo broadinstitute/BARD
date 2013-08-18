@@ -25,6 +25,7 @@ class AssayService {
     Map cloneAssay(Assay assay) {
         String assayNamePrefix = ""
         Assay newAssay = cloneAssayOnly(assay, assay.dateCreated, assay.designedBy, assayNamePrefix, assay.assayStatus, assay.readyForExtraction)
+        newAssay = newAssay.save(flush:true)
         Map<AssayContext, AssayContext> assayContextOldToNew = cloneContexts(assay, newAssay, false)
         cloneDocuments(assay, newAssay)
         // clone all measures

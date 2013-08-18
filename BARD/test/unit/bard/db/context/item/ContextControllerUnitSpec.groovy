@@ -1,6 +1,7 @@
 package bard.db.context.item
 
 import bard.db.ContextService
+import bard.db.enums.ContextType
 import bard.db.experiment.ExperimentContext
 import bard.db.project.ProjectContext
 import bard.db.registration.AssayContext
@@ -37,7 +38,7 @@ class ContextControllerUnitSpec extends Specification {
         given:
         String contextClass = "ProjectContext"
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
 
         when:
         controller.createCard(contextClass, null, cardName, cardSection)
@@ -54,7 +55,7 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "ProjectContext"
         Long ownerId = projectContext.owner.id
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
         then:
@@ -71,7 +72,7 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "ExperimentContext"
         Long ownerId = experimentContext.owner.id
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
         then:
@@ -88,7 +89,7 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "AssayContext"
         Long ownerId = assayContext.owner.id
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
         then:
@@ -106,7 +107,7 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "ProjectContext"
         Long ownerId = projectContext.owner.id
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
         views['/context/_list.gsp'] = 'mock contents'
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
@@ -122,7 +123,7 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "ExperimentContext"
         Long ownerId = experimentContext.owner.id
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
         views['/context/_list.gsp'] = 'mock contents'
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)
@@ -137,7 +138,7 @@ class ContextControllerUnitSpec extends Specification {
         String contextClass = "AssayContext"
         Long ownerId = assayContext.owner.id
         String cardName = "My Card"
-        String cardSection = "My Group"
+        String cardSection = ContextType.BIOLOGY.id
         views['/context/_list.gsp'] = 'mock contents'
         when:
         controller.createCard(contextClass, ownerId, cardName, cardSection)

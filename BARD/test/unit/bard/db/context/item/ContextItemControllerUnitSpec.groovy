@@ -4,6 +4,7 @@ import bard.db.ContextItemService
 import bard.db.ContextService
 import bard.db.context.item.BasicContextItemCommand
 import bard.db.context.item.ContextItemController
+import bard.db.enums.ContextType
 import bard.db.project.Project
 import bard.db.project.ProjectContext
 import bard.db.project.ProjectContextItem
@@ -210,7 +211,7 @@ class ContextItemControllerUnitSpec extends Specification {
 
     void "test delete"() {
         given:
-        ProjectContext projectContext = ProjectContext.build()
+        ProjectContext projectContext = ProjectContext.build(contextType: ContextType.UNCLASSIFIED)
         ProjectContextItem contextItem = ProjectContextItem.build(context:projectContext)
 
         BasicContextItemCommand basicContextItemCommand = new BasicContextItemCommand(

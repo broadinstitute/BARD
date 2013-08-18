@@ -1,5 +1,6 @@
 package bard.db
 
+import bard.db.enums.ContextType
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
@@ -25,22 +26,22 @@ class ContextService {
     }
 
     @PreAuthorize("hasPermission(#id, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    AbstractContext createAssayContext(Long id, AbstractContextOwner owningContext, String name, String section) {
+    AbstractContext createAssayContext(Long id, AbstractContextOwner owningContext, String name, ContextType section) {
         return createContext(owningContext, name, section)
     }
 
     @PreAuthorize("hasPermission(#id,'bard.db.project.Project',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    AbstractContext createProjectContext(Long id, AbstractContextOwner owningContext, String name, String section) {
+    AbstractContext createProjectContext(Long id, AbstractContextOwner owningContext, String name, ContextType section) {
         return createContext(owningContext, name, section)
     }
 
     @PreAuthorize("hasPermission(#id,'bard.db.experiment.Experiment',admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
-    AbstractContext createExperimentContext(Long id, AbstractContextOwner owningContext, String name, String section) {
+    AbstractContext createExperimentContext(Long id, AbstractContextOwner owningContext, String name, ContextType section) {
         return createContext(owningContext, name, section)
     }
 
-    private AbstractContext createContext(AbstractContextOwner owner, String name, String section) {
-        AbstractContext context = owner.createContext(contextName: name, contextGroup: section)
+    private AbstractContext createContext(AbstractContextOwner owner, String name, ContextType section) {
+        AbstractContext context = owner.createContext(contextName: name, contextType: section)
         context.save(flush: true)
         return context
     }

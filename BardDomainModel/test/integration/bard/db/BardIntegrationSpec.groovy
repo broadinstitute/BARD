@@ -2,6 +2,7 @@ package bard.db
 
 import bard.db.audit.BardContextUtils
 import grails.plugin.spock.IntegrationSpec
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.hibernate.SessionFactory
 import org.junit.Before
 
@@ -22,5 +23,6 @@ abstract class BardIntegrationSpec extends IntegrationSpec{
     @Before
     void setUsernameInBardContext(){
         BardContextUtils.setBardContextUsername(sessionFactory.currentSession, 'test')
+        SpringSecurityUtils.reauthenticate('integrationTestUser', null)
     }
 }

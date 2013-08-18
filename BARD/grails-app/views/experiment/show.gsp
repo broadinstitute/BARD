@@ -1,4 +1,4 @@
-<%@ page import="bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
+<%@ page import="bard.db.enums.ContextType; bard.db.registration.DocumentKind; bard.db.model.AbstractContextOwner; bard.db.project.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -249,7 +249,7 @@
             <g:if test="${editable == 'canedit' || true}">
                 <div class="span12">
                     <g:link action="editContext" id="${instance?.id}"
-                            params="[groupBySection: AbstractContextOwner.SECTION_UNCLASSIFIED.encodeAsURL()]"
+                            params="[groupBySection: ContextType.UNCLASSIFIED.id.encodeAsURL()]"
                             class="btn"><i class="icon-pencil"></i> Edit Contexts</g:link>
                 </div>
             </g:if>

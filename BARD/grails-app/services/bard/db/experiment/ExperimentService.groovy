@@ -176,11 +176,12 @@ class ExperimentService {
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
     }
 
+
     void validateExperimentsToMerge(Assay oldAssay, List<Experiment> experiments) {
         List<String> errorMessages = []
         for (Experiment experiment : experiments) {
-            if (experiment.assay != oldAssay) {
-                errorMessages.add("Experiment EID: ${experiment.id} , does not belong to Assay ADID: ${oldAssay.id}")
+            if (experiment?.assay?.id != oldAssay?.id) {
+                errorMessages.add("Experiment EID: ${experiment?.id} , does not belong to Assay ADID: ${oldAssay?.id}")
             }
         }
         if (errorMessages) {
@@ -188,7 +189,7 @@ class ExperimentService {
         }
     }
 
-    @PreAuthorize("hasPermission(#assayId, 'bard.db.registration.Assay', admin) or hasRole('ROLE_BARD_ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ROLE_BARD_ADMINISTRATOR')")
     Assay splitExperimentsFromAssay(Long assayId, List<Experiment> experiments) {
         Assay oldAssay = Assay.findById(assayId)
 
@@ -199,18 +200,18 @@ class ExperimentService {
 
     private Assay splitExperiments(Assay oldAssay, List<Experiment> experiments) {
 
+
         def mapping = assayService.cloneAssay(oldAssay)
 
         Assay newAssay = mapping.assay
         newAssay.fullyValidateContextItems=false
-        Assay savedAssay = newAssay.save(flush: true)
-        savedAssay.fullyValidateContextItems=false
+
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
 
 
         for (Experiment experiment : experiments) {
             oldAssay.removeFromExperiments(experiment)
-            savedAssay.addToExperiments(experiment)
+            newAssay.addToExperiments(experiment)
 
             // map measures over to new assay
             for (ExperimentMeasure experimentMeasure : experiment.experimentMeasures) {
@@ -224,7 +225,7 @@ class ExperimentService {
         }
         oldAssay.save(flush: true)
 
-        savedAssay = savedAssay.save(flush: true)
-        return Assay.findById(savedAssay.id)
+        newAssay = newAssay.save(flush: true)
+        return Assay.findById(newAssay.id)
     }
 }

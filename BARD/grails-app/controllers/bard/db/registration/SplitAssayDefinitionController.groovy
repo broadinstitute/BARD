@@ -8,9 +8,7 @@ import grails.plugins.springsecurity.SpringSecurityService
 import grails.validation.Validateable
 import grails.validation.ValidationException
 import groovy.transform.InheritConstructors
-import org.apache.commons.collections.Factory;
-import org.apache.commons.collections.ListUtils
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.StringUtils
 
 import javax.servlet.http.HttpServletResponse
 
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpServletResponse
 class SplitAssayDefinitionController {
     ExperimentService experimentService
     SpringSecurityService springSecurityService
-    def permissionEvaluator
 
     def index() {
         redirect(action: "show")
@@ -31,7 +28,6 @@ class SplitAssayDefinitionController {
 
     def selectExperimentsToMove(SplitAssayCommand splitAssayCommand) {
         if (!splitAssayCommand.assayId) {
-
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [message: "Assay Id is required"])
             return
         }
@@ -40,23 +36,27 @@ class SplitAssayDefinitionController {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [message: "Assay Id ${splitAssayCommand.assayId} cannot be found"])
             return
         }
+
         render(status: HttpServletResponse.SC_OK, template: "selectExperimentsToSplit", model: [assay: assay])
     }
 
     def splitExperiments(SplitExperimentCommand splitExperimentCommand) {
         if (!splitExperimentCommand.experimentIds) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [message: "Select at least one experiment"])
+            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [message: "Select at least one experiment to move to new assay definition"])
             return
         }
-        if (!splitExperimentCommand.experiments) {
 
+        if (!splitExperimentCommand.experiments) {
             render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [message: "Could not find experiments with ids ${StringUtils.join(splitExperimentCommand.experimentIds)}"])
             return
         }
         try {
             Assay newAssay =
                 experimentService.splitExperimentsFromAssay(splitExperimentCommand.assay.id, splitExperimentCommand.experiments)
-            Assay oldAssay = Assay.findById(splitExperimentCommand.assay.id)
+            if(!newAssay){
+                throw new RuntimeException("Could not split assay ${splitExperimentCommand.assay.id}")
+            }
+            Assay oldAssay = Assay.findById(splitExperimentCommand.assay?.id)
             render(status: HttpServletResponse.SC_OK, template: "splitAssaySuccess", model: [oldAssay: oldAssay, newAssay: newAssay])
         }
         catch (ValidationException validationError) {
@@ -64,7 +64,7 @@ class SplitAssayDefinitionController {
 
         }
         catch (Exception ee) {
-            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [errorMessage: ee?.message])
+            render(status: HttpServletResponse.SC_BAD_REQUEST, template: "splitError", model: [message: ee?.message])
         }
     }
 }
@@ -92,7 +92,10 @@ class SplitExperimentCommand extends BardCommand {
     List<Experiment> getExperiments() {
         List<Experiment> experiments = []
         for (Long id : experimentIds) {
-            experiments.add(Experiment.findById(id))
+            final Experiment experiment = Experiment.findById(id)
+            if (experiment) {
+                experiments.add(experiment)
+            }
         }
         return experiments
     }
