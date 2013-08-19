@@ -47,9 +47,9 @@ class ContextServiceUnitSpec extends Specification {
 
         then:
         context != null
-        owner.contexts.contains(context)
-        context.contextType == ContextType.UNCLASSIFIED
-        context.contextName == "name"
+        assert owner.contexts.contains(context)
+        assert context.contextType == ContextType.UNCLASSIFIED
+        assert context.contextName == "name"
     }
 
     def 'test deleteAssayContext'() {
