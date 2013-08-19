@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ExperimentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl+ "experiment/"
+    static final String controllerUrl = getBaseUrl()+ "experiment/"
 
     @Shared
     Map experimentData

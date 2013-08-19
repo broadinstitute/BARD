@@ -35,7 +35,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl +  "assayDefinition/"
+    static final String controllerUrl = getBaseUrl() +  "assayDefinition/"
 
     @Shared
     Map assayData
@@ -195,12 +195,12 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test editContext #desc'() {
         given:
         long assayId = assayData.id
-        String sectionKey = ContextType.BIOLOGY.id
+        String groupBySection = ContextType.BIOLOGY.id
         RESTClient client = getRestClient(controllerUrl,"editContext", team, teamPassword)
 
         when:
         def response = client.post() {
-            urlenc id: assayId, sectionKey: sectionKey
+            urlenc id: assayId, groupBySection: groupBySection
         }
 
         then:

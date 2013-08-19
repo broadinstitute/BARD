@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse
 @Unroll
 class AssayJSonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
 
-    static final String controllerUrl = baseUrl +  "assayJSon/"
+    static final String controllerUrl = getBaseUrl() +  "assayJSon/"
     @Shared
     Map assayData
 

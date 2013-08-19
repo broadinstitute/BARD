@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class DocumentControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl + "document/"
+    static final String controllerUrl = getBaseUrl() + "document/"
 
     @Shared
     Map documentData

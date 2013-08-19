@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ElementControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl +  "element/"
+    static final String controllerUrl = getBaseUrl() +  "element/"
 
     @Shared
     Map elementData

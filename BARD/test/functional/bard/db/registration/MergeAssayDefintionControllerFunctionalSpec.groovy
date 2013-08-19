@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class MergeAssayDefintionControllerFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl + "mergeAssayDefinition/"
+    static final String controllerUrl = getBaseUrl() + "mergeAssayDefinition/"
 
     @Shared
     List<Long> assayIdList = []  //we keep ids of all assays here so we can delete after all the tests have finished
@@ -34,8 +34,6 @@ class MergeAssayDefintionControllerFunctionalSpec extends BardControllerFunction
         String reauthenticateWithUser = TEAM_A_1_USERNAME
 
         createTeamsInDatabase(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_ROLE, reauthenticateWithUser)
-
-
 
         Map assayData = (Map) remote.exec({
             //Create two assays

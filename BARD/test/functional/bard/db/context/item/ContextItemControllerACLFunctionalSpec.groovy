@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ContextItemControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl + "contextItem/"
+    static final String controllerUrl = getBaseUrl() + "contextItem/"
 
     @Shared
     Map contextItemData
