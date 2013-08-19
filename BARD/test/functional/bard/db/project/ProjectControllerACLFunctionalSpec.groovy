@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -721,7 +722,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit context #desc'() {
         given:
         Long id = projectData.id
-        String groupBySection = "Some Section"
+        String groupBySection = ContextType.BIOLOGY.id
         RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
         when:
         Response response = client.post() {
