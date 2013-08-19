@@ -20,6 +20,15 @@ abstract class AbstractContextOwner {
         List<AbstractContext> value;
     }
 
+    List<ContextGroup> groupContexts() {
+        List<ContextGroup> groups = []
+        contexts.groupBy { it.contextType } .each{k,v ->
+            groups << new ContextGroup(key: k.id, description: "", value: v)
+        }
+
+        return groups
+    }
+
     ContextGroup groupBySection(ContextType type) {
         def result = contexts.findAll { println "${it.contextType}  == ${type}" ; return it.contextType == type }
         return new ContextGroup(key: type.id, description: "", value: result);
