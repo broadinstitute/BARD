@@ -4,6 +4,7 @@ import acl.CapPermissionService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -356,7 +357,7 @@ class ProjectController {
             return
 
         }
-        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
         [instance: instance, contexts: [contextGroup]]
     }
 
