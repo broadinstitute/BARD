@@ -30,7 +30,7 @@ abstract class AbstractContextOwner {
     }
 
     ContextGroup groupBySection(ContextType type) {
-        def result = contexts.findAll { println "${it.contextType}  == ${type}" ; return it.contextType == type }
+        def result = contexts.findAll { it.contextType == type }
         return new ContextGroup(key: type.id, description: "", value: result);
     }
 
