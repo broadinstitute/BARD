@@ -1,6 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
@@ -95,7 +96,7 @@ class AssayExportServiceIntegrationSpec extends IntegrationSpec {
         given:
         Element element = Element.build()
         Assay assay = Assay.build(capPermissionService:null)
-        AssayContext assayContext = AssayContext.build(assay: assay)
+        AssayContext assayContext = AssayContext.build(assay: assay, contextType: ContextType.UNCLASSIFIED)
         AssayContextItem assayContextItem = AssayContextItem.build(assayContext: assayContext, attributeElement: element)
         AssayDocument.build(assay: assay)
 
