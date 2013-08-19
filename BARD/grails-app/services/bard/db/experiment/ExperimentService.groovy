@@ -176,14 +176,38 @@ class ExperimentService {
         experiment.experimentMeasures = new HashSet(measureToExpMeasure.values())
     }
 
-    //TODO: This is only used by data mig. do we need to secure this?
-    void splitExperimentsFromAssay(List<Experiment> experiments) {
-        Assay oldAssay = experiments.first().assay
+
+    void validateExperimentsToMerge(Assay oldAssay, List<Experiment> experiments) {
+        List<String> errorMessages = []
+        for (Experiment experiment : experiments) {
+            if (experiment?.assay?.id != oldAssay?.id) {
+                errorMessages.add("Experiment EID: ${experiment?.id} , does not belong to Assay ADID: ${oldAssay?.id}")
+            }
+        }
+        if (errorMessages) {
+            throw new RuntimeException(StringUtils.join(errorMessages, ","))
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_BARD_ADMINISTRATOR')")
+    Assay splitExperimentsFromAssay(Long assayId, List<Experiment> experiments) {
+        Assay oldAssay = Assay.findById(assayId)
+
+        validateExperimentsToMerge(oldAssay, experiments)
+
+        return splitExperiments(oldAssay, experiments)
+    }
+
+    private Assay splitExperiments(Assay oldAssay, List<Experiment> experiments) {
+
 
         def mapping = assayService.cloneAssay(oldAssay)
 
         Assay newAssay = mapping.assay
+        newAssay.fullyValidateContextItems=false
+
         Map<Measure, Measure> measureOldToNew = mapping.measureOldToNew
+
 
         for (Experiment experiment : experiments) {
             oldAssay.removeFromExperiments(experiment)
@@ -199,5 +223,9 @@ class ExperimentService {
                 newMeasure.addToExperimentMeasures(experimentMeasure)
             }
         }
+        oldAssay.save(flush: true)
+
+        newAssay = newAssay.save(flush: true)
+        return Assay.findById(newAssay.id)
     }
 }

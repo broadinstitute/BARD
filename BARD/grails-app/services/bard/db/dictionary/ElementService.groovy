@@ -30,14 +30,18 @@ class ElementService {
         element.save(flush: true)
         addElementHierarchy(parentElement, element, termCommand.relationship)
 
+        reloadCache()
+
+        return element
+    }
+
+    public void reloadCache() {
         //execute async
         this.executorService.execute(new Runnable() {
             public void run() {
                 ontologyDataAccessService.reloadCache()
             }
         });
-
-        return element
     }
     /**
      *
@@ -79,7 +83,7 @@ class ElementService {
                 boolean isLazy = childElement.parentHierarchies ? true : false
                 boolean isFolder = childElement.parentHierarchies ? true : false
                 final AddChildMethod childMethod = childElement.addChildMethod
-                childNodes.add([elementId: childElement.id, childMethodDescription:childMethod.description,childMethod: childMethod.toString(), addClass: childMethod.label, title: childElement.label, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
+                childNodes.add([elementId: childElement.id, childMethodDescription: childMethod.description, childMethod: childMethod.toString(), addClass: childMethod.label, title: childElement.label, description: childElement.description, isFolder: isFolder, isLazy: isLazy])
             }
         }
         childNodes.sort { Map a, Map b -> a["title"].toLowerCase().compareTo(b["title"].toLowerCase()) }
