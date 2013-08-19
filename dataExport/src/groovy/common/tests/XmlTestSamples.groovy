@@ -324,7 +324,7 @@ class XmlTestSamples {
     static final String CONTEXT_MINIMAL_WITH_GROUP = '''
          <context id='1' displayOrder='0'>
             <contextName/>
-            <contextGroup>contextGroup</contextGroup>
+            <contextGroup>Biology</contextGroup>
          </context>
      '''
     static final String CONTEXT_MINIMAL_WITH_ONE_ITEM = '''
@@ -751,7 +751,7 @@ class XmlTestSamples {
     static final String ASSAY_CONTEXT_WITH_CONTEXT_GROUP = '''
         <assayContext assayContextId='1' displayOrder='0'>
           <contextName/>
-          <contextGroup>contextGroup</contextGroup>
+          <contextGroup>Biology</contextGroup>
         </assayContext>
      '''
 

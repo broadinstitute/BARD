@@ -1,6 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.enums.ReadyForExtraction
 import bard.db.experiment.Experiment
 import dataexport.util.ExportAbstractService
@@ -25,8 +26,8 @@ class AssayExportHelperService extends ExportAbstractService {
                 'displayOrder': assayContext.assay.assayContexts.indexOf(assayContext)]
         markupBuilder.assayContext(attributes) {
             contextName(assayContext.getPreferredName())
-            if (assayContext.contextGroup) {
-                contextGroup(assayContext.contextGroup)
+            if (assayContext.contextType != ContextType.UNCLASSIFIED) {
+                contextGroup(assayContext.contextType.id)
             }
             generateAssayContextItems(markupBuilder, assayContext.assayContextItems)
             generateAssayContextMeasureRefs(markupBuilder, 'measureRef', assayContext.assayContextMeasures)
