@@ -10,7 +10,8 @@ target(main: "Create zip file of all files in this tree") {
   FileOutputStream fos = new FileOutputStream(targetFile);
   ZipOutputStream zos = new ZipOutputStream(fos);
   println "Writing zip file to ${targetFile.absolutePath}"
-  for(dir in [new File("."), new File("../BardDomainModel")]) {
+
+  for(dir in [new File("."), new File("../BardDomainModel"), new File("../functional-spock"), new File("../crowdUserRegistration")]) {
     dir.eachFileRecurse (FileType.FILES) { file ->
       if(targetFile.absolutePath == file.absolutePath) {
         return
