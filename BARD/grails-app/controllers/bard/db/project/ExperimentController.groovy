@@ -292,8 +292,8 @@ class ExperimentController {
         }
     }
 
-    def reloadResults() {
-        def experiment = Experiment.get(params.id)
+    def reloadResults(Long id) {
+        def experiment = Experiment.get(id)
         ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
         def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
