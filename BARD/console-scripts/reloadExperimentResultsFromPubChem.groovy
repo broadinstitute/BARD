@@ -12,6 +12,7 @@ import org.hibernate.Session
 def outFile = new File('reload_experiment_result_out.txt')
 outFile.withWriter { writer ->
     List<Long> eids = []
+    List<String> failedEids = []
     new File('EIDs.txt').eachLine { String line ->
         String[] eidStrings = line.split(/\s/)
         assert eidStrings.every { String eidString -> eidString.isLong() }, "All EIDs must be a LONG number ${eidStrings}"
@@ -35,8 +36,9 @@ outFile.withWriter { writer ->
         ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
         def aid = Integer.parseInt(xref.extAssayRef.replace("aid=", ""))
 
-        println("Reloading for EID=${eid} [AID=${aid}; ADID=${experiment.assay.id}] (${index}/${eids.size()})")
-        writer.writeLine("Reloading for EID=${eid} [AID=${aid}; ADID=${experiment.assay.id}] (${index++}/${eids.size()})")
+        String message = "Reloading for EID=${eid} [AID=${aid}; ADID=${experiment.assay.id}] (${index++}/${eids.size()})"
+        println(message)
+        writer.writeLine(message)
         try {
             Experiment.withTransaction { TransactionStatus transactionStatus ->
                 Experiment.withSession { Session session ->
@@ -50,12 +52,16 @@ outFile.withWriter { writer ->
                 }
             }
         } catch (Exception exp) {
-            println("\tFailed reloading: ${ExceptionUtils.getStackTrace(exp)}")
-            writer.writeLine("\tFailed reloading: ${ExceptionUtils.getStackTrace(exp)}")
+            failedEids << "\nEID=${eid} [AID=${aid}; ADID=${experiment.assay.id}]\n\tCause:\n\t${exp.cause}"
+            String msg = "\tFailed reloading: ${ExceptionUtils.getStackTrace(exp)}"
+            println(msg)
+            writer.writeLine(msg)
         }
     }
 
     ctx.getBean('sessionFactory').currentSession.flush()
     sw.stop()
-    println("finished processing flush() duration: ${sw}\n")
+    String message = "finished processing flush() duration: ${sw}\nFailed EIDs:\n\n${failedEids.join('\n')}"
+    println(message)
+    writer.writeLine(message)
 }

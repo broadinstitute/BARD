@@ -657,9 +657,9 @@ class PubchemReformatService {
     // recreate experiment measures on an already existing experiment/assay (Given a ResultMap)
     void recreateMeasures(Experiment experiment, ResultMap resultMap) {
         Collection<MappedStub> newMeasures = createMeasures(resultMap).collect { mapStub(it) }
-        for(m in newMeasures)
+        for (m in newMeasures)
         //println("newMeasure: ${m.resultType.label} children: ${m.children.collect {it.resultType.label} }")
-        recreateMeasures(experiment, newMeasures)
+            recreateMeasures(experiment, newMeasures)
     }
 
     // recreate experiment measures on an already existing experiment/assay
@@ -670,7 +670,6 @@ class PubchemReformatService {
             measureByKey[makeMeasureKey(measure)] = measure
             //println("existing measure: ${measure.resultType.label}")
         }
-
 
         // first, make sure all of the measures we want exist
         verifyOrCreateMeasures(newMeasures, measureByKey, assay)
@@ -784,6 +783,7 @@ class PubchemReformatService {
                 item.attributeElement = attribute
                 item.valueMin = 0
                 item.valueMax = maxConcentration
+                item.valueDisplay = item.deriveDisplayValue()
 
                 context.addToAssayContextItems(item)
             } else {
