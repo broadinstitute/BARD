@@ -61,22 +61,24 @@ class ContextItemDTO implements Comparable<ContextItemDTO> {
         }
     }
     //We mark each item as exclusive
-    static final SortedMap<String, List<ContextItemDTO>> buildCardMap(Collection<ContextItemDTO> contextItems) {
-        Map<String, List<ContextItemDTO>> cardMap = [:]
+    static final SortedMap<ContextDTO, List<ContextItemDTO>> buildCardMap(Collection<ContextItemDTO> contextItems) {
+        Map<ContextDTO, List<ContextItemDTO>> cardMap = [:]
 
         for (ContextItemDTO contextItemDTO : contextItems) {
-            ContextDTO contextName = contextItemDTO.contextDTO
-            if (contextName) {
-                List<ContextItemDTO> contextItemDTOs = cardMap.get(contextName)
+            ContextDTO contextDTO = contextItemDTO.contextDTO
+            if (contextDTO) {
+                List<ContextItemDTO> contextItemDTOs = cardMap.get(contextDTO)
                 if (contextItemDTOs == null) {
                     contextItemDTOs = []
                 }
                 contextItemDTO.isExclusiveToCard = true
                 contextItemDTOs.add(contextItemDTO)
-                cardMap.put(contextName, contextItemDTOs)
+                cardMap.put(contextDTO, contextItemDTOs)
             }
         }
-        return new TreeMap(cardMap)
+        TreeMap sortedMapAccordingToContextName = new TreeMap(new ContextDTOComparator())
+        sortedMapAccordingToContextName.putAll(cardMap)
+        return sortedMapAccordingToContextName
     }
 
     public final static List<ContextItemDTO> toContextItemDTOs(List<AssayContextItem> assayContextItems) {

@@ -41,7 +41,7 @@ class ContextDTO implements Comparable<ContextDTO> {
     @Override
     public int compareTo(ContextDTO thatContextDTO) {
         return new CompareToBuilder()
-                .append(this.contextName, thatContextDTO.contextName)
+                .append(this.contextId, thatContextDTO.contextId)
                 .toComparison();
     }
 
@@ -60,7 +60,7 @@ class ContextDTO implements Comparable<ContextDTO> {
 
         ContextDTO that = (ContextDTO) aThat;
         return new EqualsBuilder().
-                append(this.contextName, that.contextName).
+                append(this.contextId, that.contextId).
                 isEquals();
     }
 
@@ -70,7 +70,7 @@ class ContextDTO implements Comparable<ContextDTO> {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).
-                append(this.contextName).
+                append(this.contextId).
                 toHashCode();
     }
 }
