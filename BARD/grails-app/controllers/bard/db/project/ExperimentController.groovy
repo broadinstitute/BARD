@@ -1,6 +1,7 @@
 package bard.db.project
 
 import acl.CapPermissionService
+import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
@@ -249,7 +250,7 @@ class ExperimentController {
             return
 
         }
-        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
         render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
     }
 

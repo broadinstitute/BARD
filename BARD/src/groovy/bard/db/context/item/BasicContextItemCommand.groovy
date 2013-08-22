@@ -151,8 +151,14 @@ class BasicContextItemCommand extends BardCommand {
             if (owningContext instanceof Assay) {
                 return contextItemService.createAssayContextItem(owningContext.id, this)
             }
-            if (owningContext instanceof Project) {
+            else if (owningContext instanceof Project) {
                 return contextItemService.createProjectContextItem(owningContext.id, this)
+            }
+            else if (owningContext instanceof Experiment) {
+                return contextItemService.createExperimentContextItem(owningContext.id, this)
+            }
+            else {
+                throw new RuntimeException("Unknown owning context: ${owningContext}")
             }
         }
         return createSuccessful
