@@ -74,5 +74,4 @@ beans = {
     def extOntologyFactory = externalOntologyFactory(bard.validation.ext.RegisteringExternalOntologyFactory) { bean ->
         bean.factoryMethod = "getInstance"
     }
-
 }

@@ -243,6 +243,12 @@ if (appName) {
             println "Skipping Config.groovy overrides: $primaryFullName and $secondaryFullName not found"
         }
     }
+
+    if(System.getProperty("migrationContextsToRun") != null) {
+        grails.plugin.databasemigration.updateOnStart = true
+        grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+        grails.plugin.databasemigration.updateOnStartContexts = System.getProperty("migrationContextsToRun").split(",") as List
+    }
 }
 
 // Added by the JQuery Validation UI plugin:

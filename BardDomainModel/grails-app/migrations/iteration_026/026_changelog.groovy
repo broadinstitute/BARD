@@ -1,9 +1,6 @@
 package iteration_026
 
 databaseChangeLog = {
-    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
-    File migrationsDir = new File(bardDomainModelMigrationsDir)
-
 
     changeSet(author: "jasiedu", id: "iteration-026/01-add-display-name-column-to-Role", dbms: "oracle", context: "standard") {
         grailsChange {
@@ -14,7 +11,7 @@ databaseChangeLog = {
                                """)
             }
         }
-        sqlFile(path: "${migrationsDir}/iteration_026/01-add-display-name-column-to-Role.sql", stripComments: true)
+        sqlFile(path: "iteration_026/01-add-display-name-column-to-Role.sql", stripComments: true)
         grailsChange {
             change {
                 sql.execute("""BEGIN
@@ -33,7 +30,7 @@ databaseChangeLog = {
                                """)
             }
         }
-        sqlFile(path: "${migrationsDir}/iteration_026/02-add-curators-and-Role.sql", stripComments: true)
+        sqlFile(path: "iteration_026/02-add-curators-and-Role.sql", stripComments: true)
         grailsChange {
             change {
                 sql.execute("""BEGIN

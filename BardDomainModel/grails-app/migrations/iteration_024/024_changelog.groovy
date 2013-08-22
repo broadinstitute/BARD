@@ -1,17 +1,14 @@
 package iteration_024
 
 databaseChangeLog = {
-    String bardDomainModelMigrationsDir = ctx.migrationResourceAccessor.baseDirectory
-    File migrationsDir = new File(bardDomainModelMigrationsDir)
-
     changeSet(author: "pmontgom", id: "iteration-024/01-add-experiment-file-pk", dbms: 'oracle', context: 'standard') {
-        sqlFile(path: "${migrationsDir}/iteration_024/01-add-experiment-file-pk.sql", stripComments: true)
+        sqlFile(path: "iteration_024/01-add-experiment-file-pk.sql", stripComments: true)
     }
     changeSet(author: "jasiedu", id: "iteration-024/01-add-parent-child-relationship-to-assay", dbms: 'oracle', context: 'standard') {
-        sqlFile(path: "${migrationsDir}/iteration_024/01-add-parent-child-relationship-to-assay.sql", stripComments: true)
+        sqlFile(path: "iteration_024/01-add-parent-child-relationship-to-assay.sql", stripComments: true)
     }
     changeSet(author: "jasiedu", id: "iteration-024/03-add-display-order-unique-constraint", dbms: 'oracle', context: 'standard') {
-        sqlFile(path: "${migrationsDir}/iteration_024/03-add-display-order-unique-constraint.sql", stripComments: true)
+        sqlFile(path: "iteration_024/03-add-display-order-unique-constraint.sql", stripComments: true)
     }
     changeSet(author: "jasiedu", id: "add parent child relationship to measures", dbms: 'oracle', context:'standard') {
         grailsChange {
@@ -62,11 +59,11 @@ databaseChangeLog = {
         }
     }
     changeSet(author: "jasiedu", id: "iteration-024/04-add-comments-field-to-Element", dbms: 'oracle', context: 'standard') {
-        sqlFile(path: "${migrationsDir}/iteration_024/04-add-comments-field-to-Element.sql", stripComments: true)
+        sqlFile(path: "iteration_024/04-add-comments-field-to-Element.sql", stripComments: true)
     }
 
     changeSet(author: "pmontgom", id: "iteration-024/05-recreate-deferred-constraints", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration_024/05-recreate-deferred-constraints.sql", stripComments: true)
+        sqlFile(path: "iteration_024/05-recreate-deferred-constraints.sql", stripComments: true)
     }
 
     changeSet(author: "pmontgom", id: "iteration-024/06-create-ext-ontology-tree", dbms: "oracle", context: "standard") {
@@ -86,7 +83,7 @@ databaseChangeLog = {
     }
 
     changeSet(author: "pmontgom", id: "iteration-024/08-add-replaced-by-to-element", dbms: "oracle", context: "standard") {
-        sqlFile(path: "${migrationsDir}/iteration_024/08-add-replaced-by-to-element.sql", stripComments: true)
+        sqlFile(path: "iteration_024/08-add-replaced-by-to-element.sql", stripComments: true)
     }
 }
 
