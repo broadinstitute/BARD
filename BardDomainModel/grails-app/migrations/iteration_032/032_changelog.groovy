@@ -25,8 +25,22 @@ databaseChangeLog = {
             }
         }
 
-        //Create the new EXPERIMENT_DOCUMENT table
         sqlFile(path: "${migrationsDir}/iteration_032/01-remap-context-group.sql", stripComments: true)
+    }
+
+    changeSet(author: "pmontgom", id: "iteration-032/02-create-value-type", dbms: "oracle", context: "standard") {
+
+        //Set the username in context
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('pmontgom');
+                               END;
+                               """)
+            }
+        }
+
+        sqlFile(path: "${migrationsDir}/iteration_032/02-create-value-type.sql", stripComments: true)
     }
 }
 
