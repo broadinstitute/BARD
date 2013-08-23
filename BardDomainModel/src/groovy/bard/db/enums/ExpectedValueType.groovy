@@ -8,6 +8,7 @@ package bard.db.enums
  * To change this template use File | Settings | File Templates.
  */
 enum ExpectedValueType implements IEnumUserType {
+
     NUMERIC("numeric"),
     ELEMENT('element'),
     EXTERNAL_ONTOLOGY('external ontology'),
