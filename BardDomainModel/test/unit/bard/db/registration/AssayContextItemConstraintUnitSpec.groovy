@@ -4,6 +4,7 @@ import bard.db.dictionary.Element
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContextItemConstraintUnitSpec
 import grails.buildtestdata.mixin.Build
+import grails.test.mixin.Mock
 import org.junit.Before
 import spock.lang.Unroll
 
@@ -21,7 +22,8 @@ import static test.TestUtils.assertFieldValidationExpectations
  * Time: 9:18 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([AssayContextItem, Element])
+@Build([AssayContextItem, Element, Assay, AssayContext])
+@Mock([AssayContextItem, Element, Assay, AssayContext])
 @Unroll
 class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUnitSpec<AssayContextItem> {
     @Before
@@ -322,8 +324,8 @@ class AssayContextItemConstraintUnitSpec extends AbstractContextItemConstraintUn
         'invalid Range Type & NUMERIC null valueMax'                    | [expectedValueType: NUMERIC]                               | RangeAttrType | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: 1.0, valueMax: null, valueDisplay: 'someDisplay']      | false         | ['contextItem.range.required.fields']                                    | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: 'contextItem.valueMax.null', valueDisplay: null]
         'invalid Range Type & NUMERIC scalar numeric'                   | [expectedValueType: NUMERIC]                               | RangeAttrType | null            | [extValueId: null, qualifier: '= ', valueNum: 1.0, valueMin: null, valueMax: null, valueDisplay: 'someDisplay']      | false         | ['contextItem.range.required.fields']                                    | [extValueId: null, valueElement: null, qualifier: 'contextItem.qualifier.not.null', valueNum: 'contextItem.valueNum.not.null', valueMin: 'contextItem.valueMin.null', valueMax: 'contextItem.valueMax.null', valueDisplay: null]
 
-        'invalid Free & ELEMENT combo'                                  | [expectedValueType: ELEMENT]                               | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]              | false         | ['assayContextItem.invalid.attributeTypeAndAttributeExpectedValueCombo'] | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
-        'invalid Free & EXTERNAL_ONTOLOGY combo'                        | [expectedValueType: EXTERNAL_ONTOLOGY]                     | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]              | false         | ['assayContextItem.invalid.attributeTypeAndAttributeExpectedValueCombo'] | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
+        'invalid Free & ELEMENT combo'                                  | [expectedValueType: ELEMENT]                               | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]              | true          | []                                                                       | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
+        'invalid Free & EXTERNAL_ONTOLOGY combo'                        | [expectedValueType: EXTERNAL_ONTOLOGY]                     | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]              | true          | []                                                                       | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
 
         'valid Free Type & NUMERIC'                                     | [expectedValueType: NUMERIC]                               | Free          | null            | [extValueId: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]              | true          | []                                                                       | [extValueId: null, valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
         'valid Free Type & NUMERIC but extValueId'                      | [expectedValueType: NUMERIC]                               | Free          | null            | [extValueId: 'someId', qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]          | false         | ['assayContextItem.attributeType.free.required.fields']                  | [extValueId: 'contextItem.extValueId.not.null', valueElement: null, qualifier: null, valueNum: null, valueMin: null, valueMax: null, valueDisplay: null]
