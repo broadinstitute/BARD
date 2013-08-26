@@ -5,6 +5,8 @@ import bard.db.enums.HierarchyType
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.apache.commons.collections.CollectionUtils
+import spock.lang.IgnoreRest
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -16,7 +18,7 @@ import spock.lang.Unroll
  * Time: 11:30 AM
  * To change this template use File | Settings | File Templates.
  */
-@Build([Assay,AssayContext, AssayContextItem, AssayContextMeasure, Measure])
+@Build([Assay, AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @Mock([AssayContext, AssayContextItem, AssayContextMeasure, Measure])
 @TestFor(AssayContextService)
 @Unroll
@@ -40,6 +42,7 @@ class AssayContextServiceUnitSpec extends Specification {
         ""                                                | null
 
     }
+
 
     void "test addItemToEndOfList #desc"() {
         given: 'an a'

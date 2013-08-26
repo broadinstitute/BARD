@@ -5,6 +5,8 @@ import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.UnitConversion
 import bard.db.experiment.Experiment
+import bard.db.experiment.ExperimentContext
+import bard.db.experiment.ExperimentContextItem
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextItem
 import bard.db.model.AbstractContextOwner
@@ -33,10 +35,10 @@ import java.util.regex.Pattern
 class BasicContextItemCommand extends BardCommand {
 
     private static final Pattern SCIENTIFIC_NOTATION_PATTERN = Pattern.compile("^[-+]?[1-9][0-9]*\\.?[0-9]*([Ee][+-]?[0-9]+)")
-    public static final Map<String, Class> CONTEXT_NAME_TO_OWNER_CLASS = ['ProjectContext': Project, 'AssayContext': Assay]
-    public static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext, 'AssayContext': AssayContext]
-    public static final Map<String, Class> CONTEXT_NAME_TO_ITEM_CLASS = ['ProjectContext': ProjectContextItem, 'AssayContext': AssayContextItem]
-    public static final Map<String, String> CONTEXT_NAME_TO_CONTROLLER = ['ProjectContext': 'project', 'AssayContext': 'assayDefinition']
+    public static final Map<String, Class> CONTEXT_NAME_TO_OWNER_CLASS = ['ProjectContext': Project, 'AssayContext': Assay, 'ExperimentContext': Experiment]
+    public static final Map<String, Class> CONTEXT_NAME_TO_CLASS = ['ProjectContext': ProjectContext, 'AssayContext': AssayContext, 'ExperimentContext': ExperimentContext]
+    public static final Map<String, Class> CONTEXT_NAME_TO_ITEM_CLASS = ['ProjectContext': ProjectContextItem, 'AssayContext': AssayContextItem, 'ExperimentContext': ExperimentContextItem]
+    public static final Map<String, String> CONTEXT_NAME_TO_CONTROLLER = ['ProjectContext': 'project', 'AssayContext': 'assayDefinition', 'ExperimentContext': 'experiment']
 
     static Class getContextItemClass(String name) {
         return CONTEXT_NAME_TO_ITEM_CLASS[name]
@@ -149,8 +151,14 @@ class BasicContextItemCommand extends BardCommand {
             if (owningContext instanceof Assay) {
                 return contextItemService.createAssayContextItem(owningContext.id, this)
             }
-            if (owningContext instanceof Project) {
+            else if (owningContext instanceof Project) {
                 return contextItemService.createProjectContextItem(owningContext.id, this)
+            }
+            else if (owningContext instanceof Experiment) {
+                return contextItemService.createExperimentContextItem(owningContext.id, this)
+            }
+            else {
+                throw new RuntimeException("Unknown owning context: ${owningContext}")
             }
         }
         return createSuccessful

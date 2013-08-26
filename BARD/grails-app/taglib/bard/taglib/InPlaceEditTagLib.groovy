@@ -16,6 +16,7 @@ class InPlaceEditTagLib {
 
         out << "<span href='#' id='widget_${domId}' " +
                 "data-type='text' " +
+                "data-name='${params.contextClass}' " +
                 "data-toggle='manual' " +
                 "data-mode='inline' " +
                 "data-inputclass='input-xxlarge' "+
@@ -25,22 +26,23 @@ class InPlaceEditTagLib {
                 "data-placeholder='Empty' " +
                 "data-original-title='${dataOriginalTitle}' >"
         out << fieldValue.encodeAsHTML()
-        out << "</span> <a href='javascript:' class='icon-pencil documentPencil' title='Click to edit' data-id='widget_${domId}'></a>"
-        r.script() {
-            out << "\$('#widget_${domId}').editable({\n" +
-                    "   params: function(params){  \n" +
-                    "       var p = {id: params.pk, value: params.value};\n"
-
-            // add the extra parameters to the submission
-            if (params) {
-                params.each { k, v ->
-                    out << "p['${k}'] = '${v}';\n"
-                }
-            }
-
-            out << "       return p;\n" +
-                    "   }\n" +
-                    "})\n;\n\n"
-        }
+        out << "</span> <a href='javascript:' class='context-card-edit icon-pencil documentPencil' title='Click to edit' data-id='widget_${domId}'></a>"
+// TODO: Commenting out the following javascript because it would not load when we use a template
+// r.script() {
+//            out << "\$('#widget_${domId}').editable({\n" +
+//                    "   params: function(params){  \n" +
+//                    "       var p = {id: params.pk, value: params.value};\n"
+//
+//            // add the extra parameters to the submission
+//            if (params) {
+//                params.each { k, v ->
+//                    out << "p['${k}'] = '${v}';\n"
+//                }
+//            }
+//
+//            out << "       return p;\n" +
+//                    "   }\n" +
+//                    "})\n;\n\n"
+//        }
     }
 }

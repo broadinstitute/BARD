@@ -1,11 +1,13 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.ContextService
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.HierarchyType
 import bard.db.project.InlineEditableCommand
+import bard.db.project.ProjectExperimentRenderService
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import grails.buildtestdata.mixin.Build
@@ -20,6 +22,7 @@ import org.codehaus.groovy.grails.plugins.testing.GrailsMockErrors
 import org.junit.Before
 import org.springframework.security.access.AccessDeniedException
 import spock.lang.Unroll
+import acl.CapPermissionService
 
 import javax.servlet.http.HttpServletResponse
 
@@ -45,11 +48,13 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         MeasureTreeService measureTreeService = Mock(MeasureTreeService)
         AssayContextService assayContextService = Mock(AssayContextService)
         AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
+        CapPermissionService capPermissionService  = Mock(CapPermissionService)
         controller.springSecurityService = Mock(SpringSecurityService)
         controller.measureTreeService = measureTreeService
         controller.assayContextService = assayContextService
         controller.assayDefinitionService = assayDefinitionService
         controller.contextService = Mock(ContextService)
+        controller.capPermissionService = capPermissionService
         assay = Assay.build(assayName: 'Test')
         assert assay.validate()
     }
@@ -284,6 +289,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test show'() {
         given:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
         controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
@@ -291,6 +298,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         def model = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
         model.assayInstance == assay
     }
 
@@ -315,6 +323,8 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
 
     void 'test editMeasure'() {
         given:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
         controller.measureTreeService.createMeasureTree(_, _) >> []
 
         when:
@@ -322,6 +332,7 @@ class AssayDefinitionControllerUnitSpec extends AbstractInlineEditingControllerU
         def model = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
         model.assayInstance == assay
     }
 

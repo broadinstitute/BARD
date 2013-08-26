@@ -61,7 +61,7 @@ public class AssayServiceUnitSpec extends Specification {
         Assay clonedAssay = service.cloneAssayOnly(assay, assay.dateCreated, "me", "Clone ")
 
         when:
-        Map<AssayContext, AssayContext> map = service.cloneContexts(assay, clonedAssay)
+        Map<AssayContext, AssayContext> map = service.cloneContexts(assay, clonedAssay, false)
         then:
         assert map
         assert map.size() == assay.assayContexts.size()
@@ -118,7 +118,7 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext newContext = newAssay.assayContexts.first()
         newContext != context
         newContext.contextName == context.contextName
-        newContext.contextGroup == context.contextGroup
+        newContext.contextType == context.contextType
 
         // test assay context items are good
         AssayContextItem newContextItem = newContext.assayContextItems.first()
@@ -176,7 +176,7 @@ public class AssayServiceUnitSpec extends Specification {
         AssayContext newContext = newAssay.assayContexts.first()
         newContext != context
         newContext.contextName == context.contextName
-        newContext.contextGroup == context.contextGroup
+        newContext.contextType == context.contextType
 
         // test assay context items are good
         AssayContextItem newContextItem = newContext.assayContextItems.first()

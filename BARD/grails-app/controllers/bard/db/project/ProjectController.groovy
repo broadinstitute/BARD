@@ -1,8 +1,10 @@
 package bard.db.project
 
+import acl.CapPermissionService
 import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -29,6 +31,7 @@ class ProjectController {
     SpringSecurityService springSecurityService
     def permissionEvaluator
     LinkGenerator grailsLinkGenerator
+    CapPermissionService capPermissionService
 
     def create(ProjectCommand projectCommand) {
         if (!projectCommand) {
@@ -85,7 +88,18 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
-            project = projectService.updateProjectName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Project.PROJECT_NAME_MAX_SIZE, inputValue.length())
+            if(maxSizeMessage){
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            project = projectService.updateProjectName(inlineEditableCommand.pk, inputValue)
+
+            if(project?.hasErrors()){
+                throw new Exception("Error while editing Project Name")
+            }
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.name)
 
         } catch (AccessDeniedException ade) {
@@ -105,7 +119,19 @@ class ProjectController {
                 conflictMessage(message)
                 return
             }
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Project.DESCRIPTION_MAX_SIZE, inputValue.length())
+            if(maxSizeMessage){
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
             project = projectService.updateProjectDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            if(project?.hasErrors()){
+                throw new Exception("Error while editing Project Description")
+            }
+
             generateAndRenderJSONResponse(project.version, project.modifiedBy, null, project.lastUpdated, project.description)
 
         } catch (AccessDeniedException ade) {
@@ -152,10 +178,12 @@ class ProjectController {
             return
         }
         boolean editable = canEdit(permissionEvaluator, springSecurityService, projectInstance)
+        String owner = capPermissionService.getOwner(projectInstance)
 
-        [instance: projectInstance, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
+        [instance: projectInstance, projectOwner: owner, pexperiment: projectExperimentRenderService.contructGraph(projectInstance), editable: editable ? 'canedit' : 'cannotedit']
     }
 
+    @Deprecated //this method is not used anymore. The editing is now done from the SHOW page.
     def edit() {
         def projectInstance = Project.get(params.id)
 
@@ -329,7 +357,7 @@ class ProjectController {
             return
 
         }
-        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(groupBySection?.decodeURL())
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
         [instance: instance, contexts: [contextGroup]]
     }
 

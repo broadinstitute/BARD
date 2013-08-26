@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/BARD-grailsPlugins.iml" filepath="$PROJECT_DIR$/BARD-grailsPlugins.iml" />
       <module fileurl="file://$PROJECT_DIR$/bardDomainModel-inplacePlugin.iml" filepath="$PROJECT_DIR$/bardDomainModel-inplacePlugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/crowdUserRegistration-inplacePlugin.iml" filepath="$PROJECT_DIR$/crowdUserRegistration-inplacePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/functionalSpock-inplacePlugin.iml" filepath="$PROJECT_DIR$/functionalSpock-inplacePlugin.iml" />
     </modules>
   </component>
 </project>

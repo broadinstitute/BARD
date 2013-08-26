@@ -2,6 +2,7 @@ package bard.db.project
 
 import bard.db.dictionary.Element
 import bard.db.dictionary.StageTree
+import bard.db.enums.ContextType
 import bard.db.enums.ProjectGroupType
 import bard.db.enums.ProjectStatus
 import bard.db.experiment.Experiment
@@ -36,7 +37,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl + "project/"
+    static final String controllerUrl = getBaseUrl() + "project/"
 
     @Shared
     Map projectData
@@ -394,29 +395,6 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
         "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
     }
 
-    def 'test edit #desc'() {
-        given:
-        RESTClient client = getRestClient(controllerUrl, "edit", team, teamPassword)
-        Long projectId = projectData.id
-        when:
-        def response = client.post() {
-            urlenc id: projectId
-        }
-
-        then:
-        assert response.statusCode == expectedHttpResponse
-
-
-        where:
-        desc       | team              | teamPassword      | expectedHttpResponse      | buttonExist
-        "User A_1" | TEAM_A_1_USERNAME | TEAM_A_1_PASSWORD | HttpServletResponse.SC_OK | true
-        "User B"   | TEAM_B_1_USERNAME | TEAM_B_1_PASSWORD | HttpServletResponse.SC_OK | false
-        "User A_2" | TEAM_A_2_USERNAME | TEAM_A_2_PASSWORD | HttpServletResponse.SC_OK | true
-        "ADMIN"    | ADMIN_USERNAME    | ADMIN_PASSWORD    | HttpServletResponse.SC_OK | true
-        "CURATOR"  | CURATOR_USERNAME  | CURATOR_PASSWORD  | HttpServletResponse.SC_OK | false
-
-    }
-
     def 'test findByName #desc'() {
         given:
         Map currentDataMap = getCurrentProjectProperties()
@@ -744,7 +722,7 @@ class ProjectControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
     def 'test edit context #desc'() {
         given:
         Long id = projectData.id
-        String groupBySection = "Some Section"
+        String groupBySection = ContextType.BIOLOGY.id
         RESTClient client = getRestClient(controllerUrl, "editContext", team, teamPassword)
         when:
         Response response = client.post() {

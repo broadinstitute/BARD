@@ -11,6 +11,7 @@ class ModifyElementAndHierarchyService {
     String relationshipType
 
     SpringSecurityService springSecurityService
+    ElementService elementService
 
     /**
      * @param relationshipType    relationshipType to be used when finding and modifying ElementHierarchy's
@@ -33,7 +34,9 @@ class ModifyElementAndHierarchyService {
             renameElement(newElementAndPath.element, newElementAndPath.newElementLabel)
         }
 
-        updateHierarchyIfNeeded(newElementAndPath)
+        if(updateHierarchyIfNeeded(newElementAndPath)){  //reload the cache if this returned true
+            elementService.reloadCache()
+        }
     }
 
     /**
@@ -45,7 +48,7 @@ class ModifyElementAndHierarchyService {
      * @param newPathElementList
      * @throws AuthenticatedUserRequired
      */
-    void updateHierarchyIfNeeded(NewElementAndPath newElementAndPath) throws AuthenticatedUserRequired,
+    boolean updateHierarchyIfNeeded(NewElementAndPath newElementAndPath) throws AuthenticatedUserRequired,
             ModifyElementAndHierarchyLoopInPathException {
 
         //represents the previous path as an element hierarchy list
@@ -70,6 +73,7 @@ class ModifyElementAndHierarchyService {
                 newPathLastElement.parentHierarchies.add(elementHierarchy)
 
                 childElement.childHierarchies.add(elementHierarchy)
+                return true
             } else {
                 throw new ModifyElementAndHierarchyLoopInPathException(pathWithLoop: pathWithLoop)
             }
@@ -82,6 +86,7 @@ class ModifyElementAndHierarchyService {
             elementHierarchy.parentElement = null
             elementHierarchy.childElement = null
             elementHierarchy.delete()
+            return true
 
         } else if (previousPathAsElementHierarchyList.size() > 0 && newPathAsElementList.size() > 0) {
             //last section of previous path represented as element hierarchy.  This represents what the parent-child
@@ -101,6 +106,7 @@ class ModifyElementAndHierarchyService {
                     oldParent.parentHierarchies.remove(previousPathLastElementHierarchy)
                     previousPathLastElementHierarchy.parentElement = newPathLastElement
                     newPathLastElement.parentHierarchies.add(previousPathLastElementHierarchy)
+                    return true
                 } else {
                     throw new ModifyElementAndHierarchyLoopInPathException(pathWithLoop: pathWithLoop)
                 }
@@ -108,6 +114,7 @@ class ModifyElementAndHierarchyService {
         } else {
             //both are empty and therefore the same; no change to be made
         }
+        return false
     }
 
     /**

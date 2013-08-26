@@ -10,16 +10,25 @@ import bard.db.enums.hibernate.ReadyForExtractionEnumUserType
 import bard.db.experiment.Experiment
 import bard.db.model.AbstractContext
 import bard.db.model.AbstractContextOwner
-import bard.db.project.ProjectContext
 
 class Assay extends AbstractContextOwner {
     public static final int ASSAY_NAME_MAX_SIZE = 1000
     private static final int ASSAY_VERSION_MAX_SIZE = 10
-    private static final int DESIGNED_BY_MAX_SIZE = 100
+    public static final int DESIGNED_BY_MAX_SIZE = 100
     private static final int MODIFIED_BY_MAX_SIZE = 40
     private static final int ASSAY_SHORT_NAME_MAX_SIZE = 250
 
-    // def aclUtilService
+
+    /**
+     This transient variable determines whether context items should be fully validated or not
+     This is a short term fix, until we implement the Guidance work, that Dan is working on
+     By default this is set to true and it is only used in  bard.db.registration.AssayContextItem#valueValidation(Errors errors)
+     This is not in the assayContextItem class because we would have to set it for every single context item that we do not want to validate.
+     Keeping it here means that it is located in one place.
+     */
+    boolean fullyValidateContextItems = true
+
+
     def capPermissionService
     AssayStatus assayStatus = AssayStatus.DRAFT
     String assayShortName
@@ -61,7 +70,7 @@ class Assay extends AbstractContextOwner {
         // the ' - ' is this issue in this case
         assayType(nullable: false)
         dateCreated(nullable: false)
-        lastUpdated(nullable:false)
+        lastUpdated(nullable: false)
         modifiedBy(nullable: true, blank: false, maxSize: MODIFIED_BY_MAX_SIZE)
     }
 
@@ -73,13 +82,19 @@ class Assay extends AbstractContextOwner {
         assayContexts(indexColumn: [name: 'DISPLAY_ORDER'], lazy: 'true', cascade: 'all-delete-orphan')
     }
 
-    static transients = ['assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
+    static transients = ['fullyValidateContextItems','assayContextItems', 'publications', 'externalURLs', 'comments', 'protocols', 'otherDocuments', 'descriptions', "disableUpdateReadyForExtraction"]
 
     def afterInsert() {
         Assay.withNewSession {
             capPermissionService?.addPermission(this)
         }
     }
+	
+	String getOwner(assay){
+		Assay.withNewSession {
+			return capPermissionService?.getOwner(this)
+		}
+	}
 
     List<AssayDocument> getPublications() {
         final List<AssayDocument> documents = assayDocuments.findAll { it.documentType == DocumentType.DOCUMENT_TYPE_PUBLICATION } as List<AssayDocument>

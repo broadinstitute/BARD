@@ -50,8 +50,10 @@ abstract class AbstractContextItem<T extends AbstractContext> {
 
         dateCreated(nullable: false)
         lastUpdated(nullable: true,)
+        //TODO: Why is the validation on the modifiedBy attribute?
         modifiedBy(nullable: true, maxSize: MODIFIED_BY_MAX_SIZE,
                 validator: { String field, AbstractContextItem instance, Errors errors ->
+
                     instance.valueValidation(errors)
                 })
 

@@ -1,6 +1,7 @@
 package dataexport.registration
 
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.registration.*
 import common.tests.XmlTestAssertions
@@ -67,13 +68,13 @@ class AssayExportHelperServiceUnitSpec extends Specification {
 
         where:
         label                 | results                                     | numItems | numMeasureRefs | map
-        "Minimal"             | ASSAY_CONTEXT_MINIMAL                       | 0        | 0              | [:]
-        "with name"           | ASSAY_CONTEXT_WITH_CONTEXT_NAME             | 0        | 0              | [contextName: 'contextName']
-        "with group"          | ASSAY_CONTEXT_WITH_CONTEXT_GROUP            | 0        | 0              | [contextGroup: 'contextGroup']
-        "with 1 contextItem"  | ASSAY_CONTEXT_WITH_ONE_CONTEXT_ITEM         | 1        | 0              | [:]
-        "with 2 contextItems" | ASSAY_CONTEXT_WITH_TWO_CONTEXT_ITEMS        | 2        | 0              | [:]
-        "with measureRefs"    | MINIMAL_ASSAY_CONTEXT_WITH_ONE_MEASURE_REF  | 0        | 1              | [:]
-        "with measureRefs"    | MINIMAL_ASSAY_CONTEXT_WITH_TWO_MEASURE_REFS | 0        | 2              | [:]
+        "Minimal"             | ASSAY_CONTEXT_MINIMAL                       | 0        | 0              | [contextType: ContextType.UNCLASSIFIED]
+        "with name"           | ASSAY_CONTEXT_WITH_CONTEXT_NAME             | 0        | 0              | [contextName: 'contextName',contextType: ContextType.UNCLASSIFIED]
+        "with group"          | ASSAY_CONTEXT_WITH_CONTEXT_GROUP            | 0        | 0              | [contextType: ContextType.BIOLOGY]
+        "with 1 contextItem"  | ASSAY_CONTEXT_WITH_ONE_CONTEXT_ITEM         | 1        | 0              | [contextType: ContextType.UNCLASSIFIED]
+        "with 2 contextItems" | ASSAY_CONTEXT_WITH_TWO_CONTEXT_ITEMS        | 2        | 0              | [contextType: ContextType.UNCLASSIFIED]
+        "with measureRefs"    | MINIMAL_ASSAY_CONTEXT_WITH_ONE_MEASURE_REF  | 0        | 1              | [contextType: ContextType.UNCLASSIFIED]
+        "with measureRefs"    | MINIMAL_ASSAY_CONTEXT_WITH_TWO_MEASURE_REFS | 0        | 2              | [contextType: ContextType.UNCLASSIFIED]
 
     }
 

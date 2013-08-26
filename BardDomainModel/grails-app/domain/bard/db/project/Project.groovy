@@ -11,10 +11,10 @@ import bard.db.model.AbstractContextOwner
 import bard.db.registration.ExternalReference
 
 class Project extends AbstractContextOwner {
-    private static final int PROJECT_NAME_MAX_SIZE = 256
-    private static final int MODIFIED_BY_MAX_SIZE = 40
-    private static final int DESCRIPTION_MAX_SIZE = 1000
-    private static final int GROUP_TYPE_MAX_SIZE = 20
+    public static final int PROJECT_NAME_MAX_SIZE = 256
+    public static final int MODIFIED_BY_MAX_SIZE = 40
+    public static final int DESCRIPTION_MAX_SIZE = 1000
+    public static final int GROUP_TYPE_MAX_SIZE = 20
     def capPermissionService
     String name
     ProjectGroupType groupType = ProjectGroupType.PROJECT

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class PersonControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl+ "person/"
+    static final String controllerUrl = getBaseUrl() + "person/"
     @Shared
     Map personId
     @Shared

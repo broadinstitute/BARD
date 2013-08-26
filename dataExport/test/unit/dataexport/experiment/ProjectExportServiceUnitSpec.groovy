@@ -1,6 +1,7 @@
 package dataexport.experiment
 
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.enums.DocumentType
 import bard.db.enums.ReadyForExtraction
 import bard.db.project.*
@@ -105,17 +106,17 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         where:
         label                         | results                        | numItems | map
-        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [:]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextName: 'contextName']
-        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextGroup: 'contextGroup']
-        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [:]
-        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [:]
+        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
+        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
+        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
+        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
     }
 
     void "generate ProjectExperiment #label"() {
         given:
         ProjectExperiment projectExperiment = ProjectExperiment.build(mapClosure.call())
-        numContext.times { ProjectExperimentContext.build(projectExperiment: projectExperiment) }
+        numContext.times { ProjectExperimentContext.build(projectExperiment: projectExperiment, contextType: ContextType.UNCLASSIFIED) }
 
         when:
         this.projectExportService.generateProjectExperiment(this.markupBuilder, projectExperiment)
@@ -149,17 +150,17 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         where:
         label                         | results                        | numItems | map
-        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [:]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextName: 'contextName']
-        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextGroup: 'contextGroup']
-        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [:]
-        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [:]
+        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
+        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
+        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
+        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
     }
 
     void "generate ProjectStep #label"() {
         given:
         ProjectStep projectStep = ProjectStep.build(map)
-        numContext.times { StepContext.build(projectStep: projectStep) }
+        numContext.times { StepContext.build(projectStep: projectStep, contextType: ContextType.UNCLASSIFIED) }
 
         when:
         this.projectExportService.generateProjectStep(this.markupBuilder, projectStep)
@@ -191,11 +192,11 @@ class ProjectExportServiceUnitSpec extends Specification {
 
         where:
         label                  | results                        | numItems | map
-        "Minimal"              | CONTEXT_MINIMAL                | 0        | [:]
-        "with contextName"     | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextName: 'contextName']
-        "with contextGroup"    | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextGroup: 'contextGroup']
-        "context with 1 item"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [:]
-        "context with 2 items" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [:]
+        "Minimal"              | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
+        "with contextName"     | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "with contextGroup"    | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
+        "context with 1 item"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
+        "context with 2 items" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
     }
 
     void "generate ProjectDocument #label"() {
@@ -223,10 +224,10 @@ class ProjectExportServiceUnitSpec extends Specification {
         final Project project = Project.build(map)
         numExtRef.times { ExternalReference.build(project: project) }
         numDoc.times { ProjectDocument.build(project: project) }
-        numPrjCtx.times { ProjectContext.build(project: project) }
+        numPrjCtx.times { ProjectContext.build(project: project, contextType: ContextType.UNCLASSIFIED) }
         numPrjExp.times {
             ProjectExperiment pe = ProjectExperiment.build(project: project)
-            numPrjExpCtx.times { ProjectExperimentContext.build(projectExperiment: pe) }
+            numPrjExpCtx.times { ProjectExperimentContext.build(projectExperiment: pe, contextType: ContextType.UNCLASSIFIED) }
         }
         numPrjStep.times { ProjectStep.build(previousProjectExperiment: project.projectExperiments.first(), nextProjectExperiment: project.projectExperiments.last()) }
 

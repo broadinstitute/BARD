@@ -12,6 +12,7 @@ modules = {
             resource id: 'bootstrap-css', url: '/js/jquery-ui-bootstrap/bootstrap/bootstrap.css'
         }
     }
+
     core {
         dependsOn 'jquery, jquery-ui, jquery-theme, jquery-validation-ui, datatables, jqueryform'
         resource url: '/css/datatables/demo_table_jui.css'
@@ -47,8 +48,8 @@ modules = {
     datatables {
         resource url: '/js/DataTables-1.9.3/media/js/jquery.dataTables.js'
     }
-    grailspagination{
-        resource url:'/css/grailspagination.css'
+    grailspagination {
+        resource url: '/css/grailspagination.css'
     }
     dynatree {
         dependsOn 'jquery, jquery-ui'
@@ -66,10 +67,14 @@ modules = {
     }
 
     assayshow {
-        dependsOn(['bootstrapplus', 'card'])
+        dependsOn(['bootstrapplus', 'card', 'sectionCounter'])
         resource url: '/js/dynatree-1.2.2/jquery.dynatree.js'
         resource url: '/js/cap/assay.show.js'
         resource url: '/css/measures-dynatree.css'
+    }
+
+    sectionCounter {
+        resource url: '/css/sectioncounter.css'
     }
 
     handlebars {
@@ -94,7 +99,7 @@ modules = {
     assaysummary {
         resource url: '/js/cap/editSummary.js'
     }
-    createProject{
+    createProject {
         resource url: '/js/cap/createProject.js'
     }
     projectsummary {
@@ -139,5 +144,9 @@ modules = {
         resource url: "/js/zynga-scroller-a44d7c2/Animate.js"
         resource url: "/js/zynga-scroller-a44d7c2/Scroller.js"
         resource url: "/js/zynga-scroller-a44d7c2/render.js"
+    }
+    assaycompare {
+        dependsOn 'core,bootstrap,bootstrapplus,card'
+        resource url: '/js/cap/assaycompare.js'
     }
 }

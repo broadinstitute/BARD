@@ -1,10 +1,13 @@
 package bard.db.project
 
+import acl.CapPermissionService
+import bard.db.enums.ContextType
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
 import bard.db.experiment.PubchemImportService
 import bard.db.experiment.ResultsService
+import bard.db.model.AbstractContextOwner
 import bard.db.registration.Assay
 import bard.db.registration.AssayDefinitionService
 import bard.db.registration.EditingHelper
@@ -31,28 +34,18 @@ class ExperimentController {
     SpringSecurityService springSecurityService
     PubchemImportService pubchemImportService
     def permissionEvaluator
+    CapPermissionService capPermissionService
 
     def create() {
         def assay = Assay.get(params.assayId)
         render renderEditFieldsForView("create", new Experiment(), assay);
-        // renderCreate(assay, new Experiment())
     }
 
     def edit() {
         def experiment = Experiment.get(params.id)
-
-        // renderEdit(experiment, experiment.assay)
         render renderEditFieldsForView("edit", experiment, experiment.assay);
     }
 
-//    def renderEdit(Experiment experiment, Assay assay) {
-//        render renderEditFieldsForView("edit", experiment, assay);
-//       // renderEditFieldsView("edit", experiment, assay);
-//    }
-
-//    def renderCreate(Assay assay, Experiment experiment) {
-//        renderEditFieldsView("create", experiment, assay);
-//    }
 
 
     def experimentStatus() {
@@ -79,7 +72,9 @@ class ExperimentController {
         JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experimentInstance.assay, false))
         boolean editable = canEdit(permissionEvaluator, springSecurityService, experimentInstance)
         boolean isAdmin = SpringSecurityUtils.ifAnyGranted('ROLE_BARD_ADMINISTRATOR')
+        String owner = capPermissionService.getOwner(experimentInstance)
         [instance: experimentInstance,
+                experimentOwner: owner,
                 measuresAsJsonTree: measuresAsJsonTree,
                 assayMeasuresAsJsonTree: assayMeasuresAsJsonTree,
                 editable: editable ? 'canedit' : 'cannotedit',
@@ -164,12 +159,24 @@ class ExperimentController {
     def editDescription(InlineEditableCommand inlineEditableCommand) {
         try {
             Experiment experiment = Experiment.findById(inlineEditableCommand.pk)
-            final String message = inlineEditableCommand.validateVersions(experiment.version, Project.class)
+            final String message = inlineEditableCommand.validateVersions(experiment.version, Experiment.class)
             if (message) {
                 conflictMessage(message)
                 return
             }
-            experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Experiment.DESCRIPTION_MAX_SIZE, inputValue.length())
+            if(maxSizeMessage){
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            experiment = experimentService.updateExperimentDescription(inlineEditableCommand.pk, inputValue)
+
+            if(experiment?.hasErrors()){
+                throw new Exception("Error while editing Experiment Description")
+            }
+
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.description)
 
         } catch (AccessDeniedException ade) {
@@ -189,7 +196,18 @@ class ExperimentController {
                 conflictMessage(message)
                 return
             }
-            experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inlineEditableCommand.value.trim())
+
+            final String inputValue = inlineEditableCommand.value.trim()
+            String maxSizeMessage = validateInputSize(Experiment.DESCRIPTION_MAX_SIZE, inputValue.length())
+            if(maxSizeMessage){
+                editExceedsLimitErrorMessage(maxSizeMessage)
+                return
+            }
+            experiment = experimentService.updateExperimentName(inlineEditableCommand.pk, inputValue)
+            if(experiment?.hasErrors()){
+                throw new Exception("Error while editing Experiment Name")
+            }
+
             generateAndRenderJSONResponse(experiment.version, experiment.modifiedBy, null, experiment.lastUpdated, experiment.experimentName)
 
         } catch (AccessDeniedException ade) {
@@ -224,6 +242,18 @@ class ExperimentController {
         }
     }
 
+    def editContext(Long id, String groupBySection) {
+        Experiment instance = Experiment.get(id)
+        if (!instance) {
+            // FIXME:  Should not use flash if we do not redirect afterwards
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'experiment.label', default: 'Experiment'), id])
+            return
+
+        }
+        AbstractContextOwner.ContextGroup contextGroup = instance.groupBySection(ContextType.byId(groupBySection?.decodeURL()))
+        render view: '../project/editContext', model: [instance: instance, contexts: [contextGroup]]
+    }
+
     def save() {
         def assay = Assay.get(params.assayId)
         boolean editable = canEdit(permissionEvaluator, springSecurityService, assay)
@@ -237,11 +267,9 @@ class ExperimentController {
         experiment.dateCreated = new Date()
         if (!validateExperiment(experiment)) {
             render renderEditFieldsForView("create", experiment, assay);
-            // renderCreate(assay, experiment)
-        } else {
+         } else {
             if (!experiment.save(flush: true)) {
                 render renderEditFieldsForView("create", experiment, assay);
-                //renderCreate(assay, experiment)
             } else {
                 experimentService.updateMeasures(experiment.id, JSON.parse(params.experimentTree))
                 redirect(action: "show", id: experiment.id)
@@ -259,15 +287,14 @@ class ExperimentController {
             return
         }
         if (!experiment.save(flush: true)) {
-            // renderEdit(experiment, experiment.assay)
             render renderEditFieldsForView("edit", experiment, experiment.assay);
         } else {
             redirect(action: "show", id: experiment.id)
         }
     }
 
-    def reloadResults() {
-        def experiment = Experiment.get(params.id)
+    def reloadResults(Long id) {
+        def experiment = Experiment.get(id)
         ExternalReference xref = experiment.externalReferences.find { it.extAssayRef.startsWith("aid=") }
         def aid = Integer.parseInt(xref.extAssayRef.replace("aid=",""))
 
@@ -282,12 +309,6 @@ class ExperimentController {
 
         return [view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree]]
     }
-//    def renderEditFieldsView(String viewName, Experiment experiment, Assay assay) {
-//        JSON experimentMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTree(experiment, false))
-//        JSON assayMeasuresAsJsonTree = new JSON(measureTreeService.createMeasureTreeWithSelections(assay, experiment, true))
-//
-//        render(view: viewName, model: [experiment: experiment, assay: assay, experimentMeasuresAsJsonTree: experimentMeasuresAsJsonTree, assayMeasuresAsJsonTree: assayMeasuresAsJsonTree])
-//    }
     private boolean validateExperiment(Experiment experiment) {
         println "Validating Experiment dates"
 

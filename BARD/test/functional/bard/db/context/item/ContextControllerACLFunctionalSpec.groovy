@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class ContextControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl + "context/"
+    static final String controllerUrl = getBaseUrl() + "context/"
 
     @Shared
     Map contextData

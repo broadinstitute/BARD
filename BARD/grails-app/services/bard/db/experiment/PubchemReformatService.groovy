@@ -3,6 +3,7 @@ package bard.db.experiment
 import au.com.bytecode.opencsv.CSVReader
 import au.com.bytecode.opencsv.CSVWriter
 import bard.db.dictionary.Element
+import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.registration.Assay
 import bard.db.registration.AssayContext
@@ -656,9 +657,9 @@ class PubchemReformatService {
     // recreate experiment measures on an already existing experiment/assay (Given a ResultMap)
     void recreateMeasures(Experiment experiment, ResultMap resultMap) {
         Collection<MappedStub> newMeasures = createMeasures(resultMap).collect { mapStub(it) }
-        for(m in newMeasures)
+        for (m in newMeasures)
         //println("newMeasure: ${m.resultType.label} children: ${m.children.collect {it.resultType.label} }")
-        recreateMeasures(experiment, newMeasures)
+            recreateMeasures(experiment, newMeasures)
     }
 
     // recreate experiment measures on an already existing experiment/assay
@@ -669,7 +670,6 @@ class PubchemReformatService {
             measureByKey[makeMeasureKey(measure)] = measure
             //println("existing measure: ${measure.resultType.label}")
         }
-
 
         // first, make sure all of the measures we want exist
         verifyOrCreateMeasures(newMeasures, measureByKey, assay)
@@ -771,7 +771,7 @@ class PubchemReformatService {
     void createAssayContextForResultType(Assay assay, Collection<Element> attributeKeys, Map<Element, Collection<String>> attributeValues, Collection<Element> freeAttributes, Measure measure) {
         AssayContext context = new AssayContext()
         context.contextName = "annotations for ${measure.resultType.label}";
-        context.contextGroup = "project management> experiment>";
+        context.contextType = ContextType.EXPERIMENT
 
         for (attribute in attributeKeys) {
             if (attribute.id == SCREENING_CONCENTRATION_ID) {
@@ -783,6 +783,7 @@ class PubchemReformatService {
                 item.attributeElement = attribute
                 item.valueMin = 0
                 item.valueMax = maxConcentration
+                item.valueDisplay = item.deriveDisplayValue()
 
                 context.addToAssayContextItems(item)
             } else {

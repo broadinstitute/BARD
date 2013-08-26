@@ -1,5 +1,6 @@
 package dataexport.experiment
 
+import bard.db.enums.ContextType
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentContext
 import bard.db.experiment.ExperimentContextItem
@@ -81,11 +82,11 @@ class ExperimentExportServiceUnitSpec extends Specification {
 
         where:
         label                         | results                        | numItems | map
-        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [:]
-        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextName: 'contextName']
-        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextGroup: 'contextGroup']
-        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [:]
-        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [:]
+        "Minimal"                     | CONTEXT_MINIMAL                | 0        | [contextType: ContextType.UNCLASSIFIED]
+        "Minimal with name"           | CONTEXT_MINIMAL_WITH_NAME      | 0        | [contextType: ContextType.UNCLASSIFIED,contextName: 'contextName']
+        "Minimal with group"          | CONTEXT_MINIMAL_WITH_GROUP     | 0        | [contextType: ContextType.BIOLOGY]
+        "Minimal with 1 contextItem"  | CONTEXT_MINIMAL_WITH_ONE_ITEM  | 1        | [contextType: ContextType.UNCLASSIFIED]
+        "Minimal with 2 contextItems" | CONTEXT_MINIMAL_WITH_TWO_ITEMS | 2        | [contextType: ContextType.UNCLASSIFIED]
     }
 
     void "test generate ExperimentMeasure #label"() {
@@ -111,7 +112,7 @@ class ExperimentExportServiceUnitSpec extends Specification {
         given: "An Experiment"
         Experiment experiment = Experiment.build(map)
         numExtRef.times { ExternalReference.build(experiment: experiment) }
-        numExpCtx.times { ExperimentContext.build(experiment: experiment) }
+        numExpCtx.times { ExperimentContext.build(experiment: experiment, contextType: ContextType.UNCLASSIFIED) }
         numExpMsr.times { ExperimentMeasure.build(experiment: experiment) }
 
         when: "We attempt to generate an experiment XML document"

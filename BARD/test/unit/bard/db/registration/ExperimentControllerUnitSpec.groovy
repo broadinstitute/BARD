@@ -1,5 +1,6 @@
 package bard.db.registration
 
+import acl.CapPermissionService
 import bard.db.enums.ExperimentStatus
 import bard.db.experiment.Experiment
 import bard.db.experiment.ExperimentService
@@ -37,6 +38,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
 
         ExperimentService experimentService = Mock(ExperimentService)
         AssayDefinitionService assayDefinitionService = Mock(AssayDefinitionService)
+        controller.capPermissionService = Mock(CapPermissionService)
         controller.experimentService = experimentService
         controller.assayDefinitionService = assayDefinitionService
     }
@@ -395,6 +397,8 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
 
     def 'test show'() {
         setup:
+        CapPermissionService capPermissionService = Mock(CapPermissionService)
+        controller.capPermissionService = capPermissionService
         controller.measureTreeService = Mock(MeasureTreeService)
         controller.measureTreeService.createMeasureTree(_, _) >> []
 
@@ -404,6 +408,7 @@ class ExperimentControllerUnitSpec extends AbstractInlineEditingControllerUnitSp
         def m = controller.show()
 
         then:
+        capPermissionService.getOwner(_) >> { 'owner' }
         m.instance == exp
     }
 }

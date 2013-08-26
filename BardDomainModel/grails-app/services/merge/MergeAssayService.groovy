@@ -16,7 +16,6 @@ import bard.db.model.AbstractContextItem
 import groovy.sql.Sql
 import bard.db.experiment.ExperimentMeasure
 import bard.db.registration.AssayContextMeasure
-import bard.db.model.AbstractDocument
 import org.apache.commons.lang3.builder.EqualsBuilder
 import org.apache.commons.math3.util.Precision
 import bard.db.enums.AssayStatus
@@ -97,7 +96,7 @@ class MergeAssayService {
                 assayContextItemNotInKeep++
                 // At the point we should be able to find a corresponding context
                 AssayContext context = assayWillKeep.assayContexts.find {
-                    item.assayContext.contextName == it.contextName && item.assayContext.contextGroup == it.contextGroup
+                    item.assayContext.contextName == it.contextName && item.assayContext.contextType == it.contextType
                 }
                 if (!context) {
                     // Add assay context to assay that will be kept if there is no one exist
@@ -137,9 +136,9 @@ class MergeAssayService {
 
     private void createExperimentContextAndItem(AssayContext assayContext, String modifiedBy) {
         for (Experiment experiment : assayContext.assay.experiments) {
-            def foundExperimentContext = experiment.experimentContexts.find { it?.contextName == assayContext.contextName && it?.contextGroup == assayContext.contextGroup }
+            def foundExperimentContext = experiment.experimentContexts.find { it?.contextName == assayContext.contextName && it?.contextType == assayContext.contextType }
             if (!foundExperimentContext) {
-                foundExperimentContext = new ExperimentContext(contextName: assayContext?.contextName, contextGroup: assayContext?.contextGroup, experiment: experiment)
+                foundExperimentContext = new ExperimentContext(contextName: assayContext?.contextName, contextType: assayContext?.contextType, experiment: experiment)
                 experiment.addToExperimentContexts(foundExperimentContext)
                 foundExperimentContext.experiment = experiment
                 foundExperimentContext.modifiedBy = modifiedBy + "-addedFromACI-${assayContext.id}"
@@ -194,7 +193,6 @@ class MergeAssayService {
         }
         println("Total candidate experiments: ${experiments.size()}, added ${addExperimentToKept}")
         assayWillKeep.save(failOnError: true)
-        // Assay.findById(assayWillKeep.id)
     }
 
     //assay documents:  check for exact string matches, copy over everything that does not match
@@ -381,7 +379,7 @@ class MergeAssayService {
         assays.each { Assay assay ->
             assay.assayStatus = AssayStatus.RETIRED
             assay.modifiedBy = modifiedBy
-            if (!assay.save()) {
+            if (!assay.save(failOnError: true)) {
                 println("Error happened when update assay status ${assay.errors}")
             }
         }

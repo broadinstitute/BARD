@@ -13,6 +13,9 @@ class AssayContext extends AbstractContext {
 
     Assay assay
 
+
+
+
     List<AssayContextItem> assayContextItems = []
     Set<AssayContextMeasure> assayContextMeasures = [] as Set
 
@@ -40,7 +43,7 @@ class AssayContext extends AbstractContext {
     }
 
     public AssayContext clone(Assay newOwner) {
-        AssayContext newContext = new AssayContext(contextName: contextName, contextGroup: contextGroup);
+        AssayContext newContext = new AssayContext(contextName: contextName, contextType: contextType);
 
         for(item in assayContextItems) {
             item.clone(newContext)
@@ -59,5 +62,10 @@ class AssayContext extends AbstractContext {
     @Override
     void addContextItem(AbstractContextItem item) {
         this.addToAssayContextItems(item)
+    }
+
+    @Override
+    Class<? extends AbstractContextItem> getItemSubClass() {
+        return AssayContextItem
     }
 }

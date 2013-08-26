@@ -15,6 +15,7 @@
         <g:form class="form-horizontal" action="save">
             <g:hiddenField name="assayId" value="${document?.assayId}"/>
             <g:hiddenField name="projectId" value="${document?.projectId}"/>
+            <g:hiddenField name="experimentId" value="${document?.experimentId}"/>
 
             <g:render template="editProperties" model="${[document: document]}"/>
 

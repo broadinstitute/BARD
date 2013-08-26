@@ -4,6 +4,7 @@ import bard.db.people.Person
 import bard.db.people.PersonRole
 import bard.db.people.Role
 import grails.plugin.remotecontrol.RemoteControl
+import grails.util.BuildSettingsHolder
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import spock.lang.Specification
@@ -29,9 +30,10 @@ import wslite.rest.RESTClient
  */
 @Unroll
 abstract class BardControllerFunctionalSpec extends Specification {
+
+
     static RemoteControl remote = new RemoteControl()
 
-    static final String baseUrl = remote { ctx.grailsApplication.config.grails.serverURL }
     static final String TEAM_A_1_USERNAME = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.teamA_1.username }
     static final String TEAM_A_1_EMAIL = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.teamA_1.email }
     static final String TEAM_A_1_ROLE = remote { ctx.grailsApplication.config.CbipCrowd.mockUsers.teamA_1.roles.get(0) }
@@ -70,7 +72,9 @@ abstract class BardControllerFunctionalSpec extends Specification {
 
     static final String dbpassword = remote { ctx.grailsApplication.config.dataSource.password }
 
-
+    static String getBaseUrl() {
+        return BuildSettingsHolder.settings?.functionalTestBaseUrl
+    }
 
     static RESTClient getRestClient(String baseUrl, String action, String team, String teamPassword) {
 
@@ -85,6 +89,8 @@ abstract class BardControllerFunctionalSpec extends Specification {
         return client
     }
     static void createTeamsInDatabase(String teamuserName, String teamEmail, String teamRole, String reAuthenticateWith) {
+        assert teamuserName != null
+
         remote.exec({
             SpringSecurityUtils.reauthenticate(reAuthenticateWith, null)
             Person person = Person.findByUserName(teamuserName)

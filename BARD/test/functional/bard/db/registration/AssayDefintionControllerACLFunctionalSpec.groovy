@@ -3,6 +3,7 @@ package bard.db.registration
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
+import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
 import bard.db.model.AbstractContextOwner
 import groovy.sql.Sql
@@ -34,7 +35,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Unroll
 class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctionalSpec {
-    static final String controllerUrl = baseUrl +  "assayDefinition/"
+    static final String controllerUrl = getBaseUrl() +  "assayDefinition/"
 
     @Shared
     Map assayData
@@ -194,12 +195,12 @@ class AssayDefintionControllerACLFunctionalSpec extends BardControllerFunctional
     def 'test editContext #desc'() {
         given:
         long assayId = assayData.id
-        String sectionKey = AbstractContextOwner.SECTION_BIOLOGY
+        String groupBySection = ContextType.BIOLOGY.id
         RESTClient client = getRestClient(controllerUrl,"editContext", team, teamPassword)
 
         when:
         def response = client.post() {
-            urlenc id: assayId, sectionKey: sectionKey
+            urlenc id: assayId, groupBySection: groupBySection
         }
 
         then:
