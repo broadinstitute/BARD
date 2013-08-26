@@ -126,6 +126,7 @@ switch (Environment.current) {
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
                     ]
                 }
@@ -157,6 +158,7 @@ switch (Environment.current) {
                             '/document/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/assayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/experiment/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/moveExperiments/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/**': 'JOINED_FILTERS,-basicAuthenticationFilter,-basicExceptionTranslationFilter'
                     ]
                 }
