@@ -1,15 +1,12 @@
 package molspreadsheet
-
 import bard.core.rest.spring.CompoundRestService
 import bard.core.rest.spring.SunburstCacheService
 import bard.core.rest.spring.compounds.CompoundSummary
 import bard.core.rest.spring.compounds.TargetClassInfo
+import bard.core.rest.spring.util.RingNode
 import grails.converters.JSON
 import grails.plugin.spock.IntegrationSpec
-import bard.core.rest.spring.util.RingNode
 import groovy.json.JsonBuilder
-import spock.lang.IgnoreRest
-
 /**
  * Created with IntelliJ IDEA.
  * User: balexand
@@ -23,14 +20,32 @@ class RingNodeIntegrationSpec  extends IntegrationSpec {
     CompoundRestService compoundRestService
 
     void "test generateAccessionIdentifiers"(){
+        //  NCGC is always changing their IDs, so we have to go find a protein. Not just any protein will do, however,
+        //   for it has to be one with hits. Therefore we take the first hundred by biology values, pull out all the
+        //   proteins and send them all over. Hopefully one of them (at least) will have a few hits, otherwise this
+        //   test will fail
         given:
         String ncgcBaseURL = applicationContext.getBean("grailsApplication").config.ncgc.server.root.url
-        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology?top=10", String.class)
+        def result = this.compoundRestService.getForObject("${ncgcBaseURL}/biology?top=100", String.class)
         def resultJSON = JSON.parse(result)
-        final List<Long> bids = [(resultJSON.collection[0] - '/biology/').toLong()]
+        final List<Long> bids = []
+        resultJSON.collection.each{
+            bids << (it - '/biology/').toLong()
+        }
+        // Only proteins work!
+        List<String> bidForProteins = []
+        for ( Long bid in bids) {
+            String resultString = this.compoundRestService.getForObject("${ncgcBaseURL}/biology/${bid}?expand=true", String.class)
+            if (resultString.contains("PROTEIN"))   {
+                bidForProteins << bid  as String
+            }
+        }
+
 
         when:
-        List<String> accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bids, "hits", [:])
+        // But not only proteins – we must have one with hits!
+        List<String> accessionIdentifiers  = []
+        accessionIdentifiers  = ringManagerService.generateAccessionIdentifiers (bidForProteins, "hits", [:])
 
         then:
         accessionIdentifiers.size()  > 0
