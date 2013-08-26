@@ -26,6 +26,10 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     @Shared
     List<Long> CAP_ADIDS = [5168, 5981, 5982]
+    String FREE_TEXT_SEARCH_STRING = "dna repair"
+
+
+
 
     void "searchAssaysByCapIds #label"() {
         when:
@@ -372,7 +376,7 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
 
     public void "testServices Free Text Search"() {
         given:
-        SearchParams sp = new SearchParams("Scarb1");
+        SearchParams sp = new SearchParams(FREE_TEXT_SEARCH_STRING);
         sp.setSkip(new Long(0));
         sp.setTop(new Long(10));
         when:
@@ -385,10 +389,10 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
     void "test free text Assay search with filters"() {
         given: "A GO biological term filters"
         List<String[]> filters = []
-        filters.add(["gobp_term", "cholesterol efflux"] as String[])
+        filters.add(["gobp_term", "cell death"] as String[])
 
-        and: "A search parameter is constructed using the filters and the search string 'Scarb1'"
-        SearchParams searchParams = new SearchParams("Scarb1", filters);
+        and: "A search parameter is constructed using the filters and the search string 'dna repair'"
+        SearchParams searchParams = new SearchParams(FREE_TEXT_SEARCH_STRING, filters);
         when: "The search method of a AssayService is invoked with the search params constructed above"
         AssayResult searchResult = this.assayRestService.findAssaysByFreeTextSearch(searchParams)
         and: "We collect all of the assays into a collection"
@@ -442,13 +446,12 @@ class AssayRestServiceIntegrationSpec extends IntegrationSpec {
      *
      */
     void "test REST Assay Service #label #seachString with paging"() {
-        given: "A search string of 'Scarb1' and two Search Params, Params 1 has skip=0 and top=4, params2 has skip=4 and top=10"
-        final String searchString = "Scarb1"
-        SearchParams params1 = new SearchParams(searchString)
+        given: "A search string of 'DNA repair' and two Search Params, Params 1 has skip=0 and top=4, params2 has skip=4 and top=10"
+        SearchParams params1 = new SearchParams(FREE_TEXT_SEARCH_STRING)
         params1.setSkip(0)
         params1.setTop(4);
 
-        SearchParams params2 = new SearchParams(searchString)
+        SearchParams params2 = new SearchParams(FREE_TEXT_SEARCH_STRING)
         params2.setSkip(4)
         params2.setTop(10);
 
