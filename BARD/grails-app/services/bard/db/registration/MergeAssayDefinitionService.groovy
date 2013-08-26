@@ -144,10 +144,40 @@ class MergeAssayDefinitionService {
         return errorMessages
     }
 
+    void validateExperimentsToMerge(Assay oldAssay, List<Experiment> experiments) {
+        List<String> errorMessages = []
+        for (Experiment experiment : experiments) {
+            if (experiment?.assay?.id != oldAssay?.id) {
+                errorMessages.add("Experiment EID: ${experiment?.id} , does not belong to Assay ADID: ${oldAssay?.id}")
+            }
+        }
+        if (errorMessages) {
+            throw new RuntimeException(org.apache.commons.lang.StringUtils.join(errorMessages, ","))
+        }
+    }
+
+
+    Assay moveExperimentsFromAssay(Assay sourceAssay, Assay targetAssay,
+                                   List<Experiment> experiments) {
+        validateExperimentsToMerge(sourceAssay, experiments)
+        targetAssay.fullyValidateContextItems = false
+
+        String modifiedBy = springSecurityService.principal?.username
+        mergeAssayService.moveExperiments(experiments,targetAssay,modifiedBy)
+        println("end handleExperiments")
+        sessionFactory.currentSession.flush()
+       // def session, Assay sourceAssay, Assay targetAssay, List<Experiment> sourceExperiments, String modifiedBy
+        mergeAssayService.handleMeasuresForMovedExperiments(sessionFactory.currentSession,sourceAssay,targetAssay,experiments,modifiedBy)
+        sessionFactory.currentSession.flush()
+
+        return Assay.findById(targetAssay.id)
+
+    }
+
     public Assay mergeAllAssays(final Assay targetAssay, final List<Assay> assaysToMerge) {
         println("start handleExperiments")
         //Turn full validation off for this assay so that u can validate the context items
-        targetAssay.fullyValidateContextItems=false
+        targetAssay.fullyValidateContextItems = false
         String modifiedBy = springSecurityService.principal?.username
         mergeAssayService.handleExperiments(assaysToMerge, targetAssay, modifiedBy)     // associate experiments with kept
         println("end handleExperiments")
