@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Tautomerization - Tautomers</title>
+<link rel="stylesheet" type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+<h1>Tautomers</h1>
+
+<h2><a class="anchor" name="tautomer"></a>Tautomerization</h2>
+<p>Tautomers are structural isomers of organic compounds that are in dynamic equilibrium due to the migration of a proton. The isomerization reaction by which tautomers are interconverted is called: tautomerization. 
+</p>
+<img src="images/tautomerization.png"/>
+<p>
+<small>The X, Y, Z atoms are generally any of C, H, O, or S, and H becomes an electrophile during isomerization. When the electrophile is H<sup>+</sup>, isomerization is also known as "prototropy".</small>
+</p>
+<p>In solutions, in which tautomerization is possible, a chemical equilibrium of the isomers will be reached while the reaction results in the formal migration of a hydrogen atom or proton accompanied by a switch of a single bond and adjacent double bond. Commonly, the catalysts of these reactions are acids or bases. 
+</p>
+<img src="images/equilibrium.png"/>
+
+<h2><a class="anchor" name="plugin"></a>Tautomer Generator Plugin</h2>
+<p>Different tautomers of a compound can be generated with the help of
+the Tautomer Generator Plugin. Tautomer Generator Plugin first identifies possible proton donors and acceptors in a molecule and finds tautomerization paths between them. Depending on the desired operation, 
+<ul>
+<li>it combines the paths into regions (<i>Generic tautomer</i>),</li> 
+<li>combinatorially generates all possible tautomeric forms (<i>All tautomers</i>),</li> 
+<li>filters and ranks enumerated isomers (<i>Major tautomer</i> and <i>Dominant tautomer distribution</i>);</li> 
+<li>furthermore, it provides "general" and "rational" <i>Canonical tautomers</i>.</li>
+</ul>
+<b>General canonical tautomers</b> are evaluated by the systematic rearrangement of single and double bonds in the available tautomeric regions. <a class="anchor" name="rational"></a>Using <b>rational canonical tautomer</b> option, the tautomerization products are generated according to empirical rules. Rational tautomer generation narrows down the possible tautomerization paths and leads to chemically more feasible products.    
+</p>
+<a href="isomers.html#tautomer" target="blank">See Tautomer Generator Plugin options</a>
+
+<h4>Comparison of "general" and "rational" canonical tautomers of tautomer molecules</h4> 
+<p>The example below illustrates that "general" and "rational" canonical tautomers can differ in number.</p>
+<a href="images/rational_general_canonical.png" title="Click to open in new tab" target="blank"><img src="images/rational_general_canonical.png" width="600" height="261"/></a>
+<p>
+Rational canonical tautomer generation classifies isomers according to structural similarities: isomers in a group can convert into each other by simple low energy transformations, while transformation between the isomers of two different groups requires higher energy steps (e.g., breaking/forming aromatic system). 
+</p>
+<p>The following image shows the previous example from a different angle.<br>
+In line with the definition of tautomerization, all isomers of a compound are in equilibrium, e.g., isomer <b>B</b> - outlined in red - is in equilibrium with its seven tautomers via multiple steps. Note that isomer <b>G</b> or <b>H</b> can transform into isomer <b>E</b> or <b>F</b> only in multiple steps through isomer <b>D</b>.
+</p>
+<a href="images/rational_group.png" title="Click to open in new tab" target="blank"><img src="images/rational_group.png" width="600" height="176"/></a>
+
+</body>
+</html>

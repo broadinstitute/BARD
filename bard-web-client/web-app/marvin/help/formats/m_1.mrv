@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<cml>
+<MDocument>
+  <MChemicalStruct>
+    <molecule molID="m1">
+      <atomArray
+          atomID="a1 a2 a3 a4 a5 a6 a7 a8"
+          elementType="C C C C C C C C"
+          x2="-5.28000020980835 -3.946321087980314 -2.6126419661522786 -1.2789628443242427 0.0547162775037926 1.3883953993318285 2.722074521159864 4.0557536429878995"
+          y2="4.235000133514404 5.005000133514404 4.235000133514403 5.005000133514403 4.2350001335144025 5.005000133514402 4.235000133514402 5.005000133514401"
+          />
+      <bondArray>
+        <bond atomRefs2="a1 a2" order="1" />
+        <bond atomRefs2="a2 a3" order="2" />
+        <bond atomRefs2="a3 a4" order="1" />
+        <bond atomRefs2="a4 a5" order="2" />
+        <bond atomRefs2="a5 a6" order="1">
+          <bondStereo convention="MDL" conventionValue="4" />
+        </bond>
+        <bond atomRefs2="a6 a7" order="2" />
+        <bond atomRefs2="a7 a8" order="1" />
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+</cml>

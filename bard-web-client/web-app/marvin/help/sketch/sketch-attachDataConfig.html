@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Configure the Attach Data Dialog in MarvinSketch</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Configure the Attach Data Dialog in MarvinSketch</h1>
+<h3>The Schema definition</h3>
+<p>The XML Schema Definition file of the configuration xml can be downloaded from this <a href="sketch-basic_files/AttachDataDialogConfig.xsd">link</a>.
+<p>With the help of the XSD file, you can validate your configuration before applying it to
+the MarvinSketch application. You can also find information about the usable elements, and attributes
+in the documentation sections of the definition file.
+<h3>The default AttachData dialog configuration</h3>
+<p>The default configuration becomes active when no user configuration is found.
+If a user configuration file is in the [.]chemaxon directory inside the home directory of
+the user with the name "AttachDataDialog.xml" can be found, then the configuration defined 
+in the file will be used, and the default configuration will not take effect.
+<p>
+Contents of the default configuration:
+<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br/>
+&lt;AttachDataDialogConfig<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns="AttachDataDialogConfig"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;xsi:schemaLocation="AttachDataDialogConfig AttachDataDialogConfig.xsd "&gt;<br/>
+&lt;context name="Atom"&gt;&lt;/context&gt;<br/>
+&lt;context name="Bond"&gt;&lt;/context&gt;<br/>
+&lt;context name="Single Bond"&gt;&lt;/context&gt;<br/>
+&lt;context name="Double Bond"&gt;&lt;/context&gt;<br/>
+&lt;context name="Fragment"&gt;&lt;/context&gt;<br/>
+&lt;context name="Group" displayName="Group (Selection)"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="COEFF"/&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="Stoichiometry"/&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="[DUP]"/&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="REAGENT"/&gt;<br/>
+&lt;/context&gt;<br/>
+&lt;/AttachDataDialogConfig&gt;<br/></code>
+
+<h3>A complex example configuration file</h3>
+<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br/>
+&lt;AttachDataDialogConfig<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns="AttachDataDialogConfig"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;xsi:schemaLocation="AttachDataDialogConfig AttachDataDialogConfig.xsd "&gt;<br/>
+&lt;context name="Atom"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="foo" defaultTag="f" multipleValuesEnabled="false" valueFieldEditable="false"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar1&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar2&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar3&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u1&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u2&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dataname&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="foo2" multipleValuesEnabled="true"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar2&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar4&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u1&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u3&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dataname&gt;<br/>
+&lt;/context&gt;<br/>
+&lt;context name="Group" displayName="Group (Selection)" nameFieldEditable="false"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="foo"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar3&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar4&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;bar5&lt;/value&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u1&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u3&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;unit&gt;u4&lt;/unit&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/dataname&gt;<br/>
+&lt;/context&gt;<br/>
+&lt;context name="Bond"/&gt;<br/>
+&lt;context name="Single Bond"&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;dataname textRepresentation="foooo"/&gt;<br/>
+&lt;/context&gt;<br/>
+&lt;/AttachDataDialogConfig&gt;<br/></code><br/><br/>
+
+<p>The result of this configuration can be seen in the dialog.<br>
+With this file the following have been configured:
+<ul>
+<li>The context field will have four values: the Atom, Group, Bond, Single Bond</li>
+<li>When the Atom context is selected, the Name combo box will have the following values set: editable empty field, foo, foo2</li>
+<li>When the Atom context is selected, and the value foo is selected in the Name combo box, the Value field will not be editable</li>
+<li>When the Group context is selected, the Name combo box will have the following value set: foo</li>
+<li>When the Group  context is selected, the Name combo box will not be editable</li>
+<li>When the Bond context is selected, the Name combo box will only contain the editable empty field</li>
+<li>When the Single Bond context is selected, the Name combo box will have the editable empty field, and the foooo name set</li>
+<li>In one session if the user enters something into the editable empty field, then that value will be added to the list of names belonging to the context. These values will be missing after restarting the application.</li>
+<li>Same names in the name field are independent from each other, if they are in a different context. Same names inside the same context will cause confusion, and maybe malfunction.</li>
+<li>After selecting the name, the Value field will load the defined values in the given Context for the specified name, if there are any.</li>
+<li>If the multipleValuesEnabled attribute of the namedata element is set to true, then the user can select more than one value in the Values field, otherwise only one value can be selected.</li>
+<li>If the defaultTag attribute is set for the dataname element, and the name is selected, then the Tag field will be filled with its defaultTag. (Tag can be of a single character length, this is only checked by the GUI.)</li>
+<li>The Values field also has an empty editable field, newly entered values work the same as by the Name field.</li>
+<li>The Unit field also has an empty editable field, newly entered values work the same as by the Name field.</li>
+</ul>
+</body>
+</html>

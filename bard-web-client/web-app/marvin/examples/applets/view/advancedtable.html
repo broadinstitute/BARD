@@ -1,0 +1,100 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Creating an advanced molecule table</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Creating an advanced molecule table</h1>
+
+In this example two downloaded and two inline molecules are placed into a 2x2 molecule table,
+each scaled to occupy 150x150 pixels.
+The cells are numbered from zero, in left to right, up to down order.
+
+<p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mview_begin("../../..", 300, 300);
+mview_param("rows", "2");
+mview_param("cols", "2");
+mview_param("cell0", "|../../../mols-2d/caffeine.csmol");
+mview_param("cell1", "|O[C@H](\C=C\[C@@H](O)C1=CC=CC=C1)C2=CC=CC=C2");
+mview_param("cell2", "|Ethane\n"
++"  Marvin  07119915552D\n"
++"\n"
++"  2  1  0  0  0  0  0  0  0  0999 V2000\n"
++"   -0.5625    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n"
++"   -0.5625    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n"
++"  1  2  1  0  0  0  0\n"
++"M  END");
+mview_param("cell3", "|C[C@]12CC[C@@H]3[C@H](CC[C@H]4CC(=O)C(\C[C@]34C)=C\O)[C@@H]1CCC(=O)O2");
+mview_end();
+//-->
+</script>
+</center>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">mview_begin(&quot;../../..&quot;, 300, 300);
+mview_param(&quot;rows&quot;, &quot;2&quot;);
+mview_param(&quot;cols&quot;, &quot;2&quot;);
+mview_param(&quot;cell0&quot;, &quot;|../../../mols-2d/caffeine.csmol&quot;);
+mview_param(&quot;cell1&quot;, &quot;|O[C@H](\C=C\[C@@H](O)C1=CC=CC=C1)C2=CC=CC=C2&quot;);
+mview_param(&quot;cell2&quot;, &quot;|Ethane\n&quot;
++&quot;  Marvin  07119915552D\n&quot;
++&quot;\n&quot;
++&quot;  2  1  0  0  0  0  0  0  0  0999 V2000\n&quot;
++&quot;   -0.5625    1.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;
++&quot;   -0.5625    0.2500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n&quot;
++&quot;  1  2  1  0  0  0  0\n&quot;
++&quot;M  END&quot;);
+mview_param(&quot;cell3&quot;, &quot;|C[C@]12CC[C@@H]3[C@H](CC[C@H]4CC(=O)C(\C[C@]34C)=C\O)[C@@H]1CCC(=O)O2&quot;);
+mview_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.rows"><code>rows</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cols"><code>cols</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cell"><code>cell0</code></a></li>
+</ul>
+
+<p>
+The &quot;<code>|</code>&quot; characters before the Molfile names/contents
+and SMILES strings are separator characters.
+They seem to be superfluous now, because each cell contains only one
+object, no need to separate anything.
+But you will see their significance in the forthcoming examples.
+
+<p>
+This is only a very basic example.
+In reality, the greatest advantages of a molecule table over an html table
+with many small applets can be seen if you have a large number of molecules.
+This may be the case if the molecules are the result of a database search.
+100 separate molecule applets consumes much more memory and are much slower
+then one molecule table with 100 molecules.
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+
+If you have a large number of molecules, it would be nice
+if the user would see some additional information next to the molecule.
+You will see how to do this and even more in the
+<a HREF="advancedcomponents.html">next example.</a>
+
+</body>
+</html>

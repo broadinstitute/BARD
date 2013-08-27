@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customization active="default">
+  <scheme id="default" name="Marvin">
+    <modify path="toolbar/atoms" row="0"/>
+    <modify path="toolbar/tools" row="0"/>
+    <modify path="toolbar/templates" row="0"/>
+    <modify path="toolbar/chemical" row="0"/>
+    <modify path="toolbar/markush" row="0"/>
+    <modify path="toolbar/mytemplates" row="0"/>
+    <modify path="toolbar/general" row="0"/>
+    <modify path="toolbar/edit3D" row="0"/>
+    <add path="popup/atom">
+      <item id="foo"/>
+      <item id="toggle"/>
+      <item id="radio"/>
+    </add>
+    <order path="popup/atom" itemorder="stereo-menu/foo/toggle/radio/atomCharge/atom-valence/radical-menu/atomIsotope/atomMap/atomRgroup/rgroupAttachmentPoint/atomRgroupAttachment/atomLinkNode/attachmentPoint/sep-4/cut/copy/copyAs/paste/delete/sep-1/fixStructure/createSGroup/editSGroup/ungroupSGroup/contractSGroup/expandSGroup/mergeBrackets/sep-2/structure-add-menu/structure-remove-menu/editData/sep-3/branchAtom/format/addToMyTemplates/editAtomProperties"/>
+  </scheme>
+</customization>

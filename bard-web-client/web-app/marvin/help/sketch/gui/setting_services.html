@@ -1,0 +1,216 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../../marvinmanuals.css">
+<title>Integrate third-party services into Marvin</title>
+</head>
+<body>
+<center>
+
+<h1>Marvin's Services Module</h1>
+
+</center>
+
+<h2>Contents</h2>
+<ul>
+	<li><a href="#setservice">Set Services</a></li>
+	<li>Settings of the following service types
+	<ul>
+		<li><a href="#local">Local Service</a></li>
+		<li><a href="#http">HTTP Service</a></li>
+		<li><a href="#soap">SOAP Service</a></li>
+	</ul>
+	</li>
+	<li><a href="#export">Export and Import Service configurations</li>
+	<li>Usage
+	<ul>
+	<li><a href="../../calculations/services_menu.html" target="_blank">Use Services from MarvinSketch</a></li>
+</ul></li></ul>
+
+<center>
+<div class="lenia">&nbsp;</div>
+</center>
+
+<h2>Marvin Services</h2>
+
+<p>
+The <a href="../../developer/services.html">Services module</a> provides seamless integration of 
+<a href="#thirdparty">third-party calculations</a><sup>*</sup> into Marvin. The guide below 
+describes how to integrate JAVA based local services or different webservices via MarvinSketch GUI. 
+You can find and use the adapted services under the <a href="../../calculations/services_menu.html">Tools > Services</a> 
+menu of MarvinSketch. <b>Note</b>: When no Services are set in MarvinSketch, the <b>Tools</b> > <b>Services</b> menu is inactive.</p>
+ 
+</p>
+ 
+<h2><a class="anchor" name="setservice"></a>Set Services</h2>
+
+<ol>
+	<li>Select <b>Edit</b> > <b>Preferences</b> > <a href="dialogs.html#services"><i>Services</a></i> tab;
+	<li>Click <i>Add new Service...</i> button;
+	<p><img src="gui-files/dialogs/preferences5.png" width="" height=""></p>
+	<li>Select the requested service:
+	<ul>
+		<li><b>Service type</b>: Select the <a href="../../developer/services.html#implement">type 
+			of the service</a> you want to use in MarvinSketch. Local, HTTP and three different 
+			webservices are available as service type. The further options to be set will change 
+			according to your selection;
+		<p>
+		<img src="gui-files/preferences5_1.png" width="" height="">
+		</p>
+		<p>
+		<i>Fill in the required fields, according to your service type selection. 
+			<a href="#local">Local Service</a>,  JSON RPC Service,  XML-RPC Service, <a href="#http">HTTP Service</a>, <a href="#soap">SOAP RPC Service</a>.</i>
+		</p>
+		</li>
+		<li><b>Service name</b>: Enter the service name. This name will be shown on the <i>Services</i> tab,
+			and under <b>Tools</b> > <b>Services</b> menu;</li>
+		<li><b>Service description</b>: Describe shortly the relevant service; it will appear as a brief 
+			help in a pop-up box (optional);</li>
+	</ul>
+		</li>
+	<li><b>Accept</b> your settings. The set service will appear on the <a href="dialogs.html#services"><i>Services</a></i> tab;
+		<p>
+		<img src="gui-files/preferences5_5.png" width="" height="">
+		</p></li>
+	<li><b>Specify the order</b> of services by moving them up and down using the Up/Down buttons.</li>
+	<li><b>Add</b> a new service to the list, or <b>remove</b> the selected service from the list by the add and remove buttons. </li>  
+	<li><b>Import</b> and <b>export</b> configuration file. </li>
+	<b>Note</b>: <i>Restore Defaults</i> sets the configuration file to the <code>servicesconfig.xml</code> located in the users's ChemAxon folder (in <i>user's home</i> chemaxon or .chemaxon folder, depending on operating system).
+</ol>
+
+<h2>Settings of the different service types</h2>
+<p>
+<ul>
+	<li><a class="anchor" name="local"></a>Service type: <a href="../../developer/services.html#local">Local Service</a>
+		<ul>
+			<p>
+			<img src="gui-files/preferences5_2.png" width="" height="">
+			</p>
+			<li><b>Java Archive (JAR)</b>: Browse the JAVA Archive file, which contains the classes of 
+				the desired calculation; </li>
+			<li><b>Select a function</b>: The JAR file may contain more calculation implementations; browse and select 
+				the relevant class and method;</li>
+			<li>Fill in the required fields: 
+				<ul>
+					<li><b>Type</b>: The type  of the parameter(s) defined in JAVA method's signature;</li>
+					<li><b>Name</b>: Name of the input parameter(s). Give a name, if it is not defined 
+						in the relevant <code>JAR</code> file;</li> 
+					<li><b>Evaluation</b>: Specify how the parameters  are passed to the service. Select from the drop-down list: 
+						<ul>
+							<li>Chemical Terms: Evaluate the given <a href="../../chemicalterms/ChemicalTerms.html">Chemical Terms</a> 
+								expression on the input molecule and pass the evaluation result to the service as parameter;</li> 
+							<li>Active molecule: The service will use the active molecule of MarvinSketch for the calculations;</li>
+							<li>Active selection: The service will use the selected part of the molecule in MarvinSketch for the calculations;</li>
+							<li>Manual: The value of the parameter is read from the <b>Value</b> field.</li>
+						</ul>
+					</li>
+					<li><b>Value</b>: Set a default value for the input parameter (in case of Manual evaluation) or set the parameters for evaluation. Value can 
+					be overwritten on the calculation info  panel.</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</p>
+<p>
+	<li><a class="anchor" name="http"></a>Service type: <a href="../../developer/services.html#http">HTTP Service</a>
+		<ul>
+		<p>
+			<img src="gui-files/preferences5_3.png" width="" height="">
+		</p>
+			<li><b>Service URL</b>: Type the URL address of the appropriate service;</li>
+			<li><b>Call method</b>: 
+				<ul>
+					<li><b>GET</b>: Use HTTP GET request method to call the service;</li>
+					<li><b>POST</b>: Use HTTP POST request method to call the service;</li>
+				</ul>
+			</li>
+			<li>Fill in the required fields: 
+				<ul>
+					<li><b>Type</b>: Type of the parameter; supported parameter types are: <code>Integer</code>, <code>String</code>, <code>Double</code>, <code>Boolean</code>;</li>
+					<li><b>Name</b>: Name of the parameter; parameters can be referred by this name later;</li>
+					<li><b>Evaluation</b>: Specify how the parameters are passed to the service. Select from the drop-down list: 
+						<ul>
+							<li>Molecule format: Input molecule is converted to specified format and the resulting string is passed to 
+							the service as parameter;</li> 
+							<li>Chemical Terms: Evaluate the given <a href="../../chemicalterms/ChemicalTerms.html">Chemical Terms</a> 
+								expression on the input molecule and pass the evaluation result to the service as parameter;</li> 
+							<li>Manual: The value of the parameter is read from the <b>Value</b> field.</li>
+						</ul>
+					</li>
+					<li><b>Value</b>: Set a default value for the input parameter (in case of Manual evaluation) or set the parameters for evaluation. Value can 
+					be overwritten on the calculation info  panel.</li>
+				</ul>
+			</li>
+		</ul>
+	</li>
+</p>
+<p>
+	<li><a class="anchor" name="soap"></a>Service type: <a href="../../developer/services.html#soap">SOAP Service</a>
+		<ul>
+		<p>
+		<img src="gui-files/preferences5_4.png" width="" height="">
+		</p>
+			<li><b>WSDL URI</b>: Browse the WSDL file or type the URI of the service;</li>
+			<li><b>Port</b>: Select WSDL port which describes the interfaces (legal operations) exposed by the web service;</li>
+			<li>After importing the service descriptor, the tree containing all available operation of the web-service is filled, and an operation can be selected.
+			Upon selecting an operation, the argument list of the operation is filled, if the operation is supported, otherwise an error message is shown.
+			There is a port selector for an operation. The SOAP type requests are supported. The port selector automatically tries to select a SOAP type port.
+			
+			</li>
+			<li>Fill in the required fields: 
+				<ul>
+					<li><b>Type</b>: Type of the parameter; supported types and their mapping:<br><br>	
+						<table style="border: solid 2px #006579; padding: 2px">
+							<tr><td>SOAP</td><td>Java</td></tr>
+							<tr><td><code>xs:string</code></td><td><code>java.lang.String</code></td></tr>
+							<tr><td><code>xs:int</code></td><td><code>java.lang.Integer</code></td></tr>
+							<tr><td><code>xs:double</code></td><td><code>java.lang.Double</code></td></tr>
+							<tr><td><code>xs:float</code></td><td><code>java.lang.Float</code></td></tr>
+							<tr><td><code>xs:boolean</code></td><td><code>java.lang.Boolean</code></td></tr>
+							<tr><td><code>xs:anytype</code></td><td><code>java.lang.Object</code></td></tr>
+						</table>
+						<br>
+					</li>
+					<li><b>Name</b>: Name of the parameter; parameters can be referred by this name later;</li>
+					<li><b>Evaluation</b>: Specify how the parameters are passed to the service. Select from the drop-down list: 
+						<ul>
+							<li>Molecule format: Input molecule is converted to specified format and the resulting string is passed to 
+							the service as parameter;</li> 
+							<li>Chemical Terms: Evaluate the given <a href="../../chemicalterms/ChemicalTerms.html">Chemical Terms</a> 
+								expression on the input molecule and pass the evaluation result to the service as parameter;</li> 
+							<li>Manual: The value of the parameter is read from the <b>Value</b> field.</li>
+						</ul>
+					</li>
+					<li><b>Value</b>: Set a default value for the input parameter (in case of Manual evaluation) or set the parameters for evaluation. Value can 
+					be overwritten on the calculation info  panel.</li>
+				</ul>
+			</li>
+		</ul> 
+	</li>
+</p>
+</ul>
+<h2><a class="anchor" id="export"></a>Export and Import Service configuration</h2>
+<table>
+<tr>
+<td><img src="gui-files/servicesimport_export.png"/></td>
+<td>You can export the set services configuration <code>XML</code> file to a preferred location, and import it for later usage by clicking on the appropriate buttons of the Services tab. Open Service Configuration <code>XML</code> file from URL is also available; Click on button <img src="gui-files/url.png"/> and specify the URL of configuration <code>XML</code> file.<br> The location of the set services configuration is displayed at the bottom of the configuration window.</td>
+</tr>
+</table> 
+<center>
+<div class="lenia">&nbsp;</div>
+</center>
+
+<p>
+<a class="anchor" name="thirdparty"><sup>*</sup>All the calculations that are not provided in ChemAxon's Marvin Beans or in its JChem package are referred 
+as <i>third-party calculations</i>. 
+</p>
+
+<center>
+<div class="lenia">&nbsp;</div>
+</center>
+
+<center><font size="-2" face="helvetica"> Copyright
+&copy; 1999-2012 <a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved. </font></center>
+
+</body>
+</html>

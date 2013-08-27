@@ -1,0 +1,19 @@
+#placeholderWrapper { /* required to avoid jumping */
+    left: 450px;
+    position: absolute;
+    width:250px;
+}
+
+#placeholder {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width:250px;
+}
+
+#placeholder.fixed {
+    position: fixed;
+    top: 0;
+}

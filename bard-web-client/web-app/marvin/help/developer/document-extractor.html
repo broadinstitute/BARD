@@ -1,0 +1,75 @@
+<HTML>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" 
+TITLE="Style">
+<TITLE>Document to Structure Developer's Guide</TITLE>
+</HEAD>
+<BODY>
+<center>
+<h1>Document to Structure Developer's Guide</h1>
+<h3>Version 5.10.1</h3>
+</center>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a>
+<li><a href="#api">Basic API usage</a>
+</ul>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="intro"></a>Introduction</h2>
+
+<p>
+The DocumentExtractor class extracts chemical names from text documents and converts them to chemical structures.
+</p>
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2><a name="api"></a>Basic API usage</h2>
+<p>
+ Example usage:
+ <pre>
+// We have a document to process
+java.io.Reader document = ...;
+
+DocumentExtractor x = new DocumentExtractor();
+x.processHTML(document); // or processPlainText(document) for input in plain text format
+
+// Iterate through the hits
+for (Hit hit : x.getHits()) {
+  System.out.println(hit.position + ": " + hit.text + ": " + hit.structure.toFormat("smiles"));
+}
+</pre>
+<p> 
+The field hit.position contains the position of the first character of the name in the document.
+<p>
+Note that hit.text contains the name as it appears in the source document. A cleaned version 
+(of possible OCR errors, typos, ...) can be retrieved with <code>hit.structure.getName()</code>.
+<p>
+This class can also be called on the command-line. It then expects the name of a plain text file
+as the first argument (or from the standard input when absent). The list of hits is printed
+on the standard output.
+
+<center><div class="lenia">&nbsp;</div></center>
+<h2>See also</h2>
+
+<ul>
+<li>Detailed <a href="../../examples/d2s/index.html">code examples</a> using Document to Structure
+in real-world situations.
+<li><a href="beans/api/chemaxon/naming/DocumentExtractor.html">API documentation</a>
+<li><a href="../d2s/d2s.html">User documentation for d2s</a></li>
+</ul>
+</p>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<center>
+<font size="-2" face="helvetica">
+Copyright &copy; 1999-2012 
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+
+</BODY>
+</HTML>

@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>MarvinSketch Help</TITLE>
+ <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</HEAD>
+<BODY>
+<H1 CLASS="title">Chemical Features of MarvinSketch</H1>
+
+<a HREF="sketch-index.html">Table of Contents</a>
+
+<H2><A class="anchor" NAME="valence-check">Valence Check</A></H2>
+<P>MarvinSketch does not automatically correct valence errors. Instead,
+they are highlighted by a red underline and you may make the
+appropriate corrections. This option can be turned on or off using the <B class="buttonName">Edit
+&gt; Preferences </B> box. 
+</P>
+
+<H2><A class="anchor" NAME="structurechecker">Structure Checker</A></H2>
+<p>MarvinSketch offers a structure checking addon that gives warning for
+    specific features or errors in the molecule. Single molecules can be
+    checked in MarvinSketch, batch usage is available via command line or API (with license).
+    <a href="../structurechecker/checker.html">Read more about Structure Checker.</a>
+
+<H2><A class="anchor" NAME="charges">Charges</A></H2>
+<P>In MarvinSketch, the charge of an atom is initially set to be neutral.
+As bonds are added or removed, MarvinSketch adjusts the number of implicit
+hydrogens to let the charge remain neutral. You may change the charge
+of any atom using the <A HREF="gui/popups.html#atom.popup" class="buttonName">Atom
+Pop-up Menu</A>. The number of implicit hydrogens will
+be adjusted, if possible, to accommodate the new charge. MarvinSketch will
+then perform a valence check and highlight the atom if an error is
+found. 
+</P>
+
+<H2><A class="anchor" NAME="reactions">Reactions</A></H2>
+<P>MarvinSketch allows you to <a href="sketch-basic.html#howto-draw.reactions">draw reactions</a> in your molecule by placing a
+reaction arrow. You can place the reaction arrow in any position,
+pointing in any direction. The structures before the arrow will be
+considered Reactants, structures along the arrow Agents, and
+structures after the arrow as Products. 
+</P>
+
+<H2><A class="anchor" NAME="mapping">Mapping</A></H2>
+<P>MarvinSketch allows you to set a map label on any atom in the molecule.
+Map labels are useful because they remain constant, unlike atom
+indexes, which can change as the molecule is altered. Atom mapping
+can be very useful when drawing reactions. It allows you to specify
+that specific reactant atoms will become specific product atoms. 
+You can assign the same free map number to both of these atoms by pressing the
+<A HREF="gui/toolbars.html#reaction" class="buttonName">Reaction Button</A>
+on the toolbar, then drawing the arrow from the first atom to the second one.
+You can also select a Map for an atom from the 
+<A HREF="gui/popups.html#atom.popup" class="buttonName">Atom Pop-up Menu</A>,
+or else you can use the <A HREF="gui/popups.html#edit.popup" class="buttonName">Edit Pop-up Menu</A> to automatically assign map numbers to selected atoms.
+You can also use the <A HREF="gui/shortcuts.html">shortcuts</A> M1, M2, ...
+to assign map labels, M0 to remove map labels, M= or M+ to assign unique map numbers.
+</P>
+
+<H2><A class="anchor" NAME="isotopes">Isotopes</A></H2>
+<P>MarvinSketch allows you to change an atom into one of its isotopes using
+the
+<A HREF="gui/popups.html#atom.popup" class="buttonName">Atom
+Pop-up Menu</A>  or selecting the atom and choosing <B class="buttonName">Atom&gt;Isotope</B> from the Menu Bar. <br>There is the possibility to extend the isotope list with
+custom items. <a href="isotopelist.html">Technical details.</a>
+</P>
+
+<H2><A class="anchor" NAME="stereo">Stereochemistry</A></H2>
+<P>MarvinSketch provides stereo representations. Using the <A HREF="gui/menubar.html#atom" class="buttonName">Atom Menu</A> or <A HREF="gui/popups.html#atom.popup" class="buttonName">Atom
+Pop-up Menu</A>, you can <a href="../sci/stereo-doc.html#howto.stereo">set the configuration</a> of each chirality center in a molecule. The absolute configuration of a chiral molecule can also be defined by using <A HREF="gui/menubar.html#setAbsoluteStereo" class="buttonName">Structure Menu</A>. To see the set labels on the Canvas, choose Stereo options in <A HREF="gui/menubar.html#view" class="buttonName">View Menu</A>. 
+</P>
+
+<H2><A class="anchor" NAME="e-z">E/Z Feature</A></H2>
+<P>By choosing <B class="buttonName">View &gt;
+Stereo &gt; E/Z Labels </B>, you can toggle the
+display of absolute double bond stereoconfiguration labels. Bonds
+known to have an (E) or (Z) configuration will be marked as such. 
+</P>
+
+<H2><A class="anchor" NAME="sgroups">Abbreviated groups (Superatom group)</A></H2>
+<P>MarvinSketch has a rich collection of features related to
+abbreviated groups. 
+</P>
+<H3>Predefined Abbreviated Groups</H3>
+<P>A number of predefined abbreviated groups are available in MarvinSketch. The
+complete set is listed under the <B class="buttonName">Groups</B>
+menu. These groups are also available as <A HREF="gui/shortcuts.html">shortcuts</A>.
+<br>Their usage is described in the <a href="sketch-basic.html#abbreviatedgroups">Basic MarvinSketch</a> page.<br>
+The rotation of the molecule might change the groups' writing order, thus retaining 
+the chemically correct connectivity. Read a <a href="../formats/abbrevgroup-doc.html">
+  detailed description</a> of this feature.
+</P>
+<H3>User-Defined Abbreviated Groups</H3>
+<P>You can easily create new groups that you often use. Select the structure and give it 
+a name (<i>Superatom (abbreviation)</i> in <B class="buttonName">Structure &gt; Groups &gt;
+Create Group</B>) and if needed, define an attachment point. 
+<a href="sketch-basic.html#abbreviatedgroups">Details.</a>
+</P>
+<H3>S-groups as My Templates</H3>
+<P>User-defined groups are, by default, session-only. To retain an abbreviated 
+group for future use, add it to <B class="buttonName">My
+Templates</B>. This will also make the group available in
+the <B class="buttonName">Groups</B>
+menu or as a shortcut. 
+</P>
+
+<h2><a class="anchor" name="link-nodes">Link Nodes</a></h2>
+<p>Link nodes enable specifying query structures containing rings or chains of variable size. In the following example, the number of carbons can be between 1 and 7:</p>
+<p><img src="../images/link-node.png"></p>
+
+<H2><a class="anchor" name="groups">Working with Groups</a></H2>
+<P>Group manipulation functions are available through the <B class="buttonName">Structure
+&gt; Group </B>submenu and by right-clicking on an
+existing group.
+ <BR>Choosing <B class="buttonName">Contract</B> from the context menu
+or <B class="buttonName">Structure &gt; Group &gt; Contract Group</B> from the main menu
+contracts one group to its abbreviation if there is one group selected, otherwise contracts all
+groups in the molecule.
+<BR>Choosing <B class="buttonName">Expand Group</B> from the context menu
+or <B class="buttonName">Structure &gt; Group &gt; Expand Group</B> from the main menu
+displays the full structure instead of a contracted group if there is one group selected, otherwise expands all
+groups in the molecule.
+
+<BR>Selecting <B class="buttonName">Ungroup</B>
+will remove all abbreviated groups from the molecule. The structures
+will remain, but will no longer be associated with their
+abbreviations. You will be unable to Expand/Contract these
+structures. 
+<BR>To add or remove an Attachment Point, right-click on
+an atom within the group and select the <B class="buttonName">S-group attachment</B> icon.
+</P>
+
+<H2><A class="anchor" NAME="radicals">Working with Radicals</A></H2>
+<P>MarvinSketch allows you to specify that an atom in the molecule is a
+radical. This functionality is available via the <A HREF="gui/popups.html#atom.popup" class="buttonName">Atom
+Pop-up Menu</A>.<BR>To change an atom into a radical,
+right-click on it to access the Atom Pop-up Menu. Select the type of
+radical from the <B class="buttonName">Radicals</B>
+submenu. A radical symbol will appear next to the atom and a valence
+check will be run with errors highlighted.
+</P>
+
+<H2><A class="anchor" NAME="query-guide">Query features</A></H2>
+<P>The <A HREF="http://www.chemaxon.com/jchem/doc/user/queryindex.html">JChem
+query guide</A> provides more detailed information on
+how to use query structures created in MarvinSketch with JChem's query functionality.
+The following are some of the query building features available in
+MarvinSketch.
+</P>
+
+<H3><A class="anchor" NAME="rgroups">R-groups</A></H3>
+<P>MarvinSketch allows you to specify R-groups within your molecule. These
+R-groups can be very useful in <A HREF="http://www.chemaxon.com/jchem/doc/user/query_special_types.html">R-group
+queries</A>. An R-group is a variable representing a
+user-defined list of structures. Using R-groups in a query structure
+can allow you to quickly search for a wide range of substructure hits
+using only a single query. <BR>You can set or change the R-group
+label of a molecule node from the <A HREF="gui/popups.html#atom.popup" class="buttonName">Atom
+Pop-up Menu</A> or by typing the corresponding R-group label on the keyboard.
+<BR>To define the set of structures that are represented by an R-group label,
+<SPAN LANG="en-US"> select the </SPAN>structures you wish to include. Then, select the
+corresponding label from the <B class="buttonName">Periodic
+Table</B> or use one of type the R-group <A HREF="gui/shortcuts.html">label
+on the keyboard</A>. Set additional Occurrence, RestH and If-then conditions for the query
+in the R-logic dialog available from the Edit/Attributes menu.
+</P>
+
+<H3><A class="anchor" NAME="atomlist">Atom Lists</A></H3>
+<P>MarvinSketch allows you to add Atom List query atoms to your molecule.
+An Atom List is a user-defined list of elements included in a query
+structure, any of which will produce a hit if found in the target.
+</P>
+<P>You can add Atom Lists to your molecule through the <B class="buttonName">Periodic
+Table</B>. To add an Atom List to the molecule, select the <B class="buttonName">Atom
+List</B> button, then select the elements you wish to
+include in the list. Move the mouse into the canvas and click to add a query atom representing this atom list.</p>
+<p>You can create the preferred Atom List without opening the <B class="buttonName">Periodic
+Table</B>. Move your mouse over an empty space of the canvas and start typing the chemical symbols you wish to add to the Atom List. The entries of the Atom List must be separated by commas (e.g., au,pt,ag). You can use Backspace to delete errors. The items of the Atom List appear on the upper left corner of the canvas and concurrently at the tip of the pointer (e.g., L[Au,Pt,Ag]). Click on the query atom you want to add this Atom List.</p>
+<p>You can move your mouse over the appropriate atom of a molecule or make selections on one or multiple atoms of the molecule before creating the Atom List as a different manner. When you start typing chemical symbols separated by commas, the Atom List adds directly to the selected atoms.
+</P>
+
+<H3><A class="anchor" NAME="notlist">Not Lists</A></H3>
+<P>A Not List is a query atom that allows you to define a list of
+elements that should not be included in the target structure. If an
+atom within the query structure is set as a Not List, then the atom
+in the same position within the target structure can be any atom that
+is not on the list to produce a hit. <BR>To add a Not List to the
+molecule, select the <B class="buttonName">Not
+List</B> button in the <B class="buttonName">Periodic
+Table</B>, then select the elements you wish to include in
+the list.
+Move the mouse into the canvas and click to add a query atom representing
+this Not List.</p>
+<p>You can create Not Lists without opening the <B class="buttonName">Periodic
+Table</B>. Move your mouse over an empty space of the canvas and type an exclamation mark first, then start typing the chemical symbols you wish to add to the Not List. The entries of the Not List must be separated by commas (e.g., !au,pt,ag). You can use Backspace to delete errors. The items of the Not List appear on the upper left corner of the canvas and concurrently at the tip of the pointer (e.g., ~L![Au,Pt,Ag]). Click on the query atom you want to add this Not List.</p>
+<p>You can move your mouse over the appropriate atom of a molecule or make selections on one or multiple atoms of the molecule before creating the Not List as a different manner. Start with an exclamation mark and then type the chemical symbols separated by commas. The Not List adds directly to the selected atoms.
+</P>
+
+<H3><A class="anchor" NAME="generic-atoms">Generic Atoms</A></H3>
+<P>Generic atoms can be added to include a wide range of elements in
+a query structure. Currently, MarvinSketch supports two types of generic
+atoms: <B class="buttonName">Any</B>
+and <B class="buttonName">Hetero</B>
+<BR>If an atom within the query structure is designated as &quot;Any&quot;,
+any atom at this position in the target structure will produce a hit.
+<BR>If an atom within the query structure is designated as &quot;Q&quot;,
+then the atom at this position can be any heteroatom (i.e. any atom
+except hydrogen or carbon) and it will produce a hit. <BR>To add a
+generic atom to the molecule, select one of the generic atom types
+from the <B class="buttonName">Periodic
+Table</B> and place it on the canvas with the mouse.
+</P>
+
+<H3><A class="anchor" NAME="atom-props">Atom Properties</A></H3>
+<p><b>General atom properties:</b> various atom properties can be added to an atom in the drawing.
+The property key and the value is free to set by the user in the Edit properties dialog. 
+First select an atom in the molecule, right-click and choose Edit properties... In the dialog 
+box double-click the blue text field and type the property key then the value. Press Enter 
+after each entry. The visibility of the atom properties can be switched on and off: go to 
+View -> Misc -> Atom properties.
+<P><b>Query properties:</b> You can define the chemical neighborhood for an atom within a
+query structure. MarvinSketch allows you to set properties, such as
+hydrogen count, valence count, ring size, and aromaticity, which must
+be matched by the corresponding atom in the target structure to
+produce a hit.
+ <ul>
+<li>First select atoms, then periodic system buttons to apply to all.
+<li>First click periodic system buttons, then click individual atoms to increase/decrease property value.
+<li>Each query property can be drawn typing .&lt;query property name&gt; (e.g. .H2) for one atom with the mouse pointer over the atom 
+or selected atoms.
+</ul>
+<p>The list of available query properties is found <a href="gui/dialogs.html#queryprops">here</a>.
+</P>
+
+<H3><A class="anchor" NAME="attacheddata">Attached data</A></H3>
+<P>Information may be attached to atoms and brackets. This data may include
+    search restrictions in queries. Find details of query usage in 
+    JChem's Query guide.
+<dt><b>Adding data</b></dt>
+<dd><p>Select an atom or group bracket, right-click and choose <B class="buttonName">Add &gt;
+ Data...</B> or <B class="buttonName">Data...</B>, respectively, from the context menu. Fill 
+the appropriate fields in the dialog and click OK. The attached data can be edited any time: 
+right-click the atom, the bracket or the data label and choose Edit Data... from the context menu.<p></dd>
+    
+<dt><b>Context field</b></dt>
+<dd><p>
+<ul>
+<li>Atom - the data will be attached independently to all atoms in the selection.</li>
+<li>Bond - the data will be attached independently to all bonds in the selection.</li>
+<li>Single Bond - the data will be attached independently to all single bonds in the selection.</li>
+<li>Double Bond - the data will be attached independently to all double bonds in the selection.</li>
+<li>Fragment - the data will be attached independently to all disconnected fragments that are completely or partially contained by the selection.</li>
+<li>Selection - the data will be attached to the whole selection.</li>
+</ul>
+<p>The number and name of the selectable contexts may vary in different configurations.</dt>
+
+<dt><b>URLs  as attached data</b></dt>
+<dd><p> Values starting with www and including at least 2 full stops are handled as web page 
+links (no spaces allowed). The format &lt;scheme&gt;://&lt;authority&gt;&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;
+ will also be recognized. Double-click or Ctrl-click on the link to open the webpage. Links are
+ currently not underlined as usually.</dd>
+
+<dt><b>Customizability</b></dt> 
+<dd><p>The elements of the Name and the Value editable combo boxes can be customized by an administrator.
+The corresponding elements of the Value combo box can be defined for each element in the Name combo box list,
+just as the corresponding Name combo box contents for each element in the context combo box.<br><a href="https://www.chemaxon.com/marvin/help/sketch/sketch-attachDataConfig.html">Details on the customization process.</a>
+
+
+
+<dt><b>Label placement</b></dt>
+<dd><p>The labels can be positioned in 3 ways: absolute, relative or next to objects. Absolute
+means a stationary label, which can be moved independently from the
+structure. If the structure is moved, the label does not change its place. Relative
+labels always move with the same xy coordinates as the object. Labels next
+to objects can not be moved separately.
+<p>Mouseover highlights all details of the attached data.</dd>
+
+
+<P ALIGN=CENTER><A HREF="#">Return to Top</A></P>
+<p ALIGN=CENTER>
+Copyright &copy; 1998-2012
+<a HREF="http://www.chemaxon.com">ChemAxon Ltd.</a>
+</p>
+<p ALIGN=CENTER>
+<a HREF="http://www.chemaxon.com/marvin">http://www.chemaxon.com/marvin</a>
+</p>
+
+</BODY>
+</HTML>

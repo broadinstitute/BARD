@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <link rel="stylesheet" href="../marvinmanuals.css" type="text/css">
+    <title>Installing Licenses on Servers</title>
+</head>
+<body>
+<h1>Installing Licenses on Servers</h1>
+
+
+<p>The recommended method of installing licenses to servers is via
+</p>
+    <h2><a name="variable" class="text">Using system variables</a></h2>
+   
+    <p>The location of the license file can be set with:
+        <ul>
+            <li><code>chemaxon.license.url</code> <em>Java system property</em><br>
+                Example: -Dchemaxon.license.url=http://example.server.org/chemaxon_license.cxl
+            </li>
+            <li><code>CHEMAXON_LICENSE_URL</code> <em>environment variable</em></li>
+        </ul>
+
+
+<h2>Other ways of installing the license:</h2>
+
+<ol>    <li><a name="manual" class="text"><b>Manual install:</b></a><br>
+        The license.cxl file must be stored in the <code>.chemaxon</code> (Unix) or
+        <code>chemaxon</code> (Windows) sub-directory under the
+        home directory of the user who started JChem Server.
+    </li>
+    <li><a name="cmdline" class="text"><b>Command line install:</b></a><br>
+        Launch the <code>license</code> shell script (Unix) or <code>license.bat</code>
+        batch file (Windows). <br>
+        Type <code>license -h</code> for the list of available options.
+
+    </li>
+    <li><a name="api" class="text"><b>Using API:</b></a><br>
+        <a href="../developer/beans/api/chemaxon/license/LicenseManager.html#setLicenseFile(java.lang.String)"><code>chemaxon.license.LicenseManager.setLicenseFile(String path)</code></a>
+    </li>
+</ol>
+
+<h4>Notes</h4>
+<ul>
+ <li>
+<a href="licensing_old.html">Read this documentation</a> for installing license files issued
+ for versions prior to 5.0.
+</li>
+</ul>
+
+<!--
+<h2><a name="noclient" class="anchor">Install licenses on server without client install</a></h2>
+<p>In case of (embedded) Marvin applets the licenses can be installed on servers
+without needing to install them on any client machine.<br>
+The license resides on the server in this case, and the path of the license should be
+explicitely set. The recommended way of this configuration is to use the <code>chemaxon.license.url</code>
+Java system property.<br>
+However there is a restriction to this configuration. Only those licenses can be
+configured this way, that have the "Server mode allowed" field.
+</p>
+
+<h4><a name="jws" class="anchor">Java Web Start</a></h4>
+<p>
+Example:
+<pre>
+&lt;resources>
+  &lt;property name="chemaxon.license.url" value="http://www.yourserver.com/license.cxl"/>
+&lt;/resources>
+</pre>
+<p>Restrictions:
+<ul>
+<li>The licenses should have the "Server mode allowed" field</li>
+<li>The value should start with http:// or https://</li>
+</ul>-->
+
+
+</body>
+</html>

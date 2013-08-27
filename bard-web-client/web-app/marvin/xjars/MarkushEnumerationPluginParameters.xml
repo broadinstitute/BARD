@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+	<Tab Title="General Options">
+    <Group>
+    <Label Text="To enumerate only a part"/>
+    <Label Text="of your Markush diagram,"/>
+    <Label Text="select the part to be enumerated."/>
+    </Group>
+    <Label Text=""/>
+
+    <Group Title="Calculation">
+    <RadioButtonGroup Key="calctype">
+	<Choice Value="countonly" Text="Markush library size" Tooltip="No enumeration, only calculates the number of enumerated structures. The calculated number is the size of the whole library, and does not consider the valence check filter."/>
+	<Choice Value="enumerate" Text="Sequential enumeration" Tooltip="Enumerates members of the Markush library in a sequential manner (by substituting the first definition of the first variable, etc)." Selected="true"/>
+	<Choice Value="random" Text="Random enumeration" Tooltip="Generates a random subset of the Markush library to give a quick sampling. Size of the sample must be given."/>
+    </RadioButtonGroup>
+    <Number Key="num" Label="" Range="[1,100000]" Value="10000" Type="int" Indent="3">
+	<Dependencies>
+	    <Item Key="calctype" Range="random"/>
+	</Dependencies>
+    </Number>
+    <Separator/>
+    <RadioButtonGroup Key="enumtype" Indent="3">
+	<Choice Value="all" Text="Generate all enumerations" Tooltip="Enumarates all possible structures." />
+	<Choice Value="limited" Text="Generate maximum" Tooltip="Enumerates given amount of structures." Selected="true"/>
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate"/>
+	</Dependencies>
+    </RadioButtonGroup>
+    <Number Key="max" Label="" Range="[1,100000]" Value="10000" Type="int" Indent="5">
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate"/>
+	    <Item Key="enumtype" Range="limited"/>
+	</Dependencies>
+    </Number>
+    <Boolean Key="enumhomology" Label="Enumerate homology groups" Tooltip="Enumerates homology group names covering a set of R-groups either built-in or user-defined." Value="false" Indent="3"/>
+    <Boolean Key="valencecheck" Label="Valence filter" Tooltip="Filters structures with valence errors." Value="false" Indent="3">
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate,random"/>
+	</Dependencies>
+    </Boolean>
+    </Group>
+	</Tab>
+
+	<Tab Title="Display Options">
+    <Group Title="Display">
+    <Boolean Key="alignscaffold" Label="Scaffold alignment" Tooltip="Differentiation of the structures is aided by alignment of all structures to the original scaffold." Value="true">
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate,random"/>
+	</Dependencies>
+    </Boolean>
+    <MultipleSelection Key="coloring" Label="Coloring" Tooltip="Coloring the scaffold (part of the structure containg no Markush features) and/or the R-groups in enumerated structures." Verify="false">
+	<Choice Value="scaffold" Text="Scaffold"/>
+	<Choice Value="rgroups" Text="R-groups"/>
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate,random"/>
+	</Dependencies>
+    </MultipleSelection>
+    </Group>
+    <Group Title="Markush Code">
+    <Boolean Key="code" Label="Generate Markush code" Tooltip="a special ID number is generated for the library members." Value="false">
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate,random"/>
+	    <Item Key="fusedmultiplemoleculedisplay" Range="false"/>
+	</Dependencies>
+    </Boolean>
+    <RadioButtonGroup Key="structureidtype" Indent="3">
+	<Choice Value="none" Text="No scaffold ID" Selected="true"/>
+	<Choice Value="structureid" Text="Scaffold ID or ID tag name"/>
+	<Dependencies>
+	    <Item Key="code" Range="true"/>
+	    <Item Key="fusedmultiplemoleculedisplay" Range="false"/>
+	</Dependencies>
+    </RadioButtonGroup>
+    <Text Key="structureid" Label="" Value="" Indent="3">
+	<Dependencies>
+	    <Item Key="code" Range="true"/>
+	    <Item Key="structureidtype" Range="structureid"/>
+	    <Item Key="fusedmultiplemoleculedisplay" Range="false"/>
+	</Dependencies>
+    </Text>
+    </Group>
+	<Group>
+    <Boolean Key="fusedmultiplemoleculedisplay" Label="Fused output" Tooltip="Result is a multifragment molecule displayed in one cell." Value="false">	
+	<Dependencies>
+	    <Item Key="calctype" Range="enumerate,random"/>
+	</Dependencies>
+	</Boolean>
+	</Group>
+    </Tab>
+</ParameterPanel>

@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="XYZ format in Marvin">
+<meta NAME="keywords" CONTENT="XYZ, Java, Marvin">
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>XYZ format in Marvin</title>
+</head>
+<body>
+
+<h1>XYZ</h1>
+
+<p>
+Codename: <strong>xyz</strong>
+</p>
+<h2>Contents</h2>
+<ul>
+<li><a href="#xyz">XYZ format</a></li>
+<li><a href="#import">Import options</a></li>
+<li><a href="#export">Export options</a></li>
+</ul>
+
+<h2><a class="anchor" name="xyz">XYZ format</a></h2>
+Marvin imports and exports XYZ molecule files that have the following format:
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=5 border="0">
+<tr><td>[</td>
+    <td># optional comment line</td>
+    <td>]</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>not written but allowed at import</em></tr>
+<tr><td>[</td><td><i>N</i></td><td>]</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>always written, but can be omitted in imported files</em></td></tr>
+<tr><td>[</td><td><i>name</i>\t<i>E</i></td><td>]</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<em>always written, but can be omitted in imported files</em></td></tr>
+<tr><td>&nbsp;</td><td>atom1 x y z</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>atom2 x y z</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>...</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td>atomN x y z</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+</blockquote>
+where <i>N</i> is the number of atoms and <i>E</i> is the energy (optional).
+If energy is set for the molecule, then it is separated from the molecule
+<i>name</i> with a TAB ("\t") character.
+
+<p>Restrictions of the XYZ format:</p>
+<ul>
+<li>Bonds are not stored.</li>
+<li>As a consequence, all the hydrogens must be explicit, otherwise the
+    bond types can not be guessed reliably by the importing program.
+    In Marvin, implicit hydrogens are automatically converted to explicit
+    H atoms at XYZ export.</li> 
+<li>Charges are not stored.</li>
+<li>Query properties and other extra features are not stored.</li>
+</ul>
+<h2><a class="anchor" NAME="import">Import options</a></h2>
+At <strong>import</strong>, the default behavior is to use the
+&quot;any&quot; bond type for all bonds, 0 charge for each atom,
+no implicit hydrogens.
+<p>
+Import options can be specified in the applet by writing
+&quot;{<em>options</em>}&quot; after the filename.
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=5 border="0">
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_f"><strong>f...</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Bond length cut-off. Two atoms can be connected if they are closer
+	than the sum of their covalent radii times the cut-off value.
+	Default: &quot;{f1.12}&quot;</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_Z"><strong>Z#</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Set maximum number of connections for element Z.<br>
+	Example: &quot;{f1.4,C4,H1}&quot;. This setting increases the
+	cut-off value, but does not let Carbons to have more than 4
+	connections, and Hydrogens to have more than 1 connection.</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_b"><strong>b</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Try to guess bond types, atom charges and implicit hydrogens
+	from atom distances and valence rules.<br>
+	<strong>Warning:</strong> This is an <em>experimental</em> feature.
+	Since XYZ files do not contain bond information, these
+	&quot;guesses&quot; can be different from the actual bond orders,
+	especially in case of
+	<table CELLSPACING=0 CELLPADDING=5 border="0">
+	<tr><td>-&nbsp;&nbsp;</td><td>radicals</td></tr>
+	<tr><td>-&nbsp;&nbsp;</td><td>missing Hydrogen atoms</td></tr>
+	<tr><td>-&nbsp;&nbsp;</td><td>complexes</td></tr>
+	</table>
+	The user should check the calculated bonds after import.
+	</td></tr>
+</table>
+</blockquote>
+<h2><a class="anchor" name="export">Export options</a></h2>
+See also the <a HREF="basic-export-opts.html">basic export options</a>.
+<p>
+<strong>WARNING:</strong> <font COLOR="#ff0000">Do not export 2D drawings in XYZ!</font>
+XYZ export in Marvin is only meaningful for 3D molecules with
+realistic atomic distances.
+
+</body>
+</html>

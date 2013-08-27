@@ -1,0 +1,151 @@
+<!DOCTYPE html><HTML>
+ <head>
+        <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+        <title>Converting structure from Kekulé form to aromatic form   </title>
+        <link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+ </head>
+
+<BODY>
+<h1> Converting structure from Kekulé form to aromatic form</h1> 
+<p>Three  methods  are  provided  to  convert  a  molecule  from  Kekulé  form
+ to  aromatic  form:  <i>basic</i>, <i>general, </i>and <i>loose</i> 
+aromaticity detection. </p>  
+<p> The  <b>basic  method</b> locates  the  ring atoms  in the  molecule  
+connected
+  with single  and  double  bonds. Takes  each ring in a  ring system 
+separately and  sums  the  number  of electrons.  
+If  the  Hückel's  rule holds, then the ring is aromatic.  </p>
+<p>There  are  some  exceptions,  when  the  double  and  single  bonds  are  
+not  sequential  yet  the  ring  is aromatic. 
+In this case the atom between single bonds has an orbital which takes  part  
+in the  aromatic system. (Relevant atoms: N, O, P, S, As and Se as they can 
+donate a free electron-pair to the aromatic system and  B as  it  can donate  
+a  molecular  orbital without  additional electron.)  
+Rings  of less  than 5 
+atoms are so constrained that they cannot be aromatic.  </p>
+The  <b>general  method </b> also  locates  the  ring  atoms  in  the molecule
+  connected  with single  and  double  bonds,  
+then it sums the number of electrons in the  ring system and  if the 
+Hückel's rule is fulfilled, then the ring system is aromatic. 
+In this  method  the  atoms  defining  the  ring  system  may  not form  a  
+continuous  ring  like  in  benzo[de]chromene  (see figure on the below), 
+where all atoms of the  molecule  are  in the ring system generated from the 
+three 6 membered rings. 
+<p style="text-align: center;">
+   <img src="images/convert_to_aromatic_1.png" width="136" height="136" 
+        border="0" 
+        style="margin:0 auto;margin:0px;"></p>
+<p style="text-align: center;">
+  <span style="font-style: italic;">benzo[de]chromene</span></p>
+
+<p>Some examples for heteroatoms in aromatic ring systems: 
+<ul>
+<li> Oxygen and sulfur can share a pair of pi-electrons with the 
+     delocalized electron system like in the case of furan. 
+       <p style="text-align: center;">
+         <img src="images/convert_to_aromatic_2.png" width="75" height="75" 
+              border="0" style="margin:0 auto;margin:0px;"></p>
+       <p style="text-align: center;">
+         <span style="font-style: italic;">furan</span></p>
+     </li>
+<li> Nitrogen can also share a pair of pi-electrons if it has three ligands, 
+     otherwise the sp2 nitrogen shares just one electron (as in pyridine).
+<div style="text-align: center; text-indent: 0px; padding: 0px 0px 0px 0px; 
+            margin: 0px 0px 0px 0px;">
+ <table align="center" cellspacing="0" 
+     cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+ <tr style="text-align:left;vertical-align:top;">
+   <td valign="top" width="302" style="width:302px;">  
+     <p style="text-align: center;">
+      <img src="images/convert_to_aromatic_3.png" width="77" height="77" 
+           border="0" 
+           style="margin:0 auto;margin:0px;"></p>
+     <p style="text-align: center;">
+          <span style="font-style: italic;">pyrrol</span></p>
+   </td>
+   <td valign="top" width="302" style="width:302px;"> 
+    <p style="text-align: center;">
+      <img src="images/convert_to_aromatic_4.png" width="77" height="77" 
+           border="0" 
+           style="margin:0 auto;margin:0px;"></p>
+    <p style="text-align: center;">
+         <span style="font-style: italic;">pyridine</span></p>
+   </td>
+  </tr>
+ </table>
+</div>
+
+     </li> 
+<li>An exocyclic double bond to an electronegative atom takes out one shared
+  pi-electron from the cycle, as in 2-pyridone or coumarin. 
+  <p style="text-align: center;">
+    <img src="images/convert_to_aromatic_5.png" width="174" height="91" 
+         border="0" 
+         style="margin:0 auto;margin:0px;"></p>
+ <p style="text-align: center;">
+     <span style="font-style: italic;">coumarin</span></p>
+     </li>
+</ul></p>
+
+<p> The <b>loose method</b> also locates the ring atoms in the molecule 
+connected with single and double bonds, then it sums the number of electrons 
+in the ring system and if the Hückel's rule is fulfilled, 
+then the ring system is  aromatic.  Only five  membered  rings,  six-membered  
+rings  that  can be  drawn as  alternating single and double bonds and the 
+perimeter bonds of azulenes are considered. </p>
+
+<p>The  aromatization  functions,  
+<code>aromatize()</code>,  
+<code>aromatize(boolean  a)</code>  and  
+<code>aromatize(int method)</code>  are located in 
+<code>MoleculeGraph </code> class.  
+While  <code> aromatize()</code>  uses  the  default  aromatization 
+method,  in  <code>aromatize(int  method) </code> 
+the  basic  (<code>MoleculeGraph.AROM_BASIC</code>),    
+general  (<code>MoleculeGraph.AROM_GENERAL</code>)  or  
+loose  (<code>MoleculeGraph.AROM_LOOSE</code>)    method  can  be specified.
+</p>   
+<p>Code example: aromatize the molecule with the default aromatization method 
+<ul>
+<pre>molecule.<b>aromatize</b>(); </pre></p>
+</ul>
+<p>Code example: aromatize the molecule with general aromatization method 
+<ul>
+<pre>molecule.<b>aromatize</b>(MoleculeGraph.AROM_GENERAL); </pre> </p>
+</ul>
+<p>More information about aromatization can be found 
+<a href="../../sci/aromatization-doc.html">here.
+</a></p> 
+
+
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="aromaticity.html">
+          Aromaticity</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="diff_basic_and_general.html"> 
+           Differences between the basic and general methods<a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table>
+
+
+</BODY>
+</HTML>

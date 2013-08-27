@@ -1,0 +1,60 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<title>Sketch a Molecule</title>
+<link REL ="stylesheet" TYPE="text/css" HREF="../../marvinmanuals.css" TITLE="Style">
+</head>
+<body>
+
+<center>
+<script type="text/javascript" SRC="../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+function importMol() {
+	if(document.MSketch != null) {
+		var s = document.MolForm.MolTxt.value;
+		document.MSketch.setMol(s);
+	} else {
+		alert("Cannot import molecule:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function exportMol(format) {
+	if(document.MSketch != null) {
+		var s = document.MSketch.getMol(format);
+		document.MolForm.MolTxt.value = s;
+	} else {
+		alert("Cannot import molecule:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+
+msketch_name = "MSketch";
+msketch_begin("../..", 100, 100);
+msketch_param("detach", "show,size=440x440");
+msketch_param("molbg", "#ffffff");
+msketch_end();
+//-->
+</script>
+<form NAME=MolForm onSubmit="return false">
+<table BORDER=0 cellpadding="5" cellspacing="0">
+<tr>
+<td><input TYPE=BUTTON VALUE="Write mol" onClick="exportMol('mol')">
+    </td>
+<td><input TYPE=BUTTON VALUE="Write compressed" onClick="exportMol('csmol')">
+    </td>
+<td><input TYPE=BUTTON VALUE="Write SMILES" onClick="exportMol('smiles')">
+    </td>
+<td><input TYPE=BUTTON VALUE="Read" onClick="importMol()">
+    </td>
+</tr>
+<tr>
+<td COLSPAN=4><textarea NAME="MolTxt" ROWS=20 COLS=70></textarea>
+    </td>
+</tr>
+</table>
+</form>
+</center>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="AttachDataDialogConfig" xmlns:tns="AttachDataDialogConfig" elementFormDefault="qualified">
+    <annotation>
+    	<documentation>Configuration file schema definition for Attach Data Dialog in MarvinSketch.</documentation></annotation>
+
+    <element name="AttachDataDialogConfig"
+    	type="tns:AttachDataDialogConfigType">
+        <annotation>
+        	<documentation>Root element of the configuration xml.</documentation>
+        </annotation>
+    </element>
+
+    <complexType name="AttachDataDialogConfigType">
+        <annotation>
+        	<documentation>Defines the root element type.
+Root element can contain 0-6 context with the following predefined names: Atom, Bond, Single Bond, Double Bond, Fragment, Group (Selection) that are also the display names of the contexts.
+Each name should be defined only once, but none of them is mandatory.</documentation>
+        </annotation>
+        <sequence>
+    		<element name="context" type="tns:ContextType" maxOccurs="6" minOccurs="0">
+    			<annotation>
+    				<documentation>The context element, its type is the ContextType.</documentation>
+    			</annotation></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="ContextType">
+        <annotation>
+        	<documentation>The ContextType defines the possible attributes, and elements that can be used in the context element.
+Each context element defines a name from the following possible values: Atom, Bond, Single Bond, Double Bond, Fragment, Group (Selection) that are also the display names of the contexts.
+Each name should be defined only once, but none of them is mandatory.
+Any context can have any number of dataname elements, that will define the attach data field name, and the corresponding elements on the dialog.</documentation>
+        </annotation>
+        <sequence>
+    		<element name="dataname" type="tns:DataNameType" maxOccurs="unbounded" minOccurs="0">
+    			<annotation>
+    				<documentation>Element to define the Name field in the dialog, and all the corresponding values for the Values field, for the Units field, and for the Tag field.</documentation>
+    			</annotation></element>
+    	</sequence>
+    	<attribute name="name" default="Group (Selection)">
+            <annotation>
+            	<documentation>Each context element defines a name from the following possible values: Atom, Bond, Single Bond, Double Bond, Fragment, Group (Selection) that are also the display names of the contexts.
+Each name should be defined only once, but none of them is mandatory.</documentation></annotation>
+            <simpleType>
+                <annotation>
+                	<documentation>Each context element defines a name from the following possible values: Atom, Bond, Single Bond, Double Bond, Fragment, Group (Selection) that are also the display names of the contexts.
+Each name should be defined only once, but none of them is mandatory.</documentation></annotation>
+                <restriction base="string">
+    				<enumeration value="Atom"></enumeration>
+    				<enumeration value="Bond"></enumeration>
+    				<enumeration value="Single Bond"></enumeration>
+    				<enumeration value="Double Bond"></enumeration>
+    				<enumeration value="Fragment"></enumeration>
+    				<enumeration value="Group (Selection)"></enumeration>
+    			</restriction>
+    		</simpleType>
+    	</attribute>
+    </complexType>
+
+    <complexType name="DataNameType">
+        <annotation>
+        	<documentation>Type to define the attributes and the usable elements inside a dataname element.
+textRepresentation attribute will be visible in the Name combo box in the dialog.
+defaultTag will be set automatically as the value of the Tag field if present.
+multipleValuesEnabled will change the Values field behaviour, if true, then multiple values can be selected in the combo box, otherwise only one element can be selected for one attached data.
+Any dataname can have any corresponding Values as a sequence of value elements.
+Any dataname can have any corresponding Untis as a sequence of unit elements.</documentation>
+        </annotation>
+        <sequence>
+    		<element name="value" type="string"
+    			maxOccurs="unbounded" minOccurs="0">
+                <annotation>
+                	<documentation>Any dataname can have any corresponding Values as a sequence of value elements.</documentation></annotation>
+    		</element>
+    		<element name="unit" type="string"
+    			maxOccurs="unbounded" minOccurs="0">
+                <annotation>
+                	<documentation>Any dataname can have any corresponding Untis as a sequence of unit elements.</documentation></annotation>
+    		</element>
+    	</sequence>
+        <attribute name="textRepresentation" type="string" use="required">
+        	<annotation>
+        		<documentation>This attribute will be visible in the Name combo box in the dialog.</documentation>
+        	</annotation></attribute>
+        <attribute name="defaultTag" type="string" use="optional">
+        	<annotation>
+        		<documentation>This string will be set automatically as the value of the Tag field if present.</documentation>
+        	</annotation></attribute>
+    	<attribute name="multipleValuesEnabled" type="boolean"
+    		use="optional" default="false">
+            <annotation>
+            	<documentation>This attribute will change the Values field behaviour, if true, then multiple values can be selected in the combo box, otherwise only one element can be selected for one attached data.</documentation>
+            </annotation>
+    	</attribute>
+    </complexType>
+
+</schema>

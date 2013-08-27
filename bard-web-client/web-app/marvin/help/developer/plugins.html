@@ -1,0 +1,327 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Nora Mate">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Calculator Plugins</title>
+</head>
+<body>
+<h1>Calculator Plugins</h1>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#mech">Mechanism</a></li>
+<li><a href="#config">Configuration</a></li>
+<li><a href="#custom">Your plugin</a></li>
+<li><a href="../../examples/plugin/index.html">Calculator Plugins code examples</a></li>
+</ul>
+
+<h2><a class="anchor" name="intro">Introduction</a></h2>
+
+<p>Plugins are generally used to add dynamically loaded modules to an application  
+based on user defined configuration.</p>
+
+<p>Our chemical calculator plugin structure is added to Marvin for the following reasons:</p>
+<ol>
+<li>There are a large number of chemical calculations and the set of necessary
+calculations may vary by user
+<li>Users may need special calculations that are available on the internet or even
+more specific ones for which they have their own implementation
+<li>A general mechanism is needed to enable both graphical java applications and
+command line tools to set chemical calculation parameters, perform the required
+calculation and display the results
+</ol>
+<p>There are some built-in calculations such as charge, p<i>K</i><sub>a</sub>,
+log<i>P</i> and log<i>D</i> computations that can be purchased from
+<script language="JavaScript"><!--
+document.write('<a href="mailto:'+'sales'+'@'+'chemaxon.com">'+'sales'+'@'+'chemaxon.com</a>');
+//--></script>.
+If a user needs another calculation, then he/she can integrate that calculation into
+Marvin as a <a href="#custom">custom plugin</a>.</p>
+<p>We developed a mechanism to handle these calculations in a uniform way. This common interface
+is utilized as a common java API for developers, as a
+<a href="../applications/calc.html">command line tool</a> and also in our graphical applications and applets
+<a href="sketchman.html">MarvinSketch</a> and <a href="viewman.html">MarvinView</a>.
+
+<h2><a class="anchor" name="mech">Mechanism</a></h2>
+
+<p>The implementation of the general plugin handling mechanism can be found in the
+<code>chemaxon.marvin.plugin</code> package. Our specific plugin implementations
+are in the <code>chemaxon.marvin.calculations</code> package.</p>
+<p>Calculator plugins have a common base class:
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPlugin.html" target="_blank">
+<code>chemaxon.marvin.plugin.CalculatorPlugin</code></a>.
+This base class declares methods to be implemented by the specific plugin classes for
+input molecule setting, parameter setting, performing the calculation and getting the results,
+ implements the license handling, and provides some helper functions (e.g. for number
+formatting).</p>
+
+<p><a name="plugindisplay"></a>Apart from this main plugin class, our graphical applications and applets
+<a href="sketchman.html">MarvinSketch</a> and <a href="viewman.html">MarvinView</a> require a
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html" target="_blank">
+<code>chemaxon.marvin.plugin.CalculatorPluginDisplay</code></a> class to provide result GUI components.
+For most plugins, the default implementation is sufficient as long as the
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPlugin.html#getResultMolecule()" target="_blank">
+<code>CalculatorPlugin.getResultMolecule()</code></a> method is implemented such that molecular results
+are written to molecule properties by
+<a href="beans/api/chemaxon/struc/Molecule.html#setProperty(java.lang.String, java.lang.String)" target="_blank">
+<code>Molecule.setProperty(String key, String value)</code></a> and atomic properties are written to
+extra lables by
+<a href="beans/api/chemaxon/struc/MolAtom.html#setExtraLabel(java.lang.String)" target="_blank">
+<code>MolAtom.setExtraLabel(String label)</code></a>. It is also possible to set the atom label display color by
+<a href="beans/api/chemaxon/struc/MolAtom.html#setExtraLabelColor(long)" target="_blank">
+<code>MolAtom.setExtraLabelColor(long color)</code></a>.
+The <code>CalculatorPluginDisplay</code> base class provides a MarvinView display for all of these in
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html#getResultComponent()" target="_blank">
+<code>CalculatorPluginDisplay.getResultComponent()</code></a>.
+However, your plugin may require a different display, in which case you should write a custom display class
+extending <a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html" target="_blank">
+<code>chemaxon.marvin.plugin.CalculatorPluginDisplay</code></a> which overrides
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html#getResultComponent()" target="_blank">
+<code>CalculatorPluginDisplay.getResultComponent()</code></a>. You can also rewrite
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html#store()" target="_blank">
+<code>CalculatorPluginDisplay.store()</code></a> to store results - this is mainly useful when more molecules
+are drawn as a multi-fragment molecule in the sketcher and your plugin handles these one-by-one
+(<a href="beans/api/chemaxon/marvin/plugin/CalculatorPlugin.html#handlesMultiFragmentMolecules()" target="_blank">
+<code>CalculatorPlugin.handlesMultiFragmentMolecules()</code></a> returns <code>false</code>).</p>
+
+<p>In Marvin applications and applets plugin parameters can be set in a plugin specific parameter panel which can be
+configured in a corresponding XML code. If the parameter
+setting panel is more complicated then it is also possible to return it in
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html#getParameterPanel()" target="_blank">
+<code>CalculatorPluginDisplay.getParameterPanel()</code></a>.</p>
+
+<p>There is an <a href="../../examples/plugin/index.html">example plugin</a> implementation with a
+test application among the <a href="../../examples/index.html">Marvin Beans Examples</a>.</p>
+
+<p><a name="pluginoutput"></a>The <a href="../applications/calc.html">cxcalc</a> command line tool uses
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginOutput.html" target="_blank">
+<code>chemaxon.marvin.plugin.CalculatorPluginOutput</code></a>
+to generate the plugin results in table form.
+This class implements the default table output with one result row for each input molecule,
+the molecule ID in the first column followed by the plugin results in the subsequent
+columns. A specific output table format can be defined by subclassing this class.</p>
+
+
+<h2><a class="anchor" name="config">Configuration</a></h2>
+
+<p>Both the <a href="../applications/calc.html">cxcalc</a> command line tool and the
+graphical applications and applets require separate configuration files that specify the
+available calculations / calculator plugins. For the configuration of the command line tool see the
+<a href="../applications/calc.html#config">Configuration File</a> section in the
+<a href="../applications/calc.html">Calculator user manual</a>. The plugin configuration for
+<a href="sketchman.html">MarvinSketch</a> and <a href="viewman.html">MarvinView</a>
+describes the calculator plugins accessible from the <code>Tools</code> menu. It is read from
+<code>plugins/plugins.properties</code> file (taken relative to the Marvin root
+directory), or from <code>xjars/plugins.properties</code> file (located inside MarvinBeans.jar)
+if the previous doesn't exist. It is also possible to specify the configuration in
+java properties file given in the <code>toolfiles</code> application or applet parameter
+(the file name should be given relative to the <code>CLASSPATH</code>). Marvin applets
+load configuration files  from the server computer.
+
+<p>The configuration file syntax is best shown by an example:
+
+<pre>
+#$&lt;plugin class name&gt;$&lt;plugin JAR URL&gt;$&lt;menu&gt;$&lt;mnemonics&gt;$&lt;group&gt;$&lt;groupmnemonics&gt;$&lt;NOPARAMS&gt;
+
+#first char is separator, you can choose any ASCII character that is not contained in the fields
+
+plugin_01=$chemaxon.marvin.calculations.ElementalAnalyserPlugin$ElementalAnalyserPlugin.jar$Elemental Analysis$EA$$
+plugin_11=$chemaxon.marvin.calculations.pKaPlugin$pKaPlugin.jar$pKa$pK$Protonation$P
+</pre>
+
+<p>The property keys should be unique within one configuration file.
+The <code>Tools</code> menu is constructed with submenus specified in group strings with menuitems defined in menu strings.
+Mnemonics can be set for groups using groupmnemonics and for plugins defining mnemonics strings. If group string is
+left empty then the plugin is listed directly in the <code>Tools</code> menu.
+<p>Each property value defines a plugin configuration by giving the following fields:
+
+<ol>
+<li>the full package name of the <em>plugin class</em>
+<li>the <em>plugin JAR</em> (with path relative to the <code>plugins</code> directory)
+<li>the label in the <code>Tools</code> menu
+<li>the menu label mnemonics character (only first character is considered if a string is given)
+<li>the menu group label in the <code>Tools</code> menu
+<li>the menu group label mnemonics character (only first character is considered if a string is given)
+<li>an optional "NOPARAMS" string indicating that the plugin has no parameters
+</ol>
+
+<p>At least one of the plugin class and the plugin JAR is mandatory. If the plugin class is not
+specified then it is read from the <code>Plugin-Class</code> attribute of the JAR manifest. If the
+JAR is not specified then the plugin is loaded from the CLASSPATH.
+The ending "NOPARAMS" option can simply be omitted, while if an intermediate field
+is omitted then the corresponding separator character should be added.
+
+<p><b>Plugin loading:</b>
+<p>The central plugin loader class is the
+<a href="beans/api/chemaxon/marvin/plugin/PluginFactory.html" target="_blank">
+<code>chemaxon.marvin.plugin.PluginFactory</code></a>:
+this class reads the configuration from a <code>java.util.Properties</code> object or from
+a configuration file. In the latter case the <code>Tools</code> menu is also constructed
+based on this configuration. The parameter panels are dynamically constructed from the plugin specific parameter panel descriptor XMLs or fetched from the display class. In the former case
+the parameter panel can be constructed and displayed before the plugin class is loaded.</p>
+
+<p>The plugin loading mechanism is the following:
+first the program tries to load the plugin class by the default class loader from the
+CLASSPATH; if the plugin class is not found then the JAR is loaded and the system
+tries to load the plugin class from there.
+<p>If the plugin name is omitted then the plugin is loaded directly from the JAR where
+the <code>Plugin-Class</code> manifest attribute specifies the plugin class.
+<p>If the JAR name is omitted then the plugin is loaded from the CLASSPATH.
+<p>For example, here is the above plugin configuration with omitted fields:
+
+<pre>
+#$&lt;plugin class name&gt;$&lt;plugin JAR URL&gt;$&lt;menu&gt;$&lt;mnemonics&gt;$&lt;group&gt;$&lt;groupmnemonics&gt;$&lt;NOPARAMS&gt;
+
+#first char is separator, you can choose any ASCII character that is not contained in the fields
+
+plugin_01=$chemaxon.marvin.calculations.ElementalAnalyserPlugin$$Elemental Analysis$EA$$
+plugin_11=$$pKaPlugin.jar$pKa$pK$Protonation$P
+</pre>
+
+<h2><a class="anchor" name="custom">Your plugin</a></h2>
+
+<p>The following table shows the items needed for the different plugin uses:</p>
+<table border="0" cellspacing="0" cellpadding="3" id="grid">
+<tr><td>&nbsp;</td><td align="center">
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPlugin.html" target="_blank">
+<b>CalculatorPlugin</b></a> subclass</td><td align="center">
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginDisplay.html" target="_blank">
+<b>CalculatorPluginDisplay</b></a> class or subclass</td><td align="center">
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPluginOutput.html" target="_blank">
+<b>CalculatorPluginOutput</b></a> class or subclass</td><td align="center">
+<b>plugins.properties</b></td><td align="center">
+<b>calc.properties</b></td></tr>
+<tr><td align="right"><b>sketcher/viewer</b></td><td align="center"><img src="../images/yes.png"></td><td align="center"><img src="../images/yes.png"></td><td align="center"><img src="../images/no.png"></td><td align="center"><img src="../images/yes.png"></td><td align="center"><img src="../images/no.png"></td></tr>
+<tr><td align="right"><b>cxcalc tool</b></td><td align="center"><img src="../images/yes.png"></td><td align="center"><img src="../images/no.png"></td><td align="center"><img src="../images/yes.png"></td><td align="center"><img src="../images/no.png"></td><td align="center"><img src="../images/yes.png"></td></tr>
+<tr><td align="right"><b>java API</b></td><td align="center"><img src="../images/yes.png"></td><td align="center"><img src="../images/no.png"></td><td align="center"><img src="../images/no.png"></td><td align="center"><img src="../images/no.png"></td><td align="center"><img src="../images/no.png"></td></tr>
+</table>
+
+
+<p><b>Naming convention:</b>
+
+<p>The plugin handling mechanism currently requires the following naming convention:</p>
+<ul>
+<li>Plugin class: any class name will do, but built-in plugins are named <code>...Plugin</code>
+    (e.g. <code>chemaxon.marvin.calculations.HBDAPlugin</code>)
+<li>Display class: <code>&lt;plugin class name&gt;Display</code>
+    (e.g. <code>chemaxon.marvin.calculations.HBDAPluginDisplay</code>)
+<li>Output class: <code>&lt;plugin class name&gt;Output</code>
+    (e.g. <code>chemaxon.marvin.calculations.HBDAPluginOutput</code>)
+</ul>
+
+<p>There is an <a href="../../examples/plugin/index.html">example plugin</a> implementation
+(plugin and display classes) with a test application among the
+<a href="../../examples/index.html">Marvin Beans Examples</a>.</p>
+
+<p>Here are some guidelines to follow when designing your own plugin, as a
+<a href="beans/api/chemaxon/marvin/plugin/CalculatorPlugin.html" target="_blank">
+<code>CalculatorPlugin</code></a> subclass
+
+<p>The first step: go to the internet and download some code or write your own.
+The calculation code is assumed to work on one input molecule at a time, perform the calculation
+and then return various results of the calculation. The plugin class will first set the input
+molecule, then run the calculation and finally query the results, so it is a good idea to follow
+roughly the same implementation style in the calculation module: the more the calculation
+code follows this model, the easier your work will be when you write the plugin wrapper.</p>
+<p>Then extend the abstract base plugin class <code>chemaxon.marvin.plugin.CalculatorPlugin</code>.
+Here is the list of methods that have to be implemented:
+</p>
+<ol>
+<li><pre><code>abstract protected void setInputMolecule(Molecule mol) throws PluginException</code></pre>
+This method sets the input molecule. Throw a <code>PluginException</code> on any error.
+</li>
+<li><pre><code>public void setParameters(Properties params) throws PluginException</code></pre>
+This method sets the plugin specific parameters: the <code>params</code> argument contains the
+plugin parameters as <code>long parameter name -&gt; parameter value</code> pairs.
+(The <code>long parameter name</code> here is without the "<code>--</code>" prefix: e.g. if you
+have <code>--type</code> as a command line parameter then it will be present with key
+<code>type</code> in this property table.) Your task is to
+convert the parameter values from string to the required format and set the parameter
+in the calculation module or store it in the plugin for later use. Throw a
+<code>PluginException</code> on any error (unexpected format, unexpected value). All possible
+plugin parameters have a default value so a missing parameter should not cause any error: use
+its default value instead.
+</li>
+<li><pre><code>public void checkMolecule(Molecule mol) throws PluginException</code></pre>
+Checks the input molecule. Throws a <code>PluginException</code> if the plugin calculation
+result is not defined for the given molecule (e.g. molecule is a reaction molecule or a
+molecule with R-groups). The exception message will be formed to an error message to the
+user and the molecule will not be processed if a <code>PluginException</code> is thrown.
+Do nothing if the molecule is accepted.
+</li>
+<li><pre><code>abstract public boolean run() throws PluginException</code></pre>
+This method performs the calculation and stores the results. Include those tasks
+that must be run once for each molecule and produce the calculation results in the end. Returns <code>true</code> if the
+calculation was successful, <code>false</code> on calculation problems. Again, throw a <code>PluginException</code> on any error.
+</li>
+<li><pre><code>public Object[] getResultTypes()</code></pre>
+This method returns the queried result types. For example, the <code>charge</code>
+calculation may have three result types: <code>sigma</code>, <code>pi</code> and <code>total</code>,
+the <code>logp</code> calculation may have two result types: <code>increments</code> and
+<code>molecule</code>. The built-in plugins <code>charge</code>, <code>logp</code> and
+<code>pka</code> have the <code>--type</code> command line parameter that specifies the required
+result types: this method returns those that are specified in this parameter. However, it is
+possible to return all available result types and not provide this choice.
+</li>
+<li><pre><code>public int getResultDomain(Object type)</code></pre>
+This returns the domain that the calculation result for the specified result type refers to:
+currently it can be <code>ATOM</code> or <code>MOLECULE</code>. For example, the
+<code>logPPlugin</code> returns <code>ATOM</code> if <code>type</code> is <code>"increments"</code>
+and returns <code>MOLECULE</code> if <code>type</code> is <code>"molecule"</code>.
+</li>
+<li><pre><code>public int getResultCount(Object type)</code></pre>
+This returns the number of result items for the specified result type. For <code>ATOM</code> result
+domain this is usually the number of atoms in the molecule, for <code>MOLECULE</code> domain this
+is usually <code>1</code>.
+</li>
+<li><pre><code>public Object getResult(Object type, int index) throws PluginException</code></pre>
+This returns the result for the specified result type and the specified result index: this index
+must be at least <code>0</code> and less than the result count returned by
+<code>getResultCount(Object type)</code> for this result type. In our case the result is a number:
+it must be wrapped into the derived class of <code>java.lang.Number</code> corresponding to its
+primitive type (e.g. <code>double</code> must be wrapped into <code>java.lang.Double</code>).
+<code>PluginException</code> can be thrown on any error.
+</li>
+<li><pre><code>public String getResultAsString(Object type, int index, Object result) throws PluginException</code></pre>
+This returns a string representation of the result. The result type and index are also given:
+in some cases the string representation may include these or depend on these as well. The
+<code>protected String format(double x)</code> can be used to <code>double -&gt; String</code>
+conversion with a given number of fractional digits. If you intend to use this formatting then
+<code>protected void setDoublePrecision(int precision)</code> has to be called once beforehand
+to set the maximum number of decimal digits allowed in the fractional portion of a number.
+<code>PluginException</code> can be thrown on any error.
+</li>
+<li><pre><code>public String getResultAsRGB(Object type, int index, Object result) throws PluginException</code></pre>
+Returns the color to be used when displaying the result. For example, this method is used when acidic p<i>K</i><sub>a</sub> values are displayed
+in red while basic p<i>K</i><sub>a</sub> values are displayed in blue. The color is returned as a single <code>int</code> (see the
+<em>java.awt.Color.<init>(int)</em> for a
+definition of encoding a color into a single <code>int</code>). The default implementation returns <code>0</code>
+which means that the result will be displayed using the current foreground color.
+<code>PluginException</code> can be thrown on any error.
+</li>
+<li><pre><code>public void standardize(Molecule mol)</code></pre>
+This method is used to bring the molecule to a standardized form. Some calculations require a certain
+standardization preprocess, such as aromatization or a common form of certain functional groups
+(one prescribed tautomer or mezomer form). The current implementation performs only aromatization and
+nitro group and sulphynil group conversions (transforms to the neutral forms). If any other transformation is
+needed or no such transformation is necessary then you must implement this method. Be careful with
+transformations that change the atom set of the molecule since these change the atom indices as
+well: if the result domain is <code>ATOM</code> then after querying the results with
+<code>getResult(Object key, int index)</code> and
+<code>getResultAsString(Object key, int index, Object result)</code>
+the program will output the returned result for the specified atom index
+in the <i>original molecule</i> and not in the transformed one.
+If the standardization procedure changes the atom indices then the index given in these result
+query methods must be transformed to the corresponding atom index in the transformed molecule
+and the result for that atom index must be returned.
+</li>
+<li><pre><code>public boolean isLicensed()</code></pre>
+Returns <code>true</code> if the plugin is licensed. Implement this only if you want to sell your plugin and protect
+it with a license key. The default implementation always returns <code>true</code> which means that the plugin is free:
+no license key is required. This method returns only information about the licensing, license checking has to be
+implemented separately. </li>
+</ol>
+
+</body>
+</html>

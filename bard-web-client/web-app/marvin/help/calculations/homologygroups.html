@@ -1,0 +1,568 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="../marvinmanuals.css">
+<title>Homology groups in Markush structures</title>
+</head>
+
+<body>
+<h1>Homology groups in Markush structures</h1>
+
+<p>Currently JChem enables the searching of Markush structures containing 
+homology groups only with specific molecule queries (with no query 
+features). Homology groups are supported on the target and on the query side 
+the latter only for non-markush targets. Properties can also be specified for the 
+groups.  
+<p><a href="../sketch/sketch-basic.html#markush-structures">Read the user's guide about homology groups and property editing in MarvinSketch.</a>
+<h2>Contents</h2>
+
+ <ul>
+                    <li><a href="#definition">Definition of the groups</a></li>
+                    <li><a href="#searchoptions">Search options</a></li>
+                    <li><a href="#enumeration">Enumeration</a></li>
+                    <li><a href="#homology_properties">Properties of homology groups</a></li>
+                    
+                </ul>
+<h2><a class="anchor" name="definition">Definition of the groups</a></h2>
+
+<p>The homology groups in Markush structures are represented by pseudo atoms 
+labeled with the common chemical annotation of the groups. Most groups have alias names
+which allow shorter names. The names 
+are case insensitive, spaces might be inserted. The pseudo atoms can be most easily drawn in Marvin Sketch 
+using the Homology Groups 
+<a href="../sketch/sketch-basic.html#templates">template group</a>.</p>
+
+There are two major types of homology groups regarding their way of definition:
+<ol>
+        <li><b>Built-in groups</b> are defined by specific structural properties of the 
+		group. These groups are not enumerated during searching, but the query structure 
+		is recognized as fulfilling the requirements for such a structure. The possible 
+		number of covered structures is usually infinite, unless the number of atoms is 
+		limited. Examples of built-in groups are alkyl, aryl, heterocycle, etc.</li>
+        <li><b>User-defined groups</b> are explicitly defined and only the listed
+        structures can match these homology groups. The definition is given in the 
+		form of an R-group definition, and any of the generic features discussed in the 
+		Markush
+		chapter can be used in the definition. These definitions can be customized by 
+		the user, and may be context-specific. (E.g. protecting group definition 
+		depends on which functional group it is protecting.)</li>
+</ol>
+
+<h3><a class="anchor" name="builtin">Built-in groups</a></h3>
+
+Table 1. shows the properties of built-in groups.
+Built-in groups are recognized some specific features, these are shown in the table
+as "compulsory" parts. Optional parts are structures that are not necessarily 
+part of the structure that matches on the homology group. 'Incomplete case' means structures
+that are substructures of structures that would represent a homology group.  
+It is required that even such incomplete structures be extended to a complete homology
+group. <a href="#searchoptions">Search options</a> regulate if incomplete structures can match on 
+a homology group or complete structures are required.      
+<p> The "Example" column shows complete structures representing the homology groups. 
+
+<p>
+<b>Table 1.</b> Built-in groups
+</p>
+<table border="0" cellspacing="0" cellpadding="5" class="grid" summary="" rules="all">
+        <thead>
+        <tr>
+            <th>Group name (alias names)</th>
+            <th width="200">Compulsory</th>
+            <th width="200">Optional</th>
+            <th width="200">Incomplete case</th>
+            <th>Example</th>
+         </tr>
+    </thead>
+    <tbody>
+        <tr>    
+            <td>Alkyl <br>(chk)</td>
+            <td>- minimum of one carbon atom<br>
+                - only carbon and hydrogen atoms<br>
+                - single bonds<br>
+                - no ring bonds</td>
+            <td>connection point at arbitrary position(s)</td>
+            <td>same requirements</td>
+        <td align="center"><img src="Homology_files/alkyl.png" alt="" width="234" height="116"></td>
+        </tr>
+        <tr>
+            <td>Alkenyl <br>(che)</td>
+            <td>- at least one double bond<br>
+                - minimum of 2 carbon atoms<br>
+                - otherwise same as for Alkyl</td>
+            <td>same as above</td>
+            <td>same as at compulsory, but the matching structure does not need to have any double bond</td>
+	         <td align="center"><img src="Homology_files/alkenyl.png" alt="" width="72" height="70"></td>
+        </tr>
+        <tr>
+            <td>Alkynyl <br>(chy)</td>
+            <td>- at least one triple bond<br>
+                - minimum of 2 carbon atoms<br>
+                - otherwise same as for Alkyl</td>
+            <td>same as above, double bond</td>
+            <td>same as at compulsory, but the matching structure does not need to have any triple bond</td>
+	         <td align="center"><img src="Homology_files/alkynyl.png" alt="" width="175" height="108"></td>
+        </tr>
+        <tr>
+            <td>CarbonTree<br>(acyclicCarbon)</td>
+            <td>Any connected acyclic carbon structure.</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center"><img src="Homology_files/carbontree.png" width="152" height="85"></td>
+        </tr>
+        <tr>
+            <td>Carboalicyclyl <br>(cyc, cycloalkyl)</td>
+            <td>- monocyclic or fused aliphatic rings<br>
+                - only carbon and hydrogen atoms<br>
+		- no substitution by (saturated) alkyl chains</td>
+            <td>- double or triple bonds in the ring but not aromatic<br>
+                - several connection points on the rings
+            </td>
+            <td>- any carbon structure without aromatic bonds<br>
+                - the substituting alkyl chain can be unsaturated</td>
+            <td align="center"><img src="Homology_files/carboalicyclyl.png" alt="" width="136" height="132"></td>
+        </tr>
+        <tr>
+            <td>Carboaryl <br>(ary, aryl)</td>
+            <td>- monocyclic or fused rings<br>
+                - among these rings at least one should be aromatic<br>
+                - only carbon and hydrogen atoms</td>
+            <td>- double bonds/triple bonds in the aliphatic rings<br>
+                - several connection points but all must be on an
+    aromatic ring (can't have external connection on an
+    aliphatic ring)</td>
+            <td>- similar to carboalicyclyl but the atoms can have aromatic bonds:<br>
+                - any carbon structure where the external connection is on an 
+                atom that has aromatic bond or has only one bond.<br>
+                - the matching structure doesn't need to have a ring.</td>
+            <td align="center"><img src="Homology_files/aryl.png" alt="" width="160" height="145"></td>
+        </tr>
+        <tr>
+            <td> Heteromonoalicyclyl <br>(het, heterocycle, heterocyclyl,<br> AliphaticHeterocyclyl)</td>
+            <td>- monocyclic, aliphatic ring with at least one hetero atom, carbon atom is also required<br>
+                <br>
+		</td>
+            <td>same as carboalicyclyl</td>
+            <td>similar to carboalicyclyl but here hetero atoms are accepted as well, which means
+any structure without aromatic bonds</td>
+            <td align="center"><img src="Homology_files/heterocycle.png" alt="" width="100" height="97"></td>
+
+        </tr>
+        <tr>
+            <td>Heteromonoaryl <br>(hea, Heteroaryl)</td>
+            <td>- similar to aryl but the monocyclic aromatic ring should contain at least one
+            hetero atom, carbon atom is also required<br>
+		- no fused rings</td>
+            <td>same as aryl</td>
+            <td>Similar to aryl but here hetero atoms are accepted as well. Condition for the
+externally connecting atom holds as in case of aryl.</td>
+            <td align="center"><img src="Homology_files/heteroaryl.png" alt="" width="88" height="90"></td>
+        </tr>
+        <tr>
+            <td>FusedHetero, fusedHeterocyclyl <br>(hef)</td>
+            <td>- Fused ring system having at least one hetero atom, carbon atom is also required</td>
+            <td>same as aryl, but the connection point can be on an aliphatic ring as well</td>
+            <td>Any structure having hetero, carbon and hydrogen atoms, with any bonds.</td>
+            <td align="center"><img src="Homology_files/fusedhetero.png" width="188" height="103"></td>
+        </tr>
+        <tr>
+            <td>Cyclyl<br>(anycyclyl, anyring)</td>
+            <td>Any kind of ring regardless fuseness, aromaticity and hetero-carbo nature.</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center"><img src="Homology_files/cyclyl.png" width="132" height="86"></td>
+        </tr>
+        <tr>
+            <td>RingSegment<br>-</td>
+            <td>A part of a ring where every atom has only 2 ring connections. 
+            Non ring connections are allowed. The group does not represent a whole ring.</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center"><img src="Homology_files/ringsegment.png" width="81" height="82"></td>
+        </tr>
+        <tr>
+            <td>Unknown group <br>(unk)</td>
+            <td align="center">-</td>
+            <td>Any structure. Unknown structures are enumerated as the union of all other homology groups.</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+        </tr>
+        <tr>
+            <td>Metal <br>(mx)</td>
+            <td>Any metal</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center">U, K, Fe, Na, Ni, Al, ...</td>
+        </tr>
+        <tr>
+            <td>AlkaliMetal <br>(amx)</td>
+            <td>Alkali and alkaline earth metals</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center">Na, K, Ca, Mg, ...</td>
+        </tr>
+        <tr>
+            <td>OtherMetal <br>(a35)</td>
+            <td>Group IIIa-Va metals</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center">Al, Ga, ...</td>
+        </tr>
+        <tr>
+            <td>TransitionMetal <br>(trm)</td>
+            <td>Transition metals excluding lanthanum</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center">Fe, Ni, Zn, Co, Hg, W, ...</td>
+        </tr>
+        <tr>
+            <td>Lanthanide <br>(lan)</td>
+            <td>Lanthanides (including lanthanum)</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center">Nd, Ce, Pr, ...</td>
+        </tr>
+        <tr>
+            <td>Actinide<br>(act)</td>
+            <td>Actinides (including actinium)</td>
+            <td align="center">-</td>
+            <td align="center">-</td>
+            <td align="center">U, Th, Pa, ...</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3><a name="userdefined" class="anchor">User-defined homology groups</a></h3>
+
+<p>These homology groups are predefined and are represented by R-group 
+definitions. During search the pseudo atoms are translated to the 
+corresponding R-group definitions.
+
+<!--<p>Location of the definitions: in chemaxon/enumeration/homology/user_def_groups in the jar file.
+The name implies that these groups are represented by these definitions during
+search and enumeration as well. For the enumeration of built-in structures see section enumeration.
+
+<p>The user can override these definition, just has to copy the definition from the
+jar file to the user chemaxon directory into the directory: homology/user_def_groups.
+You can override these files which will affect searching groups.
+-->
+
+<p>The group definitions are <a href="#customizedef">customizable</a>, the user can override them or 
+can make new definitions as well. Group names are treated case insensitive, 
+but in case sensitive file systems the definition files should be lowercase.
+
+<!-- <p>Technically, the group definitions are handled in a conversion step before the 
+search, in which the homology group is replaced by the R-atom. This atom receives
+an alias string, which shows the name of the converted homology group, and the
+R-group index. Internally this alias helps to distinguish between originally existing
+R-groups and R-groups resulting from homology conversion.
+ -->
+<p>User-defined groups readily available in the system are the following:
+
+<h4><a name="halogen" class="anchor">Halogen</a></h4>
+
+Halogen elements: F, Cl, I and Br.
+<br>
+JChem's group name: halogen
+<br>
+alias names: hal
+
+
+<h4><a name="protecting" class="anchor">Protecting</a></h4>
+
+<p>Protecting groups' definition file contains several definitions, 
+each for protecting different functional groups. The protected functional
+group is defined by the neighborhood of the R-atom. When the R-atom has the same
+neighborhood as the "protecting" pseudo atom, then the group is replaced 
+by the R-atom.</p>
+<p>
+The conversion processes the group definitions in their order in the file. 
+This means that more specific environments should be placed earlier.
+For example, a carboxyl protecting group definition should precede an 
+alcohol definition, otherwise the alcohol definitions will be applied 
+instead.
+Currently they are located in the following order:
+<ol>
+	<li>amino</li>
+	<li>carboxyl</li>
+	<li>alcohol</li>
+</ol>
+
+<!--See example definition. (rename it to mrv.)-->
+
+<p>Currently the system can't handle protecting groups having more than one
+attachment point, or groups where the heavy atoms of the functional group 
+should be changed by the substitution.
+The readily available definitions contain amine, carboxyl and hydroxyl 
+protecting groups.
+<br>
+JChem's group name: protecting
+<br>
+alias names: prt
+
+<p>Some examples with different functional groups protected can be found on Table 2.
+
+<p>
+<b>Table 2.</b> Protecting group examples
+</p>
+<p>
+<table border="0" cellspacing="0" cellpadding="5" class="grid" summary="" rules="all">
+        <tr>
+            <td align="center"><b>Protecting group</b></td>
+            <td align="center" colspan="3"><b>Represented examples</b></th>
+         </tr>
+        <tr>
+            <td align="center"><img src="Homology_files/protectingN.png" alt="" width="114" height="74"></td>
+            <td align="center"><img src="Homology_files/protectingN1.png" alt="" width="75" height="82"></td>
+            <td align="center"><img src="Homology_files/protectingN2.png" alt="" width="100" height="104"></td>
+            <td align="center"><img src="Homology_files/protectingN3.png" alt="" width="129" height="123"></td>
+        </tr>
+        <tr>
+            <td align="center"><img src="Homology_files/protectingO.png" alt="" width="120" height="57"></td>
+            <td align="center"><img src="Homology_files/protectingO1.png" alt="" width="124" height="96"></td>
+            <td align="center"><img src="Homology_files/protectingO2.png" alt="" width="106" height="86"></td>
+            <td align="center"><img src="Homology_files/protectingO3.png" alt="" width="101" height="70"></td>
+        </tr>
+        <tr>
+            <td align="center"><img src="Homology_files/protectingCOO.png" alt="" width="136" height="68"></td>
+            <td align="center"><img src="Homology_files/protectingCOO1.png" alt="" width="105" height="72"></td>
+            <td align="center"><img src="Homology_files/protectingCOO2.png" alt="" width="135" height="77"></td>
+            <td align="center"><img src="Homology_files/protectingCOO3.png" alt="" width="117" height="69"></td>
+        </tr>
+</table>
+
+
+<h4><a name="acyl" class="anchor">Acyl</a></h4>
+
+<p>Residue left after removal of one or more OH groups from an acid. Currently it behaves 
+as simple pseudo atoms: can only be matched by itself and is not enumerated. This behavior
+ complies with the Thomson-Reuters/Questel acyl group handling.
+<br>
+JChem's group name: acyl
+<br>
+alias names: acy
+
+<h4><a name="any" class="anchor">Any group</a></h4>
+
+<p>The union of all other homology groups except acyl, unknown and protecting. This union is represented 
+by cyclyl, carbonTree, metal and halogen groups. If the group occurs
+in a ring then represents a ringSegment homology group.
+<br>
+JChem's group name: any
+<br>
+alias names: xx
+
+<h2><a class="anchor" name="searchoptions">Search options</a></h2>
+
+Search options regulating the search behavior are also available:
+
+<p>Currently there is one regulating option: 'completeHG', which specifies if the
+part of the query side structure matching on the given group should represent an
+entire homology group or if substructures are also accepted. Of course in the incomplete
+case an entire structure can also match on the given homology group.
+<br>For example, if completeHG is set to true (default) an alkyl chain can't match on a cycloalkyl
+group, only a ring (system). The detailed behavior is found at the definition of the groups.
+And example is shown on Table 3.
+
+<p>
+<b>Table 3.</b> Complete and incomplete structures of homology groups</p>
+<p>
+
+<table border="0" cellspacing="0" cellpadding="5" class="grid" summary="">
+    <tr>
+        <td rowspan="2" align="center">
+            <b>target</b>
+        </td>
+        <td rowspan="2" align="center">
+            <b>query</b>
+        </td>
+        <td colspan="2" align="center">
+            <b>hit</b>
+        </td>
+    </tr>
+
+    <tr>
+
+        <td align="center">
+            <em>completeHG:y</em>
+        </td>
+        <td align="center">
+            <em>completeHG:n</em>
+        </td>
+    </tr>
+    <tr>
+
+    <tr>
+        <td align="center" rowspan="2">
+            <img src="Homology_files/cycloalkylt.png" alt="" width="90" height="57">
+        </td>
+        <td align="center"><img src="Homology_files/cycloalkylq1.png" alt="" width="157" height="90"></td>
+        <td align="center"><img src="Homology_files/yes.png" width="24" height="24" alt=""></td>
+        <td align="center"><img src="Homology_files/yes.png" width="24" height="24" alt=""></td>
+    </tr>
+    <tr>
+        <td align="center"><img src="Homology_files/cycloalkylq2.png" alt="" width="231" height="111"></td>
+        <td align="center"><img src="Homology_files/no.png" width="24" height="24" alt=""></td>
+        <td align="center"><img src="Homology_files/yes.png" width="24" height="24" alt=""></td>
+    </tr>
+</table></p>
+
+<h2><a class="anchor" name="subset">Subset rules between homology groups</a></h2>
+	<ul>
+		<li>alkyl, alkenyl and alkynyl are a subset of carbontree</li>
+		<li>carboalicyclyl, carboaryl, heteromonoaryl, heteromonoalicyclyl and fused hetero cyclyl are subset of cyclyl</li>
+		<li>alkalimetal, transitionmetal, othermetal, lanthanides and actinides are subset of metal.</li>
+		<li>all the above groups are subset of the "any" homology group</li>		
+	</ul>  	 
+
+
+
+<h2><a class="anchor" name="enumeration">Enumeration</a></h2>
+To enable the enumeration of homology groups, the homology enumeration option of 
+Markush enumeration has to be switched on. Otherwise the homology groups are kept 
+as pseudo atoms. This latter option might be useful for showing that these 
+structures can't be fully enumerated.
+
+<h3>Built-in groups</h3>
+
+<p>For the built-in types, example R-group definitions specify the enumerable 
+library, with the same technology as user-defined groups. These structures are
+characteristic to the homology group and encompass simple and large structures 
+as well. The group definitions are <a href="#customizedef">customizable</a>.
+
+<p>We have to emphasize, that these definitions are only used for enumeration 
+and do not affect searching. As
+noted earlier, arbitrary structures fulfilling the requirements for the homology
+group will match such a target.
+
+<p>The enumeration definitions contain as default two attachment points. After 
+enumeration these are the atoms which connect to the first two neighbors
+of the group. If the enumerated homology pseudo atom has more than 
+ two connections then further attachment points are added. These are put on atoms 
+ that have free valence and comply the requirements for externally connecting atoms
+ of the given group. E.g. for aryl only aromatic ring atoms can be connection points
+ of the aryl. The atoms of the definition are investigated in the order of their 
+ numbering.  
+ If a definition does not have the sufficient number of such atoms, then
+ it is rejected. In case all the definitions of a homology atoms are rejected
+ an exception is thrown showing that the given homology group does not have any 
+ suitable enumeration definition.    
+
+<!--<p>The definition files are located in the following directory:
+chemaxon/enumeration/homology/enumeration_only in the jar file.
+
+<p>These files can be copied to the users "chemaxon" (or ".chemaxon") directory as
+written in case of user-defined groups. The name of the definition's directory
+in the user's directory should be "homology/enumeration_only".
+-->
+
+<h3><a class="anchor" name="userdefenum">User-defined groups</a></h3>
+<p>
+The enumeration of user-defined homology groups use the same (<a href="#customizedef">customizable</a>) 
+R-group definitions as searching.
+
+The user-defined homology atom should have the same number of connections as are shown in the definitions.
+
+<h3><a class="anchor" name="customizedef">Customizing homology group definitions</a></h3>
+Location of the definitions: 
+<dl>
+	<dt>User-defined groups</dt>
+	<dd>Directory <i>chemaxon/enumeration/homology/user_def_groups</i> in the jar file.
+The name implies that these groups are represented by these definitions during
+search and enumeration as well.</dd>
+
+	<dt>Built-in groups</dt>
+	<dd>Directory <i>chemaxon/enumeration/homology/enumeration_only</i> in the jar file.
+The name implies that these groups are represented by these definitions during
+enumeration only.</dd>
+</dl> 
+
+<p>The definition files are in lower case, customized file names have to be in
+lower case as well. 
+Overriding of these definition occurs by copying the definition from the
+jar file to the user <i>(.)chemaxon</i> directory into the subdirectory: <i>homology/user_def_groups</i>
+(or <i>homology/enumeration_only</i> for built-in groups).
+Overriding these files will affect searching/enumeration in case of 
+user-defined groups and the enumeration in case of built-in groups. <br>
+Adding a new group can be achieved by creating/copying a new mrv file containing an R atom
+and the definitions of the group. The name of the new group is specified by 
+the name of the file. 
+<BR> The overridden definition or the newly added group can also be dependent on the neighborhood 
+(context-sensitive) as in the case of protecting groups.
+<BR>
+If the user would like to have different definitions for searching and enumeration of a
+ user-defined group, then a separate file should be specified in the "enumeration_only" dictionary.
+ In this case the content of the "<i>user_def_groups</i>" will be used during searching and 
+ the content of the "<i>enumeration_only</i>" for enumeration. 
+<br>
+An example for overriding an amino protecting group definition may consist of the following
+ steps:
+<ol>
+	<li>Copy protecting group definition to the users (.)chemaxon library: e.g. from 
+	.../MarvinBeans-enumeration.jar/chemaxon/enumeration/homology/user_def_groups/protecting.mrv to 
+	/home/{USER_NAME}/.chemaxon/homology/user_def_groups/</li>
+	<li>Open the newly copied file in the user's directory with MarvinSketch.</li>
+	<li>A dialog appears asking the index of molecule to open. Enter 1 because 
+	this contains the amino protecting group definition. If the proper molecule number is
+	not known, all the definitions can be displayed using MarvinView.</li>
+	<li>Overwrite the structures, e.g. delete the FMOC group, see Table 4. 
+	The new definition will be used in searching and enumeration, see Table 4.</li>
+</ol>
+
+<p>If a definition is overridden it comes into effect immediately, however the addition of a new group 
+requires a restart of the Java Virtual Machine. 
+
+<p>
+<b>Table 4.</b> Overriding amino protecting group definitions.
+<p>
+
+<table border="0" cellspacing="0" cellpadding="5" class="grid" summary="">
+	<tr>
+		<td align="center"><b>overwriting the definition</b></td>	
+		<td align="center"><b>sample markush file</b></td>	
+		<td align="center"><b>enumerations</b></td>	
+	</tr>
+	<tr>
+		<td align="center"><img src="Homology_files/protectingOverr.png" alt="" width="382" height="266"></td>	
+		<td align="center"><img src="Homology_files/protectingSample.png" alt="" width="86" height="70"></td>	
+		<td align="center"><img src="Homology_files/protectingEnum.jpg" alt="" width="356" height="526"></td>	
+	</tr>
+</table>
+<p>
+</p>
+
+<h2><a type="anchor" name="homology_properties"></a>Properties of homology groups</h2>
+
+<p>Some homology groups have important properties. You might want to specify if the alkyl chain is branched, or
+ any deuterium atoms are present. The homology groups have a special property editing dialog where you can set 
+the different properties. They include the followings (with the group to which it may be applied):
+<ol>
+    <li><b>Deuterium and tritium count:</b> for all homology groups. The value should be given as e.g. D1-4T3, meaning the group 
+contains up to 4 deuterium atoms and 3 tritium atoms.</li>
+    <li><b>Text notes:</b> for all homology groups.
+	<br>Text format: Letters denoting different parameters followed by number ranges. <br>
+	These entries are separated by commas (,). Specification of attachment atom type is also possible.<br>
+	Possible parameters: 
+	<dl>
+	<dt>E</dt><dd>Number of double bonds</dd>
+	<dt>Y</dt><dd>Number of triple bonds</dd>
+	<dt>C</dt><dd>Number of carbon atoms</dd>
+	<dt>Hetero atom symbol</dt><dd>Number of occurrences of a particular heteroatom</dd>
+	<dt>X</dt><dd>Number of occurrences of heteroatoms not defined otherwise</dd>
+	<dt>NR</dt><dd>Number of rings in a ring system</dd>
+	<dt>RA</dt><dd>Number of atoms in a ring system</dd>
+	<dt>&gt;atomic symbol</dt><dd>Presence of one attachment to the specified atom</dd>
+	<dt>&gt&gt;atomic symbol</dt><dd>Presence of more than one attachment to the specified atom</dd>
+	</dl>
+	Example: N1-3,NR4,E1-2,&gt&gt;C    
+    </li>
+    <li><b>Branching:</b> for chain homology groups (BRA for branched, STR for straight chain).</li>
+    <li><b>Size:</b> for chains. Chains are marked as low (C1-6. LO), mid (C7-10, MID) or high (C11-, HI) according to the length of the chain.</li>
+    <li><b>Saturation:</b> for ring groups. They can be marked as saturated or unsaturated.</li>
+    <li><b>Ring type:</b> for ring groups. They are marked as monocyclic (MON) or multicyclic (FU), or can be marked as 'not specified'.</li>
+</ol>
+Not specifying a property means that there is no restriction on that property.
+<p><a href="../sketch/sketch-basic.html#markush-structures">Read the user's guide about homology groups and property editing in MarvinSketch.</a>
+
+</body>
+</html>

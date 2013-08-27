@@ -1,0 +1,88 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinSketch Example - Query atoms, extra bond types, disabling elements</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinSketch Example - Query atoms, extra bond types, disabling elements</h1>
+
+You can easily control which atom and bond types can be used in the applet.
+
+<p>
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+msketch_begin("../../..", 540, 480);
+msketch_param("elements", "C-F,P-Cl");
+msketch_param("queryAtoms", "any,hetero,list,notlist");
+msketch_param("atomStrings", "alias");
+msketch_param("extraBonds", "arom,wedge,either,any,1or2,aromany,topology,coordinate");
+msketch_end();
+//-->
+</script>
+</center>
+
+<p>
+In this example,  we have made only certain atom and bond types available to the user.
+</p>
+<p>
+Using the <a HREF="../../../help/developer/sketchman.html#parameters.elements"><code>elements</code></a>
+parameter, we have disabled the use of all atoms
+ except C, N, O, F, P, S, and Cl.
+We allow all the query atom and extra bond types that can be used in MDL
+molfiles, but disable the SMARTS-only ones.
+The SMARTS properties X, v, R, r, a, A are disabled because they are not listed
+<a HREF="../../../help/developer/sketchman.html#parameters.queryAtoms"><code>queryAtoms</code></a>.
+</p>
+<p>
+The textfield in the Periodic System window can only be used to enter molfile atom
+aliases because
+<a HREF="../../../help/developer/sketchman.html#parameters.atomStrings"><code>atomStrings</code></a> parameter contains only the value "alias"
+ The use of SMARTS strings can be enabled by adding the
+&quot;smarts&quot value to this parameter.
+</p>
+<p>
+With the
+<a HREF="../../../help/developer/sketchman.html#parameters.extraBonds"><code>extraBonds</code></a>
+parameter, we enable only the following extra bond types:
+aromatic bond, up/down stereo wedge bonds, up/down and cis/trans
+&quot;either&quot; bonds,
+&quot;any&quot; bond,
+&quot;single or double&quot;, &quot;single or aromatic&quot;,
+&quot;double or aromatic&quot; and &quot;coordinate&quot; bonds.
+</p>
+<p>
+Make the <a href="../../../help/sketch/gui/dialogs.html#periodic"><b>Periodic System</b></a> visible to see the effect of these changes.
+</p>
+
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">msketch_begin(&quot;../../..&quot;, 540, 480);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.elements">elements</a>&quot;, &quot;C-F,P-Cl&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.queryAtoms">queryAtoms</a>&quot;, &quot;any,hetero,list,notlist&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.atomStrings">atomStrings</a>&quot;, &quot;alias&quot;);
+msketch_param(&quot;<a HREF="../../../help/developer/sketchman.html#parameters.extraBonds">extraBonds</a>&quot;, &quot;arom,wedge,either,any,1or2,aromany,topology,coordinate&quot;);
+msketch_end();
+</pre><pre class="sh_html">//--&gt;
+&lt;/script&gt;
+</pre>
+</blockquote>
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+And now let us see
+<a HREF="viewonly.html">how to use the sketcher like a viewer</a>.
+
+</body>
+</html>

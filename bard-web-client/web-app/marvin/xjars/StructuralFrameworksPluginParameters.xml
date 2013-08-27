@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+    <Tab Title="Framework Type">
+        <RadioButtonGroup Key="type">
+            <Choice Value="bmf" Text="Bemis-Murcko framework" Tooltip="Is calculated by removing side chains from the input and generalizing atom/bond types." Selected="true"/>
+            <Choice Value="bmfl" Text="Bemis-Murcko loose framework" Tooltip="Is calculated by removing side chains from the input. Exocyclic non single bonded atoms are kept. Remaining atom/bond types are not changed."/>
+            <Choice Value="mcs" Text="Maximum common substructure" Tooltip="Calculates MCS for every pairs of input fragments. The input must contain at least two disconnected fragments."/>
+            <Choice Value="largestring" Text="Largest ring" Tooltip="Returns the largest SSSR ring of the input."/>
+            <Choice Value="allringsystems" Text="All fused ring systems" Tooltip="Returns the fused ring systems of the input."/>
+            <Choice Value="largestringsystem" Text="Largest fused ring system" Tooltip="Returns the largest the fused ring systems of the input."/>
+            <Choice Value="sssr" Text="Smallest set of smallest rings (SSSR)" Tooltip="Returns the SSSR rings of the input."/>
+            <Choice Value="cssr" Text="Complete set of smallest rings (CSSR)" Tooltip="Returns the CSSR rings of the input."/>
+            <Choice Value="keep" Text="Only pre/post process, no framework reduction" Tooltip="It can be used to examine the optional preprocess and postprocess functionality. Selecting this option will skip any framework reduction/fragmentation."/>
+        </RadioButtonGroup>
+        <Boolean Key="keepsingleatom" Label="Keep single atom for non-empty acyclic structures" Value="true">
+            <Dependencies>
+                <Item Key="type" Range="bmf"/>
+                <Item Key="type" Range="bmfl"/>
+            </Dependencies>
+        </Boolean>
+    </Tab>
+    <Tab Title="Advanced Settings">
+        <Group Title="Input preprocess" Tooltip="Input preprocess steps are executed before the framework calculation.">
+            <Boolean Key="lfin" Label="Process only the largest fragment of the input structure" Tooltip="If selected then the largest fragment will be processed in the following steps." Value="false">
+                <Dependencies>
+                    <Item Key="type" Range="bmf,bmfl,largestring,allringsystems,largestringsystem,sssr,cssr,keep"/>
+                </Dependencies>
+            </Boolean>
+            <Boolean Key="prunein" Label="Prune input - generalize input atom and bond types" Tooltip="The input structure will be generalized by changing all atom types to carbon, all bond types to single and removing all stereo/wedge bond flags." Value="false">
+                <Dependencies>
+                    <Item Key="type" Range="mcs,largestring,allringsystems,largestringsystem,sssr,cssr,keep"/>
+                </Dependencies>
+            </Boolean>
+            <Boolean Key="hydrogenize" Label="Add explicit hydrogens to the input structure" Tooltip="Invokes hydrogenize on the input." Value="false">
+                <Dependencies>
+                    <Item Key="dehydrogenize" Range="false"/>
+                    <Item Key="type" Range="mcs,keep"/>
+                    <Item Key="prunein" Range="false"/>
+                </Dependencies>
+            </Boolean>
+            <Boolean Key="dehydrogenize" Label="Remove explicit hydrogens from the input structure" Tooltip="Invokes dehydrogenize on the input." Value="false">
+                <Dependencies>
+                    <Item Key="hydrogenize" Range="false"/>
+                    <Item Key="type" Range="mcs,keep"/>
+                    <Item Key="prunein" Range="false"/>
+                </Dependencies>
+            </Boolean>
+        </Group>
+        <Group Title="Output postprocess" Tooltip="Output postprocess steps are executed after the framework calculation.">
+            <Boolean Key="pruneout" Label="Prune results - generalize result atom and bond types"  Tooltip="Generalizes the resulting framework after the calculations." Value="false">
+                <Dependencies>
+                    <Item Key="type" Range="bmfl,mcs,largestring,allringsystems,largestringsystem,sssr,cssr,keep"/>
+                    <Item Key="prunein" Range="false"/>
+                </Dependencies>
+            </Boolean>
+            <Boolean Key="lfout" Label="Return only the largest fragment of the result"  Tooltip="Keeps only the largest resulting fragment." Value="false">
+                <Item Key="type" Range="bmf,bmfl,mcs,allringsystems,sssr,cssr,keep"/>
+                <Item Key="oeqcheck" Range="false"/>
+            </Boolean>
+            <Boolean Key="oeqcheck" Label="Remove topologically equivalent output fragments"  Tooltip="Removes duplicated result fragments." Value="false">
+                <Dependencies>
+                    <Item key="lfout" Range="false"/>
+                    <Item Key="type" Range="bmf,bmfl,mcs,allringsystems,sssr,cssr,keep"/>
+                </Dependencies>
+            </Boolean>
+        </Group>
+
+    </Tab>
+
+
+
+    
+</ParameterPanel>

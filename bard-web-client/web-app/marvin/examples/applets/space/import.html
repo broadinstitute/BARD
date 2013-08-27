@@ -1,0 +1,110 @@
+<HTML>
+<HEAD>
+<meta NAME="author" CONTENT="Judit Vasko-Szedlar">
+<link REL="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+
+<TITLE>MarvinSpace demo</TITLE>
+<SCRIPT type="text/javascript">
+function selectedMolecule()
+{
+  if(document.Open.group1[0].checked == true)
+  {
+    document.MSpaceApplet.setMolecule( document.Open.group1[0].value );
+  }
+  if(document.Open.group1[1].checked == true)
+  {
+    document.MSpaceApplet.setMolecule( document.Open.group1[1].value );
+  }
+  if(document.Open.group1[2].checked == true)
+  {
+    document.MSpaceApplet.setPDB( document.Open.group1[2].value );
+  }
+  if(document.Open.group1[3].checked == true)
+  {
+    document.MSpaceApplet.setMoleculeString( document.Open.group1[3].value );
+  }
+}
+
+</SCRIPT>
+
+</HEAD>
+
+<BODY>
+
+<H1>MarvinSpace</H1>
+
+<p>This example demonstrates the available modes of importing structures.</p>
+
+<table align="center" cellspacing="0" cellpadding="5" border="0">
+<tr><td>
+<script type="text/javascript" src="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+mspace_name="MSpaceApplet";
+mspace_begin(mspace_name,"../../..",400,400);
+mspace_param("progressbar","true");
+mspace_param("selectionpanel","false");
+mspace_param("molecule","http://www.chemaxon.com/marvinspace/data/1AID.pdb");
+mspace_end();
+//-->
+</script>
+
+</applet>
+</td>
+
+<td>
+Open molecule<br>
+<form name="Open">
+<input type="radio" name="group1" checked value="../marvinspace/data/1AID.pdb" onClick="selectedMolecule()"> 1AID<br>
+<input type="radio" name="group1" value="http://www.chemaxon.com/marvinspace/data/1PXX.pdb" onClick="selectedMolecule()"> 1PXX<br>
+<input type="radio" name="group1" value="1ETS" onClick="selectedMolecule()"> 1ETS<br>
+<input type="radio" name="group1" value="[H]C(=O)C([H])([H])C([H])([H])C([H])([H])[H]" onClick="selectedMolecule()"> Smiles<br>
+</form>
+<br>
+
+</td>
+</tr>
+</table>
+
+<blockquote>
+    <p>By clicking on the first radio button, 1AID.pdb is loaded. The input structure is referenced by the relative address
+    <code>"../../../../marvinspace/data/1AID.pdb"</code>, which means the file is located relatively to the applet codebase.
+    This is equivalent of the api call
+    <pre>
+        document.MSpaceApplet.setMolecule( "../../../../marvinspace/data/1AID.pdb" );
+    </pre>
+    </p>
+    <p>The second option is loading of 1PXX. It is given by absolute URL, but it is slower than loading by a relative address.
+    It can be invoked by
+    <pre>
+        document.MSpaceApplet.setMolecule( "http://www.chemaxon.com/marvinspace/data/1PXX.pdb" );
+    </pre>
+    </p>
+    <p>A special way of importing macromolecules is through the <a href="http://rcsb.org">RCSB Protein Data Bank</a>.
+    In this case, giving the 4 letter PDB ID is sufficient, but the api call is different:
+    <pre>
+        document.MSpaceApplet.setPDB( "1ETS" );
+    </pre>
+    </p>
+    <p>The last example shows that MarvinSpace can directly import structures from a Smiles string.
+    <pre>
+        document.MSpaceApplet.setMoleculeString( "[H]C(=O)C([H])([H])C([H])([H])C([H])([H])[H]" );
+    </pre>
+    </p>
+</blockquote>
+
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+<center>
+<font size="-2" face="helvetica">
+
+Copyright &copy; 2004-2011
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+
+</BODY>
+</HTML>
+
+

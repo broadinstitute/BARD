@@ -1,0 +1,670 @@
+<!DOCTYPE html><HTML>
+
+ <head>
+   <META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+   <script type="text/javascript" src="../../../examples/sh_main.js"></script>
+   <script type="text/javascript" src="../../../examples/sh_java.js"></script>
+   <script type="text/javascript" src="../../../examples/sh_javascript.js">
+      </script>
+   <link REL ="stylesheet" TYPE="text/css" 
+         HREF="../../../examples/sh_nedit.css" TITLE="Style">
+   <title> Stereoisomers around double bond  </title>
+   <link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+ </head>
+
+
+<BODY onload="sh_highlightDocument();"  >
+<h1>Stereoisomers around double bond</h1> 
+<h2>Cis/Trans stereoisomers</h2> 
+<p>The <i>cis</i>/<i>trans</i> information for ligands of the double bond can 
+be calculated by scpecifying a ligand (a1) of the double bond connecting to 
+one end (a2) of the double bond and giving another ligand (a4) of the 
+double bond connecting to the other end (a3) of the double bond. </p>
+
+<p style="text-align: center;">
+<img src="images/stereo_around_double_bond_1.png" width="124" height="100" 
+     border="0" style="margin:0 auto;margin:0px;" alt></p>
+
+
+<p>The possible values: 
+<ul>
+   <li> 0: if no stereo information given or the double bond doesn't have 
+        enough ligands to be stereochemically active 
+   <li> CIS: if the ligands are on the same side of the double bond 
+   <li> TRANS: if the ligands are on the opposite side of the double bond 
+   <li> CIS|TRANS: if the ligands can be both CIS and TRANS arrangement 
+</ul></p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="middle" width="70" style="width:70px;"><p style="text-align: center;">Molecule</p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_2.png" width="83" height="75" border="0" alt="_img36" style="margin:0 auto;margin:0px;"></p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_3.png" width="83" height="75" border="0" alt="_img37" style="margin:0 auto;margin:0px;"></p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_4.png" width="83" height="75" border="0" alt="_img38" style="margin:0 auto;margin:0px;"></p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_5.png" width="100" height="75" border="0" alt="_img39" style="margin:0 auto;margin:0px;"></p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_6.png" width="83" height="75" border="0" alt="_img40" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="70" style="width:70px;"><p style="text-align: center;"><span style="font-style: italic;">cis</span>/<span style="font-style: italic;">trans</span> value</p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;">0</p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;">CIS</p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;">TRANS</p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;">CIS|TRANS</p>
+</td>
+<td valign="middle" width="107" style="width:107px;"><p style="text-align: center;">CIS|TRANS</p>
+</td>
+</tr>
+</table>
+</div>
+
+<p>An additional flag is used in conjunction with CIS or TRANS information in 
+case of query molecules: </p>
+<ul>
+   <li> CTUNSPEC : the ligands are in the specified (CIS or TRANS) 
+        configuration or unspecified </li>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="232" style="width:232px; height:77px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_7.png" width="91" height="75" border="0" alt="_img41" style="margin:0 auto;margin:0px;"></p>
+</td>
+<td valign="top" width="232" style="width:232px; height:77px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_8.png" width="83" height="75" border="0" alt="_img42" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="232" style="width:232px;"><p style="text-align: center;">CIS or unspecified double bond</p>
+</td>
+<td valign="top" width="232" style="width:232px;"><p style="text-align: center;">TRANS or unspecified double bond</p>
+</td>
+</tr>
+</table>
+</div>
+</ul>
+
+<h2>Change Cis/Trans stereoisomers in the GUI</h2> 
+<p>Depending on the  molecule's  dimension the  cis/trans  information 
+corresponding to  the  ligands  of the double bond is stored in the bond or 
+calculated from the coordinates.</p> 
+<p>It  is  optional to  check  atom equivalences  using graph invariants  
+for  the  ligands  of  the  double  bond during stereo calculation. 
+If graph invariants are equal on one endpoint of the double bond then the two 
+ligands  connecting  to  this  node  are  equivalent  and  so  the  double  
+bond  does  not  exhibit  <i>cis</i>/<i>trans </i>isomerism. 
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="424" style="width:424px;"><p style="text-align: center;"><span style="font-style: italic;">Double bond stereo information of the atoms 3-1=2-5</span></p>
+</td>
+<td valign="top" width="143" style="width:143px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="middle" width="424" style="width:424px; height:54px;"><p style="text-align: center;">if graph invariants <span style="font-weight: bold;">not</span> checked on the ligands the result is CIS</p>
+</td>
+<td rowspan="2" valign="top" width="143" style="width:143px; height:54px;"><p style="text-align: center;">
+<img src="images/stereo_around_double_bond_9.png" width="119" height="119" border="0" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="middle" width="424" style="width:424px; height:54px;"><p style="text-align: center;">if graph invariants checked on the ligands</p>
+<p style="text-align: center;">the result is 0</p>
+</td>
+</tr>
+</table>
+</div>
+
+<p>To change <i>cis</i>/<i>trans</i> information of a double bond  in the  GUI,
+  move  the  double  bond  ligands  to  the expected position. </p>
+
+<p>To set<i> cis</i>/<i>trans</i> isomers, set the double bond type to 
+<i>Double Cis or Trans </i> or  set  one  ligand  of the double bond to 
+<i>Single Up or Down</i>. </p>
+
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_10new.png" width="530" height="369" border="0" alt="bond1_2"></p>
+
+<p style="text-align: center;"><img src="images/stereo_around_double_bond_11new.png" width="535" height="374" border="0" alt="bond3_4"></p>
+
+
+<h2> Cis/Trans stereoisomers in 0 Dimension</h2> 
+<p>If the atomic coordinates are all zero then the  molecule's  dimension is  
+zero.  The  double  bond  stereo information is  stored  in the  bond  flag 
+referring to  the  first  ligand  
+(which is  not  the  other  end  of  the double bond) of each endpoint for the 
+double bond (<i>default reference frame</i>).  </p>
+
+<h3><a name="set_ct_0d"></a>Setting cis/trans information in 0D (API)</h3> 
+<p> The <i>cis</i>/<i>trans</i> information can be set directly using the 
+<code>setFlags(int) </code> function of the <code>MolBond </code>class. 
+In this case the set value refers to the <i>default  reference frame </i>
+arrangement a1-a2=a3-a4 where a2 and  a3  is  the  double  bond  first  and  
+second  node  and  a1  and  a4  is  the  first  ligand  of  a2  and  a3 
+respectively. </p>
+<p> Code example for getting the default reference frame: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="348" style="width:348px;">
+ <p style="text-align: left;"> 
+  <blockquote>
+  <pre class="sh_java">
+  MolBond b = molecule.<b>getBond</b>(2)
+
+  <i>// default reference frame </i>
+  <i>// for which the bond stereo will be set </i>
+  MolAtom a1 = b.<b>getCTAtom1();</b>
+  MolAtom a2 = b.<b>getAtom1();</b>
+  MolAtom a3 = b.<b>getAtom2();</b>
+  MolAtom a4 = b.<b>getCTAtom4();</b></p>
+</blockquote> </pre>
+</td>
+<td valign="bottom" width="221" style="width:221px;"><p style="text-align: center;"><img src="images/stereo_around_double_bond_12.png" width="109" height="109" border="0" alt="_img48" style="margin:0 auto;margin:0px;"></p>
+<p style="text-align: center;">molecule with atom indexes</p>
+</td>
+</tr>
+</table>
+</div>
+ 
+<p>Code example to set flags using the default reference frame: </p>
+<p>
+ <pre class="sh_java">
+<blockquote>
+  MolBond b = molecule.<b>getBond</b>(2); 
+ // set CIS value to the reference frame 
+ b.<b>setFlags</b>(StereoConstants.CIS, StereoConstants.CTUMASK); 
+ </blockquote></pre></p>
+
+<p>Another possibility to set <i>cis</i>/<i>trans</i> information is via the 
+<code>setStereo2Flags(MolAtom a1, MolAtom 
+a4,  int  s) </code> function of the <code>MolBond </code> class, 
+where the reference frame is  
+defined  by the  <code>a1</code>  and  <code>a4</code> atoms. </p> 
+
+<p> Code example using given reference frame: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="400" style="width:400px;">
+<blockquote>
+<pre class="sh_java"> 
+MolBond b = molecule.<b>getBond</b>(2); 
+
+ <i>// reference frame</i>
+MolAtom a1 = molecule.<b>getAtom</b>(0); 
+MolAtom a4 = molecule.<b>getAtom</b>(4); 
+
+<i>// set CIS value to the reference frame</i>
+b.<b>setStereo2Flags</b>(a1, a4, StereoConstants.TRANS);
+</pre> </blockquote>
+</td>
+<td valign="bottom" width="203" style="width:203px;"><p style="text-align: center;"><img src="images/stereo_around_double_bond_13.png" width="109" height="109" border="0" alt="_img49" style="margin:0 auto;margin:0px;"></p>
+<p style="text-align: center;">Result</p>
+</td>
+</tr>
+</table>
+</div>
+
+<h3>Getting cis/trans information in 0D (API)</h3> 
+<p>The <i>cis</i>/<i>trans</i> information can be got directly by the 
+<code>getFlags()</code> function of the MolBond class. 
+In this case the value returned refers to the <i>default reference frame</i>. 
+</p>
+
+<p>Code example: </p>
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; 
+            margin: 0px 0px 0px 0px;">
+  <table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="middle" width="400" style="width:400px;">
+ <ul>
+   <pre class="sh_java"> 
+     MolBond b = molecule.<b>getBond</b>(2);
+     int s = b.<b>getFlags</b>() &amp;  StereoConstants.CTUMASK; 
+   </pre>
+ </ul>
+</td>
+<td valign="bottom" width="204" style="width:204px;">
+  <p style="text-align: center;">
+   <img src="images/stereo_around_double_bond_12.png" width="109" height="109" border="0" alt="_img48" style="margin:0 auto;margin:0px;"></p>
+<p style="text-align: center;">s = TRANS</p>
+</td>
+</tr>
+</table>
+</div>
+
+
+<p>With a given reference frame there are four options to get the stereo 
+information: </p>
+<ul>
+<li> 1. getStereo2(MolAtom a1, int i2, int i3, MolAtom a4) </li>
+<li> 2. getStereo2(int i1, int i2, int i3, int i4) </li>
+<li> 3. getStereo2(MolBond b, MolAtom a1, MolAtom a4) </li>
+<li> 4. getStereo2(MolBond b, MolAtom a1, MolAtom a4, boolean grcheck) </li>
+</ul>
+<p>These all functions of the <code>MoleculeGraph </code> class.  
+The  difference  between them is  how the  reference frame is given 
+(by the node or by the node index) and the  last  method  can check  
+atom equivalences too. </p>
+
+<p>Code example:  </p>
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+ <table cellspacing="0" cellpadding="0" border="0" 
+        style="border: none; border-spacing:0px;">
+   <tr style="text-align:left;vertical-align:top;">
+    <td valign="top" width="336" style="width:336px;">
+      <pre class="sh_java" >
+        <blockquote>
+            MolBond b = molecule.<b>getBond</b>(2); 
+            // reference frame 
+            MolAtom a1 = molecule.<b>getAtom</b>(0); 
+            MolAtom a4 = molecule.<b>getAtom</b>(4); 
+            <b>int</b> s = molecule.<b>getStereo2</b>(b, a1, a4);  
+        </blockquote>
+      </pre>
+    </td>
+<td valign="bottom" width="132" style="width:132px;">
+ <p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_14.gif" width="110" 
+       height="110" border="0" 
+       style="margin:0 auto;margin:0px;"></p>
+  </td>
+ </tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="336" style="width:336px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+</td>
+<td valign="bottom" width="132" style="width:132px;"><p style="text-align: center;">s = CIS</p>
+</td>
+</tr>
+</table>
+</div>
+
+<p> Code example with atom equivalence check: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+<table cellspacing="0" cellpadding="0" border="0" 
+       style="border: none; border-spacing:0px;">
+  <tr style="text-align:left;vertical-align:top;">
+   <td valign="top" width="355" style="width:355px;">
+     <p><pre class="sh_java">
+     <blockquote>
+        MolBond b = molecule.<b>getBond</b>(2);
+        // reference frame
+        MolAtom a1 = molecule.<b>getAtom</b>(0);
+        MolAtom a4 = molecule.<b>getAtom</b>(4);
+        int s = molecule.<b>getStereo2</b>(b, a1, a4, true);
+     </p></blockquote> 
+   </td>
+<td valign="bottom" width="175" style="width:175px;"><p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_14.gif" width="110" height="110" 
+       border="0"  style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="325" style="width:325px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+</td>
+<td valign="bottom" width="175" style="width:175px;"><p style="text-align: center;">s = 0</p>
+</td>
+</tr>
+</table>
+</div>
+
+<h2>Cis/Trans stereoisomers in 2 or 3 Dimensions</h2> 
+<p>If the atomic coordinates are specified, then the molecule has  nonzero  
+spatial dimension.  
+In this  case the double bond stereo information is calculated from the 
+double bond and the  reference  frame  atom coordinates.  
+There are two exceptions when coordinates are not used and CIS|TRANS value 
+is returned: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; 
+            margin: 0px 0px 0px 0px;">
+  <table cellspacing="0" cellpadding="4" border="0" 
+         style="border: none; border-spacing:0px;">
+   <tr style="text-align:left;vertical-align:top;">
+    <td valign="top" width="301" style="width:301px;">
+    <p>1. CIS|TRANS flag is set for the double bond which is depicted as 
+       crossed double bond.</p>
+    </td>
+    <td valign="top" width="205" style="width:205px;">
+    <p style="text-align: center;">
+     <img src="images/stereo_around_double_bond_15.gif" width="100" 
+          height="90" border="0" alt="_img51" 
+          style="margin:0 auto;margin:0px;"></p>
+     </td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="301" style="width:301px;">
+<p>2. One ligand of the double bond has wiggly (UP|DOWN) bond type.</p>
+</td>
+<td valign="top" width="205" style="width:205px;">
+<p style="text-align: center;">
+<img src="images/stereo_around_double_bond_16.gif" width="100" height="90" border="0" alt="_img52" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+</table>
+</div>
+
+<h3><a name="set_ct_23d"></a>
+   Setting cis/trans information in 2 or 3 Dimensions (API)</h3> 
+<p>The only way to change the double stereo information from CIS to TRANS  in 
+2 or 3D is to change the atomic coordinates of the corresponding ligands.  
+This  can be  achieved  through 
+<code>setXYZ(double x,  double  y,  double  z) </code> 
+or  <code>setXY(double  x,  double  y) </code> functions  of  
+<code>MolAtom </code> class.  
+Be aware  that  modifying the  coordinates  directly  may  cause  overlapping  
+atoms  and  bonds.  
+It  is  more convenient to convert the molecule to 0D, 
+change stereo information in the 0D molecule and clean it to 2D or 3D. </p>
+
+<p>Code example changing double bond type through 0 dimension: </p>
+<blockquote>
+<pre class="sh_java">
+molecule.<b>setDim</b>(0); 
+
+<i>// reference frame</i> 
+MolAtom a1 = molecule.<b>getAtom</b>(0); 
+MolAtom a4 = molecule.<b>getAtom</b>(4);
+
+<i>// set CIS value to the reference frame</i> 
+MolBond b = molecule.<b>getBond</b>(1); 
+b.<b>setStereo2Flags</b>(a1, a4, StereoConstants.CIS); 
+
+<i>// clean to 2D</i> 
+molecule.<b>clean</b>(2, <b>null</b>); 
+</pre>
+</blockquote>
+
+<p>To change the actual value to CIS|TRANS, there are two possibilities: 
+either set CIS|TRANS flag for the double bond or set one bond between the 
+double bond and a ligand to wiggly.  </p>
+
+<p>Code example: set the double bond to CIS|TRANS via changing the double 
+bond flag: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+  <table cellspacing="0" cellpadding="0" 
+         border="0" style="border: none; border-spacing:0px;">
+   <tr style="text-align:left;vertical-align:top;">
+    <td valign="top" width="400" style="width:400px;">
+       <pre class="sh_java">
+          <b>int</b> CISTRANS =  StereoConstants.CIS | StereoConstants.TRANS;
+          <i>// get the double bond</i>
+          MolBond b = molecule.<b>getBond</b>(2);
+          <i>// change flag</i>
+          b.<b>setFlags</b>(CISTRANS, StereoConstants.CTUMASK);
+       </pre>
+    </td>
+<td valign="middle" width="203" style="width:203px;"><p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_17.gif" width="110" height="110" border="0" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+</table>
+</div>
+
+<p> Code example: set double bond to CIS|TRANS using wiggly bond:
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+  <table cellspacing="0" cellpadding="0" 
+         border="0" style="border: none; border-spacing:0px;">
+   <tr style="text-align:left;vertical-align:top;">
+    <td valign="top" width="400" style="width:400px;">
+       <pre class="sh_java">
+         <i>// get the double bond</i> 
+         MolBond b = molecule.<b>getBond</b>(2); 
+
+         <i>// get a single bond connected to one endpoint </i>
+         <i>// of the double bond</i>
+         MolAtom a1 = b.<b>getAtom1</b>(); 
+         MolBond s = (a1.<b>getBond</b>(0)  == b) ? a1.<b>getBond</b>(1) : a1.<b>getBond</b>(0);
+         <i>// change single bond to WAVY</i>
+         s.<b>setFlags</b>(MolBond.WAVY, STEREO1_MASK);
+       </pre>
+    </td>
+<td valign="middle" width="203" style="width:203px;"><p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_18.gif" width="110" height="110" border="0" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+</table>
+</div>
+
+
+<h3>Getting cis/trans information in 2 or 3 Dimensions (API)</h3> 
+<p>There are two low level functions in <code>MolBond </code>
+class to calculate double 
+bond stereo information from the coordinates in 2D or 3D. 
+None of them checks if the bond in question is double bond or not. </p>
+<ul>
+ <li> <code>calcStereo2() </code>calculate the stereo information 
+   for the default reference frame. </li>
+ <li> <code>calcStereo2(MolAtom  atom1,  MolAtom  atom4) </code> 
+  calculates the stereo information for the given reference frame. 
+  Note: it is not checked if <code>atom1</code> and 
+  <code>atom4 </code>are bound to the bond. </li>
+</ul>
+<p>As in case  of the  0D molecules  there  are  four  methods  to  get  the  
+stereo  information with reference frame given: </p>
+
+<blockquote>
+1. <code>getStereo2(MolAtom a1, int i2, int i3, MolAtom a4)</code> <br>
+2. <code>getStereo2(int i1, int i2, int i3, int i4)</code> <br>
+3. <code>getStereo2(MolBond b, MolAtom a1, MolAtom a4)</code> <br>
+4. <code>getStereo2(MolBond b, MolAtom a1, MolAtom a4, boolean grcheck)</code>
+</blockquote> 
+
+<p> All  of  them  are  functions  of  the  <code>MoleculeGraph </code> class.
+  The  difference  between  them  is  how  the reference frame is specified 
+(by the node or by the node index) and the last method can check  
+atom equivalences too. <p>
+
+<p>It is important to note that CIS or TRANS result can be obtained if and 
+only if there is no contradictory information in the coordinates. 
+This means that two ligands at one end of the double bond on the same side  
+are  not  allowed.  
+Moreover,  if a  ligand  is  collinear  with the  double  bond  
+CIS|TRANS  value  is returned: 
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;"><table cellspacing="0" cellpadding="0" border="0" style="border: none; border-spacing:0px;">
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="216" style="width:216px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_19.gif" width="120" height="90" border="0" style="margin:0 auto;margin:0px;"></p>
+</td>
+<td valign="top" width="216" style="width:216px;"><p style="text-align: center;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+<p style="text-align: center;">
+ <img src="images/stereo_around_double_bond_20.gif" width="120" height="90" border="0" alt="_img39" style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="216" style="width:216px;"><p style="text-align: center;">stereo 0 </p>
+</td>
+<td valign="top" width="216" style="width:216px;"><p style="text-align: center;">stereo CIS | TRANS</p>
+</td>
+</tr>
+</table>
+</div>
+
+<p>Code example without atom equivalence check: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+ <table cellspacing="0" cellpadding="0" border="0" 
+        style="border: none; border-spacing:0px;">
+   <tr style="text-align:left;vertical-align:top;">
+    <td valign="top" width="336" style="width:336px;">
+      <blockquote>
+        <pre class="sh_java">
+            MolBond b = molecule.<b>getBond</b>(2); 
+            // reference frame
+            MolAtom a1 = molecule.<b>getAtom</b>(0); 
+            MolAtom a4 = molecule.<b>getAtom</b>(4); 
+            int s = molecule.<b>getStereo2</b>(b, a1, a4);  
+      </blockquote>
+    </td>
+<td valign="bottom" width="132" style="width:132px;">
+ <p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_14.gif" width="110" 
+       height="110" border="0" 
+       style="margin:0 auto;margin:0px;"></p>
+  </td>
+ </tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="336" style="width:336px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+</td>
+<td valign="bottom" width="132" style="width:132px;"><p style="text-align: center;">s = CIS</p>
+</td>
+</tr>
+</table>
+</div>
+
+<p> Code example with atom equivalence check: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px;">
+<table cellspacing="0" cellpadding="0" border="0" 
+       style="border: none; border-spacing:0px;">
+  <tr style="text-align:left;vertical-align:top;">
+   <td valign="top" width="355" style="width:355px;">
+     <blockquote>
+      <pre class="sh_java">
+      MolBond b = molecule.<b>getBond</b>(2);
+      // reference frame
+      MolAtom a1 = molecule.<b>getAtom</b>(0); 
+      MolAtom a4 = molecule.<b>getAtom</b>(4);
+      int s = molecule.<b>getStereo2</b>(b, a1, a4, true);
+     </blockquote> 
+   </td>
+<td valign="bottom" width="175" style="width:175px;"><p style="text-align: center;">
+  <img src="images/stereo_around_double_bond_14.gif" width="110" height="110" 
+       border="0"  style="margin:0 auto;margin:0px;"></p>
+</td>
+</tr>
+<tr style="text-align:left;vertical-align:top;">
+<td valign="top" width="325" style="width:325px;"><p style="text-align: left;"><span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">&nbsp;</span></p>
+</td>
+<td valign="bottom" width="175" style="width:175px;"><p style="text-align: center;">s = 0</p>
+</td>
+</tr>
+</table>
+</div>
+
+<h2> <i>E/Z </i>stereoisomers</h2> 
+<p>Each substituent  on a  double  bond  is  assigned  a  priority  based  
+on  the  Cahn-Ingold-Prelog  priority rules. 
+Ligands with highest priorities define the reference frame. 
+If the two groups of higher priority are on opposite sides of the double bond 
+(<i>trans</i> arrangement), then the E configuration is assigned to the bond. 
+If the two groups of higher priority are on the same side of the double bond 
+(<i>cis</i> arrangement), than the Z configuration is assigned to it. <p>
+
+<p>Possible values: </p>
+<ul>
+ <li>0: if no stereo information given or the double bond doesn't have enough 
+ligands to be stereochemically active </li>
+ <li>CIS: for configuration Z if the ligands with highest priority are on the 
+same side of the double bond </li>
+ <li> TRANS: for configuration E if the ligands with highest priority are on 
+the opposite side of the double bond 
+ <li>CIS|TRANS: if the ligands can arrange both CIS and TRANS </li>
+</ul>
+
+<h3>Setting E/Z information</h3> 
+<p>The  stereoisomer  type  can  not  be  modified  directly.  
+However,  it  is  possible  to  change  it  through changing 
+<i>cis</i>/<i>trans </i> information of the  double  bond  using the  methods  
+mentioned  in  
+<a href="#set_ct_0d">
+Setting  cis/trans information in 0 Dimension </a> and 
+<a href="#set_ct_23d">
+Setting cis/trans information in 2 or 3 Dimension </a>. 
+If the opposite value is needed then the one actually set, 
+<i>cis/trans</i> information should be changed to the opposite value also. 
+The removal of <i>cis/trans</i> information also removes the <i>E/Z </i>
+information. 
+</p>
+
+<h3>Getting E/Z information</h3> 
+<p>The E/Z stereoinformation can be calculated by the 
+<code>getStereo2(MolBond b) </code>
+function of the 
+<code>MoleculeGraph </code>class. 
+
+<p>Code example: </p>
+
+<div style="text-align: left; text-indent: 0px; padding: 0px 0px 0px 0px; 
+            margin: 0px 0px 0px 0px;">
+   <table cellspacing="0" cellpadding="0" border="0" 
+          style="border: none; border-spacing:0px;">
+    <tr style="text-align:left;vertical-align:top;">
+     <td valign="middle" width="302" style="width:302px;">
+      <p style="text-align: left;">
+      <pre class="sh_java">
+       MolBond b = molecule.<b>getBond</b>(2); 
+       <b>int</b> s = molecule.<b>getStereo2</b>(b); 
+      </pre>
+     </td>
+     <td valign="middle" width="302" style="width:302px;">
+      <p style="text-align: center;">
+         <img src="images/stereo_around_double_bond_21.gif" 
+              width="110" height="100" border="0" 
+              style="margin:0 auto;margin:0px;"></p>
+          <p style="text-align: center;">s = CIS </p>
+      <p style="text-align: center;">(which equals with the Z stereoisomer)</p>
+     </td>
+    </tr>
+  </table>
+</div>
+
+<p style="text-align: left;">
+<span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">
+&nbsp;
+</span></p>
+<p style="text-align: left;">
+<span style="font-size: 10pt; font-family: 'Arial'; color: #000000;">
+&nbsp;
+</span></p>
+ 
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+ 
+ <table summary="next pages">
+   <tr style="text-align:left">
+     <td width="250" valign="middle"> 
+       <p style="text-align: center;">
+        <a href="stereochemistry/CIPStereoChemistry.html">
+          CIPStereoChemistry</a><br>
+        <i>Previous chapter</i>
+       </p>   
+     </td>
+     <td width="250" valign="middle">
+      <p style="text-align: center;">
+       <a href="core_index.html"> Table of contents</a> <br>
+       &nbsp;
+      </p>
+     </td>
+     <td width="250"valign="middle" >
+      <p style="text-align: center;"> 
+       <a href="parity.html"> 
+           Parity</a><br>
+       <i>Next chapter</i>
+      </p>
+     </td>
+   </tr>
+ </table> 
+
+
+</BODY>
+</HTML>

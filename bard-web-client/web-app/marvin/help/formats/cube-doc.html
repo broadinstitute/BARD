@@ -1,0 +1,153 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="Gaussian Cube format in Marvin">
+<meta NAME="keywords" CONTENT="Gaussian, Cube, Java, Marvin">
+<meta NAME="author" CONTENT="Nora Mate">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Gaussian Cube format in Marvin</title>
+</head>
+<body BGCOLOR="#ffffff" TEXT="#333366">
+
+<h1>Gaussian Cube</h1>
+
+<p>
+Codename: <strong>cube</strong>
+</p>
+<h2>Contents</h2>
+<ul>
+<li><a href="#cube-format">Cube format</a></li>
+    <ul>
+    <li><a href="#import">Import options</a></li>
+    <li><a href="#restriction">Restrictions</a></li>
+    <li><a href="#limitation">Limitation</a></li>
+    </ul>
+<li><a href="basic-export-opts.html">Basic export options</a></li>
+</ul>
+<p>
+<h2><a class="anchor" name="cube-format">Cube format</a></h2>
+Marvin imports and exports Gaussian Cube molecule files that have the following format:
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=5 border="0">
+<tr><td>comment line</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>(always written, ignored at import)</em></td></tr>
+<tr><td>comment line</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>(always written, ignored at import)</em></tr>
+<tr><td VALIGN="TOP">N vx vy vz</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>number of atoms,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	followed by the position of the origin<br> 
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+	of the volumetric data (the latter is not read in case of
+	<a href="#option_M">import option 'M'</a>,<br>in which case it is 
+	set to <code>0 0 0</code> at export)</em></td></tr>
+
+<tr><td VALIGN="TOP">M1 vx1 vy1 vz1</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>number of voxels along the first axis,<br> 
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	followed by the first axis vector<br> 
+	(if volumetric data is ignored at import then 
+	this is set to <code>1 1 0 0</code> at export)</em></td></tr>
+<tr><td VALIGN="TOP">M2 vx2 vy2 vz2</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>number of voxels along the second axis,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	followed by the second axis vector<br> 
+	(if volumetric data is ignored at import then
+	this is set to <code>1 0 1 0</code> at export))</em></td></tr>
+<tr><td VALIGN="TOP">M3 vx3 vy3 vz3</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <em>number of voxels along the third axis,<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	followed by the third axis vector<br> 
+	(if volumetric data is ignored at import then
+	this is set to <code>1 0 0 1</code> at export))</em></td></tr>
+
+<tr><td>atom1 x y z</td><td>&nbsp;</td></tr>
+<tr><td>atom2 x y z</td><td>&nbsp;</td></tr>
+<tr><td>...</td><td>&nbsp;</td></tr>
+<tr><td>atomN x y z</td><td>&nbsp;</td></tr>
+<tr><td>volumetric data lines</td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <em>(if volumetric data is ignored at import then
+	this is set to a single <code>0</code> at export)</em></td></tr>
+</table>
+</blockquote>
+<h3><a class="anchor" name="import">Gaussian Cube format import/export in Marvin</a></h3>
+Import options can be specified by writing &quot;{<em>options</em>}&quot; 
+after the filename.
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=0 border="0">
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_f"><strong>f...</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Bond length cut-off. Two atoms can be connected if they are closer
+	than the sum of their covalent radii times the cut-off value.
+	Default: &quot;{f1.12}&quot;</td></tr>
+<tr VALIGN="TOP">
+    <td><a  class="text"NAME="option_Z"><strong>Z#</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Set maximum number of connections for element Z.<br>
+	Example: &quot;{f1.4,C4,H1}&quot;. This setting increases the
+	cut-off value, but does not let Carbons to have more than 4
+	connections, and Hydrogens to have more than 1 connection.</td></tr>
+<tr VALIGN="TOP">
+    <td><a  class="text"NAME="option_b"><strong>b</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Try to guess bond types, atom charges and implicit hydrogens
+	from atom distances and valence rules.<br>
+	<strong>Warning:</strong> This is an <em>experimental</em> feature.
+	Since Gaussian Cube files do not contain bond information, these
+	&quot;guesses&quot; can be different from the actual bond orders,
+	especially in case of
+	<table CELLSPACING=0 CELLPADDING=0 border="0">
+	<tr><td>-&nbsp;&nbsp;</td><td>radicals</td></tr>
+	<tr><td>-&nbsp;&nbsp;</td><td>missing Hydrogen atoms</td></tr>
+	<tr><td>-&nbsp;&nbsp;</td><td>complexes</td></tr>
+	</table>
+	The user should check the calculated bonds after import.
+	</td></tr>
+<tr VALIGN="TOP">
+    <td><a class="text" NAME="option_M"><strong>M</strong></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td>Read only molecule, skip volumetric data.<br>
+	<strong>Warning:</strong> This data is not processed by Marvin
+	but only written upon export. 
+	<a href="../space/space-index.html">MarvinSpace</a> uses the
+	volumetric data.
+	</td></tr>
+</table>
+</blockquote>
+<p>See also the <a HREF="basic-export-opts.html">basic export options</a>.
+<h3><a class="anchor" name="restriction">Restrictions</a></h3>
+<ul>
+<li>Bonds are not stored.</li>
+<li>As a consequence, all the hydrogens must be explicit, otherwise the
+    bond types can not be guessed reliably by the importing program.</li> 
+<li>Charges are not stored.</li>
+<li>Query properties and other extra features are not stored.</li>
+<li>Volumetric data is skipped if <a href="#option_M">import option 'M'</a> is specified:
+    <ul>
+    <li>if volumetric data is read at import then data is stored and saved upon export
+    but it is not processed by Marvin</li>
+    <li>if volumetric data is ignored at import then 
+    the corresponding fields are filled with defaults
+    (a single voxel with zero volumetric value).</li>
+    </ul>
+</li>
+</ul>
+<p>The default behavior is to use the &quot;any&quot; bond type for all bonds, 
+0 charge for each atom, no implicit hydrogens.
+
+<h3><a class="anchor" name="limitation">Limitation</a></h3>
+<ul>
+<li>Volumetric data is not processed by Marvin but read in at import 
+and written out at export. However,
+<a href="../space/space-index.html">MarvinSpace</a> uses the
+volumetric data.
+If the <a href="#option_M">import option 'M'</a> is specified then 
+the volumetric data is skipped at import and filled with defaults 
+(a single voxel with zero volumetric value) at export.</li>
+</ul>
+
+</body>
+</html>

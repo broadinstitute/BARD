@@ -1,0 +1,53 @@
+<html>
+<head>
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>PDF export in Marvin</title>
+</head>
+<body>
+
+<h1>Adobe Portable Document Format</h1>
+<p>
+Codename: <strong>pdf</strong>
+
+<p>
+Marvin beans and applications can import and export PDF files. If PDF file serves as input, Marvin converts the chemical names in the text into structures. The pictures are also converted if <a HREF="imageimport.html">OSRA</a> is installed and it can recognize the picture as a chemical structure.<a HREF="imageimport.html#problems"> See well known limitations of OSRA here.</a> If a structure is exported in PDF format, Marvin saves it as a vector graphical <a HREF="images-doc.html">image</a>.   
+
+<p>
+The PdfExport module recognizes
+the <a HREF="images-doc.html#options">common image export options</a>.
+<p>
+<!--
+<h2>Known Issues</h2>
+<ul>
+<li>Sometimes, multi color bonds are curved.</li>
+<li>In &quot;Ball and Stick&quot; and in &quot;Spacefill&quot; rendering mode, Marvin applets
+generates a zero length file when you save the molecule in PDF format.
+From Marvin Beans API or applications, copying and saving in PDF format works 
+fine.</li>
+<li>Marvin copy restricts &quot;Ball and Stick&quot; and &quot;Spacfill&quot;
+rendering mode at PDF copy. In this case, the copied image will be drawn
+in &quot;Wireframe&quot; or &quot;Sticks&quot; rendering mode.</li>
+</ul>
+-->
+<h2>Reference</h2>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/PDF">Adobe Portable Document Format</a></li>
+<li><a HREF="http://java.freehep.org/vectorgraphics/" TARGET="_top">VectorGraphics (2D Vector and Image Graphics Libary)</a></li>
+<li><a HREF="http://java.freehep.org/
+" TARGET="_top">FreeHEP Java Library</a></li>
+</ul>
+
+
+<p ALIGN=LEFT>
+<small>PdfExport uses the <em>VectorGraphics</em> package of <em>FreeHEP Java Library</em> that is an &quot;Open Source&quot; library distributed under the terms of the <a HREF="http://www.gnu.org/copyleft/lesser.html">GNU Lesser General 
+Public License (LGLP)</a>.
+You can freely modify and recompile the 
+<a HREF="http://java.freehep.org/vectorgraphics/SourceDistributions.html">source</a> 
+of this library, then replace the binaries in Marvin with your own version,
+according to the requirements of the <em>LGLP</em>.<br>
+To update Marvin with your own version of <em>FreeHep library</em>, substitute the proper jar files (<code>freehep-base.jar, freehep-graphics2d.jar, freehep-graphicsio.jar, freehep-graphicsio-pdf.jar</code>) in your Marvin package.
+</small>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta NAME="description" 
+CONTENT="Parity">
+<meta NAME="keywords" CONTENT="stereochemistry, parity, local parity, global parity">
+<meta NAME="author" CONTENT="Peter Szakacs">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Parity</title>
+</head>
+
+<body>
+<h1>Parity</h1>
+<h2>Introduction</h2>
+Parity is a general type of specification of chirality. 
+The two most commonly used types, Tetrahedral Parity and Allene-like Parity, is implemented.
+ 
+<h2>Tetrahedral Parity</h2>
+
+
+<h3>Global Parity</h3>
+ A parity value 0 is used for atoms, which cannot have parity.
+ An atom has nonzero global parity, if the following conditions are met:
+ <ul>
+     <li> Tetrahedral central atom has parity, if</li>
+     <ul>
+         <li> 4 different types of ligands around the central atom, </li>
+         <li> implicit hydrogens and lone pairs also considered as ligands,</li>
+         <li> implicit and explicit hydrogen does not count as different kinds of ligands.</li>
+     </ul> 
+     <li> Tetrahedral central atom <i> in a ring </i> has parity, if </li>
+     <ul>
+         <li> the central atom has 2 different kinds of ligands outside the ring, </li>
+         <li> if the graph invariant of the ring is <i>not</i> the same in the
+              two sides of the central atom, </li>
+         <li> if the graph invariant of the ring <i>is the same </i> in the 
+              two sides of the central atom, but</li>
+         <ul>
+            <li> the ring contains even numbers of atoms (including the parity central atom),</li>
+            <li> there is an atom with nonzero parity in the opposite side of the ring: <br>
+               <IMG SRC="p001.png" ALT="parity in rings"> 
+               <IMG SRC="p002.png" ALT="parity in rings">   </li>
+         </ul>
+     </ul> 
+     <li> Atoms N, P and S in ring have parity, if</li>
+     <ul>
+          <li> they are bridge atoms. <br>
+             <IMG SRC="p005.png" ALT="bridge atoms">
+          </li>
+             
+     </ul>
+     <li> N has parity in a 3 membered ring,</li>
+     <ul>
+          <li> if the graph invariant of the ring is <i>not</i> the same in the 
+               two sides of the nitrogen atom.
+     </ul> 
+ </ul>
+ The value of global parity is determined as follows <a HREF="#ref1">[1]</a>. 
+ <ul>
+   <li>Number the atoms around the stereocenter according to 
+      the position in the atom block. </li>
+   <li>Hydrogen gets the highest value, in this case 4.</li>
+   <li>View the molecule such, that the atom that has the highest number is behind the
+      plane formed by the other three atoms.</li>
+   <li>Now, the three atoms forming the plane may arrange </li>
+   <ul>
+     <li> either clockwise, in which case the general parity of the stereo center 
+         is called <i>ODD</i>,</li>
+     <li> or counterclockwise, in which case the general parity of the stereo center
+        is called <i>EVEN</i>.</li>
+   </ul>
+ </ul>
+ 
+<h3>Local Parity</h3>
+  An atom have nonzero local parity, if
+  <ul>
+     <li> number of implicit and explicit H &lt; 3, </li>
+     <li> number of implicit H &lt; 2. </li>
+  </ul> 
+  The determination of he local parity is similar to that of global parity: 
+  <ul>
+     <li>Number the atoms around the stereocenter according to 
+         the atom number (position in the atom block). </li>
+     <li>Hydrogens get the highest values: 
+         a constant number is added to the atom number of all the H atoms.  </li>
+     <li>View the molecule such, that the atom that has the highest number is behind the
+         plane formed by the other three atoms.</li>
+     <li>Now, the three atoms forming the plane may arrange </li>
+     <ul>
+       <li> either clockwise, in which case the local parity of the stereo center 
+            is called <i>ODD</i>,</li>
+       <li> or counterclockwise, in which case the local parity of the stereo center
+            is called <i>EVEN</i>.</li>
+     </ul>
+ </ul>
+ For example, the molecule depicted below has nonzero local 
+ but zero global parity value: <br>
+  <IMG SRC="p004.png" ALT="local parity">
+  
+<h2>Allene-like Parity</h2>
+  An atom can have allene-like parity if the following condition holds: 
+  <ul>
+    <li>there are equal numbers of double bonds in each side of the central atom,</li>
+    <li>there are at least two different ligands on both terminal atoms. </li>
+  </ul> 
+  In connection with allene-like parity <i>local</i> and <i> global </i> types are not
+  differentiated. <br>
+  Allene like parity is defined as follows.
+  <ul>
+     <li>Number the two pairs of atoms which connect to the central atom
+         through one single and odd number of double bond with 
+         1, 2, 3 and 4 in order of increasing atom number 
+         (position in the atom block). </li>
+     <li>Hydrogen atom should be the highest numbered atom, in this
+         case atom 4. </li> 
+     <li>If the molecule contains two hydrogen atoms,
+         then that one gets the smaller value (3), 
+         which is on the same side of the central atom as
+         the ligand with higher atom number. </li>
+     <li>View the molecule such, that the atom that has the highest number 
+         is behind the plane formed by the other three atoms.</li>
+     <li>Now, the three atoms forming the plane may arrange  </li>
+     <ul>
+       <li> either clockwise, in which case the parity of the stereo center 
+            has the value 1, </li>
+       <li> or counterclockwise, in which case the parity of the stereo center
+            has the value 2. </li>
+      </ul>
+  </ul>
+  
+<h2>References</h2>
+<table border="0" cellspacing="0" cellpadding="5">
+<tr VALIGN=TOP>
+<td><a name="ref1">[1]</a></td>
+<td>MDL's CTfile <!-- Hat, ide jo lenne egy link, de nem talaltam mdleset -->  </td>
+</tr>
+</table>
+
+</body>
+</html>

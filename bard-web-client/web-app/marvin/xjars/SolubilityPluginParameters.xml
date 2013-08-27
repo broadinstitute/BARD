@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+
+	<Group>
+		<Precision Key="precision" Label="Decimal places" />
+		<Boolean Key="distribution" Label="Show logS vs. pH chart" Value="true" />
+	</Group>
+	<Group Title="pH values">
+		<Number Key="lower" Label="pH lower limit" Range="[0.0,14.0]"
+			Value="0">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+		<Number Key="upper" Label="pH upper limit" Range="[0.0,14.0]"
+			Value="14">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+		<Number Key="step" Label="pH step size" Value="0.5">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+	</Group>
+	<Group Title="Reference pH values">
+		<Number Key="ref1" Label="pH 1" Range="[0.0,14.0]" Value="1.5">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+		<Number Key="ref2" Label="pH 2" Range="[0.0,14.0]" Value="5.0">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+		<Number Key="ref3" Label="pH 3" Range="[0.0,14.0]" Value="6.5">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+		<Number Key="ref4" Label="pH 4" Range="[0.0,14.0]" Value="7.4">
+			<Dependencies>
+				<Item Key="distribution" Range="true" />
+			</Dependencies>
+		</Number>
+	</Group>
+</ParameterPanel>

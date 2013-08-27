@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+<title>Step-by-step instructions for logP plugin teaching</title>
+<meta name="description" content="Training of the logP calculations. Usage via Chemaxon products such as cxcalc, Chemical Terms (Instant JChem), and MarvinSketch"/>
+
+</head>
+<body>
+    
+ <h1><a name="logptraining" type="anchor"></a>Training of the Log<i>P</i> plugin</h1>
+ <p>If you feel your experimental data could improve the performance of the default log<i>P</i> calculator,
+    you can take advantage of the supervised log<i>P</i> learning method that is built
+    into this calculator. 
+ </p>  
+   <b> What do you need to see clearly in log<i>P</i> model building?</b>
+    <p>
+    If you create a local log<i>P</i> model then the scope of  the log<i>P</i> calculator will be
+    limited. It means that the calculated log<i>P</i> will only provide reasonable prediction
+    for a few types of structures. Practically only those types of structures will be
+    predicted correctly which were introduced to the training set during the teaching process.
+    For example, if the training set contains only certain types of hydrocarbon and
+    no other functional groups are present in the training set then 
+    that the predicted log<i>P</i> of any amine-like structure will not be accurate.
+    <p>
+    In other words, you need to be aware that a more robust general log<i>P</i> model requires a
+    large, diverse training set with thousands of structures. 
+	You can generate a log<i>P</i> training library via cxcalc and via Instant JChem as well.
+	
+ <h2><a name="logptraininginijc" type="anchor"></a>Training of the Log<i>P</i> plugin</h2>
+ <h3>Instant JChem</h3>
+<ol>
+<p>The training of the Log<i>P</i>  plugin is simplest by using the graphical interface of Instant JChem, where the 
+log<i>P</i> and general property trainings are available. <a href="https://www.chemaxon.com/instantjchem/ijc_latest/docs/user/help/htmlfiles/chemistry_functions/training.html">See the IJC documentation for details.</a>
+The created log<i>P</i> training library <a href="../calculations/training_libr_place.html"> will be stored on your computer</a> in the same place where the training library created by cxtrain, and it also can be used via Marvin, cxcalc and Chemical Terms. 
+
+<h4>Features:</h4>
+<ul>
+<li>Graphical User Interface</li>
+<li>Cross validation</li>
+<li>Validation with other set</li>
+<li>Exculde unwanted strucures</li>
+</ul>
+<br>
+</p>
+<img src="training_files/logP_training_IJC.png" width="576" height="687" alt="validation in IJC "/></td>
+</ol>    
+<h3>cxtrain</h3>
+<ol>
+<h4>Creating a training set</h4>
+	As the first step of the training via cxtrain, you have to <b>create a training set</b> of any molecule file format which supports sdf properties (such as sdf or mrv) from your experimental
+            data. This can be easily done by using the graphical user interface of Instant JChem. This training set must contain the following items:
+            <ul>
+                <li>structure</li>
+                <li>logP values in a property field named LOGP</li>
+            </ul>
+<p>See this bit of an example file (<a href="training_files/logP_trainingset.sdf">logP_trainingset.sdf </a>). <h3></h3>
+  <img src="training_files/logp_data.png" width="300" height="392" alt="mylogpdata"/>
+ </p>          
+	After that, you have to run the training algorithm which
+    creates a log<i>P</i> training library from your data. <a href="../calculations/training_libr_place.html">This will be stored on your computer</a><!-- home directory under chemaxon\calculations\training -->.
+	
+	<h4>Generating the log<i>P</i> training library</h4> 
+     <b>Execute the following command from command line </b>:
+	 <pre>cxtrain logp -t LOGP -i [library name] -a [training file] </pre> 
+	 <a href="../calculations/predictor_training.html">See detailed options here.</a>  
+	 (Note usage -a is optional, but recomended. It adds the built-in Log<i>P</i> training set to your data.)<br><br>
+			<b>Example</b>
+	 <pre>cxtrain logp -t LOGP -i mylogp -a logP_trainingset.sdf</pre>
+	  
+    After this step you can use this log<i>P</i> training library via Marvin, cxcalc, or Chemical Terms.
+  </ol>
+<h2>Application</h2>  
+   <h3>Marvin</h3>
+<ol>
+<li>Choose MarvinSketch menu:<B class="buttonName">Tools &gt; Partitioning &gt; logP</B>.</li>
+<li> Select the <i>User defined</i> or the <i>Weighted</i> method to activate the training option.</li>
+<li> If you have created multiple training sets, choose the needed one from the dropdown list below the checkbox.</li><br>
+            <img src="training_files/logP_panel_general.png" width="324" height="513" alt="usage in Marvin"/></td>
+</ol>
+<h3>cxcalc</h3>
+<ol>
+To apply your Log<i>P</i> dataset use the parameter <code>--trainingid</code> combine with the parameter <code>--method</code>.
+<pre>cxcalc logp <code>--method user --trainingid</code>[library name] [input file/string]</pre>
+<b>Example</b>
+<pre><code>$ cxcalc logp --method user --trainingid mylogp "CC(C)CCO"</code></pre>
+<I>Result</I>
+<code><pre>id      logP</pre>
+<pre>1       1,13</pre></code>
+without the training:
+<code><pre>$ cxcalc logp "CC(C)CCO"</pre>
+<pre>id      logP</pre>
+<pre>1       1,09</pre></code>
+</ol>
+<h3>Chemical Terms</h3> 
+<ol>
+<h4>Evaluator</h4>
+The parameters <code>method</code> and <code>trainingid</code> is utilized in Chemical Terms Evaluator as well.
+
+ <pre>$ evaluate -e "logp('method:user trainingid:[library name]')" "[input file/string]"</pre>
+ <b>Example</b>
+ <pre>$ evaluate -e "logp('method:user trainingid:mylogp')" "CC(C)CCO"</pre>
+
+ <h4>Instant JChem</h4>
+ You can also apply your log<i>P</i> training library via Chemical Terms in <a href="https://www.chemaxon.com/instantjchem/ijc_latest/docs/user/help/htmlfiles/ijcTOC.html"> Instant JChem </a>.   
+ <li> Choose the 'New Chemical Terms Field icon' on the panel on the right side.</li>
+ <li> Type the chemical term into the window, use the  parameters method and trainingid. Do not forget to adjust the Name, the Type and the DB Column Name.</li>
+	<br> 
+	<b>Example</b> <br>
+	The following figure presents the usage of Log<i>P</i> training in the 'New Chemical terms' window. 
+	The expression <code>logP('method:user trainingid:mylogp')</code> defines that the plugin use the user defined log<i>P</i> training library named myplogp	<h2></h2><br>
+<img src="training_files/logP_usage_IJC.png" width="616" height="553" alt="Chemical Terms window in Instant JChem"/>
+<h2></h2>
+<br>The part of the results of this calculation is presented on the next figure. You can see the difference between the untrained(column 5.,LogP) and trained (column 6., Trained LogP) log<i>P</i> values. 
+  	<h2></h2>
+<img src="training_files/logP_table_IJC.png" width="558" height="679" alt="Table in Instant JChem"/>
+</ol>
+
+</ol>
+
+</body>
+</html>
