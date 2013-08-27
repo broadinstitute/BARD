@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<title>Partitioning</title>
+<link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+<h1>Partitioning</h1>
+
+
+<h2><a name="logp"></a>log<i>P</i> Plugin
+<a href="logp_training.html"><img border="0" src="images/trainable.png" width="30" height="27" alt="Calculation can be trained with measured data"/></a>
+</h2>
+
+<p>The log<i>P</i> plugin calculates the octanol/water partition
+coefficient, which is used in QSAR analysis and rational drug design as
+a measure of molecular hydrophobicity. The calculation method is based
+on the publication of Viswanadhan et al. (see <a HREF="#ref1">Ref.1.</a>)
+The log<i>P</i> value of a molecule is composed of the increment values
+of its atoms. The algorithm described in the paper was modified at 
+several points. Many atomic types were redefined to accommodate electron 
+delocalization. Contributions of ionic forms were added. The log<i>P</i> value 
+of zwitterions are calculated from the log<i>D</i> value at the isoelectric 
+point. The effect of hydrogen bonds on log<i>P</i> is considered if there is a 
+chance to form a six membered ring between suitable donor and acceptor 
+atoms. New atom types were introduced especially for sulfur, carbon, 
+nitrogen, and metal atoms.</p>
+<p>
+
+<a href="logPlogD.html">Learn more</a> about how the plugin calculates
+log<i>P</i> and how a <a href="logPlogD.html#methods">user defined set</a> 
+is used in the calculations.</p>
+
+<p><b>We introduced the trainable log<i>P</i> calculation</b> in version 5.1.3.<br>
+What does trainability mean? With this new feature you can teach our program, how it should calculate the
+log<i>P</i> values of structures in your compound library. Experimental data and
+the molecules are saved into a file which is used in the calculation if user
+defined method is selected. <p>Read how you can
+benefit from the <a href="logPlogD.html#methods">user defined method</a>
+used in the calculations. <a href="logp_training.html">Technical
+details about setting up.</a></p>
+
+<p>Different calculation parameters can be set in the <b CLASS="buttonName">log<i>P</i> Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/logP_panel_general.png" width="280" height="457"></td>
+		<td><img src="images/logP_panel_display.png" width="280" height="457"></td>
+	</tr>
+</table>
+</p>
+<p>
+<b>General Options</b>
+
+<ul>
+	<li><b>Method</b>
+		<ul>
+			<li><b>VG:</b> the calculation method derived from <a href="#ref1">Reference 1.</a> is applied (VG stands for Viswanadhan and Ghose, first authors of the cited paper).</li>
+			<li><b>KLOP:</b> log<i>P</i> data from <a href="#ref2">Klopman's paper</a> is applied.</li>
+			<li><b>PHYSPROP:</b> log<i>P</i> data from PHYSPROP<sup>&copy;</sup> database is used.</li>
+			<li><b>User defined:</b> if a training set of structures and corresponding experimental log<i>P</i> values is created by the user, and stored in the appropriate format, it can be used as a database for related molecules' log<i>P</i> calculations. See <a href="logp_training.html">this document</a> about creating such sets.</li>
+			<li><b>Weighted:</b> default setting. The use of methods can be melted by the user, selecting this method turns the Method weights section active.</li>
+		</ul>
+	</li>
+	<li><b>Training ID:</b> if the <b>User defined</b> or the <b>Weighted</b> method is selected, this dropdown list becomes active. All created training sets are listed here. Choose the one to apply for the calculation. <a href="logp_training.html">Read more on creating a training set.</a></li>
+	<li><b>Method weights:</b> you can set the proportion of the methods used in the calculations. Acitve only in Weighted method.</li>
+	<li><b>Electrolyte concentration</b>
+		<ul>
+			<li><b>Cl<sup>-</sup> concentration:</b> can be set between 0.1 and 0.25 mol/L.</li>
+			<li><b>Na<sup>+</sup> K<sup>+</sup> concentration:</b> can be set between 0.1 and 0.25 mol/L.</li>
+		</ul>
+	</li>
+	<li><b>Take major tautomeric form:</b> the log<i>P</i> of the major tautomer will be calcutated.</li>
+</ul>
+<p><b>Display Options</b>
+<ul>
+	<li><b>Precision:</b> setting the number of decimal places with which the result value is given.</li>
+	<li><b>Show value</b>
+		<ul>
+			<li><b>increments:</b> calculates the increments given by the atoms.</li>
+			<li><b>log<i>P</i>:</b> calculates the value of log<i>P</i></li>
+			<li><b>Increments of hydrogens:</b> displays the increments given by hydrogens (in brackets).</li>
+		</ul>
+	</li>
+	<li><b>Display in MarvinSpace:</b> the result window opens as 3D MarvinSpace viewer. If unchecked, the results will be shown on a 2D picture.</li>
+</ul>
+
+<p><b>Notes to Method and Method Weights:</b> These log<i>P</i> methods were developed by us based
+partly on the atom types given in <a href="#ref1">Reference 1.</a>. The three abbrevations only refer
+to the appropiate training log<i>P</i> data set according to the references <a href="#ref1">1</a>, <a HREF="#ref2">2</a> and <a HREF="#ref3">3</a>.
+Weighted method is a combination of the above three log<i>P</i> calclulations. The three methods are equally weighted
+(1/3) by the default setting. The calculated log<i>P</i> in this way will be the
+arithmetic average of the three methods. The weighted method usually provides more
+reliable log<i>P</i> value than any one of the three separate methods.
+
+<p>The result of the calculation appears in a new window, either in a MarvinView (2D) window or a MarvinSpace (3D) window:
+</p>
+<p>
+<img src="images/logP.png" width="388" height="446"><br>
+<img src="images/logP_mspace.png" width="798" height="539">
+</p>
+<p>The result window shows the log<i>P</i> increments for each atom. The
+numbers in brackets refer to the log<i>P</i> increment sums of implicit
+H atoms, and displayed only if the "Increment of Hs" option is switched on 
+in the <b>log<i>P</i> Options</b> panel.</p>
+
+<h2><a name="logd"></a>log<i>D</i> Plugin
+</h2>
+
+<p>Compounds having ionizable groups exist in solution as a mixture
+of different ionic forms. The ionization of those groups, thus the ratio
+of the ionic forms depends on the pH. Since log<i>P</i> describes the
+hydrophobicity of one form only, the apparent log<i>P</i> value can be
+different. The octanol-water distribution coefficient,
+log<i>D</i> represents the compounds at any pH value (see <a HREF="#ref3">Ref. 3.</a>).<BR>
+<a href="logPlogD.html">Learn more</a> about how the plugin calculates
+log<i>D</i>.</p>
+<p>Different calculation parameters can be set in the <b CLASS="buttonName">log<i>D</i> Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/logD_panel_general.png" width="280" height="527"></td>
+		<td><img src="images/logD_panel_display.png" width="280" height="527"></td>
+	</tr>
+</table>
+</p>
+<p>
+<b>General Options</b>
+
+<ul>
+	<li><b>log<i>P</i> Method</b>
+        <ul>
+            <li><b>VG:</b> the calculation method derived from <a href="#ref1">Reference 1.</a>
+                is applied (VG stands for Viswanadhan and Ghose, first authors of the cited paper).</li>
+            <li><b>KLOP:</b> log<i>P</i> data from <a href="#ref2">Klopman's paper</a>
+                is applied.</li>
+            <li><b>PHYSPROP:</b> log<i>P</i> data from PHYSPROP<sup>&copy;</sup>
+                database is used.</li>
+            <li><b>User defined:</b> if a training set of structures and corresponding experimental log<i>P</i>
+                values is created by the user, and stored in the appropriate format, it can
+                be used as a database for related molecules' log<i>P</i> calculations. See <a href="../applications/calc.html">this
+                    document</a> about creating such sets.</li>
+            <li><b>Weighted:</b> default setting. The use of methods can be melted by the user, selecting
+                this method turns the Method weights section active.</li>
+        </ul>
+    </li>
+	<li><b>Log<i>P</i> Training ID:</b> if the <b>User defined</b> or the <b>Weighted</b> method is selected, this dropdown list becomes active. All created training sets are listed here. Choose the one to apply for the calculation. <a href="logp_training.html">Read more on creating a training set.</a></li>
+    <li><b>Method weights:</b> you can set the proportion of the methods used in the calculations. Acitve only in Weighted method.</li>
+    <li><b>Electrolyte concentration</b>
+		<ul>
+			<li><b>Cl<sup>-</sup> concentration:</b> can be set between 0.1 and 0.25 mol/L.</li>
+			<li><b>Na<sup>+</sup> K<sup>+</sup> concentration:</b> can be set between 0.1 and 0.25 mol/L.</li>
+		</ul>
+	</li>
+	<li><b>pKa correction library:</b> the custom pKa training for the compounds may be used. First, create a training set for your compunds, which then will appear in the dropdown list. If the option is checked, this list becomes active. <a href="pka_training.html">Read more on creating a training set.</a></li>
+	<li><b>Consider tautomerization:</b> in case of tautomer structures, all dominant tautomers at given pH are taken into account during the log<i>D</i> calculation.</li>
+</ul>
+<p><b>Display Options</b>
+<ul>
+	<li><b>Precision:</b> setting the number of decimal places with which the result value is given. </li>
+    <li><b>Chart: pH limits, pH step size:</b> defines the pH window in which the log<i>D</i> is calculated, with pH values starting from the lower limit incremented by the step size, the results given in table format and a chart.</li>
+    <li><b>Reference pH values:</b> the log<i>D</i> at the given reference pH values are calculated, both pH and log<i>D</i> values with an accuracy of the decimal places value set.</li>
+</ul>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/logD.png" width="800" height="543"></td>
+	</tr>
+</table>
+</p>
+<p>The chart shows the log<i>D</i>(pH) curves for each molecule
+drawn in the sketcher. The molecule images are shown in the legend. When
+clicking on an image, the corresponding molecule is displayed in the
+upper-left viewer. The viewer can be detached from the chart panel by
+double clicking in it, or else by selecting <b>Open Viewer</b> from the
+<b>View</b> menu. The reference log<i>D</i> values originally shown can
+be restored by either clicking on the chart outside of the legend image
+areas, or else by selecting <b>log<i>D</i> at reference pHs</b> from the <b>View</b>
+menu.</p>
+
+<h2>References</h2>
+<ol>
+<li><a class="text" name="ref1"></a>Viswanadhan, V. N.; Ghose, A. K.; Revankar,
+	G. R.; Robins, R. K., <i>J. Chem. Inf. Comput. Sci.</i>, <b>1989</b>, <i>29</i>,
+	163-172; <a href="http://dx.doi.org/10.1021/ci00063a006">doi</a>
+</li>
+<li><a class="text" name="ref2">Klopman, G.;</a> Li, Ju-Yun.; Wang, S.; Dimayuga,
+M.: <i>J.Chem.Inf.Comput.Sci.</i>, <b>1994</b>, <i>34</i>, 752;
+<a href="http://dx.doi.org/10.1021/ci00020a009">doi</a></li>
+<li>PHYSPROP<sup>&copy;</sup> database</li>
+<li><a class="text" name="ref3"></a>Csizmadia, F; Tsantili-Kakoulidou, A.;
+	Pander, I.; Darvas, F., <i>J. Pharm. Sci.</i>, <b>1997</b>, <i>86</i>,
+	865-871; <a href="http://dx.doi.org/10.1021/js960177k">doi</a>
+</li>
+</ol>
+
+</body>
+</html>

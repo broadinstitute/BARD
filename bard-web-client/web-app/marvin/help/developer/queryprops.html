@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="Query properties in molecule file formats">
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Query properties in molecule file formats</title>
+</head>
+<body>
+
+<h1>Query properties in molecule file formats</h1>
+
+Query properties are supported in
+<a HREF="../formats/mol-csmol-doc.html">Molfiles</a> and
+<a HREF="../formats/smiles-doc.html">SMILES/SMARTS</a> files.
+The following table shows the details.
+<center>
+<p>
+<table BORDER=0 CELLSPACING=0 CELLPADDING=4 id="colored-grid">
+<tr ALIGN=CENTER><th>Name</th><th>MDL Molfile</th><th>SMARTS</th>
+    <th>MarvinSketch<br>Parameter</th></tr>
+<tr><td>any atom</td>
+    <td>yes (A)</td><td>yes (*)</td>
+    <td><code>queryAtoms=any</code></td></tr>
+<tr><td>heteroatom</td>
+    <td>yes (Q)</td><td>yes (!C!H)</td>
+    <td><code>queryAtoms=hetero</code></td></tr>
+<tr><td>atom list</td>
+    <td>yes</td><td>yes</td>
+    <td><code>queryAtoms=list</code></td></tr>
+<tr><td>NOT list</td>
+    <td>yes</td><td>yes</td>
+    <td><code>queryAtoms=notlist</code></td></tr>
+<tr><td>valence</td><td>yes</td><td>yes (v)</td>
+    <td><code>queryAtoms=val</code></td></tr>
+<tr><td>hydrogens</td>
+    <td>no <sup><em>(extension)</em></sup></td><td>yes (H)</td>
+    <td><code>queryAtoms=H</code></td></tr>
+<tr><td>connections</td>
+    <td>no <sup><em>(extension)</em></sup><td>yes (X)</td>
+    <td><code>queryAtoms=conn</code></td></tr>
+<tr><td>rings</td>
+    <td>no <sup><em>(extension)</em></sup><td>yes (R)</td>
+    <td><code>queryAtoms=rings</code></td></tr>
+<tr><td>smallest ring size</td>
+    <td>no <sup><em>(extension)</em></sup></td><td>yes (r)</td>
+    <td><code>queryAtoms=srs</code></td></tr>
+<tr><td>aromatic atom</td>
+    <td>no <sup><em>(extension)</em></sup></td><td>yes (a)</td>
+    <td><code>queryAtoms=arom</code></td></tr>
+<tr><td>aliphatic atom</td>
+    <td>no <sup><em>(extension)</em></sup></td><td>yes (A)</td>
+    <td><code>queryAtoms=arom</code></td></tr>
+<tr><td>any bond</td>
+    <td>yes</td><td>yes (~)</td>
+    <td><code>extraBonds=any</code></td></tr>
+<tr><td>single or double</td>
+    <td>yes</td><td>yes (-,=)</td>
+    <td><code>extraBonds=1or2</code></td></tr>
+<tr><td>single or aromatic</td>
+    <td>yes</td><td>yes (-,:)</td>
+    <td><code>extraBonds=aromany</code></td></tr>
+<tr><td>double or aromatic</td>
+    <td>yes</td><td>yes (=,:)</td>
+    <td><code>extraBonds=aromany</code></td></tr>
+<tr><td>single up or down</td>
+    <td>yes</td><td>not in Marvin</td>
+    <td><code>extraBonds=either</code></td></tr>
+<tr><td>double cis or trans</td>
+    <td>yes</td><td>yes</td>
+    <td><code>extraBonds=either</code></td></tr>
+<tr><td>double cis or unspecified</td>
+    <td>yes</td><td>yes</td>
+    <td><code>extraBonds=ctu</code></td></tr>
+<tr><td>double trans or unspecified</td>
+    <td>yes</td><td>yes</td>
+    <td><code>extraBonds=ctu</code></td></tr>
+<tr><td>&quot;ring&quot; bond</td>
+    <td>yes</td><td>yes (@)</td>
+    <td><code>extraBonds=topology</code></td></tr>
+<tr><td>&quot;chain&quot; bond</td>
+    <td>yes</td><td>yes(!@)</td>
+    <td><code>extraBonds=topology</code></td></tr>
+</table>
+</center>
+<p>
+<em>Extensions:</em> Marvin generated Molfiles and Compressed Molfiles support
+extra SMARTS properties also.
+
+</body>
+</html>

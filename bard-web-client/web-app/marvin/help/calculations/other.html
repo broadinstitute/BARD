@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+    <meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+    <title>Other Plugins</title>
+    <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</head>
+
+<body>
+
+<h1>Other Plugins</h1>
+
+
+<h2><a class="anchor" name="HBDA">Hydrogen Bond Donor-Acceptor Plugin</a></h2>
+<p>Hydrogen Bond Donor-Acceptor calculates atomic hydrogen bond
+donor and acceptor inclination. Atomic data and overall hydrogen bond
+donor and acceptor multiplicity are displayed for the input molecule (or
+its <a href="protonation.html#ms">microspecies</a> at a given pH). The
+weighted average hydrogen bond donor and acceptor multiplicities taken over the microspecies and the proportions of their occurrences are computed for different pHs and displayed in a chart.</p>
+<p>Different calculation parameters can be set in the <b CLASS="buttonName">H Bond Donor/Acceptor Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/Hbond_panel.png" width="220" height="366"></td>
+	</tr>
+</table>
+</p>
+<ul>
+	<li><b>Decimal places:</b> setting the number of decimal places with which the result value is given.</li>
+	<li><b>Type: 
+		<ul>
+			<li>donor, acceptor:</b> specifying search for donor or acceptor characteristics.</li>
+		</ul>
+	</li>
+	<li><b>Exclude sulfur atoms from acceptors</b></li>
+	<li><b>Exclude halogens from acceptors</b></li>
+	<li><b>Show microspecies data by pH:</b> the number of donor or acceptor sites vs. pH chart is displayed.</li>
+	<li><b>Microspecies: 
+		<ul>
+			<li>pH lower limit; pH upper limit; pH step size:</b> the pH window of the chart is set here, with data points in the step size marks.</li>
+		</ul>
+	</li>
+	<li><b>Display major mecrospecies:</b> the structure of the major form at the given pH is displayed.</li>
+</ul>
+<p>
+<table>
+	<tr>
+		<td><img src="images/hbda.png" width="797" height="745"></td>
+	</tr>
+</table>
+</p>
+
+<h2><a class="anchor" NAME="huckel">H&#252;ckel Analysis Plugin</a></h2>
+<p>Localization energies L(+) and L(-) for electrophilic and
+nucleophilic attack at an aromatic center are calculated by the H&#252;ckel
+method. The smaller L(+) or L(-) means more reactive atomic location.
+Order of atoms in E(+) or in Nu(-) attack are adjusted according to
+their localization energies. The total pi energy, the pi electron
+density and the total electron density are also calculated by the H&#252;ckel
+method. Depending on the chemical environment the following atoms have optimal Coulomb and resonance integral parameters: B, C, N, O, S, F, Cl, Br, I. All other atoms have a default, not optimized parameter. </p>
+<p>Theoretical background is taken from <a HREF="#ref2">Isaacs' book</a>. Additional literature for the H&#252;ckel's parameters is <a href="#ref3">Streitwieser's book.</a></p>
+<p>Following calculation parameters can be set in the <b CLASS="buttonName">Huckel Analysis Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/huckel_panel.png" width="291" height="220"></td>
+	</tr>
+</table>
+</p>
+<ul>
+	<li><b>Decimal places:</b>  setting the number of decimal places with which the result value is given. </li>
+	<li><b>Type</b> 
+	<ul>
+		<li><b>E(+)/Nu(-) order:</b> numbers the aromatic atoms according to their likeliness of being attacked by electrophiles or nucleophiles.</li>
+		<li><b>Localization energy L(+)/L(-):</b> gives the localization energies of the aromatic center (dimension &beta;).</li>
+		<li><b>Pi energy:</b> calculates the pi energy of the aromatic ring(s) (dimension &beta;).</li>
+		<li><b>Electron density:</b> calculates the pi electron density.</li>
+		<li><b>Charge density:</b> calculates total charge density on the ring atoms.</li>
+	</ul></li>
+	<li><b>Subtype: E(+); Nu(-):</b> for E(+)/Nu(-)order and Localization energy L(+)/L(-), the electrophilicity and nucleophilicity approaches can be selected (at least one fo them). Results for E(+) are coloured red, and Nu(-) blue.</li>
+	<li><b>Take major microspecies at pH:</b> calculates the values for the major microspecies at the given pH.</li>
+</ul>
+<p>
+The results appear in a new window, indicating all values at the corresponding atoms in the aromatic ring. The picture on the left is the result of Aromatic E(+)/Nu(-) order, the picture on the right the pi energy calculation:
+</p>
+<p>
+
+<img src="images/enOrder.png" width="388" height="423"/>
+<img src="images/pienergy.png" width="388" height="446"/>
+
+</p>
+
+<h2><a class="anchor" name="refractivity"></a>Refractivity Plugin</h2>
+<p>Our calculation is based on the atomic method proposed by <a HREF="#ref1">Viswanadhan et al.</a> Molar refractivity
+is strongly related to the volume of the molecules and to London
+dispersive forces that has important effect in drug-receptor interaction.</p>
+<p>Different calculation parameters can be set in the <b CLASS="buttonName">Refractivity Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/refrac_panel.png" width="218" height="212"></td>
+	</tr>
+</table>
+</p>
+<ul>
+	<li><b>Decimal places:</b>  setting the number of decimal places with which the result value is given.</li>
+	<li><b>Type</b>
+		<ul>
+			<li><b>Increments:</b> displays the increments given by atoms.</li>
+			<li><b>Refractivity:</b> calculates the value of the molar refractivity</li>
+		</ul>
+	</li>
+	<li><b>Increments of hydrogens:</b> displays the increments given by hydrogens.</li>
+	<li><b>Display in MarvinSpace:</b> the result window opens as 3D MarvinSpace viewer. If unchecked, the results will be shown on a 2D picture.</li>
+</ul>
+<p>The result appears in a new window, containing a text field with the value of refractivity (dimension: 10<sup>6</sup>&sdot;[m<sup>3</sup>&sdot;mol<sup>-1</sup>] and the molecule in 2D or 3D view:</p>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/refractivity.png" width="334" height="348"></td>
+		<td><img src="images/refractivity_mspace.png" width="784" height="348"></td>
+	</tr>
+</table>
+</p>
+<p>The numbers in brackets refer to the refractivity sums of the implicit hydrogen atoms.</p>
+
+<p>
+<table cellpadding="4">
+</table>
+</p>
+
+<h2><a class="anchor" NAME="resonance">Resonance Plugin</a></h2>
+<p>The Resonance plugin generates all resonance structures of a molecule.
+The major contributors of the resonance structures can be calculated
+separately. Following options can be adjusted in the <b CLASS="buttonName">Resonance Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/resonance_panel.png" width="234" height="161"></td>
+	</tr>
+</table>
+</p>
+<ul>
+	<li><b>Max. number of structure:</b> maximize the number of structures to display (decrease calculation time).</li>
+	<li><b>Take canonical form:</b> displays the canonical structure of the molecule.</li>
+	<li><b>Take major contributors:</b> select the most relevant structures.</li>
+	<li><b>Single fragment mode :</b> if checked (default), the results are displayed in separate windows; if unchecked, the calculation handles unlinked molecules together and results are in the same window.</li>
+</ul>
+<p>For example the two structures below, on the left are the major
+resonance contributors of diazomethane, while the structure on the right is the
+canonical form:</p>
+<p>
+<table cellpadding="4">
+	<tr>
+		<td><img src="images/resonance.png" width="407" height="288"></td>
+		<td><img src="images/canonical_resonance.png" width="238" height="274"></td>
+	</tr>
+</table>
+</p>
+
+<h2><a class="anchor" name="framework">Structural Frameworks Plugin</a></h2>
+
+<p>
+The plugin calculates Bemis and Murcko frameworks and other structure based
+reduced representations of the input structures.
+<p>The required calculation can be selected on the <b>Framework type</b> tab of
+the <b>Structural frameworks Options</b> panel:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/framework_panel.png" width="350" height="323"></td>
+	</tr>
+</table>
+</p>
+
+<ul>
+    <li><b>Bemis-Murcko framework</b> is calculated by removing side chains from
+    the input and generalizing atom/bond types. If <b>Keep single atom for non-
+    empty acyclic structures</b> selected then acyclic inputs will not be erased
+    completely; they will be represented by a single node.</li>
+    <li><b>Maximum common substructure</b> calculates MCS for every pairs of
+    input fragments. The input must contain at least two disconnected fragments.</li>
+    <li><b>Largest ring</b> returns the largest SSSR ring of the input.</li>
+    <li><b>All fused ring systems</b> returns the fused ring systems of the input</li>
+    <li><b>Largest fused ring system</b> returns the largest the fused ring systems
+    of the input</li>
+    <li><b>Smallest set of the smallest rings (SSSR)</b> returns the SSSR rings
+    of the input.</li>
+    <li><b>Complete set of the smallest rings (CSSR)</b> returns the CSSR rings
+    of the input.</li>
+    <li><b>Only pre/post process, no framework reduction</b> can be used to examine
+    the optional preprocess and postprocess functionality. Selecting this option
+    will skip any framework reduction/fragmentation.</li>
+</ul>
+
+<p>The <b>Advanced settings</b> tab allows options to fine tune the execution:</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/framework_panel2.png" width="350" height="323"></td>
+	</tr>
+</table>
+</p>
+
+Note that redundant or not applicable options will be dinamically disabled based
+on the selected framework type or other calculations. (For example Bemis-Murcko
+framework calculation will generalize the input, so prune input/output will
+be disabled when it is selected.)
+
+<ul>
+    <li><b>Input preprocess</b> steps are executed before the framework calculation.
+    <ul>
+        <li><b>Process only the largest fragment of the input structure</b>: if
+        selected then the largest fragment will be processed in the following steps</li>
+        <li><b>Prune input</b> the input structure will be generalized by
+        changing all atom types to carbon, all bond types to single and removing
+        all stereo/wedge bond flags</li>
+        <li><b>Add explicit hydrogens</b> will invoke hydrogenize on  the input</li>
+        <li><b>Remove explicit hydrogens</b> will invoke dehydrogenize on the
+        input</li>
+    </ul></li>
+    <li><b>Output postprocess</b> steps are executed after the framework calculation.
+    <ul>
+        <li><b>Prune results</b> will generalize the resulting framework after
+        the calculations</li>
+        <li><b>Return only the largest fragment of the result</b> will keep only
+        the largest resulting fragment</li>
+        <li><b>Remove topologically equivalent output fragments</b> will remove
+        duplicated result fragments</li>
+    </ul></li>
+</ul>
+
+<p>The result window contains the framework:
+
+</p>
+<p>
+<table>
+	<tr>
+		<td><img src="images/framework.png" width="364" height="374"></td>
+	</tr>
+</table>
+</p>
+
+<h2>References</h2>
+<ul>
+<li><a class="text" name="ref1"></a>Viswanadhan, V. N.; Ghose, A. K.; Revankar,
+	G. R.; Robins, R. K., <i>J. Chem. Inf. Comput. Sci.</i>, <b>1989</b>, <i>29</i>,
+	163-172; <a href="http://dx.doi.org/10.1021/ci00063a006">doi</a> </li>
+<li><a class="text" name="ref2">Isaacs, N.S., <i>Physical Organic
+	Chemistry</i>, John Wiley & Sons, Inc., New York, <b>1987</b>,</a> ISBN 0582218632. </li>
+<li> <a class="text" name="ref3">Streitwieser, A., <i>Molecular Orbital Theory for Organic Chemists,</i> John Wiley, <b>1961</b>,</a> ISBN 0471833584.</li>
+
+
+
+</ul>
+</body>
+</html>

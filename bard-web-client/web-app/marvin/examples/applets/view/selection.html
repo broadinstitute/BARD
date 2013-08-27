@@ -1,0 +1,214 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Selecting atoms</title>
+</head>
+<body onLoad="links_set_search(location.search)">
+
+<h1>MarvinView Example - Selecting atoms</h1>
+
+This example demonstrates how to change the applet's contents using JavaScript
+calls, and how to highlight atoms in the molecules.
+
+<p>
+
+<center>
+<script type="text/javascript">
+<!--
+function showM(s) {
+	if(document.MView != null) {
+		document.MView.selectAllAtoms(0, false); // clear selection
+		document.MView.setM(0, "../../../mols-2d/" + s + ".csmol");
+	} else {
+		alert("Cannot set molecule:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+//-->
+</script>
+
+<form onSubmit="return false">
+<table CELLSPACING=5 CELLPADDING=0 BORDER=0>
+<tr>
+<td><input TYPE=BUTTON VALUE="Caffeine" onClick="showM('caffeine')"></td>
+<td><input TYPE=BUTTON VALUE="Adrenaline" onClick="showM('l-adrenaline')"></td>
+<td><input TYPE=BUTTON VALUE="Aspirin" onClick="showM('aspirin')"></td>
+<td><input TYPE=BUTTON VALUE="Vitamin C" onClick="showM('vitaminc')"></td>
+</tr>
+</table>
+</form>
+
+<p>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+function selectAll(b) {
+	if(document.MView != null) {
+		document.MView.selectAllAtoms(0, b);
+	} else {
+		alert("Cannot select atoms:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function selectAtom(b) {
+	if(document.MView != null) {
+		var atom = document.SelForm.AtomNumber.value;
+		document.MView.selectAtom(0, atom-1, b);
+	} else {
+		alert("Cannot select atom:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+mview_name = "MView";
+mview_begin("../../..", 200, 200);
+mview_param("background", "#ffffff");
+mview_param("molbg", "#ffffff");
+mview_param("atomNumbersVisible",true);
+mview_param("mol", "../../../mols-2d/caffeine.csmol");
+mview_param("selection0", "0,1,3,8,9");
+mview_param("loadMols",
+ "../../../mols-2d/caffeine.csmol,"
++"../../../mols-2d/l-adrenaline.csmol,"
++"../../../mols-2d/aspirin.csmol,"
++"../../../mols-2d/vitaminc.csmol");
+mview_end();
+//-->
+</script>
+<p>
+<form onSubmit="return false" NAME="SelForm">
+<table CELLSPACING=5 CELLPADDING=0 BORDER=0>
+<tr>
+<td><input TYPE=BUTTON VALUE="Select All" onClick="selectAll(true)"></td>
+<td><input TYPE=BUTTON VALUE="Unselect All" onClick="selectAll(false)"></td>
+<td><input TYPE=BUTTON VALUE="Select" onClick="selectAtom(true)"></td>
+<td><input TYPE=BUTTON VALUE="Unselect" onClick="selectAtom(false)"></td>
+<td>Atom Number:</td>
+<td><input TYPE=TEXT VALUE="" NAME="AtomNumber"></td>
+</tr>
+<tr>
+<td COLSPAN=5><small>Right click, then choose Misc -&gt; Atom Numbers
+    to see the atom numbers</small></td>
+</tr>
+</table>
+</form>
+</center>
+
+<p>
+Molecule loading is handled by the following JavaScript function and HTML form:
+<blockquote>
+<pre>
+<strong>&lt;script type</strong>=&quot;text/javascript&quot; <strong>SRC</strong>=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;<strong>&gt;</strong><strong>&lt;/script&gt;</strong>
+<strong>&lt;script type</strong>=&quot;text/javascript&quot;<strong>&gt;</strong>
+<strong>&lt;!--</strong>
+<a NAME="function_showM">function <strong>showM(s)</strong></a> {
+	if(document.MView != null) {
+		document.MView.<a HREF="../../../help/developer/applets/api/JMView.html#selectAllAtoms(int, boolean)">selectAllAtoms</a>(0, false); // clear selection
+		document.MView.<a HREF="../../../help/developer/applets/api/JMView.html#setM(int, java.lang.String)">setM</a>(0, &quot;../../../mols-2d/&quot; + s + &quot;.csmol&quot;);
+	} else {
+		alert(&quot;Cannot set molecule:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+//<strong>--&gt;</strong>
+<strong>&lt;/script&gt;</strong>
+
+<strong>&lt;form onSubmit</strong>="return false"<strong>&gt;</strong>
+<strong>&lt;table CELLSPACING</strong>=5 <strong>CELLPADDING</strong>=0 <strong>BORDER</strong>=0<strong>&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Caffeine" <strong>onClick</strong>="showM('caffeine')"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Adrenaline" <strong>onClick</strong>="showM('l-adrenaline')"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Aspirin" <strong>onClick</strong>="showM('aspirin')"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Vitamin C" <strong>onClick</strong>="showM('vitaminc')"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;/table&gt;</strong>
+<strong>&lt;/form&gt;</strong>
+</pre>
+</blockquote>
+
+<p>
+
+Atom selection is handled by two JavaScript functions:
+<blockquote>
+<pre>
+<strong>&lt;script type</strong>=&quot;text/javascript&quot; <strong>SRC</strong>=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;<strong>&gt;</strong><strong>&lt;/script&gt;</strong>
+<strong>&lt;script type</strong>=&quot;text/javascript&quot;<strong>&gt;</strong>
+<strong>&lt;!--</strong>
+function <strong>selectAll(b)</strong> {
+	if(document.MView != null) {
+		document.MView.<a HREF="../../../help/developer/applets/api/JMView.html#selectAllAtoms(int, boolean)">selectAllAtoms</a>(0, atom-1, b);
+	} else {
+		alert(&quot;Cannot select atoms:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function <strong>selectAtom(b)</strong> {
+	if(document.MView != null) {
+		var atom = document.SelForm.AtomNumber.value;
+		document.MView.<a HREF="../../../help/developer/applets/api/JMView.html#selectAtom(int, int, boolean)">selectAtom</a>(0, atom-1, b);
+	} else {
+		alert(&quot;Cannot select atom:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+</pre>
+</blockquote>
+In the applet tag, we specify the initial molecule and the selected atoms:
+<blockquote>
+<pre>
+<strong>mview_name</strong> = &quot;MView&quot;;
+<strong>mview_begin(</strong>&quot;../../..&quot;<strong>,</strong> 200<strong>,</strong> 200<strong>);</strong>
+<strong>mview_param(</strong>&quot;<a HREF="../../../help/developer/viewman.html#parameters.background">background</a>&quot;<strong>,</strong> &quot;#ffffff&quot;<strong>);</strong>
+<strong>mview_param(</strong>&quot;<a HREF="../../../help/developer/viewman.html#parameters.molbg">molbg</a>&quot;<strong>,</strong> &quot;#ffffff&quot;<strong>);</strong>
+<strong>mview_param(</strong>&quot;<a HREF="../../../help/developer/viewman.html#parameters.atomNumbersVisible">atomNumbersVisible</a>&quot;<strong>,</strong>true<strong>);</strong>
+<strong>mview_param(</strong>&quot;<a HREF="../../../help/developer/viewman.html#parameters.mol">mol</a>&quot;<strong>,</strong> &quot;../../../mols-2d/caffeine.csmol&quot;<strong>);</strong>
+<strong>mview_param(</strong>&quot;<a HREF="../../../help/developer/viewman.html#parameters.selection">selection</a>0&quot;<strong>,</strong> &quot;1,2,3&quot;<strong>);</strong>
+</pre>
+</blockquote>
+Note that the atom indices are in the 0, ..., n-1 range, where n is the total
+number of atoms. So an atom index is one less than the atom number
+(1, ..., n) that the user sees when (s)he selects View -&gt; Misc -&gt;
+Atom Numbers.
+
+<p>To make molecule changes (the <a HREF="#function_showM">showM</a> method)
+fast, we preload all the molecules into the Marvin's cache:
+<blockquote>
+<pre>
+<strong>mview_param(</strong>&quot;<a HREF="../../../help/developer/viewman.html#parameters.loadMols">loadMols</a>&quot;<strong>,</strong>
+ &quot;../../../mols-2d/caffeine.csmol,&quot;
++&quot;../../../mols-2d/l-adrenaline.csmol,&quot;
++&quot;../../../mols-2d/aspirin.csmol,&quot;
++&quot;../../../mols-2d/vitaminc.csmol&quot;<strong>);</strong>
+<strong>mview_end();</strong>
+</pre>
+</blockquote>
+<p>
+Finally, the form used to select atoms is the following:
+<blockquote>
+<pre>
+<strong>&lt;form onSubmit</strong>="return false" <strong>NAME</strong>="SelForm"<strong>&gt;</strong>
+<strong>&lt;table CELLSPACING</strong>=5 <strong>CELLPADDING</strong>=0 <strong>BORDER</strong>=0<strong>&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Select All" <strong>onClick</strong>="selectAll(true)"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Unselect All" <strong>onClick</strong>="selectAll(false)"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Select" <strong>onClick</strong>="selectAtom(true)"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=BUTTON <strong>VALUE</strong>="Unselect" <strong>onClick</strong>="selectAtom(false)"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;td&gt;</strong>Atom Number:<strong>&lt;/td&gt;</strong>
+<strong>&lt;td&gt;&lt;input TYPE</strong>=TEXT <strong>VALUE</strong>="" <strong>NAME</strong>="AtomNumber"<strong>&gt;&lt;/td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;tr&gt;</strong>
+<strong>&lt;td</strong> <strong>COLSPAN</strong>=5<strong>&gt;&lt;small&gt;</strong>Right click, then choose Misc -&gt; Atom Numbers
+    to see the atom numbers<strong>&lt;/small&gt;&lt;td&gt;</strong>
+<strong>&lt;/tr&gt;</strong>
+<strong>&lt;/table&gt;</strong>
+<strong>&lt;/form&gt;</strong>
+</pre>
+</blockquote>
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+The next example shows how to
+<a HREF="colorsets.html">color atomsets</a> in the viewer.
+
+</body>
+</html>

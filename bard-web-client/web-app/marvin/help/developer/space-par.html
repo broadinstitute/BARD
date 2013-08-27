@@ -1,0 +1,597 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="MarvinSpace Parameters">
+<meta NAME="author" CONTENT="Judit Papp">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>MarvinSpace Parameters and Events</title>
+</head>
+<body>
+
+<h1>MarvinSpace Parameters and Events</h1>
+<h3 align=center>Version 5.10.1</h3>
+
+<h2>Contents</h2>
+    <ol>
+        <li><a HREF="#scene">Scene parameters</a></li>
+        <li><a HREF="#action">Action parameters</a></li>
+        <li><a HREF="#ligand">Ligand parameters</a></li>
+        <li><a HREF="#macro">MacroMolecule parameters</a></li>
+        <li><a HREF="#water">Water parameters</a></li>
+        <li><a HREF="#ion">Ion parameters</a></li>
+        <li><a HREF="#ph">Pharmacophore parameters</a></li>
+        <li><a HREF="#surface">Surface parameters</a></li>
+        <li><a HREF="#secondary">Secondary Structure parameters</a></li>
+    </ol>
+
+<center><div class="lenia">&nbsp;</div></center>
+
+<h2>Parameters</h2>
+Parameters of the MarvinSpace applications can be set using the <code>-p</code> command line option, for applets they can be set using the <code>&lt;param&gt;</code> HTML tag.
+
+<ol>
+<h3><li><a NAME="scene">Scene parameters</a></li></h3>
+
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>Quality</code></td>
+            <td>Rendering quality of the components</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Background.Color</code></td>
+            <td>Color of the scene, the same color applies to all cells</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code> value as <code>String</code></td>
+            <td ALIGN=CENTER><code>#000000</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Background.Transparent</code></td>
+            <td>Transparent background affects image saving, i.e. save image with or without background color</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>true</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Background.Smooth</code></td>
+            <td>Smooth backgound means that the background color will be a linearly interpolated to a brighter color</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Depthcue</code></td>
+            <td>Enable/disable depth cue (fog) effect</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Depthcue.Near</code></td>
+            <td>Start position of fog relative to the view point</td>
+            <td ALIGN=CENTER><code>Integer</code> value as <code>String</code></td>
+            <td ALIGN=CENTER><code>0</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Depthcue.Far</code></td>
+            <td>End position of fog relative to the view point</td>
+            <td ALIGN=CENTER><code>Integer</code> value as <code>String</code></td>
+            <td ALIGN=CENTER><code>40</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Clipping.Near</code></td>
+            <td>Position of the near clipping plane</td>
+            <td ALIGN=CENTER><code>Float</code> value as <code>String</code></td>
+            <td ALIGN=CENTER><code>-59.9</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Clipping.Far</code></td>
+            <td>Position of the far clipping plane</td>
+            <td ALIGN=CENTER><code>Float</code> value as <code>String</code></td>
+            <td ALIGN=CENTER><code>450</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SynchronousMode</code></td>
+            <td>Synchronous navigation (rotate, zoom, shift) in all cells</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="action">Action parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>ShowSurface</code></td>
+            <td>Generates molecular surface on all visible components</td>
+            <td ALIGN=CENTER><code>"van der Waals", "Solvent-accessible", "Connolly", "Blobby"</code></td>
+            <td ALIGN=CENTER><code>Connolly</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>ShowSecondaryStructure</code></td>
+            <td>Generates secondary structure to all visible macromolecules</td>
+            <td ALIGN=CENTER><code>Trace, Tube, Ribbon, Cartoon</code></td>
+            <td ALIGN=CENTER><code>Cartoon</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="ligand">Ligand parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.DrawType</code></td>
+            <td>Draw type of all ligands/small molecules on the scene</td>
+            <td ALIGN=CENTER><code>"Wire", "Stick", "Ball", "BallAndStick",
+     "StickAndBall", "BallAndWire", "WireAndBall", "Spacefill"</code></td>
+            <td ALIGN=CENTER><code>BallAndStick</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.ColorType</code></td>
+            <td>Color type of all ligands/small molecules on the scene</td>
+            <td ALIGN=CENTER><code>"Constant", "CPK"</code></td>
+            <td ALIGN=CENTER><code>CPK</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.Quality</code></td>
+            <td>Quality of all ligands/small molecules on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.Hydrogens</code></td>
+            <td>Hydrogens of ligands are displayed or not. Note that hydrogens
+                are always calculated whether they are described in the input or not.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.LonePairs</code></td>
+            <td>Lone pairs of ligands are displayed or not.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.BallRadius</code></td>
+            <td>Radius of displayed balls in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.4</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.BondRadius</code></td>
+            <td>Radius of bond cylinders in ball&amp;stick mode in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.1</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.StickRadius</code></td>
+            <td>Radius of bond cylinders in stick mode in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.3</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.LineWidth</code></td>
+            <td>Width of displayed lines in wire mode in pixels</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>2</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.BondDistance</code></td>
+            <td>Gap between two lines/sticks representing a double bond.
+     It is determined as a percentage of Bond radius.</td>
+            <td ALIGN=CENTER><code>Integer</code></td>
+            <td ALIGN=CENTER><code>100</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.BondWidth</code></td>
+            <td>Thickness of line/stick representing a double bond.
+     It is expressed relative to the thickness of a single bond.</td>
+            <td ALIGN=CENTER><code>Integer</code></td>
+            <td ALIGN=CENTER><code>50</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.SmoothStickStyle</code></td>
+            <td>Smooth, shaded display of two colored bonds</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.ScaledBalls</code></td>
+            <td>Are balls scaled according to vdW radius or have uniform size in ball mode or not</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.DisplayBondOrder</code></td>
+            <td>Double, aromatic bonds are displayed differently from single bonds or not</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>true</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ligand.Color</code></td>
+            <td>The color used in constant color mode</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code></td>
+            <td ALIGN=CENTER><code>#fff050</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="macro">MacroMolecule parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.DrawType</code></td>
+            <td>Draw type of all macromolecules on the scene</td>
+            <td ALIGN=CENTER><code>"Wire", "Stick", "Ball", "BallAndStick",
+     "StickAndBall", "BallAndWire", "WireAndBall", "Spacefill"</code></td>
+            <td ALIGN=CENTER><code>Wire</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.ColorType</code></td>
+            <td>Color type of all macromolecules on the scene</td>
+            <td ALIGN=CENTER><code>"Constant", "CPK", "Residue",
+                "Chain", "Rainbow", "B-factor", "Secondary Structure"</code></td>
+            <td ALIGN=CENTER><code>CPK</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.Quality</code></td>
+            <td>Quality of all macromolecules on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.Hydrogens</code></td>
+            <td>Hydrogens of macromolecules are displayed or not. Note that hydrogens
+                are not calculated for macromolecules.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.LonePairs</code></td>
+            <td>Lone pairs of macromolecules are displayed or not.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.BallRadius</code></td>
+            <td>Radius of displayed balls in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.4</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.BondRadius</code></td>
+            <td>Radius of bond cylinders in ball&amp;stick mode in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.1</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.StickRadius</code></td>
+            <td>Radius of bond cylinders in stick mode in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.15</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.LineWidth</code></td>
+            <td>Width of displayed lines in wire mode in pixels</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>2</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.BondDistance</code></td>
+            <td>Gap between two lines/sticks representing a double bond.
+     It is determined as a percentage of Bond radius.</td>
+            <td ALIGN=CENTER><code>Integer</code></td>
+            <td ALIGN=CENTER><code>100</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.BondWidth</code></td>
+            <td>Thickness of line/stick representing a double bond.
+     It is expressed relative to the thickness of a single bond.</td>
+            <td ALIGN=CENTER><code>Integer</code></td>
+            <td ALIGN=CENTER><code>50</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.SmoothStickStyle</code></td>
+            <td>Smooth, shaded display of two colored bonds</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.ScaledBalls</code></td>
+            <td>Are balls scaled according to vdW radius or have uniform size in ball mode or not</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.DisplayBondOrder</code></td>
+            <td>Double, aromatic bonds are displayed differently from single bonds or not</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>true</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>MacroMolecule.Color</code></td>
+            <td>The color used in constant color mode</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code></td>
+            <td ALIGN=CENTER><code>#bebebe</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="water">Water parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>Water.DrawType</code></td>
+            <td>Draw type of all water molecules on the scene</td>
+            <td ALIGN=CENTER><code>"Wire", "Ball", "Spacefill"</code></td>
+            <td ALIGN=CENTER><code>Wire</code></td>
+        </tr>
+        <!--<tr VALIGN=TOP>
+            <td><code>Water.ColorType</code></td>
+            <td>Color type of all water molecules on the scene</td>
+            <td ALIGN=CENTER><code>"Constant", "CPK"</code></td>
+            <td ALIGN=CENTER><code>CPK</code></td>
+        </tr>-->
+        <tr VALIGN=TOP>
+            <td><code>Water.Quality</code></td>
+            <td>Quality of all water molecules on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <!--<tr VALIGN=TOP>
+            <td><code>Water.Hydrogens</code></td>
+            <td>Hydrogens of macromolecules are displayed or not. Note that hydrogens
+                are not calculated for macromolecules.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>false</code></td>
+        </tr>-->
+        <tr VALIGN=TOP>
+            <td><code>Water.BallRadius</code></td>
+            <td>Radius of displayed balls in angstroms</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>0.4</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Water.LineWidth</code></td>
+            <td>Width of displayed lines in wire mode in pixels</td>
+            <td ALIGN=CENTER><code>Double</code></td>
+            <td ALIGN=CENTER><code>2</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Water.Color</code></td>
+            <td>The color used in constant color mode</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code></td>
+            <td ALIGN=CENTER><code>#ff0000</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="ion">Ion parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>Ion.DrawType</code></td>
+            <td>Draw type of all ions on the scene</td>
+            <td ALIGN=CENTER><code>"Dotted", "Wire", "Ball", "Spacefill"</code></td>
+            <td ALIGN=CENTER><code>Spacefill</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ion.ColorType</code></td>
+            <td>Color type of all ions on the scene</td>
+            <td ALIGN=CENTER><code>"Constant", "CPK"</code></td>
+            <td ALIGN=CENTER><code>CPK</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ion.Quality</code></td>
+            <td>Quality of all ions on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Ion.Color</code></td>
+            <td>The color used in constant color mode</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code></td>
+            <td ALIGN=CENTER><code>#871ece</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="ph">Pharmacophore parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>PharmacophorePoint.DrawType</code></td>
+            <td>Draw type of all pharmacophore points on the scene</td>
+            <td ALIGN=CENTER><code>"Dotted", "Mesh", "Solid", "Transparent"</code></td>
+            <td ALIGN=CENTER><code>Transparent</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>PharmacophorePoint.Quality</code></td>
+            <td>Quality of all pharmacophore points on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>PharmacophoreArrow.DrawType</code></td>
+            <td>Draw type of all pharmacophore arrows on the scene</td>
+            <td ALIGN=CENTER><code>"Dotted", "Mesh", "Solid", "Transparent"</code></td>
+            <td ALIGN=CENTER><code>Solid</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>PharmacophoreArrow.Quality</code></td>
+            <td>Quality of all pharmacophore arrows on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+    </table>
+
+<h3><li><a NAME="surface">Surface parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>Surface.DrawType</code></td>
+            <td>Draw type of all molecular surfaces on the scene</td>
+            <td ALIGN=CENTER><code>"Dot", "Mesh", "Solid", "Transparent"</code></td>
+            <td ALIGN=CENTER><code>Solid</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Surface.ColorType</code></td>
+            <td>Color type of all molecular surfaces on the scene</td>
+            <td ALIGN=justify><code>
+                <ul><li>"Constant",</li> <li>"AtomType/CPK", <li>"ResidueType", <li>"ChainType",
+            <li>"ElectrostaticPotential", <li>"SecondaryStructureType", <li>"B-factor"</ul></code></td>
+            <td ALIGN=CENTER><code>Constant</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Surface.Quality</code></td>
+            <td>Quality of all molecular surfaces on the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Surface.Palette</code></td>
+            <td>Palette identifier used when coloring surface</td>
+            <td ALIGN=justify><code><ul><li>"Red to Blue",
+	                                    <li>"Blue to Red",
+	                                    <li>"Rainbow",
+		                                <li>"Reverse Rainbow",
+	                                    <li>"Blue to Green",
+	                                    <li>"Green to Blue",
+	                                    <li>"Fire",
+	                                    <li>"Blue",
+	                                    <li>"Green",
+	                                    <li>"Yellow"</ul>
+            </code></td>
+            <td ALIGN=CENTER><code>"Blue to Red"</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>Surface.Color</code></td>
+            <td>The color used in constant color mode</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code></td>
+            <td ALIGN=CENTER><code>#cccccc</code></td>
+        </tr>
+
+    </table>
+
+<h3><li><a NAME="secondary">Secondary Structure parameters</a></li></h3>
+    <table BORDER=0 width="1000" cellpadding="4" cellspacing="0" id="colored-grid">
+    <tr ALIGN=CENTER><th>Parameter</th><th>Meaning</th><th>Possible values</th><th>Default</th></tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.DrawType</code></td>
+            <td>Draw type of all secondary structure components of the scene</td>
+            <td ALIGN=justify><ul><li>Trace,<li>Tube,<li>PipeAndPlank,<li>RibbonLines,
+                <li>Ribbon,<li>CartoonSquare,<li>Cartoon</ul></td>
+            <td ALIGN=CENTER><code>Cartoon</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.ColorType</code></td>
+            <td>Color type of all secondary structure components of the scene</td>
+            <td ALIGN=CENTER><code>"Constant", "Residue",
+                "Chain", "Rainbow", "B-factor", "SecondaryStructure"</code></td>
+            <td ALIGN=CENTER><code>SecondaryStructure</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.Quality</code></td>
+            <td>Quality of all secondary structure components of the scene</td>
+            <td ALIGN=CENTER><code>"High", "Medium", "Low"</code></td>
+            <td ALIGN=CENTER><code>Medium</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.Color</code></td>
+            <td>The color used in constant color mode</td>
+            <td ALIGN=CENTER><code>java.awt.Color</code></td>
+            <td ALIGN=CENTER><code>#ffffff</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.HelixWidth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>1.2</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.HelixDepth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>0.3</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.HelixShift</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>2.5</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.HelixArrow</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>true</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.HelixArrowWidth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>3.8</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.SheetWidth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>1.2</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.SheetDepth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>0.4</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.SheetArrow</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>true</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.SheetArrowWidth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>3.8</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.CoilWidth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>0.3</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.CoilDepth</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Float</code></td>
+            <td ALIGN=CENTER><code>0.3</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.CoilUniform</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>true, false</code></td>
+            <td ALIGN=CENTER><code>true</code></td>
+        </tr>
+        <tr VALIGN=TOP>
+            <td><code>SecondaryStructure.Threads</code></td>
+            <td>.</td>
+            <td ALIGN=CENTER><code>Integer</code></td>
+            <td ALIGN=CENTER><code>6</code></td>
+        </tr>
+    </table>
+
+
+    </ol>
+
+<hr>
+<p>
+<center>
+<font size="-2" face="helvetica">
+
+Copyright &copy; 2004-2012
+<a href="http://www.chemaxon.com">ChemAxon Ltd.</a>
+&nbsp;&nbsp;&nbsp;All rights reserved.
+</font>
+</center>
+</body>
+</html>

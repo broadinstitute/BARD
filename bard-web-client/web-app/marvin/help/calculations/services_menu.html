@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<title>Use integrated calculations in Marvin</title>
+<link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</head>
+<body>
+<h1>Marvin Services</h1>
+
+<h2><a class="anchor" NAME="tautomer">Calculation integration as service</a></h2>
+<p>Services is a handy module of Marvin that helps to integrate 
+<a href="#thirdparty" title="All calculations not provided in ChemAxon's Marvin Beans or in its JChem package.">third-party calculations</a><sup>*</sup> via 
+<a href="../sketch/gui/setting_services.html" title="How to integrate calculations into MarvinSketch?">the MarvinSketch GUI</a>. 
+The linked services will appear under the <b>Tools</b> > <b>Services</b> menu. The menu contains the 
+names of the services in a <a href="../sketch/gui/setting_services.html" title="Where to set the order and names of services?">formerly set</a> 
+order. </p>
+<p><b>Figure 1.</b> The location of the set services</p>
+<img src="services_files/services01.png" width="388" height="76">
+<p><b>Note</b>: When no Services are set in MarvinSketch, the <b>Tools</b> > <b>Services</b> menu will be disabled.</p>
+<h2>How to use </h2>
+<p>
+Select the desired third-party calculation under <b>Tools</b> > <b>Services</b>. The opening new window 
+&mdash; right of MarvinSketch &mdash; has the same title as the service name. </p>
+<p><b>Figure 2.</b> MarvinSketch window (left) with the new service window (right)</p>
+<img src="services_files/services02.png" width="600" height="312">
+<p>The collapsible panels of the window are the following:
+	<ul>	
+		<li><b>Structure</b>: The upper panel will show the structure in 
+			question. The structure can only be edited in the MarvinSketch window.    
+			<ul><li><b>Update</b> button: If the structure is changed in MarvinSketch, press this button to 
+			refresh the structure for the calculation. <b>Note</b>: The button will be disabled if 
+			<b>Calculate automatically</b> is checked;</li>
+			</ul></li>
+		<li><b>Arguments</b>: The middle panel shows the calculation parameters. Unless the parameter is bold, it can be modified;</li>
+		<li><b>Result</b>: The lower panel will show the result of the calculation. The panel can 
+			present different output formats, e.g., string, structure, web page;
+			<ul><li><b>Calculate automatically</b> check box: If the structure is changed in MarvinSketch, the update of the structure and the 
+				calculation will run automatically. <b>Note</b>: In case it is checked, the <b>Calculate</b> and <b>Update</b> buttons will be inactive; </li>
+				<li><b>Calculate</b> button: Calculates and retrieves the result.  </li>
+			</ul></li>
+			
+      </ul>
+</p>
+<p><b>Figure 3.</b> Different output type examples</p>
+<table>
+<tr>
+<td align="middle"><b>String</b></td>
+<td align="middle"><b>Structure</b></td>
+<td align="middle"><b>Web page</b></td>
+</tr>
+<tr>
+<td><img src="services_files/services03.png" width="200" height="290"></td>
+<td><img src="services_files/services04.png" width="200" height="388"></td>
+<td><img src="services_files/services05.png" width="200" height="387"></td>
+</tr>
+</table>
+<center>
+<div class="lenia">&nbsp;</div>
+</center>
+
+<p>
+<a class="anchor" name="thirdparty"><sup>*</sup>All calculations not provided in ChemAxon's Marvin Beans or in its JChem package are referred 
+to third-party calculations.</a> 
+</p>
+
+</body>
+</html>

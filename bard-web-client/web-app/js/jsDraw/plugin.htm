@@ -1,0 +1,74 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw - A Javascript Chemical Structure Editor/Viewer</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+
+<h2>JSDraw - A Javascript Chemical Structure Editor/Viewer</h2>
+
+<p>JSDraw provides custom plug-in architecture.  With the plug-in architecture, you can implement your code with the editor.
+One most common use case for this is to create a custom toolbar button to load structure from your corporation database using
+a corporation compound ID.
+</p>
+
+<p>The example below is to get SMILES and show it in a dialog:<br />
+(Check the right button on the toolbar)
+</p>
+
+<div class='JSDraw' id="test" style="width: 690px; height: 300px;border:1px solid gray" dataformat='molurl' data='data/mol1.mol.txt'></div>
+
+
+<script type="text/javascript">
+    JSDraw.create('test', { plugins: [{ iconurl: 'plugins/world.gif', tooltips: 'Get SMILES', onclick: foo}] });
+
+    function foo(jsdraw) {
+        var smiles = jsdraw.getSmiles();
+        alert("SMILS: " + smiles);
+    }
+</script>
+
+<br />
+Here is the custom code behind:
+<pre style='border:solid 1px gray; background-color: #f0f0f0; margin:0px; padding:5px; font-size:x-small;'>
+    JSDraw.create('test', { plugins: [{ iconurl: 'plugins/word.gif', tooltips: 'Get SMILES', onclick: foo}] });
+
+    function foo(jsdraw) {
+        var smiles = jsdraw.getSmiles();
+        alert("SMILS: " + smiles);
+    }
+
+</pre>
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

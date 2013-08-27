@@ -1,0 +1,102 @@
+<HTML>
+<HEAD>
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css">
+<TITLE>Managing License Keys</TITLE>
+</HEAD>
+<BODY>
+<center>
+<h1>Managing License Keys</h1>
+</center>
+<h4>Marvin 4.1.* and JChem 3.2.*</h4>
+<p>Entering license keys for <b>JChem Base</b>, <b>JChem Cartridge for Oracle</b>, and <b>JKlustor</b> is described in
+<a href="../../../jchem/doc/admin/index.html#lickey">JChem's Administration Guide</a>.
+<br>Entering license keys using <b>Instant JChem</b> is described in the
+<a href="http://www.chemaxon.com/instantjchem/ijc_2_0/docs/user/help/htmlfiles/changing_user_settings.html">
+Instant JChem User guide</a>.
+
+<p>A license key for any other software module of ChemAxon is
+an 8-character string that enables the user to use
+the application that require a license key without restriction.
+These applications run in demo mode if the user
+does not have the license key.
+This means that you can run these tools for a restricted
+number of molecules.</p>
+<p>There is a license handler tool that lists licensed applications and provides a graphical interface
+to set license keys. The tool can run as a command line
+application, a graphical standalone application and is also available from the
+Marvin GUI. The standalone versions can be accessed
+through the <code>license</code> shell script (Unix) or <code>license.bat</code>
+batch file (Windows).</p>
+<p>Prepare the usage of the <code>license</code> script or batch file
+as described in <a href="../../../jchem/doc/admin/prepscripts.html">Preparing the Usage of JChem
+Batch Files and Shell Scripts</a>.</p>
+<p>Type
+<pre>license -h</pre>
+for the list of command line options.</p>
+<p>Type
+<pre>license</pre>
+to invoke the graphical version.</p>
+<p>The same tool can be accessed from the <b>Edit &gt; Preferences &gt; Licenses</b> tab
+of the Marvin GUI.</p>
+<table><caption>The graphical license handler: all license groups</caption>
+<tr><td><IMG border="0" src="gui1.png"></td></tr>
+</table>
+<br>
+<table><caption>The graphical license handler: an individual group</caption>
+<tr><td><IMG border=0 src="gui2.png"></td></tr>
+</table>
+<p>
+Note: License handler tool is available in
+Marvin 4.1/JChem 3.2 and above. In preceding versions license keys have to be set by
+editing the <code>licenses.dat</code> file, as described below.
+</p>
+<p>License keys of Marvin's plugins can be set using the the
+Marvin GUI:
+invoke the graphical license handler from the corresponding plugin options pane
+(e.g. for the log<i>D </i>plugin: Tools -&gt; Partitioning -&gt; logD).</p>
+<p>The license key for <a href="../space/space-index.html">MarvinSpace</a>
+can be set in MarvinSpace: invoke the graphical license handler from the
+"Others" tab of the Options pane (Display -&gt; Options...). As of Marvin 4.1.5 MarvinSpace does not
+require separate license key.</p>
+<p>License keys are listed in the  <code>.chemaxon/licenses.dat</code> (Unix)
+or <code>chemaxon\licenses.dat</code> (Windows) file under the user's home directory.
+License keys are automatically saved in this file when they are set
+by the license handler tool. On Unix systems - including most distributions of Linux -
+the home directory for each user takes the form <code>/home/username</code>
+(where <code>username</code> is the name of the user account).
+In newer versions of Microsoft Windows, based on the multi-user Windows NT,
+each user has a home directory which by default is located at
+<code>C:\Documents and Settings\username</code> when using the English language
+version of the OS (with <code>username</code> again replaced by the particular
+user's login name).</p>
+
+<p>In case of a web application (e.g. JSP pages) the license file should be placed
+on the server side, the user home is the home directory of the user that runs
+(owns) the web server.
+If the web server runs as a system service under Windows the user home can be
+a system user home, which is sometimes difficult to determine.
+(It can be <code>"c:\"</code> or <code>"c:\windows\system32\config\systemprofile\"</code>, etc.)
+To make setting the license keys easier, we provide a web-based (JSP)
+utility: &lt;jchem_home&gt;/util/license/setlicense.jsp.
+Load this page in a browser from your web server, and you can
+upload a specified license file from the client computer
+to the appropriate directory and file name on the server.</p>
+<p>However, the license file should be placed on the client side in case of Marvin applets
+or web applications having embedded Marvin applets to access the plugin calculations.</p>
+
+
+<p>Example license key entries in the license file:
+<pre>
+chemaxon.marvin.calculations.XYZPlugin=56TYAD12
+chemaxon.reaction.XYZReactionHandler=ABCD1234
+</pre>
+</p>
+
+<p>Please contact
+    <script language="JavaScript"><!--
+    document.write('<a href="mailto:'+
+    'sales'+'@'+'chemaxon.com">');
+    //--></script>ChemAxon</a>
+if you need a license key.
+</BODY>
+</HTML>

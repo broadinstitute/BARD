@@ -1,0 +1,598 @@
+<?xml version="1.0" ?>
+<cml>
+<MDocument>
+  <MChemicalStruct>
+    <molecule  title="Alkyl" molID="m1">
+      <propertyList>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>CHK</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Alkyl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Alkenyl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>CHE</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Alkenyl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Alkynyl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>CHY</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Alkynyl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Carboaryl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>ARY</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Carboaryl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Heteromonoaryl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>HEA</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Heteromonoaryl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Heteromonoalicyclyl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>HET</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Heteromonoalicyclyl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Carboalicyclyl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>CYC</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Carboalicyclyl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="FusedHetero" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>HEF</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="FusedHetero"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Halogen" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>HAL</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Halogen"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Protecting" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>PRT</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Protecting"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="UnknownGroup" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>UNK</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="UnknownGroup"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Actinide" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>ACT</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Actinide"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Lanthanide" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>LAN</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Lanthanide"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="OtherMetal" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>A35</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="OtherMetal"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Metal" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>MX</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Metal"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="TransitionMetal" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>TRM</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="TransitionMetal"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="AlkaliMetal" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>AMX</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="AlkaliMetal"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="CarbonTree" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>CARBONTREE</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="CarbonTree"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="Cyclyl" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>CYCLYL</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="Cyclyl"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="RingSegment" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>RINGSEGMENT</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="RingSegment"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="AnyGroup" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>ANYGROUP</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="AnyGroup"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="XX" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>XX</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="XX"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+<MDocument>
+  <MChemicalStruct>
+    <molecule title="AnyAtom" molID="m1">
+      <propertyList>
+        <property dictRef="sgroupState" title="sgroupState">
+          <scalar>expand</scalar>
+        </property>
+        <property dictRef="rotation.unit" title="rotation.unit">
+          <scalar>15</scalar>
+        </property>
+        <property dictRef="abbreviation" title="abbreviation">
+          <scalar>ANYATOM</scalar>
+        </property>
+      </propertyList>
+      <atomArray
+          atomID="a1"
+          elementType="C"
+          mrvPseudo="AnyAtom"
+          x2="0.0"
+          y2="0.0"
+          />
+      <bondArray>
+      </bondArray>
+    </molecule>
+  </MChemicalStruct>
+</MDocument>
+</cml>

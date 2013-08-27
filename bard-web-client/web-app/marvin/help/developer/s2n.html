@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta NAME="description" CONTENT="IUPAC name generator">
+<meta NAME="author" CONTENT="Daniel Bonniot">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>IUPAC name generator</title>
+</head>
+<body>
+
+<h1>IUPAC name generator</h1>
+
+<h2>API</h2>
+
+Marvin provides an API so that names can also be generated from Java programs.
+Given a <code>chemaxon.stuc.Molecule</code> object <code>m</code>,
+its name can be computed by using:
+<p>
+<blockquote><code>
+String name = m.toFormat("name");
+</code></blockquote>
+
+<h3>Options</h3>
+
+<h4>Nomenclature options</h4>
+
+It is possible to use a format option to chose a nomenclature style:
+<ul>
+<li><code>i</code> (default) uses the IUPAC rules for prefered names;
+<li><code>t</code> uses a more traditional style.
+</ul>
+For instance, to generate traditional names, use the following:
+<blockquote><code>
+String tradionalName = m.toFormat("name:t");
+</code></blockquote>
+
+<h4>Timeout</h4>
+
+By default, naming computation will timeout after a certain number of seconds.
+This is used to ensure batch naming terminates in a reasonable time, even in the presence
+of very complicated structures that would take too long to name or of bugs in the naming program.
+If you experience timeouts, you can set a higher custom timeout value to try to get the naming to
+succeed. Alternatively, you can also reduce the timeout to avoid slowing down the batch naming process.
+
+The timeout can be set as an export option, with the format <tt>name:timeout=N</tt>,
+where <tt>N</tt> is the timeout value, expressed in seconds.
+<p>
+For instance, to compute the name of a molecule during up to 5 seconds, use:
+<blockquote><code><pre>
+try {
+	String name = m.toFormat("name:timeout=5");
+	...
+}
+catch (IUPACNamer.TimeoutError e) {
+	...
+}
+
+</pre></code></blockquote>
+
+<h2>General information</h2>
+
+For general information about the IUPAC name generator,
+see the <a href="../calculations/s2n.html">user documentation</a>.
+
+</body>
+</html>

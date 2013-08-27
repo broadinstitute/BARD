@@ -1,0 +1,142 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>Molfile compression using molCompress()</title>
+</head>
+<body>
+
+<h1>
+Molfile compression using molCompress()
+</h1>
+
+<h2><a NAME="java"></a>Using the MdlCompressor class in Java</h2>
+<p>
+The <code>chemaxon.formats.MdlCompressor</code> can compress or decompress
+MDL Molfiles, SDfiles, RGfiles and Rxnfiles in two ways:
+<ol>
+<li><em>In one step:</em>
+    if the input file contents are in a byte array or in a String.<br>
+    MdlCompressor has two static methods that convert in one step:
+<pre>
+public static byte[] convert(byte[] mol, int flags) throws IOException;
+public static String convert(String mol, int flags) throws IOException;
+</pre>
+    The following flags can be specified:
+    <ul>
+    <li><code>COMPRESS</code> for compression</li>
+    <li><code>DECOMPRESS</code> for decompression</li>
+    </ul>
+    </li>
+<li><em>Molecule by molecule:</em> using an InputStream and an OutputStream.
+<pre>
+import java.io.*;
+import chemaxon.formats.*;
+ 
+public class Example {
+    public static void main(String args[]) {
+        int n = 0;
+        try {
+            FileInputStream in = new FileInputStream(&quot;2000.sdf&quot;);
+            MdlCompressor mc = new MdlCompressor(in, System.out,
+						 MdlCompressor.COMPRESS);
+            while(mc.convert())
+                ++n;
+        } catch(FileNotFoundException ex) {
+            System.err.println(&quot;File not found&quot;);
+        } catch(MolFormatException ex) {
+            System.err.println(&quot;Bad file format&quot;);
+        } catch(IOException ex) {
+            System.err.println(&quot;Unexpected end of file&quot;);
+        }
+	System.out.println(&quot;Number of molecules: &quot;+n);
+    }
+}
+</pre>
+    </li>
+</ol>
+Note that there is a more general converter class in the Chemaxon
+class library (too general to be open source),
+chemaxon.formats.MolConverter, that is also a command line
+application (it has a main() method).
+In a Java program, it can be used similarly to
+MdlCompressor. Only the constructor differs:
+<pre>
+            MolConverter mc = new MolConverter(in, System.out, &quot;csmol&quot;);
+</pre>
+Decompression:
+<pre>
+            MolConverter mc = new MolConverter(in, System.out, &quot;mol&quot;);
+</pre>
+
+<p>
+<h2><a NAME="js"></a>Using molCompress() in JavaScript</h2>
+
+<small>
+Note that the JavaScript version of molCompress can only compress simple
+Molfiles. SDfiles, RGfiles and Rxnfiles are not supported.
+</small>
+<p>
+At first you should include the file molcompress.js in the HTML page, in the
+following way:
+<pre>
+<blockquote>
+&lt;script LANGUAGE=&quot;JavaScript1.1&quot; SRC=&quot;molcompress.js&quot;&gt;&lt;/script&gt;
+</blockquote>
+</pre>
+
+Because of the difference of operating systems in text file formats,
+you might need a function that converts a string to DOS/Windows format:
+<pre>
+<blockquote>
+&lt;script LANGUAGE=&quot;JavaScript1.1&quot;&gt;
+&lt;!--
+// molCompress() returns a string with \n newline characters.
+// The &lt;textarea&gt; HTML element needs \r\n end-of-line characters
+// in MS Windows, so we must fix the molCompress() output before
+// setting the value of a &lt;textarea&gt;.
+function eolfix(s) {
+        if(navigator.userAgent.lastIndexOf(&quot;(Win&quot;) &gt;= 0) {
+                return s.split(&quot;\n&quot;).join(&quot;\r\n&quot;);
+        } else {
+                return s;
+        }
+}
+//--&gt;
+&lt;/script&gt;
+</blockquote>
+</pre>
+
+In this example, an HTML textarea is used to display the input and output
+of the molfile compression or decompression.
+<pre>
+<blockquote>
+&lt;form onSubmit=&quot;return false;&quot;&gt;
+&lt;textarea NAME=&quot;mol&quot; ROWS=5 COLS=60&gt;
+
+  MSketch 11289810322D
+
+  1  0  0  0  0  0  0  0  0  0999 V2000
+   -2.5313    0.7188    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+M  END
+&lt;/textarea&gt;
+</blockquote>
+</pre>
+The second argument of <code>molCompress()</code> must be
+<code>true</code> for compression, <code>false</code> for decompession.
+<pre>
+<blockquote>
+&lt;input TYPE=&quot;BUTTON&quot; VALUE=&quot;Compress&quot;
+	onClick="mol.value=eolfix(molCompress(mol.value, true))&quot;&gt;
+&lt;input TYPE=&quot;BUTTON&quot; VALUE=&quot;Inflate&quot;
+	onClick="mol.value=eolfix(molCompress(mol.value, false))&quot;&gt;
+&lt;/form&gt;
+</blockquote>
+</pre>
+
+You may want to try the <a 
+HREF="http://www.chemaxon.com/marvin/doc/dev/molcompress-demo.html">compression
+ demo</a> and view its source.
+
+</body>
+</html>

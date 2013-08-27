@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <link rel="stylesheet" href="../marvinmanuals.css" type="text/css">
+  <title>Frequently Asked Questions</title>
+</head>
+<body>
+<h2>Frequently Asked Questions</h2>
+
+<a href="#todo">What shall I do with license files?</a><br>
+<a href="#install_howto">How do I install license files?</a><br>
+<a href="#clm">What is ChemAxon License Manager?</a><br>
+<a href="#license_manager">How can I use the ChemAxon License Manager?</a><br>
+<a href="#separate">Will I have separate license files for each product?</a><br>
+<a href="#more_licenses">Can I have more than one license file?</a><br>
+<a href="#install_all">Do I have to install the license files in each product I have license to?</a><br>
+<a href="#what_happens">What happens when I install a license file?</a><br>
+<a href="#inside_licenses">What do license files contain?</a><br>
+<a href="#location_api">Can I set the license file location through API?</a><br>
+
+<h4><a class="anchor" name="todo">What shall I do with license files?</a></h4>
+You need to install the license files you get, because all products should know
+the location of the license file.
+<h4><a class="anchor" name=install_howto>How do I install license files?</a></h4>
+You can install the license files either manually or with the Chemaxon License Manager.
+<h4><a class="anchor" name=clm>What is ChemAxon License Manager?</a></h4>
+ChemAxon License Manager is a central place where you can manage the licenses of all ChemAxon products.
+<h4><a class="anchor" name=license_manager>How can I use the ChemAxon License Manager?</a></h4>
+You can reach the graphical interface either from the Help menu of any product, or
+through the Start menu. You can also use the <code>scripts/license</code> command line version.
+<h4><a class="anchor" name=separate>Will I have separate license files for each product?</a></h4>
+No, license files usually contain licenses to several products.
+<h4><a class="anchor" name=more_licenses>Can I have more than one license file?</a></h4>
+Yes, it is possible that you have more license files, though these can be easily
+merged into one file.
+<h4><a class="anchor" name=install_all>Do I have to install the license files in each product I have license to?</a></h4>
+No, with ChemAxon License Manager you need to install a license file only once.
+<h4><a class="anchor" name=what_happens>What happens when I install a license file?</a></h4>
+ChemAxon License Manager copies the license file to a location where all products can find it.
+This location is <code>.chemaxon/license.cxl</code> (Unix) or
+<code>chemaxon\license.cxl</code> (Windows) under the user's home directory.<br>
+You can copy your license file to this location if you wish to install manually.
+<h4><a class="anchor" name=inside_licenses>What do license files contain?</a></h4>
+License files contain several licenses to products. A license contains all relevant
+information from your license agreement, such as product name, licensee, expiration date,
+usage restrictions, etc. All licenses are cryptographically protected from modification.
+<h4><a class="anchor" name=location_api>Can I set the license file location through API?</a></h4>
+Yes, you can use the following method:<br>
+<a href="../developer/beans/api/chemaxon/license/LicenseManager.html#setLicenseFile(java.lang.String)">
+    chemaxon.license.LicenseManager.setLicenseFile(String path)</a>
+
+
+</body>
+</html>
+

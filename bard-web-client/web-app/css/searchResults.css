@@ -1,0 +1,16 @@
+
+.resultTable {
+    margin-bottom: 5px;
+}
+
+.resultTable tr td.align-center {
+    text-align: center;
+}
+
+.resultTable th {
+    white-space: nowrap;
+}
+
+#resultTabContent .pagination {
+    margin: 2px 0;
+}

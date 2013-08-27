@@ -1,0 +1,83 @@
+﻿<!--
+//////////////////////////////////////////////////////////////////////////////////
+//
+JSDraw
+// Copyright (C) 2013 Scilligence Corporation
+// http://www.scilligence.com/
+//
+//////////////////////////////////////////////////////////////////////////////////
+-->
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" >
+<head>
+<title>JSDraw - A Javascript Chemical Structure Editor/Viewer</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js" type="text/javascript"></script>
+<script type="text/javascript" src='Scilligence.JSDraw2.js'></script>
+
+
+</head>
+<body>
+
+Query Features and SMARTS:
+<div id="smarts" style="width: 660px; height: 300px;border:1px solid gray" dataformat='molfile' data='
+ChemJSDraw12251017312D
+
+  9  9  0  0  0  0  0  0  0  0  1 V2000
+   14.7849   -7.8083    0.0000 C   0  0
+   17.4866   -7.8075    0.0000 C   0  0
+   16.1383   -7.0274    0.0000 C   0  0
+   17.4866   -9.3703    0.0000 C   0  0
+   14.7849   -9.3773    0.0000 C   0  0
+   16.1417  -10.1502    0.0000 C   0  0
+   16.1383   -5.4650    0.0000 L   0  0
+   18.8337  -10.1464    0.0000 L   0  0
+   18.8352  -11.7010    0.0000 L   0  0
+  6  4  5  0  0  0
+  5  6  1  0  0  0
+  2  3  6  0  0  0
+  1  5  7  0  0  0
+  4  2  1  0  0  0
+  3  1  1  0  0  0
+  3  7  1  0  0  2
+  4  8  1  0  0  0
+  8  9  1  0  0  0
+M  ALS   7  4 F C   N   S   O   
+M  RBC  1   7  -1
+M  UNS  1   7   1
+M  SUB  1   7   4
+M  ALS   8  1 T *   
+M  ALS   9  1 T A   
+M  END
+'></div>
+
+
+<script type="text/javascript">
+    JSDraw.create('editor');
+</script>
+
+<input id='smiles' size='60' /><input type='button' value='Get Smiles/Smarts' onclick='document.getElementById("smiles").value = JSDraw.get("smarts").getSmiles()' />
+<br />
+
+
+<script type="text/javascript">
+    JSDraw.create('smarts');
+</script>
+
+
+
+<br />
+<br />
+<hr />
+Copyright (C) 2013 Scilligence Corporation (<a href='http://www.scilligence.com/'>http://www.scilligence.com/</a>)
+<br />
+<br />
+<b>License:</b>
+<ul>
+<li>Free for education (<a href='http://www.scilligence.com/web/download.aspx?prod=JSDraw'>Download</a>)</li>
+<li>Please <a href='http://www.scilligence.com/web/contact.aspx'>contact us</a> for commercial licenses</li>
+</ul>    
+
+</body>
+</html>

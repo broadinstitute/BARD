@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+<title>Step-by-step instructions for Predictor plugin training</title>
+</head>
+
+<body>
+
+<h1><a name="predictortraining" type="anchor"></a>Predictor plugin training</h1>
+<p>Predictor can be applied for molecular property prediction when molecular properties can be expressed as the sum of atomic contributions. 
+You have to create a training file which contains the structures and the experimental values of the property you would like to create a prediction for.
+
+<h2><a name="train_cl" type="anchor"></a>Training set creation via <code>cxtrain</code></h2>
+
+<p>The command line program <code>cxtrain</code> is available for log<i>P</i>, p<i>K</i><sub>a</sub> and custom prediction training.
+<ol>
+        <li><b>Create a structure file of any molecule file format</b> from your experimental
+            data (easily done with Instant JChem). The file must contain the following information:
+            <ul>
+                <li>structure</li>
+                <li>the experimental values in a property field (named MP in this example)</li>
+            </ul>
+            In the example below this file is my_data_mp.sdf</a>.
+        </li>
+        <li><b>Execute the following command</b> from command line:
+            <pre>cxtrain prediction -t MP -i meltingpoint my_data_mp.sdf</pre>
+       The data tagged MP is    
+          </li>
+        
+        <li>Use this data via  via cxcalc, Chemical Terms or Marvin's Predictor Plugin.
+        </li>
+    </ol>
+<a href="../calculations/cxtrain.html#usage">See cxtrain options here.</a>
+<h2>Known issues</h2>
+<p>MarvinSketch and MarvinWiew applet cannot access pKa correction library files and logP/predictor training parameter files stored on server.
+Applet allows only to use trainings stored on local computer.</p>
+
+<h2><a name="traininginijc" type="anchor"></a>Predictor plugin training in Instant JChem</h2>
+
+<p>The training of the Predictor plugin is simplest by using the graphical interface of Instant JChem where the 
+log<i>P</i> and general property trainings are available. <a href="https://www.chemaxon.com/instantjchem/ijc_latest/docs/user/help/htmlfiles/chemistry_functions/training.html">See the IJC documentation for details.</a>
+
+
+</body>
+</html>

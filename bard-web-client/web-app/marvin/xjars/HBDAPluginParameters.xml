@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+<Group>
+    <Precision Key="precision" Label="Decimal places"/>
+    <MultipleSelection Key="type" Label="Type" Tooltip="Specifying search for donor or acceptor characteristics.">
+	<Choice Value="donor" Text="Donor" Selected="true"/>
+	<Choice Value="acceptor" Text="Acceptor" Selected="true"/>
+    </MultipleSelection>
+    <Boolean Key="excludesulfur" Label="Exclude sulfur atoms from acceptors" Toltip="Sets to exclude sulfur atoms from hydrogen bond acceptors." Value="true"/>
+    <Boolean Key="excludehalogens" Label="Exclude halogens from acceptors" Toltip="Sets to exclude halogens from hydrogen bond acceptors." Value="true"/>
+    <Boolean Key="mscalc" Label="Show microspecies data by pH" Toltip="The number of donor or acceptor sites vs. pH graph is displayed." Value="true"/>
+</Group>
+<Group Title="Microspecies" Tooltip="Rhe pH window of the chart is set here, with data points in the step size marks.">
+    <Number Key="lower" Label="pH lower limit" Value="0" Range="[0.0, 14.0]" Type="real">
+	<Dependencies>
+	    <Item Key="mscalc" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Number Key="upper" Label="pH upper limit" Value="14" Range="[0.0, 14.0]" Type="real">
+	<Dependencies>
+	    <Item Key="mscalc" Range="true"/>
+	</Dependencies>
+    </Number>
+    <Number Key="step" Label="pH step size" Value="0.5" Type="real">
+	<Dependencies>
+	    <Item Key="mscalc" Range="true"/>
+	</Dependencies>
+    </Number>
+</Group>
+<Group>
+    <Boolean Key="microspecies" Label="Display major microspecies" Tooltip="Rhe structure of the major form at the given pH is displayed." Value="false"/>
+    <Number Key="pH" Label="at pH" Range="[0.0,14.0]" Value="7.4">
+	<Dependencies>
+	    <Item Key="microspecies" Range="true"/>
+	</Dependencies>
+    </Number>
+</Group>
+</ParameterPanel>

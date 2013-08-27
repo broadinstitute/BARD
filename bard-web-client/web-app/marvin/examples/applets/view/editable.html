@@ -1,0 +1,288 @@
+<html>
+<head>
+<meta NAME="author" CONTENT="Peter Csizmadia">
+    <script type="text/javascript" src="../../sh_main.js"></script>
+    <script type="text/javascript" src="../../sh_javascript.js"></script>
+    <script type="text/javascript" src="../../sh_html.js"></script>
+    <link REL ="stylesheet" TYPE="text/css" HREF="../../sh_nedit.css" TITLE="Style">
+<link REL ="stylesheet" TYPE="text/css" HREF="../../../marvinmanuals.css" TITLE="Style">
+<title>MarvinView Example - Editable table</title>
+</head>
+<body onload="sh_highlightDocument();">
+
+<h1>MarvinView Example - Editable table</h1>
+
+To edit a molecule, double click on the container cell or select Edit > Structure from the pop-up
+menu (right click with the mouse).
+In the appearing <a href="../../../help/sketch/sketch-index.html">MarvinSketch window</a>,
+the molecule can be altered with many available functions. When it is complete, the
+MarvinSketch window can simply be closed and the molecule in the MarvinView cell will be
+automatically updated.
+<p>
+You can also edit the data associated with a molecule:
+<ol>
+<li><em>Select</em> a molecule by clicking on it.</li>
+<li>Press the &quot;Get molecule data&quot; button to load the molecule data to the text fields.</li>
+<li>Change the name, the CAS number or the weight.</li>
+<li>Press &quot;Set molecule data&quot; to update the data in the selected cell.</li>
+</ol>
+
+<p>
+
+<center>
+<script type="text/javascript" SRC="../../../marvin.js"></script>
+<script type="text/javascript">
+<!--
+function getsel() {
+	if(document.MView != null) {
+		var index = document.MView.getSelectedIndex();
+		if(index < 0) {
+			alert("Please select a molecule first.");
+		} else {
+			var name = document.MView.getL(5*index);
+			var cas = document.MView.getL(5*index+2);
+			var weight = document.MView.getL(5*index+4);
+			document.MolForm.MolName.value = name;
+			document.MolForm.MolCAS.value = cas;
+			document.MolForm.MolWeight.value = weight;
+		}
+	} else {
+		alert("Cannot get index of selected molecule:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+function setsel() {
+	if(document.MView != null) {
+		var index = document.MView.getSelectedIndex();
+		if(index < 0) {
+			alert("Please select a molecule first.");
+		} else {
+			var name = document.MolForm.MolName.value;
+			var cas = document.MolForm.MolCAS.value;
+			var weight = document.MolForm.MolWeight.value;
+			document.MView.setL(5*index, name);
+			document.MView.setL(5*index+2, cas);
+			document.MView.setL(5*index+4, weight);
+		}
+	} else {
+		alert("Cannot get index of selected molecule:\n"+
+		      "no JavaScript to Java communication in your browser.\n");
+	}
+}
+//marvin_jvm="builtin"
+//marvin_gui="awt"
+mview_name = "MView";
+mview_begin("../../..", 501, 201);
+mview_param("rows", "2");
+mview_param("cols", "2");
+mview_param("border", "1");
+mview_param("background", "#ffffff");
+mview_param("molbg", "#ffffff");
+mview_param("editable", "2");
+msketch_param("isMyTemplatesEnabled", "true");
+msketch_param("queryAtoms", "");
+msketch_param("atomStrings", "alias");
+msketch_param("extraBonds", "arom,wedge");
+mview_param("layout", ":5:3:"
++"M:0:0:5:1:nw:n:"
++"L:0:1:1:2:c:h:0:10:"
++"L:2:1:1:1:e:n:0:10:L:2:2:1:1:w:h:0:10:"
++"L:3:1:1:1:e:n:0:10:L:3:2:1:1:w:h:0:10");
+mview_param("param", ":"
++"M:140:100:"
++"L:12b:"
++"L:10i:L:12:"
++"L:10i:L:12");
+mview_param("cell0", "|../../../mols-2d/caffeine.csmol"
++"|Caffeine|CAS:|58-08-2|Weight:|194.19");
+mview_param("cell1", "|../../../mols-2d/l-adrenaline.csmol"
++"|Adrenaline|CAS:|51-43-4|Weight:|183.21");
+mview_param("cell2", "|../../../mols-2d/vitaminc.csmol"
++"|Vitamin C|CAS:|50-81-7|Weight:|176.13");
+mview_param("cell3", "|../../../mols-2d/aspirin.csmol"
++"|Aspirin|CAS:|50-78-2|Weight:|180.16");
+mview_end();
+//-->
+</script>
+<p>
+<form onSubmit="return false" NAME="MolForm">
+<table CELLSPACING=5 CELLPADDING=0 BORDER=0>
+<tr>
+<td><input TYPE=BUTTON VALUE="Get molecule data" onClick="getsel()"></td>
+<td>Name:</td><td><input TYPE=TEXT VALUE="" NAME="MolName"></td><td>&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;</td><td>CAS:</td><td><input TYPE=TEXT VALUE="" NAME="MolCAS"></td><td>&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;</td><td>Weight:</td><td><input TYPE=TEXT VALUE="" NAME="MolWeight"></td>
+<td><input TYPE=BUTTON VALUE="Set molecule data" onClick="setsel()"></td>
+</tr>
+</table>
+</form>
+</center>
+
+<p>
+
+The query and update of the data for the selected molecule are handled by two
+JavaScript functions:
+<blockquote>
+<pre class="sh_html">
+&lt;script type=&quot;text/javascript&quot; SRC=&quot;../../../<a HREF="../marvin.js.txt">marvin.js</a>&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+&lt;!--
+</pre><pre class="sh_javascript">function getsel() {
+	if(document.MView != null) {
+		var index = document.MView.getSelectedIndex();
+		if(index &lt; 0) {
+			alert(&quot;Please select a molecule first.&quot;);
+		} else {
+			var name = document.MView.getL(5*index);
+			var cas = document.MView.getL(5*index+2);
+			var weight = document.MView.getL(5*index+4);
+			document.MolForm.MolName.value = name;
+			document.MolForm.MolCAS.value = cas;
+			document.MolForm.MolWeight.value = weight;
+		}
+	} else {
+		alert(&quot;Cannot get index of selected molecule:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+function setsel() {
+	if(document.MView != null) {
+		var index = document.MView.getSelectedIndex();
+		if(index &lt; 0) {
+			alert(&quot;Please select a molecule first.&quot;);
+		} else {
+			var name = document.MolForm.MolName.value;
+			var cas = document.MolForm.MolCAS.value;
+			var weight = document.MolForm.MolWeight.value;
+			document.MView.setL(5*index, name);
+			document.MView.setL(5*index+2, cas);
+			document.MView.setL(5*index+4, weight);
+		}
+	} else {
+		alert(&quot;Cannot get index of selected molecule:\n&quot;+
+		      &quot;no JavaScript to Java communication in your browser.\n&quot;);
+	}
+}
+</pre>
+</blockquote>
+Links to the main API methods used:
+<ul>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#getSelectedIndex()"><code>getSelectedIndex</code></a></li>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#getL(int)"><code>getL</code></a></li>
+    <li><a HREF="../../../help/developer/applets/api/JMView.html#setL(int, java.lang.String)"><code>setL</code></a></li>
+</ul>
+
+<p>The applet tag begins like in the previous examples...</p>
+<blockquote>
+<pre class="sh_javascript">
+mview_name = &quot;MView&quot;;
+mview_begin(&quot;../../..&quot;, 501, 201);
+mview_param(&quot;rows&quot;, &quot;2&quot;);
+mview_param(&quot;cols&quot;, &quot;2&quot;);
+mview_param(&quot;border&quot;, &quot;1&quot;);
+mview_param(&quot;background&quot;, &quot;#ffffff&quot;);
+mview_param(&quot;molbg&quot;, &quot;#ffffff&quot;);
+</pre>
+</blockquote>
+...but now we have a special parameter that enables editing of structures:
+<blockquote>
+<pre class="sh_javascript">
+mview_param(&quot;editable&quot;, &quot;2&quot;);
+</pre>
+</blockquote>
+Furthermore, we also specify some MarvinSketch parameters:
+<blockquote>
+<pre class="sh_javascript">
+msketch_param(&quot;queryAtoms&quot;, &quot;&quot;);
+msketch_param(&quot;atomStrings&quot;, &quot;alias&quot;);
+msketch_param(&quot;extraBonds&quot;, &quot;arom,wedge&quot;);
+</pre>
+</blockquote>
+For editable data fields, it is important that the <em>fill</em> parameters in
+the layout of the corresponding labels must be <em>h</em> (horizontal) or
+<em>b</em> (both directions). Otherwise the initial data string would determine
+the label size, and a longer string would not fit in the label component.
+<blockquote>
+<pre class="sh_javascript">
+mview_param(&quot;layout&quot;, &quot;:5:3:&quot;
++&quot;M:0:0:5:1:nw:n:&quot;
++&quot;L:0:1:1:2:c:h:0:10:&quot;
++&quot;L:2:1:1:1:e:n:0:10:L:2:2:1:1:w:h:0:10:&quot;
++&quot;L:3:1:1:1:e:n:0:10:L:3:2:1:1:w:h:0:10&quot;);
+mview_param(&quot;param&quot;, &quot;:&quot;
++&quot;M:140:100:&quot;
++&quot;L:12b:&quot;
++&quot;L:10i:L:12:&quot;
++&quot;L:10i:L:12"&quot;);
+</pre>
+</blockquote>
+The initial contents of the cells are set with the <em>cell</em> parameters:
+<blockquote>
+<pre class="sh_javascript">
+mview_param(&quot;cell0&quot;, &quot;|../../../mols-2d/caffeine.csmol&quot;
++&quot;|Caffeine|CAS:|58-08-2|Weight:|194.19&quot;);
+mview_param(&quot;cell1&quot;, &quot;|../../../mols-2d/l-adrenaline.csmol&quot;
++&quot;|Adrenaline|CAS:|51-43-4|Weight:|183.21&quot;);
+mview_param(&quot;cell2&quot;, &quot;|../../../mols-2d/vitaminc.csmol&quot;
++&quot;|Vitamin C|CAS:|50-81-7|Weight:|176.13&quot;);
+mview_param(&quot;cell3&quot;, &quot;|../../../mols-2d/aspirin.csmol&quot;
++&quot;|Aspirin|CAS:|50-78-2|Weight:|180.16&quot;);
+&lt;/script&gt;
+</pre>
+</blockquote>
+The form used to change molecule data is the following:
+<blockquote>
+<pre class="sh_html">
+&lt;form onSubmit="return false" NAME="MolForm"&gt;
+&lt;table CELLSPACING=5 CELLPADDING=0 BORDER=0&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;input TYPE=BUTTON VALUE="Get molecule data" onClick="getsel()"&gt;&lt;/td&gt;
+&lt;td&gt;Name:&lt;/td&gt;&lt;td&gt;&lt;input TYPE=TEXT VALUE="" NAME="MolName"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;&lt;td&gt;CAS:&lt;/td&gt;&lt;td&gt;&lt;input TYPE=TEXT VALUE="" NAME="MolCAS"&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;&lt;td&gt;Weight:&lt;/td&gt;&lt;td&gt;&lt;input TYPE=TEXT VALUE="" NAME="MolWeight"&gt;&lt;/td&gt;
+&lt;td&gt;&lt;input TYPE=BUTTON VALUE="Set molecule data" onClick="setsel()"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+</pre>
+</blockquote>
+
+Description of the used parameters:
+<ul>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.rows"><code>rows</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cols"><code>cols</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.border"><code>border</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.background"><code>background</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.molbg"><code>molbg</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#parameters.editable"><code>editable</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.layout"><code>layoutH</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.param"><code>paramH</code></a></li>
+    <li><a HREF="../../../help/developer/viewman.html#advanced.cell"><code>cell0</code></a></li>
+</ul>
+Description of the used MarvinSketch parameters:
+<ul>
+    <li><a HREF="../../../help/developer/sketchman.html#parameters.queryAtoms"><code>queryAtoms</code></a></li>
+    <li><a HREF="../../../help/developer/sketchman.html#parameters.atomStrings"><code>atomStrings</code></a></li>
+    <li><a HREF="../../../help/developer/sketchman.html#parameters.extraBonds"><code>extraBonds</code></a></li>
+</ul>
+
+
+<p>
+<center><div class="lenia">&nbsp;</div></center>
+<p>
+<!--The next example shows how to
+<a HREF="selection.html">select atoms</a> in the viewer.-->
+The next example shows how to
+<a HREF="atomcoloring.html">color atoms</a> in the viewer.
+
+
+</body>
+</html>

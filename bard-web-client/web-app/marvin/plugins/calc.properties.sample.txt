@@ -1,0 +1,29 @@
+# <plugin name>=<plugin class name>$<plugin JAR URL>$<plugin group name>$<parameters>$<default tag name>$<description>$<helptext>$<exampletext>
+# important: plugins cannot have -c options because it is in conflict with the
+# general option -c --config.
+# separate parameter description items by ';' (will be separated by newline
+# characters) in <helptext>
+# do not use $ characters except for field separation
+# <exampletext> is optional
+
+# Solubility
+
+#ALIAS
+logs=$chemaxon.marvin.calculations.SolubilityPlugin\
+	$SolubilityPlugin.jar\
+	$Solubility\
+	$p=precision:2;t=type:logSMicro;H=pH:;d=distribution:false;l=lower:0;u=upper:14;s=step:1;1=ref1:;2=ref2:;3=ref3:;4=ref4:\
+	$LOGS\
+	$Solubility (logS) calculation.\
+	$-p, --precision=<floating point precision as number of\nfractional digits: 0-8 or inf> (default: 2);-t, --type=[logSTrue|logSMicro|logSNeutral] (default: logSMicro);-H, --pH=<pH value> takes logS at this pH\n(default: no default, logSMicro is calculated by default);-d, --distribution=[true|false] calculate pH-logS distribution\n(default: false);-l, --lower=<pH lower limit> (default: 0);-u, --upper=<pH upper limit> (default: 14);-s, --step=<pH step size> (default: 1);-1, --ref1=<pH reference 1> (default: none);-2, --ref2=<pH reference 2> (default: none);-3, --ref3=<pH reference 3> (default: none);-4, --ref4=<pH reference 4> (default: none)\
+	$cxcalc logS -d true -l 4 -u 9 -s 0.5 test.sdf 
+
+solubility=$chemaxon.marvin.calculations.SolubilityPlugin\
+	$SolubilityPlugin.jar\
+	$Solubility\
+	$p=precision:2;t=type:logSMicro;H=pH:;d=distribution:false;l=lower:0;u=upper:14;s=step:1;1=ref1:;2=ref2:;3=ref3:;4=ref4:\
+	$SOLUBILITY\
+	$Solubility (logS) calculation.\
+	$-p, --precision=<floating point precision as number of\nfractional digits: 0-8 or inf> (default: 2);-t, --type=[logSTrue|logSMicro|logSNeutral] (default: logSMicro);-H, --pH=<pH value> takes logS at this pH\n(default: no default, logSMicro is calculated by default);-d, --distribution=[true|false] calculate pH-logS distribution\n(default: false);-l, --lower=<pH lower limit> (default: 0);-u, --upper=<pH upper limit> (default: 14);-s, --step=<pH step size> (default: 1);-1, --ref1=<pH reference 1> (default: none);-2, --ref2=<pH reference 2> (default: none);-3, --ref3=<pH reference 3> (default: none);-4, --ref4=<pH reference 4> (default: none)\
+	$cxcalc solubility -H 7.4 test.sdf 
+

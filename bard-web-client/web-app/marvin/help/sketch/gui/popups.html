@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+<TITLE>Pop-up Menus of MarvinSketch</TITLE>
+<link rel=stylesheet type="text/css" href="../../marvinmanuals.css">
+</head>
+<body>
+<h1>Pop-up Menus of MarvinSketch</h1>
+
+<P>There are four pop-up menus (also called context or right-click menus) available in MarvinSketch:</P>
+<blockquote>
+<ul>
+    <li><a href="#atom.popup">Atom Pop-up Menu</a></li>
+    <li><a href="#bond.popup">Bond Pop-up Menu</a></li>
+    <li><a href="#object.popup">Object Pop-up Menu</a></li>
+    <li><a href="#edit.popup">Edit Pop-up Menu</a></li>
+</ul>
+</blockquote>
+<p>These popup menus do not require the corresponding atom, bond or object to be selected,
+however there are some <a href="#selection.popup">additional menu elements</a> that appear only when they are selected.</p>
+<p>Please note that when a pop-up menu appears, it is usually the combination of these menus.
+For example when selecting an atom and pressing the right mouse button, a popup menu appears that contains elements
+of the context pop-up menu,in this case the Atom Pop-up Menu, the Edit Pop-up Menu, and the Selection Pop-up Menu.</p>
+<img src="gui-files/merged_popup.png" width="236" height="487">    
+
+
+<H3><a class="anchor" name="atom.popup">Atom Pop-up Menu</a></H3>
+<P>The Atom pop-up menu appears when you right-click on an atom on
+the canvas. It contains options for atom-specific activities that also can be accessed from the <a href="menubar.html#atom">Atom Menu</a>.</P>
+<TABLE CELLPADDING=5 cellspacing="0" class="grid">
+<TR>
+    <TH WIDTH=20%><P>Menu Item</P></TH>
+    <TH WIDTH=80%><P>Description</P></TH>
+</TR>
+<tr>
+    <td><p>Stereo</p></td>
+    <td><p>Assigns reaction stereo labels or enhanced stereo labels to atoms.
+        See the <a href="../../sci/stereo-doc.html">Enhanced stereo specification</a> for details.</p></td>
+</tr>
+<TR>
+    <TD><P>Charge</P></TD>
+    <TD><P>Applies a <a href="../sketch-chem.html#charges">charge</a> between
+        [-128,128] to the atom. Marvin will let you set any of these values on any atom, highlighting
+        the Valence Errors in red upon completion. In other words, Marvin will
+        allow you to set a charge of -5 on hydrogen, despite the fact that
+        this is chemically impossible.</P></TD>
+</TR>
+<TR>
+    <TD><P>Valence</P></TD>
+    <TD><P>Allows you to change the valence of any atom between [0, 8].</P></TD>
+</TR>
+<TR>
+    <TD><P>Radical</P></TD>
+    <TD><P>Sets the selected atom as a <a href="../sketch-chem.html#radicals">radical</a>.
+            You can select the type of radical - monovalent, divalent,
+        divalent singlet, divalent triplet, trivalent, trivalent doublet, trivalent
+        quartet. The Off option removes the radical designation.</P></TD>
+</TR>
+<TR>
+    <TD><P>Isotope</P></TD>
+    <TD><P>The <a href="../sketch-chem.html#isotopes" class="buttonName"
+        >Isotope</a> submenu contains a list of the isotopes of the selected
+        element, dynamically generated based on the selected atom. Select an
+	isotope to set or change the isotope number or choose Off
+            to reset the default atom type (no isotope).</P></TD>
+</TR>
+<TR>
+    <TD><P>Map</P></TD>
+    <TD><P>Set <a href="../sketch-chem.html#mapping">map</a> labels/identifiers on the selected atoms that do not change while altering the molecule. They are useful when dealing with reactions, and can be saved in SMILES and MDL formats.</P></TD>
+</TR>
+<TR>
+    <TD>	<P>R-group</P></TD>
+    <TD>	<P>Changes the selected atom to an <a href="../sketch-chem.html#rgroups">R-group</a> label. R-groups symbolize alternative substituents.</P> </TD>
+</TR>
+<TR>
+    <TD>	<P>R-group attachment</P></TD>
+    <TD>	<P>Adds R-group attachment point to the selected atom.</P>    </TD>
+</TR>
+<TR>
+    <TD>	<P>R-group attachment order</P></TD>
+    <TD>	<P>Defines the order of the R-group or deletes R-group attachment point.</P>    </TD>
+</TR>
+<tr>
+    <td><p>Link Node</p></td>
+    <td><p><a href="../sketch-chem.html#link-nodes">Link node</a>
+    specifies rings or chains of variable size.</p></td>
+</tr>
+<tr>
+    <td><p>S-group attachment</p></td>
+    <td><p>Creates S-group attachment point to the selected atom.</p></td>
+</tr>
+<!--<TR>
+    <TD><P>Cut, Copy, Copy As..., Delete</P></TD>
+    <TD><P>Cuts, copies, removes the atom of the molecule.</P></TD>
+</TR>
+<TR>
+    <TD><P>Group...</P></TD>
+    <TD><P>Creates group according to specification on group type.</P></TD>
+</TR>
+<TR>
+    <TD><P>Add</P></TD>
+    <TD><P>Adds properies to the atom (explicit hydrogen, map, data,...).</P></TD>
+</TR>
+<TR>
+    <TD><P>Remove</P></TD>
+    <TD><P>Removes atom properties (explicit hydrogen, map, chiral falg).</P></TD>
+</TR>-->
+<TR>
+    <TD><P>Add Branch</P></TD>
+    <TD><P>Adds a new bond with implicit hydrogen to the selected atom.
+	This option is disabled for atoms that can have no more bonds.</P> </TD>
+</TR>
+<!--<TR>
+    <TD><P>Format...</P></TD>
+    <TD><P>Change atom drawing properties.</P></TD>
+</TR>
+<TR>
+    <TD><P>Add To My Templates</P></TD>
+    <TD><P>Adds the selected structure to the "My Templates" group that appears in the Template Library and on the Advanced Templates Toolbar.</P></TD>
+</TR>
+<TR>
+    <TD><P>Edit Properties...</P></TD>
+    <TD><P>Adds property key and value to the selected atom that appears on the canvas.</P></TD>
+</TR>-->
+</TABLE>
+
+
+<h3><a class="anchor" name="bond.popup">Bond Pop-up Menu</a></h3>
+<P>The bond pop-up menu appears when you right-click on a bond within
+the molecule. It allows you to make a number of changes to the
+selected bond. It contains options for bond-specific activities that also can be accessed from the <a href="menubar.html#bond">Bond Menu</a>.
+</P>
+<TABLE CELLPADDING=5 cellspacing="0" class="grid">
+<TR>
+    <TH WIDTH=10%>
+	<P>Menu Item</P>
+    </TH>
+    <TH WIDTH=10%>
+	<P>Submenu Items</P>
+    </TH>
+    <TH WIDTH="80%">
+        <P>Description</P>
+    </TH>
+</TR>
+<TR>
+    <TD rowspan="5"><P><a href="menubar.html#bond">Type</a></P></TD>
+    <TD><P>Single</P></TD>
+    <TD><P>Changes the selected bond type to Single.</P></TD>
+</TR>
+<TR>
+	<TD><P>Double</P></TD>
+    <TD><P>Changes the selected bond type to Double.</P></TD>
+</TR>
+<TR>
+    <TD><P>Triple</P></TD>
+    <TD><P>Changes the selected bond type to Triple.</P></TD>
+</TR>
+<TR>
+    <TD><P>Aromatic</P></TD>
+    <TD><P>Changes the selected bond type to Aromatic.</P></TD>
+</TR>
+<TR>
+    <TD><P>Query bond types</P></TD>
+    <TD><P>Changes the selected bond to a bond type (Single Up, Single Down, Single Up or Down, Double Cis or Trans, Double C/T or
+	Unspec, Single or Double, Single or Aromatic, Any) for use in a query.</P></TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Bold</P></TD>
+	<TD><p>Thickens the selected bond.</p></TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Hashed</P></TD>
+	<TD><p>Changes the selected bond hashed.</p></TD>
+</TR>
+<TR>
+    <TD ROWSPAN=4><P>Topology</P></TD>
+	<TD>&nbsp;</TD>
+	<TD><p>The following options can be set as bond property when the molecule is used as a
+	query.</p></TD>
+</TR>
+<TR>
+	<TD><P>None</P></TD>
+    <TD><P>Removes defined bond topologies.</P></TD>
+</TR>
+<TR>
+    <TD><P>In Ring</P></TD>
+    <TD><P>The specified bond must be in a ring to score a hit.</P></TD>
+</TR>
+<TR>
+    <TD><P>In Chain</P></TD>
+    <TD><P>The specified bond must be in a chain to score a hit.</P></TD>
+</TR>
+<TR>
+    <TD ROWSPAN=7><P>Reacting Center</P></TD>
+	<TD>&nbsp;</td>
+    <TD><P>The following bond property options can be set in case of drawing reaction search queries. See <a href="http://www.chemaxon.com/jchem/doc/user/query_reactionsearch.html#reactingcenter">Reacting center bond</a> for further query feature descriptions.</P><TD>
+</TR>
+<TR>
+	<TD><P>None</P></TD>
+    <TD><P>Removes added bond property.</P></TD>
+</TR>
+<TR>
+    <TD><P>Center</P></TD>
+    <TD><P>Specifies that the bond takes part in the reaction.</P></TD>
+</TR>
+<TR>
+    <TD><P>Make or Break</P></TD>
+    <TD><P>The assigned bond can form or disappear in the reaction.</P></TD>
+</TR>
+<TR>
+    <TD><P>Change</P></TD>
+    <TD><P>The assigned bond remains and can alter during the reaction.</P></TD>
+</TR>
+<TR>
+    <TD><P>Make and Change</P></TD>
+    <TD><P>The assigned bond can form, break,or change its type during the reaction.</P></TD>
+</TR>
+<TR>
+    <TD><P>Not Center</P></TD>
+    <TD><P>The assigned bond can not be the reaction center.</P></TD>
+</TR>
+<TR>
+    <TD colspan=2><P>Stereo Search</P></TD>
+    <TD><P>Uses stereoconfiguration of specified double bond when the molecule is used as a query.</P></TD>
+</TR>
+<TR>
+    <TD ROWSPAN=2><P>Arrange</P></TD>
+    <TD><P>Bring to Front</P></TD>
+    <TD><P>Brings the selected bond in front of the others.</P></TD>
+</TR>
+<TR>
+	<TD><P>Send to Back</P></TD>
+	<TD><P>Sends the selected bond to the back of the others.</P></TD></TR>
+<TR>
+    <TD ROWSPAN=2><P>Align</P></TD>
+    <TD><P>Horizontally</P></TD>
+    <TD><P>Orients the selected bond horizontally.</P></TD>
+</TR>
+<TR>
+    <TD><P>Vertically</P></TD>
+    <TD><P>Orients the bond vertically.</P></TD>
+</TR>
+<!--<TR>
+    <TD colspan="2"><P>Cut, Copy, Copy As..., Delete</P></TD>
+    <TD><P>Cuts, copies, or removes the assigned bond of the molecule.</P></TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Group...</P></TD>
+    <TD><P>Creates group according to specification on group type.</P></TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Add</P></TD>
+    <TD><P>Adds properies to the molecule (explicit hydrogen, map, data,...).</P></TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Remove</P></TD>
+    <TD><P>Removes atom properties (explicit hydrogen, map, chiral falg).</P></TD>
+</TR>
+<TR>
+    <TD rowspan="4"><P><a href="menubar.html#dragSelection1">Transformation</a></P></TD>
+    <TD><P><a href="menubar.html#dragSelection">Drag Selection</a></P> </TD>
+	<TD><P>The selected part of the molecule can be moved by dragging the mark box with your mouse or with the proper arrow keys.</P> </TD>
+</TR>
+<TR>
+	<TD><P><a href="menubar.html#rotateSelection3D">Rotate in 3D</a></P></TD>
+	<TD>The selected part of the molecule will be rotated according to the chosen rotation mode.</TD>
+</TR>
+<TR>
+	<TD><P>Switch Transformation (space)</P></TD>
+	<TD>You can switch between dragging or 3D rotating the selected molecular parts by hitting the space bar.</TD>
+</TR>
+<TR><TD><P><a href="menubar.html#flipHorizontally">Flip, Mirror, Inverse</a></P></TD>
+<TD>The selected part of the molecule will be transformed according to the chosen method.</TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Format</P></TD>
+    <TD><P>Change bond drawing properties.</P></TD>
+</TR>
+<TR>
+    <TD colspan="2"><P>Add To My Templates</P></TD>
+    <TD><P>Adds the selected structure to the "My Templates" group that appears in the Template Library and on the Advanced Templates Toolbar.</P></TD>
+</TR>-->
+</TABLE>
+
+
+<H3><a class="anchor" name="object.popup">Object Pop-up Menu</a></H3>
+<P>
+This menu appears when the context is a graphical object like Text, Bracket, or other Graphics.
+</P><BR>
+
+<TABLE CELLPADDING=5 cellspacing="0" class="grid">
+<TR>
+    <TH WIDTH=20%>
+	<P>Menu Item</P>
+    </TH>
+    <TH WIDTH=80%>
+        <P>Description</P>
+    </TH>
+</TR>
+<TR>
+    <TD>
+	<P>Bring to Front</P>
+    </TD>
+    <TD>
+        <P>Brings the selected object in front of all others.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Send to Back</P>
+    </TD>
+    <TD>
+	<P>Places the selected object behind all others.</P>
+    </TD>
+</TR>
+ <!--<TR>
+        <TD>
+            <P>Cot, Copy, Delete</P>
+        </TD>
+        <TD>
+            <P>Cuts, copies, or removes the object from the canvas.</P>
+        </TD>
+    </TR>
+ <TR>
+        <TD>
+            <P>Add</P>
+        </TD>
+        <TD>
+            <P>Data can be added to the selected object.</P>
+        </TD>
+    </TR>
+	 <TR>
+        <TD>
+            <P>Transformation</P>
+        </TD>
+        <TD>
+            <P>The object can be <a href="menubar.html#dragSelection1">transformed</a>.</P>
+        </TD>
+    </TR>
+	<TR>
+    <TD>
+	<P>Format</P>
+    </TD>
+    <TD>
+	<P>Change object drawing properties.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Add To My Templates</P>
+    </TD>
+    <TD>
+	<P>Adds the selected structure to the "My Templates" group that appears in the Template Library and on the Advanced Templates Toolbar.</P>
+    </TD>
+</TR>-->
+</TABLE>
+
+<H3><a class="anchor" name="edit.popup">Edit Pop-up Menu</a></H3>
+<P>The Edit pop-up menu appears when you right-click on open canvas
+space. In case there is an atom, bond or graphic object under the cursor, the appearing pop-up menu
+contains the elements of the Edit Pop-up Menu merged with the pop-up menu of the selected element.<br>
+Edit pop-up menu items include:</P>
+
+<TABLE CELLPADDING=5 cellspacing="0" class="grid">
+<TR>
+    <TH width="20%">
+	<P>Menu Item</P>
+    </TH>
+    <TH WIDTH=80%>
+	<P>Description</P>
+    </TH>
+</TR>
+<TR>
+    <TD>
+	<P>Cut</P>
+    </TD>
+    <TD>
+	<P>Removes and copies the selection to the clipboard.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Copy</P>
+    </TD>
+    <TD>
+        <P>Copies the selection to the clipboard.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Copy As</P>
+    </TD>
+    <TD>
+	<P>Copies the selection to the clipboard in the specified format.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Paste</P>
+    </TD>
+    <TD>
+	<P>Inserts the contents of the clipboard at the location of the cursor, without replacing selection.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Select All</P>
+    </TD>
+    <TD>
+	<P>Selects the structure being on the canvas including all fragments and graphical objects.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Group</P>
+    </TD>
+    <TD>
+        <P>Creates an abbreviated Group from the selected substructure.
+	See the <a href="../sketch-chem.html#sgroups">S-groups</a> section for
+        more information on creating and using Groups.</P>
+    </TD>
+</TR>
+<!--<TR>
+    <TD>
+	<P>Flip</P>
+    </TD>
+    <TD>
+	<P>Flips the structure on the canvas. The submenu allows you to
+	choose horizontally or vertically.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Mirror</P>
+    </TD>
+    <TD>
+	<P>Flips the object horizontally, inverting
+	tetrahedral stereochemistry. The submenu allows you to
+	choose horizontally or vertically.</P>
+    </TD>
+</TR>-->
+</TABLE>
+
+
+<h3><a class="anchor" name="selection.popup">Pop-up elements upon Selection</a></h3>
+
+<table cellpadding="5" cellspacing="0" class="grid">
+    <tr>
+        <th width="20%">Menu Item</th>
+        <th width="80%">Description</th>
+    </tr>
+    <tr>
+        <td>Add/Remove Explicit Hydrogens</td>
+        <td>Switches explicit H atoms to implicit ones and vica versa. Explicit hydrogens are displayed with atoms joining its neighbor while implicit hydrogens are displayed by atom symbols only.</td>
+    </tr>
+    <tr>
+        <td>Add/Remove Map Atoms</td>
+        <td>Adding atom maps is an automatic assignment of map numbers to all selected atoms of a reaction by using the automapper tool.</td>
+    </tr>
+    <tr>
+        <td>Add/Remove Data</td>
+        <td>Attach/Remove data like stoichiometry coefficient to the molecule.</td>
+    </tr>
+    <tr>
+        <td>Add/Remove Absolute Stereo (CHIRAL)</td>
+        <td>Sets/Removes chiral flag for the molecule.</td>
+    </tr>
+    <tr>
+        <td>Add Multi-Center</td>
+        <td>Add a multi-center attachment point representing a group of atoms.</td>
+    </tr>
+    <tr>
+        <td>Add Position Variation Bond</td>
+        <td>Create a variable point of attachment to represent a connection point to a group of atoms.</td>
+    </tr>
+    <tr>
+        <td>Link Node</td>
+        <td>Specifies query structures containing rings or chains of variable size.</td>
+    </tr>
+    <tr>
+        <td>R-Logic</td>
+        <td>Allows setting additional R-group conditions such as occurrence, rest H and if-then expressions to R-groups in the R-logic dialog.</td>
+    </tr>
+    <TR>
+    <TD><P><a href="menubar.html#dragSelection1">Transformation</a> &gt; Drag Selection</P></TD>
+  	<TD><P>The selected part of the molecule can be moved by dragging the mark box with your mouse or with the proper arrow keys.</P> </TD>
+</TR>
+<TR>
+	<TD><P>Transformation &gt; <a href="menubar.html#rotateSelection3D">Rotate in 3D</a></P></TD>
+	<TD>The selected part of the molecule will be rotated according to the chosen rotation mode.</TD>
+</TR>
+<TR>
+	<TD><P>Transformation &gt; Switch Transformation (space)</P></TD>
+	<TD>You can switch between dragging or 3D rotating the selected molecular parts by hitting the space bar.</TD>
+</TR>
+<TR>
+    <TD>
+	<P>Transformation &gt; Flip</P>
+    </TD>
+    <TD>
+	<P>Flips the structure on the canvas. The submenu allows you to
+	choose horizontally or vertically.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Transformation &gt; Mirror</P>
+    </TD>
+    <TD>
+	<P>Flips the object horizontally, inverting
+	tetrahedral stereochemistry. The submenu allows you to
+	choose horizontally or vertically.</P>
+    </TD>
+</TR>
+<TR><TD><P>Transformation &gt; Inverse</P></TD>
+<TD>Reflects the selected fragment(s) through the geometric or arbitrary center.</TD>
+</TR>
+<!--<tr>
+        <td>Merge Reaction Fragments</td>
+        <td>Merge the selected fragments to a reactant, product or agent.</td>
+    </tr>
+    <tr>
+        <td>Unmerge Reaction Fragments</td>
+        <td>Removes selected fragments from a previously merged reactant, product or agent.</td>
+    </tr>-->
+<TR>
+    <TD>
+	<P>Format</P>
+    </TD>
+    <TD>
+	<P>Change atom and bond drawing properties.</P>
+    </TD>
+</TR>
+<TR>
+    <TD>
+	<P>Add To My Templates</P>
+    </TD>
+    <TD>
+	<P>Adds the selected structure to the "My Templates" group that appears in the Template Library and on the Advanced Templates Toolbar.</P>
+    </TD>
+</TR>
+</table>
+
+
+</body>
+</html>

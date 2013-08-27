@@ -1,0 +1,31 @@
+<html>
+<head><title></title></head>
+<!-- 
+ Used by macjs.js
+-->	
+<body>
+<script type="text/javascript"><!--
+    var res = null;
+    var i = location.search.indexOf("=");
+    if(i > -1) {
+	var paramname = location.search.substring(1,i);
+	if(paramname.indexOf("res") == 0) {
+	    res = location.search.substring(i+1);
+		var pw;
+		if(window.opener != null) {
+			pw = window.opener;
+		} else {
+			pw = parent;
+		}
+	    pw.writeResult(res);
+	    //last fragment
+	    if(paramname.length == "res".length) {
+		//close res	
+		pw.closeResult();
+	    }
+	}
+    }
+//--></script>
+	</ul>
+</body>
+</html>

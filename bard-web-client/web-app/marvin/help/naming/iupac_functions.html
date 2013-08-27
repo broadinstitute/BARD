@@ -1,0 +1,86 @@
+<!-- 
+    Document   : iupac_functions
+    Created on : Sep 10, 2008, 3:22:08 PM
+    Author     : Panni 
+	Modified by Efi September 2011
+-->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>IUPAC name functionalities</TITLE>
+ <link rel=stylesheet type="text/css" href="../marvinmanuals.css">
+</HEAD>
+  <body>
+  
+  <h1>Name to Structure Conversion</h1>
+  ChemAxon’s naming toolkit capabilities allow you to generate chemical structures from IUPAC, trivial, drug, CAS names and from CAS numbers.
+  <h3>Supported names include</h3>
+<ul>
+<li>Chains, Monocycles</li>
+<li>Retained/traditional names for ring systems with and without heteroatoms</li>
+<li>Spiro ring systems</li>
+<li>All cases of von Baeyer nomenclature for bridged ring systems</li>
+<li>Fused ring systems</li>
+<li>Ethers</li>
+<li>Common characteristic groups</li>
+<li>Ionic compounds</li>
+<li>Compounds with one radical</li>
+<li>Unlimited number of atoms and rings</li>
+<li>All atom types</li>
+<li>Substitutive nomenclature</li>
+<li>Stereochemistry</li>
+<li>CAS numbers (Note, this feature uses a Web service.)</li>
+</ul>
+
+<h3>Current limitations</h3>
+
+<ul>
+<li>Molecules containing multiple radicals (e.g. <code>ethane-1,2-diyl</code>) are not supported yet.
+<li>Names representing isotopes are not supported yet</li>.
+</ul>
+<h3>Notes</h3> 
+<ul>
+<li>You can extend the name to structure conversion by creating a custom dictionary file. Detailed description of the setting up of a custom dictionary is described in <a href="../naming/naming_customdic.html">this page</a>
+</ul>
+
+ 
+  
+  <h2><a name="name2str" class="anchor">Name to Structure Conversion in MarvinSketch</a></h2>
+  <p>There are different ways how you can import a name directly into MarvinSketch and convert it to a chemical structure. 
+  
+  <ul>
+    <li>A simple method is to select the name in the text of any page and drag&amp;drop or copy&amp;paste 
+      it to MarvinSketch.
+     </li> OR<br>
+    <li>Select the "Import Name" (Ctrl+Shift+N) option from the Edit menu, and write the name into the text field and click the "Import" button (Ctrl+I).
+    <p><img src="iupac_images/importsource_55.png" width="481" height="498" alt="importsource"></p>
+    </li>
+  </ul>
+	<h2><a name="name2str_MView" class="anchor">Name to Structure Conversion in MarvinView</a></h2>
+    <p>Open a text file (.name) containing IUPAC names (one per row). MarvinView will open 
+    all the structures. Opening the same file in MarvinSketch, the program will ask you to select one structure (by its index number).
+    </p>
+<h2><a name="name2str_MView" class="anchor">Name to structure conversion from command line</a></h2>
+As a commandline tool, you can use <a href="../applications/molconvert.html">MolConverter</a> for name to structure conversion.  
+Examples:
+<ol>
+<li> Converting "test.name" name file to MOL file:
+<pre> molconvert mol test.name -o test.mol</pre></li>
+<li>Converting "test.name" name file to "test.smi" SMILES file which also contains the name of the structures:
+<pre>molconvert smiles:n test.name>test.smi</pre>
+</ol>
+  </ul>
+  
+<h3>Marvin can also convert <a href="../calculations/s2n.html">structures to names</a>.<h3>
+
+<h2>License informations</h2>
+</ul>
+<li>Name import is only available for a single molecule with the free MarvinSketch desktop 
+application. For batch conversion (with MarvinView, MolConverter, API, ...) you need the "Name to Structure" licence.</li>
+</ul>
+
+  
+  
+  </body>
+</html>

@@ -1,0 +1,27 @@
+#summaryView h3 {
+    font-size: 1em;
+    line-height: 1em;
+    margin: .3em;
+    display: inline-block;
+}
+
+#summaryView .dropdown {
+    display: inline-block;
+}
+
+ul.horizontal-list {
+    list-style-type:   none;
+    text-align:        center;
+    margin: 0;
+}
+ul.horizontal-list li {
+    display:           inline-block;
+    font-size: .9em;
+}
+ul.horizontal-list li:not(:first-child):before {
+    content: ' | ';
+}
+div.plot {
+    width: 200px;
+    height: 300px;
+}

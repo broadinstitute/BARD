@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ParameterPanel>
+<Group Title="Generate">
+    <RadioButtonGroup Key="stereoisomerism">
+	<Choice Value="tetrahedral" Text="tetrahedral stereo isomers" Tooltip="Only the R/S isomers are generated." Selected="true"/>
+	<Choice Value="doublebond" Text="double bond stereo isomers" Tooltip="Only E/Z isomers are generated."/>
+	<Choice Value="both" Text="both" Tooltip="Both R/S and E/Z isomers are generated."/>
+    </RadioButtonGroup>
+</Group>
+
+    <Boolean Key="generateall" Label="Generate all stereoisomers" Tooltip="All isomers are generated." Value="false"/>
+    <Number Key="maxstereoisomers" Label="Generate maximum" Tooltip="Only the given number of structures are generated." Range="[1,1000000000]" Value="1000">
+	<Dependencies>
+	    <Item Key="generateall" Range="false"/>
+	</Dependencies>
+    </Number>
+    
+    <Boolean Key="protecttetrahedralstereo" Label="Protect tetrahedral stereo centers" Tooltip="If checked, preset stereocenters are not included in the stereoisomer generation." Value="false"/>
+    <Boolean Key="protectdoublebondstereo" Label="Protect double bond stereo" Tooltip="If checked, all double bonds with preset stereo information remain intact." Value="false"/>
+
+    <Boolean Key="verify3d" Label="Filter invalid 3D structures" Tooltip="Sterically restricted isomers are discarded." Value="false"/>
+    <Boolean Key="in3d" Label="Display in 3D" Tooltip="Results are displayed in a 3D viewer." Value="false">
+	<Dependencies>
+	    <Item Key="verify3d" Range="true"/>
+	</Dependencies>
+	</Boolean>
+
+</ParameterPanel>
+Generate
+
+    * Tetrahedral stereo isomers: only the R/S isomers are generated.
+    * double bond stereo isomers: only E/Z isomers are generated.
+    * both: both R/S and E/Z isomers are generated

@@ -1,0 +1,115 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+ <head>
+   <meta NAME="description" CONTENT="Name format in Marvin">
+<meta NAME="keywords" CONTENT="Name, file format, Java, Marvin">
+<link REL ="stylesheet" TYPE="text/css" HREF="../marvinmanuals.css" TITLE="Style">
+<title>NAME format in Marvin</title>
+</head>
+<body>
+
+<h1>NAME</h1>
+<p>
+Codename: <strong>name</strong>
+<h2>Contents:</h2>
+<ul>
+<li><a href="#NAME">Name format</a></li>
+<li><a href="#import">Import option</a></li>
+<li><a href="#export">Export options</a></li>
+<li><a href="#see_also">See also</a></li>
+</ul>
+
+
+  <h3><a class="anchor" name="NAME">NAME format</a></h3>
+  <p>
+  The names are saved in a text file following this rules:
+  <ul><li>one name per line</li>
+  <li>additional fields can be added, separated by tabs</li>
+</ul>
+  <h3><a class="anchor" NAME="import">Import option</a></h3> 
+  
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=5 border="0">
+<tr VALIGN="TOP">
+<td><a class="text" NAME="import_OCR"><strong>ocr</strong></a><br></td>
+    <td> converts names containig OCR (optical character recognition) error.<br>
+	Example: 
+	<pre>molconvert 'smiles:T*' -s '3-rnethyl-l-methoxynaphthalene{name:ocr}</pre>
+	converts the defective name "3-rnethyl-l-methoxynaphthalene" to smiles.
+	</td>
+    </tr>
+
+<tr VALIGN="TOP">
+<td><a class="text"><strong>systematic</strong></a></td>
+<td>convert only systematic names</td>
+</tr>
+
+<tr VALIGN="TOP">
+<td><a class="text"><strong>-systematic</strong></a></td>
+<td>disable conversion of systematic names</td>
+</tr>
+
+<tr VALIGN="TOP">
+<td><a class="text"><strong>-elements</strong></a></td>
+<td>disable conversion of the name of chemical elements, for instance carbon, sodium, ....
+Even though "carbon" is not converted, "methane" still is, since it is a molecule name, not an element.
+</td>
+</tr>
+
+<tr VALIGN="TOP">
+<td><a class="text"><strong>-ions</strong></a></td>
+<td>disable conversion of ion syntax, for instance "Ca2+".
+</td>
+</tr>
+
+<p>
+Some of these options are mainly useful when configuring which names
+<a href="../d2s/d2s.html">Document to Structure</a> recognizes.
+</p>
+
+</table>
+</blockquote>
+ <h3><a class="anchor" NAME="export">Export options</a></h3> 
+  
+<blockquote>
+<table CELLSPACING=0 CELLPADDING=5 border="0">
+<tr VALIGN="TOP">
+<td><a class="text" NAME="export_t"><strong>t</strong></a><br>
+		</td>
+		 <td> converts to traditional name.
+		 This option generates a common name if one is known for the structure.
+		 Otherwise, it generates a systematic name, but sometimes uses some
+		 traditionally accepted rules instead of the strict application of the IUPAC
+		 rules, when that generates a simpler name.
+	</td>
+	</tr>
+	<tr>
+	<td><a class="text" NAME="export_allcommon"><strong>common</strong></a><br>
+		</td>
+		 <td>generates the most popular common name of a structure. (It fails if none is known.)<br>
+	</td>
+
+    </tr>
+	<tr>
+	<td><a class="text" NAME="export_allcommon"><strong>common,all</strong></a><br>
+		</td>
+		 <td> generates all common names of a structure.<br>
+	</td>
+
+    </tr>
+	<tr>
+	<td><a class="text" NAME="export_source"><strong>source</strong></a><br>
+		</td>
+		 <td>outputs the name present in the source data (no generation).<br>
+	</td>
+
+    </tr>
+</table>
+</blockquote>		 
+ <h3><a class="anchor" name="see_also">See also</h3>
+  <li>General information about <a href="../naming/n2s.html">Name to Structure conversion</a>.
+  <li>General information about <a href="../calculations/s2n.html">Structure to Name conversion</a>.
+   
+  </body>
+</html>
