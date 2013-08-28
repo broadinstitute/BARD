@@ -3,6 +3,7 @@
 <div class="row-fluid">
 <div id="foo" class="span12">
 <h1>Create Experiment for ADID: ${assay.id}</h1>
+
 <h2><g:link controller="assayDefinition" action="show"
             id="${assay.id}">${assay.name}</g:link></h2>
 <g:if test="${experiment.experimentName == null || experiment.errors}">
@@ -10,8 +11,6 @@
     <h3>Summary</h3>
 
     <dl class="dl-horizontal">
-
-
 
         <dt>Name:</dt>
         <dd>
@@ -45,17 +44,16 @@
     </dd>
 
         <dt>Run Date To:</dt><dd>
-        <input type="text" class="input-large date-selection" name="runDateTo"  placeholder="Click icon to select date"
+        <input type="text" class="input-large date-selection" name="runDateTo" placeholder="Click icon to select date"
                value="${experiment.runDateTo ? new SimpleDateFormat("MM/dd/yyyy").format(experiment.runDateTo) : experiment.runDateTo}"/>
     </dd>
     </dl>
 
     <r:script>
-         $('.date-selection').datepicker({
+        $('.date-selection').datepicker({
             format: 'MM/dd/yyyy',
             showOn: "button",
-            buttonImage: "../../images/calendar.gif",
-            buttonImageOnly: true
+            buttonText: '<i class="icon-calendar"></i>'
         });
     </r:script>
 </g:if>
