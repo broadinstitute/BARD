@@ -1,7 +1,7 @@
 
 /*
 	This is the Geb configuration file.
-
+	
 	See: http://www.gebish.org/manual/current/configuration.html
 */
 
@@ -15,16 +15,16 @@ import org.openqa.selenium.remote.DesiredCapabilities
 
 // Use htmlunit as the default
 // See: http://code.google.com/p/selenium/wiki/HtmlUnitDriver
-driver = {
-    def driver = new HtmlUnitDriver()
-    driver.javascriptEnabled = true
+driver = { 
+	def driver = new HtmlUnitDriver()
+	driver.javascriptEnabled = true
     driver
 }
 environments {
-
-    // run as “grails -Dgeb.env=chrome test-app”
-    // See: http://code.google.com/p/selenium/wiki/ChromeDriver
-    chrome {
+	
+	// run as “grails -Dgeb.env=chrome test-app”
+	// See: http://code.google.com/p/selenium/wiki/ChromeDriver
+	chrome {
         // Set the location of the chromedriver executable
         System.setProperty("webdriver.chrome.driver", "test/resources/chromedriver.exe")
 
@@ -32,18 +32,21 @@ environments {
         // see http://code.google.com/p/selenium/issues/detail?id=2681
         DesiredCapabilities capabilities = new DesiredCapabilities()
         capabilities.setCapability("chrome.switches", Arrays.asList("--ignore-certificate-errors"))
+        capabilities.setCapability("chrome.switches", Arrays.asList("--start-maximized"))
 
         driver = { new ChromeDriver(capabilities) }
-    }
-
-    // run as “grails -Dgeb.env=firefox test-app”
-    // See: http://code.google.com/p/selenium/wiki/FirefoxDriver
-    firefox {
+	}
+	
+	// run as “grails -Dgeb.env=firefox test-app”
+	// See: http://code.google.com/p/selenium/wiki/FirefoxDriver
+	firefox {
         File profileDir = new File("target/firefoxProfile")
         if (!profileDir.exists()) { profileDir.mkdir() }
 
         FirefoxProfile profile = new FirefoxProfile(profileDir)
-        driver = { new FirefoxDriver(profile) }
-    }
+		driver = { new FirefoxDriver(profile) }
+
+        driver.manage().window().maximize()
+	}
 
 }
