@@ -44,7 +44,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     ShoppingCartService shoppingCartService
     MobileService mobileService
     BardUtilitiesService bardUtilitiesService
-    ProjectExperimentRenderService projectExperimentRenderService
+    QueryProjectExperimentRenderService queryProjectExperimentRenderService
     @Shared List<SearchFilter> searchFilters = [new SearchFilter(filterName: 'group1', filterValue: 'facet1'), new SearchFilter(filterName: 'group2', filterValue: 'facet2')]
     @Shared Value facet1 = new IntValue(source: new DataSource(), id: 'group1', value: null, children: [new IntValue(source: new DataSource(), id: 'facet1', value: 1)])
     @Shared Value facet3 = new IntValue(source: new DataSource(), id: 'group3', value: null, children: [new IntValue(source: new DataSource(), id: 'facet3', value: 1)])
@@ -54,10 +54,10 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
     void setup() {
         controller.metaClass.mixin(InetAddressUtil)
         bardUtilitiesService = Mock(BardUtilitiesService)
-        projectExperimentRenderService = Mock(ProjectExperimentRenderService)
+        queryProjectExperimentRenderService = Mock(QueryProjectExperimentRenderService)
         controller.metaClass.mixin(SearchHelper)
         controller.bardUtilitiesService = bardUtilitiesService
-        controller.projectExperimentRenderService = projectExperimentRenderService
+        controller.queryProjectExperimentRenderService = queryProjectExperimentRenderService
 
         queryService = Mock(QueryService)
         experimentDataFactoryService = Mock(ExperimentDataFactoryService)
@@ -1064,7 +1064,7 @@ class BardWebInterfaceControllerUnitSpec extends Specification {
 
         then:
         queryService.showProject(_) >> { projectAdapter }
-        projectExperimentRenderService.constructGraph(_, _) >> { [:] }
+        queryProjectExperimentRenderService.constructGraph(_, _) >> { [:] }
         expectedProjectView == view
         if (pid && projectAdapter) {
             assert model.projectAdapter

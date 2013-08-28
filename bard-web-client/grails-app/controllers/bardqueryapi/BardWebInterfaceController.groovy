@@ -47,7 +47,7 @@ class BardWebInterfaceController {
     MobileService mobileService
     ExperimentRestService experimentRestService
     ExperimentDataFactoryService experimentDataFactoryService
-    ProjectExperimentRenderService projectExperimentRenderService
+    QueryProjectExperimentRenderService queryProjectExperimentRenderService
     RingManagerService ringManagerService
     List<SearchFilter> filters = []
 
@@ -540,7 +540,7 @@ class BardWebInterfaceController {
 
             if (projectMap) {
                 ProjectAdapter projectAdapter = projectMap.projectAdapter
-                final Map projectExperimentMap = this.projectExperimentRenderService.constructGraph(projId, projectAdapter.experimentTypes)
+                final Map projectExperimentMap = this.queryProjectExperimentRenderService.constructGraph(projId, projectAdapter.experimentTypes)
                 def projectExperimentJSON = null
                 if (projectExperimentMap) {
                     projectExperimentJSON = new JSON(projectExperimentMap)

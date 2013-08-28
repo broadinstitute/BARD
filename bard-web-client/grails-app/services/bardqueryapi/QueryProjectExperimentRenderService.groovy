@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus
  * The service can be reused with different view implementation if view requires similar objects.
  * Otherwise, this service can be adapted to provide more information to view for displaying purpose.
  */
-class ProjectExperimentRenderService {
+class QueryProjectExperimentRenderService {
     ProjectRestService projectRestService
 
     /**

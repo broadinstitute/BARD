@@ -12,8 +12,8 @@ import spock.lang.Unroll
  *
  */
 @Unroll
-@TestFor(ProjectExperimentRenderService)
-class ProjectExperimentRenderServiceUnitSpec extends Specification {
+@TestFor(QueryProjectExperimentRenderService)
+class QueryProjectExperimentRenderServiceUnitSpec extends Specification {
     @Shared
     ObjectMapper objectMapper = new ObjectMapper()
 

@@ -5,14 +5,14 @@ import spock.lang.Unroll
 import spock.lang.Ignore
 
 @Unroll
-class ProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
+class QueryProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
 
-    ProjectExperimentRenderService projectExperimentRenderService
+    QueryProjectExperimentRenderService queryProjectExperimentRenderService
 
     void "test constructGraph #label"() {
 
         when:
-        final Map result = projectExperimentRenderService.constructGraph(pid)
+        final Map result = queryProjectExperimentRenderService.constructGraph(pid)
         then:
         assert result
 
@@ -33,7 +33,7 @@ class ProjectExperimentRenderServiceIntegrationSpec extends IntegrationSpec {
     void "test constructGraphWithSomeIsolatedNodes #label"() {
 
         when:
-        final Map result = projectExperimentRenderService.constructGraph(pid)
+        final Map result = queryProjectExperimentRenderService.constructGraph(pid)
         then:
         assert result
 
