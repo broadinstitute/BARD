@@ -74,7 +74,7 @@ class BardWebInterfaceController {
 
 
     def index() {
-        render( view: 'homepage')
+        render( view: 'homepage', model: {})
     }
 
     def search() {

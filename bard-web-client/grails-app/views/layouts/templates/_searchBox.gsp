@@ -7,7 +7,7 @@
              alt="Please enable JavaScript to access the full functionality of this site."/>
     </a>
 </noscript>
-<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">
+<g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm">
     <div class="row-fluid" style="margin-top: 15px;">
         <div class="input-append">
             <g:if test="${flash?.searchString}">

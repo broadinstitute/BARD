@@ -3,7 +3,9 @@
 <head>
     <title>BioAssay Research Database</title>
 
-     <meta charset="utf-8">
+
+
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BARD</title>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
@@ -11,22 +13,27 @@
     <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap.css">
     <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap-responsive.css">
     <link media="all" rel="stylesheet" href="css/bardHomepage/BardHomepage.css">
-    <link media="all" rel="stylesheet" href="css/flick/jquery-ui-1.8.20.custom.css">
 
-    %{--xx--}%
-    %{--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />--}%
-    %{--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>--}%
-    %{--<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>--}%
-    %{--xx--}%
     <script src="js/bardHomepage/jquery-1.8.3.min.js"></script>
-    <script>window.jQuery || document.write('<script src="js/jquery-1.8.3.min.js"><\/script>')</script>
-    <script src="js/bardHomepage/jquery-ui-1.8.15.custom.js"></script>
     <script src="js/bardHomepage/bootstrap.js"></script>
     <script src="js/bardHomepage/jquery.main.js"></script>
-     %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js"></script>--}%
-    %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js"></script>--}%
+    <script src="js/bardHomepage/idSearchDialog.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.html.js"></script>
     <!--[if lt IE 9]><link rel="stylesheet" href="css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="js/bardHomepage/ie.js"></script><![endif]-->
+
+
+
+    %{--Good stuff--}%
+
+    %{--<script src="js/bardHomepage/bootstrap.js"></script>--}%
+    %{--<script src="js/bardHomepage/jquery.main.js"></script>--}%
+    %{--<script src="js/bardHomepage/idSearchDialog.js"></script>--}%
+     %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js"></script>--}%
+    %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js"></script>--}%
 
 
 
@@ -46,11 +53,43 @@
             return true;
         }
     </script>
+    <script>
+
+        $(document).ready(function () {
+
+            //set up auto complete
+            var autoOpts = {
+                source:"/bardwebclient/bardWebInterface/autoCompleteAssayNames",
+                minLength:2,
+                html: true,
+                delay:1000
+            };
+
+            $("#searchString").autocomplete(autoOpts);
+            $("#searchString").bind("autocompleteselect", function (event, ui) {
+                $("#searchString").val(ui.item.value)
+                $("#searchButton").click();
+            });
+            // make sure to close the autocomplete box when the search button or ENTER are clicked
+            $("#searchButton").click(function () {
+                $("#searchString").autocomplete("close");
+            });
+            $('#searchButton').keypress(function(eventData) {
+                if(eventData.which == 13) {
+                    $("#searchString").autocomplete("close");
+                }
+            });
+
+        });
+
+    </script>
 
 
 </head>
 
 <body>
+
+
 <div id="wrapper">
 
 %{--The control area at the top of the page is all contained within this header--}%
@@ -95,6 +134,7 @@
 <article class="hero-block">
     <div class="container-fluid">
         <div class="hero-area">
+
             <div class="row-fluid">
                 <article class="span8">
                     <h1>Enhanced data and advanced tools to accelerate drug discovery.</h1>
@@ -111,10 +151,42 @@
 %{--Block to hold the main search textblock--}%
 <div class="search-panel">
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span6 offset3">
-                <g:render template="/layouts/templates/searchBox"/>
-            </div>
+
+        <div class="head-holder">
+            <h2>SEARCH BARD</h2>
+
+            <p>Search assay, project and experiment data or <a
+                    href="#">learn about BARD’s innovative search features.</a></p>
+        </div>
+
+        <div class="search-block">
+
+
+                <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="search-form">
+                    <fieldset>
+                        <div class="search-field input-append">
+                            <div class="text-field">
+                                <g:textField id="searchString" name="searchString" placeholder="Search by Chemistry, Biology, Structure and More" value="${flash.searchString}"/>
+                            </div>
+
+                            <div class="btn-field">
+                                <button name="search" class="btn btn-primary"  id="searchButton" type="submit">Search <span
+                                        class="hidden-phone">BARD</span>
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </g:form>
+
+
+
+        <div class="links-holder">
+            <a href="#">Advanced Search</a>
+            <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+        </div>
+
+
+
         </div>
 
     </div>
