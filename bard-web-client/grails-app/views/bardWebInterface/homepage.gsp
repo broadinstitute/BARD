@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <title>BioAssay Research Database</title>
-    <r:require modules="autocomplete"/>
-    %{--<r:require modules="core"/>--}%
-    <r:layoutResources/>
 
      <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +25,27 @@
     %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js"></script>--}%
     <!--[if lt IE 9]><link rel="stylesheet" href="css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
     <!--[if IE]><script src="js/bardHomepage/ie.js"></script><![endif]-->
+
+
+
+    <script type="text/javascript">
+
+        //report error messages
+        window.onerror = bardClientErrorHandler;
+        //    Handle javascript errors
+        function bardClientErrorHandler(message, url, line) {
+            $.ajax({
+                cache:false,
+                type:"post",
+                data:{error:message, url:url, line:line, browser:navigator.userAgent},
+                url:"/bardwebclient/ErrorHandling/handleJsErrors",
+                async:true
+            });
+            return true;
+        }
+    </script>
+
+
 </head>
 
 <body>
@@ -91,80 +109,12 @@
 %{--Block to hold the main search textblock--}%
 <div class="search-panel">
     <div class="container-fluid">
-        <div class="head-holder">
-            <h2>SEARCH BARD</h2>
-
-            <p>Search assay, project and experiment data or <a
-                    href="#">learn about BARD’s innovative search features.</a></p>
-        </div>
-
-        <div class="search-block">
-
-            %{--<r:require modules="autocomplete"/>--}%
-            <noscript>
-                <a href="http://www.enable-javascript.com/" target="javascript">
-                    <img src="${resource(dir: 'images', file: 'enable_js.png')}"
-                         alt="Please enable JavaScript to access the full functionality of this site."/>
-                </a>
-            </noscript>
-
-            <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">
-                <div class="row-fluid" style="margin-top: 15px;">
-                    <div class="input-append">
-                        <g:if test="${flash?.searchString}">
-                            <g:textField id="searchString" name="searchString" value="${flash.searchString}"
-                                         class="input-xxlarge"/>
-                        </g:if>
-                        <g:elseif test="${params?.searchString}">
-                            <g:textField id="searchString" name="searchString" value="${params?.searchString}"
-                                         class="input-xxlarge"/>
-                        </g:elseif>
-                        <g:else>
-                            <g:textField id="searchString" name="searchString" value="" class="input-xxlarge"/>
-                        </g:else>
-
-                        <button type="submit" name="search" class="btn btn-primary" id="searchButton">Search</button>
-                    </div>
-                </div>
-
-                %{--<div class="row-fluid">--}%
-                    %{--<div class="span10">--}%
-                        %{--<r:script> $(document).on('click', '#structureSearchLink', showJSDrawEditor)</r:script>--}%
-                        %{--<div class="pull-right"><g:link controller="bardWebInterface" action="jsDrawEditor">--}%
-                            %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure"--}%
-                                 %{--title="Draw or paste a structure"/> Draw or paste a structure</g:link> or <a--}%
-                                %{--data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>--}%
-                    %{--</div>--}%
-                %{--</div>--}%
-            </g:form>
-
-
-
-
-
-
-
-
-            %{--<form action="#" class="search-form">--}%
-                %{--<fieldset>--}%
-                    %{--<div class="search-field">--}%
-                        %{--<div class="text-field">--}%
-                            %{--<input type="text" placeholder="Search by Chemistry, Biology, Structure and More">--}%
-                        %{--</div>--}%
-
-                        %{--<div class="btn-field">--}%
-                            %{--<button class="btn btn-primary" type="submit">Search <span class="hidden-phone">BARD</span>--}%
-                            %{--</button>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-                %{--</fieldset>--}%
-            %{--</form>--}%
-
-            <div class="links-holder">
-                <a href="#">Advanced Search</a>
-                <a href="#" class="download-link hidden-phone">Download the BARD Desktop Client</a>
+        <div class="row-fluid">
+            <div class="span6 offset3">
+                <g:render template="/layouts/templates/searchBox"/>
             </div>
         </div>
+
     </div>
 </div>
 
