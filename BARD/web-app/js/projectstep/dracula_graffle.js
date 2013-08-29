@@ -15,7 +15,7 @@
  * returns:
  *      connection { draw = function() }
  */
-var template1 = Handlebars.compile($("#edge-selection-template").html())
+//var template1 = Handlebars.compile($("#edge-selection-template").html())
 Raphael.fn.connection = function Connection(obj1, obj2, style) {
   var selfRef = this;
   /* create and return new connection */
@@ -111,7 +111,7 @@ Raphael.fn.connection = function Connection(obj1, obj2, style) {
               .toBack()
           .click(function(){
               var params = {fromNode:obj1.data.link, toNode:obj2.data.link}
-              $('#edge-selection-details').html(template1(params))
+//              $('#edge-selection-details').html(template1(params))
           }));
 
       edge.bg && edge.bg[move]({path:path})
@@ -121,7 +121,7 @@ Raphael.fn.connection = function Connection(obj1, obj2, style) {
                 "stroke-width": style.fill.split("|")[1] || 3 }).toBack().
           click(function(){
               var params = {fromNode:obj1.data.link, toNode:obj2.data.link}
-              $('#edge-selection-details').html(template1(params))
+//              $('#edge-selection-details').html(template1(params))
           }));
       /* setting label */
       style && style.label

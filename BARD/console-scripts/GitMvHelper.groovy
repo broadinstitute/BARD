@@ -9,24 +9,25 @@ import groovy.io.FileType
  */
 String srcRoot = 'bard-web-client'
 String dstRoot = 'BARD'
-def dirs = ['src', 'test']
+def dirs = ['web-app'] // ['src', 'test', 'grails-app']
 for(String relativeDir in dirs){
     final String srcDir = "$srcRoot/$relativeDir"
     executeCommand("cp -r ${srcDir} ${dstRoot}")
     new File(srcDir).traverse([type: FileType.FILES, ]) { File file ->
         final String srcPath = file.getPath()
-        executeCommand("git mv -f ${srcPath} ${srcPath.replace(srcDir, "$dstRoot/$relativeDir")}")
+        String relativeDst = "$dstRoot/$relativeDir"
+        executeCommand(/git mv -f "${srcPath}" "${srcPath.replace(srcDir, relativeDst)}"/)
     }
 }
 
 private executeCommand(String cmd){
     println(cmd)
-    def proc = cmd.execute()
-    proc.waitFor()
-    final exitCode = proc.exitValue()
-    if(exitCode!=0) {
-        println "return code: ${ exitCode}"
-        println "stderr: ${proc.err.text}"
-        println "stdout: ${proc.in.text}"
-    }
+//    def proc = cmd.execute()
+//    proc.waitFor()
+//    final exitCode = proc.exitValue()
+//    if(exitCode!=0) {
+//        println "return code: ${ exitCode}"
+//        println "stderr: ${proc.err.text}"
+//        println "stdout: ${proc.in.text}"
+//    }
 }
