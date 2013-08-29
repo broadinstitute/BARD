@@ -12,13 +12,15 @@
     <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap-responsive.css">
     <link media="all" rel="stylesheet" href="css/bardHomepage/BardHomepage.css">
     <link media="all" rel="stylesheet" href="css/flick/jquery-ui-1.8.20.custom.css">
+
     %{--xx--}%
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    %{--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />--}%
+    %{--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>--}%
+    %{--<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>--}%
     %{--xx--}%
     <script src="js/bardHomepage/jquery-1.8.3.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/jquery-1.8.3.min.js"><\/script>')</script>
+    <script src="js/bardHomepage/jquery-ui-1.8.15.custom.js"></script>
     <script src="js/bardHomepage/bootstrap.js"></script>
     <script src="js/bardHomepage/jquery.main.js"></script>
      %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js"></script>--}%

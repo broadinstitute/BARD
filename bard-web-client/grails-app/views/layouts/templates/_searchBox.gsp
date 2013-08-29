@@ -1,5 +1,6 @@
 %{--<r:require modules="autocomplete, structureSearch"/>--}%
-<r:require modules="autocomplete"/>
+%{--<r:require modules="autocomplete"/>--}%
+<script src="js/autocomplete.js"></script>
 <noscript>
     <a href="http://www.enable-javascript.com/" target="javascript">
         <img src="${resource(dir: 'images', file: 'enable_js.png')}"
