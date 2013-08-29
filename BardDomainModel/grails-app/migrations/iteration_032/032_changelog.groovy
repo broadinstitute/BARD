@@ -38,7 +38,7 @@ databaseChangeLog = {
         }
 
         //Create the new EXPERIMENT_DOCUMENT table
-        sqlFile(path: "${migrationsDir}/iteration_032/02-add-constraint-expt-doc.sql", stripComments: true)
+        sqlFile(path: "iteration_032/02-add-constraint-expt-doc.sql", stripComments: true)
     }
 }
 
