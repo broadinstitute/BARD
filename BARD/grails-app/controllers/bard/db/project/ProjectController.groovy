@@ -30,34 +30,27 @@ class ProjectController {
     ProjectService projectService
     SpringSecurityService springSecurityService
     def permissionEvaluator
-    LinkGenerator grailsLinkGenerator
     CapPermissionService capPermissionService
 
     def create(ProjectCommand projectCommand) {
         if (!projectCommand) {
-            projectCommand: new ProjectCommand(status: ProjectStatus.APPROVED.id)
+            projectCommand: new ProjectCommand()
         }
         [projectCommand: projectCommand]
     }
-
     def save(ProjectCommand projectCommand) {
-        String errorMessage = null
-        try {
-            projectCommand.modifiedBy = springSecurityService.principal?.username
-            Project project = projectCommand.createProject()
-            if (project) {
-                //return a link to the newly created project
-                String link = grailsLinkGenerator.link(controller: 'project', action: 'show', id: project.id, absolute: false)
-                Map map = [url: link]
-                render status: HttpServletResponse.SC_OK, text: map as JSON, contentType: 'text/json', template: null
-                return
-            }
-            errorMessage = "Could not create Project"
-        } catch (Exception ee) {
-            errorMessage = ee.message
+        if (!projectCommand.validate()) {
+            create(projectCommand)
+            return
         }
-        render status: HttpServletResponse.SC_BAD_REQUEST, text: errorMessage, contentType: 'text/plain', template: null
+        Project project = projectCommand.createProject()
+        if (project) {
+            redirect(action: "show", id: project.id)
+            return
+        }
+        create(projectCommand)
     }
+
 
     def editProjectStatus(InlineEditableCommand inlineEditableCommand) {
         try {
@@ -435,16 +428,18 @@ class ProjectController {
 @InheritConstructors
 @Validateable
 class ProjectCommand extends BardCommand {
+
     String name
-    String modifiedBy
-    String description //the new value
-    String status = ProjectStatus.DRAFT.id
-    String groupType = ProjectGroupType.PROJECT.id
+    String description
+    ProjectGroupType projectGroupType=ProjectGroupType.PROJECT
+    ProjectStatus projectStatus  = ProjectStatus.DRAFT
+
+    SpringSecurityService springSecurityService
+
+
 
     static constraints = {
-        importFrom Project, include: ["name", "description"]
-        status(blank: false, nullable: false)
-        groupType(blank: false, nullable: false)
+        importFrom(Project, include: ["name", "description","groupType","projectStatus"])
     }
 
     Project createProject() {
@@ -459,12 +454,12 @@ class ProjectCommand extends BardCommand {
     }
 
     void copyFromCmdToDomain(Project project) {
-        project.groupType = ProjectGroupType.byId(this.groupType)
+        project.groupType = this.projectGroupType
         project.name = this.name
-        project.modifiedBy = this.modifiedBy
+        project.modifiedBy = springSecurityService.principal?.username
         project.description = this.description
         project.dateCreated = new Date()
-        project.projectStatus = ProjectStatus.byId(this.status)
+        project.projectStatus = this.projectStatus
 
     }
 }

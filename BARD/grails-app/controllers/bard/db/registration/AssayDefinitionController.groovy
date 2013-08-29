@@ -2,17 +2,21 @@ package bard.db.registration
 
 import acl.CapPermissionService
 import bard.db.ContextService
+import bard.db.command.BardCommand
 import bard.db.dictionary.Element
 import bard.db.enums.AssayStatus
 import bard.db.enums.AssayType
 import bard.db.enums.ContextType
 import bard.db.enums.HierarchyType
+import bard.db.enums.ReadyForExtraction
 import bard.db.model.AbstractContextOwner
 import bard.db.project.InlineEditableCommand
 import grails.converters.JSON
 import grails.plugins.springsecurity.Secured
 import grails.plugins.springsecurity.SpringSecurityService
+import grails.validation.Validateable
 import grails.validation.ValidationException
+import groovy.transform.InheritConstructors
 import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -197,6 +201,23 @@ class AssayDefinitionController {
         redirect(action: "findById")
     }
 
+    def save(AssayCommand assayCommand) {
+        if (!assayCommand.validate()) {
+            render(view: "create", model: [assayCommand: assayCommand])
+            return
+        }
+        final Assay assay = assayCommand.createNewAssay()
+        if (assay) {
+            redirect(action: "show", id: assay.id)
+            return
+        }
+        render(view: "create", model: [assayCommand: assayCommand])
+    }
+
+    def create() {
+        return [assayCommand: new AssayCommand()]
+    }
+
     def cloneAssay(Long id) {
         Assay assay = Assay.get(id)
         try {
@@ -218,10 +239,10 @@ class AssayDefinitionController {
         JSON measureTreeAsJson = null
 
         // sanity check the context items
-        for(context in assayInstance.assayContexts) {
+        for (context in assayInstance.assayContexts) {
             assert context.id != null
-            for(item in context.contextItems) {
-                if(item?.id == null) {
+            for (item in context.contextItems) {
+                if (item?.id == null) {
                     throw new RuntimeException("Context ${context.id} missing context item.  Display order probably needs to be updated.")
                 }
             }
@@ -462,10 +483,6 @@ class AssayDefinitionController {
         }
     }
 
-//    def showEditSummary(Long instanceId) {
-//        def assayInstance = Assay.findById(instanceId)
-//        render(template: "editSummary", model: [assay: assayInstance])
-//    }
     /**
      *
      * @param measureId
@@ -541,4 +558,49 @@ class EditingHelper {
         return [status: HttpServletResponse.SC_FORBIDDEN, text: message(code: 'editing.forbidden.message'), contentType: 'text/plain', template: null]
     }
 
+}
+@InheritConstructors
+@Validateable
+class AssayCommand extends BardCommand {
+
+    String assayName
+    String assayVersion = "1"
+    Date dateCreated = new Date()
+    AssayType assayType = AssayType.REGULAR
+
+
+    SpringSecurityService springSecurityService
+
+
+    public static final List<String> PROPS_FROM_CMD_TO_DOMAIN = ['assayType', 'assayName', 'assayVersion', 'dateCreated'].asImmutable()
+
+    static constraints = {
+        importFrom(Assay, exclude: ['assayShortName', 'assayStatus', 'readyForExtraction', 'lastUpdated'])
+    }
+
+    AssayCommand() {}
+
+
+
+    Assay createNewAssay() {
+        Assay assayToReturn = null
+        if (validate()) {
+            Assay tempAssay = new Assay()
+            copyFromCmdToDomain(tempAssay)
+            if (attemptSave(tempAssay)) {
+                assayToReturn = tempAssay
+            }
+        }
+        return assayToReturn
+    }
+
+
+    void copyFromCmdToDomain(Assay assay) {
+        assay.designedBy = springSecurityService.principal?.username
+        assay.modifiedBy = assay.designedBy
+        assay.assayShortName=this.assayName
+        for (String field in PROPS_FROM_CMD_TO_DOMAIN) {
+            assay[(field)] = this[(field)]
+        }
+    }
 }
