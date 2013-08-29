@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>BioAssay Research Database</title>
-    <r:require modules="core,bootstrap"/>
+    <r:require modules="autocomplete"/>
+    %{--<r:require modules="core"/>--}%
     <r:layoutResources/>
 
      <meta charset="utf-8">
@@ -10,29 +11,30 @@
     <title>BARD</title>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,400italic,700,700italic,900,900italic,300,300italic'
           rel='stylesheet' type='text/css'>
-    <link media="all" rel="stylesheet" href="../css/bootstrapHomepage/bootstrap.css">
-    <link media="all" rel="stylesheet" href="../css/bootstrapHomepage/bootstrap-responsive.css">
-    <link media="all" rel="stylesheet" href="../css/bardHomepage/BardHomepage.css">
-    <script src="../js/bardHomepage/jquery-1.8.3.min.js"></script>
+    <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap.css">
+    <link media="all" rel="stylesheet" href="css/bardHomepage/bootstrap-responsive.css">
+    <link media="all" rel="stylesheet" href="css/bardHomepage/BardHomepage.css">
+    <link media="all" rel="stylesheet" href="css/flick/jquery-ui-1.8.20.custom.css">
+    %{--xx--}%
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    %{--xx--}%
+    <script src="js/bardHomepage/jquery-1.8.3.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/jquery-1.8.3.min.js"><\/script>')</script>
-    <script src="../js/bardHomepage/bootstrap.js"></script>
-    <script src="../js/bardHomepage/jquery.main.js"></script>
-    <!--[if lt IE 9]><link rel="stylesheet" href="../css/bootstrapHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
-    <!--[if IE]><script src="../js/bardHomepage/ie.js"></script><![endif]-->
-
-    <r:script type='text/javascript'>
-        $(document).ready(function () {
-            $('input[name="j_username"]').focus();
-        });
-    </r:script>
-
+    <script src="js/bardHomepage/bootstrap.js"></script>
+    <script src="js/bardHomepage/jquery.main.js"></script>
+     %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.autoSelect.js"></script>--}%
+    %{--<script src="js/jquery-ui-extensions/autocomplete/jquery.ui.autocomplete.selectFirst.js"></script>--}%
+    <!--[if lt IE 9]><link rel="stylesheet" href="css/bardHomepage/ieBardHomepage.css" media="screen" /><![endif]-->
+    <!--[if IE]><script src="js/bardHomepage/ie.js"></script><![endif]-->
 </head>
 
 <body>
 <div id="wrapper">
 
 %{--The control area at the top of the page is all contained within this header--}%
-<header class="navbar navbar-st   static-top  static-top" id="header">
+<header class="navbar navbar-static-top" id="header">
     <div class="container-fluid">
         <strong class="logo"><a href="#">BARD BioAssay Research Database</a></strong>
         <ul class="social-networks">
@@ -97,20 +99,66 @@
         </div>
 
         <div class="search-block">
-            <form action="#" class="search-form">
-                <fieldset>
-                    <div class="search-field">
-                        <div class="text-field">
-                            <input type="text" placeholder="Search by Chemistry, Biology, Structure and More">
-                        </div>
 
-                        <div class="btn-field">
-                            <button class="btn btn-primary" type="submit">Search <span class="hidden-phone">BARD</span>
-                            </button>
-                        </div>
+            %{--<r:require modules="autocomplete"/>--}%
+            <noscript>
+                <a href="http://www.enable-javascript.com/" target="javascript">
+                    <img src="${resource(dir: 'images', file: 'enable_js.png')}"
+                         alt="Please enable JavaScript to access the full functionality of this site."/>
+                </a>
+            </noscript>
+
+            <g:form name="searchForm" controller="bardWebInterface" action="search" id="searchForm" class="form-inline">
+                <div class="row-fluid" style="margin-top: 15px;">
+                    <div class="input-append">
+                        <g:if test="${flash?.searchString}">
+                            <g:textField id="searchString" name="searchString" value="${flash.searchString}"
+                                         class="input-xxlarge"/>
+                        </g:if>
+                        <g:elseif test="${params?.searchString}">
+                            <g:textField id="searchString" name="searchString" value="${params?.searchString}"
+                                         class="input-xxlarge"/>
+                        </g:elseif>
+                        <g:else>
+                            <g:textField id="searchString" name="searchString" value="" class="input-xxlarge"/>
+                        </g:else>
+
+                        <button type="submit" name="search" class="btn btn-primary" id="searchButton">Search</button>
                     </div>
-                </fieldset>
-            </form>
+                </div>
+
+                %{--<div class="row-fluid">--}%
+                    %{--<div class="span10">--}%
+                        %{--<r:script> $(document).on('click', '#structureSearchLink', showJSDrawEditor)</r:script>--}%
+                        %{--<div class="pull-right"><g:link controller="bardWebInterface" action="jsDrawEditor">--}%
+                            %{--<img src="${resource(dir: 'images', file: 'structureEditIcon.png')}" alt="Draw or paste a structure"--}%
+                                 %{--title="Draw or paste a structure"/> Draw or paste a structure</g:link> or <a--}%
+                                %{--data-toggle="modal" href="#idModalDiv">list of IDs for search</a></div>--}%
+                    %{--</div>--}%
+                %{--</div>--}%
+            </g:form>
+
+
+
+
+
+
+
+
+            %{--<form action="#" class="search-form">--}%
+                %{--<fieldset>--}%
+                    %{--<div class="search-field">--}%
+                        %{--<div class="text-field">--}%
+                            %{--<input type="text" placeholder="Search by Chemistry, Biology, Structure and More">--}%
+                        %{--</div>--}%
+
+                        %{--<div class="btn-field">--}%
+                            %{--<button class="btn btn-primary" type="submit">Search <span class="hidden-phone">BARD</span>--}%
+                            %{--</button>--}%
+                        %{--</div>--}%
+                    %{--</div>--}%
+                %{--</fieldset>--}%
+            %{--</form>--}%
 
             <div class="links-holder">
                 <a href="#">Advanced Search</a>
@@ -169,7 +217,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span6 img-box">
-                        <img src="../images/bardHomepage/img-01.png" alt="image description">
+                        <img src="images/bardHomepage/img-01.png" alt="image description">
                     </div>
 
                     <div class="span6 pull-right article">
@@ -187,7 +235,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span6 img-box">
-                        <img src="../images/bardHomepage/img-02.png" alt="image description">
+                        <img src="images/bardHomepage/img-02.png" alt="image description">
                     </div>
 
                     <div class="span6 pull-right article">
@@ -205,7 +253,7 @@
             <div class="container-fluid">
                 <div class="row-fluid">
                     <div class="span6 img-box">
-                        <img src="../images/bardHomepage/img-03.png" alt="image description">
+                        <img src="images/bardHomepage/img-03.png" alt="image description">
                     </div>
 
                     <div class="span6 pull-right article">

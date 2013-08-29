@@ -71,7 +71,10 @@ class BardWebInterfaceController {
         return mobileService.detect(request)
     }
 
+
+
     def index() {
+        render( view: 'homepage')
     }
 
     def search() {

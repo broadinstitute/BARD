@@ -98,6 +98,17 @@ modules = {
         resource url: "js/html5historyapi/history.js"
         resource url: "js/experimentalResults.js"
     }
+    bardHomePage {
+        resource url: 'css/bardHomepage/bootstrap.css'
+        resource url: 'css/bardHomepage/bootstrap-responsive.css'
+        resource url: 'css/bardHomepage/BardHomepage.css'
+        resource url: 'js/bardHomepage/jquery-1.8.3.min.js'
+        resource url: 'js/bardHomepage/bootstrap.js'
+        resource url: 'js/bardHomepage/jquery.main.js'
+        resource url: 'js/bardHomepage/bootstrap.js'
+//        resource url: 'js/bardHomepage/jquery.main.js'
+
+    }
     jqueryMobile {
         dependsOn 'jqueryMobilePreInit'
         resource url: "jquery.mobile-1.3.1/jquery.mobile-1.3.1.css"
