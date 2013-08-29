@@ -9,7 +9,7 @@ import groovy.io.FileType
  */
 String srcRoot = 'bard-web-client'
 String dstRoot = 'BARD'
-def dirs = ['web-app'] // ['src', 'test', 'grails-app']
+def dirs = ['grails-app'] // ['web-app'] // ['src', 'test', 'grails-app']
 for(String relativeDir in dirs){
     final String srcDir = "$srcRoot/$relativeDir"
     executeCommand("cp -r ${srcDir} ${dstRoot}")
