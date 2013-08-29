@@ -12,7 +12,7 @@ databaseChangeLog = {
      *       just modify the create-ontology-procedures.sql file directly, this way vcs and easily see diffs over time.
      */
 
-    changeSet(author: 'ddurkin', id: 'pkg_auditing_setup.sql', dbms: 'oracle', context: 'auditing', runOnChange: 'true') {
+    changeSet(author: 'ddurkin', id: 'pkg_auditing_setup.sql', dbms: 'oracle', context: 'standard, auditing', runOnChange: 'true') {
         grailsChange {
             final List<String> sqlBlocks = []
             String text = resourceAccessor.getResourceAsStream('sql-auditing/pkg_auditing_setup.sql').text
@@ -27,7 +27,7 @@ databaseChangeLog = {
             checkSum(text)
         }
     }
-    changeSet(author: 'ddurkin', id: 'pkg_auditing_init.sql', dbms: 'oracle', context: 'auditing', runOnChange: 'true') {
+    changeSet(author: 'ddurkin', id: 'pkg_auditing_init.sql', dbms: 'oracle', context: 'standard, auditing', runOnChange: 'true') {
         grailsChange {
             final List<String> sqlBlocks = []
             String text = resourceAccessor.getResourceAsStream('sql-auditing/pkg_auditing_init.sql').text
@@ -42,7 +42,7 @@ databaseChangeLog = {
             checkSum(text)
         }
     }
-    changeSet(author: 'ddurkin', id: 'pkg_auditing.sql', dbms: 'oracle', context: 'auditing', runOnChange: 'true') {
+    changeSet(author: 'ddurkin', id: 'pkg_auditing.sql', dbms: 'oracle', context: 'standard, auditing', runOnChange: 'true') {
         grailsChange {
             final List<String> sqlBlocks = []
             String text = resourceAccessor.getResourceAsStream('sql-auditing/pkg_auditing.sql').text
@@ -58,7 +58,7 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "ddurkin", id: "call auditing_setup.setup_tables();", context: 'auditing', dbms: 'oracle') {
+    changeSet(author: "ddurkin", id: "call auditing_setup.setup_tables();", context: 'standard, auditing', dbms: 'oracle') {
         grailsChange {
             change {
                 sql.call('call auditing_setup.setup_tables()')
@@ -66,7 +66,7 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "ddurkin", id: "refresh audit_settings and triggers", context: 'auditing', dbms: 'oracle', runAlways: 'true' ) {
+    changeSet(author: "ddurkin", id: "refresh audit_settings and triggers", context: 'standard, auditing', dbms: 'oracle', runAlways: 'true') {
         grailsChange {
             change {
                 sql.call('''call auditing_setup.update_settings('', 'Refresh')''')
