@@ -57,7 +57,7 @@ clover {
     includes = ['**/*.groovy', '**/*.java']
     excludes = ['**/RESTTestHelper.*', '**/*Spec*.*', '**/conf/**', '**/JSONNodeTestHelper.java']
 }
-codenarc.ruleSetFiles = "file:grails-app/conf/BardCodeNarcRuleSet.groovy"
+codenarc.ruleSetFiles = "file:grails-app/conf/BardRestApiWrapperCodeNarcRuleSet.groovy"
 codenarc.reports = {
     html('html') {
         outputFile = 'target/codenarc-reports/html/BARD-CodeNarc-Report.html'
