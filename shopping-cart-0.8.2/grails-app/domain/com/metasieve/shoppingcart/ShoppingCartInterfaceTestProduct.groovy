@@ -9,6 +9,7 @@ class ShoppingCartInterfaceTestProduct implements IShoppable {
 		return name
 	}
     static mapping = {
-        table 'shopcartintertestprod'
+        table 'SC_INTERFACE_TEST_PROD'
+        id(generator: 'sequence', params: [sequence: 'SC_INTERFACE_TEST_PROD_ID_SEQ'])
     }
 }

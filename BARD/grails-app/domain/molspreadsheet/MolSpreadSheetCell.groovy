@@ -18,8 +18,10 @@ class MolSpreadSheetCell {
     SpreadSheetActivityStorage spreadSheetActivityStorage
 
     static mapping = {
-        spreadSheetActivityStorage column: "spreadActStore"
-        molSpreadSheetData column: "molData"
+        table(name: 'MOL_SS_CELL')
+        id(generator: 'sequence', params: [sequence: 'MOL_SS_CELL_ID_SEQ'])
+        spreadSheetActivityStorage column: "SS_ACTIVITY_STORAGE_ID"
+        molSpreadSheetData column: "MOL_SS_DATA_ID"
     }
     static constraints = {
         activity(nullable: false)

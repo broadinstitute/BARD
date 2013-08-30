@@ -8,4 +8,8 @@ class Quantity {
 	String toString() {
 		return "${value}"
 	}
+
+    static mapping = {
+        id(generator: 'sequence', params: [sequence: 'QUANTITY_ID_SEQ'])
+    }
 }

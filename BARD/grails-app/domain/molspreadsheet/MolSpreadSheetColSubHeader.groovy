@@ -11,10 +11,11 @@ class MolSpreadSheetColSubHeader {
     static constraints = {
     }
     static mapping = {
-        table 'MolSSColSubHeader'
-        maximumResponse column: "maxResponse"
-        minimumResponse column: "minResponse"
-        unitsInColumnAreUniform column: "unitsInColumnAreUniform"
+        table('MOL_SS_COL_SUB_HEADER')
+        id(generator: 'sequence', params: [sequence: 'MOL_SS_COL_SUB_HEADER_ID_SEQ'])
+        maximumResponse(column: "MAX_RESPONSE")
+        minimumResponse(column: "MIN_RESPONSE")
+        unitsInColumnAreUniform(column: "UNITS_IN_COLUMN_ARE_UNIFORM")
 
     }
 }

@@ -7,6 +7,8 @@ class MolSpreadSheetColumnHeader {
     static constraints = {
     }
     static mapping = {
-        molSpreadSheetColSubHeaderList column: "molSSColSubHeaderList"
+        table(name:'MOL_SS_COL_HEADER')
+        id(generator: 'sequence', params: [sequence: 'MOL_SS_COL_HEADER_ID_SEQ'])
+        molSpreadSheetColSubHeaderList column: "MOL_SS_COL_SUB_HEADER_LIST"
     }
 }

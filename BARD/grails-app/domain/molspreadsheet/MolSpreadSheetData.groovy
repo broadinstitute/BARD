@@ -5,33 +5,37 @@ class MolSpreadSheetData {
     static hasMany = [molSpreadSheetCell: MolSpreadSheetCell]
     static transients = ['rowCount', 'columnCount']
 
-    Map<String, MolSpreadSheetCell> mssData = [:]
-    Map<Long, Integer> rowPointer = [:]
-    Map<Long, Integer> columnPointer = [:]
-    Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
     List<MolSpreadSheetColumnHeader> mssHeaders = []
     List<String> experimentNameList = []
     List<String> experimentFullNameList = []
+
+    Map<String, MolSpreadSheetCell> mssData = [:]
+    Map<Long, Integer> columnPointer = [:]
+    Map<Long, Integer> rowPointer = [:]
+    Map<Long, Long> mapExperimentIdsToCapAssayIds = [:]
     Map<Integer, String> mapColumnsToAssay = [:]
     Map<Integer, String> mapColumnsToAssayName = [:]
     Map<Integer, Boolean> mapColumnsNormalization = [:]
+
     MolSpreadsheetDerivedMethod molSpreadsheetDerivedMethod
 
     static mapping = {
-        table 'MSData'
+        table('MOL_SS_DATA')
+        id(generator: 'sequence', params: [sequence: 'MOL_SS_DATA_ID_SEQ'])
+        mssHeaders(indexColumn: [name: "MOL_SS_COL_HEADER_IDX"])
+        experimentNameList(joinTable: [name: 'MOL_SS_DATA_EXP_NAME_LIST', key: 'MOL_SS_DATA_ID', column: "EXP_NAME"], indexColumn: [name: "EXP_NAME_IDX"])
+        experimentFullNameList(joinTable: [name: 'MOL_SS_DATA_EXP_FULL_NAME_LIST', key: 'MOL_SS_DATA_ID', column: "EXP_FULL_NAME"], indexColumn: [name: "EXP_FULL_NAME_IDX"])
 
-        mapColumnsToAssay column: "colsToAssay"
-        rowPointer column: "rowPter"
-        columnPointer column: "columnPter"
-        mapExperimentIdsToCapAssayIds indexColumn: [name: "expToCapAssay_idx", type: Integer],
-                joinTable: [name: 'mexptocap', column: "expToCapAssayIds" ,key : 'exp_id', column: 'maptoexp']
-        mapColumnsToAssayName indexColumn: [name: "colsToAssayName_idx", type: Integer],
-                joinTable: [name: 'mcolsassayname', column: "colsToAssayName"]
+        mssData(joinTable: [name: 'MOL_SS_DATA_MOL_SS_CELL_MAP', key: 'MOL_SS_DATA_ID', column: "MOL_SS_CELL_ID"], indexColumn: [name: "CELL_POSITION_IDX", type: String])
+        columnPointer(joinTable: [name: 'MOL_SS_DATA_COLUMN_POINTER_MAP', key: 'MOL_SS_DATA_ID', column: "COLUMN_POINTER"], indexColumn: [name: "COLUMN_POINTER_IDX", type: Long])
+        rowPointer(joinTable: [name: 'MOL_SS_DATA_ROW_POINTER_MAP', key: 'MOL_SS_DATA_ID', column: "ROW_POINTER"], indexColumn: [name: "ROW_POINTER_IDX", type: Long])
+        mapExperimentIdsToCapAssayIds(joinTable: [name: 'MOL_SS_DATA_EXP_CAP_MAP', key: 'MOL_SS_DATA_ID', column: "CAP_ASSAY_ID"], indexColumn: [name: "EXP_ID_IDX", type: Long])
+        mapColumnsToAssay(joinTable: [name: 'MOL_SS_DATA_COL_ASSAY_MAP', key: 'MOL_SS_DATA_ID', column: "ASSAY"], indexColumn: [name: "COLUMN_ID_IDX", type: Integer])
+        mapColumnsToAssayName(joinTable: [name: 'MOL_SS_DATA_COL_ASSAY_NAME_MAP', key: 'MOL_SS_DATA_ID', column: "ASSAY_NAME"], indexColumn: [name: "COLUMN_ID_IDX", type: Integer])
 
-        mapColumnsNormalization indexColumn: [name: "colsToNorm_idx", type: Integer],
-                joinTable: [name: 'mcolnorm', column: "colsToNorm"]
+        mapColumnsNormalization(joinTable: [name: 'MOL_SS_DATA_COLS_NORM_MAP', key: 'MOL_SS_DATA_ID', column: "NORMALIZATION"], indexColumn: [name: "COLUMN_ID_IDX", type: Integer])
 
-
+        molSpreadsheetDerivedMethod(column: 'MOL_SS_DERIVED_METHOD')
     }
 
 
@@ -41,8 +45,6 @@ class MolSpreadSheetData {
         columnPointer(nullable: false)
         molSpreadsheetDerivedMethod(nullable: true)
     }
-
-
 
     /**
      * Display a cell, as specified by a row and column
@@ -164,7 +166,7 @@ class MolSpreadSheetData {
             for (int i in 0..(assayNames.size() - 1)) {
                 String fullAssayName = 'Data error: please contact your system administrator'   // This message should never be displayed
                 if (assayNames[i] != null) {    // Assay name should never be null -- this is a safety measure
-                    int columnOfAssay = mapColumnsToAssay.find { it.value == assayNames[i]}.key
+                    int columnOfAssay = mapColumnsToAssay.find { it.value == assayNames[i] }.key
                     fullAssayName = mapColumnsToAssayName[columnOfAssay]
                     this.mapExperimentIdsToCapAssayIds
                 }
@@ -178,7 +180,7 @@ class MolSpreadSheetData {
                 }
                 Boolean normalized = true
                 if (mapColumnsNormalization.containsKey(assayNames[i]))
-                    normalized =  mapColumnsNormalization[assayNames[i]]
+                    normalized = mapColumnsNormalization[assayNames[i]]
                 returnValue << ["assayName": assayNames[i], "bardAssayId": capId, "numberOfResultTypes": (accumulator[assayNames[i]] + 1), "fullAssayName": fullAssayName, "normalized": normalized]
             }
         }
@@ -186,30 +188,29 @@ class MolSpreadSheetData {
     }
 
 
-    void flipNormalizationForAdid ( Long assayIdAsALong ) {
+    void flipNormalizationForAdid(Long assayIdAsALong) {
         // We have the CAP ID.  First converted to the Bard assay ID
-        Long bardAssayId = mapExperimentIdsToCapAssayIds.find{it.value == assayIdAsALong}?.key  ?: 0L
-        if (bardAssayId != 0)  {
-            String  assayIdAsAString = bardAssayId as String
+        Long bardAssayId = mapExperimentIdsToCapAssayIds.find { it.value == assayIdAsALong }?.key ?: 0L
+        if (bardAssayId != 0) {
+            String assayIdAsAString = bardAssayId as String
             if (mapColumnsNormalization.containsKey(assayIdAsAString)) {  // if we don't recognize the Aid then ignore the request
-                mapColumnsNormalization[assayIdAsAString]   = !(mapColumnsNormalization[assayIdAsAString])
+                mapColumnsNormalization[assayIdAsAString] = !(mapColumnsNormalization[assayIdAsAString])
             }
         }
     }
 
-    void flipNormalizationForAdid ( String aIdToFlip ) {
-        Long assayIdAsALong  =   0L
+    void flipNormalizationForAdid(String aIdToFlip) {
+        Long assayIdAsALong = 0L
         try {
-            assayIdAsALong  =   Long.valueOf(aIdToFlip)
+            assayIdAsALong = Long.valueOf(aIdToFlip)
         } catch (NumberFormatException numberFormatException) {
             // Since this parameter comes off the URL line we could get past anything.  If it isn't
             //  numerical then simply ignore it
         }
         if (assayIdAsALong != 0L) {
-            flipNormalizationForAdid ( assayIdAsALong )
+            flipNormalizationForAdid(assayIdAsALong)
         }
-   }
-
+    }
 
 
 }
