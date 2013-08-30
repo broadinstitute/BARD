@@ -32,6 +32,7 @@ class ModifyElementAndHierarchyService {
 
         if (newElementAndPath.element.label != newElementAndPath.newElementLabel) {
             renameElement(newElementAndPath.element, newElementAndPath.newElementLabel)
+            elementService.reloadCache()
         }
 
         if(updateHierarchyIfNeeded(newElementAndPath)){  //reload the cache if this returned true

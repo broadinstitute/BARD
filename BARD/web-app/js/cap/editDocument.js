@@ -124,6 +124,7 @@ function updateEntityVersion(response, serverresponse) {
             var element = elements[i];
             element.setAttribute("data-version", version);
         }
+        location.reload(true)
     }
 }
 

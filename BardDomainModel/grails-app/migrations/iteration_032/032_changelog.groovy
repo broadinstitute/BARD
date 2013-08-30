@@ -28,5 +28,20 @@ databaseChangeLog = {
         //Create the new EXPERIMENT_DOCUMENT table
         sqlFile(path: "${migrationsDir}/iteration_032/01-remap-context-group.sql", stripComments: true)
     }
+    changeSet(author: "jasiedu", id: "iteration-032/02-add-constraint-expt-doc", dbms: "oracle", context: "standard") {
+
+        //Set the username in context
+        grailsChange {
+            change {
+                sql.execute("""BEGIN
+                               bard_context.set_username('jasiedu');
+                               END;
+                               """)
+            }
+        }
+
+        //Create the new EXPERIMENT_DOCUMENT table
+        sqlFile(path: "${migrationsDir}/iteration_032/02-add-constraint-expt-doc.sql", stripComments: true)
+    }
 }
 
