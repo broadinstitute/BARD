@@ -1,4 +1,4 @@
-var waitingImage = '<img src="/bardwebclient/static/images/ajax-loader.gif" alt="loading" title="loading"/>';
+var waitingImage = '<img src="/BARD/static/images/ajax-loader.gif" alt="loading" title="loading"/>';
 
 var PromiscuityHandler = {
     setup:function () {

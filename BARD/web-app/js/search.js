@@ -1,6 +1,6 @@
 //use GLOBAL params here
-var spinnerImageLink = '<img src="/bardwebclient/static/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16"/>';
-var bigSpinnerImage = '<div class="tab-message"><img src="/bardwebclient/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
+var spinnerImageLink = '<img src="/BARD/static/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16"/>';
+var bigSpinnerImage = '<div class="tab-message"><img src="/BARD/static/images/ajax-loader.gif" alt="loading" title="loading"/></div>';
 var errorImageTwitterBootstrap = '<img src=""  class="icon-exclamation-sign" alt="error" height="16" width="16" />';
 
 //matches a number followed by a zero or more spaces, followed by max of one comma
@@ -214,10 +214,10 @@ function handleFilteredQuery(searchString, facetFormType, currentFormId, current
 
     var controllerAction = findTheAppropriateControllerActionForRequest(searchString, facetFormType);
     if (controllerAction == 'structureSearch') {
-        handleStructureSearch('/bardwebclient/bardWebInterface/searchStructures', currentFormId)
+        handleStructureSearch('/BARD/bardWebInterface/searchStructures', currentFormId)
     }
     else if (controllerAction != 'EMPTY') {
-        handleSearch('/bardwebclient/bardWebInterface/' + controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
+        handleSearch('/BARD/bardWebInterface/' + controllerAction, currentFormId, currentTabId, numberOfHitsDivId, tabDisplayPrefix, updateId);
     }
 
 }
@@ -293,23 +293,23 @@ function handleMainFormSubmit(searchString) {
         case 'ADID':
             activateCurrentTab('assaysTab');
             showTab("assays");
-            handleSearch('/bardwebclient/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+            handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
             break;
         case 'CID':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/bardwebclient/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PROBES':
             activateCurrentTab('compoundsTab');
             showTab("compounds");
-            handleSearch('/bardwebclient/bardWebInterface/showProbeList', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+            handleSearch('/BARD/bardWebInterface/showProbeList', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
             break;
         case 'PID':
             activateCurrentTab('projectsTab');
             // $("#projects").tab('show');
             showTab("projects");
-            handleSearch('/bardwebclient/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+            handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
             break;
         case 'ID':
             //TODO: Right now we are treating Id searches like regular searches
@@ -326,7 +326,7 @@ function handleMainFormSubmit(searchString) {
                 var srchStr = splt[0].toLowerCase() + ':' + $.trim(splt[1]);
                 $("#searchString").val(srchStr);
             }
-            handleStructureSearch('/bardwebclient/bardWebInterface/searchStructures', 'searchForm');
+            handleStructureSearch('/BARD/bardWebInterface/searchStructures', 'searchForm');
             break;
     }
 }
@@ -334,18 +334,18 @@ function handleMainFormSubmit(searchString) {
  * Handle all free text searches
  */
 function handleAllFreeTextSearches() {
-    handleSearch('/bardwebclient/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('/bardwebclient/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('/bardwebclient/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    handleSearch('/BARD/bardWebInterface/searchAssays', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('/BARD/bardWebInterface/searchCompounds', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('/BARD/bardWebInterface/searchProjects', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 }
 
 /**
  * Handle all ID searches
  */
 function handleAllIdSearches() {
-    handleSearch('/bardwebclient/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
-    handleSearch('/bardwebclient/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
-    handleSearch('/bardwebclient/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
+    handleSearch('/BARD/bardWebInterface/searchAssaysByIDs', 'searchForm', 'assaysTab', 'totalAssays', 'Assay Definitions ', 'assays');
+    handleSearch('/BARD/bardWebInterface/searchCompoundsByIDs', 'searchForm', 'compoundsTab', 'totalCompounds', 'Compounds ', 'compounds');
+    handleSearch('/BARD/bardWebInterface/searchProjectsByIDs', 'searchForm', 'projectsTab', 'totalProjects', 'Projects ', 'projects');
 }
 /**
  * Make Tabs inactive

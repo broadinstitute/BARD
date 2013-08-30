@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     //set up auto complete
     var autoOpts = {
-        source:"/bardwebclient/bardWebInterface/autoCompleteAssayNames",
+        source:"/BARD/bardWebInterface/autoCompleteAssayNames",
         minLength:2,
         html: true,
         delay:1000

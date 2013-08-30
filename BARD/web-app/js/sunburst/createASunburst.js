@@ -193,7 +193,7 @@ function createASunburst(width, height, padding, duration, colorScale, domSelect
         .attr("class", "molstruct")
         .style("pointer-events","none")
         .append("img")
-        .attr("src", "/bardwebclient/chemAxon/generateStructureImageFromCID?cid="+cid+"&width=150&height=150");
+        .attr("src", "/BARD/chemAxon/generateStructureImageFromCID?cid="+cid+"&width=150&height=150");
 
     var svg = d3.select(domSelector).append("svg")
         .attr("width", width)

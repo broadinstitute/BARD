@@ -385,7 +385,7 @@ var linkedVisualizationModule = (function () {
                             return d.assay_type;
                         },
                         function (d) {
-                            return "<a href='/bardwebclient/bardWebInterface/showAssay/" + d.assayBId + "'>" + d.assayId + "</a>";
+                            return "<a href='/BARD/bardWebInterface/showAssay/" + d.assayBId + "'>" + d.assayId + "</a>";
                         }
                     ])
                     .order(d3.ascending)
@@ -865,7 +865,7 @@ var linkedVisualizationModule = (function () {
 
             verifyLinkedData = function (cid) {
                 console.log('beginning Linked Hierarchy with cid = '+cid+'.');
-                d3.json("/bardwebclient/bardWebInterface/linkedData/"+cid, function (incomingData) {
+                d3.json("/BARD/bardWebInterface/linkedData/"+cid, function (incomingData) {
                     // create an empty list, Just in case we get null data
                     linkedVizData.parseData(incomingData);
                     if (!linkedVizData.validateLinkedData()) {

@@ -2,7 +2,7 @@ $(document).on('click', '#addAllItemsToCart', function () {
     var mainDivName = $(this).attr('mainDivName');
     var saveToCartElements = $('#' + mainDivName + ' input.addToCartCheckbox');
     var payloadArray = new Array();
-    var spinnerImageLink = '<img src="/bardwebclient/static/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16" style="background-color: transparent;"/>';
+    var spinnerImageLink = '<img src="/BARD/static/images/loading_icon.gif" alt="loading" title="loading" height="16" width="16" style="background-color: transparent;"/>';
     var saveAllButtonElement = $('#' + mainDivName + ' a#addAllItemsToCart');
     var buttonHtml = $(saveAllButtonElement).html()
 
@@ -27,7 +27,7 @@ $(document).on('click', '#addAllItemsToCart', function () {
     var payloadArrayJSON = JSON.stringify(payloadArray);
 
     $.ajax({
-        url:'/bardwebclient/queryCart/addItems',
+        url:'/BARD/queryCart/addItems',
         type:'POST',
         cache:false,
 //        dataType:'json',

@@ -13,7 +13,7 @@ $(document).on('click', '#searchButton', function (event) {
     if (!smiles) {
         //If the user didn't draw any structure, cancel the search
         event.preventDefault();
-        window.location.href = '/bardwebclient/bardWebInterface/search';
+        window.location.href = '/BARD/bardWebInterface/search';
         return false;
     }
     var structureSearchTypeSelected = $('input:radio[name=structureSearchType]:checked').attr('value');
