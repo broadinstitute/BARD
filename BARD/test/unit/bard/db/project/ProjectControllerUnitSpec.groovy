@@ -90,14 +90,17 @@ class ProjectControllerUnitSpec extends AbstractInlineEditingControllerUnitSpec 
 
     void 'test save Project #desc'() {
 
+        given:
+        projectCommand.springSecurityService = controller.springSecurityService
         when:
+
         controller.save(projectCommand)
         then:
         response.status == expectedStatus
         where:
-        desc                       | projectCommand                                                                                                                        | expectedStatus                     | expectedMessage
-        "Full Project"             | new ProjectCommand(name: "name", description: "description", status: ProjectStatus.APPROVED.id, groupType: ProjectGroupType.PANEL.id) | HttpServletResponse.SC_OK          | [url: "http://localhost:8080/project/show/2"] as JSON
-        "Invalid Project- No name" | new ProjectCommand(description: "description", status: ProjectStatus.APPROVED.id, groupType: ProjectGroupType.PANEL.id)               | HttpServletResponse.SC_BAD_REQUEST | "Could not create Project"
+        desc                       | projectCommand                                                                                                                                | expectedStatus
+        "Full Project"             | new ProjectCommand(name: "name", description: "description", projectStatus: ProjectStatus.APPROVED, projectGroupType: ProjectGroupType.PANEL) | HttpServletResponse.SC_FOUND
+        "Invalid Project- No name" | new ProjectCommand(description: "description", projectStatus: ProjectStatus.APPROVED, projectGroupType: ProjectGroupType.PANEL)               | HttpServletResponse.SC_OK
 
     }
 

@@ -8,7 +8,7 @@
 --%>
 
 <%-- A template for both project and assay def, edit card --%>
-<r:require modules="xeditable"/>
+
 
 <div id="card-${context.id}" class="card roundedBorder card-table-container">
     <table class="table table-hover">
