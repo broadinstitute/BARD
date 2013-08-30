@@ -14,7 +14,8 @@ class AssayContextUnclassifiedSpec extends AssayBaseContextSpec{
 		cardGroup = "cardHolderUnclassified"
 		editContextGroup = "Unclassified"
 		dbContextGroup = "Unclassified"
-
+		oldGroup = "unclassified>"
+		
 		logInSomeUser()
 
 		when: "User is at Home page, Navigating to Search Assay By Id page"

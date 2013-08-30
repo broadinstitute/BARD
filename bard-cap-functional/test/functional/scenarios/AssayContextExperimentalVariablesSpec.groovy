@@ -14,7 +14,8 @@ class AssayContextExperimentalVariablesSpec extends AssayBaseContextSpec{
 		cardGroup = "cardHolderExperimentalVariables"
 		editContextGroup = "Experimental-Variables"
 		dbContextGroup = "Experimental Variables"
-
+		oldGroup = "project management> project information>"
+		
 		logInSomeUser()
 
 		when: "User is at Home page, Navigating to Search Assay By Id page"
