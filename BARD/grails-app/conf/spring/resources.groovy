@@ -1,5 +1,14 @@
 import acl.CapPermissionService
 import bard.core.helper.LoggerService
+import bard.core.rest.spring.AssayRestService
+import bard.core.rest.spring.CapRestService
+import bard.core.rest.spring.CompoundRestService
+import bard.core.rest.spring.DictionaryRestService
+import bard.core.rest.spring.ETagRestService
+import bard.core.rest.spring.ExperimentRestService
+import bard.core.rest.spring.ProjectRestService
+import bard.core.rest.spring.SubstanceRestService
+import bard.core.rest.spring.TargetRestService
 import bard.core.util.ExternalUrlDTO
 import bard.db.ReadyForExtractFlushListener
 import bard.hibernate.ModifiedByListener
@@ -97,8 +106,56 @@ beans = {
     restTemplate(RestTemplate)
     loggerService(LoggerService)
 
+    compoundRestService(CompoundRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
 
-    switch (GrailsUtil.environment) {
+    experimentRestService(ExperimentRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    projectRestService(ProjectRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    assayRestService(AssayRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    substanceRestService(SubstanceRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+
+    dictionaryRestService(DictionaryRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    eTagRestService(ETagRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    targetRestService(TargetRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+    }
+    capRestService(CapRestService) {
+        externalUrlDTO = ref('externalUrlDTO')
+        restTemplate = ref('restTemplate')
+        loggerService = ref('loggerService')
+        grailsApplication = grailsApplication
+    }
+
+    switch (Environment.current) {
         case "offline":
             queryService(MockQueryService) {
                 queryHelperService = ref('queryHelperService')
