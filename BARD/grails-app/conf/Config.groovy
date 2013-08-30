@@ -149,6 +149,7 @@ switch (Environment.current) {
                     basic.realmName = 'CAP'
                     filterChain.chainMap = [
                             '/person/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
+                            '/sandbox/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/element/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/mergeAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
                             '/splitAssayDefinition/**': 'JOINED_FILTERS,-exceptionTranslationFilter',
