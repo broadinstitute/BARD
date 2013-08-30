@@ -7,22 +7,6 @@ import grails.plugins.springsecurity.Secured
 class SandboxController {
     def sandboxService
 
-    static class ParameterCommand {
-        String scriptName;
-        List<String> keys;
-        List<String> values;
-
-        Map<String, String> getParamsAsMap() {
-            Map<String,String> p = [:]
-            if(keys != null) {
-            for(int i=0;i<keys.size();i++) {
-                p[keys[i]] = values[i]
-            }
-            }
-            return p
-        }
-    }
-
     def index() {
         redirect action: "list"
     }
@@ -41,3 +25,20 @@ class SandboxController {
         return null
     }
 }
+
+class ParameterCommand {
+    String scriptName;
+    List<String> keys;
+    List<String> values;
+
+    Map<String, String> getParamsAsMap() {
+        Map<String,String> p = [:]
+        if(keys != null) {
+            for(int i=0;i<keys.size();i++) {
+                p[keys[i]] = values[i]
+            }
+        }
+        return p
+    }
+}
+
