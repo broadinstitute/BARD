@@ -9,6 +9,10 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
+        "/bbgrid/$id?"(controller: "grid") {
+            action = [GET:"list", POST: "save", DELETE: "delete", PUT: "edit"]
+        }
+        "/"(controller: 'bardWebInterface', action: 'index')
         "403"(controller: "errors", action: "error403")
         "500"(controller: "errors", action: "error500")
         "500"(controller: "errors", action: "error403",
@@ -16,7 +20,6 @@ class UrlMappings {
         "500"(controller: "errors", action: "error403",
                 exception: NotFoundException)
 
-        "/"(view:"/index")
-		"500"(view:'/error')
+	"500"(view:'/error')
 	}
 }
